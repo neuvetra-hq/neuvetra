@@ -1,0 +1,18 @@
+{
+  "name": "neuvetra",
+  "private": true,
+  "packageManager": "bun@1.2.0",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "turbo": "^2.1.0",
+    "typescript": "^5.0.0"
+  }
+}

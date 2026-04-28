@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.54.0",
+    "@elysiajs/cors": "^1.4.1",
+    "@terrascope/calculator": "workspace:*",
+    "@terrascope/database": "workspace:*",
+    "@supabase/supabase-js": "^2.50.0",
+    "drizzle-orm": "^0.45.1",
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.0"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "deploy:retell": "bun run scripts/deploy-retell-agent.ts"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "@frontdesk/database": "workspace:*",
+    "@supabase/supabase-js": "^2.50.0",
+    "drizzle-orm": "^0.45.1",
+    "elysia": "latest",
+    "node-fetch": "^3.3.2",
+    "retell-sdk": "^5.12.0",
+    "stripe": "^22.0.0",
+    "tsdav": "^2.1.8",
+    "twilio": "^5.12.2"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.0"
+  }
+}

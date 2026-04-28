@@ -1,0 +1,6 @@
+[build]
+builder = "nixpacks"
+installCommand = "bun install"
+
+[deploy]
+startCommand = "bun run src/index.ts"

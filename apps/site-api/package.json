@@ -1,0 +1,26 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "sync-kb": "bun run scripts/sync-kb-corpus.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.71",
+    "@anthropic-ai/sdk": "^0.91.1",
+    "@elysiajs/cors": "^1.4.1",
+    "@langfuse/otel": "^5.2.0",
+    "@langfuse/tracing": "^5.2.0",
+    "@opentelemetry/sdk-node": "^0.215.0",
+    "@supabase/supabase-js": "^2.105.0",
+    "ai": "^6.0.168",
+    "elysia": "latest",
+    "xstate": "^5.30.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "yaml": "^2.8.3"
+  }
+}

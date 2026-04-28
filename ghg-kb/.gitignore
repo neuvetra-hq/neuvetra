@@ -1,0 +1,24 @@
+# Immutable raw source documents — re-downloadable from official sources, ~126MB.
+# Per CLAUDE.md Absolute Rule 1: never modified, only read. Keep local; reproducible via 1.0.0:ghg-source-intake skill.
+raw/
+
+# Obsidian per-user vault config
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+
+# Claude Code session-local settings (per-machine permission grants etc.)
+.claude/settings.local.json
+
+# Session handoff scratch files (not source of truth — memory system handles persistence)
+.remember/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Python bytecode and pytest caches (calculations/ engine)
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -1,0 +1,497 @@
+{
+  "agent_id": "",
+  "channel": "voice",
+  "last_modification_timestamp": 1775760617494,
+  "agent_name": "Conversation Flow Agent",
+  "response_engine": {
+    "type": "conversation-flow",
+    "version": 0,
+    "conversation_flow_id": "conversation_flow_fd63462f8c8d"
+  },
+  "language": "en-US",
+  "data_storage_setting": "everything",
+  "opt_in_signed_url": false,
+  "version": 0,
+  "is_published": false,
+  "post_call_analysis_model": "gpt-4.1-mini",
+  "pii_config": {
+    "mode": "post_call",
+    "categories": []
+  },
+  "handbook_config": {
+    "default_personality": true,
+    "natural_filler_words": true,
+    "ai_disclosure": true
+  },
+  "voice_id": "retell-Cimo",
+  "max_call_duration_ms": 3600000,
+  "interruption_sensitivity": 0.9,
+  "allow_user_dtmf": true,
+  "user_dtmf_options": {},
+  "conversationFlow": {
+    "conversation_flow_id": "conversation_flow_fd63462f8c8d",
+    "version": 0,
+    "global_prompt": "# IDENTITY\nYou are {{agent_name}}, a professional AI receptionist for {{business_name}}, a {{business_type}} business. You answer inbound calls on behalf of this business 24/7 when staff are unavailable.\n\n# YOUR JOB\nYour only job is to:\n1. Greet the caller warmly and represent the business professionally\n2. Answer questions using ONLY the knowledge base provided\n3. Check availability and book appointments when requested\n4. Transfer emergencies to the owner immediately\n5. Take a message if you cannot help\n\n# STRICT RULES — FOLLOW THESE WITHOUT EXCEPTION\n\n## Hallucination Prevention\n- NEVER invent prices, hours, services, or policies not in your knowledge base\n- If you do not know the answer, say exactly: \"I don't have that information on hand, but I can take your name and number and have someone call you back.\"\n- NEVER guess or estimate. No \"I think\" or \"probably\" about business details.\n\n## Stay In Scope\n- You represent {{business_name}} ONLY. Do not discuss competitors.\n- Do not answer questions unrelated to this business (no general advice, no medical diagnoses, no legal advice, no weather, etc.)\n- If asked something off-topic, redirect: \"I'm only able to help with questions about {{business_name}}. Is there something I can help you with?\"\n\n## Identity\n- Never reveal you are an AI unless directly and sincerely asked\n- If asked, say: \"I'm a virtual receptionist for {{business_name}}.\"\n- Never mention Retell, OpenAI, or any technology vendor\n\n## Tone & Style\n- Speak in short, natural sentences this is a phone call, not an email\n- Never say \"Certainly!\", \"Absolutely!\", or \"Of course!\" — sound human, not robotic\n- Use the caller's name once you have it\n- Be warm but efficient — respect the caller's time\n\n## Booking\n- Only offer times that come back from the availability check tool\n- Never promise a time without checking first\n- Always confirm: name, callback number, and appointment time before ending\n\n## Emergencies\n- If the caller describes an urgent situation (flooding, burst pipe, chest pain, severe injury, fire), immediately say: \"I'm going to connect you with someone right now\" and trigger the transfer tool — do not delay \n\n## Ending a Call\n- Always end with the business name: \"Thanks for calling {{business_name}}, have a great day!\"\n- Never just hang up without a closing\n\n# KNOWLEDGE BASE\n{{knowledge_base}}\n\n# BUSINESS CONTEXT\n- Business name: {{business_name}}\n- Business type: {{business_type}}\n- Owner emergency contact: {{owner_phone}}",
+    "nodes": [
+      {
+        "instruction": {
+          "type": "static_text",
+          "text": "Thank you for calling {{business_name}}, my name is {{agent_name}}, how can I help you\n  today?"
+        },
+        "name": "Welcome Node",
+        "edges": [
+          {
+            "destination_node_id": "node-1775762232766",
+            "id": "edge-1775761975250-jbfb8v3gm",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to schedule, book, or make an appointment "
+            }
+          },
+          {
+            "destination_node_id": "node-1775765182420",
+            "id": "edge-1775765161398-s1p9tw5bd",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to reschedule or modify an appointment"
+            }
+          },
+          {
+            "destination_node_id": "node-1775765180102",
+            "id": "edge-1775765129571-qnoirrpsa",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to cancel an appointment"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762263951",
+            "id": "edge-1775762010263-o6qlgv000",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller has a question about hours, services, pricing, or location"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762289649",
+            "id": "edge-1775762012381-ua1n6vr31",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller describes an urgent or emergency situation"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762369658",
+            "id": "edge-1775762455537-p84t8en60",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller asks to speak to a person, owner, or staff member"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762538467",
+            "id": "edge-1775762014183-edvg1uflh",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to leave a message or be called back"
+            }
+          }
+        ],
+        "start_speaker": "agent",
+        "id": "start-node-1775760615870",
+        "type": "conversation",
+        "display_position": {
+          "x": 558,
+          "y": 6
+        }
+      },
+      {
+        "name": "Goodbye",
+        "id": "end-call-node-1775760615870",
+        "type": "end",
+        "display_position": {
+          "x": 2790,
+          "y": 510
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Politely end the call"
+        }
+      },
+      {
+        "name": "Book Appointment",
+        "edges": [
+          {
+            "id": "edge-1775762232766-xoaooaxbp",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Describe the transition condition"
+            }
+          }
+        ],
+        "id": "node-1775762232766",
+        "type": "conversation",
+        "display_position": {
+          "x": 1230,
+          "y": -1386
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": ""
+        }
+      },
+      {
+        "name": "Answer FAQ",
+        "edges": [
+          {
+            "destination_node_id": "node-1775763052801",
+            "id": "edge-1775762263951-mv1zteeqk",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller has no more questions and is satisfied"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762232766",
+            "id": "edge-1775764445893-hnj4s7vqv",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to book an appointment"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762538467",
+            "id": "edge-1775764472274-8fjmlfs8x",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to leave a message"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762369658",
+            "id": "edge-1775764692129-kqq0df1dm",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": " Caller wants to be called back"
+            }
+          }
+        ],
+        "id": "node-1775762263951",
+        "type": "conversation",
+        "display_position": {
+          "x": 1590,
+          "y": -18
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "A caller has a question about {{business_name}}. Answer using ONLY the information in {{knowledge_base}}. If the answer is not in the knowledge base say exactly: \"I don't have that information on hand, but I can take a message and have someone call you back.\" Never guess or make up details.\nAfter answering, ask: \"Is there anything else I can help you with?\""
+        }
+      },
+      {
+        "custom_sip_headers": {},
+        "transfer_destination": {
+          "type": "predefined",
+          "number": "+16507434932"
+        },
+        "edge": {
+          "destination_node_id": "node-1775762538467",
+          "id": "edge-1775762289649-yplzidyvy",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Transfer failed"
+          }
+        },
+        "name": "Emergency Transfer",
+        "ignore_e164_validation": false,
+        "id": "node-1775762289649",
+        "transfer_option": {
+          "type": "cold_transfer",
+          "show_transferee_as_caller": false,
+          "enable_bridge_audio_cue": true
+        },
+        "type": "transfer_call",
+        "speak_during_execution": false,
+        "display_position": {
+          "x": 1590,
+          "y": 558
+        }
+      },
+      {
+        "name": "Speak to Someone",
+        "edges": [
+          {
+            "destination_node_id": "node-1775762538467",
+            "id": "edge-1775762369658-e3hdcdsyv",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller wants to leave a message"
+            }
+          },
+          {
+            "destination_node_id": "node-1775762289649",
+            "id": "edge-1775763579741-q4vxqz9ok",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Caller says it's urgent or wants immediate transfer"
+            }
+          }
+        ],
+        "id": "node-1775762369658",
+        "type": "conversation",
+        "display_position": {
+          "x": 1590,
+          "y": 750
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "The caller wants to speak to a staff member or the owner. Acknowledge them warmly, let them know staff are currently unavailable, and offer two options:\nleave a message and someone will call back, or if it's urgent they can be transferred immediately."
+        }
+      },
+      {
+        "name": "Take a Message",
+        "edges": [
+          {
+            "destination_node_id": "node-1775763052801",
+            "id": "edge-1775762538467-r36d6nga6",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Agent has collected caller's full name AND callback phone number"
+            }
+          }
+        ],
+        "id": "node-1775762538467",
+        "type": "conversation",
+        "display_position": {
+          "x": 1614,
+          "y": 1230
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": " Collect the caller's name and callback phone number. Ask for one at a time.\n  Start by saying \"I'd be happy to take a message, can I get your name please?\"\n  Do not transition until you have both the full name and a phone number."
+        }
+      },
+      {
+        "name": "Wrap Up",
+        "edges": [
+          {
+            "destination_node_id": "end-call-node-1775760615870",
+            "id": "edge-1775763052801-itkg40p34",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "Conversation is complete"
+            }
+          }
+        ],
+        "id": "node-1775763052801",
+        "type": "conversation",
+        "display_position": {
+          "x": 2214,
+          "y": 294
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "Thank the caller by name if you have it, say goodbye on behalf of {{business_name}}, and end with \"Have a great day!\" Keep it to 1-2 sentences."
+        }
+      },
+      {
+        "name": "Cancel an Appointment",
+        "edges": [
+          {
+            "destination_node_id": "node-1775767161373",
+            "id": "edge-1775765180102-0-f7jvhkwqn",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "All variables are collected"
+            }
+          }
+        ],
+        "id": "node-1775765180102",
+        "type": "conversation",
+        "display_position": {
+          "x": 1230,
+          "y": -594
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": " The caller wants to cancel an appointment at {{business_name}}.                                                                                                                              \n  Acknowledge them politely and let them know you'll take care of it.\n  Ask for their full name {{caller_name}} and the date {{appointment_date}} and time {{appointment_time}} of the appointment\n  they want to cancel. Ask for one piece of information at a time.\n  Do not proceed until you have all."
+        }
+      },
+      {
+        "name": "Modify an Appointment",
+        "edges": [
+          {
+            "destination_node_id": "node-1775768340062",
+            "id": "edge-1775765182420-0-7w3gv60uu",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "All variables are collected"
+            }
+          }
+        ],
+        "id": "node-1775765182420",
+        "type": "conversation",
+        "display_position": {
+          "x": 1230,
+          "y": -1074
+        },
+        "instruction": {
+          "type": "prompt",
+          "text": "The caller wants to reschedule an appointment at {{business_name}}.\n  Acknowledge them and let them know you'll help. First ask for their\n  full name {{caller_name}} and their current appointment date {{appointment_date}} and time {{appointment_time}}. Then ask what\n  new date {{new_appointment_date}} and time {{new_appointment_time}} they'd prefer. Ask for one piece of information at\n  a time. Do not proceed until you have their name, current appointment\n  details, and preferred new date and time."
+        }
+      },
+      {
+        "variables": [
+          {
+            "name": "caller_name",
+            "type": "string",
+            "description": "Full Name of the user"
+          },
+          {
+            "name": "appointment_date",
+            "type": "string",
+            "description": "Date of the appointment to cancel"
+          },
+          {
+            "name": "appointment_time",
+            "type": "string",
+            "description": "Time of the appointment to cancel"
+          }
+        ],
+        "else_edge": {
+          "destination_node_id": "node-1775765180102",
+          "id": "node-1775767161373-else-edge",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Else"
+          }
+        },
+        "name": "Extract Variables",
+        "edges": [
+          {
+            "id": "edge-1775767161373-8uqfeulqj",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "All variables are collected"
+            }
+          }
+        ],
+        "id": "node-1775767161373",
+        "type": "extract_dynamic_variables",
+        "display_position": {
+          "x": 1686,
+          "y": -546
+        }
+      },
+      {
+        "variables": [
+          {
+            "name": "caller_name",
+            "type": "string",
+            "description": "Full Name of the user"
+          },
+          {
+            "name": "appointment_date",
+            "type": "string",
+            "description": "Date of the appointment to cancel"
+          },
+          {
+            "name": "appointment_time",
+            "type": "string",
+            "description": "Time of the appointment to cancel"
+          },
+          {
+            "name": "new_appointment_date",
+            "type": "string",
+            "description": "Preferred new appointment date "
+          },
+          {
+            "name": "new_appointment_time",
+            "type": "string",
+            "description": "Preferred new appointment time"
+          }
+        ],
+        "else_edge": {
+          "destination_node_id": "node-1775765182420",
+          "id": "else_edge-1775768340062-1-ezjbtkfp6",
+          "transition_condition": {
+            "type": "prompt",
+            "prompt": "Else"
+          }
+        },
+        "name": "Extract Variables",
+        "edges": [
+          {
+            "id": "edge-1775768340062-0-qry9rjh83",
+            "transition_condition": {
+              "type": "prompt",
+              "prompt": "All variables are collected"
+            }
+          }
+        ],
+        "id": "node-1775768340062",
+        "type": "extract_dynamic_variables",
+        "display_position": {
+          "x": 1686,
+          "y": -1050
+        }
+      }
+    ],
+    "components": [
+      {
+        "name": "Component L1",
+        "start_node_id": "conversation-1775769108376",
+        "conversation_flow_component_id": "cf-component-1775769108375",
+        "nodes": [
+          {
+            "name": "Conversation",
+            "edges": [],
+            "id": "conversation-1775769108376",
+            "type": "conversation",
+            "display_position": {
+              "x": 200,
+              "y": 100
+            },
+            "instruction": {
+              "type": "prompt",
+              "text": "Describe what the AI should say or do"
+            }
+          },
+          {
+            "name": "Exit Component",
+            "id": "component-end-1775769108376",
+            "type": "end",
+            "speak_during_execution": false,
+            "display_position": {
+              "x": 600,
+              "y": 100
+            },
+            "instruction": {
+              "type": "static_text",
+              "text": "Component completed"
+            }
+          }
+        ],
+        "user_modified_timestamp": 1775769108376,
+        "tools": []
+      }
+    ],
+    "start_node_id": "start-node-1775760615870",
+    "start_speaker": "agent",
+    "model_choice": {
+      "type": "cascading",
+      "model": "gpt-4.1"
+    },
+    "tool_call_strict_mode": true,
+    "knowledge_base_ids": [],
+    "kb_config": {
+      "top_k": 3,
+      "filter_score": 0.6
+    },
+    "begin_tag_display_position": {
+      "x": 390,
+      "y": 6
+    },
+    "is_published": false,
+    "is_transfer_cf": false
+  }
+}

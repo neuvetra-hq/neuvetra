@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1772829451205,
+      "tag": "0000_groovy_echo",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772830893028,
+      "tag": "0001_ambitious_microbe",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772845869108,
+      "tag": "0002_sync_users_trigger",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1773028748404,
+      "tag": "0003_unique_sally_floyd",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1744300000000,
+      "tag": "0004_stripe_billing",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1744400000000,
+      "tag": "0005_calendar_integration",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1744500000000,
+      "tag": "0006_callback_requests",
+      "breakpoints": true
+    }
+  ]
+}

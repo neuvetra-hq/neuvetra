@@ -1,0 +1,20 @@
+{
+  "name": "@frontdesk/database",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun --env-file=../../apps/api/.env run src/migrate.ts",
+    "db:push": "bun --env-file=../../apps/api/.env drizzle-kit push",
+    "db:studio": "bun --env-file=../../apps/api/.env drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.1",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.9"
+  }
+}
