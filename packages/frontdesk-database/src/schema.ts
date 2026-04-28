@@ -1,6 +1,6 @@
 import {
   pgTable,
-  pgEnum,
+  pgSchema,
   uuid,
   text,
   integer,
@@ -11,16 +11,25 @@ import {
 } from "drizzle-orm/pg-core"
 
 // ---------------------------------------------------------------------------
-// Enums
+// Schemas
+// ---------------------------------------------------------------------------
+// FrontDesk-specific tables live in the `frontdesk` Postgres schema.
+// `public.users` stays shared across all Neuvetra products and mirrors `auth.users`
+// via the `on_auth_user_created` trigger (see migration 0007_neuvetra_namespace_reorg).
+
+export const frontdesk = pgSchema("frontdesk")
+
+// ---------------------------------------------------------------------------
+// Enums (frontdesk schema)
 // ---------------------------------------------------------------------------
 
-export const businessStatusEnum = pgEnum("business_status", [
+export const businessStatusEnum = frontdesk.enum("business_status", [
   "active",
   "inactive",
   "suspended",
 ])
 
-export const businessTypeEnum = pgEnum("business_type", [
+export const businessTypeEnum = frontdesk.enum("business_type", [
   "medical",
   "dental",
   "spa",
@@ -31,20 +40,20 @@ export const businessTypeEnum = pgEnum("business_type", [
   "other",
 ])
 
-export const memberRoleEnum = pgEnum("member_role", [
+export const memberRoleEnum = frontdesk.enum("member_role", [
   "owner",
   "admin",
   "member",
 ])
 
-export const callStatusEnum = pgEnum("call_status", [
+export const callStatusEnum = frontdesk.enum("call_status", [
   "in_progress",
   "completed",
   "missed",
   "transferred",
 ])
 
-export const calendarProviderEnum = pgEnum("calendar_provider", [
+export const calendarProviderEnum = frontdesk.enum("calendar_provider", [
   "google",
   "outlook",
   "apple",
@@ -52,10 +61,26 @@ export const calendarProviderEnum = pgEnum("calendar_provider", [
 ])
 
 // ---------------------------------------------------------------------------
-// businesses
+// users (public schema — shared identity across all Neuvetra products)
+// id mirrors Supabase auth.users.id — no defaultRandom()
 // ---------------------------------------------------------------------------
 
-export const businesses = pgTable("businesses", {
+export const users = pgTable("users", {
+  id:        uuid("id").primaryKey(),
+  email:     text("email").unique(),
+  firstName: text("first_name").notNull(),
+  lastName:  text("last_name").notNull(),
+  phone:     text("phone").unique(),
+  avatarUrl: text("avatar_url"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+})
+
+// ---------------------------------------------------------------------------
+// businesses (frontdesk schema)
+// ---------------------------------------------------------------------------
+
+export const businesses = frontdesk.table("businesses", {
   id:            uuid("id").primaryKey().defaultRandom(),
   name:          text("name").notNull(),
   slug:          text("slug").notNull().unique(),
@@ -66,32 +91,18 @@ export const businesses = pgTable("businesses", {
   businessType:  businessTypeEnum("business_type"),
   stripeCustomerId:      text("stripe_customer_id").unique(),
   stripeSubscriptionId:  text("stripe_subscription_id").unique(),
-  stripePlanId:          text("stripe_plan_id"),          // flat price id (e.g. price_growth_flat)
-  stripeMeteredItemId:   text("stripe_metered_item_id"),  // subscription item id for usage reporting
+  stripePlanId:          text("stripe_plan_id"),
+  stripeMeteredItemId:   text("stripe_metered_item_id"),
   createdAt:     timestamp("created_at").notNull().defaultNow(),
   updatedAt:     timestamp("updated_at").notNull().defaultNow(),
 })
 
 // ---------------------------------------------------------------------------
-// users  (id mirrors Supabase auth.users.id — no defaultRandom())
+// business_members (frontdesk schema — many-to-many: users ↔ businesses)
+// Cross-schema FK to public.users.id is supported by Postgres natively.
 // ---------------------------------------------------------------------------
 
-export const users = pgTable("users", {
-  id:        uuid("id").primaryKey(),
-  email:     text("email").unique(),          // nullable — phone auth users may have no email
-  firstName: text("first_name").notNull(),
-  lastName:  text("last_name").notNull(),
-  phone:     text("phone").unique(),            // verified personal mobile (nullable for legacy rows)
-  avatarUrl: text("avatar_url"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-})
-
-// ---------------------------------------------------------------------------
-// business_members  (many-to-many: users ↔ businesses)
-// ---------------------------------------------------------------------------
-
-export const businessMembers = pgTable(
+export const businessMembers = frontdesk.table(
   "business_members",
   {
     id:         uuid("id").primaryKey().defaultRandom(),
@@ -108,28 +119,26 @@ export const businessMembers = pgTable(
 )
 
 // ---------------------------------------------------------------------------
-// knowledge_base
+// knowledge_base (frontdesk schema)
 // ---------------------------------------------------------------------------
 
-export const knowledgeBase = pgTable("knowledge_base", {
+export const knowledgeBase = frontdesk.table("knowledge_base", {
   id:           uuid("id").primaryKey().defaultRandom(),
   businessId:   uuid("business_id")
     .notNull()
     .references(() => businesses.id, { onDelete: "cascade" }),
   question:     text("question").notNull(),
   answer:       text("answer").notNull(),
-  // Groups entries into labeled sections (e.g. "Emergencies", "Pricing")
   category:     text("category"),
-  // Display order within the category
   sortOrder:    integer("sort_order").notNull().default(0),
   createdAt:    timestamp("created_at").notNull().defaultNow(),
 })
 
 // ---------------------------------------------------------------------------
-// calendar_connections  (one row per provider per business)
+// calendar_connections (frontdesk schema — one row per provider per business)
 // ---------------------------------------------------------------------------
 
-export const calendarConnections = pgTable(
+export const calendarConnections = frontdesk.table(
   "calendar_connections",
   {
     id:                uuid("id").primaryKey().defaultRandom(),
@@ -137,9 +146,7 @@ export const calendarConnections = pgTable(
       .notNull()
       .references(() => businesses.id, { onDelete: "cascade" }),
     provider:          calendarProviderEnum("provider").notNull(),
-    // Provider-issued account identifier — used to detect re-auth vs new connect
     providerAccountId: text("provider_account_id"),
-    // Human-readable display ("Connected as john@gmail.com")
     providerEmail:     text("provider_email"),
     accessToken:       text("access_token"),
     refreshToken:      text("refresh_token"),
@@ -149,19 +156,18 @@ export const calendarConnections = pgTable(
     updatedAt:         timestamp("updated_at").notNull().defaultNow(),
   },
   (t) => [
-    // One active connection per provider per business
     uniqueIndex("uq_calendar_connections").on(t.businessId, t.provider),
   ],
 )
 
 // ---------------------------------------------------------------------------
-// callback_requests
-// Saved by the take_message webhook function when the AI takes a caller's
-// name, number, and reason so the business can call them back.
-// Used when no calendar is connected OR for businesses that prefer callbacks.
+// callback_requests (frontdesk schema)
+// Saved by the take_message webhook when the AI captures a caller's name,
+// number, and reason. Used when no calendar is connected or the business
+// prefers a callback model.
 // ---------------------------------------------------------------------------
 
-export const callbackRequests = pgTable("callback_requests", {
+export const callbackRequests = frontdesk.table("callback_requests", {
   id:          uuid("id").primaryKey().defaultRandom(),
   businessId:  uuid("business_id")
     .notNull()
@@ -169,15 +175,15 @@ export const callbackRequests = pgTable("callback_requests", {
   callerPhone: text("caller_phone").notNull(),
   callerName:  text("caller_name"),
   message:     text("message"),
-  status:      text("status").notNull().default("pending"), // "pending" | "handled"
+  status:      text("status").notNull().default("pending"),
   createdAt:   timestamp("created_at").notNull().defaultNow(),
 })
 
 // ---------------------------------------------------------------------------
-// calls
+// calls (frontdesk schema)
 // ---------------------------------------------------------------------------
 
-export const calls = pgTable("calls", {
+export const calls = frontdesk.table("calls", {
   id:              uuid("id").primaryKey().defaultRandom(),
   businessId:      uuid("business_id")
     .notNull()
