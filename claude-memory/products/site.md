@@ -5,8 +5,8 @@ title: "Site — Neuvetra parent landing surface"
 aliases: ["site", "neuvetra site", "parent landing", "neuvetra.com site", "neuvetra.ai"]
 status: active
 created: 2026-04-25
-updated: 2026-04-27
-related: [parent-landing-experience, spirit, frontdesk, terrascope, 2026-04-25-parent-landing-site, 2026-04-25-spirit-as-brand-icon, 2026-04-25-spirit-packaging, 2026-04-25-wiki-architecture-policy, 2026-04-27-site-deploy-and-dns, multi-product-launch, stack, site-chat-backend, langfuse, vercel-ai-sdk]
+updated: 2026-04-28
+related: [parent-landing-experience, spirit, frontdesk, terrascope, 2026-04-25-parent-landing-site, 2026-04-25-spirit-as-brand-icon, 2026-04-25-spirit-packaging, 2026-04-25-wiki-architecture-policy, 2026-04-27-site-deploy-and-dns, 2026-04-28-consolidate-into-single-monorepo, multi-product-launch, stack, site-chat-backend, langfuse, vercel-ai-sdk]
 mentions: [frontdesk, terrascope, spirit]
 discussed_in: [2026-04-25-site-scaffold, 2026-04-27-site-deploy-and-dns]
 sources: [2026-04-25-site-scaffold-conv, 2026-04-27-site-deploy-and-dns-conv]
@@ -23,7 +23,9 @@ Site is **independent** of the products it advertises — it has its own codebas
 
 ## Status
 
-**LIVE in production at `https://www.neuvetra.ai`** as of 2026-04-27 ([[2026-04-27-site-deploy-and-dns]]). Deployed to Railway in the `Neuvetra-AI` project alongside Langfuse. Code on `main` of [github.com/neuvetra-hq/site](https://github.com/neuvetra-hq/site); HEAD `b7298b7`.
+**LIVE in production at `https://www.neuvetra.ai`** as of 2026-04-27 ([[2026-04-27-site-deploy-and-dns]]). Deployed to Railway in the `Neuvetra-AI` project alongside Langfuse.
+
+**Codebase home (as of 2026-04-28):** `apps/site-api/` + `apps/site-web/` in the unified Neuvetra monorepo at `github.com/neuvetra-hq/neuvetra` ([[2026-04-28-consolidate-into-single-monorepo]]). Was at `github.com/neuvetra-hq/site` HEAD `b7298b7` until the consolidation; the old repo remains for archival reference until Railway is repointed at the new monorepo.
 
 **What's live:**
 - **`https://www.neuvetra.ai`** — Homepage v1 (Spirit + wordmark + slogan + product cards + chat input). Railway-issued Let's Encrypt SSL.
@@ -62,12 +64,9 @@ Standard Neuvetra stack per `[[stack]]` — Bun + Turborepo + Vite + React 19 + 
 | Linting | ESLint 9 (flat config) | `@eslint/js` + `typescript-eslint` + `react-hooks` + `react-refresh` |
 | Deploy | Railway, **`Neuvetra-AI` project** | Both `site-api` and `site-web` services live. **Per-app Root Directory** (`apps/api` / `apps/web`) — each app is its own Docker build context (the staged-COPY pattern hit a BuildKit edge case; both Dockerfiles now use simple `COPY . . + bun install`). `railway.toml` + `Dockerfile` for both apps committed in-repo. |
 
-### Hierarchy deviations from FrontDesk / Terrascope
+### Layout in the monorepo
 
-- **No `code/` subdirectory.** Site IS the code root. FrontDesk pairs `code/` with `wiki/` (placeholder, slated for review); Terrascope used to pair `code/` with `ghg-kb/`, but the GHG KB was elevated to root 2026-04-26 — so all three knowledge stores (`wiki/`, `neuvetra-kb/`, `ghg-kb/`) now sit at the same Neuvetra-root level. Site has no KB sibling planned.
-- **No `wiki/` subdirectory** by `[[2026-04-25-wiki-architecture-policy|policy]]`. Memory wikis live only at the Neuvetra root. The `FrontDesk/wiki/` placeholder is now redundant under this policy and slated for review.
-
-Both deviations are documented in `Site\CLAUDE.md` and rolled up into the root `CLAUDE.md` hierarchy diagram.
+As of 2026-04-28, all products are flattened siblings under `apps/`. There's no per-product folder containing a `code/` subdirectory anymore. Site lives at `apps/site-api/` and `apps/site-web/`; FrontDesk at `apps/frontdesk-{api,web}/`; Terrascope at `apps/terrascope-{api,web}/`. The three knowledge stores (`claude-memory/`, `neuvetra-kb/`, `ghg-kb/`) sit at root.
 
 ## Open strategic questions
 
@@ -84,9 +83,9 @@ These are deferred from `[[parent-landing-experience]]` and remain blockers for 
 
 ## Where the operational state lives
 
-- **Build / deploy state, dev commands, conventions:** `Site\CLAUDE.md` (cascades up to `Neuvetra\CLAUDE.md`).
-- **Scaffold spec + plan:** `docs\superpowers\specs\2026-04-25-neuvetra-site-scaffold-design.md` and `docs\superpowers\plans\2026-04-25-neuvetra-site-scaffold.md`.
-- **Memory / strategy:** this wiki (`Neuvetra\wiki\`). Site has no `wiki/` of its own per `[[2026-04-25-wiki-architecture-policy]]`.
+- **Build / deploy state, dev commands, conventions:** root `CLAUDE.md` (rewritten in the 2026-04-28 cycle) and per-app CLAUDE.md files in `apps/site-{api,web}/` if they exist.
+- **Scaffold spec + plan:** `docs/superpowers/specs/2026-04-25-neuvetra-site-scaffold-design.md` and `docs/superpowers/plans/2026-04-25-neuvetra-site-scaffold.md`.
+- **Memory / strategy:** this wiki (`claude-memory/`).
 
 ## Next
 

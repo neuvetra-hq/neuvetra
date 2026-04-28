@@ -2,7 +2,7 @@
 
 Catalog of every page in the C-level wiki, organized by type. The LLM reads this first on every Neuvetra question.
 
-> Last updated: 2026-04-27 (Karpathy's LLM Wiki + autoresearch frameworks adopted as standing Neuvetra guidance — see [[karpathy-llm-wiki]] + [[karpathy-autoresearch]])
+> Last updated: 2026-04-28 (Monorepo consolidation — single private repo at `github.com/neuvetra-hq/neuvetra`. See [[2026-04-28-consolidate-into-single-monorepo]] + [[2026-04-28-monorepo-restructure]] + [[frontdesk-sms-architecture]].)
 
 ---
 
@@ -25,6 +25,7 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 - [[2026-04-25-site-scaffold-conv]] — Site scaffold stand-up + wiki-architecture policy
 - [[2026-04-27-site-deploy-and-dns-conv]] — Site deploy + neuvetra.ai DNS swap + Langfuse OTel migration
 - [[2026-04-27-karpathy-frameworks-conv]] — Karpathy's LLM Wiki + autoresearch adopted as standing Neuvetra guidance
+- [[2026-04-28-monorepo-restructure-conv]] — Twilio Campaign 2 diagnosis + monorepo consolidation execution
 
 ---
 
@@ -53,6 +54,7 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 - [[2026-04-25-spirit-packaging]] — Copy the Spirit into Site; defer extraction to 3rd consumer
 - [[2026-04-25-wiki-architecture-policy]] — Memory wikis live only at the Neuvetra root; GHG KB sole exception
 - [[2026-04-25-auth-billing-strategy]] — Single Neuvetra-wide user base; shared Supabase + Twilio infra (closed 2026-04-26 via [[2026-04-26-site-chat-backend-architecture]])
+- [[2026-04-28-consolidate-into-single-monorepo]] — Three product repos + four unbacked-up local stores consolidated into single private monorepo at `github.com/neuvetra-hq/neuvetra` (supersedes [[2026-04-25-folder-hierarchy]])
 
 > Wiki schema/policy calls from 2026-04-25 (wiki-as-memory, taxonomy-expansion, lifecycle policy A/B/C, skills operating model) are folded into the [[2026-04-25-skill-and-wiki-framework|meeting note]] § Decisions, per the new lifecycle policy on decision-page minimization.
 
@@ -104,6 +106,7 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 ## Topics
 - [[karpathy-llm-wiki]] — Karpathy's LLM Wiki model; foundational primitive for every Neuvetra knowledge store (claude-memory, ghg-kb, neuvetra-kb)
 - [[karpathy-autoresearch]] — Karpathy's autoresearch model; foundational primitive for every Neuvetra optimization or measurement system
+- [[frontdesk-sms-architecture]] — FrontDesk's two-campaign SMS architecture: Campaign 1 (auth, approved, Twilio Verify) and Campaign 2 (owner notifications, Low Volume Mixed, rejected 2026-04-28)
 
 ## Meetings
 - [[2026-04-25-c-level-wiki-design]] — Designed and scaffolded this wiki
@@ -119,3 +122,4 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 - [[2026-04-26-site-chat-backend-architecture]] — Multi-agent AI stack ratified for [[site]]; closes [[2026-04-25-auth-billing-strategy]]; new tech [[vercel-ai-sdk]] + [[langfuse]]; [[xstate]] now serves backend too; [[site-chat-backend]] M1-M4 trajectory locked
 - [[2026-04-26-site-chat-backend-m1-shipped]] — Site chat backend M1 shipped end-to-end; Langfuse v3 deployed on Railway (`Neuvetra-AI` project); code published to [github.com/neuvetra-hq/site](https://github.com/neuvetra-hq/site); PR #1 squash-merged into `main`; `neuvetra.ai` locked as Site's domain home (closes [[parent-landing-experience]] Q8)
 - [[2026-04-27-site-deploy-and-dns]] — Site deployed to Railway `Neuvetra-AI` (both services live); Langfuse migrated from manual SDK to OTel-based integration per official skill; MinIO credential mismatch on self-hosted Langfuse server fixed; `neuvetra.ai` DNS swap done via `www` + `api` subdomain pattern (mirrors `.com`); apex 301-forwards via Squarespace; Railway-issued SSL; `https://www.neuvetra.ai` LIVE
+- [[2026-04-28-monorepo-restructure]] — Three product repos + four local-only stores consolidated into a single private monorepo at `github.com/neuvetra-hq/neuvetra`; Twilio Campaign 2 rejection diagnosed (deferred to Issue 1); FrontDesk branch cleanup (deleted `feature/app-fsm`); `.gitattributes` LF normalization added; old `.git` directories nuked; initial commit `6466770` (720 files, 93,782 lines); 8 operational decisions folded per Policy C

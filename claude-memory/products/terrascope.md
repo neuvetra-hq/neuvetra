@@ -1,10 +1,11 @@
 ---
 id: terrascope
 type: product
+title: "Terrascope"
 status: active
 created: 2026-04-25
-updated: 2026-04-25
-related: [frontdesk, multi-product-launch, stack, weaviate, 2026-04-25-calculator-implementation-strategy]
+updated: 2026-04-28
+related: [frontdesk, site, multi-product-launch, stack, supabase, weaviate, 2026-04-25-calculator-implementation-strategy, 2026-04-28-consolidate-into-single-monorepo]
 tags: [product]
 ---
 
@@ -15,21 +16,23 @@ GHG emissions reporting chatbot. Subscription product that talks businesses thro
 ## Positioning
 Compliance + operational tool for SMBs subject to California (SB 253, SB 261, CARB MRR) and EU (CSRD, ESRS E1) reporting. Expansion-ready for US Federal, TCFD, ISSB, UK, Canada, Australia.
 
-## Status (as of 2026-04-25 — full detail in `Terrascope\status.md`)
-- **Wiki content:** 106 pages, 39 sources ingested. EU + California complete. PCAF Cat 15 done. 5 PDFs unprocessed in inbox.
-- **Wiki calculation engine (Python — reference spec):** Phase 1 + 2 complete. 4 methodologies + Inventory aggregator. 33 tests passing.
+## Status (as of 2026-04-28 — full operational detail in `apps/terrascope-api/STATUS.md`)
+
+- **Codebase home:** `apps/terrascope-api/` + `apps/terrascope-web/` + `packages/terrascope-database/` + `packages/terrascope-config/` + `packages/terrascope-calculator/` in the unified Neuvetra monorepo (was `Neuvetra/Terrascope/code/...` until 2026-04-28; was the only product without a GitHub remote pre-restructure).
+- **GHG KB:** at `ghg-kb/` (top-level since 2026-04-26; absorbed into the monorepo 2026-04-28). 119 pages, 44 sources. EU + California complete.
+- **Calculation engine (Python — reference spec):** Phase 1 + 2 complete. 4 methodologies + Inventory aggregator. 33 tests passing.
 - **API:** real. 4-step `/chat` pipeline (extract → calculate → format). `/companies`, `/reports`, `/factors` wired.
-- **TypeScript calculator:** 4 methodologies mirrored, 9 test files passing.
-- **Database:** 5 tables, 2,138 emission factors seeded, RLS on (not in migrations).
+- **TypeScript calculator:** 4 methodologies mirrored, 9 test files passing. Lives at `packages/terrascope-calculator/`.
+- **Database:** 5 tables, 2,138 emission factors seeded (per audit), RLS on (not in migrations).
 - **Frontend:** "coming soon" placeholder. Largest visible gap.
-- **Deploy:** no Railway config.
+- **Deploy:** not yet deployed.
 
 ## Architectural commitment
 The LLM never does arithmetic. Every emission number returned to a user originates from a typed `CalculationResult` produced by a calculator function.
 
 ## Tech
 Standard Neuvetra stack — see [[stack]]. Notable additions:
-- [[weaviate]] for wiki retrieval (RAG + graph)
+- [[weaviate]] for KB retrieval (RAG + graph)
 - Python calculation engine in parallel with TypeScript runtime — open: [[2026-04-25-calculator-implementation-strategy]]
 
 ## Critical regulatory facts
@@ -39,15 +42,19 @@ Standard Neuvetra stack — see [[stack]]. Notable additions:
 ## Open strategic questions
 - Calculator implementation: Python canonical, TS canonical, or parallel → [[2026-04-25-calculator-implementation-strategy]]
 - Brand alignment → [[2026-04-25-brand-identity]]
-- Billing model → [[2026-04-25-auth-billing-strategy]]
 
 ## Where the operational state lives
-- **Operational status:** `Neuvetra\Terrascope\status.md` (build state, gaps, factor queue, audit findings)
-- **GHG KB schema:** `Neuvetra\ghg-kb\CLAUDE.md` (top-level since 2026-04-26; was `Neuvetra\Terrascope\ghg-kb\CLAUDE.md`)
-- **Code:** `Neuvetra\Terrascope\code\` — see `code\CLAUDE.md`
+- **Operational status:** `apps/terrascope-api/STATUS.md` — build state, gaps, factor queue, audit findings (was `Neuvetra/Terrascope/status.md` until 2026-04-28).
+- **GHG KB schema:** `ghg-kb/CLAUDE.md` (top-level; CLAUDE.md preserved per Karpathy LLM Wiki model — [[karpathy-llm-wiki]]).
+- **Code:** `apps/terrascope-{api,web}/` and `packages/terrascope-{database,config,calculator}/`.
 
 ## Next
-- Phase 1 cleanup: Drizzle migrations, schema columns (`unit_class`, `input_unit_canonical`), RLS in migrations.
-- Process 5 inbox PDFs (LCFS, GHG Protocol Land/Removals, IPCC AR6 Ch7, EU CBAM, EU Taxonomy).
-- Ship a real frontend.
-- Resolve calculator strategy.
+**Pre-Phase-3 gate** (resume next Terrascope session in this order, per `apps/terrascope-api/STATUS.md`):
+1. Reconcile Supabase factor count — audit says 2,138 seeded vs `ghg-kb/factors/index.md` says "Loaded: No"
+2. Fix `ghg-kb/factors/schema.sql` (3 missing columns/constraints) before any factor reload
+3. Rebuild GHG KB git index (currently corrupted)
+4. Update factor-CSV env var in `packages/terrascope-database/src/seed-factors.ts` to point at `ghg-kb/factors/processed/` (path was `Neuvetra/ghg-kb/factors/processed/` pre-monorepo; relative path may need adjustment)
+
+**Then** Phase 3 (mobile combustion → Cat 1 spend → Cat 6 travel → boundary `inventory_config` → Cat 15 financed → AFOLU/baselines) and Weaviate export.
+
+Will get an earthy/green Spirit preset when its frontend is built out — and triggers the Spirit-extraction event per [[2026-04-25-spirit-packaging]] (now a one-line workspace move in the monorepo).
