@@ -9,6 +9,7 @@ import { Chat } from "@/components/Chat"
 import { ProductPill, type ProductPillTheme } from "@/components/ProductPill"
 import { AgentIdentityBar } from "@/components/AgentIdentityBar"
 import { SceneRegion } from "@/components/SceneRegion"
+import { SignInButton } from "@/components/SignInButton"
 import { useChat } from "@/hooks/useChat"
 import type { ChatToolCall } from "@/lib/api"
 import { sceneMachine } from "@/actors/scene.actor"
@@ -257,6 +258,7 @@ export function App() {
       <div ref={containerRef} className="fixed inset-0 bg-[#0b0c0d]" />
 
       <AgentIdentityBar />
+      <SignInButton />
       <SceneRegion sceneActor={sceneActor} />
 
       {/* Compact product pills — top-left, only in chat mode */}

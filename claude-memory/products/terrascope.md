@@ -5,7 +5,7 @@ title: "Terrascope"
 status: active
 created: 2026-04-25
 updated: 2026-04-28
-related: [frontdesk, site, multi-product-launch, stack, supabase, weaviate, 2026-04-25-calculator-implementation-strategy, 2026-04-28-consolidate-into-single-monorepo]
+related: [frontdesk, site, multi-product-launch, stack, supabase, weaviate, 2026-04-25-calculator-implementation-strategy, 2026-04-28-consolidate-into-single-monorepo, 2026-04-28-ghg-kb-confidence-provenance]
 tags: [product]
 ---
 
@@ -26,6 +26,7 @@ Compliance + operational tool for SMBs subject to California (SB 253, SB 261, CA
 - **Database:** 5 tables, 2,138 emission factors seeded (per audit), RLS on (not in migrations).
 - **Frontend:** "coming soon" placeholder. Largest visible gap.
 - **Deploy:** not yet deployed.
+- **Defensibility moat workstream** (in flight 2026-04-28): confidence-tagged provenance for `ghg-kb` wiki body claims (Tier-2 inline `⟦E⟧` / `⟦I:0.7⟧` / `⟦A⟧` labels + per-claim markdown footnote footers) + dual-link source cards in chatbot UI. See [[2026-04-28-ghg-kb-confidence-provenance]] for the strategic call; brainstorm at Section 3 of 5 in [[2026-04-28-ghg-kb-provenance-design]]; spec doc + impl plan pending.
 
 ## Architectural commitment
 The LLM never does arithmetic. Every emission number returned to a user originates from a typed `CalculationResult` produced by a calculator function.
