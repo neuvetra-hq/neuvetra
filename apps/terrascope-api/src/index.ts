@@ -20,7 +20,7 @@ const app = new Elysia()
   .use(factorsRoutes)
   .use(companiesRoutes)
   .use(reportsRoutes)
-  .listen(Bun.env.PORT ?? 3000)
+  .listen(Bun.env.PORT ?? 3002)
 
 console.log(`Terrascope API running on port ${app.server?.port}`)
 

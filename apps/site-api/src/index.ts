@@ -28,7 +28,7 @@ const app = new Elysia()
   .use(chatRoutes)
   .listen({
     hostname: "0.0.0.0",
-    port: Number(Bun.env.PORT ?? 3000),
+    port: Number(Bun.env.PORT ?? 3001),
   })
 
 export type App = typeof app

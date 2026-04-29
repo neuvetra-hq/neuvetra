@@ -11,6 +11,11 @@
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
+    },
+    "lint": {},
+    "test": {},
+    "test:e2e": {
+      "dependsOn": ["^build"]
     }
   }
 }

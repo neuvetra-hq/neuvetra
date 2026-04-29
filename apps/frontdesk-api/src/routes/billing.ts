@@ -281,7 +281,7 @@ export const billingRoutes = new Elysia({ prefix: "/billing" })
     return {
       planId:           planId ?? null,
       status:           sub.status,
-      currentPeriodEnd: sub.current_period_end,
+      currentPeriodEnd: sub.items.data[0]?.current_period_end ?? null,
     }
   })
 
@@ -380,8 +380,13 @@ export const billingRoutes = new Elysia({ prefix: "/billing" })
       return empty
     }
 
-    const periodStart = new Date(sub.current_period_start * 1000)
-    const periodEnd   = new Date(sub.current_period_end   * 1000)
+    const item = sub.items.data[0]
+    if (!item) {
+      console.error("Stripe subscription has no items:", sub.id)
+      return empty
+    }
+    const periodStart = new Date(item.current_period_start * 1000)
+    const periodEnd   = new Date(item.current_period_end   * 1000)
 
     const [usageRow] = await db
       .select({ totalSeconds: sql<number>`COALESCE(SUM(duration_seconds), 0)` })
@@ -409,8 +414,8 @@ export const billingRoutes = new Elysia({ prefix: "/billing" })
       minutesIncluded,
       overageMinutes,
       overageCost,
-      periodStart: sub.current_period_start,
-      periodEnd:   sub.current_period_end,
+      periodStart: item.current_period_start,
+      periodEnd:   item.current_period_end,
       planId:      planId ?? null,
     }
 

@@ -171,7 +171,7 @@ export const chatRoutes = new Elysia({ prefix: "/chat" }).post(
       message: formatResponse.content[0],
       metadata: {
         methodology: calcResult.methodologyId,
-        factor_ids: calcResult.factors.map(f => f.factorId),
+        factor_ids: calcResult.factors.map((f: { factorId: string }) => f.factorId),
         value_kg_co2e: calcResult.value,
         value_t_co2e: Math.round(calcResult.value / 10) / 100,
         regulatory_context: calcResult.regulatoryContext,

@@ -1,5 +1,5 @@
 {
-  "extends": "../../packages/config/tsconfig.base.json",
+  "extends": "../../packages/terrascope-config/tsconfig.base.json",
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],

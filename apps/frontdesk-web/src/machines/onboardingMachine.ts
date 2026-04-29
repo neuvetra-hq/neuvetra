@@ -37,6 +37,8 @@ interface ActivateResult {
 // ── Context ────────────────────────────────────────────────────────────────
 
 interface Context {
+  // Mirrored from input on machine init so guards can read it from context
+  isAlreadyActive: boolean
   // Step 0 — identity
   firstName: string
   lastName: string
@@ -146,10 +148,12 @@ export const onboardingMachine = setup({
   },
 
   guards: {
-    alreadyActive: ({ input }) => input.isAlreadyActive,
+    alreadyActive: ({ context }) => context.isAlreadyActive,
 
     isExistingAccount: ({ event }) =>
-      event.type === "xstate.done.actor.verifyOtp" &&
+      // event.type from xstate.done.actor.<id> is not in the user Events union;
+      // cast for the runtime comparison
+      (event as { type: string }).type === "xstate.done.actor.verifyOtp" &&
       (event as any).output?.hasExistingBusiness === true,
   },
 
@@ -216,7 +220,8 @@ export const onboardingMachine = setup({
 }).createMachine({
   id: "onboarding",
 
-  context: () => ({
+  context: ({ input }) => ({
+    isAlreadyActive: input.isAlreadyActive,
     firstName: "", lastName: "", phone: "",
     userId: null, accessToken: null,
     businessName: "", businessType: "",

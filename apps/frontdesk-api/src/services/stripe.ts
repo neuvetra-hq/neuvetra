@@ -5,7 +5,7 @@ if (!Bun.env.STRIPE_SECRET_KEY) {
 }
 
 export const stripe = new Stripe(Bun.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-06-30.basil",
+  apiVersion: "2026-04-22.dahlia",
 })
 
 export const PLANS = {
