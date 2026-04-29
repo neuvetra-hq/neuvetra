@@ -1,0 +1,92 @@
+# `apps/site-api` — Site API (chat backend)
+
+> **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
+
+Bun + Elysia API serving the Site's `/chat` endpoint. Live at `https://api.neuvetra.ai`. Multi-agent Claude backend with Vercel AI SDK + Langfuse OpenTelemetry tracing + XState orchestration.
+
+## Stack
+
+- **Runtime:** Bun 1.2+, port 3000 (binds to `0.0.0.0` for Railway proxy reachability)
+- **Framework:** Elysia + `@elysiajs/cors`
+- **AI:** Vercel AI SDK 6 (`ai`) + `@ai-sdk/anthropic` (Claude `claude-sonnet-4-6`)
+- **Direct Anthropic SDK:** `@anthropic-ai/sdk` (carried alongside AI SDK)
+- **Tracing:** Langfuse via OpenTelemetry — `@langfuse/tracing` + `@langfuse/otel` + `@opentelemetry/sdk-node`
+- **Auth (planned, M2):** Supabase JS client, sharing the Neuvetra-wide auth backbone
+- **State machines:** XState 5 (multi-agent orchestration)
+
+## Commands
+
+```bash
+cd apps/site-api
+bun run dev            # watch mode on port 3000
+bun run typecheck      # tsc --noEmit
+bun run sync-kb        # sync KB corpus (script in scripts/sync-kb-corpus.ts)
+```
+
+## Layout
+
+```
+apps/site-api/
+├── src/
+│   ├── index.ts              ← Elysia entry. Imports instrumentation FIRST.
+│   ├── instrumentation.ts    ← Boots NodeSDK + LangfuseSpanProcessor BEFORE app
+│   ├── env.ts                ← typed Bun.env
+│   ├── routes/
+│   │   └── chat.ts           ← createChatRoutes(deps) factory — testable
+│   ├── chat-handler.ts       ← AI SDK generateText with experimental_telemetry
+│   ├── lib/
+│   │   ├── rate-limit.ts     ← in-memory token bucket, per-IP
+│   │   ├── origin-check.ts   ← strict server-side Origin allowlist
+│   │   └── ...
+│   ├── config/
+│   │   └── allowed-origins.ts ← single source of truth (used by CORS + origin-check)
+│   ├── agents/               ← agent definitions (greeter today; specialists in M2)
+│   ├── tools/                ← Vercel AI SDK tools — move_spirit, set_spirit_color (M2 pilot)
+│   └── tests/
+├── scripts/sync-kb-corpus.ts
+├── HARDENING.md              ← operator checklist BEFORE public marketing push
+├── Dockerfile
+├── railway.toml
+└── package.json
+```
+
+## Critical context
+
+### Langfuse OTel (the "common mistake")
+
+Langfuse instrumentation is **OpenTelemetry-based**, not the manual `langfuse@3.x` SDK. The official Langfuse skill explicitly flags the manual SDK as a "common mistake" for Vercel AI SDK projects. `instrumentation.ts` boots `NodeSDK` with `LangfuseSpanProcessor`; AI SDK opts in via `experimental_telemetry: { isEnabled: true, functionId: 'chat:<agentId>', metadata: { agentId } }`. **`instrumentation.ts` must be imported FIRST in `index.ts`** so OTel spans are captured from boot. See [[2026-04-27-site-deploy-and-dns]] § Decision 4.
+
+### Hardening (already done; checklist for operator actions)
+
+The `/chat` route has three hardening layers, all shipped 2026-04-27 ([[next.md]] hardening pass):
+
+1. **Origin allowlist** (`lib/origin-check.ts`) — runs FIRST so junk doesn't burn IP rate-limit budget
+2. **IP rate limit** (`lib/rate-limit.ts`) — in-memory token bucket, 10k bucket cap with oldest-first eviction; configurable via `CHAT_RATE_LIMIT_MAX` + `CHAT_RATE_LIMIT_WINDOW_MS` (defaults: 10/min)
+3. **Error sanitization** — `try/catch` returns `{ error: <sanitized> }` with 500; upstream Anthropic error details never reach the browser
+
+**Operator actions remain in [`HARDENING.md`](HARDENING.md)** — must be done BEFORE public marketing push: dedicated production `ANTHROPIC_API_KEY` (currently shares Terrascope dev key), Anthropic workspace spend cap, Langfuse Triggers.
+
+### Single environment
+
+There is currently no separate dev/staging environment — production is the only target. `Bun.env.NODE_ENV ?? "development"` keys the Langfuse `environment` tag, which pre-stages the future split with no code change. See [[stack]] § Environments.
+
+### Per-app Root Directory on Railway
+
+Railway is configured with **per-app Root Directory** (this app's build context is `apps/site-api`, not the repo root). Dockerfile uses simple `COPY . . + bun install` — the staged-COPY pattern hits a BuildKit cache-key edge case under per-app Root. See [[2026-04-27-site-deploy-and-dns]] § Decision 2-3.
+
+### Testing
+
+Tests live in `src/tests/`. Coverage includes the chat-handler with mocked AI SDK responses, rate-limit, origin-check. AI SDK 6 quirk caught during M2 pilot: `result.toolCalls` is **last-step-only** when tools have an `execute` function. Aggregate via `result.steps.flatMap(s => s.toolCalls)` instead. See [[2026-04-27-site-deploy-and-dns]] § Bug.
+
+## Deploy
+
+Railway service `site-api` in the `Neuvetra-AI` project (alongside Langfuse). [`Dockerfile`](Dockerfile) + [`railway.toml`](railway.toml). DNS: `api.neuvetra.ai` CNAME → Railway target with Let's Encrypt SSL.
+
+Pending Railway re-point: when this monorepo replaces the old `neuvetra-hq/site` repo as the source, the Root Directory is `apps/site-api`.
+
+## Skills to reach for
+
+- **Anthropic / Claude API:** `claude-api`
+- **AI SDK / state machines:** `xstate-v5`, `actor-model`, `mcp__plugin_context7_context7__query-docs` (resolve `ai`, `@ai-sdk/anthropic`, `@langfuse/tracing`, `@langfuse/otel`)
+- **Process:** `superpowers:test-driven-development`, `superpowers:systematic-debugging`, `superpowers:verification-before-completion`
+- **Live docs:** `mcp__plugin_context7_context7__query-docs` for Elysia, Bun

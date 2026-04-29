@@ -662,7 +662,7 @@ Issues found: [N contradictions, N orphans, ...]. Fixed: [list or none].
 
 ## What Does NOT Belong Here
 
-- **Product-operational state** — `Terrascope\status.md`, `FrontDesk\CLAUDE.md`, the GHG KB.
+- **Product-operational state** — `apps/terrascope-api/STATUS.md`, `apps/site-api/HARDENING.md`, per-app `CLAUDE.md` files, the GHG KB.
 - **Code** — never. The wiki is markdown only.
 - **Numerical data that changes** (emission factors, prices, KPIs) — pages describe what we track, values live in databases.
 - **Per-conversation transient context** — that's what `raw/conversations/` is for. Only material things become full curated pages.
@@ -679,4 +679,4 @@ When flagging: direct, not alarmist. State the issue, why it matters downstream,
 
 ## Today's Date
 
-**2026-04-25.** Always use ISO 8601 (`YYYY-MM-DD`) in this wiki.
+Use today's date from `<env>` context. Always ISO 8601 (`YYYY-MM-DD`) in this wiki.

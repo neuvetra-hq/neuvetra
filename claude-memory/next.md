@@ -36,6 +36,8 @@ The monorepo restructure ([[2026-04-28-consolidate-into-single-monorepo]]) is th
 - Resubmit Campaign 2 with consent text scoped only to shipped behavior — drop "callback requests" and "emergency alerts"
 - Open verifications: does `sendOptinConfirmation` ride Campaign 1 or 2? Does per-business Twilio number provisioning enroll new numbers in Campaign 2's Messaging Service?
 
+**Issue X (new, surfaced during 2026-04-28 CLAUDE.md rewrite) — Terrascope packages empty.** `apps/terrascope-api` imports `@terrascope/database` and `@terrascope/calculator` from 4 source files (`src/routes/{chat,companies,factors,reports}.ts`), but `packages/terrascope-database/` and `packages/terrascope-calculator/` are empty in the working tree. They were gutted in Terrascope's working tree before the monorepo move and the snapshot-as-is directive captured the broken state. `bun install` at root will fail to resolve these workspace deps. Recovery requires either restoring the package contents (from another machine, or git history that may exist on a backup) or rewriting the imports. Tracked in [[apps/terrascope-api/CLAUDE.md]] § Known broken state.
+
 **Issue 2 — Site sign-in OTP rendering bug** — never triaged 2026-04-28. CEO observed OTP form not rendering + database empty. Diagnostic questions still outstanding:
 - Prod (`https://www.neuvetra.ai`) or local?
 - Phone OTP or email magic link?
