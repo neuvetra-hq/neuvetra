@@ -2,15 +2,15 @@
 
 Neuvetra is becoming a California and U.S. greenhouse-gas research and accounting application. The repository retains the earlier Site, FrontDesk and Terrascope workspaces for traceability. FrontDesk is deferred; TerraScope is no longer a customer-facing brand. Start with the [current delivery plan](docs/roadmap-neuvetra-ghg.md) and [research assessment](docs/research/neuvetra-assessment.md).
 
-The current homepage is a research preview: an overview of the planned workflow and a searchable, filterable library of four primary references from GHG Protocol, EPA, and CARB. It does not mount chat, authentication, billing, or emissions calculations. Source-backed Q&A and deterministic accounting remain in development.
+The current homepage includes an overview, a searchable library of four primary publisher references, and an **Ask Neuvetra** private Scope 2 pilot. The pilot uses a real model to select independently reviewed EPA statements, retaining exact qualifications and references. Missing-context, unsupported and unresolved-source responses contain no invented answer. Broader Q&A, authentication, billing and emissions calculations remain outside this preview. Start with the [pilot runbook and limits](docs/milestones/m2-answer-demo.md).
 
-The preserved foundation is tagged on GitHub as `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). Current work is on `work/neuvetra-ghg`. The Railway dashboard assessment is complete; production still deploys from the older repositories, and this preview has not been cut over. See the [verified deployment map](docs/deployment.md).
+The preserved foundation is tagged on GitHub as `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). The foundation PR was merged into `main` at `0100b96`; the answer pilot is developed on `work/scope2-answer-demo`. Production still deploys from the older repositories, and this preview has not been cut over. See the [verified deployment map](docs/deployment.md).
 
 ## Product workspaces
 
 | Area | Code | Local web / API | Purpose |
 | --- | --- | --- | --- |
-| Neuvetra preview (Site) | `apps/site-*` | `5174` / `3001` | GHG overview, source browser, and optional decorative Spirit; retained API is not used by the preview |
+| Neuvetra preview (Site) | `apps/site-*` | `5174` / research `3012` | GHG overview, source browser, and isolated private answer pilot; historical API `3001` remains separate |
 | FrontDesk (deferred) | `apps/frontdesk-*`, `packages/frontdesk-*` | `5173` / `3000` | Preserved receptionist, dashboard, calls, appointments, and billing work |
 | Legacy GHG implementation | `apps/terrascope-*`, `packages/terrascope-*` | `5175` / `3002` | Historical folder names retained; database/calculator stubs are not a working accounting service |
 
@@ -36,6 +36,8 @@ bun run dev
 ```
 
 `dev` previews only the Site frontend at `http://localhost:5174`. The overview and source browser work without credentials or an API. They do not invoke the retained chat, sign-in, or calculation code.
+
+`bun run dev:research` starts the separate loopback research service. It defaults to provider-disabled and needs an independently pinned release, verified source originals and explicit development model configuration for supported answers. Follow the [runbook](docs/milestones/m2-answer-demo.md); do not use a watch process with a live in-memory budget. No environment export is loaded automatically.
 
 For explicit work on the retained web/API pairs, copy the relevant app `.env.example` files to `.env` in the same directories and populate development credentials. This is not needed for the research preview:
 

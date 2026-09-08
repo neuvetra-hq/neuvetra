@@ -2,16 +2,16 @@
 
 > **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
 
-Vite + React 19 SPA for Neuvetra's California/U.S. greenhouse-gas research and accounting direction. The current `App.tsx` mounts only `ResearchPreview`: an overview of the planned workflow and a searchable, filterable primary-source browser. Neuvetra is the sole customer-facing brand; FrontDesk is deferred and TerraScope is retired as a brand. Historical workspace names remain for traceability.
+Vite + React 19 SPA for Neuvetra's California/U.S. greenhouse-gas research and accounting direction. `App.tsx` mounts `ResearchPreview`, containing the overview, source browser and private `ResearchAnswerPanel`. Neuvetra is the sole customer-facing brand; FrontDesk is deferred and TerraScope is retired as a brand. Historical workspace names remain for traceability.
 
 This checkout is a local research preview, not the current production website. The signed-in Railway assessment confirms that production still uses the old Site repository. No cutover has occurred. See the [deployment guide](../../docs/deployment.md) for the verified assignments and remaining work.
 
 ## Current behavior
 
 - Overview/Sources navigation, topic/publisher search, category filters, an empty-result reset, and four original publisher links from GHG Protocol, EPA, and CARB.
-- Explicit preview status: source-backed Q&A and deterministic calculations are in development. The source browser contains publisher entry points, not approved calculation-factor data.
+- A private Scope 2 answer pilot selects reviewed EPA concepts through an isolated live model adapter. It requests context, withholds unsupported answers and displays exact source references. Broader Q&A and deterministic calculations remain in development. The source browser contains publisher entry points, not approved calculation-factor data.
 - Optional decorative Spirit, loaded separately on desktop. Motion can be paused; small screens and reduced-motion preferences use the static illustration. The preview does not unlock audio.
-- No mounted chat, authentication, OTP, billing, uploads, or calculation flow. The preview needs no API or credentials. Retained chat/auth source files and tests are not evidence that these features are active.
+- No mounted historical greeter, authentication, OTP, billing, uploads or calculation flow. Overview and Sources need no credentials; Ask Neuvetra uses `/research-api` and shows unavailable when its isolated service is not ready. Retained chat/auth source files and tests are not evidence that those features are active.
 
 Keep this distinction clear when editing copy or features. Do not reconnect the historical salesperson/greeter to answer GHG questions from the old brand KB. Future answers and calculations need the reviewed evidence and deterministic contracts described in the [product architecture](../../docs/research/product-architecture.md).
 
@@ -66,7 +66,7 @@ apps/site-web/
 
 The current Dockerfile requires Railway Root Directory `/` and config-file path `/apps/site-web/railway.toml`, using the root lockfile and shared configuration. This is the prepared monorepo build contract, not the active production assignment. The verified `Neuvetra-AI` / `Site-Web` service still deploys the old `neuvetra-hq/site` repository to `https://www.neuvetra.ai`. Reconfirm that recorded state at cutover and follow [docs/deployment.md](../../docs/deployment.md); no production change is implied by a local build.
 
-`VITE_API_URL` and Supabase browser configuration remain relevant to the retained API/auth clients. The development proxy still maps `/api/*` to the local Site API on port 3001. The research preview does not invoke these clients, and changing those variables does not enable Q&A or sign-in. Never place server credentials in browser variables.
+`VITE_API_URL` and Supabase browser configuration remain relevant to retained API/auth clients. The development proxy maps `/api/*` to the old Site API on port 3001 and `/research-api/*` to `/research/*` on loopback port 3012. The answer panel uses only the latter. Its response decoder rejects inconsistent states, unsafe publisher URLs and unresolved references; only supported/qualified live-provider responses can display claims. Never place server credentials in browser variables. See the [pilot runbook](../../docs/milestones/m2-answer-demo.md) for the actual evidence, budget and local-only scope.
 
 ## Historical chat and M2 notes
 

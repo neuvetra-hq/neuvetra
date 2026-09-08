@@ -1,8 +1,10 @@
-# `apps/site-api` — Site API (chat backend)
+# `apps/site-api` — isolated research pilot and retained chat backend
 
 > **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
 
-Bun + Elysia API serving the Site's `/chat` endpoint. Live at `https://api.neuvetra.ai`. Multi-agent Claude backend with Vercel AI SDK + Langfuse OpenTelemetry tracing + XState orchestration.
+The new `src/research-server.ts` is a separate local-only entry point for the private Scope 2 pilot. It imports no inherited greeter, authentication, database or telemetry startup. Run `bun run start:research` with the [explicit research configuration](../../docs/milestones/m2-answer-demo.md); it binds only `127.0.0.1:3012`, uses origin 5174, defaults to provider-disabled, and validates independently reviewed evidence and source pins. Do not introduce watch-mode restarts around the in-memory model budget or expose this unauthenticated demo publicly.
+
+The historical Bun + Elysia `/chat` backend below remains separate. Its earlier deployment is at `https://api.neuvetra.ai`; these notes do not imply the new research service is deployed there. Vercel AI SDK, Langfuse and XState descriptions below apply to the retained backend.
 
 ## Stack
 

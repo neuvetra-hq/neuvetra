@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { ResearchSpirit } from "@/components/ResearchSpirit"
+import { ResearchAnswerPanel } from "@/components/ResearchAnswerPanel"
 import { filterResearchSources, RESEARCH_SOURCES, SOURCE_CATEGORIES, type SourceCategory } from "@/data/research-sources"
 
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
@@ -11,7 +12,7 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 }
 
 export function ResearchPreview() {
-  const [view, setView] = useState<"overview" | "sources">("overview")
+  const [view, setView] = useState<"overview" | "sources" | "answers">("overview")
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState<SourceCategory>("All sources")
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -36,6 +37,7 @@ export function ResearchPreview() {
         <nav className="research-navigation" aria-label="Main navigation">
           <button type="button" aria-current={view === "overview" ? "page" : undefined} onClick={() => navigate("overview")}>Overview</button>
           <button type="button" aria-current={view === "sources" ? "page" : undefined} onClick={() => navigate("sources")}>Sources <span>{RESEARCH_SOURCES.length}</span></button>
+          <button type="button" aria-current={view === "answers" ? "page" : undefined} onClick={() => navigate("answers")}>Ask Neuvetra</button>
         </nav>
         <span className="research-preview-badge"><span /> Research preview</span>
       </header>
@@ -49,10 +51,10 @@ export function ResearchPreview() {
                 <h1 id="overview-heading" ref={headingRef} tabIndex={-1}>GHG research.<br /><span>Grounded in<br className="research-desktop-break" /> evidence.</span></h1>
                 <p className="research-intro">A clearer path through greenhouse gas accounting. Neuvetra is taking shape as a workspace for source-backed answers and traceable emissions calculations.</p>
                 <div className="research-hero-actions">
-                  <button type="button" className="research-primary-button" onClick={() => navigate("sources")}>Explore the sources <Arrow /></button>
+                  <button type="button" className="research-primary-button" onClick={() => navigate("answers")}>Try the research pilot <Arrow /></button>
                   <a className="research-text-link" href="#workflow">See what we're building <span aria-hidden="true">↓</span></a>
                 </div>
-                <p className="research-availability">Start with the source library. Q&A and calculations are in development.</p>
+                <p className="research-availability">Explore the source library or try the private Scope 2 research pilot. Calculations are in development.</p>
               </div>
               <ResearchSpirit />
             </section>
@@ -70,12 +72,12 @@ export function ResearchPreview() {
               </div>
               <div className="research-steps">
                 <article><span className="research-step-number">01 / RESEARCH</span><h3>Start at the source.</h3><p>Explore original materials from GHG Protocol, EPA, and CARB. Open the publisher's page and find the context behind the guidance.</p><span className="research-step-status is-available">Source library available</span></article>
-                <article><span className="research-step-number">02 / UNDERSTAND</span><h3>See what supports the answer.</h3><p>We're developing answers linked to specific evidence, with clear assumptions and an honest response when the sources aren't enough.</p><span className="research-step-status">Q&A in development</span></article>
+                <article><span className="research-step-number">02 / UNDERSTAND</span><h3>See what supports the answer.</h3><p>Try a bounded Scope 2 research pilot with specific source references, qualifications, and an honest response when the sources aren't enough.</p><span className="research-step-status is-available">Private research pilot</span></article>
                 <article><span className="research-step-number">03 / ACCOUNT</span><h3>Follow every number.</h3><p>Planned calculations will connect activity data, units, factor versions, and methodology, so results can be reviewed and reproduced.</p><span className="research-step-status">Calculations in development</span></article>
               </div>
             </section>
           </>
-        ) : (
+        ) : view === "answers" ? <ResearchAnswerPanel headingRef={headingRef} /> : (
           <section className="research-library" aria-labelledby="sources-heading">
             <div className="research-library-heading">
               <div><p className="research-eyebrow">The Neuvetra source library</p><h1 id="sources-heading" ref={headingRef} tabIndex={-1}>The source comes first.</h1><p className="research-intro">A starting collection of primary references for GHG accounting and reporting research. Explore the original materials directly.</p></div>
@@ -113,7 +115,7 @@ export function ResearchPreview() {
                 <button type="button" className="research-primary-button" onClick={() => { setQuery(""); setCategory("All sources") }}>Reset search <Arrow /></button>
               </div>
             )}
-            <p className="research-library-note">These references link to the publishers' materials. Check the edition, reporting period, and applicable guidance before using a source. This preview does not yet generate answers or calculate emissions.</p>
+            <p className="research-library-note">These references link to the publishers' materials. Check the edition, reporting period, and applicable guidance before using a source. The separate research pilot covers a small reviewed Scope 2 evidence set; calculations remain in development.</p>
           </section>
         )}
       </main>
