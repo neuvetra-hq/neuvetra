@@ -37,7 +37,8 @@
     {"id": "D4", "decision": "Relevant specialist delegation and independent QA with CEO roll-up", "why": "Clear ownership, evidence and brief board reports without fabricated agent activity", "evidence": "operations/agents/README.md"},
     {"id": "D5", "decision": "Keep the green palette and simple presentation; close M1 feedback gate", "why": "User reviewed both preview pages and approved this direction", "evidence": "operations/feedback/2026-09-08-milestone-1.md"},
     {"id": "D6", "decision": "Refresh and verify source versions before releasing answer evidence", "why": "Board's concern about inherited data freshness; publisher corrections and incomplete prior synthesis confirmed the need", "evidence": "docs/research/source-refresh-validation.md"},
-    {"id": "D7", "decision": "Start the answer demonstration with purchased-electricity/Scope 2 research", "why": "A bounded question family makes passage support, context requests and refusal behavior reviewable before broader legal and industry coverage", "evidence": "docs/milestones/m2-evidence-and-answers.md"}
+    {"id": "D7", "decision": "Start the answer demonstration with purchased-electricity/Scope 2 research", "why": "A bounded question family makes passage support, context requests and refusal behavior reviewable before broader legal and industry coverage", "evidence": "docs/milestones/m2-evidence-and-answers.md"},
+    {"id": "D8", "decision": "Disable optional automatic Claude Code Review; retain Verify and independent agent review", "why": "Board authorization; the PR integration failed before review because no usable Anthropic credential was supplied, while both Verify jobs passed", "evidence": "docs/ci-review.md"}
   ],
   "open_dependencies": [
     {"id": "R1", "detail": "Current complete appellate docket and OAL status require refresh before affected operational advice", "impact": "Blocks definitive answers on unresolved enforcement/deadline status, not the research preview"},
