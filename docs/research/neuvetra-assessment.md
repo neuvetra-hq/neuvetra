@@ -6,7 +6,7 @@ The first milestone preserves the earlier repository, establishes the source and
 
 ## Preserved work and source audit
 
-The private repository has an annotated GitHub checkpoint, [`checkpoint/pre-ghg-focus-2026-09-08`](https://github.com/neuvetra-hq/neuvetra/tree/checkpoint/pre-ghg-focus-2026-09-08), resolving to commit `367497e750530c590c7eedd229e48a34e2daf8b8`. It preserves Site, FrontDesk, the historical Terrascope workspaces and the reviewed common foundation. New GHG work is on the separate local branch `work/neuvetra-ghg`. Environment exports and downloaded research artifacts were excluded from the checkpoint.
+The private repository has an annotated GitHub checkpoint, [`checkpoint/pre-ghg-focus-2026-09-08`](https://github.com/neuvetra-hq/neuvetra/tree/checkpoint/pre-ghg-focus-2026-09-08), resolving to commit `367497e750530c590c7eedd229e48a34e2daf8b8`. It preserves Site, FrontDesk, the historical Terrascope workspaces and the reviewed common foundation. The GHG milestone was uploaded and verified on the separate [`work/neuvetra-ghg` branch](https://github.com/neuvetra-hq/neuvetra/tree/work/neuvetra-ghg), with implementation commit `84d55b7fcfb4b0f127c5ede80b13e389652a0a80`. Environment exports and downloaded research artifacts were excluded from Git.
 
 The foundation passed nine TypeScript targets, 65 offline tests and all three frontend production builds. Lint had no errors and 44 remaining FrontDesk warnings. These checks validate a development baseline; they do not establish the correctness of real billing, phone calls, login delivery or GHG outputs. Container execution was not tested because Docker was unavailable.
 
