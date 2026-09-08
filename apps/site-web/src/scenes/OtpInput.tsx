@@ -1,28 +1,11 @@
 import { useState, type FormEvent } from "react"
-import { supabase } from "@/lib/supabase"
+import { defaultVerifyOtp, type VerifyOtp } from "@/lib/verify-otp"
 import type { SceneComponentProps } from "./registry"
 
 const JOST = "'Jost Variable', 'Jost', sans-serif"
 
 export interface VerifyOtpDeps {
-  verify: (
-    phone: string,
-    code: string,
-  ) => Promise<{ ok: true } | { ok: false; reason: string }>
-}
-
-/**
- * Default verify path — calls Supabase Auth's verifyOtp. Exported so tests
- * can substitute a fake implementation without rendering React.
- */
-export const defaultVerifyOtp: VerifyOtpDeps["verify"] = async (phone, code) => {
-  const { error } = await supabase.auth.verifyOtp({
-    phone,
-    token: code,
-    type: "sms",
-  })
-  if (error) return { ok: false, reason: error.message ?? "verify_failed" }
-  return { ok: true }
+  verify: VerifyOtp
 }
 
 interface OtpInputProps extends SceneComponentProps {
@@ -64,6 +47,7 @@ export function OtpInput({ sceneActor, props, verifyDeps }: OtpInputProps) {
         type="text"
         inputMode="numeric"
         autoComplete="one-time-code"
+        aria-label="Six-digit verification code"
         pattern="\d{6}"
         maxLength={6}
         value={code}

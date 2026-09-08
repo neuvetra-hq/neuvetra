@@ -10,8 +10,8 @@ import {
 // ─── AudioEngine ──────────────────────────────────────────────────────────────
 
 // iOS Safari uses webkitAudioContext on older versions.
-const AC: typeof AudioContext =
-  (window as any).AudioContext ?? (window as any).webkitAudioContext
+const AC = window.AudioContext ??
+  (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
 
 class AudioEngine {
   private ctx: AudioContext | null = null
@@ -253,20 +253,19 @@ export class SpiritEngine {
   }
 
   private _lerp(from: SpiritPreset, to: SpiritPreset, t: number): SpiritPreset {
-    const colorKeys = new Set<keyof SpiritPreset>(['color1', 'color2', 'bgColor'])
-    const result: any = { ...from }
+    const result: SpiritPreset = { ...from }
     for (const key of Object.keys(from) as (keyof SpiritPreset)[]) {
       if (key === 'useTriangles' || key === 'soundEffect') continue
-      if (colorKeys.has(key)) {
-        const fc = new THREE.Color(from[key] as string)
-        result[key] = '#' + fc.lerp(new THREE.Color(to[key] as string), t).getHexString()
+      if (key === 'color1' || key === 'color2' || key === 'bgColor') {
+        const fc = new THREE.Color(from[key])
+        result[key] = '#' + fc.lerp(new THREE.Color(to[key]), t).getHexString()
       } else {
-        result[key] = (from[key] as number) + ((to[key] as number) - (from[key] as number)) * t
+        result[key] = from[key] + (to[key] - from[key]) * t
       }
     }
     result.useTriangles = to.useTriangles
     result.soundEffect = to.soundEffect
-    return result as SpiritPreset
+    return result
   }
 
   private _tick = (): void => {

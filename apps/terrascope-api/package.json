@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start": "bun run src/index.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",

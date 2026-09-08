@@ -1,6 +1,11 @@
+# Service Root Directory must be /; config path is /apps/site-api/railway.toml.
+# Legacy Railway config; migration status is recorded in docs/deployment.md.
 [build]
-builder = "nixpacks"
-installCommand = "bun install"
+builder = "DOCKERFILE"
+dockerfilePath = "apps/site-api/Dockerfile"
+watchPatterns = ["apps/site-api/**", "apps/*/package.json", "packages/*/package.json", "package.json", "bun.lock", "tsconfig.base.json", "config/**", ".dockerignore"]
 
 [deploy]
 startCommand = "bun run src/index.ts"
+healthcheckPath = "/health"
+healthcheckTimeout = 120

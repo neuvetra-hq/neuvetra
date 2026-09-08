@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react"
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
 import { supabase } from "@/lib/supabase"
+import { findBusinessMembership } from "@/lib/account-data"
 import { toast } from "sonner"
 import { WizardButton } from "./WizardButton"
 import { jost } from "./types"
@@ -34,12 +35,7 @@ export function StepVerify({ phone, onVerified }: Props) {
       if (error) throw error
       if (!data.user || !data.session) throw new Error("Verification failed — please try again")
 
-      const { data: existing } = await supabase
-        .from("business_members")
-        .select("business_id")
-        .eq("user_id", data.user.id)
-        .limit(1)
-        .maybeSingle()
+      const existing = await findBusinessMembership(supabase, data.user.id)
 
       if (existing) {
         toast.info("You already have an account — signing you in.")

@@ -1,12 +1,6 @@
 {
-  "extends": "../../packages/terrascope-config/tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["ESNext"],
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "types": ["bun-types"]
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "extends": "../../config/typescript/api.json",
+  "include": [
+    "src/**/*"
+  ]
 }

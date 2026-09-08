@@ -6,20 +6,21 @@ Bun + Elysia API serving the Site's `/chat` endpoint. Live at `https://api.neuve
 
 ## Stack
 
-- **Runtime:** Bun 1.2+, port 3000 (binds to `0.0.0.0` for Railway proxy reachability)
+- **Runtime:** Bun 1.3.12; local example port 3001, container default 3000 (binds to `0.0.0.0` for Railway proxy reachability)
 - **Framework:** Elysia + `@elysiajs/cors`
 - **AI:** Vercel AI SDK 6 (`ai`) + `@ai-sdk/anthropic` (Claude `claude-sonnet-4-6`)
 - **Direct Anthropic SDK:** `@anthropic-ai/sdk` (carried alongside AI SDK)
 - **Tracing:** Langfuse via OpenTelemetry — `@langfuse/tracing` + `@langfuse/otel` + `@opentelemetry/sdk-node`
-- **Auth (planned, M2):** Supabase JS client, sharing the Neuvetra-wide auth backbone
+- **Auth:** optional Supabase JWT context on chat, sharing the Neuvetra-wide auth backbone
 - **State machines:** XState 5 (multi-agent orchestration)
 
 ## Commands
 
 ```bash
 cd apps/site-api
-bun run dev            # watch mode on port 3000
+bun run dev            # watch mode; PORT=3001 in the local environment example
 bun run typecheck      # tsc --noEmit
+bun run test           # offline unit tests
 bun run sync-kb        # sync KB corpus (script in scripts/sync-kb-corpus.ts)
 ```
 
@@ -70,19 +71,19 @@ The `/chat` route has three hardening layers, all shipped 2026-04-27 ([[next.md]
 
 There is currently no separate dev/staging environment — production is the only target. `Bun.env.NODE_ENV ?? "development"` keys the Langfuse `environment` tag, which pre-stages the future split with no code change. See [[stack]] § Environments.
 
-### Per-app Root Directory on Railway
+### Repository-root deployment context
 
-Railway is configured with **per-app Root Directory** (this app's build context is `apps/site-api`, not the repo root). Dockerfile uses simple `COPY . . + bun install` — the staged-COPY pattern hits a BuildKit cache-key edge case under per-app Root. See [[2026-04-27-site-deploy-and-dns]] § Decision 2-3.
+The current Dockerfile requires Railway Root Directory `/` and config-file path `/apps/site-api/railway.toml`, with a frozen install from the root lockfile. The April isolated-app deployment instructions are historical; dashboard repointing remains unverified. See [`docs/deployment.md`](../../docs/deployment.md) for the current build and runtime contract.
 
 ### Testing
 
-Tests live in `src/tests/`. Coverage includes the chat-handler with mocked AI SDK responses, rate-limit, origin-check. AI SDK 6 quirk caught during M2 pilot: `result.toolCalls` is **last-step-only** when tools have an `execute` function. Aggregate via `result.steps.flatMap(s => s.toolCalls)` instead. See [[2026-04-27-site-deploy-and-dns]] § Bug.
+Tests are colocated under `src/lib/` and `src/routes/`. Coverage includes chat with mocked dependencies, rate limiting, origin checks and the public KB export gate. AI SDK 6 quirk caught during M2 pilot: `result.toolCalls` is **last-step-only** when tools have an `execute` function. Aggregate via `result.steps.flatMap(s => s.toolCalls)` instead. See [[2026-04-27-site-deploy-and-dns]] § Bug.
 
 ## Deploy
 
 Railway service `site-api` in the `Neuvetra-AI` project (alongside Langfuse). [`Dockerfile`](Dockerfile) + [`railway.toml`](railway.toml). DNS: `api.neuvetra.ai` CNAME → Railway target with Let's Encrypt SSL.
 
-Pending Railway re-point: when this monorepo replaces the old `neuvetra-hq/site` repo as the source, the Root Directory is `apps/site-api`.
+Before deploying this checkout, verify the existing service and set Root Directory `/` with config-file path `/apps/site-api/railway.toml`. No production settings were changed during the foundation cleanup.
 
 ## Skills to reach for
 

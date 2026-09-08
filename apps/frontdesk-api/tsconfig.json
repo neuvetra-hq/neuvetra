@@ -1,11 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "skipLibCheck": true,
-    "types": ["bun-types"]
-  },
-  "include": ["src/**/*"]
+  "extends": "../../config/typescript/api.json",
+  "include": [
+    "src/**/*"
+  ]
 }

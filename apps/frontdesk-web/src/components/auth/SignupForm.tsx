@@ -57,13 +57,13 @@ export function SignupForm() {
 
     // Create a placeholder business for this user (onboarding fills in details later)
     if (authData.user) {
-      await supabase.from("businesses").insert({
+      await supabase.schema("frontdesk").from("businesses").insert({
         name: `${data.fullName}'s Business`,
         slug: `${data.fullName.toLowerCase().replace(/\s+/g, "-")}-${Date.now()}`,
         status: "inactive",
       }).select("id").single().then(async ({ data: business }) => {
         if (business) {
-          await supabase.from("business_members").insert({
+          await supabase.schema("frontdesk").from("business_members").insert({
             business_id: business.id,
             user_id: authData.user!.id,
             role: "owner",

@@ -5,6 +5,7 @@
  */
 export const ALLOWED_ORIGINS = [
   "http://localhost:5173",
+  "http://localhost:5174",
   "https://neuvetra.com",
   "https://www.neuvetra.com",
   "https://neuvetra.ai",

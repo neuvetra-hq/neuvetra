@@ -28,7 +28,7 @@ export function SceneRegion({ sceneActor }: SceneRegionProps) {
   }
 
   return (
-    <div className="pointer-events-auto fixed top-1/2 right-4 -translate-y-1/2 z-30 max-w-sm">
+    <div className="pointer-events-auto fixed inset-x-4 bottom-4 z-40 mx-auto max-w-sm md:top-1/2 md:right-6 md:bottom-auto md:left-auto md:mx-0 md:-translate-y-1/2">
       <Component sceneActor={sceneActor} props={active.props} />
     </div>
   )

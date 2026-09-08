@@ -11,19 +11,20 @@ Vite + React 19 SPA for Site, the Neuvetra parent landing surface. Live at `http
 - **AI client:** Vercel AI SDK 6 (`ai`) — streaming via `useChat`-style patterns
 - **Markdown:** `react-markdown` for rendering chat responses
 - **State machines:** XState 5 + `@xstate/react` 6 (frontend orchestrator + Spirit actor)
-- **3D:** Three.js 0.184 (Spirit will land here when copied from `apps/frontdesk-web/src/lib/spirit/` per [[2026-04-25-spirit-packaging]])
-- **Auth client (planned, M2):** `@supabase/supabase-js`
-- **API client:** plain typed `fetch()` wrapper at `src/lib/api.ts` (Eden was dropped 2026-04-27 — see § Per-app Root Directory below)
+- **3D:** Three.js 0.184; Spirit is implemented in `src/lib/spirit/`
+- **Auth client:** `@supabase/supabase-js`; phone OTP is implemented, with explicit unavailable state when local configuration is missing
+- **API client:** plain typed `fetch()` wrapper at `src/lib/api.ts` (Eden was dropped 2026-04-27)
 
 ## Commands
 
 ```bash
 cd apps/site-web
-bun run dev           # Vite dev server, port 5173
+bun run dev           # Vite dev server, port 5174
 bun run build         # tsc -b && vite build
 bun run preview       # preview production build
-bun run typecheck     # tsc --noEmit
+bun run typecheck     # tsc -b, including referenced projects
 bun run lint          # eslint .
+bun run test          # offline unit tests
 ```
 
 ## Layout
@@ -35,12 +36,12 @@ apps/site-web/
 │   ├── main.tsx, index.css
 │   ├── lib/
 │   │   ├── api.ts             ← typed fetch() wrapper for /chat (replaces Eden)
-│   │   ├── spirit/            ← (will land here in Cycle 2 — copied from FrontDesk)
+│   │   ├── spirit/            ← implemented Spirit renderer and actor
 │   │   └── ...
 │   ├── components/
 │   ├── machines/              ← XState orchestrator + spiritActor (M2 pilot architecture)
 │   └── data/
-├── public/                    ← static assets (will include audio/ when Spirit copies)
+├── public/                    ← static assets, including Spirit audio
 ├── Dockerfile                 ← multi-stage Bun build → serve on port 8080
 ├── railway.toml
 ├── vite.config.ts             ← @/* → src/*; VITE_API_URL baked at build time
@@ -49,13 +50,13 @@ apps/site-web/
 
 ## Critical context
 
-### Per-app Root Directory on Railway → no Eden
+### Repository-root deployment context
 
-Railway uses per-app Root Directory; this app's build context is `apps/site-web`, isolated from `apps/site-api`. The original Eden type-bridge (`@elysiajs/eden` consuming `App` type from the API) couldn't resolve at build time. **Replaced with a plain typed `fetch()` wrapper at [`src/lib/api.ts`](src/lib/api.ts).** See [[2026-04-27-site-deploy-and-dns]] § Decision 3.
+The current Dockerfile requires Railway Root Directory `/` and config-file path `/apps/site-web/railway.toml`, using the root lockfile and shared configuration. The April deployment used an isolated app context; dashboard repointing remains unverified. See [`docs/deployment.md`](../../docs/deployment.md). The existing plain typed [`fetch()` wrapper](src/lib/api.ts) remains the API contract.
 
-### Spirit not yet here
+### Spirit ownership
 
-The Spirit (`src/lib/spirit/`, `data/spirit-presets.ts`, `public/audio/`) is currently in `apps/frontdesk-web`. Cycle 2 of [[parent-landing-experience]] copies it here. In a monorepo this is a one-line workspace move when Terrascope's frontend lights up and triggers extraction to `packages/spirit` per [[2026-04-25-spirit-packaging]].
+Spirit is implemented in both Site and FrontDesk. The existing packaging decision defers extraction to a shared package until another product needs it. Any later extraction needs behavior and visual checks; see [[2026-04-25-spirit-packaging]].
 
 ### M2 pilot architecture (ratified)
 
@@ -65,22 +66,22 @@ Two-region UI (chat region + scene region), both XState actors on the frontend, 
 
 ### `VITE_API_URL` baked at build
 
-`VITE_API_URL=https://api.neuvetra.ai` is baked at build time in production. In dev, Vite's proxy rule sends `/api/*` → `http://localhost:3000`.
+`VITE_API_URL=https://api.neuvetra.ai` is baked at build time in production. In dev, leave it blank: the client uses `/api`, and Vite proxies `/api/*` → `http://localhost:3001`. The homepage renders without credentials; real chat and OTP need a configured API/Supabase environment.
 
-### Lighthouse mobile = 100 on the homepage
+### Historical Lighthouse result
 
-Maintained 2026-04-27. Don't break it. Heavy work (Three.js init, OTel boot) is deferred or skipped on the homepage.
+The April 27 notes record a mobile score of 100. This cleanup checked layout and console output, not a new Lighthouse score. Keep Three.js initialization deferred so the homepage can paint first.
 
 ## Deploy
 
 Railway service `site-web` in the `Neuvetra-AI` project. Multi-stage [`Dockerfile`](Dockerfile) → static SPA served on port 8080. DNS: `www.neuvetra.ai` CNAME → Railway target with Let's Encrypt SSL.
 
-Pending Railway re-point: when this monorepo replaces the old `neuvetra-hq/site` repo, the Root Directory is `apps/site-web`.
+Before deploying this checkout, verify the existing service and set Root Directory `/` with config-file path `/apps/site-web/railway.toml`. No production settings were changed during the foundation cleanup.
 
 ## Skills to reach for
 
 - **State machines:** `xstate-v5`, `xstate-react`, `actor-model`
-- **3D / Spirit (when it lands):** `webgpu-threejs-tsl:webgpu-threejs-tsl`, `mcp__plugin_context7_context7__query-docs` for Three.js
+- **3D / Spirit:** `webgpu-threejs-tsl:webgpu-threejs-tsl`, `mcp__plugin_context7_context7__query-docs` for Three.js
 - **UI / design:** `frontend-design:frontend-design`
 - **Browser debugging:** `chrome-devtools-mcp:chrome-devtools`, `chrome-devtools-mcp:debug-optimize-lcp`, `chrome-devtools-mcp:a11y-debugging`
 - **AI SDK:** `mcp__plugin_context7_context7__query-docs` for `ai`, `@ai-sdk/anthropic`

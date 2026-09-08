@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, type FormEvent } from "react"
-import { supabase } from "@/lib/supabase"
+import { AUTH_UNAVAILABLE_MESSAGE, supabase } from "@/lib/supabase"
 
 const JOST = "'Jost Variable', 'Jost', sans-serif"
 
@@ -47,6 +47,10 @@ export function SignInModal({ onClose }: SignInModalProps) {
   const handlePhoneSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (busy) return
+    if (!supabase) {
+      setError(AUTH_UNAVAILABLE_MESSAGE)
+      return
+    }
     const normalized = normalizeE164(phone)
     if (!normalized) {
       setError("Enter a 10-digit US number, or +<country><number>")
@@ -70,6 +74,10 @@ export function SignInModal({ onClose }: SignInModalProps) {
   const handleVerify = async (e: FormEvent) => {
     e.preventDefault()
     if (busy || code.length !== 6) return
+    if (!supabase) {
+      setError(AUTH_UNAVAILABLE_MESSAGE)
+      return
+    }
     setBusy(true)
     setError(null)
     const { error: verifyErr } = await supabase.auth.verifyOtp({
@@ -87,6 +95,10 @@ export function SignInModal({ onClose }: SignInModalProps) {
 
   const handleResend = async () => {
     if (busy) return
+    if (!supabase) {
+      setError(AUTH_UNAVAILABLE_MESSAGE)
+      return
+    }
     setBusy(true)
     setError(null)
     const { error: sendErr } = await supabase.auth.signInWithOtp({
@@ -105,6 +117,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
     <div
       role="dialog"
       aria-modal="true"
+      aria-labelledby="sign-in-title"
       className="fixed inset-0 z-50 flex items-center justify-center"
       style={{ fontFamily: JOST }}
     >
@@ -129,7 +142,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
           ×
         </button>
 
-        <h2 className="text-white/85 text-base font-light tracking-[0.18em] uppercase">
+        <h2 id="sign-in-title" className="text-white/85 text-base font-light tracking-[0.18em] uppercase">
           {step === "phone" ? "Sign in" : "Enter code"}
         </h2>
         <p className="mt-1 text-white/55 text-xs tracking-wide">
@@ -145,6 +158,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
               type="tel"
               inputMode="tel"
               autoComplete="tel"
+              aria-label="Phone number"
               placeholder="+1 (415) 555-0100"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -172,6 +186,7 @@ export function SignInModal({ onClose }: SignInModalProps) {
               type="text"
               inputMode="numeric"
               autoComplete="one-time-code"
+              aria-label="Six-digit verification code"
               pattern="\d{6}"
               maxLength={6}
               placeholder="000000"

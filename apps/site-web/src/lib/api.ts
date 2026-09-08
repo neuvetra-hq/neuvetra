@@ -47,7 +47,7 @@ export type StreamChatFn = (
 ) => Promise<void>
 
 const API_BASE = import.meta.env.DEV
-  ? "http://localhost:3000"
+  ? "/api"
   : (import.meta.env.VITE_API_URL ?? window.location.origin)
 
 /**
@@ -64,21 +64,29 @@ export const streamChat: StreamChatFn = async (messages, callbacks, signal) => {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   }
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const session = supabase ? (await supabase.auth.getSession()).data.session : null
   if (session?.access_token) {
     headers["Authorization"] = `Bearer ${session.access_token}`
   }
 
-  const res = await fetch(`${API_BASE}/chat`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ messages }),
-    signal,
-  })
+  let res: Response
+  try {
+    res = await fetch(`${API_BASE}/chat`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ messages }),
+      signal,
+    })
+  } catch (error) {
+    if (signal?.aborted) throw error
+    throw new Error(chatUnavailableMessage())
+  }
 
   if (!res.ok) {
+    // Vite returns an empty 500 when the local API is not running.
+    if (res.status >= 500 && !res.headers.get("content-type")?.includes("application/json")) {
+      throw new Error(chatUnavailableMessage())
+    }
     throw new Error(await extractErrorMessage(res))
   }
 
@@ -169,6 +177,12 @@ export const streamChat: StreamChatFn = async (messages, callbacks, signal) => {
       callbacks.onScenarioActivate({ id: scenarioId, props })
     }
   }
+}
+
+function chatUnavailableMessage() {
+  return import.meta.env.DEV
+    ? "Chat is unavailable in this preview."
+    : "Chat is temporarily unavailable. Please try again in a moment."
 }
 
 interface UIMessagePart {

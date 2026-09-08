@@ -1,28 +1,54 @@
-FROM oven/bun:1 AS builder
+# Build from the repository root; see docs/deployment.md.
+FROM oven/bun:1.3.12 AS workspace
 WORKDIR /app
 
-# Build-time env vars for Vite
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
-ARG VITE_API_URL
-ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
-ENV VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=$VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
-ENV VITE_API_URL=$VITE_API_URL
-
+# Keep every workspace manifest available for frozen lockfile validation.
 COPY package.json bun.lock ./
-COPY packages/database/package.json ./packages/database/
-COPY apps/web/package.json ./apps/web/
+COPY apps/frontdesk-api/package.json ./apps/frontdesk-api/
+COPY apps/frontdesk-web/package.json ./apps/frontdesk-web/
+COPY apps/site-api/package.json ./apps/site-api/
+COPY apps/site-web/package.json ./apps/site-web/
+COPY apps/terrascope-api/package.json ./apps/terrascope-api/
+COPY apps/terrascope-web/package.json ./apps/terrascope-web/
+COPY packages/frontdesk-config/package.json ./packages/frontdesk-config/
+COPY packages/frontdesk-database/package.json ./packages/frontdesk-database/
+COPY packages/terrascope-config/package.json ./packages/terrascope-config/
+COPY packages/terrascope-database/package.json ./packages/terrascope-database/
+COPY packages/terrascope-calculator/package.json ./packages/terrascope-calculator/
 
-RUN bun install
+FROM workspace AS build
+RUN bun install --frozen-lockfile --filter frontdesk-web
+COPY tsconfig.base.json ./
+COPY config/ ./config/
+COPY apps/frontdesk-web/ ./apps/frontdesk-web/
 
-COPY packages/ ./packages/
-COPY apps/web/ ./apps/web/
+# These public values are embedded by Vite; Railway passes declared ARGs.
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
+ARG VITE_SUPABASE_URL
+ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
+ARG VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+ENV VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY=$VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
+ARG VITE_STRIPE_PUBLISHABLE_KEY
+ENV VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY
+ARG VITE_STRIPE_PRICE_STARTER_FLAT
+ENV VITE_STRIPE_PRICE_STARTER_FLAT=$VITE_STRIPE_PRICE_STARTER_FLAT
+ARG VITE_STRIPE_PRICE_GROWTH_FLAT
+ENV VITE_STRIPE_PRICE_GROWTH_FLAT=$VITE_STRIPE_PRICE_GROWTH_FLAT
+ARG VITE_STRIPE_PRICE_PRO_FLAT
+ENV VITE_STRIPE_PRICE_PRO_FLAT=$VITE_STRIPE_PRICE_PRO_FLAT
+RUN bun run --filter frontdesk-web build
 
-RUN cd apps/web && bun run build
+FROM workspace AS production-dependencies
+RUN bun install --frozen-lockfile --production --filter frontdesk-web
 
-FROM node:20-alpine
-RUN npm install -g serve
+FROM oven/bun:1.3.12 AS runtime
 WORKDIR /app
-COPY --from=builder /app/apps/web/dist ./dist
+ENV NODE_ENV=production
+ENV PORT=8080
+# Copy the selected workspace's production dependency tree, including serve.
+COPY --from=production-dependencies /app/ ./
+COPY --from=build /app/apps/frontdesk-web/dist/ ./apps/frontdesk-web/dist/
+WORKDIR /app/apps/frontdesk-web
 EXPOSE 8080
-CMD ["serve", "-s", "dist", "-l", "8080"]
+CMD ["bun", "run", "--bun", "serve", "-s", "dist", "-l", "tcp://0.0.0.0:8080", "--no-clipboard", "--no-port-switching"]

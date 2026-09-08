@@ -1,14 +1,14 @@
 import { createClient } from "@supabase/supabase-js"
+import { getSupabaseConfig } from "./supabase-config"
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+const config = getSupabaseConfig(
+  import.meta.env?.VITE_SUPABASE_URL,
+  import.meta.env?.VITE_SUPABASE_ANON_KEY,
+)
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-  console.warn(
-    "[supabase] VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY not set — auth flows will not work locally. " +
-      "Populate apps/web/.env (use apps/web/.env.example as a template).",
-  )
-}
+export const AUTH_UNAVAILABLE_MESSAGE = import.meta.env?.DEV
+  ? "Sign-in is unavailable in this preview."
+  : "Sign-in is temporarily unavailable."
 
 /**
  * Browser-side Supabase client (singleton). Default config: persists
@@ -16,4 +16,4 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
  * instance is imported wherever auth is needed — login flows, the chat
  * transport (for the Bearer header), and components reading auth state.
  */
-export const supabase = createClient(SUPABASE_URL ?? "", SUPABASE_ANON_KEY ?? "")
+export const supabase = config ? createClient(config.url, config.anonKey) : null

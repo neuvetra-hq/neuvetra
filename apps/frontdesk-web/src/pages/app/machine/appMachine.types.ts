@@ -1,24 +1,9 @@
 import type { Session } from "@supabase/supabase-js"
 import type { AnyActorRef } from "xstate"
 import type { SectionTheme } from "@/data/section-themes"
+import type { UserProfile as AppUserProfile, Business as AppBusiness } from "@/lib/account-data"
 
-export interface AppUserProfile {
-  id: string
-  firstName: string
-  lastName: string
-  phone: string
-}
-
-export interface AppBusiness {
-  id: string
-  name: string
-  status: "active" | "inactive" | "suspended"
-  businessType: string | null
-  twilioNumber: string | null
-  stripePlanId: string | null
-  stripeSubscriptionId: string | null
-  aiConfig: Record<string, unknown> | null
-}
+export type { UserProfile as AppUserProfile, Business as AppBusiness } from "@/lib/account-data"
 
 export interface AppContext {
   session: Session | null

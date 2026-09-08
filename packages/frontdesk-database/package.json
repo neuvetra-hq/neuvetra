@@ -6,9 +6,10 @@
   },
   "scripts": {
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "bun --env-file=../../apps/api/.env run src/migrate.ts",
-    "db:push": "bun --env-file=../../apps/api/.env drizzle-kit push",
-    "db:studio": "bun --env-file=../../apps/api/.env drizzle-kit studio"
+    "db:migrate": "bun --env-file=../../apps/frontdesk-api/.env run src/migrate.ts",
+    "db:push": "bun --env-file=../../apps/frontdesk-api/.env drizzle-kit push",
+    "db:studio": "bun --env-file=../../apps/frontdesk-api/.env drizzle-kit studio",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.1",

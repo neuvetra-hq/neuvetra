@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { createActor, type Actor } from "xstate"
+import { useActorRef } from "@xstate/react"
 // SpiritEngine is dynamically imported below — keeps Three.js out of the initial bundle
 // so the wordmark / cards / chat input paint before the WebGL chunk arrives.
 import type { SpiritEngine as SpiritEngineType } from "@/lib/spirit/engine"
@@ -15,7 +16,6 @@ import type { ChatToolCall } from "@/lib/api"
 import { sceneMachine } from "@/actors/scene.actor"
 
 type SpiritActor = Actor<ReturnType<typeof createSpiritMachine>>
-type SceneActor = Actor<typeof sceneMachine>
 
 /** Maps the agent's cardinal direction enum to existing Spirit anchors. */
 const DIRECTION_TO_ANCHOR: Record<string, NamedAnchor> = {
@@ -91,10 +91,10 @@ function ProductCard({ name, kicker, line1, line2, theme }: ProductCardProps) {
   const [hovered, setHovered] = useState(false)
   const backdropFilter = `blur(12px) hue-rotate(${theme.hueRotate}deg)`
   return (
-    <div
+    <article
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="flex flex-1 cursor-pointer flex-col px-8 py-10 text-center min-h-[16rem] md:py-14 md:min-h-[26rem] transition-shadow duration-200"
+      className="site-product-card flex flex-1 flex-col rounded-2xl px-6 py-7 text-center transition-shadow duration-200 sm:px-8 sm:py-9 md:min-h-[20rem] md:py-11"
       style={{
         fontFamily: JOST,
         backdropFilter,
@@ -108,7 +108,7 @@ function ProductCard({ name, kicker, line1, line2, theme }: ProductCardProps) {
       <p
         className="text-white"
         style={{
-          fontWeight: 200,
+          fontWeight: 300,
           fontSize: "clamp(1.4rem, 2.6vw, 2rem)",
           letterSpacing: "0.04em",
         }}
@@ -126,7 +126,7 @@ function ProductCard({ name, kicker, line1, line2, theme }: ProductCardProps) {
         {kicker}
       </p>
       <div
-        className="mt-auto pt-10 text-white/55"
+        className="mt-auto pt-7 text-white/65 md:pt-10"
         style={{
           fontWeight: 300,
           fontSize: "clamp(0.85rem, 1.4vw, 0.95rem)",
@@ -137,7 +137,7 @@ function ProductCard({ name, kicker, line1, line2, theme }: ProductCardProps) {
         <p>{line1}</p>
         <p>{line2}</p>
       </div>
-    </div>
+    </article>
   )
 }
 
@@ -146,9 +146,8 @@ export function App() {
   const engineRef = useRef<SpiritEngineType | null>(null)
   const spiritActorRef = useRef<SpiritActor | null>(null)
 
-  // useState lazy initializer runs once — gives us a stable, non-null actor
-  // that React can read in JSX without violating react-hooks/refs.
-  const [sceneActor] = useState<SceneActor>(() => createActor(sceneMachine).start())
+  // React owns the scene lifecycle independently of the optional Spirit canvas.
+  const sceneActor = useActorRef(sceneMachine)
 
   useEffect(() => {
     const container = containerRef.current
@@ -181,11 +180,10 @@ export function App() {
       cancelled = true
       spiritActorRef.current?.stop()
       spiritActorRef.current = null
-      sceneActor.stop()
       engineRef.current?.dispose()
       engineRef.current = null
     }
-  }, [sceneActor])
+  }, [])
 
   const handleToolCall = useCallback((toolCall: ChatToolCall) => {
     const actor = spiritActorRef.current
@@ -255,15 +253,19 @@ export function App() {
   return (
     <>
       {/* Spirit canvas — full-bleed background */}
-      <div ref={containerRef} className="fixed inset-0 bg-[#0b0c0d]" />
+      <div ref={containerRef} aria-hidden="true" className="site-background fixed inset-0 bg-[#0b0c0d]" />
 
-      <AgentIdentityBar />
-      <SignInButton />
+      <header className="fixed inset-x-0 top-0 z-30 px-4 py-4 sm:px-6 sm:py-5">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+          <AgentIdentityBar />
+          <SignInButton />
+        </div>
+      </header>
       <SceneRegion sceneActor={sceneActor} />
 
       {/* Compact product pills — top-left, only in chat mode */}
       {inChatMode && (
-        <div className="pointer-events-none fixed top-4 left-4 z-20 flex flex-col gap-2">
+        <div className="pointer-events-none fixed top-20 left-4 z-20 flex gap-2 sm:left-6 lg:flex-col">
           <ProductPill
             name="FrontDesk"
             kicker="AI Receptionist"
@@ -280,17 +282,16 @@ export function App() {
       )}
 
       {/* Foreground content — sits on top, scrolls with the page; canvas behind stays fixed */}
-      <div className="pointer-events-none relative z-10 min-h-screen flex flex-col items-center px-6 pt-6 pb-12 md:py-[10vh] text-center select-none">
+      <main className={`site-main pointer-events-none relative z-10 flex min-h-svh flex-col items-center px-5 pb-8 text-center sm:px-6 md:pb-12 ${inChatMode ? "site-main-chat pt-44 lg:pt-32" : "pt-28 md:pt-32"}`}>
         {/* TOP — wordmark + slogan + product cards stacked together */}
         <div className="flex flex-col items-center w-full max-w-4xl">
           <h1
-            className="uppercase leading-none"
+            className="site-wordmark max-w-full uppercase leading-none"
             style={{
               fontFamily: JOST,
               fontWeight: 150,
-              fontSize: "clamp(2.2rem, 9vw, 9rem)",
               letterSpacing: "0.09em",
-              color: "rgba(120, 170, 220, 0.55)",
+              color: "rgba(145, 190, 232, 0.78)",
               textShadow:
                 "0 0 28px rgba(80, 150, 230, 0.55), 0 0 70px rgba(60, 120, 210, 0.4), 0 0 140px rgba(40, 90, 180, 0.25)",
             }}
@@ -298,12 +299,13 @@ export function App() {
             Neuvetra
           </h1>
           <p
-            className="mt-3 uppercase text-white"
+            className="site-tagline mt-5 max-w-[28rem] text-balance uppercase text-white/85 md:max-w-none"
             style={{
               fontFamily: JOST,
-              fontWeight: 200,
-              fontSize: "clamp(0.7rem, 1.6vw, 1.15rem)",
-              letterSpacing: "0.28em",
+              fontWeight: 300,
+              fontSize: "clamp(0.7rem, 1.4vw, 0.95rem)",
+              letterSpacing: "0.2em",
+              lineHeight: 1.8,
             }}
           >
             AI specialists for every job in your business
@@ -311,7 +313,7 @@ export function App() {
 
           {/* Expanded product cards — only outside chat mode */}
           {!inChatMode && (
-            <div className="pointer-events-auto mt-14 md:mt-20 flex flex-col md:flex-row items-stretch justify-center gap-6 md:gap-10 w-full max-w-[44rem]">
+            <div className="site-product-grid pointer-events-auto mt-10 flex w-full max-w-[48rem] flex-col items-stretch justify-center gap-4 sm:mt-12 sm:flex-row sm:gap-6 md:mt-14">
               <ProductCard
                 name="FrontDesk"
                 kicker="AI Receptionist"
@@ -322,8 +324,8 @@ export function App() {
               <ProductCard
                 name="Terrascope"
                 kicker="Emissions Reporting"
-                line1="Calculates your scope 1, 2, 3."
-                line2="Files the report for you."
+                line1="Scope 1, 2 and 3 reporting."
+                line2="In development."
                 theme={TERRASCOPE_THEME}
               />
             </div>
@@ -331,10 +333,10 @@ export function App() {
         </div>
 
         {/* BOTTOM — chat input. mt-auto pushes it to the bottom on desktop; on mobile it just flows after the cards. */}
-        <div className="mt-16 md:mt-auto flex flex-col items-center w-full">
+        <div className="site-chat-entry mt-10 flex w-full flex-col items-center pt-2 md:mt-auto md:pt-12">
           <Chat chat={chat} />
         </div>
-      </div>
+      </main>
     </>
   )
 }

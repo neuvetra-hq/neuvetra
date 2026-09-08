@@ -4,6 +4,14 @@
 
 Single private repo at `github.com/neuvetra-hq/neuvetra` (consolidated 2026-04-28 — see [[2026-04-28-consolidate-into-single-monorepo]]).
 
+## Current development baseline (2026-09-08)
+
+The company Site, FrontDesk and Terrascope are separate product workspaces with shared tooling. See [`docs/architecture.md`](docs/architecture.md) for ownership and [`docs/deployment.md`](docs/deployment.md) for current public observations and the root-context Railway build contract. Historical deployment assertions below and in memory are not proof of current dashboard state.
+
+Use Bun **1.3.12**. `bun run dev` previews Site web only; `dev:site`, `dev:frontdesk` and `dev:terrascope` explicitly select each web/API pair. `dev:all` starts every app. `bun run check` runs application typechecks, lint, unit tests and web builds. The Python GHG suite is separate (`test:ghg`) and still blocked by unfinished methodology expectations.
+
+Shared compiler/lint settings live in `config/`. Product-specific legacy config packages remain compatibility wrappers. Terrascope's TypeScript database/calculator packages are **throwing stubs**, not working implementations; they install/typecheck but cannot support real product requests. Current work order: common foundation and deployment, modest Site polish, FrontDesk completion, then Terrascope.
+
 ---
 
 ## The Hierarchy
@@ -23,7 +31,7 @@ neuvetra/                             ← repo root (this file)
 │   ├── frontdesk-config/
 │   ├── terrascope-database/
 │   ├── terrascope-config/
-│   └── terrascope-calculator/        ← typed GHG calc engine (TS mirror of Python ref)
+│   └── terrascope-calculator/        ← throwing stub; Python reference survives in ghg-kb
 ├── claude-memory/                    ← C-level strategic memory (this is Claude's, see § below)
 │   └── CLAUDE.md                     ← memory schema + INGEST/QUERY/LINT workflows
 ├── neuvetra-kb/                      ← brand-level public salesperson RAG
@@ -31,12 +39,12 @@ neuvetra/                             ← repo root (this file)
 ├── ghg-kb/                           ← Terrascope domain RAG (data-integrity-critical)
 │   └── CLAUDE.md                     ← Karpathy LLM Wiki model — DO NOT touch without coordination
 ├── docs/                             ← cross-product specs, PRDs, plans
+├── config/                           ← shared TypeScript + frontend lint settings
 ├── .claude/                          ← repo-wide skills + settings
 ├── .github/                          ← Claude Code review workflows
 ├── package.json                      ← workspaces: ["apps/*", "packages/*"]
 ├── turbo.json
 ├── tsconfig.base.json
-├── eslint.config.mjs
 ├── .gitignore
 ├── .gitattributes                    ← LF normalization (prevents Windows CRLF phantom diffs)
 └── README.md
@@ -44,7 +52,7 @@ neuvetra/                             ← repo root (this file)
 
 **Domains:** `neuvetra.com` → FrontDesk (live, indefinite). `www.neuvetra.ai` → Site (live). Both on Squarespace as registrar; Railway as host. See [[overview]] for the full domain map.
 
-**Three apps are subscription-shaped chatbots.** They greet a visitor, gather context, and convert to a paid subscription. Site is the parent surface that frames FrontDesk and Terrascope as siblings of one brand.
+**Two products share a company website.** Site introduces FrontDesk and Terrascope and provides the greeter/chat surface; each product owns its domain workflows and subscriptions.
 
 ---
 
@@ -120,11 +128,16 @@ When the user says "my project" or talks about Neuvetra without qualifier, defau
 
 ```bash
 bun install                    # install all workspaces
-bun run dev                    # all apps via turbo
+bun run dev                    # Site frontend preview
+bun run dev:site               # Site web + API
+bun run dev:frontdesk          # FrontDesk web + API
+bun run dev:terrascope         # explicit opt-in; Terrascope runtime still incomplete
+bun run dev:all                # all apps via turbo
 bun run build                  # all apps
 bun run typecheck              # all apps
 bun run lint                   # all apps
-bun run test                   # all apps
+bun run test                   # available offline application unit tests
+bun run check                  # typecheck + lint + test + build
 
 # Per-app:
 cd apps/<name> && bun run dev

@@ -11,7 +11,7 @@ Vite + React 19 SPA for FrontDesk. Live in production at `neuvetra.com`. Hosts t
 - **Components:** ShadCN + Radix UI + Base UI + lucide-react + Framer Motion + Sonner (toasts) + cmdk (command palette) + react-day-picker + recharts
 - **Forms:** react-hook-form + Zod via `@hookform/resolvers`
 - **Auth client:** `@supabase/supabase-js`
-- **API client:** `@elysiajs/eden` consuming `App` type from `apps/frontdesk-api`
+- **API client:** browser `fetch()` calls; Eden remains installed but is not used by the current source
 - **State:** XState 5 + `@xstate/react` 6 (onboarding wizard machine, Spirit machine)
 - **3D:** Three.js 0.184 (Spirit particle field) + `webgpu-threejs-tsl` skill for WebGPU/TSL guidance
 - **Voice (browser):** `@twilio/voice-sdk` (in-browser click-to-call)
@@ -27,7 +27,8 @@ cd apps/frontdesk-web
 bun run dev           # Vite dev server, port 5173
 bun run build         # tsc -b && vite build
 bun run preview       # preview production build
-bun run typecheck     # tsc --noEmit
+bun run typecheck     # tsc -b, including referenced frontend/config projects
+bun run test          # offline account-data regression tests
 bun run lint          # eslint .
 bun run test:e2e      # Playwright (auto-starts dev server)
 bun run test:e2e:ui   # Playwright UI mode
@@ -75,7 +76,7 @@ Playwright E2E lives in `tests/`. Convention: failing test first, then implement
 
 ## Deploy
 
-Railway service via [`Dockerfile`](Dockerfile) + [`railway.toml`](railway.toml). Multi-stage Bun build → static SPA served on port 8080 in production.
+Repository deployment configuration: [`Dockerfile`](Dockerfile) + [`railway.toml`](railway.toml), with Root Directory `/` and config-file path `/apps/frontdesk-web/railway.toml`. Multi-stage Bun build → static SPA served on port 8080. Current hosting assignments still need dashboard verification; see [`docs/deployment.md`](../../docs/deployment.md).
 
 ## Skills to reach for
 

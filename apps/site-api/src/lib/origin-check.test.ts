@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test"
 import { checkOrigin } from "./origin-check"
+import { ALLOWED_ORIGINS } from "../config/allowed-origins"
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -9,6 +10,10 @@ const allowedOrigins = [
 
 describe("checkOrigin()", () => {
   const make = (init: Record<string, string>) => new Headers(init)
+
+  test("accepts the Site development server origin", () => {
+    expect(checkOrigin(make({ origin: "http://localhost:5174" }), ALLOWED_ORIGINS).allowed).toBe(true)
+  })
 
   test("allows an origin that exactly matches the allowlist", () => {
     const result = checkOrigin(make({ origin: "https://www.neuvetra.ai" }), allowedOrigins)

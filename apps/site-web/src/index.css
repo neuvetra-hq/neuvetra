@@ -1,6 +1,93 @@
 @import "tailwindcss";
 @import "@fontsource-variable/jost";
 
+:root {
+  color-scheme: dark;
+  font-family: "Jost Variable", "Jost", sans-serif;
+  background: #0b0c0d;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:is(button, input, a):focus-visible {
+  outline: 2px solid #91bee8;
+  outline-offset: 4px;
+}
+
+::selection {
+  color: white;
+  background: rgb(71 121 170 / 60%);
+}
+
+.site-background {
+  background-image: radial-gradient(ellipse at 50% 22%, rgb(44 72 99 / 18%), transparent 65%);
+}
+
+.site-wordmark {
+  font-size: clamp(2.6rem, 9vw, 8rem);
+}
+
+/* Keep the chat entry visible on common laptop screens. */
+@media (min-width: 768px) and (max-height: 800px) {
+  .site-main {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .site-wordmark {
+    font-size: clamp(2.6rem, 8vw, 6rem);
+  }
+
+  .site-tagline {
+    margin-top: 0.75rem;
+  }
+
+  .site-product-grid {
+    margin-top: 2rem;
+  }
+
+  .site-product-card {
+    min-height: 14rem;
+    padding-block: 1.5rem;
+  }
+
+  .site-product-card > div {
+    padding-top: 1.5rem;
+  }
+
+  .site-chat-entry {
+    padding-top: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) and (max-height: 800px) {
+  .site-main-chat {
+    padding-top: 11rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /**
  * Chat-message-list scrollbar — modern, slim, dark-friendly.
  *

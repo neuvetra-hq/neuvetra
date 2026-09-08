@@ -1,0 +1,6 @@
+{
+  "extends": "../../config/typescript/api.json",
+  "include": [
+    "src"
+  ]
+}

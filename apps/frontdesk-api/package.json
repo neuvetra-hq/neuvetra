@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "typecheck": "tsc --noEmit",
-    "deploy:retell": "bun run scripts/deploy-retell-agent.ts"
+    "deploy:retell": "bun run scripts/deploy-retell-agent.ts",
+    "start": "bun run src/index.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
