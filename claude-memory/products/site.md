@@ -5,15 +5,17 @@ title: "Site — Neuvetra parent landing surface"
 aliases: ["site", "neuvetra site", "parent landing", "neuvetra.com site", "neuvetra.ai"]
 status: active
 created: 2026-04-25
-updated: 2026-04-28
+updated: 2026-09-08
 related: [parent-landing-experience, spirit, frontdesk, terrascope, 2026-04-25-parent-landing-site, 2026-04-25-spirit-as-brand-icon, 2026-04-25-spirit-packaging, 2026-04-25-wiki-architecture-policy, 2026-04-27-site-deploy-and-dns, 2026-04-28-consolidate-into-single-monorepo, multi-product-launch, stack, site-chat-backend, langfuse, vercel-ai-sdk]
 mentions: [frontdesk, terrascope, spirit]
-discussed_in: [2026-04-25-site-scaffold, 2026-04-27-site-deploy-and-dns]
+discussed_in: [2026-04-25-site-scaffold, 2026-04-27-site-deploy-and-dns, 2026-09-08-neuvetra-ghg-focus]
 sources: [2026-04-25-site-scaffold-conv, 2026-04-27-site-deploy-and-dns-conv]
 tags: [product, brand, infra, landing]
 ---
 
 # Site — Neuvetra parent landing surface
+
+> **September 8:** the website is being refocused entirely on the Neuvetra GHG application, replacing the two-product marketing surface described below. First milestone: a truthful research preview and source discovery, followed by evidence-backed answers and deterministic calculations after review. See [[2026-09-08-neuvetra-ghg-focus]]. Existing production remains on the older Site repository until a deliberate cutover.
 
 ## Positioning
 

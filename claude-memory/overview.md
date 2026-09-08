@@ -5,7 +5,8 @@ title: "Neuvetra — overview"
 aliases: [company overview, neuvetra at a glance]
 status: active
 created: 2026-04-25
-updated: 2026-04-28
+updated: 2026-09-08
+discussed_in: [2026-09-08-neuvetra-ghg-focus]
 tags: [overview, synthesis]
 related: [frontdesk, terrascope, site, multi-product-launch, stack, ceo, c-suite, spirit, parent-landing-experience, 2026-04-25-spirit-as-brand-icon, 2026-04-25-spirit-packaging, 2026-04-25-wiki-architecture-policy, 2026-04-26-neuvetra-kb-design, 2026-04-27-site-deploy-and-dns, 2026-04-28-consolidate-into-single-monorepo]
 mentions: [frontdesk, terrascope, site, spirit]
@@ -18,13 +19,15 @@ Evolving synthesis of Neuvetra's company state. Updated whenever a save material
 
 ## Definition
 
-Neuvetra is the parent brand for two independent subscription chatbots, owned and operated by [[ceo]] (Nima Birgani). The C-level is run by Nima as CEO and [[c-suite]] (Claude wearing CFO / CPO / CTO hats). Both products share a tech stack and a shared brand surface; otherwise they're independent.
+Neuvetra is now focused on one California/U.S. greenhouse-gas research and accounting application, owned and operated by [[ceo]] (Nima Birgani). The September 8 direction retires TerraScope as a customer-facing brand and defers FrontDesk. The C-level work combines founder, product and technology judgment with independently verified sources and staged demonstrations. See [[2026-09-08-neuvetra-ghg-focus]].
 
 ## Why it matters at Neuvetra
 
 This page is the chatbot's "what is Neuvetra" answer. Every other curated page sits beneath it.
 
 ## Current state
+
+**September 8 correction:** the source repository is preserved at `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). Current GHG work must not inherit the completion claims below: the TypeScript calculator/database are throwing stubs, the Python suite has unfinished expectations, and the legacy RAG pipeline does not verify claim support. The new assessment and source manifests live in [`docs/research/`](../docs/research/). Signed-in Railway inspection confirms Site and FrontDesk still deploy from the old repositories; public FrontDesk API health failed. The following April sections are historical context, not current product scope or readiness.
 
 ### Repo structure
 

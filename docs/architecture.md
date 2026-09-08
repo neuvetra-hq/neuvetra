@@ -1,5 +1,7 @@
 # Architecture and product boundaries
 
+**Historical foundation, superseded product priority:** the September 8 CEO direction makes Neuvetra the sole GHG product, retires TerraScope branding and defers FrontDesk. The boundaries below describe the preserved source layout. Use [the current delivery plan](roadmap-neuvetra-ghg.md) and [GHG architecture proposal](research/product-architecture.md) for new work.
+
 The company website, FrontDesk and Terrascope are independent applications. They share engineering conventions and identity; they do not share business behavior merely because their folders are in one repository.
 
 ## Ownership
@@ -35,4 +37,4 @@ Use current implementation, checks and observed service state to assess readines
 
 ## Work order
 
-September 8 guidance: clean the common foundation and clarify deployment first, then modestly polish the company website. FrontDesk is the first product priority; Terrascope follows. Auth/billing/telephony changes and calculator restoration are subsequent product work, with their own acceptance tests.
+The earlier September 8 sequence (foundation, Site polish, FrontDesk, Terrascope) is preserved by the checkpoint tag. It was superseded later that day by a single Neuvetra GHG focus. New stages are research/source verification, supported answers, deterministic calculations, secure workspaces and a controlled pilot.

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-09-08",
+  "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
+  "board": "user",
+  "coordinator_role": "ceo",
+  "milestone": {"id": "M1", "name": "Preserve, assess, research and refocus", "status": "awaiting_board_feedback", "next_gate": "Board review of the website demo and evidence package"},
+  "runtime": {"execution": "Task-scoped local Codex collaboration", "concurrency_limit_including_coordinator": 4, "persistent_cloud_workers": "not_implemented", "role_prompts_are_live_workers": false},
+  "checkpoint": {"tag": "checkpoint/pre-ghg-focus-2026-09-08", "commit": "367497e750530c590c7eedd229e48a34e2daf8b8", "github_verified": true},
+  "working_branch": "work/neuvetra-ghg",
+  "reporting": {"cadence": "milestones_and_on_request", "daily_schedule": "preference_requested_not_activated"},
+  "tasks": [
+    {"id": "M1-01", "owner": "cto", "status": "complete", "title": "Preserve reviewed foundation", "acceptance": "Annotated tag resolves on GitHub; environment exports excluded", "evidence": ["docs/foundation-cleanup.md", "checkpoint/pre-ghg-focus-2026-09-08"]},
+    {"id": "M1-02", "owner": "security-reliability", "status": "complete", "title": "Map current hosting and inspect ENV safely", "acceptance": "Four current services and commits recorded; public failures and secret-export limits stated", "evidence": ["docs/deployment.md"]},
+    {"id": "M1-03", "owner": "regulatory-research", "status": "complete", "title": "Verify California and U.S. program requirements", "acceptance": "Primary sources; enacted/proposed/enforcement distinctions; remaining docket gaps explicit", "evidence": ["docs/research/california-requirements.md", "docs/research/california-downloads.json"]},
+    {"id": "M1-04", "owner": "accounting-validation", "status": "complete", "title": "Audit source archive and calculation foundations", "acceptance": "Version/method pitfalls and inherited gaps recorded; downloaded bytes verified independently", "evidence": ["docs/research/calculation-sources.md", "docs/research/legacy-source-inventory.csv", "docs/research/source-integrity-check.md"]},
+    {"id": "M1-05", "owner": "software-engineering", "status": "complete", "title": "Build focused website research preview", "acceptance": "Neuvetra-only homepage; real source search/filter/reset; truthful readiness; responsive browser checks", "evidence": ["apps/site-web/src/components/ResearchPreview.tsx", "docs/research/milestone-1-validation.md"]},
+    {"id": "M1-06", "owner": "ceo", "status": "complete", "title": "Establish agent prompts, ledger and board reporting", "acceptance": "Clear role authority/handoffs; real status evidence; persistent-cloud limitations explicit", "evidence": ["AGENTS.md", "operations/agents/README.md", "operations/board-report.md"]},
+    {"id": "M1-07", "owner": "qa-lead", "status": "awaiting_board_feedback", "title": "Review integrated milestone and demonstrate it", "acceptance": "Material findings addressed; demo shown; validation and board feedback recorded", "review_disposition": "Independent QA findings addressed; demonstration and validation package ready; board feedback pending", "evidence": ["docs/research/milestone-1-validation.md"]},
+    {"id": "M2-01", "owner": "regulatory-research", "status": "planned", "title": "Release a small reviewed evidence corpus", "depends_on": ["M1-07"], "acceptance": "Approved source spans, version/status fields and explicit unsupported coverage", "evidence": []},
+    {"id": "M2-02", "owner": "software-engineering", "status": "planned", "title": "Demonstrate supported answering and abstention", "depends_on": ["M2-01"], "acceptance": "Claim support, citations, context requests and malicious-evidence cases validated", "evidence": []},
+    {"id": "M3-01", "owner": "accounting-validation", "status": "planned", "title": "Demonstrate first deterministic methods", "depends_on": ["M2-01"], "acceptance": "Independent expected values, units/GWP/period validation and identical replay/export numbers", "evidence": []},
+    {"id": "M4-01", "owner": "data-database", "status": "planned", "title": "Build tenant-safe company evidence workspace", "depends_on": ["M2-02", "M3-01"], "acceptance": "Cross-tenant rejection across all stores; controlled uploads; versioned audit records", "evidence": []},
+    {"id": "OPS-01", "owner": "cto", "status": "planned", "title": "Implement persistent cloud agent orchestration", "acceptance": "Durable tasks, scoped identities, leases, budgets, retries, audit log and independent review demonstrated", "evidence": []},
+    {"id": "OPS-02", "owner": "security-reliability", "status": "planned", "title": "Establish cloud source storage and staging", "acceptance": "Rights and retention reviewed; immutable object versions; backup/restore and scoped access verified", "evidence": []}
+  ],
+  "decisions": [
+    {"id": "D1", "decision": "One Neuvetra GHG brand; FrontDesk deferred", "why": "Board's focused California/U.S. business direction", "evidence": "claude-memory/meetings/2026-09-08-neuvetra-ghg-focus.md"},
+    {"id": "D2", "decision": "Rebuild answer and calculation trust boundaries", "why": "Legacy citation and numerical code cannot establish supported and reproducible outputs", "evidence": "docs/research/product-architecture.md"},
+    {"id": "D3", "decision": "Raw downloads require review before runtime release", "why": "Integrity, authority, effective date and method applicability are different checks", "evidence": "docs/research/calculation-sources.md"},
+    {"id": "D4", "decision": "Relevant specialist delegation and independent QA with CEO roll-up", "why": "Clear ownership, evidence and brief board reports without fabricated agent activity", "evidence": "operations/agents/README.md"}
+  ],
+  "open_dependencies": [
+    {"id": "R1", "detail": "Current complete appellate docket and OAL status require refresh before affected operational advice", "impact": "Blocks definitive answers on unresolved enforcement/deadline status, not the research preview"},
+    {"id": "R2", "detail": "No approved production factor/method or answer corpus release", "impact": "Gates customer-facing GHG answers/calculations"},
+    {"id": "R3", "detail": "ENV export covers FrontDesk API, not new GHG development services", "impact": "Isolated credentials and staging needed for live integration tests"},
+    {"id": "R4", "detail": "Downloaded source bytes are local; cloud artifact storage and rights/retention review remain", "impact": "GitHub contains code, notes and source metadata rather than a complete cloud source archive"}
+  ]
+}

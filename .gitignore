@@ -32,7 +32,7 @@ pnpm-lock.yaml
 **/playwright-report/
 **/test-results/
 /coverage
-/tmp/pdfs/
+/tmp/
 
 # Logs
 *.log

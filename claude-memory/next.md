@@ -1,5 +1,7 @@
 # What's Next
 
+> **Updated September 8, 2026:** The active sequence is now [[2026-09-08-neuvetra-ghg-focus]]. Demo the Neuvetra-only website and primary-source assessment; then build a small source-supported answer path, deterministic calculation slice, secure company workspace and controlled pilot. FrontDesk completion and EU/global expansion are deferred. Historical open items below do not override this direction. Detailed gates: [`docs/roadmap-neuvetra-ghg.md`](../docs/roadmap-neuvetra-ghg.md).
+
 Aggregator of forward-looking items across the wiki. The CEO reads this first when asking "what's next."
 
 > Last updated: 2026-04-28 (Graphify-inspired confidence-tagged provenance for ghg-kb — strategic call closed [[2026-04-28-ghg-kb-confidence-provenance]]; brainstorm paused at Section 3 of 5; spec doc + impl plan pending. Earlier today: monorepo consolidation + Twilio Campaign 2 diagnosis.)

@@ -52,6 +52,7 @@ These unauthenticated DNS/HTTP checks were made during the cleanup; they do not 
 | `https://neuvetra.com` | HTTPS `200`, title “Front Desk by Neuvetra — AI Receptionist for Small Business”, `server: cloudflare`. The edge header does not identify the origin host. |
 | `https://www.neuvetra.com` | HTTPS `404`, `server: cloudflare`, JSON “Application not found”. The apex works while this hostname needs investigation. |
 | `https://api.neuvetra.com/health` | First request timed out after 15 seconds; a second returned HTTP `502`, `server: cloudflare`. The API did not pass its public healthcheck during this review. Verify the service and upstream routing in the hosting dashboard. |
+| `https://api-production-1f64.up.railway.app/health` | Direct Railway origin also returned `502`, “Application failed to respond”. The failure is not explained solely by the custom domain or Cloudflare; runtime diagnosis remains needed. |
 
 ## Shared services and data ownership
 
