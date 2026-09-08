@@ -1,13 +1,13 @@
 # Neuvetra board update
 
-**Stage 1: research and website preview ready for review.**
+**Stage 1 approved. Stage 2: source foundation delivered; AI answer demo next.**
 
-- **Completed:** GitHub preservation tag and uploaded milestone branch; verified Railway map; 47 primary-source downloads checked; inherited archive audited; Neuvetra-only website with working source search and mobile layout; ten agent role prompts with independent review.
-- **Decision:** rebuild the answer and calculation boundaries. Existing citations do not prove support, and the current GHG runtime is incomplete.
-- **Decision:** one Neuvetra product for California/U.S.; FrontDesk deferred. Keep proposed rules, effective rules and enforcement guidance separate.
-- **Bottlenecks:** final regulatory/docket verification for affected advice; reviewed method fixtures; isolated development credentials and cloud source storage. No customer-ready GHG engine or persistent cloud workforce yet.
-- **Next demo:** one source-supported answer, one honest abstention, and then a reproducible calculation with a complete evidence trace.
+- **Completed:** 50 additional source artifacts; 97 records checked in the new local catalog; pipeline tests passed with one documented Windows skip; independent review and a separate Windows junction check completed; 35 future answer-test cases prepared.
+- **Decision:** preserve the approved green, simple design. Refresh and review evidence before connecting answers; keep drafts, effective standards and different dataset products distinct.
+- **Findings:** missing CARB September guidance and August GHG Protocol corrections added; incomplete earlier docket summary corrected. The old archive remains preserved.
+- **Bottlenecks:** approved passage/answer fixtures and model connection; one inaccessible third-party dataset/license; current appellate evidence, rights and cloud source storage. AI answer tests and persistent cloud workers are not running.
+- **Next demo:** a real source-supported answer, a context request and an honest refusal to answer beyond the evidence; deterministic calculations follow as a separate increment.
 
-[Preview](http://localhost:5174/) · [GitHub milestone](https://github.com/neuvetra-hq/neuvetra/tree/work/neuvetra-ghg) · [Assessment](../docs/research/neuvetra-assessment.md) · [Tasks and evidence](status.json) · [Agent roles](agents/README.md) · [Delivery stages](../docs/roadmap-neuvetra-ghg.md)
+[Preview](http://localhost:5174/) · [Source refresh and tests](../docs/research/source-refresh-validation.md) · [GitHub branch](https://github.com/neuvetra-hq/neuvetra/tree/work/neuvetra-ghg) · [Tasks and evidence](status.json) · [Agent roles](agents/README.md)
 
-This report reflects the September 8 milestone. Source, code and task timestamps must be rechecked before describing later work as current. The role prompts define responsibilities; actual workers are dispatched per task. Production still runs the earlier repositories.
+This report reflects the September 8 source-foundation delivery. The 35 question cases are specifications, not passed AI results. Source originals remain local; code, reports and manifests belong on the GitHub branch. Source/code/task timestamps must be rechecked before describing later activity as current. Production still runs the earlier repositories.

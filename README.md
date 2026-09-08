@@ -20,6 +20,8 @@ The preserved foundation is tagged on GitHub as `checkpoint/pre-ghg-focus-2026-0
 - **`neuvetra-kb/`** — Historical public salesperson RAG. Its multi-product content is retained and is not loaded by the research preview.
 - **`ghg-kb/`** — Inherited GHG regulations, methodologies, and factor data. Treat claims and extracted values as unverified until checked against primary sources.
 
+The [offline research pipeline](tools/research/README.md) builds a normalized source catalog from explicit manifests. It verifies local file hashes, sizes, and allowed paths; records provenance and unresolved metadata; and rejects identity/version conflicts. Catalog inclusion does not approve a source for runtime answers or calculations. Originals remain outside Git.
+
 ## Stack
 
 Bun 1.3.12 + Turborepo + Elysia + Vite + React 19 + React Router v7 + Tailwind v4 + Drizzle + Supabase. Each API has its own port. Shared TypeScript and ESLint defaults live in `config/`.
@@ -56,6 +58,14 @@ bun run build:terrascope
 ```
 
 Typechecking includes the six applications and three database/calculator packages. Frontend checks compile their project references. FrontDesk's remaining legacy lint warnings are explicit in its own config. Unit tests run on every invocation. `.github/workflows/verify.yml` runs these application checks for pull requests and pushes to `main`.
+
+The same workflow defines a separate **Python 3.12** job for the offline catalog tests, using only the standard library and synthetic temporary files. Run them locally from the repository root:
+
+```sh
+python -m unittest discover -s tools/research -p "test_*.py" -v
+```
+
+This command needs no credentials, downloaded originals, or package installation. `bun run check` remains the application-only command and does not require Python. See the [catalog README](tools/research/README.md) for the builder command and the bundled Windows Python path when Python is not on PATH.
 
 Integration checks are separate:
 

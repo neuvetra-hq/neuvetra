@@ -1,5 +1,7 @@
 # Milestone 1 validation — September 8, 2026
 
+**Feedback update:** the user subsequently reviewed both pages and approved the green, simple design and direction. The [board feedback record](../../operations/feedback/2026-09-08-milestone-1.md) closes this milestone's feedback gate. The validation below records the original delivered scope and its limits.
+
 The delivered scope is a preserved development baseline, current deployment assessment, primary-source research and architecture, a focused website preview, and an agent operating model. Customer GHG answers, calculations, persistent cloud workers and production cutover are not part of this validation result.
 
 ## Website demonstration
@@ -42,4 +44,4 @@ The reviewer subsequently rechecked the corrections and found no remaining mater
 
 Docker/container execution, remote CI, production deployment, real OTP delivery, paid AI, live billing, external integrations and production database behavior have not been established by this milestone. Existing GHG TypeScript packages remain incomplete; the full Python reference suite still fails on unfinished `TBD` data. No customer answer or numerical result is certified by a frontend build.
 
-Source bytes are retained locally outside the application repository. GitHub carries the code, reports and manifests; cloud object storage, rights/retention review, approved runtime source/method releases and isolated development credentials remain open work. Current-law claims must be refreshed before consequential use. Milestone 1 is ready for board review; feedback remains pending before dependent product implementation.
+Source bytes are retained locally outside the application repository. GitHub carries the code, reports and manifests; cloud object storage, rights/retention review, approved runtime source/method releases and isolated development credentials remain open work. Current-law claims must be refreshed before consequential use. Milestone 1's board feedback was subsequently received as recorded above; Milestone 2 starts with the source refresh.

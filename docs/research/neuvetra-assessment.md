@@ -68,7 +68,7 @@ The board should receive a brief record of completed work, open bottlenecks, imp
 
 The [delivery plan](../roadmap-neuvetra-ghg.md) defines six stages and the requested monitoring list. The list includes regulatory/court updates, factor and standard releases, source integrity, evaluation regressions, access, uptime, cost and restore checks. New sources create review and impact work; they do not silently replace released rules or recalculate approved inventories. Persistent cloud execution remains a later implementation stage.
 
-The immediate review is the Neuvetra-only website/source-discovery preview and this evidence/architecture package. The next stage after feedback is the first reviewed evidence release and supported-answer demonstration. Customer uploads, live billing, broad expert claims and regulated submissions remain gated behind their own validation.
+The user subsequently approved both preview pages, the green palette and simple presentation. [Feedback](../../operations/feedback/2026-09-08-milestone-1.md) closes Milestone 1. [Milestone 2](../milestones/m2-evidence-and-answers.md) starts with the requested source refresh and pipeline integrity work before the first reviewed evidence release and supported-answer demonstration. Customer uploads, live billing, broad expert claims and regulated submissions remain gated behind their own validation.
 
 ## Sources
 
