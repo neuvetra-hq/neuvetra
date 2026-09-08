@@ -2,7 +2,7 @@
 
 > **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
 
-Vite + React 19 SPA for Terrascope. **Currently a placeholder** — the largest visible gap in the product. Backend + DB + calculation engine are real and tested; this frontend is "coming soon."
+Vite + React 19 SPA for Terrascope. **Currently a placeholder.** API routes exist, but the TypeScript database and calculator packages are throwing stubs. The separate Python calculation reference survives. See the root README and `docs/foundation-cleanup.md` for current verification limits.
 
 ## Stack
 
@@ -19,10 +19,10 @@ Vite + React 19 SPA for Terrascope. **Currently a placeholder** — the largest 
 
 ```bash
 cd apps/terrascope-web
-bun run dev           # Vite dev server, port 5173
+bun run dev           # Vite dev server, port 5175
 bun run build         # tsc -b && vite build
 bun run preview
-bun run typecheck     # tsc --noEmit
+bun run typecheck     # tsc -b
 bun run lint          # eslint .
 ```
 

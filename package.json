@@ -1,18 +1,34 @@
 {
   "name": "neuvetra",
   "private": true,
-  "packageManager": "bun@1.2.0",
+  "packageManager": "bun@1.3.12",
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=site-web",
+    "dev:site": "turbo run dev --filter=site-web --filter=site-api",
+    "dev:frontdesk": "turbo run dev --filter=frontdesk-web --filter=frontdesk-api",
+    "dev:terrascope": "turbo run dev --filter=terrascope-web --filter=terrascope-api",
+    "dev:all": "turbo run dev",
     "build": "turbo run build",
+    "build:site": "turbo run build --filter=site-web",
+    "build:frontdesk": "turbo run build --filter=frontdesk-web",
+    "build:terrascope": "turbo run build --filter=terrascope-web",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "test:e2e:frontdesk": "turbo run test:e2e --filter=frontdesk-web",
+    "test:ghg": "cd ghg-kb && python -m pytest calculations/tests -q",
+    "check": "bun run typecheck && bun run lint && bun run test && bun run build"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@types/bun": "latest",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
     "turbo": "^2.1.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^8.48.0"
   }
 }

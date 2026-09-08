@@ -19,6 +19,7 @@ export function AgentIdentityBar() {
   const [user, setUser] = useState<UserSummary | null>(null)
 
   useEffect(() => {
+    if (!supabase) return
     let cancelled = false
     supabase.auth.getSession().then(({ data }) => {
       if (cancelled) return
@@ -51,14 +52,14 @@ export function AgentIdentityBar() {
 
   return (
     <div
-      className="pointer-events-auto fixed top-3 left-1/2 -translate-x-1/2 z-30 rounded-full px-4 py-1.5 backdrop-blur-md"
+      className="min-w-0 rounded-full px-3 py-2 backdrop-blur-md sm:px-4"
       style={{
         fontFamily: JOST,
         background: "rgba(0, 0, 0, 0.32)",
         border: "1px solid rgba(120, 170, 220, 0.30)",
       }}
     >
-      <span className="text-white/80 text-xs tracking-[0.18em] uppercase">
+      <span className="block truncate text-[0.65rem] tracking-[0.1em] text-white/75 uppercase sm:text-xs sm:tracking-[0.16em]">
         {user
           ? `Iris · talking to ${user.name ?? user.phone ?? "you"}`
           : "Iris · Neuvetra greeter"}

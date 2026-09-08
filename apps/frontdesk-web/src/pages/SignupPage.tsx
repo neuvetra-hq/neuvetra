@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Navigate, useNavigate, Link } from "react-router"
 import { useAuth } from "@/contexts/AuthContext"
 import { supabase } from "@/lib/supabase"
+import { findBusinessMembership } from "@/lib/account-data"
 import { AuthLayout } from "@/components/auth/AuthLayout"
 import { StepIdentity, type IdentityData } from "@/components/signup/StepIdentity"
 import { StepVerify } from "@/components/signup/StepVerify"
@@ -63,12 +64,7 @@ export function SignupPage() {
     setBusy(true)
     try {
       // Check if this phone number already has an account
-      const { data: existingMembership } = await supabase
-        .from("business_members")
-        .select("business_id")
-        .eq("user_id", verifiedUserId)
-        .limit(1)
-        .maybeSingle()
+      const existingMembership = await findBusinessMembership(supabase, verifiedUserId)
 
       if (existingMembership) {
         await refreshProfile()

@@ -1,6 +1,11 @@
+# Service Root Directory must be /; config path is /apps/frontdesk-api/railway.toml.
+# Legacy Railway config; migration status is recorded in docs/deployment.md.
 [build]
-builder = "nixpacks"
-installCommand = "bun install"
+builder = "DOCKERFILE"
+dockerfilePath = "apps/frontdesk-api/Dockerfile"
+watchPatterns = ["apps/frontdesk-api/**", "apps/*/package.json", "packages/*/package.json", "package.json", "bun.lock", "tsconfig.base.json", "config/**", ".dockerignore", "packages/frontdesk-database/**", "packages/frontdesk-config/**"]
 
 [deploy]
 startCommand = "bun run src/index.ts"
+healthcheckPath = "/health"
+healthcheckTimeout = 120

@@ -1,9 +1,6 @@
 import * as THREE from 'three'
-// @ts-ignore
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
-// @ts-ignore
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
-// @ts-ignore
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { SpiritSimulator } from './simulator'
 import { PARTICLES_VERT, TRIANGLES_VERT, PARTICLES_FRAG } from './shaders'

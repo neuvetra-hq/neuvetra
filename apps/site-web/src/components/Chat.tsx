@@ -67,7 +67,7 @@ export function Chat({ chat }: ChatProps) {
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     })
   }, [messages, isLoading])
 
@@ -88,7 +88,10 @@ export function Chat({ chat }: ChatProps) {
       {hasMessages && (
         <div
           ref={scrollRef}
-          className="chat-scroll max-h-[50vh] overflow-y-auto flex flex-col gap-3 px-1"
+          role="log"
+          aria-label="Conversation with Iris"
+          aria-live="polite"
+          className="chat-scroll flex max-h-[50vh] flex-col gap-3 overflow-y-auto px-1 py-2"
         >
           {messages.map((m, i) => (
             <ChatMessage key={i} message={m} />
@@ -105,7 +108,7 @@ export function Chat({ chat }: ChatProps) {
 
       <form
         onSubmit={handleSubmit}
-        className="flex w-full items-center gap-2 rounded-full px-3 py-2 backdrop-blur-md"
+        className="flex w-full items-center gap-1 rounded-full px-2 py-2 shadow-[0_12px_44px_rgba(0,0,0,0.2)] backdrop-blur-md transition-colors focus-within:border-white/40 sm:gap-2 sm:px-3"
         style={{
           background: "rgba(0, 0, 0, 0.32)",
           border: "1px solid rgba(120, 170, 220, 0.30)",
@@ -114,7 +117,9 @@ export function Chat({ chat }: ChatProps) {
         <button
           type="button"
           aria-label="Attach"
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white cursor-pointer"
+          title="Attachments are not available yet"
+          disabled
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white/25 cursor-default"
         >
           <PlusIcon />
         </button>
@@ -124,6 +129,7 @@ export function Chat({ chat }: ChatProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask anything"
+          aria-label="Message Iris"
           disabled={isLoading}
           className="flex-1 min-w-0 bg-transparent px-2 text-white placeholder:text-white/45 outline-none disabled:opacity-50"
           style={{
@@ -137,8 +143,9 @@ export function Chat({ chat }: ChatProps) {
         <button
           type="button"
           aria-label="Dictate"
-          disabled={isLoading}
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white/70 transition-colors duration-150 hover:bg-white/10 hover:text-white cursor-pointer disabled:opacity-40"
+          title="Dictation is not available yet"
+          disabled
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-white/25 cursor-default"
         >
           <MicIcon />
         </button>

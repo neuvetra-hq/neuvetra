@@ -1,12 +1,11 @@
 import { describe, expect, mock, test } from "bun:test"
 import { createActor } from "xstate"
 import { sceneMachine } from "@/actors/scene.actor"
+import { defaultVerifyOtp } from "@/lib/verify-otp"
+import { AUTH_UNAVAILABLE_MESSAGE, supabase } from "@/lib/supabase"
 
-// NOTE: We do NOT import OtpInput.tsx or defaultVerifyOtp here because
-// OtpInput.tsx imports @/lib/supabase, which calls createClient() at module
-// load time and throws in the Bun test environment (no VITE_SUPABASE_* env
-// vars). The logic under test lives in the sceneMachine actor and the
-// inline verify shape — we exercise those without touching the component.
+// Exercise the real verification helper with no credentials.
+// Never make an Auth request from a test, even if local credentials are present.
 
 describe("OtpInput verification path", () => {
   test("on success, sceneActor receives DONE with { authenticated: true } and clears the scene", async () => {
@@ -50,14 +49,10 @@ describe("OtpInput verification path", () => {
     expect(actor.getSnapshot().value).toBe("active")
   })
 
-  test("defaultVerifyOtp shape: verify dep has correct async function signature", () => {
-    // Verifies the contract shape the component accepts without importing
-    // the supabase-dependent module.
-    type VerifyFn = (
-      phone: string,
-      code: string,
-    ) => Promise<{ ok: true } | { ok: false; reason: string }>
-    const stub: VerifyFn = async () => ({ ok: true })
-    expect(typeof stub).toBe("function")
+  test.skipIf(supabase !== null)("missing auth configuration returns an unavailable result without a request", async () => {
+    expect(await defaultVerifyOtp("+15551234567", "123456")).toEqual({
+      ok: false,
+      reason: AUTH_UNAVAILABLE_MESSAGE,
+    })
   })
 })

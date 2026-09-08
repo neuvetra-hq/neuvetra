@@ -1,15 +1,19 @@
 ---
 id: terrascope
 type: product
-title: "Terrascope"
+title: "Neuvetra GHG — formerly Terrascope"
+aliases: [Neuvetra GHG, TerraScope]
 status: active
 created: 2026-04-25
-updated: 2026-04-28
+updated: 2026-09-08
+discussed_in: [2026-09-08-neuvetra-ghg-focus]
 related: [frontdesk, site, multi-product-launch, stack, supabase, weaviate, 2026-04-25-calculator-implementation-strategy, 2026-04-28-consolidate-into-single-monorepo, 2026-04-28-ghg-kb-confidence-provenance]
 tags: [product]
 ---
 
 # Terrascope
+
+> **Current direction:** this historical page ID now refers to the GHG work being rebuilt as Neuvetra. TerraScope branding is retired, California/U.S. are the only initial jurisdictions, and every inherited claim/factor/method requires independent verification. The completion statements below are April history and are contradicted in several places by current source inspection. See [[2026-09-08-neuvetra-ghg-focus]] and [`the current roadmap`](../../docs/roadmap-neuvetra-ghg.md).
 
 GHG emissions reporting chatbot. Subscription product that talks businesses through their emissions inventory and produces filing-ready reports.
 

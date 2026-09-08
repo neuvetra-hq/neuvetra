@@ -2,15 +2,18 @@
 id: frontdesk
 type: product
 title: "FrontDesk"
-status: active
+status: parked
 created: 2026-04-25
-updated: 2026-04-28
+updated: 2026-09-08
+discussed_in: [2026-09-08-neuvetra-ghg-focus]
 related: [terrascope, site, multi-product-launch, stack, supabase, frontdesk-sms-architecture, 2026-04-28-consolidate-into-single-monorepo]
 mentions: [frontdesk-sms-architecture]
 tags: [product]
 ---
 
 # FrontDesk
+
+> **September 8:** preserved and deferred under [[2026-09-08-neuvetra-ghg-focus]]. Neuvetra's active website/application direction is GHG. Existing FrontDesk production services have not been deleted or migrated; current hosting and health observations are in [`docs/deployment.md`](../../docs/deployment.md).
 
 AI voice front-desk for businesses. Subscription chatbot that greets visitors, gathers context, and converts them to a paid subscription.
 

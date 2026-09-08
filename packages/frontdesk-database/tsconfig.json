@@ -1,10 +1,7 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "strict": true,
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*", "drizzle.config.ts"]
+  "extends": "../../config/typescript/api.json",
+  "include": [
+    "src/**/*",
+    "drizzle.config.ts"
+  ]
 }

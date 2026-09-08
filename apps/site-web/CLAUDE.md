@@ -1,87 +1,92 @@
-# `apps/site-web` — Site Web (parent landing)
+# `apps/site-web` — Neuvetra GHG research preview
 
 > **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
 
-Vite + React 19 SPA for Site, the Neuvetra parent landing surface. Live at `https://www.neuvetra.ai`. Hosts the Spirit, the homepage chat input, and the two product entry points (FrontDesk, Terrascope).
+Vite + React 19 SPA for Neuvetra's California/U.S. greenhouse-gas research and accounting direction. The current `App.tsx` mounts only `ResearchPreview`: an overview of the planned workflow and a searchable, filterable primary-source browser. Neuvetra is the sole customer-facing brand; FrontDesk is deferred and TerraScope is retired as a brand. Historical workspace names remain for traceability.
+
+This checkout is a local research preview, not the current production website. The signed-in Railway assessment confirms that production still uses the old Site repository. No cutover has occurred. See the [deployment guide](../../docs/deployment.md) for the verified assignments and remaining work.
+
+## Current behavior
+
+- Overview/Sources navigation, topic/publisher search, category filters, an empty-result reset, and four original publisher links from GHG Protocol, EPA, and CARB.
+- Explicit preview status: source-backed Q&A and deterministic calculations are in development. The source browser contains publisher entry points, not approved calculation-factor data.
+- Optional decorative Spirit, loaded separately on desktop. Motion can be paused; small screens and reduced-motion preferences use the static illustration. The preview does not unlock audio.
+- No mounted chat, authentication, OTP, billing, uploads, or calculation flow. The preview needs no API or credentials. Retained chat/auth source files and tests are not evidence that these features are active.
+
+Keep this distinction clear when editing copy or features. Do not reconnect the historical salesperson/greeter to answer GHG questions from the old brand KB. Future answers and calculations need the reviewed evidence and deterministic contracts described in the [product architecture](../../docs/research/product-architecture.md).
 
 ## Stack
 
-- **Bundler:** Vite 7
-- **UI:** React 19 + React Router v7 + Tailwind v4
-- **AI client:** Vercel AI SDK 6 (`ai`) — streaming via `useChat`-style patterns
-- **Markdown:** `react-markdown` for rendering chat responses
-- **State machines:** XState 5 + `@xstate/react` 6 (frontend orchestrator + Spirit actor)
-- **3D:** Three.js 0.184 (Spirit will land here when copied from `apps/frontdesk-web/src/lib/spirit/` per [[2026-04-25-spirit-packaging]])
-- **Auth client (planned, M2):** `@supabase/supabase-js`
-- **API client:** plain typed `fetch()` wrapper at `src/lib/api.ts` (Eden was dropped 2026-04-27 — see § Per-app Root Directory below)
+- **Bundler:** Vite 7; `@/*` aliases `src/*`.
+- **UI:** React 19 + React Router v7 + Tailwind v4; Jost typography.
+- **3D:** Three.js 0.184; decorative renderer in `src/lib/spirit/`, dynamically imported by `ResearchSpirit`.
+- **Retained historical dependencies:** Vercel AI SDK 6, `react-markdown`, XState 5, `@xstate/react` 6, and `@supabase/supabase-js` support the older chat/auth implementation. They are not mounted by the current homepage.
 
 ## Commands
 
 ```bash
 cd apps/site-web
-bun run dev           # Vite dev server, port 5173
+bun run dev           # Vite dev server, port 5174; no API needed for preview
 bun run build         # tsc -b && vite build
-bun run preview       # preview production build
-bun run typecheck     # tsc --noEmit
+bun run preview       # preview production build locally
+bun run typecheck     # tsc -b, including referenced projects
 bun run lint          # eslint .
+bun run test          # offline unit tests, including retained chat/auth behavior
 ```
+
+Use Bun **1.3.12**. From the repository root, `bun run dev` starts only this frontend. `bun run dev:site` additionally starts the retained Site API and requires that API's development configuration.
 
 ## Layout
 
-```
+```text
 apps/site-web/
 ├── src/
-│   ├── App.tsx                ← homepage v1: Spirit + wordmark + slogan + product cards + chat input
-│   ├── main.tsx, index.css
-│   ├── lib/
-│   │   ├── api.ts             ← typed fetch() wrapper for /chat (replaces Eden)
-│   │   ├── spirit/            ← (will land here in Cycle 2 — copied from FrontDesk)
-│   │   └── ...
+│   ├── App.tsx                         ← mounts ResearchPreview only
+│   ├── main.tsx, index.css             ← app entry and research-preview styles
 │   ├── components/
-│   ├── machines/              ← XState orchestrator + spiritActor (M2 pilot architecture)
-│   └── data/
-├── public/                    ← static assets (will include audio/ when Spirit copies)
-├── Dockerfile                 ← multi-stage Bun build → serve on port 8080
+│   │   ├── ResearchPreview.tsx         ← overview and source browser
+│   │   ├── ResearchSpirit.tsx          ← optional decorative renderer lifecycle
+│   │   └── ...                        ← retained historical chat/auth components
+│   ├── data/research-sources.ts        ← publisher references and search/filter logic
+│   ├── lib/
+│   │   ├── spirit/                    ← existing renderer and behavior machinery
+│   │   └── ...                        ← retained API/auth helpers
+│   ├── actors/                        ← historical chat/scene actors and tests
+│   ├── hooks/                         ← retained Spirit/chat hooks
+│   └── scenes/                        ← historical OTP scene and tests
+├── public/                            ← static assets, including retained Spirit audio
+├── index.html                         ← Neuvetra GHG title and metadata
+├── Dockerfile                         ← repository-root Bun build, static SPA on 8080
 ├── railway.toml
-├── vite.config.ts             ← @/* → src/*; VITE_API_URL baked at build time
+├── vite.config.ts
 └── package.json
 ```
 
-## Critical context
+## Deployment and environment
 
-### Per-app Root Directory on Railway → no Eden
+The current Dockerfile requires Railway Root Directory `/` and config-file path `/apps/site-web/railway.toml`, using the root lockfile and shared configuration. This is the prepared monorepo build contract, not the active production assignment. The verified `Neuvetra-AI` / `Site-Web` service still deploys the old `neuvetra-hq/site` repository to `https://www.neuvetra.ai`. Reconfirm that recorded state at cutover and follow [docs/deployment.md](../../docs/deployment.md); no production change is implied by a local build.
 
-Railway uses per-app Root Directory; this app's build context is `apps/site-web`, isolated from `apps/site-api`. The original Eden type-bridge (`@elysiajs/eden` consuming `App` type from the API) couldn't resolve at build time. **Replaced with a plain typed `fetch()` wrapper at [`src/lib/api.ts`](src/lib/api.ts).** See [[2026-04-27-site-deploy-and-dns]] § Decision 3.
+`VITE_API_URL` and Supabase browser configuration remain relevant to the retained API/auth clients. The development proxy still maps `/api/*` to the local Site API on port 3001. The research preview does not invoke these clients, and changing those variables does not enable Q&A or sign-in. Never place server credentials in browser variables.
 
-### Spirit not yet here
+## Historical chat and M2 notes
 
-The Spirit (`src/lib/spirit/`, `data/spirit-presets.ts`, `public/audio/`) is currently in `apps/frontdesk-web`. Cycle 2 of [[parent-landing-experience]] copies it here. In a monorepo this is a one-line workspace move when Terrascope's frontend lights up and triggers extraction to `packages/spirit` per [[2026-04-25-spirit-packaging]].
+The April homepage combined Spirit, multi-product cards, a greeter chat, identity display, and phone OTP. That composition is preserved in the GitHub tag `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). Related components, hooks, actors, helpers, and tests remain in this tree for reference; the current `App.tsx` does not import them. There is no active `SHOW_PRODUCT_CARDS` switch.
 
-### M2 pilot architecture (ratified)
+The historical M2 design used chat and scene regions, XState orchestration, and tool-driven Spirit actions such as `move_spirit` and `set_spirit_color`. Those plans do not describe the current research preview. See the [M2 design notes](../../docs/superpowers/specs/2026-04-27-site-chat-backend-m2-design-notes.md) if reviewing the old implementation.
 
-Two-region UI (chat region + scene region), both XState actors on the frontend, communicating through a frontend orchestrator. Mobile = scene-as-bottom-sheet. Agent tool calls become scenario lifecycle events. Pilot tools `move_spirit({ direction })` and `set_spirit_color({ color })` validated end-to-end 2026-04-27. Full design at `docs/superpowers/specs/2026-04-27-site-chat-backend-m2-design-notes.md`.
+The retained typed `fetch()` wrapper at `src/lib/api.ts` is the old chat API contract, not the future GHG answer contract. Historical knowledge-base content, model responses, and readiness claims require verification before reuse.
 
-**`SHOW_PRODUCT_CARDS` flag** in `App.tsx` is a temporary lever to hide FrontDesk + Terrascope cards during pilot-style testing. M2 will replace it with an agent-driven `consolidate_homepage_cards` scenario.
+## Spirit ownership and visual checks
 
-### `VITE_API_URL` baked at build
+Spirit implementations remain in both Site and FrontDesk. The prior packaging decision deferred extraction into a shared package; this preview reuses Site's renderer directly. Any extraction needs behavior and visual checks.
 
-`VITE_API_URL=https://api.neuvetra.ai` is baked at build time in production. In dev, Vite's proxy rule sends `/api/*` → `http://localhost:3000`.
-
-### Lighthouse mobile = 100 on the homepage
-
-Maintained 2026-04-27. Don't break it. Heavy work (Three.js init, OTel boot) is deferred or skipped on the homepage.
-
-## Deploy
-
-Railway service `site-web` in the `Neuvetra-AI` project. Multi-stage [`Dockerfile`](Dockerfile) → static SPA served on port 8080. DNS: `www.neuvetra.ai` CNAME → Railway target with Let's Encrypt SSL.
-
-Pending Railway re-point: when this monorepo replaces the old `neuvetra-hq/site` repo, the Root Directory is `apps/site-web`.
+Keep initialization deferred and preserve static/reduced-motion behavior. The optional Three.js chunk still produces a build-size warning. Historical notes record an April Lighthouse score; that is not a current performance measurement.
 
 ## Skills to reach for
 
-- **State machines:** `xstate-v5`, `xstate-react`, `actor-model`
-- **3D / Spirit (when it lands):** `webgpu-threejs-tsl:webgpu-threejs-tsl`, `mcp__plugin_context7_context7__query-docs` for Three.js
-- **UI / design:** `frontend-design:frontend-design`
-- **Browser debugging:** `chrome-devtools-mcp:chrome-devtools`, `chrome-devtools-mcp:debug-optimize-lcp`, `chrome-devtools-mcp:a11y-debugging`
-- **AI SDK:** `mcp__plugin_context7_context7__query-docs` for `ai`, `@ai-sdk/anthropic`
-- **Process:** `superpowers:test-driven-development`, `superpowers:systematic-debugging`, `superpowers:verification-before-completion`
+- **UI / design:** relevant frontend-design skills when available.
+- **3D / Spirit:** Three.js documentation and applicable rendering skills.
+- **Browser review:** accessible navigation, keyboard use, mobile layout, and motion preferences.
+- **Historical state-machine or AI work:** applicable XState or AI SDK skills only when that work is explicitly in scope.
+
+Use the session's actual skill/tool catalog; the historical skill names in older notes do not establish present availability.

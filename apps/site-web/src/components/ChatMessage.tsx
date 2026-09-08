@@ -14,7 +14,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
     >
       <div
         className={[
-          "max-w-[80%] rounded-2xl px-4 py-3 text-left",
+          "max-w-[92%] break-words rounded-2xl px-4 py-3 text-left leading-relaxed sm:max-w-[85%]",
           isUser
             ? "bg-white/10 text-white"
             : "bg-white/5 text-white/90",
@@ -25,7 +25,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             {message.content}
           </p>
         ) : (
-          <div className="text-sm md:text-base [&_p]:my-2 [&_ul]:my-2 [&_ol]:my-2 [&_pre]:my-2 [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_code]:py-0.5 [&_a]:underline [&_a]:underline-offset-2">
+          <div className="text-sm md:text-base [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:my-2 [&_pre]:overflow-x-auto [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_code]:py-0.5 [&_a]:text-blue-200 [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-white">
             <ReactMarkdown>{message.content}</ReactMarkdown>
           </div>
         )}

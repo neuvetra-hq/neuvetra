@@ -1,2 +1,11 @@
+# Service Root Directory must be /; config path is /apps/site-web/railway.toml.
+# Legacy Railway config; migration status is recorded in docs/deployment.md.
 [build]
-dockerfilePath = "apps/web/Dockerfile"
+builder = "DOCKERFILE"
+dockerfilePath = "apps/site-web/Dockerfile"
+watchPatterns = ["apps/site-web/**", "apps/*/package.json", "packages/*/package.json", "package.json", "bun.lock", "tsconfig.base.json", "config/**", ".dockerignore"]
+
+[deploy]
+startCommand = "bun run --bun serve -s dist -l tcp://0.0.0.0:8080 --no-clipboard --no-port-switching"
+healthcheckPath = "/"
+healthcheckTimeout = 120

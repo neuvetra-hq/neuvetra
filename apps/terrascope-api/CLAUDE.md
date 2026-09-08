@@ -4,6 +4,8 @@
 
 Bun + Elysia API for Terrascope, the GHG emissions reporting chatbot. **Not yet deployed.** Implements the 4-step `/chat` pipeline (extract → calculate → format), company CRUD, reports, and factor lookup against the GHG KB.
 
+**Current correction (2026-09-08):** the packages described as empty below now contain manifests and explicit throwing stubs. Workspace installation/typechecking succeeds, but useful API requests remain blocked. Local port is **3002**. The shared build context for future deployment is the repository root; see `docs/deployment.md`, which supersedes the historical isolated-app instructions below.
+
 > **⚠️ Known broken state (snapshot artifact, 2026-04-28):** Source files (`src/routes/{chat,companies,factors,reports}.ts`) import from `@terrascope/database` and `@terrascope/calculator`, but **`packages/terrascope-database/` and `packages/terrascope-calculator/` are empty** — they were gutted in the Terrascope working tree before the monorepo move and the CEO directive was to snapshot as-is. `bun install` at root will fail to resolve those workspace deps until the packages are restored or the imports are rewritten. **Recovery:** check the original Terrascope repo's git history (was at `Neuvetra/Terrascope/code/`, no longer accessible since `.git` was nuked). The on-disk Terrascope code is what shipped; the deleted packages may be in an earlier commit on the FrontDesk repo's reflog or a different machine.
 
 ## Stack

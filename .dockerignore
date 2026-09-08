@@ -1,0 +1,36 @@
+# Keep credentials, local installs and generated output out of build contexts.
+**/.env
+**/.env.*
+**/ENV
+**/ENV.txt
+**/env.txt
+**/env.json
+**/env.json.txt
+**/ENV.json
+**/ENV.json.txt
+**/node_modules
+**/dist
+**/.turbo
+**/*.tsbuildinfo
+**/.git
+**/.claude
+**/.agents
+**/.codex
+**/.superpowers
+**/.remember
+**/.worktrees
+**/.api_keys
+**/.retell
+**/.obsidian
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/test-results
+**/playwright-report
+
+# Knowledge is shipped through generated public corpora, never internal memory.
+claude-memory/
+neuvetra-kb/
+ghg-kb/
+docs/
+artifacts/

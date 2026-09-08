@@ -7,6 +7,7 @@ build/
 out/
 .next/
 .turbo/
+*.tsbuildinfo
 
 # Env files
 .env
@@ -14,6 +15,13 @@ out/
 !.env.example
 .env.local
 .env.*.local
+ENV
+ENV.txt
+env.txt
+env.json
+env.json.txt
+ENV.json
+ENV.json.txt
 
 # Lock files (bun.lock at root is committed)
 package-lock.json
@@ -24,6 +32,7 @@ pnpm-lock.yaml
 **/playwright-report/
 **/test-results/
 /coverage
+/tmp/
 
 # Logs
 *.log

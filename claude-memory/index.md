@@ -1,5 +1,7 @@
 # Wiki Index
 
+> **Current direction — September 8, 2026:** [[2026-09-08-neuvetra-ghg-focus]] replaces the earlier multi-product priority. Neuvetra is the California/U.S. GHG product; TerraScope branding is retired and FrontDesk is deferred. The older entries remain historical context.
+
 Catalog of every page in the C-level wiki, organized by type. The LLM reads this first on every Neuvetra question.
 
 > Last updated: 2026-04-28 (Graphify-inspired confidence-tagged provenance design for ghg-kb — strategic call closed [[2026-04-28-ghg-kb-confidence-provenance]]; brainstorm at Section 3 of 5, spec doc + impl plan pending. Earlier today: monorepo consolidation [[2026-04-28-consolidate-into-single-monorepo]] + [[frontdesk-sms-architecture]].)
@@ -111,6 +113,8 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 - [[frontdesk-sms-architecture]] — FrontDesk's two-campaign SMS architecture: Campaign 1 (auth, approved, Twilio Verify) and Campaign 2 (owner notifications, Low Volume Mixed, rejected 2026-04-28)
 
 ## Meetings
+
+- [[2026-09-08-neuvetra-ghg-focus]] — CEO refocuses Neuvetra on California/U.S. GHG; preserved repository tag, primary-source reassessment, deterministic accounting and staged demos.
 - [[2026-04-25-c-level-wiki-design]] — Designed and scaffolded this wiki
 - [[2026-04-25-domain-deployment-state]] — Captured `neuvetra.com` / `.ai` and FrontDesk live-deployment state
 - [[2026-04-25-wiki-raw-layer-design]] — Designed the raw → wiki two-layer architecture

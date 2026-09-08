@@ -121,7 +121,7 @@ export const businessesRoutes = new Elysia({ prefix: "/businesses" })
   })
 
   // Search available Twilio numbers by area code
-  .get("/:id/available-numbers", async ({ params, query }) => {
+  .get("/:id/available-numbers", async ({ query }) => {
     const areaCode = (query as Record<string, string>).areaCode ?? "415"
     const numbers = await searchAvailableNumbers(areaCode)
     return { numbers }

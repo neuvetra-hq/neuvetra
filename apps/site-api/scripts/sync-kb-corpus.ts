@@ -1,17 +1,16 @@
 /**
  * Reads every public-visibility markdown page in `Neuvetra/neuvetra-kb/wiki/`
- * and emits a typed TypeScript const at `apps/api/src/generated/kb-corpus.ts`.
+ * and emits a typed TypeScript const at `apps/site-api/src/generated/kb-corpus.ts`.
  *
- * The runtime (`apps/api/src/lib/kb-corpus.ts`) consumes the generated file,
- * not the markdown directly — neuvetra-kb is outside the Site repo, so on
- * Railway the API has no filesystem access to it. The generated file is
- * committed to git; running this script is part of the authoring workflow:
+ * The runtime consumes the generated file rather than reading markdown on
+ * every request. It also works in deployments that include only the API app.
+ * The generated file is committed; run this after approved public-KB edits:
  *
  *   1. Author / edit pages in `Neuvetra/neuvetra-kb/wiki/`.
- *   2. Run `bun run sync-kb` from `Site/apps/api/`.
+ *   2. Run `bun run sync-kb` from `apps/site-api/`.
  *   3. Commit + push the regenerated file along with whatever else changed.
  *
- * Drafts (`visibility: draft`) are skipped. README.md files are skipped.
+ * Only `visibility: public` is exported. Administrative files are skipped.
  */
 
 import { readdir, readFile, writeFile } from "node:fs/promises"
@@ -35,7 +34,7 @@ interface KbPage {
   body: string
 }
 
-const KB_WIKI_DIR = join(import.meta.dir, "..", "..", "..", "..", "neuvetra-kb", "wiki")
+export const KB_WIKI_DIR = join(import.meta.dir, "..", "..", "..", "neuvetra-kb", "wiki")
 const OUTPUT_PATH = join(import.meta.dir, "..", "src", "generated", "kb-corpus.ts")
 
 async function listMarkdownFiles(dir: string): Promise<string[]> {
@@ -70,16 +69,16 @@ function asStringArray(value: unknown): string[] {
   return value.filter((v): v is string => typeof v === "string")
 }
 
-async function buildCorpus(): Promise<KbPage[]> {
-  const files = await listMarkdownFiles(KB_WIKI_DIR)
+export async function buildCorpus(wikiDir = KB_WIKI_DIR): Promise<KbPage[]> {
+  const files = await listMarkdownFiles(wikiDir)
   const pages: KbPage[] = []
 
   for (const file of files) {
     const raw = await readFile(file, "utf-8")
     const { fm, body } = splitFrontmatter(raw)
 
-    const visibility = typeof fm.visibility === "string" ? fm.visibility : "public"
-    if (visibility !== "public") continue
+    // Publication is explicit: drafts and pages without visibility stay private.
+    if (fm.visibility !== "public") continue
 
     const id = typeof fm.id === "string" ? fm.id : null
     const type = typeof fm.type === "string" ? fm.type : null
@@ -89,7 +88,7 @@ async function buildCorpus(): Promise<KbPage[]> {
       continue
     }
 
-    const pathFromWiki = relative(KB_WIKI_DIR, file).replace(/\\/g, "/").replace(/\.md$/, "")
+    const pathFromWiki = relative(wikiDir, file).replace(/\\/g, "/").replace(/\.md$/, "")
 
     pages.push({
       id,
@@ -148,7 +147,9 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  console.error("[sync-kb-corpus] failed:", err)
-  process.exit(1)
-})
+if (import.meta.main) {
+  main().catch((err) => {
+    console.error("[sync-kb-corpus] failed:", err)
+    process.exit(1)
+  })
+}

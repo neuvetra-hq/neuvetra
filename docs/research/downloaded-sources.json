@@ -1,0 +1,261 @@
+{
+  "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+  "legacy_repo": "https://github.com/neuvetra-hq/rag-pipeline",
+  "legacy_commit": "2adfaca",
+  "sources": [
+    {
+      "file": "ghg-corporate-standard.pdf",
+      "publisher": "GHG Protocol",
+      "source_url": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Wed, 15 Feb 2023 20:57:39 GMT",
+      "bytes": 3680902,
+      "sha256": "cfcda4dd20a0b0936b30e5e5c7c635c26efdfa770d29c1004f549bf082c0fe3c",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-corporate-standard.pdf",
+      "legacy_exact_matches": [
+        "datasets/ghg-protocol-revised.pdf"
+      ]
+    },
+    {
+      "file": "ghg-scope-2-guidance.pdf",
+      "publisher": "GHG Protocol",
+      "source_url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Wed, 09 Apr 2025 16:34:51 GMT",
+      "bytes": 3446578,
+      "sha256": "b4f17030e5d723d5b9b65ed85592c5449dafe4f798eb845ed9db0465893c894a",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-scope-2-guidance.pdf",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "ghg-scope-2-corrections.pdf",
+      "publisher": "GHG Protocol",
+      "source_url": "https://ghgprotocol.org/sites/default/files/2023-03/List%20of%20Corrections%20to%20the%20Scope%202%20Guidance.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ghgprotocol.org/sites/default/files/2023-03/List%20of%20Corrections%20to%20the%20Scope%202%20Guidance.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Mon, 07 Apr 2025 18:12:58 GMT",
+      "bytes": 135659,
+      "sha256": "b7772e0d86764383b41f923bfcace305d239ac5baf39ad22ffb55f78ba9dacad",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-scope-2-corrections.pdf",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "ghg-scope-3-standard.pdf",
+      "publisher": "GHG Protocol",
+      "source_url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Wed, 15 Feb 2023 20:57:39 GMT",
+      "bytes": 6177981,
+      "sha256": "c748e35216aedd90fff3dc580b233f37cbaf9e6cefd211c88e92965bded54b91",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-scope-3-standard.pdf",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "ghg-scope-3-calculation-guidance.pdf",
+      "publisher": "GHG Protocol",
+      "source_url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope3_Calculation_Guidance_0%5B1%5D.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope3_Calculation_Guidance_0%5B1%5D.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Thu, 23 Mar 2023 18:43:23 GMT",
+      "bytes": 2134603,
+      "sha256": "d231248e0d64a9b500164ca45bba1509020e54de813a9fb97439d5ee02265432",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-scope-3-calculation-guidance.pdf",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "ghg-gwp-august-2024.pdf",
+      "publisher": "GHG Protocol",
+      "source_url": "https://ghgprotocol.org/sites/default/files/2024-08/Global-Warming-Potential-Values%20%28August%202024%29.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ghgprotocol.org/sites/default/files/2024-08/Global-Warming-Potential-Values%20%28August%202024%29.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Wed, 07 Aug 2024 14:45:57 GMT",
+      "bytes": 432266,
+      "sha256": "5f0bbd46600e0b27ea4eda97932d683aaef9b6e70a88830e8b219c885aeea387",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-gwp-august-2024.pdf",
+      "legacy_exact_matches": [
+        "datasets/Global-Warming-Potential-Values (August 2024).pdf"
+      ]
+    },
+    {
+      "file": "epa-factors-hub-2025.xlsx",
+      "publisher": "US EPA",
+      "source_url": "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "last_modified": "Fri, 17 Jan 2025 01:33:01 GMT",
+      "bytes": 1014275,
+      "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-factors-hub-2025.xlsx",
+      "legacy_exact_matches": [
+        "datasets/1_emission_factors/epa/ghg-emission-factors-hub-2025.xlsx"
+      ]
+    },
+    {
+      "file": "epa-factors-hub-2025.pdf",
+      "publisher": "US EPA",
+      "source_url": "https://www.epa.gov/system/files/documents/2025-01/ghg-emission-factors-hub-2025.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://www.epa.gov/system/files/documents/2025-01/ghg-emission-factors-hub-2025.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Fri, 17 Jan 2025 01:34:16 GMT",
+      "bytes": 478277,
+      "sha256": "5d07c678fae6783623acb1e23faa4a7c46268ee6c5a0654c9e49c50de7caf924",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-factors-hub-2025.pdf",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "epa-egrid2023-technical-guide.pdf",
+      "publisher": "US EPA",
+      "source_url": "https://www.epa.gov/system/files/documents/2025-01/egrid2023_technical_guide.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://www.epa.gov/system/files/documents/2025-01/egrid2023_technical_guide.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Wed, 15 Jan 2025 17:55:21 GMT",
+      "bytes": 2768135,
+      "sha256": "12164c665217f1b4d00ac6a8115a3806710dab79993d02959cdf7f7f66abd841",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-egrid2023-technical-guide.pdf",
+      "legacy_exact_matches": [
+        "datasets/1_emission_factors/epa_egrid/EPA_eGRID2023_techguide.pdf"
+      ]
+    },
+    {
+      "file": "carb-mrr-2026-final-order.pdf",
+      "publisher": "CARB",
+      "source_url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/mrr/mrr_final%20reg%20order.pdf",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/mrr/mrr_final%20reg%20order.pdf",
+      "content_type": "application/pdf",
+      "last_modified": "Mon, 03 Aug 2026 17:23:15 GMT",
+      "bytes": 9078137,
+      "sha256": "024c96c29dccb34ae647b38a07721fd2e3b7d25c167b0401fa83c12c24ef5612",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\carb-mrr-2026-final-order.pdf",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "carb-mrr-2026-alt-format.docx",
+      "publisher": "CARB",
+      "source_url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/mrr/a-1.1%20alt%20format.docx",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/mrr/a-1.1%20alt%20format.docx",
+      "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "last_modified": "Mon, 03 Aug 2026 19:22:39 GMT",
+      "bytes": 536261,
+      "sha256": "763de247641de9234e6fd2776582beb26dd7df045f946afbe6188d8bf7babe4e",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\carb-mrr-2026-alt-format.docx",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "epa-supplychain-v1.3-co2e-usd2022.csv",
+      "publisher": "US EPA",
+      "source_url": "https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv",
+      "content_type": "text/csv",
+      "last_modified": "Wed, 10 Jul 2024 00:30:18 GMT",
+      "bytes": 123481,
+      "sha256": "6025a14c4fe16675735efba1683030e4d36011e3973f3c4261f8231aa69c002f",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-supplychain-v1.3-co2e-usd2022.csv",
+      "legacy_exact_matches": [
+        "datasets/1_emission_factors/useeio/v1.3/USEEIO_v1.3_CO2e_USD2022.csv"
+      ]
+    },
+    {
+      "file": "epa-supplychain-v1.3-byghg-usd2022.csv",
+      "publisher": "US EPA",
+      "source_url": "https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_byGHG_USD2022.csv",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://pasteur.epa.gov/uploads/10.23719/1531143/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_byGHG_USD2022.csv",
+      "content_type": "text/csv",
+      "last_modified": "Wed, 10 Jul 2024 00:30:18 GMT",
+      "bytes": 2553711,
+      "sha256": "963952e5911dd5c5a4408172192b327c1583b5491a5b80c2d7cb03260411ee16",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-supplychain-v1.3-byghg-usd2022.csv",
+      "legacy_exact_matches": [
+        "datasets/1_emission_factors/useeio/v1.3/USEEIO_v1.3_byGHG_USD2022.csv"
+      ]
+    },
+    {
+      "file": "epa-supplychain-v1.3-about.docx",
+      "publisher": "US EPA",
+      "source_url": "https://pasteur.epa.gov/uploads/10.23719/1531143/documents/Aboutv1.3SupplyChainGHGEmissionFactors.docx",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://pasteur.epa.gov/uploads/10.23719/1531143/documents/Aboutv1.3SupplyChainGHGEmissionFactors.docx",
+      "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "last_modified": "Wed, 10 Jul 2024 00:30:18 GMT",
+      "bytes": 36118,
+      "sha256": "15c6d98e95281a6b1db209556581ee70ef7ffad47c6a21b8753d50a23f26e1cd",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-supplychain-v1.3-about.docx",
+      "legacy_exact_matches": []
+    },
+    {
+      "file": "egrid2023_data_metric_rev2.xlsx",
+      "publisher": "US EPA",
+      "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_metric_rev2.xlsx",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_metric_rev2.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "last_modified": "Thu, 12 Jun 2025 19:31:55 GMT",
+      "bytes": 24803997,
+      "sha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\egrid2023_data_metric_rev2.xlsx",
+      "legacy_exact_matches": [
+        "datasets/1_emission_factors/epa_egrid/EPA_eGRID2023_metric.xlsx"
+      ]
+    },
+    {
+      "file": "egrid2023_data_rev2.xlsx",
+      "publisher": "US EPA",
+      "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "status": "downloaded",
+      "review_status": "download-integrity-only; applicability needs expert approval",
+      "final_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "last_modified": "Mon, 16 Jun 2025 15:33:55 GMT",
+      "bytes": 21213301,
+      "sha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6",
+      "local_path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\egrid2023_data_rev2.xlsx",
+      "legacy_exact_matches": []
+    }
+  ]
+}

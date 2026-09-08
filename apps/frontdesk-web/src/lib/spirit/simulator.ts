@@ -117,7 +117,7 @@ export class SpiritSimulator {
   ) {
     this.copyMaterial.uniforms.texture.value =
       input instanceof THREE.WebGLRenderTarget ? input.texture : input
-    this.gpgpuMesh.material = this.copyMaterial as any
+    this.gpgpuMesh.material = this.copyMaterial
     this.renderer.setRenderTarget(output)
     this.renderer.render(this.gpgpuScene, this.gpgpuCamera)
     this.renderer.setRenderTarget(null)
@@ -141,7 +141,7 @@ export class SpiritSimulator {
     u.attraction.value = settings.attraction
     u.initAnimation.value = this.initAnimation
 
-    this.gpgpuMesh.material = this.positionMaterial as any
+    this.gpgpuMesh.material = this.positionMaterial
     this.renderer.setRenderTarget(this.positionRenderTarget)
     this.renderer.render(this.gpgpuScene, this.gpgpuCamera)
     this.renderer.setRenderTarget(null)

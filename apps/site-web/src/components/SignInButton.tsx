@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
+import { AUTH_UNAVAILABLE_MESSAGE, supabase } from "@/lib/supabase"
 import { SignInModal } from "./SignInModal"
 
 const JOST = "'Jost Variable', 'Jost', sans-serif"
@@ -13,11 +13,12 @@ const JOST = "'Jost Variable', 'Jost', sans-serif"
  * scene-mounted OtpInput; both paths land at the same `auth.users` row.
  */
 export function SignInButton() {
-  const [authed, setAuthed] = useState<boolean | null>(null)
+  const [authed, setAuthed] = useState<boolean | null>(supabase ? null : false)
   const [open, setOpen] = useState(false)
   const [signingOut, setSigningOut] = useState(false)
 
   useEffect(() => {
+    if (!supabase) return
     let cancelled = false
     supabase.auth.getSession().then(({ data }) => {
       if (cancelled) return
@@ -34,7 +35,7 @@ export function SignInButton() {
   }, [])
 
   const handleSignOut = async () => {
-    if (signingOut) return
+    if (signingOut || !supabase) return
     setSigningOut(true)
     await supabase.auth.signOut()
     setSigningOut(false)
@@ -49,15 +50,16 @@ export function SignInButton() {
       <button
         type="button"
         onClick={() => (authed ? handleSignOut() : setOpen(true))}
-        disabled={signingOut}
-        className="pointer-events-auto fixed top-3 right-3 z-30 rounded-full px-4 py-1.5 backdrop-blur-md text-white/80 text-xs tracking-[0.18em] uppercase hover:text-white transition-colors duration-150 disabled:opacity-50 cursor-pointer"
+        disabled={signingOut || !supabase}
+        title={!supabase ? AUTH_UNAVAILABLE_MESSAGE : undefined}
+        className="shrink-0 rounded-full px-3 py-2 text-[0.65rem] tracking-[0.1em] text-white/80 uppercase backdrop-blur-md transition-colors duration-150 hover:bg-white/5 hover:text-white disabled:cursor-default disabled:text-white/45 sm:px-4 sm:text-xs sm:tracking-[0.16em] cursor-pointer"
         style={{
           fontFamily: JOST,
           background: "rgba(0, 0, 0, 0.32)",
           border: "1px solid rgba(120, 170, 220, 0.30)",
         }}
       >
-        {authed ? (signingOut ? "Signing out…" : "Sign out") : "Sign in"}
+        {!supabase ? "Sign-in unavailable" : authed ? (signingOut ? "Signing out…" : "Sign out") : "Sign in"}
       </button>
       {open && <SignInModal onClose={() => setOpen(false)} />}
     </>
