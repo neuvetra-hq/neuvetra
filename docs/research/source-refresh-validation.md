@@ -30,6 +30,8 @@ The implementation delegate added [the catalog builder and tests](../../tools/re
 
 The final normalized catalog is [source-catalog.json](source-catalog.json), SHA-256 `5417de55cd9c8bb82ff924b554cf305569b96eab164ba74f7afe3e5bee9318e8`. This identifies the catalog bytes, not a release of approved accounting or legal evidence. Its five input manifests are listed with their own hashes inside the catalog.
 
+The source-foundation implementation, reports and manifests were uploaded to `work/neuvetra-ghg` at [commit 6bfd36d](https://github.com/neuvetra-hq/neuvetra/commit/6bfd36d0e29ef0326be509cb733fac4d0bd973af), and the remote commit was verified. The staged scan checked 23 changed files and found no environment exports or matching credential-like values; this targeted scan is not a comprehensive security audit.
+
 ## Reproduce and inspect
 
 Use the builder's [documented command](../../tools/research/README.md) with the three original manifests plus `ghg-protocol-refresh-downloads.json` and `epa-carb-refresh-downloads.json`; supply both `2026-09-08` and `2026-09-08-refresh` original-source directories as explicit roots. The command is offline and needs only Python's standard library. The tool README documents the path, duplicate, version and atomic-output contracts and how to run the synthetic tests.

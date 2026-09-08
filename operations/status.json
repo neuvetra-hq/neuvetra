@@ -9,7 +9,7 @@
   "runtime": {"execution": "Task-scoped local Codex collaboration", "concurrency_limit_including_coordinator": 4, "persistent_cloud_workers": "not_implemented", "role_prompts_are_live_workers": false},
   "checkpoint": {"tag": "checkpoint/pre-ghg-focus-2026-09-08", "commit": "367497e750530c590c7eedd229e48a34e2daf8b8", "github_verified": true},
   "working_branch": "work/neuvetra-ghg",
-  "publication": {"repository": "https://github.com/neuvetra-hq/neuvetra", "implementation_commit": "84d55b7fcfb4b0f127c5ede80b13e389652a0a80", "github_verified": true, "verified_at": "2026-09-08", "production_cutover": "not_performed"},
+  "publication": {"repository": "https://github.com/neuvetra-hq/neuvetra", "implementation_commit": "84d55b7fcfb4b0f127c5ede80b13e389652a0a80", "implementation_commit_scope": "M1", "source_foundation_commit": "6bfd36d0e29ef0326be509cb733fac4d0bd973af", "source_foundation_github_verified": true, "github_verified": true, "verified_at": "2026-09-08", "production_cutover": "not_performed"},
   "reporting": {"cadence": "milestones_and_on_request", "daily_schedule": "preference_requested_not_activated"},
   "tasks": [
     {"id": "M1-01", "owner": "cto", "status": "complete", "title": "Preserve reviewed foundation", "acceptance": "Annotated tag resolves on GitHub; environment exports excluded", "evidence": ["docs/foundation-cleanup.md", "checkpoint/pre-ghg-focus-2026-09-08"]},

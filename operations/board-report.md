@@ -10,4 +10,4 @@
 
 [Preview](http://localhost:5174/) · [Source refresh and tests](../docs/research/source-refresh-validation.md) · [GitHub branch](https://github.com/neuvetra-hq/neuvetra/tree/work/neuvetra-ghg) · [Tasks and evidence](status.json) · [Agent roles](agents/README.md)
 
-This report reflects the September 8 source-foundation delivery. The 35 question cases are specifications, not passed AI results. Source originals remain local; code, reports and manifests belong on the GitHub branch. Source/code/task timestamps must be rechecked before describing later activity as current. Production still runs the earlier repositories.
+This report reflects the September 8 source-foundation delivery. The 35 question cases are specifications, not passed AI results. Source originals remain local; code, reports and manifests were uploaded and verified at `6bfd36d` on the GitHub branch. Source/code/task timestamps must be rechecked before describing later activity as current. Production still runs the earlier repositories.
