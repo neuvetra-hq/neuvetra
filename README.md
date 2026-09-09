@@ -2,7 +2,9 @@
 
 Neuvetra is becoming a California and U.S. greenhouse-gas research and accounting application. The repository retains the earlier Site, FrontDesk and Terrascope workspaces for traceability. FrontDesk is deferred; TerraScope is no longer a customer-facing brand. Start with the [current delivery plan](docs/roadmap-neuvetra-ghg.md) and [research assessment](docs/research/neuvetra-assessment.md).
 
-The current homepage includes an overview, a searchable library of four primary publisher references, and an **Ask Neuvetra** private Scope 2 pilot. The pilot uses a real model to select independently reviewed EPA statements, retaining exact qualifications and references. Missing-context, unsupported and unresolved-source responses contain no invented answer. Broader Q&A, authentication, billing and emissions calculations remain outside this preview. Start with the [pilot runbook and limits](docs/milestones/m2-answer-demo.md).
+The current homepage includes an overview, a searchable library of four primary publisher references, and **Ask Neuvetra**. Its opt-in private Scope 2 experiment retrieves reviewed EPA paragraphs, drafts an answer for each requested part, and checks support and completeness before display. Source integrity and reference checks are deterministic; model judgments remain fallible. Broader Q&A, authentication, billing and emissions calculations remain outside this preview. Start with the [current experiment and limits](docs/milestones/m2-passage-retrieval.md) and its [independent QA results](docs/research/scope2-passages-qa.md). The earlier fixed-statement pilot and failed evaluation history are preserved.
+
+**The dynamic-answer release is held.** Software checks passed, but the latest live run produced only two independently clean complete answers out of eight. Local answering is stopped while the [next reliability work](docs/research/scope2-answer-reliability-next.md) is defined; this branch does not establish a working professional answer service.
 
 The preserved foundation is tagged on GitHub as `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). The foundation PR was merged into `main` at `0100b96`; the answer pilot is developed on `work/scope2-answer-demo`. Production still deploys from the older repositories, and this preview has not been cut over. See the [verified deployment map](docs/deployment.md).
 
@@ -37,7 +39,7 @@ bun run dev
 
 `dev` previews only the Site frontend at `http://localhost:5174`. The overview and source browser work without credentials or an API. They do not invoke the retained chat, sign-in, or calculation code.
 
-`bun run dev:research` starts the separate loopback research service. It defaults to provider-disabled and needs an independently pinned release, verified source originals and explicit development model configuration for supported answers. Follow the [runbook](docs/milestones/m2-answer-demo.md); do not use a watch process with a live in-memory budget. No environment export is loaded automatically.
+`bun run dev:research:passages` starts the opt-in paragraph experiment on loopback port 3012. It defaults to provider-disabled and needs an independently pinned release, verified original/extracted sources and explicit development model configuration. Follow the [current runbook](docs/milestones/m2-passage-retrieval.md); do not use a watch process with a live in-memory budget. No environment export is loaded automatically. `bun run dev:research` retains the [historical fixed-statement service](docs/milestones/m2-answer-demo.md); run only one of these services at a time.
 
 For explicit work on the retained web/API pairs, copy the relevant app `.env.example` files to `.env` in the same directories and populate development credentials. This is not needed for the research preview:
 

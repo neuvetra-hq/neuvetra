@@ -6,6 +6,8 @@
     "dev": "bun run --watch src/index.ts",
     "dev:research": "bun run src/research-server.ts",
     "start:research": "bun run src/research-server.ts",
+    "dev:research-passages": "bun run src/research-passages-server.ts",
+    "start:research-passages": "bun run src/research-passages-server.ts",
     "typecheck": "tsc --noEmit",
     "sync-kb": "bun run scripts/sync-kb-corpus.ts",
     "start": "bun run src/index.ts",

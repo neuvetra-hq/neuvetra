@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-09T02:02:22.890435+00:00",
+  "git_base_commit": "fc97c487df156bfd6e9a589d34bfe8c67fdfc2b4",
+  "code_sha256": {
+    "apps/site-api/src/research-passages/config.ts": "b8b3c44bbe40dd8501e7f5480b68a9d4e353a3f83693d1e1a767d3e5d1ccecda",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "ab8912100441eae36b7efdb345dc3d0ae2d0610a16bfc3b680b19c780fb0f5b5",
+    "apps/site-api/src/research-passages/passages.test.ts": "da6d382641fa8507e21d45a743aa73e420c206a7221058827e9ad32238842723",
+    "apps/site-api/src/research-passages/provider.ts": "2527c18ecd6e998b9b7662118c1a441ed79545c746b9b13077d73b995a77374f",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/routes.ts": "a28554aadaaa430d4e19690d0978f0546349d5d650bdb87130fe8e54f6b1601f",
+    "apps/site-api/src/research-passages/service.ts": "c36d241d6ddcc501a7cf0966665ff54722ac6c1556c91c0e9f2f1802c20fa68a",
+    "apps/site-api/src/research-passages/types.ts": "329dbe98642097fb45943e47a328fa7c5d7d893fa211166448aedbb96a0d2e6a",
+    "apps/site-api/src/research-passages/validation.ts": "0780b6148f9adb76be1ce83933a31d485803fafeff09b45e4eef0042cd126e50",
+    "apps/site-api/src/research-passages-server.ts": "b30b4fc6dc2715a5e4662e8f86630cdb733b229833896452b5c9241d4036f9e9",
+    "apps/site-api/package.json": "0f994ae45d415e555eb259b553af7faaef895de4c0ad0da5573efb92cbee4c7d",
+    "apps/site-web/src/lib/research-api.ts": "07b57ba221b8e980193f5b10a11e70541b0f6b2ffcf0739273be8c48fb902fc4",
+    "apps/site-web/src/components/ResearchAnswerPanel.tsx": "63620fe1fe28ba3d1593848bf021541a501a918f4039174cd772a14880900669",
+    "tools/research/run_passage_eval.py": "c5f2b6c4277162d472b6f2f237c4b3e8d8c32621b2475fd2290d17f5a41db7fb"
+  },
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "fixture_sha256": "a6ddc6cef7acbab68ca4d2ec70234c683013bc72ee31491a04e94c51a271a863",
+  "release_path": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\data\\research\\releases\\scope2-passages.v1.json",
+  "fixture_path": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\evaluations\\research-qa\\scope2-passages-unseen-compound-fixtures.json",
+  "retained_artifacts": [
+    {
+      "kind": "source",
+      "id": "epa-electricity-2023",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-electricity-emissions-2023.pdf",
+      "sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    {
+      "kind": "extraction",
+      "id": "epa-electricity-2023-pages-v1",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-scope2-pilot/epa-electricity-2023-normalized-pages-v1.json",
+      "sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    }
+  ],
+  "scope": "1 live question cases for the opt-in passage experiment",
+  "before": {
+    "service": "neuvetra-research-passages",
+    "answer_mode": "passage_grounded",
+    "readiness": "ready",
+    "reason_code": "none",
+    "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+    "release": {
+      "id": "scope2-passages",
+      "version": "1",
+      "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+    },
+    "provider": {
+      "mode": "live",
+      "model": "claude-sonnet-5"
+    },
+    "limits": {
+      "max_calls": 4,
+      "remaining_calls": 4,
+      "max_output_tokens": 1200,
+      "max_spend_usd": 1.8,
+      "reserved_spend_usd": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "H-C01",
+      "question": "Explain market-based Scope 2 accounting and tell me which Scope 3 category covers employee travel.",
+      "duration_ms": 2688,
+      "stage_calls": 1,
+      "mechanical_checks_passed": true,
+      "issues": [],
+      "response": {
+        "status": "unsupported",
+        "message": "The reviewed material does not fully support this question. More source coverage or review is needed.",
+        "reason_code": "coverage_missing",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    }
+  ],
+  "semantic_review": "pending_independent_review",
+  "notes": [
+    "Mechanical checks do not establish entailment, completeness or general model accuracy.",
+    "The independent reviewer must assess required_facets and forbidden_claim_kinds from the frozen fixture.",
+    "Service reservations are not measured provider billing.",
+    "No credentials or customer data are included."
+  ],
+  "after": {
+    "service": "neuvetra-research-passages",
+    "answer_mode": "passage_grounded",
+    "readiness": "ready",
+    "reason_code": "none",
+    "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+    "release": {
+      "id": "scope2-passages",
+      "version": "1",
+      "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+    },
+    "provider": {
+      "mode": "live",
+      "model": "claude-sonnet-5"
+    },
+    "limits": {
+      "max_calls": 4,
+      "remaining_calls": 3,
+      "max_output_tokens": 1200,
+      "max_spend_usd": 1.8,
+      "reserved_spend_usd": 0.06
+    }
+  },
+  "finished_at": "2026-09-09T02:02:25.646492+00:00",
+  "artifacts_unchanged": true,
+  "mechanical_checks_passed": true
+}

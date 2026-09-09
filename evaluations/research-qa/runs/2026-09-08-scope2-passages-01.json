@@ -1,0 +1,454 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-09T01:43:19.425444+00:00",
+  "git_base_commit": "fc97c487df156bfd6e9a589d34bfe8c67fdfc2b4",
+  "code_sha256": {
+    "apps/site-api/src/research-passages/config.ts": "b8b3c44bbe40dd8501e7f5480b68a9d4e353a3f83693d1e1a767d3e5d1ccecda",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "ab8912100441eae36b7efdb345dc3d0ae2d0610a16bfc3b680b19c780fb0f5b5",
+    "apps/site-api/src/research-passages/passages.test.ts": "a14098ddac48b0d776ca8c8a22c9d6707a80b77cd247fab9baa8ffc4ee25e2ef",
+    "apps/site-api/src/research-passages/provider.ts": "a9c769b14d01861b0488c291ba1936fb880e8641dc277efefb371fabedeeea2b",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/routes.ts": "a28554aadaaa430d4e19690d0978f0546349d5d650bdb87130fe8e54f6b1601f",
+    "apps/site-api/src/research-passages/service.ts": "b36d9403e972a7d233d720331b7204380355749d64738fa2b66d74a5d5c90533",
+    "apps/site-api/src/research-passages/types.ts": "399a02967562d5da7b2fd3f99306c94376e22be5f5282ef02764be52a0240a7f",
+    "apps/site-api/src/research-passages/validation.ts": "ee67ff26c03c977abb642496181dbcb16b5cd1c156fe0cff67733bcb5e6cd037",
+    "apps/site-api/src/research-passages-server.ts": "b30b4fc6dc2715a5e4662e8f86630cdb733b229833896452b5c9241d4036f9e9",
+    "apps/site-api/package.json": "0f994ae45d415e555eb259b553af7faaef895de4c0ad0da5573efb92cbee4c7d",
+    "apps/site-web/src/lib/research-api.ts": "07b57ba221b8e980193f5b10a11e70541b0f6b2ffcf0739273be8c48fb902fc4",
+    "apps/site-web/src/components/ResearchAnswerPanel.tsx": "63620fe1fe28ba3d1593848bf021541a501a918f4039174cd772a14880900669",
+    "tools/research/run_passage_eval.py": "c5f2b6c4277162d472b6f2f237c4b3e8d8c32621b2475fd2290d17f5a41db7fb"
+  },
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "fixture_sha256": "7200fc50b37b07535f7c364e901c681806b13dc0ec58ce09dc472aa7612d7207",
+  "release_path": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\data\\research\\releases\\scope2-passages.v1.json",
+  "fixture_path": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\evaluations\\research-qa\\scope2-passages-live-fixtures.json",
+  "retained_artifacts": [
+    {
+      "kind": "source",
+      "id": "epa-electricity-2023",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-electricity-emissions-2023.pdf",
+      "sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    {
+      "kind": "extraction",
+      "id": "epa-electricity-2023-pages-v1",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-scope2-pilot/epa-electricity-2023-normalized-pages-v1.json",
+      "sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    }
+  ],
+  "scope": "8 live question cases for the opt-in passage experiment",
+  "before": {
+    "service": "neuvetra-research-passages",
+    "answer_mode": "passage_grounded",
+    "readiness": "ready",
+    "reason_code": "none",
+    "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+    "release": {
+      "id": "scope2-passages",
+      "version": "1",
+      "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+    },
+    "provider": {
+      "mode": "live",
+      "model": "claude-sonnet-5"
+    },
+    "limits": {
+      "max_calls": 30,
+      "remaining_calls": 30,
+      "max_output_tokens": 1200,
+      "max_spend_usd": 1.8,
+      "reserved_spend_usd": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "H-M01",
+      "question": "What separates a grid-average footprint from one based on electricity purchasing contracts?",
+      "duration_ms": 14515,
+      "stage_calls": 2,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The drafted statements or their citations did not pass validation. No draft was released.",
+        "reason_code": "draft_invalid",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "H-R01",
+      "question": "For a U.S. Scope 2 inventory, what is the point of presenting a pair of totals rather than just one?",
+      "duration_ms": 10828,
+      "stage_calls": 3,
+      "mechanical_checks_passed": true,
+      "issues": [],
+      "response": {
+        "status": "qualified",
+        "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+        "reason_code": "none",
+        "answer_mode": "passage_grounded",
+        "claims": [
+          {
+            "id": "c1",
+            "text": "Guidance for quantifying two scope 2 emissions totals—using a location-based method and a market-based method—is included, and the organization should quantify and report both totals in its GHG inventory.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          },
+          {
+            "id": "c2",
+            "text": "The location-based method considers average emission factors for the electricity grids that provide electricity, while the market-based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          },
+          {
+            "id": "c3",
+            "text": "Organizations should calculate and report scope 2 emissions using two methods, one using location-based emission factors and one using market-based emission factors, with both results clearly labeled according to the method used.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties.",
+              "EPA's reporting recommendation is not a universal legal obligation."
+            ],
+            "evidence_ids": [
+              "S01",
+              "S02"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S01",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 4 / printed page 1",
+            "excerpt": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+          },
+          {
+            "id": "S02",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "H-S01",
+      "question": "Where is regional electricity carbon-intensity data published, and what records are needed to substantiate a provider-specific figure?",
+      "duration_ms": 13468,
+      "stage_calls": 2,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "unavailable",
+        "message": "The model service did not complete a valid response. No answer was released.",
+        "reason_code": "provider_failure",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "H-S02",
+      "question": "Which EPA dataset would I consult to document a grid-average electricity factor, without choosing a value for my facilities?",
+      "duration_ms": 16562,
+      "stage_calls": 3,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The support and completeness review did not approve this answer. No draft was released.",
+        "reason_code": "support_not_verified",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "H-N01",
+      "question": "For a team that tracks electricity in kWh, explain the two Scope 2 methods without doing any arithmetic.",
+      "duration_ms": 12375,
+      "stage_calls": 3,
+      "mechanical_checks_passed": true,
+      "issues": [],
+      "response": {
+        "status": "qualified",
+        "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+        "reason_code": "none",
+        "answer_mode": "passage_grounded",
+        "claims": [
+          {
+            "id": "c1",
+            "text": "Guidance describes two methods for quantifying scope 2 emissions totals: a location-based method and a market-based method.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          },
+          {
+            "id": "c2",
+            "text": "The location-based method considers average emission factors for the electricity grids that provide electricity.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          },
+          {
+            "id": "c3",
+            "text": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          },
+          {
+            "id": "c4",
+            "text": "The organization should quantify and report both the location-based and market-based totals in its GHG inventory, with results clearly labeled according to the method used.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties.",
+              "EPA's reporting recommendation is not a universal legal obligation."
+            ],
+            "evidence_ids": [
+              "S01",
+              "S02"
+            ]
+          },
+          {
+            "id": "c5",
+            "text": "This document is aligned with the principles and methodologies of the GHG Protocol Scope 2 Guidance but does not attempt to address all scope 2 issues, and organizations are encouraged to consult that guidance for a comprehensive discussion of scope 2 quantification and reporting.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S01",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 4 / printed page 1",
+            "excerpt": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+          },
+          {
+            "id": "S02",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "H-U02",
+      "question": "Can a renewable certificate be used for market-based accounting just because the seller calls it certified?",
+      "duration_ms": 11938,
+      "stage_calls": 2,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The draft included an unsupported number or a quantitative result that this conceptual experiment cannot release.",
+        "reason_code": "numeric_output_not_allowed",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "H-T02",
+      "question": "Explain location-based accounting when a facility gets normal grid power; I am not asking about its street address.",
+      "duration_ms": 13406,
+      "stage_calls": 2,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The drafted statements or their citations did not pass validation. No draft was released.",
+        "reason_code": "draft_invalid",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    },
+    {
+      "id": "K-SOURCE",
+      "question": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+      "duration_ms": 14719,
+      "stage_calls": 2,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "unavailable",
+        "message": "The model service did not complete a valid response. No answer was released.",
+        "reason_code": "provider_failure",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-sonnet-5"
+        }
+      }
+    }
+  ],
+  "semantic_review": "pending_independent_review",
+  "notes": [
+    "Mechanical checks do not establish entailment, completeness or general model accuracy.",
+    "The independent reviewer must assess required_facets and forbidden_claim_kinds from the frozen fixture.",
+    "Service reservations are not measured provider billing.",
+    "No credentials or customer data are included."
+  ],
+  "after": {
+    "service": "neuvetra-research-passages",
+    "answer_mode": "passage_grounded",
+    "readiness": "ready",
+    "reason_code": "none",
+    "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+    "release": {
+      "id": "scope2-passages",
+      "version": "1",
+      "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+    },
+    "provider": {
+      "mode": "live",
+      "model": "claude-sonnet-5"
+    },
+    "limits": {
+      "max_calls": 30,
+      "remaining_calls": 11,
+      "max_output_tokens": 1200,
+      "max_spend_usd": 1.8,
+      "reserved_spend_usd": 1.14
+    }
+  },
+  "finished_at": "2026-09-09T01:45:07.426340+00:00",
+  "artifacts_unchanged": true,
+  "mechanical_checks_passed": false
+}

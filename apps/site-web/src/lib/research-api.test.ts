@@ -18,6 +18,14 @@ describe("research response boundary", () => {
   test("rejects a model draft without the server answer contract", () => expect(isResearchAnswer({ decision: "answer", claims: [{ text: "Draft" }] })).toBe(false))
   test("rejects a prototype-key status", () => expect(isResearchAnswer({ ...unavailable, status: "toString" })).toBe(false))
   test("accepts a complete linked answer", () => expect(isResearchAnswer(supported)).toBe(true))
+  test("distinguishes generated passage answers from the original fixed-statement pilot", () => {
+    const passageAnswer = { ...supported, answer_mode: "passage_grounded", release: { id: "scope2-passages", version: "1" } }
+    expect(isResearchAnswer(passageAnswer)).toBe(true)
+    expect(isResearchAnswer({ ...passageAnswer, answer_mode: undefined })).toBe(false)
+    expect(isResearchAnswer({ ...passageAnswer, answer_mode: "reviewed_statements" })).toBe(false)
+    expect(isResearchAnswer({ ...passageAnswer, answer_mode: "guaranteed_correct" })).toBe(false)
+    expect(isResearchAnswer({ ...passageAnswer, evidence: [] })).toBe(false)
+  })
   test("rejects factual claims in a withheld response or with a disabled provider", () => {
     expect(isResearchAnswer({ ...supported, status: "needs_review" })).toBe(false)
     expect(isResearchAnswer({ ...supported, provider: unavailable.provider })).toBe(false)

@@ -1,6 +1,7 @@
 export type AnswerStatus = "supported" | "qualified" | "needs_input" | "needs_review" | "unsupported" | "stale_or_conflicting" | "unavailable"
 
 export interface ResearchAnswer {
+  answer_mode?: "reviewed_statements" | "passage_grounded"
   status: AnswerStatus
   message: string
   claims: { id: string; text: string; qualifications: string[]; evidence_ids: string[] }[]
@@ -34,12 +35,14 @@ const PUBLISHER_HOSTS = new Set(["epa.gov", "www.epa.gov", "ghgprotocol.org", "w
 
 export function isResearchAnswer(value: unknown): value is ResearchAnswer {
   if (!record(value) || typeof value.status !== "string" || !Object.prototype.hasOwnProperty.call(ANSWER_LABELS, value.status) || typeof value.message !== "string") return false
+  if (value.answer_mode !== undefined && value.answer_mode !== "reviewed_statements" && value.answer_mode !== "passage_grounded") return false
   if (!Array.isArray(value.claims) || !value.claims.every((item) => record(item) && typeof item.id === "string" && typeof item.text === "string" && stringList(item.qualifications) && stringList(item.evidence_ids))) return false
   if (!Array.isArray(value.evidence) || !value.evidence.every((item) => record(item) && typeof item.id === "string" && typeof item.source_id === "string" && typeof item.locator === "string" && typeof item.excerpt === "string")) return false
   if (!Array.isArray(value.sources) || !value.sources.every((item) => record(item) && typeof item.id === "string" && typeof item.title === "string" && typeof item.version === "string" && typeof item.status === "string" && typeof item.canonical_url === "string" && publisherUrl(item.canonical_url) !== null)) return false
   if (value.release !== null && (!record(value.release) || typeof value.release.id !== "string" || typeof value.release.version !== "string")) return false
   if (!record(value.provider) || (value.provider.mode !== "live" && value.provider.mode !== "disabled") || !(value.provider.model === null || typeof value.provider.model === "string") || !stringList(value.missing_context)) return false
   const answer = value as unknown as ResearchAnswer
+  if (answer.release?.id === "scope2-passages" && answer.answer_mode !== "passage_grounded") return false
   if (answer.missing_context.some((item) => !CONTEXT_IDS.has(item)) || new Set(answer.missing_context).size !== answer.missing_context.length) return false
   if ((answer.status === "needs_input") !== (answer.missing_context.length > 0)) return false
   const hasAnswer = answer.status === "supported" || answer.status === "qualified"

@@ -3,7 +3,7 @@ import { ANSWER_LABELS, publisherUrl, requestResearchAnswer, type ResearchAnswer
 
 const SUGGESTIONS = [
   { label: "Compare the two methods", question: "What is the difference between location-based and market-based Scope 2 accounting?" },
-  { label: "Choose an electricity factor", question: "Which electricity emission factor should my company use?" },
+  { label: "Find factor sources", question: "Where do electricity emission factors come from?" },
   { label: "Check the limits", question: "Calculate our Scope 2 emissions and file our California report." },
   { label: "Draft or published guidance?", question: "Does a newer Scope 2 draft replace the published guidance?" },
 ]
@@ -61,7 +61,7 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
     setError("")
     setAnswer(null)
     setSubmittedQuestion(trimmed)
-    const timeout = window.setTimeout(() => controller.abort("timeout"), 55000)
+    const timeout = window.setTimeout(() => controller.abort("timeout"), 155000)
     try {
       const result = await requestResearchAnswer(trimmed, controller.signal)
       if (requestRef.current !== controller) return
@@ -90,7 +90,7 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
         <div>
           <p className="research-eyebrow">A closer look at purchased electricity</p>
           <h1 id="answer-heading" ref={headingRef} tabIndex={-1}>Ask. Then inspect the evidence.</h1>
-          <p className="answer-intro">Explore U.S. Scope 2 concepts. AI selects from reviewed source statements, with the qualifications and references kept alongside the answer.</p>
+          <p className="answer-intro">Ask about U.S. purchased electricity. Answers link to the reviewed evidence and explain their limits.</p>
         </div>
         <span className="research-outline-label">Private pilot</span>
       </div>
@@ -134,9 +134,9 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
               {answer.evidence.length > 0 && <div className="answer-evidence"><h3>Inspect the supporting material</h3>{answer.evidence.map((item) => {
                 const source = answer.sources.find((entry) => entry.id === item.source_id)
                 const url = source ? sourcePageUrl(source.canonical_url, item.locator) : null
-                return <details key={item.id} id={`evidence-${item.id}`}><summary><span>{source?.title ?? "Source material"}<small>{item.locator}</small></span><span aria-hidden="true">+</span></summary><div className="answer-evidence-detail"><p className="answer-source-meta">Find this phrase in the original; read its full surrounding context.</p><blockquote>{item.excerpt}</blockquote>{source && <p className="answer-source-meta">{source.version} · {source.status.replace(/_/g, " ")}</p>}{url && <a href={url} target="_blank" rel="noopener noreferrer">Open original source <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>}</div></details>
+                return <details key={item.id} id={`evidence-${item.id}`}><summary><span>{source?.title ?? "Source material"}<small>{item.locator}</small></span><span aria-hidden="true">+</span></summary><div className="answer-evidence-detail"><p className="answer-source-meta">{answer.answer_mode === "passage_grounded" ? "Reviewed source passage. Open the original for its full surrounding context." : "Find this phrase in the original; read its full surrounding context."}</p><blockquote>{item.excerpt}</blockquote>{source && <p className="answer-source-meta">{source.version} · {source.status.replace(/_/g, " ")}</p>}{url && <a href={url} target="_blank" rel="noopener noreferrer">Open original source <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>}</div></details>
               })}</div>}
-              <p className="answer-provenance">{answer.claims.length > 0 && answer.provider.mode === "live" ? "AI-selected, reviewed source statements" : answer.provider.mode === "disabled" ? "No live model answer" : "No supported answer displayed"}{answer.release ? ` · Evidence ${answer.release.version}` : ""}</p>
+              <p className="answer-provenance">{answer.claims.length > 0 && answer.provider.mode === "live" ? (answer.answer_mode === "passage_grounded" ? "AI response checked against reviewed passages" : "AI-selected, reviewed source statements") : answer.provider.mode === "disabled" ? "No live model answer" : "No supported answer displayed"}{answer.release ? ` · Evidence ${answer.release.version}` : ""}</p>
             </section>
           ) : !pending && !error && <div className="answer-empty"><span className="answer-empty-mark" aria-hidden="true">↗</span><h2>Start with a question.</h2><p>The answer, its qualifications, and the original source references will appear together here.</p></div>}
         </div>
@@ -144,7 +144,7 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
         <aside className="answer-scope" aria-label="Pilot coverage">
           <p className="research-eyebrow">What this pilot covers</p>
           <h2>One topic.<br />Visible support.</h2>
-          <p>Location-based and market-based purchased-electricity concepts from a small, reviewed evidence set.</p>
+          <p>Purchased-electricity methods, activity records, factor sources and reporting periods from reviewed U.S. guidance.</p>
           <div className="answer-scope-divider" />
           <h3>When the evidence is not enough</h3>
           <p>Neuvetra asks for context, identifies a source limitation, or leaves the question unanswered.</p>

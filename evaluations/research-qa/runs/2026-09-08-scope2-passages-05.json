@@ -1,0 +1,831 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-09-09T03:12:37.753447+00:00",
+  "git_base_commit": "fc97c487df156bfd6e9a589d34bfe8c67fdfc2b4",
+  "code_sha256": {
+    "apps/site-api/src/research-passages/config.ts": "2fdb19e6d88f33b33869fa8fdb9d5d83ca8c6a3f0439e6b391c135267e5a3cf4",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "ab8912100441eae36b7efdb345dc3d0ae2d0610a16bfc3b680b19c780fb0f5b5",
+    "apps/site-api/src/research-passages/passages.test.ts": "55ee1031edc89a85d8ba6794ab3d1888215ff95d0182e47cd5087f0caf14da22",
+    "apps/site-api/src/research-passages/provider.ts": "958e512ffb04ff7af4bf622f17755a27a3d9cca80e3e184162f1ff4e81005b5b",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/routes.ts": "a28554aadaaa430d4e19690d0978f0546349d5d650bdb87130fe8e54f6b1601f",
+    "apps/site-api/src/research-passages/service.ts": "1a69a93c458c2c571745accf55196bfaa8f6beaa4b35cb4c897837b1773a63f0",
+    "apps/site-api/src/research-passages/types.ts": "a700ff3729a984a40e2712af5adc81aa83faac90578193a41773769d69b8a5fa",
+    "apps/site-api/src/research-passages/validation.ts": "59b6540b4833e0dc24e25defc6e2ce7503bec9e98dc7f191c0e6facfb9ee7933",
+    "apps/site-api/src/research-passages-server.ts": "6d9709898f183dd14758206e5165ad1f6047ab87ad9f1fd11eecd5d7c1fa2321",
+    "apps/site-api/package.json": "0f994ae45d415e555eb259b553af7faaef895de4c0ad0da5573efb92cbee4c7d",
+    "package.json": "b46c31d4a1fe33f5df65b6d874e2c84f8681d8bc8e8416482a5525cee350f3ee",
+    "apps/site-web/src/lib/research-api.ts": "07b57ba221b8e980193f5b10a11e70541b0f6b2ffcf0739273be8c48fb902fc4",
+    "apps/site-web/src/components/ResearchAnswerPanel.tsx": "c3c602f892d99cfa79e5c5b0387672bb31c02deb27a04c0c7d5737069ad9d5f3",
+    "tools/research/run_passage_eval.py": "c844b1622e2ea4dbf6557d1b283135147b3d931053892971d733bd4ed47004f4"
+  },
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "fixture_sha256": "7200fc50b37b07535f7c364e901c681806b13dc0ec58ce09dc472aa7612d7207",
+  "release_path": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\data\\research\\releases\\scope2-passages.v1.json",
+  "fixture_path": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\evaluations\\research-qa\\scope2-passages-live-fixtures.json",
+  "retained_artifacts": [
+    {
+      "kind": "source",
+      "id": "epa-electricity-2023",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-electricity-emissions-2023.pdf",
+      "sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    {
+      "kind": "extraction",
+      "id": "epa-electricity-2023-pages-v1",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-scope2-pilot/epa-electricity-2023-normalized-pages-v1.json",
+      "sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    }
+  ],
+  "scope": "8 live question cases for the opt-in passage experiment",
+  "before": {
+    "service": "neuvetra-research-passages",
+    "answer_mode": "passage_grounded",
+    "readiness": "ready",
+    "reason_code": "none",
+    "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+    "release": {
+      "id": "scope2-passages",
+      "version": "1",
+      "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+    },
+    "provider": {
+      "mode": "live",
+      "model": "claude-opus-5",
+      "stages": {
+        "plan": {
+          "model": "claude-sonnet-5",
+          "max_output_tokens": 1200,
+          "thinking": "disabled",
+          "effort": null
+        },
+        "draft": {
+          "model": "claude-opus-5",
+          "max_output_tokens": 8192,
+          "thinking": "adaptive",
+          "effort": "high"
+        },
+        "verify": {
+          "model": "claude-opus-5",
+          "max_output_tokens": 8192,
+          "thinking": "adaptive",
+          "effort": "high"
+        }
+      }
+    },
+    "limits": {
+      "max_calls": 30,
+      "remaining_calls": 30,
+      "max_output_tokens": 8192,
+      "max_spend_usd": 15,
+      "reserved_spend_usd": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "H-M01",
+      "question": "What separates a grid-average footprint from one based on electricity purchasing contracts?",
+      "duration_ms": 41547,
+      "stage_calls": 3,
+      "mechanical_checks_passed": true,
+      "issues": [],
+      "response": {
+        "status": "qualified",
+        "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+        "reason_code": "none",
+        "answer_mode": "passage_grounded",
+        "claims": [
+          {
+            "id": "c1",
+            "text": "EPA describes two scope 2 totals: the location-based method uses average emission factors for the electricity grids providing the power, while the market-based method reflects contractual arrangements under which the organization procures power from specific sources, such as renewable energy.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ],
+            "evidence_ids": [
+              "S01"
+            ]
+          },
+          {
+            "id": "c2",
+            "text": "EPA states organizations should calculate and report both a location-based and a market-based result, each clearly labeled by method; this is a reporting recommendation, not a universal legal obligation.",
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties.",
+              "EPA's reporting recommendation is not a universal legal obligation."
+            ],
+            "evidence_ids": [
+              "S01",
+              "S02"
+            ]
+          },
+          {
+            "id": "c3",
+            "text": "For purchased electricity, emission factors reflect the energy resources used and conversion efficiency and cover generation only, so they should exclude transmission and distribution losses and emissions upstream of the generating facility.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods."
+            ],
+            "evidence_ids": [
+              "S06"
+            ]
+          },
+          {
+            "id": "c4",
+            "text": "In the market-based method, an energy attribute certificate such as a REC or a European GO that carries an emission factor can provide it, based on the specific source represented; Section 4 quality criteria must be checked before claiming it.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor.",
+              "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          },
+          {
+            "id": "c5",
+            "text": "Where a contract such as a PPA covers generation with no associated certificates, the contract itself carries the facility's factor, subject to Section 4 criteria; if certificates were issued and sold to another entity, the purchaser cannot claim that factor.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor.",
+              "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here.",
+              "Check who retains the certificates and which conditions apply. Contract eligibility, direct-line cases and fallback factors require separate review."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S01",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 4 / printed page 1",
+            "excerpt": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+          },
+          {
+            "id": "S02",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used."
+          },
+          {
+            "id": "S06",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 8 / printed page 5",
+            "excerpt": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+          },
+          {
+            "id": "S11",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+          },
+          {
+            "id": "S13",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method. Examples are renewable energy certificates (RECs) or Guarantees of Origin (GOs) in Europe. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate. The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component)."
+          },
+          {
+            "id": "S14",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "An organization may have a contract, such as a power purchase agreement (PPA), to purchase electricity from a specified generating facility, which may be located at the organization’s facility, at a nearby location with a direct line connection to the organization, or located remotely. If there are no certificates associated with this generation, the contract itself carries the emission factor associated with the generation facility, regardless of the energy resource used. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the contract. If certificates are issued to the generating facility, the emission factor is conveyed by the certificates, rather than the contract. If the certificates are bundled with the contract, the purchaser can claim the emission factor. If the certificates are sold to another entity, the purchaser cannot make that claim, and the energy should be assigned the residual mix factor if available, or the regional or national factor."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "H-R01",
+      "question": "For a U.S. Scope 2 inventory, what is the point of presenting a pair of totals rather than just one?",
+      "duration_ms": 31109,
+      "stage_calls": 3,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The support and completeness review did not approve this answer. No draft was released.",
+        "reason_code": "support_not_verified",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "H-S01",
+      "question": "Where is regional electricity carbon-intensity data published, and what records are needed to substantiate a provider-specific figure?",
+      "duration_ms": 61657,
+      "stage_calls": 3,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The support and completeness review did not approve this answer. No draft was released.",
+        "reason_code": "support_not_verified",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "H-S02",
+      "question": "Which EPA dataset would I consult to document a grid-average electricity factor, without choosing a value for my facilities?",
+      "duration_ms": 39391,
+      "stage_calls": 3,
+      "mechanical_checks_passed": true,
+      "issues": [],
+      "response": {
+        "status": "qualified",
+        "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+        "reason_code": "none",
+        "answer_mode": "passage_grounded",
+        "claims": [
+          {
+            "id": "c1",
+            "text": "For grid-delivered electricity, EPA guidance says an organization should use published factors based on each facility's geographic location, reflecting average generation supplying that grid; for U.S. operations the recommended regional factors are eGRID total output subregion grid factors.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08"
+            ]
+          },
+          {
+            "id": "c2",
+            "text": "eGRID total output factors represent average factors for all plants generating for the grid, including baseload, intermediate and peaking units; an eGRID subregion is a portion of the U.S. grid within one NERC region, generally similar in emissions and resource mix.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08"
+            ]
+          },
+          {
+            "id": "c3",
+            "text": "EPA also publishes a GHG Emission Factors Hub containing the most recent eGRID subregion factors, though there may be a delay after a new eGRID version's release; eGRID and its documentation are at epa.gov/egrid. Check edition and data year before use.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors.",
+              "Dataset versions and factor values need a current check of EPA's publication pages."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08",
+              "S09"
+            ]
+          },
+          {
+            "id": "c4",
+            "text": "EPA's documented route for identifying which eGRID subregion a facility sits in is the Power Profiler Tool, where users enter facility zip codes and utility names; no subregion assignment or factor is made here.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "This is EPA's documented lookup route; a current facility lookup still needs verification."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S10"
+            ]
+          },
+          {
+            "id": "c5",
+            "text": "Because these purchased-electricity (scope 2) emissions are quantified at the point of generation, the factors used should exclude transmission and distribution losses and emissions upstream of the generating facility.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods."
+            ],
+            "evidence_ids": [
+              "S06"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S06",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 8 / printed page 5",
+            "excerpt": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+          },
+          {
+            "id": "S07",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+          },
+          {
+            "id": "S08",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints."
+          },
+          {
+            "id": "S09",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid."
+          },
+          {
+            "id": "S10",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "To determine in which eGRID subregion an organization’s facilities are located, they can use the Power Profiler Tool. This tool allows users to enter their facility zip codes and utility names to identify the appropriate eGRID subregions."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "H-N01",
+      "question": "For a team that tracks electricity in kWh, explain the two Scope 2 methods without doing any arithmetic.",
+      "duration_ms": 25437,
+      "stage_calls": 3,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The support and completeness review did not approve this answer. No draft was released.",
+        "reason_code": "support_not_verified",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "H-U02",
+      "question": "Can a renewable certificate be used for market-based accounting just because the seller calls it certified?",
+      "duration_ms": 42532,
+      "stage_calls": 3,
+      "mechanical_checks_passed": true,
+      "issues": [],
+      "response": {
+        "status": "qualified",
+        "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+        "reason_code": "none",
+        "answer_mode": "passage_grounded",
+        "claims": [
+          {
+            "id": "c1",
+            "text": "Under the EPA December 2023 guidance, a certificate is not automatically usable simply because a seller labels it: if an energy attribute certificate carries an emission factor, that factor may be used in the market-based method only after referring to the Section 4 quality criteria.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor.",
+              "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          },
+          {
+            "id": "c2",
+            "text": "The certificate's emission factor is based on the specific source the certificate represents, regardless of the energy resource used; such certificates typically represent renewable energy and may be zero, but may in some cases be non-zero (e.g., a fossil-fuel or biomass component).",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor.",
+              "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          },
+          {
+            "id": "c3",
+            "text": "Market-based emission factors reflect contractual arrangements under which the organization procures power from specific sources (fossil, renewable or other facilities), and the available factor types are listed in order of preference based on their precision.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S11"
+            ]
+          },
+          {
+            "id": "c4",
+            "text": "Where certificates are issued to a generating facility, the certificates rather than the contract convey the factor: bundled certificates let the purchaser claim it, but if they are sold to another entity the purchaser cannot, and the energy takes residual mix if available, else regional/national.",
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor.",
+              "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here.",
+              "Check who retains the certificates and which conditions apply. Contract eligibility, direct-line cases and fallback factors require separate review."
+            ],
+            "evidence_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S06",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 8 / printed page 5",
+            "excerpt": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+          },
+          {
+            "id": "S11",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+          },
+          {
+            "id": "S13",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method. Examples are renewable energy certificates (RECs) or Guarantees of Origin (GOs) in Europe. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate. The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component)."
+          },
+          {
+            "id": "S14",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "An organization may have a contract, such as a power purchase agreement (PPA), to purchase electricity from a specified generating facility, which may be located at the organization’s facility, at a nearby location with a direct line connection to the organization, or located remotely. If there are no certificates associated with this generation, the contract itself carries the emission factor associated with the generation facility, regardless of the energy resource used. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the contract. If certificates are issued to the generating facility, the emission factor is conveyed by the certificates, rather than the contract. If the certificates are bundled with the contract, the purchaser can claim the emission factor. If the certificates are sold to another entity, the purchaser cannot make that claim, and the energy should be assigned the residual mix factor if available, or the regional or national factor."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "H-T02",
+      "question": "Explain location-based accounting when a facility gets normal grid power; I am not asking about its street address.",
+      "duration_ms": 27281,
+      "stage_calls": 3,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The support and completeness review did not approve this answer. No draft was released.",
+        "reason_code": "support_not_verified",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "K-SOURCE",
+      "question": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+      "duration_ms": 54672,
+      "stage_calls": 3,
+      "mechanical_checks_passed": false,
+      "issues": [
+        "unexpected_status"
+      ],
+      "response": {
+        "status": "needs_review",
+        "message": "The support and completeness review did not approve this answer. No draft was released.",
+        "reason_code": "support_not_verified",
+        "answer_mode": "passage_grounded",
+        "claims": [],
+        "evidence": [],
+        "sources": [],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-passages",
+          "version": "1",
+          "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5",
+          "stages": {
+            "plan": {
+              "model": "claude-sonnet-5",
+              "max_output_tokens": 1200,
+              "thinking": "disabled",
+              "effort": null
+            },
+            "draft": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            },
+            "verify": {
+              "model": "claude-opus-5",
+              "max_output_tokens": 8192,
+              "thinking": "adaptive",
+              "effort": "high"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "semantic_review": "pending_independent_review",
+  "notes": [
+    "Mechanical checks do not establish entailment, completeness or general model accuracy.",
+    "The independent reviewer must assess required_facets and forbidden_claim_kinds from the frozen fixture.",
+    "Service reservations are not measured provider billing.",
+    "No credentials or customer data are included."
+  ],
+  "after": {
+    "service": "neuvetra-research-passages",
+    "answer_mode": "passage_grounded",
+    "readiness": "ready",
+    "reason_code": "none",
+    "message": "Each statement cites the reviewed paragraphs used, with their qualifications. This is a private research experiment.",
+    "release": {
+      "id": "scope2-passages",
+      "version": "1",
+      "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7"
+    },
+    "provider": {
+      "mode": "live",
+      "model": "claude-opus-5",
+      "stages": {
+        "plan": {
+          "model": "claude-sonnet-5",
+          "max_output_tokens": 1200,
+          "thinking": "disabled",
+          "effort": null
+        },
+        "draft": {
+          "model": "claude-opus-5",
+          "max_output_tokens": 8192,
+          "thinking": "adaptive",
+          "effort": "high"
+        },
+        "verify": {
+          "model": "claude-opus-5",
+          "max_output_tokens": 8192,
+          "thinking": "adaptive",
+          "effort": "high"
+        }
+      }
+    },
+    "limits": {
+      "max_calls": 30,
+      "remaining_calls": 6,
+      "max_output_tokens": 8192,
+      "max_spend_usd": 15,
+      "reserved_spend_usd": 12
+    }
+  },
+  "finished_at": "2026-09-09T03:18:01.506648+00:00",
+  "artifacts_unchanged": true,
+  "mechanical_checks_passed": false
+}

@@ -1,0 +1,386 @@
+{
+  "schema_version": 1,
+  "mode": "live",
+  "started_at": "2026-09-09T02:46:32.497147+00:00",
+  "manifest_sha256": "b73907d6804fefceb1beab0d482f1c8b86a1e24ea17a2eeacef9ec373ebbb10f",
+  "harness_sha256": "cb281f87083ec8e78218906455661b82e14189127043343c0c0f89f2c4066566",
+  "max_attempts": 4,
+  "per_attempt_reservation_usd": 0.5,
+  "reserved_budget_usd": 2,
+  "baseline": [
+    {
+      "case_id": "H-U02",
+      "observed_decision": "pass",
+      "observed_response_status": "qualified",
+      "model": "claude-sonnet-5",
+      "thinking": {
+        "type": "disabled"
+      },
+      "max_tokens": 1200,
+      "completed_trace": ".superpowers/passage-stage-traces-batch03/960cfa5c-79d7-4bab-9eed-4f62b24c5de2-3-verify-d069ef3f-cedd-42fb-8804-acea471d12f1.completed.json",
+      "note": "Independent source QA rejected this draft; baseline falsely accepted it."
+    },
+    {
+      "case_id": "H-S01",
+      "observed_decision": "pass",
+      "observed_response_status": "qualified",
+      "model": "claude-sonnet-5",
+      "thinking": {
+        "type": "disabled"
+      },
+      "max_tokens": 1200,
+      "completed_trace": ".superpowers/passage-stage-traces-batch03/3c900404-e633-402a-8479-87c042b19714-3-verify-797658a7-38c8-4559-9313-953024bdc48c.completed.json",
+      "note": "Independent QA accepted this draft within its bounded scope."
+    }
+  ],
+  "attempts": [
+    {
+      "number": 1,
+      "case_id": "H-U02",
+      "model": "claude-sonnet-5",
+      "thinking": {
+        "type": "adaptive",
+        "display": "omitted"
+      },
+      "effort": "high",
+      "max_tokens": 4096,
+      "request_sha256": "7115f0c79d406c41fc4d2df7bcd886c47231f0dc33b4a707db2dabcc8470ffa2",
+      "input_sha256": "c49589ca208c2f2c1c5274697d57795c1504bdefe7b05f96df15fee99a187fbd",
+      "system_sha256": "32499e7c4577d6e25004043114d44eae69ff84184da842a51207f7d216fda652",
+      "schema_sha256": "170f3498641093f016fe848f4da70c5ecdc3480aef91f0686dae813060e1d8fa",
+      "serialized_input_bytes": 14404,
+      "reserved_at": "2026-09-09T02:46:32.501471+00:00",
+      "reservation_usd": 0.5,
+      "status": "withheld",
+      "before": {
+        "attempts_consumed": 0,
+        "attempts_remaining": 4
+      },
+      "http_status": 200,
+      "usage": {
+        "input_tokens": 4788,
+        "output_tokens": 4096,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens_details": {
+          "thinking_tokens": 4096
+        }
+      },
+      "stop_reason": "max_tokens",
+      "reason_code": "response_not_complete",
+      "finished_at": "2026-09-09T02:47:19.117345+00:00",
+      "after": {
+        "attempts_consumed": 1,
+        "attempts_remaining": 3
+      }
+    },
+    {
+      "number": 2,
+      "case_id": "H-U02",
+      "model": "claude-opus-5",
+      "thinking": {
+        "type": "adaptive",
+        "display": "omitted"
+      },
+      "effort": "high",
+      "max_tokens": 4096,
+      "request_sha256": "a5b0958d1c462864e44069215f1abca0508ec00f567d0db4a8fc850dfa14749e",
+      "input_sha256": "c49589ca208c2f2c1c5274697d57795c1504bdefe7b05f96df15fee99a187fbd",
+      "system_sha256": "32499e7c4577d6e25004043114d44eae69ff84184da842a51207f7d216fda652",
+      "schema_sha256": "170f3498641093f016fe848f4da70c5ecdc3480aef91f0686dae813060e1d8fa",
+      "serialized_input_bytes": 14402,
+      "reserved_at": "2026-09-09T02:47:19.120347+00:00",
+      "reservation_usd": 0.5,
+      "status": "verdict_validated",
+      "before": {
+        "attempts_consumed": 1,
+        "attempts_remaining": 3
+      },
+      "http_status": 200,
+      "usage": {
+        "input_tokens": 4788,
+        "output_tokens": 1325,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens_details": {
+          "thinking_tokens": 994
+        }
+      },
+      "stop_reason": "end_turn",
+      "verdict": {
+        "decision": "fail",
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": false,
+        "context_sufficient": true,
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1",
+              "c2",
+              "c3",
+              "c4",
+              "c5"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c1",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          },
+          {
+            "id": "c2",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          },
+          {
+            "id": "c3",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          },
+          {
+            "id": "c4",
+            "supported": false,
+            "qualifications_complete": false,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          },
+          {
+            "id": "c5",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ]
+      },
+      "block_counts": {
+        "thinking": 1,
+        "redacted_thinking": 0,
+        "text": 1
+      },
+      "mechanical_acceptance": false,
+      "pass_consistent_with_flags": true,
+      "finished_at": "2026-09-09T02:47:35.027299+00:00",
+      "after": {
+        "attempts_consumed": 2,
+        "attempts_remaining": 2
+      }
+    },
+    {
+      "number": 3,
+      "case_id": "H-S01",
+      "model": "claude-sonnet-5",
+      "thinking": {
+        "type": "adaptive",
+        "display": "omitted"
+      },
+      "effort": "high",
+      "max_tokens": 4096,
+      "request_sha256": "0cc666020180ff6fa7bbcd60ae89a7de793a4280ae73687dcf8fb37c04fdbd86",
+      "input_sha256": "45366413548e91da27de7217f40e9e18040c012da461537ee840ad2d4697fd8c",
+      "system_sha256": "32499e7c4577d6e25004043114d44eae69ff84184da842a51207f7d216fda652",
+      "schema_sha256": "170f3498641093f016fe848f4da70c5ecdc3480aef91f0686dae813060e1d8fa",
+      "serialized_input_bytes": 17696,
+      "reserved_at": "2026-09-09T02:47:35.032299+00:00",
+      "reservation_usd": 0.5,
+      "status": "withheld",
+      "before": {
+        "attempts_consumed": 2,
+        "attempts_remaining": 2
+      },
+      "http_status": 200,
+      "usage": {
+        "input_tokens": 5799,
+        "output_tokens": 4096,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens_details": {
+          "thinking_tokens": 4096
+        }
+      },
+      "stop_reason": "max_tokens",
+      "reason_code": "response_not_complete",
+      "finished_at": "2026-09-09T02:48:19.593923+00:00",
+      "after": {
+        "attempts_consumed": 3,
+        "attempts_remaining": 1
+      }
+    },
+    {
+      "number": 4,
+      "case_id": "H-S01",
+      "model": "claude-opus-5",
+      "thinking": {
+        "type": "adaptive",
+        "display": "omitted"
+      },
+      "effort": "high",
+      "max_tokens": 4096,
+      "request_sha256": "61458bf3bb666a45388169ad892dff122dde7a7a55653afc383ec5d168f46dce",
+      "input_sha256": "45366413548e91da27de7217f40e9e18040c012da461537ee840ad2d4697fd8c",
+      "system_sha256": "32499e7c4577d6e25004043114d44eae69ff84184da842a51207f7d216fda652",
+      "schema_sha256": "170f3498641093f016fe848f4da70c5ecdc3480aef91f0686dae813060e1d8fa",
+      "serialized_input_bytes": 17694,
+      "reserved_at": "2026-09-09T02:48:19.596924+00:00",
+      "reservation_usd": 0.5,
+      "status": "verdict_validated",
+      "before": {
+        "attempts_consumed": 3,
+        "attempts_remaining": 1
+      },
+      "http_status": 200,
+      "usage": {
+        "input_tokens": 5799,
+        "output_tokens": 3061,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens_details": {
+          "thinking_tokens": 2658
+        }
+      },
+      "stop_reason": "end_turn",
+      "verdict": {
+        "decision": "pass",
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1",
+              "c2",
+              "c3"
+            ]
+          },
+          {
+            "facet_id": "f2",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c4",
+              "c5",
+              "c6"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c1",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S07",
+              "S08"
+            ]
+          },
+          {
+            "id": "c2",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S07",
+              "S08",
+              "S09"
+            ]
+          },
+          {
+            "id": "c3",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S07",
+              "S10"
+            ]
+          },
+          {
+            "id": "c4",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S12",
+              "S15"
+            ]
+          },
+          {
+            "id": "c5",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          },
+          {
+            "id": "c6",
+            "supported": true,
+            "qualifications_complete": true,
+            "passage_ids": [
+              "S15"
+            ]
+          }
+        ]
+      },
+      "block_counts": {
+        "thinking": 1,
+        "redacted_thinking": 0,
+        "text": 1
+      },
+      "mechanical_acceptance": true,
+      "pass_consistent_with_flags": true,
+      "finished_at": "2026-09-09T02:48:56.988055+00:00",
+      "after": {
+        "attempts_consumed": 4,
+        "attempts_remaining": 0
+      }
+    }
+  ],
+  "limitations": [
+    "Two exposed packets, one repeat per model; this is diagnostic discrimination, not an accuracy estimate.",
+    "Baseline used 1200 tokens with thinking disabled; comparison also changes the output cap, so it cannot isolate thinking causally.",
+    "QA labels and baseline verdicts are never included in request files.",
+    "Reservations are authorization controls, not measured provider billing."
+  ],
+  "independent_result_review": "pending",
+  "finished_at": "2026-09-09T02:48:56.992056+00:00",
+  "attempts_consumed": 4,
+  "attempts_remaining": 0
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "batch_id": "m2-passages-2026-09-08-02",
+  "scope": "Independent regression evaluation of the compact passage answer contract after observed truncation and quotation-copying failures",
+  "limit_selected_by": "coordinator",
+  "limit_is_board_imposed": false,
+  "status": "closed_with_unused_allowance",
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "limits": {
+    "max_attempted_model_stages": 30,
+    "reserved_usd_per_attempt": 0.06,
+    "max_reserved_usd": 1.8,
+    "max_output_tokens_per_stage": 1200,
+    "automatic_retries": 0
+  },
+  "plan": {
+    "live_regression_questions": 8,
+    "max_regression_stage_attempts": 24,
+    "browser_demonstration_questions": 1,
+    "max_browser_stage_attempts": 3
+  },
+  "execution": {
+    "started_at": "2026-09-09T02:02:43.430218+00:00",
+    "attempts_consumed": 29,
+    "remaining_attempts": 1,
+    "run_artifacts": [
+      "evaluations/research-qa/runs/2026-09-08-scope2-passages-02.json",
+      "evaluations/research-qa/runs/2026-09-08-scope2-passages-unseen-positive-01.json"
+    ],
+    "browser_result": "withheld_after_independent_completeness_failure"
+  },
+  "accounting_note": "A separately declared coordinator-selected recheck batch, not a user or provider-account limit and not measured billing. The prior batch retains its consumed/remaining ledger and is not relabeled or silently reset. Any restart within this batch carries its actual remaining allowance. Failed or uncertain attempts consume reservations. The previously exposed eight cases are regression cases, not an unseen accuracy benchmark.",
+  "diagnostic": {
+    "private_artifact": ".superpowers\\passage-diagnostic-04.json",
+    "sha256": "05d1b1eda06b3627872089e987f50837c5a462f82876735f7e15867217c1d305",
+    "attempts": 3,
+    "remaining_after": 3,
+    "result": "qualified",
+    "interpretation": "This invocation produced an answer; it does not explain or replace the previous support-review rejection."
+  },
+  "code_snapshot": {
+    "path": "evaluations/research-qa/snapshots/scope2-passages-compact-code.zip",
+    "sha256": "44d9b393bf5d5219aeab8fccdd2d8a3c0d0b93c32e77a7b69ec6c1ccc2b5962f",
+    "files": 14,
+    "purpose": "Exact code bytes bound by compact run02; overlay on its git_base_commit for the snapshot source files."
+  },
+  "finding": "6/8 mechanically answered,2withheld. Known sourcing question still omits supplier workflow despite global critic pass. Independent full semantic gate fails; do not promote or demonstrate as solved."
+}

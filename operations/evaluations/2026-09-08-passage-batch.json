@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "batch_id": "m2-passages-2026-09-08-01",
+  "scope": "Board-requested systemic retrieval correction and private passage-engine evaluation",
+  "limit_selected_by": "coordinator",
+  "limit_is_board_imposed": false,
+  "status": "closed_with_unused_allowance",
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "original_statement_demo": {
+    "initial_attempt_allowance": 30,
+    "verified_remaining_attempts": 0,
+    "verification": "Read-only status on the carried-forward original process; the second board question separately reproduced a zero-model routing refusal",
+    "reset_as_this_batch": false
+  },
+  "limits": {
+    "max_attempted_model_stages": 30,
+    "reserved_usd_per_attempt": 0.06,
+    "max_reserved_usd": 1.8,
+    "max_output_tokens_per_stage": 1200,
+    "automatic_retries": 0,
+    "max_concurrent_question_pipelines": 1,
+    "overall_question_deadline_seconds": 50
+  },
+  "plan": {
+    "live_http_questions": 8,
+    "max_http_stage_attempts": 24,
+    "browser_demonstration_questions": 1,
+    "max_browser_stage_attempts": 3
+  },
+  "execution": {
+    "started_at": "2026-09-09T01:43:00.617762+00:00",
+    "attempts_consumed": 27,
+    "remaining_attempts": 3,
+    "run_artifacts": [
+      "evaluations/research-qa/runs/2026-09-08-scope2-passages-01.json",
+      "evaluations/research-qa/runs/2026-09-08-scope2-passages-unseen-01.json"
+    ],
+    "browser_result": "not_run",
+    "first_batch_mechanical_passes": 2,
+    "first_batch_cases": 8
+  },
+  "accounting_note": "This is a separately declared local experiment, not a provider/account budget or measured billing. Failed and uncertain calls consume reservations. On every process restart, carry this batch's remaining allowance forward rather than resetting it. Source approval and offline QA are prerequisites to activation.",
+  "diagnostics": [
+    {
+      "private_artifact": ".superpowers\\passage-diagnostic-01.json",
+      "sha256": "540a4f5235bd80bdd0191dc3557c58490c50cc606e01c4a0bfc14a3ccb00bca3",
+      "attempts": 2,
+      "remaining_after": 9,
+      "response_status": "unavailable",
+      "response_reason": "provider_failure",
+      "stage_outcomes": [
+        {
+          "stage": "plan",
+          "http_status": 200,
+          "stop_reason": "end_turn",
+          "usage": {
+            "input_tokens": 4286,
+            "output_tokens": 203
+          }
+        },
+        {
+          "stage": "draft",
+          "http_status": 200,
+          "stop_reason": "max_tokens",
+          "usage": {
+            "input_tokens": 3653,
+            "output_tokens": 1200
+          }
+        }
+      ]
+    },
+    {
+      "private_artifact": ".superpowers\\passage-diagnostic-02.json",
+      "sha256": "25c27c21b5eaad7fed0ae90dc78eb2062fb1c4dea42ca7241ddef2c8d9290a39",
+      "attempts": 3,
+      "remaining_after": 6,
+      "response_status": "qualified",
+      "response_reason": "none",
+      "stage_outcomes": [
+        {
+          "stage": "plan",
+          "http_status": 200,
+          "stop_reason": "end_turn",
+          "usage": {
+            "input_tokens": 4278,
+            "output_tokens": 182
+          }
+        },
+        {
+          "stage": "draft",
+          "http_status": 200,
+          "stop_reason": "end_turn",
+          "usage": {
+            "input_tokens": 2802,
+            "output_tokens": 504
+          }
+        },
+        {
+          "stage": "verify",
+          "http_status": 200,
+          "stop_reason": "end_turn",
+          "usage": {
+            "input_tokens": 3683,
+            "output_tokens": 131
+          }
+        }
+      ]
+    },
+    {
+      "private_artifact": ".superpowers\\passage-diagnostic-03.json",
+      "sha256": "349377636371e198eeb7aa79df22760372fa003e79e81d69106f07c5b34f1a2f",
+      "attempts": 2,
+      "remaining_after": 4,
+      "response_status": "needs_review",
+      "response_reason": "draft_invalid",
+      "stage_outcomes": [
+        {
+          "stage": "plan",
+          "http_status": 200,
+          "stop_reason": "end_turn",
+          "usage": {
+            "input_tokens": 4275,
+            "output_tokens": 258
+          }
+        },
+        {
+          "stage": "draft",
+          "http_status": 200,
+          "stop_reason": "end_turn",
+          "usage": {
+            "input_tokens": 3350,
+            "output_tokens": 846
+          }
+        }
+      ]
+    }
+  ],
+  "diagnostic_findings": [
+    "Diagnostic01 correctly retrieved regional/supplier passages; drafting ended at max_tokens1200. Truncated output also repeated support entries for one passage, allowed by schema but rejected by local validation.",
+    "Diagnostic03 parsed a draft but inserted an ellipsis inside a purported exact quotation; quotation containment rejected it.",
+    "Diagnostic02 returned an answer on this invocation; it does not explain or overwrite the earlier numerical-guard rejection."
+  ]
+}

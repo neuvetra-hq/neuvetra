@@ -1,5 +1,7 @@
 # Scope 2 research pilot
 
+This document describes the historical fixed-statement pilot. The [passage retrieval experiment](m2-passage-retrieval.md) addresses its systemic vocabulary and evidence-context limitations in a separate entry point; its validation and remaining limits are recorded independently.
+
 This increment adds an **Ask Neuvetra** workspace to the approved green Site preview and an isolated local research service. It is a private internal evaluation of U.S. purchased-grid-electricity concepts. It is not a general greenhouse-gas expert, a calculation engine, a filing service, or a production deployment.
 
 ## What the user can try

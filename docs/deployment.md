@@ -23,6 +23,8 @@ The FrontDesk services confirm Railway as the origin host behind Cloudflare. The
 
 ## Railway environment export
 
+**Later export check, September 8:** the currently supplied `C:/Users/nimab/Neuvetra/env.json.txt` has an `ANTHROPIC_API_KEY` assignment. A name-only scan found no `OPENAI_API_KEY`, `PINECONE_API_KEY`, `PINECONE_INDEX_HOST` or `PINECONE_INDEX_NAME` assignments. The earlier export description below is historical and must not be treated as a description of this later file. The private passage experiment successfully used Anthropic; it has no Pinecone or Supabase connection. Other credential stores and live projects remain unverified. See the [data-flow audit](research/data-flow-audit.md).
+
 The user-provided `env.json.txt` is stored outside this repository. Read-only inspection found 31 populated FrontDesk API variables, including database/Supabase, Twilio/Retell, Google/Microsoft OAuth and Stripe configuration. The Stripe secret-key prefix identifies test mode, and `PORT` matches the configured 3000 target. `STRIPE_WEBHOOK_SECRET` is absent from this export; that alone does not establish the complete live service environment. This file contains no Site Anthropic, Langfuse or Pinecone keys. Credential validity and external accounts were not tested. Secret values are deliberately omitted from these notes and from Git/Docker build contexts.
 
 ## Recorded hosting topology

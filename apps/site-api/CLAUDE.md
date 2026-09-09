@@ -2,7 +2,9 @@
 
 > **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
 
-The new `src/research-server.ts` is a separate local-only entry point for the private Scope 2 pilot. It imports no inherited greeter, authentication, database or telemetry startup. Run `bun run start:research` with the [explicit research configuration](../../docs/milestones/m2-answer-demo.md); it binds only `127.0.0.1:3012`, uses origin 5174, defaults to provider-disabled, and validates independently reviewed evidence and source pins. Do not introduce watch-mode restarts around the in-memory model budget or expose this unauthenticated demo publicly.
+The current opt-in passage experiment uses `src/research-passages-server.ts` and `bun run start:research-passages`. Read its [scope, source pins and evaluation instructions](../../docs/milestones/m2-passage-retrieval.md) and [independent QA](../../docs/research/scope2-passages-qa.md). It has a separate reviewed release, semantic passage selection, drafting and fresh-context verification. It retains the same loopback port; do not run both research entry points together. Carry remaining model-stage allowances across restarts. The earlier fixed-statement pilot below and its evidence remain historical, separately runnable artifacts.
+
+The earlier `src/research-server.ts` is a separate local-only entry point for the fixed-statement Scope 2 pilot. It imports no inherited greeter, authentication, database or telemetry startup. Run `bun run start:research` with the [explicit research configuration](../../docs/milestones/m2-answer-demo.md); it binds only `127.0.0.1:3012`, uses origin 5174, defaults to provider-disabled, and validates independently reviewed evidence and source pins. Do not introduce watch-mode restarts around the in-memory model budget or expose this unauthenticated demo publicly.
 
 The historical Bun + Elysia `/chat` backend below remains separate. Its earlier deployment is at `https://api.neuvetra.ai`; these notes do not imply the new research service is deployed there. Vercel AI SDK, Langfuse and XState descriptions below apply to the retained backend.
 
