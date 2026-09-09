@@ -13,4 +13,4 @@ The preview has 32 model stages remaining after demonstration, enough for up to 
 
 [Independent QA](../docs/research/website-cloud-qa.md) · [How data reaches the answer](../docs/research/website-composed-runtime.md) · [Task ledger](status.json) · [PR #2](https://github.com/neuvetra-hq/neuvetra/pull/2)
 
-September 9, 2026. Local checks pass. Publication and CI evidence are recorded separately; earlier CI did not cover this integration.
+September 9, 2026. Implementation `7aabba4` is published to PR #2. Local checks and both [GitHub Verify jobs](https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113) passed for that exact implementation commit.

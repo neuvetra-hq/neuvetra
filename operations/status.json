@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-09T14:53:21.988663+00:00",
+  "updated_at": "2026-09-09T15:12:27.104410+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -43,7 +43,11 @@
     "production_cutover": "not_performed",
     "passage_investigation_commit": "636dc7eb34612d46accabcc215f4b40624b342a9",
     "passage_investigation_checks": "both_verify_jobs_passed_run_34308623708",
-    "website_integration_state": "Validated locally; current commit and remote CI pending publication."
+    "website_integration_state": "Published to existing open PR; implementation verified by both GitHub jobs; production unchanged.",
+    "website_implementation_commit": "7aabba4a8aae6145e8134c21fc97d05827866bfc",
+    "website_verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113",
+    "website_verification": "Both Verify jobs passed for the exact implementation commit",
+    "website_verified_at": "2026-09-09T15:12:27.104410+00:00"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",

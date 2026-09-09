@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "observed_at": "2026-09-09T14:53:21.988663+00:00",
+  "observed_at": "2026-09-09T15:12:27.104410+00:00",
   "state": "private_epa_website_demonstrated_awaiting_board_feedback",
   "pinecone": {
     "organization_name": "Neuvetra Inc.",
@@ -126,7 +126,7 @@
     "migration_applied": true,
     "synthetic_roundtrip": "passed_three_frozen_questions_exact_source_resolution",
     "approved_source_upload": "Reviewed EPA December2023 purchased-electricity guide, extraction and18 passage release; private internal scope only.",
-    "answer_quality_gate": "18 baselinepassed; original punctuation failure preserved; narrow 06b delta replayed 18 decisions unchanged;2 explicit follow-ups and root/independent browser gate passed.",
+    "answer_quality_gate": "18 baseline outcomes passed; original punctuation failure preserved; narrow 06b delta replayed 18 decisions unchanged; two explicit follow-ups and root/independent browser checks passed.",
     "production_deployment": "not_performed",
     "fixture": "evaluations/cloud-integration/synthetic-fixture.v1.json",
     "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
@@ -138,7 +138,8 @@
       "bun_assertions": 464,
       "python_tests": 53,
       "strict_typescript": "passed",
-      "remote_ci": "pending_publication_of_current_changes"
+      "remote_ci": "passed_for_website_implementation_7aabba4a8aae6145e8134c21fc97d05827866bfc",
+      "website_repository_checks": "Final type checks, lint, tests and web builds passed; both remote Verify jobs passed for the recorded implementation commit."
     },
     "next_cloud_changes": "No further cloud writes needed for this milestone. Wider corpus/lifecycle/customer authorization remain future gated work.",
     "synthetic_access_checks": "passed_22_live_checks",
@@ -167,10 +168,10 @@
     "emulator_started": false
   },
   "implementation_checkpoint": {
-    "commit": "636dc7eb34612d46accabcc215f4b40624b342a9",
+    "commit": "7aabba4a8aae6145e8134c21fc97d05827866bfc",
     "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/2",
     "state": "open_unmerged",
-    "verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34308623708",
+    "verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113",
     "application_job": "passed",
     "catalog_job": "passed",
     "ci_warning": "actions/checkout@v4 targets deprecated Node 20; runner forced Node 24. Job succeeded."
