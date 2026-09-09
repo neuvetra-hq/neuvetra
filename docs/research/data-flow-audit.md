@@ -1,5 +1,7 @@
 # Data-flow and cloud-connection audit
 
+**Latest follow-up:** Pinecone sign-in completed after the read-only assessment below. The accessible Neuvetra Inc. / Default project had no indexes; the coordinator created the empty development index `neuvetra-ghg-dev`. No source or synthetic records were uploaded. New server-key creation was rejected by automatic approval review because the current plan permits only broad full-project keys. Supabase metadata access works, but dashboard/project-role verification and application integration remain pending. See the [dated resource record](../../operations/cloud-development.json); the earlier inspection findings below retain their original scope.
+
 Audit date: 2026-09-08. Read-only inspection of legacy `rag-pipeline` at commit `2adfaca51fae3681ea030bbdefc60e1e6edcec82`, plus the current Neuvetra passage experiment. No credentials, live indexes, model APIs or production systems were accessed. No legacy modules were imported or tests run. The legacy checkout has no `AGENTS.md`; its README/PROJECT descriptions were read as historical claims, then checked against code.
 
 **The current passage experiment reads local evidence and calls Anthropic. It is not connected to Pinecone or Supabase. The next integration will use cloud services, following the user's updated direction.**

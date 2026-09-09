@@ -40,7 +40,9 @@
     "answer_demo_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/2",
     "answer_demo_state": "open_unmerged",
     "passage_experiment_state": "release_gate_failed_local_answering_stopped",
-    "production_cutover": "not_performed"
+    "production_cutover": "not_performed",
+    "passage_investigation_commit": "636dc7eb34612d46accabcc215f4b40624b342a9",
+    "passage_investigation_checks": "both_verify_jobs_passed_run_34308623708"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -322,10 +324,11 @@
       "status": "in_progress",
       "title": "Connect verified evidence through development Pinecone and Supabase",
       "acceptance": "Authenticated development targets verified; reproducible source/metadata/index roundtrip with fixed embeddings, access isolation and exact citation resolution; answer quality evaluated separately",
-      "progress": "Current/legacy data paths audited. Supabase REST schema and storage-bucket metadata returned HTTP 200 using narrowly selected supplied credentials; exposed paths / and /users, no storage buckets. No customer rows or writes. Both dashboards require sign-in; exact development targets and Pinecone access remain unverified. Local container setup stopped at board direction.",
+      "progress": "Supabase metadata probes passed with no writes/customer rows. Pinecone account verified: Neuvetra Inc./Default initially had zero indexes; created empty neuvetra-ghg-dev. No application connection or source upload. Automatic approval review rejected a persistent All-permission API key; need specific authorization or an existing private key. Supabase dashboard/project role and non-truncating embedding parameters remain unverified.",
       "evidence": [
         "docs/research/data-flow-audit.md",
-        "docs/research/cloud-integration-gate.md"
+        "docs/research/cloud-integration-gate.md",
+        "operations/cloud-development.json"
       ]
     }
   ],
@@ -443,8 +446,8 @@
     },
     {
       "id": "R7",
-      "detail": "Pinecone and Supabase dashboards require account sign-in; exact development resources, credentials and live contents remain unverified",
-      "impact": "Blocks authenticated cloud inspection and integration writes; implementation planning and saved software checks can continue"
+      "detail": "Pinecone development index exists, but the current plan only offers All-permission keys; automatic approval review rejected new-key creation. Specific approval or an existing private PINECONE_API_KEY is required. Supabase API credentials work; dashboard/project role still needs verification.",
+      "impact": "Blocks programmatic Pinecone configuration, ingestion and integrated cloud testing. No source data has been uploaded."
     }
   ]
 }

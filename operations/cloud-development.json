@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-09",
+  "state": "provisioning_partial_application_not_connected",
+  "pinecone": {
+    "organization_name": "Neuvetra Inc.",
+    "organization_id": "-OafbCdZXBb8VKX5Tu9W",
+    "project_name": "Default",
+    "project_id": "a0ba5552-cf2a-4c01-bf53-58ce49dcbee3",
+    "plan_observed": "Starter",
+    "indexes_before_provisioning": 0,
+    "index_name": "neuvetra-ghg-dev",
+    "console_url": "https://app.pinecone.io/organizations/-OafbCdZXBb8VKX5Tu9W/projects/a0ba5552-cf2a-4c01-bf53-58ce49dcbee3/indexes/neuvetra-ghg-dev/configuration",
+    "cloud": "aws",
+    "region": "us-east-1",
+    "capacity": "serverless_on_demand",
+    "embedding_model": "llama-text-embed-v2",
+    "creation_dimension": 1024,
+    "creation_metric": "cosine",
+    "field_map": {"text": "text"},
+    "deletion_protection_observed": true,
+    "record_count_observed": 0,
+    "read_parameters_observed": {"input_type": "query", "dimension": 1024, "truncate": "END"},
+    "write_parameters": "not_fully_verified",
+    "api_host": null,
+    "api_configuration_verified": false,
+    "required_before_ingestion": "Obtain authorized server credential; describe exact index host/profile; configure and verify non-truncating read/write parameters; freeze synthetic fixture and ingestion manifest",
+    "credential_state": "new_key_creation_rejected_by_automatic_approval_review",
+    "credential_detail": "Existing keys are masked. Supplied export has no PINECONE_API_KEY assignment. Current plan offers All permissions; Custom is disabled. A request to create NeuvetraDevelopment was rejected because a persistent broad key needs specific authorization. No new key was created.",
+    "data_uploaded": false
+  },
+  "supabase": {
+    "project_host": "icockcoguyadhryzydvl.supabase.co",
+    "dashboard_signed_in": false,
+    "project_role": "unverified_development_or_existing_shared_product",
+    "rest_schema_http_status": 200,
+    "rest_resource_paths": ["/", "/users"],
+    "storage_bucket_list_http_status": 200,
+    "storage_buckets_observed": [],
+    "unexposed_schemas_inspected": false,
+    "customer_rows_requested": 0,
+    "writes": 0,
+    "rls_verified": false
+  },
+  "application_integration": {
+    "pinecone": "not_implemented",
+    "supabase": "not_implemented",
+    "synthetic_roundtrip": "unrun",
+    "approved_source_upload": "not_performed",
+    "answer_quality_gate": "fail",
+    "production_deployment": "not_performed"
+  },
+  "local_setup": {
+    "direction": "stopped_at_user_request",
+    "wsl_attempt": "failed_REGDB_E_CLASSNOTREG",
+    "verified_microsoft_installer_downloaded": true,
+    "downloaded_installer_executed": false,
+    "docker_installed": false,
+    "emulator_started": false
+  },
+  "implementation_checkpoint": {
+    "commit": "636dc7eb34612d46accabcc215f4b40624b342a9",
+    "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/2",
+    "state": "open_unmerged",
+    "verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34308623708",
+    "application_job": "passed",
+    "catalog_job": "passed",
+    "ci_warning": "actions/checkout@v4 targets deprecated Node 20; runner forced Node 24. Job succeeded."
+  }
+}
