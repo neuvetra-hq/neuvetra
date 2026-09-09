@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "website-composed-06b-independent-source-followup",
+  "reviewed_at": "2026-09-09T14:45:46.7299714Z",
+  "reviewer": "Independent AI regulatory source reviewer /root/source_review",
+  "disposition": "PASS",
+  "scope": "Source support and complete conceptual question fit for the two actual post-correction follow-ups. Browser behavior, general selection accuracy and production assurance are separate gates.",
+  "bindings": {
+    "frozen_two_probe_fixture_sha256": "bcc9b8f87ec984f4bdcdb6f51a4ddab1a3fbf5e3ca61982db0c3dbbcbe37a3dc",
+    "original_fresh_run_sha256": "6ede669fc1fce33f26111a4af8a0365116813c87e3ec54d2c3f769518b02138c",
+    "followup_raw_sha256": "83232bd60c4cd55af6c3242550482f1e2ea76f31d3c1a014f227ab5b79759928",
+    "unit_catalog_sha256": "c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f",
+    "source_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "source_review_expires_at": "2026-09-15T23:20:32Z"
+  },
+  "retained_history": "The original revision06 F01 returned selection_invalid with no answer because a typographic apostrophe in an internal question fragment was copied as a straight apostrophe. F02 passed. That failed F01 result is retained and is not relabeled by these two separately recorded follow-ups. The source reviewer inspected the original proposed composition and found it source-complete; this did not convert the failed request into a successful display.",
+  "cases": [
+    {
+      "id": "F01",
+      "actual_status": "qualified",
+      "verdict": "PASS",
+      "units": ["U07", "U08", "U09", "U10", "U12", "U13", "U16", "U20"],
+      "finding": "Regional EPA/eGRID routes and geographic/publication context are distinguished from supplier product sourcing. All delivered power includes supplier generation and purchases from others; only the agreement-covered portion applies when dates differ. The response supplies conceptual background without selecting an actual factor, allocating company purchases or deciding eligibility."
+    },
+    {
+      "id": "F02",
+      "actual_status": "qualified",
+      "verdict": "PASS",
+      "units": ["U01", "U02", "U03", "U10", "U17", "U20", "U21"],
+      "finding": "The response explains grid-average and contractual perspectives, separately recorded source/data/calculation/inventory dates, publication lag and possible timing uncertainty. U03 and U21 remain labeled interpretations rather than asserted EPA policy motives or new filing duties."
+    }
+  ],
+  "checks": {
+    "displayed_unit_occurrences": 15,
+    "exact_unit_text_title_type_and_citation_ids": true,
+    "required_companions_present": true,
+    "evidence_excerpts_and_locators_match_approved_source": true,
+    "material_source_or_fit_defects_found": 0,
+    "model_calls_by_source_reviewer": 0,
+    "network_calls_by_source_reviewer": 0,
+    "runtime_edits_by_source_reviewer": 0
+  },
+  "limitations": [
+    "These are explicit post-correction executions of already exposed probe wording, not a new held-out accuracy sample.",
+    "The eighteen-question revision06 baseline has its separate source report; independent software QA owns the cross-version replay and runtime binding.",
+    "The actual website demonstration remains separate from these recorded API outcomes.",
+    "No source scope, expiry, commercial permission or professional assurance is expanded by this disposition."
+  ]
+}

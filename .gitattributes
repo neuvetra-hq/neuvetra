@@ -47,3 +47,8 @@
 # Lock files — text but never auto-normalize (let Bun/npm own line endings)
 bun.lock      -text
 package-lock.json -text
+
+# Evaluation receipts and journals are hashed evidence; preserve recorded bytes.
+evaluations/research-qa/runs/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+evaluations/research-qa/runs/*.jsonl -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+operations/website-evaluation-allocation-*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

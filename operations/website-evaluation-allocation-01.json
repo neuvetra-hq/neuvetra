@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "run_id": "website-evaluation-01",
+  "allocated_at": "2026-09-09T07:05:44.580825+00:00",
+  "allocated_by": "Root coordinator under authorized private website integration and testing",
+  "scope": "Frozen 18-question website acceptance set, 12 paired claim challenges and limited browser verification",
+  "max_provider_attempts": 150,
+  "reservation_usd_per_attempt": 1,
+  "reservation_total_usd": 150,
+  "reservation_is_actual_billing": false,
+  "note": "Conservative technical ceiling for the fixed 64000-byte input / 8192-output-token profile, including failed or uncertain attempts. Actual returned token usage is recorded separately. This is a coordinator allocation, not a user-stated spend limit.",
+  "profile_sha256": "6b4489d069c28dcc6464f6633ab09ccca838a2eb60ab0d4fc44f9c5750daaaed",
+  "fixture_sha256": "9a97060e47b46dd6d6729967b51692ab38f89b91e5c0be74ad46bf3f037625cc",
+  "claim_packet_sha256": "ba78f6bad65558823205f1a32837aa10978356fc7889694a75f40bc46626c344",
+  "release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "automatic_retries": false,
+  "counter_reset_on_restart": false,
+  "private_local_only": true,
+  "production_cutover": false,
+  "semantic_quality_review_required": true
+}

@@ -1,0 +1,666 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "2026-09-09-website-claim-review-02",
+  "status": "decisions_and_defect_explanations_pass_one_target_flag_inconsistency",
+  "reviewed_at": "2026-09-09T07:36:04.183517+00:00",
+  "reviewer": "independent QA AI agent /root/site_review",
+  "source_specialist_review": "Independent AI source specialist /root/terrascope_review confirmed actual C09 and C13-C16 judgments.",
+  "qualified_human_review_performed": false,
+  "execution_attribution": "Coordinator executed sixteen verifier calls; QA performed local original-source/output review and deterministic rebind only.",
+  "benchmark_scope": "Twelve unchanged claim inputs rerun on the revised verifier plus four exposed-failure paired regressions. Not an unseen sample or end-to-end website test.",
+  "preceding_result": {
+    "path": "evaluations/research-qa/runs/2026-09-09-website-claim-review-01.json",
+    "sha256": "a86afa2d55020aa7d597d3fdff03e3766197d6a66b12307751fbe500575caf02"
+  },
+  "fixture": {
+    "path": "evaluations/research-qa/website-cloud-acceptance.v1.json",
+    "sha256": "9a97060e47b46dd6d6729967b51692ab38f89b91e5c0be74ad46bf3f037625cc"
+  },
+  "source_release": {
+    "path": "data/research/releases/scope2-website.v1.json",
+    "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+  },
+  "private_packet": {
+    "path": ".superpowers/website-claim-packets-02.json",
+    "sha256": "a0d2f299f2cbf7ed23341f9d2692f6d1c1f3b9c6391fe8c12c4b32e56225caf0",
+    "original_twelve_inputs_unchanged": true,
+    "expected_labels_in_provider_input": false
+  },
+  "additional_definitions": {
+    "path": ".superpowers/website-relationship-claims.v1.json",
+    "sha256": "fdf151b21f73e9e716133376777f17d48386e2254ecac83ef1fb2b826504d9a6"
+  },
+  "raw_result": {
+    "path": ".superpowers/website-claim-results-02.jsonl",
+    "sha256": "083702bd2ccb628c6ef6e44cbfcf68caf05c5009e8f5fc05fa87605f7f66e176",
+    "bytes": 37380
+  },
+  "runner": {
+    "path": ".superpowers/website-claim-run-02.ts",
+    "sha256": "9b8f830834dc6b52c23a3af8f473ea7a741eb16a5dd21ac1f3fb71e6e288250e"
+  },
+  "profile_sha256": "798f01db98612766e9770504ea98deff2740f0c306f403a2602914da5fd1f144",
+  "code_pins": {
+    "apps/site-api/src/research-cloud/provider.ts": "c382af81983c5e85e06b3fa1ddcfabd71e8ed8e99519070e2b30e694e14e47a3",
+    "apps/site-api/src/research-cloud/answer-contract.ts": "c0c3f0c60f7d4b9eda14aaedae6c1b50838b0ac4bb213986251f76d20fbee65d",
+    "apps/site-api/src/research-cloud/budget.ts": "92d78f9da4c472cb18ec4292b32ff9c36610fae835c4bf8d753ce0393b5555b6",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/provider.ts": "958e512ffb04ff7af4bf622f17755a27a3d9cca80e3e184162f1ff4e81005b5b",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "ab8912100441eae36b7efdb345dc3d0ae2d0610a16bfc3b680b19c780fb0f5b5"
+  },
+  "bindings": {
+    "request_bodies": "all sixteen reproduced with cloudRequestBody",
+    "stage_inputs_outputs": "all thirty-two trace events match packet inputs and retained outputs",
+    "review_parser": "all sixteen independently reparsed and equal recorded reviews",
+    "attempt_reservations": "revision02 attempts001-016 input hashes and verify stages match",
+    "files_unchanged": "all six recorded imported code pins match final review"
+  },
+  "counts": {
+    "packets": 16,
+    "valid_reviews": 16,
+    "supported_controls_accepted": 8,
+    "negative_claims_rejected": 8,
+    "decision_alignment_passes": 16,
+    "target_explanation_alignment_passes": 16,
+    "explicit_target_flag_alignment_passes": 15,
+    "explicit_target_flag_alignment_failures": 1,
+    "false_approvals_observed": 0,
+    "false_rejections_observed": 0,
+    "provider_failures": 0,
+    "automatic_retries": 0
+  },
+  "flag_measurement_limit": "The explicit targeted expectation is scored separately from rejection and explanation; this is not a ground-truth audit of every possible Boolean aspect. C09 remains an unmet frozen citation-flag check.",
+  "budget": {
+    "run_id": "website-evaluation-02",
+    "prior_revision_attempts_reserved": 32,
+    "remaining_before": 118,
+    "remaining_after": 102,
+    "attempts_reserved_this_benchmark": 16,
+    "combined_attempts_reserved_to_this_point": 48,
+    "combined_original_attempt_ceiling": 150,
+    "reservation_usd_per_attempt": 1,
+    "reservation_ceiling_this_benchmark_usd": 16,
+    "measured_billing_usd": null,
+    "continuing_batch_not_closed": true
+  },
+  "provider_reported_usage": {
+    "input_tokens": 145764,
+    "output_tokens": 15173
+  },
+  "started_at": "2026-09-09T07:29:09.210Z",
+  "finished_at": "2026-09-09T07:32:34.806Z",
+  "cases": [
+    {
+      "id": "C01",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Reporting recommendation and labels accepted without a universal legal-duty claim.",
+      "input_sha256": "427ac7071ba18d66b07896a7cd4c28af0a1d1f1d410e4e2c770639c2d1d15a62",
+      "request_sha256": "a204f79810f1bba230e4b3b6f58413d310ddb0e9ef0456b7880e263d0c5fc052",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/001-started.json",
+          "sha256": "2289391c0ef37727bf46823813c6648f475bec329e669bae4dda9ce00f490eec"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/001-completed.json",
+          "sha256": "41cd77bb96b561c8835554561affc17595b5bb51b6557f7607e9d63316e952a0"
+        }
+      ],
+      "reserved_attempt": 1,
+      "remaining_after": 117
+    },
+    {
+      "id": "C02",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": false,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "modality"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "The claim-specific support and modality issues detect the conversion of a recommendation into a worldwide legal obligation.",
+      "input_sha256": "77b5cba0174ddba9f4685eb334555a13676b4f411c2eeee6ccd2e7234c9bec29",
+      "request_sha256": "8b2fce77f32a31f37aef0fea32d93db5f16306bc620c7aa7892846ea6c88cfd5",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/002-started.json",
+          "sha256": "725efb797e57d6db3b9da66b7d82cc61541f0f32c933642b6aa003255a9ca77e"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/002-completed.json",
+          "sha256": "a36fac85779071a8da873dd63b3e7fc2ad69a5aa3c35f79ee35d0a21bf14e706"
+        }
+      ],
+      "reserved_attempt": 2,
+      "remaining_after": 116
+    },
+    {
+      "id": "C03",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Supplier delivered-product boundary including own generation and purchased power accepted.",
+      "input_sha256": "8f960399f302d6b275a9222e974f26f4e3516e10d48c73b2c9512b937bcc0580",
+      "request_sha256": "217eca309e70a0a2290f9a426d978aa9916eb7dc7525738aeb8991478db109c2",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/003-started.json",
+          "sha256": "610bf17cfb66ce252f0ffa309eadc35a6fb8cf4ceaad87e5287e2399919b3060"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/003-completed.json",
+          "sha256": "0b6dfa7012352926a1b02e6130f24ba5b9705682328bc28ac90d63a3c1a3057b"
+        }
+      ],
+      "reserved_attempt": 3,
+      "remaining_after": 115
+    },
+    {
+      "id": "C04",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Claim-specific support issue identifies the contradiction of the full delivered-product boundary.",
+      "input_sha256": "4276f99e683f4e7f9923a7df87784309ec3bc9c525d2e3db9c45bf6fa4ffe960",
+      "request_sha256": "06c64b303a9ca38214bddbe97658a4f037896270fb04e84d165f90d8e7c58852",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/004-started.json",
+          "sha256": "d4e435a56cd02556c2cc1959a2461e9bec1c46e0fd3ebc7b2f4fdd2ed6a9c715"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/004-completed.json",
+          "sha256": "cd8fd92e61639935511f3e3734c14c3f42dd6d4c83319ba8716bcf7f64f2890e"
+        }
+      ],
+      "reserved_attempt": 4,
+      "remaining_after": 114
+    },
+    {
+      "id": "C05",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Partial-period agreement coverage accepted without whole-period invalidation.",
+      "input_sha256": "715e0ed13d2dbf83f582a7a0b756bf528cfbc4b22271bba736330fdbb5dd8a81",
+      "request_sha256": "56ba35408add5409d7b0cb8a236b18fe418230458f23b1cbd902575b8240d8ff",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/005-started.json",
+          "sha256": "8d4f098557ea7e1173d23296b85409ea21441587e3b7acbca8f388348e590a7a"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/005-completed.json",
+          "sha256": "7bb67f4853a3073d84cf7c97c4047770760b7cf68f07d7d24974797de53794a2"
+        }
+      ],
+      "reserved_attempt": 5,
+      "remaining_after": 113
+    },
+    {
+      "id": "C06",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Claim-specific support issue identifies the false exact-date prerequisite and retained partial-period rule.",
+      "input_sha256": "787d4576bccf56d40eccebe3bb38af3199f4220c1c21b8e7980d94f8c5724f66",
+      "request_sha256": "ec0fc9944bba4abd3504b2d4696abd8318c42ff4d9df1c19b85f5065bde6b98b",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/006-started.json",
+          "sha256": "b4a68985c356cab888c7fc07b390dcf66d186d232220610edc5150ba165f62cf"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/006-completed.json",
+          "sha256": "4a1776e246b5993294f86d88d01f76ff7623ed6c2aeef3166ea1e685ab4f8062"
+        }
+      ],
+      "reserved_attempt": 6,
+      "remaining_after": 112
+    },
+    {
+      "id": "C07",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Necessary quality-criteria review accepted without treating mere review as sufficient eligibility.",
+      "input_sha256": "fe0909b39c3ce4a2a02f35eb5cdcbc79c0d7a2e72b6e133bd99e5bd1e6945179",
+      "request_sha256": "bf5cfb9486462d393e927cd3d17a7e506620c4aa64f5ec7a0a2b892977d56c93",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/007-started.json",
+          "sha256": "5c27e5a3e6238b912c2e2bdf6f50b1c9ca949f54daed2eb31b35b8e70fcba430"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/007-completed.json",
+          "sha256": "2fdb6e3fdb189a2dda310e242f0f073b7c8e1556dbf6888d66d87e7240325fe8"
+        }
+      ],
+      "reserved_attempt": 7,
+      "remaining_after": 111
+    },
+    {
+      "id": "C08",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": false,
+        "modality_preserved": false,
+        "relationships_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "condition",
+        "modality",
+        "relationship"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Claim-specific condition/support/modality issues identify omitted quality prerequisites and the false bundling guarantee.",
+      "input_sha256": "8811022c0985c9f600c390dc2d2b0b94707a38f19598a8b1448e79f4616740d3",
+      "request_sha256": "9055ee9ab888bfcdce2d9def995ee6498cfda64b2200bd29f91cdd3724b6f32f",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/008-started.json",
+          "sha256": "91b13824721b5b076761b8186777c4b7bed098eb691956a1ebff46cd12bb0e76"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/008-completed.json",
+          "sha256": "10a4894499ec1530fb6b152b59212afa9b2c4eb5748ab1943989fdb9aa1dddcc"
+        }
+      ],
+      "reserved_attempt": 8,
+      "remaining_after": 110
+    },
+    {
+      "id": "C09",
+      "expected_judgment": "unsupported_citation",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "relationship"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "fail",
+      "independent_assessment": "The verdict safely rejects and explicitly identifies absent own-citation support, but citations_sufficient=true is inconsistent with that explanation and the frozen citation-specific expectation. No false approval occurred.",
+      "input_sha256": "4774bb160555fbc2543686c87e598e7bfb73ec119e1c085afebbe3f9a8a3387b",
+      "request_sha256": "fe8f550eaa3609f1ff88c237363e40b1e937d0ea5adcd800d1a4a4389034d161",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/009-started.json",
+          "sha256": "87765cff301df6db3b450d84806557a96aa2648fbe2cb3d188e24a56ff58d291"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/009-completed.json",
+          "sha256": "9384cf78727d88ee1ba994b3879aef9fd8f8528a419236fc954ea28ebb169ddc"
+        }
+      ],
+      "reserved_attempt": 9,
+      "remaining_after": 109
+    },
+    {
+      "id": "C10",
+      "expected_judgment": "supported_synthesis",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Qualified label/claimability synthesis accepted with S13 in its own citation closure.",
+      "input_sha256": "44260b001b33f7d5939ff25373a3991f89fac7007e36dd2007661221aa3f2096",
+      "request_sha256": "af97cfd07beea8fa770e092cdf6d699cfb01b6b99925929122a1edada9c0ed28",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/010-started.json",
+          "sha256": "9a5079f316801b206552a99bdc4b1345891f8d6edb6f68ddafebd4d7b19ed9cb"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/010-completed.json",
+          "sha256": "39e8675354965d3a9537729d81bd02490b0945075a58505f96419775f67e0af1"
+        }
+      ],
+      "reserved_attempt": 10,
+      "remaining_after": 108
+    },
+    {
+      "id": "C11",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": false,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "modality"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Claim-specific support/condition/modality issues distinguish ordinary factor updates from methodology/base-year adjustments.",
+      "input_sha256": "b8566795493d02983d57f9c99fd4b32175cb772164a2243c6f148e1a609540eb",
+      "request_sha256": "079e3f01e2219e1e7291626cf90f8832f0a9ff84debc87e038e394ce5bd0c9db",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/011-started.json",
+          "sha256": "5122ba14253c2d41c111e31f553381ee3aae8290603e28c8bef6a25e6d2a9aa7"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/011-completed.json",
+          "sha256": "18ff6cac2146112bd0fac12b8d6dc29bff3a51ca6798fa9125680da65bd4aa8b"
+        }
+      ],
+      "reserved_attempt": 11,
+      "remaining_after": 107
+    },
+    {
+      "id": "C12",
+      "expected_judgment": "supported_synthesis",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "Modest two-perspective synthesis accepted without inventing the source author’s policy motive.",
+      "input_sha256": "eddade297d96b8a34f4e91718e348ab48224722f034ad1a4cde796b2698d46ba",
+      "request_sha256": "6193cc517345665b97b690da28f758fd62e8d56b9bdca03ee67cb571baa2d108",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/012-started.json",
+          "sha256": "4960691af373c54419557e51e98da6eecdc26f15a3a4493047636ee673b1e5f6"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/012-completed.json",
+          "sha256": "942e831990676a727cb81d0df02cd46f268bf6fece72acff9c5fd268de9cb26c"
+        }
+      ],
+      "reserved_attempt": 12,
+      "remaining_after": 106
+    },
+    {
+      "id": "C13",
+      "expected_judgment": "unsupported_attributed_causal_relation",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "relationship"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "The relationship issue rejects the attributed cause for EPA’s recommendation while preserving the independently supported factual components.",
+      "input_sha256": "300ee9c30b6312877ede154963a0ae9b2078eaa76ccf9d89812eaa1af48b3006",
+      "request_sha256": "c7fd2d8f64440a355e19dfbd279c392a62518e132c946ed23161980e34461d52",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/013-started.json",
+          "sha256": "f83c5488e0e97ac5370466c64c22c7becbbb50e46b4b381e0a00a5973ff1662f"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/013-completed.json",
+          "sha256": "a1a2d9901c7c081d03fee61f816c8beb9657c057a53b2c266e8c60e9f1f69937"
+        }
+      ],
+      "reserved_attempt": 13,
+      "remaining_after": 105
+    },
+    {
+      "id": "C14",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "The plain description and recommendation are accepted without an attributed rationale.",
+      "input_sha256": "408f0c88924ad07c1b50f7c15253cdeea5ab2841e7da9d929b9764363fe15b9e",
+      "request_sha256": "be1bd937f2f892e1defb2c3bf6d8d39f0782f966c9864a737a1101b6fdcfea38",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/014-started.json",
+          "sha256": "fdf3a6d98d9e0a839ae05a501cf34a6bc5884f5278c7c1dcb2945e30abebc60d"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/014-completed.json",
+          "sha256": "608e10dd92c70b9794f58d982859a0476cbb13b258d301a17c957b0b1caea25b"
+        }
+      ],
+      "reserved_attempt": 14,
+      "remaining_after": 104
+    },
+    {
+      "id": "C15",
+      "expected_judgment": "unsupported_document_wide_absence",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "relationship"
+      ],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "The relationship issue rejects inference of absence throughout the publication from only the cited introductory paragraph; it makes no finding that another part actually supplies a rationale.",
+      "input_sha256": "36e58f98d25456996769db0cc517caa1312c93457d6e2f6ce4c1652c22c6006b",
+      "request_sha256": "d64cd107aa330f7e84da6912553eab1c75fdfb43ade5195d1dc6fdfda4fc5c6c",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/015-started.json",
+          "sha256": "eb5ec3469c9c0da9d3acfa3878e14fb0357b98f4786389767ec470b6e69b6b0f"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/015-completed.json",
+          "sha256": "679d36933a52c9870c0182e3e55ad144337c121bdfac8629f7f4b9b2e8691b61"
+        }
+      ],
+      "reserved_attempt": 15,
+      "remaining_after": 103
+    },
+    {
+      "id": "C16",
+      "expected_judgment": "supported_bounded_absence",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "relationships_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "decision_alignment": "pass",
+      "target_explanation_alignment": "pass",
+      "explicit_target_flag_alignment": "pass",
+      "independent_assessment": "The absence statement bounded to the exact introductory paragraph is accepted, retaining the supported counterpart.",
+      "input_sha256": "7313f3312ec8ec964d477c9162b01735733656582c95a9df1d45e700762cbfe9",
+      "request_sha256": "d90b04c79626bed48a8a50c9ca01d44a01a7592fb9ac7397cfce46babeda7bcb",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-02/traces/016-started.json",
+          "sha256": "e99d7147c8b2f16487db3181d8ea724b08c9712788d16554c4a9ae9248a2e225"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-02/traces/016-completed.json",
+          "sha256": "79ad899c94d80106843764e212842223dc8e202674654e3c8241e54c5816c566"
+        }
+      ],
+      "reserved_attempt": 16,
+      "remaining_after": 102
+    }
+  ],
+  "limits": [
+    "The unchanged first twelve are regressions, and four additions derive from already observed failures. The result is not a broad accuracy estimate.",
+    "C09 is safely rejected but has an inconsistent citation-specific flag; do not claim all diagnostic checks passed.",
+    "Quotes and structural checks still cannot guarantee semantic truth; the fallible model reviewer remains an extra control.",
+    "Natural-question answering, retrieval, drafting, correction and browser acceptance require separate results. No numerical/legal/production/commercial approval follows."
+  ]
+}

@@ -73,7 +73,7 @@ The `/chat` route has three hardening layers, all shipped 2026-04-27 ([[next.md]
 
 ### Single environment
 
-There is currently no separate dev/staging environment — production is the only target. `Bun.env.NODE_ENV ?? "development"` keys the Langfuse `environment` tag, which pre-stages the future split with no code change. See [[stack]] § Environments.
+The legacy marketing service has no separately verified staging deployment. The new private research preview has an isolated development scope in the existing Supabase/Pinecone resources and an explicit loopback server entry point at `src/research-composed-server.ts`; see [its runbook](../../docs/research/website-composed-runtime.md). It is not part of the production startup or the legacy `/chat` endpoint. `Bun.env.NODE_ENV ?? "development"` keys the legacy Langfuse environment tag. See [[stack]] § Environments for historical context.
 
 ### Repository-root deployment context
 

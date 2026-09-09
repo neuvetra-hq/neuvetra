@@ -1,0 +1,642 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-09T14:46:02.889Z",
+  "reviewer": "Independent AI QA /root/website_qa",
+  "disposition": "PASS_TARGETED_CORRECTION_FOLLOWUP",
+  "classification": "Explicit follow-up after recorded first F01 failure; not a new held-out or all-first-attempt pass.",
+  "raw_result": {
+    "path": ".superpowers/website-composed-fresh-results-06b.jsonl",
+    "sha256": "83232bd60c4cd55af6c3242550482f1e2ea76f31d3c1a014f227ab5b79759928",
+    "bytes": 68015
+  },
+  "baseline_review_sha256": "24b89eb3f46c4a78ce7f07f4d9eed4d14bd8f982e4e191c80e31487d908a6542",
+  "original_fresh_failure_report_sha256": "922c03db6dbb2e318c4a24a23a83c79c3fa98ea96c21652cbf3fbe1ec098527e",
+  "offline_replay_report_sha256": "4e426e072c45f67ffa6c5d72e6ef2e97f48315e42afce55a22fc7a558a985c8e",
+  "fixture_sha256": "bcc9b8f87ec984f4bdcdb6f51a4ddab1a3fbf5e3ca61982db0c3dbbcbe37a3dc",
+  "freeze_sha256": "9ca6ff47270c57e71269da5f0c4c1eed3accc51f46ecbc3a0a5cfe1e0ff56bd1",
+  "profile_sha256": "ecd63437fcf498cc02f76ecd3c401fb6411ad7cbc6b3057b9b2f53dcfbaa4f4e",
+  "counts": {
+    "cases": 2,
+    "complete_answers": 2,
+    "exact_unit_occurrences": 15,
+    "stages": 5,
+    "before": 21,
+    "after": 16,
+    "all_revision06_reserved": 44,
+    "prior_reserved": 198,
+    "combined_reserved": 242,
+    "combined_ceiling": 258
+  },
+  "binding": {
+    "frozen_files_rebound": 52,
+    "followup_stage_requests_outputs_reservations": 5,
+    "prior_failed_fresh_requests_rebound": 3,
+    "automatic_retries": 0
+  },
+  "decision": "Proceed to actual mounted website demonstration. This does not yet pass the browser gate or authorize production deployment.",
+  "cases": [
+    {
+      "id": "F01",
+      "question": "For a U.S. site, I need background on a regional electricity emissions figure and on a retailer’s product figure. Where would I research each, what supply should the retailer figure represent, and how should I think about it if the contract dates overlap only part of our reporting year?",
+      "expected_outcome": "answer",
+      "response": {
+        "status": "qualified",
+        "message": "Selected from independently reviewed explanations of EPA guidance. Interpretations are labeled separately; open each reference to inspect the source.",
+        "answer_mode": "cloud_reviewed_composition",
+        "reason_code": "none",
+        "claims": [
+          {
+            "id": "U07",
+            "text": "For purchased electricity, the scope 2 factor covers emissions at the point of generation from sources owned and operated by other entities. It should exclude transmission and distribution losses, fuel extraction and other activities upstream of the generating facility. This boundary does not mean those other emissions do not occur. Calculating them would require separate methods outside this preview.",
+            "evidence_ids": [
+              "S06"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods."
+            ]
+          },
+          {
+            "id": "U08",
+            "text": "For electricity purchased and delivered through a grid, EPA says the published factor should correspond to the geographic location of each facility and the average emissions of generating facilities supplying that grid. Regional or subnational factors representing a grid distribution area are recommended. This preview does not assign a facility to a subregion or select its numerical factor.",
+            "evidence_ids": [
+              "S06",
+              "S07"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor."
+            ]
+          },
+          {
+            "id": "U09",
+            "text": "For U.S. operations, EPA’s December 2023 guide recommends the total-output subregion grid factors in its Emission & Generation Resource Integrated Database (eGRID). Total-output factors represent the average across plants generating electricity for the grid, including baseload, intermediate and peaking units. This identifies a source route, not a current dataset edition or numerical factor.",
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors."
+            ]
+          },
+          {
+            "id": "U10",
+            "text": "The EPA guide identifies both eGRID and the GHG Emission Factors Hub as publication routes. It notes that the Hub can be updated later than a new eGRID release. The guide points to EPA’s eGRID page for versions, supporting documentation and resources. Check the publisher’s actual release and supporting documentation before use; this preview does not assert which release or factor is current.",
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08",
+              "S09"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors.",
+              "Dataset versions and factor values need a current check of EPA's publication pages."
+            ]
+          },
+          {
+            "id": "U12",
+            "text": "Market-based emission factors reflect contractual arrangements under which an organization procures power from specific sources, such as fossil, renewable or other generating facilities. Describing that category does not establish that a particular supplier statement, contract or certificate is eligible for use. This preview does not provide the complete factor hierarchy or choose a fallback.",
+            "evidence_ids": [
+              "S06",
+              "S11"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor."
+            ]
+          },
+          {
+            "id": "U13",
+            "text": "An electricity supplier, including a regulated utility or deregulated supplier, may provide the factor associated with its standard or differentiated electricity product. For use in the market-based method, that factor must include all electricity delivered by the supplier, both electricity it generates and electricity it purchases from others. A figure covering only supplier-owned generating facilities does not meet that delivered-electricity boundary. Receiving a figure alone is not an eligibility determination.",
+            "evidence_ids": [
+              "S06",
+              "S11",
+              "S12",
+              "S15"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor.",
+              "The factor should describe the electricity delivered for the relevant product and period; receiving it does not establish eligibility.",
+              "Compare the reporting dates with the agreement's coverage. This preview does not allocate a company's purchases or factors."
+            ]
+          },
+          {
+            "id": "U16",
+            "text": "EPA says organizations should consider the alignment of the inventory reporting year and purchasing-agreement dates. If they align, the agreement and associated factors can apply for the entire reporting year. If they differ, the agreement’s factors should apply only to the portion of reporting covered by the agreement. A reporting year can involve different agreements or periods with no agreement. Date mismatch therefore does not imply rejection for the entire year. This timing explanation neither establishes other eligibility conditions nor allocates a company’s purchases.",
+            "evidence_ids": [
+              "S15"
+            ],
+            "qualifications": [
+              "Compare the reporting dates with the agreement's coverage. This preview does not allocate a company's purchases or factors."
+            ]
+          },
+          {
+            "id": "U20",
+            "text": "Average grid factors are not completely accurate because the operating generating units and factors vary by time of day and season. EPA notes that factors may be even more uncertain if their data year differs from the electricity-purchase year, and warns that eGRID data may be out of date. These are limitations to consider; this preview does not quantify uncertainty or certify a factor as current.",
+            "evidence_ids": [
+              "S18"
+            ],
+            "qualifications": [
+              "A factor can have timing and averaging limitations; this preview does not quantify their effect or certify a dataset."
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S06",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 8 / printed page 5",
+            "excerpt": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+          },
+          {
+            "id": "S07",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+          },
+          {
+            "id": "S08",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints."
+          },
+          {
+            "id": "S09",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid."
+          },
+          {
+            "id": "S11",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+          },
+          {
+            "id": "S12",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 10 / printed page 7",
+            "excerpt": "An electricity supplier, such as a regulated utility or a deregulated supplier, may provide information to its customers on the emission factor associated with its electricity product. The product may be a standard product or a differentiated product. To be used in the market-based method, the emission factor must include all the electricity delivered by the supplier, including electricity it generates as well as electricity it purchases from others. An example of a factor that should not be used is a supplier emission factor that only includes generation facilities owned by the supplier, which does not represent the full set of generation facilities supplying the delivered electricity"
+          },
+          {
+            "id": "S15",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 11 / printed page 8",
+            "excerpt": "An organization should consider the alignment of its inventory reporting year and the timeframes of its purchasing agreements. If those timeframes align, the agreement and the associated emission factors can be applied for the entire reporting year. If they do not align, such as if the reporting year is based on a fiscal year and a purchasing agreement is for a calendar year, the emission factors for a purchasing agreement should only be applied to the portion of the reporting covered by that agreement. A given reporting year may be covered by two different purchasing agreements, or there may be portions of the reporting year which are not covered by any purchasing agreement."
+          },
+          {
+            "id": "S18",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 17 / printed page 14",
+            "excerpt": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-website",
+          "version": "1",
+          "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5"
+        },
+        "retrieval": {
+          "mode": "cloud",
+          "store": "Supabase",
+          "search": "Pinecone",
+          "build_id": "63f0190c-9694-46db-9ea8-85445a80f6be",
+          "release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+          "candidate_ids": [
+            "S07",
+            "S12",
+            "S15",
+            "S16",
+            "S01",
+            "S18",
+            "S14",
+            "S08",
+            "S06",
+            "S03"
+          ],
+          "selected_ids": [
+            "S06",
+            "S07",
+            "S08",
+            "S09",
+            "S11",
+            "S12",
+            "S15",
+            "S18"
+          ],
+          "checked_at": "2026-09-09T14:44:12.462Z"
+        },
+        "composition": {
+          "catalog_id": "scope2-website-answer-units",
+          "version": "1",
+          "sha256": "c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f",
+          "units": [
+            {
+              "id": "U07",
+              "title": "The generation-only factor boundary",
+              "type": "source_summary"
+            },
+            {
+              "id": "U08",
+              "title": "Regional geography for grid electricity",
+              "type": "source_summary"
+            },
+            {
+              "id": "U09",
+              "title": "EPA eGRID as a regional source",
+              "type": "source_summary"
+            },
+            {
+              "id": "U10",
+              "title": "Checking the publisher’s update channels",
+              "type": "source_summary"
+            },
+            {
+              "id": "U12",
+              "title": "Market evidence and the purchased product",
+              "type": "source_summary"
+            },
+            {
+              "id": "U13",
+              "title": "Obtaining a supplier-specific factor",
+              "type": "source_summary"
+            },
+            {
+              "id": "U16",
+              "title": "Agreement dates and inventory dates",
+              "type": "source_summary"
+            },
+            {
+              "id": "U20",
+              "title": "Timing and averaging limitations",
+              "type": "source_summary"
+            }
+          ],
+          "wording": "reviewed_verbatim"
+        },
+        "correction_attempted": true,
+        "correction_kind": "selection_size"
+      },
+      "http_status": 200,
+      "duration_ms": 25560,
+      "counters_before": 21,
+      "counters_after": 18,
+      "stages_consumed": 3,
+      "counter_consistent": true,
+      "checks": {
+        "decoder_valid": true,
+        "cloud_mode": true,
+        "release_pin": true,
+        "source_metadata": true,
+        "exact_passages": true,
+        "selected_ids_known": true,
+        "claim_context_closed": true
+      },
+      "mechanical_checks_passed": true,
+      "outcome_aligned": true,
+      "semantic_review": "complete",
+      "stage_count_valid": true,
+      "independent_disposition": "clean_complete_answer",
+      "independent_assessment": "Regional EPA route, geographic/data limitations, supplier all-delivered generation/purchases and partial-period conditions complete. Whole size reselection preserves every material facet and required companion.",
+      "stages": [
+        {
+          "attempt": 40,
+          "stage": "plan",
+          "started_sha256": "db5ce9b30b4489336cff24ddb12decb7a6b45d8e8f103372e4be4a59238bfcdc",
+          "completed_sha256": "78f994faa080561f562a38134be0391e2d899b0434bc661a3fa4762ddcb63521",
+          "reservation_sha256": "af1014bd9db0fc4660a9b21aa18ed075b73b3cef7689c3acc2a81949ad7001d6"
+        },
+        {
+          "attempt": 41,
+          "stage": "plan",
+          "started_sha256": "4e74ec63a6b67b24acded1f2bf7a66ceb7799fb5c7994bd2a5aa24c289119a6e",
+          "completed_sha256": "79d1c4a8e484a8de876037eb07b03bebaf1d469f6d3b84953c150c4af6f124b8",
+          "reservation_sha256": "7c181a4c24c1f53d8ceb0bb77e717c2cb7d71d05c4b76acd1cef03d46b98543c"
+        },
+        {
+          "attempt": 42,
+          "stage": "verify",
+          "started_sha256": "868c424989d341f3ff5ad27d992dea470614a7bb27e009d937b2c252998a8d96",
+          "completed_sha256": "1c15e3afe1afd1b424b89f0ee6e4269ce5e25fc79987d88fbcfb4997d1b232ef",
+          "reservation_sha256": "73c77fec99536cac63027b74e66ebaa31166515c25a5af35a10e9aa698623cec"
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "question": "Two differently labeled electricity totals can appear in the same inventory. What perspectives do those labels communicate, and why should the source edition, factor data period and reporting period remain separately recorded?",
+      "expected_outcome": "answer",
+      "response": {
+        "status": "qualified",
+        "message": "Selected from independently reviewed explanations of EPA guidance. Interpretations are labeled separately; open each reference to inspect the source.",
+        "answer_mode": "cloud_reviewed_composition",
+        "reason_code": "none",
+        "claims": [
+          {
+            "id": "U01",
+            "text": "The location-based method considers average emission factors for the electricity grids that provide electricity. The market-based method considers the contractual arrangements under which an organization procures power from specific sources, such as renewable energy. These are accounting perspectives; this explanation does not determine that a particular purchase or instrument qualifies.",
+            "evidence_ids": [
+              "S01"
+            ],
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+            ]
+          },
+          {
+            "id": "U02",
+            "text": "EPA’s December 2023 guide recommends that organizations quantify and report both location-based and market-based scope 2 totals in their GHG inventory. Both results should be clearly labeled with the method used. This is the guide’s reporting recommendation; the preview does not determine a particular company’s legal reporting obligations.",
+            "evidence_ids": [
+              "S01",
+              "S02"
+            ],
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties.",
+              "EPA's reporting recommendation is not a universal legal obligation."
+            ]
+          },
+          {
+            "id": "U03",
+            "text": "Reporting the two results with their method labels presents the grid-average perspective and the contractual procurement perspective separately. This is an explanation of what those two labeled results communicate, not a statement of EPA’s policy motive or a universal legal requirement.",
+            "evidence_ids": [
+              "S01",
+              "S02"
+            ],
+            "qualifications": [
+              "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties.",
+              "EPA's reporting recommendation is not a universal legal obligation."
+            ]
+          },
+          {
+            "id": "U10",
+            "text": "The EPA guide identifies both eGRID and the GHG Emission Factors Hub as publication routes. It notes that the Hub can be updated later than a new eGRID release. The guide points to EPA’s eGRID page for versions, supporting documentation and resources. Check the publisher’s actual release and supporting documentation before use; this preview does not assert which release or factor is current.",
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08",
+              "S09"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors.",
+              "Dataset versions and factor values need a current check of EPA's publication pages."
+            ]
+          },
+          {
+            "id": "U17",
+            "text": "Scope 2 factors represent the emissions profile of generation during a particular period. EPA explains that this profile can change with the resource mix and generating efficiency, so factors may be updated periodically. Changes in electricity purchasing choices can also change the emissions associated with an organization’s purchases. A factor’s represented period is relevant information; it is not automatically the organization’s inventory period.",
+            "evidence_ids": [
+              "S16",
+              "S17",
+              "S18"
+            ],
+            "qualifications": [
+              "This is EPA's timing recommendation for this guidance. Keep factor data year, calculation date and inventory period distinct; do not treat it as a universal rule or selection of a current factor.",
+              "Applying a base-year policy or recalculating a historical inventory requires separate review.",
+              "A factor can have timing and averaging limitations; this preview does not quantify their effect or certify a dataset."
+            ]
+          },
+          {
+            "id": "U20",
+            "text": "Average grid factors are not completely accurate because the operating generating units and factors vary by time of day and season. EPA notes that factors may be even more uncertain if their data year differs from the electricity-purchase year, and warns that eGRID data may be out of date. These are limitations to consider; this preview does not quantify uncertainty or certify a factor as current.",
+            "evidence_ids": [
+              "S18"
+            ],
+            "qualifications": [
+              "A factor can have timing and averaging limitations; this preview does not quantify their effect or certify a dataset."
+            ]
+          },
+          {
+            "id": "U21",
+            "text": "As a source-checking practice, record the publisher’s edition, the period represented by the factor data, the calculation date and the inventory period separately. They describe different things: generation profiles change, publication channels can update at different times, and a data year may differ from the purchase year. Recording those distinctions makes the source and timing assumptions inspectable. This is a recordkeeping interpretation of the cited guidance, not an additional EPA filing rule.",
+            "evidence_ids": [
+              "S06",
+              "S07",
+              "S08",
+              "S09",
+              "S16",
+              "S17",
+              "S18"
+            ],
+            "qualifications": [
+              "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods.",
+              "Facility location matters; this preview does not assign a subregion or select a factor.",
+              "Check the source edition and its data year before use; this preview does not supply current numerical factors.",
+              "Dataset versions and factor values need a current check of EPA's publication pages.",
+              "This is EPA's timing recommendation for this guidance. Keep factor data year, calculation date and inventory period distinct; do not treat it as a universal rule or selection of a current factor.",
+              "Applying a base-year policy or recalculating a historical inventory requires separate review.",
+              "A factor can have timing and averaging limitations; this preview does not quantify their effect or certify a dataset."
+            ]
+          }
+        ],
+        "evidence": [
+          {
+            "id": "S01",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 4 / printed page 1",
+            "excerpt": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+          },
+          {
+            "id": "S02",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used."
+          },
+          {
+            "id": "S06",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 8 / printed page 5",
+            "excerpt": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+          },
+          {
+            "id": "S07",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+          },
+          {
+            "id": "S08",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints."
+          },
+          {
+            "id": "S09",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 9 / printed page 6",
+            "excerpt": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid."
+          },
+          {
+            "id": "S16",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 12 / printed page 9; PDF page 12 / printed page 9",
+            "excerpt": "All scope 2 emission factors represent the emissions profile for generation during a specific period of time. This emissions profile can change over time, due to changes in the resource mix and generation efficiency supplying the electricity. As a result, the emission factors may be updated periodically to reflect these changes. Organizations may also make different choices in their purchase decisions over time, such as beginning to buy RECs. These represent real changes in the emissions associated with an organization’s electricity purchases. As such, it is recommended that organizations use the newest emission factors available at the time they calculate emissions for a reporting year. 5 Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.\n\n5 This applies whether an organization uses a calendar year period or other period for their GHG Inventory. For example, if an organization is calculating a GHG Inventory in August for a July through June reporting year, the inventory should use the newest factors available in August."
+          },
+          {
+            "id": "S17",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 12 / printed page 9",
+            "excerpt": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy."
+          },
+          {
+            "id": "S18",
+            "source_id": "epa-electricity-2023",
+            "locator": "PDF page 17 / printed page 14",
+            "excerpt": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date."
+          }
+        ],
+        "sources": [
+          {
+            "id": "epa-electricity-2023",
+            "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+            "version": "December 2023",
+            "status": "published_guidance",
+            "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf"
+          }
+        ],
+        "missing_context": [],
+        "release": {
+          "id": "scope2-website",
+          "version": "1",
+          "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+        },
+        "provider": {
+          "mode": "live",
+          "model": "claude-opus-5"
+        },
+        "retrieval": {
+          "mode": "cloud",
+          "store": "Supabase",
+          "search": "Pinecone",
+          "build_id": "63f0190c-9694-46db-9ea8-85445a80f6be",
+          "release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+          "candidate_ids": [
+            "S04",
+            "S15",
+            "S01",
+            "S16",
+            "S02",
+            "S12",
+            "S05",
+            "S18",
+            "S06",
+            "S07"
+          ],
+          "selected_ids": [
+            "S01",
+            "S02",
+            "S06",
+            "S07",
+            "S08",
+            "S09",
+            "S16",
+            "S17",
+            "S18"
+          ],
+          "checked_at": "2026-09-09T14:44:28.083Z"
+        },
+        "composition": {
+          "catalog_id": "scope2-website-answer-units",
+          "version": "1",
+          "sha256": "c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f",
+          "units": [
+            {
+              "id": "U01",
+              "title": "Two accounting perspectives",
+              "type": "source_summary"
+            },
+            {
+              "id": "U02",
+              "title": "Reporting the two results",
+              "type": "source_summary"
+            },
+            {
+              "id": "U03",
+              "title": "What separate results show",
+              "type": "reviewed_interpretation"
+            },
+            {
+              "id": "U10",
+              "title": "Checking the publisher’s update channels",
+              "type": "source_summary"
+            },
+            {
+              "id": "U17",
+              "title": "The period represented by a factor",
+              "type": "source_summary"
+            },
+            {
+              "id": "U20",
+              "title": "Timing and averaging limitations",
+              "type": "source_summary"
+            },
+            {
+              "id": "U21",
+              "title": "Keeping source dates distinct",
+              "type": "reviewed_interpretation"
+            }
+          ],
+          "wording": "reviewed_verbatim"
+        },
+        "correction_attempted": false,
+        "correction_kind": null
+      },
+      "http_status": 200,
+      "duration_ms": 15080,
+      "counters_before": 18,
+      "counters_after": 16,
+      "stages_consumed": 2,
+      "counter_consistent": true,
+      "checks": {
+        "decoder_valid": true,
+        "cloud_mode": true,
+        "release_pin": true,
+        "source_metadata": true,
+        "exact_passages": true,
+        "selected_ids_known": true,
+        "claim_context_closed": true
+      },
+      "mechanical_checks_passed": true,
+      "outcome_aligned": true,
+      "semantic_review": "complete",
+      "stage_count_valid": true,
+      "independent_disposition": "clean_complete_answer",
+      "independent_assessment": "Perspectives and distinct source edition/data/reporting periods complete; source-based recordkeeping interpretation labeled.",
+      "stages": [
+        {
+          "attempt": 43,
+          "stage": "plan",
+          "started_sha256": "d6f33d7df1c311c8022c1ee1296ca637ab649f6be140a632df24a161a59e5eb1",
+          "completed_sha256": "1772114b2c9d708f659c447d5dcdcb3bb920f232a624f3f54ab6dc6ee871ce18",
+          "reservation_sha256": "cdbf18e68bee15dd7f98eabfb47e4d027e3fbd285938d10034aced576a1608c2"
+        },
+        {
+          "attempt": 44,
+          "stage": "verify",
+          "started_sha256": "aae9ea348c1e7430804320b06e2d616003a845ce4973917d69ae85e78e788c1e",
+          "completed_sha256": "a631917815b37cd656d8f5f4c4b1042bb192a3bd12ed361a95389bef508eefd9",
+          "reservation_sha256": "64d9a38df2c79aef8bdc025b8eb8dd324d21c086db1515f42e20954b414e9d22"
+        }
+      ]
+    }
+  ]
+}

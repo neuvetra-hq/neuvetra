@@ -51,4 +51,20 @@ describe("research response boundary", () => {
     for (const url of ["javascript:alert(1)", "data:text/html,hello", "http://example.com", "https://user:secret@example.com", "//example.com", "https://unapproved.example", "https://www.epa.gov.unapproved.example", "https://www.epa.gov:444"]) expect(publisherUrl(url)).toBeNull()
   })
   test("keeps a valid publisher page locator", () => expect(publisherUrl("https://www.epa.gov/example.pdf#page=4")).toBe("https://www.epa.gov/example.pdf#page=4"))
+  test("cloud answers require matching release provenance and complete selected references", () => {
+    const cloud = { ...supported, answer_mode: "cloud_passage_grounded", correction_attempted: false, correction_kind: null,
+      release: { id: "scope2-website", version: "1", sha256: "a".repeat(64) },
+      retrieval: { mode: "cloud", store: "Supabase", search: "Pinecone", build_id: "63f0190c-9694-46db-9ea8-85445a80f6be", release_sha256: "a".repeat(64), candidate_ids: ["E01"], selected_ids: ["E01"], checked_at: "2026-09-09T06:00:00Z" } }
+    expect(isResearchAnswer(cloud)).toBe(true)
+    expect(isResearchAnswer({ ...cloud, retrieval: null })).toBe(false)
+    expect(isResearchAnswer({ ...cloud, release: { ...cloud.release, sha256: "b".repeat(64) } })).toBe(false)
+    expect(isResearchAnswer({ ...cloud, retrieval: { ...cloud.retrieval, selected_ids: ["E02"] } })).toBe(false)
+    expect(isResearchAnswer({ ...cloud, correction_attempted: undefined })).toBe(false)
+    expect(isResearchAnswer({ ...cloud, correction_attempted: true, correction_kind: 'draft_contract' })).toBe(true)
+    expect(isResearchAnswer({ ...cloud, correction_attempted: true, correction_kind: 'source_review' })).toBe(true)
+    expect(isResearchAnswer({ ...cloud, correction_attempted: true, correction_kind: null })).toBe(false)
+    expect(isResearchAnswer({ ...cloud, correction_attempted: false, correction_kind: 'draft_contract' })).toBe(false)
+    expect(isResearchAnswer({ ...unavailable, answer_mode: "cloud_passage_grounded", retrieval: null, correction_attempted: false, correction_kind: null })).toBe(true)
+    expect(isResearchAnswer({ ...unavailable, answer_mode: "cloud_passage_grounded", retrieval: cloud.retrieval, correction_attempted: false })).toBe(false)
+  })
 })

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "website-evaluation-05",
+  "allocated_at": "2026-09-09T07:00:39.000787-07:00",
+  "allocated_by": "Root coordinator under user authorization for private website integration and necessary testing",
+  "reason": "Architecture change to immutable independently reviewed explanation units, semantic selection and independent question-coverage review; unchanged18questions,2freshcompositionprobes and actualbrowser checks",
+  "prior_reserved_attempts_by_run": {
+    "website-evaluation-01": 32,
+    "website-evaluation-02": 59,
+    "website-evaluation-03": 4,
+    "website-evaluation-04": 64
+  },
+  "prior_total_reserved": 159,
+  "prior_unspent_carried_forward": 36,
+  "additional_explicit_attempt_allocation": 24,
+  "max_provider_attempts": 60,
+  "combined_attempt_ceiling": 219,
+  "reservation_usd_per_attempt": 1,
+  "reservation_is_actual_billing": false,
+  "user_specified_financial_cap": null,
+  "counter_reset_on_restart": false,
+  "automatic_retries": false,
+  "source_release_unchanged": true,
+  "unit_catalog_sha256": "c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f",
+  "profile_sha256": "24d975f99c712c0b4320d84b28c6d22eda680fb9adefc06b903335823efea82d",
+  "production_cutover": false,
+  "closed_reserved_attempts": 39,
+  "closed_completed_attempts": 39,
+  "unspent_carried_to_revision06": 21,
+  "disposition": "Failed baseline:8 clean supported,1 supported withholding,6 correct boundaries,2 failed boundary responses,1 incorrectly answered excluded action. Fresh probes unexecuted."
+}

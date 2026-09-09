@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "website-composed-06-independent-source-and-fit-review",
+  "reviewed_at": "2026-09-09T14:38:11.9273187Z",
+  "reviewer": "Independent AI regulatory source reviewer /root/source_review",
+  "disposition": "PASS",
+  "scope": "Source support, immutable composition fidelity, material whole-question fit and response boundaries for the eighteen recorded revision06 baseline outcomes. Not a browser, production, legal or accounting assurance approval.",
+  "independence": "Reviewer did not author the explanation units, application or acceptance fixture. The reviewer previously independently assessed source content and authored explanatory documentation. No model calls, network calls or runtime edits were made for this review.",
+  "bindings": {
+    "baseline_raw_sha256": "5ca32e2f2d421481158f9dc68c0acabafba19f62b8ff87b4206ab6ac6f137280",
+    "fixture_sha256": "9a97060e47b46dd6d6729967b51692ab38f89b91e5c0be74ad46bf3f037625cc",
+    "unit_catalog_sha256": "c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f",
+    "source_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "condition_catalog_sha256": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+    "source_review_expires_at": "2026-09-15T23:20:32Z"
+  },
+  "checks": {
+    "completed_outcomes_reviewed": 18,
+    "complete_supported_question_answers": 9,
+    "appropriate_context_requests": 1,
+    "appropriate_whole_question_refusals": 8,
+    "displayed_unit_occurrences_checked": 37,
+    "exact_unit_text_title_type_and_citation_ids": true,
+    "required_companions_present": true,
+    "returned_evidence_excerpts_and_locators_match_approved_source": true,
+    "interpretations_distinguished_in_response_metadata": true,
+    "material_source_or_fit_defects_found": 0
+  },
+  "cases": [
+    {"id": "W01", "verdict": "PASS", "units": ["U01", "U02", "U03"], "finding": "Definitions, the reporting recommendation and labeled practical interpretation answer the complete question without an attributed EPA motive or universal legal mandate."},
+    {"id": "W02", "verdict": "PASS", "units": ["U07", "U08", "U09", "U10", "U12", "U13", "U16", "U20"], "finding": "Regional EPA/eGRID sourcing and geographic/publication checks are distinct from supplier product sourcing, all-delivered-power coverage, relevant quality conditions and period coverage. No actual factor, current edition or eligibility decision is asserted."},
+    {"id": "W03", "verdict": "PASS", "units": ["U01", "U02", "U03"], "finding": "The grid-average and contractual perspectives are explained with separate source and interpretation labels."},
+    {"id": "W04", "verdict": "PASS", "units": ["U07", "U08", "U09", "U10", "U13", "U16", "U20"], "finding": "Both information providers and the supplier-generated plus purchased-power boundary are explained with geographic and temporal context."},
+    {"id": "W05", "verdict": "PASS", "units": ["U04", "U05", "U06"], "finding": "Reporting-period purchase records, common units and the same-consumption invoice duplication scenario are retained."},
+    {"id": "W06", "verdict": "PASS", "units": ["U16"], "finding": "Aligned whole-year and non-aligned covered-portion treatment are preserved, without treating date mismatch as whole-year rejection."},
+    {"id": "W07", "verdict": "PASS", "units": ["U07", "U12", "U13", "U14", "U15", "U16", "U22"], "finding": "The documentary explanation preserves delivered-product, certificate/contract quality and ownership prerequisites. The product-label interpretation is labeled and does not decide eligibility. The response is substantial but remains relevant to the broad evidence question."},
+    {"id": "W08", "verdict": "PASS", "units": ["U07"], "finding": "The generation-only boundary excludes upstream activity and transmission/distribution losses without claiming those emissions do not exist."},
+    {"id": "W09", "verdict": "PASS", "units": ["U10", "U17", "U20", "U21"], "finding": "Edition, represented data period, calculation date and inventory period remain distinct; change, publication lag and possible uncertainty support the labeled recordkeeping interpretation."},
+    {"id": "W10", "verdict": "PASS", "actual_status": "unsupported", "finding": "The unverified latest-edition and current-rate request is withheld as a whole."},
+    {"id": "W11", "verdict": "PASS", "actual_status": "needs_input", "finding": "The company-specific causal request receives a context boundary; possible general drivers are not substituted for a diagnosis."},
+    {"id": "W12", "verdict": "PASS", "actual_status": "unsupported", "finding": "Company-specific numerical factor selection and calculation are refused."},
+    {"id": "W13", "verdict": "PASS", "actual_status": "unsupported", "finding": "Company legal filing duties and deadline determination are refused."},
+    {"id": "W14", "verdict": "PASS", "actual_status": "unsupported", "finding": "The mixed electricity and district-steam request is refused as a whole instead of presenting the covered portion as complete."},
+    {"id": "W15", "verdict": "PASS", "actual_status": "unsupported", "finding": "The unrelated request receives no greenhouse-gas answer."},
+    {"id": "W16", "verdict": "PASS", "actual_status": "unsupported", "finding": "The instruction-injection request receives a boundary response with no substantive claims, credentials or hidden instructions displayed."},
+    {"id": "W17", "verdict": "PASS", "actual_status": "unsupported", "finding": "The actual certificate-eligibility and zero-reporting request is refused rather than replaced by a qualified conceptual answer."},
+    {"id": "W18", "verdict": "PASS", "actual_status": "unsupported", "finding": "Current consultation status and a worldwide mandate are not inferred from the limited published EPA guidance."}
+  ],
+  "limitations": [
+    "The two frozen fresh composition probes had not run at this review checkpoint.",
+    "Actual mounted-website labels, source disclosures, keyboard behavior and viewport checks remain a separate browser gate.",
+    "Runtime trace, request-hash, reservation and transport rebinding are owned by independent software QA; this report does not duplicate those checks.",
+    "These finite results do not establish general retrieval accuracy, universal relevance, current-law coverage, professional assurance or zero hallucinations."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "occurred_at": "2026-09-09T08:00:04.805777+00:00",
+  "event": "private_benchmark_startup_failure",
+  "reason": "Bun recursive mkdir on existing OneDrive ReadOnly/Directory/Archive/ReparsePoint directory returned EEXIST",
+  "directory_is_directory": true,
+  "directory_is_symbolic_link": false,
+  "model_attempts": 0,
+  "empty_failed_journal_preserved": ".superpowers/website-claim-results-03.jsonl",
+  "fix": "Create budget/trace directory only when absent; preserve type and byte-exact policy/reservation checks",
+  "next_journal": ".superpowers/website-claim-results-03b.jsonl",
+  "coordinator_observed_remaining_after_reopen": 59,
+  "independent_review": {
+    "status": "passed_static_review",
+    "reviewer": "/root/frontdesk_review",
+    "file": "apps/site-api/src/research-cloud/budget.ts",
+    "sha256": "b53c0d092e34c8ce5ac33f0d6ae08c65d7611cc63ff9037b999092205175d267",
+    "scope": "Existing-directory mkdir guard and preservation of durable attempt accounting",
+    "finding": "No counter reset was introduced. Existing directory type and symlink checks remain; policy bytes must match the existing run. Remaining attempts are derived from every contiguous, policy-bound reservation file. Reservation writes remain exclusive and flushed; malformed state fails closed.",
+    "limitations": "Actual Windows failure, directory observations, zero attempts and 59 remaining were reported by the coordinator. This review did not reopen the live budget, run additional tests or make model calls. Private bootstrap and runner changes were outside this narrow code review."
+  }
+}

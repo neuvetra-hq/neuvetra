@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-09",
+  "updated_at": "2026-09-09T14:53:21.988663+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M2",
     "name": "Reviewed evidence and first supported answer",
-    "status": "in_progress",
-    "next_gate": "Review the demonstrated synthetic cloud milestone; separately approve real-source processing and integrate retrieval into the application. Answer quality remains below release gate."
+    "status": "awaiting_board_feedback",
+    "next_gate": "Board tries the working private website; collect feedback before expanding evidence or starting calculations."
   },
   "completed_milestones": [
     {
@@ -39,10 +39,11 @@
     "verified_at": "2026-09-08",
     "answer_demo_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/2",
     "answer_demo_state": "open_unmerged",
-    "passage_experiment_state": "release_gate_failed_local_answering_stopped",
+    "passage_experiment_state": "Historical generated-answer failures retained; reviewed-composition private website accepted through baseline, targeted follow-up and independent browser gates.",
     "production_cutover": "not_performed",
     "passage_investigation_commit": "636dc7eb34612d46accabcc215f4b40624b342a9",
-    "passage_investigation_checks": "both_verify_jobs_passed_run_34308623708"
+    "passage_investigation_checks": "both_verify_jobs_passed_run_34308623708",
+    "website_integration_state": "Validated locally; current commit and remote CI pending publication."
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -249,11 +250,11 @@
     {
       "id": "M2-RCA",
       "owner": "cto",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Replace systemic vocabulary and fixed-statement answer limitations",
       "acceptance": "Actual passage retrieval without query-word gates, independently frozen varied questions, complete source-backed live answers and browser demonstration",
       "investigation_status": "complete",
-      "review_disposition": "Original pre-retrieval vocabulary rejection and five-statement evidence limitation proved. Separate 18-paragraph engine implemented; final 118 API tests, 11 frontend tests, typecheck, website build and lint pass. Five live batches retain failed gates. Final run05: two clean complete answers, one deficient released answer and five withheld; run04 had four clean including K-SOURCE. No new approved browser demonstration or public deployment. Local answering stopped. Dynamic reliability remains unresolved; no claim of general accuracy.",
+      "review_disposition": "Private website now uses whole-question semantic selection of22 reviewed units with live 18-passage Supabase/Pinecone evidence, without query-word gates. Original 18 baseline outcomes passed. Input-only quote correction replayed all 18 decisions unchanged;2 explicit follow-ups and actual originals/browser checks passed. General unrestricted answering remains outside coverage.",
       "evidence": [
         "docs/milestones/m2-passage-retrieval.md",
         "docs/research/scope2-retrieval-root-cause-qa.md",
@@ -265,19 +266,26 @@
         "operations/evaluations/2026-09-08-verifier-comparison.json",
         "evaluations/research-qa/runs/2026-09-08-scope2-passages-04.json",
         "evaluations/research-qa/runs/2026-09-08-scope2-passages-05.json",
-        "docs/research/scope2-answer-reliability-next.md"
-      ]
+        "docs/research/scope2-answer-reliability-next.md",
+        "docs/research/website-answering-decision.md",
+        "docs/research/website-cloud-qa.md"
+      ],
+      "historical_generated_answer_review": "Original pre-retrieval vocabulary rejection and five-statement evidence limitation proved. Separate 18-paragraph engine implemented; final 118 API tests, 11 frontend tests, typecheck, website build and lint pass. Five live batches retain failed gates. Final run05: two clean complete answers, one deficient released answer and five withheld; run04 had four clean including K-SOURCE. No new approved browser demonstration or public deployment. Local answering stopped. Dynamic reliability remains unresolved; no claim of general accuracy."
     },
     {
       "id": "M2-REL",
       "owner": "cto_and_independent_qa",
-      "status": "planned",
+      "status": "complete",
       "title": "Measure bounded answer correction and missed-condition detection",
       "parent_task": "M2-RCA",
       "acceptance": "Independently frozen claim-level judgments, explicit bounded correction eligibility and attempts, fresh whole-answer review, measured false approvals and refusals; broad gate and approved demonstration pass before promotion",
       "evidence": [
-        "docs/research/scope2-answer-reliability-next.md"
-      ]
+        "docs/research/scope2-answer-reliability-next.md",
+        "docs/research/website-condition-catalog.md",
+        "docs/research/website-composed-acceptance.md",
+        "docs/research/website-cloud-qa.md"
+      ],
+      "progress": "Claim controls and failed generated-prose experiments retained. Immutable reviewed wording adopted after observed false approval; whole-question review and one shared size/semantic correction tested. Private promotion passed; no universal reliability claim."
     },
     {
       "id": "M3-01",
@@ -321,10 +329,10 @@
     {
       "id": "M2-CLOUD",
       "owner": "cto",
-      "status": "in_progress",
+      "status": "complete",
       "title": "Connect verified evidence through development Pinecone and Supabase",
       "acceptance": "Authenticated development targets verified; reproducible source/metadata/index roundtrip with fixed embeddings, access isolation and exact citation resolution; answer quality evaluated separately",
-      "progress": "Synthetic foundation gate passed: exact20-row staging, two ordinary Auth identities, private bucket/six source artifacts, six Pinecone vectors, API addition preserving old schemas, two scoped activations, all3 frozen retrieval cases and22live access checks. Saved report demonstrates actual results. Application wiring, real source ingestion, lifecycle and answer-quality work remain separate and incomplete.",
+      "progress": "Synthetic roundtrip and access checks retained. Reviewed EPA source/extraction/18 passages verified in separate private scope with12 dedicated reader checks. Actual website now retrieves through Supabase/Pinecone; lifecycle, wider rights/retention and legacy authorization remain separate open work.",
       "evidence": [
         "docs/research/data-flow-audit.md",
         "docs/research/cloud-integration-gate.md",
@@ -335,7 +343,10 @@
         "evaluations/cloud-integration/observations/2026-09-09-pinecone-describe.json",
         "evaluations/cloud-integration/observations/2026-09-09-supabase-inventory-summary.json",
         "evaluations/cloud-integration/observations/2026-09-09-legacy-anon-containment.json",
-        "evaluations/cloud-integration/observations/2026-09-09-synthetic-stage.json"
+        "evaluations/cloud-integration/observations/2026-09-09-synthetic-stage.json",
+        "evaluations/cloud-integration/website-epa-publication-01.json",
+        "evaluations/cloud-integration/website-reader-access-01.json",
+        "docs/research/website-composed-runtime.md"
       ]
     },
     {
@@ -349,6 +360,49 @@
         "evaluations/cloud-integration/observations/2026-09-09-access-checks.json",
         "docs/research/cloud-integration-qa.md",
         "evaluations/cloud-integration/demo.html"
+      ]
+    },
+    {
+      "id": "M2-WEB-SOURCE",
+      "owner": "regulatory_research_with_independent_qa",
+      "status": "complete",
+      "title": "Review and publish the real EPA website corpus",
+      "acceptance": "Separate private processing review; exact3objects/18 passages verified in the dedicated scope; known reader activated; prior scopes/security baseline preserved",
+      "evidence": [
+        "docs/research/website-source-release.md",
+        "evaluations/cloud-integration/website-epa-publication-01.json"
+      ]
+    },
+    {
+      "id": "M2-WEB-ENGINE",
+      "owner": "cto_and_software_engineering",
+      "status": "complete",
+      "title": "Connect actual website questions to approved cloud evidence",
+      "acceptance": "Ordinary reader authorization and exact cloud bytes; semantic whole-question planning; complete claim-specific support and one bounded correction; useful tested browser answers",
+      "progress": "Accepted 06b core runs on the website proxy target 3012. Both original questions answered in the actual browser with exact reviewed wording and source disclosures; dedicated private reader, no cloud admin credentials in the answering process.",
+      "evidence": [
+        "apps/site-api/src/research-cloud",
+        "docs/research/website-cloud-qa.md",
+        "apps/site-api/src/research-composed",
+        "docs/research/website-composed-runtime.md",
+        "evaluations/research-qa/runs/2026-09-09-website-browser-root-observations.json"
+      ]
+    },
+    {
+      "id": "M2-WEB-QA",
+      "owner": "independent_qa",
+      "status": "complete",
+      "title": "Evaluate claim false approval, question completeness and the actual website",
+      "acceptance": "Preserve all failed experiments; independent source/whole-question evaluation, narrowly justified delta replay/follow-up, and actual browser evidence before private promotion.",
+      "progress": "18 baseline outcomes passed, first F01 typographic validation failure retained,18decisions replayed unchanged after quote-only fix, both explicit cross-topic follow-ups passed. Root tested both originals, citation, cancellation, connection recovery and 375-pixel viewport. Independent QA submitted W01 in a separate browser, verified exact units/source and readable layout. Final full repository and strict TypeScript checks pass.",
+      "evidence": [
+        "evaluations/research-qa/website-cloud-acceptance.v1.json",
+        "docs/research/website-cloud-qa.md",
+        "operations/website-evaluation-allocation-04.json",
+        "evaluations/research-qa/runs/website-revision04-interruption.json",
+        "evaluations/research-qa/runs/2026-09-09-website-composed-review-06.json",
+        "evaluations/research-qa/runs/2026-09-09-website-06b-independent-replay.json",
+        "evaluations/research-qa/runs/2026-09-09-website-composed-followup-review-06b.json"
       ]
     }
   ],
@@ -442,6 +496,30 @@
       "decision": "Verify cloud storage and citation primitives with six owned fictional passages before transferring reviewed source material",
       "why": "A tiny fixed fixture tests the actual data path, access controls and integrity without implying semantic accuracy, source approval or successful dynamic answering. Credentials, source review and activation remain separate server responsibilities.",
       "evidence": "docs/research/cloud-integration-qa.md"
+    },
+    {
+      "id": "D16",
+      "decision": "Integrate a separately reviewed EPA corpus into the existing private cloud resources and test the actual website before local promotion",
+      "why": "Board approved a third private reader and EPA workspace. Shared cloud connectivity is verified; useful claim-complete answers require independent quality evidence. Keep source bounds, one correction attempt and durable shared provider counters.",
+      "evidence": "docs/research/website-cloud-qa.md"
+    },
+    {
+      "id": "D17",
+      "decision": "Require a source-reviewed condition ledger for every answer paragraph and preserve interrupted evaluation attempts",
+      "why": "An actual verifier false approval omitted a material prerequisite. Mandatory conditions improve review coverage but still require independent semantic QA. Runtime loss must not erase usage or uncertain outcomes.",
+      "evidence": "docs/research/website-condition-catalog.md"
+    },
+    {
+      "id": "D18",
+      "decision": "Render immutable independently reviewed explanation units and assess whole-question fit separately",
+      "why": "Generated prose introduced unsupported causal wording despite model review; fixed source-supported wording bounds that risk while semantic selection remains tested.",
+      "evidence": "docs/research/website-answering-decision.md"
+    },
+    {
+      "id": "D19",
+      "decision": "Treat local website operation, answer quality and browser demonstration as separate release gates",
+      "why": "The website targeted a stopped answering service while a separate candidate was live; actual browser submissions and independent verification now close that gap.",
+      "evidence": "docs/research/website-cloud-qa.md"
     }
   ],
   "open_dependencies": [
@@ -452,13 +530,13 @@
     },
     {
       "id": "R2",
-      "detail": "18 EPA conceptual passages have private internal approval. Five live answer batches failed the overall gate; latest engine stopped. Broader factors, methods, legal and commercial rights releases remain unapproved",
-      "impact": "Gates passage demo promotion, customer-facing answers and deterministic calculations"
+      "detail": "18 EPA conceptual passages and22 explanation units approved for private internal use. Bounded website acceptance passed; wider methods/factors/legal/commercial releases remain unapproved.",
+      "impact": "Limits coverage beyond the private purchased-electricity preview."
     },
     {
       "id": "R4",
-      "detail": "Downloaded source bytes are local; cloud artifact storage and rights/retention review remain",
-      "impact": "GitHub contains code, notes and source metadata rather than a complete cloud source archive"
+      "detail": "One separately reviewed EPA guide, extraction and18 passages now verified in private cloud storage/index. Wider raw corpus and commercial/provider retention review remain.",
+      "impact": "Only the small approved private corpus is available to the new website candidate."
     },
     {
       "id": "R5",
@@ -467,13 +545,13 @@
     },
     {
       "id": "R6",
-      "detail": "Research service is loopback-only with an in-memory budget and evidence-review deadline 2026-09-15T23:20:32Z; no automatic review renewal",
-      "impact": "Public/cloud deployment needs durable authentication, usage controls, portable source storage and source-rights clearance"
+      "detail": "Loopback website uses an ordinary private reader and encrypted session persistence. Evaluation reservations 242 retained; private preview 40-stage allowance includes 16 carried + 24 added, 282 combined ceiling. Eight preview stages used at demo, 32 remaining. Review expires 2026-09-15T23:20:32Z without automatic renewal.",
+      "impact": "Public/customer deployment still requires authentication, production usage controls, lifecycle and source-rights clearance."
     },
     {
       "id": "R7",
-      "detail": "Credentials, direct TLS, isolated migration, two test identities, private Storage, Pinecone publication, API adoption and synthetic access/retrieval all verified. Research application still uses its local evidence path; no real source corpus uploaded. Pending GitHub-email OAuth was not granted or needed for these successful operations.",
-      "impact": "Blocks claiming a connected released GHG application until real-source processing, corpus integration and independent answer-quality gates pass."
+      "detail": "Actual website5174→research 3012→privateSupabase/Pinecone and live models independently demonstrated. Board feedback pending.",
+      "impact": "Complete board review before a dependent milestone; local services are not an always-on production deployment."
     },
     {
       "id": "R8",

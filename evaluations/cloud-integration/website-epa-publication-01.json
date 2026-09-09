@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "artifact_id": "website-epa-publication-01",
+  "status": "private_cloud_publication_and_activation_completed",
+  "recorded_at": "2026-09-09T07:07:34.451770+00:00",
+  "execution_attribution": "Coordinator performed the authorized live operations. Source/publication author compared saved receipts with frozen artifacts without cloud calls or credential reads.",
+  "project_ref": "icockcoguyadhryzydvl",
+  "scope_id": "90000000-0000-4000-8000-00000000000c",
+  "scope_label": "reviewed-epa-private",
+  "is_synthetic": false,
+  "build_id": "63f0190c-9694-46db-9ea8-85445a80f6be",
+  "namespace": "nv-63f0190c969446db9ea885445a80f6be",
+  "source_release": {
+    "path": "data/research/releases/scope2-website.v1.json",
+    "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "status": "approved_private_internal_research",
+    "approved_source_ids": [
+      "epa-electricity-2023"
+    ],
+    "approved_extraction_ids": [
+      "epa-electricity-2023-pages-v1"
+    ],
+    "approved_passage_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18"
+    ],
+    "source_reviewed_at": "2026-09-09T06:35:47Z",
+    "review_expires_at": "2026-09-15T23:20:32Z"
+  },
+  "execution_target": {
+    "path": "infra/cloud/website-epa-target.approved-01.json",
+    "sha256": "bcf2631c75aae3ea494cec99450d7ff63ef8020a85e75a250b728e3b48b05f1f",
+    "status": "approved_private_research",
+    "approved_at": "2026-09-09T06:59:47.918196+00:00",
+    "review_expires_at": "2026-09-15T23:20:32Z",
+    "pending_template_path": "infra/cloud/website-epa-target.v1.json"
+  },
+  "artifact_bindings": {
+    "plan_path": "infra/cloud/website-epa-plan.v1.json",
+    "plan_file_sha256": "ac8c67759e9487a9f3e24c0f4d0d1615ebe4e9f3b72de4f1215cb5cefd217b25",
+    "canonical_plan_sha256": "47b77e74fb67166b047bcab1d2d4d5b1b28ed3e3d73604e4e3395cf0c1ab4a34",
+    "ingestion_manifest_sha256": "6843c6b9c5ec5849eed2ec26d1c96d24e0483cb9952cf4cb6e7e24bfeb13519e",
+    "stage_path": "infra/cloud/website-epa-stage.v1.json",
+    "stage_file_sha256": "72ec41f086d9eed862eb91011fee9cc6c6061a4b5d4614ba627a40822f7bce16",
+    "migration_path": "infra/cloud/003-reviewed-epa-scope.sql",
+    "migration_sha256": "f2002b8c10cc913180fde2bcb14398ebf504b13eea409a93ee46333328ae35a9",
+    "helper_path": "tools/cloud/website-publication.ts",
+    "helper_sha256": "26711584a1c69c23aa096fd70355d5cc0ea40731687c74768e939f5ff7eb62b4",
+    "profile_sha256": "756dd7589f918a257dad2fad38e3d8839c7d9c55a007885f0e1505f5528871f5"
+  },
+  "counts": {
+    "staged_database_rows": 25,
+    "private_objects_verified": 3,
+    "selected_passages_embedded": 18,
+    "vectors_verified": 18,
+    "private_reader_memberships_inserted": 1,
+    "passages_approved_in_database": 18,
+    "builds_activated": 1
+  },
+  "storage": {
+    "bucket": {
+      "id": "neuvetra-research-dev",
+      "public": false,
+      "file_size_limit": 1000000,
+      "allowed_mime_types": [
+        "application/octet-stream"
+      ]
+    },
+    "objects": [
+      {
+        "scope_id": "90000000-0000-4000-8000-00000000000c",
+        "object_sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+        "kind": "source",
+        "byte_size": 396931,
+        "bucket": "neuvetra-research-dev",
+        "object_key": "90000000-0000-4000-8000-00000000000c/sha256/14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3/source.pdf"
+      },
+      {
+        "scope_id": "90000000-0000-4000-8000-00000000000c",
+        "object_sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4",
+        "kind": "extraction",
+        "byte_size": 31214,
+        "bucket": "neuvetra-research-dev",
+        "object_key": "90000000-0000-4000-8000-00000000000c/sha256/6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4/extraction.json"
+      },
+      {
+        "scope_id": "90000000-0000-4000-8000-00000000000c",
+        "object_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+        "kind": "release",
+        "byte_size": 53375,
+        "bucket": "neuvetra-research-dev",
+        "object_key": "90000000-0000-4000-8000-00000000000c/sha256/38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f/release.json"
+      }
+    ],
+    "full_pdf_use": "Private reference preservation only; no full-PDF AI input or public redistribution."
+  },
+  "vector_profile": {
+    "api_version": "2026-04",
+    "model": "llama-text-embed-v2",
+    "dimension": 1024,
+    "metric": "cosine",
+    "input_types": [
+      "passage",
+      "query"
+    ],
+    "truncate": "NONE",
+    "text_scope": "Approved S01-S18 paragraphs only; full PDF and unselected extraction text excluded from embedding."
+  },
+  "publication": {
+    "upload_finished_at": "2026-09-09T07:03:40.315Z",
+    "upload_result": "uploaded_readiness_pending",
+    "verification_finished_at": "2026-09-09T07:03:54.676Z",
+    "verification_result": "verified",
+    "verification_read_only": true,
+    "database_approval_before_verification": false,
+    "publication_operation_requests": 12,
+    "verification_operation_requests": 6
+  },
+  "activation": {
+    "committed": true,
+    "dedicated_reader_auth_id_included": false,
+    "commercial_runtime_approval": false
+  },
+  "preservation_audit": {
+    "status": "passed",
+    "baseline_sha256": "98362a815578b18fd261c13dae72130eda47d5c22a0d44e5189fb7f4c8e08fe1",
+    "after_sha256": "98362a815578b18fd261c13dae72130eda47d5c22a0d44e5189fb7f4c8e08fe1",
+    "coverage": "A/B rows, table RLS, grants and policy definitions unchanged",
+    "attribution": "Coordinator live audit; saved hashes compared by this report author. This is not an audit of every legacy customer-data permission."
+  },
+  "receipts": [
+    {
+      "phase": "migrate",
+      "private_receipt_path": ".superpowers/website-cloud-migrate-01.json",
+      "sha256": "ecbd219511a56b111150ffcc0765d4899b87950fb91e35d528fb041866ec5258",
+      "bytes": 473,
+      "recorded_status": "completed",
+      "finished_at": null
+    },
+    {
+      "phase": "stage",
+      "private_receipt_path": ".superpowers/website-cloud-stage-01.json",
+      "sha256": "dbbd60bf7d5e2f8a987f4b9761222a95da6dfc68aaf6451a47391c96fdfc3658",
+      "bytes": 595,
+      "recorded_status": "completed",
+      "finished_at": null
+    },
+    {
+      "phase": "publish",
+      "private_receipt_path": ".superpowers/website-cloud-publish-01.json",
+      "sha256": "1f2b703a3718a7ff1b8765f65bafdae8615721f022cc76e55005a143f0448707",
+      "bytes": 2194,
+      "recorded_status": "uploaded_readiness_pending",
+      "finished_at": "2026-09-09T07:03:40.315Z"
+    },
+    {
+      "phase": "verify",
+      "private_receipt_path": ".superpowers/website-cloud-verify-01.json",
+      "sha256": "ea13cf4daee31357eed998a2883e18f4796119c9d45b346e010382f4d8ac56c2",
+      "bytes": 2348,
+      "recorded_status": "verified",
+      "finished_at": "2026-09-09T07:03:54.676Z"
+    },
+    {
+      "phase": "activate",
+      "private_receipt_path": ".superpowers/website-cloud-activate-01.json",
+      "sha256": "3589274933c47bf8046efe6d8655ecdb80408c5ea5c9fe91949e1f3efb41b7fb",
+      "bytes": 577,
+      "recorded_status": "completed",
+      "finished_at": null
+    },
+    {
+      "phase": "audit",
+      "private_receipt_path": ".superpowers/website-cloud-audit-01.json",
+      "sha256": "e10c08bcde6b3ebae07839c7cf63613831b280dbc7f9043c120e38501550d39b",
+      "bytes": 204,
+      "recorded_status": "passed",
+      "finished_at": null
+    }
+  ],
+  "limits": {
+    "answer_quality": "pending_separate_live_evaluation",
+    "website_acceptance": "not_established_by_publication_receipts",
+    "production_deployment": false,
+    "public_or_commercial_source_release": false,
+    "numerical_accounting": false,
+    "automatic_cleanup_or_renewal": false,
+    "customer_data_uploaded": false,
+    "credentials_or_tokens_included": false,
+    "synthetic_ab_review_deadline_changed": false
+  },
+  "interpretation": "The original/extraction/release, selected vectors and dedicated private build are connected. Successful publication is not proof of source applicability for arbitrary questions, model accuracy, customer-ready authorization, or production readiness."
+}

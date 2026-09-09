@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "observed_date": "2026-09-09",
+  "observer": "Root coordinator through CUA; independent QA review is separate",
+  "url": "http://localhost:5174/",
+  "browser": "Chrome, existing website tab",
+  "answer_server": "Loopback3012, explicit private preview launcher",
+  "freeze_sha256": "9ca6ff47270c57e71269da5f0c4c1eed3accc51f46ecbc3a0a5cfe1e0ff56bd1",
+  "provider_profile_sha256": "ecd63437fcf498cc02f76ecd3c401fb6411ad7cbc6b3057b9b2f53dcfbaa4f4e",
+  "observations": [
+    {"check":"disconnected_form","outcome":"pass","evidence":"Original W01 question remains in textarea while Ask is disabled; adjacent offline message and Check connection again are visible."},
+    {"check":"reconnection","outcome":"pass","evidence":"After accepted service starts on3012, Check connection again changes to Research service ready without losing W01."},
+    {"check":"original_methods_question","outcome":"pass","evidence":"Keyboard Enter submits W01. Actual qualified answer displays U01/U02 source summaries, U03 reviewed interpretation, source references and a qualified reporting recommendation."},
+    {"check":"citation_disclosure","outcome":"pass","evidence":"Clicking reporting citation opens evidence-S02 with the exact reporting passage and December2023 version.","original_source_url":"https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf#page=9"},
+    {"check":"original_factor_sources_question","outcome":"pass","evidence":"Fresh W02 submission clears prior answer while pending, then displays eight reviewed units covering regional/eGRID sourcing and supplier-delivered product boundaries with references."},
+    {"check":"narrow_viewport","outcome":"pass","viewport_width":375,"viewport_height":812,"document_scroll_width":360,"evidence":"Screenshot shows readable wrapping and source-summary labels without horizontal overflow; temporary viewport reset after inspection."},
+    {"check":"cancellation","outcome":"pass","evidence":"Cancel immediately after a new methods request clears prior result, preserves typed question and displays stopped-request notice. No model stage was reserved for this canceled request."},
+    {"check":"excluded_request_after_cancellation","outcome":"pass","question":"Calculate our Scope 2 emissions and file our California report.","evidence":"Actual response identifies calculation/filing coverage limits, has no claims or residual prior answer, and leaves Research service ready."}
+  ],
+  "completed_model_stages": 6,
+  "stage_scope": "Two originals and one boundary request, two stages each; traces001–006 in ignored private preview storage",
+  "preview_remaining_after_root_checks": 34,
+  "browser_screenshot_review": "Root visually inspected desktop methods answer and narrow supplier-source answer in CUA",
+  "limitations": "Local private conceptual preview. No production deployment, legal filing determination, factor selection or emissions calculation. This root-authored observation record is not independent QA approval."
+}

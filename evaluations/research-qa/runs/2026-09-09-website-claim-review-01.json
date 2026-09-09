@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "2026-09-09-website-claim-review-01",
+  "status": "pass_for_frozen_claim_benchmark_only",
+  "reviewed_at": "2026-09-09T07:14:20.458629+00:00",
+  "reviewer": "independent QA AI agent /root/site_review",
+  "qualified_human_review_performed": false,
+  "execution_attribution": "Coordinator executed the twelve verifier calls; QA read retained outputs and reran only deterministic local binding/parser checks.",
+  "benchmark_scope": "Twelve fixed source/citation challenge packets, one claim each, unchanged provider verifier profile; not end-to-end website questions or a general accuracy estimate.",
+  "fixture": {
+    "path": "evaluations/research-qa/website-cloud-acceptance.v1.json",
+    "sha256": "9a97060e47b46dd6d6729967b51692ab38f89b91e5c0be74ad46bf3f037625cc"
+  },
+  "source_release": {
+    "path": "data/research/releases/scope2-website.v1.json",
+    "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+  },
+  "private_packet": {
+    "path": ".superpowers/website-claim-packets.json",
+    "sha256": "ba78f6bad65558823205f1a32837aa10978356fc7889694a75f40bc46626c344",
+    "source_packet_review": "Independently checked by /root/terrascope_review before execution; expected labels and rationale excluded from provider_input."
+  },
+  "raw_result": {
+    "path": ".superpowers/website-claim-results-01.jsonl",
+    "sha256": "50227710e8189bba71b1faf69e2c94e7209afb56c65c1a721cc7fa139c717ad1",
+    "bytes": 30366
+  },
+  "runner": {
+    "path": ".superpowers/website-claim-run.ts",
+    "sha256": "e0e2a6f3b44d01965680da89dc60a878af211013701989ee40ba10de75a26b3d"
+  },
+  "profile_sha256": "6b4489d069c28dcc6464f6633ab09ccca838a2eb60ab0d4fc44f9c5750daaaed",
+  "code_pins": {
+    "apps/site-api/src/research-cloud/provider.ts": "1ad4a1864421f43a7c2bc11118b90d73241090c3d12017a2f930bcd9298b661a",
+    "apps/site-api/src/research-cloud/answer-contract.ts": "7cb5f1a0793f8bb3a1e59bc8f8c544f25eefbcce86a52e01ad3b84c16c6f3701",
+    "apps/site-api/src/research-cloud/budget.ts": "92d78f9da4c472cb18ec4292b32ff9c36610fae835c4bf8d753ce0393b5555b6",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/provider.ts": "958e512ffb04ff7af4bf622f17755a27a3d9cca80e3e184162f1ff4e81005b5b",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "ab8912100441eae36b7efdb345dc3d0ae2d0610a16bfc3b680b19c780fb0f5b5"
+  },
+  "bindings": {
+    "request_bodies": "all twelve reproduced with cloudRequestBody",
+    "stage_inputs_outputs": "all twenty-four trace events match packet inputs and retained parsed outputs",
+    "review_parser": "all twelve independently reparsed and equal recorded reviews",
+    "attempt_reservations": "attempts001-012 input hashes and verify stages match",
+    "files_unchanged": "all six recorded imported code pins match at final review"
+  },
+  "counts": {
+    "packets": 12,
+    "valid_reviews": 12,
+    "supported_controls_accepted": 6,
+    "unsupported_or_wrong_citation_claims_detected": 6,
+    "false_approvals_observed": 0,
+    "false_rejections_observed": 0,
+    "provider_failures": 0,
+    "automatic_retries": 0
+  },
+  "budget": {
+    "run_id": "website-evaluation-01",
+    "remaining_before": 150,
+    "remaining_after": 138,
+    "attempts_reserved": 12,
+    "reservation_usd_per_attempt": 1,
+    "reservation_ceiling_for_these_attempts_usd": 12,
+    "measured_billing_usd": null,
+    "continuing_batch_not_closed": true
+  },
+  "provider_reported_usage": {
+    "input_tokens": 107627,
+    "output_tokens": 12069
+  },
+  "started_at": "2026-09-09T07:08:39.223Z",
+  "finished_at": "2026-09-09T07:11:25.285Z",
+  "cases": [
+    {
+      "id": "C01",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Reporting recommendation and labels accepted without a universal legal-duty claim.",
+      "input_sha256": "427ac7071ba18d66b07896a7cd4c28af0a1d1f1d410e4e2c770639c2d1d15a62",
+      "request_sha256": "2ce1c67f1a4393a56a88043b3719934c3fca4b89a6e68525bfb396dd510fdab7",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/001-started.json",
+          "sha256": "45ee40eafe8e725baaeb4c38528a0db15d854689abbfb71f703ba45c40ad80ac"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/001-completed.json",
+          "sha256": "82445939edfac739e1f55c0b196e15c60ff6ea05b49261435a9b90cc89d5c354"
+        }
+      ],
+      "reserved_attempt": 1,
+      "remaining_after": 149
+    },
+    {
+      "id": "C02",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "modality"
+      ],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "The claim-specific support and modality issues detect the conversion of a recommendation into a worldwide legal obligation.",
+      "input_sha256": "77b5cba0174ddba9f4685eb334555a13676b4f411c2eeee6ccd2e7234c9bec29",
+      "request_sha256": "9a13ac6fee54b746de530311a22be37a7b04ee31f717dbe063284a780cdbba88",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/002-started.json",
+          "sha256": "e300a60d8e77aca42f30bc08df6a3cc1d52201f5445d1ecb0dc4088f167a57fc"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/002-completed.json",
+          "sha256": "af9e204f6036c43239fd7f27f5d314b6a7bd2db2add04973aff409acda25d410"
+        }
+      ],
+      "reserved_attempt": 2,
+      "remaining_after": 148
+    },
+    {
+      "id": "C03",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Supplier delivered-product boundary including own generation and purchased power accepted.",
+      "input_sha256": "8f960399f302d6b275a9222e974f26f4e3516e10d48c73b2c9512b937bcc0580",
+      "request_sha256": "5347e3995db7bb878d8089b6220df425f190cb41f97d8b845851e0752da5fdf7",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/003-started.json",
+          "sha256": "3b3b7130cf5a6a88db290b23d469967e26baf1c4d505210869cb8936f25c507c"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/003-completed.json",
+          "sha256": "81e888a32fa5de798fee4a851e5d49fe83bda2ce6e3633236c8728f2a75ff337"
+        }
+      ],
+      "reserved_attempt": 3,
+      "remaining_after": 147
+    },
+    {
+      "id": "C04",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support"
+      ],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Claim-specific support issue identifies the contradiction of the full delivered-product boundary.",
+      "input_sha256": "4276f99e683f4e7f9923a7df87784309ec3bc9c525d2e3db9c45bf6fa4ffe960",
+      "request_sha256": "9aaf4220c50202738fca8963ecfe3afb16c729808d0126bcca8bafcc123eb2ab",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/004-started.json",
+          "sha256": "9988bcb5f1a58830bb63c77e78b6f010a569aa33c68937d27bc6d2afed15b7d7"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/004-completed.json",
+          "sha256": "22b9841f7fe82c955c58dbc2ede76faba77f8ec46862f68a932000b84e01e563"
+        }
+      ],
+      "reserved_attempt": 4,
+      "remaining_after": 146
+    },
+    {
+      "id": "C05",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Partial-period agreement coverage accepted without whole-period invalidation.",
+      "input_sha256": "715e0ed13d2dbf83f582a7a0b756bf528cfbc4b22271bba736330fdbb5dd8a81",
+      "request_sha256": "2cabce60c1132c918276b907e9d2ba6c2f45c1ccac2fa0fea4e602618a4f6c22",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/005-started.json",
+          "sha256": "e0d2d3e2c1d38046ccc2c4dc9bb491cd75c06029ccf597ace9419fb48ce05b46"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/005-completed.json",
+          "sha256": "6f75e228dbc2b38e71e3e40af14db524aeaa20daebb219d75ff5657ad9fdbb83"
+        }
+      ],
+      "reserved_attempt": 5,
+      "remaining_after": 145
+    },
+    {
+      "id": "C06",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support"
+      ],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Claim-specific support issue identifies the false exact-date prerequisite and retained partial-period rule.",
+      "input_sha256": "787d4576bccf56d40eccebe3bb38af3199f4220c1c21b8e7980d94f8c5724f66",
+      "request_sha256": "c5136ffe9116ab6d0136fe006c7d6fb5eaca25d577da602f6610f381bfa91ff5",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/006-started.json",
+          "sha256": "734f7f8e6702de7c701fad13131d39c21c6ac89ca6ef7c19a68ce6ace64b76d7"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/006-completed.json",
+          "sha256": "ea1abe379ecf5a4d1a170aed4b5efbb99c3ca2993b5dfda4f833162543408043"
+        }
+      ],
+      "reserved_attempt": 6,
+      "remaining_after": 144
+    },
+    {
+      "id": "C07",
+      "expected_judgment": "supported",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Necessary quality-criteria review accepted without treating mere review as sufficient eligibility.",
+      "input_sha256": "fe0909b39c3ce4a2a02f35eb5cdcbc79c0d7a2e72b6e133bd99e5bd1e6945179",
+      "request_sha256": "3d56411cda47330a2f63bfb5b5d792e4672613ab290e50cfa3684ca1c2f921d5",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/007-started.json",
+          "sha256": "0c8ba5251b796f71d2ef8429a5a5f10d0ab002d93db18a4f930c6af4ad758953"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/007-completed.json",
+          "sha256": "096a7380b6248734f07d2a44b3f27c1f4fc2c992eab84c56411be8da67603f37"
+        }
+      ],
+      "reserved_attempt": 7,
+      "remaining_after": 143
+    },
+    {
+      "id": "C08",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": false,
+        "modality_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "condition",
+        "modality"
+      ],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Claim-specific condition/support/modality issues identify omitted quality prerequisites and the false bundling guarantee.",
+      "input_sha256": "8811022c0985c9f600c390dc2d2b0b94707a38f19598a8b1448e79f4616740d3",
+      "request_sha256": "d497de430ae66fd168a8e75dd58c7db390a1cb5328d5e6c8c114ed4c698b3caa",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/008-started.json",
+          "sha256": "f6ca485503c0264a5e3a132930d698afcafe352ed9a17daf3206158c5778118f"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/008-completed.json",
+          "sha256": "2375a10bdde493a2dd3e5a59a5b3caf50ac236c24a4f14c419631a4223fbc4db"
+        }
+      ],
+      "reserved_attempt": 8,
+      "remaining_after": 142
+    },
+    {
+      "id": "C09",
+      "expected_judgment": "unsupported_citation",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": false
+      },
+      "claim_issue_codes": [
+        "support",
+        "citation"
+      ],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Claim-specific citations_sufficient=false and aligned citation issue reject borrowing certificate support from uncited S13/S14.",
+      "input_sha256": "4774bb160555fbc2543686c87e598e7bfb73ec119e1c085afebbe3f9a8a3387b",
+      "request_sha256": "edd3c2aa56df79582994d010b08a181d32b6809d97f5a6f1b37cffc031737973",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/009-started.json",
+          "sha256": "f402d123c99512bef2c1a4caceca02c7ff46a58eca3f6cf63a2490801051358e"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/009-completed.json",
+          "sha256": "74b0f5fc3e4456a291dcacb0fcc15ac1c476824937098d2cd236e4f6706cd026"
+        }
+      ],
+      "reserved_attempt": 9,
+      "remaining_after": 141
+    },
+    {
+      "id": "C10",
+      "expected_judgment": "supported_synthesis",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Qualified label/claimability synthesis accepted with S13 in its own citation closure.",
+      "input_sha256": "44260b001b33f7d5939ff25373a3991f89fac7007e36dd2007661221aa3f2096",
+      "request_sha256": "0dbeb91b38dab39d64b4aba671ba00046f820f67237fb050c27971ee60673a6f",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/010-started.json",
+          "sha256": "ae9eea15253ad0af64c54ece52edcd2f8e520a3ca4d3a037c167be9e55123658"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/010-completed.json",
+          "sha256": "147fb1ed24d1dd07c4c2cffadcd6f76394ac606a04efda25aa40e388764482d5"
+        }
+      ],
+      "reserved_attempt": 10,
+      "remaining_after": 140
+    },
+    {
+      "id": "C11",
+      "expected_judgment": "unsupported",
+      "observed_decision": "fail",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": false,
+        "conditions_complete": false,
+        "modality_preserved": false,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [
+        "support",
+        "condition",
+        "modality"
+      ],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Claim-specific support/condition/modality issues distinguish ordinary factor updates from methodology/base-year adjustments.",
+      "input_sha256": "b8566795493d02983d57f9c99fd4b32175cb772164a2243c6f148e1a609540eb",
+      "request_sha256": "e432a7d411714eb41b48bd5935d5ad6f2dad291eb70a898922be99e0f5793637",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/011-started.json",
+          "sha256": "b09fc54dc4a0b2d4b3561a12338e7b072fa510a5733d1659661850dd83c63397"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/011-completed.json",
+          "sha256": "1cb7df31b35ef552a857426d73d9f87c28fe115fe7965465161d5d35a62cbc46"
+        }
+      ],
+      "reserved_attempt": 11,
+      "remaining_after": 139
+    },
+    {
+      "id": "C12",
+      "expected_judgment": "supported_synthesis",
+      "observed_decision": "pass",
+      "review_shape": "valid",
+      "claim_flags": {
+        "supported": true,
+        "conditions_complete": true,
+        "modality_preserved": true,
+        "citations_sufficient": true
+      },
+      "claim_issue_codes": [],
+      "targeted_semantic_review": "pass",
+      "independent_assessment": "Modest two-perspective synthesis accepted without inventing the source author’s policy motive.",
+      "input_sha256": "eddade297d96b8a34f4e91718e348ab48224722f034ad1a4cde796b2698d46ba",
+      "request_sha256": "dbda9e2779306f9f4e37c56e241543f6ed03c1d4097f848730842ed5c2906189",
+      "trace_pins": [
+        {
+          "phase": "started",
+          "path": ".superpowers/website-evaluation-01/traces/012-started.json",
+          "sha256": "de877c7a8881ff9fa6c7c7e463daf1539281f7013ee38d3c19a1e12fafa7e7d9"
+        },
+        {
+          "phase": "completed",
+          "path": ".superpowers/website-evaluation-01/traces/012-completed.json",
+          "sha256": "74588e85d9d687436f4b732c04bc5c935f7aed1e34835f1fe1a17d305d6f2354"
+        }
+      ],
+      "reserved_attempt": 12,
+      "remaining_after": 138
+    }
+  ],
+  "limits": [
+    "Six negative claims and six positive controls are a small constructed set. Zero observed errors here does not establish a zero-error rate or reliable performance on arbitrary answers.",
+    "Exact quotes and structural checks alone still accept a deliberately lying semantic reviewer in controlled offline tests.",
+    "This benchmark does not test retrieval, original-question planning, drafting, whole-answer correction or browser behavior.",
+    "Actual end-to-end website quality remains a separate gate. No numerical, legal, production or commercial approval follows."
+  ]
+}

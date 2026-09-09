@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "website-answer-units-05-final-metadata-binding",
+  "reviewed_at": "2026-09-09T13:58:22.909Z",
+  "reviewer": "Independent AI QA agent /root/website_qa",
+  "disposition": "PASS",
+  "approved_candidate_sha256": "c4972ad035fc331660eb2e37d12f5779a02d2942b093f2c35b65fee41cbf0803",
+  "final_catalog": {
+    "path": "data/research/answer-units/scope2-website.v1.json",
+    "sha256": "c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f",
+    "bytes": 58867
+  },
+  "evidence": "Restoring only review metadata to the exact original candidate object reproduces the approved candidate SHA-256. Every other byte-defined content field, source anchor and unit dependency is unchanged.",
+  "review_metadata": {
+    "status": "approved_private",
+    "expires_at": "2026-09-15T23:20:32Z",
+    "source_review": {
+      "reviewer": "Independent AI regulatory reviewer /root/source_review",
+      "reviewed_at": "2026-09-09T13:56:25.362969+00:00",
+      "disposition": "approved_private"
+    },
+    "qa_review": {
+      "reviewer": "Independent AI QA /root/website_qa",
+      "reviewed_at": "2026-09-09T13:54:02.007Z",
+      "disposition": "approved_private"
+    }
+  },
+  "content_report": {
+    "path": "evaluations/research-qa/runs/2026-09-09-website-answer-units-review-05.json",
+    "sha256": "04959d4a59a3fae1177d9152628d716337421afd5f43d77ce301c1d74ec617ed"
+  },
+  "scope": "Final private content approval binding only. Runtime, live selection, completeness and browser gates remain outstanding.",
+  "network_calls_by_qa": 0
+}

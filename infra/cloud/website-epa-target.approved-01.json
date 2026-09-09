@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "approved_private_research",
+  "approved_by": "Root coordinator; explicit board approval of private website integration; independent source and publication reviews",
+  "approved_at": "2026-09-09T06:59:47.918196+00:00",
+  "review_expires_at": "2026-09-15T23:20:32Z",
+  "project_ref": "icockcoguyadhryzydvl",
+  "scope_id": "90000000-0000-4000-8000-00000000000c",
+  "build_id": "63f0190c-9694-46db-9ea8-85445a80f6be",
+  "namespace": "nv-63f0190c969446db9ea885445a80f6be",
+  "release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "profile_sha256": "756dd7589f918a257dad2fad38e3d8839c7d9c55a007885f0e1505f5528871f5",
+  "plan_sha256": "47b77e74fb67166b047bcab1d2d4d5b1b28ed3e3d73604e4e3395cf0c1ab4a34",
+  "bucket": "neuvetra-research-dev",
+  "supabase_host": "icockcoguyadhryzydvl.supabase.co",
+  "pinecone_host": "neuvetra-ghg-dev-0msj1fa.svc.aped-4627-b74a.pinecone.io",
+  "pinecone_index": "neuvetra-ghg-dev"
+}

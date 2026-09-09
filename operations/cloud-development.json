@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "observed_at": "2026-09-09",
-  "state": "synthetic_cloud_storage_retrieval_and_access_gate_passed_answer_application_not_connected",
+  "observed_at": "2026-09-09T14:53:21.988663+00:00",
+  "state": "private_epa_website_demonstrated_awaiting_board_feedback",
   "pinecone": {
     "organization_name": "Neuvetra Inc.",
     "organization_id": "-OafbCdZXBb8VKX5Tu9W",
@@ -37,17 +37,18 @@
     "api_configuration_verified": true,
     "api_describe_observation": "evaluations/cloud-integration/observations/2026-09-09-pinecone-describe.json",
     "api_describe_observed_at": "2026-09-09T04:42:32.720813Z",
-    "required_before_ingestion": "Fictional fixture upload/readback completed. Real source/provider-processing review and a separate approved corpus build are required next.",
+    "required_before_ingestion": "Reviewed EPA source uploaded to separate C namespace; all18 owned manifest records verified. No broader corpus ingestion.",
     "credential_state": "created_after_explicit_authorization_private_export_saved_live_read_verified",
     "credential_detail": "User specifically authorized the All-permission server key after the earlier automatic rejection. NeuvetraDevelopment was created successfully. Browser clipboard transfer was unavailable; the user then saved PINECONE_API_KEY in the private export. A narrow private read authenticated the exact index describe request successfully (HTTP 200). No key value was exposed in chat or committed.",
     "data_uploaded": true,
     "verified_fixture_records": 6,
-    "record_count_observation_note": "Earlier zero-count console observation retained; later exact six manifest-owned vectors fetched and verified, not an unrestricted whole-index count."
+    "record_count_observation_note": "Earlier zero-count console observation retained; later exact six manifest-owned vectors fetched and verified, not an unrestricted whole-index count.",
+    "verified_epa_records": 18
   },
   "supabase": {
     "project_host": "icockcoguyadhryzydvl.supabase.co",
     "dashboard_signed_in": false,
-    "dashboard_access": "Supabase GitHub OAuth requests read-only email addresses. Automatic approval review rejected Authorize supabase; a specific approval question is pending. The earlier Pinecone key authorization remains valid and resolved.",
+    "dashboard_access": "Separate GitHub-email OAuth was not granted or needed; approved operations used the existing private project credentials.",
     "project_role": "existing_shared_site_and_frontdesk_database_confirmed_by_catalog",
     "rest_schema_http_status": 200,
     "rest_resource_paths": [
@@ -58,7 +59,7 @@
     "storage_buckets_observed": [],
     "unexposed_schemas_inspected": true,
     "customer_rows_requested": 0,
-    "writes": "Research migration; anon-only legacy containment; synthetic stage20; two test Auth users; private bucket and six objects; API schema addition; two memberships and two synthetic build activations. No customer records requested or modified.",
+    "writes": "Research migration; anon-only legacy containment; synthetic stage20; two test Auth users; private bucket and six objects; API schema addition; two memberships and two synthetic build activations. No customer records requested or modified. Separate approved C reader, EPA scope and25 staged rows, three EPA objects,18 Pinecone passages and C activation; A/B rows and grants/RLS unchanged by C publication.",
     "rls_verified": false,
     "database_inventory": {
       "target_routing_check": "passed_without_connecting",
@@ -83,7 +84,7 @@
     "research_tables_rls_enabled": 8,
     "legacy_anon_containment": "verified_all_8_privileges_and_column_access_denied_on_7_tables",
     "legacy_anon_containment_observation": "evaluations/cloud-integration/observations/2026-09-09-legacy-anon-containment.json",
-    "test_auth_users_created": 2,
+    "test_auth_users_created": 3,
     "research_bucket_created": true,
     "research_data_api_exposure_configured": true,
     "research_private_bucket": {
@@ -93,7 +94,7 @@
       "allowed_mime_types": [
         "application/octet-stream"
       ],
-      "verified_objects": 6
+      "verified_objects": 9
     },
     "data_api": {
       "before": [
@@ -121,11 +122,11 @@
   "application_integration": {
     "pinecone": "live_synthetic_embed_upsert_fetch_and_three_searches_verified",
     "supabase": "live_synthetic_private_sources_catalog_auth_membership_rls_storage_verified",
-    "current_answer_service_wiring": "unchanged_local_evidence_and_Anthropic_answer_process_stopped",
+    "current_answer_service_wiring": "Local website 5174 proxies research 3012, which uses approved ordinary reader C, private Supabase objects/catalog and Pinecone. Evaluation 3016 stopped.",
     "migration_applied": true,
     "synthetic_roundtrip": "passed_three_frozen_questions_exact_source_resolution",
-    "approved_source_upload": "owned_fictional_fixture_only_no_regulatory_source_corpus",
-    "answer_quality_gate": "fail",
+    "approved_source_upload": "Reviewed EPA December2023 purchased-electricity guide, extraction and18 passage release; private internal scope only.",
+    "answer_quality_gate": "18 baselinepassed; original punctuation failure preserved; narrow 06b delta replayed 18 decisions unchanged;2 explicit follow-ups and root/independent browser gate passed.",
     "production_deployment": "not_performed",
     "fixture": "evaluations/cloud-integration/synthetic-fixture.v1.json",
     "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
@@ -139,7 +140,7 @@
       "strict_typescript": "passed",
       "remote_ci": "pending_publication_of_current_changes"
     },
-    "next_cloud_changes": "Synthetic setup approval resolved and completed. Next milestone: reviewed real-source provider/storage scope, portable corpus ingestion and application integration, with independent source and answer-quality gates.",
+    "next_cloud_changes": "No further cloud writes needed for this milestone. Wider corpus/lifecycle/customer authorization remain future gated work.",
     "synthetic_access_checks": "passed_22_live_checks",
     "demo": "evaluations/cloud-integration/demo.html",
     "demo_url": "http://127.0.0.1:5186/demo.html",
@@ -180,5 +181,20 @@
     "automatic_renewal": false,
     "automatic_cleanup": false,
     "cleanup_scope": "Only the two recorded test Auth users, fixture-owned objects/vector namespaces and research rows; deactivate first. A cleanup runner/lifecycle test has not been implemented."
+  },
+  "private_epa_website": {
+    "scope_id": "90000000-0000-4000-8000-00000000000c",
+    "build_id": "63f0190c-9694-46db-9ea8-85445a80f6be",
+    "publication_receipt": "evaluations/cloud-integration/website-epa-publication-01.json",
+    "reader_access_receipt": "evaluations/cloud-integration/website-reader-access-01.json",
+    "live_access_reads_passed": 12,
+    "production_cutover": false,
+    "review_expires_at": "2026-09-15T23:20:32Z",
+    "qa": "docs/research/website-cloud-qa.md",
+    "runtime": "docs/research/website-composed-runtime.md",
+    "website_url": "http://localhost:5174/",
+    "independent_browser": "passed_one_actual_W01_submission_in_separate_QA_tab",
+    "preview_allocation": "operations/website-preview-allocation-01.json",
+    "board_feedback": "pending"
   }
 }

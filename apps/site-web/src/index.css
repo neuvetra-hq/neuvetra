@@ -73,6 +73,8 @@ h1, h2, h3, p { margin: 0; }
 .answer-result-supported .answer-status-dot, .answer-result-qualified .answer-status-dot { background: var(--research-accent); }
 .answer-result-message { margin-top: 14px; font-size: 15px; line-height: 1.8; color: #b6c1b9; }
 .answer-claim { padding-top: 24px; font-size: 17px; font-weight: 350; line-height: 1.8; }
+.answer-claim > .research-eyebrow { margin-bottom: 4px; }
+.answer-claim > h3 { margin: 0 0 10px; font-size: 18px; font-weight: 500; line-height: 1.5; }
 .answer-qualifications { margin: 15px 0 0; padding-left: 19px; color: #abb8af; font-size: 14px; }
 .answer-qualifications li + li { margin-top: 8px; }
 .answer-citation-links { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 14px; }

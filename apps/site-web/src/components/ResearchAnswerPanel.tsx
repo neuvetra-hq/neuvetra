@@ -35,45 +35,49 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
   const [pending, setPending] = useState(false)
   const [error, setError] = useState("")
   const [connection, setConnection] = useState<"checking" | "ready" | "unavailable" | "offline">("checking")
+  const [connectionAttempt, setConnectionAttempt] = useState(0)
   const requestRef = useRef<AbortController | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const resultRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     const controller = new AbortController()
-    fetch("/research-api/status", { signal: controller.signal })
+    fetch("/research-api/status", { signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25000)]) })
       .then(async (response) => {
         const body: unknown = await response.json()
         if (controller.signal.aborted) return
         setConnection(response.ok && typeof body === "object" && body !== null && "readiness" in body ? (body.readiness === "ready" ? "ready" : "unavailable") : "offline")
       })
       .catch(() => { if (!controller.signal.aborted) setConnection("offline") })
-    return () => { controller.abort(); requestRef.current?.abort(); requestRef.current = null }
-  }, [])
+    return () => { controller.abort() }
+  }, [connectionAttempt])
+  useEffect(() => () => { requestRef.current?.abort(); requestRef.current = null }, [])
 
   async function submit(event: FormEvent) {
     event.preventDefault()
     const trimmed = question.trim()
-    if (!trimmed || pending) return
+    if (!trimmed || pending || connection !== "ready") return
     const controller = new AbortController()
     requestRef.current = controller
     setPending(true)
     setError("")
     setAnswer(null)
     setSubmittedQuestion(trimmed)
-    const timeout = window.setTimeout(() => controller.abort("timeout"), 155000)
+    const timeout = window.setTimeout(() => controller.abort("timeout"), 245000)
     try {
       const result = await requestResearchAnswer(trimmed, controller.signal)
       if (requestRef.current !== controller) return
       setAnswer(result)
-      if (result.status === "unavailable") setConnection("unavailable")
+      if (result.status === "unavailable" || result.status === "stale_or_conflicting") setConnection("unavailable")
+      else setConnection("ready")
       requestAnimationFrame(() => {
         resultRef.current?.focus({ preventScroll: true })
         resultRef.current?.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" })
       })
     } catch {
       if (requestRef.current !== controller) return
-      setError(controller.signal.aborted ? "The request stopped before an answer was ready. You can try again." : "The research service could not be reached or returned an unusable response. Please try again.")
+      if (!controller.signal.aborted) setConnection("offline")
+      setError(controller.signal.aborted ? "The request stopped before an answer was ready. Your question is still in the form." : "The research service is unavailable. Your question has been kept in the form.")
     } finally {
       window.clearTimeout(timeout)
       if (requestRef.current === controller) { setPending(false); requestRef.current = null }
@@ -82,6 +86,11 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
 
   function cancel() {
     requestRef.current?.abort()
+  }
+
+  function recheckConnection() {
+    setConnection("checking")
+    setConnectionAttempt(n => n + 1)
   }
 
   return (
@@ -102,8 +111,12 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
             <textarea id="research-question" ref={textareaRef} value={question} onChange={(event) => setQuestion(event.target.value)} maxLength={2000} rows={4} placeholder="How do location-based and market-based accounting differ?" aria-describedby="answer-question-help" disabled={pending} required />
             <div className="answer-form-footer">
               <span id="answer-question-help">Use a general question. Leave out confidential company information.</span>
-              <button className="research-primary-button" type="submit" disabled={pending || !question.trim()}>{pending ? "Checking the evidence…" : "Ask Neuvetra"}<span aria-hidden="true">↗</span></button>
+              <button className="research-primary-button" type="submit" disabled={pending || connection !== "ready" || !question.trim()}>{pending ? "Checking the evidence…" : "Ask Neuvetra"}<span aria-hidden="true">↗</span></button>
             </div>
+            {connection !== "ready" && <div className={`answer-connection mt-4 text-sm leading-relaxed text-[var(--research-muted)] ${connection}`} role="status" aria-live="polite">
+              <p>{connection === "checking" ? "Checking the research connection. Your question will stay here." : connection === "offline" ? "Research is offline right now. Your question will stay here." : "Research is connected but cannot answer right now. Your question will stay here."}</p>
+              {connection !== "checking" && <button type="button" className="research-text-link" disabled={pending} onClick={recheckConnection}>Check connection again ↗</button>}
+            </div>}
           </form>
 
           <div className="answer-suggestions" aria-label="Example questions">
@@ -122,6 +135,10 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
               <p className="answer-result-message">{answer.message}</p>
               {answer.claims.map((claim) => (
                 <article className="answer-claim" key={claim.id}>
+                  {answer.composition?.units.find(unit=>unit.id===claim.id) && <>
+                    <p className="research-eyebrow">{answer.composition.units.find(unit=>unit.id===claim.id)?.type === 'reviewed_interpretation' ? 'Reviewed interpretation' : 'Reviewed source summary'}</p>
+                    <h3>{answer.composition.units.find(unit=>unit.id===claim.id)?.title}</h3>
+                  </>}
                   <p>{claim.text}</p>
                   {claim.qualifications.length > 0 && <ul className="answer-qualifications">{claim.qualifications.map((item) => <li key={item}>{item}</li>)}</ul>}
                   <div className="answer-citation-links">{claim.evidence_ids.map((id) => {
@@ -134,9 +151,9 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
               {answer.evidence.length > 0 && <div className="answer-evidence"><h3>Inspect the supporting material</h3>{answer.evidence.map((item) => {
                 const source = answer.sources.find((entry) => entry.id === item.source_id)
                 const url = source ? sourcePageUrl(source.canonical_url, item.locator) : null
-                return <details key={item.id} id={`evidence-${item.id}`}><summary><span>{source?.title ?? "Source material"}<small>{item.locator}</small></span><span aria-hidden="true">+</span></summary><div className="answer-evidence-detail"><p className="answer-source-meta">{answer.answer_mode === "passage_grounded" ? "Reviewed source passage. Open the original for its full surrounding context." : "Find this phrase in the original; read its full surrounding context."}</p><blockquote>{item.excerpt}</blockquote>{source && <p className="answer-source-meta">{source.version} · {source.status.replace(/_/g, " ")}</p>}{url && <a href={url} target="_blank" rel="noopener noreferrer">Open original source <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>}</div></details>
+                return <details key={item.id} id={`evidence-${item.id}`}><summary><span>{source?.title ?? "Source material"}<small>{item.locator}</small></span><span aria-hidden="true">+</span></summary><div className="answer-evidence-detail"><p className="answer-source-meta">{answer.answer_mode === "passage_grounded" || answer.answer_mode === "cloud_passage_grounded" || answer.answer_mode === "cloud_reviewed_composition" ? "Reviewed source passage. Open the original for its full surrounding context." : "Find this phrase in the original; read its full surrounding context."}</p><blockquote>{item.excerpt}</blockquote>{source && <p className="answer-source-meta">{source.version} · {source.status.replace(/_/g, " ")}</p>}{url && <a href={url} target="_blank" rel="noopener noreferrer">Open original source <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span></a>}</div></details>
               })}</div>}
-              <p className="answer-provenance">{answer.claims.length > 0 && answer.provider.mode === "live" ? (answer.answer_mode === "passage_grounded" ? "AI response checked against reviewed passages" : "AI-selected, reviewed source statements") : answer.provider.mode === "disabled" ? "No live model answer" : "No supported answer displayed"}{answer.release ? ` · Evidence ${answer.release.version}` : ""}</p>
+              <p className="answer-provenance">{answer.claims.length > 0 && answer.provider.mode === "live" ? (answer.answer_mode === "cloud_reviewed_composition" ? "AI-selected reviewed explanations · live cloud evidence" : answer.answer_mode === "cloud_passage_grounded" ? "Answer checked against reviewed cloud evidence" : answer.answer_mode === "passage_grounded" ? "AI response checked against reviewed passages" : "AI-selected, reviewed source statements") : answer.provider.mode === "disabled" ? "No live model answer" : "No supported answer displayed"}{answer.release ? ` · Evidence ${answer.release.version}` : ""}</p>
             </section>
           ) : !pending && !error && <div className="answer-empty"><span className="answer-empty-mark" aria-hidden="true">↗</span><h2>Start with a question.</h2><p>The answer, its qualifications, and the original source references will appear together here.</p></div>}
         </div>

@@ -1,0 +1,984 @@
+{
+  "schema_version": 2,
+  "release_id": "scope2-website",
+  "version": "1",
+  "status": "approved",
+  "created_at": "2026-09-09T06:24:59Z",
+  "scope": {
+    "jurisdictions": [
+      "US"
+    ],
+    "allowed_actions": [
+      "conceptual_research"
+    ],
+    "topics": [
+      "accounting_methods",
+      "activity_evidence",
+      "contractual_evidence",
+      "data_quality",
+      "electricity_units",
+      "factor_boundaries",
+      "factor_documentation",
+      "factor_geography",
+      "factor_time_periods",
+      "grid_factor_sources",
+      "market_factor_sources",
+      "reporting_period",
+      "scope2_reporting",
+      "source_versions",
+      "supplier_factor_sources"
+    ],
+    "exclusions": [
+      "Numerical factor selection and emissions calculations",
+      "Company legal applicability, compliance, assurance or regulatory filings",
+      "Contract/certificate eligibility decisions",
+      "On-site generation, direct-line supply, steam/heat/cooling and organizational boundary decisions",
+      "Current residual-mix availability or current numeric eGRID values",
+      "Scope 1/3, avoided emissions calculations or wider corporate inventories",
+      "Historical accounting-period applicability not independently prepared in this candidate",
+      "Treating draft/consultation text as effective accounting requirements",
+      "Detailed contractual quality criteria, procurement eligibility and certification",
+      "Complete market-factor hierarchy or fallback selection",
+      "Carbon-neutrality, zero-emissions and avoided-emissions claims",
+      "Current source-version assertions without a fresh released status source",
+      "Customer uploads, actual record interpretation and company subregion lookup"
+    ]
+  },
+  "review": {
+    "author": "regulatory-research",
+    "reviewer": "independent QA /root/site_review",
+    "reviewed_at": "2026-09-09T06:35:47Z",
+    "expires_at": "2026-09-15T23:20:32Z",
+    "approved_passage_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18"
+    ],
+    "approved_source_ids": [
+      "epa-electricity-2023"
+    ],
+    "approved_extraction_ids": [
+      "epa-electricity-2023-pages-v1"
+    ],
+    "status": "approved_internal",
+    "expires_at_meaning": "Operational source review deadline, not source expiration or regulatory effective date; any shorter cloud-resource deadline also applies",
+    "based_on_source_release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+    "intended_approval_scope": "Private internal website research/evaluation: preserve the original EPA PDF and normalized extraction in private Supabase; embed only S01-S18 in the configured Pinecone index; send selected approved paragraph text to configured Anthropic; show attributed answers and selected excerpts only to authorized private reviewers. No commercial/public release approval.",
+    "approval_scope": "Private internal website research/evaluation: preserve the original EPA PDF and normalized extraction in private Supabase; embed only S01-S18 in the configured Pinecone index; send selected approved paragraph text to configured Anthropic; show attributed answers and selected excerpts only to authorized private reviewers. No commercial/public release approval.",
+    "previous_review_is_not_hosted_processing_approval": true,
+    "reviewed_candidate_sha256": "d9608dc3ec442204894fbdf221b97131cec14022035da60e71767f4525abe94b"
+  },
+  "intended_use": "Private internal conceptual research/evaluation, including selected approved paragraphs sent to configured Anthropic and private attributed display only",
+  "commercial_runtime_approval": false,
+  "sources": [
+    {
+      "id": "epa-electricity-2023",
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+      "version": "December 2023",
+      "source_type": "pdf",
+      "status": "published_guidance",
+      "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-electricity-emissions-2023.pdf",
+      "sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+      "bytes": 396931,
+      "document_date": "2023-12",
+      "retrieved_at": "2026-09-08T21:07:20.661717+00:00",
+      "checked_on": "2026-09-09",
+      "integrity_checked_at": "2026-09-09T06:24:59Z",
+      "rights_review": "approved",
+      "review_status": "approved",
+      "intended_use": "Private internal website research/evaluation: preserve the original EPA PDF and normalized extraction in private Supabase; embed only S01-S18 in the configured Pinecone index; send selected approved paragraph text to configured Anthropic; show attributed answers and selected excerpts only to authorized private reviewers. No commercial/public release approval.",
+      "commercial_runtime_approval": false,
+      "role": "Candidate EPA source for the selected private website paragraph corpus",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "rights_basis": "EPA Copyright Status permits noncommercial scientific/educational document use, with individual-document and commercial-use caveats. The recommended private research disposition preserves the official PDF as a restricted reference and sends only the previously reviewed EPA explanatory paragraphs to embedding/answer providers. Section 4 attributed GHG Protocol criteria, unselected text, graphics and branding are not released AI evidence. This is not blanket commercial or public permission.",
+      "rights_url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+      "rights_scope": "approved_internal_research_evaluation_only",
+      "version_note": "Cover identifies December 2023 despite 2020-12 URL directory. Current publisher page still links this nineteen-page PDF. Retained local bytes and spans reverified; browser original inspected. Direct fresh byte-download check was blocked by local socket policy, so current origin-byte identity is not asserted.",
+      "pages": 19,
+      "rights_decision": "Independent QA approved the exact candidate for private Supabase original/extraction reference, selected S01-S18 Pinecone embedding, selected paragraphs plus required context in configured Anthropic, and private attributed display. No public/commercial/full-PDF AI or unselected-catalog approval."
+    }
+  ],
+  "extractions": [
+    {
+      "id": "epa-electricity-2023-pages-v1",
+      "source_id": "epa-electricity-2023",
+      "source_sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-scope2-pilot/epa-electricity-2023-normalized-pages-v1.json",
+      "sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4",
+      "format": "normalized_pages_json_v1",
+      "normalization": "nfkc_whitespace_v1",
+      "tool": {
+        "name": "pypdf",
+        "version": "6.10.0"
+      },
+      "extractor": {
+        "name": "extract_scope2_passages.py",
+        "version": "1.0.0"
+      },
+      "review_status": "approved"
+    }
+  ],
+  "passages": [
+    {
+      "id": "S01",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Two accounting perspectives for purchased electricity",
+      "coverage": [
+        "accounting_methods",
+        "scope2_reporting"
+      ],
+      "text": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy.",
+      "sha256": "2d24a4602a50b405b8f130a5dab3bb6fe4eeed084c68a78b8b20325dcaa96358",
+      "locator": "PDF page 4 / printed page 1",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 4,
+            "printed_page": "1",
+            "context_start": 1517,
+            "context_end_exclusive": 2372,
+            "normalized_page_sha256": "9251f3cb490531dff28a922403184268f9fc8ad64cdafe373c8e822bee3a78fc",
+            "context_sha256": "2d24a4602a50b405b8f130a5dab3bb6fe4eeed084c68a78b8b20325dcaa96358"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+      ],
+      "exclusions": [
+        "global reporting obligations",
+        "legal applicability",
+        "special supply cases"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S02",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Distinct labels for the two reported results",
+      "coverage": [
+        "scope2_reporting",
+        "accounting_methods"
+      ],
+      "text": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used.",
+      "sha256": "fcb71acc74e0b6066ef363a0c5f83ec44e50b457c13e1705456ce686a1f7fddf",
+      "locator": "PDF page 9 / printed page 6",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 9,
+            "printed_page": "6",
+            "context_start": 187,
+            "context_end_exclusive": 422,
+            "normalized_page_sha256": "f7bd719520160e18d1cc8fc8cdb619965c39d606f2339bb71c8f91ee0e48ea79",
+            "context_sha256": "fcb71acc74e0b6066ef363a0c5f83ec44e50b457c13e1705456ce686a1f7fddf"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S01"
+      ],
+      "qualifications": [
+        "EPA's reporting recommendation is not a universal legal obligation."
+      ],
+      "exclusions": [
+        "filing requirements",
+        "company-specific mandatory reporting"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S03",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Electricity purchase records for an inventory period",
+      "coverage": [
+        "activity_evidence",
+        "reporting_period"
+      ],
+      "text": "To quantify scope 2 emissions, the activity data needed are the amount of electricity that is purchased during the reporting year. Utility bills or other purchase records can be used to determine the amount of electricity purchased. This information on the electricity entering the organization’s facility is considered the best type of activity data as opposed to sub-metering data from within the facility, which may be incomplete.",
+      "sha256": "a757b4a19397b1d91aec32006e74f38be8625c55f21b4c37489059e50a71885a",
+      "locator": "PDF page 7 / printed page 4",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 7,
+            "printed_page": "4",
+            "context_start": 563,
+            "context_end_exclusive": 996,
+            "normalized_page_sha256": "a658f97ee6d95b6700644c4c75fd834f364ef282911c71cbccba4da4e49a85be",
+            "context_sha256": "a757b4a19397b1d91aec32006e74f38be8625c55f21b4c37489059e50a71885a"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "This preview explains record collection; it does not prepare an inventory or estimate missing consumption."
+      ],
+      "exclusions": [
+        "customer bill uploads",
+        "estimating missing consumption"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S04",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Separate supplier and delivery invoices without duplicate consumption",
+      "coverage": [
+        "activity_evidence",
+        "data_quality"
+      ],
+      "text": "Commodity electricity may be purchased from a provider other than the local distribution utility. In this situation, the reporting organization may receive invoices from both the commodity supplier as well as from the local distribution utility, who charges a fee for electricity delivery. It is recommended that the consumption from the local utility be used as the activity data, because this is based on electricity meters located at the organization’s facility. To avoid counting the same consumption twice, ensure that consumption from the commodity supplier is not also included in the activity data.",
+      "sha256": "062fb82c211041d94a7bdb1f2dd83bb362e37cd8ddfd7bff802c476e67ecd2f3",
+      "locator": "PDF page 7 / printed page 4",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 7,
+            "printed_page": "4",
+            "context_start": 997,
+            "context_end_exclusive": 1603,
+            "normalized_page_sha256": "a658f97ee6d95b6700644c4c75fd834f364ef282911c71cbccba4da4e49a85be",
+            "context_sha256": "062fb82c211041d94a7bdb1f2dd83bb362e37cd8ddfd7bff802c476e67ecd2f3"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S03"
+      ],
+      "qualifications": [
+        "Check supplier and delivery invoices for the same consumption; this preview cannot diagnose your records."
+      ],
+      "exclusions": [
+        "customer transaction diagnosis"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S05",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Units appearing in electricity activity records",
+      "coverage": [
+        "electricity_units",
+        "activity_evidence"
+      ],
+      "text": "The units of measure in which activity data are reported on utility bills or other purchase records can vary between electricity, steam, heat, and cooling. For electricity, heat, and cooling, activity data are typically reported in energy units. For electricity, kilowatt-hours (kWh) or megawatt-hours (MWh) are most common.",
+      "sha256": "fcca12c9fd630b440c01a7ba604730986652f545a75c69706097ca6631babee7",
+      "locator": "PDF page 8 / printed page 5",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 8,
+            "printed_page": "5",
+            "context_start": 1560,
+            "context_end_exclusive": 1884,
+            "normalized_page_sha256": "f2abcc92bb0ca610eacf23c1a4dc258e13e4fe3cbd48e177271b28731e2ada80",
+            "context_sha256": "fcca12c9fd630b440c01a7ba604730986652f545a75c69706097ca6631babee7"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "This preview covers electricity units; it does not convert units or cover purchased heat, steam or cooling."
+      ],
+      "exclusions": [
+        "unit conversion calculations",
+        "steam heat or cooling units"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S06",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Generation boundary of a purchased-energy factor",
+      "coverage": [
+        "factor_boundaries",
+        "factor_documentation"
+      ],
+      "text": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility.",
+      "sha256": "d8788e3b6a898580271f7d380ac20fddc26db0c7523c6194c3dc27c25ec0b20e",
+      "locator": "PDF page 8 / printed page 5",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 8,
+            "printed_page": "5",
+            "context_start": 3330,
+            "context_end_exclusive": 4175,
+            "normalized_page_sha256": "f2abcc92bb0ca610eacf23c1a4dc258e13e4fe3cbd48e177271b28731e2ada80",
+            "context_sha256": "d8788e3b6a898580271f7d380ac20fddc26db0c7523c6194c3dc27c25ec0b20e"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods."
+      ],
+      "exclusions": [
+        "Scope 3 calculations",
+        "life-cycle factor selection",
+        "steam heat or cooling methods"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S07",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Regional grid geography for factor discovery",
+      "coverage": [
+        "grid_factor_sources",
+        "factor_geography"
+      ],
+      "text": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area.",
+      "sha256": "1999a0370b332edfd8e691e35b3753da1c9976c2d4f121b8fca2252e3d32e507",
+      "locator": "PDF page 9 / printed page 6",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 9,
+            "printed_page": "6",
+            "context_start": 1915,
+            "context_end_exclusive": 2309,
+            "normalized_page_sha256": "f7bd719520160e18d1cc8fc8cdb619965c39d606f2339bb71c8f91ee0e48ea79",
+            "context_sha256": "1999a0370b332edfd8e691e35b3753da1c9976c2d4f121b8fca2252e3d32e507"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S06"
+      ],
+      "qualifications": [
+        "Facility location matters; this preview does not assign a subregion or select a factor."
+      ],
+      "exclusions": [
+        "company subregion assignment",
+        "direct-line supply"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S08",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "EPA eGRID as the U.S. regional data source",
+      "coverage": [
+        "grid_factor_sources",
+        "factor_geography"
+      ],
+      "text": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints.",
+      "sha256": "88af2036a14e9c8f9eb6266ea91412deee782d1a1ba9837e0fb1af57cf87dada",
+      "locator": "PDF page 9 / printed page 6",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 9,
+            "printed_page": "6",
+            "context_start": 2310,
+            "context_end_exclusive": 3182,
+            "normalized_page_sha256": "f7bd719520160e18d1cc8fc8cdb619965c39d606f2339bb71c8f91ee0e48ea79",
+            "context_sha256": "88af2036a14e9c8f9eb6266ea91412deee782d1a1ba9837e0fb1af57cf87dada"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S07"
+      ],
+      "qualifications": [
+        "Check the source edition and its data year before use; this preview does not supply current numerical factors."
+      ],
+      "exclusions": [
+        "latest eGRID release",
+        "numeric emission rates",
+        "international factor selection"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S09",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "EPA publication channels and their update timing",
+      "coverage": [
+        "grid_factor_sources",
+        "source_versions"
+      ],
+      "text": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid.",
+      "sha256": "bfe0654e7e15e08269635c5a56d6a4852b74d80542c0d0bab22198619b340c73",
+      "locator": "PDF page 9 / printed page 6",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 9,
+            "printed_page": "6",
+            "context_start": 3183,
+            "context_end_exclusive": 3526,
+            "normalized_page_sha256": "f7bd719520160e18d1cc8fc8cdb619965c39d606f2339bb71c8f91ee0e48ea79",
+            "context_sha256": "bfe0654e7e15e08269635c5a56d6a4852b74d80542c0d0bab22198619b340c73"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S08"
+      ],
+      "qualifications": [
+        "Dataset versions and factor values need a current check of EPA's publication pages."
+      ],
+      "exclusions": [
+        "latest dataset assertions",
+        "automatic source updates"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S10",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Publisher tool for researching the grid subregion",
+      "coverage": [
+        "grid_factor_sources",
+        "factor_geography"
+      ],
+      "text": "To determine in which eGRID subregion an organization’s facilities are located, they can use the Power Profiler Tool. This tool allows users to enter their facility zip codes and utility names to identify the appropriate eGRID subregions.",
+      "sha256": "b4dae5d480d52a78826348ad3c0320923fd25e078d51b52ed287d6ef311fa653",
+      "locator": "PDF page 10 / printed page 7",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 10,
+            "printed_page": "7",
+            "context_start": 187,
+            "context_end_exclusive": 425,
+            "normalized_page_sha256": "321313cc78ab0efe7fe97ab0c47eab88d788aaeaef37613dacd76a8622ddf3ec",
+            "context_sha256": "b4dae5d480d52a78826348ad3c0320923fd25e078d51b52ed287d6ef311fa653"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S07"
+      ],
+      "qualifications": [
+        "This is EPA's documented lookup route; a current facility lookup still needs verification."
+      ],
+      "exclusions": [
+        "interactive subregion lookup",
+        "company factor selection"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S11",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Market evidence relates to the electricity product purchased",
+      "coverage": [
+        "market_factor_sources",
+        "supplier_factor_sources"
+      ],
+      "text": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors.",
+      "sha256": "b099444a26a1fb38fc36db9d67fa951b909cba409846a5a25c569c09a9692adc",
+      "locator": "PDF page 10 / printed page 7",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 10,
+            "printed_page": "7",
+            "context_start": 681,
+            "context_end_exclusive": 1064,
+            "normalized_page_sha256": "321313cc78ab0efe7fe97ab0c47eab88d788aaeaef37613dacd76a8622ddf3ec",
+            "context_sha256": "b099444a26a1fb38fc36db9d67fa951b909cba409846a5a25c569c09a9692adc"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S06"
+      ],
+      "qualifications": [
+        "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor."
+      ],
+      "exclusions": [
+        "complete hierarchy selection",
+        "instrument eligibility",
+        "current residual-mix availability"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S12",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Supplier-specific factor must describe the delivered product",
+      "coverage": [
+        "supplier_factor_sources",
+        "factor_boundaries",
+        "factor_documentation"
+      ],
+      "text": "An electricity supplier, such as a regulated utility or a deregulated supplier, may provide information to its customers on the emission factor associated with its electricity product. The product may be a standard product or a differentiated product. To be used in the market-based method, the emission factor must include all the electricity delivered by the supplier, including electricity it generates as well as electricity it purchases from others. An example of a factor that should not be used is a supplier emission factor that only includes generation facilities owned by the supplier, which does not represent the full set of generation facilities supplying the delivered electricity",
+      "sha256": "285139790841b1b65805ec32aefdd22f6ff193dd205b8f21da14c2091308dd54",
+      "locator": "PDF page 10 / printed page 7",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 10,
+            "printed_page": "7",
+            "context_start": 2868,
+            "context_end_exclusive": 3562,
+            "normalized_page_sha256": "321313cc78ab0efe7fe97ab0c47eab88d788aaeaef37613dacd76a8622ddf3ec",
+            "context_sha256": "285139790841b1b65805ec32aefdd22f6ff193dd205b8f21da14c2091308dd54"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S11",
+        "S15"
+      ],
+      "qualifications": [
+        "The factor should describe the electricity delivered for the relevant product and period; receiving it does not establish eligibility."
+      ],
+      "exclusions": [
+        "supplier eligibility certification",
+        "customer product diagnosis",
+        "numeric factor selection"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S13",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Certificate documentation conveys source attributes with conditions",
+      "coverage": [
+        "market_factor_sources",
+        "contractual_evidence"
+      ],
+      "text": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method. Examples are renewable energy certificates (RECs) or Guarantees of Origin (GOs) in Europe. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate. The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component).",
+      "sha256": "eaa59a132904d2a78bb7d72a7e83d1b3f8f24a7c54f94adc6fa23fd38247332f",
+      "locator": "PDF page 10 / printed page 7",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 10,
+            "printed_page": "7",
+            "context_start": 1098,
+            "context_end_exclusive": 1800,
+            "normalized_page_sha256": "321313cc78ab0efe7fe97ab0c47eab88d788aaeaef37613dacd76a8622ddf3ec",
+            "context_sha256": "eaa59a132904d2a78bb7d72a7e83d1b3f8f24a7c54f94adc6fa23fd38247332f"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S11"
+      ],
+      "qualifications": [
+        "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here."
+      ],
+      "exclusions": [
+        "detailed quality criteria",
+        "certificate eligibility",
+        "zero-emissions claims",
+        "biomass accounting"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S14",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Contracts and separately issued certificates are different evidence",
+      "coverage": [
+        "market_factor_sources",
+        "contractual_evidence"
+      ],
+      "text": "An organization may have a contract, such as a power purchase agreement (PPA), to purchase electricity from a specified generating facility, which may be located at the organization’s facility, at a nearby location with a direct line connection to the organization, or located remotely. If there are no certificates associated with this generation, the contract itself carries the emission factor associated with the generation facility, regardless of the energy resource used. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the contract. If certificates are issued to the generating facility, the emission factor is conveyed by the certificates, rather than the contract. If the certificates are bundled with the contract, the purchaser can claim the emission factor. If the certificates are sold to another entity, the purchaser cannot make that claim, and the energy should be assigned the residual mix factor if available, or the regional or national factor.",
+      "sha256": "d78433f1c54c45a66ca9ef52c54db001381acf0e39b1261da31dc6f520be8eb5",
+      "locator": "PDF page 10 / printed page 7",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 10,
+            "printed_page": "7",
+            "context_start": 1814,
+            "context_end_exclusive": 2830,
+            "normalized_page_sha256": "321313cc78ab0efe7fe97ab0c47eab88d788aaeaef37613dacd76a8622ddf3ec",
+            "context_sha256": "d78433f1c54c45a66ca9ef52c54db001381acf0e39b1261da31dc6f520be8eb5"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S11",
+        "S13"
+      ],
+      "qualifications": [
+        "Check who retains the certificates and which conditions apply. Contract eligibility, direct-line cases and fallback factors require separate review."
+      ],
+      "exclusions": [
+        "contract eligibility",
+        "direct-line methods",
+        "fallback-factor selection",
+        "current residual-mix availability"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S15",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Reporting periods and purchasing agreements may cover different dates",
+      "coverage": [
+        "reporting_period",
+        "supplier_factor_sources",
+        "factor_time_periods"
+      ],
+      "text": "An organization should consider the alignment of its inventory reporting year and the timeframes of its purchasing agreements. If those timeframes align, the agreement and the associated emission factors can be applied for the entire reporting year. If they do not align, such as if the reporting year is based on a fiscal year and a purchasing agreement is for a calendar year, the emission factors for a purchasing agreement should only be applied to the portion of the reporting covered by that agreement. A given reporting year may be covered by two different purchasing agreements, or there may be portions of the reporting year which are not covered by any purchasing agreement.",
+      "sha256": "53357a40ebf00ccfd4762277d6f926833025a1a1bfe6c713a1c34b3f6ffcc705",
+      "locator": "PDF page 11 / printed page 8",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 11,
+            "printed_page": "8",
+            "context_start": 3641,
+            "context_end_exclusive": 4325,
+            "normalized_page_sha256": "0665e6bdcfff603ed1c51398f1105dce036f6ca3005ae2d195cceb48e16b645a",
+            "context_sha256": "53357a40ebf00ccfd4762277d6f926833025a1a1bfe6c713a1c34b3f6ffcc705"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "Compare the reporting dates with the agreement's coverage. This preview does not allocate a company's purchases or factors."
+      ],
+      "exclusions": [
+        "company factor allocation",
+        "emissions calculation"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S16",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Factor revisions and the EPA guidance's timing recommendation",
+      "coverage": [
+        "source_versions",
+        "factor_time_periods"
+      ],
+      "text": "All scope 2 emission factors represent the emissions profile for generation during a specific period of time. This emissions profile can change over time, due to changes in the resource mix and generation efficiency supplying the electricity. As a result, the emission factors may be updated periodically to reflect these changes. Organizations may also make different choices in their purchase decisions over time, such as beginning to buy RECs. These represent real changes in the emissions associated with an organization’s electricity purchases. As such, it is recommended that organizations use the newest emission factors available at the time they calculate emissions for a reporting year. 5 Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.\n\n5 This applies whether an organization uses a calendar year period or other period for their GHG Inventory. For example, if an organization is calculating a GHG Inventory in August for a July through June reporting year, the inventory should use the newest factors available in August.",
+      "sha256": "3f00ff9da2c0490c2095ff281936b1747f2a7de5e2b205a92f40822749636b16",
+      "locator": "PDF page 12 / printed page 9; PDF page 12 / printed page 9",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 12,
+            "printed_page": "9",
+            "context_start": 2243,
+            "context_end_exclusive": 3090,
+            "normalized_page_sha256": "c57139492252410e3402469cabf778fb740f180982ca35761fe5f15923345afc",
+            "context_sha256": "b65d31e5854682f87a240aecc2158af75e9f4d30b53c96666e61db9106bfec2f"
+          },
+          {
+            "pdf_page_1_based": 12,
+            "printed_page": "9",
+            "context_start": 3892,
+            "context_end_exclusive": 4177,
+            "normalized_page_sha256": "c57139492252410e3402469cabf778fb740f180982ca35761fe5f15923345afc",
+            "context_sha256": "587d21e7673fb115c998e4a7f6eb1eb9de57cd4627acd822d9c56946ef848d5c"
+          }
+        ]
+      },
+      "required_passage_ids": [
+        "S17",
+        "S18"
+      ],
+      "qualifications": [
+        "This is EPA's timing recommendation for this guidance. Keep factor data year, calculation date and inventory period distinct; do not treat it as a universal rule or selection of a current factor."
+      ],
+      "exclusions": [
+        "numeric factor selection",
+        "historical inventory recalculation",
+        "latest-release assertion"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S17",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Methodology changes differ from ordinary factor updates",
+      "coverage": [
+        "source_versions",
+        "factor_time_periods"
+      ],
+      "text": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy.",
+      "sha256": "4e97df2a10d9b9fd70adce5d7a28e4e0bbc2fb2da8f602c24e041651d239ccb3",
+      "locator": "PDF page 12 / printed page 9",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 12,
+            "printed_page": "9",
+            "context_start": 3091,
+            "context_end_exclusive": 3503,
+            "normalized_page_sha256": "c57139492252410e3402469cabf778fb740f180982ca35761fe5f15923345afc",
+            "context_sha256": "4e97df2a10d9b9fd70adce5d7a28e4e0bbc2fb2da8f602c24e041651d239ccb3"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "Applying a base-year policy or recalculating a historical inventory requires separate review."
+      ],
+      "exclusions": [
+        "base-year policy determination",
+        "historical inventory recalculation"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    },
+    {
+      "id": "S18",
+      "source_id": "epa-electricity-2023",
+      "extraction_id": "epa-electricity-2023-pages-v1",
+      "title": "Timing and averaging limit factor accuracy",
+      "coverage": [
+        "data_quality",
+        "factor_time_periods"
+      ],
+      "text": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date.",
+      "sha256": "54d9199a3eb12f9af6983f5350917afca0c46cf556c19ea287aee5786c2795c8",
+      "locator": "PDF page 17 / printed page 14",
+      "locator_detail": {
+        "normalization": "nfkc_whitespace_v1",
+        "separator": "\n\n",
+        "offset_unit": "unicode_code_points",
+        "spans": [
+          {
+            "pdf_page_1_based": 17,
+            "printed_page": "14",
+            "context_start": 983,
+            "context_end_exclusive": 1514,
+            "normalized_page_sha256": "bdc7d6776e3f16709d041ecafd3e7fadfd1681f020963166303b11d6bd1c6449",
+            "context_sha256": "54d9199a3eb12f9af6983f5350917afca0c46cf556c19ea287aee5786c2795c8"
+          }
+        ]
+      },
+      "required_passage_ids": [],
+      "qualifications": [
+        "A factor can have timing and averaging limitations; this preview does not quantify their effect or certify a dataset."
+      ],
+      "exclusions": [
+        "uncertainty calculations",
+        "current dataset quality certification"
+      ],
+      "applicability": "U.S. grid-delivered purchased electricity; conceptual research only; EPA December 2023 guidance",
+      "source_method": "Exact normalized original sentences/paragraphs; no model extraction or authored replacement text",
+      "review_status": "approved",
+      "rights_scope": "approved_internal_research_evaluation_only"
+    }
+  ],
+  "author_checks": {
+    "original_hash": "matched",
+    "exact_span_assembly": "matched",
+    "dependency_cycles": "none",
+    "independent_review": "Exact-candidate scoped source/hosted-processing disposition approved; cloud/software/live-answer gates remain separate",
+    "model_calls": "none",
+    "contains_ghgp_section4": "no selected page or passage from Section 4",
+    "cloud_mutations": "none",
+    "original_fresh_download": "Not completed: direct anonymous socket request blocked; current publisher-linked PDF inspected through browser tool",
+    "prior_content_preserved": "All 18 text/locator/hash/dependency/qualification/exclusion/coverage records identical to source release; only new release/review/provenance/hosted-use metadata changed"
+  },
+  "publisher_checks": [
+    {
+      "url": "https://www.epa.gov/climateleadership/scope-1-and-scope-2-inventory-guidance",
+      "checked_at": "2026-09-09T06:24:59Z",
+      "page_updated_on": "2026-04-02",
+      "result": "Still links December 2023 electricity guidance at the pinned canonical URL."
+    },
+    {
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf",
+      "checked_at": "2026-09-09T06:24:59Z",
+      "result": "Publisher-linked original has nineteen pages and December 2023 cover; relevant text inspected through browser and retained original. No successful fresh origin-byte hash check claimed."
+    },
+    {
+      "url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+      "checked_at": "2026-09-09T06:24:59Z",
+      "page_updated_on": "2025-12-22",
+      "result": "Noncommercial scientific/educational permission and individual-document/commercial caveats remain. No vendor-specific or blanket commercial permission inferred."
+    },
+    {
+      "url": "https://www.epa.gov/egrid/detailed-data",
+      "checked_at": "2026-09-09T06:24:59Z",
+      "page_updated_on": "2026-05-20",
+      "result": "Still lists eGRID2023 revisions and a planned eGRID2024 date that has passed. This source corpus makes no latest-release assertion."
+    },
+    {
+      "url": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub",
+      "checked_at": "2026-09-09T06:24:59Z",
+      "page_updated_on": "2026-01-12",
+      "result": "Lists 2025 factors as current. No numerical factors ingested into this corpus."
+    },
+    {
+      "url": "https://www.epa.gov/egrid/power-profiler",
+      "checked_at": "2026-09-09T06:24:59Z",
+      "page_updated_on": "2025-10-01",
+      "result": "Page announces 2023 eGRID data and exposes a loading shell to the text reader. Interactive facility lookup was not performed."
+    }
+  ],
+  "hosted_processing": {
+    "review_status": "approved",
+    "purpose": "Private internal conceptual research and evaluation by authorized reviewers",
+    "commercial_runtime_approval": false,
+    "public_redistribution_approval": false,
+    "supabase": {
+      "original_pdf": "private reference preservation only",
+      "normalized_extraction": "private integrity and locator resolution only",
+      "release": "private approved-corpus metadata and passage text",
+      "public_bucket": false,
+      "public_downloads": false
+    },
+    "pinecone": {
+      "allowed_content": "Exact approved S01-S18 paragraph text and bounded metadata only",
+      "purpose": "Integrated embedding and private semantic retrieval",
+      "full_pdf_upload": false,
+      "unselected_page_text": false
+    },
+    "anthropic": {
+      "allowed_content": "Selected approved S01-S18 paragraph text plus required dependency closure and bounded metadata",
+      "purpose": "Private evidence-supported answer evaluation",
+      "full_pdf_upload": false,
+      "unselected_page_text": false
+    },
+    "attributed_ghg_protocol_criteria": "May remain inside preserved official PDF, but excluded from embedding, AI context and excerpt display",
+    "conditions": [
+      "Only reviewed exact bytes and explicitly configured private resources/providers may be used.",
+      "Authorization and provider processing terms must remain appropriate to this private evaluation. No claim about provider training or retention is made here.",
+      "Full original preservation does not approve every paragraph as answer evidence.",
+      "A source-review expiry or shorter resource deadline must withhold use until explicitly reviewed.",
+      "No legal duty, contractual eligibility, numerical factor selection, calculation or current dataset certification is approved."
+    ]
+  }
+}

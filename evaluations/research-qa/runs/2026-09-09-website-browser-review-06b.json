@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-09T14:53:04.354Z",
+  "reviewer": "Independent AI QA /root/website_qa",
+  "disposition": "PASS_PRIVATE_LOCAL_PREVIEW",
+  "scope": "Actual mounted local website at localhost5174, existing private cloud EPA evidence, bounded conceptual answers. No public/production deployment, calculation, eligibility or filing approval.",
+  "runtime_freeze_sha256": "9ca6ff47270c57e71269da5f0c4c1eed3accc51f46ecbc3a0a5cfe1e0ff56bd1",
+  "runtime_pins_verified": 47,
+  "provider_profile_sha256": "ecd63437fcf498cc02f76ecd3c401fb6411ad7cbc6b3057b9b2f53dcfbaa4f4e",
+  "allocation_sha256": "3749509c275b96f2c3b9c4e9924a8cf18054d9c6c2b31355d70ec322bfb699c8",
+  "browser": {
+    "surface": "Chrome extension through supported CUA",
+    "independent_tab_id": "851833316",
+    "url": "http://localhost:5174/#evidence-S02",
+    "marked_deliverable": true,
+    "left_state": "Original methods question answered, source S02 expanded, viewport returned to top of question and result."
+  },
+  "independent_actual_ui_observations": [
+    {
+      "check": "Connection readiness",
+      "result": "Ask disabled while connecting, then enabled with Research service ready."
+    },
+    {
+      "check": "One original W01 submission",
+      "result": "Exactly one new question submitted. Pending state disabled input/examples, exposed Cancel and displayed no old answer."
+    },
+    {
+      "check": "Actual result",
+      "result": "Supported with qualifications. U01/U02/U03 text exactly matches approved units visible in AX state. Source-summary versus interpretation headings remain distinct; universal legal must is qualified."
+    },
+    {
+      "check": "Source disclosure",
+      "result": "Clicking Source PDFp9/printedp6 expanded S02, exact reporting-method paragraph, December2023/published-guidance metadata and publisher link."
+    },
+    {
+      "check": "Original source link",
+      "result": "Visible link target matches https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf#page=9. QA inspected the target; no extra publisher tab opened."
+    },
+    {
+      "check": "Desktop visual",
+      "result": "Two actual screenshots inspected at1703x1203: clear green/black layout, readable question/result/source disclosure, no observed overlap or clipping. Screenshots were tool-rendered observations, not saved file artifacts."
+    },
+    {
+      "check": "Return state",
+      "result": "Question, answer and source disclosure retained; service ready; tab marked deliverable."
+    }
+  ],
+  "root_executed_ui_observations": {
+    "attribution": "Root directly executed and reported these CUA checks; independent QA did not rerun them.",
+    "checks": [
+      "Offline service preserved question and disabled Ask; Check connection again recovered ready state.",
+      "W01 submitted by keyboard Enter; supported answer and source disclosure.",
+      "W02 original factor-sourcing question answered with eight units; old answer absent while pending.",
+      "375px viewport: documentWidth360 vs inner375, screenshot readable, override reset.",
+      "Cancellation before provider stage retained question and cleared answer.",
+      "Following calculation/California-filing example returned unsupported with no prior answer, and readiness remained ready."
+    ]
+  },
+  "trace_binding": {
+    "stages": 8,
+    "root_stages": 6,
+    "independent_qa_stages": 2,
+    "all_request_output_and_reservation_bindings_checked": true,
+    "preview_max_attempts": 40,
+    "remaining_attempts": 32,
+    "prior_reserved": 242,
+    "total_reserved": 250,
+    "combined_ceiling": 282,
+    "reservation_is_actual_billing": false,
+    "stderr_empty_at_review": true,
+    "stages_detail": [
+      {
+        "attempt": 1,
+        "executed_by": "root browser check",
+        "stage": "plan",
+        "question": "What is the difference between the location-based and market-based calculation methods, and why must companies report both?",
+        "started_sha256": "a9819d88c84699616fde2f16aa15e36183ea10118f77bf341cc70ed19a24d71b",
+        "completed_sha256": "8c73fae872f83627c72b44307bcd1276fce757588fb0ff299fccb76a70371b5e",
+        "reservation_sha256": "48afbb59ed94a9bfe59f1d306fe75b68883c57f3e8cb9014bd6def3db5c51f4a"
+      },
+      {
+        "attempt": 2,
+        "executed_by": "root browser check",
+        "stage": "verify",
+        "question": "What is the difference between the location-based and market-based calculation methods, and why must companies report both?",
+        "started_sha256": "2d249aed4a8d410e9f60a522741ba92ade97f7996246111493c9d662b060f969",
+        "completed_sha256": "6087e99f3a41d0e430e080f397c8018f616a0769cc0d0ef6f160d34cd2587891",
+        "reservation_sha256": "c95ecb58fc67b2bc7d274930667d2972b01a9f0973b5a3f390f08e373e76aaf9"
+      },
+      {
+        "attempt": 3,
+        "executed_by": "root browser check",
+        "stage": "plan",
+        "question": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+        "started_sha256": "046ea71f026196c798aea223d78aa58de136f99afb1a0c2e7b305563c7600f93",
+        "completed_sha256": "ba8c9b4803060d20a65707b49c42503cb4a18e7d6f0a88c3d33912753ee17c2d",
+        "reservation_sha256": "d3bc47fdbcb6b20d84c5fc781dd3c072fbf903d484237e52bf92eb51e420dabf"
+      },
+      {
+        "attempt": 4,
+        "executed_by": "root browser check",
+        "stage": "verify",
+        "question": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+        "started_sha256": "617c3b74fea9a1a43712206df93b4e877a11c917f802bdaf943404d33f13796d",
+        "completed_sha256": "859d113c556571d0030ba386f25903b8151958f0106496ac96095ac48ca77cc7",
+        "reservation_sha256": "b2eb4cc60fd98dc9e88dd2f97684a3cf66ae6b835f05fcbc450479871bf8a246"
+      },
+      {
+        "attempt": 5,
+        "executed_by": "root browser check",
+        "stage": "plan",
+        "question": "Calculate our Scope 2 emissions and file our California report.",
+        "started_sha256": "838ce683e8c6eb18868cab32b27d889aa87dedb4709d66e21767d6fdc2ce5f07",
+        "completed_sha256": "f450b07fceb19e13e39e36081f57a0c7bc45a14569f61f7caae0122cbc6dbd06",
+        "reservation_sha256": "597bd36de10082084c702d48d5dabb2aefea972dd2f4fd7997cb7ccd8c1809c7"
+      },
+      {
+        "attempt": 6,
+        "executed_by": "root browser check",
+        "stage": "verify",
+        "question": "Calculate our Scope 2 emissions and file our California report.",
+        "started_sha256": "f0f3494ca52ee11497a42432a7edf694920dd62e8e4013412f640febeecdb4f1",
+        "completed_sha256": "1633b9888ee9bbdc53373dd4e4eebd4447cade803094f88b21f074dfff7a145d",
+        "reservation_sha256": "ef72c322e0611ae72ebe9254ef45294aa2905c2c64665b624b74bcaad47fcc8d"
+      },
+      {
+        "attempt": 7,
+        "executed_by": "independent QA browser check",
+        "stage": "plan",
+        "question": "What is the difference between the location-based and market-based calculation methods, and why must companies report both?",
+        "started_sha256": "a16bb9d095143cd3bf0b495a2e30f09ea80db03aec278038dacf31bff32da56f",
+        "completed_sha256": "1b560f0ca1d87cf68c95950597c4ca2416c23bae094da94810984a576bc80a60",
+        "reservation_sha256": "99bfa31ebc2f76aa120165cb27d34977c53bbe4944a47420737653f3515bae4a"
+      },
+      {
+        "attempt": 8,
+        "executed_by": "independent QA browser check",
+        "stage": "verify",
+        "question": "What is the difference between the location-based and market-based calculation methods, and why must companies report both?",
+        "started_sha256": "0274067555acb7dd26c40d58ff434afc52e3a0ac91dc3a86c89f8155f550297d",
+        "completed_sha256": "68c2544131cedc56f46af9b0c3706b13c33ec8634839f0cc2253041d2f812a7a",
+        "reservation_sha256": "beb1bb8f51c8305710f76cc3aef13e7d87b7ee50b442588df181d14a33aaa008"
+      }
+    ]
+  },
+  "related_reports": {
+    "baseline06": "24b89eb3f46c4a78ce7f07f4d9eed4d14bd8f982e4e191c80e31487d908a6542",
+    "first_fresh06_failure": "922c03db6dbb2e318c4a24a23a83c79c3fa98ea96c21652cbf3fbe1ec098527e",
+    "bounded06b_replay": "4e426e072c45f67ffa6c5d72e6ef2e97f48315e42afce55a22fc7a558a985c8e",
+    "explicit06b_followup": "f28c288a72c7eba6aa2bfa0e840c54db1a4b923519178576253d2e11706a7fe7"
+  },
+  "limits": [
+    "First F01 failure remains recorded; this is not twenty first-attempt passes.",
+    "Finite evaluated concepts do not establish universal answer correctness.",
+    "Reviewed source expires2026-09-15T23:20:32Z; renewal, durable hosting and cleanup are not established by this check.",
+    "Local services must remain running; the UI detects disconnection but this report does not establish an always-on service.",
+    "Legacy authorization riskR8 and qualified human accounting/legal/security review remain outside this private conceptual acceptance."
+  ]
+}
