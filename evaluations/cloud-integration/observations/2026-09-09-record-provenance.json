@@ -1,0 +1,76 @@
+{
+  "mapping": [
+    {
+      "private_record": "cloud-stage-03.json",
+      "private_sha256": "b7466246fe66bdca75d90c8bdc760772a60854de2b94c3a99170d3a2d0ef0713",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-stage-success.json",
+      "tracked_sha256": "b7466246fe66bdca75d90c8bdc760772a60854de2b94c3a99170d3a2d0ef0713",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-api-apply-01.json",
+      "private_sha256": "7c16478ea77085d16394a2d5b06da726bcc0600199bdc4f593451a31b4cdee7a",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-api-setting.json",
+      "tracked_sha256": "7c16478ea77085d16394a2d5b06da726bcc0600199bdc4f593451a31b4cdee7a",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-api-effective-05.json",
+      "private_sha256": "effc619336356b9f6460fe69ffa27e2084cb3ef6d56f7f449eb4d079ea5c1123",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-api-adoption.json",
+      "tracked_sha256": "db0e30562c28797f2b7cb3d845ebd1bfb5eb9a7c6871bb50abcbe41f4db8ecdc",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-publication-publish-01.json",
+      "private_sha256": "7e474450f184c9aa5700a29dd63b5709df0cdc45cf58adce4127a4ac7587bdbb",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-publication-first-failure.json",
+      "tracked_sha256": "64cfd4792be605bfe08bd6324cd924b98232dff77f7f7c5913e0e76e1c9fa76c",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "storage-missing-probe-01.json",
+      "private_sha256": "3dcfa0f3148a5eba1f7c42fe7bfe9a44c0f3096e7fdadab5c6957c373eba318e",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-storage-missing-diagnostic.json",
+      "tracked_sha256": "e431a14e21f9a9f825a370a625d3fe2e224e74dd8888ed3f6f6f7035cda3eeac",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-publication-publish-02.json",
+      "private_sha256": "a7ea3da6a8e1746de6489c2c611a818474a63cbc9b65b9ab3c6eff11adaf56c4",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-publication.json",
+      "tracked_sha256": "05972b566b1eaa9e82af914657fd1dc567f1a6f00d10fba73b8178bf1adc815d",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-publication-verify-02.json",
+      "private_sha256": "037ce736a108914dd2ee07e031e72841048270349b7e2dae1b68fbf50e2eed7e",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-publication-verified.json",
+      "tracked_sha256": "41fa06f7ad73d226711f714914b80047f969acfde5809fd77ec169ebe096f54d",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-activate-01.json",
+      "private_sha256": "98242d8be6880d7ec4600094111538478d598e0bbebb918342c2b2f19d315e6b",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-activation.json",
+      "tracked_sha256": "98242d8be6880d7ec4600094111538478d598e0bbebb918342c2b2f19d315e6b",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-roundtrip-01.json",
+      "private_sha256": "5b63ee98a9fe05e97e831ae6490b6da640d89ce106716ae3c2f29f0685d51e47",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-roundtrip.json",
+      "tracked_sha256": "33a60fb4893c4e0d967b042105d6bf62a455960c2e7b80fb711f6c87cb4a835d",
+      "transformation": "CRLF_to_LF_only"
+    },
+    {
+      "private_record": "cloud-access-checks-01.json",
+      "private_sha256": "7902384c921a045a87c7a988ba162bc9f6cb9a378e214c7fdd5daba119fe6272",
+      "tracked_record": "evaluations/cloud-integration/observations/2026-09-09-access-checks.json",
+      "tracked_sha256": "40c13928b93430fa8c632ede84aa698d94e8b2da0e598a0664a8bbec43c8926c",
+      "transformation": "CRLF_to_LF_only"
+    }
+  ],
+  "test_identity_record": "Sanitized last safe journal entry; encrypted-state filename and sequence removed; credential handling note added. No secret-state file read.",
+  "customer_data": "None; supplied data is the frozen owned fictional fixture."
+}

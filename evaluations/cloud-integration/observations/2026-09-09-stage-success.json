@@ -1,0 +1,18 @@
+{
+  "project_ref": "icockcoguyadhryzydvl",
+  "operation": "stage",
+  "status": "completed",
+  "started_at": "2026-09-09T05:34:17.418Z",
+  "inventory_sha256": "5ff9ebd0bead22e94e4d77f83ec5e6f46613b7beb0c91a07708d9f1edb3028e6",
+  "migration_sha256": "5e136e3c859375a427b410d9ea680821e07f5e315610a0fa10ff0e6cfd6ab5fa",
+  "ca_sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7",
+  "stage_sha256": "b98ef3e1a52d294a5916f2b2f9cf8972d40a2445a25c6cb98597c05af0311ce5",
+  "contract_sha256": "b3c9cf14177c00cebd9f4e7b6ccdf382839214573c48e31c2282d4485fff2803",
+  "connection_mode": "direct",
+  "committed": true,
+  "approvals_written": 0,
+  "activations": 0,
+  "auth_users_created": 0,
+  "stage_rows": 20,
+  "finished_at": "2026-09-09T05:34:20.168Z"
+}

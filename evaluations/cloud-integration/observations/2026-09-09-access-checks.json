@@ -1,0 +1,129 @@
+{
+  "operation": "synthetic_live_access_checks",
+  "started_at": "2026-09-09T05:56:26.476524+00:00",
+  "status": "passed",
+  "checks": [
+    {
+      "id": "A_cannot_read_other_research_memberships",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_cannot_read_other_research_objects",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_cannot_read_other_research_sources",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_cannot_read_other_research_releases",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_cannot_read_other_research_passages",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_cannot_read_other_research_active_builds",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_own_private_original_matches",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "A_cannot_read_other_private_original",
+      "passed": true,
+      "http_status": 400
+    },
+    {
+      "id": "A_cannot_grant_own_cross_scope_membership",
+      "passed": true,
+      "http_status": 403
+    },
+    {
+      "id": "B_cannot_read_other_research_memberships",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_cannot_read_other_research_objects",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_cannot_read_other_research_sources",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_cannot_read_other_research_releases",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_cannot_read_other_research_passages",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_cannot_read_other_research_active_builds",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_own_private_original_matches",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "B_cannot_read_other_private_original",
+      "passed": true,
+      "http_status": 400
+    },
+    {
+      "id": "B_cannot_grant_own_cross_scope_membership",
+      "passed": true,
+      "http_status": 403
+    },
+    {
+      "id": "inactive_passage_invisible",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "anonymous_research_table_denied",
+      "passed": true,
+      "http_status": 401
+    },
+    {
+      "id": "anonymous_authenticated_original_denied",
+      "passed": true,
+      "http_status": 400
+    },
+    {
+      "id": "anonymous_public_original_denied",
+      "passed": true,
+      "http_status": 400
+    }
+  ],
+  "customer_rows_requested": 0,
+  "ordinary_user_mutation_attempts": 2,
+  "pending_mutation": {
+    "table": "research_memberships",
+    "scope_id": "90000000-0000-4000-8000-00000000000a",
+    "user_id": "a9d01030-4010-4a9f-a45b-a16a842c9b59",
+    "operation": "insert",
+    "expected": "deny",
+    "outcome": "denied"
+  },
+  "finished_at": "2026-09-09T05:56:29.630038+00:00",
+  "limits": "Only two synthetic identities and owned records/bucket. No legacy signed-in security, tenant lifecycle, production policy or general security assurance."
+}

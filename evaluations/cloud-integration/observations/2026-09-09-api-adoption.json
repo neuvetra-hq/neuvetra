@@ -1,0 +1,11 @@
+{
+  "operation": "public_zero_row_schema_probe",
+  "observed_at": "2026-09-09T05:51:40.174435+00:00",
+  "project_ref": "icockcoguyadhryzydvl",
+  "customer_rows_requested": 0,
+  "writes": 0,
+  "http_status": 406,
+  "response_within_limit": true,
+  "code": "PGRST106",
+  "schema_metadata_message": "Invalid schema: neuvetra_probe_unexposed None Only the following schemas are exposed: public, graphql_public, neuvetra_research_dev"
+}

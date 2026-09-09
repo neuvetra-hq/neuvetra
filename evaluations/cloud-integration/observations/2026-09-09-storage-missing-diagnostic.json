@@ -1,0 +1,11 @@
+{
+  "operation": "synthetic_bucket_missing_metadata",
+  "observed_at": "2026-09-09T05:46:36.524490+00:00",
+  "customer_rows_requested": 0,
+  "writes": 0,
+  "http_status": 400,
+  "storage_status_code": "404",
+  "storage_error": null,
+  "storage_code": "NoSuchBucket",
+  "missing_message_class": "Bucket not found"
+}

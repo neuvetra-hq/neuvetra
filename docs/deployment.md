@@ -109,6 +109,10 @@ Docker was unavailable during this cleanup. Actual container builds remain unver
 
 ## Dashboard items still to resolve
 
+Latest follow-up: the explicitly authorized fictional-data cloud test is complete. The API adopted `public, graphql_public, neuvetra_research_dev`; two test accounts, private Storage, six manifest-owned vectors, three retrieval cases and 22 access checks are verified. The database override takes precedence over Dashboard exposure settings until reset; the exact guarded reset is documented in [the API helper](../tools/cloud/README-data-api.md). This is a standalone tested evidence path and [saved demo](../evaluations/cloud-integration/demo.html), with no production application cutover or new approved greenhouse-gas answer. [Current cloud state](../operations/cloud-development.json) supersedes the earlier blocked staging observation below.
+
+Development-cloud follow-up on September 9, 2026 UTC: the supplied Pinecone key and direct Supabase connection are now verified. An isolated research schema was applied; legacy anonymous table privileges were contained while signed-in/backend grants were preserved. This has not deployed or connected the answering application. Synthetic staging failed and rolled back; its correction is tested locally only. Further cloud settings, source uploads and real user-isolation checks remain held. See [the current cloud record](../operations/cloud-development.json) for evidence and limitations; earlier ENV/key assessments in this document describe their original observations.
+
 1. Reconfirm the recorded dashboard assignments immediately before a cutover. Establish staging, a rollback plan and backups; current staging availability is unknown. Do not deploy unfinished GHG functionality merely by repointing the services.
 2. Confirm DNS ownership and fix FrontDesk's missing `www` domain and API public health failure if maintaining those services. Railway origin hosting is now verified; the earlier Vercel note is historical.
 3. Verify shared Supabase project identity, migration state, policies, auth redirects, and backups. Reconcile Terrascope's separate database and factor counts.

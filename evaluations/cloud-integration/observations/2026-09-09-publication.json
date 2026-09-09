@@ -1,0 +1,239 @@
+{
+  "project_ref": "icockcoguyadhryzydvl",
+  "target_sha256": "fff2d429b00a4dc31806cf029d386de87be263efa2f55ec366b5e928dd5be055",
+  "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
+  "stage_sha256": "b98ef3e1a52d294a5916f2b2f9cf8972d40a2445a25c6cb98597c05af0311ce5",
+  "stage_report_sha256": "b7466246fe66bdca75d90c8bdc760772a60854de2b94c3a99170d3a2d0ef0713",
+  "adapter_sha256": "3ca78f070155d66be9565a7e9ca76b6cac9b6622c0aeacbfa1137226601dd23b",
+  "review_expires_at": "2026-09-10T05:30:00Z",
+  "activated": false,
+  "approvals_written": 0,
+  "operation": "publish_synthetic_artifacts",
+  "status": "uploaded_objects_readback_verified",
+  "phase": "complete",
+  "observed_at": "2026-09-09T05:51:56.124914+00:00",
+  "bucket": {
+    "id": "neuvetra-research-dev",
+    "public": false,
+    "file_size_limit": 1000000,
+    "allowed_mime_types": [
+      "application/octet-stream"
+    ]
+  },
+  "publication_receipts": [
+    {
+      "scope_id": "90000000-0000-4000-8000-00000000000a",
+      "build_id": "d9c339ee-d1bb-40e4-8e5a-e345a77638a6",
+      "artifact_write_completed": true,
+      "readiness_verified": false,
+      "activated": false
+    },
+    {
+      "scope_id": "90000000-0000-4000-8000-00000000000b",
+      "build_id": "b39e5c40-098a-4001-4e0c-99c7a180332a",
+      "artifact_write_completed": true,
+      "readiness_verified": false,
+      "activated": false
+    }
+  ],
+  "readiness_verified": false,
+  "finished_at": "2026-09-09T05:52:04.222233+00:00",
+  "transport_events": [
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-11c3-7dff-b697-a042bf36908e",
+      "storage_missing": "bucket"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 152,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-138f-7d21-90d5-4cc61fb77ec5"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-1427-78b7-a395-f8972d4b52d8"
+    },
+    {
+      "origin": "control",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-1560-753a-bb6f-7ae242ad6e88",
+      "storage_missing": "object"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 870,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-1677-79e9-b9b3-29a2f9101796"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-1775-76ac-9b89-7ca8bf97be44"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-18ca-7f64-9c88-90eccdf1b839",
+      "storage_missing": "object"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 1017,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-19c3-7efd-89d1-eea27469940d"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-1ada-747a-9406-98a91b501562"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-1bcf-7c0a-86a6-a7440bf7f573",
+      "storage_missing": "object"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 3383,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-1cf5-7c9c-9267-b7d10032773e"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-1db9-7abd-ab3d-935c6941c699"
+    },
+    {
+      "origin": "pinecone",
+      "method": "POST",
+      "request_bytes": 2497,
+      "status": "complete",
+      "http_status": 201
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-22e5-78cc-a827-25d7c574c4a5",
+      "storage_missing": "object"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 445,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-250b-7e41-8126-862674bc7386"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-25ec-740e-992f-2d0d2cc57aea"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-2712-7af9-9e29-5ba434c9cf1d",
+      "storage_missing": "object"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 594,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-280b-7dd1-b0e5-e7f2e904a33c"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-290c-7518-8c3d-e5c1f3d9508b"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b9-2a89-7e05-bde1-021168629149",
+      "storage_missing": "object"
+    },
+    {
+      "origin": "supabase",
+      "method": "POST",
+      "request_bytes": 1839,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-2b61-7b8c-ba77-291cd6153a0a"
+    },
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "complete",
+      "http_status": 200,
+      "provider_request_id": "01a084b9-2c2f-70e5-a1f6-ad08d84feebe"
+    },
+    {
+      "origin": "pinecone",
+      "method": "POST",
+      "request_bytes": 1240,
+      "status": "complete",
+      "http_status": 201
+    }
+  ]
+}

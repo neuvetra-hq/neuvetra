@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "fixture_id": "cloud-evidence-synthetic-v1",
+  "frozen_at": "2026-09-09T04:23:37Z",
+  "purpose": "Owned synthetic content for cloud storage, hosted embedding, retrieval and evidence-integrity checks. No regulatory assertions, source approval or generated-answer approval.",
+  "live_authorization": false,
+  "normalization": "nfkc_whitespace_v1",
+  "top_k": 4,
+  "scopes": [
+    {
+      "label": "A",
+      "scope_id": "90000000-0000-4000-8000-00000000000a",
+      "title": "Fictional Juniper electricity record exercise",
+      "passages": [
+        {
+          "id": "A01",
+          "text": "In this fictional Juniper exercise, utility invoices describe electricity entering the building. Internal room meters may omit equipment, so the exercise starts from incoming power records.",
+          "dependency_ids": ["A02"],
+          "is_active": true
+        },
+        {
+          "id": "A02",
+          "text": "Juniper's fictional supply invoice and delivery invoice can describe the same electricity. The exercise records that delivered quantity once, rather than adding the two invoices as separate consumption.",
+          "dependency_ids": [],
+          "is_active": true
+        },
+        {
+          "id": "A03",
+          "text": "The Juniper exercise keeps the reporting window's beginning and ending dates beside an unchanged copy of the original record. This lets a reviewer check which period the fictional record describes.",
+          "dependency_ids": [],
+          "is_active": true
+        },
+        {
+          "id": "A04",
+          "text": "INACTIVE fictional Juniper instruction: add the supply invoice and delivery invoice as two independent amounts even when they describe the same power. This deliberately outdated record must never be retrieved as active evidence.",
+          "dependency_ids": [],
+          "is_active": false
+        }
+      ]
+    },
+    {
+      "label": "B",
+      "scope_id": "90000000-0000-4000-8000-00000000000b",
+      "title": "Fictional Boreal private record exercise",
+      "passages": [
+        {
+          "id": "B01",
+          "text": "Boreal's fictional private exercise gathers invoices for electricity entering its building. These Boreal records belong only to scope B and must not appear in Juniper's scope A evidence.",
+          "dependency_ids": [],
+          "is_active": true
+        },
+        {
+          "id": "B02",
+          "text": "Boreal's fictional private worksheet preserves the beginning and ending dates of its reporting window and an unchanged original document. These private source records are available only to the Boreal test identity.",
+          "dependency_ids": [],
+          "is_active": true
+        }
+      ]
+    }
+  ],
+  "semantic_cases": [
+    {
+      "id": "CLOUD-S01",
+      "scope_label": "A",
+      "question": "How can the fictional team gather its building's power use without tallying the same delivery twice?",
+      "required_passage_ids": ["A01", "A02"],
+      "forbidden_passage_ids": ["A04", "B01", "B02"]
+    },
+    {
+      "id": "CLOUD-S02",
+      "scope_label": "A",
+      "question": "What should the fictional team preserve so someone can later inspect when its evidence applies?",
+      "required_passage_ids": ["A03"],
+      "forbidden_passage_ids": ["A04", "B01", "B02"]
+    },
+    {
+      "id": "CLOUD-S03",
+      "scope_label": "B",
+      "question": "What should the fictional team preserve so someone can later inspect when its evidence applies?",
+      "required_passage_ids": ["B02"],
+      "forbidden_passage_ids": ["A01", "A02", "A03", "A04"]
+    }
+  ],
+  "interpretation_limits": [
+    "A successful check demonstrates provider and evidence plumbing, not legal correctness or answer-generation quality.",
+    "At top_k 4 this tiny per-scope corpus does not establish useful semantic ranking accuracy.",
+    "The repeated A/B question tests scope separation; namespaces alone are not a substitute for authenticated membership and RLS tests.",
+    "Independent review and explicit resource/fixture authorization are required before cloud execution."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-08",
+  "updated_at": "2026-09-09",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M2",
     "name": "Reviewed evidence and first supported answer",
     "status": "in_progress",
-    "next_gate": "Verify isolated cloud Pinecone/Supabase connections and source-to-citation retrieval; dynamic answer quality still fails and requires separate reliability work before a new approved demonstration"
+    "next_gate": "Review the demonstrated synthetic cloud milestone; separately approve real-source processing and integrate retrieval into the application. Answer quality remains below release gate."
   },
   "completed_milestones": [
     {
@@ -324,11 +324,31 @@
       "status": "in_progress",
       "title": "Connect verified evidence through development Pinecone and Supabase",
       "acceptance": "Authenticated development targets verified; reproducible source/metadata/index roundtrip with fixed embeddings, access isolation and exact citation resolution; answer quality evaluated separately",
-      "progress": "Supabase metadata probes passed with no writes/customer rows. Pinecone account verified: Neuvetra Inc./Default initially had zero indexes; created empty neuvetra-ghg-dev. No application connection or source upload. Automatic approval review rejected a persistent All-permission API key; need specific authorization or an existing private key. Supabase dashboard/project role and non-truncating embedding parameters remain unverified.",
+      "progress": "Synthetic foundation gate passed: exact20-row staging, two ordinary Auth identities, private bucket/six source artifacts, six Pinecone vectors, API addition preserving old schemas, two scoped activations, all3 frozen retrieval cases and22live access checks. Saved report demonstrates actual results. Application wiring, real source ingestion, lifecycle and answer-quality work remain separate and incomplete.",
       "evidence": [
         "docs/research/data-flow-audit.md",
         "docs/research/cloud-integration-gate.md",
-        "operations/cloud-development.json"
+        "operations/cloud-development.json",
+        "docs/research/cloud-integration-qa.md",
+        "tools/cloud/README.md",
+        "tools/cloud/README-database.md",
+        "evaluations/cloud-integration/observations/2026-09-09-pinecone-describe.json",
+        "evaluations/cloud-integration/observations/2026-09-09-supabase-inventory-summary.json",
+        "evaluations/cloud-integration/observations/2026-09-09-legacy-anon-containment.json",
+        "evaluations/cloud-integration/observations/2026-09-09-synthetic-stage.json"
+      ]
+    },
+    {
+      "id": "M2-CLOUD-SYNTHETIC",
+      "owner": "cto_with_independent_qa",
+      "status": "complete",
+      "title": "Demonstrate actual cloud storage, citations and two-account access with fictional records",
+      "acceptance": "Exact owned fixture staged/uploaded/read back; ordinary A/B JWTs resolve exact originals; three frozen retrieval cases and22access checks pass; report truthfully labels synthetic/nonproduction scope.",
+      "evidence": [
+        "evaluations/cloud-integration/observations/2026-09-09-roundtrip.json",
+        "evaluations/cloud-integration/observations/2026-09-09-access-checks.json",
+        "docs/research/cloud-integration-qa.md",
+        "evaluations/cloud-integration/demo.html"
       ]
     }
   ],
@@ -416,6 +436,12 @@
       "decision": "Use cloud Pinecone and Supabase for development integration; stop local container setup",
       "why": "Board chose cloud after local prerequisite friction. Isolate development data and preserve verified release boundaries; cloud connectivity is distinct from answer accuracy.",
       "evidence": "docs/research/data-flow-audit.md"
+    },
+    {
+      "id": "D15",
+      "decision": "Verify cloud storage and citation primitives with six owned fictional passages before transferring reviewed source material",
+      "why": "A tiny fixed fixture tests the actual data path, access controls and integrity without implying semantic accuracy, source approval or successful dynamic answering. Credentials, source review and activation remain separate server responsibilities.",
+      "evidence": "docs/research/cloud-integration-qa.md"
     }
   ],
   "open_dependencies": [
@@ -446,8 +472,14 @@
     },
     {
       "id": "R7",
-      "detail": "Pinecone development index exists, but the current plan only offers All-permission keys; automatic approval review rejected new-key creation. Specific approval or an existing private PINECONE_API_KEY is required. Supabase API credentials work; dashboard/project role still needs verification.",
-      "impact": "Blocks programmatic Pinecone configuration, ingestion and integrated cloud testing. No source data has been uploaded."
+      "detail": "Credentials, direct TLS, isolated migration, two test identities, private Storage, Pinecone publication, API adoption and synthetic access/retrieval all verified. Research application still uses its local evidence path; no real source corpus uploaded. Pending GitHub-email OAuth was not granted or needed for these successful operations.",
+      "impact": "Blocks claiming a connected released GHG application until real-source processing, corpus integration and independent answer-quality gates pass."
+    },
+    {
+      "id": "R8",
+      "detail": "Legacy public.users and six FrontDesk tables retain broad authenticated access with RLS disabled; legacy privileged business API also needs server-side authorization. Anonymous access was contained without changing signed-in/backend grants.",
+      "impact": "Blocks claims of customer isolation or production security; authenticated compatibility and scoped authorization require separate work.",
+      "evidence": "docs/research/legacy-database-access-review.md"
     }
   ]
 }

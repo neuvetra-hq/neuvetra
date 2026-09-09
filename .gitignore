@@ -49,6 +49,8 @@ Thumbs.db
 Untitled.canvas
 
 # Local tooling
+__pycache__/
+*.py[cod]
 .remember/
 .superpowers/
 .claude/settings.local.json

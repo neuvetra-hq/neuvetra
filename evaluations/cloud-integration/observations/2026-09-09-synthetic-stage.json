@@ -1,0 +1,71 @@
+{
+  "project_ref": "icockcoguyadhryzydvl",
+  "status": "two_failed_transactions_preserved_third_corrected_transaction_committed",
+  "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
+  "stage_sha256": "b98ef3e1a52d294a5916f2b2f9cf8972d40a2445a25c6cb98597c05af0311ce5",
+  "attempts": [
+    {
+      "attempt": "01",
+      "started_at": "2026-09-09T05:15:52.015Z",
+      "finished_at": "2026-09-09T05:15:54.007Z",
+      "status": "failed_or_outcome_unconfirmed",
+      "error": "database_operation_failed",
+      "diagnostic": null,
+      "private_attempt_sha256": "87bbc6ddcfc6a9afe61c932864b782c4791fb5ba4c914faa50bcebe5d57710c3",
+      "rollback_observed_at": "2026-09-09T05:17:38.689Z",
+      "rollback_counts": {
+        "research_scopes": 0,
+        "research_objects": 0,
+        "research_sources": 0,
+        "research_releases": 0,
+        "research_passages": 0,
+        "research_ingestion_runs": 0,
+        "research_memberships": 0,
+        "research_active_builds": 0
+      },
+      "private_rollback_sha256": "dbe32da9044a4e53bc0040d77d4375288d0cfeb891a2ff4a065ee3b4a36a83e1"
+    },
+    {
+      "attempt": "02",
+      "started_at": "2026-09-09T05:23:10.354Z",
+      "finished_at": "2026-09-09T05:23:12.201Z",
+      "status": "failed_or_outcome_unconfirmed",
+      "error": "database_operation_failed",
+      "diagnostic": {
+        "stage": "stage_insert",
+        "table": "research_passages",
+        "row_index_0based": 0,
+        "sqlstate": "22023"
+      },
+      "private_attempt_sha256": "698aa829d056704aefa074f85706cae96cd324040bdac65bfb1304551ff090aa",
+      "rollback_observed_at": "2026-09-09T05:23:53.138Z",
+      "rollback_counts": {
+        "research_scopes": 0,
+        "research_objects": 0,
+        "research_sources": 0,
+        "research_releases": 0,
+        "research_passages": 0,
+        "research_ingestion_runs": 0,
+        "research_memberships": 0,
+        "research_active_builds": 0
+      },
+      "private_rollback_sha256": "52eee6a04fde43ba46c59f473f8c66d8ca92a9cb7f994b5afe2bac20dc1d315c"
+    }
+  ],
+  "root_cause": "Postgres.js 3.4.9 inferred JSONB parameters and serialized already encoded JSON strings again; PostgreSQL array functions received a scalar (SQLSTATE 22023).",
+  "local_correction": "Cast serialized parameters through text before JSONB; source arrays, fixture, schema and validation remain unchanged.",
+  "corrected_helper_sha256": "c9c4fa23e1fd2de819b8ef9f49fd5e30afc5cc252bb490bfa0081cd32f337c5c",
+  "corrected_tests_sha256": "e7f60799ef2e260697113dcd178c13b765789e134ac06a8c1c95b72662d61364",
+  "corrected_helper_offline_tests": 15,
+  "corrected_helper_offline_assertions": 192,
+  "corrected_helper_live_attempted": true,
+  "final_independent_review": "passed_including_actual_stage03_receipt",
+  "source_object_uploads": 6,
+  "vector_uploads": 6,
+  "test_auth_users_created": 2,
+  "active_builds": 2,
+  "customer_rows_requested": 0,
+  "customer_rows_changed": 0,
+  "limits": "Original count-only rollback records lack session fields; root checked guarded direct read-only wrappers. Corrected stage03 committed and exact later projection comparison preceded activation. Only owned fictional data; no regulatory source approval or generated answer.",
+  "successful_attempt": "evaluations/cloud-integration/observations/2026-09-09-stage-success.json"
+}

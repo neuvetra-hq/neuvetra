@@ -1,0 +1,20 @@
+{
+  "observation": "legacy_anonymous_access_containment",
+  "observed_at": "2026-09-09T05:14:26.159992+00:00",
+  "project_ref": "icockcoguyadhryzydvl",
+  "migration_sha256": "82c71c10c66d270ef322365111ac8cbba3a4562ce155d3dcfdee23ca7e8ea102",
+  "before_metadata_sha256": "18e76bdada2ceab0c00dff284554282a78f4fdebdaab89ca548795db0ed2e6d5",
+  "after_metadata_sha256": "ff7b326386b0bdc32878a2302910c952d5592f101d3fa012516202db4ab644d0",
+  "target_tables": 7,
+  "revoked_role": "anon",
+  "captured_rollback_grants": 56,
+  "anonymous_all_eight_table_privileges_and_column_access_denied": true,
+  "all_non_anonymous_acl_entries_unchanged": true,
+  "authenticated_and_service_role_effective_privileges_unchanged": true,
+  "auth_trigger_metadata_unchanged": true,
+  "customer_rows_requested_or_changed": 0,
+  "public_users_head_zero_rows_before": 200,
+  "public_users_head_zero_rows_after": 401,
+  "frontdesk_businesses_head_zero_rows_before_and_after": 406,
+  "scope_limit": "Anonymous access containment only. Authenticated legacy RLS and privileged API authorization remain unresolved. Real signed-in user flows were not exercised. HTTP 406 alone does not classify its exact cause."
+}

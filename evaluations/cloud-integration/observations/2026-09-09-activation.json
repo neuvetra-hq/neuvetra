@@ -1,0 +1,16 @@
+{
+  "operation": "activate_synthetic_builds",
+  "project_ref": "icockcoguyadhryzydvl",
+  "committed": true,
+  "target_sha256": "fff2d429b00a4dc31806cf029d386de87be263efa2f55ec366b5e928dd5be055",
+  "stage_sha256": "b98ef3e1a52d294a5916f2b2f9cf8972d40a2445a25c6cb98597c05af0311ce5",
+  "publication_sha256": "037ce736a108914dd2ee07e031e72841048270349b7e2dae1b68fbf50e2eed7e",
+  "identities_sha256": "4bbe25fd2bf5755b565d995d76e80cf9f017b42baa97d931129ac9c01551e19a",
+  "memberships_inserted": 2,
+  "synthetic_sources_approved": 2,
+  "synthetic_passages_approved": 6,
+  "builds_activated": 2,
+  "commercial_runtime_approval": false,
+  "status": "completed",
+  "observed_at": "2026-09-09T05:55:29.689Z"
+}

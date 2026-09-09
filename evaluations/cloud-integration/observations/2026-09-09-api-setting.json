@@ -1,0 +1,31 @@
+{
+  "operation": "data_api_schema_exposure",
+  "project_ref": "icockcoguyadhryzydvl",
+  "mode": "apply",
+  "connection_mode": "direct",
+  "committed": true,
+  "api_verified": false,
+  "before_api": {
+    "code": "PGRST106",
+    "http_status": 406,
+    "schemas": [
+      "public",
+      "graphql_public"
+    ],
+    "observed_at": "2026-09-09T05:50:58.909Z"
+  },
+  "after_api": null,
+  "before_settings": [],
+  "after_settings": [
+    {
+      "role_scope": "authenticator",
+      "database_scope": "postgres",
+      "db_schemas": "public, graphql_public, neuvetra_research_dev"
+    }
+  ],
+  "customer_rows_requested": 0,
+  "table_or_grant_writes": 0,
+  "sql_sha256": "a409a07c3d02d9603036ef0685ac83d40f66bb365b0f03eae57ea8271638885d",
+  "status": "completed",
+  "observed_at": "2026-09-09T05:50:59.801Z"
+}
