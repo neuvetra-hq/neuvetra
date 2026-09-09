@@ -7,6 +7,7 @@ export interface QuestionRoute {
   status?: AnswerStatus
   missingContext: string[]
   topics: string[]
+  questionKind?: 'general_concept' | 'company_specific'
 }
 
 // A deliberately narrow, inspectable boundary for the reviewed concept demo.
@@ -18,9 +19,9 @@ export function routeQuestion(question: string): QuestionRoute {
   // EPA's released conceptual prose does not establish another publisher's
   // obligations or support financial/procurement decisions, even when those
   // questions contain the same method and electricity keywords.
-  if (/\b(worldwide|global|globally|international|ghg protocol|mandatory|obligations?|pricing|prices?|costs?|cheapest|cheaper|expensive|financial|income|profits?|bills?|best supplier)\b/.test(text)) return route('unsupported')
+  if (/\b(worldwide|global|globally|international|ghg protocol|mandatory|obligations?|pricing|prices?|costs?|cheapest|cheaper|expensive|financial|income|profits?|bills?|best supplier|software|platforms?|apps?|tools?|vendors?)\b/.test(text)) return route('unsupported')
   if (/\b(zero|neutral|neutrality|net zero|avoided|physical|additionality|eligible|eligibility|direct line|on site|onsite|steam|heating|cooling|organizational boundary)\b/.test(text)) return route('unsupported')
-  if (/\b(calculate|compute|convert|tonnes?|tons?|co2e|kilograms?|multiply|kwh|mwh|filing|file|deadline|sb\s*25[13]|sb\s*261|legal|compliance|carb|assurance|audit)\b/.test(text)) return route('unsupported')
+  if (/\b(calculate|compute|convert|tonnes?|tons?|co2e|kilograms?|multiply|kwh|mwh|filing|file|deadline|sb\s*25[13]|sb\s*261|law|laws|legal|legally|regulatory|statute|compliance|carb|assurance|audit)\b/.test(text)) return route('unsupported')
   if (/\b(draft|proposal|consultation|superseded|withdrawn|latest|newest|current rule)\b/.test(text)) return route('stale_or_conflicting')
   if (/\b(factor|factors|rate)\b/.test(text) && /\b(my|our|company|office|facility|which|select|use|choose)\b/.test(text)) {
     const missing: string[] = []
@@ -32,16 +33,28 @@ export function routeQuestion(question: string): QuestionRoute {
   // The reviewed release describes concepts; it cannot decide applicability to
   // a company's historical inventory or any jurisdiction-specific obligation.
   if (/\b(19|20)\d{2}\b/.test(text) || /\b(eu|europe|uk|united kingdom|china|india|canada|australia|brazil|mexico|japan|germany|france|scope\s*[13])\b/.test(text)) return route('unsupported')
+  const reporting = /\b(report|reports|reporting|reported)\b/.test(text)
+  if (reporting && /\b(must|required|have to|need to|should|obliged)\b/.test(text) && /\b(my|our|we|i|this company)\b/.test(text)) return route('unsupported')
   const scope2 = /\bscope\s*2\b/.test(text)
-  const domain = scope2 || /\belectricity\b|\b(?:location|market) based\b/.test(text)
+  const epaMethods = /\bepa\b/.test(text) && reporting && /\bmethods?\b/.test(text)
+  const domain = scope2 || epaMethods || /\belectricity\b|\b(?:location|market) based\b/.test(text)
   if (!domain) return route('unsupported')
-  const comparison = /\b(two|both|between|different|differently|difference|compare|comparison)\b/.test(text) && /\b(methods?|accounting|results?|scope\s*2)\b/.test(text)
+  const comparison = (/\b(different|differently|difference|differ|compare|comparison|contrast|versus)\b/.test(text) || (!reporting && /\b(two|both|between)\b/.test(text))) && /\b(methods?|accounting|approaches?|results?|scope\s*2)\b/.test(text)
   const location = comparison || /\blocation based\b|\b(grid|regional|average)\b/.test(text)
   const market = comparison || /\bmarket based\b|\b(contractual|supplier|certificate|rec|renewable)\b/.test(text)
   const topics = [location ? 'location_based' : '', market ? 'market_based' : ''].filter(Boolean)
-  if (!topics.length && scope2 && /\b(dual|report|reporting|separate|separately)\b/.test(text)) topics.push('scope2_general')
+  // Compound questions need every requested concept. The reviewed reporting
+  // recommendation and its explanatory rationale are separate evidence topics;
+  // neither a method definition nor the context checklist can stand in for them.
+  if (reporting) {
+    topics.push('dual_reporting')
+    if (/\b(why|reason|reasons|rationale|purpose|benefit|benefits)\b/.test(text) || /\bexplain\b.{0,100}\brecommendation\b/.test(text)) topics.push('reporting_rationale')
+  }
   if (!topics.length) return route('unsupported')
-  return { topics, missingContext: [] }
+  const diagnosticTarget = /\b(results?|totals?|numbers?|figures?|inventory|inventories)\b/.test(text) || (/\bemissions\b/.test(text) && /\b(why|differ|different|higher|lower|discrepancy)\b/.test(text))
+  const companyContext = diagnosticTarget && /\b(my|our|company|office|facility|plant|actual|measured)\b/.test(text)
+  const personalDiagnostic = diagnosticTarget && /\b(?:we|i)\s+(?:got|get|have|see|reported|recorded|used|purchased)\b/.test(text)
+  return { topics, missingContext: [], questionKind: companyContext || personalDiagnostic ? 'company_specific' : 'general_concept' }
 }
 
 export function retrieve(question: string, verified: VerifiedRelease, topics: string[], limit = 6): Proposition[] {

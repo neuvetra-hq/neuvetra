@@ -68,12 +68,16 @@ export function createResearchService(options: ResearchServiceOptions) {
       let candidate: Candidate | null
       try { candidate = validateCandidate(await options.provider.select({ question, propositions: selected, evidence }), selected, route.topics) } catch { return result('unavailable', verified) }
       if (!candidate) return result('needs_review', verified)
+      if (candidate.decision === 'needs_input' && route.questionKind === 'general_concept') return result('needs_review', verified)
       if (candidate.decision !== 'answer') return result(candidate.decision, verified, candidate.missing_context)
+      if (route.questionKind === 'company_specific') return result('unsupported', verified)
       // Revalidate both the pinned release and original bytes after model latency.
       // No stream, raw candidate prose, or cached fallback crosses this boundary.
       try { const current = await options.loadRelease(); if (current.sha256 !== verified.sha256) return result('unavailable') } catch (error) { return result(error instanceof ReleaseError ? error.reason : 'unavailable') }
       const ids = new Set(candidate.claims.map(item => item.proposition_id))
-      const claims = selected.filter(item => ids.has(item.id)).map(({ id, text, qualifications, evidence_ids }) => ({ id, text, qualifications, evidence_ids }))
+      // Retrieval scores choose candidates; the independently reviewed release
+      // order presents definitions, recommendation and rationale coherently.
+      const claims = verified.release.propositions.filter(item => ids.has(item.id)).map(({ id, text, qualifications, evidence_ids }) => ({ id, text, qualifications, evidence_ids }))
       const answer = result(claims.some(item => item.qualifications.length) ? 'qualified' : 'supported', verified)
       answer.claims = claims
       const finalEvidenceIds = new Set(claims.flatMap(item => item.evidence_ids))

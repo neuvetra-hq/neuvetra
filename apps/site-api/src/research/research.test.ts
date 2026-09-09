@@ -36,6 +36,21 @@ const mockProvider = (select: (input: ModelInput) => Promise<unknown> = async ()
   mode: 'live', model: 'unit-test-stub-only', available: () => true, limits: () => ({ max_calls: 1, remaining_calls: 1, max_output_tokens: 100, max_spend_usd: 0, reserved_spend_usd: 0 }), select,
 })
 const comparison = 'What is the difference between location-based and market-based accounting?'
+const compoundQuestion = 'What is the difference between the location-based and market-based calculation methods, and why must companies report both?'
+const reportingRelease = (): Release => {
+  const data = release()
+  data.scope.topics.push('dual_reporting', 'reporting_rationale')
+  data.review.approved_proposition_ids.push('reporting', 'rationale')
+  data.evidence.push(
+    { id: 'reporting-span', source_id: 'source-a', locator: 'Synthetic section C', excerpt: 'Synthetic reporting evidence.', review_status: 'approved' },
+    { id: 'rationale-span', source_id: 'source-a', locator: 'Synthetic section D', excerpt: 'Synthetic rationale evidence.', review_status: 'approved' },
+  )
+  data.propositions.push(
+    { id: 'reporting', text: 'Synthetic reviewed reporting recommendation.', evidence_ids: ['reporting-span'], qualifications: ['Synthetic qualification correcting a universal requirement premise.'], keywords: ['report', 'reporting', 'both', 'dual'], topic: 'dual_reporting' },
+    { id: 'rationale', text: 'Synthetic reviewed rationale.', evidence_ids: ['rationale-span'], qualifications: ['Synthetic explanation boundary.'], keywords: ['why', 'report', 'reporting', 'both'], topic: 'reporting_rationale' },
+  )
+  return data
+}
 const temporary: string[] = []
 afterEach(async () => { for (const dir of temporary.splice(0)) await rm(dir, { recursive: true, force: true }) })
 async function diskFixture() {
@@ -111,6 +126,73 @@ describe('retrieval and supported selection', () => {
     expect(retrieve(comparison, verified(), ['location_based', 'market_based']).map(item => item.id)).toEqual(['location', 'market'])
     expect(retrieve(comparison, verified(), ['location_based', 'scope2_general'])).toEqual([])
   })
+  test('compound method and reporting questions require the recommendation and rationale independently', async () => {
+    const data = verified(reportingRelease())
+    const route = routeQuestion(compoundQuestion)
+    expect(route.topics).toEqual(['location_based', 'market_based', 'dual_reporting', 'reporting_rationale'])
+    expect(routeQuestion(comparison).topics).toEqual(['location_based', 'market_based'])
+    expect(routeQuestion('Why does EPA recommend reporting both methods?').topics).toEqual(['dual_reporting', 'reporting_rationale'])
+    expect(routeQuestion("Compare the two Scope 2 approaches and explain EPA's recommendation to report both.").topics).toEqual(route.topics)
+    expect(routeQuestion('How do location-based and market-based calculation methods differ?').topics).toEqual(['location_based', 'market_based'])
+    expect(routeQuestion('Does EPA recommend separate Scope 2 reporting?').topics).toEqual(['dual_reporting'])
+    const retrieved = retrieve(compoundQuestion, data, route.topics)
+    expect(new Set(retrieved.map(item => item.id))).toEqual(new Set(['location', 'market', 'reporting', 'rationale']))
+    for (const ids of [['location', 'market'], ['location', 'market', 'reporting'], ['location', 'market', 'rationale']]) {
+      expect(validateCandidate(answerCandidate(ids), retrieved, route.topics)).toBeNull()
+      const result = await createResearchService({ loadRelease: async () => data, provider: mockProvider(async () => answerCandidate(ids)) }).answer(compoundQuestion)
+      expect(result).toMatchObject({ status: 'needs_review', claims: [] })
+    }
+    const response = await createResearchService({ loadRelease: async () => data, provider: mockProvider(async () => answerCandidate(['location', 'market', 'reporting', 'rationale'])) }).answer(compoundQuestion)
+    expect(response.status).toBe('qualified')
+    expect(retrieved.map(item => item.id)).not.toEqual(['location', 'market', 'reporting', 'rationale'])
+    expect(response.claims.map(item => item.id)).toEqual(['location', 'market', 'reporting', 'rationale'])
+    expect(response.claims.find(item => item.id === 'reporting')?.qualifications).toEqual(data.release.propositions.find(item => item.id === 'reporting')?.qualifications)
+  })
+  test('reporting-only questions accept complete reporting support without forcing method definitions', async () => {
+    const question = 'Why does EPA recommend reporting both Scope 2 results?'
+    const data = verified(reportingRelease())
+    expect(routeQuestion(question).topics).toEqual(['dual_reporting', 'reporting_rationale'])
+    const service = createResearchService({ loadRelease: async () => data, provider: mockProvider(async input => {
+      expect(new Set(input.propositions.map(item => item.id))).toEqual(new Set(['reporting', 'rationale']))
+      return answerCandidate(['reporting', 'rationale'])
+    }) })
+    const response = await service.answer(question)
+    expect(response.status).toBe('qualified')
+    expect(response.claims.map(item => item.id)).toEqual(['reporting', 'rationale'])
+    for (const ids of [['reporting'], ['rationale']]) {
+      expect(await createResearchService({ loadRelease: async () => data, provider: mockProvider(async () => answerCandidate(ids)) }).answer(question)).toMatchObject({ status: 'needs_review', claims: [] })
+    }
+  })
+  test('generic differences need no company context while actual inventory diagnoses stay withheld', async () => {
+    const data = release()
+    for (const item of data.propositions) item.keywords.push('scope 2')
+    const loadRelease = async () => verified(data)
+    const generic = 'Why are the two Scope 2 results different?'
+    const company = 'Why are our two Scope 2 results different?'
+    expect(routeQuestion(generic).questionKind).toBe('general_concept')
+    expect(routeQuestion(company).questionKind).toBe('company_specific')
+    expect(routeQuestion('Explain the difference between location-based and market-based methods before any company details are available.').questionKind).toBe('general_concept')
+    expect(routeQuestion('Explain the two Scope 2 approaches without needing details about my company.').questionKind).toBe('general_concept')
+    expect(routeQuestion('Why are the company inventory results different between the two Scope 2 methods?').questionKind).toBe('company_specific')
+    expect(routeQuestion('Why are our measured Scope 2 results different?').questionKind).toBe('company_specific')
+    const service = createResearchService({ loadRelease, provider: mockProvider() })
+    expect(await service.answer(generic)).toMatchObject({ status: 'qualified', missing_context: [] })
+    expect(await service.answer(company)).toMatchObject({ status: 'unsupported', claims: [] })
+    const contextProvider = mockProvider(async () => ({ decision: 'needs_input', claims: [], missing_context: ['location', 'reporting_period', 'electricity_supply'] }))
+    const contextService = createResearchService({ loadRelease, provider: contextProvider })
+    expect(await contextService.answer(generic)).toMatchObject({ status: 'needs_review', claims: [], missing_context: [] })
+    expect(await contextService.answer(company)).toMatchObject({ status: 'needs_input', claims: [], missing_context: ['location', 'reporting_period', 'electricity_supply'] })
+  })
+  test('an incomplete reporting release and a generic context proposition cannot fill the rationale gap', async () => {
+    const data = reportingRelease()
+    data.propositions = data.propositions.filter(item => item.id !== 'rationale')
+    data.propositions.push({ id: 'context-only', text: 'Synthetic context checklist.', evidence_ids: ['location-span'], qualifications: [], keywords: ['why', 'report', 'both'], topic: 'scope2_general' })
+    data.review.approved_proposition_ids.push('context-only')
+    let calls = 0
+    const result = await createResearchService({ loadRelease: async () => verified(data), provider: mockProvider(async () => { calls++; return answerCandidate(['location', 'market', 'reporting']) }) }).answer(compoundQuestion)
+    expect(result).toMatchObject({ status: 'unsupported', claims: [] })
+    expect(calls).toBe(0)
+  })
   test('scope routing rejects unrelated broad words and preserves comparison paraphrases', () => {
     for (const question of ['What is the average household income?', 'Can we say we have zero emissions because we bought renewable electricity?', 'Explain direct-line electricity supply.', 'What is Scope 2?']) expect(routeQuestion(question).status).toBe('unsupported')
     for (const question of ['Why might the same electricity purchase appear differently under two accounting methods?', 'Why are the two Scope 2 results different?']) expect(routeQuestion(question).topics).toEqual(['location_based', 'market_based'])
@@ -118,7 +200,7 @@ describe('retrieval and supported selection', () => {
   test('publisher obligations and financial comparisons cannot render unrelated valid propositions', async () => {
     let calls = 0
     const service = createResearchService({ loadRelease: async () => verified(), provider: mockProvider(async () => { calls++; return answerCandidate(['market']) }) })
-    for (const question of ['Is dual Scope 2 reporting mandatory worldwide under GHG Protocol?', 'How does market-based pricing affect electricity costs?', 'Which supplier has the cheapest electricity?', 'Explain market-based Scope 2 in Brazil.']) {
+    for (const question of ['Is dual Scope 2 reporting mandatory worldwide under GHG Protocol?', 'How does market-based pricing affect electricity costs?', 'Which supplier has the cheapest electricity?', 'Explain market-based Scope 2 in Brazil.', 'Must my company report both Scope 2 methods?', 'Why must companies report both methods under law?', 'Calculate both Scope 2 totals for 500 kWh.', 'What reporting software should handle our Scope 2 data?']) {
       expect(await service.answer(question)).toMatchObject({ status: 'unsupported', claims: [] })
     }
     expect(calls).toBe(0)
@@ -200,6 +282,21 @@ describe('real-provider transport with mocked network only', () => {
     expect(await provider.select(input)).toEqual(answerCandidate())
     expect(captured).toMatchObject({ model: 'claude-sonnet-5', thinking: { type: 'disabled' }, output_config: { format: { type: 'json_schema' } } })
     expect(captured).not.toHaveProperty('stream'); expect(captured).not.toHaveProperty('temperature')
+  })
+  test('transport supplies conceptual or company-specific routing metadata and exact required topics', async () => {
+    const observed: unknown[] = []
+    const provider = createAnthropicProvider({ ...providerOptions, fetch: async (_url, request) => {
+      const payload = JSON.parse(String(request.body)) as { messages: { content: string }[] }
+      const content = JSON.parse(payload.messages[0].content) as { routing: unknown }
+      observed.push(content.routing)
+      return success()
+    } })
+    await provider.select({ ...input, question: 'Why are the two Scope 2 results different?' })
+    await provider.select({ ...input, question: 'Why are our two Scope 2 results different?' })
+    expect(observed).toEqual([
+      { question_kind: 'general_concept', required_topics: ['location_based', 'market_based'] },
+      { question_kind: 'company_specific', required_topics: ['location_based', 'market_based'] },
+    ])
   })
   test('rejects refusal, truncation, malformed JSON and unexpected output blocks', async () => {
     for (const response of [

@@ -85,7 +85,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-live", action="store_true", required=True, help="Explicitly allow this run to use the already configured, budgeted local model service")
     parser.add_argument("--base-url", default="http://127.0.0.1:3012")
-    parser.add_argument("--fixtures", type=Path, default=ROOT / "evaluations/research-qa/scope2-pilot-fixtures.json")
+    parser.add_argument("--fixtures", type=Path, default=ROOT / "evaluations/research-qa/scope2-pilot-feedback-fixtures.json")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     url = urlparse(args.base_url)
@@ -114,7 +114,7 @@ def main() -> int:
         "schema_version": 1, "started_at": datetime.now(timezone.utc).isoformat(),
         "git_base_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
         "code_sha256": code_hashes, "release_sha256": pin, "fixture_sha256": digest(args.fixtures),
-        "scope": "17 live-eligible HTTP question cases; other adversarial layers are separate offline tests",
+        "scope": f"{len(cases)} live-eligible HTTP question cases; other adversarial layers are separate offline tests",
         "before": before, "cases": [], "notes": ["Assertions are bounded to this reviewed fixture set, not general model accuracy.", "Reserved spend is a conservative envelope, not measured billing.", "No customer data or credentials are included."]
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
