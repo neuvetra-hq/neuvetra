@@ -69,3 +69,12 @@ __pycache__/
 **/*.tgz
 *.pem
 *.bak
+
+# Local source expansion held pending publisher-use clearance.
+# These candidate records include extracted GHG Protocol expression/anchors.
+/data/research/releases/scope2-website.v2.candidate.json
+/data/research/conditions/scope2-website.v2.candidate.json
+/data/research/answer-units/scope2-website.v2.candidate.json
+/data/research/candidates/scope2-website.v2.manifest.json
+/data/research/candidates/scope2-website.v2.spec.json
+/data/research/candidates/scope2-website.v2.units.json

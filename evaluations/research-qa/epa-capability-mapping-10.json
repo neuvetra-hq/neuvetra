@@ -1,0 +1,669 @@
+{
+  "schema_version": 1,
+  "task_id": "M2-EPA-QA-13",
+  "reviewed_at": "2026-09-09T19:51:40.672Z",
+  "reviewer": "Independent QA /root/qa_live",
+  "draft_path": ".superpowers/data-capability-13/capabilities.review3.json",
+  "draft_sha256": "bd5a2f6b40793d7ccca579cef2305f02b1b0efca42c3cabf5ec54371e8ead86b",
+  "unit_catalog_sha256": "adb43b8a9e90cbe85f382988dedc16e16f82f7a596e0bcf5f5e98ba2f84630cd",
+  "source_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "condition_catalog_sha256": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+  "expires_at": "2026-09-15T23:20:32Z",
+  "units_reviewed": 23,
+  "capabilities_reviewed": 29,
+  "limits_reviewed": 23,
+  "anchor_errors": 0,
+  "disposition": "approved_for_private_runtime_integration; exact metadata meanings only, implementation and live acceptance remain separate",
+  "source_basis": "Existing approved EPA unit text only; no new source facts or benchmark reference content used",
+  "observations": [
+    "U07 additional conditional generation-boundary capability is directly supported by its first two sentences.",
+    "U14 direction to quality prerequisites and negative limitation do not authorize an actual eligibility finding.",
+    "U04 record sources, U13 supplier-product source, U20 uncertainty explanation and U21 date-distinction explanation need accurate classification under strict kind matching to avoid conservative false gaps.",
+    "A part may require multiple independent kind/subject requirements. Empty or unrelated proofs must never establish completeness.",
+    "A limit blocks only a requested excluded task; its presence alone does not block all useful bounded answers.",
+    "Proof validation supplements independent whole-question interpretation; it does not establish deterministic semantic correctness."
+  ],
+  "entries": [
+    {
+      "unit_id": "U01",
+      "anchors": [
+        {
+          "id": "U01-C01",
+          "anchor": [
+            0,
+            268
+          ],
+          "text_sha256": "26076985446c80000589beed15c4b7f7af69579847d95cac6b48c3d29e9cfadc",
+          "kind": "definition",
+          "subject": "accounting_methods"
+        },
+        {
+          "id": "U01-L01",
+          "anchor": [
+            268,
+            390
+          ],
+          "text_sha256": "914a4cab09fc215807c1a9385e1ab091202143ce139b62c9029c65f31fcb8c51",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U02",
+      "anchors": [
+        {
+          "id": "U02-C01",
+          "anchor": [
+            0,
+            213
+          ],
+          "text_sha256": "219bf7a2fcb851e52e0179b67bc3f89692db77c0319a33b1ac707738436beeae",
+          "kind": "general_recommendation",
+          "subject": "reporting_methods"
+        },
+        {
+          "id": "U02-L01",
+          "anchor": [
+            213,
+            341
+          ],
+          "text_sha256": "39545e27c9bcebf4fa65409b72c21cf2b487215242bb7d249a1821f0026be516",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U03",
+      "anchors": [
+        {
+          "id": "U03-C01",
+          "anchor": [
+            0,
+            145
+          ],
+          "text_sha256": "4a86a1106f459390eba1c41b03fadc39218f8c59f14704f8abb17383ba0a972b",
+          "kind": "explanation",
+          "subject": "reporting_perspectives"
+        },
+        {
+          "id": "U03-L01",
+          "anchor": [
+            145,
+            287
+          ],
+          "text_sha256": "bc902c4ff0d1d362638da9d1ee0e19515520c130247715a2d98b288873c87294",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U04",
+      "anchors": [
+        {
+          "id": "U04-C01",
+          "anchor": [
+            0,
+            331
+          ],
+          "text_sha256": "a976dd37acb4a73b0fa066df159e6972ed42e9f5a7c8700f22531c7a8e771824",
+          "kind": "general_recommendation",
+          "subject": "activity_records"
+        },
+        {
+          "id": "U04-C02",
+          "anchor": [
+            0,
+            150
+          ],
+          "text_sha256": "b4011940080bf54d47dcb4d56dd2eb09ead9a60e04094f44adfd9bb47d034959",
+          "kind": "source_route",
+          "subject": "activity_records"
+        },
+        {
+          "id": "U04-L01",
+          "anchor": [
+            331,
+            407
+          ],
+          "text_sha256": "a29d6be5d2a5fbe1356a5180b2e419a16f3676dd333b8b8ceb58cac378666b92",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U05",
+      "anchors": [
+        {
+          "id": "U05-C01",
+          "anchor": [
+            0,
+            358
+          ],
+          "text_sha256": "17455027a97d284977672983a914a8ebaabed4f152c1024414bfa268685d447e",
+          "kind": "conditional_rule",
+          "subject": "duplicate_consumption"
+        },
+        {
+          "id": "U05-L01",
+          "anchor": [
+            358,
+            447
+          ],
+          "text_sha256": "37f52c110eff19a0e66d8f5d1aa31cdd8c487464cafce38b332fe091c442427d",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U06",
+      "anchors": [
+        {
+          "id": "U06-C01",
+          "anchor": [
+            0,
+            145
+          ],
+          "text_sha256": "c51f4ae69a09f42fac3c9ca515408f4f9cb222fd69f043618be27f56887a88cd",
+          "kind": "definition",
+          "subject": "electricity_units"
+        },
+        {
+          "id": "U06-L01",
+          "anchor": [
+            145,
+            269
+          ],
+          "text_sha256": "f7cd5fdc50643d996d3277c8fd7ced2842e3f2a97e11408064d2e4006fae398b",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U07",
+      "anchors": [
+        {
+          "id": "U07-C01",
+          "anchor": [
+            0,
+            335
+          ],
+          "text_sha256": "9c494a50bb9712bb991898489b087677623faf984d2c8ffb259058755965ea37",
+          "kind": "explanation",
+          "subject": "generation_boundary"
+        },
+        {
+          "id": "U07-C02",
+          "anchor": [
+            0,
+            271
+          ],
+          "text_sha256": "5d7982c279507dda4a670d6511c87befa1f00f1a735d5c768e97d850b5d58f90",
+          "kind": "conditional_rule",
+          "subject": "generation_boundary"
+        },
+        {
+          "id": "U07-L01",
+          "anchor": [
+            335,
+            404
+          ],
+          "text_sha256": "ec308c18d6da50eecc17dbbf12feff285ff3d0811d46d2d6dc8f4f4c4956daca",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U08",
+      "anchors": [
+        {
+          "id": "U08-C01",
+          "anchor": [
+            0,
+            307
+          ],
+          "text_sha256": "61dfb5ceab884c313a3882091bdd8de262fdce937bf4e44a30d4c5203998fa9d",
+          "kind": "conditional_rule",
+          "subject": "grid_geography"
+        },
+        {
+          "id": "U08-L01",
+          "anchor": [
+            307,
+            393
+          ],
+          "text_sha256": "6f2ffdfc3c750ca4a0525d7c01bbd8ee028edbe1db7b813def8a4a1c4fbe75b6",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U09",
+      "anchors": [
+        {
+          "id": "U09-C01",
+          "anchor": [
+            0,
+            311
+          ],
+          "text_sha256": "ead74578cb408ff5fb92619d92a1d87d1d1a1553157a8345a31d2ee033563103",
+          "kind": "source_route",
+          "subject": "grid_factor_source"
+        },
+        {
+          "id": "U09-L01",
+          "anchor": [
+            311,
+            393
+          ],
+          "text_sha256": "4287f65bd7c0ce39a1ad3bad03585bb46e1104b9a0165446a86a47215c0c3e19",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U10",
+      "anchors": [
+        {
+          "id": "U10-C01",
+          "anchor": [
+            0,
+            330
+          ],
+          "text_sha256": "e29f1baf108e0cff11f111c599c050c56f679a61b3fca9ab2309021e68a85c47",
+          "kind": "source_route",
+          "subject": "publisher_updates"
+        },
+        {
+          "id": "U10-L01",
+          "anchor": [
+            330,
+            394
+          ],
+          "text_sha256": "a36e894c6fd8f99b3b2d12e940391f5c8918026fc507d86f7ce1d873ea59a8fd",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U11",
+      "anchors": [
+        {
+          "id": "U11-C01",
+          "anchor": [
+            0,
+            192
+          ],
+          "text_sha256": "d09e2c61c19fe80ac6a7c512064c7cf20f6129dafaf5ec7861b96503a5473fd0",
+          "kind": "source_route",
+          "subject": "subregion_lookup"
+        },
+        {
+          "id": "U11-L01",
+          "anchor": [
+            192,
+            260
+          ],
+          "text_sha256": "e8596d241371c38d0188e6fd82099ad872a55a57f5946f6281b88142d5625e8f",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U12",
+      "anchors": [
+        {
+          "id": "U12-C01",
+          "anchor": [
+            0,
+            187
+          ],
+          "text_sha256": "a4556e372e55d6a81ec036a3ded76cdcb140922005f023fa42b8f08d504bb48c",
+          "kind": "definition",
+          "subject": "market_procurement"
+        },
+        {
+          "id": "U12-L01",
+          "anchor": [
+            187,
+            395
+          ],
+          "text_sha256": "93cae7a7e587865d05e9b5ebed082b20955b91ce22034511ed5460941d03c2b8",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U13",
+      "anchors": [
+        {
+          "id": "U13-C01",
+          "anchor": [
+            0,
+            458
+          ],
+          "text_sha256": "0131ee0644d57a8f9ca8e8c9768dc097264d286cb5c4a7b72fbbed834dae9409",
+          "kind": "conditional_rule",
+          "subject": "supplier_delivered_boundary"
+        },
+        {
+          "id": "U13-C02",
+          "anchor": [
+            0,
+            171
+          ],
+          "text_sha256": "884ec0012fcc03cee9536607a5d4c4fa52d64587da209522be50d1f48fa85fa7",
+          "kind": "source_route",
+          "subject": "supplier_delivered_boundary"
+        },
+        {
+          "id": "U13-L01",
+          "anchor": [
+            458,
+            519
+          ],
+          "text_sha256": "fbcb6e92032532d6e9699fc17c1bf6963e0d2b84fbd22199af963fcaaca8aaa6",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U14",
+      "anchors": [
+        {
+          "id": "U14-C01",
+          "anchor": [
+            0,
+            240
+          ],
+          "text_sha256": "cf4a559306a4e0f0c7476909d80c741a04bf5fdb75caf62366db3100468c4d69",
+          "kind": "general_recommendation",
+          "subject": "certificate_quality_prerequisite"
+        },
+        {
+          "id": "U14-L01",
+          "anchor": [
+            240,
+            486
+          ],
+          "text_sha256": "43cc78c358b7d2c95b528d8d1d9a8e62dbec70539ab5d29561a2042e688b3064",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U15",
+      "anchors": [
+        {
+          "id": "U15-C01",
+          "anchor": [
+            0,
+            461
+          ],
+          "text_sha256": "a7f28300e304e170345ee59334280e3086972cfe72987b602a58fe6dfc8fdd66",
+          "kind": "conditional_rule",
+          "subject": "contract_certificate_claim"
+        },
+        {
+          "id": "U15-L01",
+          "anchor": [
+            461,
+            600
+          ],
+          "text_sha256": "5ce42cfcd65a2a43b6cdd31b9b794c930790c4d87b862dc12b95f82bdb9c2bf9",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U16",
+      "anchors": [
+        {
+          "id": "U16-C01",
+          "anchor": [
+            0,
+            472
+          ],
+          "text_sha256": "4f4ff6913cbb450ab09a046f1cf9b934addac8b765a077184cdbbfe7050321c6",
+          "kind": "conditional_rule",
+          "subject": "agreement_period_alignment"
+        },
+        {
+          "id": "U16-L01",
+          "anchor": [
+            472,
+            581
+          ],
+          "text_sha256": "5cd90469bb2c35efea2acca8e3d242859f649ee304f65dc96f4ac32b9279ab1c",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U17",
+      "anchors": [
+        {
+          "id": "U17-C01",
+          "anchor": [
+            0,
+            453
+          ],
+          "text_sha256": "c5bd2c21cb6686589c459b58b1bbe00c90e29ad39cae35d000d206b107936a16",
+          "kind": "explanation",
+          "subject": "factor_data_period"
+        },
+        {
+          "id": "U17-L01",
+          "anchor": [
+            338,
+            453
+          ],
+          "text_sha256": "fcc07bd5c253d08bc147481a51d0cba6e5366d1363dc10cf2f05ebfc964be144",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U18",
+      "anchors": [
+        {
+          "id": "U18-C01",
+          "anchor": [
+            0,
+            459
+          ],
+          "text_sha256": "504669a5c3b79ffdedb9337f062b2aff2d73bb990bf4eccdf07e0d99b3e9f6a2",
+          "kind": "conditional_rule",
+          "subject": "factor_update_adjustment"
+        },
+        {
+          "id": "U18-C02",
+          "anchor": [
+            0,
+            185
+          ],
+          "text_sha256": "3e38bef852b1c045905097e64aba80fafbccfa45f732726eb3b198c1c32a3456",
+          "kind": "general_recommendation",
+          "subject": "factor_update_adjustment"
+        },
+        {
+          "id": "U18-L01",
+          "anchor": [
+            459,
+            578
+          ],
+          "text_sha256": "d5b9dbb0b9ccd31481d9b581d8af313336acfb9127a2e518edbf9d2e47a0c400",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U19",
+      "anchors": [
+        {
+          "id": "U19-C01",
+          "anchor": [
+            0,
+            312
+          ],
+          "text_sha256": "0bc0cf7b654b747163b4656716d5b17b3fdd5449512e74967eed4c320b397b9b",
+          "kind": "conditional_rule",
+          "subject": "methodology_adjustment"
+        },
+        {
+          "id": "U19-L01",
+          "anchor": [
+            312,
+            414
+          ],
+          "text_sha256": "5a5c2a6b3cc4bc13b26bf2c1e593de31322e77f43b3a651eb2672709a358ca34",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U20",
+      "anchors": [
+        {
+          "id": "U20-C01",
+          "anchor": [
+            0,
+            291
+          ],
+          "text_sha256": "ccbe1b015544b0530e9c1239007967ae522d8d86d190885c30164a72833f5c5c",
+          "kind": "limitation",
+          "subject": "grid_factor_uncertainty"
+        },
+        {
+          "id": "U20-C02",
+          "anchor": [
+            0,
+            291
+          ],
+          "text_sha256": "ccbe1b015544b0530e9c1239007967ae522d8d86d190885c30164a72833f5c5c",
+          "kind": "explanation",
+          "subject": "grid_factor_uncertainty"
+        },
+        {
+          "id": "U20-L01",
+          "anchor": [
+            291,
+            400
+          ],
+          "text_sha256": "2a5c245aee61464d380d687bfbf384d2ab0957e43ab5f31fa728b5b08e3cd06a",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U21",
+      "anchors": [
+        {
+          "id": "U21-C01",
+          "anchor": [
+            0,
+            409
+          ],
+          "text_sha256": "6f0629deda677d8e05d139769be2e3d66039797b7873c8eeef9f8f9d9372b050",
+          "kind": "general_recommendation",
+          "subject": "source_date_recordkeeping"
+        },
+        {
+          "id": "U21-C02",
+          "anchor": [
+            164,
+            409
+          ],
+          "text_sha256": "0185d8ee6e4c02f1322a2996690c197441be1595c5366b77fc04af6eff091ee3",
+          "kind": "explanation",
+          "subject": "source_date_recordkeeping"
+        },
+        {
+          "id": "U21-L01",
+          "anchor": [
+            409,
+            505
+          ],
+          "text_sha256": "b3efc4191cf7249233e0dcf8879266a2e497cae89ef942e99f1291780503449d",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U22",
+      "anchors": [
+        {
+          "id": "U22-C01",
+          "anchor": [
+            0,
+            381
+          ],
+          "text_sha256": "13d51d9f7adb6576228fe21d30991c79a19108f070a8d0a4c7dc19674d5163ea",
+          "kind": "explanation",
+          "subject": "product_label_documentation"
+        },
+        {
+          "id": "U22-L01",
+          "anchor": [
+            381,
+            482
+          ],
+          "text_sha256": "f7d6cc2059bf569c5e3f91b56400f1e5418cb91f1dbfadfd96520447a51e2de8",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    },
+    {
+      "unit_id": "U23",
+      "anchors": [
+        {
+          "id": "U23-C01",
+          "anchor": [
+            0,
+            600
+          ],
+          "text_sha256": "8d51732be3e502ba1295767eaacd5056d19d43f049e6d7ef68ed6ff5265bed55",
+          "kind": "inquiry_step",
+          "subject": "supplier_factor_inquiry"
+        },
+        {
+          "id": "U23-L01",
+          "anchor": [
+            600,
+            725
+          ],
+          "text_sha256": "6a5664c04fd473308e7ec5d6453d42be1fa65d01996ced89653072914c0494b1",
+          "kind": "limit",
+          "subject": null
+        }
+      ]
+    }
+  ],
+  "prior_review": {
+    "draft_sha256": "fcbd0bc809acfc2de59a43d3d95c3e1541e458e182c32ed166414191a96f52ef",
+    "artifact_sha256": "af4508299833760079c1e887813b83a26ec1d36e3223ebf74301322b5559d880",
+    "disposition": "Reviewed anchor meanings supported; conditional integration approval subject to finite taxonomy completeness resolution and independent runtime proof review"
+  },
+  "taxonomy_resolution": "Exactly four supported alternative substantive roles were added: U04 source_route, U13 source_route, U20 explanation, U21 explanation; all prior capabilities and limits unchanged."
+}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type RefObject } from "react"
-import { ANSWER_LABELS, publisherUrl, requestResearchAnswer, type ResearchAnswer } from "@/lib/research-api"
+import { answerHeading, CONTEXT_LABELS, publisherUrl, qualificationNotes, requestResearchAnswer, type ResearchAnswer } from "@/lib/research-api"
+import { isResearchPreviewPaused, PREVIEW_PAUSED_MESSAGE, requestResearchConnection } from "@/lib/research-maintenance"
 
 const SUGGESTIONS = [
   { label: "Compare the two methods", question: "What is the difference between location-based and market-based Scope 2 accounting?" },
@@ -7,12 +8,6 @@ const SUGGESTIONS = [
   { label: "Check the limits", question: "Calculate our Scope 2 emissions and file our California report." },
   { label: "Draft or published guidance?", question: "Does a newer Scope 2 draft replace the published guidance?" },
 ]
-
-const CONTEXT_LABELS: Record<string, string> = {
-  location: "Facility location or electricity grid",
-  reporting_period: "The year or period being reported",
-  electricity_supply: "Electricity supplier, tariff and any contractual arrangements",
-}
 
 function sourcePageUrl(canonicalUrl: string, locator: string): string | null {
   const safeUrl = publisherUrl(canonicalUrl)
@@ -29,6 +24,7 @@ function shortLocator(locator: string): string {
 }
 
 export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTMLHeadingElement | null> }) {
+  const paused = isResearchPreviewPaused(import.meta.env?.VITE_RESEARCH_PREVIEW_PAUSED)
   const [question, setQuestion] = useState("")
   const [submittedQuestion, setSubmittedQuestion] = useState("")
   const [answer, setAnswer] = useState<ResearchAnswer | null>(null)
@@ -39,24 +35,24 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
   const requestRef = useRef<AbortController | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const resultRef = useRef<HTMLElement>(null)
+  const notes = answer?.answer_mode === 'cloud_reviewed_composition' ? qualificationNotes(answer) : []
 
   useEffect(() => {
+    if (paused) { requestRef.current?.abort(); return }
     const controller = new AbortController()
-    fetch("/research-api/status", { signal: AbortSignal.any([controller.signal, AbortSignal.timeout(25000)]) })
-      .then(async (response) => {
-        const body: unknown = await response.json()
+    requestResearchConnection(AbortSignal.any([controller.signal, AbortSignal.timeout(25000)]), paused)
+      .then((status) => {
         if (controller.signal.aborted) return
-        setConnection(response.ok && typeof body === "object" && body !== null && "readiness" in body ? (body.readiness === "ready" ? "ready" : "unavailable") : "offline")
+        if (status !== 'paused') setConnection(status)
       })
-      .catch(() => { if (!controller.signal.aborted) setConnection("offline") })
     return () => { controller.abort() }
-  }, [connectionAttempt])
+  }, [connectionAttempt, paused])
   useEffect(() => () => { requestRef.current?.abort(); requestRef.current = null }, [])
 
   async function submit(event: FormEvent) {
     event.preventDefault()
     const trimmed = question.trim()
-    if (!trimmed || pending || connection !== "ready") return
+    if (paused || !trimmed || pending || connection !== "ready") return
     const controller = new AbortController()
     requestRef.current = controller
     setPending(true)
@@ -65,7 +61,7 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
     setSubmittedQuestion(trimmed)
     const timeout = window.setTimeout(() => controller.abort("timeout"), 245000)
     try {
-      const result = await requestResearchAnswer(trimmed, controller.signal)
+      const result = await requestResearchAnswer(trimmed, controller.signal, paused)
       if (requestRef.current !== controller) return
       setAnswer(result)
       if (result.status === "unavailable" || result.status === "stale_or_conflicting") setConnection("unavailable")
@@ -89,6 +85,7 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
   }
 
   function recheckConnection() {
+    if (paused) return
     setConnection("checking")
     setConnectionAttempt(n => n + 1)
   }
@@ -111,9 +108,9 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
             <textarea id="research-question" ref={textareaRef} value={question} onChange={(event) => setQuestion(event.target.value)} maxLength={2000} rows={4} placeholder="How do location-based and market-based accounting differ?" aria-describedby="answer-question-help" disabled={pending} required />
             <div className="answer-form-footer">
               <span id="answer-question-help">Use a general question. Leave out confidential company information.</span>
-              <button className="research-primary-button" type="submit" disabled={pending || connection !== "ready" || !question.trim()}>{pending ? "Checking the evidence…" : "Ask Neuvetra"}<span aria-hidden="true">↗</span></button>
+              <button className="research-primary-button" type="submit" disabled={paused || pending || connection !== "ready" || !question.trim()}>{pending ? "Checking the evidence…" : "Ask Neuvetra"}<span aria-hidden="true">↗</span></button>
             </div>
-            {connection !== "ready" && <div className={`answer-connection mt-4 text-sm leading-relaxed text-[var(--research-muted)] ${connection}`} role="status" aria-live="polite">
+            {paused ? <div className="answer-connection mt-4 text-sm leading-relaxed text-[var(--research-muted)]" role="status" aria-live="polite"><p>{PREVIEW_PAUSED_MESSAGE}</p></div> : connection !== "ready" && <div className={`answer-connection mt-4 text-sm leading-relaxed text-[var(--research-muted)] ${connection}`} role="status" aria-live="polite">
               <p>{connection === "checking" ? "Checking the research connection. Your question will stay here." : connection === "offline" ? "Research is offline right now. Your question will stay here." : "Research is connected but cannot answer right now. Your question will stay here."}</p>
               {connection !== "checking" && <button type="button" className="research-text-link" disabled={pending} onClick={recheckConnection}>Check connection again ↗</button>}
             </div>}
@@ -131,23 +128,25 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
           {answer ? (
             <section className={`answer-result answer-result-${answer.status}`} aria-labelledby="answer-result-heading" ref={resultRef} tabIndex={-1}>
               <p className="answer-result-question">{submittedQuestion}</p>
-              <div className="answer-result-title"><span className="answer-status-dot" /><h2 id="answer-result-heading">{ANSWER_LABELS[answer.status]}</h2></div>
+              <div className="answer-result-title"><span className="answer-status-dot" /><h2 id="answer-result-heading">{answerHeading(answer)}</h2></div>
               <p className="answer-result-message">{answer.message}</p>
               {answer.claims.map((claim) => (
-                <article className="answer-claim" key={claim.id}>
+                <article className="answer-claim" id={`claim-${claim.id}`} key={claim.id}>
                   {answer.composition?.units.find(unit=>unit.id===claim.id) && <>
                     <p className="research-eyebrow">{answer.composition.units.find(unit=>unit.id===claim.id)?.type === 'reviewed_interpretation' ? 'Reviewed interpretation' : 'Reviewed source summary'}</p>
                     <h3>{answer.composition.units.find(unit=>unit.id===claim.id)?.title}</h3>
                   </>}
                   <p>{claim.text}</p>
-                  {claim.qualifications.length > 0 && <ul className="answer-qualifications">{claim.qualifications.map((item) => <li key={item}>{item}</li>)}</ul>}
+                  {answer.answer_mode === 'cloud_reviewed_composition' ? <div className="answer-citation-links">{notes.filter(note => note.claim_ids.includes(claim.id)).map(note => <a key={note.id} href={`#${note.id}`}>Source note {notes.indexOf(note) + 1} ↓</a>)}</div> : claim.qualifications.length > 0 && <ul className="answer-qualifications">{claim.qualifications.map((item) => <li key={item}>{item}</li>)}</ul>}
                   <div className="answer-citation-links">{claim.evidence_ids.map((id) => {
                     const item = answer.evidence.find((evidence) => evidence.id === id)
                     return item ? <a key={id} href={`#evidence-${id}`} onClick={() => { const detail = document.getElementById(`evidence-${id}`); if (detail instanceof HTMLDetailsElement) detail.open = true }}>Source · {shortLocator(item.locator)} <span aria-hidden="true">↓</span></a> : null
                   })}</div>
                 </article>
               ))}
-              {answer.missing_context.length > 0 && <div className="answer-missing-context"><h3>Useful context for the next step</h3><ul>{answer.missing_context.map((item) => <li key={item}>{CONTEXT_LABELS[item] ?? item}</li>)}</ul></div>}
+              {notes.length > 0 && <div className="answer-qualifications"><h3>Source notes</h3><ol className="list-none">{notes.map((note, index) => <li id={note.id} key={note.id}><p><strong>{index + 1}. </strong>{note.text}</p><div className="answer-citation-links">{note.claim_ids.map(id => <a key={id} href={`#claim-${id}`}>{answer.composition?.units.find(unit => unit.id === id)?.title ?? id} ↑</a>)}</div></li>)}</ol></div>}
+              {!!answer.scope_gaps?.length && <div className="answer-missing-context"><h3>What remains unresolved</h3><ul>{answer.scope_gaps.map((gap, index) => <li key={index}><blockquote>{gap.question_fragment}</blockquote><p>{gap.reason === 'coverage_missing' ? 'The reviewed material does not yet resolve this part.' : gap.reason === 'action_out_of_scope' ? 'This requested action or determination is outside the preview.' : 'This reference or context needs clarification.'}</p>{gap.context_ids.length > 0 && <ul>{gap.context_ids.map(id => <li key={id}>{CONTEXT_LABELS[id]}</li>)}</ul>}</li>)}</ul></div>}
+              {answer.missing_context.length > 0 && !answer.scope_gaps?.length && <div className="answer-missing-context"><h3>Useful context for the next step</h3><ul>{answer.missing_context.map((item) => <li key={item}>{CONTEXT_LABELS[item] ?? item}</li>)}</ul></div>}
               {answer.evidence.length > 0 && <div className="answer-evidence"><h3>Inspect the supporting material</h3>{answer.evidence.map((item) => {
                 const source = answer.sources.find((entry) => entry.id === item.source_id)
                 const url = source ? sourcePageUrl(source.canonical_url, item.locator) : null
@@ -168,7 +167,7 @@ export function ResearchAnswerPanel({ headingRef }: { headingRef: RefObject<HTML
           <div className="answer-scope-divider" />
           <h3>Still to come</h3>
           <p>Company-specific factors, emissions calculations, legal deadlines and filing. This pilot does not submit reports.</p>
-          <p className={`answer-connection ${connection}`} role="status">{connection === "checking" ? "Connecting to research service…" : connection === "ready" ? "Research service ready" : connection === "unavailable" ? "Research service connected; answering is unavailable." : "Research service offline. Answers are unavailable."}</p>
+          <p className={`answer-connection ${connection}`} role="status">{paused ? 'Research preview paused.' : connection === "checking" ? "Connecting to research service…" : connection === "ready" ? "Research service ready" : connection === "unavailable" ? "Research service connected; answering is unavailable." : "Research service offline. Answers are unavailable."}</p>
         </aside>
       </div>
     </section>

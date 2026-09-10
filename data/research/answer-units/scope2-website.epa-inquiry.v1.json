@@ -1,0 +1,746 @@
+{
+  "schema_version": 1,
+  "catalog_id": "scope2-website-answer-units",
+  "version": "2-epa-inquiry",
+  "source_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "condition_catalog_sha256": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+  "review": {
+    "status": "approved_private",
+    "expires_at": "2026-09-15T23:20:32Z",
+    "source_review": {
+      "reviewer": "Independent EPA source reviewer /root/benchmark_custodian",
+      "reviewed_at": "2026-09-09T18:57:57.5528860Z",
+      "disposition": "approved_private"
+    },
+    "qa_review": {
+      "reviewer": "Independent product and packaging QA /root/qa_live",
+      "reviewed_at": "2026-09-09T18:57:57.5528860Z",
+      "disposition": "approved_private"
+    }
+  },
+  "units": [
+    {
+      "id": "U01",
+      "title": "Two accounting perspectives",
+      "text": "The location-based method considers average emission factors for the electricity grids that provide electricity. The market-based method considers the contractual arrangements under which an organization procures power from specific sources, such as renewable energy. These are accounting perspectives; this explanation does not determine that a particular purchase or instrument qualifies.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S01"
+      ],
+      "support": [
+        {
+          "passage_id": "S01",
+          "quote": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "accounting_methods",
+        "grid_average_basis",
+        "contractual_basis"
+      ]
+    },
+    {
+      "id": "U02",
+      "title": "Reporting the two results",
+      "text": "EPA’s December 2023 guide recommends that organizations quantify and report both location-based and market-based scope 2 totals in their GHG inventory. Both results should be clearly labeled with the method used. This is the guide’s reporting recommendation; the preview does not determine a particular company’s legal reporting obligations.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S01",
+        "S02"
+      ],
+      "support": [
+        {
+          "passage_id": "S01",
+          "quote": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+        },
+        {
+          "passage_id": "S02",
+          "quote": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "scope2_reporting",
+        "dual_reporting",
+        "reporting_modality",
+        "method_labels"
+      ]
+    },
+    {
+      "id": "U03",
+      "title": "What separate results show",
+      "text": "Reporting the two results with their method labels presents the grid-average perspective and the contractual procurement perspective separately. This is an explanation of what those two labeled results communicate, not a statement of EPA’s policy motive or a universal legal requirement.",
+      "type": "reviewed_interpretation",
+      "passage_ids": [
+        "S01",
+        "S02"
+      ],
+      "support": [
+        {
+          "passage_id": "S01",
+          "quote": "The GHG Protocol Scope 2 Guidance provides a comprehensive discussion of issues related to quantification and reporting of scope 2 emissions, and organizations are encouraged to consult that guidance. This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues. Guidance for quantifying two scope 2 emissions totals, using a location-based method and a market-based method, is included in this document. The organization should quantify and report both totals in its GHG inventory. The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy."
+        },
+        {
+          "passage_id": "S02",
+          "quote": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used."
+        }
+      ],
+      "required_unit_ids": [
+        "U01",
+        "U02"
+      ],
+      "coverage": [
+        "comparison_synthesis",
+        "dual_reporting_explanation",
+        "reporting_premise"
+      ]
+    },
+    {
+      "id": "U04",
+      "title": "Purchase records and the reporting period",
+      "text": "The activity data are the amount of electricity purchased during the reporting year. Utility bills or other purchase records can provide that amount. EPA identifies information about electricity entering the organization’s facility as the best type of activity data, compared with internal submetering data that may be incomplete. This preview does not estimate missing consumption or assess actual records.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S03"
+      ],
+      "support": [
+        {
+          "passage_id": "S03",
+          "quote": "To quantify scope 2 emissions, the activity data needed are the amount of electricity that is purchased during the reporting year. Utility bills or other purchase records can be used to determine the amount of electricity purchased. This information on the electricity entering the organization’s facility is considered the best type of activity data as opposed to sub-metering data from within the facility, which may be incomplete."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "activity_evidence",
+        "reporting_period",
+        "incoming_facility_records",
+        "submetering"
+      ]
+    },
+    {
+      "id": "U05",
+      "title": "Supplier and delivery invoices",
+      "text": "When electricity is bought from a commodity supplier other than the local distribution utility, an organization may receive separate supplier and delivery invoices. EPA recommends using the local utility’s consumption as activity data because it is based on meters at the facility. The same consumption from the commodity supplier must not also be included. This explains how to avoid duplicate consumption; it does not diagnose a company’s bills.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S03",
+        "S04"
+      ],
+      "support": [
+        {
+          "passage_id": "S03",
+          "quote": "To quantify scope 2 emissions, the activity data needed are the amount of electricity that is purchased during the reporting year. Utility bills or other purchase records can be used to determine the amount of electricity purchased. This information on the electricity entering the organization’s facility is considered the best type of activity data as opposed to sub-metering data from within the facility, which may be incomplete."
+        },
+        {
+          "passage_id": "S04",
+          "quote": "Commodity electricity may be purchased from a provider other than the local distribution utility. In this situation, the reporting organization may receive invoices from both the commodity supplier as well as from the local distribution utility, who charges a fee for electricity delivery. It is recommended that the consumption from the local utility be used as the activity data, because this is based on electricity meters located at the organization’s facility. To avoid counting the same consumption twice, ensure that consumption from the commodity supplier is not also included in the activity data."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "activity_evidence",
+        "data_quality",
+        "duplicate_consumption",
+        "delivery_commodity_invoices"
+      ]
+    },
+    {
+      "id": "U06",
+      "title": "Electricity activity units",
+      "text": "Electricity activity data on utility bills or other purchase records are most commonly reported in kilowatt-hours (kWh) or megawatt-hours (MWh). This preview explains those units; it does not convert quantities or provide a purchased steam, heat or cooling calculation.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S05"
+      ],
+      "support": [
+        {
+          "passage_id": "S05",
+          "quote": "The units of measure in which activity data are reported on utility bills or other purchase records can vary between electricity, steam, heat, and cooling. For electricity, heat, and cooling, activity data are typically reported in energy units. For electricity, kilowatt-hours (kWh) or megawatt-hours (MWh) are most common."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "electricity_units",
+        "activity_evidence",
+        "kwh_mwh"
+      ]
+    },
+    {
+      "id": "U07",
+      "title": "The generation-only factor boundary",
+      "text": "For purchased electricity, the scope 2 factor covers emissions at the point of generation from sources owned and operated by other entities. It should exclude transmission and distribution losses, fuel extraction and other activities upstream of the generating facility. This boundary does not mean those other emissions do not occur. Calculating them would require separate methods outside this preview.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "factor_boundaries",
+        "generation_only",
+        "upstream_exclusions",
+        "transmission_distribution_exclusions"
+      ]
+    },
+    {
+      "id": "U08",
+      "title": "Regional geography for grid electricity",
+      "text": "For electricity purchased and delivered through a grid, EPA says the published factor should correspond to the geographic location of each facility and the average emissions of generating facilities supplying that grid. Regional or subnational factors representing a grid distribution area are recommended. This preview does not assign a facility to a subregion or select its numerical factor.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S07"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S07",
+          "quote": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+        }
+      ],
+      "required_unit_ids": [
+        "U07"
+      ],
+      "coverage": [
+        "grid_factor_sources",
+        "factor_geography",
+        "regional_factors",
+        "grid_delivery"
+      ]
+    },
+    {
+      "id": "U09",
+      "title": "EPA eGRID as a regional source",
+      "text": "For U.S. operations, EPA’s December 2023 guide recommends the total-output subregion grid factors in its Emission & Generation Resource Integrated Database (eGRID). Total-output factors represent the average across plants generating electricity for the grid, including baseload, intermediate and peaking units. This identifies a source route, not a current dataset edition or numerical factor.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S08"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S07",
+          "quote": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+        },
+        {
+          "passage_id": "S08",
+          "quote": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints."
+        }
+      ],
+      "required_unit_ids": [
+        "U08",
+        "U10",
+        "U20"
+      ],
+      "coverage": [
+        "grid_factor_sources",
+        "us_egrid",
+        "total_output_subregion",
+        "factor_geography"
+      ]
+    },
+    {
+      "id": "U10",
+      "title": "Checking the publisher’s update channels",
+      "text": "The EPA guide identifies both eGRID and the GHG Emission Factors Hub as publication routes. It notes that the Hub can be updated later than a new eGRID release. The guide points to EPA’s eGRID page for versions, supporting documentation and resources. Check the publisher’s actual release and supporting documentation before use; this preview does not assert which release or factor is current.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S08",
+        "S09"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S07",
+          "quote": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+        },
+        {
+          "passage_id": "S08",
+          "quote": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints."
+        },
+        {
+          "passage_id": "S09",
+          "quote": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "source_versions",
+        "grid_factor_sources",
+        "publication_timing",
+        "egrid_hub"
+      ]
+    },
+    {
+      "id": "U11",
+      "title": "Researching the grid subregion",
+      "text": "EPA’s guide identifies the Power Profiler Tool as a way to research the eGRID subregion for a facility, using its ZIP code and utility name. This preview explains the documented lookup route. It has not performed or verified a lookup for a particular facility.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S10"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S07",
+          "quote": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+        },
+        {
+          "passage_id": "S10",
+          "quote": "To determine in which eGRID subregion an organization’s facilities are located, they can use the Power Profiler Tool. This tool allows users to enter their facility zip codes and utility names to identify the appropriate eGRID subregions."
+        }
+      ],
+      "required_unit_ids": [
+        "U08"
+      ],
+      "coverage": [
+        "grid_factor_sources",
+        "factor_geography",
+        "power_profiler_lookup"
+      ]
+    },
+    {
+      "id": "U12",
+      "title": "Market evidence and the purchased product",
+      "text": "Market-based emission factors reflect contractual arrangements under which an organization procures power from specific sources, such as fossil, renewable or other generating facilities. Describing that category does not establish that a particular supplier statement, contract or certificate is eligible for use. This preview does not provide the complete factor hierarchy or choose a fallback.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S11"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S11",
+          "quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "market_factor_sources",
+        "contractual_procurement",
+        "supplier_factor_sources"
+      ]
+    },
+    {
+      "id": "U13",
+      "title": "Obtaining a supplier-specific factor",
+      "text": "An electricity supplier, including a regulated utility or deregulated supplier, may provide the factor associated with its standard or differentiated electricity product. For use in the market-based method, that factor must include all electricity delivered by the supplier, both electricity it generates and electricity it purchases from others. A figure covering only supplier-owned generating facilities does not meet that delivered-electricity boundary. Receiving a figure alone is not an eligibility determination.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S12",
+        "S15"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S11",
+          "quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+        },
+        {
+          "passage_id": "S12",
+          "quote": "An electricity supplier, such as a regulated utility or a deregulated supplier, may provide information to its customers on the emission factor associated with its electricity product. The product may be a standard product or a differentiated product. To be used in the market-based method, the emission factor must include all the electricity delivered by the supplier, including electricity it generates as well as electricity it purchases from others. An example of a factor that should not be used is a supplier emission factor that only includes generation facilities owned by the supplier, which does not represent the full set of generation facilities supplying the delivered electricity"
+        },
+        {
+          "passage_id": "S15",
+          "quote": "An organization should consider the alignment of its inventory reporting year and the timeframes of its purchasing agreements. If those timeframes align, the agreement and the associated emission factors can be applied for the entire reporting year. If they do not align, such as if the reporting year is based on a fiscal year and a purchasing agreement is for a calendar year, the emission factors for a purchasing agreement should only be applied to the portion of the reporting covered by that agreement. A given reporting year may be covered by two different purchasing agreements, or there may be portions of the reporting year which are not covered by any purchasing agreement."
+        }
+      ],
+      "required_unit_ids": [
+        "U07",
+        "U16"
+      ],
+      "coverage": [
+        "supplier_factor_sources",
+        "delivered_product",
+        "generated_and_purchased_electricity",
+        "supplier_documentation"
+      ]
+    },
+    {
+      "id": "U14",
+      "title": "Certificate evidence and its quality prerequisite",
+      "text": "An energy attribute certificate may carry an emission factor associated with the specific source it represents. EPA directs organizations to the quality criteria in Section 4 to ensure that a factor can be claimed based on the certificate. Possession of a certificate or a reference to a checklist does not establish in this preview that the quality requirements have been met. The detailed criteria, an actual claimability decision and numerical factor values are outside this release.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S13"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S11",
+          "quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+        },
+        {
+          "passage_id": "S13",
+          "quote": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method. Examples are renewable energy certificates (RECs) or Guarantees of Origin (GOs) in Europe. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate. The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component)."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "contractual_evidence",
+        "energy_attribute_certificates",
+        "quality_prerequisite",
+        "certificate_claimability"
+      ]
+    },
+    {
+      "id": "U15",
+      "title": "Contracts and separately issued certificates",
+      "text": "If no certificates are associated with the generation, EPA says the contract carries the generating facility’s factor and directs a review of the Section 4 quality criteria to ensure claimability. If certificates are issued, they convey the factor rather than the contract. Bundled certificates can support the purchaser’s claim subject to the relevant quality requirements; if the certificates are sold to another entity, the purchaser cannot make that claim. This is a conceptual distinction, not a finding that an actual contract or certificate qualifies, and it does not select a fallback factor.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S13",
+        "S14"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S11",
+          "quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+        },
+        {
+          "passage_id": "S13",
+          "quote": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method. Examples are renewable energy certificates (RECs) or Guarantees of Origin (GOs) in Europe. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate. The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component)."
+        },
+        {
+          "passage_id": "S14",
+          "quote": "An organization may have a contract, such as a power purchase agreement (PPA), to purchase electricity from a specified generating facility, which may be located at the organization’s facility, at a nearby location with a direct line connection to the organization, or located remotely. If there are no certificates associated with this generation, the contract itself carries the emission factor associated with the generation facility, regardless of the energy resource used. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the contract. If certificates are issued to the generating facility, the emission factor is conveyed by the certificates, rather than the contract. If the certificates are bundled with the contract, the purchaser can claim the emission factor."
+        },
+        {
+          "passage_id": "S14",
+          "quote": " If the certificates are sold to another entity, the purchaser cannot make that claim, and the energy should be assigned the residual mix factor if available, or the regional or national factor."
+        }
+      ],
+      "required_unit_ids": [
+        "U14"
+      ],
+      "coverage": [
+        "contractual_evidence",
+        "contract_certificate_distinction",
+        "certificate_ownership",
+        "quality_prerequisite"
+      ]
+    },
+    {
+      "id": "U16",
+      "title": "Agreement dates and inventory dates",
+      "text": "EPA says organizations should consider the alignment of the inventory reporting year and purchasing-agreement dates. If they align, the agreement and associated factors can apply for the entire reporting year. If they differ, the agreement’s factors should apply only to the portion of reporting covered by the agreement. A reporting year can involve different agreements or periods with no agreement. Date mismatch therefore does not imply rejection for the entire year. This timing explanation neither establishes other eligibility conditions nor allocates a company’s purchases.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S15"
+      ],
+      "support": [
+        {
+          "passage_id": "S15",
+          "quote": "An organization should consider the alignment of its inventory reporting year and the timeframes of its purchasing agreements. If those timeframes align, the agreement and the associated emission factors can be applied for the entire reporting year. If they do not align, such as if the reporting year is based on a fiscal year and a purchasing agreement is for a calendar year, the emission factors for a purchasing agreement should only be applied to the portion of the reporting covered by that agreement. A given reporting year may be covered by two different purchasing agreements, or there may be portions of the reporting year which are not covered by any purchasing agreement."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "reporting_period",
+        "factor_time_periods",
+        "agreement_alignment",
+        "partial_period_coverage"
+      ]
+    },
+    {
+      "id": "U17",
+      "title": "The period represented by a factor",
+      "text": "Scope 2 factors represent the emissions profile of generation during a particular period. EPA explains that this profile can change with the resource mix and generating efficiency, so factors may be updated periodically. Changes in electricity purchasing choices can also change the emissions associated with an organization’s purchases. A factor’s represented period is relevant information; it is not automatically the organization’s inventory period.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S16",
+        "S17",
+        "S18"
+      ],
+      "support": [
+        {
+          "passage_id": "S16",
+          "quote": "All scope 2 emission factors represent the emissions profile for generation during a specific period of time. This emissions profile can change over time, due to changes in the resource mix and generation efficiency supplying the electricity. As a result, the emission factors may be updated periodically to reflect these changes. Organizations may also make different choices in their purchase decisions over time, such as beginning to buy RECs. These represent real changes in the emissions associated with an organization’s electricity purchases. As such, it is recommended that organizations use the newest emission factors available at the time they calculate emissions for a reporting year."
+        },
+        {
+          "passage_id": "S16",
+          "quote": " 5 Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.\n\n5 This applies whether an organization uses a calendar year period or other period for their GHG Inventory. For example, if an organization is calculating a GHG Inventory in August for a July through June reporting year, the inventory should use the newest factors available in August."
+        },
+        {
+          "passage_id": "S17",
+          "quote": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy."
+        },
+        {
+          "passage_id": "S18",
+          "quote": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "source_versions",
+        "factor_data_period",
+        "generation_profile_changes"
+      ]
+    },
+    {
+      "id": "U18",
+      "title": "The guide’s timing recommendation",
+      "text": "EPA’s December 2023 guide recommends the newest factors available when emissions for a reporting year are calculated, including when the inventory uses a non-calendar reporting period. Ordinary factor updates reflecting changed generation or purchasing choices do not themselves require prior-year emissions to be adjusted. Methodology changes are different: the guide says prior-year adjustments should follow the organization’s base-year adjustment policy. This states the guide’s recommendation, not a current-factor selection or a decision to restate a particular inventory.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S16",
+        "S17",
+        "S18"
+      ],
+      "support": [
+        {
+          "passage_id": "S16",
+          "quote": "All scope 2 emission factors represent the emissions profile for generation during a specific period of time. This emissions profile can change over time, due to changes in the resource mix and generation efficiency supplying the electricity. As a result, the emission factors may be updated periodically to reflect these changes. Organizations may also make different choices in their purchase decisions over time, such as beginning to buy RECs. These represent real changes in the emissions associated with an organization’s electricity purchases. As such, it is recommended that organizations use the newest emission factors available at the time they calculate emissions for a reporting year."
+        },
+        {
+          "passage_id": "S16",
+          "quote": " 5 Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.\n\n5 This applies whether an organization uses a calendar year period or other period for their GHG Inventory. For example, if an organization is calculating a GHG Inventory in August for a July through June reporting year, the inventory should use the newest factors available in August."
+        },
+        {
+          "passage_id": "S17",
+          "quote": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy."
+        },
+        {
+          "passage_id": "S18",
+          "quote": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "factor_time_periods",
+        "calculation_date",
+        "factor_updates",
+        "historical_adjustment_distinction"
+      ]
+    },
+    {
+      "id": "U19",
+      "title": "Methodology changes and prior-year adjustments",
+      "text": "Examples of methodology changes in an organization’s inventory include changes in how emission factors are developed and changes in the type of factor used because of availability. EPA says prior-year emissions should then be adjusted in a manner consistent with that organization’s base-year adjustment policy. This preview does not decide whether a particular change is methodological or calculate an adjustment.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S17"
+      ],
+      "support": [
+        {
+          "passage_id": "S17",
+          "quote": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "source_versions",
+        "methodology_changes",
+        "base_year_adjustment_policy"
+      ]
+    },
+    {
+      "id": "U20",
+      "title": "Timing and averaging limitations",
+      "text": "Average grid factors are not completely accurate because the operating generating units and factors vary by time of day and season. EPA notes that factors may be even more uncertain if their data year differs from the electricity-purchase year, and warns that eGRID data may be out of date. These are limitations to consider; this preview does not quantify uncertainty or certify a factor as current.",
+      "type": "source_summary",
+      "passage_ids": [
+        "S18"
+      ],
+      "support": [
+        {
+          "passage_id": "S18",
+          "quote": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "factor_uncertainty",
+        "averaging_limits",
+        "factor_data_period",
+        "inventory_period"
+      ]
+    },
+    {
+      "id": "U21",
+      "title": "Keeping source dates distinct",
+      "text": "As a source-checking practice, record the publisher’s edition, the period represented by the factor data, the calculation date and the inventory period separately. They describe different things: generation profiles change, publication channels can update at different times, and a data year may differ from the purchase year. Recording those distinctions makes the source and timing assumptions inspectable. This is a recordkeeping interpretation of the cited guidance, not an additional EPA filing rule.",
+      "type": "reviewed_interpretation",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S16",
+        "S17",
+        "S18"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S07",
+          "quote": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area."
+        },
+        {
+          "passage_id": "S08",
+          "quote": "Regional factors are available for several countries through national governments or other sources. For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units. An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints."
+        },
+        {
+          "passage_id": "S09",
+          "quote": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid."
+        },
+        {
+          "passage_id": "S16",
+          "quote": "All scope 2 emission factors represent the emissions profile for generation during a specific period of time. This emissions profile can change over time, due to changes in the resource mix and generation efficiency supplying the electricity. As a result, the emission factors may be updated periodically to reflect these changes. Organizations may also make different choices in their purchase decisions over time, such as beginning to buy RECs. These represent real changes in the emissions associated with an organization’s electricity purchases. As such, it is recommended that organizations use the newest emission factors available at the time they calculate emissions for a reporting year."
+        },
+        {
+          "passage_id": "S16",
+          "quote": " 5 Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.\n\n5 This applies whether an organization uses a calendar year period or other period for their GHG Inventory. For example, if an organization is calculating a GHG Inventory in August for a July through June reporting year, the inventory should use the newest factors available in August."
+        },
+        {
+          "passage_id": "S17",
+          "quote": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy."
+        },
+        {
+          "passage_id": "S18",
+          "quote": "The accuracy of calculating emissions from purchased electricity is also determined by the emission factors used to convert purchases into indirect emissions. Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load). Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase. If using emission factors from eGRID, keep in mind that data may be out of date."
+        }
+      ],
+      "required_unit_ids": [
+        "U10",
+        "U17",
+        "U20"
+      ],
+      "coverage": [
+        "source_provenance",
+        "data_year_publication_edition",
+        "calculation_date_inventory_period",
+        "recordkeeping_synthesis"
+      ]
+    },
+    {
+      "id": "U22",
+      "title": "Assessing documentation behind a product label",
+      "text": "For this preview, a renewable product label is a starting point for examining the underlying contractual or certificate evidence, not a completed eligibility assessment. The cited guidance makes the documentary route and relevant quality requirements material to claimability. Review that evidence and those requirements before treating the label as support for a reporting claim. This explanation does not decide that a particular product qualifies or assign it a numerical factor.",
+      "type": "reviewed_interpretation",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S13",
+        "S14"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S11",
+          "quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+        },
+        {
+          "passage_id": "S13",
+          "quote": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method. Examples are renewable energy certificates (RECs) or Guarantees of Origin (GOs) in Europe. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate. The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component)."
+        },
+        {
+          "passage_id": "S14",
+          "quote": "An organization may have a contract, such as a power purchase agreement (PPA), to purchase electricity from a specified generating facility, which may be located at the organization’s facility, at a nearby location with a direct line connection to the organization, or located remotely. If there are no certificates associated with this generation, the contract itself carries the emission factor associated with the generation facility, regardless of the energy resource used. Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the contract. If certificates are issued to the generating facility, the emission factor is conveyed by the certificates, rather than the contract. If the certificates are bundled with the contract, the purchaser can claim the emission factor."
+        },
+        {
+          "passage_id": "S14",
+          "quote": " If the certificates are sold to another entity, the purchaser cannot make that claim, and the energy should be assigned the residual mix factor if available, or the regional or national factor."
+        }
+      ],
+      "required_unit_ids": [
+        "U14",
+        "U15"
+      ],
+      "coverage": [
+        "supplier_documentation",
+        "renewable_label",
+        "evidence_assessment",
+        "eligibility_boundary"
+      ]
+    },
+    {
+      "id": "U23",
+      "title": "Questions to clarify a supplier's electricity factor",
+      "text": "Ask your supplier: Which standard or differentiated electricity product does this figure describe? Does it include all electricity delivered, including power bought from other generators, or only supplier-owned generation? Does it cover generation emissions alone, excluding transmission and distribution losses, fuel extraction and other upstream activities? Request the supporting factor documentation. If an applicable purchasing agreement is being used, ask for its dates and compare them with your inventory year: its factor should apply only to the reporting portion covered by that agreement. These inquiries help examine the figure; they do not validate its value or establish that every eligibility condition is met.",
+      "type": "reviewed_interpretation",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S12",
+        "S15"
+      ],
+      "support": [
+        {
+          "passage_id": "S06",
+          "quote": "Emission factors are necessary to calculate the emissions attributable to electricity, steam, heat, and cooling purchases. Emission factors reflect the renewable or fossil energy resource(s) used and the efficiency of converting input energy into useful energy output. Emission factors should be chosen based on the guidance below. Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility."
+        },
+        {
+          "passage_id": "S11",
+          "quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements. The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors."
+        },
+        {
+          "passage_id": "S12",
+          "quote": "An electricity supplier, such as a regulated utility or a deregulated supplier, may provide information to its customers on the emission factor associated with its electricity product. The product may be a standard product or a differentiated product. To be used in the market-based method, the emission factor must include all the electricity delivered by the supplier, including electricity it generates as well as electricity it purchases from others. An example of a factor that should not be used is a supplier emission factor that only includes generation facilities owned by the supplier, which does not represent the full set of generation facilities supplying the delivered electricity"
+        },
+        {
+          "passage_id": "S15",
+          "quote": "An organization should consider the alignment of its inventory reporting year and the timeframes of its purchasing agreements. If those timeframes align, the agreement and the associated emission factors can be applied for the entire reporting year. If they do not align, such as if the reporting year is based on a fiscal year and a purchasing agreement is for a calendar year, the emission factors for a purchasing agreement should only be applied to the portion of the reporting covered by that agreement. A given reporting year may be covered by two different purchasing agreements, or there may be portions of the reporting year which are not covered by any purchasing agreement."
+        }
+      ],
+      "required_unit_ids": [],
+      "coverage": [
+        "supplier_inquiry",
+        "factor_documentation",
+        "delivered_product",
+        "generation_only",
+        "conditional_agreement_alignment"
+      ]
+    }
+  ]
+}

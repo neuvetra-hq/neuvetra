@@ -47,9 +47,36 @@ export function selectQuestionCases(value: unknown, ids: string[]): Case[] {
 
 export function prepareEvaluation(options: { fixtureBytes: Uint8Array; fixtureSha256: string; caseIds: string[]; repoRoot: string }): PreparedEvaluation {
   need(options.fixtureSha256 === FIXTURE_SHA256 && sha256(options.fixtureBytes) === FIXTURE_SHA256, 'fixture_pin_mismatch')
-  const fixture = json(options.fixtureBytes), cases = selectQuestionCases(fixture, options.caseIds), repoRoot = realpathSync(options.repoRoot)
+  const fixture = json(options.fixtureBytes), cases = selectQuestionCases(fixture, options.caseIds)
+  return preparePinnedCases(options.repoRoot, FIXTURE_SHA256, (fixture as Row).fixture_id as string, cases)
+}
+
+/** Separately pinned, question-only inputs. No QA answers, source pages or labels
+ * are accepted here, and this cannot replace the immutable baseline fixture. */
+export function prepareQuestionOnlyEvaluation(options: { fixtureBytes: Uint8Array; fixtureSha256: string; caseIds: string[]; repoRoot: string }): PreparedEvaluation {
+  need(/^[a-f0-9]{64}$/.test(options.fixtureSha256) && sha256(options.fixtureBytes) === options.fixtureSha256 && options.fixtureSha256 !== FIXTURE_SHA256, 'fixture_pin_mismatch')
+  const fixture = json(options.fixtureBytes)
+  need(record(fixture) && Object.keys(fixture).sort().join(',') === 'fixture_id,question_cases,schema_version'
+    && fixture.schema_version === 1 && typeof fixture.fixture_id === 'string' && /^[a-z0-9-]{1,100}$/.test(fixture.fixture_id)
+    && Array.isArray(fixture.question_cases), 'invalid_question_only_fixture')
+  const rows = (fixture as Row).question_cases as Row[]
+  need(rows.length > 0 && rows.length <= 16 && rows.every(r => record(r) && Object.keys(r).sort().join(',') === 'id,question'
+    && typeof r.id === 'string' && /^[A-Z][A-Z0-9-]{1,39}$/.test(r.id) && typeof r.question === 'string' && r.question.trim().length > 0 && r.question.length <= 2000)
+    && new Set(rows.map(r => r.id)).size === rows.length, 'invalid_question_only_fixture')
+  need(options.caseIds.length > 0 && new Set(options.caseIds).size === options.caseIds.length && options.caseIds.every(id => rows.some(r => r.id === id)), 'invalid_case_selection')
+  const cases: Case[] = options.caseIds.map(id => ({ id, question: rows.find(r => r.id === id)!.question as string, expected_outcome: 'safe_boundary' }))
+  return preparePinnedCases(options.repoRoot, options.fixtureSha256, (fixture as Row).fixture_id as string, cases,
+    ['tools/research/evaluate-website-questions.ts'])
+}
+
+function preparePinnedCases(root: string, fixtureSha: string, fixtureId: string, cases: Case[], extraPaths: string[] = []): PreparedEvaluation {
+  const repoRoot = realpathSync(root)
   const pins: Record<string, string> = {}
-  const paths = ['tools/research/evaluate-website-composed.ts', 'apps/site-web/src/lib/research-api.ts', 'data/research/conditions/scope2-website.v1.json', 'data/research/answer-units/scope2-website.v1.json', RELEASE_PATH]
+  const paths = ['tools/research/evaluate-website-composed.ts', 'apps/site-web/src/lib/research-api.ts',
+    'apps/site-web/src/lib/research-maintenance.ts', 'apps/site-web/src/data/reviewed-qualifications.json',
+    'apps/site-web/src/components/ResearchAnswerPanel.tsx', 'apps/site-web/vite.config.ts',
+    'data/research/conditions/scope2-website.v1.json', 'data/research/answer-units/scope2-website.v1.json',
+    'data/research/answer-units/scope2-website.epa-inquiry.v1.json', 'data/research/capabilities/scope2-website.epa-inquiry.v1.json', 'data/research/answer-units/scope2-website.epa-acquisition.v1.json', 'data/research/capabilities/scope2-website.epa-acquisition.v1.json', 'data/research/capabilities/scope2-website.epa-route.v1.json', 'data/research/capabilities/scope2-website.epa-limitations.v1.json', RELEASE_PATH, ...extraPaths]
   for (const dir of ['apps/site-api/src/research-composed', 'apps/site-api/src/research-cloud', 'apps/site-api/src/research-passages', 'apps/site-api/src/research']) {
     for (const f of readdirSync(path.join(repoRoot, dir)).sort()) if (f.endsWith('.ts')) paths.push(`${dir}/${f}`)
   }
@@ -57,6 +84,12 @@ export function prepareEvaluation(options: { fixtureBytes: Uint8Array; fixtureSh
   for (const relative of paths.sort()) pins[relative] = sha256(readPinned(path.join(repoRoot, relative)))
   need(pins[RELEASE_PATH] === RELEASE_SHA256, 'release_pin_mismatch')
   need(pins['data/research/answer-units/scope2-website.v1.json'] === 'c59ffac9c6e824b81174aac7f52bf3a36dfed516a7340ff40ff8ba758518ef1f', 'unit_catalog_pin_mismatch')
+  need(pins['data/research/answer-units/scope2-website.epa-inquiry.v1.json'] === 'adb43b8a9e90cbe85f382988dedc16e16f82f7a596e0bcf5f5e98ba2f84630cd', 'unit_catalog_pin_mismatch')
+  need(pins['data/research/capabilities/scope2-website.epa-inquiry.v1.json'] === '230060af16b77bde32e253ca49e9676e2603e9ceebe165eae33c0ef87ce6e823', 'capability_catalog_pin_mismatch')
+  need(pins['data/research/answer-units/scope2-website.epa-acquisition.v1.json'] === '97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50', 'unit_catalog_pin_mismatch')
+  need(pins['data/research/capabilities/scope2-website.epa-acquisition.v1.json'] === 'd768f4beea51ae5cf8cc1ca21f8e7eba8ecdc00dd7994e118ed1a55f15b138fe', 'capability_catalog_pin_mismatch')
+  need(pins['data/research/capabilities/scope2-website.epa-route.v1.json'] === '379447e6a7b6c8b4d1db2749e179afd20965b617cfb8c6693a61feb4d4a791d5', 'capability_catalog_pin_mismatch')
+  need(pins['data/research/capabilities/scope2-website.epa-limitations.v1.json'] === 'a7724c245fed1fd3a9dd08a82886c107b54905693039150f33359b2ed629e2c2', 'capability_catalog_pin_mismatch')
   need(pins['data/research/conditions/scope2-website.v1.json'] === '063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6', 'condition_pin_mismatch')
   const evidence = json(readPinned(path.join(repoRoot, RELEASE_PATH))) as Evidence
   need(evidence.release_id === 'scope2-website' && evidence.version === '1' && Array.isArray(evidence.sources) && Array.isArray(evidence.passages) && Array.isArray(evidence.extractions), 'invalid_release')
@@ -65,7 +98,7 @@ export function prepareEvaluation(options: { fixtureBytes: Uint8Array; fixtureSh
   need(evidence.sources.length === 1 && evidence.sources[0]!.sha256 === '14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3'
     && evidence.extractions.length === 1 && evidence.extractions[0]!.source_sha256 === evidence.sources[0]!.sha256
     && evidence.extractions[0]!.sha256 === '6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4', 'source_pin_mismatch')
-  const prepared = { repoRoot, fixture_sha256: FIXTURE_SHA256, fixture_id: (fixture as Row).fixture_id as string, cases, pins, evidence }
+  const prepared = { repoRoot, fixture_sha256: fixtureSha, fixture_id: fixtureId, cases, pins, evidence }
   preparations.set(prepared, { digest: sha256(JSON.stringify(prepared)), snapshot: structuredClone(prepared) })
   return prepared
 }
@@ -111,28 +144,39 @@ async function request(fetcher: Fetch, route: 'status' | 'answer', question?: st
   return { http_status: response.status, body }
 }
 
-export async function evaluateWebsiteComposed(options: { prepared: PreparedEvaluation; outputPath: string; fetch?: Fetch; now?: () => number }) {
+export interface RuntimeBinding { run_id: string; manifest_sha256: string; profile_sha256: string; process_id: number; port: 3016 }
+export async function evaluateWebsiteComposed(options: { prepared: PreparedEvaluation; outputPath: string; fetch?: Fetch; now?: () => number; runtimeBinding?: RuntimeBinding; stageCeiling?: number; stopOnMechanicalFailure?: boolean }) {
   const sealed = preparations.get(options.prepared)
   need(sealed && sealed.digest === sha256(JSON.stringify(options.prepared)), 'preparation_changed_or_untrusted')
   const p = structuredClone(sealed!.snapshot), fetcher = options.fetch ?? fetch, now = options.now ?? Date.now
   unchanged(p)
+  const runtimeBinding = options.runtimeBinding ? structuredClone(options.runtimeBinding) : undefined
+  const stageCeiling = options.stageCeiling ?? p.cases.length * 5
+  need(options.stopOnMechanicalFailure === undefined || typeof options.stopOnMechanicalFailure === 'boolean', 'invalid_mechanical_stop_policy')
+  const stopOnMechanicalFailure = options.stopOnMechanicalFailure === true
+  need(Number.isInteger(stageCeiling) && stageCeiling >= p.cases.length * 5 && stageCeiling <= 200, 'invalid_stage_ceiling')
+  const checkBinding = (body: unknown) => {
+    if (runtimeBinding) need(record(body) && record(body.runtime_binding)
+      && Object.entries(runtimeBinding).every(([key, value]) => (body.runtime_binding as Row)[key] === value), 'runtime_binding_mismatch')
+  }
   need(path.isAbsolute(options.outputPath) && path.extname(options.outputPath) === '.jsonl', 'invalid_output_path')
   const privateRoot = realpathSync(path.join(p.repoRoot, '.superpowers')), parent = realpathSync(path.dirname(options.outputPath))
   const relative = path.relative(privateRoot, parent)
   need(relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative)), 'output_outside_private_root')
   const fd = openSync(options.outputPath, 'wx', 0o600)
-  let sequence = 0, stop_reason: string | null = null
+  let sequence = 0, stop_reason: string | null = null, totalConsumed = 0
   const results: Row[] = []
   const save = (event: Row) => { const line = Buffer.from(JSON.stringify({ sequence: sequence++, recorded_at: new Date(now()).toISOString(), ...event }) + '\n'); let offset = 0; while (offset < line.length) { const n = writeSync(fd, line, offset); need(n > 0, 'journal_failed'); offset += n } fsyncSync(fd) }
   try {
     save({ event: 'run_started', endpoint: ENDPOINT, origin: ORIGIN, fixture_id: p.fixture_id, fixture_sha256: p.fixture_sha256,
-      case_ids: p.cases.map(c => c.id), pins: p.pins, runtime_pin_origin: 'local_files_coordinator_must_bind_to_server_launch', source_pins: { origin: 'approved_release_declarations', sources: p.evidence.sources.map(s => s.sha256), extractions: p.evidence.extractions.map(e => e.sha256) }, semantic_review: 'pending', automatic_retries: 0 })
+      case_ids: p.cases.map(c => c.id), pins: p.pins, runtime_binding: runtimeBinding ?? null, stage_ceiling: stageCeiling, stop_on_mechanical_failure: stopOnMechanicalFailure, runtime_pin_origin: runtimeBinding ? 'coordinator_launch_manifest_and_process_status' : 'local_files_coordinator_must_bind_to_server_launch', source_pins: { origin: 'approved_release_declarations', sources: p.evidence.sources.map(s => s.sha256), extractions: p.evidence.extractions.map(e => e.sha256) }, semantic_review: 'pending', automatic_retries: 0 })
     for (const item of p.cases) {
       unchanged(p)
       save({ event: 'status_before_started', case_id: item.id })
       const before = await request(fetcher, 'status'); save({ event: 'status_before', case_id: item.id, ...before })
+      checkBinding(before.body)
       const remaining = budget(before.body)
-      need(before.http_status === 200 && (before.body as Row).readiness === 'ready' && remaining >= 4, 'service_not_ready')
+      need(before.http_status === 200 && (before.body as Row).readiness === 'ready' && remaining >= 5 && stageCeiling - totalConsumed >= 5, 'service_not_ready')
       const started = now()
       save({ event: 'answer_started', case_id: item.id, question: item.question, expected_outcome: item.expected_outcome, counters_before: remaining })
       let response: Awaited<ReturnType<typeof request>>
@@ -142,19 +186,27 @@ export async function evaluateWebsiteComposed(options: { prepared: PreparedEvalu
       save({ event: 'answer_received', case_id: item.id, duration_ms: duration, ...response })
       save({ event: 'status_after_started', case_id: item.id })
       const after = await request(fetcher, 'status'); save({ event: 'status_after', case_id: item.id, ...after })
+      checkBinding(after.body)
       const afterRemaining = budget(after.body), consumed = remaining - afterRemaining
+      totalConsumed += consumed
       const mechanical = checkMechanical(response.body, item, p.evidence)
       const answered = isResearchAnswer(response.body) && ['supported','qualified'].includes(response.body.status)
       const correction = (response.body as ResearchAnswer | null)?.correction_kind
-      const expectedStages = correction === null ? 2 : correction === 'selection_size' ? 3 : correction === 'source_review' ? 4 : null
+      const expectedStages = correction === null ? 3 : correction === 'selection_size' || correction === 'selection_contract' ? 4 : correction === 'source_review' ? 5 : null
       const reviewedOutcome = answered || (isResearchAnswer(response.body) && ['unsupported','needs_input'].includes(response.body.status))
       const answered_stage_count_valid = !reviewedOutcome || consumed === expectedStages
       const result = { ...item, response: response.body, http_status: response.http_status, duration_ms: duration, counters_before: remaining, counters_after: afterRemaining, stages_consumed: consumed,
-        counter_consistent: after.http_status === 200 && consumed >= 0 && consumed <= 4, ...mechanical,
+        counter_consistent: after.http_status === 200 && consumed >= 0 && consumed <= 5, ...mechanical,
         http_success: response.http_status === 200, answered_stage_count_valid,
         mechanical_checks_passed: response.http_status === 200 && mechanical.mechanical_checks_passed && answered_stage_count_valid }
       results.push(result); save({ event: 'case_completed', result })
       need(result.counter_consistent, 'counter_inconsistent')
+      // A provider rejection is shared infrastructure failure, not a distinct
+      // semantic outcome to keep sampling. Retain its first response and stop.
+      need(!(record(response.body) && ['provider_failure', 'provider_timeout', 'request_timeout'].includes(String(response.body.reason_code))), 'provider_request_failed')
+      // This explicit campaign policy preserves the first response before stopping.
+      // A valid technical boundary or semantic mismatch alone is not a mechanics failure.
+      need(!stopOnMechanicalFailure || result.mechanical_checks_passed, 'mechanical_checks_failed')
     }
     unchanged(p)
   } catch (error) {

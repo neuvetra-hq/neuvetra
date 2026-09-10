@@ -16,7 +16,7 @@ const part = (id: string, text: string, dependencies: string[] = []): Passage =>
     context_end_exclusive: Array.from(PAGE.slice(0, PAGE.indexOf(text) + text.length)).length, normalized_page_sha256: hash(PAGE), context_sha256: hash(text) }] },
   required_passage_ids: dependencies, qualifications: id === 'B' ? ['Synthetic mandatory condition.'] : [], exclusions: [], review_status: 'approved', rights_scope: 'approved_internal_research_evaluation_only',
 })
-function fixture(mutate?: (release: PassageRelease) => void) {
+function fixture(mutate?: (release: PassageRelease) => void, secondOriginal?: string) {
   const extraction = JSON.stringify({ source_sha256: hash(SOURCE), normalization: 'nfkc_whitespace_v1', pages: [{ pdf_page_1_based: 1, text: PAGE }] })
   const release: PassageRelease = {
     schema_version: 2, release_id: 'scope2-website', version: '1', status: 'approved', commercial_runtime_approval: false,
@@ -26,11 +26,20 @@ function fixture(mutate?: (release: PassageRelease) => void) {
     extractions: [{ id: 'extraction', source_id: 'epa-fixture', source_sha256: hash(SOURCE), local_path: '/never-read-extraction', sha256: hash(extraction), format: 'normalized_pages_json_v1', normalization: 'nfkc_whitespace_v1', tool: { name: 'synthetic', version: '1' } }],
     passages: [part('A', 'Grid source paragraph.', ['B']), part('B', 'Required condition paragraph.'), part('C', 'Supplier source paragraph.')],
   }
+  const secondExtraction = secondOriginal === undefined ? undefined : JSON.stringify({ source_sha256: hash(secondOriginal), normalization: 'nfkc_whitespace_v1', pages: [{ pdf_page_1_based: 77, text: PAGE }] })
+  if (secondOriginal !== undefined && secondExtraction !== undefined) {
+    release.sources.push({ ...release.sources[0], id: 'ghgp-fixture', title: 'Second synthetic original', canonical_url: 'https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf', sha256: hash(secondOriginal), bytes: Buffer.byteLength(secondOriginal) })
+    release.extractions.push({ ...release.extractions[0], id: 'second-extraction', source_id: 'ghgp-fixture', source_sha256: hash(secondOriginal), sha256: hash(secondExtraction) })
+    const extra = part('D', 'Supplier source paragraph.')
+    extra.source_id = 'ghgp-fixture'; extra.extraction_id = 'second-extraction'; extra.locator_detail.spans[0].pdf_page_1_based = 77
+    release.passages.push(extra); release.review.approved_passage_ids.push('D')
+  }
   mutate?.(release)
   const releaseBytes = JSON.stringify(release), releaseSha = hash(releaseBytes), scope_id = RESEARCH_SCOPE
   const target: CloudTarget = { supabaseHost: PROJECT_HOST, schema: 'neuvetra_research_dev', bucket: 'neuvetra-research-dev', pineconeHost: PINECONE_HOST, pineconeIndex: 'neuvetra-ghg-dev', scopeId: scope_id,
     buildId: BUILD, namespace: `nv-${BUILD.replaceAll('-', '')}`, releaseSha256: releaseSha, profileSha256: PROFILE_SHA256, expectedReaderUserId: USER, reviewExpiresAt: '2026-09-10T05:00:00Z' }
   const objects = [{ kind: 'source', suffix: 'source.pdf', bytes: SOURCE }, { kind: 'extraction', suffix: 'extraction.json', bytes: extraction }, { kind: 'release', suffix: 'release.json', bytes: releaseBytes }]
+  if (secondOriginal !== undefined && secondExtraction !== undefined) objects.push({ kind: 'source', suffix: 'source.pdf', bytes: secondOriginal }, { kind: 'extraction', suffix: 'extraction.json', bytes: secondExtraction })
   const bytes = new Map(objects.map(o => [`${scope_id}/sha256/${hash(o.bytes)}/${o.suffix}`, o.bytes]))
   const bind = { scope_id, release_sha256: releaseSha, build_id: BUILD }
   const tables: Record<string, Record<string, unknown>[]> = {
@@ -39,7 +48,7 @@ function fixture(mutate?: (release: PassageRelease) => void) {
     research_releases: [{ ...bind, profile_sha256: PROFILE_SHA256, namespace: target.namespace, status: 'approved', version: release.version, review_expires_at: release.review.expires_at, commercial_runtime_approval: false }],
     research_objects: objects.map(o => ({ scope_id, object_sha256: hash(o.bytes), kind: o.kind, byte_size: Buffer.byteLength(o.bytes), bucket: target.bucket, object_key: `${scope_id}/sha256/${hash(o.bytes)}/${o.suffix}` })),
     research_sources: release.sources.map(s => ({ scope_id, source_sha256: s.sha256, source_id: s.id, title: s.title, canonical_url: s.canonical_url, version: s.version, review_status: 'approved' })),
-    research_passages: release.passages.map(p => ({ ...bind, passage_id: p.id, vector_id: hash(scope_id + releaseSha + p.id), source_sha256: release.sources[0].sha256, extraction_sha256: release.extractions[0].sha256,
+    research_passages: release.passages.map(p => ({ ...bind, passage_id: p.id, vector_id: hash(scope_id + releaseSha + p.id), source_sha256: release.sources.find(s => s.id === p.source_id)!.sha256, extraction_sha256: release.extractions.find(e => e.id === p.extraction_id)!.sha256,
       text: p.text, text_sha256: p.sha256, locator: p.locator, spans: p.locator_detail.spans, dependency_ids: p.required_passage_ids, qualifications: p.qualifications, review_status: 'approved', is_active: true })),
   }
   let user: Record<string, unknown> = { id: USER, role: 'authenticated' }
@@ -61,6 +70,33 @@ function fixture(mutate?: (release: PassageRelease) => void) {
 const signal = () => new AbortController().signal
 
 describe('authenticated complete cloud corpus with semantic candidates', () => {
+  test('verifies a larger second original and keeps each passage bound to its own source and extraction', async () => {
+    const original = '%PDF-1.7\n' + 'synthetic large original\n'.repeat(145_000)
+    const f = fixture(undefined, original), repo = createCloudRepository(f.config)
+    const loaded = await repo.loadForQuestion('Compare two supported sources', signal())
+    expect(loaded.verified.passages).toHaveLength(4)
+    expect(loaded.binding.sourceSha256).toEqual([hash(SOURCE), hash(original)].sort())
+    expect(f.calls.filter(c => c.url.pathname.endsWith('source.pdf'))).toHaveLength(2)
+    f.tables.research_passages[3]!.source_sha256 = hash(SOURCE)
+    await expect(repo.recheck(loaded.binding, signal())).rejects.toThrow('cloud_metadata_invalid')
+  })
+  test('larger-source support does not waive rights, publisher identity or streaming size bounds', async () => {
+    for (const mutate of [
+      (r: PassageRelease) => { r.sources[1].rights_review = 'pending' },
+      (r: PassageRelease) => { r.sources[1].canonical_url = 'https://ghgprotocol.org.attacker.example/sites/default/files/2023-03/Scope%202%20Guidance.pdf' },
+      (r: PassageRelease) => { r.sources[1].canonical_url += '?unreviewed=1' },
+    ]) {
+      const f = fixture(mutate, '%PDF second source')
+      await expect(createCloudRepository(f.config).loadForQuestion('question', signal())).rejects.toThrow('cloud_source_unavailable')
+      expect(f.calls.some(c => c.url.pathname.endsWith('source.pdf'))).toBe(false)
+    }
+    const f = fixture(undefined, '%PDF second source')
+    const secondKey = [...f.bytes.keys()].find(key => key.includes(hash('%PDF second source')))!
+    const repo = createCloudRepository({ ...f.config, fetch: async (url, init) => url.endsWith(secondKey)
+      ? new Response('x'.repeat(5_000_001)) : f.fetcher(url, init) })
+    await expect(repo.loadForQuestion('question', signal())).rejects.toThrow('cloud_response_too_large')
+    expect(f.calls.some(c => c.url.hostname === PINECONE_HOST)).toBe(false)
+  })
   test('verifies cloud bytes and Unicode spans, retaining whole catalog and dependencies despite low-scoring single hit', async () => {
     const f = fixture(), repo = createCloudRepository(f.config), answer = await repo.loadForQuestion('A conceptual paraphrase without catalog vocabulary', signal())
     expect(answer.candidateIds).toEqual(['A'])

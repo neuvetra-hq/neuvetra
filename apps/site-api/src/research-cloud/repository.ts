@@ -12,6 +12,9 @@ export const PROFILE = { model: 'llama-text-embed-v2', dimension: 1024, metric: 
   write_parameters: { input_type: 'passage', dimension: 1024, truncate: 'NONE' } } as const
 export const TOP_K = 10
 const MAX_BYTES = 1_000_000
+// Metadata remains tightly bounded; approved original PDFs may be larger.
+const MAX_SOURCE_BYTES = 5_000_000
+const MAX_ROWS = 32
 const HEX = /^[a-f0-9]{64}$/
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/
 type Row = Record<string, unknown>
@@ -80,9 +83,9 @@ export function createCloudRepository(config: CloudRepositoryConfig): CloudRepos
   }
   async function table(name: string, filters: Record<string, string>, token: string, signal: AbortSignal): Promise<Row[]> {
     requireValue(['research_memberships', 'research_active_builds', 'research_releases', 'research_objects', 'research_sources', 'research_passages'].includes(name))
-    const query = new URLSearchParams({ select: '*', limit: '33', ...Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, `eq.${value}`])) })
+    const query = new URLSearchParams({ select: '*', limit: String(MAX_ROWS + 1), ...Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, `eq.${value}`])) })
     const data = json(await request('supabase', `/rest/v1/${name}?${query}`, token, signal))
-    requireValue(Array.isArray(data) && data.length <= 32 && data.every(record))
+    requireValue(Array.isArray(data) && data.length <= MAX_ROWS && data.every(record))
     requireValue(data.every(row => Object.entries(filters).every(([key, value]) => row[key] === value)))
     return data
   }
@@ -135,11 +138,12 @@ export function createCloudRepository(config: CloudRepositoryConfig): CloudRepos
       const matches = objects.filter(row => row.object_sha256 === sha)
       requireValue(matches.length === 1, 'cloud_source_unavailable')
       const row = matches[0]!, suffix = kind === 'source' ? 'source.pdf' : `${kind}.json`
+      const byteLimit = kind === 'source' ? MAX_SOURCE_BYTES : MAX_BYTES
       const key = `${target.scopeId}/sha256/${sha}/${suffix}`
       requireValue(HEX.test(sha) && row.kind === kind && row.bucket === target.bucket && row.object_key === key
-        && typeof row.byte_size === 'number' && Number.isSafeInteger(row.byte_size) && row.byte_size > 0 && row.byte_size <= MAX_BYTES
+        && typeof row.byte_size === 'number' && Number.isSafeInteger(row.byte_size) && row.byte_size > 0 && row.byte_size <= byteLimit
         && (expectedBytes === undefined || expectedBytes === row.byte_size), 'cloud_source_unavailable')
-      const bytes = await request('supabase', `/storage/v1/object/authenticated/${target.bucket}/${key}`, token, signal)
+      const bytes = await request('supabase', `/storage/v1/object/authenticated/${target.bucket}/${key}`, token, signal, undefined, byteLimit)
       requireValue(bytes.length === row.byte_size && hash(bytes) === sha, 'cloud_source_unavailable')
       return bytes
     }
@@ -152,7 +156,7 @@ export function createCloudRepository(config: CloudRepositoryConfig): CloudRepos
     requireValue(release.release_id === 'scope2-website' && metadata.version === release.version
       && Date.parse(String(metadata.review_expires_at)) === Date.parse(release.review.expires_at!), 'cloud_source_unavailable')
     const passages = release.passages.filter(p => release.review.approved_passage_ids.includes(p.id))
-    requireValue(passages.length > 0 && passages.length <= 32 && release.sources.length <= 4 && release.extractions.length <= 4)
+    requireValue(passages.length > 0 && passages.length <= MAX_ROWS && release.sources.length <= 4 && release.extractions.length <= 4)
     requireValue(projected.length === passages.length && new Set(projected.map(row => row.passage_id)).size === projected.length)
     const activeSources = release.sources.filter(source => passages.some(p => p.source_id === source.id))
     await Promise.all(activeSources.map(async source => {

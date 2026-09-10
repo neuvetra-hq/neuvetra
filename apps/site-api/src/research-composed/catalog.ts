@@ -39,6 +39,7 @@ export interface VerifiedCatalog {
     catalog: UnitCatalog;
     sha256: string;
 }
+export const unitContentLimits = Object.freeze({ maxTitleCharacters: 100, maxTextCharacters: 2500 });
 export const SOURCE_SHA = '38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f';
 export const CONDITIONS_SHA = '063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6';
 /** The expected digest is operator-reviewed code/configuration, never model or browser input. */
@@ -53,7 +54,7 @@ export function parseUnitCatalog(bytes: Uint8Array, expectedSha: string, verifie
     }
     need(exactKeys(raw, ['schema_version', 'catalog_id', 'version', 'source_release_sha256', 'condition_catalog_sha256', 'review', 'units']), 'unit_catalog_invalid');
     const v = raw as UnitCatalog;
-    need(v.schema_version === 1 && v.catalog_id === 'scope2-website-answer-units' && v.version === '1' && v.source_release_sha256 === SOURCE_SHA && verified.sha256 === SOURCE_SHA && v.condition_catalog_sha256 === CONDITIONS_SHA, 'unit_catalog_invalid');
+    need(v.schema_version === 1 && v.catalog_id === 'scope2-website-answer-units' && ['1', '2-epa-inquiry', '3-epa-acquisition'].includes(v.version) && v.source_release_sha256 === SOURCE_SHA && verified.sha256 === SOURCE_SHA && v.condition_catalog_sha256 === CONDITIONS_SHA, 'unit_catalog_invalid');
     need(exactKeys(v.review, ['status', 'expires_at', 'source_review', 'qa_review']) && v.review.status === 'approved_private', 'unit_catalog_invalid');
     const expiry = Date.parse(v.review.expires_at);
     need(Number.isFinite(expiry) && expiry > now && expiry <= Date.parse(verified.release.review.expires_at ?? ''), 'unit_catalog_stale');
@@ -67,7 +68,7 @@ export function parseUnitCatalog(bytes: Uint8Array, expectedSha: string, verifie
     }).reviewer, 'unit_catalog_invalid');
     need(Array.isArray(v.units) && v.units.length >= 1 && v.units.length <= 48 && new Set(v.units.map(u => u.id)).size === v.units.length, 'unit_catalog_invalid');
     for (const u of v.units) {
-        need(exactKeys(u, ['id', 'title', 'text', 'type', 'passage_ids', 'support', 'required_unit_ids', 'coverage']) && /^U\d{2}$/.test(u.id) && typeof u.title === 'string' && u.title.trim().length > 0 && u.title.length <= 100 && typeof u.text === 'string' && u.text.trim().length >= 12 && u.text.length <= 850 && ['source_summary', 'reviewed_interpretation'].includes(u.type) && strings(u.passage_ids) && u.passage_ids.length > 0 && strings(u.required_unit_ids) && strings(u.coverage) && u.coverage.length > 0, 'unit_catalog_invalid');
+        need(exactKeys(u, ['id', 'title', 'text', 'type', 'passage_ids', 'support', 'required_unit_ids', 'coverage']) && /^U\d{2}$/.test(u.id) && typeof u.title === 'string' && u.title.trim().length > 0 && u.title.length <= unitContentLimits.maxTitleCharacters && typeof u.text === 'string' && u.text.trim().length >= 12 && u.text.length <= unitContentLimits.maxTextCharacters && ['source_summary', 'reviewed_interpretation'].includes(u.type) && strings(u.passage_ids) && u.passage_ids.length > 0 && strings(u.required_unit_ids) && strings(u.coverage) && u.coverage.length > 0, 'unit_catalog_invalid');
         const closure = dependencyClosure(u.passage_ids, verified.passages);
         need(closure.length === u.passage_ids.length && closure.every(p => u.passage_ids.includes(p.id)), 'unit_catalog_invalid');
         need(Array.isArray(u.support) && u.support.length >= u.passage_ids.length && u.support.length <= 24, 'unit_catalog_invalid');

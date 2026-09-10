@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "task_id": "M2-EPA-QA-SOURCE-17",
+  "reviewer": "/root/qa_live",
+  "role": "Independent source-informed wording and capability QA; not the author",
+  "disposition": "approved_private",
+  "approval_scope": "Exact U24 candidate version2 wording, support, standalone companion closure and capability proposal may be assembled in a separately versioned private EPA catalog after root source approval. This is not active corpus, public/commercial release, live acceptance or a source-rights expansion.",
+  "candidate": {
+    "path": ".superpowers/epa-source-acquisition-17/candidate-v2.json",
+    "sha256": "7fd3f66a78bf17cc9b054b049f2dd2be4c69116ed2ac787cf97a78dd9244e1ee",
+    "version": 2
+  },
+  "source_anchor_map": {
+    "path": ".superpowers/epa-source-acquisition-17/source-anchor-map-v2.md",
+    "sha256": "d5000ba16a48bb666a6e69460377b23164417811f403c313080b6386bec92351"
+  },
+  "review_expires_at": "2026-09-15T23:20:32Z",
+  "factual_scope": "EPA December2023 guide; U.S. grid-delivered purchased electricity; acquisition and locator explanation using only approved retained paragraphs.",
+  "mechanical_checks": {
+    "input_pins": 4,
+    "source_pdf_sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+    "extraction_sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4",
+    "exact_support_quotes": 9,
+    "original_page_and_context_hashes": "pass",
+    "recursive_source_dependencies": "closed",
+    "clause_anchors": 13,
+    "source_condition_rows": 16,
+    "preserved_condition_rows": 14,
+    "not_asserted_conditions": [
+      "S08-C02",
+      "S11-C02"
+    ],
+    "capability_anchors": 4,
+    "limit_anchors": 4,
+    "title_plus_text_utf16_characters": 2219,
+    "proposed_required_unit_ids": []
+  },
+  "source_findings": [
+    {
+      "clauses": [
+        "A01",
+        "A02"
+      ],
+      "verdict": "pass",
+      "basis": "The U.S. grid-delivered scope and generation-only boundary retain exclusion of transmission/distribution and upstream activity. Separate-method wording is an explicit scope limitation consistent with existing approved qualifications."
+    },
+    {
+      "clauses": [
+        "A03",
+        "A04",
+        "A05",
+        "A06"
+      ],
+      "verdict": "pass",
+      "basis": "Regional/subnational facility-grid geography, eGRID total-output average including all operating plant categories, Power Profiler ZIP/utility inputs, publisher route, Hub delay and variable/data-year uncertainty are retained. It identifies documented discovery routes, not a verified present edition or facility assignment."
+    },
+    {
+      "clauses": [
+        "A07",
+        "A08",
+        "A09"
+      ],
+      "verdict": "pass",
+      "basis": "Supplier may provide a standard/differentiated product factor; contractual procurement context remains. All delivered electricity includes own generation and purchases; supplier-owned-only figures are explicitly unsuitable for that boundary. No complete eligibility determination is inferred."
+    },
+    {
+      "clauses": [
+        "A10"
+      ],
+      "verdict": "pass_after_revision",
+      "basis": "Version2 conditions date comparison on an applicable purchasing agreement being used. Whole-year alignment, covered-portion-only application on mismatch, possible multiple agreements and uncovered periods remain. It does not impose an agreement on every supplier inquiry."
+    },
+    {
+      "clauses": [
+        "A11",
+        "A12",
+        "A13"
+      ],
+      "verdict": "pass",
+      "basis": "Authored scope limitations disclaim a completed lookup, current factors, comprehensive eligibility, factor hierarchy/fallback, numerical value, uncertainty calculation, emissions calculation and filing decision. They do not deny that external guidance could supply those subjects."
+    },
+    {
+      "conditions": [
+        "S08-C02",
+        "S11-C02"
+      ],
+      "verdict": "acceptable_nonassertion",
+      "basis": "The unit does not attempt a full eGRID geographic-structure definition or rank factor types. NERC/PCA/mix/transmission structure and the precision hierarchy therefore are not claims requiring compressed replacement. Their original conditions and exact source paragraphs remain retained in the support closure."
+    }
+  ],
+  "capability_findings": [
+    {
+      "id": "U24-C01",
+      "verdict": "pass",
+      "basis": "Grid source_route anchor includes grid geography, eGRID/source publication routes, Power Profiler and currency qualifiers."
+    },
+    {
+      "id": "U24-C02",
+      "verdict": "pass_after_revision",
+      "basis": "Supplier source_route is directly supported by A07 identifying the utility/supplier as a possible source of the purchased product factor. It replaces the redundant separately typed subregion route without removing its text."
+    },
+    {
+      "id": "U24-C03",
+      "verdict": "pass",
+      "basis": "Supplier inquiry action and supporting delivered-product/timing checks are present in the anchored own text."
+    },
+    {
+      "id": "U24-C04",
+      "verdict": "pass",
+      "basis": "A09 expressly states the delivered-electricity boundary and negative effect of a supplier-owned-generation-only figure, supporting this limited conditional rule."
+    }
+  ],
+  "standalone_closure_disposition": "Accepted: own text retains material qualifications formerly supplied by companion units, while all9 source passages and recursive passage dependencies remain. No original unit or dependency is deleted. A separately versioned24-unit catalog must preserve the original23 units and prove exact U24 assembly.",
+  "resolved_findings": [
+    {
+      "version1_sha256": "0cb439a5c9e553a542ee1d3038b6e213dfa96b3944ac2b2b89011b0ed64add10",
+      "finding": "Unconditional agreement-date imperative could imply an agreement is part of every acquisition inquiry.",
+      "resolution": "Version2 adds applicable-agreement condition; all other clause text unchanged."
+    },
+    {
+      "finding": "Metadata represented a second grid route but omitted the explicit supplier source route.",
+      "resolution": "Version2 C02 represents the actual supplier route; C01 still spans subregion lookup. No validator cap increase or new source fact."
+    }
+  ],
+  "limitations": [
+    "This metadata lists approved roles, not every possible semantic use of the full text. In particular, preserved generation/timing qualifications do not automatically create additional proof IDs. A certificate of missing approved capabilities must not claim missing external facts or external rules.",
+    "Live unit selection may still overselect; the2219-character standalone cost is not proof that the runtime will choose a useful bounded answer.",
+    "No current publisher download or updated-factor check was performed; retained PDF/extraction bytes and selected page spans were reverified. The existing operational review deadline and private use boundary are unchanged.",
+    "This source candidate does not fix the separate run16 conditional-boundary review contradiction or improve a blind benchmark score by itself."
+  ],
+  "held29_opened": false,
+  "gold_used_for_source_authoring_or_shared": false,
+  "new_sources": 0,
+  "provider_io": 0,
+  "active_files_changed_by_qa": 0,
+  "recorded_at": "2026-09-09T22:17:58.745Z"
+}

@@ -19,6 +19,7 @@ const integer = (v: unknown): number => typeof v === 'number' && Number.isSafeIn
 const digest = (v: unknown): string => typeof v === 'string' && /^[a-f0-9]{64}$/.test(v) ? v : fail()
 const unique = (items: { id: string }[]) => { if (new Set(items.map(i => i.id)).size !== items.length) fail() }
 const RIGHTS = 'approved_internal_research_evaluation_only'
+const SCOPE2_GUIDANCE_URL = 'https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf'
 
 export function parsePassageRelease(raw: unknown, now = Date.now()): PassageRelease {
   const value = object(raw), scope = object(value.scope), review = object(value.review)
@@ -32,7 +33,8 @@ export function parsePassageRelease(raw: unknown, now = Date.now()): PassageRele
       const source: PassageSource = { id: string(v.id), title: string(v.title), version: string(v.version), status: string(v.status), canonical_url: string(v.canonical_url), local_path: string(v.local_path), sha256: digest(v.sha256), review_status: string(v.review_status), rights_review: string(v.rights_review), rights_scope: string(v.rights_scope) }
       if (v.bytes !== undefined) source.bytes = integer(v.bytes)
       const url = new URL(source.canonical_url)
-      if (url.protocol !== 'https:' || url.username || url.password || url.port || !['www.epa.gov', 'epa.gov'].includes(url.hostname)) fail()
+      const allowedPublisher = ['www.epa.gov', 'epa.gov'].includes(url.hostname) || url.href === SCOPE2_GUIDANCE_URL
+      if (url.protocol !== 'https:' || url.username || url.password || url.port || !allowedPublisher) fail()
       return source
     }),
     extractions: array(value.extractions).map(raw => {

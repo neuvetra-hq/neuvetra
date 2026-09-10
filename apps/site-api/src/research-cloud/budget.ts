@@ -35,7 +35,7 @@ export function createAttemptBudget(directory: string, policy: { runId: string; 
     remaining: () => Math.max(0, policy.maxCalls - count()),
     reserve(stage, inputSha256) {
       const attempt = count() + 1
-      if (attempt > policy.maxCalls || !['plan', 'draft', 'verify'].includes(stage) || !/^[a-f0-9]{64}$/.test(inputSha256)) throw new PassageError('budget_exhausted')
+      if (attempt > policy.maxCalls || !['analyze', 'plan', 'draft', 'verify'].includes(stage) || !/^[a-f0-9]{64}$/.test(inputSha256)) throw new PassageError('budget_exhausted')
       try { exclusive(path.join(directory, `attempt-${String(attempt).padStart(3, '0')}.json`), JSON.stringify({ attempt, policy_sha256: policySha, stage, input_sha256: inputSha256, reserved_usd: 1, started_at: new Date().toISOString() })) }
       catch { throw new PassageError('budget_exhausted') }
       return attempt

@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "task_id": "M2-EPA-QA-20",
+  "reviewer": "/root/qa_live",
+  "recorded_at": "2026-09-10T00:36:58.811Z",
+  "disposition": "source_candidate_approved_for_separately_versioned_private_assembly",
+  "candidate": {
+    "path": ".superpowers/epa-limitation-audit-20/candidate.json",
+    "sha256": "f1db4a2481ba3981ef39ce6157b2fce80bb11f4d2bb55464b675d343ddc9ce83"
+  },
+  "source_map": {
+    "path": ".superpowers/epa-limitation-audit-20/source-map.md",
+    "sha256": "a5fadc4428e7bc9ed78ba63b676929830d057f2bed90b1f85983b77469344c86"
+  },
+  "input_pins": {
+    "data/research/answer-units/scope2-website.epa-acquisition.v1.json": "97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50",
+    "data/research/capabilities/scope2-website.epa-route.v1.json": "379447e6a7b6c8b4d1db2749e179afd20965b617cfb8c6693a61feb4d4a791d5",
+    "data/research/releases/scope2-website.v1.json": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "data/research/conditions/scope2-website.v1.json": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6"
+  },
+  "checks": {
+    "units_reviewed": 24,
+    "additive_anchors": 21,
+    "source_maps": 18,
+    "condition_maps": 33,
+    "source_and_extraction_bytes": "rehashed",
+    "source_context_ranges": "rederived_from_retained_normalized_pages",
+    "unit_source_condition_closures": "all24_rederived",
+    "prior_capability_objects": 34,
+    "prior_limit_objects": 27,
+    "all_unchanged": true
+  },
+  "candidate_verdicts": [
+    {
+      "id": "U04-C03",
+      "kind": "limitation",
+      "subject": "activity_records",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "A qualified warning that internal submeters may omit activity; no universal defect.",
+      "support_condition_ids": [
+        "S03-C01",
+        "S03-C02"
+      ],
+      "quote_sha256": "98ba326128b02a615b07bd7703641b9a3fd74c6e40b561d3cd50829dc15d2332"
+    },
+    {
+      "id": "U05-C02",
+      "kind": "limitation",
+      "subject": "duplicate_consumption",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Restriction concerns duplicate counting of the same invoiced consumption, retaining the utility recommendation.",
+      "support_condition_ids": [
+        "S04-C01"
+      ],
+      "quote_sha256": "7b0212fa8bb44f498c0982c51e0c75739884af26fb000b5bc429176254873090"
+    },
+    {
+      "id": "U06-C02",
+      "kind": "limitation",
+      "subject": "electricity_units",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "The common-unit statement is non-exclusive. It supplies no alternative-unit approval, conversion or legal prohibition.",
+      "support_condition_ids": [
+        "S05-C01"
+      ],
+      "quote_sha256": "0d8cac92e5639159f8af60ccf7bc1736d5285dbbf1a0e48b86464546022a35ad"
+    },
+    {
+      "id": "U07-C03",
+      "kind": "limitation",
+      "subject": "generation_boundary",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Generation-only factor boundary is explicit; excluded upstream and loss emissions are not denied.",
+      "support_condition_ids": [
+        "S06-C01"
+      ],
+      "quote_sha256": "caf263ca422e6cb5714b60175df8a9c792687de807def998d25b9b4b0c3dcfcf"
+    },
+    {
+      "id": "U08-C02",
+      "kind": "limitation",
+      "subject": "grid_geography",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Geographic/grid fit is qualified by grid delivery and should/recommendation language, not a universal prohibition.",
+      "support_condition_ids": [
+        "S07-C01"
+      ],
+      "quote_sha256": "0ff59061594ea1bde18f7367d19b8552fe206f4c5d8e8e512cb4f41288b16517"
+    },
+    {
+      "id": "U10-C02",
+      "kind": "limitation",
+      "subject": "publisher_updates",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Publication lag is possible, with no current-version conclusion.",
+      "support_condition_ids": [
+        "S09-C01"
+      ],
+      "quote_sha256": "dc6fbd9c1b75defe34ba265424869f09ac0a9a7ef00472398bf00b4bab8b70b2"
+    },
+    {
+      "id": "U13-C04",
+      "kind": "limitation",
+      "subject": "supplier_delivered_boundary",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Delivered product includes owned and purchased generation; this limited prerequisite is not full eligibility.",
+      "support_condition_ids": [
+        "S12-C01",
+        "S12-C02"
+      ],
+      "quote_sha256": "3f380e1ae2f567f0851c30f0506c045b6a069011d24bde012fa51d947daa4221"
+    },
+    {
+      "id": "U14-C02",
+      "kind": "limitation",
+      "subject": "certificate_quality_prerequisite",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Claimability requires relevant quality review; the unit does not supply the detailed criteria.",
+      "support_condition_ids": [
+        "S13-C01",
+        "S13-C02"
+      ],
+      "quote_sha256": "aeb01e0697ceb7a873012fff6269e9bf03a11135a5ade23e5b8df432e42edd03"
+    },
+    {
+      "id": "U15-C02",
+      "kind": "limitation",
+      "subject": "contract_certificate_claim",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Documentary attribution restrictions retain issuance, bundling, sale and quality conditions; no fallback selection.",
+      "support_condition_ids": [
+        "S13-C02",
+        "S14-C01",
+        "S14-C02",
+        "S14-C03",
+        "S14-C04",
+        "S14-C05"
+      ],
+      "quote_sha256": "02cad93acb78d7ee6734575a0eb727af0f2515ae3a45fe839523cf8e8b956102"
+    },
+    {
+      "id": "U16-C02",
+      "kind": "limitation",
+      "subject": "agreement_period_alignment",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Only covered reporting portions use the agreement factor; mismatch does not invalidate the entire year.",
+      "support_condition_ids": [
+        "S15-C01",
+        "S15-C02",
+        "S15-C03"
+      ],
+      "quote_sha256": "9b45a0b3800efe8e2ccc2ffb7b1b26a365107ee23c3ec5001bf76e4162fce126"
+    },
+    {
+      "id": "U17-C02",
+      "kind": "limitation",
+      "subject": "factor_data_period",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Existing labeled interpretation distinguishes represented data period from inventory period, without mandatory equality.",
+      "support_condition_ids": [
+        "S16-C01",
+        "S18-C02"
+      ],
+      "quote_sha256": "fcc07bd5c253d08bc147481a51d0cba6e5366d1363dc10cf2f05ebfc964be144"
+    },
+    {
+      "id": "U18-C03",
+      "kind": "limitation",
+      "subject": "factor_update_adjustment",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Ordinary changes and methodology changes remain distinct; no universal no-recalculation claim.",
+      "support_condition_ids": [
+        "S16-C01",
+        "S16-C03",
+        "S17-C01"
+      ],
+      "quote_sha256": "2809da2da72eab28aefda0f1eeac7f7b4a86a3be40d7589f14cb8185a0d4f449"
+    },
+    {
+      "id": "U19-C02",
+      "kind": "limitation",
+      "subject": "methodology_adjustment",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Described methodology changes and the organization policy bound the should-adjust statement; no invented policy or automatic classification.",
+      "support_condition_ids": [
+        "S17-C01"
+      ],
+      "quote_sha256": "2c4cf006f2a54bd8c378a26ef428e4d382136e379a66251aa1f95043d8be67b6"
+    },
+    {
+      "id": "U22-C02",
+      "kind": "limitation",
+      "subject": "product_label_documentation",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Existing reviewed interpretation connects label claims to documentary/quality evidence. It is not a new publisher label rule.",
+      "support_condition_ids": [
+        "S13-C01",
+        "S13-C02",
+        "S14-C01",
+        "S14-C02",
+        "S14-C03",
+        "S14-C04"
+      ],
+      "quote_sha256": "9b38606d0243d3ad7548db10a5cd752235644eb6ac09873b42ca988c505e7219"
+    },
+    {
+      "id": "U23-C02",
+      "kind": "limitation",
+      "subject": "agreement_period_alignment",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Only the embedded conditional agreement-date assertion is annotated; inquiry questions themselves are not affirmative boundaries.",
+      "support_condition_ids": [
+        "S15-C01",
+        "S15-C02",
+        "S15-C03"
+      ],
+      "quote_sha256": "0a35e9bf6b0034f494eeec1e1b4a2feb977784f4bc3acbee7fc52bbb5b154a39"
+    },
+    {
+      "id": "U24-C05",
+      "kind": "limitation",
+      "subject": "generation_boundary",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "The full self-contained U.S. acquisition unit retains generation-only scope and separate-method need.",
+      "support_condition_ids": [
+        "S06-C01"
+      ],
+      "quote_sha256": "bcff741bcbe4476c1fc84cdda2f1b99d55b6a4ea938bb207abbef75d90d6cb25"
+    },
+    {
+      "id": "U24-C06",
+      "kind": "limitation",
+      "subject": "grid_geography",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Grid geography and recommended U.S. total-output subregion category remain qualified and do not perform a lookup.",
+      "support_condition_ids": [
+        "S07-C01",
+        "S08-C01"
+      ],
+      "quote_sha256": "e482684729433ee385733b3d9a06762a7434ea263b7239ddac6946939598d438"
+    },
+    {
+      "id": "U24-C07",
+      "kind": "limitation",
+      "subject": "publisher_updates",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Possible publisher lag supplies a caveat, not verification of currentness.",
+      "support_condition_ids": [
+        "S09-C01"
+      ],
+      "quote_sha256": "a416cbe04125c0a113f13bea5e0a990e7da7b92b81b80b0c08cca9041669056c"
+    },
+    {
+      "id": "U24-C08",
+      "kind": "limitation",
+      "subject": "grid_factor_uncertainty",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Time/season averaging and potential date mismatch/staleness support uncertainty only, not invalidity or quantified error.",
+      "support_condition_ids": [
+        "S18-C01",
+        "S18-C02",
+        "S18-C03"
+      ],
+      "quote_sha256": "074828579fc0a74ae349dcf557e2ffc317dc75259eb28d57d9bf39adb6c30b0f"
+    },
+    {
+      "id": "U24-C09",
+      "kind": "limitation",
+      "subject": "supplier_delivered_boundary",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "All delivered supplier product supply is required; the full unit keeps market-based/product/eligibility qualifications.",
+      "support_condition_ids": [
+        "S12-C01",
+        "S12-C02"
+      ],
+      "quote_sha256": "f8e7b5eed260631c54dc2c96ce956dd26f7a043c71e2131b0b724146325d482b"
+    },
+    {
+      "id": "U24-C10",
+      "kind": "limitation",
+      "subject": "agreement_period_alignment",
+      "verdict": "approved_narrow_existing_wording_role",
+      "rationale": "Applicable agreement condition, alignment, partial coverage, multiple agreements and uncovered periods are retained.",
+      "support_condition_ids": [
+        "S15-C01",
+        "S15-C02",
+        "S15-C03"
+      ],
+      "quote_sha256": "fdeae1043914a445403c062ae494704eaeb1bbf0161c46e945306a230dd38b5d"
+    }
+  ],
+  "non_additions": {
+    "count": 8,
+    "verdict": "Defensible non-additions: service inability and legal/eligibility disclaimers do not create external rules; U20 existing limitation is retained; this review does not claim exhaustive coverage of every paraphrase."
+  },
+  "assembly_constraints": {
+    "total_capabilities": 55,
+    "general_per_unit_ceiling": 10,
+    "old34_capabilities_and27_limits_preserved": true,
+    "unit_source_condition_bytes_unchanged": true,
+    "source_expiry_unchanged": true,
+    "new_conditional_capabilities": 0,
+    "required_companions_preserved": true,
+    "full_text_required": true
+  },
+  "limitations": [
+    "Role anchors are not standalone answers. Exact kind/subject presence is necessary structural support; independent complete-question task fit still decides semantic sufficiency.",
+    "New labels do not expand the approved passage corpus, detailed quality criteria, actual company determinations or reporting applicability.",
+    "No active integration, provider request, fresh source acquisition, runtime test pass or live acceptance is authorized or claimed by this source-only receipt."
+  ],
+  "gold_access_for_this_review": false,
+  "held29_opened": false
+}
