@@ -44,6 +44,15 @@ export interface SelectionReview {
         explanation: string;
     }[];
 }
+/** Bytes occupied by issues inside messages[].content after both JSON encodings;
+ * exclude only the enclosing string quotes, which belong to the surrounding wire. */
+export function reviewIssuesNestedWireBytes(issues: SelectionReview['issues']): number {
+    return Buffer.byteLength(JSON.stringify(JSON.stringify(issues)), 'utf8') - 2;
+}
+export const selectionReviewIssueBudget = Object.freeze({
+    maximum_nested_wire_utf8_bytes: 8192,
+    measurement: reviewIssuesNestedWireBytes.toString(),
+});
 /** Validate every facet and ID before any size decision. An oversized earlier
  * facet must not conceal a malformed or foreign selection later in the plan.
  */
@@ -135,6 +144,7 @@ export function parseSelectionReview(raw: unknown, plan: Selection, units: Answe
         else
             need(issue.target_id === 'answer' && Object.hasOwn(globalIssue, issue.code) && record(v) && v[globalIssue[issue.code]!] === false, 'selection_review_invalid');
     }
+    need(reviewIssuesNestedWireBytes(v.issues) <= selectionReviewIssueBudget.maximum_nested_wire_utf8_bytes, 'selection_review_invalid');
     for (const [code, key] of Object.entries(globalIssue))
         if ((v as unknown as Record<string, unknown>)[key] === false)
             need(v.issues.some(i => i.code === code && i.target_id === 'answer'), 'selection_review_invalid');

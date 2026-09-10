@@ -8,7 +8,7 @@ import type { CloudEvidence, CloudRepository } from '../research-cloud/types'
 import type { AttemptBudget } from '../research-cloud/budget'
 import type { ComposedStageEvent } from './provider'
 import { parseUnitCatalog, resolveUnitClosure, selectedUnits, titleTextCharacters, SOURCE_SHA, type UnitCatalog } from './catalog'
-import { analyzeSelectionSize, parseSelection, parseSelectionReview, type Selection, type SelectionReview } from './selection'
+import { analyzeSelectionSize, parseSelection, parseSelectionReview, reviewIssuesNestedWireBytes, selectionReviewIssueBudget, type Selection, type SelectionReview } from './selection'
 import { composedRequestBody, createComposedProvider, type ComposedStage } from './provider'
 import { createComposedAnswerService } from './answer'
 import { analysisInput } from './question-analysis'
@@ -567,6 +567,76 @@ describe('Bounded whole-selection size repair', () => {
     review.issues[0]!.explanation += 'x'
     expect(() => parseSelectionReview(review, p, unitSet(p), catalog, capabilities)).toThrow('selection_review_invalid')
     expect(review.issues[0]!.explanation).toHaveLength(2001)
+  })
+  const embeddedIssueBytes = (issues: SelectionReview['issues']) => Buffer.byteLength(JSON.stringify({ content: JSON.stringify({ issues }) }), 'utf8')
+    - Buffer.byteLength(JSON.stringify({ content: JSON.stringify({ issues: [] }) }), 'utf8') + 2
+  const issueBoundary = (fill: string, target = 8192): SelectionReview['issues'] => {
+    const issues = Array.from({ length: 4 }, () => ({ code: 'premise', target_id: 'answer', explanation: 'a' }))
+    for (const issue of issues) {
+      let low = 0, high = Math.floor(1999 / fill.length)
+      while (low < high) {
+        const middle = Math.ceil((low + high) / 2)
+        issue.explanation = 'a' + fill.repeat(middle)
+        if (embeddedIssueBytes(issues) <= target) low = middle; else high = middle - 1
+      }
+      issue.explanation = 'a' + fill.repeat(low)
+    }
+    const remainder = target - embeddedIssueBytes(issues)
+    const last = issues.find(i => i.explanation.length + remainder <= 2000)!
+    last.explanation += 'a'.repeat(remainder)
+    return issues
+  }
+  test('aggregate issue budget measures exact nested UTF8 for ASCII, four-byte Unicode, quotes and backslashes at the boundary', () => {
+    expect(selectionReviewIssueBudget.maximum_nested_wire_utf8_bytes).toBe(8192)
+    for (const fill of ['x', '😀', '"', '\\']) {
+      const p = selection(), review = revise(p)
+      for (const target of [8191, 8192]) {
+        review.issues = issueBoundary(fill, target)
+        expect(review.issues.every(i => i.explanation.length <= 2000)).toBe(true)
+        expect(embeddedIssueBytes(review.issues)).toBe(target)
+        expect(reviewIssuesNestedWireBytes(review.issues)).toBe(target)
+        const original = JSON.stringify(review)
+        expect(parseSelectionReview(review, p, unitSet(p), catalog, capabilities).issues).toEqual(review.issues)
+        expect(JSON.stringify(review)).toBe(original)
+      }
+      review.issues.find(i => i.explanation.length < 2000)!.explanation += 'a'
+      expect(embeddedIssueBytes(review.issues)).toBe(8193)
+      const original = JSON.stringify(review)
+      expect(() => parseSelectionReview(review, p, unitSet(p), catalog, capabilities)).toThrow('selection_review_invalid')
+      expect(JSON.stringify(review)).toBe(original)
+    }
+    const p = selection(), review = revise(p)
+    review.issues = Array.from({ length: 25 }, () => ({ code: 'premise', target_id: 'answer', explanation: 'a' }))
+    expect(parseSelectionReview(review, p, unitSet(p), catalog, capabilities).issues).toHaveLength(25)
+    review.issues.push({ ...review.issues[0]! })
+    expect(() => parseSelectionReview(review, p, unitSet(p), catalog, capabilities)).toThrow('selection_review_invalid')
+  })
+  test('oversized review stops the service before correction while exact-boundary review reaches one unchanged correction', async () => {
+    for (const fill of ['x', '😀', '"', '\\']) {
+      const p = selection(), review = revise(p)
+      review.issues = issueBoundary(fill)
+      review.issues.find(i => i.explanation.length < 2000)!.explanation += 'a'
+      const before = JSON.stringify(review), h = harness([p, review, p, pass(p)])
+      const result = await h.service.answer(question)
+      expect(result.reason_code).toBe('selection_review_invalid')
+      expect(result.correction_attempted).toBe(false)
+      expect(result.claims).toEqual([])
+      expect(h.calls.map(c => c.stage)).toEqual(['analyze', 'plan', 'verify'])
+      expect(JSON.stringify(review)).toBe(before)
+    }
+    const p = selection(), review = revise(p); review.issues = issueBoundary('"')
+    const h = harness([p, review, p, pass(p)]), result = await h.service.answer(question)
+    expect(result.status).toBe('qualified')
+    expect(h.calls.map(c => c.stage)).toEqual(['analyze', 'plan', 'verify', 'plan', 'verify'])
+    const correction = h.calls[3]!.input as any
+    expect(correction.correction_packet.review.issues).toEqual(review.issues)
+    const empty = structuredClone(correction); empty.correction_packet.review.issues = []
+    const actualBytes = Buffer.byteLength(composedRequestBody('plan', correction)) - Buffer.byteLength(composedRequestBody('plan', empty)) + 2
+    expect(actualBytes).toBe(8192)
+    const prompt = JSON.parse(composedRequestBody('verify', {})).system as string
+    expect(prompt).toContain('8192 UTF-8 bytes')
+    expect(prompt).toContain('hard maximum 2000')
+    expect(prompt).toContain('Up to 25')
   })
   test('both stage requests carry the general whole-question, actual-causation and excluded-action policy', () => {
     // This proves policy delivery, not live model compliance; independent live
