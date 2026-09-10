@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "task": "M30-FRONTEND-HOST-SMOKE",
+  "recorded_at": "2026-09-10T21:48:41.9544992Z",
+  "disposition": "pass",
+  "execution_environment": "host",
+  "purpose": "localhost_frontend_startup_reproduction_only",
+  "provider_credentials_supplied": false,
+  "provider_requests": 0,
+  "model_requests": 0,
+  "external_network_requests": 0,
+  "temporary_port": 5185,
+  "environment": {
+    "VITE_RESEARCH_PREVIEW_PAUSED": "true"
+  },
+  "executable": {
+    "path": ".superpowers/review-tools/bun-windows-x64/bun.exe",
+    "sha256": "7449b666a6f56302b5db1687116b94f3115e9eed04b26c14bd6ca1621efe7d99"
+  },
+  "arguments": [
+    "apps/site-web/node_modules/vite/bin/vite.js",
+    "--config",
+    ".superpowers/openrouter-29/vite-isolated.config.ts",
+    "--configLoader",
+    "native",
+    "--mode",
+    "development",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "5185",
+    "--strictPort"
+  ],
+  "vite_entry_sha256": "fa03478846d229651a3c6aa64833ba2c6cbf580a798b92bd8f47c7480bafb5d8",
+  "vite_config_sha256": "3ce642889cf270e926e4d11b82c95a89051d8df582ff5888798bff7f493f8720",
+  "process_id": 13124,
+  "vite_version": "7.3.2",
+  "ready": true,
+  "startup_time_ms_reported": 780,
+  "http_status": 200,
+  "stderr_empty": true,
+  "process_stopped_after_check": true,
+  "port_closed_after_check": true,
+  "dependency_files_verified_present": [
+    "react/cjs/react.development.js",
+    "react/cjs/react-jsx-runtime.development.js",
+    "react-dom/cjs/react-dom-client.development.js",
+    "react-router/dist/development/chunk-YQSHRJWW.mjs",
+    "three/build/three.core.js"
+  ],
+  "diagnosis": "The installed dependencies are present and the same isolated Vite configuration starts and serves HTTP 200 in host execution. This rules out missing package files. The separate run29 sandbox launch reported an access-denied directory read followed by unresolved junction-backed modules, which is consistent with the restricted execution boundary.",
+  "next_run_requirement": "Start the isolated frontend in approved host execution and record frontend readiness only after its process remains live, its bound port accepts connections, and the root document returns HTTP 200.",
+  "release_acceptance": false
+}

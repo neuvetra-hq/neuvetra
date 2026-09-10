@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-30",
+  "disposition": "authorized",
+  "authority": "user",
+  "max_stages": 15,
+  "carried_stages": 0,
+  "allocation_sha256": "b58ee224b65ba8e300e6a6f34f6efd7f25c408f4cecf9e6841695495401d83b1",
+  "user_instruction_reference": "The user explicitly approved the exact M30 replacement run in the originating Neuvetra voice task, then reaffirmed approval in the current Neuvetra task.",
+  "scope": "Run only W03, W11, and EPA14-B01 through the isolated diagnostic UI; send only those public questions and the approved EPA evidence to Anthropic via OpenRouter; admit no more than 15 new monitored stages with zero carried stages; remain within the unchanged 7001081500 nanoUSD monitoring allowance. This does not authorize deployment, source expansion, release acceptance, merge, or any other paid run.",
+  "release_acceptance": false
+}

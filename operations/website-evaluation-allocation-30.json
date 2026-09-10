@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-30",
+  "recorded_at": "2026-09-10T21:50:03.438608+00:00",
+  "state": "prepared_pending_new_paid_run_authorization_and_independent_review",
+  "allocated_by": "Root preparation request only; new paid-run authorization pending",
+  "purpose": "diagnostic_only_no_release",
+  "provider": "openrouter",
+  "max_provider_attempts": 15,
+  "carried_stages": 0,
+  "additional_stage_allocation": 15,
+  "prior_run": "website-epa-live-29",
+  "prior_run_closed": true,
+  "prior_unused_stages_retired": 15,
+  "further_carry_allowed": false,
+  "cumulative_stages_reserved_before_this_run": 869,
+  "cumulative_possible_reserved_after_this_run": 884,
+  "monitoring_target_usd": "7.0010815",
+  "original_monitoring_target_usd": "10.00",
+  "prior_reported_cost_usd": "2.552456",
+  "prior_reported_cost_nano_usd": 2552456000,
+  "remaining_monitoring_target_nano_usd": 7001081500,
+  "user_specified_financial_cap": null,
+  "hard_billing_guarantee": false,
+  "normal_stages_per_question": 3,
+  "maximum_stages_per_question": 5,
+  "automatic_retries": false,
+  "question_retries": 0,
+  "single_in_request_correction": true,
+  "stop_on_provider_failure": true,
+  "stop_on_mechanical_failure": true,
+  "partitions": {
+    "paired_browser": {
+      "case_ids": [
+        "W03",
+        "W11",
+        "EPA14-B01"
+      ],
+      "questions": 3,
+      "maximum_stages": 15
+    }
+  },
+  "isolated_ui_origin": "http://localhost:5175",
+  "ordinary_preview_stays_paused": true,
+  "request_gate_required": true,
+  "server_only_proxy_nonce": true,
+  "new_transport_profile_required": false,
+  "new_answering_profile_required": false,
+  "request_byte_limit": 64000,
+  "response_byte_limit": 250000,
+  "output_token_limits": {
+    "analyze": 8192,
+    "plan": 3000,
+    "verify": 16384
+  },
+  "provider_timeout_ms": 180000,
+  "whole_question_timeout_ms": 240000,
+  "review_expires_at": "2026-09-15T23:20:32Z",
+  "prior_outcomes_immutable": true,
+  "new_provider_epa21_equivalence_claim": false,
+  "gold_in_answering_path": false,
+  "customer_data": false,
+  "new_source_upload": false,
+  "production_cutover": false,
+  "held_29_case_gate_changed": false,
+  "accepted_design": {
+    "path": ".superpowers/openrouter-27/decision.md",
+    "sha256": "9d24a93bb2e75d9b739ab70fafe343211ba1b3aa85f1313e938f4f8d55ce1cf7",
+    "meaning": "Historical isolation design;30host readiness and paid-run approval pending."
+  },
+  "prior_closure": {
+    "path": ".superpowers/website-epa-live-29/closure.json",
+    "sha256": "3e7e32b8606fe3ddee1ced9038c1e091d5e55a48d1eb1d41da18a78177af1126"
+  },
+  "independent_prior_closure_review": {
+    "path": "evaluations/research-qa/openrouter29-closure-review-10.json",
+    "sha256": "843f8ba1f435e7639df83535188feddca8c71e3413c95f70f016b207bccb7fd1"
+  },
+  "prior_incident_seal": {
+    "path": ".superpowers/website-epa-live-26/incident-seal.json",
+    "sha256": "4a37399e9b2b16fa9285230cb37779bcdae239a90483c4c8d0e8fad254b549a1"
+  },
+  "prior_joint_index": {
+    "path": ".superpowers/website-epa-live-26/joint-first31-index.json",
+    "sha256": "0584378cbf712d0a7eee41560521b760aaba55b9047f63d7cff459e171b7e760"
+  },
+  "answering_policy_sha256": "885cb919e745544b576e942aa246d3b847eaed17106bf7ffb53335d36f11684b",
+  "openrouter_profile_sha256": "58dff7af2d0d602c8967b229c5f9169713ed8ed9ab5d7cfa50e45c272382ee0c",
+  "release_acceptance": false,
+  "failed_bridge_preserved": true,
+  "semantic_failure_is_measured": true,
+  "website_repaused_after_measurement": true,
+  "measurement_scope": "Fresh isolated unchanged3case diagnostic; frontend host-context readiness repair only. Run29 zero-stage startup failure closed with15retired. No paid-run approval asserted.",
+  "prior_uncertain_exposure_nano_usd": 446462500,
+  "prior_uncertain_exposure_usd": "0.4464625",
+  "estimated_total_exposure_nano_usd": 2998918500,
+  "committed_head": "c831da340e33dfe6e0bf3bc40bddd05232d10cef",
+  "paid_run_authorized": false,
+  "prior_startup_stop": {
+    "path": ".superpowers/website-epa-live-29/startup-stop-evidence.json",
+    "sha256": "67dac553854eb6d828faff5544c9ffd28b5ecdcdd257288f038812c69c2d88aa"
+  },
+  "frontend_host_smoke": {
+    "path": "evaluations/research-qa/openrouter30-frontend-host-smoke-root.json",
+    "sha256": "e2e699397964ac1306e60b1e835e66267d00095ca52490338123d4f846daddfd"
+  },
+  "independent_frontend_host_smoke": {
+    "path": "evaluations/research-qa/openrouter30-frontend-host-smoke-qa.json",
+    "sha256": "d08f75ccfcedb61be97376d504c16c268f96e86d251b705be93a1c721e8a9322"
+  }
+}

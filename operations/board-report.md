@@ -1,16 +1,11 @@
 # Neuvetra board update
 
-**The local website now answers both original questions using reviewed EPA evidence from private Supabase and Pinecone.**
+September 10, 2026. M30 resolved the local frontend startup blocker and exercised the real isolated website. The exact frozen run used the approved W03/W11/EPA14-B01 scope, 15 new stages, zero carry, and unchanged application commit `c831da3`. Independent QA approved the 578-pin manifest and exact live backend before browser use.
 
-- **Fixed:** The website addressed a stopped answering service. The accepted service now runs on that connection, and the form preserves questions while offline. Shared selection, scope and typography issues were corrected.
-- **Verified:** The eighteen-question baseline passed. An additional punctuation failure was retained, fixed narrowly and followed by an unchanged-decision replay and two successful cross-topic follow-ups. Both originals, citations, cancellation and phone layout were checked in the website. Independent QA also submitted and verified the methods question in a separate browser.
-- **Decision:** AI selects source-reviewed explanations; the server renders their exact wording and references. Interpretations are labeled. This bounds unsupported wording without promising universal accuracy.
-- **Next:** Try [the website](http://localhost:5174/) and give feedback before we expand the evidence or start calculations. The green design is preserved. PR #2 remains open and unmerged; production is unchanged.
+W03 completed in one UI submission and returned a mechanically valid, qualified answer with visible EPA source links. It used three stages and settled $0.185417. W11 also used one UI submission: analyze and plan settled, but the verification response was rejected by strict router-identity decoding. The UI returned unavailable, attempt 6 retained a $1.1783875 uncertainty estimate, and the stop latch correctly prevented EPA14-B01 from running.
 
-This is a private purchased-electricity concepts preview. It does not calculate emissions, choose company factors or determine filing obligations. Legacy customer authorization risk R8 remains open. Source review expires September 15 at 23:20:32 UTC; renewal and cleanup are not automated.
+Run30 is permanently closed with six stages used and nine retired without carry. Both local services and the temporary browser tab are closed; ports 3012/3016/5174/5175 are clear. Current-run settled cost is $0.258937. Across preserved runs, known settled cost is $2.811393, retained uncertainty is $1.62485, and the monitoring remainder is $5.563757. These are monitoring figures, not a billing guarantee.
 
-The preview has 32 model stages remaining after demonstration, enough for up to sixteen normal two-stage answers; corrections consume more. Its durable counter is authoritative. Services run on this computer, using cloud evidence and models; they are not an always-on production deployment or persistent agent company.
+Independent QA verified closure `0c35c8f4`, all 578 manifest pins, 577 snapshots, 63 closure artifacts, the partial outcomes, accounting and shutdown. M30 proves the frontend repair and one grounded answer; it does not complete the three-case milestone or authorize release.
 
-[Independent QA](../docs/research/website-cloud-qa.md) · [How data reaches the answer](../docs/research/website-composed-runtime.md) · [Task ledger](status.json) · [PR #2](https://github.com/neuvetra-hq/neuvetra/pull/2)
-
-September 9, 2026. Implementation `7aabba4` is published to PR #2. Local checks and both [GitHub Verify jobs](https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113) passed for that exact implementation commit.
+The proposed next milestone is M31: make provider identity failures field-specific and preserve safe cost reconciliation when an HTTP-200 response fails strict semantic decoding. It is awaiting board feedback on M30 before implementation. No worker or service is active, and no new paid run, source expansion, deployment or production change is authorized.

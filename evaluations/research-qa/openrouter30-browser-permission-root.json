@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-30",
+  "phase": "browser",
+  "role": "root_coordinator",
+  "disposition": "pass",
+  "runtime_binding": {
+    "run_id": "website-epa-live-30",
+    "manifest_sha256": "9adc330c197ad780f29ec5fde247478f6310845f1deb3e87178ed3f7670073e7",
+    "profile_sha256": "58dff7af2d0d602c8967b229c5f9169713ed8ed9ab5d7cfa50e45c272382ee0c",
+    "process_id": 3808,
+    "port": 3016
+  },
+  "prior_closure_sha256": "3e7e32b8606fe3ddee1ced9038c1e091d5e55a48d1eb1d41da18a78177af1126",
+  "prior_startup_stop_sha256": "67dac553854eb6d828faff5544c9ffd28b5ecdcdd257288f038812c69c2d88aa",
+  "spending_head_sha256": "12eaa1fcbde583ec7e2797e09c064f04db5044573b0aad66b245dad8ac5ac034",
+  "joint_index_sha256": "0584378cbf712d0a7eee41560521b760aaba55b9047f63d7cff459e171b7e760",
+  "meaning": "isolated_ui_diagnostic_only",
+  "release_acceptance": false,
+  "reviewed_at": "2026-09-10T22:15:00Z",
+  "manifest_pins_verified": 578,
+  "cloud_read_observations": 24,
+  "source_review_expires_at": "2026-09-15T23:20:32Z",
+  "current_run_stages": 0,
+  "remaining_stages": 15,
+  "actual_listener_owner": 3808,
+  "model_requests_by_reviewer": 0
+}

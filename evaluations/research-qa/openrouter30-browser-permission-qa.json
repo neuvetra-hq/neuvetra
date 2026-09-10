@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "phase": "browser",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "run_id": "website-epa-live-30",
+  "runtime_binding": {
+    "run_id": "website-epa-live-30",
+    "manifest_sha256": "9adc330c197ad780f29ec5fde247478f6310845f1deb3e87178ed3f7670073e7",
+    "profile_sha256": "58dff7af2d0d602c8967b229c5f9169713ed8ed9ab5d7cfa50e45c272382ee0c",
+    "process_id": 3808,
+    "port": 3016
+  },
+  "prior_closure_sha256": "3e7e32b8606fe3ddee1ced9038c1e091d5e55a48d1eb1d41da18a78177af1126",
+  "prior_startup_stop_sha256": "67dac553854eb6d828faff5544c9ffd28b5ecdcdd257288f038812c69c2d88aa",
+  "spending_head_sha256": "12eaa1fcbde583ec7e2797e09c064f04db5044573b0aad66b245dad8ac5ac034",
+  "joint_index_sha256": "0584378cbf712d0a7eee41560521b760aaba55b9047f63d7cff459e171b7e760",
+  "meaning": "isolated_ui_diagnostic_only",
+  "release_acceptance": false,
+  "root_review": {
+    "path": "evaluations/research-qa/openrouter30-browser-permission-root.json",
+    "sha256": "cbad1161ea183877789a8d9a015787837ab99f72634de544713f2e6169dc99f1"
+  },
+  "evidence": {
+    "manifest_pins_verified": 578,
+    "process_id": 3808,
+    "process_started_utc": "2026-09-10T22:13:09.2454821Z",
+    "process_executable": ".superpowers/review-tools/bun-windows-x64/bun.exe",
+    "process_command_entry": ".superpowers/website-bootstrap-epa-live-30.ts",
+    "actual_listener": {
+      "address": "127.0.0.1",
+      "port": 3016,
+      "owner": 3808
+    },
+    "process_listener_method": "Read-only host CIM and TCP owner query after sandbox denied access",
+    "ready_cloud_status": true,
+    "source_review_expires_at": "2026-09-15T23:20:32Z",
+    "source_unexpired_at_review": true,
+    "current_model_stages": 0,
+    "remaining_stages": 15,
+    "admissions": 0,
+    "budget_files": [
+      "policy.json"
+    ],
+    "spending_files": [
+      "header.json"
+    ],
+    "traces": 0,
+    "browser_records": 0,
+    "diagnostics": 0,
+    "diagnostic_flush_records": 0,
+    "spending_snapshot": {
+      "version": "openrouter30.spending.v1",
+      "runtime_binding": {
+        "run_id": "website-epa-live-30",
+        "manifest_sha256": "9adc330c197ad780f29ec5fde247478f6310845f1deb3e87178ed3f7670073e7",
+        "profile_sha256": "58dff7af2d0d602c8967b229c5f9169713ed8ed9ab5d7cfa50e45c272382ee0c",
+        "process_id": 3808,
+        "port": 3016
+      },
+      "policy_sha256": "e922ad1cd626144bf89fd12cf7f608941a54a0dda8e56c606afaf357f19a0379",
+      "target_nano_usd": 10000000000,
+      "settled_nano_usd": 2552456000,
+      "retained_estimate_nano_usd": 446462500,
+      "estimated_total_exposure_nano_usd": 2998918500,
+      "prior_retained_estimate_nano_usd": 446462500,
+      "prior_settled_nano_usd": 2552456000,
+      "current_run_settled_nano_usd": 0,
+      "current_run_retained_estimate_nano_usd": 0,
+      "remaining_monitoring_target_nano_usd": 7001081500,
+      "pending_attempts": [],
+      "uncertain_attempts": [],
+      "unexpected_cost_attempts": [],
+      "last_reserved_attempt": 0,
+      "stop_latched": false,
+      "io_failed": false,
+      "event_count": 0,
+      "head_sha256": "2c97dc6cb7a9cd967e6efe56f0f4ba919f2a52b44baad4837da5d464de572739",
+      "reservations": [],
+      "billing_guarantee": false
+    },
+    "cloud_observations": {
+      "row_count": 24,
+      "maximum_persisted_rows": 256,
+      "cap_reached": false,
+      "observations_beyond_cap": "none",
+      "completeness_claim": false,
+      "meaning": "best_effort_safe_metadata_observer_sink_failures_do_not_change_transport",
+      "pins": {
+        "001.json": "e01a207a3f745af4ad5fd7c32a579e7272965c5c9e65dacb04e46e76c4f43ca2",
+        "002.json": "0dd497b4aa9c83d898952fe22b85a7fb0660ae0e386267003bd873d3d8c8f5a3",
+        "003.json": "710eab3d60ddccfebaecebd418f4ddfd1e1605b50aec70c3d26b7459d1666c0e",
+        "004.json": "633fd685014f8a6c12a6b1e10fb4bde9b075259c0e49bc8e825e27f21d56b3be",
+        "005.json": "5e869483c862082038c78ec5855a9e3524c3c35073a9bb105436eb2442461407",
+        "006.json": "8804a4f959d8a9af8666514694ce0ab212dad2bafdaada358d889cf31f6aa572",
+        "007.json": "68251800d17e5ff6f9e61400d821b2aa58c9f0edbc4184fa77a6e14e3cae7fc6",
+        "008.json": "29cb382c07b67d6bcc2a3247a34fb2f05c7072e367ac42b83cba5129d505f968",
+        "009.json": "7c8943f9b800b9c29ee1fcf73427babcfd44b0b905792defa701b43dd53e194c",
+        "010.json": "f5e3bf01aeb189f36e0c3d79c40b81134feb0dddc4af84d5857849d8b07d4751",
+        "011.json": "37884e6a05d5a686361edde9799fde2f4a9bf1cef5fe5605bc027a99774a501f",
+        "012.json": "6abdabf57b40f7793e6f5a24fe598fd4c13a2be54ec70df9f75e9e4d13dd00e4",
+        "013.json": "c0199ae3d2437388209e5418aa102857f2948aca74f7557555678bf1a6e72966",
+        "014.json": "28c825573b85964adca9a2a92cd64cba920675f4fdb20ec68956489d8f9ae3e2",
+        "015.json": "6b549421554a427f24f69030bc81db0ec5924bdaf03384320b7143cc77cfdb37",
+        "016.json": "b7e11f539b77fd5af622bc34a808b195942d44ff528d21870e509490da0ae01b",
+        "017.json": "5b73713a573de3cea4f24b7343c0c3b9f7efe8551ef155ce0849508e8a60867e",
+        "018.json": "d43f3997e78e7ea8c85057a6050680f2fd08169bac45a702376b202a52598740",
+        "019.json": "782218ebb3457c8afe250d01053f0355b0f5b5caffde18bf7ed957d47c5fb1d6",
+        "020.json": "faca998592b24a71b177e4e010bc1c34ad7f4aa127193f643dfdf2a5d0d003dd",
+        "021.json": "b5c1d037249d98ac0aa72bd8fa7cc980422b0aa7310fa2be68e1280a82cc372b",
+        "022.json": "32cc2de565d4d10ef4f6d8518c92f1795abb8e739f9cd51df1f5f7dfd19cc149",
+        "023.json": "ec34ee13f0dacc8d6035feeda39665cf74686728027a1bc95a9d633b273292f1",
+        "024.json": "a60fd212151819d5f97cd1b0c8330f6cd21e6cc6172c0cb026068169ca82ebca"
+      }
+    },
+    "cloud_all24_http200": true,
+    "cloud_allowlisted_read_operations_only": true
+  },
+  "limitations": [
+    "Cloud metadata is a bounded best-effort observation, not completeness or response-body proof. Ready status follows the pinned startup validation.",
+    "This approves the browser gate for the exact runtime only; root must launch the frontend through the reviewed host process, verify readiness and pairing, then admit one question at a time.",
+    "No question was admitted or submitted by this reviewer. No model, external request or credential access by reviewer.",
+    "Known historical failures and inherited uncertain cost remain unchanged; no release acceptance."
+  ],
+  "model_requests_by_reviewer": 0
+}

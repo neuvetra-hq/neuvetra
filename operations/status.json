@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-09T15:12:27.104410+00:00",
+  "updated_at": "2026-09-10T22:35:41.2164313Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M2",
     "name": "Reviewed evidence and first supported answer",
-    "status": "awaiting_board_feedback",
-    "next_gate": "Board tries the working private website; collect feedback before expanding evidence or starting calculations."
+    "status": "awaiting_board_feedback_m30_partial_closed",
+    "next_gate": "Review M30's verified partial outcome and decide whether to authorize proposed offline M31 provider-identity diagnostics and cost-reconciliation repair."
   },
   "completed_milestones": [
     {
@@ -21,7 +21,19 @@
     "execution": "Task-scoped local Codex collaboration",
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
-    "role_prompts_are_live_workers": false
+    "role_prompts_are_live_workers": false,
+    "website_preview_state": "Run30 is closed after two actual UI submissions. W03 passed mechanically with a qualified EPA-grounded answer; W11 failed at verify-stage router identity decoding with uncertain cost; EPA14-B01 was unrun. Six stages used, nine retired without carry. All services and the temporary browser tab are closed; ports3012/3016/5174/5175 are clear.",
+    "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
+    "last_session_work": "Froze and independently reviewed M30, proved the repaired frontend through host readiness and the real UI, recorded W03 and W11 once each, stopped on W11 verify-stage provider identity failure, retired remaining capacity, stopped exact processes and independently verified closure. Proposed M31 is awaiting board feedback; no worker or service is active."
+  },
+  "session_handoff": {
+    "saved_at": "2026-09-10T22:35:41.2164313Z",
+    "path": "operations/next-session.md",
+    "board_record": "claude-memory/meetings/2026-09-09-scope2-benchmark.md",
+    "next_task": "Collect board feedback on closed M30. If approved, implement proposed offline M31 field-level router identity diagnostics and safe authoritative cost recovery with separate QA. Do not restart30, retry W11 or use its retired capacity.",
+    "execution_state": "m30_closed_partial_awaiting_board_feedback",
+    "review": "Independent QA passed M30 manifest, runtime permission and closure integrity. Three-case acceptance and release remain failed.",
+    "scope": "Continue current approved EPA-only milestone and isolated FAQ benchmark; source expansion remains separately held."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -47,13 +59,141 @@
     "website_implementation_commit": "7aabba4a8aae6145e8134c21fc97d05827866bfc",
     "website_verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113",
     "website_verification": "Both Verify jobs passed for the exact implementation commit",
-    "website_verified_at": "2026-09-09T15:12:27.104410+00:00"
+    "website_verified_at": "2026-09-09T08:12:27.10441-07:00",
+    "revision07_state": "Offline implementation and independent review complete; code/reports local and unpublished; expanded source/runtime/live gates pending."
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
     "daily_schedule": "preference_requested_not_activated"
   },
   "tasks": [
+    {
+      "id": "M29-LIVE",
+      "owner": "ceo_with_connection_and_independent_qa",
+      "status": "closed_frontend_startup_failure_before_admission",
+      "title": "Run the repaired three-case website demonstration",
+      "scope": "Fresh isolated W03/W11/EPA14-B01 diagnostic with15 stages and no carry",
+      "result": "Backend and source/runtime checks passed. The frontend failed dependency optimization before admission. Zero questions, model stages and new cost;15 stages retired without carry; all services stopped; no release acceptance.",
+      "evidence": [
+        ".superpowers/website-epa-live-29/closure.json",
+        "evaluations/research-qa/openrouter29-closure-review-10.json"
+      ]
+    },
+    {
+      "id": "M30-PREP",
+      "owner": "ceo_with_evaluation_prep_and_independent_qa",
+      "status": "complete",
+      "title": "Repair frontend startup evidence and prepare a fresh bounded run",
+      "scope": "Host-only readiness checks and a fresh three-case candidate; no live start",
+      "result": "Candidate9551a417 binds48 files and zero app deltas. Host smoke HTTP200 passed. Launcher records success only after dependency/process/port/repeated-HTTP checks.26 tests/457 assertions, types,11 backend and6 frontend checks pass. Independent candidate review passes.",
+      "evidence": [
+        ".superpowers/openrouter-30/candidate.json",
+        "evaluations/research-qa/openrouter30-frontend-host-smoke-qa.json",
+        "evaluations/research-qa/openrouter30-candidate-review-10.json"
+      ]
+    },
+    {
+      "id": "M30-LIVE",
+      "owner": "ceo_with_independent_qa",
+      "status": "closed_partial_provider_failure",
+      "title": "Demonstrate the repaired three-case website path",
+      "scope": "One-use W03/W11/EPA14-B01 isolated UI sequence with15 new stages and no carry",
+      "result": "Frontend repair passed. W03 returned a mechanically valid qualified EPA-grounded answer in3 stages. W11 reached verify then failed strict router identity decoding; attempt6 cost is uncertain. EPA14-B01 was unrun. Six stages used, nine retired, no carry; all services stopped; no release acceptance.",
+      "evidence": [
+        "docs/research/website-diagnostic-30.md",
+        ".superpowers/website-epa-live-30/closure.json",
+        "evaluations/research-qa/openrouter30-closure-review-10.json"
+      ],
+      "next_action": "Await board feedback. Proposed M31 is offline field-level provider identity diagnostics and safe cost reconciliation, followed by independent QA; no paid rerun is authorized."
+    },
+    {
+      "id": "CONN-28",
+      "owner": "/root/connection",
+      "status": "complete",
+      "title": "Diagnose and verify approved cloud evidence connection",
+      "scope": "Read-only bounded connection checks and evidence-supported general repair",
+      "acceptance": "Safe diagnosis, integrity checks, relevant tests and independent QA",
+      "evidence": [
+        "docs/research/cloud-evidence-recovery-28.md",
+        "evaluations/research-qa/openrouter28-connection-review-10.json"
+      ]
+    },
+    {
+      "id": "PREP-28",
+      "owner": "/root/evaluation_prep",
+      "status": "complete",
+      "title": "Prepare fresh isolated three-question evaluation",
+      "scope": "New assets only; no startup or model requests",
+      "acceptance": "Reproducible assets and independent preflight before root execution",
+      "evidence": [
+        ".superpowers/openrouter-28/handoff.md",
+        "evaluations/research-qa/openrouter28-candidate-review-10.json",
+        "evaluations/research-qa/openrouter28-preflight-review-10.json"
+      ]
+    },
+    {
+      "id": "QA-28",
+      "owner": "/root/qa",
+      "status": "complete_prelaunch_review",
+      "title": "Independent recovery and demonstration review",
+      "scope": "Separate review of current evidence, repair, preflight and actual outcomes",
+      "acceptance": "Evidence-backed disposition; preserve failures and unrun cases",
+      "evidence": [
+        "evaluations/research-qa/openrouter28-connection-review-10.json",
+        "evaluations/research-qa/openrouter28-preflight-review-10.json",
+        "evaluations/research-qa/openrouter28-prelaunch-blocked-review-10.json"
+      ]
+    },
+    {
+      "id": "SOURCE-FACT-NOTES-20",
+      "owner": "source_data_author_with_independent_qa",
+      "status": "complete",
+      "title": "Prepare and independently review three chapter-selected local factual notes",
+      "acceptance": "Three original notes, exact primary locators/provenance and independent wording/factual review; no source activation or provider processing",
+      "result": "Three notes with17 claim/limitation spans and20 locators passed scoped independent review. Candidate a08069a4 and independent QA4ed6d760. Exact source-use and downstream representation dispositions remain pending; no new agent evidence or consequential outcome is claimed.",
+      "evidence": [
+        "docs/research/scope2-factual-notes-preparation-20.md",
+        ".superpowers/ghgp-factual-notes-20/candidate.json",
+        ".superpowers/ghgp-factual-notes-20/locator-provenance.json",
+        ".superpowers/ghgp-factual-notes-20/independent-qa.json"
+      ]
+    },
+    {
+      "id": "DATA-S12-01",
+      "owner": "ceo",
+      "status": "complete",
+      "title": "Prepare Scope 1/2 coverage matrix and customer completeness design",
+      "validation": "Independent CARB/QA preparation review PASS; 12 screening rows, 17 specified unrun acceptance cases, coherent two-site paper demonstration; 26 local links resolve. No factor, runtime, source-use or assurance approval. Board accepted the two-site missing-data example on September 9; design-feedback gate closed. Dependent EPA and release gates remain.",
+      "scope": "Documentation, paper demonstration and independent design review only; no factor or runtime release",
+      "allowed_actions": "Named design/review artifacts and operational decision record; read existing evidence",
+      "dependencies": "No dependency on EPA acceptance for preparation; dependent implementation and factor releases retain separate gates",
+      "acceptance": "Source-family/method/factor/input/approval matrix, missing-data states, synthetic paper example, explicit unrun acceptance cases and independent QA disposition",
+      "independent_reviewer": "/root/carb_role_recheck",
+      "evidence": [
+        "docs/research/scope12-coverage-matrix.md",
+        "docs/research/scope12-completeness-design.md",
+        "docs/research/scope12-preparation-qa.md",
+        "operations/feedback/2026-09-09-scope12-preparation.md"
+      ]
+    },
+    {
+      "id": "OPS-CARB-ROLE-01",
+      "owner": "ceo",
+      "status": "complete",
+      "title": "Add internal CARB verifier and Scope 1-3 audit review role",
+      "scope": "Role instructions, reporting links, dated source brief, five-original manifest and proposed knowledge-development backlog; no runtime agent or corpus activation",
+      "allowed_actions": "Edit the named role/docs and related operational memory; read public CARB evidence and retain originals locally; independent instruction review",
+      "dependencies": "None for role definition; future audit performance and formal assurance require separate evidence and qualified review",
+      "acceptance": "Eleventh role linked; CARB criteria grounded in inspected evidence; MRR/corporate distinctions and accreditation/independence limits explicit; proposed learning clearly labeled; source integrity and independent role review pass",
+      "independent_reviewer": "/root/carb_role_qa",
+      "validation": "Independent instruction/source review PASS; minor citation corrected and rechecked; 5 source hash/size checks and 25 local link targets pass. Role roster count is 11. Inventory-review performance, human accreditation and future learning remain unestablished.",
+      "evidence": [
+        "operations/agents/carb-verifier.md",
+        "docs/research/carb-verifier-role-basis.md",
+        "docs/research/carb-verifier-role-sources.json",
+        "docs/research/carb-verifier-role-qa.md"
+      ]
+    },
     {
       "id": "M1-01",
       "owner": "cto",
@@ -410,7 +550,152 @@
       ]
     }
   ],
+  "feedback_tasks": [
+    {
+      "id": "M2-FEEDBACK-DUAL-01",
+      "owner": "ceo_with_independent_source_and_qa_review",
+      "status": "complete",
+      "title": "Validate the no-renewable-purchases answer against GHG Protocol and trace the failure",
+      "acceptance": "Primary-source comparison, observed runtime cause, accurate versus incomplete distinctions and general corrective criteria documented",
+      "finding": "Both actual requests dropped the material condition and falsely passed whole-question review. EPA units were supported, but did not resolve the condition. All 22 units were available; this is not a cloud connectivity failure.",
+      "evidence": [
+        "docs/research/dual-reporting-feedback-qa.md",
+        "docs/research/dual-reporting-source-validation.md"
+      ]
+    },
+    {
+      "id": "M2-FEEDBACK-SUPPLIER-01",
+      "owner": "ceo_with_independent_source_and_qa_review",
+      "status": "complete",
+      "title": "Compare supplier-factor advice with GHG Protocol and inspect the recorded response",
+      "acceptance": "Read the supplied response, verify current primary supplier-factor requirements, distinguish content support from usefulness, and establish the observed selection/review behavior",
+      "finding": "Question fragments were preserved in stages019/020. Seven supported explanation units give partially useful context but do not directly prepare supplier questions; a renewable-label scenario is unprompted. This is an intent-fit and over-selection problem, distinct from the earlier dropped condition. Criterion6-specific retirement and sold-attribute treatment are absent; this does not imply that every broad answer must reproduce all criteria.",
+      "evidence": [
+        "docs/research/supplier-factor-feedback-qa.md",
+        "docs/research/supplier-factor-source-validation.md"
+      ]
+    },
+    {
+      "id": "M2-FEEDBACK-BASEYEAR-01",
+      "owner": "ceo_with_independent_source_and_qa_review",
+      "status": "complete",
+      "title": "Validate base-year and target guidance and trace why the website withheld its answer",
+      "acceptance": "Published guidance and historical context checked; recorded requests inspected; distinguish partial coverage, appropriate withholding and contradictory review behavior",
+      "finding": "Both matching requests ended safely without an answer. U18/U19 cover general adjustments, but target-method choice and historical proxy rules are absent. One reviewer incorrectly rejected a correct whole-question refusal because base-year background existed. Another attempt was ambiguous about the referenced requirements and later omitted targets, which final review caught. This is a coverage gap plus inconsistent boundary review, not a cloud failure or absence of all base-year information.",
+      "evidence": [
+        "docs/research/base-year-feedback-qa.md",
+        "docs/research/base-year-source-validation.md"
+      ]
+    },
+    {
+      "id": "M2-CONDITIONAL-CORRECTION",
+      "owner": "cto_with_source_specialist_and_independent_qa",
+      "status": "blocked",
+      "title": "Resolve the full question and match the requested practical outcome before approving an answer",
+      "dependencies": [
+        "M2-FEEDBACK-DUAL-01",
+        "M2-FEEDBACK-SUPPLIER-01",
+        "M2-FEEDBACK-BASEYEAR-01"
+      ],
+      "acceptance": "Conditions and exceptions need source-qualified resolution or truthful refusal. Practical requests need concise guidance without unprompted scenarios or repeated qualifications. Partial coverage must not invalidate a correct full-question refusal. Clarify unresolved references with relevant questions; distinguish missing coverage from review malfunction. Independently approve new source coverage and test varied questions before a browser demonstration",
+      "progress": "ENGINE07 full-question ledger, task-fit checks, consistent scope gaps, relevant clarification, concise source notes, public qualification projection and operator pause implemented. Root bounded reader and development filesystem protections independently reviewed. Final independent128tests/923assertions and full repository checks pass; actual paused browser verified. SOURCE07 local30passage/75condition/36unit candidate content independently reviewed. No new application provider calls, source upload, cloud write, runtime promotion or publication.",
+      "blocker": "No established rights-holder permission or qualified documented basis for the exact proposed GHG Protocol cloud ingestion used in commercial-product development; source-dependent live evaluation and release cannot proceed on that route.",
+      "next_action": "Review the concrete unsent permission specification or assess a separately cleared factual-evidence architecture; then integrate immutable v2, stage a rollback-capable cloud update and run the frozen29 evaluation plus browser demonstration.",
+      "evidence": [
+        "docs/research/website-correction-07.md",
+        "docs/research/website-source-expansion-07.md",
+        "docs/research/website-source-use-review-07.md",
+        "docs/research/ghg-protocol-permission-request.md",
+        "evaluations/research-qa/runs/2026-09-09-website-correction-offline-review-07.json",
+        "evaluations/research-qa/runs/2026-09-09-website-candidate-content-review-07.json"
+      ]
+    },
+    {
+      "id": "M2-RESUME-READINESS-08",
+      "owner": "cto_with_independent_qa_and_root_integration",
+      "status": "complete",
+      "title": "Separate the source expansion hold from unblocked EPA engineering and correct evaluation bindings",
+      "acceptance": "Concrete existing-EPA restart path, independent narrow acceptance and meaningful version-drift checks; no claim of live semantic success",
+      "evidence": [
+        "docs/research/epa-engine-readiness-08.md",
+        "docs/research/epa-engine-acceptance-08.md",
+        "tools/research/evaluate-website-composed.ts",
+        "tools/research/evaluate-website-composed.test.ts"
+      ]
+    },
+    {
+      "id": "M2-EPA-LIVE-08",
+      "owner": "cto_with_independent_qa",
+      "status": "blocked",
+      "title": "Evaluate and demonstrate the corrected engine with the existing approved EPA release",
+      "dependencies": [
+        "M2-RESUME-READINESS-08"
+      ],
+      "acceptance": "Freeze a new-profile launcher/allocation and actual process identity; preserve 18 baseline expectations and three separately recorded current-source feedback probes; independent output review and matched browser demonstration before unpause",
+      "next_action": "Investigate the failing read-only Supabase/Pinecone evidence request with safe diagnostics; do not infer an OpenRouter credit failure. Any fresh UI collection must preserve closed26/27 failures and use the reviewed one-shot isolated preview. No restart or carry from27.",
+      "evidence": [
+        "docs/research/epa-live-qa-10.md",
+        "docs/research/epa-live-engineering-11.md",
+        "operations/website-evaluation-execution-10.json",
+        "operations/website-evaluation-execution-11.json",
+        "operations/website-evaluation-allocation-12.json",
+        "operations/website-evaluation-execution-12.json",
+        "operations/website-evaluation-allocation-13.json",
+        "docs/research/epa-capability-source-review-13.md",
+        "operations/website-evaluation-execution-13.json",
+        "evaluations/research-qa/epa-candidate4-first-outcomes-10.json",
+        "docs/research/scope2-source-coverage-path-13.md",
+        "operations/website-evaluation-execution-14.json",
+        "operations/website-evaluation-execution-15.json",
+        "operations/website-evaluation-execution-16.json",
+        "operations/website-evaluation-execution-17.json",
+        "docs/research/epa-source-acquisition-review-17.md",
+        "docs/research/epa-live-engineering-17.md",
+        "operations/website-evaluation-allocation-18.json",
+        "operations/website-evaluation-execution-18.json",
+        "docs/research/epa-live-engineering-18.md",
+        "operations/website-evaluation-execution-19.json",
+        "operations/website-evaluation-allocation-20.json",
+        "docs/research/epa-limitation-capability-review-20.md",
+        "evaluations/research-qa/epa-candidate11-design-review-10.json",
+        "operations/website-evaluation-execution-26.json",
+        "operations/website-evaluation-execution-27.json",
+        "evaluations/research-qa/openrouter27-contract-review-10.json",
+        "evaluations/research-qa/openrouter27-ui-partial-review-10.json",
+        "evaluations/research-qa/openrouter27-stop-review-10.json"
+      ],
+      "progress": "OpenRouter connected; original mixed22/23/26 ten-question benchmark complete and independently graded0/20 (uniformrun19 remains1/20). Isolation27 implemented and independently reviewed. Actual controlledW03 returnedunavailable/cloud_provider_unavailable beforeanymodelstage; safeclaim/CDPidentitymatched, failuresealed fe0265e0. W11/B01unrun. Closed27 SHA3143e744: backend41172/frontend39956stopped,3012/3016/5175closed,ordinary5174paused;15unused retired/no carry. Cumulative862modelstages andOpenRouterreported$2.152794;27added$0, original$10monitorremaining$7.847206. No supportedthree-case demonstration orreleaseacceptance. No activeworkers orscheduledcontinuation. Next: diagnose read-onlycloud-evidencefailure, then separatelyreviewfreshisolatedUIcollection; preserveallfailures,benchmarkgoldisolation,andseparatesourcehold.",
+      "blocker": "Controlled W03 cloud-evidence request failed before model work; the three-case website demonstration and remaining selection reliability have not passed."
+    },
+    {
+      "id": "M2-SCOPE2-BENCHMARK-10",
+      "owner": "independent_qa_evaluator",
+      "status": "complete",
+      "title": "Run isolated official Scope2 ten-question benchmark against actual application",
+      "acceptance": "Freeze question-only requests and sealed semantic rubric before first outcomes; prove no answer key in runtime corpus/payload; preserve failures and prior exposure limits; independently score equivalent meaning and cite remaining gaps",
+      "execution_context": "Original separate custodian froze rubric/questions; grading transferred to /root/qa_live after original worker unavailable. Gold never sent to answering service or implementation authors.",
+      "evidence": [
+        "docs/research/scope2-blind-benchmark-10.md",
+        "operations/website-evaluation-execution-10.json",
+        "operations/website-evaluation-execution-12.json",
+        "operations/website-evaluation-execution-13.json",
+        "evaluations/research-qa/epa-candidate10-sealed-benchmark-summary-10.json",
+        "operations/website-evaluation-execution-19.json",
+        "evaluations/research-qa/openrouter26-benchmark-grading-10.json",
+        "evaluations/research-qa/openrouter26-benchmark-comparison-10.md",
+        "docs/research/openrouter-session-2026-09-10.md"
+      ],
+      "latest_result": "All ten original outcomes observed across22/23/26, mixed0/20. Seven technical failures, two justified coverage refusals and one unnecessary clarification. Uniformrun19 remains1/20; neither score is freshblind OpenRouter equivalence. Reference key remains evaluator-only; pretraining cannot be ruled out. Measurement complete, answer quality not accepted.",
+      "completed_at": "2026-09-10T06:08:03.511855-07:00"
+    }
+  ],
   "decisions": [
+    {
+      "id": "D-CARB-ROLE-01",
+      "decision": "Add a CARB verifier / GHG audit review role reporting through independent QA, bringing the defined role roster to eleven",
+      "why": "Board requested a specialist to review Scope 1-3 audits and develop deep CARB/GHG competence. MRR and corporate criteria require distinct review tracks; role assignment does not grant accreditation or legal independence.",
+      "evidence": "operations/agents/carb-verifier.md"
+    },
     {
       "id": "D1",
       "decision": "One Neuvetra GHG brand; FrontDesk deferred",
@@ -524,6 +809,24 @@
       "decision": "Treat local website operation, answer quality and browser demonstration as separate release gates",
       "why": "The website targeted a stopped answering service while a separate candidate was live; actual browser submissions and independent verification now close that gap.",
       "evidence": "docs/research/website-cloud-qa.md"
+    },
+    {
+      "id": "D20",
+      "decision": "Preserve and resolve the complete question, then assess the requested practical outcome separately from factual support",
+      "why": "Three feedback examples exposed omitted conditions, over-selection and inconsistent whole-question boundaries. Character preservation does not prove semantic accuracy; independent live evaluation remains required.",
+      "evidence": "docs/research/website-correction-07.md"
+    },
+    {
+      "id": "D21",
+      "decision": "Hold the proposed new GHG Protocol hosted corpus pending a demonstrated intended-use permission basis; retain reviewed candidates locally",
+      "why": "Private access and board authorization do not establish rights for commercial-product-development copying, extraction, indexing and external processing. A concrete unsent permission specification is prepared.",
+      "evidence": "docs/research/website-source-use-review-07.md"
+    },
+    {
+      "id": "D22",
+      "decision": "Pause local website submissions until the paired engine and source release passes review",
+      "why": "The hot-reloaded new frontend and previous answering service are different versions. A clear local maintenance state avoids inviting acceptance testing on that mixture; the backend remains running.",
+      "evidence": "docs/research/website-correction-07.md"
     }
   ],
   "open_dependencies": [
@@ -534,7 +837,7 @@
     },
     {
       "id": "R2",
-      "detail": "18 EPA conceptual passages and22 explanation units approved for private internal use. Bounded website acceptance passed; wider methods/factors/legal/commercial releases remain unapproved.",
+      "detail": "18 EPA conceptual passages and 24 explanation units approved for private internal use. Historical bounded website acceptance passed; the current OpenRouter website milestone remains incomplete. Wider methods, factors, legal and commercial releases remain unapproved.",
       "impact": "Limits coverage beyond the private purchased-electricity preview."
     },
     {
@@ -549,19 +852,74 @@
     },
     {
       "id": "R6",
-      "detail": "Loopback website uses an ordinary private reader and encrypted session persistence. Evaluation reservations 242 retained; private preview 40-stage allowance includes 16 carried + 24 added, 282 combined ceiling. Eight preview stages used at demo, 32 remaining. Review expires 2026-09-15T23:20:32Z without automatic renewal.",
+      "detail": "Current diagnostic services are stopped and the ordinary preview is paused. Run30 proved W03 but failed W11 at verify-stage router identity decoding; EPA14-B01 is unrun. All unused closed-run stages are retired. Source review expires 2026-09-15T23:20:32Z without automatic renewal.",
       "impact": "Public/customer deployment still requires authentication, production usage controls, lifecycle and source-rights clearance."
     },
     {
       "id": "R7",
-      "detail": "Actual website5174→research 3012→privateSupabase/Pinecone and live models independently demonstrated. Board feedback pending.",
-      "impact": "Complete board review before a dependent milestone; local services are not an always-on production deployment."
+      "detail": "Cloud operation and the repaired frontend were demonstrated in M30. W03 passed mechanically; W11 failed strict router identity decoding and EPA14-B01 was blocked by the stop latch. The three-case live/browser acceptance gate remains incomplete.",
+      "impact": "Current answer-quality gate requires correction and independent review before a dependent milestone. Local services are not an always-on production deployment.",
+      "evidence": "docs/research/website-correction-07.md"
     },
     {
       "id": "R8",
       "detail": "Legacy public.users and six FrontDesk tables retain broad authenticated access with RLS disabled; legacy privileged business API also needs server-side authorization. Anonymous access was contained without changing signed-in/backend grants.",
       "impact": "Blocks claims of customer isolation or production security; authenticated compatibility and scoped authorization require separate work.",
       "evidence": "docs/research/legacy-database-access-review.md"
+    },
+    {
+      "id": "R9",
+      "detail": "Proposed GHG Protocol original/extraction/passages/anchors have no established intended-hosted-use permission basis for business development; candidate content review passed but rights approval is held.",
+      "impact": "Blocks new-source upload, indexing, application provider use and expanded positive-answer release. Generic engineering and existing approved EPA work can proceed.",
+      "evidence": "docs/research/website-source-use-review-07.md",
+      "next_action": "Obtain rights-holder permission or a qualified documented basis for the exact use; unsent specification at docs/research/ghg-protocol-permission-request.md."
     }
-  ]
+  ],
+  "current_run28_outcome": {
+    "summary": "Run28 closed after three actual website submissions: one semantic pass, one insufficient-context failure and one provider decoding failure. Seven stages used, eight retired without carry; cumulative869. All research services stopped and ordinary preview paused. Independent QA accepted evidence and closure, not release readiness. Known cumulative cost $2.552456; unresolved attempt7 retains $0.4464625 estimate.",
+    "report": "docs/research/website-diagnostic-28.md",
+    "supersedes": "Earlier run28 prelaunch fields and historical task entries; no run28 restart permitted.",
+    "commit": "9a72b64452d5e0156f2b3da65e29b20249b1febb",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/2",
+    "remote_validation": "GitHub Verify run34523778548 succeeded for9a72b64: both jobs passed, including fresh frozen-lockfile install and bun run check."
+  },
+  "current_m29": {
+    "state": "closed_frontend_startup_failure_before_admission",
+    "brief": "docs/research/website-reliability-milestone-29.md",
+    "tasks": [
+      {
+        "id": "M29-CONTEXT",
+        "owner": "/root/evaluation_prep",
+        "status": "complete",
+        "scope": "Read-only general clarification diagnosis and repair proposal"
+      },
+      {
+        "id": "M29-TRANSPORT",
+        "owner": "/root/connection",
+        "status": "complete",
+        "scope": "Read-only provider decoding/cost diagnosis and proposal"
+      },
+      {
+        "id": "M29-QA",
+        "owner": "/root/qa",
+        "status": "complete",
+        "scope": "Independent acceptance and challenge"
+      }
+    ],
+    "new_model_requests": 0,
+    "run28_restart_allowed": false,
+    "evidence": "C:/Users/nimab/Neuvetra/work-scratch/m29/qa-review.md; api-tests-final.log592/4843; integration-tests.log32/361; APItypecheck passed",
+    "live_state": "Historical. Run29 closed with zero model stages and15 retired slots; M30 superseded its frontend startup path."
+  },
+  "current_m30": {
+    "state": "closed_partial_provider_failure_awaiting_board_feedback",
+    "closure_sha256": "0c35c8f46ffc35d722b1b98e8f534c156851f9fe08d1359a7465b64a92061e96",
+    "independent_review_sha256": "1494c560b3e976faa02d02517f1157fef5c13280f07e9d9e234258089b9509cf",
+    "outcome": "W03 qualified and mechanically valid; W11 unavailable after verify-stage decoding/router_identity; EPA14-B01 unrun.",
+    "accounting": "6 stages used,9 retired,no carry; current settled258937000nanoUSD,current uncertain1178387500,total settled2811393000,total uncertain1624850000,remaining monitoring target5563757000.",
+    "runtime": "Exact backend3808 and frontend19284 stopped; ports3012/3016/5174/5175 closed; ordinary preview paused.",
+    "next_milestone_proposal": "M31 field-level provider identity diagnostics and safe authoritative cost reconciliation; awaits board approval before implementation.",
+    "active_workers": 0,
+    "release_acceptance": false
+  }
 }
