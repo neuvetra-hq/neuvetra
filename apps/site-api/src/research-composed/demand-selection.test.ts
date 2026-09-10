@@ -164,14 +164,14 @@ describe('Bounded analyze transport and failure metadata', () => {
         const events: ComposedStageEvent[] = [];
         const provider = createComposedProvider({ apiKey: 'offline', budget: { maxCalls: 10, remaining: () => 10, reserve: () => 1 }, onStage: e => events.push(e), fetch: async () => Response.json({ model: 'claude-opus-5', stop_reason: 'max_tokens', usage: { input_tokens: 123, output_tokens: 8192, cache: 'private-marker' }, content: [{ type: 'thinking', thinking: 'secret-thinking' }, { type: 'text', text: 'partial-answer' }] }) });
         await expect(provider.invoke('verify', {}, new AbortController().signal)).rejects.toThrow('provider_truncated');
-        expect(events.at(-1)).toEqual({ stage: 'verify', attempt: 1, phase: 'failed', code: 'provider_truncated', http_status: 200, stop_reason: 'max_tokens', usage: { input_tokens: 123, output_tokens: 8192 }, elapsed_ms: expect.any(Number), failure_phase: 'decoding', abort_source: 'none' });
+        expect(events.at(-1)).toEqual({ stage: 'verify', attempt: 1, phase: 'failed', code: 'provider_truncated', http_status: 200, stop_reason: 'max_tokens', usage: { input_tokens: 123, output_tokens: 8192 }, elapsed_ms: expect.any(Number), failure_phase: 'decoding', failure_detail: 'stop_reason', abort_source: 'none' });
         expect(JSON.stringify(events)).not.toMatch(/private-marker|secret-thinking|partial-answer/);
     });
     test('invalid usage values and unrecognized stop text are excluded from failure metadata', async () => {
         const events: ComposedStageEvent[] = [];
         const provider = createComposedProvider({ apiKey: 'offline', budget: { maxCalls: 10, remaining: () => 10, reserve: () => 1 }, onStage: e => events.push(e), fetch: async () => Response.json({ model: 'claude-opus-5', stop_reason: 'private-stop-text', usage: { input_tokens: -1, output_tokens: 'private-output', extra: 'private-extra' }, content: [] }) });
         await expect(provider.invoke('verify', {}, new AbortController().signal)).rejects.toThrow('provider_failure');
-        expect(events.at(-1)).toEqual({ stage: 'verify', attempt: 1, phase: 'failed', code: 'provider_failure', http_status: 200, elapsed_ms: expect.any(Number), failure_phase: 'decoding', abort_source: 'none' });
+        expect(events.at(-1)).toEqual({ stage: 'verify', attempt: 1, phase: 'failed', code: 'provider_failure', http_status: 200, elapsed_ms: expect.any(Number), failure_phase: 'decoding', failure_detail: 'stop_reason', abort_source: 'none' });
         expect(JSON.stringify(events)).not.toContain('private-');
     });
     test('the whole-question deadline cancels the actual provider and cannot reserve a later stage', async () => {

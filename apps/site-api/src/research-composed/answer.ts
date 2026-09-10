@@ -163,7 +163,10 @@ export function createComposedAnswerService(options: {
                     if (plan.decision !== 'answer') {
                         const contract = validateQuestionContract(plan.question_contract, question, []);
                         const scope_gaps: ComposedAnswer['scope_gaps'] = contract.contract.parts.flatMap(part => part.resolution === 'coverage_missing' || part.resolution === 'action_out_of_scope' || part.resolution === 'context_required' ? [{ question_fragment: questionFragment(question, part), reason: part.resolution, context_ids: [...part.context_ids] }] : []);
-                        return finish({ ...result(plan.reason, binding), ...(coverageFidelityPassed ? { message: 'This preview cannot verify every part of this question. No partial answer was presented as complete.' } : {}), missing_context: plan.decision === 'needs_input' ? [...contract.missingContext] : [], scope_gaps });
+                        const caseClarification = plan.decision === 'needs_input' && demand.analysis.operation === 'assess_specific_case';
+                        return finish({ ...result(plan.reason, binding), ...(coverageFidelityPassed ? { message: 'This preview cannot verify every part of this question. No partial answer was presented as complete.' } : {}),
+                            ...(caseClarification ? { message: 'This preview explains general guidance; it cannot establish a company-specific conclusion. The clarification below may help identify relevant guidance, but it does not enable that determination.' } : {}),
+                            missing_context: plan.decision === 'needs_input' ? [...contract.missingContext] : [], scope_gaps });
                     }
                     const cited = new Set(units.flatMap(u => u.passage_ids)), passages = loaded.verified.passages.filter(p => cited.has(p.id));
                     const evidence = passages.map(p => ({ id: p.id, source_id: p.source_id, locator: p.locator, excerpt: p.text })), sourceIds = new Set(evidence.map(e => e.source_id));
