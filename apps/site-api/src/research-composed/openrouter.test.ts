@@ -1,6 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test';
 import { composedRequestBody, createComposedProvider, openrouterProfileSha256, profileSha256, type ComposedStageEvent } from './provider';
-import { estimateOpenRouterNanoUsd, openrouterPolicy, reconcileOpenRouterCost, usdToNanoUsd, validateOpenRouterResponse, type OpenRouterSpending, type OpenRouterStage } from './openrouter';
+import { estimateOpenRouterNanoUsd, openrouterPolicy, openRouterIdentityFailure, openRouterIdentityFields, reconcileOpenRouterCost, usdToNanoUsd, validateOpenRouterResponse, type OpenRouterIdentityField, type OpenRouterSpending, type OpenRouterStage } from './openrouter';
 import { analysisInput } from './question-analysis';
 import { planTestInput } from './test-plan-input';
 
@@ -92,6 +92,38 @@ test('conflicting or missing routing evidence cannot pass or invoke another mode
     for (const mutate of bad) { const raw = wire(); mutate(raw); expect(() => validateOpenRouterResponse('analyze', raw)).toThrow('provider_failure'); }
     const good = wire(); good.openrouter_metadata.attempts = [{ provider: 'Anthropic', model: good.model, status: 200 }];
     expect(validateOpenRouterResponse('analyze', good).reported_attempt).toBe(1);
+});
+
+test('identity diagnostics name only the first failed allowlisted field', () => {
+    const cases: readonly [OpenRouterIdentityField, (raw: any) => void][] = [
+        ['error_envelope', raw => { raw.error = { message: 'synthetic-sensitive-vendor-marker' }; }],
+        ['response_model', raw => { raw.model = 'synthetic-sensitive-vendor-marker'; }],
+        ['metadata', raw => { raw.openrouter_metadata = 'synthetic-sensitive-vendor-marker'; }],
+        ['requested_model', raw => { raw.openrouter_metadata.requested = 'synthetic-sensitive-vendor-marker'; }],
+        ['strategy', raw => { raw.openrouter_metadata.strategy = 'synthetic-sensitive-vendor-marker'; }],
+        ['attempt', raw => { raw.openrouter_metadata.attempt = 2; }],
+        ['byok', raw => { raw.openrouter_metadata.is_byok = true; }],
+        ['endpoints', raw => { raw.openrouter_metadata.endpoints = 'synthetic-sensitive-vendor-marker'; }],
+        ['response_provider', raw => { raw.provider = 'synthetic-sensitive-vendor-marker'; }],
+        ['usage_byok', raw => { raw.usage.is_byok = true; }],
+        ['usage_speed', raw => { raw.usage.speed = 'synthetic-sensitive-vendor-marker'; }],
+        ['pipeline', raw => { raw.openrouter_metadata.pipeline = ['synthetic-sensitive-vendor-marker']; }],
+        ['input_transformations', raw => { raw.input_transformations = ['synthetic-sensitive-vendor-marker']; }],
+        ['context_management', raw => { raw.context_management = 'synthetic-sensitive-vendor-marker'; }],
+        ['selected_endpoint', raw => { raw.openrouter_metadata.endpoints.available[0].provider = 'synthetic-sensitive-vendor-marker'; }],
+        ['attempts', raw => { raw.openrouter_metadata.attempts = ['synthetic-sensitive-vendor-marker']; }],
+    ];
+    for (const [expected, mutate] of cases) {
+        const raw = wire(); mutate(raw);
+        const diagnostic = openRouterIdentityFailure('analyze', raw);
+        expect(diagnostic).toBe(expected); expect(openRouterIdentityFields).toContain(diagnostic!);
+        expect(diagnostic).not.toContain('synthetic-sensitive-vendor-marker');
+    }
+    const cache = openRouterIdentityFailure('analyze', wire(), new Response('', { headers: { 'X-OpenRouter-Cache-Status': 'synthetic-sensitive-vendor-marker' } }));
+    expect(cache).toBe('cache_status');
+    const first = wire(); first.model = 'synthetic-sensitive-vendor-marker'; delete first.openrouter_metadata;
+    expect(openRouterIdentityFailure('analyze', first)).toBe('response_model');
+    expect(openRouterIdentityFailure('analyze', wire())).toBeUndefined();
 });
 
 test('HTTP failure preserves immediate failure and uncertain money with no cost lookup/retry', async () => {

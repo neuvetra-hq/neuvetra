@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 import { createComposedProvider, openrouterProfileSha256, profileSha256, providerDiagnosticContract, type ComposedStageEvent, type ProviderFailureDetail } from './provider';
-import { openrouterImplementationContract, openrouterPolicy, type OpenRouterSpending } from './openrouter';
+import { openrouterImplementationContract, openrouterPolicy, type OpenRouterIdentityField, type OpenRouterSpending } from './openrouter';
 import { analysisInput } from './question-analysis';
 import { hash } from '../research-passages/release';
 
@@ -20,21 +20,68 @@ function harness(response: () => Response, options: { settleThrows?: boolean; ca
         fetch: async () => { calls++; return response(); }, onStage(event) { events.push(event); if (event.phase === options.callbackThrows) throw new Error(marker); } });
     return { events, accounting, calls: () => calls, invoke: () => provider.invoke('analyze', input, new AbortController().signal) };
 }
-function safeFailure(h: ReturnType<typeof harness>, detail: ProviderFailureDetail, broad = 'decoding') {
+function safeFailure(h: ReturnType<typeof harness>, detail: ProviderFailureDetail, broad = 'decoding', identityField?: OpenRouterIdentityField) {
     const terminal = h.events.at(-1)!;
     expect(terminal).toMatchObject({ phase: 'failed', code: 'provider_failure', http_status: 200, failure_phase: broad, failure_detail: detail, abort_source: 'none' });
+    if (identityField) expect(terminal.router_identity_field).toBe(identityField);
+    else expect(terminal).not.toHaveProperty('router_identity_field');
     expect(providerDiagnosticContract.details).toContain(terminal.failure_detail!);
     expect(JSON.stringify(terminal)).not.toContain(marker);
     for (const key of ['input', 'output', 'headers', 'body', 'message', 'stack']) expect(terminal).not.toHaveProperty(key);
     expect(h.calls()).toBe(1);
 }
 
-test('HTTP200 failures distinguish UTF8, outer JSON, envelope and router identity without accepting any', async () => {
+test('HTTP200 failures distinguish UTF8, outer JSON, envelope and exact router identity field without accepting any', async () => {
     const invalidRoute = wire(); invalidRoute.openrouter_metadata.attempt = 2;
-    for (const [body, detail] of [[new Uint8Array([0xff]), 'utf8_decode'], ['{', 'outer_json'], ['[]', 'response_envelope'], ['{}', 'router_identity'], [JSON.stringify(invalidRoute), 'router_identity']] as const) {
+    const cases: readonly [BodyInit, ProviderFailureDetail, readonly string[], OpenRouterIdentityField?][] = [
+        [new Uint8Array([0xff]), 'utf8_decode', ['reserve', 'uncertain']],
+        ['{', 'outer_json', ['reserve', 'uncertain']],
+        ['[]', 'response_envelope', ['reserve', 'uncertain']],
+        ['{}', 'router_identity', ['reserve', 'uncertain'], 'response_model'],
+        [JSON.stringify(invalidRoute), 'router_identity', ['reserve', 'settle'], 'attempt'],
+    ];
+    for (const [body, detail, accounting, identityField] of cases) {
         const h = harness(() => new Response(body, { status: 200 }));
-        await expect(h.invoke()).rejects.toThrow('provider_failure'); safeFailure(h, detail);
+        await expect(h.invoke()).rejects.toThrow('provider_failure'); safeFailure(h, detail, 'decoding', identityField);
+        expect(h.accounting).toEqual([...accounting]);
+    }
+});
+test('identity failure settles only valid native response cost without fabricating validated identity', async () => {
+    const invalid = wire(); invalid.model = marker; invalid.openrouter_metadata.requested = marker;
+    const h = harness(() => Response.json(invalid, { headers: { 'X-Generation-Id': 'gen-synthetic' } }));
+    await expect(h.invoke()).rejects.toThrow('provider_failure');
+    safeFailure(h, 'router_identity', 'decoding', 'response_model');
+    const terminal = h.events.at(-1)!;
+    expect(h.accounting).toEqual(['reserve', 'settle']);
+    expect(terminal.openrouter_cost).toEqual({ cost_nano_usd: 1000000, cost_source: 'response', generation_id_sha256: hash('gen-synthetic') });
+    expect(terminal).not.toHaveProperty('openrouter');
+    expect(JSON.stringify(terminal)).not.toContain('gen-synthetic');
+});
+test('error envelopes and invalid identity-failure costs remain uncertain', async () => {
+    for (const cost of [undefined, null, -1, '0.001', Number.POSITIVE_INFINITY]) {
+        const invalid = wire(); invalid.model = marker; invalid.usage.cost = cost;
+        const h = harness(() => Response.json(invalid));
+        await expect(h.invoke()).rejects.toThrow('provider_failure');
+        safeFailure(h, 'router_identity', 'decoding', 'response_model');
         expect(h.accounting).toEqual(['reserve', 'uncertain']);
+        expect(h.events.at(-1)).not.toHaveProperty('openrouter_cost');
+    }
+    const errorEnvelope = wire(); errorEnvelope.error = { message: marker }; errorEnvelope.usage.cost = 0;
+    const error = harness(() => Response.json(errorEnvelope));
+    await expect(error.invoke()).rejects.toThrow('provider_failure');
+    safeFailure(error, 'router_identity', 'decoding', 'error_envelope');
+    expect(error.accounting).toEqual(['reserve', 'uncertain']);
+    expect(error.events.at(-1)).not.toHaveProperty('openrouter_cost');
+});
+test('non-200 success-family statuses cannot satisfy the exact native billing authority', async () => {
+    for (const status of [201, 202]) {
+        const invalid = wire(); invalid.model = marker;
+        const h = harness(() => Response.json(invalid, { status }));
+        await expect(h.invoke()).rejects.toThrow('provider_failure');
+        const terminal = h.events.at(-1)!;
+        expect(terminal).toMatchObject({ phase: 'failed', code: 'provider_failure', http_status: status, failure_detail: 'router_identity', router_identity_field: 'response_model' });
+        expect(h.accounting).toEqual(['reserve', 'uncertain']);
+        expect(terminal).not.toHaveProperty('openrouter_cost');
     }
 });
 test('stop reason, missing content and inner JSON get separate details while valid native cost stays settled', async () => {

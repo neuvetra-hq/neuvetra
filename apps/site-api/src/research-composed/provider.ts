@@ -9,16 +9,17 @@ import { selectionReviewIssueBudget } from './selection';
 import { analysisInput, analysisPrompt, analysisSchema, analysisTaxonomyDefinitions, analysisVersion, contextClarificationPolicy } from './question-analysis';
 import { demandContractGuidance, sourceResolutions, sizeChoicePolicy, plannerMaterialIds, plannerProjectionContract } from './demand-selection';
 import { sizeBundlePolicy } from './size-bundles';
-import { openrouterPolicy, openrouterImplementationContract, openrouterRequestBody, validateOpenRouterResponse, reconcileOpenRouterCost, nativeOpenRouterCost, type OpenRouterSpending, type SafeOpenRouterMetadata } from './openrouter';
+import { openrouterPolicy, openrouterImplementationContract, openrouterRequestBody, validateOpenRouterResponse, openRouterIdentityFailure, reconcileOpenRouterCost, nativeOpenRouterCost, openRouterIdentityFields, type OpenRouterSpending, type SafeOpenRouterMetadata, type SafeOpenRouterCostMetadata, type OpenRouterIdentityField } from './openrouter';
 export type ComposedStage = 'analyze' | 'plan' | 'verify';
 export const composedStageDeadlineMs = 180000;
 export type ProviderFailurePhase = 'awaiting_headers' | 'reading_body' | 'decoding';
 export type ProviderAbortSource = 'caller' | 'stage_deadline' | 'none';
 export type ProviderFailureDetail = 'stage_callback' | 'spending_reservation' | 'awaiting_headers' | 'http_status' | 'body_presence' | 'body_read' | 'body_size' | 'body_cleanup' | 'utf8_decode' | 'outer_json' | 'response_envelope' | 'router_identity' | 'stop_reason' | 'content_shape' | 'inner_json' | 'cost_reconciliation' | 'cost_settlement';
-export interface ComposedStageEvent extends Omit<StageEvent, 'stage'> { stage: ComposedStage; stop_reason?: string; http_status?: number; elapsed_ms?: number; failure_phase?: ProviderFailurePhase; failure_detail?: ProviderFailureDetail; abort_source?: ProviderAbortSource; openrouter?: SafeOpenRouterMetadata }
+export interface ComposedStageEvent extends Omit<StageEvent, 'stage'> { stage: ComposedStage; stop_reason?: string; http_status?: number; elapsed_ms?: number; failure_phase?: ProviderFailurePhase; failure_detail?: ProviderFailureDetail; abort_source?: ProviderAbortSource; router_identity_field?: OpenRouterIdentityField; openrouter?: SafeOpenRouterMetadata; openrouter_cost?: SafeOpenRouterCostMetadata }
 export const providerDiagnosticContract = Object.freeze({
-    version: 'private_failure_detail.v1',
+    version: 'private_failure_detail.v2',
     details: Object.freeze(['stage_callback', 'spending_reservation', 'awaiting_headers', 'http_status', 'body_presence', 'body_read', 'body_size', 'body_cleanup', 'utf8_decode', 'outer_json', 'response_envelope', 'router_identity', 'stop_reason', 'content_shape', 'inner_json', 'cost_reconciliation', 'cost_settlement']),
+    router_identity_fields: openRouterIdentityFields,
     bounded_body: boundedBody.toString(),
 });
 /** Only the actual signal states classify cancellation. Error names, messages,
@@ -166,7 +167,7 @@ export function createComposedProvider(options: {
             let failurePhase: ProviderFailurePhase = 'awaiting_headers';
             let failureDetail: ProviderFailureDetail = 'stage_callback';
             inFlight = true;
-            const metadata: { usage?: SafeComposedUsage; stop_reason?: string; http_status?: number; openrouter?: SafeOpenRouterMetadata } = {};
+            const metadata: { usage?: SafeComposedUsage; stop_reason?: string; http_status?: number; router_identity_field?: OpenRouterIdentityField; openrouter?: SafeOpenRouterMetadata; openrouter_cost?: SafeOpenRouterCostMetadata } = {};
             let costSettled = false;
             let settlementAttempted = false;
             let nativeCost: ReturnType<typeof nativeOpenRouterCost>;
@@ -184,13 +185,20 @@ export function createComposedProvider(options: {
                 failurePhase = 'reading_body';
                 const raw = await boundedBody(response, () => { failurePhase = 'decoding'; }, value => { failureDetail = value; });
                 requestSignal.throwIfAborted();
+                if (isOpenRouter) {
+                    try { nativeCost = nativeOpenRouterCost(raw, response); } catch { /* Invalid cost is never converted to a settlement. */ }
+                }
                 failureDetail = 'response_envelope';
                 if (!record(raw) || (!isOpenRouter && raw.model !== composedProfiles[stage].model))
                     throw new PassageError('provider_failure');
                 if (isOpenRouter) {
                     failureDetail = 'router_identity';
+                    const identityField = openRouterIdentityFailure(stage, raw, response);
+                    if (identityField) {
+                        metadata.router_identity_field = identityField;
+                        throw new PassageError('provider_failure');
+                    }
                     metadata.openrouter = validateOpenRouterResponse(stage, raw, response);
-                    try { nativeCost = nativeOpenRouterCost(raw, response); } catch { /* Invalid cost cannot replace an already failed generation. */ }
                 }
                 if (['end_turn', 'max_tokens', 'stop_sequence', 'tool_use', 'pause_turn', 'refusal'].includes(String(raw.stop_reason))) metadata.stop_reason = String(raw.stop_reason);
                 const usage = safeComposedUsage(raw.usage);
@@ -223,6 +231,7 @@ export function createComposedProvider(options: {
                     const cost = await reconcileOpenRouterCost({ stage, raw, response, apiKey: options.apiKey, fetch: options.fetch ?? fetch, signal: requestSignal });
                     requestSignal.throwIfAborted();
                     metadata.openrouter = { ...metadata.openrouter!, ...cost };
+                    metadata.openrouter_cost = cost;
                     failureDetail = 'cost_settlement';
                     settlementAttempted = true;
                     options.spending!.settle(attempt, cost.cost_nano_usd, cost.cost_source);
@@ -234,8 +243,14 @@ export function createComposedProvider(options: {
                 return output;
             }
             catch (error) {
-                if (isOpenRouter && !settlementAttempted && nativeCost && metadata.openrouter) {
-                    try { metadata.openrouter = { ...metadata.openrouter, ...nativeCost }; settlementAttempted = true; options.spending!.settle(attempt, nativeCost.cost_nano_usd, nativeCost.cost_source); costSettled = true; } catch { /* Preserve the original terminal classification. */ }
+                if (isOpenRouter && !settlementAttempted && nativeCost) {
+                    try {
+                        metadata.openrouter_cost = nativeCost;
+                        if (metadata.openrouter) metadata.openrouter = { ...metadata.openrouter, ...nativeCost };
+                        settlementAttempted = true;
+                        options.spending!.settle(attempt, nativeCost.cost_nano_usd, nativeCost.cost_source);
+                        costSettled = true;
+                    } catch { /* Preserve the original terminal classification. */ }
                 }
                 if (isOpenRouter && !costSettled) { try { options.spending!.uncertain(attempt); } catch { /* A failed ledger cannot authorize subsequent work. */ } }
                 const safe = classifyComposedFailure(error, signal, stageDeadline);

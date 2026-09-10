@@ -36,6 +36,7 @@ export const openrouterPolicy = deepFreeze({
     output_token_limits: { analyze: 8192, plan: 3000, verify: 16384 },
     generation_lookup: { endpoint: 'https://openrouter.ai/api/v1/generation', maximum_bytes: 16384, timeout_ms: 5000, maximum_lookups: 1 },
     success_identity: 'Exact requested/response/selected model; no generic prefix normalization; conflicts in attempts/provider fail.',
+    billing_authority: 'A finite native usage.cost on an HTTP-200 non-error OpenRouter envelope is billing evidence for that POST only. It may settle cost without validating provider identity or answer content, and never creates accepted identity metadata.',
     cost_policy: 'Serial conservative estimates, not hard billing guarantees; uncertain charges retained; unknown/unexpected cost stops later admission.',
 } as const);
 
@@ -49,6 +50,19 @@ export interface SafeOpenRouterMetadata {
     cost_nano_usd?: number;
     cost_source?: 'response' | 'generation';
 }
+export interface SafeOpenRouterCostMetadata {
+    cost_nano_usd: number;
+    cost_source: 'response' | 'generation';
+    generation_id_sha256?: string;
+}
+export const openRouterIdentityFields = Object.freeze([
+    'error_envelope', 'response_model', 'metadata', 'cache_status',
+    'requested_model', 'strategy', 'attempt', 'byok', 'endpoints',
+    'response_provider', 'usage_byok', 'usage_speed', 'pipeline',
+    'input_transformations', 'context_management', 'selected_endpoint',
+    'attempts',
+] as const);
+export type OpenRouterIdentityField = (typeof openRouterIdentityFields)[number];
 const fail = (): never => { throw new PassageError('provider_failure'); };
 function expectedModel(stage: OpenRouterStage, value: unknown): value is string {
     return value === models[stage] || value === openrouterPolicy.canonical_models[models[stage]];
@@ -79,26 +93,41 @@ export function usdToNanoUsd(value: unknown): number {
     return rounded;
 }
 
-export function validateOpenRouterResponse(stage: OpenRouterStage, raw: unknown, response?: Response): SafeOpenRouterMetadata {
-    if (!record(raw) || raw.error !== undefined || !expectedModel(stage, raw.model) || !record(raw.openrouter_metadata)) return fail();
+/** Returns only the first failed identity field from a finite allowlist. It never
+ * returns the provider value, response text, headers or nested metadata. */
+export function openRouterIdentityFailure(stage: OpenRouterStage, raw: unknown, response?: Response): OpenRouterIdentityField | undefined {
+    if (!record(raw) || raw.error !== undefined) return 'error_envelope';
+    if (!expectedModel(stage, raw.model)) return 'response_model';
+    if (!record(raw.openrouter_metadata)) return 'metadata';
     const cache = response?.headers.get('X-OpenRouter-Cache-Status');
-    if (cache != null && cache !== 'MISS') return fail();
+    if (cache != null && cache !== 'MISS') return 'cache_status';
     const m = raw.openrouter_metadata;
-    if (m.requested !== models[stage] || m.strategy !== 'direct' || m.attempt !== 1 || m.is_byok !== false || !record(m.endpoints) || !Array.isArray(m.endpoints.available) || !Number.isSafeInteger(m.endpoints.total) || Number(m.endpoints.total) < m.endpoints.available.length) return fail();
-    if (raw.provider !== undefined && raw.provider !== 'Anthropic') return fail();
-    if (record(raw.usage) && raw.usage.is_byok !== undefined && raw.usage.is_byok !== false) return fail();
-    if (record(raw.usage) && raw.usage.speed !== undefined && raw.usage.speed !== null && raw.usage.speed !== 'standard') return fail();
-    if (m.pipeline !== undefined && (!Array.isArray(m.pipeline) || m.pipeline.length !== 0)) return fail();
-    if (raw.input_transformations !== undefined && raw.input_transformations !== null && (!Array.isArray(raw.input_transformations) || raw.input_transformations.length !== 0)) return fail();
-    if (raw.context_management !== undefined && raw.context_management !== null) return fail();
+    if (m.requested !== models[stage]) return 'requested_model';
+    if (m.strategy !== 'direct') return 'strategy';
+    if (m.attempt !== 1) return 'attempt';
+    if (m.is_byok !== false) return 'byok';
+    if (!record(m.endpoints) || !Array.isArray(m.endpoints.available) || !Number.isSafeInteger(m.endpoints.total) || Number(m.endpoints.total) < m.endpoints.available.length) return 'endpoints';
+    if (raw.provider !== undefined && raw.provider !== 'Anthropic') return 'response_provider';
+    if (record(raw.usage) && raw.usage.is_byok !== undefined && raw.usage.is_byok !== false) return 'usage_byok';
+    if (record(raw.usage) && raw.usage.speed !== undefined && raw.usage.speed !== null && raw.usage.speed !== 'standard') return 'usage_speed';
+    if (m.pipeline !== undefined && (!Array.isArray(m.pipeline) || m.pipeline.length !== 0)) return 'pipeline';
+    if (raw.input_transformations !== undefined && raw.input_transformations !== null && (!Array.isArray(raw.input_transformations) || raw.input_transformations.length !== 0)) return 'input_transformations';
+    if (raw.context_management !== undefined && raw.context_management !== null) return 'context_management';
     const endpoints = m.endpoints.available;
-    if (!endpoints.length || endpoints.length > 100 || !endpoints.every(e => record(e) && typeof e.selected === 'boolean')) return fail();
+    if (!endpoints.length || endpoints.length > 100 || !endpoints.every(e => record(e) && typeof e.selected === 'boolean')) return 'endpoints';
     const selected = endpoints.filter(e => e.selected);
-    if (selected.length !== 1 || selected[0].provider !== 'Anthropic' || !expectedModel(stage, selected[0].model)) return fail();
+    if (selected.length !== 1 || selected[0].provider !== 'Anthropic' || !expectedModel(stage, selected[0].model)) return 'selected_endpoint';
     if (m.attempts !== undefined) {
-        if (!Array.isArray(m.attempts) || m.attempts.length > 1) return fail();
-        for (const a of m.attempts) if (!record(a) || a.provider !== 'Anthropic' || !expectedModel(stage, a.model) || a.status !== 200) return fail();
+        if (!Array.isArray(m.attempts) || m.attempts.length > 1) return 'attempts';
+        for (const a of m.attempts) if (!record(a) || a.provider !== 'Anthropic' || !expectedModel(stage, a.model) || a.status !== 200) return 'attempts';
     }
+    return undefined;
+}
+
+export function validateOpenRouterResponse(stage: OpenRouterStage, raw: unknown, response?: Response): SafeOpenRouterMetadata {
+    if (openRouterIdentityFailure(stage, raw, response)) return fail();
+    if (!record(raw) || !record(raw.openrouter_metadata) || !expectedModel(stage, raw.model)) return fail();
+    const m = raw.openrouter_metadata;
     return { requested_model: models[stage], response_model: raw.model, selected_provider: 'Anthropic', reported_attempt: 1, is_byok: false };
 }
 
@@ -115,8 +144,8 @@ function abortable<T>(task: Promise<T>, signal: AbortSignal): Promise<T> {
     });
 }
 
-export function nativeOpenRouterCost(raw: unknown, response: Response): { cost_nano_usd: number; cost_source: 'response'; generation_id_sha256?: string } | undefined {
-    if (!record(raw) || !record(raw.usage) || raw.usage.cost === undefined || raw.usage.cost === null) return undefined;
+export function nativeOpenRouterCost(raw: unknown, response: Response): SafeOpenRouterCostMetadata | undefined {
+    if (response.status !== 200 || !record(raw) || raw.error !== undefined || !record(raw.usage) || raw.usage.cost === undefined || raw.usage.cost === null) return undefined;
     const id = generationId(response.headers.get('X-Generation-Id'));
     return { cost_nano_usd: usdToNanoUsd(raw.usage.cost), cost_source: 'response', ...(id ? { generation_id_sha256: hash(id) } : {}) };
 }
@@ -174,6 +203,7 @@ export async function reconcileOpenRouterCost(options: {
 /** Profile identity includes the finite helpers used by the public validators. */
 export const openrouterImplementationContract = Object.freeze({
     request: openrouterRequestBody.toString(), response: validateOpenRouterResponse.toString(),
+    identity_failure: openRouterIdentityFailure.toString(), identity_fields: openRouterIdentityFields,
     expected_model: expectedModel.toString(), generation_id: generationId.toString(),
     metadata_body: metadataBody.toString(), bounded_abort: abortable.toString(),
     native_cost: nativeOpenRouterCost.toString(), reconcile: reconcileOpenRouterCost.toString(),

@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-10T22:35:41.2164313Z",
+  "updated_at": "2026-09-10T22:54:51.8783154Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M2",
     "name": "Reviewed evidence and first supported answer",
-    "status": "awaiting_board_feedback_m30_partial_closed",
-    "next_gate": "Review M30's verified partial outcome and decide whether to authorize proposed offline M31 provider-identity diagnostics and cost-reconciliation repair."
+    "status": "awaiting_board_feedback_m31_offline_complete",
+    "next_gate": "Decide whether to publish the independently accepted M31 repair, then separately whether to authorize a newly frozen paid live rerun."
   },
   "completed_milestones": [
     {
@@ -22,17 +22,17 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "Run30 is closed after two actual UI submissions. W03 passed mechanically with a qualified EPA-grounded answer; W11 failed at verify-stage router identity decoding with uncertain cost; EPA14-B01 was unrun. Six stages used, nine retired without carry. All services and the temporary browser tab are closed; ports3012/3016/5174/5175 are clear.",
+    "website_preview_state": "Run30 remains closed after two actual UI submissions. M31 repaired field-level provider diagnostics and response-cost recording offline; it did not restart services or establish live reliability. All services remain closed and the ordinary preview remains paused.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "Froze and independently reviewed M30, proved the repaired frontend through host readiness and the real UI, recorded W03 and W11 once each, stopped on W11 verify-stage provider identity failure, retired remaining capacity, stopped exact processes and independently verified closure. Proposed M31 is awaiting board feedback; no worker or service is active."
+    "last_session_work": "Published the reviewed M30 record to PR #2 as8f2b6e3. Implemented M31 offline with finite field-level provider identity diagnostics and separate exact-HTTP200 non-error native cost evidence. Independent QA passed72 tests/887 assertions, API typecheck and whitespace review after catching and verifying a201/202 boundary fix. No provider request, credential access or service start."
   },
   "session_handoff": {
-    "saved_at": "2026-09-10T22:35:41.2164313Z",
+    "saved_at": "2026-09-10T22:54:51.8783154Z",
     "path": "operations/next-session.md",
     "board_record": "claude-memory/meetings/2026-09-09-scope2-benchmark.md",
-    "next_task": "Collect board feedback on closed M30. If approved, implement proposed offline M31 field-level router identity diagnostics and safe authoritative cost recovery with separate QA. Do not restart30, retry W11 or use its retired capacity.",
-    "execution_state": "m30_closed_partial_awaiting_board_feedback",
-    "review": "Independent QA passed M30 manifest, runtime permission and closure integrity. Three-case acceptance and release remain failed.",
+    "next_task": "Collect board decision on publishing the reviewed M31 repair. A later live rerun requires a fresh immutable candidate and explicit paid-call authorization; do not restart30, retry W11 or use retired capacity.",
+    "execution_state": "m31_offline_complete_awaiting_publication_and_live_decisions",
+    "review": "Independent QA passed M31 offline implementation after a corrected exact-HTTP200 billing boundary. Three-case live acceptance and release remain failed.",
     "scope": "Continue current approved EPA-only milestone and isolated FAQ benchmark; source expansion remains separately held."
   },
   "checkpoint": {
@@ -105,6 +105,19 @@
         "evaluations/research-qa/openrouter30-closure-review-10.json"
       ],
       "next_action": "Await board feedback. Proposed M31 is offline field-level provider identity diagnostics and safe cost reconciliation, followed by independent QA; no paid rerun is authorized."
+    },
+    {
+      "id": "M31-OFFLINE",
+      "owner": "ceo_cto_with_connection_review_and_independent_qa",
+      "status": "complete",
+      "title": "Repair provider identity diagnostics and safe response-cost recording",
+      "scope": "Offline synthetic implementation and independent review only; no services, credentials, provider calls, source changes or live rerun",
+      "result": "Strict identity rejection now emits one finite failed-field label without raw values. Exact HTTP200 non-error native response cost can settle monitoring separately without accepted identity; HTTP201/202, error and invalid costs remain uncertain. QA passed72 tests/887 assertions, API typecheck and whitespace review. Full monorepo wrapper was blocked by supervised Turbo package-manager discovery.",
+      "evidence": [
+        "docs/research/provider-verification-milestone-31.md",
+        "evaluations/research-qa/openrouter31-offline-review-10.json"
+      ],
+      "next_action": "Board decides publication. A separately frozen paid live rerun requires new authorization."
     },
     {
       "id": "CONN-28",
@@ -857,8 +870,8 @@
     },
     {
       "id": "R7",
-      "detail": "Cloud operation and the repaired frontend were demonstrated in M30. W03 passed mechanically; W11 failed strict router identity decoding and EPA14-B01 was blocked by the stop latch. The three-case live/browser acceptance gate remains incomplete.",
-      "impact": "Current answer-quality gate requires correction and independent review before a dependent milestone. Local services are not an always-on production deployment.",
+      "detail": "M31's provider diagnostic/accounting repair passed offline independent review. M30's exact failed identity field and attempt6 charge remain unknown, and EPA14-B01 remains unrun. The three-case live/browser acceptance gate remains incomplete.",
+      "impact": "A newly frozen paid live rerun and board feedback are required before live acceptance. Local services are not an always-on production deployment.",
       "evidence": "docs/research/website-correction-07.md"
     },
     {
@@ -918,8 +931,22 @@
     "outcome": "W03 qualified and mechanically valid; W11 unavailable after verify-stage decoding/router_identity; EPA14-B01 unrun.",
     "accounting": "6 stages used,9 retired,no carry; current settled258937000nanoUSD,current uncertain1178387500,total settled2811393000,total uncertain1624850000,remaining monitoring target5563757000.",
     "runtime": "Exact backend3808 and frontend19284 stopped; ports3012/3016/5174/5175 closed; ordinary preview paused.",
-    "next_milestone_proposal": "M31 field-level provider identity diagnostics and safe authoritative cost reconciliation; awaits board approval before implementation.",
+    "next_milestone_proposal": "M31 completed offline. Publication and any newly frozen paid live rerun require separate decisions.",
     "active_workers": 0,
     "release_acceptance": false
+  },
+  "current_m31": {
+    "state": "offline_complete_independent_qa_pass_awaiting_publication_decision",
+    "report": "docs/research/provider-verification-milestone-31.md",
+    "independent_review": "evaluations/research-qa/openrouter31-offline-review-10.json",
+    "independent_review_sha256": "2031588cc4837c51e35fee43e50d001097c08abb00f0bc474645d3971f45df32",
+    "validation": "72 focused tests / 887 assertions, site API typecheck and whitespace review passed; full wrapper blocked by supervised Turbo package-manager discovery.",
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "services_started": false,
+    "m30_mutated": false,
+    "live_acceptance": false,
+    "release_acceptance": false,
+    "next_decision": "Publish reviewed M31, then separately decide whether to authorize a fresh paid live rerun."
   }
 }
