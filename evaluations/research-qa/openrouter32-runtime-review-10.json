@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task": "M32-RUNTIME-QA",
+  "role": "independent_qa",
+  "disposition": "fail",
+  "meaning": "offline_adapter_defects_require_correction_no_launch",
+  "run_id": "website-epa-live-32",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "allocation_sha256": "862da1cb1b51fdcfbfa8d09b2cfb52709ee6d909a2242ec6f5e98f69e3fc9508",
+  "runtime_validation_sha256": "69739f2386fad5d1718a8453a345dac2515c99c3538211843b594f3001619f04",
+  "adapter_pins": {
+    "spending.ts": "4490c39e53874247d119190d494ab1277fe9189af8fc980f5bc9a32a3bfa06dd",
+    "runtime.ts": "0af720199172c49a7a474971cddfe8e446bebcabe38a7b990151d962a9319bf4",
+    "ingress.ts": "f540a2fec869db82417bf31c38d7b4a20800c784554e867b9867823957af23e0",
+    "isolated-proxy.ts": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432",
+    "launcher.ts": "f0bf8ea131ca00868851cf727868d0d93e148b6c29c400ed6752b2baffbdd2fd",
+    "closure.ts": "b51ba3539c9da357b48716ac462bb5ee5bf8cfea8be104b091e8de8859ca9ae1",
+    "runtime.test.ts": "b3f888283a13ca097840a65d534d9abb8d3b5853b132970b94e6e8d683623829",
+    "runtime-tsconfig.json": "e0f5596d2ed991699045c7af586ee817765ad331ab8d7ec2767fa2471324c796"
+  },
+  "release_acceptance": false,
+  "paid_execution_permitted": false,
+  "validation": {
+    "tests_passed": 7,
+    "assertions": 37,
+    "failures": 0,
+    "scoped_typecheck": "pass",
+    "candidate_pins_checked_by_real_validator": 96,
+    "independent_failure_code_probe": "provider_timeout and request_cancelled both rejected by safeStage"
+  },
+  "blockers": [
+    {
+      "id": "R32-QA-1",
+      "file": "runtime.ts",
+      "finding": "Failed-event allowlist omits actual committed provider_timeout and request_cancelled. Recorder discards legitimate terminal diagnostics and turns the callback failure into mechanical failure.",
+      "required": "Allow exact existing typed terminal codes with bounded abort/failure metadata. Add actual provider timeout/cancellation through controller tests preserving one failed trace and permanent stop."
+    },
+    {
+      "id": "R32-QA-2",
+      "file": "runtime.ts",
+      "finding": "onStage requires observed openrouter_cost to equal ledger.actual_nano_usd for every terminal event. M31 intentionally preserves observed response cost when settlement fails and ledger actual remains null/uncertain, so this condition loses the original terminal record.",
+      "required": "Validate amount/source equality only when settlement is durable. Preserve separately observed cost and explicit unsettled state without marking identity accepted or cost reconciled. Test failed settlement with valid observed cost and ensure original reason/trace survive."
+    },
+    {
+      "id": "R32-QA-3",
+      "file": "closure.ts",
+      "finding": "Closure checks reservations for a matching started trace but does not reject extra orphan traces, wrong runtime/stage/receipt associations or malformed terminal metadata. It pins only trace bytes plus stop/shutdown and an embedded spending snapshot, omitting durable receipt, spending-event, admission and launch evidence pins.",
+      "required": "Reconstruct exact trace/receipt/ledger inventory, reject orphan or mismatched records, validate bounded metadata and original runtime, and pin all relevant journals and admission/launch/result evidence. Add corruption/adversarial closure tests; distinguish legitimately incomplete failed startup traces without fabricating records."
+    }
+  ],
+  "passed_boundaries": [
+    "Separate inherited settled2811393000 and uncertainty1624850000 retained.",
+    "Five-stage legal prefixes and gross cumulative reservation ceiling3937272500 enforced before ledger reserve; settled cost does not replenish reservation ceiling.",
+    "One exact W11 permit consumed exclusively; question mismatch and replay refused.",
+    "M31 diagnostic field and separate cost allowlists avoid raw provider payload copying.",
+    "No startup occurs merely by importing launcher."
+  ],
+  "remaining_integration": [
+    "Complete and independently review exact host wrapper/frontend, cloud metadata collector and final manifest bindings.",
+    "Bind root/QA approval to integrated executable hashes; current candidate alone is not a complete runtime manifest.",
+    "Ensure terminal answer/source/mechanical failures call controller.finish honestly, including failures before a model stage. No implicit success from three completed stage callbacks.",
+    "Root wrapper must clean up any partially started preview after launchRuntime rejects, then produce exact PID/listener evidence.",
+    "Require actual browser request/response correlation and terminal outcome evidence before final closure; independently verify all processes stopped and ports closed."
+  ],
+  "limitations": [
+    "Authored tests pass but miss the independently identified failure cases.",
+    "Review is offline only; no real request, service or credential access occurred.",
+    "This failing record must not be used as a launch permission. Historical M30 evidence and cost uncertainty remain unchanged."
+  ],
+  "network_requests": 0,
+  "model_requests": 0,
+  "credentials_accessed": false,
+  "services_started": false
+}

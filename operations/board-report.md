@@ -1,13 +1,15 @@
 # Neuvetra board update
 
-September 10, 2026. M31 is complete and independently accepted offline. The service now records the exact failed provider-identity field from a finite safe list while preserving every strict Anthropic/model/route rejection. A failed response cannot render or acquire accepted identity metadata.
+September 10, 2026. M32 is closed after the authorized one-question live verification of the M31 provider repair. The W11 website question was submitted once. The first analysis request received HTTP 200, failed strict provider identity on the exact field `pipeline`, and stopped the run. No answer was released and no retry occurred.
 
-Cost evidence is separate from identity evidence. A finite native cost on an exact HTTP-200, non-error OpenRouter response can settle the internal monitoring ledger for that request even when identity or answer validation fails. HTTP201/202, error envelopes and invalid or missing costs remain uncertain. This is a monitoring policy supported by OpenRouter's response usage documentation; it is not invoice finality.
+The repair worked as intended under live conditions: it retained the bounded failed-field label and independently settled valid same-response cost evidence at $0.044565 without treating identity or the answer as accepted. One stage was used, four were retired, and zero capacity carries forward. Cumulative actual reservations are 876.
 
-Independent QA passed 72 focused tests with 887 assertions, the site API type check and whitespace review. It also verified the frozen M30 closure, 577 snapshots and 63 closure artifacts remain unchanged. No model/provider request, credential access, service start, source change, deployment or merge occurred. The full monorepo wrapper could not start because Turbo could not discover its package-manager binary in the supervised environment; no tooling workaround was pursued.
+Current internal accounting is $2.855958 settled plus $1.62485 retained historical uncertainty, leaving $5.519192 of the original $10 monitoring target. This is operational evidence, not invoice finality. M32 added no uncertainty.
 
-M30 remains closed and historically unchanged. Its exact failed identity field and attempt-6 charge remain unknown; the $1.1783875 estimate stays in uncertainty. The three-case website milestone and release acceptance remain incomplete.
+Independent QA passed the final offline launch stack at 25 tests and 386 assertions. It accepted the live diagnostic and accounting evidence but rejected provider-verification success and browser mechanical acceptance. The browser API could not directly retain the response body; the proxy claim, safe trace, visible terminal UI, and an explicitly labeled reconstruction were preserved without repeating the question.
 
-M30 records were published to PR #2 in commit `8f2b6e3`. M31 is locally implemented and reviewed; its publication status must be reported from actual Git evidence. The next decision is whether to publish M31 and later authorize a newly frozen live rerun. A rerun is a separate decision with new paid-call authorization. No worker or service remains active after record finalization.
+The exact backend and frontend processes are stopped, ports 3012, 3016, 5174, and 5175 are closed, and the ordinary preview remains paused. M32 cannot be restarted. M31 is published on the current PR branch at `bab79e0`; M32 records are local pending a separate publication decision. No deployment, merge, provider change, source expansion, or global toolchain change occurred.
 
-[M31 technical record](../docs/research/provider-verification-milestone-31.md) · [M30 diagnostic](../docs/research/website-diagnostic-30.md) · [Task ledger](status.json) · [PR #2](https://github.com/neuvetra-hq/neuvetra/pull/2)
+The next proposed milestone is an offline `pipeline` identity-contract repair grounded in current primary provider documentation and adversarial synthetic tests. Any later paid rerun requires a fresh frozen run and authorization.
+
+[M32 record](../docs/research/provider-verification-live-milestone-32.md) · [M31 record](../docs/research/provider-verification-milestone-31.md) · [Task ledger](status.json) · [PR #2](https://github.com/neuvetra-hq/neuvetra/pull/2)

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-32",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "purpose": "diagnostic_only_no_release",
+  "release_acceptance": false,
+  "scope": "Final offline combined recheck of FIX3 authorization and executable/accessor binding; preserves previous immutable FAIL reviews.",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "allocation_sha256": "862da1cb1b51fdcfbfa8d09b2cfb52709ee6d909a2242ec6f5e98f69e3fc9508",
+  "author_receipt": {
+    "path": ".superpowers/openrouter-32/bootstrap-validation.json",
+    "sha256": "b8ee68295174f22e8aea8ad3c7a05686c80c3d4646f235396a5350aa5db8ccd7"
+  },
+  "adapter_pins": {
+    "spending.ts": "4490c39e53874247d119190d494ab1277fe9189af8fc980f5bc9a32a3bfa06dd",
+    "runtime.ts": "01a425cd661dddedcffa1415a4bd32758a648bb17cb9dfc049b5b68137add31f",
+    "ingress.ts": "f540a2fec869db82417bf31c38d7b4a20800c784554e867b9867823957af23e0",
+    "isolated-proxy.ts": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432",
+    "launcher.ts": "b561d843716ac3b62d76d03a1009abcfc8f76ecbbcdd373182cf7cbb0be87fba",
+    "closure.ts": "aeec7be22d34c2435379420634fe2ea102ed61c50c273205c6885c926bb44997",
+    "runtime.test.ts": "c3a9298bb0d33270d8b7c2adb108949ee1af8f3e0a20de5cf8f870ca3a8e1d56",
+    "runtime-tsconfig.json": "e0f5596d2ed991699045c7af586ee817765ad331ab8d7ec2767fa2471324c796"
+  },
+  "host_pins": {
+    "host.ts": "e12765a520d03fa36d5621c0e5c02ed50cc0af160f53231ea598b60489550efd",
+    "outcome.ts": "d424b450f65310cf45e08a8031e0f8375b4c4024b80ba2cb00459008a4a52dbc",
+    "vite-isolated.config.ts": "8a69c00ac8991b8eff3b0efc0ac3eea3f5395a92b2a127c9129f2ec7ac7be008",
+    "host.test.ts": "b6a077bf601b1a674bc04b9c459415cd0ebb8301306261755099b4e028cd34a8",
+    "outcome.test.ts": "edd6b2f15be14227ad1fc4279a661bb50a88feb909e181a21661f3edbb9a98a8",
+    "host-tsconfig.json": "88ed9ebba1c8e93e375934934fadb796d90dc6040b1c67f83f0afc1da0a2365a",
+    ".superpowers/review-tools/bun-windows-x64/bun.exe": "7449b666a6f56302b5db1687116b94f3115e9eed04b26c14bd6ca1621efe7d99",
+    "apps/site-web/node_modules/vite/bin/vite.js": "fa03478846d229651a3c6aa64833ba2c6cbf580a798b92bd8f47c7480bafb5d8",
+    "apps/site-web/vite.config.ts": "bfb13b3328dc7b35b01b0f1e9e92d2253017c90eacd99b2c23b0d03df4836256"
+  },
+  "bootstrap_pins": {
+    "bootstrap.ts": "21ff1a75b9cca0453d4379d62518be6f99611661203bc25b0e6ed965f4a3d5ff",
+    "backend-cli.ts": "6d0e632104cf584dced6c6742e5ca4e9b22cd484e8e6679bd1132b33e3933913",
+    "frontend-cli.ts": "f553c55632d1b099159be07b6e6b65667ce410a949a588c4fdbff29d9a7fda92",
+    "host-wrapper.py": "bc7cb16c1cc43a042203b3f565bf8b84ab5c2992911a2a754f8900e62a734b14",
+    "bootstrap.test.ts": "b93abba13645943e976c90d5b59ccbbc09a48caf5c398d65f3cc7c23cd4c422d",
+    "bootstrap-tsconfig.json": "161acb1e3e1f120c15fc2cf9248aa22e2770a82b2b20a25f91bb8b3ce950e2e7",
+    ".superpowers/website-runtime-target.json": "1fdc0547e7dad22b2b33bc6febab7393a6834de1bd656b68979fb4b3aa1e5700",
+    ".superpowers/website-reader-created.json": "6546cd9a47b55d7ff23847230f2dd8fd6c25af05a39fe119d433322343f4ed8a",
+    ".superpowers/website-persist-session.py": "c95696fec3a2fd05b11d0b94923f22dc1a652176fd04747bed9011f4415e863b",
+    ".superpowers/cloud_private.py": "89e6ccf0b80966f2cddc08eea24975eb966d32f7f58149c4d32162eb5521a87d",
+    ".superpowers/openrouter-24/private_key.py": "d46ae58bc4c37bf1c6263b29e69b4c0d18e06d82e1ea5cd1d104a2ccc833b92c",
+    "C:/Users/nimab/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+  },
+  "paid_run_authorization": {
+    "path": "operations/openrouter32-paid-run-authorization.json",
+    "sha256": "42e8b992db2601ee75a1ea88a658f2b811602cbc42c18c8fc8fbc0ae4bfae360"
+  },
+  "evidence": {
+    "all_current_pins_recomputed": {
+      "candidate": 96,
+      "adapter": 8,
+      "host": 9,
+      "bootstrap": 12,
+      "mismatches": 0
+    },
+    "authorization": "Exact immutable bytes plus exact object keys and values bind user approval provenance, originating task, candidate/allocation, W11 bytes, five stages, no carry or question retry, one existing correction, cost ceilings, provider, diagnostic-only purpose and every stop condition. Mutation and unrelated-record regressions pass.",
+    "execution": "Fixed Python interpreter identity is checked against sys.executable. Exact interpreter, both private accessor code files, session-persistence helper, Bun, Vite entry and inherited configuration are bound before credential imports or child startup. No accessor was imported or credential data opened during QA.",
+    "prior_blockers": "Both blockers in openrouter32-combined-review-10.json are corrected. Earlier FAIL artifacts remain valid historical findings and are not overwritten.",
+    "focused_tests": {
+      "command": "bun test runtime.test.ts host.test.ts outcome.test.ts bootstrap.test.ts contract.test.ts (all under .superpowers/openrouter-32)",
+      "passed": 25,
+      "failed": 0,
+      "assertions": 386
+    },
+    "types": {
+      "bootstrap_tsconfig": "pass",
+      "runtime_tsconfig": "pass"
+    },
+    "python_wrapper_ast": "pass; parsed without importing or executing wrapper",
+    "network_requests": 0,
+    "model_requests": 0,
+    "services_started": 0,
+    "credentials_accessed": false
+  },
+  "financial_limits": {
+    "prior_settled_nano_usd": 2811393000,
+    "prior_uncertain_nano_usd": 1624850000,
+    "maximum_new_exposure_nano_usd": 3937272500,
+    "maximum_total_exposure_nano_usd": 8373515500,
+    "remaining_after_maximum_nano_usd": 1626484500
+  },
+  "remaining_live_preflight": [
+    "Recompute all pins and HEAD bab79e08fcec691cf7c72bb6d95a5c507d7a0e47, confirm source validity before 2026-09-15T23:20:32Z, preserve closed M30 evidence, and create exact root launch authorization referencing the unchanged paid record and this review.",
+    "Fresh machine evidence within the launch validator's 60-second window must show prior evaluated processes absent, ports 3012/3016/5174/5175 closed, ordinary preview paused, and new run freshness. Use the approved host execution context and pinned wrapper.",
+    "After backend start, independently verify actual executable, PID/start time/listener, exact runtime binding, cloud readiness, five remaining stages and empty current admissions/receipts/traces/spending. No question before root and QA runtime-bound permission.",
+    "Bind frontend host attestation and permissions to actual runtime and all current pins, verify recurring HTTP 200 readiness and exact frontend/backend pairing, then admit W11 once only.",
+    "Retain actual browser request/body/claim correlation and independent semantic/source/mechanical review; deliver the terminal outcome through the same owning controller. Honor every stop latch without retries or restarting the run.",
+    "Stop and verify exact processes and all four ports, retain terminal/UI/host/cleanup/shutdown evidence with journals, use normal or conservative emergency closure as applicable, and obtain independent closure review."
+  ],
+  "limitations": [
+    "PASS covers offline preparation, not live reliability, answer correctness, billing finality, deployment or release acceptance.",
+    "Public approval provenance is bound to the immutable root-recorded user authorization; the review does not manufacture approval.",
+    "Synthetic tests do not prove actual cloud, browser, filesystem-access or process readiness. Those checks remain mandatory.",
+    "Historical M30 identity field and uncertain billing remain unresolved; no historical evidence or balances were rewritten.",
+    "Emergency closure conservatively retains the full reservation when post-activity evidence is corrupt; corrupted launch/certificate evidence requires separate forensic handling rather than invented exact accounting."
+  ]
+}

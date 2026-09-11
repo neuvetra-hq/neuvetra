@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-32",
+  "role": "root_coordinator",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "git_head": "bab79e08fcec691cf7c72bb6d95a5c507d7a0e47",
+  "execution_environment": "host",
+  "execution_mode": "require_escalated",
+  "ordinary_preview_paused": true,
+  "ports_closed": [
+    3012,
+    3016,
+    5174,
+    5175
+  ],
+  "listeners_observed": [],
+  "prior_runtime_processes_absent": true,
+  "prior_process_matches": [],
+  "new_run_directory_absent": true,
+  "backend_attempt_absent": true,
+  "source_review_not_expired": true,
+  "recorded_at": "2026-09-10T16:50:48.7984161-07:00"
+}

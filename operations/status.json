@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-10T22:54:51.8783154Z",
+  "updated_at": "2026-09-11T00:07:38.405763Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M2",
     "name": "Reviewed evidence and first supported answer",
-    "status": "awaiting_board_feedback_m31_offline_complete",
-    "next_gate": "Decide whether to publish the independently accepted M31 repair, then separately whether to authorize a newly frozen paid live rerun."
+    "status": "awaiting_board_feedback_m32_closed",
+    "next_gate": "Review the closed M32 result, then decide whether to authorize an offline pipeline identity-contract repair. Any further paid run requires a new frozen run and authorization."
   },
   "completed_milestones": [
     {
@@ -22,9 +22,9 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "Run30 remains closed after two actual UI submissions. M31 repaired field-level provider diagnostics and response-cost recording offline; it did not restart services or establish live reliability. All services remain closed and the ordinary preview remains paused.",
+    "website_preview_state": "M32 is permanently closed after one W11 UI submission. Analyze attempt1 stopped on strict provider identity field pipeline; no answer or retry. Exact backend/frontend processes are absent, ports3012/3016/5174/5175 closed, ordinary preview paused.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "Published the reviewed M30 record to PR #2 as8f2b6e3. Implemented M31 offline with finite field-level provider identity diagnostics and separate exact-HTTP200 non-error native cost evidence. Independent QA passed72 tests/887 assertions, API typecheck and whitespace review after catching and verifying a201/202 boundary fix. No provider request, credential access or service start."
+    "last_session_work": "Ran the board-authorized M32 live verification once. M31 diagnostics identified pipeline and settled valid same-response cost at44565000nanoUSD without accepting identity or releasing an answer. Independent QA accepted closure integrity/accounting and rejected live provider/browser acceptance."
   },
   "session_handoff": {
     "saved_at": "2026-09-10T22:54:51.8783154Z",
@@ -60,7 +60,10 @@
     "website_verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113",
     "website_verification": "Both Verify jobs passed for the exact implementation commit",
     "website_verified_at": "2026-09-09T08:12:27.10441-07:00",
-    "revision07_state": "Offline implementation and independent review complete; code/reports local and unpublished; expanded source/runtime/live gates pending."
+    "revision07_state": "Offline implementation and independent review complete; code/reports local and unpublished; expanded source/runtime/live gates pending.",
+    "provider_verification_commit": "bab79e08fcec691cf7c72bb6d95a5c507d7a0e47",
+    "provider_verification_remote_verified": true,
+    "m32_state": "closed_local_records_pending_separate_publication_decision"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -870,9 +873,9 @@
     },
     {
       "id": "R7",
-      "detail": "M31's provider diagnostic/accounting repair passed offline independent review. M30's exact failed identity field and attempt6 charge remain unknown, and EPA14-B01 remains unrun. The three-case live/browser acceptance gate remains incomplete.",
-      "impact": "A newly frozen paid live rerun and board feedback are required before live acceptance. Local services are not an always-on production deployment.",
-      "evidence": "docs/research/website-correction-07.md"
+      "detail": "M32 demonstrated the M31 field-level diagnostic and cost split live, but strict OpenRouter identity still fails on pipeline and the direct browser response capture was incomplete. M32 is closed with no retry.",
+      "impact": "Blocks live provider verification, website acceptance and release. Resolve the pipeline contract offline before considering a newly authorized paid run.",
+      "evidence": "docs/research/provider-verification-live-milestone-32.md"
     },
     {
       "id": "R8",
@@ -936,7 +939,7 @@
     "release_acceptance": false
   },
   "current_m31": {
-    "state": "offline_complete_independent_qa_pass_awaiting_publication_decision",
+    "state": "offline_complete_independent_qa_pass_published_remote_verified",
     "report": "docs/research/provider-verification-milestone-31.md",
     "independent_review": "evaluations/research-qa/openrouter31-offline-review-10.json",
     "independent_review_sha256": "2031588cc4837c51e35fee43e50d001097c08abb00f0bc474645d3971f45df32",
@@ -947,6 +950,24 @@
     "m30_mutated": false,
     "live_acceptance": false,
     "release_acceptance": false,
-    "next_decision": "Publish reviewed M31, then separately decide whether to authorize a fresh paid live rerun."
+    "next_decision": "M32 live verification is now closed; preserve M31 as demonstrated diagnostic/accounting behavior.",
+    "commit": "bab79e08fcec691cf7c72bb6d95a5c507d7a0e47"
+  },
+  "current_m32": {
+    "state": "closed_identity_pipeline_browser_mechanical_failure",
+    "report": "docs/research/provider-verification-live-milestone-32.md",
+    "closure_sha256": "ebaea4dd09e07e93bdba55a8c2a22122a1e10cd780d700c15b5fbba317b2964e",
+    "independent_closure_review": "evaluations/research-qa/openrouter32-closure-review-10.json",
+    "independent_closure_review_sha256": "daa24fad3ac14e295b6f8e984bf572b511351d750bfe9f685a4e3f4f968482b8",
+    "outcome": "One W11 click; analyze attempt1 HTTP200 failed strict router identity at pipeline. M31 field diagnostic and separate cost settlement worked; no accepted identity or answer.",
+    "accounting": "1 stage used,4 retired,zero carry; current settled44565000nanoUSD,current uncertainty0,total settled2855958000,total historical uncertainty1624850000,remaining monitoring5519192000.",
+    "runtime": "Backend20784 and frontend36340 absent; ports3012/3016/5174/5175 closed; ordinary preview paused; no restart.",
+    "browser_evidence": "Proxy claim and visible UI retained; direct response-body capture failed before click and was not retried. Reconstruction explicitly labeled; independent mechanical acceptance failed.",
+    "offline_validation": "25 tests / 386 assertions, two typechecks and Python syntax passed; final combined independent QA pass.",
+    "live_provider_verification": false,
+    "diagnostic_acceptance": true,
+    "release_acceptance": false,
+    "next_milestone_proposal": "Offline primary-source review and adversarial repair of the pipeline identity predicate before any new paid run.",
+    "active_workers": 0
   }
 }

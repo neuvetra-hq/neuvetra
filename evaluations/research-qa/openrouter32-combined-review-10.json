@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "task": "M32-COMBINED-FINAL-QA",
+  "role": "independent_qa",
+  "disposition": "fail",
+  "run_id": "website-epa-live-32",
+  "meaning": "integrated_offline_checks_pass_authorization_and_credential_dependency_binding_incomplete",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "allocation_sha256": "862da1cb1b51fdcfbfa8d09b2cfb52709ee6d909a2242ec6f5e98f69e3fc9508",
+  "adapter_pins": {
+    "spending.ts": "4490c39e53874247d119190d494ab1277fe9189af8fc980f5bc9a32a3bfa06dd",
+    "runtime.ts": "01a425cd661dddedcffa1415a4bd32758a648bb17cb9dfc049b5b68137add31f",
+    "ingress.ts": "f540a2fec869db82417bf31c38d7b4a20800c784554e867b9867823957af23e0",
+    "isolated-proxy.ts": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432",
+    "launcher.ts": "b561d843716ac3b62d76d03a1009abcfc8f76ecbbcdd373182cf7cbb0be87fba",
+    "closure.ts": "aeec7be22d34c2435379420634fe2ea102ed61c50c273205c6885c926bb44997",
+    "runtime.test.ts": "c3a9298bb0d33270d8b7c2adb108949ee1af8f3e0a20de5cf8f870ca3a8e1d56",
+    "runtime-tsconfig.json": "e0f5596d2ed991699045c7af586ee817765ad331ab8d7ec2767fa2471324c796"
+  },
+  "host_pins": {
+    "host.ts": "e12765a520d03fa36d5621c0e5c02ed50cc0af160f53231ea598b60489550efd",
+    "outcome.ts": "d424b450f65310cf45e08a8031e0f8375b4c4024b80ba2cb00459008a4a52dbc",
+    "vite-isolated.config.ts": "8a69c00ac8991b8eff3b0efc0ac3eea3f5395a92b2a127c9129f2ec7ac7be008",
+    "host.test.ts": "b6a077bf601b1a674bc04b9c459415cd0ebb8301306261755099b4e028cd34a8",
+    "outcome.test.ts": "edd6b2f15be14227ad1fc4279a661bb50a88feb909e181a21661f3edbb9a98a8",
+    "host-tsconfig.json": "88ed9ebba1c8e93e375934934fadb796d90dc6040b1c67f83f0afc1da0a2365a",
+    ".superpowers/review-tools/bun-windows-x64/bun.exe": "7449b666a6f56302b5db1687116b94f3115e9eed04b26c14bd6ca1621efe7d99",
+    "apps/site-web/node_modules/vite/bin/vite.js": "fa03478846d229651a3c6aa64833ba2c6cbf580a798b92bd8f47c7480bafb5d8",
+    "apps/site-web/vite.config.ts": "bfb13b3328dc7b35b01b0f1e9e92d2253017c90eacd99b2c23b0d03df4836256"
+  },
+  "bootstrap_pins": {
+    "bootstrap.ts": "21ff1a75b9cca0453d4379d62518be6f99611661203bc25b0e6ed965f4a3d5ff",
+    "backend-cli.ts": "6d0e632104cf584dced6c6742e5ca4e9b22cd484e8e6679bd1132b33e3933913",
+    "frontend-cli.ts": "f553c55632d1b099159be07b6e6b65667ce410a949a588c4fdbff29d9a7fda92",
+    "host-wrapper.py": "bc7cb16c1cc43a042203b3f565bf8b84ab5c2992911a2a754f8900e62a734b14",
+    "bootstrap.test.ts": "b93abba13645943e976c90d5b59ccbbc09a48caf5c398d65f3cc7c23cd4c422d",
+    "bootstrap-tsconfig.json": "161acb1e3e1f120c15fc2cf9248aa22e2770a82b2b20a25f91bb8b3ce950e2e7",
+    ".superpowers/website-runtime-target.json": "1fdc0547e7dad22b2b33bc6febab7393a6834de1bd656b68979fb4b3aa1e5700",
+    ".superpowers/website-reader-created.json": "6546cd9a47b55d7ff23847230f2dd8fd6c25af05a39fe119d433322343f4ed8a",
+    ".superpowers/website-persist-session.py": "c95696fec3a2fd05b11d0b94923f22dc1a652176fd04747bed9011f4415e863b",
+    ".superpowers/cloud_private.py": "89e6ccf0b80966f2cddc08eea24975eb966d32f7f58149c4d32162eb5521a87d",
+    ".superpowers/openrouter-24/private_key.py": "d46ae58bc4c37bf1c6263b29e69b4c0d18e06d82e1ea5cd1d104a2ccc833b92c",
+    "C:/Users/nimab/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe": "dd5f8d19f6755d6491ee7c4bef2fe35ddd521334cc3ca3ed8fc93ebcadf135d0"
+  },
+  "bootstrap_validation_sha256": "6676090fca561b668345d65dd63aab24ba3e70b4bed151b157a5bd0acedae631",
+  "runtime_cleanup_validation_sha256": "9dda2f773ce75bd2305e7a3f2c67aefb031095de88e793687d92a728f70a5c41",
+  "validation": {
+    "tests_passed": 23,
+    "assertions": 342,
+    "failures": 0,
+    "combined_typecheck": "pass",
+    "python_wrapper_ast": "pass_no_execution",
+    "adapter_pins_verified": 8,
+    "host_pins_verified": 9,
+    "bootstrap_pins_verified": 9
+  },
+  "blockers": [
+    {
+      "id": "B32-QA-1",
+      "file": "bootstrap.ts",
+      "finding": "validateBootstrap verifies only the referenced paid authorization file hash, not its contents. An unrelated correctly hashed file would satisfy the user-authorization reference check.",
+      "required": "Validate the immutable existing record's authorized status, user authority, run/candidate/allocation, exactW11, five stages, zero carry/retries, permitted correction, reservation limits and diagnostic-only/no-release scope. Reject synthetic/wrong-run/rejected/expanded-scope records. Do not alter the preserved user authorization."
+    },
+    {
+      "id": "B32-QA-2",
+      "files": [
+        "bootstrap.ts",
+        "host-wrapper.py",
+        "backend-cli.ts"
+      ],
+      "finding": "Executed cloud_private.py and openrouter-24/private_key.py credential accessors and the fixed Python interpreter used for encrypted persistence are absent from executable dependency pins.",
+      "required": "Bind and verify those executable dependencies before credential import or delivery. Handle the exact external Python binary path explicitly; do not broaden arbitrary external-path access. Add pure mutation-rejection tests."
+    }
+  ],
+  "actual_authorization": {
+    "path": "operations/openrouter32-paid-run-authorization.json",
+    "sha256": "42e8b992db2601ee75a1ea88a658f2b811602cbc42c18c8fc8fbc0ae4bfae360",
+    "review": "Current contents have correct explicit authorizedW11/five-stage/zero-carry/no-retry allocation and limits; defect is missing machine validation, not missing user approval."
+  },
+  "resolved_from_prior_reviews": [
+    "Zero-spending host gate now replays journal and refuses reservations/corruption.",
+    "Bun, Vite entry and inherited Vite config now pinned.",
+    "Timeout/cancellation and observed-unsettled-cost recording preserved.",
+    "Strict stored trace and normal/emergency closure validation passes.",
+    "Startup-created server cleanup is awaited and safe cleanup evidence is pinned in normal/emergency closure; contradictory post-activity cleanup rejected."
+  ],
+  "integration_observations": [
+    "Owning backend attaches terminal recorder to original controller; no ledger reconstruction.",
+    "Backend and frontend supervisors are bounded and invoke teardown on completion, failure or supervision timeout.",
+    "One-use W11 and no-restart guards preserved; full gross reservation cap remains3937272500nanoUSD with prior uncertainty retained.",
+    "Credential transfer occurs only after preflight in Python wrapper; environment contains only allowlisted system values plus four explicitly scoped credentials; backend removes credential variables before normal work; frontend gets none."
+  ],
+  "remaining_live_requirements": [
+    "Resolve blockers and refresh exact combined certificate; obtain independent recheck.",
+    "Create new root runtime authorization referencing unchanged user authorization, exact reviewed executable pins and fresh machine evidence.",
+    "Recheck source expiry, Git/pins, closed ports and prior processes, then review actual backend identity/cloud readiness and zero current accounting.",
+    "Review frontend host evidence/PID/listener/readiness and pairing before one-use admission; root and QA inspect actual W11 outcome.",
+    "Preserve complete UI, terminal, shutdown and closure evidence; independently verify process and port shutdown. No runtime result may establish general website reliability."
+  ],
+  "limitations": [
+    "Scope is offline preparation only; no paid or live reliability acceptance.",
+    "Public user authorization record was read; no credential or encrypted credential payload was accessed.",
+    "Python syntax checked via AST only; wrapper and external processes were not launched."
+  ],
+  "release_acceptance": false,
+  "paid_execution_permitted": false,
+  "services_started": false,
+  "network_requests": 0,
+  "model_requests": 0,
+  "credentials_accessed": false
+}
