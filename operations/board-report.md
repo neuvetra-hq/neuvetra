@@ -8,7 +8,7 @@ Current internal accounting is $2.855958 settled plus $1.62485 retained historic
 
 Independent QA passed the final offline launch stack at 25 tests and 386 assertions. It accepted the live diagnostic and accounting evidence but rejected provider-verification success and browser mechanical acceptance. The browser API could not directly retain the response body; the proxy claim, safe trace, visible terminal UI, and an explicitly labeled reconstruction were preserved without repeating the question.
 
-The exact backend and frontend processes are stopped, ports 3012, 3016, 5174, and 5175 are closed, and the ordinary preview remains paused. M32 cannot be restarted. M31 is published on the current PR branch at `bab79e0`; M32 records are local pending a separate publication decision. No deployment, merge, provider change, source expansion, or global toolchain change occurred.
+The exact backend and frontend processes are stopped, ports 3012, 3016, 5174, and 5175 are closed, and the ordinary preview remains paused. M32 cannot be restarted. M31 is published on the current PR branch at `bab79e0`; the reviewed M32 records are committed at `01ff95f`. No deployment, merge, provider change, source expansion, or global toolchain change occurred.
 
 The next proposed milestone is an offline `pipeline` identity-contract repair grounded in current primary provider documentation and adversarial synthetic tests. Any later paid rerun requires a fresh frozen run and authorization.
 

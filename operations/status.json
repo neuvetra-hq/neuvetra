@@ -63,7 +63,8 @@
     "revision07_state": "Offline implementation and independent review complete; code/reports local and unpublished; expanded source/runtime/live gates pending.",
     "provider_verification_commit": "bab79e08fcec691cf7c72bb6d95a5c507d7a0e47",
     "provider_verification_remote_verified": true,
-    "m32_state": "closed_local_records_pending_separate_publication_decision"
+    "m32_state": "committed_to_current_pr_branch",
+    "m32_commit": "01ff95f"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -968,6 +969,7 @@
     "diagnostic_acceptance": true,
     "release_acceptance": false,
     "next_milestone_proposal": "Offline primary-source review and adversarial repair of the pipeline identity predicate before any new paid run.",
-    "active_workers": 0
+    "active_workers": 0,
+    "commit": "01ff95f"
   }
 }

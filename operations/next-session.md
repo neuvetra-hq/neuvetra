@@ -8,7 +8,7 @@ M32 closure `ebaea4dd09e07e93bdba55a8c2a22122a1e10cd780d700c15b5fbba317b2964e` i
 
 Final offline launch preparation passed 25 tests / 386 assertions, both typechecks and Python syntax. The direct browser response subscription was unsupported before the one permitted click; the proxy claim, safe trace, visible UI, and explicitly labeled response reconstruction were retained without retry. Independent QA therefore rejected browser mechanical acceptance and did not write a consumable terminal-success record. Do not rewrite this as a captured network response or website pass.
 
-M31 is published at `bab79e08fcec691cf7c72bb6d95a5c507d7a0e47` on the PR branch. M32 records are local pending a separate publication decision. Next milestone: determine the current primary-provider contract for `pipeline`, repair the strict identity predicate offline with adversarial fixtures, and obtain independent QA. Any new paid request must use a newly frozen run and fresh authorization. No source expansion, provider change, deployment, merge, or global toolchain change is authorized.
+M31 is published at `bab79e08fcec691cf7c72bb6d95a5c507d7a0e47` on the PR branch. Reviewed M32 records are committed at `01ff95f`. Next milestone: determine the current primary-provider contract for `pipeline`, repair the strict identity predicate offline with adversarial fixtures, and obtain independent QA. Any new paid request must use a newly frozen run and fresh authorization. No source expansion, provider change, deployment, merge, or global toolchain change is authorized.
 
 # Closed outcome — run28
 
