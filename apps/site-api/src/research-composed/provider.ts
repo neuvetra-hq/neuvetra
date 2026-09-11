@@ -9,17 +9,18 @@ import { selectionReviewIssueBudget } from './selection';
 import { analysisInput, analysisPrompt, analysisSchema, analysisTaxonomyDefinitions, analysisVersion, contextClarificationPolicy } from './question-analysis';
 import { demandContractGuidance, sourceResolutions, sizeChoicePolicy, plannerMaterialIds, plannerProjectionContract } from './demand-selection';
 import { sizeBundlePolicy } from './size-bundles';
-import { openrouterPolicy, openrouterImplementationContract, openrouterRequestBody, validateOpenRouterResponse, openRouterIdentityFailure, reconcileOpenRouterCost, nativeOpenRouterCost, openRouterIdentityFields, type OpenRouterSpending, type SafeOpenRouterMetadata, type SafeOpenRouterCostMetadata, type OpenRouterIdentityField } from './openrouter';
+import { openrouterPolicy, openrouterImplementationContract, openrouterRequestBody, validateOpenRouterResponse, openRouterIdentityFailure, openRouterPipelineFailure, reconcileOpenRouterCost, nativeOpenRouterCost, openRouterIdentityFields, openRouterPipelineFailureKinds, type OpenRouterSpending, type SafeOpenRouterMetadata, type SafeOpenRouterCostMetadata, type OpenRouterIdentityField, type OpenRouterPipelineFailure } from './openrouter';
 export type ComposedStage = 'analyze' | 'plan' | 'verify';
 export const composedStageDeadlineMs = 180000;
 export type ProviderFailurePhase = 'awaiting_headers' | 'reading_body' | 'decoding';
 export type ProviderAbortSource = 'caller' | 'stage_deadline' | 'none';
-export type ProviderFailureDetail = 'stage_callback' | 'spending_reservation' | 'awaiting_headers' | 'http_status' | 'body_presence' | 'body_read' | 'body_size' | 'body_cleanup' | 'utf8_decode' | 'outer_json' | 'response_envelope' | 'router_identity' | 'stop_reason' | 'content_shape' | 'inner_json' | 'cost_reconciliation' | 'cost_settlement';
-export interface ComposedStageEvent extends Omit<StageEvent, 'stage'> { stage: ComposedStage; stop_reason?: string; http_status?: number; elapsed_ms?: number; failure_phase?: ProviderFailurePhase; failure_detail?: ProviderFailureDetail; abort_source?: ProviderAbortSource; router_identity_field?: OpenRouterIdentityField; openrouter?: SafeOpenRouterMetadata; openrouter_cost?: SafeOpenRouterCostMetadata }
+export type ProviderFailureDetail = 'stage_callback' | 'spending_reservation' | 'awaiting_headers' | 'http_status' | 'body_presence' | 'body_read' | 'body_size' | 'body_cleanup' | 'utf8_decode' | 'outer_json' | 'response_envelope' | 'router_identity' | 'router_pipeline' | 'stop_reason' | 'content_shape' | 'inner_json' | 'cost_reconciliation' | 'cost_settlement';
+export interface ComposedStageEvent extends Omit<StageEvent, 'stage'> { stage: ComposedStage; stop_reason?: string; http_status?: number; elapsed_ms?: number; failure_phase?: ProviderFailurePhase; failure_detail?: ProviderFailureDetail; abort_source?: ProviderAbortSource; router_identity_field?: OpenRouterIdentityField; router_pipeline_failure?: OpenRouterPipelineFailure; openrouter?: SafeOpenRouterMetadata; openrouter_cost?: SafeOpenRouterCostMetadata }
 export const providerDiagnosticContract = Object.freeze({
-    version: 'private_failure_detail.v2',
-    details: Object.freeze(['stage_callback', 'spending_reservation', 'awaiting_headers', 'http_status', 'body_presence', 'body_read', 'body_size', 'body_cleanup', 'utf8_decode', 'outer_json', 'response_envelope', 'router_identity', 'stop_reason', 'content_shape', 'inner_json', 'cost_reconciliation', 'cost_settlement']),
+    version: 'private_failure_detail.v3',
+    details: Object.freeze(['stage_callback', 'spending_reservation', 'awaiting_headers', 'http_status', 'body_presence', 'body_read', 'body_size', 'body_cleanup', 'utf8_decode', 'outer_json', 'response_envelope', 'router_identity', 'router_pipeline', 'stop_reason', 'content_shape', 'inner_json', 'cost_reconciliation', 'cost_settlement']),
     router_identity_fields: openRouterIdentityFields,
+    router_pipeline_failures: openRouterPipelineFailureKinds,
     bounded_body: boundedBody.toString(),
 });
 /** Only the actual signal states classify cancellation. Error names, messages,
@@ -167,7 +168,7 @@ export function createComposedProvider(options: {
             let failurePhase: ProviderFailurePhase = 'awaiting_headers';
             let failureDetail: ProviderFailureDetail = 'stage_callback';
             inFlight = true;
-            const metadata: { usage?: SafeComposedUsage; stop_reason?: string; http_status?: number; router_identity_field?: OpenRouterIdentityField; openrouter?: SafeOpenRouterMetadata; openrouter_cost?: SafeOpenRouterCostMetadata } = {};
+            const metadata: { usage?: SafeComposedUsage; stop_reason?: string; http_status?: number; router_identity_field?: OpenRouterIdentityField; router_pipeline_failure?: OpenRouterPipelineFailure; openrouter?: SafeOpenRouterMetadata; openrouter_cost?: SafeOpenRouterCostMetadata } = {};
             let costSettled = false;
             let settlementAttempted = false;
             let nativeCost: ReturnType<typeof nativeOpenRouterCost>;
@@ -196,6 +197,12 @@ export function createComposedProvider(options: {
                     const identityField = openRouterIdentityFailure(stage, raw, response);
                     if (identityField) {
                         metadata.router_identity_field = identityField;
+                        throw new PassageError('provider_failure');
+                    }
+                    failureDetail = 'router_pipeline';
+                    const pipelineFailure = openRouterPipelineFailure(raw);
+                    if (pipelineFailure) {
+                        metadata.router_pipeline_failure = pipelineFailure;
                         throw new PassageError('provider_failure');
                     }
                     metadata.openrouter = validateOpenRouterResponse(stage, raw, response);

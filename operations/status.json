@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-11T00:07:38.405763Z",
+  "updated_at": "2026-09-11T03:41:03.3731129Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M2",
     "name": "Reviewed evidence and first supported answer",
-    "status": "awaiting_board_feedback_m32_closed",
-    "next_gate": "Review the closed M32 result, then decide whether to authorize an offline pipeline identity-contract repair. Any further paid run requires a new frozen run and authorization."
+    "status": "awaiting_board_feedback_m33_offline_complete",
+    "next_gate": "Review the independently accepted M33 offline pipeline-integrity repair. Any live or paid test requires a new frozen run and separate authorization."
   },
   "completed_milestones": [
     {
@@ -22,17 +22,17 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M32 is permanently closed after one W11 UI submission. Analyze attempt1 stopped on strict provider identity field pipeline; no answer or retry. Exact backend/frontend processes are absent, ports3012/3016/5174/5175 closed, ordinary preview paused.",
+    "website_preview_state": "M32 remains permanently closed after one W11 UI submission. M33 was offline only: no service or browser start. Exact M32 backend/frontend processes remain absent, ports3012/3016/5174/5175 closed, ordinary preview paused.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "Ran the board-authorized M32 live verification once. M31 diagnostics identified pipeline and settled valid same-response cost at44565000nanoUSD without accepting identity or releasing an answer. Independent QA accepted closure integrity/accounting and rejected live provider/browser acceptance."
+    "last_session_work": "Completed M33 offline. Provider identity and pipeline processing integrity are separate; malformed/nonempty pipelines still fail closed with finite safe labels. QA passed26 focused tests/669 assertions,409 composed tests/4230 assertions and an independent148-assertion probe. No provider request or paid action."
   },
   "session_handoff": {
-    "saved_at": "2026-09-10T22:54:51.8783154Z",
+    "saved_at": "2026-09-11T03:41:03.3731129Z",
     "path": "operations/next-session.md",
     "board_record": "claude-memory/meetings/2026-09-09-scope2-benchmark.md",
-    "next_task": "Collect board decision on publishing the reviewed M31 repair. A later live rerun requires a fresh immutable candidate and explicit paid-call authorization; do not restart30, retry W11 or use retired capacity.",
-    "execution_state": "m31_offline_complete_awaiting_publication_and_live_decisions",
-    "review": "Independent QA passed M31 offline implementation after a corrected exact-HTTP200 billing boundary. Three-case live acceptance and release remain failed.",
+    "next_task": "Collect board feedback on M33. A later live check requires a fresh immutable candidate and explicit paid-call authorization; do not restart M32 or infer its lost pipeline value.",
+    "execution_state": "m33_offline_complete_independent_qa_pass_awaiting_board_feedback",
+    "review": "Independent QA passed M33 offline pipeline processing-integrity separation and fail-closed diagnostics. Live provider compatibility, browser acceptance and release remain unverified.",
     "scope": "Continue current approved EPA-only milestone and isolated FAQ benchmark; source expansion remains separately held."
   },
   "checkpoint": {
@@ -63,8 +63,10 @@
     "revision07_state": "Offline implementation and independent review complete; code/reports local and unpublished; expanded source/runtime/live gates pending.",
     "provider_verification_commit": "bab79e08fcec691cf7c72bb6d95a5c507d7a0e47",
     "provider_verification_remote_verified": true,
-    "m32_state": "committed_to_current_pr_branch",
-    "m32_commit": "01ff95f"
+    "m32_state": "local_commits_awaiting_publication_after_automatic_push_rejection",
+    "m32_commit": "01ff95f",
+    "m32_evidence_commit": "3835744",
+    "m33_state": "offline_complete_independent_qa_pass_local_uncommitted"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -122,6 +124,19 @@
         "evaluations/research-qa/openrouter31-offline-review-10.json"
       ],
       "next_action": "Board decides publication. A separately frozen paid live rerun requires new authorization."
+    },
+    {
+      "id": "M33-OFFLINE",
+      "owner": "ceo_cto_with_cpo_and_independent_qa",
+      "status": "complete",
+      "title": "Separate provider pipeline processing integrity from identity",
+      "scope": "Current primary-provider review, fail-closed offline implementation and adversarial synthetic validation only; no services, credentials, provider calls, paid actions or live run",
+      "result": "Absent/empty pipeline remains the only accepted contract. Non-array metadata now reports router_pipeline/shape; every nonempty pipeline reports router_pipeline/material_effect and stops before accepted identity or content. Strict identity and independent cost settlement remain intact. QA passed26 focused tests/669 assertions,409 composed tests/4230 assertions, two typechecks and a separate148-assertion probe.",
+      "evidence": [
+        "docs/research/provider-pipeline-milestone-33.md",
+        "evaluations/research-qa/openrouter33-offline-review-10.json"
+      ],
+      "next_action": "Board feedback. Any paid/live verification requires a new frozen run and authorization; M32 cannot be replayed."
     },
     {
       "id": "CONN-28",
@@ -968,8 +983,26 @@
     "live_provider_verification": false,
     "diagnostic_acceptance": true,
     "release_acceptance": false,
-    "next_milestone_proposal": "Offline primary-source review and adversarial repair of the pipeline identity predicate before any new paid run.",
+    "next_milestone_proposal": "M33 completed the offline provider pipeline contract repair. Board feedback is required before any newly frozen paid run.",
     "active_workers": 0,
     "commit": "01ff95f"
+  },
+  "current_m33": {
+    "state": "offline_complete_independent_qa_pass_awaiting_board_feedback",
+    "report": "docs/research/provider-pipeline-milestone-33.md",
+    "independent_review": "evaluations/research-qa/openrouter33-offline-review-10.json",
+    "independent_review_sha256": "b7b1d426816511ac88fc5249a336b02ae3a7ff1c911edfcb945358f861b6e062",
+    "outcome": "Pipeline is validated as processing integrity after strict provider identity. Only absent/empty passes; malformed and every nonempty value fail with finite labels and no raw metadata retention.",
+    "profiles": "Semantic answer policy remains885cb919e745544b576e942aa246d3b847eaed17106bf7ffb53335d36f11684b; OpenRouter profile changes from M32 f294427a03cef4f16a2634b218d09f3b139c72a6e090db3a40ef4f20b57e6fb7 to M33 29f88895c9c67676e48701bd9aad6d42eed0bd86e573b4d3e197127b807e2b99.",
+    "validation": "26 focused tests/669 assertions,409 research-composed tests/4230 assertions, site API and website typechecks,diff validation and independent148-assertion adversarial probe passed.",
+    "provider_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "services_started": false,
+    "m32_mutated": false,
+    "live_acceptance": false,
+    "release_acceptance": false,
+    "next_decision": "Board feedback on whether to prepare a newly frozen, separately authorized live check. Provider/account behavior must yield absent/empty pipeline or remain fail-closed.",
+    "active_workers": 0
   }
 }

@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test';
 import { createComposedProvider, openrouterProfileSha256, profileSha256, providerDiagnosticContract, type ComposedStageEvent, type ProviderFailureDetail } from './provider';
-import { openrouterImplementationContract, openrouterPolicy, type OpenRouterIdentityField, type OpenRouterSpending } from './openrouter';
+import { openrouterImplementationContract, openrouterPolicy, type OpenRouterIdentityField, type OpenRouterPipelineFailure, type OpenRouterSpending } from './openrouter';
 import { analysisInput } from './question-analysis';
 import { hash } from '../research-passages/release';
 
@@ -20,11 +20,13 @@ function harness(response: () => Response, options: { settleThrows?: boolean; ca
         fetch: async () => { calls++; return response(); }, onStage(event) { events.push(event); if (event.phase === options.callbackThrows) throw new Error(marker); } });
     return { events, accounting, calls: () => calls, invoke: () => provider.invoke('analyze', input, new AbortController().signal) };
 }
-function safeFailure(h: ReturnType<typeof harness>, detail: ProviderFailureDetail, broad = 'decoding', identityField?: OpenRouterIdentityField) {
+function safeFailure(h: ReturnType<typeof harness>, detail: ProviderFailureDetail, broad = 'decoding', identityField?: OpenRouterIdentityField, pipelineFailure?: OpenRouterPipelineFailure) {
     const terminal = h.events.at(-1)!;
     expect(terminal).toMatchObject({ phase: 'failed', code: 'provider_failure', http_status: 200, failure_phase: broad, failure_detail: detail, abort_source: 'none' });
     if (identityField) expect(terminal.router_identity_field).toBe(identityField);
     else expect(terminal).not.toHaveProperty('router_identity_field');
+    if (pipelineFailure) expect(terminal.router_pipeline_failure).toBe(pipelineFailure);
+    else expect(terminal).not.toHaveProperty('router_pipeline_failure');
     expect(providerDiagnosticContract.details).toContain(terminal.failure_detail!);
     expect(JSON.stringify(terminal)).not.toContain(marker);
     for (const key of ['input', 'output', 'headers', 'body', 'message', 'stack']) expect(terminal).not.toHaveProperty(key);
@@ -45,6 +47,28 @@ test('HTTP200 failures distinguish UTF8, outer JSON, envelope and exact router i
         await expect(h.invoke()).rejects.toThrow('provider_failure'); safeFailure(h, detail, 'decoding', identityField);
         expect(h.accounting).toEqual([...accounting]);
     }
+});
+test('pipeline failures are processing-integrity diagnostics and never create accepted identity', async () => {
+    for (const [pipeline, failure] of [
+        [null, 'shape'],
+        [[{ type: 'context_compression', name: 'context-compression', data: { marker } }], 'material_effect'],
+        [[{ type: 'future-stage', name: 'future-name', data: { marker } }], 'material_effect'],
+    ] as const) {
+        const invalid = wire(); invalid.openrouter_metadata.pipeline = pipeline;
+        const h = harness(() => Response.json(invalid, { headers: { 'X-Generation-Id': 'gen-synthetic' } }));
+        await expect(h.invoke()).rejects.toThrow('provider_failure');
+        safeFailure(h, 'router_pipeline', 'decoding', undefined, failure);
+        expect(h.accounting).toEqual(['reserve', 'settle']);
+        expect(h.events.at(-1)).not.toHaveProperty('openrouter');
+        expect(h.events.at(-1)!.openrouter_cost?.cost_nano_usd).toBe(1000000);
+    }
+
+    const missingCost = wire(); missingCost.openrouter_metadata.pipeline = [{ type: 'plugin', name: 'web-search', data: { marker } }]; delete missingCost.usage.cost;
+    const uncertain = harness(() => Response.json(missingCost));
+    await expect(uncertain.invoke()).rejects.toThrow('provider_failure');
+    safeFailure(uncertain, 'router_pipeline', 'decoding', undefined, 'material_effect');
+    expect(uncertain.accounting).toEqual(['reserve', 'uncertain']);
+    expect(uncertain.events.at(-1)).not.toHaveProperty('openrouter_cost');
 });
 test('identity failure settles only valid native response cost without fabricating validated identity', async () => {
     const invalid = wire(); invalid.model = marker; invalid.openrouter_metadata.requested = marker;

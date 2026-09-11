@@ -58,11 +58,13 @@ export interface SafeOpenRouterCostMetadata {
 export const openRouterIdentityFields = Object.freeze([
     'error_envelope', 'response_model', 'metadata', 'cache_status',
     'requested_model', 'strategy', 'attempt', 'byok', 'endpoints',
-    'response_provider', 'usage_byok', 'usage_speed', 'pipeline',
+    'response_provider', 'usage_byok', 'usage_speed',
     'input_transformations', 'context_management', 'selected_endpoint',
     'attempts',
 ] as const);
 export type OpenRouterIdentityField = (typeof openRouterIdentityFields)[number];
+export const openRouterPipelineFailureKinds = Object.freeze(['shape', 'material_effect'] as const);
+export type OpenRouterPipelineFailure = (typeof openRouterPipelineFailureKinds)[number];
 const fail = (): never => { throw new PassageError('provider_failure'); };
 function expectedModel(stage: OpenRouterStage, value: unknown): value is string {
     return value === models[stage] || value === openrouterPolicy.canonical_models[models[stage]];
@@ -110,7 +112,6 @@ export function openRouterIdentityFailure(stage: OpenRouterStage, raw: unknown, 
     if (raw.provider !== undefined && raw.provider !== 'Anthropic') return 'response_provider';
     if (record(raw.usage) && raw.usage.is_byok !== undefined && raw.usage.is_byok !== false) return 'usage_byok';
     if (record(raw.usage) && raw.usage.speed !== undefined && raw.usage.speed !== null && raw.usage.speed !== 'standard') return 'usage_speed';
-    if (m.pipeline !== undefined && (!Array.isArray(m.pipeline) || m.pipeline.length !== 0)) return 'pipeline';
     if (raw.input_transformations !== undefined && raw.input_transformations !== null && (!Array.isArray(raw.input_transformations) || raw.input_transformations.length !== 0)) return 'input_transformations';
     if (raw.context_management !== undefined && raw.context_management !== null) return 'context_management';
     const endpoints = m.endpoints.available;
@@ -124,8 +125,21 @@ export function openRouterIdentityFailure(stage: OpenRouterStage, raw: unknown, 
     return undefined;
 }
 
+/** Router pipeline entries are processing-integrity evidence, not provider
+ * identity. OpenRouter documents every emitted entry as a material request or
+ * response effect. The current Neuvetra policy therefore accepts only absence
+ * or an empty array and returns a finite label without retaining raw stages. */
+export function openRouterPipelineFailure(raw: unknown): OpenRouterPipelineFailure | undefined {
+    if (!record(raw) || !record(raw.openrouter_metadata)) return undefined;
+    const pipeline = raw.openrouter_metadata.pipeline;
+    if (pipeline === undefined) return undefined;
+    if (!Array.isArray(pipeline)) return 'shape';
+    return pipeline.length === 0 ? undefined : 'material_effect';
+}
+
 export function validateOpenRouterResponse(stage: OpenRouterStage, raw: unknown, response?: Response): SafeOpenRouterMetadata {
     if (openRouterIdentityFailure(stage, raw, response)) return fail();
+    if (openRouterPipelineFailure(raw)) return fail();
     if (!record(raw) || !record(raw.openrouter_metadata) || !expectedModel(stage, raw.model)) return fail();
     const m = raw.openrouter_metadata;
     return { requested_model: models[stage], response_model: raw.model, selected_provider: 'Anthropic', reported_attempt: 1, is_byok: false };
@@ -204,6 +218,7 @@ export async function reconcileOpenRouterCost(options: {
 export const openrouterImplementationContract = Object.freeze({
     request: openrouterRequestBody.toString(), response: validateOpenRouterResponse.toString(),
     identity_failure: openRouterIdentityFailure.toString(), identity_fields: openRouterIdentityFields,
+    pipeline_failure: openRouterPipelineFailure.toString(), pipeline_failure_kinds: openRouterPipelineFailureKinds,
     expected_model: expectedModel.toString(), generation_id: generationId.toString(),
     metadata_body: metadataBody.toString(), bounded_abort: abortable.toString(),
     native_cost: nativeOpenRouterCost.toString(), reconcile: reconcileOpenRouterCost.toString(),

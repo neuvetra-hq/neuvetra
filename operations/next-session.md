@@ -1,4 +1,16 @@
-# Current continuation — M32 closed; `pipeline` identity repair next
+# Current continuation — M33 offline pipeline repair complete; live evidence remains separate
+
+M33 implemented the current primary-provider `pipeline` contract offline. Official OpenRouter documentation describes each emitted pipeline entry as a material request or response effect. M32 retained only its failed-field label, so no raw value, stage or cause was inferred. Neuvetra still accepts only an absent or empty pipeline.
+
+Provider identity and router processing integrity are now separate gates. Identity remains strict. A malformed pipeline produces only `router_pipeline/shape`; any nonempty array produces only `router_pipeline/material_effect`. Both fail before accepted identity metadata or model content is retained. Valid HTTP-200 response cost can still settle once independently; missing/invalid cost remains uncertain. Raw pipeline values are never logged.
+
+Current author validation passes 26 focused tests / 669 assertions, all 409 research-composed tests / 4,230 assertions, API and website TypeScript checks, and diff validation. CPO and CTO reviews pass; independent QA passed a 148-assertion adversarial probe and recorded the exact-hash review. Semantic profile `885cb919e745544b576e942aa246d3b847eaed17106bf7ffb53335d36f11684b` is unchanged. New OpenRouter profile `29f88895c9c67676e48701bd9aad6d42eed0bd86e573b4d3e197127b807e2b99` intentionally differs from closed M32 profile `f294427a03cef4f16a2634b218d09f3b139c72a6e090db3a40ef4f20b57e6fb7`.
+
+Do not restart M32 or change its frozen evidence to make historical controller tests accept the new profile. No live request, service, credential, deployment, merge or publication occurred in M33. A later paid check requires board feedback, a new immutable run and authorization, rechecked primary docs, verified account/request plugin controls and browser capture. Until absent/empty live metadata is demonstrated or an exact effect is separately approved, live readiness remains unproven.
+
+[M33 record](../docs/research/provider-pipeline-milestone-33.md)
+
+# Previous continuation — M32 closed; `pipeline` identity repair queued
 
 M32 completed the board-authorized one-question live check of the M31 provider diagnostic and accounting repair. The unchanged public W11 question was submitted once through the isolated website. Analyze attempt 1 received HTTP 200 and failed strict provider identity at `pipeline`. The exact received value was not retained. The website displayed **Answering is unavailable**; no answer, retry, correction, or later stage occurred.
 

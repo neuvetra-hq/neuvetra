@@ -1,6 +1,6 @@
 import { afterEach, expect, spyOn, test } from 'bun:test';
 import { composedRequestBody, createComposedProvider, openrouterProfileSha256, profileSha256, type ComposedStageEvent } from './provider';
-import { estimateOpenRouterNanoUsd, openrouterPolicy, openRouterIdentityFailure, openRouterIdentityFields, reconcileOpenRouterCost, usdToNanoUsd, validateOpenRouterResponse, type OpenRouterIdentityField, type OpenRouterSpending, type OpenRouterStage } from './openrouter';
+import { estimateOpenRouterNanoUsd, openrouterPolicy, openRouterIdentityFailure, openRouterIdentityFields, openRouterPipelineFailure, openRouterPipelineFailureKinds, reconcileOpenRouterCost, usdToNanoUsd, validateOpenRouterResponse, type OpenRouterIdentityField, type OpenRouterSpending, type OpenRouterStage } from './openrouter';
 import { analysisInput } from './question-analysis';
 import { planTestInput } from './test-plan-input';
 
@@ -107,7 +107,6 @@ test('identity diagnostics name only the first failed allowlisted field', () => 
         ['response_provider', raw => { raw.provider = 'synthetic-sensitive-vendor-marker'; }],
         ['usage_byok', raw => { raw.usage.is_byok = true; }],
         ['usage_speed', raw => { raw.usage.speed = 'synthetic-sensitive-vendor-marker'; }],
-        ['pipeline', raw => { raw.openrouter_metadata.pipeline = ['synthetic-sensitive-vendor-marker']; }],
         ['input_transformations', raw => { raw.input_transformations = ['synthetic-sensitive-vendor-marker']; }],
         ['context_management', raw => { raw.context_management = 'synthetic-sensitive-vendor-marker'; }],
         ['selected_endpoint', raw => { raw.openrouter_metadata.endpoints.available[0].provider = 'synthetic-sensitive-vendor-marker'; }],
@@ -124,6 +123,53 @@ test('identity diagnostics name only the first failed allowlisted field', () => 
     const first = wire(); first.model = 'synthetic-sensitive-vendor-marker'; delete first.openrouter_metadata;
     expect(openRouterIdentityFailure('analyze', first)).toBe('response_model');
     expect(openRouterIdentityFailure('analyze', wire())).toBeUndefined();
+});
+
+test('pipeline processing integrity is separate from identity and remains fail closed', () => {
+    for (const stage of ['analyze', 'plan', 'verify'] as const) {
+        const absent = wire(stage); delete absent.openrouter_metadata.pipeline;
+        const empty = wire(stage); empty.openrouter_metadata.pipeline = [];
+        for (const raw of [absent, empty]) {
+            expect(openRouterIdentityFailure(stage, raw)).toBeUndefined();
+            expect(openRouterPipelineFailure(raw)).toBeUndefined();
+            expect(validateOpenRouterResponse(stage, raw).selected_provider).toBe('Anthropic');
+        }
+    }
+
+    for (const pipeline of [null, false, 0, 'pipeline', {}, { length: 0 }]) {
+        const raw = wire(); raw.openrouter_metadata.pipeline = pipeline;
+        expect(openRouterIdentityFailure('analyze', raw)).toBeUndefined();
+        expect(openRouterPipelineFailure(raw)).toBe('shape');
+        expect(() => validateOpenRouterResponse('analyze', raw)).toThrow('provider_failure');
+    }
+
+    const material = [
+        [{ type: 'context_compression', name: 'context-compression', data: { marker: 'synthetic-sensitive-vendor-marker' } }],
+        [{ type: 'guardrail', name: 'content-filter', data: {} }],
+        [{ type: 'plugin', name: 'web-search', data: {} }],
+        [{ type: 'plugin', name: 'file-parser', data: {} }],
+        [{ type: 'server_tools', name: 'server-tools', data: {} }],
+        [{ type: 'response_healing', name: 'response-healing', data: {} }],
+        [{ type: 'future-stage', name: 'future-name', data: {} }],
+        ['malformed-stage'],
+        new Array(101),
+    ];
+    for (const pipeline of material) {
+        const raw = wire(); raw.openrouter_metadata.pipeline = pipeline;
+        expect(openRouterIdentityFailure('analyze', raw)).toBeUndefined();
+        expect(openRouterPipelineFailure(raw)).toBe('material_effect');
+        expect(() => validateOpenRouterResponse('analyze', raw)).toThrow('provider_failure');
+    }
+    expect(openRouterPipelineFailureKinds).toEqual(['shape', 'material_effect']);
+
+    for (const stage of ['analyze', 'plan', 'verify'] as const) {
+        const additive = wire(stage); additive.openrouter_metadata.region = 'synthetic-region'; additive.openrouter_metadata.future_field = { opaque: true };
+        expect(validateOpenRouterResponse(stage, additive).reported_attempt).toBe(1);
+    }
+
+    const conflicting = wire(); conflicting.model = 'synthetic-sensitive-vendor-marker'; conflicting.openrouter_metadata.pipeline = [{ type: 'future-stage' }];
+    expect(openRouterIdentityFailure('analyze', conflicting)).toBe('response_model');
+    expect(openRouterPipelineFailure(conflicting)).toBe('material_effect');
 });
 
 test('HTTP failure preserves immediate failure and uncertain money with no cost lookup/retry', async () => {
