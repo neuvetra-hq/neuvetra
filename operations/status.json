@@ -63,10 +63,11 @@
     "revision07_state": "Offline implementation and independent review complete; code/reports local and unpublished; expanded source/runtime/live gates pending.",
     "provider_verification_commit": "bab79e08fcec691cf7c72bb6d95a5c507d7a0e47",
     "provider_verification_remote_verified": true,
-    "m32_state": "local_commits_awaiting_publication_after_automatic_push_rejection",
+    "m32_state": "published_to_current_pr_branch_remote_tracking_verified",
     "m32_commit": "01ff95f",
     "m32_evidence_commit": "3835744",
-    "m33_state": "offline_complete_independent_qa_pass_local_uncommitted"
+    "m33_state": "offline_complete_independent_qa_pass_local_commit_unpublished",
+    "m33_commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -1003,6 +1004,7 @@
     "live_acceptance": false,
     "release_acceptance": false,
     "next_decision": "Board feedback on whether to prepare a newly frozen, separately authorized live check. Provider/account behavior must yield absent/empty pipeline or remain fail-closed.",
-    "active_workers": 0
+    "active_workers": 0,
+    "commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c"
   }
 }

@@ -6,7 +6,7 @@ The adapter now validates provider identity first and processing integrity secon
 
 Author checks pass 26 focused tests / 669 assertions, all 409 research-composed tests / 4,230 assertions, both API and website TypeScript checks, and diff validation. CPO and CTO reviews pass. Independent QA passed a separate 148-assertion adversarial probe and recorded the final exact-hash review. The semantic answer profile is unchanged; the OpenRouter profile changed, so M32 stays closed and cannot be replayed.
 
-No service, credential, provider request, paid call, source change, deployment, merge or publication occurred in M33. Offline contract fidelity is demonstrated; live compatibility and release acceptance are not. A later paid test requires a fresh frozen run, explicit authorization and evidence that request/account plugin controls produce an absent or empty pipeline. A nonempty pipeline will continue to fail closed.
+No service, credential, provider request, paid call, source change, deployment, merge or publication occurred in M33. The reviewed M33 change is committed locally at `e8718df`; it has not been pushed. Offline contract fidelity is demonstrated; live compatibility and release acceptance are not. A later paid test requires a fresh frozen run, explicit authorization and evidence that request/account plugin controls produce an absent or empty pipeline. A nonempty pipeline will continue to fail closed.
 
 ## Previous closed live result
 
@@ -18,7 +18,7 @@ Current internal accounting is $2.855958 settled plus $1.62485 retained historic
 
 Independent QA passed the final offline launch stack at 25 tests and 386 assertions. It accepted the live diagnostic and accounting evidence but rejected provider-verification success and browser mechanical acceptance. The browser API could not directly retain the response body; the proxy claim, safe trace, visible terminal UI, and an explicitly labeled reconstruction were preserved without repeating the question.
 
-The exact backend and frontend processes are stopped, ports 3012, 3016, 5174, and 5175 are closed, and the ordinary preview remains paused. M32 cannot be restarted. M31 is published on the current PR branch at `bab79e0`; the reviewed M32 records are committed at `01ff95f`. No deployment, merge, provider change, source expansion, or global toolchain change occurred.
+The exact backend and frontend processes are stopped, ports 3012, 3016, 5174, and 5175 are closed, and the ordinary preview remains paused. M32 cannot be restarted. M31 is published on the current PR branch at `bab79e0`; the reviewed M32 records and evidence record are published on that branch through `3835744`. No deployment, merge, provider change, source expansion, or global toolchain change occurred.
 
 The offline `pipeline` contract repair is now implemented in M33. Any later paid rerun requires a fresh frozen run and authorization.
 
