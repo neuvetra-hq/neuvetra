@@ -1,21 +1,35 @@
 # What's Next
 
-> **Updated September 8, 2026:** The active sequence is now [[2026-09-08-neuvetra-ghg-focus]]. Demo the Neuvetra-only website and primary-source assessment; then build a small source-supported answer path, deterministic calculation slice, secure company workspace and controlled pilot. FrontDesk completion and EU/global expansion are deferred. Historical open items below do not override this direction. Detailed gates: [`docs/roadmap-neuvetra-ghg.md`](../docs/roadmap-neuvetra-ghg.md).
+> **Updated September 13, 2026:** Read the current [board report](../operations/board-report.md), [ledger](../operations/status.json), and [operational handoff](../operations/next-session.md). M52 compiled provider-disabled integration completed independent product and technical acceptance. No live request, paid activity, publication, customer pilot or release is authorized.
 
 Aggregator of forward-looking items across the wiki. The CEO reads this first when asking "what's next."
 
-> Last updated: 2026-04-28 (Graphify-inspired confidence-tagged provenance for ghg-kb — strategic call closed [[2026-04-28-ghg-kb-confidence-provenance]]; brainstorm paused at Section 3 of 5; spec doc + impl plan pending. Earlier today: monorepo consolidation + Twilio Campaign 2 diagnosis.)
+> Last updated: 2026-09-13 (M52 compiled provider-disabled integration is accepted offline.)
 
 ---
 
-## Open decisions (waiting on CEO call)
+## Current next action
+
+Collect board feedback on M52 candidate `7b0d26e0…` and the truthful boundary: the compiled launcher, composed server, stage/cost closure, composition provenance and retrieval metadata now pass provider-disabled offline; live response compatibility and production readiness remain unproven.
+
+Do not rerun M50 or reuse its consumed authorization. Any future live successor requires a separately integrated and independently reviewed secure wrapper, fresh current evidence, an exact cost scope and new board authorization.
+
+Commercial source-use clearance, the 29-case expanded-source gate, wider calculations, tenant isolation, production security and future persistent workers remain separate. These notes do not authorize a provider request, source upload, customer pilot, factor release, inventory or production action.
+
+## Agent development follow-up
+
+The eleventh role, [CARB verifier / GHG audit reviewer](../operations/agents/carb-verifier.md), has a proposed [knowledge and audit-case development backlog](../docs/research/carb-verifier-role-basis.md#development-backlog). Its next demonstration should use a synthetic Scope 1/2 inventory and auditor workpapers with independently prepared expectations. Inventory-review capability and qualified human calibration remain unmeasured; this follow-up does not replace the active EPA milestone or start a worker.
+
+## Historical April open decisions
+
+All sections below preserve the April backlog. They do not override the current next action above; old active/queued descriptions are historical and require reassessment against the September board direction before execution.
 
 - [[2026-04-25-brand-identity]] — partially anchored on [[spirit]]; logo, type scale, palette spec, voice/tone still open
 - [[2026-04-25-calculator-implementation-strategy]] — Python canonical / TS canonical / parallel
 
-## In flight — the infrastructuring cycle
+## Historical April infrastructure queue
 
-The monorepo restructure ([[2026-04-28-consolidate-into-single-monorepo]]) is the active cycle. Completed pieces and what's left:
+The following records the April monorepo cycle ([[2026-04-28-consolidate-into-single-monorepo]]). It is historical context, not the next-session queue; dates and completion claims below have not been revalidated by this save.
 
 | Phase | Status |
 |---|---|
@@ -28,7 +42,7 @@ The monorepo restructure ([[2026-04-28-consolidate-into-single-monorepo]]) is th
 | 7. Archive old GitHub repos | ⏳ After Railway re-pointed |
 | 8. `bun install` at root to regenerate `bun.lock` | ⏳ After CLAUDE.md rewrites |
 
-## Deferred issues (queued for later session bites)
+## Historical deferred issues
 
 **Issue 1 — Twilio Campaign 2 fix (FrontDesk)** — diagnosis complete (see [[frontdesk-sms-architecture]] for the durable record). Fix path agreed but not implemented:
 
@@ -47,16 +61,16 @@ The monorepo restructure ([[2026-04-28-consolidate-into-single-monorepo]]) is th
 - "Database empty" — `auth.users` (Supabase didn't receive request) or app-level tables (auth succeeded but persistence didn't fire)?
 - Browser console + network tab evidence?
 
-## Active plans
+## Historical active plans
 
 - [[multi-product-launch]] — in scoping. **One** of four original blockers remains (calculator); auth-billing closed 2026-04-26. M2 (parent landing) Cycles 2–6 outlined on [[parent-landing-experience]] § Next.
 - [[site-chat-backend]] — **M1 + hardening + M2 pilot all shipped + deployed** as of 2026-04-27. M2 pilot files (`move_spirit`, `set_spirit_color`) absorbed into the new monorepo's initial commit on 2026-04-28 (per-commit history not carried per [[2026-04-28-consolidate-into-single-monorepo]] § Decisions). **Next:** `superpowers:writing-plans` to produce the executable plan for the full M2 cycle (streaming + phone-OTP auth via Supabase Auth + persistence + 2nd agent + XState handoff + scenarios + two-region UI) from `docs/superpowers/specs/2026-04-27-site-chat-backend-m2-design-notes.md`. M3 (RAG against [[neuvetra-kb]]) and M4 (sub-agents) trajectory documented. Pre-deploy hardening pile (dedicated prod Anthropic key, workspace spend cap, Langfuse triggers) before public marketing push — operator actions in `apps/site-api/HARDENING.md`.
 
-## Active features
+## Historical active features
 
 - [[parent-landing-experience]] — Spirit + two product chat surfaces. Q1 + Q2 closed 2026-04-25. **Next:** Cycle 2 — copy Spirit (`lib/spirit/*` + presets + audio) from `apps/frontdesk-web` into `apps/site-web` (now a one-folder copy in the monorepo, eventually a `packages/spirit` extraction when Terrascope frontend triggers per [[2026-04-25-spirit-packaging]]). Then Cycle 3 (real content), Cycle 4 (chatbots), Cycle 5 (domain re-routing), Cycle 6 (mobile/a11y).
 
-## Per-product / per-codebase next moves
+## Historical per-product / per-codebase next moves
 
 - **[[site]]:** **LIVE in production at `https://www.neuvetra.ai`** as of 2026-04-27. Hardening pass shipped 2026-04-27 (`apps/site-api/HARDENING.md`). M2 design ratified ([[2026-04-27-site-deploy-and-dns]]). **Next:** push the next monorepo commit triggers Railway redeploy (after Railway is repointed); `superpowers:writing-plans` for full M2; replace the `SHOW_PRODUCT_CARDS` flag with an agent-driven `consolidate_homepage_cards` scenario. Operator actions from `apps/site-api/HARDENING.md` ship before public marketing push.
 
@@ -66,7 +80,7 @@ The monorepo restructure ([[2026-04-28-consolidate-into-single-monorepo]]) is th
 
 - **[[neuvetra-kb]]** *(scaffolded 2026-04-26)*: M2 cycle 1 (brand-level overview + wedge) shipped 2026-04-26. **Next:** M2 cycle 2 — `products/frontdesk.md` and `products/terrascope.md`. **Then:** M3 — Weaviate export pipeline. M4 — chatbot wiring is now [[site-chat-backend]]'s M3 milestone.
 
-## Recently closed
+## Historical recently closed
 
 - **2026-04-28** — [[2026-04-28-ghg-kb-confidence-provenance]]: Adopt Graphify-style confidence-tagged provenance for ghg-kb. Phase 1 lean-MVP with phased escalation triggers; bare-slug rule preserved; Tier-2 taxonomy; dual-link source cards. Strategic call closed; technical design 60% complete (brainstorm Sections 1–3 approved, Sections 4–5 + spec doc pending) per [[2026-04-28-ghg-kb-provenance-design]].
 - **2026-04-28** — [[2026-04-28-consolidate-into-single-monorepo]]: Three product repos + four unbacked-up local stores consolidated into a single private monorepo at `github.com/neuvetra-hq/neuvetra`. 8 operational decisions folded into [[2026-04-28-monorepo-restructure]] § Decisions per Policy C. Supersedes [[2026-04-25-folder-hierarchy]].
@@ -76,7 +90,7 @@ The monorepo restructure ([[2026-04-28-consolidate-into-single-monorepo]]) is th
 
 (Older closed decisions accessible via [[index]] and [[log]].)
 
-## Parked — pick up when CEO returns
+## Historical parked work
 
 ### GHG KB autoresearch loop (parked 2026-04-27)
 

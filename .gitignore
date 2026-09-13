@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.pnpm-store/
 
 # Build outputs
 dist/
@@ -33,6 +34,7 @@ pnpm-lock.yaml
 **/test-results/
 /coverage
 /tmp/
+task-output/
 
 # Logs
 *.log

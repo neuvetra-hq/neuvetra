@@ -1,7 +1,10 @@
-import { useRef, useState } from "react"
+import { lazy, Suspense, useRef, useState } from "react"
 import { ResearchSpirit } from "@/components/ResearchSpirit"
 import { ResearchAnswerPanel } from "@/components/ResearchAnswerPanel"
 import { filterResearchSources, RESEARCH_SOURCES, SOURCE_CATEGORIES, type SourceCategory } from "@/data/research-sources"
+
+const ReviewedDemoPanel = import.meta.env.DEV ? lazy(() => import("@/components/ReviewedDemoPanel").then((module) => ({ default: module.ReviewedDemoPanel }))) : null
+const DeterministicCalculationDemo = import.meta.env.DEV ? lazy(() => import("@/components/DeterministicCalculationDemo").then((module) => ({ default: module.DeterministicCalculationDemo }))) : null
 
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   return (
@@ -12,14 +15,23 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 }
 
 export function ResearchPreview() {
-  const [view, setView] = useState<"overview" | "sources" | "answers">("overview")
+  type View = "overview" | "sources" | "answers" | "demo" | "calculation"
+  const reviewedDemoEnabled = import.meta.env.DEV && import.meta.env.VITE_RESEARCH_BOARD_DEMO === "preserved-results"
+  const calculationDemoEnabled = import.meta.env.DEV && import.meta.env.VITE_DETERMINISTIC_CALC_DEMO === "stationary-natural-gas"
+  const requestedView = new URLSearchParams(window.location.search).get("view")
+  const initialView: View = calculationDemoEnabled && requestedView === "calculation" ? "calculation" : reviewedDemoEnabled && requestedView === "demo" ? "demo" : "overview"
+  const [view, setView] = useState<View>(initialView)
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState<SourceCategory>("All sources")
   const headingRef = useRef<HTMLHeadingElement>(null)
   const sources = filterResearchSources(query, category)
 
-  function navigate(nextView: typeof view) {
+  function navigate(nextView: View) {
     setView(nextView)
+    const url = new URL(window.location.href)
+    if (nextView === "demo" || nextView === "calculation") url.searchParams.set("view", nextView)
+    else url.searchParams.delete("view")
+    window.history.replaceState({}, "", url)
     requestAnimationFrame(() => {
       headingRef.current?.focus({ preventScroll: true })
       window.scrollTo({ top: 0, behavior: "instant" })
@@ -37,6 +49,8 @@ export function ResearchPreview() {
         <nav className="research-navigation" aria-label="Main navigation">
           <button type="button" aria-current={view === "overview" ? "page" : undefined} onClick={() => navigate("overview")}>Overview</button>
           <button type="button" aria-current={view === "sources" ? "page" : undefined} onClick={() => navigate("sources")}>Sources <span>{RESEARCH_SOURCES.length}</span></button>
+          {reviewedDemoEnabled && <button type="button" aria-current={view === "demo" ? "page" : undefined} onClick={() => navigate("demo")}>Reviewed demo <span>3</span></button>}
+          {calculationDemoEnabled && <button type="button" aria-current={view === "calculation" ? "page" : undefined} onClick={() => navigate("calculation")}>Calculate <span>1</span></button>}
           <button type="button" aria-current={view === "answers" ? "page" : undefined} onClick={() => navigate("answers")}>Ask Neuvetra</button>
         </nav>
         <span className="research-preview-badge"><span /> Research preview</span>
@@ -77,7 +91,7 @@ export function ResearchPreview() {
               </div>
             </section>
           </>
-        ) : view === "answers" ? <ResearchAnswerPanel headingRef={headingRef} /> : (
+        ) : view === "answers" ? <ResearchAnswerPanel headingRef={headingRef} /> : view === "demo" && ReviewedDemoPanel ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the reviewed replay…</div>}><ReviewedDemoPanel headingRef={headingRef} /></Suspense> : view === "calculation" && DeterministicCalculationDemo ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the deterministic calculation…</div>}><DeterministicCalculationDemo headingRef={headingRef} /></Suspense> : (
           <section className="research-library" aria-labelledby="sources-heading">
             <div className="research-library-heading">
               <div><p className="research-eyebrow">The Neuvetra source library</p><h1 id="sources-heading" ref={headingRef} tabIndex={-1}>The source comes first.</h1><p className="research-intro">A starting collection of primary references for GHG accounting and reporting research. Explore the original materials directly.</p></div>

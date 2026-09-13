@@ -8,6 +8,8 @@
     "start:research": "bun run src/research-server.ts",
     "dev:research-passages": "bun run src/research-passages-server.ts",
     "start:research-passages": "bun run src/research-passages-server.ts",
+    "dev:calculation": "bun run src/calculation/server.ts",
+    "start:calculation": "bun run src/calculation/server.ts",
     "typecheck": "tsc --noEmit",
     "sync-kb": "bun run scripts/sync-kb-corpus.ts",
     "start": "bun run src/index.ts",

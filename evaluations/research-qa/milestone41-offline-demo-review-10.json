@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "task": "M41-QA",
+  "milestone": "M41 offline board demonstration",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "release_acceptance": false,
+  "reviewed_source_hashes": {
+    "apps/site-web/src/data/reviewed-demo.ts": "5b7f015c0713b4150111ddab5ebe1360828c8ad63ede3ed0e92fee58c19c8c9f",
+    "apps/site-web/src/data/reviewed-demo.test.ts": "2e9932f67deb7491b74f979cf97e262879b3e26275a305dbf8535316727c3ddd",
+    "apps/site-web/src/components/ReviewedDemoPanel.tsx": "94695f6cc3f72c175b6c5e72e2a81f6f0c976fe3489d49fa4665619aadb30a29",
+    "apps/site-web/src/components/ResearchAnswerResult.tsx": "a7e5927bd848c2d56a81c48f3658a28ce4b723ced739c658afe6fb72dbf85513",
+    "apps/site-web/src/components/ResearchPreview.tsx": "43125ad0d4d4a9684ffab5f60c91aff9409c59efb8fb1a3ea5de163cb667c91f",
+    "apps/site-web/src/index.css": "5646c0f09f85a6dfff84f310708560aa0b4fbe6b47e6b5f6e718543d8fc3c061",
+    "apps/site-web/src/data/reviewed-demo-artifacts/W11.bin": "521ebac9190dc84c6d0bb96bbe4b46d5f354334b1cd57725c65f434239fc8faa",
+    "apps/site-web/src/data/reviewed-demo-artifacts/W03.bin": "dbd1570ad73900a9365b574f72cf9e4e57bd72b13239738b3dd09ae57526d49f",
+    "apps/site-web/src/data/reviewed-demo-artifacts/EPA14-B01.bin": "4dca42a33aeb6dad1bfec51da33346151afdc1d773949661345c33e0be6d9cc2",
+    ".superpowers/website-epa-live-35/W11-browser-response.body.bin": "521ebac9190dc84c6d0bb96bbe4b46d5f354334b1cd57725c65f434239fc8faa",
+    ".superpowers/website-epa-live-35/W11-terminal-qa.json": "d541eeee954a74537b8ce912b62f7ec8ce0806850177036993cbf27ebe56e482",
+    "evaluations/research-qa/openrouter35-closure-review-10.json": "5441520386f7f54b2395892eb4ad895d16f1df8b99b0a833fc854e76cbd6fe63",
+    ".superpowers/website-epa-live-39/W03-browser-response.body.bin": "dbd1570ad73900a9365b574f72cf9e4e57bd72b13239738b3dd09ae57526d49f",
+    ".superpowers/website-epa-live-39/W03-terminal-qa.json": "465429e453e787fc2eaa7fded571f1e7c16f69ec1d14d978223e3cbc04e244ca",
+    "evaluations/research-qa/openrouter39-closure-review-10.json": "f4aa6cab3b9234591b323c7e77d8218e68a43e114e59314129e0d30e0b902091",
+    ".superpowers/website-epa-live-40/EPA14-B01-browser-response.body.bin": "4dca42a33aeb6dad1bfec51da33346151afdc1d773949661345c33e0be6d9cc2",
+    ".superpowers/website-epa-live-40/EPA14-B01-terminal-qa.json": "53de5e233d7df60ab3881034c8be2551801daf5d5dd0c324d6bc26cafaf2f333",
+    ".superpowers/website-epa-live-40/closure.json": "c6ce9dde9c7c0bd24b04ee4649cfdbbb2b992b63196adfc685bd24529f267985",
+    "evaluations/research-qa/openrouter40-closure-review-10.json": "60b3e6fe680c565381236197296019db9517b80ff2bdb37abe9fbeae2742ca3e"
+  },
+  "artifact_integrity": {
+    "order": [
+      "W11",
+      "W03",
+      "EPA14-B01"
+    ],
+    "exact_byte_matches": 3,
+    "mismatches": 0,
+    "source_release": {
+      "id": "scope2-website",
+      "version": "1",
+      "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+    },
+    "changed_artifact_fails_closed": true,
+    "manifest_hashes_match": true,
+    "production_build_excludes_replay_artifact_files": true,
+    "production_build_excludes_W11_question_and_replay_hash_strings": true,
+    "replay_is_dev_only": true,
+    "demo_requires_explicit_flag": "VITE_RESEARCH_BOARD_DEMO=preserved-results",
+    "strict_mode_load_is_single_module_promise": true
+  },
+  "cases": [
+    {
+      "id": "W11",
+      "question": "Our two electricity totals changed in opposite directions. What caused that in our company?",
+      "question_sha256": "5ef784a004a72e9f9eb2da8ada9feab5eb5580cfe28830ccb5450ed336f22558",
+      "response_sha256": "521ebac9190dc84c6d0bb96bbe4b46d5f354334b1cd57725c65f434239fc8faa",
+      "status": "needs_input",
+      "reason_code": "context_required",
+      "claims": 0,
+      "evidence": 0,
+      "sources": 0,
+      "missing_context": [
+        "referenced_subject"
+      ],
+      "visible_context_request": "What the referenced phrase refers to",
+      "terminal_qa_sha256": "d541eeee954a74537b8ce912b62f7ec8ce0806850177036993cbf27ebe56e482",
+      "terminal_accepted": true,
+      "run_disposition": "accepted diagnostic; truthful conservative emergency closure after the historical ordinary-closer defect",
+      "closure_qa_sha256": "5441520386f7f54b2395892eb4ad895d16f1df8b99b0a833fc854e76cbd6fe63"
+    },
+    {
+      "id": "W03",
+      "question": "One electricity footprint reflects the mix on the surrounding grid; another reflects what a business bought under its energy agreements. What does each perspective tell us?",
+      "question_sha256": "1848a1fdce2a8a8ca9b84bd93de916d02c16739ec2d21765d39714d3a85e15e1",
+      "response_sha256": "dbd1570ad73900a9365b574f72cf9e4e57bd72b13239738b3dd09ae57526d49f",
+      "status": "qualified",
+      "reason_code": "none",
+      "claims": 3,
+      "evidence": 2,
+      "sources": 1,
+      "claim_order": [
+        "U01",
+        "U02",
+        "U03"
+      ],
+      "evidence_order": [
+        "S01",
+        "S02"
+      ],
+      "locators": [
+        "PDF page 4 / printed page 1",
+        "PDF page 9 / printed page 6"
+      ],
+      "unit_labels": [
+        "Reviewed source summary",
+        "Reviewed source summary",
+        "Reviewed interpretation"
+      ],
+      "citation_links_visible": true,
+      "terminal_qa_sha256": "465429e453e787fc2eaa7fded571f1e7c16f69ec1d14d978223e3cbc04e244ca",
+      "terminal_accepted": true,
+      "run_disposition": "accepted diagnostic; enclosing two-case run later failed closed when its supervisor stopped before the second case",
+      "closure_qa_sha256": "f4aa6cab3b9234591b323c7e77d8218e68a43e114e59314129e0d30e0b902091"
+    },
+    {
+      "id": "EPA14-B01",
+      "question": "What if I don’t make specified renewable energy purchases—do I still have to do dual reporting?",
+      "question_sha256": "fb79ae52010f0ed0ef4a1f0b52d4bc2a1b005f1417bd165ef7b212c679d7b6d0",
+      "response_sha256": "4dca42a33aeb6dad1bfec51da33346151afdc1d773949661345c33e0be6d9cc2",
+      "status": "unsupported",
+      "reason_code": "coverage_missing",
+      "claims": 0,
+      "evidence": 0,
+      "sources": 0,
+      "scope_gap_phrase": "specified renewable energy purchases",
+      "terminal_qa_sha256": "53de5e233d7df60ab3881034c8be2551801daf5d5dd0c324d6bc26cafaf2f333",
+      "terminal_accepted": true,
+      "run_disposition": "accepted diagnostic; ordinary completed closure",
+      "ordinary_closure_sha256": "c6ce9dde9c7c0bd24b04ee4649cfdbbb2b992b63196adfc685bd24529f267985",
+      "closure_qa_sha256": "60b3e6fe680c565381236197296019db9517b80ff2bdb37abe9fbeae2742ca3e"
+    }
+  ],
+  "visible_disclosures": {
+    "offline_board_demo": true,
+    "preserved_reviewed_replay": true,
+    "no_new_model_request": true,
+    "original_diagnostic_was_live": true,
+    "release_false": true,
+    "pilot_limits_visible": true,
+    "no_provider_request": true,
+    "no_source_expansion": true,
+    "no_deployment_or_release": true,
+    "limitations": [
+      "selected EPA guidance only",
+      "no emissions calculations",
+      "no factor selection",
+      "no legal-duty determination",
+      "no instrument-eligibility determination",
+      "no company data",
+      "no customer-isolation claim",
+      "no production-readiness claim",
+      "historical replay does not renew source review"
+    ]
+  },
+  "runtime_and_request_audit": {
+    "preview_url": "http://127.0.0.1:5174/?view=demo",
+    "resource_entries": 28,
+    "non_local_resource_entries": [],
+    "research_or_provider_endpoint_requests": [],
+    "replay_artifact_requests": [
+      "http://127.0.0.1:5174/src/data/reviewed-demo-artifacts/W11.bin",
+      "http://127.0.0.1:5174/src/data/reviewed-demo-artifacts/W03.bin",
+      "http://127.0.0.1:5174/src/data/reviewed-demo-artifacts/EPA14-B01.bin"
+    ],
+    "each_replay_artifact_requested_once": true,
+    "browser_warnings_or_errors": [],
+    "research_service_listener_3016": false,
+    "provider_requests": 0,
+    "new_model_requests": 0
+  },
+  "interaction_and_responsive_review": {
+    "default_viewport_loaded": true,
+    "phone_viewport": {
+      "requested_width": 390,
+      "requested_height": 844,
+      "document_client_width": 375,
+      "document_scroll_width": 375,
+      "horizontal_document_overflow": false
+    },
+    "responsive_single_column_cases": true,
+    "visible_focus": true,
+    "keyboard_arrow_navigation": {
+      "W11_to_W03": true,
+      "W03_to_EPA14_B01": true,
+      "focus_follows_selection": true,
+      "Home_End_and_wrap_handlers_present": true
+    },
+    "tabpanel_accessible_names_match_selected_tabs": true,
+    "provenance_disclosure_keyboard_control_present": true
+  },
+  "verification": {
+    "site_tests": {
+      "passed": 45,
+      "failed": 0,
+      "assertions": 165
+    },
+    "typecheck": "pass",
+    "lint": "pass",
+    "production_build": {
+      "status": "pass",
+      "vite_modules_transformed": 64,
+      "warning": "one existing chunk exceeds 500 kB; non-blocking for this scoped offline demo"
+    },
+    "git_diff_check": "pass"
+  },
+  "qa_activity": {
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "research_provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "source_changes": 0,
+    "product_source_files_modified_by_qa": false,
+    "deployment_merge_or_release": false
+  },
+  "blockers": [],
+  "conclusion": "PASS: the explicitly enabled development-only board replay renders the three independently accepted historical behaviors from exact hash-bound local bytes, preserves their questions and evidence structure, discloses its offline and non-release limits, makes no research/provider request, and passes the scoped functional, accessibility, responsive, type, lint, and build checks.",
+  "reviewed_at": "2026-09-11T22:33:49.0788716Z"
+}

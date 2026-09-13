@@ -1,0 +1,172 @@
+{
+  "schema_version": "m50_h02_live_adapter_v4_product_review.v1",
+  "task": "M50-v4-CPO",
+  "role": "independent_product_qa",
+  "reviewed_at": "2026-09-13T02:22:06.1538811Z",
+  "candidate_sha256": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
+  "manifest_sha256": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
+  "rehearsal_sha256": "5900aff28ac5114b747600ba2df8d8767b8cbb3b67fe0e295529f7eb9ada2f6c",
+  "disposition": "pass_offline_product_boundary_pending_fresh_exact_paid_authorization",
+  "live_or_paid_execution_authorized": false,
+  "release_acceptance": false,
+  "reviewed_hashes": {
+    "tools/research/m50-h02-live-candidate-v4.json": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
+    "tools/research/m50-h02-live-manifest-v4.json": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
+    "operations/openrouter50-provider-disabled-rehearsal-v4.json": "5900aff28ac5114b747600ba2df8d8767b8cbb3b67fe0e295529f7eb9ada2f6c",
+    ".superpowers/openrouter-50-v4-bin/m50-wrapper-v4.exe": "d03afae8f93fb698bec57892d55102eabe3c4d5cf9561d38f6a1c451bd883488",
+    ".superpowers/openrouter-50-v4-src/wrapper.ts": "c7b790f2e9271492c67414804902a7bd600bdb8607a88571cb5996c20b17deea",
+    "tools/research/m50-v4-child-pinset.json": "f9d362ae017d89b187ac62ee7808597205be3155e6cd16dafa98f5966d937fda",
+    "tools/research/m50-v4-evaluator-denylist.json": "2ff62fec96852d7f2e9568eb0b00041791a73684cc3c76fd94c52e79eba1c139",
+    ".superpowers/openrouter-50-v4/payload-capture.ts": "c7b019c483d5c37d01feb34338e4abe33e6c0d684d8b0a21079b8aa897cb5e20",
+    ".superpowers/openrouter-50-v4/contract.ts": "85c0683b5e524d8d2a5fc6aeae4511cad607e6cd910068fcc30306908e689806",
+    ".superpowers/openrouter-50-v4/runtime.ts": "776a553cee915ada5e3232ae2e29ae8987f92cef43ee1a19dc64b349b8987bbe",
+    ".superpowers/openrouter-50-v4/spending.ts": "33467e665e025552f025c13f1b7d439932062c3a7dbb7345eef0c4d6089a0b4f",
+    ".superpowers/openrouter-50-v4/grade-terminal.ts": "d2dcb8b01197bb6f89c40d5b24b100e998f88fa256fba584ca044e3c306415f6",
+    ".superpowers/openrouter-50-v4/approved-wrapper.ts": "f2ec18c18479d0dd6bc53e90f6de9452fd6acf29551f5cd32a254fe80ba4ab1e",
+    ".superpowers/openrouter-50-v4/backend-cli.ts": "eb25f9749289ed8b55579ce69d72bc6d57566cd9893a4ef4edffc5178f1cb159",
+    "tools/research/m49-h02-evaluator-only-key-v1.json": "5d3a3d7398893e5db544689e18dcfd4f3733320ae3a8fb5190f9d5648228b441",
+    "evaluations/research-qa/m49-h02-regression-product-acceptance-10.json": "cc4955049fbd0c58331fade893afb812450f4321a0363a1efb6484bfd7e14abd",
+    "evaluations/research-qa/m50-h02-live-adapter-product-review-10.json": "c1d5277c0fe0ba0c77fbaee214b876ea037d852235bd7c95227831553e199156",
+    "evaluations/research-qa/m50-h02-live-adapter-v2-product-review-10.json": "da484f2ad2a5e975370e5bb48dcb85162063890718ea05647a027a4173850966",
+    "evaluations/research-qa/m50-h02-live-adapter-v3-product-review-10.json": "3e4e5a83aaee77605a3e2010e67ff5d4284b29a51a5ab9eb833b5d885739879d",
+    "operations/m50-v2-windows-code-integrity-block.json": "fbb4416ad20eb5dce706d0180e3f1b7bbcf7d0f1cd55dcc7c8a7a8e123c786a6"
+  },
+  "freeze_integrity": {
+    "assigned_candidate_hash_matches": true,
+    "assigned_manifest_hash_matches": true,
+    "assigned_rehearsal_hash_matches": true,
+    "assigned_wrapper_hash_matches": true,
+    "assigned_child_pinset_hash_matches": true,
+    "manifest_author_pins_checked": 87,
+    "manifest_author_pin_mismatches": 0,
+    "wrapper_child_pins_checked": 52,
+    "wrapper_child_pin_mismatches": 0,
+    "child_pins_verified_before_attempt_capability_or_spawn": true
+  },
+  "product_contract": {
+    "case_id": "M43-H02",
+    "evaluation_role": "regression_recombination_of_prior_W02_W09_semantics_not_novel_held_out",
+    "novel_held_out": false,
+    "question": "How should I research a U.S. grid-average factor for a facility, and what should I verify before treating the result as current?",
+    "expected_answer_class": "qualified",
+    "expected_reason_code": "none",
+    "required_points_unchanged": [
+      "Use facility geography and prefer a regional or subnational grid area for grid-delivered electricity.",
+      "EPA recommends eGRID total-output subregion factors for U.S. operations and documents Power Profiler as a subregion lookup route using zip code and utility.",
+      "Check the current eGRID and Factors Hub editions because publication timing can differ and grid-average data can be stale or mismatched to the purchase year.",
+      "The answer does not assign a facility subregion, select a value, or certify a latest dataset."
+    ],
+    "evaluator_only_evidence_roles_unchanged": {
+      "S06": "required_dependency",
+      "S07": "geography_support",
+      "S08": "egrid_support",
+      "S09": "publication_timing_support",
+      "S10": "lookup_route_support",
+      "S18": "accuracy_and_staleness_support"
+    },
+    "forbidden_claims_unchanged": [
+      "Any current numerical factor or facility subregion assignment.",
+      "The Factors Hub always updates at the same time as eGRID.",
+      "The retrieved dataset is certified as latest or accurate for a particular inventory."
+    ],
+    "model_visible_source_boundary": "exact approved EPA S01-S18-derived unit catalog; all 18 IDs are present and no evaluator-selected subset or role is supplied",
+    "provider_route": "POST directly to OpenRouter messages endpoint with Anthropic only; fallbacks, plugins, tools, web and source expansion disabled",
+    "models": {
+      "analyze": "anthropic/claude-opus-5",
+      "plan": "anthropic/claude-sonnet-5",
+      "verify": "anthropic/claude-opus-5"
+    },
+    "max_stages": 5,
+    "question_retries": 0,
+    "carried_stages": 0,
+    "expected_cost_usd": 0.271573,
+    "conservative_local_reservation_usd": 3.944535,
+    "vendor_billing_cap": false,
+    "contract_disposition": "pass"
+  },
+  "product_boundary_findings": {
+    "raw_evaluator_key_available_to_answer_runtime": false,
+    "evaluator_key_first_read_by_post_shutdown_grader": true,
+    "grader_requires_hash_bound_success_terminal_payload_cost_and_shutdown_closures": true,
+    "dynamic_analyze_plan_verify_stage_capture_distinct": true,
+    "full_outbound_body_must_equal_canonical_stage_builder": true,
+    "exact_stage_input_keys_and_nested_source_cards_enforced": true,
+    "prior_v1_key_read_and_stage_identity_failures_closed": true,
+    "prior_v2_nested_json_and_S100_failures_closed": true,
+    "prior_v3_split_base64_and_source_alias_failures_closed": true,
+    "uncertain_or_unsettled_native_cost_prevents_success_and_exact_total_claim": true,
+    "provider_failure_stops_more_dispatch_and_spend": true,
+    "windows_actual_parent_image_path_queried_from_kernel_and_compared_to_fixed_canonical_wrapper": true,
+    "unapproved_script_wrapper_excluded": true,
+    "v1_v2_v3_product_failure_lineage_preserved": true,
+    "candidate_paid_authorization": false,
+    "manifest_paid_authorization": false,
+    "prior_m49_scope_intent_consumable": false,
+    "fresh_exact_candidate_board_authorization_required": true
+  },
+  "bounded_offline_acceptance": {
+    "approved_wrapper_and_fresh_preflight_tests": {
+      "passed": 7,
+      "failed": 0,
+      "assertions": 13
+    },
+    "selected_no_service_evaluator_and_cost_tests": {
+      "passed": 2,
+      "filtered_out": 9,
+      "failed": 0,
+      "assertions": 10
+    },
+    "direct_capture_positive_probe": {
+      "shape": "production-shaped canonical analyze, plan and verify bodies with pinned S01-S18-derived cards and H02-relevant units",
+      "completed_stages": ["analyze", "plan", "verify"],
+      "offline_dispatch_stub_calls": 3,
+      "terminal_kind": "success"
+    },
+    "direct_capture_negative_probes": [
+      {"case": "nested evaluator field", "result": "refused before plan dispatch"},
+      {"case": "required point inside a larger string", "result": "refused before plan dispatch"},
+      {"case": "evaluator text inside a content block", "result": "refused before plan dispatch"},
+      {"case": "base64 evaluator point", "result": "refused and failure-sealed before plan dispatch"},
+      {"case": "evaluator point split across two-character array leaves", "result": "refused before plan dispatch"},
+      {"case": "malformed embedded JSON", "result": "refused before plan dispatch"},
+      {"case": "aliased references object containing S100", "result": "refused before plan dispatch"},
+      {"case": "ranked_candidate_passage_ids containing S100", "result": "refused before plan dispatch"},
+      {"case": "provider only route changed to google", "result": "refused before plan dispatch"}
+    ],
+    "provider_or_model_requests": 0,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "application_services_started": false,
+    "temporary_probe_directories_removed": true
+  },
+  "claim_boundary": {
+    "truthful_claim_allowed": "Frozen M50 v4 passes independent offline product acceptance for a separately authorized, one-case H02 regression run within the exact application JSON and stage-encoding boundary. The canonical three-stage flow works offline and the previously demonstrated evaluator/source bypasses refuse before the affected dispatch.",
+    "claims_not_allowed": [
+      "A provider result, successful H02 answer, paid run, deployment, publication, release or production readiness.",
+      "Novel held-out generalization, reliability rate or performance beyond one exact regression case.",
+      "A current numerical factor, current facility subregion, latest-dataset certification or company-specific applicability.",
+      "A vendor billing cap: 3.944535 USD is a conservative local reservation and actual native provider cost can only be known after settlement.",
+      "Protection from arbitrary steganography or a malicious same-user administrator outside the explicit JSON and stage-schema boundary."
+    ]
+  },
+  "remaining_live_gate": [
+    "Root obtains a fresh consumable paid authorization explicitly bound to candidate SHA-256 664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee and this independent review SHA-256; it must be created within 60 seconds and expire within five minutes.",
+    "Fresh Personal/Default OpenRouter account-control evidence confirms at least 3.944535 USD available balance without reading the key value.",
+    "Fresh machine evidence confirms the canonical wrapper hash, empty production receipt paths, no conflicting processes and closed designated ports.",
+    "Fresh same-source EPA evidence confirms the frozen PDF, release, passage-release and answer-unit hashes and approved S01-S18 boundary.",
+    "The reviewed executable wrapper is used at its fixed canonical path; any byte or pin change requires a new freeze and independent review."
+  ],
+  "material_product_risk": "This is one previously exercised W02/W09 semantic regression, and its evaluator isolation claim is intentionally limited to the exact frozen application JSON and stage encodings. Fresh source/account/machine state and a new paid decision remain necessary immediately before any live run.",
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "application_services_started": false,
+    "windows_policy_changes": false,
+    "author_or_shared_operations_files_modified": false,
+    "only_new_product_review_json_written": true,
+    "commit_or_publication": false
+  },
+  "conclusion": "PASS for frozen M50 v4 candidate 664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee at the offline product boundary. No remaining product blocker was found. This does not authorize or evidence a live or paid run; fresh exact-candidate board authorization and the listed preflight evidence remain mandatory."
+}

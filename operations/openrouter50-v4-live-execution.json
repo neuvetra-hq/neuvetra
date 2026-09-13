@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "kind": "m50_v4_live_execution",
+  "run_id": "m50-h02-paid-regression-v4",
+  "case_id": "M43-H02",
+  "recorded_at": "2026-09-13T02:58:00Z",
+  "disposition": "failed_safely",
+  "question": "How should I research a U.S. grid-average factor for a facility, and what should I verify before treating the result as current?",
+  "candidate_sha256": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
+  "manifest_sha256": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
+  "wrapper_sha256": "d03afae8f93fb698bec57892d55102eabe3c4d5cf9561d38f6a1c451bd883488",
+  "authorization": {
+    "explicit_exact_scope_received": true,
+    "authorization_sha256": "c25811adcacf3f9909445f21787f49aae1b6a0d23c29f568acc203b0fadfbd62",
+    "authorization_consumed_sha256": "4006b5dffd7aae290577922dce480b68c9e56785481c949f8fa60ae813d4576d",
+    "one_use_consumed": true,
+    "reusable": false
+  },
+  "fresh_evidence": {
+    "account_sha256": "ed63ab685a8037fec40ae000a0426571161f37d725bee2114fce3e12349ed78f",
+    "machine_sha256": "80715904cf3c488211851006009888a2a51c037db1ca4cebcf7136cfe649eeb9",
+    "source_sha256": "d80319c5b6930779477678906d1e789a8d13caff1ed90ab20afabcc6fca95288",
+    "launch_bundle_sha256": "0d19ea80b1c090fc9c4b60ad2ac63166804dea0f5b8997b36f9e79f3b8c3289b",
+    "live_preflight_sha256": "4782e8a64038f5573bcbbab179aab34b2b0dad119d5496663d469cfa0eb55954",
+    "official_epa_pdf_sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+    "official_epa_pdf_bytes": 396931,
+    "approved_passages": "S01-S18"
+  },
+  "submission": {
+    "question_submissions": 1,
+    "automatic_retries": 0,
+    "carried_stages": 0,
+    "provider_transport_calls": 1,
+    "completed_provider_stages": [
+      "analyze"
+    ],
+    "failed_application_stage": "analyze",
+    "request_model": "anthropic/claude-opus-5",
+    "selected_provider": "Anthropic",
+    "provider_http_status": 200,
+    "provider_finish_reason": "stop",
+    "input_tokens": 4132,
+    "output_tokens": 521,
+    "validated_request_body_sha256": "513d064d3f52a63d2a4adbe3eca2b7210c5f7b5fe2353c799e0fa883ca5e205e",
+    "validated_request_body_bytes": 12398
+  },
+  "cost": {
+    "expected_usd": 0.271573,
+    "conservative_estimate_usd": 3.944535,
+    "guaranteed_billing_cap": false,
+    "native_settled_nano_usd": 33685000,
+    "native_settled_usd": 0.033685,
+    "pending_attempts": [],
+    "uncertain_attempts": [],
+    "exact_total_claimed": true,
+    "post_run_account_balance_usd_rounded": 98.12
+  },
+  "product_result": {
+    "http_status": 200,
+    "body_sha256": "9b8c492f5a6f968f081d260044802515e65ba402a8c38fc8a58df7ab54980ff9",
+    "status": "unavailable",
+    "reason_code": "provider_failure",
+    "claims": 0,
+    "evidence": 0,
+    "sources": 0,
+    "answer_displayed": false,
+    "accepted": false
+  },
+  "closure": {
+    "terminal_sha256": "da291cc03c03e527b50c61673a3d761187bdeb9c8dda43aee84b3a16e14110ab",
+    "terminal_kind": "failure",
+    "terminal_reason": "terminal_preconditions_failed",
+    "payload_seal_sha256": "facd754ae57c7d6703a820eceaad1aa0f5f8e11cbf19f1d243a39b9f38b472e2",
+    "cost_closure_sha256": "920ef20f97c27f3c443d245e9109be21219e91986751f30f22622f410ea50962",
+    "shutdown_sha256": "9db6319b1e512668702815067ed4ea29688856e3c2dc5eaebe94d2b38ba65550",
+    "controlled_shutdown": true,
+    "no_restart": true,
+    "no_carry": true,
+    "no_more_dispatch": true,
+    "ports_closed": [
+      3012,
+      3016,
+      5174,
+      5175
+    ],
+    "wrapper_processes": 0,
+    "post_shutdown_grader": "refused_missing_success_closure",
+    "evaluator_key_read": false
+  },
+  "limitations": [
+    "The preserved runtime evidence proves a successful Anthropic generation followed by an application analyze-stage failure, but it does not retain the finite response-validation failure detail or provider completion text, so the exact application rejection cannot be assigned from the sealed artifacts alone.",
+    "The wrapper subsequently failed while parsing live-backend stdout because the live backend does not emit the JSON result the wrapper expects. This post-terminal wrapper defect did not cause the earlier application response failure.",
+    "adapter/permit-issuer-failure.json records provider_requests as zero even though the runtime capture and shutdown record prove one provider transport call. The sealed runtime is authoritative for provider activity."
+  ],
+  "excluded": {
+    "customer_data": true,
+    "source_expansion": true,
+    "candidate_change": true,
+    "automatic_rerun": true,
+    "merge": true,
+    "publication": true,
+    "deployment": true,
+    "release": true
+  },
+  "next_action": "M51: reproduce the analyze response-contract failure offline with a sanitized shape fixture, preserve the finite failure detail, repair live-backend wrapper result emission and contradictory post-terminal failure accounting, then obtain independent provider-disabled QA before asking for any separately authorized live rerun."
+}

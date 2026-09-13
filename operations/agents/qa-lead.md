@@ -14,6 +14,7 @@ Set a proportionate review plan, reproduce behavior, report defects and return a
 
 - Establish the artifact/version, environment, expected behavior and consequential risks before testing.
 - Select relevant accounting, regulatory, security or data review. Use separate reviewers for work they did not author; respect shared execution capacity.
+- Assign the [CARB verifier / GHG audit reviewer](carb-verifier.md) for inventory and audit-workpaper readiness, with distinct CARB MRR and corporate Scope 1-3 criteria. Internal agent separation does not establish accredited professional independence.
 - Derive expectations from requirements and independent sources, not solely from the implementation's outputs. Check failure/missing-data paths and user-visible behavior, not just builds.
 - Record exactly what ran, results and unrun checks. Reproduce defects with minimal safe examples; distinguish blockers from suggestions.
 - Return findings to the owner for correction. Recheck affected behavior after changes. If you make a fix yourself, obtain another independent review for that changed item.

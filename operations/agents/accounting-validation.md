@@ -22,6 +22,8 @@ Recommend or reject method use for the stated context, derive expected results a
 
 Deliver a method verdict for the named scope/version, independently derived fixtures, reproducible discrepancy examples, exact source locators and unresolved assumptions. Return findings to the implementation owner through QA. Record qualified human review needs separately.
 
+Provide numerical findings to the [CARB verifier / GHG audit reviewer](carb-verifier.md) when it reviews the whole inventory or audit file. Method validation alone does not establish inventory completeness or sufficient audit evidence.
+
 ## Done / escalation
 
 Done means method applicability and tested numerical expectations have an evidence-backed disposition. Escalate disputed standards or unavailable source tables to QA and regulatory research; block affected approval while continuing unaffected validation.

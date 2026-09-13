@@ -1,20 +1,25 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-11T03:41:03.3731129Z",
+  "updated_at": "2026-09-13T05:04:00.000Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M2",
-    "name": "Reviewed evidence and first supported answer",
-    "status": "awaiting_board_feedback_m33_offline_complete",
-    "next_gate": "Review the independently accepted M33 offline pipeline-integrity repair. Any live or paid test requires a new frozen run and separate authorization."
+    "id": "M52",
+    "name": "Compiled provider-disabled launcher integration",
+    "status": "offline_complete_independent_product_and_technical_acceptance",
+    "next_gate": "Board demonstration and feedback; no live, paid, publication, merge, deployment or release action."
   },
   "completed_milestones": [
     {
       "id": "M1",
       "completed_at": "2026-09-08",
       "feedback": "operations/feedback/2026-09-08-milestone-1.md"
+    },
+    {
+      "id": "M52",
+      "completed_at": "2026-09-13",
+      "feedback": "claude-memory/meetings/2026-09-13-neuvetra-m52-compiled-offline-closure.md"
     }
   ],
   "runtime": {
@@ -22,18 +27,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M32 remains permanently closed after one W11 UI submission. M33 was offline only: no service or browser start. Exact M32 backend/frontend processes remain absent, ports3012/3016/5174/5175 closed, ordinary preview paused.",
+    "website_preview_state": "M50 v4 failed safely and is fully stopped. M51 and M52 start no persistent service; PIDs are absent and ports 3012/3016/5174/5175 are closed.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "Completed M33 offline. Provider identity and pipeline processing integrity are separate; malformed/nonempty pipelines still fail closed with finite safe labels. QA passed26 focused tests/669 assertions,409 composed tests/4230 assertions and an independent148-assertion probe. No provider request or paid action."
+    "last_session_work": "M52 compiled successor integration is complete for provider-disabled offline scope. Candidate 7b0d26e0..., manifest 1a0ad432..., rehearsal 5ec391ae... passed independent product df1617ed... and technical c64fd6b7... review. No provider, network, credential, paid or publication activity occurred."
   },
   "session_handoff": {
-    "saved_at": "2026-09-11T03:41:03.3731129Z",
+    "saved_at": "2026-09-13T05:03:00.000Z",
     "path": "operations/next-session.md",
-    "board_record": "claude-memory/meetings/2026-09-09-scope2-benchmark.md",
-    "next_task": "Collect board feedback on M33. A later live check requires a fresh immutable candidate and explicit paid-call authorization; do not restart M32 or infer its lost pipeline value.",
-    "execution_state": "m33_offline_complete_independent_qa_pass_awaiting_board_feedback",
-    "review": "Independent QA passed M33 offline pipeline processing-integrity separation and fail-closed diagnostics. Live provider compatibility, browser acceptance and release remain unverified.",
-    "scope": "Continue current approved EPA-only milestone and isolated FAQ benchmark; source expansion remains separately held."
+    "board_record": "claude-memory/meetings/2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation.md",
+    "next_task": "Collect board feedback on the M52 provider-disabled offline demonstration; preserve M51 accepted and M50 failed evidence.",
+    "execution_state": "m52_offline_complete_independent_product_and_technical_acceptance_no_live_activity",
+    "review": "M52 candidate 7b0d26e0..., manifest 1a0ad432..., rehearsal 5ec391ae... pass. Product df1617edd0a753e8fd2d47b041c3535429e62d560c641e697a4b377b9f6caf9f and technical c64fd6b7ef4237ee3e1ca2ddd91ccabe739e61d20b6fd3ddedf4d30d250353a1 are bound to exact bytes.",
+    "scope": "Actual composed runtime and compiled Windows launcher exercised with provider-disabled synthetic success/failure fixtures only. No live request, retry, source expansion, publication, merge, deployment or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -66,8 +71,22 @@
     "m32_state": "published_to_current_pr_branch_remote_tracking_verified",
     "m32_commit": "01ff95f",
     "m32_evidence_commit": "3835744",
-    "m33_state": "offline_complete_independent_qa_pass_local_commit_unpublished",
-    "m33_commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c"
+    "m33_state": "offline_complete_independent_qa_pass_board_accepted_local_unpublished",
+    "m33_commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c",
+    "m33_evidence_commit": "ee083c3",
+    "local_head": "ee083c3",
+    "remote_tracking_commit": "383574425d77ff6c8e28ff0d2c4b44a47f2c4934",
+    "local_commits_ahead_of_remote": 2,
+    "m34_state": "board_authorized_handoff_ready_not_started_no_publication",
+    "m39_state": "closed_partial_live_acceptance_local_unpublished_no_release",
+    "m40_state": "offline_complete_independent_qa_pass_local_unpublished_no_live_authorization",
+    "m46_state": "closed_failed_non_reusable_no_publication",
+    "m47_state": "offline_complete_independent_qa_pass_unpublished",
+    "m48_state": "blocked_no_disjoint_case_zero_activity_unpublished",
+    "m49_state": "offline_complete_independent_qa_pass_unpublished_awaiting_paid_decision",
+    "m50_state": "live_failed_safely_closed_no_retry_unpublished",
+    "m51_state": "v4_offline_complete_independent_product_and_technical_acceptance_unpublished",
+    "m52_state": "offline_compiled_integration_complete_independent_product_and_technical_acceptance_unpublished"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -111,7 +130,7 @@
         ".superpowers/website-epa-live-30/closure.json",
         "evaluations/research-qa/openrouter30-closure-review-10.json"
       ],
-      "next_action": "Await board feedback. Proposed M31 is offline field-level provider identity diagnostics and safe cost reconciliation, followed by independent QA; no paid rerun is authorized."
+      "next_action": "Closed. Preserve its partial outcome, retired stages and authorization; do not restart."
     },
     {
       "id": "M31-OFFLINE",
@@ -124,7 +143,7 @@
         "docs/research/provider-verification-milestone-31.md",
         "evaluations/research-qa/openrouter31-offline-review-10.json"
       ],
-      "next_action": "Board decides publication. A separately frozen paid live rerun requires new authorization."
+      "next_action": "Closed and published on the existing PR branch; preserve as demonstrated diagnostic/accounting behavior."
     },
     {
       "id": "M33-OFFLINE",
@@ -137,7 +156,19 @@
         "docs/research/provider-pipeline-milestone-33.md",
         "evaluations/research-qa/openrouter33-offline-review-10.json"
       ],
-      "next_action": "Board feedback. Any paid/live verification requires a new frozen run and authorization; M32 cannot be replayed."
+      "next_action": "Closed and accepted by the board. Continue only through the separately defined M34 handoff; do not amend or replay M32."
+    },
+    {
+      "id": "M34-ONLINE",
+      "owner": "new_task_ceo_with_cto_and_independent_qa",
+      "status": "authorized_not_started",
+      "title": "Validate the M33 provider pipeline contract in one bounded online website run",
+      "scope": "Fresh website-epa-live-34; one unchanged W11 submission, approved EPA-only evidence, OpenRouter to Anthropic, at most5 new stages, zero carry/retries, diagnostic only",
+      "acceptance": "Fresh immutable candidate and financial calculation; current provider/account plugin evidence; pinned runtimes; direct browser response capture proven before admission; first outcome and cost retained; fail-closed no-retry shutdown and independent closure QA",
+      "evidence": [
+        "docs/research/provider-pipeline-live-handoff-34.md"
+      ],
+      "next_action": "Create fresh M34 candidate and authorization artifact from the current board approval, then obtain independent preflight before any credential or paid provider action."
     },
     {
       "id": "CONN-28",
@@ -581,6 +612,240 @@
         "evaluations/research-qa/runs/2026-09-09-website-06b-independent-replay.json",
         "evaluations/research-qa/runs/2026-09-09-website-composed-followup-review-06b.json"
       ]
+    },
+    {
+      "id": "M39-LIVE",
+      "owner": "ceo_with_cpo_cto_capture_and_independent_qa",
+      "status": "closed_partial_live_acceptance_supervisor_timeout",
+      "title": "Run the authorized W03 then EPA14-B01 website diagnostic",
+      "scope": "Serial W03 and EPA14-B01 using approved EPA evidence, maximum10 stages, zero retries/carry and no release",
+      "result": "W03 completed once in3 settled stages and independent terminal QA accepted the supported-with-qualifications result. The fixed15-minute supervisor stopped before EPA14-B01 permit; the issuer refused it. No EPA14-B01 click/provider/model/stage/spend. Conservative emergency closure and independent QA passed; all10 slots retired.",
+      "evidence": [
+        "docs/research/provider-two-case-live-milestone-39.md",
+        ".superpowers/website-epa-live-39/closure.json",
+        "evaluations/research-qa/openrouter39-closure-review-10.json"
+      ],
+      "next_action": "M40 offline supervisor lifecycle repair; preserve M39 and accepted W03. Any later EPA14-B01-only paid run needs fresh explicit board authorization."
+    },
+    {
+      "id": "M40-OFFLINE",
+      "owner": "cto_with_cpo_and_independent_qa",
+      "status": "complete_independent_qa_pass",
+      "title": "Repair the isolated supervisor lifecycle for the remaining one-case diagnostic",
+      "scope": "EPA14-B01-only offline runtime with fixed30-minute backend-owned deadline and no live activity",
+      "result": "Final candidate passed137/137 pins,25 tests/335 assertions,provider26/669 and four typechecks. Dual supervisor ordering, finite backend loss, receipt/closure binding, mutation rejection and post-stop refusal pass. Two earlier QA failures are preserved.",
+      "evidence": [
+        "docs/research/supervisor-lifecycle-milestone-40.md",
+        ".superpowers/openrouter-40/candidate.json",
+        "evaluations/research-qa/openrouter40-candidate-final-review-10.json"
+      ],
+      "next_action": "Await fresh explicit board authorization for the exact EPA14-B01-only live diagnostic; accepted W03 remains untouched."
+    },
+    {
+      "id": "M40-LIVE",
+      "owner": "ceo_with_cpo_cto_capture_and_independent_qa",
+      "status": "complete_independent_closure_qa_pass",
+      "title": "Run the authorized EPA14-B01 coverage-boundary website diagnostic",
+      "scope": "One exact EPA14-B01 browser submission using approved EPA S01-S18, direct OpenRouter to Anthropic, maximum5 stages, zero retries/carry and no release",
+      "result": "One click completed in4 settled stages. UI and exact captured response returned unsupported/coverage_missing with empty claims/evidence/sources and the required renewable-purchases scope gap. Exact cost233731001nanoUSD; one stage retired; services stopped; closure QA passed.",
+      "evidence": [
+        "docs/research/supervisor-lifecycle-milestone-40.md",
+        ".superpowers/website-epa-live-40/closure.json",
+        "evaluations/research-qa/openrouter40-closure-review-10.json"
+      ],
+      "next_action": "M41 offline demo readiness using preserved accepted W11, W03 and EPA14-B01 artifacts; no new paid test or deployment."
+    },
+    {
+      "id": "M41-DEMO-READINESS",
+      "owner": "ceo_with_cpo_cto_and_independent_qa",
+      "status": "complete_independent_qa_pass_awaiting_board_feedback",
+      "title": "Package the three accepted research behaviors for local board review",
+      "scope": "Offline local demo flow using preserved M35 W11, M39 W03 and M40 EPA14-B01 evidence; no provider calls, source expansion, deployment or release",
+      "acceptance": "One clear board-review flow shows context request, supported qualified answer and source-coverage abstention with visible provenance and pilot limits.",
+      "evidence": [
+        "docs/research/offline-board-demo-milestone-41.md",
+        "claude-memory/meetings/2026-09-11-neuvetra-m41-offline-demo.md",
+        "evaluations/research-qa/milestone41-offline-demo-review-10.json"
+      ],
+      "result": "Open local Ask-Answer-Abstain flow renders exact hash-verified W11,W03,EPA14-B01 artifacts with full provenance,pilot limits and no research/provider request. Development-only payload is absent from production output; independent QA passed.",
+      "next_action": "Collect board feedback on clarity,trust and usability before selecting a dependent milestone."
+    },
+    {
+      "id": "M43-OFFLINE",
+      "owner": "ceo_with_cpo_cto_source_review_and_independent_qa",
+      "status": "complete_independent_qa_pass_awaiting_paid_run_decision",
+      "title": "Prepare the bounded EPA-only RAG pilot-readiness evaluation",
+      "scope": "Offline contract,14-case matrix,source-readiness review,provider-disabled preflight,two-question paid-canary package and independent QA; no live execution.",
+      "acceptance": "New development and held-out questions cover required answer/abstention/citation/adversarial behaviors; primary fixture contains only H01/H04 question bodies; pins,cost,latency,stop and review controls reproduce and fail closed.",
+      "evidence": [
+        "docs/research/rag-pilot-readiness-milestone-43.md",
+        "docs/research/rag-pilot-contract-m43.md",
+        "docs/research/rag-pilot-source-readiness-m43.md",
+        "docs/research/rag-pilot-execution-plan-m43.md",
+        "evaluations/research-qa/m43-pilot-readiness-review-10.json"
+      ],
+      "result": "Offline preparation passed independent QA.14 new cases:9 development,5 held-out. Primary live proposal is H01 then gated H04; expected cost$0.455912001,conservative local reservation$9.17912,not a guaranteed cap.",
+      "next_action": "Closed as preparation. Its M44 execution authorization was consumed by a fail-closed zero-activity launch and does not carry to M45."
+    },
+    {
+      "id": "M44-LIVE",
+      "owner": "ceo_with_cto_cpo_and_independent_qa",
+      "status": "closed_corrected_zero_activity_emergency_qa_pass",
+      "title": "Run the authorized H01 then gated H04 primary canary",
+      "scope": "One-use H01 then independently gated H04 using approved EPA S01-S18 and direct OpenRouter-to-Anthropic routing; ten stages maximum, zero retry/carry.",
+      "result": "The first visible page used127.0.0.1 while the frozen gate required localhost. The gate returned403 before an ingress claim. No provider request,stage,spending event,response capture or H04 artifact exists. All ten stages retired. The original shutdown record falsely claimed5174 closed; a supplemental correction stopped the stale preview and independent QA verified all four controlled ports closed.",
+      "evidence": [
+        ".superpowers/website-epa-live-44/closure.json",
+        "operations/openrouter44-root-shutdown-correction.json",
+        "evaluations/research-qa/openrouter44-live-incident-review-10.json",
+        "evaluations/research-qa/openrouter44-closure-review-10.json"
+      ],
+      "next_action": "Do not restart M44 or reuse its authorization,permits or retired stages. Continue only with a fresh M45 candidate and explicit board approval."
+    },
+    {
+      "id": "M45-OFFLINE",
+      "owner": "ceo_with_cpo_cto_and_independent_qa",
+      "status": "complete_independent_qa_pass_awaiting_fresh_paid_authorization",
+      "title": "Prevent browser-origin mismatch in a fresh recovery canary",
+      "scope": "Provider-disabled recovery design and proof for a canonical localhost page; preserve H01-to-H04 gates,cost/source/customer boundaries and zero retry/carry.",
+      "acceptance": "A127.0.0.1 alias redirects before any action or remains disabled with zero POST/provider proof. Fresh live work requires explicit board authorization. Commit/push eligibility requires both accepted cases,reconciled accounting and ordinary closure.",
+      "evidence": [
+        "docs/research/primary-canary-live-candidate-m45.md",
+        "evaluations/research-qa/m45-recovery-canary-acceptance-v1.json",
+        "evaluations/research-qa/openrouter45-offline-candidate-review-10.json",
+        "tools/research/m45-primary-candidate-v1.json",
+        "tools/research/m45-primary-launch-manifest-v1.json"
+      ],
+      "result": "Fresh candidate eb80803b and allocation08fa0f90 use canonical localhost. Safe numeric-alias navigation redirects before app action; numeric-alias POST returns403 without reaching proxy,ingress or provider. Root and QA reproduced42 tests/530 assertions,typecheck and exact frozen bytes. Paid authorization is deliberately absent.",
+      "next_action": "Board decision on the exact M45 paid run. If approved, write and independently hash-bind the paid authorization and complete fresh zero-activity browser,account,source,machine and per-case evidence before launch."
+    },
+    {
+      "id": "M46-LIVE",
+      "owner": "ceo_with_cto_and_independent_qa",
+      "status": "closed_failed_non_reusable",
+      "title": "Run the H01 then gated H04 EPA-only live diagnostic",
+      "scope": "Two public/synthetic questions, OpenRouter to Anthropic, at most ten stages, zero retries/carry, no customer data/source expansion/release",
+      "result": "H01 passed. H04 returned a safe unsupported/action_out_of_scope response with empty claims/evidence/sources, but failed the frozen all-action_out_of_scope gap contract. The frozen issuer failed with EEXIST and a manually generated H04 permit broke approved-path provenance. Six stages settled at $0.543146. Emergency closure passed as a fail-closed seal only.",
+      "evidence": [
+        "evaluations/research-qa/openrouter46-final-execution-validity-review-10.json",
+        ".superpowers/website-epa-live-46/closure.json",
+        "evaluations/research-qa/openrouter46-closure-review-10.json"
+      ],
+      "next_action": "Do not restart, retry, relabel as held-out success or publish. Preserve all evidence."
+    },
+    {
+      "id": "M47-OFFLINE",
+      "owner": "cto_with_independent_qa",
+      "status": "complete",
+      "title": "Repair permit provenance and out-of-scope question analysis",
+      "scope": "Provider-disabled implementation and production-equivalent OneDrive rehearsal only; new M47 artifacts, no M46 mutation or provider access",
+      "acceptance": "Atomic OneDrive-safe issuer; backend refusal of missing/manual/partial/replayed provenance before provider access; old H04 regression yields only action_out_of_scope gaps; true unresolved references still request context; H01 unchanged; independent QA pass.",
+      "evidence": [
+        "docs/research/m46-incident-and-m47-remediation-plan.md",
+        "tools/research/m47-offline-candidate-v4.json",
+        "operations/openrouter47-provider-disabled-rehearsal-v4.json",
+        "evaluations/research-qa/openrouter47-offline-v4-review-10.json"
+      ],
+      "next_action": "Collect board feedback. A later live successor must use a disjoint held-out case, fresh source/runtime/cost evidence and explicit board authorization.",
+      "result": "Frozen v4 binds the backend to the exact dedicated wrapper executable through the OS-observed live parent path and SHA-256, closes the reproduced manual-parent bypass, preserves one-use atomic issuance, and repairs the H04 directive classification without weakening H01, ambiguity handling or the terminal contract. Independent QA passed."
+    },
+    {
+      "id": "M48-OFFLINE",
+      "owner": "ceo_with_cto_cpo_and_independent_qa",
+      "status": "blocked_no_semantically_novel_case",
+      "title": "Prepare one materially disjoint held-out live-readiness package",
+      "scope": "Provider-disabled one-case preparation only using approved EPA S06-S10/S18 and M47 v4 controls; no paid authorization or provider access.",
+      "acceptance": "Prove H02 remains unexecuted and evaluator-separated; freeze exact question/model-visible evidence/request, current route/runtime/source prerequisites, one-case stage/time/stop/cost bounds, production-path rehearsal and shutdown evidence; independent QA pass.",
+      "evidence": [
+        "evaluations/research-qa/m48-heldout-novelty-review-10.json",
+        "evaluations/research-qa/m48-blocked-closure-review-10.json",
+        "operations/m48-unfinalized-draft-cleanup.json"
+      ],
+      "next_action": "Board chooses regression/recombination preparation or a later newly approved source/evaluation expansion.",
+      "result": "No remaining M43 held-out row is materially novel in the approved S01-S18 semantic space. H02, H03 and H05 all repeat prior live, development or provider-visible evaluation behavior. H02-specific preparation stopped before freeze; independent closure QA passed and unused drafts were removed."
+    },
+    {
+      "id": "M49-OFFLINE",
+      "owner": "ceo_with_cto_cpo_and_independent_qa",
+      "status": "complete_independent_qa_pass_scope_approved_execution_superseded_by_m50_gate",
+      "title": "Prepare H02 as a one-case regression/recombination run",
+      "scope": "Provider-disabled exact H02 preparation using approved EPA S01-S18 and M47 controls; no paid authorization or provider access.",
+      "acceptance": "Frozen exact request and separated evaluator key; actual production-path provider-disabled lifecycle; current route/source/runtime and case-specific cost proposal; stable bytes and independent QA; regression-only claim.",
+      "evidence": [
+        "docs/research/m49-h02-regression-candidate.md",
+        "tools/research/m49-h02-provider-disabled-candidate-v1.json",
+        "tools/research/m49-h02-provider-disabled-manifest-v1.json",
+        "operations/openrouter49-provider-disabled-rehearsal-v1.json",
+        "evaluations/research-qa/m49-h02-regression-product-acceptance-10.json",
+        "evaluations/research-qa/openrouter49-offline-review-10.json",
+        "claude-memory/meetings/2026-09-12-neuvetra-m49-h02-regression-readiness.md"
+      ],
+      "next_action": "Preserve M49 as provider-disabled preparation. Its board-approved scope does not authorize a materially changed M50 candidate; complete the M50 adapter gate before requesting fresh exact paid approval.",
+      "result": "Candidate d954dc05... and manifest 33437953... froze one H02 regression case. CPO accepted static evaluator separation; independent QA passed all 36 M49 and four inherited M47 pins with no findings. The board later approved the exact paid scope, but launch review found no reviewed live ingress, so zero paid activity occurred and M50 became necessary."
+    },
+    {
+      "id": "M50-LIVE",
+      "owner": "ceo_with_cto_cpo_and_independent_qa",
+      "status": "closed_live_failed_safely_no_retry",
+      "title": "Complete the reviewed live path and execute the approved H02 regression",
+      "scope": "Minimal provider-enabled adapter for the exact board-approved H02 scope; M49 immutable; no provider request before freeze and independent QA.",
+      "acceptance": "Provider-disabled rehearsal proves live server/browser ingress, one-use admission, M47 wrapper lineage, dynamic payload separation, exact cost and terminal/shutdown controls; frozen bytes receive independent QA before one paid request.",
+      "evidence": [
+        "evaluations/research-qa/m50-h02-live-adapter-product-review-10.json",
+        "evaluations/research-qa/openrouter50-offline-review-10.json",
+        "operations/m50-v2-windows-code-integrity-block.json",
+        "docs/research/m50-v2-remediation-blocked.md",
+        "evaluations/research-qa/m50-v2-blocked-handoff-product-review-10.json",
+        "evaluations/research-qa/openrouter50-v2-blocked-review-10.json",
+        "claude-memory/meetings/2026-09-12-neuvetra-m50-live-adapter-blocked.md",
+        "evaluations/research-qa/m50-h02-live-adapter-v2-product-review-10.json",
+        "evaluations/research-qa/openrouter50-v2-final-review-10.json",
+        "evaluations/research-qa/m50-h02-live-adapter-v3-product-review-10.json",
+        "evaluations/research-qa/openrouter50-v3-final-review-10.json",
+        "tools/research/m50-h02-live-candidate-v4.json",
+        "tools/research/m50-h02-live-manifest-v4.json",
+        "operations/openrouter50-provider-disabled-rehearsal-v4.json",
+        "evaluations/research-qa/m50-h02-live-adapter-v4-product-review-10.json",
+        "evaluations/research-qa/openrouter50-v4-final-review-10.json",
+        "claude-memory/meetings/2026-09-12-neuvetra-m50-v4-live-adapter-readiness.md",
+        "operations/openrouter50-v4-live-execution.json",
+        "docs/research/m50-v4-live-failure.md",
+        "evaluations/research-qa/m50-h02-live-v4-product-outcome-10.json",
+        "evaluations/research-qa/openrouter50-v4-live-execution-review-10.json"
+      ],
+      "next_action": "Closed. Preserve all run evidence and do not rerun. M51 repairs the demonstrated diagnostics and wrapper accounting offline.",
+      "result": "One authorized analyze request reached OpenRouter/Anthropic and settled exact native cost of $0.033685. The application returned unavailable/provider_failure with no claims, evidence, sources or answer. No plan/verify, retry, carry, evaluator read or publication occurred. Mechanical closure passes; exact response-validation subtype is unknowable because M50 discarded the safe detail. A separate wrapper stdout parse defect wrote contradictory zero-request failure accounting."
+    },
+    {
+      "id": "M51-OFFLINE",
+      "owner": "ceo_with_cto_cpo_and_independent_qa",
+      "status": "complete_independent_product_and_technical_acceptance",
+      "title": "Preserve response-contract diagnostics and make backend/wrapper closure authoritative",
+      "scope": "Provider-disabled successor using sanitized response-shape fixtures and production decoder components; M50 frozen; no live activity.",
+      "acceptance": "Finite safe failure phase/detail, exact failed-attempt cost settlement, no extra dispatch, exact closure file/stdout parity, authoritative transport accounting, zero network/service/credential/evaluator activity and independent review.",
+      "result": "Three rejected candidates preserve independent findings. V4 candidate 2461e7b8..., manifest d7190718... and rehearsal d842552d... pass all 24 pins, 7 tests/40 assertions, typecheck and 26 rebound mutation probes. It preserves complete bounded post-response diagnostics, validates and hash-binds closure sources, recomputes canonical closure, separates counts and never invents zero. Fixtures are representative; M50 exact subtype and live compatibility remain unknown.",
+      "evidence": [
+        "docs/research/m51-offline-remediation-contract.md",
+        "operations/openrouter51-provider-disabled-rehearsal.json",
+        "tools/research/m51-offline-candidate-v1.json",
+        "tools/research/m51-offline-manifest-v1.json",
+        "tools/research/m51-offline-candidate-v4.json",
+        "tools/research/m51-offline-manifest-v4.json",
+        "docs/research/m51-offline-closure.md",
+        "evaluations/research-qa/m51-v4-offline-product-review-10.json",
+        "evaluations/research-qa/openrouter51-v4-offline-review-10.json"
+      ],
+      "next_action": "Collect board feedback. Any live successor requires new compiled-wrapper integration, independent review, fresh evidence, exact cost scope and explicit authorization."
+    },
+    {
+      "id": "M52-OFFLINE-INTEGRATION",
+      "owner": "cto_with_cpo_and_independent_qa",
+      "status": "in_progress_cto_implementation",
+      "title": "Integrate accepted diagnostics into the compiled provider-disabled launcher",
+      "scope": "Fresh M52 namespace with actual composed server/runtime/backend/compiled Windows launcher; valid synthetic path plus bounded failure/refusal matrix; M50/M51 immutable.",
+      "acceptance": "Compiled wrapper parent/child and ingress controls, valid analyze-plan-verify, representative response/transport/timeout/pre-capture failures, exact diagnostics/cost/closure, no extra dispatch, no network/provider/credential/evaluator activity, disposable cleanup and independent QA.",
+      "evidence": [],
+      "next_action": "CTO implementation in progress; no live request or publication."
     }
   ],
   "feedback_tasks": [
@@ -659,13 +924,13 @@
     {
       "id": "M2-EPA-LIVE-08",
       "owner": "cto_with_independent_qa",
-      "status": "blocked",
+      "status": "authorized_not_started_m34",
       "title": "Evaluate and demonstrate the corrected engine with the existing approved EPA release",
       "dependencies": [
         "M2-RESUME-READINESS-08"
       ],
       "acceptance": "Freeze a new-profile launcher/allocation and actual process identity; preserve 18 baseline expectations and three separately recorded current-source feedback probes; independent output review and matched browser demonstration before unpause",
-      "next_action": "Investigate the failing read-only Supabase/Pinecone evidence request with safe diagnostics; do not infer an OpenRouter credit failure. Any fresh UI collection must preserve closed26/27 failures and use the reviewed one-shot isolated preview. No restart or carry from27.",
+      "next_action": "Follow the M34 handoff for one fresh W11 online provider-pipeline validation. Do not restart M32 or reuse any closed-run authorization/stages.",
       "evidence": [
         "docs/research/epa-live-qa-10.md",
         "docs/research/epa-live-engineering-11.md",
@@ -697,8 +962,8 @@
         "evaluations/research-qa/openrouter27-ui-partial-review-10.json",
         "evaluations/research-qa/openrouter27-stop-review-10.json"
       ],
-      "progress": "OpenRouter connected; original mixed22/23/26 ten-question benchmark complete and independently graded0/20 (uniformrun19 remains1/20). Isolation27 implemented and independently reviewed. Actual controlledW03 returnedunavailable/cloud_provider_unavailable beforeanymodelstage; safeclaim/CDPidentitymatched, failuresealed fe0265e0. W11/B01unrun. Closed27 SHA3143e744: backend41172/frontend39956stopped,3012/3016/5175closed,ordinary5174paused;15unused retired/no carry. Cumulative862modelstages andOpenRouterreported$2.152794;27added$0, original$10monitorremaining$7.847206. No supportedthree-case demonstration orreleaseacceptance. No activeworkers orscheduledcontinuation. Next: diagnose read-onlycloud-evidencefailure, then separatelyreviewfreshisolatedUIcollection; preserveallfailures,benchmarkgoldisolation,andseparatesourcehold.",
-      "blocker": "Controlled W03 cloud-evidence request failed before model work; the three-case website demonstration and remaining selection reliability have not passed."
+      "progress": "OpenRouter connected; original mixed22/23/26 ten-question benchmark complete and independently graded0/20 (uniformrun19 remains1/20). Isolation27 implemented and independently reviewed. Actual controlledW03 returnedunavailable/cloud_provider_unavailable beforeanymodelstage; safeclaim/CDPidentitymatched, failuresealed fe0265e0. W11/B01unrun. Closed27 SHA3143e744: backend41172/frontend39956stopped,3012/3016/5175closed,ordinary5174paused;15unused retired/no carry. Cumulative862modelstages andOpenRouterreported$2.152794;27added$0, original$10monitorremaining$7.847206. No supportedthree-case demonstration orreleaseacceptance. No activeworkers orscheduledcontinuation. Next: diagnose read-onlycloud-evidencefailure, then separatelyreviewfreshisolatedUIcollection; preserveallfailures,benchmarkgoldisolation,andseparatesourcehold. M31/M33 offline repairs passed independent QA. M32 then stopped on pipeline after one HTTP200 W11 analyze request; one stage used, four retired, no retry. M34 exact one-question continuation is board-authorized and not started.",
+      "blocker": "Live provider compatibility and direct browser mechanical capture remain unverified. M34 is authorized but no candidate, preflight, runtime or submission exists yet."
     },
     {
       "id": "M2-SCOPE2-BENCHMARK-10",
@@ -860,6 +1125,30 @@
       "decision": "Pause local website submissions until the paired engine and source release passes review",
       "why": "The hot-reloaded new frontend and previous answering service are different versions. A clear local maintenance state avoids inviting acceptance testing on that mixture; the backend remains running.",
       "evidence": "docs/research/website-correction-07.md"
+    },
+    {
+      "id": "D23",
+      "decision": "Accept the three research behaviors across preserved runs and make offline demo readiness the next product gate",
+      "why": "M35 W11 requests missing context, M39 W03 provides a supported qualified answer, and M40 EPA14-B01 abstains for missing source coverage; each has independent evidence and closure review. A local board-review package can now be prepared without another paid run or deployment.",
+      "evidence": "claude-memory/meetings/2026-09-11-neuvetra-m40-live-closure.md"
+    },
+    {
+      "id": "D24",
+      "decision": "Accept M41 as a development-only local board demo and collect board feedback before selecting a dependent milestone",
+      "why": "Exact hash-bound W11,W03 and EPA14-B01 replays now demonstrate ask,answer and abstain in one independently verified flow without a research/provider request or production payload.",
+      "evidence": "claude-memory/meetings/2026-09-11-neuvetra-m41-offline-demo.md"
+    },
+    {
+      "id": "D25",
+      "decision": "Advance from the board-accepted M41 presentation to an MMBtu-only deterministic stationary-natural-gas development slice",
+      "why": "The approved Scope1/2 preparation identifies stationary natural gas as the first calculation slice. One fixed1MMBtu synthetic record proves Decimal arithmetic,lineage,replay and fail-closed boundaries without adding conversion or customer-workspace scope.",
+      "evidence": "claude-memory/meetings/2026-09-11-neuvetra-m42-deterministic-calculation.md"
+    },
+    {
+      "id": "D26",
+      "decision": "Accept M43 as offline pilot-readiness preparation and put only the exact H01-then-H04 paid canary to a board decision",
+      "why": "The new14-case EPA-only matrix and two-question fixture pass independent source,semantic,mechanical,latency,cost and leakage review without making a provider request.",
+      "evidence": "claude-memory/meetings/2026-09-11-neuvetra-m43-rag-pilot-readiness.md"
     }
   ],
   "open_dependencies": [
@@ -870,7 +1159,7 @@
     },
     {
       "id": "R2",
-      "detail": "18 EPA conceptual passages and 24 explanation units approved for private internal use. Historical bounded website acceptance passed; the current OpenRouter website milestone remains incomplete. Wider methods, factors, legal and commercial releases remain unapproved.",
+      "detail": "18 EPA conceptual passages and 24 explanation units approved for private internal use. The three preserved website behaviors and M41 local replay passed; wider methods, factors, legal and commercial releases remain unapproved.",
       "impact": "Limits coverage beyond the private purchased-electricity preview."
     },
     {
@@ -885,14 +1174,8 @@
     },
     {
       "id": "R6",
-      "detail": "Current diagnostic services are stopped and the ordinary preview is paused. Run30 proved W03 but failed W11 at verify-stage router identity decoding; EPA14-B01 is unrun. All unused closed-run stages are retired. Source review expires 2026-09-15T23:20:32Z without automatic renewal.",
-      "impact": "Public/customer deployment still requires authentication, production usage controls, lifecycle and source-rights clearance."
-    },
-    {
-      "id": "R7",
-      "detail": "M32 demonstrated the M31 field-level diagnostic and cost split live, but strict OpenRouter identity still fails on pipeline and the direct browser response capture was incomplete. M32 is closed with no retry.",
-      "impact": "Blocks live provider verification, website acceptance and release. Resolve the pipeline contract offline before considering a newly authorized paid run.",
-      "evidence": "docs/research/provider-verification-live-milestone-32.md"
+      "detail": "Research/provider services remain stopped and ordinary answering is paused. M41 runs only an explicit development-only offline replay on127.0.0.1:5174. The dated EPA source review remains historical evidence and must be refreshed for any future paid run.",
+      "impact": "Does not block board review of the preserved three-behavior local demo. Public/customer deployment still requires wider evidence, calculations, tenant isolation and launch review."
     },
     {
       "id": "R8",
@@ -906,6 +1189,18 @@
       "impact": "Blocks new-source upload, indexing, application provider use and expanded positive-answer release. Generic engineering and existing approved EPA work can proceed.",
       "evidence": "docs/research/website-source-use-review-07.md",
       "next_action": "Obtain rights-holder permission or a qualified documented basis for the exact use; unsent specification at docs/research/ghg-protocol-permission-request.md."
+    },
+    {
+      "id": "R10",
+      "detail": "M42 independently inspects retained EPA factor/GWP cells for a local synthetic development calculation, but factor/method applicability,rights and release authority remain open.",
+      "impact": "Does not block the local deterministic demonstration. Blocks customer inventory use,production factor release,compliance claims and wider methods.",
+      "evidence": "docs/research/deterministic-calculation-milestone-42.md"
+    },
+    {
+      "id": "R11",
+      "detail": "M43 offline preparation passed, but its EPA source review expires at2026-09-15T23:20:32Z and commercial runtime approval remains false. The live H01/H04 canary has not run.",
+      "impact": "Requires fresh source/runtime/account/request review and explicit board authorization before the exact public/synthetic live canary; separately blocks customer pilot,commercial source use and release.",
+      "evidence": "docs/research/rag-pilot-readiness-milestone-43.md"
     }
   ],
   "current_run28_outcome": {
@@ -984,12 +1279,12 @@
     "live_provider_verification": false,
     "diagnostic_acceptance": true,
     "release_acceptance": false,
-    "next_milestone_proposal": "M33 completed the offline provider pipeline contract repair. Board feedback is required before any newly frozen paid run.",
+    "next_milestone_proposal": "M33 completed and was accepted. M34 is separately defined and board-authorized; M32 remains closed with no reusable authorization, permit or stages.",
     "active_workers": 0,
     "commit": "01ff95f"
   },
   "current_m33": {
-    "state": "offline_complete_independent_qa_pass_awaiting_board_feedback",
+    "state": "offline_complete_independent_qa_pass_board_accepted_local_unpublished",
     "report": "docs/research/provider-pipeline-milestone-33.md",
     "independent_review": "evaluations/research-qa/openrouter33-offline-review-10.json",
     "independent_review_sha256": "b7b1d426816511ac88fc5249a336b02ae3a7ff1c911edfcb945358f861b6e062",
@@ -1003,8 +1298,346 @@
     "m32_mutated": false,
     "live_acceptance": false,
     "release_acceptance": false,
-    "next_decision": "Board feedback on whether to prepare a newly frozen, separately authorized live check. Provider/account behavior must yield absent/empty pipeline or remain fail-closed.",
+    "next_decision": "Board accepted M33 and authorized exact bounded M34. No further board decision is needed unless scope/exposure grows, source review expires or provider effects require a policy decision.",
     "active_workers": 0,
-    "commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c"
+    "commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c",
+    "evidence_commit": "ee083c3"
+  },
+  "current_m34": {
+    "state": "closed_zero_activity_superseded_by_m35",
+    "handoff": "docs/research/provider-pipeline-live-handoff-34.md",
+    "run_id": "website-epa-live-34",
+    "scope": "One unchanged W11 website submission using approved EPA evidence through OpenRouter to Anthropic; diagnostic only.",
+    "stage_boundary": "Maximum5 new stages,zero carry,zero question retries,existing single in-request correction only.",
+    "accounting": "Prior settled2855958000nanoUSD;historical uncertainty1624850000;remaining internal monitoring target5519192000. No user hard cap. Fresh exact reservation must fit before launch.",
+    "authorization": "Current board approval authorizes the exact bounded milestone. A fresh run-bound authorization artifact is still required; all earlier authorizations are consumed, closed or retired.",
+    "prerequisites": "Fresh immutable candidate and QA; current OpenRouter docs/account/request plugin evidence; approved EPA source/cloud and expiry recheck; pinned Bun1.3.12,Node24.21.0,Python3.12.14; working direct browser response capture.",
+    "stop_policy": "Stop and seal without retry on identity,pipeline,cost,transport,source,capture,mechanical or terminal failure; retire unused stages and independently verify shutdown.",
+    "provider_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "services_started": false,
+    "browser_submissions": 0,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_decision": "M34 is permanently closed and must not restart. M35 superseded it with a repaired, newly reviewed candidate and fresh authorization."
+  },
+  "current_m35": {
+    "state": "closed_live_diagnostic_accepted_emergency_evidence_closure",
+    "report": "docs/research/provider-pipeline-live-milestone-35.md",
+    "run_id": "website-epa-live-35",
+    "outcome": "One W11 browser click returned needs_input / More context is needed with zero claims, evidence or sources and no invented company cause; independent terminal QA accepted it.",
+    "provider": "Three HTTP200 stages: analyze Opus5, plan Sonnet5, verify Opus5; OpenRouter selected Anthropic; reported attempt1 on each; provider pipeline policy passed.",
+    "accounting": "3 stages used,2 retired,zero retry,zero carry; exact current settled245200000nanoUSD; exact cumulative settled3101158000nanoUSD; historical uncertainty1624850000nanoUSD. Authorized3937272500nanoUSD was an estimate, not a guaranteed cap.",
+    "closure": "Reviewed ordinary closer failed on permission-anchor schema classification; reviewed emergency closure sealed without restart and conservatively retained the full current estimate. Independent QA separately reconciled exact spending.",
+    "closure_sha256": "7e4dfca1ec8ac391c72d51a6fab505b94cb09be729f7c33252cc45a96c3b30c7",
+    "independent_terminal_review_sha256": "d541eeee954a74537b8ce912b62f7ec8ce0806850177036993cbf27ebe56e482",
+    "independent_closure_review": "evaluations/research-qa/openrouter35-closure-review-10.json",
+    "independent_closure_review_sha256": "5441520386f7f54b2395892eb4ad895d16f1df8b99b0a833fc854e76cbd6fe63",
+    "runtime": "Backend27768,frontend listener25680 and supervisor29440 absent; ports3012/3016/5174/5175 closed; no restart.",
+    "browser_submissions": 1,
+    "provider_requests": 3,
+    "question_retries": 0,
+    "active_workers": 0,
+    "diagnostic_acceptance": true,
+    "release_acceptance": false,
+    "next_decision": "M36 offline closer repair is complete and independently accepted. Future W03/EPA14-B01 paid demonstrations require fresh authorization and current source review."
+  },
+  "current_m36": {
+    "state": "offline_complete_independent_qa_pass",
+    "report": "docs/research/ordinary-closer-milestone-36.md",
+    "candidate_sha256": "31bc18e2428139fa193120bf0e1d4c02000c659c0438564c404dc2e5ed45a9b3",
+    "closure_sha256": "bb00ae4242c892b6ffc66c24607fdd695732f53aeece7bc00f341a92320d9848",
+    "regression_sha256": "ee062ca71b08e514c12217b2513c41cc09fba30a1ab2326064a38458ecc1b1dc",
+    "validation_sha256": "fe064dded47b3889309422ad7c9f1b08d5bac840fe95ecdc10e74f842d32eab6",
+    "independent_review": "evaluations/research-qa/openrouter36-offline-review-10.json",
+    "independent_review_sha256": "a13b8c22d14acf56999c77c8cd62bc0b1af1a71ba1c2ae00a5aea72fb46e2cb3",
+    "outcome": "Fresh ordinary closer distinguishes browser admission from permission anchor, requires both for settled activity, and preserves exact accounting/stage retirement/no-carry/exclusive closure.",
+    "validation": "120 pins/0 mismatch; runtime17 tests/131 assertions; permit integrity7 tests/23 assertions; runtime typecheck and independent adversarial record probes passed.",
+    "m35_mutated": false,
+    "provider_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "services_started": false,
+    "live_authorization": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_milestone_proposal": "Fresh W03 plus EPA14-B01 run: max10 stages,zero retries/carry,$7.87852 conservative reservation; requires explicit board authorization and replacement monitoring basis of at least $16.2966005 for conservative accounting."
+  },
+  "current_m39": {
+    "state": "closed_partial_live_acceptance_conservative_emergency_closure",
+    "report": "docs/research/provider-two-case-live-milestone-39.md",
+    "run_id": "website-epa-live-39",
+    "outcome": "W03 submitted once and independently accepted as qualified/none with exact S01/S02 support. EPA14-B01 prepared but unrun because the900000ms supervisor stopped before permit issuance.",
+    "provider": "Three HTTP200 stages: analyze Opus5, plan Sonnet5, verify Opus5; OpenRouter selected Anthropic with required identity and processing policy.",
+    "accounting": "Exact current settled204937000nanoUSD; exact cumulative settled3306095000nanoUSD; historical uncertainty1624850000nanoUSD. Emergency schema retains9503370000nanoUSD conservatively; QA separately reconciled3 used/7 unused, all10 retired.",
+    "closure_sha256": "af1f893bd6733a1c534a8c45b00601bb30f4b53efdeca2aab42d32fa2cc510dc",
+    "independent_terminal_review_sha256": "465429e453e787fc2eaa7fded571f1e7c16f69ec1d14d978223e3cbc04e244ca",
+    "independent_closure_review": "evaluations/research-qa/openrouter39-closure-review-10.json",
+    "independent_closure_review_sha256": "f4aa6cab3b9234591b323c7e77d8218e68a43e114e59314129e0d30e0b902091",
+    "runtime": "Backend23072 and frontend32548 absent; ports3012/3016/5174/5175 closed; no restart/carry.",
+    "browser_submissions": 1,
+    "provider_requests": 3,
+    "question_retries": 0,
+    "active_workers": 0,
+    "diagnostic_acceptance": "W03 only",
+    "release_acceptance": false,
+    "next_milestone_proposal": "M40 offline supervisor-lifecycle repair, then fresh board decision for EPA14-B01 only with max5 stages and USD 3.9377225 conservative reservation."
+  },
+  "current_m40": {
+    "state": "live_complete_independent_closure_qa_pass",
+    "report": "docs/research/supervisor-lifecycle-milestone-40.md",
+    "candidate_sha256": "01ef52263ea2b464ca62b69b501e03a656cf874994c9b7bc20fdf75031eb8aee",
+    "allocation_sha256": "4283c2a64d62dd1ca98ce4b09b5447463ef3b920c3cfdba51e35f3a3f23ae944",
+    "validation_sha256": "b7b3ec8e153d795220c2f55387745f41771db02b9503f6b92f1dbd7d790614e7",
+    "product_acceptance_sha256": "23f9ecffd1f8b297844124f571700252b44d7d02a6eb43f7f829373c4b7406a9",
+    "launch_candidate_review": "evaluations/research-qa/openrouter40-launch-candidate-review-10.json",
+    "launch_candidate_review_sha256": "fe68f11c79b76b840cdeb5ed55351c063cc44a8d99eb84b19ea53479645f42fa",
+    "terminal_review_sha256": "53de5e233d7df60ab3881034c8be2551801daf5d5dd0c324d6bc26cafaf2f333",
+    "closure_sha256": "c6ce9dde9c7c0bd24b04ee4649cfdbbb2b992b63196adfc685bd24529f267985",
+    "independent_review": "evaluations/research-qa/openrouter40-closure-review-10.json",
+    "independent_review_sha256": "60b3e6fe680c565381236197296019db9517b80ff2bdb37abe9fbeae2742ca3e",
+    "validation": "141 pins; M4025 tests/338 assertions; provider26 tests/669 assertions; four typechecks; launch and closure reviews pass.",
+    "outcome": "One EPA14-B01 click returned unsupported/coverage_missing with empty claims/evidence/sources and the required scope gap; four stages fully settled.",
+    "scope": "EPA14-B01 only,max5 stages,zero retries/carry,conservative estimate3937722500nanoUSD; actual settled233731001nanoUSD.",
+    "live_authorization": true,
+    "authorization_state": "consumed_closed",
+    "services_started": false,
+    "provider_requests": 4,
+    "question_retries": 0,
+    "stages_used": 4,
+    "stages_retired": 1,
+    "current_run_settled_nano_usd": 233731001,
+    "pending_or_uncertain_cost": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_decision": "Board feedback on the completed M41 offline three-behavior demo; no new paid test or deployment."
+  },
+  "current_m41": {
+    "state": "offline_local_demo_complete_independent_qa_pass",
+    "report": "docs/research/offline-board-demo-milestone-41.md",
+    "board_record": "claude-memory/meetings/2026-09-11-neuvetra-m41-offline-demo.md",
+    "independent_review": "evaluations/research-qa/milestone41-offline-demo-review-10.json",
+    "independent_review_sha256": "7e8167c6c97b15b4bf2da09e0553b962edb91139529c3900b7267c1811f3acca",
+    "demo_url": "http://127.0.0.1:5174/?view=demo",
+    "outcome": "One preserved reviewed replay presents W11 context request,W03 supported qualified answer and EPA14-B01 coverage abstention from exact hash-bound accepted response bytes.",
+    "validation": "19 source/evidence bindings/0 mismatch;45 site tests/165 assertions;typecheck,lint,build,diff,default and390x844 layouts,keyboard tabs and CDP zero-external/research/provider-request audit pass.",
+    "development_only": true,
+    "production_replay_artifacts": 0,
+    "provider_requests": 0,
+    "paid_actions": 0,
+    "source_expansion": false,
+    "deployment": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_decision": "Board accepted M41 presentation and selected M42; M41 release acceptance remains false."
+  },
+  "current_m42": {
+    "state": "local_demo_complete_independent_qa_pass",
+    "report": "docs/research/deterministic-calculation-milestone-42.md",
+    "board_record": "claude-memory/meetings/2026-09-11-neuvetra-m42-deterministic-calculation.md",
+    "independent_review": "evaluations/research-qa/milestone42-deterministic-calculation-review-10.json",
+    "independent_review_sha256": "eb448ec54476d6bfc34179baf6f69d5c6330629b46c907ab7f85a78ff18b14e7",
+    "demo_url": "http://127.0.0.1:5174/?view=calculation",
+    "outcome": "One fixed synthetic1MMBtu U.S. stationary-natural-gas activity returns53.1145kgCO2e with gas-resolved Decimal arithmetic,source/method/GWP lineage,export/replay and finite fail-closed examples.",
+    "source": "EPA Hub2025 workbook hash43afb91d;Table1 C38/E38/F38/G38;Table11 E524/E525/E526;HHV,combustion-only,upstream excluded.",
+    "validation": "Final QA:6 Python;602 API/5254 assertions;48 web/169 assertions;typechecks,lint,build,diff,exact max input,source locators,cross-runtime hashes,replay tamper/binding refusal,all required UI errors,local-only26-request audit,desktop/390x844/keyboard pass.",
+    "development_only": true,
+    "factor_method_release": false,
+    "provider_requests": 0,
+    "paid_actions": 0,
+    "customer_data": false,
+    "source_expansion": false,
+    "database_changes": false,
+    "deployment": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_decision": "Board feedback on clarity,trust and usefulness of the open local M42 demo before selecting a dependent calculation increment."
+  },
+  "current_m43": {
+    "state": "offline_complete_independent_qa_pass_awaiting_paid_run_decision",
+    "report": "docs/research/rag-pilot-readiness-milestone-43.md",
+    "board_record": "claude-memory/meetings/2026-09-11-neuvetra-m43-rag-pilot-readiness.md",
+    "independent_review": "evaluations/research-qa/m43-pilot-readiness-review-10.json",
+    "independent_review_sha256": "0c986584466ecf1f1db9ef7bc1ab9c5d7939e5f5d4b1d5a22c497266ce5d9f25",
+    "evaluation_cases": 14,
+    "development_cases": 9,
+    "held_out_cases": 5,
+    "primary_batch": [
+      "M43-H01",
+      "M43-H04"
+    ],
+    "optional_follow_up": [
+      "M43-H02",
+      "M43-H03",
+      "M43-H05"
+    ],
+    "expected_primary_batch_usd": "0.455912001",
+    "maximum_primary_batch_reservation_usd": "9.17912",
+    "provider_cap_guaranteed": false,
+    "maximum_stages_per_case": 5,
+    "maximum_primary_stages": 10,
+    "question_retries": 0,
+    "cross_run_stage_carry": 0,
+    "first_case_gate": "M43-H01 must independently pass before M43-H04 submission.",
+    "source_review_expires_at": "2026-09-15T23:20:32Z",
+    "fresh_review_required": true,
+    "live_run_authorized": false,
+    "customer_pilot_acceptance": false,
+    "release_acceptance": false,
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "customer_data": false,
+    "source_expansion": false,
+    "deployment": false,
+    "merge": false,
+    "commit": false,
+    "next_decision": "Board authorize or decline only the exact H01 then gated H04 public/synthetic paid canary."
+  },
+  "current_m46": {
+    "state": "closed_failed_non_reusable_independent_emergency_closure_qa_pass",
+    "run_id": "website-epa-live-46",
+    "candidate_sha256": "c271c0fb734de0942bd74acb7bc0d0c0f70114d9cbd14d1d5ca4d5a987e15cce",
+    "allocation_sha256": "b2d097d84fa3b3d3f2cb7200c0e9b67cc9a1b8966bd97a6f9391e2262cc12ed1",
+    "outcome": "H01 passed. H04 safely returned unsupported/action_out_of_scope with no claims, evidence, sources, factor or calculation, but one context_required gap violated the frozen terminal contract. Manual permit recovery after frozen issuer EEXIST invalidated execution provenance.",
+    "accounting": "6 completed stages, zero retries/carry/correction/pending/uncertain events; H01 $0.247266, H04 $0.295880, exact current-run settled total $0.543146. Reservation was not a billing guarantee.",
+    "terminal": {
+      "h01_qa_sha256": "07aa33c8c4c98416e3645fee2b56b7fb65266f59faafffb353c97878b0000a68",
+      "h04_qa_sha256": "772f03c70eff19b27fa4aef23f5d5419d9092191fc646f4437b00325e67c7618",
+      "final_execution_review_sha256": "9a6e25087851aaf945a982793d36438c6635f8cf0b7a21df40b8e0cbad029bcf"
+    },
+    "closure_sha256": "530b8d15c5bc2b42f1b46a21a65002af057a668965e0efe579b63d56700c9377",
+    "independent_closure_review": "evaluations/research-qa/openrouter46-closure-review-10.json",
+    "independent_closure_review_sha256": "c86d4a9e19fcd3fa4830ab548ea82633cd3fa11e3fec3c123babd05a1ba99aa7",
+    "runtime": "Backend 30452 and frontend 39160 absent; ports 3012/3016/5174/5175 closed; no restart/carry.",
+    "provider_requests": 6,
+    "question_submissions": 2,
+    "question_retries": 0,
+    "live_acceptance": false,
+    "pilot_acceptance": false,
+    "release_acceptance": false,
+    "publication": false,
+    "active_workers": 0,
+    "next_decision": "Complete M47 offline remediation and QA. Any later live successor requires a disjoint held-out case and fresh board authorization."
+  },
+  "current_m47": {
+    "state": "offline_complete_independent_qa_pass",
+    "scope": "Provider-disabled OneDrive-safe issuer/provenance and bounded question-analysis repair; M46 preserved immutable.",
+    "candidate_sha256": "8261f9f160aec205e3fc08a81a02c667a84ec744f3ced11938f090cd506b04f7",
+    "manifest_sha256": "d25e0f36e5ae0d0ce41d33550f5e217946191ff547cc502d160a6e136ea22260",
+    "rehearsal_sha256": "16991ffda586479bc41c9032e90319905ffab6f090d83a671defdcfaaeb7c9d0",
+    "approved_wrapper_sha256": "ba52fe7dd72eaabc92488e3b4cf386a23f811e760fe7dbaf3eebfe0c58b0c774",
+    "independent_review": "evaluations/research-qa/openrouter47-offline-v4-review-10.json",
+    "independent_review_sha256": "8b5e74f7eb8eace4295887bac9b53b7b1ede65146c61146ff738284514b853fa",
+    "validation": "166 tests/1,019 assertions; site API and flattened v4 TypeScript checks; freezer twice; 161 M46 and 23 v4 pins; independent two-workspace lifecycle and refusal probes passed.",
+    "outcome": "Dedicated frozen wrapper identity is checked from the backend using the Windows-observed live parent executable canonical path and on-disk SHA-256. Manual Python parent, copied or changed wrapper, direct, partial, stale and replay paths refuse before backend consumption or claim. H01 is unchanged; old H04 yields only action_out_of_scope; genuine unresolved references remain context_required; terminal contract unchanged.",
+    "limitation": "Acceptance is limited to the frozen local Windows/OneDrive wrapper workflow; it is not hardware or administrator attestation and does not establish live, held-out, pilot or release acceptance.",
+    "paid_authorization": false,
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "network_used": false,
+    "services_started": false,
+    "customer_data": false,
+    "source_expansion": false,
+    "publication": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_gate": "Board feedback. Recommended M48 is offline preparation for disjoint held-out case M43-H02; paid execution requires fresh explicit authorization."
+  },
+  "current_m48": {
+    "state": "blocked_no_semantically_novel_case_zero_activity_closed",
+    "selected_case_id": null,
+    "selection_result": "H02 overlaps W02/W09; H03 overlaps M43-D04/W06/provider-visible P03-P04; H05 overlaps provider-visible C11/W09. No optional M43 case supports a truthful novel held-out claim.",
+    "product_review": "evaluations/research-qa/m48-heldout-novelty-review-10.json",
+    "product_review_sha256": "4cd456bb20431ac34e6ad11c9bc21d070a0a8d93dd249c126e77b96c58308914",
+    "independent_closure_review": "evaluations/research-qa/m48-blocked-closure-review-10.json",
+    "independent_closure_review_sha256": "173cc14d7fe4fab61e2ac40b153752c85e1cb013867f383ef441bfc3b6b7ec87",
+    "cleanup": "operations/m48-unfinalized-draft-cleanup.json",
+    "cleanup_result": "14 unfinalized H02 draft files / 116,368,170 bytes removed after independent closure acceptance.",
+    "candidate_created": false,
+    "request_package_created": false,
+    "cost_package_created": false,
+    "paid_authorization": false,
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "network_used": false,
+    "services_started": false,
+    "customer_data": false,
+    "source_expansion": false,
+    "publication": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "board_options": [
+      "Prepare H02 only as an explicitly labeled regression/recombination check; a fresh exact offline cost and approval package is required before any paid decision.",
+      "Open a later offline milestone for newly approved source coverage and quarantined evaluator-authored case creation; source expansion requires separate authorization."
+    ],
+    "next_gate": "Board choice. No exact paid approval or cost estimate exists because H02 was rejected before freeze."
+  },
+  "current_m49": {
+    "state": "offline_complete_independent_qa_pass_awaiting_exact_paid_run_decision",
+    "case_id": "M43-H02",
+    "evaluation_label": "regression_recombination_of_prior_W02_W09_semantics_not_novel_held_out",
+    "question": "How should I research a U.S. grid-average factor for a facility, and what should I verify before treating the result as current?",
+    "source_boundary": "Approved EPA S01-S18. Evaluator roles and expected H02 answer criteria are separated from provider payloads; dynamic plan/verify bodies require pre-dispatch inspection.",
+    "provider_route": "OpenRouter Messages API direct to Anthropic; Opus 5 analyze/verify, Sonnet 5 plan; fallbacks and plugins disabled.",
+    "limits": {
+      "cases": 1,
+      "maximum_stages": 5,
+      "question_retries": 0,
+      "carried_stages": 0,
+      "stage_deadline_ms": 180000,
+      "question_deadline_ms": 240000,
+      "supervisor_deadline_ms": 1800000
+    },
+    "cost": {
+      "expected_usd": "0.271573",
+      "conservative_local_reservation_usd": "3.944535",
+      "retained_basis_plus_reservation_usd": "9.652357001",
+      "remaining_under_internal_target_usd": "6.644243499",
+      "vendor_cap_or_billing_guarantee": false
+    },
+    "hashes": {
+      "candidate": "d954dc0508e26350c138163049adbf13e85814af523e64e84e00a00cb8c6e96c",
+      "manifest": "334379536c8a21e2d4d124f85c37a4e7c3615e00c81f75c190d42a59d31c6c46",
+      "rehearsal": "61cff517738bab6be176e9a8078ae0dc5c5c42b02eb17b4823e2f47c71bf3a1f",
+      "wrapper": "93dbae144918003d3d3da24a9e7ee9edf5c1604e69acd60930f904724e35de42",
+      "product_acceptance": "cc4955049fbd0c58331fade893afb812450f4321a0363a1efb6484bfd7e14abd",
+      "independent_qa": "57b65614efcf35f053a7efafc4680733a3720c3b6d3ef0f593195398acae3ddb"
+    },
+    "validation": "Author 184 tests / 1,134 assertions, TypeScript pass, three concurrent rehearsals and two stable freezes. Independent QA 18 unique tests / 141 assertion calls across repeated rehearsal, two stable verifications, no findings.",
+    "source_review_expires_at": "2026-09-15T23:20:32Z",
+    "paid_authorization": false,
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "network_used": false,
+    "services_started": false,
+    "customer_data": false,
+    "source_expansion": false,
+    "publication": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_gate": "M49 scope was approved, but execution requires a materially changed M50 adapter. Complete the M50 Windows policy, lifecycle, freeze and independent-review gates before requesting fresh exact M50 authorization."
+  },
+  "current_m50": {
+    "state": "v4_offline_complete_independent_qa_pass_awaiting_fresh_exact_paid_authorization",
+    "board_m49_scope_approved": true,
+    "m50_paid_authorization": false,
+    "approval_scope": "Exact M43-H02 regression, direct OpenRouter-to-Anthropic, maximum five stages, zero retries/carry, $3.944535 conservative reservation.",
+    "blocker_found": null,
+    "resolution": "M50 v4 repaired and independently passed all reproduced adapter defects. Fresh exact-candidate authorization and short-lived launch evidence are the remaining gates.",
+    "candidate_sha256": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
+    "manifest_sha256": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
+    "rehearsal_sha256": "5900aff28ac5114b747600ba2df8d8767b8cbb3b67fe0e295529f7eb9ada2f6c",
+    "wrapper_sha256": "d03afae8f93fb698bec57892d55102eabe3c4d5cf9561d38f6a1c451bd883488",
+    "product_review_sha256": "dc407f9d4466eea38e24a93346cc479e50763f7c19467f37d1a4c166a5b1cd85",
+    "technical_review_sha256": "2041acd0184f4f62f84e7a61393d4c33aa4d3da963a0468f44cde0c7d47bb36c",
+    "account_balance_observed_usd": "98.16",
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "paid_cost_usd": "0",
+    "publication": false,
+    "release_acceptance": false,
+    "active_workers": 0,
+    "next_gate": "Fresh exact-candidate paid authorization, then account/machine/source/browser evidence and one-use preflight inside their freshness windows."
   }
 }

@@ -1,0 +1,226 @@
+{
+  "schema_version": "m43_pilot_readiness_review.v1",
+  "task": "M43-QA",
+  "milestone": "M43 offline RAG pilot-readiness package",
+  "role": "independent_qa",
+  "disposition": "pass_offline_preparation_only",
+  "live_run_authorized": false,
+  "pilot_acceptance": false,
+  "release_acceptance": false,
+  "reviewed_at": "2026-09-12T06:22:55.8623051Z",
+  "reviewed_artifact_hashes": {
+    "docs/research/rag-pilot-contract-m43.md": "7da5d2ae0d111ece485bd0578c3a720b45da3dbcc049065d83cb39b66218afe8",
+    "evaluations/research-qa/m43-pilot-evaluation-cases-v1.json": "9f6e68cbe55805f9737a8a908e23875b2bb5c1c77bd74d3d50feae69dd716e6d",
+    "docs/research/rag-pilot-source-readiness-m43.md": "77c0cf54669b426943c858fc0d336dbf3793955152b3476747bd49740b979653",
+    "docs/research/rag-pilot-execution-plan-m43.md": "8d1730c214da3d68f28da02de1e47d0e71b9f96c4b62e32cd7a68c14c012651d",
+    "tools/research/m43-pilot-preflight.ts": "93b0c6e7653d92cc6bbfd5926070a37f00dec50085d4b1bd8ad01174a7138eca",
+    "tools/research/m43-pilot-preflight.test.ts": "fe952e839dd4565db9e86bda08509b086925c0c9c1c04ebf0a5fadd5866b64e8",
+    "tools/research/m43-heldout-first-batch-v1.json": "a2dc2014be922f5a795863203dedc92af066dce04cda7de06e5d52d257e7c17d",
+    "tools/research/m43-pilot-preflight-report-v1.json": "fae791ec1912e75b7d2b7a8a6272ae07da0e328fc094d8f055eaabde13bc86b8"
+  },
+  "case_matrix_review": {
+    "total_cases": 14,
+    "development_cases": 9,
+    "held_out_cases": 5,
+    "primary_batch_order": [
+      "M43-H01",
+      "M43-H04"
+    ],
+    "optional_follow_up_order": [
+      "M43-H02",
+      "M43-H03",
+      "M43-H05"
+    ],
+    "historical_reruns": 0,
+    "exact_question_duplicates_with_prior_repository_evaluations": 0,
+    "novelty_assessment": "No exact prior-question duplicate was found. The cases intentionally revisit the finite EPA source topics with new prompts and combinations. The held-out split is project-visible and suitable for bounded directional assessment, not a statistically blind benchmark.",
+    "category_coverage": {
+      "direct_claim_support_inside_qualified_result": true,
+      "direct_qualified": true,
+      "multi_passage": true,
+      "missing_context": true,
+      "coverage_missing": true,
+      "action_out_of_scope": true,
+      "misleading_premise": true,
+      "citation_fidelity": true,
+      "retrieval_instruction_resistance_offline": true
+    },
+    "answer_class_and_reason_code_contracts_consistent": true,
+    "required_points_forbidden_claims_and_objective_checks_reviewed": true,
+    "development_and_held_out_payload_separation": "pass",
+    "question_fixture_contains_only_id_and_question": true,
+    "evaluator_answer_keys_or_evidence_hints_in_fixture": false
+  },
+  "source_review": {
+    "approved_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "approved_passages": "S01-S18",
+    "case_locators_exact_against_release": "14/14",
+    "transitive_dependency_closure": "14/14",
+    "retained_original": {
+      "bytes": 396931,
+      "sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    "normalized_extraction": {
+      "bytes": 31214,
+      "sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4",
+      "pages": 8
+    },
+    "review_expires_at": "2026-09-15T23:20:32Z",
+    "fresh_review_required_before_live_run": true,
+    "commercial_runtime_approval": false,
+    "public_redistribution_approval": false,
+    "customer_pilot_source_rights_and_applicability_cleared": false
+  },
+  "runtime_pin_review": {
+    "active_source_unit_capability_and_condition_files_pinned": 9,
+    "all_current_hashes_match": true,
+    "active_acquisition_unit_sha256": "97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50",
+    "active_limitations_capability_sha256": "a7724c245fed1fd3a9dd08a82886c107b54905693039150f33359b2ed629e2c2",
+    "table_driven_pin_mutations_fail_closed": "9/9",
+    "full_live_runtime_freeze": "deferred to an authorized live candidate and required before the first request"
+  },
+  "provider_disabled_review": {
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "customer_data_used": false,
+    "external_network_requests": 0,
+    "generated_fixture_reproduced_sha256": "a2dc2014be922f5a795863203dedc92af066dce04cda7de06e5d52d257e7c17d",
+    "generated_report_reproduced_sha256": "fae791ec1912e75b7d2b7a8a6272ae07da0e328fc094d8f055eaabde13bc86b8",
+    "retrieval_injection_pipeline_proof": "Existing repository tests reject foreign, duplicate, unknown and hash-mismatched candidates and demonstrate that untrusted vector prose cannot enter answer evidence. M43-D08 adds a provider-disabled case whose unapproved instruction candidate is absent from the question fixture."
+  },
+  "execution_controls": {
+    "endpoint": "https://openrouter.ai/api/v1/messages",
+    "provider": "Anthropic",
+    "model_route": {
+      "analyze": "anthropic/claude-opus-5",
+      "plan": "anthropic/claude-sonnet-5",
+      "verify": "anthropic/claude-opus-5"
+    },
+    "serial": true,
+    "maximum_stages_per_case": 5,
+    "maximum_primary_batch_stages": 10,
+    "question_retries": 0,
+    "cross_run_stage_carry": 0,
+    "stage_deadline_ms": 180000,
+    "whole_question_deadline_ms": 240000,
+    "batch_supervisor_deadline_ms": 1800000,
+    "first_case_gate": "Preserve and independently grade M43-H01 before M43-H04. Submit H04 only if H01 passes answer class, required points, citation/dependency closure, forbidden claims, latency, per-case cost and mechanics.",
+    "uncertain_unmatched_or_pending_cost_stops": true,
+    "unused_stages_retired_without_carry": true,
+    "optional_follow_up_requires_separate_authorization_after_primary_reconciliation": true
+  },
+  "acceptance_review": {
+    "both_primary_cases_must_pass_all_semantic_and_mechanical_checks": true,
+    "unsupported_displayed_material_claims_allowed": 0,
+    "topical_but_nonsupporting_citations_allowed": 0,
+    "per_case_terminal_latency_ms_at_most": 240000,
+    "two_case_answer_window_ms_at_most": 480000,
+    "two_case_median_latency_ms_at_most": 120000,
+    "two_case_median_definition": "arithmetic mean of the two ordered terminal-latency observations",
+    "production_percentile_or_service_level_claim_allowed": false,
+    "mean_settled_cost_nano_usd_at_most": 500000000,
+    "single_case_settled_cost_nano_usd_at_most": 1000000000,
+    "pending_uncertain_or_unmatched_cost_events_allowed": 0
+  },
+  "cost_review": {
+    "historical_settled_nano_usd": [
+      245200000,
+      204937000,
+      233731001
+    ],
+    "historical_mean_per_case_nano_usd": "227956000.333333333333333333",
+    "expected_primary_batch_nano_usd_rounded_up": 455912001,
+    "expected_primary_batch_usd": "0.455912001",
+    "maximum_case_reservation_nano_usd": 4589560000,
+    "maximum_primary_batch_reservation_nano_usd": 9179120000,
+    "maximum_primary_batch_reservation_usd": "9.17912",
+    "exact_settled_through_m40_nano_usd": 3539826001,
+    "retained_historical_uncertainty_nano_usd": 1624850000,
+    "retained_exposure_basis_nano_usd": 5164676001,
+    "internal_monitoring_target_nano_usd": 16296600500,
+    "remaining_before_m43_nano_usd": 11131924499,
+    "retained_basis_plus_primary_reservation_nano_usd": 14343796001,
+    "remaining_after_primary_reservation_nano_usd": 1952804499,
+    "arithmetic_reproduced": true,
+    "reservation_is_conservative_local_estimate": true,
+    "provider_enforced_or_guaranteed_cap": false
+  },
+  "verification": {
+    "primary_contract_suite": {
+      "passed": 69,
+      "failed": 0,
+      "assertions": 696
+    },
+    "integration_and_security_suite": {
+      "passed": 34,
+      "failed": 0,
+      "assertions": 460
+    },
+    "targeted_typescript_check": "pass",
+    "generated_fixture_and_report_byte_reproduction": "pass_by_matching_sha256",
+    "git_diff_check": "pass"
+  },
+  "defects_found_and_closed_during_independent_review": [
+    {
+      "finding": "Initial matrix totals reported 13 cases and eight development cases while the file contained 14 and nine.",
+      "repair": "Contract and plan now consistently state 14 total, nine development and five held-out cases.",
+      "retest": "pass"
+    },
+    {
+      "finding": "Initial missing-context cases asked for conclusions that conflicted with their expected abstention class.",
+      "repair": "M43-D04 and M43-H03 now use synthetic missing-document and missing-date questions with exact required context.",
+      "retest": "pass"
+    },
+    {
+      "finding": "M43-H01 initially expected an unqualified supported result, which current qualified passages and runtime semantics cannot produce.",
+      "repair": "H01 now expects qualified/none while requiring direct claim-level support and qualifications.",
+      "retest": "pass"
+    },
+    {
+      "finding": "Initial case evidence omitted required transitive passage dependencies.",
+      "repair": "All 14 cases now contain complete release dependency closure.",
+      "retest": "pass"
+    },
+    {
+      "finding": "Initial five-case reservation exceeded the remaining internal monitoring target.",
+      "repair": "The primary batch is limited to H01 then H04. The optional three cases require separate authorization after reconciliation. Expected and conservative cost arithmetic was corrected and the local target is explicitly not called a provider cap.",
+      "retest": "pass"
+    },
+    {
+      "finding": "Initial preflight omitted current unit, capability and condition catalogs and lacked mutation proof.",
+      "repair": "All nine active files are pinned, including the current acquisition-unit and limitations-capability hashes; table-driven mutations fail closed for 9/9 pins.",
+      "retest": "pass"
+    },
+    {
+      "finding": "Initial plan regressed to a 15-minute supervisor and omitted the 120-second two-case median definition and explicit first-case semantic gate.",
+      "repair": "The final plan uses M40's fixed 30-minute supervisor, defines the two-observation median as their arithmetic mean with a 120-second target, and requires independent H01 acceptance before H04.",
+      "retest": "pass"
+    },
+    {
+      "finding": "The final runtime-tested preflight initially failed a targeted TypeScript check because validated JSON fields remained typed as unknown.",
+      "repair": "The validator now narrows the case array and adversarial-candidate text without weakening validation.",
+      "retest": "pass"
+    }
+  ],
+  "remaining_live_pilot_and_release_gates": [
+    "Fresh source, rights, currentness and applicability review before the operational deadline and any shorter cloud-resource deadline.",
+    "Exact live runtime, request-body, provider route, ordinary-reader and cost-reservation freeze before the first request.",
+    "Separate board authorization for only M43-H01 then gated M43-H04; the optional three cases remain unauthorized.",
+    "Successful live outcomes, immutable capture, independent grading and native-cost reconciliation are still unperformed.",
+    "Customer data categories, provider terms, tenant and derived-store authorization, security, deployment, rollback, support and incident controls remain unaccepted.",
+    "Commercial/public source rights, qualified applicability/legal/accounting review and independent launch authority remain open."
+  ],
+  "qa_activity": {
+    "author_files_modified_by_qa": false,
+    "only_qa_artifact_written": true,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "customer_data_used": false,
+    "source_expansion": false,
+    "deployment_merge_release_or_commit": false
+  },
+  "offline_preparation_blockers": [],
+  "conclusion": "PASS for the exact provider-disabled M43 preparation package only. It defines a novel, bounded 14-case EPA-only matrix, separates development material and evaluator keys from a two-question H01/H04 fixture, validates current source and policy pins, preserves strict stop, latency and cost controls, and reproduces deterministically with no provider or credential access. This pass does not authorize a live request, optional follow-up, customer pilot, source expansion, deployment, merge, release or commit."
+}

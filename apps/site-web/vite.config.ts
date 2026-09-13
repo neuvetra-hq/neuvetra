@@ -33,6 +33,10 @@ export default defineConfig({
         target: "http://127.0.0.1:3012",
         rewrite: (path) => path.replace(/^\/research-api/, "/research"),
       },
+      "/calculation-api": {
+        target: "http://127.0.0.1:3014",
+        rewrite: (path) => path.replace(/^\/calculation-api/, "/calculation"),
+      },
       "/api": {
         target: "http://localhost:3001",
         rewrite: (path) => path.replace(/^\/api/, ""),

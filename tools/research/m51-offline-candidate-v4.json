@@ -1,0 +1,163 @@
+{
+  "schema_version": 4,
+  "kind": "m51_provider_disabled_remediation_candidate_v4",
+  "milestone": "M51",
+  "frozen_at": "2026-09-13T03:30:10.625Z",
+  "status": "provider_disabled_v4_candidate_pending_independent_product_and_technical_review",
+  "scope": "Preserve bounded response-contract diagnostics and make backend/wrapper closure and request accounting authoritative after the M50 v4 failed-safe live result.",
+  "m50_disposition": "fail_live_execution_closed_no_retry",
+  "m50_exact_rejection_subtype": "unknown_not_reconstructable",
+  "fixture_claim": "sanitized representative response shapes, not actual retained provider output",
+  "controls": [
+    "finite allowlisted failure phase/detail persisted without input, output, response content, headers, raw errors, stack or credentials",
+    "one exclusive canonical closure binds terminal, payload, cost and shutdown hashes",
+    "wrapper requires whole-byte parity between stdout and closure file; console prefixes, suffixes, duplicate records and altered bytes fail closed",
+    "external provider transports, in-process synthetic responses and logical dispatches remain distinct",
+    "transport count derives only from validated shutdown evidence and is null when unavailable, never invented as zero",
+    "wrapper failure accounting validates the full terminal/payload/cost/shutdown chain before reporting counts; ordinary shutdown-shaped JSON is untrusted",
+    "the single safe failed-stage record remains resolvable when the post-response payload has completed analyze and null failed_stage/failed_attempt, matching M50 evidence",
+    "failed-stage keys, enums and finite numbers are exact; filename attempt and payload stage sequence must reconcile; the stage record hash is bound into terminal",
+    "wrapper rederives canonical closure bytes from exact-schema terminal, payload, cost, shutdown and failed-stage seals before accepting matching stdout/file bytes",
+    "bounded post-response failure requires complete analyze/attempt1/provider_failure/HTTP200/end_turn/decoding/content_shape-or-inner_json/no-abort diagnostics and terminal agreement",
+    "native cost on HTTP-200 contract rejection settles once while terminal status remains failure"
+  ],
+  "v1_rejection_lineage": {
+    "candidate_sha256": "9349283730c40906aab2086020b6109e5055f84b271e16979c8f14b3bfbb1d8b",
+    "manifest_sha256": "e21ca194e14d2daf5d86eb1be21baefd865014f94257dadfdb0cc4054ce379d0",
+    "product_review_sha256": "72d8dc77d3a8a208390aaca9c5b34ed342aa2d03429eacd5f81007a5bca2e586",
+    "disposition": "fail"
+  },
+  "v2_rejection_lineage": {
+    "candidate_sha256": "b40ecd4655343a6ceb07219cb692725922f702dc64466caf44e2e0bfb2f2a4c2",
+    "manifest_sha256": "bccc7e414825ffb4199b8167d4f5f3af1953e13e5dbba1af8f0d51d8b87d1db5",
+    "product_review_sha256": "baa080b820593290c15d7231088cb7677d46f9ad6d136715f106a1d2c29ffcbb",
+    "technical_review_sha256": "b0826a2f8833a8821c994fa3378abbf851ec8fdd626f276b440b72cee3079ed7",
+    "disposition": "fail"
+  },
+  "v3_rejection_lineage": {
+    "candidate_sha256": "4fd6a42621f907f7221f79afcc2ed6fe8479d8c9d94d36b6a41cc745d4c811ae",
+    "manifest_sha256": "5ea039b1db4aa4d3dbed55d4deb2836ac5685caf2f2199a6f9589040d985c608",
+    "product_review_sha256": "a70f47c98686c42441ed1db4520d8588da7d0e26732c7483a5e97a671cd96e7f",
+    "technical_review_sha256": "f92b1b4edd1c13b28425ba14d73a668bc4d42095840714044cb026521a056e7b",
+    "disposition": "fail"
+  },
+  "validation": {
+    "focused_tests": 7,
+    "assertions": 40,
+    "typecheck": "pass",
+    "provider_disabled_rehearsal_sha256": "d842552dd2c2b6674ec3f7fc6a7cefce7c41efe36ba93e36ca712cb00f562c5f"
+  },
+  "exclusions": [
+    "live provider request",
+    "retry",
+    "credential access",
+    "network service",
+    "evaluator access",
+    "source expansion",
+    "customer data",
+    "compiled live wrapper",
+    "publication",
+    "merge",
+    "deployment",
+    "release"
+  ],
+  "next_gate": "Independent product and technical review of these exact bytes. Any future live successor requires a new secure wrapper integration, fresh current evidence, exact cost scope and separate board authorization.",
+  "pins": [
+    {
+      "path": ".superpowers/openrouter-51/safe-stage.ts",
+      "sha256": "4c69fdbf4464af19802963588e0e2b877e5dd671d4a1a04f7405ba3cc5048fad"
+    },
+    {
+      "path": ".superpowers/openrouter-51/closure.ts",
+      "sha256": "66ec9a47efe48fb964066890efaf852e653baf8f5a39070fde90b0d0713f9ee5"
+    },
+    {
+      "path": ".superpowers/openrouter-51/offline-backend.ts",
+      "sha256": "22038bc0edb0b25b82050d4dd3a4c90ac0b1ccfd38d53d989a51607c31805d43"
+    },
+    {
+      "path": ".superpowers/openrouter-51/offline-wrapper.ts",
+      "sha256": "695b3a2af25134fc8ef11199992150a9e3ec44df9dacb4d35aaaee603fe19e57"
+    },
+    {
+      "path": ".superpowers/openrouter-51/rehearse.ts",
+      "sha256": "df8bea1cdb6431f6ff12421159856f034b2ac37ad4dffa7dface8d9418dced0f"
+    },
+    {
+      "path": ".superpowers/openrouter-51/m51.test.ts",
+      "sha256": "f0faf65755f9edeee9887d5166103fab6c8b5832a6a8b1578eea33c0bfd47641"
+    },
+    {
+      "path": ".superpowers/openrouter-51/fixtures/sanitized-content-shape-failure.json",
+      "sha256": "037479486baebac22510338a17d6e02ec4b84503d2b2cabd64c6ecf05ce3887d"
+    },
+    {
+      "path": ".superpowers/openrouter-51/fixtures/sanitized-inner-json-failure.json",
+      "sha256": "5ea3e4406579689a6cb536e879f6459291cb687e52923266056ee57f2fd7d0cc"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/provider.ts",
+      "sha256": "d6db5fbba45a9d35f5145405694119192857f17f18a1816d4897bb6845b85385"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/openrouter.ts",
+      "sha256": "4c22cff66ff92ad0f5518214eb875f085f1cbb4f399279b70d2315b41f7b3431"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/question-analysis.ts",
+      "sha256": "b9fdf1f36ef5f48ee6763b16fdcfe28071ec3ea4cf62deeec366d86eb567aa92"
+    },
+    {
+      "path": ".superpowers/openrouter-50/contract.ts",
+      "sha256": "782fb76d273a28a7f52f60c9b5e66e585e878269370c4cd9196070559e3d9863"
+    },
+    {
+      "path": "operations/openrouter50-v4-live-execution.json",
+      "sha256": "3927c16d8896e6f98b96e939cf9c5b9dd853206c7ad0bcca13b836df5aa61d49"
+    },
+    {
+      "path": "operations/openrouter51-provider-disabled-rehearsal.json",
+      "sha256": "d842552dd2c2b6674ec3f7fc6a7cefce7c41efe36ba93e36ca712cb00f562c5f"
+    },
+    {
+      "path": "evaluations/research-qa/m50-h02-live-v4-product-outcome-10.json",
+      "sha256": "9786e6de938b4192dbb008db67ea69d91fc1a38ec61d317fa652088dc3d7474e"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter50-v4-live-execution-review-10.json",
+      "sha256": "3dd8544b40ef1d51fb6c1bf0adb8b93466f3b5def3795637907dd32dd04f3c95"
+    },
+    {
+      "path": "evaluations/research-qa/m51-offline-product-review-10.json",
+      "sha256": "72d8dc77d3a8a208390aaca9c5b34ed342aa2d03429eacd5f81007a5bca2e586"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter51-offline-review-10.json",
+      "sha256": "237052df7eb6089998f632d7665db2f42adbe25ac98663fad89669b47aa1f04b"
+    },
+    {
+      "path": "evaluations/research-qa/m51-v2-offline-product-review-10.json",
+      "sha256": "baa080b820593290c15d7231088cb7677d46f9ad6d136715f106a1d2c29ffcbb"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter51-v2-offline-review-10.json",
+      "sha256": "b0826a2f8833a8821c994fa3378abbf851ec8fdd626f276b440b72cee3079ed7"
+    },
+    {
+      "path": "evaluations/research-qa/m51-v3-offline-product-review-10.json",
+      "sha256": "a70f47c98686c42441ed1db4520d8588da7d0e26732c7483a5e97a671cd96e7f"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter51-v3-offline-review-10.json",
+      "sha256": "f92b1b4edd1c13b28425ba14d73a668bc4d42095840714044cb026521a056e7b"
+    },
+    {
+      "path": "docs/research/m50-v4-live-failure.md",
+      "sha256": "549077072845f52f8af530d5bdfbbfd10a8f737273f9bbf686ef891476218fe2"
+    },
+    {
+      "path": "docs/research/m51-offline-remediation-contract.md",
+      "sha256": "c07f372eff21f9020d68b6eb7aba14e6252a37f51e848d60bd414b14d5a066e4"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "schema_version": "m52_compiled_offline_product_review_v3.final_pass",
+  "task": "M52-v3-CPO-INDEPENDENT-FINAL-ACCEPTANCE",
+  "reviewed_at": "2026-09-13T05:05:00Z",
+  "candidate_sha256": "7b0d26e0d6f02fd4e8dfa62b9066a921062c9df301a7888cb4fa6511407a5941",
+  "manifest_sha256": "1a0ad4323b3e97efe7cbb76c624e642b71162092c7f66dc70cee0edfe427d32d",
+  "rehearsal_sha256": "5ec391ae1fc4f6c1a7de9941fc25acfbc76aa3fb6f24f60d8ab7690d5bc328d9",
+  "compiled_wrapper_sha256": "d48468453e3093ce6b16557e65412c3f1fb3f1922fda0671524619eedc081499",
+  "closure_sha256": "de2f9ef969bb3802af39363292dfcd621288856862035ffaf22759cf3192f9af",
+  "disposition": "pass_bounded_compiled_provider_disabled_product_acceptance",
+  "product_acceptance": true,
+  "milestone_complete_for_bounded_offline_scope": true,
+  "live_or_paid_execution_authorized": false,
+  "release_acceptance": false,
+  "freeze_integrity": {
+    "candidate_hash_matches": true,
+    "manifest_hash_matches": true,
+    "rehearsal_hash_matches": true,
+    "manifest_pins_checked": 28,
+    "manifest_pin_mismatches": 0
+  },
+  "product_checks": {
+    "clean_compiled_success": "pass",
+    "success_stage_sequence": ["analyze", "plan", "verify"],
+    "success_synthetic_response_count": 3,
+    "success_exact_settled_nano_usd": 3000000,
+    "content_shape_safe_failure": "pass",
+    "inner_json_safe_failure": "pass",
+    "pre_capture_safe_failure": "pass",
+    "transport_safe_failure": "pass",
+    "timeout_safe_failure": "pass",
+    "stdout_single_canonical_json_and_stderr_empty": "pass",
+    "replay_child_tamper_and_copied_wrapper_refusal": "pass",
+    "controlled_shutdown_ports_closed_and_cleanup": "pass",
+    "provider_requests": 0,
+    "credentials_accessed": false,
+    "external_network_allowed": false,
+    "paid_activity": false
+  },
+  "grounding_checks": {
+    "release_id_version_and_hash": "pass",
+    "claim_id_text_evidence_dependencies_and_qualifications": "pass",
+    "evidence_passage_source_excerpt_and_locator": "pass",
+    "source_title_version_status_and_url": "pass",
+    "composition_exact_keys_catalog_id_version_hash_and_wording": "pass",
+    "composition_exact_nonempty_claim_corresponding_unit_order": "pass",
+    "retrieval_exact_schema_store_search_build_release_and_selected_ids": "pass",
+    "retrieval_exact_ordered_candidate_ids": "pass",
+    "retrieval_checked_at_iso_finite_stale_and_future_bounds": "pass"
+  },
+  "adversarial_acceptance": [
+    {
+      "probe": "fake composition catalog identity/hash",
+      "result": "refused",
+      "error_class": "m52_body_grounding_refused"
+    },
+    {
+      "probe": "altered composition wording",
+      "result": "refused",
+      "error_class": "m52_body_grounding_refused"
+    },
+    {
+      "probe": "empty, reordered, or claim-mismatched composition units",
+      "result": "refused",
+      "error_class": "m52_body_grounding_refused"
+    },
+    {
+      "probe": "out-of-corpus retrieval candidate_ids including S99",
+      "result": "refused",
+      "error_class": "m52_body_grounding_refused"
+    },
+    {
+      "probe": "stale retrieval checked_at at 1900-01-01T00:00:00.000Z",
+      "result": "refused",
+      "error_class": "m52_body_grounding_refused"
+    }
+  ],
+  "claim_boundary": {
+    "allowed": "The frozen M52 candidate passes the bounded compiled provider-disabled integration outcome: one grounded synthetic H02 success and five safe-failure paths traverse the actual composed server and approved compiled launcher with exact answer, stage, capture, accounting and shutdown closure.",
+    "not_allowed": [
+      "Live provider compatibility or semantic quality beyond the frozen synthetic answer is proven.",
+      "The exact M50 rejection subtype is known; content_shape and inner_json remain representative synthetic fixtures.",
+      "A live or paid run, retry, deployment, publication or release is authorized."
+    ]
+  },
+  "limitations": [
+    "This is an offline provider-disabled product acceptance using synthetic provider-shaped envelopes.",
+    "Independent evaluator grading and live provider compatibility remain separate future gates.",
+    "The checked_at lower bound is the frozen M52 campaign boundary, not a general production freshness policy."
+  ],
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "evaluator_key_accessed": false,
+    "external_network_requests": 0,
+    "author_or_shared_operations_files_modified": false,
+    "only_persistent_review_file_written": "evaluations/research-qa/m52-compiled-offline-product-review-v2-10.json",
+    "temporary_probe_directories_removed": true,
+    "commit_publish_merge_deploy_or_release": false
+  },
+  "conclusion": "PASS for exact candidate 7b0d26e0d6f02fd4e8dfa62b9066a921062c9df301a7888cb4fa6511407a5941 within the frozen compiled provider-disabled M52 scope. All requested composition and retrieval mutations refuse, and no product blocker remains for this offline milestone."
+}

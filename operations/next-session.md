@@ -1,4 +1,164 @@
-# Current continuation — M33 offline pipeline repair complete; live evidence remains separate
+# Current continuation — M52 compiled offline integration accepted
+
+September 13, 2026. **M52 is complete for its provider-disabled offline scope.** The exact compiled Windows launcher and composed research server passed the success path (`analyze → plan → verify`) with three synthetic provider-shaped envelopes, exact settled cost `3,000,000` nano-USD, empty stderr and one canonical JSON closure. `content_shape`, `inner_json`, `pre_capture`, `transport` and `timeout` each failed safely with no retry, carry, further dispatch or spend; transport and timeout preserve uncertainty. Replay, mutated-child, copied-wrapper and tampered-executable paths refused; loopback ports closed and disposable cleanup passed.
+
+Final candidate `7b0d26e0d6f02fd4e8dfa62b9066a921062c9df301a7888cb4fa6511407a5941`, manifest `1a0ad4323b3e97efe7cbb76c624e642b71162092c7f66dc70cee0edfe427d32d`, rehearsal `5ec391ae1fc4f6c1a7de9941fc25acfbc76aa3fb6f24f60d8ab7690d5bc328d9` and compiled wrapper `d48468453e3093ce6b16557e65412c3f1fb3f1922fda0671524619eedc081499` are bound by 28 manifest pins and 48 transitive child pins. Independent product acceptance `df1617edd0a753e8fd2d47b041c3535429e62d560c641e697a4b377b9f6caf9f` and technical acceptance `c64fd6b7ef4237ee3e1ca2ddd91ccabe739e61d20b6fd3ddedf4d30d250353a1` pass the exact bytes, including composition catalog/unit provenance, retrieval candidate IDs and timestamp checks.
+
+Provider requests, credentials, external network, evaluator access and paid activity were zero. M52 does not prove live OpenRouter compatibility, customer-data authorization, production readiness, publication, merge, deployment or release eligibility. Collect board feedback on this local offline demonstration before any dependent milestone; any live or paid action requires a new exact scope and authorization.
+
+[M52 closure](../docs/research/m52-compiled-offline-closure.md) · [candidate](../tools/research/m52-compiled-offline-candidate-v2.json) · [manifest](../tools/research/m52-compiled-offline-manifest-v2.json) · [rehearsal](openrouter52-provider-disabled-rehearsal.json) · [product acceptance](../evaluations/research-qa/m52-compiled-offline-product-review-v2-10.json) · [technical acceptance](../evaluations/research-qa/m52-compiled-offline-technical-review-v2-10.json)
+
+# Historical continuation — M50 v4 failed safely; M51 v4 closed offline
+
+September 12, 2026. Never rerun `website-epa-live-50-v4-01` or reuse its consumed authorization. One exact H02 analyze request reached OpenRouter/Anthropic, settled native response cost at $0.033685, and then failed during post-response handling. The product returned `unavailable / provider_failure` with no answer, claims, evidence or sources. No plan/verify, retry, carry, evaluator read or further spend occurred. All services are stopped and ports 3012/3016/5174/5175 are closed.
+
+Read `operations/openrouter50-v4-live-execution.json` with product review `9786e6de…` and technical closure `3dd8544b…`. Mechanical closure passes. The exact response-validation subtype is unknowable because M50 discarded the safe stage details. The later wrapper error is separate: it parsed ordinary backend stdout and wrote contradictory zero-request accounting.
+
+The board authorized M51 provider-disabled remediation. Three rejected candidates preserve review findings. Accepted v4 candidate `2461e7b8…`, manifest `d7190718…` and rehearsal `d842552d…` pass independent product review `aa721bb5…` and technical QA `d7022287…`: all 24 pins, seven tests / 40 assertions, type checking and 26 rebound mutation probes pass. The successor persists complete bounded diagnostics, validates and hash-binds the stage/terminal/payload/cost/shutdown chain, rederives the canonical closure before exact stdout/file acceptance, separates logical/synthetic/external counts and never invents zero when authoritative evidence is unavailable. Sanitized response-shape fixtures reproduce `content_shape` and `inner_json`; they are not actual retained M50 output.
+
+M51 repairs diagnosis and accounting only. It does not prove live response compatibility or a compiled Windows wrapper/process chain. Do not start a live provider request, retry, source expansion, publication, merge, deployment or release. Any future live successor needs new secure wrapper integration, fresh evidence, exact cost scope, independent preflight and separate board authorization.
+
+[M50 decision and M51 record](../claude-memory/meetings/2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation.md) · [M51 candidate](../tools/research/m51-offline-candidate-v1.json) · [M51 contract](../docs/research/m51-offline-remediation-contract.md)
+
+# Historical continuation — M48 held-out selection blocked; board choice next
+
+September 12, 2026. M48 could not select a materially novel held-out case within the remaining M43 matrix and approved EPA S01–S18 corpus. H02 overlaps live W02/W09; H03 overlaps M43-D04, W06 and provider-visible P03/P04; H05 overlaps provider-visible C11 and W09. CPO report `4cd456bb…` and independent blocked-closure review `173cc14d…` agree that these can support regression evidence only, not a novel product-generalization claim.
+
+H02 engineering stopped before freeze. There is no M48 candidate, request, cost package, allocation, paid authorization or runtime artifact. No provider/model request, credential, network, service, customer data, source expansion, publication, commit, merge, deploy or release occurred. All 184 M46/M47 pins still match. Fourteen unused draft files totaling 116,368,170 bytes were removed from OneDrive after independent closure acceptance.
+
+The board must choose one of two paths: prepare H02 offline as an explicitly labeled regression/recombination check, or keep paid work stopped and authorize a later offline milestone for newly approved source coverage and quarantined evaluator-authored case creation. No exact paid approval or cost estimate exists yet.
+
+[M48 product review](../evaluations/research-qa/m48-heldout-novelty-review-10.json) · [M48 closure QA](../evaluations/research-qa/m48-blocked-closure-review-10.json) · [M48 cleanup](m48-unfinalized-draft-cleanup.json)
+
+# Historical continuation — M47 offline remediation complete; board feedback next
+
+September 12, 2026. M47 v4 is frozen and independently accepted for the provider-disabled local Windows/OneDrive wrapper workflow. Candidate `8261f9f1…`, manifest `d25e0f36…`, rehearsal `16991ffd…` and independent review `8b5e74f7…` bind the backend to the exact dedicated wrapper executable through the Windows-observed live parent canonical path and SHA-256. The prior manual Python-parent bypass, copied or altered wrapper, direct, partial, stale and replay paths refuse before backend consumption or claim. Two clean approved-wrapper runs succeeded in separate pre-created OneDrive-local workspaces and cleaned up.
+
+Question analysis is also repaired: H01 is unchanged, old H04 now produces only `action_out_of_scope`, genuine unresolved references remain `context_required`, and the terminal contract is unchanged. Final verification passed 166 tests / 1,019 assertions, both TypeScript checks, two stable freezer runs, all 161 M46 and 23 v4 pins, with zero provider requests, credential access, network use or services.
+
+Collect board feedback before advancing. The CEO recommendation is M48: prepare one disjoint M43-H02 held-out canary offline, refreshing source applicability, runtime identity, exact request and cost evidence. This recommendation does not authorize a provider call. Paid execution requires a new explicit board approval, and publication remains unavailable because M46 did not meet the board's success condition.
+
+[M47 independent QA](../evaluations/research-qa/openrouter47-offline-v4-review-10.json) · [M47 candidate](../tools/research/m47-offline-candidate-v4.json) · [M47 rehearsal](openrouter47-provider-disabled-rehearsal-v4.json)
+
+# Historical continuation — M46 failed closed; M47 offline remediation queued
+
+September 12, 2026. Never restart `website-epa-live-46`, reuse its authorization or permits, or relabel its H04 result as held-out success. H01 independently passed as a qualified answer in three stages, 63.891 seconds and $0.247266. H04 safely returned `unsupported` / `action_out_of_scope` with no claims, evidence, sources, factor or calculation in three stages, 86.333 seconds and $0.295880. H04 still failed the frozen terminal contract because the response also included a `context_required` gap for “Use this guidance to”.
+
+The frozen H04 issuer failed twice with Windows/Bun `EEXIST` on the existing OneDrive ingress directory. Root then created a schema/hash-bound permit directly before expiry. The backend consumed it, but this did not follow or prove the approved frozen issuer path. Independent execution review `9a6e2508…` therefore fails authorization provenance and release eligibility. Six stages settled at $0.543146 total with zero retries, carry, correction, pending or uncertain cost and no request after H04.
+
+Emergency closure `530b8d15c5bc2b42f1b46a21a65002af057a668965e0efe579b63d56700c9377` seals the failed run. Independent closure QA `c86d4a9e19fcd3fa4830ab548ea82633cd3fa11e3fec3c123babd05a1ba99aa7` rehashed five launch certificates and 48 durable artifacts, separately reconciled spending, and verified PIDs 30452/39160 absent with ports 3012/3016/5174/5175 closed. The emergency schema honestly leaves `all_costs_reconciled=false`; the independent review supplies the exact reconciliation. Preserve the deviation archive and do not expose token contents.
+
+M47 was authorized for offline remediation only. This paragraph preserves the pre-implementation scope: build a new `.superpowers/openrouter-47` path, preserve every M46 hash, repair issuance/provenance and question classification, rehearse on OneDrive with the provider disabled, and obtain independent QA. M47 later completed within that boundary.
+
+Any later live successor needs a disjoint held-out case, fresh evidence, a new costed scope and explicit board approval. Do not repeat M46 H04 as held-out evidence.
+
+[M46 execution review](../evaluations/research-qa/openrouter46-final-execution-validity-review-10.json) · [M46 closure QA](../evaluations/research-qa/openrouter46-closure-review-10.json) · [M47 plan](../docs/research/m46-incident-and-m47-remediation-plan.md)
+
+# Historical continuation — M44 closed at zero activity; M45 recovery candidate next
+
+September 12, 2026. Never restart `website-epa-live-44` or reuse its authorization, H01 permit or retired capacity. The one visible H01 submission used the `127.0.0.1:5175` alias while the frozen gate required `localhost:5175`; it was refused before an ingress claim. No provider/model request, stage, spending event, response capture or H04 artifact exists. Closure reason is `zero_activity_startup`; all ten stages are retired and nothing carries.
+
+Read the sealed closure together with `operations/openrouter44-root-shutdown-correction.json` and independent QA `evaluations/research-qa/openrouter44-closure-review-10.json`. The original root shutdown record incorrectly claimed port 5174 was closed after its check returned access denied. The correction records the stale ordinary Vite process and its subsequent stop. Independent QA verified PIDs 25840, 31100 and 27828 absent and no listeners on 3012, 3016, 5174 or 5175. Do not rewrite the sealed closure or erase the inaccurate original; the correction is part of the truthful chain.
+
+M45 is a fresh run with provider-disabled preparation complete. Candidate `eb80803b5c0b1679e474c11380f4f8afae473eb81245a1565bf16c51943b81b2` and allocation `08fa0f90755953ade04273504f76186dc058b1ddb950f6a5f8116b24f72e2b35` passed independent QA `41f3b96f1988e5239898aa1976a64cfc2f3615f2ee71500c88c652d5a9818ee9`. The visible origin is canonical `http://localhost:5175`; safe `127.0.0.1` GET/HEAD navigation receives a 307 redirect before the app loads, while numeric-alias POST returns 403 without reaching the next middleware, proxy, ingress or provider. Root and QA reproduced 42 tests / 530 assertions, type checking and exact frozen bytes. Preserve exact H01, independent H01 acceptance before H04, exact H04, five stages each, ten total, zero retries/carry, EPA S01-S18 only, direct OpenRouter-to-Anthropic routing, customer-data exclusion and release false.
+
+The next action is an explicit board decision on the exact M45 run and $9.17912 conservative local reservation. M44 approval does not carry. The required paid-authorization file is absent, so the pinned bootstrap cannot start. After approval, independently hash-bind that authorization and complete fresh alias/canonical zero-activity browser, machine, account, source and per-case evidence before any provider request. Commit and push to the existing PR branch only after both live cases independently pass, cost/latency/stages reconcile and ordinary closure passes. Merge, deployment and release remain separate decisions.
+
+# Historical continuation — M43 offline RAG pilot-readiness complete; paid-run decision next
+
+September 11, 2026. M43 has an independent QA pass for offline preparation only. It defines a 14-question EPA-only evaluation matrix with nine development and five held-out cases, while rerunning none of M35 W11, M39 W03 or M40 EPA14-B01. The matrix covers qualified direct support, multi-passage answers, missing company context, absent source coverage, out-of-scope calculations, misleading premises, citation fidelity and retrieval-instruction resistance.
+
+The only proposed primary paid batch is the public/synthetic question-only fixture `M43-H01` followed by `M43-H04`. H01 must be captured, graded and reconciled successfully before H04 may be submitted. Maximum execution is five stages per case and ten total, with zero question retries, zero carry, 180 seconds per stage, 240 seconds per question and a fixed 30-minute supervisor. The expected two-case cost is $0.455912001. The conservative local reservation is $9.17912 and is neither a provider limit nor a guaranteed billing cap.
+
+Before any live request, recheck the exact source release, all nine source/policy pins, current runtime/provider route, exact request bodies, account controls and reservation. The current source review expires at `2026-09-15T23:20:32Z`. Bind any authorization only to S01-S18 and direct OpenRouter Messages API routing to Anthropic Claude Opus 5/Sonnet 5. Stop on any mismatch, failed H01 acceptance, uncertain/unmatched/pending cost or deadline failure. Optional `M43-H02`, `M43-H03` and `M43-H05` require separate authorization after primary closure.
+
+No live request has run. No credential was accessed and no customer data, source expansion, deployment, merge, release or commit occurred. A successful live result would remain a bounded internal evaluation, not customer-pilot or release acceptance. Commercial source rights/applicability, tenant isolation, security, operations and independent launch reviews remain open.
+
+[M43 milestone](../docs/research/rag-pilot-readiness-milestone-43.md) · [Contract](../docs/research/rag-pilot-contract-m43.md) · [Execution plan](../docs/research/rag-pilot-execution-plan-m43.md) · [Independent QA](../evaluations/research-qa/m43-pilot-readiness-review-10.json)
+
+# Historical continuation — M42 deterministic calculation complete; board feedback next
+
+September 11, 2026. The board accepted M41's presentation and directed the next milestone. M42 implements the first bounded Stage 3 product slice at `http://127.0.0.1:5174/?view=calculation`: one fixed synthetic U.S. stationary boiler consuming exactly `1 MMBtu` of natural gas. The canonical Python Decimal engine returns `53.06 kg CO2`, `0.028 kg CO2e` from CH4, `0.0265 kg CO2e` from N2O and `53.1145 kg CO2e` total.
+
+The retained EPA Hub workbook hash matches the manifest. Independent accounting verified Table 1 cells `C38/E38/F38/G38`, Table 11 cells `E524/E525/E526`, HHV and combustion-only notes, and reproduced the exact result. The factor/method are still development candidates: rights, applicability and release review are open. M42 supports MMBtu only, keeps AR5 explicit and does not claim a complete inventory or regulatory result.
+
+The isolated API on `127.0.0.1:3014` invokes the sole Python Decimal authority with no shell; the browser only renders returned strings. Calculate, export/replay and the required wrong-unit/missing-geography/wrong-period failures work. Independent QA found two material defects: the maximum accepted input could round under the original Decimal context, and the record did not pin the exact cells proving HHV, combustion scope, 100-year horizon and AR5. Both were repaired. The 96-digit context and exact boundary regression pass; the complete policy locators now resolve to the same workbook hash/sheet and render in the UI.
+
+Final QA `eb448ec54476d6bfc34179baf6f69d5c6330629b46c907ab7f85a78ff18b14e7` passed the repaired bytes: 6 Python tests, all 602 API tests / 5,254 assertions, all 48 website tests / 169 assertions, typechecks, lint, build, cross-runtime hashes, replay tamper/binding refusal, all required error states, ordinary-production-bundle exclusion, local-only browser traffic and desktop/mobile/keyboard review. M42 is complete as a bounded development demonstration. The next gate is board feedback before selecting a dependent calculation increment.
+
+No provider request, credential, customer data, source expansion, database, deployment, merge, release or commit occurred. Preserve the accepted M41 flow and do not extend M42 to therms, volume, LHV, other fuels, customer inputs or inventory storage without a new bounded milestone.
+
+[M42 record](../docs/research/deterministic-calculation-milestone-42.md)
+
+# Historical continuation — M41 offline board demo complete; board feedback next
+
+September 11, 2026. M41 implemented and independently accepted the local preserved-response demo. Open `http://127.0.0.1:5174/?view=demo` while the explicit development server is running. The page presents W11, W03 and EPA14-B01 in fixed order and states **Preserved reviewed replay**, **Offline replay · no new model request**, `Release false` and the pilot limits. It contains no question form or retry action.
+
+Each local response file is a byte-for-byte copy of its accepted browser artifact and is SHA-256 checked before display. Contract mismatches fail closed as **Reviewed replay unavailable**. Full response, terminal-QA and closure-QA hashes and the distinct M35/M39/M40 enclosing-run dispositions are inspectable. The source-review deadline is shown as historical evidence and is not renewed by replay.
+
+Root and independent QA passed 45 site tests / 165 assertions, typecheck, lint, build and diff validation. QA `7e8167c6c97b15b4bf2da09e0553b962edb91139529c3900b7267c1811f3acca` rehashed 19 bindings with zero mismatch, verified the exact rendered behavior/citations, keyboard flow and 390 × 844 fit, and captured zero external or research/provider endpoint requests. The production build contains no replay artifacts or diagnostic strings.
+
+Only the offline Vite front end is intentionally listening on 127.0.0.1:5174 for board review. Ports 3012, 3016 and 5175 remain closed and no provider service is enabled. Collect board feedback before selecting a dependent milestone. Do not infer deployment, release, current source validation, deterministic calculations, customer isolation or production readiness from M41.
+
+[M41 record](../docs/research/offline-board-demo-milestone-41.md) · [M41 independent QA](../evaluations/research-qa/milestone41-offline-demo-review-10.json)
+
+# Historical continuation — M40 live boundary accepted; M41 demo readiness next
+
+September 11, 2026. M40 completed the one authorized EPA14-B01 live diagnostic and passed independent terminal and closure QA. Candidate `01ef52263ea2b464ca62b69b501e03a656cf874994c9b7bc20fdf75031eb8aee` admitted the exact question once, used four of five stages, allowed zero question retries and carried nothing forward. Direct OpenRouter routing selected Anthropic Opus 5 for analyze/verify and Sonnet 5 for two plan stages.
+
+The website displayed **More source coverage is needed**. The exact captured body is `unsupported` / `coverage_missing`, with empty claims, evidence and sources and a scope gap containing `specified renewable energy purchases`. Terminal QA `53de5e233d7df60ab3881034c8be2551801daf5d5dd0c324d6bc26cafaf2f333` accepted the source, mechanical and answer checks. Exact current-run settled cost is $0.233731001; pending, uncertain, unexpected and retained current-run costs are zero.
+
+Closure `c6ce9dde9c7c0bd24b04ee4649cfdbbb2b992b63196adfc685bd24529f267985` is independently accepted by `60b3e6fe680c565381236197296019db9517b80ff2bdb37abe9fbeae2742ca3e`. Backend PID 29944, frontend child PID 31632 and frontend supervisor PID 25548 are absent; ports 3012/3016/5174/5175 are closed; ordinary preview is paused. One stage is retired, no stage carries, and release acceptance is false.
+
+Across preserved runs, all three intended behaviors are accepted: M35 W11 requests missing company context, M39 W03 answers with support and qualifications, and M40 EPA14-B01 abstains for missing source coverage. Next, define M41 as an offline demo-readiness package: one local board-review flow using these preserved accepted artifacts, clear pilot limits, and no new paid test or deployment. Do not restart M35, M39 or M40.
+
+[M40 record](../docs/research/supervisor-lifecycle-milestone-40.md) · [M40 closure QA](../evaluations/research-qa/openrouter40-closure-review-10.json) · [Accepted screenshot](C:/Users/nimab/Documents/Codex/2026-09-11/realtime-voice-chat/outputs/neuvetra-m40-epa14-b01-coverage-missing-accepted.jpg)
+
+# Historical continuation — M39 closed; M40 offline supervisor repair next
+
+September 11, 2026. M39 completed and independently accepted W03 in one browser submission and three settled OpenRouter-to-Anthropic stages. The website displayed **Supported, with qualifications** with exact approved EPA support. Current-run settled cost is $0.204937; exact cumulative settled cost is $3.306095 and historical retained uncertainty is $1.62485.
+
+EPA14-B01 was never submitted. The exact backend supervisor reached its fixed 900,000 ms lifetime and recorded mechanical stop at `2026-09-11T19:27:01.478Z`. Independent permission arrived 1.299 seconds later, and the root anchor followed 31.091 seconds after stop. The issuer refused the stopped runtime before permit creation. No EPA14-B01 private token, claim, click, provider/model request, stage, spend, capture or terminal outcome exists.
+
+M39 is sealed by the reviewed conservative emergency path, closure `af1f893bd6733a1c534a8c45b00601bb30f4b53efdeca2aab42d32fa2cc510dc`, with independent QA `f4aa6cab3b9234591b323c7e77d8218e68a43e114e59314129e0d30e0b902091`. All ten allocation slots are retired from reuse; do not restart M39 or carry its authorization. Backend PID 23072 and frontend PID 32548 are absent, ports 3012/3016/5174/5175 are closed, and ordinary preview is paused.
+
+Next, complete M40 offline. Preserve M39 and the accepted W03 screenshot. Repair the supervisor lifecycle so a realistic end-to-end regression runs the clock across delayed permission, provider work, capture, independent terminal review and closure while retaining finite idle/request/global bounds. The old fixture advanced case timestamps but never exercised the supervisor loop, which is why it missed the 15-minute ceiling. Obtain independent QA before proposing a paid run.
+
+Any later live milestone is EPA14-B01 only, maximum five stages, zero retries and zero carry, approved EPA S01-S18 only, direct OpenRouter-to-Anthropic routing and a conservative reservation of $3.9377225. That estimate is not a billing guarantee. It needs a fresh candidate, source/account observations, one-use permission and explicit board authorization because M39 had paid activity and cannot transfer unused capacity.
+
+[M39 record](../docs/research/provider-two-case-live-milestone-39.md) · [M39 closure QA](../evaluations/research-qa/openrouter39-closure-review-10.json)
+
+# Historical continuation — M36 complete; two-case live run awaited board decision
+
+September 11, 2026. M36 repaired the ordinary closer in a fresh offline candidate and passed independent QA. M35 remains immutable. The repaired closer validates the browser admission and permission anchor under separate schemas and requires both for settled activity. Its realistic regression preserves settled accounting, stage retirement, zero carry and exclusive closure. Independent QA rehashed 120 pins with zero mismatch, passed 17 runtime tests / 131 assertions, 7 permission tests / 23 assertions, runtime typecheck and adversarial record-integrity probes. Do not launch M36; it has no live authorization and is not shaped for the remaining two cases.
+
+The next proposed live milestone is fully scoped in [the two-case proposal](../docs/research/provider-two-case-live-scope-after-m36.md): W03 then EPA14-B01, approved EPA S01-S18 only, OpenRouter to Anthropic Opus 5/Sonnet 5, five stages per case, ten total, zero question retries and zero carry. The fresh conservative reservation is $7.87852. It would bring monitored exposure to $12.604528 on the independently reconciled view or $16.2966005 while preserving M35's emergency-conservative ceiling. Both exceed the previous $10 target.
+
+Before any credential access, service, browser or paid request, obtain an explicit board decision covering both exact questions, transmission boundary, models/provider, stage/retry rules, $7.87852 reservation and replacement monitoring basis. The conservative choice is at least $16.2966005. Then create and independently review a fresh two-case candidate, recheck the source review before its `2026-09-15T23:20:32Z` expiry, and issue new one-use permissions. No current authorization may be reused.
+
+[M36 record](../docs/research/ordinary-closer-milestone-36.md) · [M36 QA](../evaluations/research-qa/openrouter36-offline-review-10.json)
+
+# Historical continuation — M35 closed; M36 offline closer repair next
+
+September 11, 2026. M35 completed the one authorized W11 browser diagnostic. The exact application outcome was **More context is needed** (`needs_input`): it made no company-specific claim and asked what the referenced company subject meant. Independent terminal QA accepted the result and the exact hash-bound browser response and UI screenshot. Three stages completed with zero retries and $0.2452 settled current cost. Two stages were retired with no carry. Exact cumulative settled cost is $3.101158; historical uncertainty remains $1.62485.
+
+The backend and frontend are stopped and ports 3012/3016/5174/5175 are closed. The reviewed ordinary closer has a permission-anchor schema defect at its admission loop, so its reviewed emergency path sealed M35 conservatively. That closure retains the full $3.9372725 estimate and reports $1.5819195 remaining under the original internal monitoring target. Independent closure QA separately reconciled the exact three receipts and six spending events with no pending or uncertain item. Do not restart M35 or reuse its authorization, permit or retired stages.
+
+Next, complete M36 entirely offline: repair the closer so the permission anchor is validated by its own schema while the browser admission keeps its existing checks; add a regression using both real admission files; obtain independent QA; and update the frozen candidate only for a future separately authorized run. After M36, the remaining browser demonstration cases are supported W03 and source-gap EPA14-B01. Do not submit either without fresh board authorization and a current source review. No merge, deployment, release, source expansion or customer-data use is authorized by this handoff.
+
+[M35 record](../docs/research/provider-pipeline-live-milestone-35.md) · [M35 closure QA](../evaluations/research-qa/openrouter35-closure-review-10.json)
+
+# Historical continuation — M34 online provider validation authorized; not started
+
+The board accepted the completed M33 offline repair and authorized the next online milestone. The next owner must create a **fresh** `website-epa-live-34` candidate for one unchanged W11 submission, obtain independent preflight on its exact bytes and runtime, prove direct browser response capture before the click, and then run under the bounded stop policy in the [M34 handoff](../docs/research/provider-pipeline-live-handoff-34.md). No worker, runtime, service, browser admission or provider request is currently active.
+
+M34 may allocate at most five new stages, with zero carry and zero question retries. M32 used one stage and retired four; its authorization, browser permit and runtime are consumed and cannot be reused. Earlier run allocations and authorizations are also closed or retired. Current retained accounting is $2.855958 settled plus $1.62485 historical uncertainty, leaving $5.519192 of the original $10 internal monitoring target. That target is not a hard billing cap. Recompute the exact M34 reservation before launch; proceed under the current board approval only if the new maximum stays within the remaining target and the question, provider/model and EPA-only scope are unchanged.
+
+Freeze M33 implementation commit `e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c`, local evidence commit `ee083c3`, semantic profile `885cb919e745544b576e942aa246d3b847eaed17106bf7ffb53335d36f11684b` and OpenRouter profile `29f88895c9c67676e48701bd9aad6d42eed0bd86e573b4d3e197127b807e2b99` into a new manifest. Recheck current official OpenRouter pipeline/plugin/transform documentation, account and organization plugin defaults, the exact request's disabled-plugin settings, approved EPA source/cloud bytes and the `2026-09-15T23:20:32Z` source-review expiry. Use freshly verified Bun 1.3.12, bundled Node.js 24.21.0 and bundled Python 3.12.14 runtime hashes recorded in the handoff; do not silently substitute the separately discoverable Python 3.14.7.
+
+The new runtime must understand M33's finite `router_pipeline` / `shape|material_effect` evidence without retaining raw pipeline values. Stop and seal the first outcome on any identity or pipeline failure, uncertain or failed cost settlement, transport/non-200/timeout/cancellation, source mismatch, browser capture/mechanical failure or terminal answer failure. No retry or policy relaxation is allowed. Retire unused stages, stop exact processes, recheck ports 3012/3016/5174/5175 and obtain independent closure QA. No additional board decision is needed for this exact bounded M34 run; return to the board if scope or maximum exposure grows, source review expires, account controls cannot establish the requested plugin policy, or an exact nonempty effect would need approval.
+
+# Completed checkpoint — M33 offline pipeline repair
 
 M33 implemented the current primary-provider `pipeline` contract offline. Official OpenRouter documentation describes each emitted pipeline entry as a material request or response effect. M32 retained only its failed-field label, so no raw value, stage or cause was inferred. Neuvetra still accepts only an absent or empty pipeline.
 
@@ -120,3 +280,42 @@ Board-approved Scope 1/2 matrix/completeness preparation is complete and indepen
 Latest code checkpoint: 9a72b64452d5e0156f2b3da65e29b20249b1febb pushed to existing PR2; diagnostic and commit-validation reports are included. Other operational history remains local/uncommitted intentionally.
 
 Remote CI confirmed: both Verify jobs passed for9a72b64 in https://github.com/neuvetra-hq/neuvetra/actions/runs/34523778548. User-approved commit/PR update complete; no services or QA workers remain active.
+# Current continuation — M50 v4 accepted offline; fresh exact paid decision next
+
+September 12, 2026. M50 v4 is the current frozen candidate. Preserve v1-v3 and their rejection/block records. Candidate `664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee`, manifest `db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7`, rehearsal `5900aff28ac5114b747600ba2df8d8767b8cbb3b67fe0e295529f7eb9ada2f6c` and wrapper `d03afae8f93fb698bec57892d55102eabe3c4d5cf9561d38f6a1c451bd883488` are stable.
+
+Independent product review `dc407f9d4466eea38e24a93346cc479e50763f7c19467f37d1a4c166a5b1cd85` and technical QA `2041acd0184f4f62f84e7a61393d4c33aa4d3da963a0468f44cde0c7d47bb36c` pass the exact frozen bytes. Technical review passed 32 tests / 356 assertions, all 87 candidate and manifest pins and all 52 wrapper child pins. Windows allowed the exact wrapper; two provider-disabled lifecycles passed; ports 3012/3016/5174/5175 are closed.
+
+Do not execute without a fresh consumable authorization bound to candidate `664df11d…` and review `2041acd0…`. The scope is exactly H02 as a W02/W09 regression, EPA S01-S18 only, direct OpenRouter-to-Anthropic, Opus 5 analyze/verify and Sonnet 5 plan, maximum five stages, zero retries/carry, 180 seconds per stage, 240 seconds for the question and a 30-minute supervisor. Expected cost is $0.271573; the conservative reservation is $3.944535 and is not a billing guarantee.
+
+After fresh approval, create the one-use authorization within 60 seconds and expiry within five minutes. Refresh Personal / Default Workspace account and plugin controls, balance and source evidence within five minutes; refresh wrapper hash, empty production paths, processes, ports and browser origin within 60 seconds. The retained source approval window ends `2026-09-15T23:20:32Z`. Then materialize preflight and run `.superpowers/openrouter-50-v4-bin/m50-wrapper-v4.exe live <workspace-relative> 664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee <authorization-sha256> <evidence-bundle-sha256>`. No secrets are command arguments.
+
+No provider request, credential, external network, paid cost, customer data, source expansion, commit, publication, merge, deployment or release occurred during M50 preparation. The prior publication request remains conditional on a successful live result and independent closure.
+
+# Current continuation — M50 repaired core; Windows policy approval required
+
+September 12, 2026. Do not launch M49 or M50. M49 is frozen and accepted as provider-disabled preparation; its earlier scope approval did not cover a materially changed live adapter. M50 v1 failed independent review and remains rejected. M50 v2 repaired the tested core but is blocked before freeze by Windows Application Control.
+
+The exact blocked file is `.superpowers/openrouter-50-v2-bin/m50-wrapper-v2.exe`, 116,286,552 bytes, SHA-256 `9995fb8c0412001b12bb5712d9bd8581c8f36eb46234da6b4c922598d37bd6e1`. Read `operations/m50-v2-windows-code-integrity-block.json`, `docs/research/m50-v2-remediation-blocked.md`, technical review `evaluations/research-qa/openrouter50-v2-blocked-review-10.json` and product review `evaluations/research-qa/m50-v2-blocked-handoff-product-review-10.json`. Six Code Integrity events confirm the enterprise signing/policy denial. Do not bypass the policy or use the unapproved script-wrapper draft.
+
+Unaffected checks pass 9 tests / 36 assertions plus a focused type check. The provider-disabled composed path reaches analyze→plan→verify with distinct captures, three synthetic native-cost settlements and payload/cost/terminal/shutdown seals. No final wrapper lifecycle, candidate, manifest, integrated rehearsal freeze, independent candidate review or paid authorization exists.
+
+Next action: the Windows administrator or Application Control policy owner must approve or sign the final wrapper. Then hash the exact allowed bytes, update the parent-image pin, rerun the complete wrapper-to-issuer-to-backend provider-disabled lifecycle and refusal suite, freeze new candidate/manifest/rehearsal evidence, and obtain independent product and technical review. Ask the board for fresh exact M50 paid approval only after those bytes pass. Recheck source, runtime, account and browser observations immediately before any eventual paid request.
+
+No credentials, provider request, paid cost, customer data, source expansion, commit, publication, merge, deployment or release occurred. Ports 3012, 3016, 5174 and 5175 were closed after testing.
+
+# Current continuation — M49 offline complete; exact paid decision next
+
+September 12, 2026. M49 completed and passed independent QA. It prepares one exact `M43-H02` question as a regression/recombination of W02/W09 behavior, not a novel held-out canary. Candidate `d954dc0508e26350c138163049adbf13e85814af523e64e84e00a00cb8c6e96c`, manifest `334379536c8a21e2d4d124f85c37a4e7c3615e00c81f75c190d42a59d31c6c46`, rehearsal `61cff517738bab6be176e9a8078ae0dc5c5c42b02eb17b4823e2f47c71bf3a1f` and wrapper `93dbae144918003d3d3da24a9e7ee9edf5c1604e69acd60930f904724e35de42` are frozen.
+
+The exact question is: “How should I research a U.S. grid-average factor for a facility, and what should I verify before treating the result as current?” Model-visible material is the question, ordinary application instructions and approved EPA S01–S18 product corpus. The separate H02 expected result, required points, S06–S10/S18 evidence roles, forbidden claims and grading checks are evaluator-only. Inspect every dynamic plan/verify request body for separation before dispatch; grade only after immutable terminal capture.
+
+The route is OpenRouter Messages API direct to Anthropic, with Opus 5 for analyze/verify and Sonnet 5 for plan, fallbacks disabled and plugins disabled. Permit at most five stages for this one case, zero question retries and zero carried stages. Use 180 seconds per stage, 240 seconds for the question and the 30-minute fixed supervisor. Stop on identity, routing/pipeline, transport, source, cost, ordering, response, capture, shutdown or wrapper mismatch.
+
+Expected cost is $0.271573 from the two latest same-pipeline M46 cases. Conservative local reservation is $3.944535; this is not a vendor-enforced cap or billing guarantee. Retained basis plus reservation is $9.652357001, leaving $6.644243499 below the $16.2966005 internal monitoring target.
+
+CPO acceptance `cc4955049fbd0c58331fade893afb812450f4321a0363a1efb6484bfd7e14abd` and independent QA `57b65614efcf35f053a7efafc4680733a3720c3b6d3ef0f593195398acae3ddb` pass. The author suite passed 184 tests / 1,134 assertions; independent QA repeated the frozen verifier, type checks and lifecycle rehearsal with no finding. No provider, credential, network, customer-data, source-expansion, service, paid-authorization, commit, publication, merge, deployment or release activity occurred.
+
+Stop now for an explicit board decision. Approval must name exactly this one H02 regression/recombination, direct route, five-stage maximum, zero retries/carry and $3.944535 reservation. After approval and before any paid request, refresh official EPA source bytes/applicability, local release/runtime pins, OpenRouter account/workspace/plugin/routing controls, balance, empty attempt paths and browser origin. The current source review expires `2026-09-15T23:20:32Z`.
+
+[M49 record](../claude-memory/meetings/2026-09-12-neuvetra-m49-h02-regression-readiness.md) · [M49 candidate](../tools/research/m49-h02-provider-disabled-candidate-v1.json) · [M49 independent QA](../evaluations/research-qa/openrouter49-offline-review-10.json)

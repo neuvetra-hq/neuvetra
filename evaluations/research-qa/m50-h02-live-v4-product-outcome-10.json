@@ -1,0 +1,136 @@
+{
+  "schema_version": "m50_h02_live_v4_product_outcome.v1",
+  "task": "M50-v4-live-CPO-outcome",
+  "role": "independent_product_qa",
+  "reviewed_at": "2026-09-13T03:06:00Z",
+  "workspace": ".superpowers/website-epa-live-50-v4-01/runtime",
+  "disposition": "failed_safely_evaluation_forbidden",
+  "h02_user_outcome_passed": false,
+  "unsupported_answer_shown": false,
+  "evaluation_may_proceed": false,
+  "live_retry_authorized": false,
+  "release_acceptance": false,
+  "reviewed_evidence": {
+    ".superpowers/website-epa-live-50-v4-01/runtime/M43-H02-terminal-body.bin": "9b8c492f5a6f968f081d260044802515e65ba402a8c38fc8a58df7ab54980ff9",
+    ".superpowers/website-epa-live-50-v4-01/runtime/M43-H02-terminal-failure.json": "da291cc03c03e527b50c61673a3d761187bdeb9c8dda43aee84b3a16e14110ab",
+    ".superpowers/website-epa-live-50-v4-01/runtime/provider-capture/001-analyze.json": "8de4877fbb5d89f0326cd5e69c0b00476155fd9a1a4ca9e39be4b064199adb54",
+    ".superpowers/website-epa-live-50-v4-01/runtime/provider-capture/payload-seal.json": "facd754ae57c7d6703a820eceaad1aa0f5f8e11cbf19f1d243a39b9f38b472e2",
+    ".superpowers/website-epa-live-50-v4-01/runtime/budget/001-reservation.json": "af6dae63d00b3eca0017549a13a3af4483c59371b9a71bb74846ef75d3f1363a",
+    ".superpowers/website-epa-live-50-v4-01/runtime/budget/001-settlement.json": "e71b4294433c83ca704b216d0a7c2ea04532e159524fbf43e8ed3d7df5ace5ab",
+    ".superpowers/website-epa-live-50-v4-01/runtime/budget/cost-closure.json": "920ef20f97c27f3c443d245e9109be21219e91986751f30f22622f410ea50962",
+    ".superpowers/website-epa-live-50-v4-01/runtime/shutdown.json": "9db6319b1e512668702815067ed4ea29688856e3c2dc5eaebe94d2b38ba65550",
+    ".superpowers/website-epa-live-50-v4-01/adapter/permit-issuer-failure.json": "08a0db8027cb6ec701f41bf2c8e116276144c1dd22bab52cc149616e1aae8c56"
+  },
+  "sealed_integrity": {
+    "terminal_is_failure": true,
+    "terminal_payload_hash_matches": true,
+    "terminal_cost_hash_matches": true,
+    "shutdown_terminal_hash_matches": true,
+    "payload_capture_hash_matches": true,
+    "controlled_shutdown": true,
+    "no_restart": true,
+    "no_carry": true,
+    "designated_processes_closed": true,
+    "designated_loopback_listeners_absent": true
+  },
+  "user_visible_result": {
+    "http_response_captured": true,
+    "status": "unavailable",
+    "reason_code": "provider_failure",
+    "message": "The research service could not verify a complete answer. Your question can be tried again after its connection is checked.",
+    "claims_count": 0,
+    "evidence_count": 0,
+    "sources_count": 0,
+    "missing_context_count": 0,
+    "scope_gaps_count": 0,
+    "retrieval": null,
+    "composition": null,
+    "correction_attempted": false,
+    "product_judgment": "The requested H02 research answer was not delivered, but the product showed a bounded unavailable state and did not present unsupported or partial research as an answer."
+  },
+  "execution_outcome": {
+    "exact_question_claim_consumed_once": true,
+    "completed_provider_stages": ["analyze"],
+    "failed_stage": "analyze",
+    "provider_transport_calls": 1,
+    "synthetic_provider_envelopes": 0,
+    "question_retries": 0,
+    "cross_run_carry": 0,
+    "analyze_model": "anthropic/claude-opus-5",
+    "analyze_request_body_sha256": "513d064d3f52a63d2a4adbe3eca2b7210c5f7b5fe2353c799e0fa883ca5e205e",
+    "route_exact": true,
+    "plugins_disabled": true,
+    "evaluator_material_present": false,
+    "reserved_nano_usd": 462175000,
+    "settled_nano_usd": 33685000,
+    "settled_usd": 0.033685,
+    "native_cost_source": "response",
+    "pending_cost_attempts": [],
+    "uncertain_cost_attempts": [],
+    "exact_cost_for_the_single_attempt": true,
+    "full_h02_terminal_success": false,
+    "cost_success_closure": false
+  },
+  "evaluation_gate": {
+    "success_terminal_capture_present": false,
+    "failure_terminal_capture_present": true,
+    "payload_terminal_kind": "failure",
+    "cost_terminal_kind": "failure",
+    "all_native_costs_final_for_success": false,
+    "grade_input_present": false,
+    "evaluator_key_read_during_this_review": false,
+    "decision": "Do not open the evaluator key or grade this run. The frozen grader requires a success terminal, success payload seal, successful native-cost closure and controlled shutdown; this run fails the first three conditions."
+  },
+  "evidence_quality_findings": [
+    {
+      "id": "M50-LIVE-PRODUCT-01",
+      "severity": "next_milestone_blocker",
+      "finding": "The wrapper-level failure record reports provider_requests:0 even though the sealed runtime evidence proves one validated analyze dispatch and shutdown.transport_calls:1.",
+      "impact": "Using the wrapper failure record alone would understate paid provider activity and conflict with the settled 0.033685 USD native cost.",
+      "board_reporting_rule": "Treat the runtime payload seal, capture, cost closure and shutdown as authoritative. Report one provider request and 0.033685 USD settled cost; do not repeat the wrapper's zero-request field."
+    },
+    {
+      "id": "M50-LIVE-PRODUCT-02",
+      "severity": "diagnostic_gap",
+      "finding": "The user body records provider_failure at analyze, while the terminal envelope records terminal_preconditions_failed and the stage failure record contains no safe failure phase/detail.",
+      "impact": "The run is safely classifiable, but the preserved artifacts do not identify the exact provider-response incompatibility needed for a confident repair.",
+      "board_reporting_rule": "Describe the exact cause as undiagnosed analyze-stage provider failure after an HTTP response; do not infer a model-quality failure or a specific OpenRouter/Anthropic defect."
+    }
+  ],
+  "truthful_claim_boundary": {
+    "allowed": "The single authorized M50 v4 H02 run made one exact analyze request, settled 0.033685 USD, failed before plan or verify, displayed no unsupported answer, sealed failure and shut down without retry or carry.",
+    "not_allowed": [
+      "H02 passed or received an evaluated answer.",
+      "The model failed the H02 content criteria.",
+      "Zero provider requests or zero paid activity occurred.",
+      "The exact provider incompatibility is known from the current evidence.",
+      "Any novel-generalization, current-factor, applicability, release or production-readiness conclusion."
+    ]
+  },
+  "recommended_next_product_milestone": {
+    "id": "M51",
+    "name": "Analyze-stage compatibility and truthful failure evidence",
+    "bounded_user_outcome": "A frozen offline adapter can accept a production-shaped successful OpenRouter-to-Anthropic analyze response or preserve a precise safe failure classification, while every failure record agrees on provider activity and settled cost.",
+    "acceptance_criteria": [
+      "Reproduce the observed analyze-stage provider_failure offline from sanitized response-shape evidence or a representative fixture; do not use evaluator material.",
+      "Preserve safe phase/detail and provider identity diagnostics sufficient to distinguish HTTP, envelope, identity, pipeline, content, decoding and schema failures without retaining provider prose, credentials or thinking content.",
+      "Make wrapper, terminal, payload, cost and shutdown records agree that a post-dispatch failure consumed one provider request; never emit provider_requests:0 after transport dispatch.",
+      "Demonstrate offline both a production-shaped analyze success continuing to canonical plan/verify and representative failures stopping before unsupported output, retry or carry.",
+      "Freeze replacement bytes and obtain independent technical and product QA. Any further paid H02 attempt requires a new candidate-bound, one-use board authorization and fresh account, source and machine evidence."
+    ],
+    "current_run_retryable": false
+  },
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "evaluator_key_accessed": false,
+    "application_services_started": false,
+    "source_expansion": false,
+    "code_or_shared_operations_files_modified": false,
+    "only_new_product_report_written": true,
+    "commit_publish_deploy_or_release": false
+  },
+  "conclusion": "FAILED SAFELY. H02 produced no research answer and cannot be graded, but the user saw a bounded unavailable response with no unsupported claims or sources. M51 should repair analyze-response compatibility and make failure accounting internally consistent before any separately authorized live rerun."
+}

@@ -22,6 +22,8 @@ Research, preserve authorized public evidence and recommend interpretations. You
 
 Deliver a dated evidence brief with an applicability matrix, supported conclusions, exact citations, unresolved questions, change implications and monitoring suggestions. Hand product implications to CPO and proposed rule changes to CTO through review. Do not modify released rule/factor data merely because a new source appeared.
 
+Supply program, edition and data-year applicability findings to the [CARB verifier / GHG audit reviewer](carb-verifier.md). Keep MRR verification requirements and corporate Scope 1-3/SB 253 assurance criteria separately supported.
+
 ## Done / escalation
 
 Done means each material conclusion resolves to inspected evidence and its context, or is explicitly unresolved. Escalate consequential interpretive ambiguity to CPO/CEO for qualified review; preserve progress on independently answerable questions.

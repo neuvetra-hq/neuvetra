@@ -1,0 +1,99 @@
+{
+  "schema_version": "m48_blocked_closure_review.v1",
+  "task": "M48-INDEPENDENT-QA",
+  "role": "independent_qa",
+  "reviewed_at": "2026-09-12T20:25:50.5857697Z",
+  "disposition": "pass_truthful_blocked_closure",
+  "scope": "Independent review of the M48 case-selection closure only. This is not live-readiness, paid-run, pilot, publication, deployment, or release acceptance.",
+  "reviewed_artifacts": {
+    "evaluations/research-qa/m48-heldout-novelty-review-10.json": "4cd456bb20431ac34e6ad11c9bc21d070a0a8d93dd249c126e77b96c58308914",
+    "evaluations/research-qa/m43-pilot-evaluation-cases-v1.json": "9f6e68cbe55805f9737a8a908e23875b2bb5c1c77bd74d3d50feae69dd716e6d",
+    ".superpowers/website-evaluation-all-06.jsonl": "5ca32e2f2d421481158f9dc68c0acabafba19f62b8ff87b4206ab6ac6f137280",
+    ".superpowers/website-prerequisite-holdout.v1.json": "fd22f1e2f46855b1cf6d749faf303a02d1ebe70b00164ca4552aa156205e2e49",
+    ".superpowers/website-evaluation-04/traces/023-started.json": "aa4801bbb15cd3e435c646ab07c5713a314bdd5f7a0fc1120426d59a7a58234a",
+    ".superpowers/website-evaluation-04/traces/024-started.json": "d30a4ad6a68c25ce2d7c08c8d8ccc04239730bb3cf96c298e90d4987e1f78188",
+    ".superpowers/website-evaluation-04/traces/024-completed.json": "ce30dd20da0455dfbfd19febd140af1aa4a8e5c88ea96b68695ffd122f0f6e25",
+    ".superpowers/website-claim-packets-04.json": "29be7d44a7cbc86462138e9a7780d18402bb937dc3a475558c1cf0a29d89ef4f",
+    ".superpowers/website-evaluation-04/traces/011-started.json": "0f254933f02dfcab3afa537540a186584be527a2c1c24156c060f8f18570241b",
+    ".superpowers/website-evaluation-04/traces/011-completed.json": "f6a0fc23e68a519d174e96ac85fbf1cae0c8a659df8882a9a28baa0bf8157ab9",
+    "tools/research/m47-offline-manifest-v4.json": "d25e0f36e5ae0d0ce41d33550f5e217946191ff547cc502d160a6e136ea22260",
+    "tools/research/m47-offline-candidate-v4.json": "8261f9f160aec205e3fc08a81a02c667a84ec744f3ced11938f090cd506b04f7",
+    "evaluations/research-qa/openrouter47-offline-v4-review-10.json": "8b5e74f7eb8eace4295887bac9b53b7b1ede65146c61146ff738284514b853fa"
+  },
+  "criteria": {
+    "cpo_report_integrity": {
+      "result": "pass",
+      "finding": "The reviewed CPO report rehashes exactly and selects no case because H02, H03, and H05 are semantic regressions or recombinations inside the already exposed S01-S18 space."
+    },
+    "h02_overlap": {
+      "result": "pass",
+      "held_out_question_sha256": "13e3e2bb76ecf7e7f1228b6f852076a433f181c2de12f42e90023028378542c3",
+      "representative_evidence": [
+        "W02 previously asked how to source U.S. eGRID regional averages versus supplier factors and completed qualified/none with live provider-visible input and S06-S09/S11/S12/S15/S18 selection.",
+        "W09 previously asked why factor data year and publication edition must remain distinct from inventory year and completed qualified/none with live provider-visible input and S06-S09/S16-S18 selection."
+      ],
+      "finding": "H02 combines the already exercised grid-factor discovery and currentness checks; its exact wording remains unexecuted, but its product behavior is not materially novel."
+    },
+    "h03_overlap": {
+      "result": "pass",
+      "held_out_question_sha256": "160e8c9006181438e442b177b23f9faad6809e2e8b46e07df3243ba1eb691e90",
+      "representative_evidence": [
+        "M43-D04 is a near-twin fictional missing-document/full-reporting-year case with needs_input/context_required, the same three missing-context IDs, and the same S06/S11/S12/S15 family.",
+        "W06 previously asked whether mismatched agreement and inventory dates make an agreement unusable for the entire inventory and completed qualified/none on S15 with live provider-visible input.",
+        "P03 and P04 used the exact same provider-visible agreement/full-year question; both started verifier traces exist, and P04 completed pass while preserving aligned and covered-portion branches."
+      ],
+      "finding": "H03 changes the number of fictional products but repeats the missing-document, date-alignment, and full-year coverage behavior."
+    },
+    "h05_overlap": {
+      "result": "pass",
+      "held_out_question_sha256": "ca5919524bc98917fb0d8e8d20ac117ab68082fbbbef044f19c74fe346e36215",
+      "representative_evidence": [
+        "Verifier C11 exposed to the provider the question distinguishing ordinary factor updates from methodology changes and the misleading claim that every historic inventory always requires recalculation; its S16-S18 started and completed traces are preserved.",
+        "W09 separately exercised edition, represented period, currentness, and timing limitations in a qualified live result."
+      ],
+      "finding": "H05 is a user-form restatement of the prior C11 verifier challenge with already exercised W09 timing context, so it is not materially novel."
+    },
+    "remaining_m43_held_out_cases": {
+      "result": "pass",
+      "facts": "M43 defines H01-H05 as held out. M46 exact request artifacts contain H01 and H04. The remaining H02, H03, and H05 each fail the material-novelty test above.",
+      "finding": "No remaining M43 held-out case can honestly be labeled materially novel within approved S01-S18."
+    },
+    "h02_freeze_and_paid_boundary": {
+      "result": "pass",
+      "absent": [
+        "M48 candidate file",
+        "M48 exact request body file",
+        "M48 cost or allocation file",
+        "M48 paid or live authorization file",
+        ".superpowers/website-epa-live-48 runtime directory"
+      ],
+      "finding": "H02-specific preparation stopped before candidate, request, cost/allocation, paid authorization, admission, runtime, or provider execution artifacts were frozen or issued."
+    },
+    "m47_freezer_integrity": {
+      "result": "pass",
+      "checked_pins": 184,
+      "m46_preservation_pins": 161,
+      "m47_v4_implementation_pins": 23,
+      "mismatches": 0,
+      "finding": "Every current path in the frozen M47 v4 manifest rehashes to its pinned digest; M46 and M47 frozen artifacts remain unchanged."
+    },
+    "m48_activity_boundary": {
+      "result": "pass_with_bounded_evidence",
+      "finding": "The CPO record declares zero provider/model requests, paid actions, credential access, external network requests, services, customer data, source expansion, publication, deployment, release, merge, or commit. Local artifact inspection corroborates no M48 candidate/request/cost/authorization/runtime records, and Git HEAD remains ee083c3e03a41c6a777b14271703b33680087bc6 from 2026-09-10. This review used local file reads and hashes only and wrote this JSON; it cannot independently attest activity outside the preserved workspace evidence."
+    }
+  },
+  "draft_cleanup": {
+    "directories": [
+      ".superpowers/openrouter-48",
+      ".superpowers/openrouter-48-v1-src",
+      ".superpowers/openrouter-48-v1-bin"
+    ],
+    "file_count": 14,
+    "total_bytes": 116368170,
+    "largest_file": ".superpowers/openrouter-48-v1-bin/m48-wrapper-v1.exe",
+    "largest_file_bytes": 116286552,
+    "status": "unfinalized_and_not_part_of_a_candidate_or_authorization",
+    "recommendation": "Delete all three draft directories after this closure review is accepted. They retain H02-specific draft bytes, add about 116 MB to OneDrive, and have no frozen candidate, request, cost, authorization, or live-run standing. Deletion was not performed by this independent review."
+  },
+  "conclusion": "PASS for truthful blocked closure. M48 should close without selecting or running a supposedly novel M43 case. A future run may label H02 only as a regression/recombination check unless a new approved and quarantined semantic space is created."
+}

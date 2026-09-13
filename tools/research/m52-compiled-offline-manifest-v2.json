@@ -1,0 +1,130 @@
+{
+  "schema_version": 2,
+  "kind": "m52_compiled_provider_disabled_manifest_v2",
+  "milestone": "M52",
+  "candidate": {
+    "path": "tools/research/m52-compiled-offline-candidate-v2.json",
+    "sha256": "7b0d26e0d6f02fd4e8dfa62b9066a921062c9df301a7888cb4fa6511407a5941"
+  },
+  "rehearsal": {
+    "path": "operations/openrouter52-provider-disabled-rehearsal.json",
+    "sha256": "5ec391ae1fc4f6c1a7de9941fc25acfbc76aa3fb6f24f60d8ab7690d5bc328d9"
+  },
+  "pins": [
+    {
+      "path": ".superpowers/openrouter-52-src/wrapper.ts",
+      "sha256": "fd5f3d7e40cfecb23a6d2b2473fff6d4b0ea6043de765faaf1077c580a63afce"
+    },
+    {
+      "path": ".superpowers/openrouter-52-bin/m52-wrapper.exe",
+      "sha256": "d48468453e3093ce6b16557e65412c3f1fb3f1922fda0671524619eedc081499"
+    },
+    {
+      "path": ".superpowers/openrouter-52/contract.ts",
+      "sha256": "60f5995fb8b855d0e223aad4bb2217c37441ebf7f27e8cb4b863ec2fe640cc76"
+    },
+    {
+      "path": ".superpowers/openrouter-52/rehearsal-fixture.ts",
+      "sha256": "1b0a2c8319d4ebe2446462d34accd44a62b9a97ff6025f52186adab56c448f89"
+    },
+    {
+      "path": ".superpowers/openrouter-52/runtime.ts",
+      "sha256": "3afba959257eb5a17b55f1455e95695ec99573947d14948cde51cbe65c558db0"
+    },
+    {
+      "path": ".superpowers/openrouter-52/payload-capture.ts",
+      "sha256": "4e3ce65cbe029c1ab498fc2dcf774727269c9e03ee370b4e25760e02c3f45125"
+    },
+    {
+      "path": ".superpowers/openrouter-52/spending.ts",
+      "sha256": "71c0df791057b3243ea40a1f8a76d8e8be2d35d2f174b19607ea536858309808"
+    },
+    {
+      "path": ".superpowers/openrouter-52/ingress.ts",
+      "sha256": "1a8c94a517b161690e821f45618aefa779bf031319f858a9791a7abc53df6920"
+    },
+    {
+      "path": ".superpowers/openrouter-52/closure.ts",
+      "sha256": "de2f9ef969bb3802af39363292dfcd621288856862035ffaf22759cf3192f9af"
+    },
+    {
+      "path": ".superpowers/openrouter-52/backend-cli.ts",
+      "sha256": "6210ddcc8cb44bcd3759e29a8bbb13cbca211237978494179f6638662d3e22d2"
+    },
+    {
+      "path": ".superpowers/openrouter-52/issuer-cli.ts",
+      "sha256": "e6cfa0413c892555728e5268c70ea8d17c369cc9e90421aeff40af17967667ce"
+    },
+    {
+      "path": ".superpowers/openrouter-52/issuer.ts",
+      "sha256": "b1566e5ba8f44fcc2fb3add15f2d7256f60db1ff13f11b8f179dd4714539794a"
+    },
+    {
+      "path": ".superpowers/openrouter-52/approved-wrapper.ts",
+      "sha256": "a4bab22980beb32d740a1464de3120eb5eb39153a86a7d0b8ea32e69444a6fd6"
+    },
+    {
+      "path": ".superpowers/openrouter-52/preflight.ts",
+      "sha256": "0b77d43c95f7fce54f7531d378f204d0080edd377b8b2c9ef986be98fb241200"
+    },
+    {
+      "path": "tools/research/m52-child-pinset.json",
+      "sha256": "ab32e1f301e54ae0012c8cdea8a6a0b1e479cc8813364f36ddf6d21d21d9dfe9"
+    },
+    {
+      "path": "tools/research/m52-evaluator-denylist.json",
+      "sha256": "2ff62fec96852d7f2e9568eb0b00041791a73684cc3c76fd94c52e79eba1c139"
+    },
+    {
+      "path": "tools/research/m49-h02-exact-request-v1.json",
+      "sha256": "3314822622ba31ee160d6ca8e55b1f4ddbbd8178a0c91013a2c881aafc6ff5e7"
+    },
+    {
+      "path": "tools/research/m49-h02-model-visible-source-boundary-v1.json",
+      "sha256": "e39e1963aca08eee005cc94c024e82401783515cda69941d4f036e01addb0cbf"
+    },
+    {
+      "path": "data/research/answer-units/scope2-website.epa-acquisition.v1.json",
+      "sha256": "97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50"
+    },
+    {
+      "path": "data/research/capabilities/scope2-website.epa-limitations.v1.json",
+      "sha256": "a7724c245fed1fd3a9dd08a82886c107b54905693039150f33359b2ed629e2c2"
+    },
+    {
+      "path": "data/research/releases/scope2-website.v1.json",
+      "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+    },
+    {
+      "path": "tools/research/m52-lifecycle.py",
+      "sha256": "83eb883eb4f6b915e03baac7664937e75b66371043b5f4a18ddb914d9f1103c2"
+    },
+    {
+      "path": "operations/openrouter50-v4-live-execution.json",
+      "sha256": "3927c16d8896e6f98b96e939cf9c5b9dd853206c7ad0bcca13b836df5aa61d49"
+    },
+    {
+      "path": "operations/openrouter51-provider-disabled-rehearsal.json",
+      "sha256": "d842552dd2c2b6674ec3f7fc6a7cefce7c41efe36ba93e36ca712cb00f562c5f"
+    },
+    {
+      "path": "evaluations/research-qa/m50-h02-live-v4-product-outcome-10.json",
+      "sha256": "9786e6de938b4192dbb008db67ea69d91fc1a38ec61d317fa652088dc3d7474e"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter50-v4-live-execution-review-10.json",
+      "sha256": "3dd8544b40ef1d51fb6c1bf0adb8b93466f3b5def3795637907dd32dd04f3c95"
+    },
+    {
+      "path": "evaluations/research-qa/m51-v4-offline-product-review-10.json",
+      "sha256": "aa721bb5c7756242398a05be9c7d2a003321abcd746d2a42c3e93e027e3eeb94"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter51-v4-offline-review-10.json",
+      "sha256": "d7022287da0f210408d618264b4c4de3222cfe28254814c7de5407bc14f016e9"
+    }
+  ],
+  "paid_authorization": false,
+  "live_execution_allowed": false,
+  "independent_review_required": true
+}

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'bun:test';
 import { hash } from '../research-passages/release';
 import { CompositionError } from './catalog';
 import { questionTokens } from './question-contract';
-import { analysisInput, analysisPrompt, analysisSchema, analysisTaxonomyDefinitions, analysisTaxonomyVersion, analysisVersion, parseQuestionAnalysis } from './question-analysis';
+import { analysisInput, analysisPrompt, analysisSchema, analysisTaxonomyDefinitions, analysisTaxonomyVersion, analysisVersion, applicationReferencePolicy, parseQuestionAnalysis } from './question-analysis';
 
 // Synthetic language and declared taxonomy labels only: no source files, stored
 // responses, fixtures, answer keys or claims of natural-language accuracy.
@@ -112,6 +112,70 @@ describe('sealed analysis structure', () => {
             const result = parseQuestionAnalysis({ ...raw(), operation }, 'Perform the requested task.');
             expect(result.operation).toBe(operation);
             expect(Reflect.has(result, 'decision')).toBe(false);
+        }
+    });
+
+    test('canonicalizes only the resolved application guidance directive while preserving the calculation', () => {
+        const question = 'Use this guidance to select a factor and calculate our emissions from purchased district steam.';
+        const proposal = { operation: 'calculate', parts: [
+            { id: 'q1', start_token: 0, kind: 'ambiguous_reference', requirements: [], ambiguity_context_ids: ['referenced_requirement'] },
+            { id: 'q2', start_token: 4, kind: 'request', requirements: [{ kind: 'explanation', subject: 'unrepresented_subject' }], ambiguity_context_ids: [] },
+        ] };
+        const result = parseQuestionAnalysis(proposal, question);
+        expect(applicationReferencePolicy).toBe('application-reference.v1');
+        expect(result.operation).toBe('calculate');
+        expect(result.parts.map(value => value.kind)).toEqual(['background', 'request']);
+        expect(result.parts[0]!.requirements).toEqual([]);
+        expect(result.parts[0]!.ambiguity_context_ids).toEqual([]);
+        expect(result.parts[1]!.requirements).toHaveLength(1);
+        expect(analysisPrompt).toContain('use this guidance');
+    });
+
+    test('does not resolve genuine or differently placed references', () => {
+        const genuine = parseQuestionAnalysis({ operation: 'explain', parts: [{ id: 'q1', start_token: 0, kind: 'ambiguous_reference', requirements: [], ambiguity_context_ids: ['referenced_requirement'] }] }, 'What does that requirement mean?');
+        expect(genuine.parts[0]!.kind).toBe('ambiguous_reference');
+        expect(genuine.parts[0]!.ambiguity_context_ids).toEqual(['referenced_requirement']);
+        const notLeading = 'Calculate our emissions using this guidance.';
+        const other = parseQuestionAnalysis({ operation: 'calculate', parts: [
+            { id: 'q1', start_token: 0, kind: 'request', requirements: [{ kind: 'explanation', subject: 'unrepresented_subject' }], ambiguity_context_ids: [] },
+            { id: 'q2', start_token: 4, kind: 'ambiguous_reference', requirements: [], ambiguity_context_ids: ['referenced_requirement'] },
+        ] }, notLeading);
+        expect(other.parts[1]!.kind).toBe('ambiguous_reference');
+    });
+
+    test('resolves equivalent leading application directives without changing mixed material requests', () => {
+        const fixtures = [
+            ['Using this guidance, calculate emissions.', 'calculate'],
+            ['Based on the displayed guidance, submit the report.', 'submit_or_file'],
+            ['Following the guidance shown here, explain the limit and calculate a total.', 'calculate'],
+            ['Use the provided guidance to select a factor and prepare a filing.', 'submit_or_file'],
+        ] as const;
+        for (const [question, operation] of fixtures) {
+            const tokens = questionTokens(question), split = tokens.findIndex(token => /^(calculate|submit|explain|select)\b/i.test(token.trim()));
+            expect(split).toBeGreaterThan(0);
+            const result = parseQuestionAnalysis({ operation, parts: [
+                { id: 'q1', start_token: 0, kind: 'ambiguous_reference', requirements: [], ambiguity_context_ids: ['referenced_requirement'] },
+                { id: 'q2', start_token: split, kind: 'request', requirements: [{ kind: 'explanation', subject: 'unrepresented_subject' }], ambiguity_context_ids: [] },
+            ] }, question);
+            expect(result.parts[0]!.kind).toBe('background');
+            expect(result.parts[1]!.kind).toBe('request');
+            expect(result.operation).toBe(operation);
+        }
+    });
+
+    test('keeps external, demonstrative and non-directive references unresolved', () => {
+        for (const [question, start] of [
+            ['Use that guidance to calculate emissions.', 4],
+            ['Using external guidance, calculate emissions.', 3],
+            ['Calculate emissions under the guidance shown there.', 0],
+        ] as const) {
+            const proposal = start === 0
+                ? { operation: 'calculate', parts: [{ id: 'q1', start_token: 0, kind: 'ambiguous_reference', requirements: [], ambiguity_context_ids: ['referenced_requirement'] }] }
+                : { operation: 'calculate', parts: [
+                    { id: 'q1', start_token: 0, kind: 'ambiguous_reference', requirements: [], ambiguity_context_ids: ['referenced_requirement'] },
+                    { id: 'q2', start_token: start, kind: 'request', requirements: [{ kind: 'explanation', subject: 'unrepresented_subject' }], ambiguity_context_ids: [] },
+                ] };
+            expect(parseQuestionAnalysis(proposal, question).parts[0]!.kind).toBe('ambiguous_reference');
         }
     });
 

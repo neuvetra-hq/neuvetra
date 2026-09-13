@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "task": "M42-QA",
+  "milestone": "M42 deterministic stationary natural-gas calculation demonstration",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "release_acceptance": false,
+  "reviewed_implementation_hashes": {
+    "apps/site-api/package.json": "2b8d5263b292c1e4f0377773d38c1de855f1556976ef19f12cc5e30bca8f4bd8",
+    "apps/site-api/src/calculation/server.ts": "0c131073c370dfe1473bcc06c53b6391415f3dd611c7789a84a5e90ccdf29341",
+    "apps/site-api/src/calculation/server.test.ts": "fc2cf37d7e0b0a305e8d9ca84ca8bb63dee1db567d1b212320c434f6af1d7f08",
+    "apps/site-api/src/calculation/stationary_natural_gas.py": "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603",
+    "apps/site-api/src/calculation/stationary_natural_gas_test.py": "dcfae21dc0b4a67925b24ed94080ba4cfd8df71806166a79c0fa2512b14f4e7c",
+    "apps/site-web/src/lib/calculation-api.ts": "c8331825f6b23d3ac820d03e03c8484a8f26cae6549d85c21a9b840c853f166d",
+    "apps/site-web/src/lib/calculation-api.test.ts": "24467d7d99afe8c730139eddef0c6ce50c0be9e978cfcd58a88a697dafbcdcc7",
+    "apps/site-web/src/components/DeterministicCalculationDemo.tsx": "f9edffcad3a2ea142f7e75f0f565818fce110a3ff080d3ed9630ebb468ea1ab3",
+    "apps/site-web/src/components/ResearchPreview.tsx": "a3dde793d464949efa598905b96ffe62ac575c058fbe2532916113f0dbf75be2",
+    "apps/site-web/src/index.css": "52a0ad48afa14e99e2180a2a31d946013466ee21cd040d81b0d20226bc38d970",
+    "apps/site-web/vite.config.ts": "c8011c4348fbd01f3bd5cac9b5379a0a82701e09767e3f87aa35ca4a2eb495ba"
+  },
+  "source_binding_review": {
+    "workbook": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-factors-hub-2025.xlsx",
+    "workbook_sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+    "hash_matches_manifest": true,
+    "sheet": "Emission Factors Hub",
+    "last_modified_cell": {
+      "cell": "F3",
+      "value": "Last Modified: January 15, 2025"
+    },
+    "stationary_combustion": {
+      "table_cells": {
+        "B12": "Table 1",
+        "C12": "Stationary Combustion"
+      },
+      "header_cells": {
+        "C14": "Fuel Type",
+        "D14": "Heat Content (HHV)",
+        "E14": "CO2 Factor",
+        "F14": "CH4 Factor",
+        "G14": "N2O Factor",
+        "E36": "kg CO2 per mmBtu",
+        "F36": "g CH4 per mmBtu",
+        "G36": "g N2O per mmBtu"
+      },
+      "natural_gas_cells": {
+        "C38": "Natural Gas",
+        "E38": "53.06",
+        "F38": "1.0",
+        "G38": "0.10"
+      },
+      "method_note_cells": {
+        "C94": "factors use higher heating values (HHV)",
+        "C99": "combustion emissions only; upstream emissions excluded"
+      },
+      "all_engine_factor_values_and_units_match": true,
+      "factor_candidate_sha256": "80da7b01f57c852a1bca9a6f80a23636baef02091cd26880a7395c8331f5a20f"
+    },
+    "gwp_policy": {
+      "table_cells": {
+        "B521": "Table 11",
+        "C521": "Global Warming Potential (GWP)",
+        "E523": "100-Year GWP"
+      },
+      "value_cells": {
+        "E524": "CO2 = 1",
+        "E525": "CH4 = 28",
+        "E526": "N2O = 265"
+      },
+      "assessment_note_cells": {
+        "C10": "IPCC Fifth Assessment Report (AR5) summary",
+        "C556": "Table 11 source note: 100-year GWP values from IPCC AR5"
+      },
+      "same_workbook_hash_and_sheet_pinned_in_result": true,
+      "gwp_policy_sha256": "d87fb6c54a170e1dff70327bf475774febb3681a754cb8abec9c4c31efa3b908"
+    },
+    "source_values_are_literal_numeric_cells_not_formulas": true,
+    "source_rights_and_factor_release_are_unresolved": true
+  },
+  "independent_arithmetic_review": {
+    "method": "CO2 kg + CH4 kg * 28 + N2O kg * 265",
+    "input": {
+      "quantity": "1",
+      "unit": "MMBtu",
+      "fuel": "Natural Gas"
+    },
+    "gas_results": {
+      "co2_mass_kg": "53.06",
+      "co2_co2e_kg": "53.06",
+      "ch4_mass_kg": "0.001",
+      "ch4_co2e_kg": "0.028",
+      "n2o_mass_kg": "0.0001",
+      "n2o_co2e_kg": "0.0265"
+    },
+    "exact_total_kg_co2e": "53.1145",
+    "display_total_kg_co2e": "53.1145",
+    "no_intermediate_rounding_observed": true,
+    "rounding_policy": "four decimal places; ROUND_HALF_EVEN; no intermediate rounding",
+    "half_even_cases": [
+      {
+        "quantity_mmbtu": "0.1",
+        "unrounded": "5.31145",
+        "display": "5.3114",
+        "tie_direction": "down_to_even"
+      },
+      {
+        "quantity_mmbtu": "0.3",
+        "unrounded": "15.93435",
+        "display": "15.9344",
+        "tie_direction": "up_to_even"
+      }
+    ],
+    "zero_case": {
+      "quantity": "0",
+      "unrounded": "0",
+      "display": "0.0000",
+      "missing_remains_distinct_and_rejected": true
+    },
+    "upper_bound_case": {
+      "quantity": "999999999999999999999999999999.999999999999999999",
+      "expected_unrounded": "53114499999999999999999999999999.9999999999999999468855",
+      "actual_unrounded": "53114499999999999999999999999999.9999999999999999468855",
+      "exact": true
+    },
+    "result_bindings": {
+      "input_snapshot_sha256": "e3897d225c40e926448ee5c7b50a5ae9681471866010e63b9b72cf96ad74359a",
+      "method_implementation_sha256": "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603",
+      "result_payload_sha256": "28da1f1cb9d3d0d18391850ee929021b215bac01513191ac45036ff90c06da68"
+    },
+    "result_payload_hash_recomputed_independently_in_bun": true,
+    "repeat_calculation_byte_equivalent": true
+  },
+  "contract_and_negative_review": {
+    "all_decimal_inputs_factors_intermediates_and_outputs_cross_json_as_strings": true,
+    "binary_float_route_observed": false,
+    "numeric_quantity": {
+      "http_status": 422,
+      "code": "quantity_invalid"
+    },
+    "negative_quantity": {
+      "http_status": 422,
+      "code": "quantity_invalid"
+    },
+    "wrong_unit": {
+      "http_status": 422,
+      "code": "unit_conversion_unapproved",
+      "stale_total_cleared_in_browser": true
+    },
+    "missing_geography": {
+      "http_status": 422,
+      "code": "geography_required",
+      "stale_total_cleared_in_browser": true
+    },
+    "wrong_period": {
+      "http_status": 422,
+      "code": "reporting_period_mismatch",
+      "stale_total_cleared_in_browser": true
+    },
+    "unsupported_fuel": {
+      "http_status": 422,
+      "code": "fuel_unsupported"
+    },
+    "factor_or_latest_override": {
+      "http_status": 422,
+      "code": "request_contract_invalid"
+    },
+    "altered_record_without_rehash": {
+      "http_status": 409,
+      "code": "replay_hash_mismatch"
+    },
+    "altered_binding_with_recomputed_hash": {
+      "http_status": 409,
+      "code": "replay_binding_mismatch"
+    },
+    "valid_replay_hash_match": true
+  },
+  "runtime_boundary_review": {
+    "preview_url": "http://127.0.0.1:5174/?view=calculation",
+    "api_url": "http://127.0.0.1:3014/calculation",
+    "listeners_seen": [
+      "127.0.0.1:3014",
+      "127.0.0.1:5174"
+    ],
+    "listeners_absent": [
+      "3012",
+      "3016",
+      "5175"
+    ],
+    "status": {
+      "mode": "local_synthetic_development",
+      "provider_requests": false,
+      "persistence": false
+    },
+    "wrong_origin": {
+      "http_status": 403,
+      "code": "forbidden"
+    },
+    "missing_origin": {
+      "http_status": 403,
+      "code": "forbidden"
+    },
+    "browser_request_trace": {
+      "requests": 26,
+      "calculation_posts": 1,
+      "hosts": [
+        "127.0.0.1:5174"
+      ],
+      "non_local_requests": []
+    },
+    "browser_storage": {
+      "local_storage_keys": [],
+      "session_storage_keys": [],
+      "indexed_db_databases": [],
+      "service_workers": 0
+    },
+    "server_calculation_code_provider_or_database_imports": [],
+    "server_writes": false,
+    "browser_warnings_or_errors": [],
+    "download_action_invoked_by_qa": false
+  },
+  "production_exclusion_review": {
+    "development_gate": "import.meta.env.DEV && VITE_DETERMINISTIC_CALC_DEMO=stationary-natural-gas",
+    "production_build_status": "pass",
+    "vite_modules_transformed": 64,
+    "calculator_data_or_behavior_chunks": 0,
+    "absent_from_production_files": [
+      "Follow the number.",
+      "Development calculation",
+      "/calculation-api/run",
+      "Synthetic boiler 001",
+      "53.1145",
+      "Replay calculation record",
+      "combustion-natural-gas-epa-cfr98-2025",
+      "Table 11 - Global Warming Potential"
+    ],
+    "non_blocking_build_warning": "one existing engine chunk exceeds 500 kB"
+  },
+  "interaction_and_accessibility_review": {
+    "desktop_viewport": {
+      "requested_width": 1440,
+      "requested_height": 900,
+      "document_client_width": 1425,
+      "document_scroll_width": 1425,
+      "horizontal_document_overflow": false,
+      "two_column_activity_and_result_layout": true
+    },
+    "phone_viewport": {
+      "requested_width": 390,
+      "requested_height": 844,
+      "document_client_width": 375,
+      "document_scroll_width": 375,
+      "horizontal_document_overflow": false,
+      "single_column_activity_result_and_trace": true
+    },
+    "skip_link_is_first_keyboard_focus": true,
+    "calculate_button_enter_key_produces_result": true,
+    "navigation_focus_moves_to_calculation_heading": true,
+    "calculation_navigation_aria_current": true,
+    "result_region_aria_live": "polite",
+    "negative_error_role": "alert",
+    "trace_disclosure_keyboard_focusable": true,
+    "trace_displays_factor_method_gwp_and_replay_bindings": true,
+    "visual_review_desktop": "pass",
+    "visual_review_phone": "pass"
+  },
+  "visible_copy_review": {
+    "synthetic_data_label": true,
+    "factor_candidate_not_released_label": true,
+    "development_calculation_label": true,
+    "cannot_add_to_inventory_or_report": true,
+    "no_model_credentials_upload_or_external_service": true,
+    "no_customer_data_source_expansion_provider_deployment_merge_release_or_filing": true,
+    "rights_or_method_approval_not_implied": true
+  },
+  "defects_found_and_closed_during_independent_review": [
+    {
+      "severity": "material",
+      "finding": "The initial 50-digit Decimal context rounded the last digits of a quantity that the input contract accepted.",
+      "repair": "The calculation context was raised to 96 digits and an exact upper-bound regression was added.",
+      "retest": "pass",
+      "final_engine_sha256": "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603"
+    },
+    {
+      "severity": "material_provenance",
+      "finding": "The initial record did not bind the source cells supporting HHV, combustion-only scope, the 100-year horizon, and the AR5 assessment.",
+      "repair": "Exact Table 1, HHV, scope, Table 11, horizon, value, and assessment-note locators now travel with their workbook hash and sheet, and the UI displays the method/GWP locators.",
+      "retest": "pass"
+    }
+  ],
+  "verification": {
+    "python_calculation_tests": {
+      "passed": 6,
+      "failed": 0
+    },
+    "focused_bun_tests": {
+      "passed": 5,
+      "failed": 0,
+      "assertions": 10
+    },
+    "site_web_tests": {
+      "passed": 48,
+      "failed": 0,
+      "assertions": 169
+    },
+    "site_api_tests": {
+      "passed": 602,
+      "failed": 0,
+      "assertions": 5254
+    },
+    "site_web_typecheck": "pass",
+    "site_api_typecheck": "pass",
+    "site_web_lint": "pass",
+    "production_build": "pass",
+    "git_diff_check": "pass"
+  },
+  "limitations": [
+    "This is one fixed synthetic 1 MMBtu U.S. stationary natural-gas demonstration, not an editable activity workflow or complete inventory.",
+    "Only MMBtu is accepted; therm, scf, mass, LHV, renewable-gas blends, upstream emissions, fugitives, duplicate detection, period splitting, and other fuels are outside this method version.",
+    "The EPA factor extraction, GWP policy, method, source rights, and runtime release remain development candidates and are explicitly not release eligible.",
+    "No network refresh was performed, so QA confirms the retained January 15, 2025 workbook bytes rather than current publisher status.",
+    "The exact-Origin and loopback restrictions are development containment controls, not tenant authentication or a production authorization claim.",
+    "The browser decoder validates display-critical result structure and unsafe release classification; a production contract should add complete server-side nested schema validation.",
+    "The client offers a local record download, but QA did not invoke it; the calculation service itself made no persistence write.",
+    "No qualified accounting, legal/source-rights, regulatory applicability, security, deployment, or release approval is implied by this QA pass."
+  ],
+  "qa_activity": {
+    "implementation_files_modified_by_qa": false,
+    "only_qa_artifact_written": true,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "customer_data_used": false,
+    "source_expansion": false,
+    "deployment_merge_release_or_commit": false
+  },
+  "blockers": [],
+  "conclusion": "PASS after two independently found defects were repaired: the final development-only M42 slice reproduces the retained EPA workbook's natural-gas and AR5 100-year cells, calculates the fixed synthetic activity with exact Decimal arithmetic and one declared display rounding point, binds result replay to input/method/factor/GWP/source hashes, clears stale totals on every demonstrated rejection, stays on loopback with no provider or service persistence, and is excluded from the production JavaScript/data bundle. This is a QA pass for the bounded development demonstration only, not factor, method, inventory, compliance, deployment, or release approval.",
+  "reviewed_at": "2026-09-12T01:27:34.6200212Z"
+}
