@@ -37,6 +37,10 @@ export default defineConfig({
         target: "http://127.0.0.1:3014",
         rewrite: (path) => path.replace(/^\/calculation-api/, "/calculation"),
       },
+      "/workspace-api": {
+        target: process.env.M54_WORKSPACE_TARGET ?? "http://127.0.0.1:3015",
+        rewrite: (path) => path.replace(/^\/workspace-api/, ""),
+      },
       "/api": {
         target: "http://localhost:3001",
         rewrite: (path) => path.replace(/^\/api/, ""),

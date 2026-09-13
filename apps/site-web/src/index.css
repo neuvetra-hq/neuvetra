@@ -13,6 +13,31 @@
   --research-line: #ffffff1c;
 }
 
+.workspace-demo { padding: 5.5rem 0 7rem; }
+.workspace-demo-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: start; }
+.workspace-demo-heading h1 { max-width: 850px; margin: 1rem 0 1.25rem; font-size: clamp(2.7rem, 6vw, 5.8rem); font-weight: 350; line-height: .96; letter-spacing: -.045em; }
+.workspace-identity { display: flex; flex-wrap: wrap; gap: .5rem; margin: 3rem 0 1.2rem; }
+.workspace-identity button { border: 1px solid var(--research-line); border-radius: 999px; background: transparent; color: inherit; padding: .7rem 1rem; cursor: pointer; }
+.workspace-identity button[aria-pressed="true"] { border-color: #e8eae6; background: #e8eae6; color: #0b0c0d; }
+.workspace-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+.workspace-actions button:disabled { opacity: .42; cursor: not-allowed; }
+.research-secondary-button { border: 1px solid var(--research-line); background: transparent; color: inherit; padding: .9rem 1.25rem; border-radius: 999px; }
+.workspace-message { min-height: 1.5rem; margin: 1.5rem 0; color: var(--research-muted); }
+.workspace-record { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--research-line); border-bottom: 1px solid var(--research-line); }
+.workspace-record > div { display: flex; flex-direction: column; gap: .45rem; padding: 1.5rem; border-right: 1px solid var(--research-line); }
+.workspace-record > div:last-child { border-right: 0; }
+.workspace-record span, .workspace-record small { color: var(--research-muted); }
+.workspace-record span { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
+.workspace-record strong { font-size: 1.08rem; font-weight: 500; }
+.workspace-boundary-note { max-width: 760px; margin-top: 1.5rem; color: var(--research-muted); font-size: .9rem; }
+
+@media (max-width: 760px) {
+  .workspace-demo-heading { grid-template-columns: 1fr; }
+  .workspace-record { grid-template-columns: 1fr; }
+  .workspace-record > div { border-right: 0; border-bottom: 1px solid var(--research-line); }
+  .workspace-record > div:last-child { border-bottom: 0; }
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; }

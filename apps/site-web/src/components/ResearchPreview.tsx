@@ -5,6 +5,7 @@ import { filterResearchSources, RESEARCH_SOURCES, SOURCE_CATEGORIES, type Source
 
 const ReviewedDemoPanel = import.meta.env.DEV ? lazy(() => import("@/components/ReviewedDemoPanel").then((module) => ({ default: module.ReviewedDemoPanel }))) : null
 const DeterministicCalculationDemo = import.meta.env.DEV ? lazy(() => import("@/components/DeterministicCalculationDemo").then((module) => ({ default: module.DeterministicCalculationDemo }))) : null
+const CompanyWorkspaceDemo = import.meta.env.DEV ? lazy(() => import("@/components/CompanyWorkspaceDemo").then((module) => ({ default: module.CompanyWorkspaceDemo }))) : null
 
 function Arrow({ diagonal = false }: { diagonal?: boolean }) {
   return (
@@ -15,11 +16,12 @@ function Arrow({ diagonal = false }: { diagonal?: boolean }) {
 }
 
 export function ResearchPreview() {
-  type View = "overview" | "sources" | "answers" | "demo" | "calculation"
+  type View = "overview" | "sources" | "answers" | "demo" | "calculation" | "workspace"
   const reviewedDemoEnabled = import.meta.env.DEV && import.meta.env.VITE_RESEARCH_BOARD_DEMO === "preserved-results"
   const calculationDemoEnabled = import.meta.env.DEV && import.meta.env.VITE_DETERMINISTIC_CALC_DEMO === "stationary-natural-gas"
+  const workspaceDemoEnabled = import.meta.env.DEV && import.meta.env.VITE_COMPANY_WORKSPACE_DEMO === "synthetic-m54"
   const requestedView = new URLSearchParams(window.location.search).get("view")
-  const initialView: View = calculationDemoEnabled && requestedView === "calculation" ? "calculation" : reviewedDemoEnabled && requestedView === "demo" ? "demo" : "overview"
+  const initialView: View = workspaceDemoEnabled && requestedView === "workspace" ? "workspace" : calculationDemoEnabled && requestedView === "calculation" ? "calculation" : reviewedDemoEnabled && requestedView === "demo" ? "demo" : "overview"
   const [view, setView] = useState<View>(initialView)
   const [query, setQuery] = useState("")
   const [category, setCategory] = useState<SourceCategory>("All sources")
@@ -29,7 +31,7 @@ export function ResearchPreview() {
   function navigate(nextView: View) {
     setView(nextView)
     const url = new URL(window.location.href)
-    if (nextView === "demo" || nextView === "calculation") url.searchParams.set("view", nextView)
+    if (nextView === "demo" || nextView === "calculation" || nextView === "workspace") url.searchParams.set("view", nextView)
     else url.searchParams.delete("view")
     window.history.replaceState({}, "", url)
     requestAnimationFrame(() => {
@@ -51,6 +53,7 @@ export function ResearchPreview() {
           <button type="button" aria-current={view === "sources" ? "page" : undefined} onClick={() => navigate("sources")}>Sources <span>{RESEARCH_SOURCES.length}</span></button>
           {reviewedDemoEnabled && <button type="button" aria-current={view === "demo" ? "page" : undefined} onClick={() => navigate("demo")}>Reviewed demo <span>3</span></button>}
           {calculationDemoEnabled && <button type="button" aria-current={view === "calculation" ? "page" : undefined} onClick={() => navigate("calculation")}>Calculate <span>1</span></button>}
+          {workspaceDemoEnabled && <button type="button" aria-current={view === "workspace" ? "page" : undefined} onClick={() => navigate("workspace")}>Workspace <span>1</span></button>}
           <button type="button" aria-current={view === "answers" ? "page" : undefined} onClick={() => navigate("answers")}>Ask Neuvetra</button>
         </nav>
         <span className="research-preview-badge"><span /> Research preview</span>
@@ -91,7 +94,7 @@ export function ResearchPreview() {
               </div>
             </section>
           </>
-        ) : view === "answers" ? <ResearchAnswerPanel headingRef={headingRef} /> : view === "demo" && ReviewedDemoPanel ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the reviewed replay…</div>}><ReviewedDemoPanel headingRef={headingRef} /></Suspense> : view === "calculation" && DeterministicCalculationDemo ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the deterministic calculation…</div>}><DeterministicCalculationDemo headingRef={headingRef} /></Suspense> : (
+        ) : view === "answers" ? <ResearchAnswerPanel headingRef={headingRef} /> : view === "demo" && ReviewedDemoPanel ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the reviewed replay…</div>}><ReviewedDemoPanel headingRef={headingRef} /></Suspense> : view === "calculation" && DeterministicCalculationDemo ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the deterministic calculation…</div>}><DeterministicCalculationDemo headingRef={headingRef} /></Suspense> : view === "workspace" && CompanyWorkspaceDemo ? <Suspense fallback={<div className="reviewed-demo-loading" role="status">Opening the company workspace…</div>}><CompanyWorkspaceDemo headingRef={headingRef} /></Suspense> : (
           <section className="research-library" aria-labelledby="sources-heading">
             <div className="research-library-heading">
               <div><p className="research-eyebrow">The Neuvetra source library</p><h1 id="sources-heading" ref={headingRef} tabIndex={-1}>The source comes first.</h1><p className="research-intro">A starting collection of primary references for GHG accounting and reporting research. Explore the original materials directly.</p></div>
