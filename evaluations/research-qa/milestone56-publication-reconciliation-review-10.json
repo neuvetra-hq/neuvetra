@@ -1,0 +1,69 @@
+{
+  "schema_version": "m56_publication_reconciliation_independent_review_v1",
+  "task_id": "M56-PUBLICATION-RECONCILIATION",
+  "reviewed_at": "2026-09-13T23:28:00Z",
+  "reviewer_role": "independent Head of QA",
+  "scope": "Reconcile the independently accepted M56 bytes with the implementation publication commit and the later status-only publication record.",
+  "verdict": "pass",
+  "publication_reconciled": true,
+  "release_acceptance": false,
+  "git_evidence": {
+    "implementation_commit": "8d3b2f0ac43d0c0175ef88e5d07675d9c59af348",
+    "final_status_reconciliation_commit": "c8cc2962cebec745da8fb7ec214cd8c9e5bcb3d4",
+    "head": "c8cc2962cebec745da8fb7ec214cd8c9e5bcb3d4",
+    "local_origin_work_scope2_answer_demo": "c8cc2962cebec745da8fb7ec214cd8c9e5bcb3d4",
+    "implementation_is_ancestor_of_final_status": true,
+    "repair_review_sha256": "85fc46d5a63531e09b40351e210929ad3728911fad1a8c8ac8f93a87bf39b2a7",
+    "milestone_record_sha256_at_final_status_commit": "3c60a9d505975d479334f8b446a641f3d52937d0ad7378075b9c18fdec300ebb"
+  },
+  "accepted_non_milestone_file_sha256_at_final_status_commit": {
+    "docs/research/synthetic-bill-calculation-milestone-56-product-brief.md": "bcc874dc8402bf9e3173432dd4cf6d3f06d634ca0f905b19c078a541f9e5763b",
+    "docs/research/synthetic-bill-calculation-milestone-56-technical-contract.md": "0f39cf9db7c2f3044d1f249f1c1069096328fc15f51a5be39dfc5c87895e7b2d",
+    "apps/site-api/src/calculation/linked_bill_calculation.py": "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e",
+    "apps/site-api/src/calculation/linked_bill_calculation_test.py": "a9008b6a3e7c12b18b33391152c3966692773c151f6db8f1b21995ffba0f4a19",
+    "apps/site-api/src/calculation/server.ts": "376e4c671f3bfc166c978025291f09956b5549e91f2462d6ffa249b65724cd2c",
+    "apps/site-api/src/calculation/server.test.ts": "09c25b6426715a45987b638be68e57eacc2655f49cecd5c3b091d597d5e21e18",
+    "apps/site-api/src/workspace/types.ts": "4640dc92e1f1f39a0416e98bfd1123c2d12c581bfa2c465b1ae44ed8b51be35a",
+    "apps/site-api/src/workspace/routes.ts": "5e073867cdc8db8771ce1316c9ad682420bb9b9cc0eb2fef529ae7eff163cf64",
+    "apps/site-api/src/workspace/routes.test.ts": "65974d1325fa9d23e09b77278bf98f5a012bb760f379683972239c6112f1231c",
+    "apps/site-api/src/workspace/server.ts": "4b11cf0067dbd24d633e7323c5fef3725cfcc3c2ff42cc0115dae09b59f66adb",
+    "apps/site-api/src/workspace/server.test.ts": "3632a2c28737998d661bb31864c5118a5100d5d92ba70a6f62f41245b2311f22",
+    "apps/site-web/src/lib/workspace-api.ts": "87e742a090dc8f0434966a8933238a3b5ce67ee825384827c1df31e00f471b0a",
+    "apps/site-web/src/lib/workspace-api.test.ts": "7c2be537e118d699d7b3f69a7a1f81df8ca91891ac2ef9d1528793eb418fb5dc",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "1c1848223004f597b951b3d7f1b666058710cd93735953ca9f148f9a0664e8e2",
+    "apps/site-web/src/components/ResearchPreview.tsx": "c2f007e7c3d32e46dcc7bd69fca5be76af5e4680bae55ca4d236dfed77b4b637",
+    "apps/site-web/src/index.css": "bc401b693db70119ed9552fe25bb70fa68806725ff2b715031f858ef934dd957",
+    "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6",
+    "packages/neuvetra-database/src/index.ts": "91fc9a3f0cbc18184439048ce8c466d7c026cc56b1a2a1c22d54d3f792de7d94",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "be5319f75dc187daf517194c2408ca10f807641653af650f876be27157fe93b2"
+  },
+  "checks": [
+    {
+      "check": "accepted_byte_reconciliation",
+      "status": "pass",
+      "evidence": "All 19 implementation, test, product-brief and technical-contract SHA-256 values at c8cc296 exactly match the accepted repair review. Only the milestone status record differs from its pre-publication binding."
+    },
+    {
+      "check": "implementation_publication",
+      "status": "pass",
+      "evidence": "Commit 8d3b2f0 contains the accepted M56 implementation and both independent review records. It is an ancestor of the current branch and local origin ref."
+    },
+    {
+      "check": "status_record_truthfulness",
+      "status": "pass",
+      "evidence": "The final milestone record identifies 8d3b2f0 as the implementation publication commit, states that M56 is complete and independently accepted, retains the exact accepted verification counts and review hash, and explicitly keeps Stage 4, merge, deployment and release separate and false. It no longer claims that the later status bytes existed in 8d3b2f0."
+    },
+    {
+      "check": "publication_diff_hygiene",
+      "status": "pass",
+      "evidence": "git diff --check from 8d3b2f0 through c8cc296 produced no errors after the final whitespace-only normalization."
+    }
+  ],
+  "findings": [],
+  "limitations": [
+    "The remote publication check is based on the current local remote-tracking ref origin/work/scope2-answer-demo; this reconciliation made no network fetch.",
+    "The exact accepted implementation bytes made rerunning the already recorded M56 functional suites unnecessary for this narrow publication-only review.",
+    "This pass does not authorize or claim Stage 4, merge, deployment or product release."
+  ],
+  "conclusion": "PASS. The published M56 implementation exactly matches all 19 accepted non-status bindings, the repair review remains unchanged, and the final status record truthfully reconciles publication at implementation commit 8d3b2f0 while keeping Stage 4, merge, deployment and release false."
+}
