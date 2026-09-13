@@ -1,7 +1,7 @@
 # M56 — reviewed synthetic bill to deterministic draft calculation
 
 **Date:** 2026-09-13  
-**Status:** complete, independently accepted and published to the existing PR at `8d3b2f0ac43d0c0175ef88e5d07675d9c59af348`  
+**Status:** complete, independently accepted and published to the existing PR at `8d3b2f0ac43d0c0175ef88e5d07675d9c59af348`
 **Scope:** one fixed fictional January 2023 electricity bill in the local M54/M55 tenant workspace
 
 ## Demonstrated outcome
