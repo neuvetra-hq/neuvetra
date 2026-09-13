@@ -1,20 +1,20 @@
 # What's Next
 
-> **Updated September 12, 2026:** Read the current [board report](../operations/board-report.md), [ledger](../operations/status.json), and [operational handoff](../operations/next-session.md). The reviewed checkpoint is published to the existing PR at `20511a8`. M53 location-based purchased electricity completed full validation and independent accounting/product acceptance; publishing the accepted M53 bytes is the next action. Release acceptance remains false.
+> **Updated September 13, 2026:** Read the current [board report](../operations/board-report.md), [ledger](../operations/status.json), and [operational handoff](../operations/next-session.md). M53 is published at `fbbbafd`; the independently accepted M54 tenant-safe synthetic company workspace is published to the existing PR at `b02d381`. Stage 4 and release acceptance remain false.
 
 Aggregator of forward-looking items across the wiki. The CEO reads this first when asking "what's next."
 
-> Last updated: 2026-09-12 (M53 location-based electricity implementation is in progress.)
+> Last updated: 2026-09-13 (M54 bounded local synthetic company workspace is published.)
 
 ---
 
 ## Current next action
 
-Publish accepted M53 to the existing PR, then begin the first bounded Stage 4 company-workspace slice. M53's completed outcome is one inspectable and replayable location-based Scope 2 result for a fixed synthetic CAMX facility, with the published EPA total-output rate, explicit gas/GWP context and fail-closed unit/geography/period/quantity and browser-payload behavior.
+Collect board feedback on M54 before advancing. The recommended M55 slice is one fixed synthetic bill inside the accepted tenant boundary, with immutable original/version metadata, isolated deterministic extraction, explicit human correction history and cross-tenant storage/job/cache/log refusal tests.
 
 Do not rerun M50 or reuse its consumed authorization. Any future live successor requires a separately integrated and independently reviewed secure wrapper, fresh current evidence, an exact cost scope and new board authorization.
 
-Commercial source-use clearance, the 29-case expanded-source gate, wider calculations, tenant isolation, production security and future persistent workers remain separate. These notes do not authorize a provider request, source upload, customer pilot, factor release, inventory or production action.
+Commercial source-use clearance, hosted Supabase/real authentication, durable storage, wider calculations, production security and future persistent workers remain separate. These notes do not authorize a provider request, customer upload, customer pilot, factor release, inventory release or production action.
 
 ## Agent development follow-up
 

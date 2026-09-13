@@ -1,12 +1,14 @@
-# Current continuation — M53 location-based electricity implementation in progress
+# Current continuation — M54 company workspace published; M55 feedback gate next
 
-September 12, 2026. The board approved publication of the reviewed checkpoint and directed the next milestone. Commit `20511a8ebd4b91846113b867092b4e8f67434d0e` is pushed to the existing `work/scope2-answer-demo` PR branch and remote tracking matches.
+September 13, 2026. M53 is published at `fbbbafdb96018cdf4720315b67b9ab28b9f50ef9`. M54 is published at `b02d3812b54325a9f454815ffc6cd3dd4c49fe9d`; local `HEAD` and `origin/work/scope2-answer-demo` matched after each push.
 
-M53 fills the remaining Stage 3 method: fixed synthetic `1 MWh` purchased electricity, calendar 2023, explicit United States / California / CAMX geography, EPA eGRID2023 revision 2. The local Python Decimal method returns the published `195.0402888 kg CO2e` total, renders the rounded gas columns and their `0.0108864 kg CO2e` reconciliation, replays an exact exported record, and refuses wrong unit, missing geography, wrong period, altered quantity and fabricated browser payloads. Ten Python tests, all 608 API tests / 5,289 assertions, all 49 web tests / 174 assertions, both TypeScript checks, lint and the production build pass; the release bundle excludes M53. Browser result/replay/refusal/trace and 390-pixel width checks pass with no console warning/error. Independent accounting/product review `cdb6c5af…` passes the bounded development milestone with all six findings resolved; release acceptance remains false. Publish these exact accepted bytes to the existing PR, then begin a bounded Stage 4 company-workspace milestone.
+M54 establishes the first bounded Stage 4 tenant root. A fixed synthetic owner creates and revisits one California company, one facility and one versioned draft boundary through a loopback API backed by a real PostgreSQL migration executed in PGlite. Forced RLS and scoped grants derive identity from `auth.uid()`. Owner/admin writes pass; member/outsider writes fail; a real mixed-company facility link fails; foreign and unknown reads are indistinguishable. The development server starts only with the explicit M54 flag and a development/test runtime, and the synthetic surface is absent from the production bundle.
 
-Obtain independent accounting and product review before changing M53 from in progress to complete. Do not release the factor/method or use customer data. No live model/provider work is part of this milestone.
+Independent review `446d646e99b2ce10bfb9f4963d7cb356ec09d6a38e1e2489bf2d3e1c5631e054` passes the exact 20-file binding after seven repairs. Focused M54 checks pass 20 / 73; database 7 / 40; full API 617 / 5,311; web 53 / 185; all type checks, web lint/build, production exclusion and browser owner/foreign/signed-out paths pass. All local preview listeners are closed. Stage 4 and release acceptance remain false.
 
-[M53 record](../docs/research/location-based-electricity-milestone-53.md)
+Collect board feedback on the M54 demonstration before a dependent milestone. The CEO recommendation is M55: one fixed synthetic bill inside the M54 tenant boundary, immutable original/version metadata, isolated deterministic extraction, explicit correction history and executable cross-tenant storage/job/cache/log refusals. Do not use customer data, hosted production services, OCR/model providers, deployment, merge or release without a new bounded decision.
+
+[M54 record](../docs/research/company-workspace-milestone-54.md) · [M54 independent review](../evaluations/research-qa/milestone54-company-workspace-review-10.json) · [open PR](https://github.com/neuvetra-hq/neuvetra/pull/2)
 
 # Historical continuation — M52 compiled offline integration accepted
 

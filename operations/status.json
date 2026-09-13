@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13T06:17:08.272Z",
+  "updated_at": "2026-09-13T07:15:00.000Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M53",
-    "name": "Location-based purchased electricity calculation",
-    "status": "complete_independent_accounting_and_product_acceptance_publication_pending",
-    "next_gate": "Publish the accepted M53 bytes to the existing PR, then begin a bounded Stage 4 company-workspace milestone; factor and method remain unreleased."
+    "id": "M54",
+    "name": "Tenant-safe company workspace foundation",
+    "status": "complete_independent_security_product_data_acceptance_published_to_pr",
+    "next_gate": "Collect board feedback, then decide whether to begin M55 synthetic bill evidence intake; Stage 4 and release acceptance remain false."
   },
   "completed_milestones": [
     {
@@ -25,6 +25,11 @@
       "id": "M53",
       "completed_at": "2026-09-12",
       "feedback": "docs/research/location-based-electricity-milestone-53.md"
+    },
+    {
+      "id": "M54",
+      "completed_at": "2026-09-13",
+      "feedback": "docs/research/company-workspace-milestone-54.md"
     }
   ],
   "runtime": {
@@ -32,18 +37,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M50 v4 failed safely and is fully stopped. M51 and M52 start no persistent service; PIDs are absent and ports 3012/3016/5174/5175 are closed.",
+    "website_preview_state": "M54 local browser acceptance completed; all temporary workspace/API preview listeners are closed. No persistent M54 service is running.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M53 location-based electricity passed its bounded development gate: exact CAMX synthetic result, reconciliation, replay, fail-closed controls, full regressions, browser checks and independent accounting/product QA. Publication to the existing PR is pending."
+    "last_session_work": "M53 was published at fbbbafd. M54 passed its bounded local synthetic tenant-workspace gate after seven independent findings were repaired, then was published at b02d381. Stage 4 and release acceptance remain false."
   },
   "session_handoff": {
-    "saved_at": "2026-09-13T06:17:08.272Z",
+    "saved_at": "2026-09-13T07:15:00.000Z",
     "path": "operations/next-session.md",
-    "board_record": "claude-memory/meetings/2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation.md",
-    "next_task": "Publish the independently accepted M53 bytes to the existing PR, then define and begin the first bounded Stage 4 company-workspace slice.",
-    "execution_state": "m53_complete_independently_accepted_publication_pending_no_release",
-    "review": "Ten Python tests, all 608 API tests / 5,289 assertions, all 49 web tests / 174 assertions, both TypeScript checks, lint, production build/exclusion and browser result/replay/refusal/trace/mobile checks pass. Independent accounting/product review cdb6c5af passed with all six findings resolved.",
-    "scope": "Fixed synthetic 1 MWh, calendar 2023, explicit United States/California/CAMX location-based calculation using retained EPA eGRID2023 revision 2. No customer data or factor release."
+    "board_record": "docs/research/company-workspace-milestone-54.md",
+    "next_task": "Collect board feedback on M54, then decide whether to begin M55 synthetic bill evidence intake within the accepted tenant boundary.",
+    "execution_state": "m54_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
+    "review": "Focused M54 20 tests / 73 assertions, database 7 / 40, API 617 / 5,311, web 53 / 185, all type checks, web lint/build, production exclusion and browser paths pass. Independent review 446d646e passes all 20 bound file hashes after seven resolved findings.",
+    "scope": "Fixed synthetic local company/facility/versioned draft boundary with forced RLS, scoped grants and synthetic identities. No customer data, hosted Supabase, real authentication, durable storage, upload, deployment, merge or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -79,8 +84,8 @@
     "m33_state": "offline_complete_independent_qa_pass_board_accepted_local_unpublished",
     "m33_commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c",
     "m33_evidence_commit": "ee083c3",
-    "local_head": "20511a8ebd4b91846113b867092b4e8f67434d0e",
-    "remote_tracking_commit": "20511a8ebd4b91846113b867092b4e8f67434d0e",
+    "local_head": "b02d3812b54325a9f454815ffc6cd3dd4c49fe9d",
+    "remote_tracking_commit": "b02d3812b54325a9f454815ffc6cd3dd4c49fe9d",
     "local_commits_ahead_of_remote": 0,
     "m34_state": "board_authorized_handoff_ready_not_started_no_publication",
     "m39_state": "closed_partial_live_acceptance_local_unpublished_no_release",
@@ -92,7 +97,10 @@
     "m50_state": "live_failed_safely_closed_no_retry_unpublished",
     "m51_state": "v4_offline_complete_independent_product_and_technical_acceptance_unpublished",
     "m52_state": "offline_compiled_integration_complete_independent_product_and_technical_acceptance_published_to_pr",
-    "m53_state": "complete_independent_accounting_and_product_acceptance_publication_pending_unreleased"
+    "m53_state": "complete_independent_accounting_and_product_acceptance_published_to_pr_unreleased",
+    "m53_commit": "fbbbafdb96018cdf4720315b67b9ab28b9f50ef9",
+    "m54_state": "complete_independent_security_product_data_acceptance_published_to_pr_stage4_and_release_false",
+    "m54_commit": "b02d3812b54325a9f454815ffc6cd3dd4c49fe9d"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -861,7 +869,7 @@
     {
       "id": "M53-LOCATION-ELECTRICITY",
       "owner": "ceo_with_independent_accounting_and_product_qa",
-      "status": "complete_independent_acceptance_publication_pending",
+      "status": "complete_independent_acceptance_published_to_pr",
       "title": "Add the first location-based purchased-electricity calculation",
       "scope": "Fixed synthetic 1 MWh, calendar 2023, explicit United States/California/CAMX fixture using retained EPA eGRID2023 revision 2; local development only.",
       "acceptance": "Exact published total-output result and factor lineage, visible gas-column reconciliation and GWP policy, replay parity, wrong-unit/missing-geography/wrong-period refusal, full regressions, production exclusion, browser evidence and independent accounting/product review.",
@@ -871,7 +879,22 @@
         "apps/site-api/src/calculation/location_based_electricity_test.py",
         "evaluations/research-qa/milestone53-location-electricity-review-10.json"
       ],
-      "next_action": "Publish the accepted bytes to the existing PR; release acceptance remains false."
+      "next_action": "Closed and published to the existing PR at fbbbafd; release acceptance remains false."
+    },
+    {
+      "id": "M54-COMPANY-WORKSPACE",
+      "owner": "ceo_with_independent_security_product_data_qa",
+      "status": "complete_independent_acceptance_published_to_pr",
+      "title": "Establish a tenant-safe synthetic company workspace foundation",
+      "scope": "Fixed local synthetic owner/company/facility/versioned draft boundary using a PostgreSQL migration exercised in PGlite; no customer data or hosted production services.",
+      "acceptance": "Forced RLS, scoped grants, auth-derived identity, atomic bootstrap, real cross-company link refusal, role matrix, strict API/browser boundaries, production exclusion, browser demonstration and independent review.",
+      "result": "Published at b02d381 after seven independent findings were resolved. Focused 20/73, database 7/40, API 617/5,311 and web 53/185 pass. Independent review 446d646e passes. Stage 4 and release acceptance remain false.",
+      "evidence": [
+        "docs/research/company-workspace-milestone-54.md",
+        "packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+        "evaluations/research-qa/milestone54-company-workspace-review-10.json"
+      ],
+      "next_action": "Collect board feedback, then decide whether to begin M55 synthetic bill evidence intake."
     }
   ],
   "feedback_tasks": [

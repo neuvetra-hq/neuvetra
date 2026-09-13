@@ -1,6 +1,14 @@
 # Neuvetra board update
 
-September 12, 2026. **M53 location-based purchased electricity is complete and independently accepted for its bounded development scope; publication to the existing PR is pending.** The fixed synthetic `1 MWh`, calendar-2023, explicitly declared `CAMX` facility returns EPA's published `195.0402888 kg CO2e` total, exposes the rounded gas-column reconciliation, replays exact records and refuses wrong units, missing geography, wrong periods, altered quantities and fabricated result payloads.
+September 13, 2026. **M54 tenant-safe company workspace is complete for its bounded local synthetic scope and published to the existing PR at `b02d381`.** A synthetic signed-in owner can create and revisit one California company, facility and versioned draft reporting boundary in one transaction. Forced row-level security, scoped grants and composite keys prevent foreign reads, writes and cross-company links; unknown and foreign identifiers produce the same safe response. The local UI also demonstrates signed-out refusal and locks identity switching while requests are pending.
+
+Independent security/product/data review `446d646e…` passed after seven findings were repaired and rebound to all 20 reviewed file hashes. The focused suite passes 20 tests / 73 assertions; database 7 / 40, full API 617 / 5,311 and web 53 / 185 pass with all type checks, lint, production build/exclusion and browser acceptance. Stage 4 and release acceptance remain false: hosted Supabase, real authentication, durable storage, upload parsing, derived-store isolation, deployment and customer data were not tested.
+
+The recommended next milestone is **M55: synthetic bill evidence intake and correction** within the M54 tenant boundary: one fixed fake bill, immutable original/version metadata, isolated deterministic extraction, explicit review/correction and cross-tenant storage/job/cache/log refusal. Begin only after board feedback on the M54 demonstration.
+
+[M54 record](../docs/research/company-workspace-milestone-54.md) · [independent review](../evaluations/research-qa/milestone54-company-workspace-review-10.json) · [open PR](https://github.com/neuvetra-hq/neuvetra/pull/2)
+
+September 12, 2026. **M53 location-based purchased electricity is complete, independently accepted and published to the existing PR at `fbbbafd`.** The fixed synthetic `1 MWh`, calendar-2023, explicitly declared `CAMX` facility returns EPA's published `195.0402888 kg CO2e` total, exposes the rounded gas-column reconciliation, replays exact records and refuses wrong units, missing geography, wrong periods, altered quantities and fabricated result payloads.
 
 Ten Python tests, all 608 API tests / 5,289 assertions and all 49 web tests / 174 assertions pass with both type checks, lint, production build/exclusion and browser desktop/mobile checks. Independent review `cdb6c5af…` passed accounting and product acceptance after six findings were repaired and rebound to exact file hashes. Release acceptance remains false: this does not approve a production factor, customer inventory, deployment, assurance or filing.
 
