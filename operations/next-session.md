@@ -1,4 +1,16 @@
-# Current continuation — M55 synthetic bill intake published; M56 feedback gate next
+# Current continuation — M56 deterministic bill calculation published; M57 feedback gate next
+
+September 13, 2026. **M56 is complete, independently accepted and published to the existing PR at `8d3b2f0ac43d0c0175ef88e5d07675d9c59af348`.** The exact reviewed M55 bill version now produces one immutable location-based Scope 2 draft result through the unchanged M53 CAMX authority: `12.346000 MWh × 195.0402888 = 2407.9674055248 kg CO2e`, displayed as `2,407.9674 kg CO2e`.
+
+The result binds the complete tenant/evidence/version/activity/facility/boundary/method/factor/GWP lineage, canonical hashes, actor and creation time. Create requests use idempotency keys and operation fingerprints; one calculation produces one audit event. The browser can download the exact record and replay it; mutations refuse and runtime/database failures return no result. Owner/admin creation, member read-only behavior, foreign isolation, forced RLS and production exclusion pass.
+
+Independent repair review `85fc46d5a63531e09b40351e210929ad3728911fad1a8c8ac8f93a87bf39b2a7` passed all 20 exact bindings with no open finding. Python 6, API 625/5,362, web 57/207 and database 19/120 pass, together with type checks, lint, build, production exclusion and diff checks. Temporary listeners are closed. Stage 4 and release acceptance remain false.
+
+The CEO recommendation after board feedback is **M57: draft inventory review and approval gate**. Put the accepted M56 line into a versioned 2023 draft Scope 2 inventory view, show completeness and unreleased-factor warnings, and require an authorized review decision with immutable history before any inventory status can advance. Keep the slice local and synthetic; do not add market-based accounting, customer data, hosted storage, deployment, merge or release.
+
+[M56 record](../docs/research/synthetic-bill-calculation-milestone-56.md) · [M56 independent review](../evaluations/research-qa/milestone56-synthetic-bill-calculation-repair-review-10.json) · [open PR](https://github.com/neuvetra-hq/neuvetra/pull/2)
+
+# Historical continuation — M55 synthetic bill intake published
 
 Publication reconciliation is complete through M55. All current `apps/` and `packages/` implementation is on the PR branch. M34 had no missing product commit: it closed before frontend/provider activity and was superseded by M35. The apparent M43 omission is a restricted evaluator package whose matrix contains the held-out answer key; it remains local with its exact reviewed hashes. Rejected, consumed, superseded and machine-bound evaluation harnesses remain local historical evidence. See [the reconciliation record](../docs/research/publication-reconciliation-2026-09-13.md).
 

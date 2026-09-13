@@ -189,3 +189,10 @@ The exact backend and frontend processes are stopped, ports 3012, 3016, 5174, an
 The offline `pipeline` contract repair is now implemented in M33. Any later paid rerun requires a fresh frozen run and authorization.
 
 [M33 record](../docs/research/provider-pipeline-milestone-33.md) · [M32 record](../docs/research/provider-verification-live-milestone-32.md) · [M31 record](../docs/research/provider-verification-milestone-31.md) · [Task ledger](status.json) · [PR #2](https://github.com/neuvetra-hq/neuvetra/pull/2)
+# Board update — M56 published; M57 recommendation ready
+
+September 13, 2026. M56 is complete, independently accepted and published to the existing PR at `8d3b2f0ac43d0c0175ef88e5d07675d9c59af348`. One reviewed fictional January electricity bill now creates one immutable, tenant-scoped location-based draft result of **2,407.9674 kg CO2e**, with exact Decimal arithmetic, complete lineage, idempotency, one audit event, exact-record download/replay and tamper refusal.
+
+Independent repair review `85fc46d5…` passed all 20 exact bindings with no open finding. Full verification passed Python 6, API 625/5,362, web 57/207 and database 19/120, plus type checks, lint, build and production exclusion. Stage 4 and release acceptance remain false.
+
+CEO recommendation: M57 should add a versioned 2023 draft inventory review and approval gate around the accepted M56 line, including completeness and unreleased-factor warnings plus immutable reviewer history. It should remain local and synthetic; market-based accounting, customer data, hosted operation, merge, deployment and release remain outside scope.
