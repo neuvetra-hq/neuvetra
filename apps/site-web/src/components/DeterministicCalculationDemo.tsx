@@ -1,5 +1,6 @@
 import { useState, type RefObject } from "react"
 import { calculateSyntheticActivity, replayCalculationRecord, type CalculationError, type CalculationRecord, type SyntheticActivity } from "@/lib/calculation-api"
+import { LocationBasedElectricityDemo } from "@/components/LocationBasedElectricityDemo"
 
 const SYNTHETIC_ACTIVITY: SyntheticActivity = {
   asset_id: "Synthetic boiler 001",
@@ -21,7 +22,7 @@ function ShortHash({ value }: { value: string }) {
   return <code title={value}>{value.slice(0, 12)}…{value.slice(-8)}</code>
 }
 
-export function DeterministicCalculationDemo({ headingRef }: { headingRef: RefObject<HTMLHeadingElement | null> }) {
+function StationaryNaturalGasDemo({ headingRef }: { headingRef: RefObject<HTMLHeadingElement | null> }) {
   const [record, setRecord] = useState<CalculationRecord | null>(null)
   const [error, setError] = useState<CalculationError | null>(null)
   const [busy, setBusy] = useState(false)
@@ -139,5 +140,18 @@ export function DeterministicCalculationDemo({ headingRef }: { headingRef: RefOb
 
       <div className="calculation-limits"><p>This local synthetic example demonstrates calculation mechanics only. The factor and method are development candidates, not a released factor set or compliance determination.</p><p>No customer data, source expansion, provider request, deployment, merge, inventory release or filing occurs in this demo.</p></div>
     </section>
+  )
+}
+
+export function DeterministicCalculationDemo({ headingRef }: { headingRef: RefObject<HTMLHeadingElement | null> }) {
+  const [method, setMethod] = useState<"stationary" | "electricity">("electricity")
+  return (
+    <>
+      <nav className="calculation-method-switcher" aria-label="Deterministic calculation method">
+        <button type="button" aria-pressed={method === "electricity"} onClick={() => setMethod("electricity")}><span>Scope 2</span>Location-based electricity</button>
+        <button type="button" aria-pressed={method === "stationary"} onClick={() => setMethod("stationary")}><span>Scope 1</span>Stationary natural gas</button>
+      </nav>
+      {method === "electricity" ? <LocationBasedElectricityDemo headingRef={headingRef} /> : <StationaryNaturalGasDemo headingRef={headingRef} />}
+    </>
   )
 }

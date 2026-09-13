@@ -1,16 +1,16 @@
 # What's Next
 
-> **Updated September 13, 2026:** Read the current [board report](../operations/board-report.md), [ledger](../operations/status.json), and [operational handoff](../operations/next-session.md). M52 compiled provider-disabled integration completed independent product and technical acceptance. No live request, paid activity, publication, customer pilot or release is authorized.
+> **Updated September 12, 2026:** Read the current [board report](../operations/board-report.md), [ledger](../operations/status.json), and [operational handoff](../operations/next-session.md). The reviewed checkpoint is published to the existing PR at `20511a8`. M53 location-based purchased electricity completed full validation and independent accounting/product acceptance; publishing the accepted M53 bytes is the next action. Release acceptance remains false.
 
 Aggregator of forward-looking items across the wiki. The CEO reads this first when asking "what's next."
 
-> Last updated: 2026-09-13 (M52 compiled provider-disabled integration is accepted offline.)
+> Last updated: 2026-09-12 (M53 location-based electricity implementation is in progress.)
 
 ---
 
 ## Current next action
 
-Collect board feedback on M52 candidate `7b0d26e0…` and the truthful boundary: the compiled launcher, composed server, stage/cost closure, composition provenance and retrieval metadata now pass provider-disabled offline; live response compatibility and production readiness remain unproven.
+Publish accepted M53 to the existing PR, then begin the first bounded Stage 4 company-workspace slice. M53's completed outcome is one inspectable and replayable location-based Scope 2 result for a fixed synthetic CAMX facility, with the published EPA total-output rate, explicit gas/GWP context and fail-closed unit/geography/period/quantity and browser-payload behavior.
 
 Do not rerun M50 or reuse its consumed authorization. Any future live successor requires a separately integrated and independently reviewed secure wrapper, fresh current evidence, an exact cost scope and new board authorization.
 

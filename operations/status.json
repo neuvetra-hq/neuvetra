@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13T05:04:00.000Z",
+  "updated_at": "2026-09-13T06:17:08.272Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M52",
-    "name": "Compiled provider-disabled launcher integration",
-    "status": "offline_complete_independent_product_and_technical_acceptance",
-    "next_gate": "Board demonstration and feedback; no live, paid, publication, merge, deployment or release action."
+    "id": "M53",
+    "name": "Location-based purchased electricity calculation",
+    "status": "complete_independent_accounting_and_product_acceptance_publication_pending",
+    "next_gate": "Publish the accepted M53 bytes to the existing PR, then begin a bounded Stage 4 company-workspace milestone; factor and method remain unreleased."
   },
   "completed_milestones": [
     {
@@ -20,6 +20,11 @@
       "id": "M52",
       "completed_at": "2026-09-13",
       "feedback": "claude-memory/meetings/2026-09-13-neuvetra-m52-compiled-offline-closure.md"
+    },
+    {
+      "id": "M53",
+      "completed_at": "2026-09-12",
+      "feedback": "docs/research/location-based-electricity-milestone-53.md"
     }
   ],
   "runtime": {
@@ -29,16 +34,16 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M50 v4 failed safely and is fully stopped. M51 and M52 start no persistent service; PIDs are absent and ports 3012/3016/5174/5175 are closed.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M52 compiled successor integration is complete for provider-disabled offline scope. Candidate 7b0d26e0..., manifest 1a0ad432..., rehearsal 5ec391ae... passed independent product df1617ed... and technical c64fd6b7... review. No provider, network, credential, paid or publication activity occurred."
+    "last_session_work": "M53 location-based electricity passed its bounded development gate: exact CAMX synthetic result, reconciliation, replay, fail-closed controls, full regressions, browser checks and independent accounting/product QA. Publication to the existing PR is pending."
   },
   "session_handoff": {
-    "saved_at": "2026-09-13T05:03:00.000Z",
+    "saved_at": "2026-09-13T06:17:08.272Z",
     "path": "operations/next-session.md",
     "board_record": "claude-memory/meetings/2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation.md",
-    "next_task": "Collect board feedback on the M52 provider-disabled offline demonstration; preserve M51 accepted and M50 failed evidence.",
-    "execution_state": "m52_offline_complete_independent_product_and_technical_acceptance_no_live_activity",
-    "review": "M52 candidate 7b0d26e0..., manifest 1a0ad432..., rehearsal 5ec391ae... pass. Product df1617edd0a753e8fd2d47b041c3535429e62d560c641e697a4b377b9f6caf9f and technical c64fd6b7ef4237ee3e1ca2ddd91ccabe739e61d20b6fd3ddedf4d30d250353a1 are bound to exact bytes.",
-    "scope": "Actual composed runtime and compiled Windows launcher exercised with provider-disabled synthetic success/failure fixtures only. No live request, retry, source expansion, publication, merge, deployment or release."
+    "next_task": "Publish the independently accepted M53 bytes to the existing PR, then define and begin the first bounded Stage 4 company-workspace slice.",
+    "execution_state": "m53_complete_independently_accepted_publication_pending_no_release",
+    "review": "Ten Python tests, all 608 API tests / 5,289 assertions, all 49 web tests / 174 assertions, both TypeScript checks, lint, production build/exclusion and browser result/replay/refusal/trace/mobile checks pass. Independent accounting/product review cdb6c5af passed with all six findings resolved.",
+    "scope": "Fixed synthetic 1 MWh, calendar 2023, explicit United States/California/CAMX location-based calculation using retained EPA eGRID2023 revision 2. No customer data or factor release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -74,9 +79,9 @@
     "m33_state": "offline_complete_independent_qa_pass_board_accepted_local_unpublished",
     "m33_commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c",
     "m33_evidence_commit": "ee083c3",
-    "local_head": "ee083c3",
-    "remote_tracking_commit": "383574425d77ff6c8e28ff0d2c4b44a47f2c4934",
-    "local_commits_ahead_of_remote": 2,
+    "local_head": "20511a8ebd4b91846113b867092b4e8f67434d0e",
+    "remote_tracking_commit": "20511a8ebd4b91846113b867092b4e8f67434d0e",
+    "local_commits_ahead_of_remote": 0,
     "m34_state": "board_authorized_handoff_ready_not_started_no_publication",
     "m39_state": "closed_partial_live_acceptance_local_unpublished_no_release",
     "m40_state": "offline_complete_independent_qa_pass_local_unpublished_no_live_authorization",
@@ -86,7 +91,8 @@
     "m49_state": "offline_complete_independent_qa_pass_unpublished_awaiting_paid_decision",
     "m50_state": "live_failed_safely_closed_no_retry_unpublished",
     "m51_state": "v4_offline_complete_independent_product_and_technical_acceptance_unpublished",
-    "m52_state": "offline_compiled_integration_complete_independent_product_and_technical_acceptance_unpublished"
+    "m52_state": "offline_compiled_integration_complete_independent_product_and_technical_acceptance_published_to_pr",
+    "m53_state": "complete_independent_accounting_and_product_acceptance_publication_pending_unreleased"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -840,12 +846,32 @@
     {
       "id": "M52-OFFLINE-INTEGRATION",
       "owner": "cto_with_cpo_and_independent_qa",
-      "status": "in_progress_cto_implementation",
+      "status": "complete_independent_product_and_technical_acceptance_published_to_pr",
       "title": "Integrate accepted diagnostics into the compiled provider-disabled launcher",
       "scope": "Fresh M52 namespace with actual composed server/runtime/backend/compiled Windows launcher; valid synthetic path plus bounded failure/refusal matrix; M50/M51 immutable.",
       "acceptance": "Compiled wrapper parent/child and ingress controls, valid analyze-plan-verify, representative response/transport/timeout/pre-capture failures, exact diagnostics/cost/closure, no extra dispatch, no network/provider/credential/evaluator activity, disposable cleanup and independent QA.",
-      "evidence": [],
-      "next_action": "CTO implementation in progress; no live request or publication."
+      "evidence": [
+        "docs/research/m52-compiled-offline-closure.md",
+        "operations/openrouter52-provider-disabled-rehearsal.json",
+        "evaluations/research-qa/m52-compiled-offline-product-review-v2-10.json",
+        "evaluations/research-qa/m52-compiled-offline-technical-review-v2-10.json"
+      ],
+      "next_action": "Closed and published to the existing PR at 20511a8; no live or release acceptance."
+    },
+    {
+      "id": "M53-LOCATION-ELECTRICITY",
+      "owner": "ceo_with_independent_accounting_and_product_qa",
+      "status": "complete_independent_acceptance_publication_pending",
+      "title": "Add the first location-based purchased-electricity calculation",
+      "scope": "Fixed synthetic 1 MWh, calendar 2023, explicit United States/California/CAMX fixture using retained EPA eGRID2023 revision 2; local development only.",
+      "acceptance": "Exact published total-output result and factor lineage, visible gas-column reconciliation and GWP policy, replay parity, wrong-unit/missing-geography/wrong-period refusal, full regressions, production exclusion, browser evidence and independent accounting/product review.",
+      "evidence": [
+        "docs/research/location-based-electricity-milestone-53.md",
+        "apps/site-api/src/calculation/location_based_electricity.py",
+        "apps/site-api/src/calculation/location_based_electricity_test.py",
+        "evaluations/research-qa/milestone53-location-electricity-review-10.json"
+      ],
+      "next_action": "Publish the accepted bytes to the existing PR; release acceptance remains false."
     }
   ],
   "feedback_tasks": [

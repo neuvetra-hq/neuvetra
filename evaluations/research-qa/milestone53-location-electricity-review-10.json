@@ -1,0 +1,164 @@
+{
+  "schema_version": "m53_location_electricity_independent_review_v1",
+  "task_id": "M53-LOCATION-ELECTRICITY-INDEPENDENT-ACCOUNTING-PRODUCT-QA",
+  "reviewed_at": "2026-09-13T06:10:14Z",
+  "reviewer_role": "independent accounting and product QA reviewer",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed implementation or its repairs. The reviewer's only persistent change is this review artifact.",
+  "review_scope": "Exact current working-tree implementation for the fixed synthetic 1 MWh, CAMX, 2023 location-based purchased-electricity demonstration, including retained EPA evidence, deterministic arithmetic, API dispatch and browser decoder, UI behavior, replay and tamper controls, refusals, release boundary, production-bundle exclusion, and regressions.",
+  "reviewed_git_state": {
+    "head": "20511a8ebd4b91846113b867092b4e8f67434d0e",
+    "working_tree": "dirty and unpublished",
+    "binding": "The review applies only to the file hashes recorded below; the repository contained substantial unrelated modified and untracked work."
+  },
+  "reviewed_file_sha256": {
+    "apps/site-api/src/calculation/location_based_electricity.py": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+    "apps/site-api/src/calculation/location_based_electricity_test.py": "5f9e2d12725270f31fc1f047c39b4b692817069f273db773dc3b6050ddafc80c",
+    "apps/site-api/src/calculation/server.ts": "e34db7faa6226567f45fb0c80baf69be2c9b844a5390c5042bc63f190806ee68",
+    "apps/site-api/src/calculation/server.test.ts": "053d4fb05a42f0620781dd2cdad25153adeea7a41aad5fedf028f5b1e7b399b2",
+    "apps/site-web/src/components/LocationBasedElectricityDemo.tsx": "17448d16b81955f3313d6c6d139196584f8241eb14c251566169f1c84ac5cd6a",
+    "apps/site-web/src/components/DeterministicCalculationDemo.tsx": "08638364a1b5f0ca00cfefdcee70183daeee5d8d76171388d67a37516d8f8902",
+    "apps/site-web/src/lib/calculation-api.ts": "ff4d76ca501c3211a9797ba957a098d6a9928b162bfafcc9193a30f97cc876d6",
+    "apps/site-web/src/lib/calculation-api.test.ts": "d970ed1714d72012ce1083e767ea15efa8fbf8070df40c3b23e079d0499cf525",
+    "apps/site-web/src/index.css": "b51d1fbd425938e2176a56e56d2f78fbde5ab0fb2015fb0d2d24b7689737939a",
+    "apps/site-web/src/components/ResearchPreview.tsx": "a3dde793d464949efa598905b96ffe62ac575c058fbe2532916113f0dbf75be2",
+    "docs/research/location-based-electricity-milestone-53.md": "d5f33fad411872127481de1c6b11b55b98f57282f634e8ccbf6a77dfc1d05353",
+    "docs/research/m53-epa-currentness-observation-2026-09-12.json": "609fba75c3e9c27ff434df1c59b1f93487a34fff4048e858507a6c025266dc63"
+  },
+  "disposition": "pass_bounded_development_accounting_and_product_qa",
+  "accounting_acceptance": true,
+  "product_acceptance": true,
+  "milestone_gate_pass": true,
+  "release_acceptance": false,
+  "release_boundary": "This is a bounded local development demonstration. The calculation reports release_eligible=false and not_released; this review does not approve a production factor release, customer use, assurance, deployment, or launch.",
+  "findings": [
+    {
+      "id": "M53-R01",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The engine initially accepted quantities other than the milestone's fixed 1 MWh scope.",
+      "resolution_evidence": "The engine now requires Decimal quantity exactly equal to 1, and focused tests demonstrate quantity 2 is refused."
+    },
+    {
+      "id": "M53-R02",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The browser decoder initially accepted relabeled M42 or incompletely bound M53 payloads.",
+      "resolution_evidence": "The decoder now pins the M53 activity, method, classification, factor and source identities, GWP identity, conversion, input hash, implementation hash, result hash shape, and exact fixed inputs. Relabeled M42 and quantity 2 fixtures are rejected."
+    },
+    {
+      "id": "M53-R03",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The milestone initially cited a nonexistent technical-guide subsection for the GWP basis.",
+      "resolution_evidence": "The locator now points to printed page 12 under section 3.1.1.2, where the retained guide identifies 100-year IPCC AR5 values without climate-carbon feedbacks and the values CO2=1, CH4=28, N2O=265."
+    },
+    {
+      "id": "M53-R04",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "An intermediate decoder repair still accepted fabricated totals, gas results, trace values, or reconciliation metadata when the outer payload was made internally consistent.",
+      "resolution_evidence": "The decoder now pins exact implementation, factor, GWP, input and result hashes; all gas results; all trace rows; the published total, rounding policy, and reconciliation. Negative fixtures with fabricated total and hash are rejected."
+    },
+    {
+      "id": "M53-R05",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "Exact trace validation initially depended on JavaScript object insertion order and rejected the real Python JSON transport whose keys were sorted.",
+      "resolution_evidence": "Trace rows are now validated by exact key sets and values independently of insertion order. A Python sort_keys-style transport fixture is explicitly accepted, and the final HTTP/browser path decoded successfully."
+    },
+    {
+      "id": "M53-R06",
+      "severity": "minor",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The milestone document reported 172 web assertions while the observed final suite contained 174.",
+      "resolution_evidence": "The reviewed milestone document reports 49 passing tests and 174 assertions, matching the observed run."
+    }
+  ],
+  "source_verification": {
+    "workbook_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/egrid2023_data_metric_rev2.xlsx",
+    "workbook_sha256_observed": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+    "workbook_sheet": "SRL23",
+    "cells_observed": {
+      "A1": "Data Year",
+      "B1": "eGRID subregion acronym",
+      "C1": "eGRID subregion name",
+      "AC1": "annual CO2 total output emission rate (kg/MWh)",
+      "AE1": "annual CH4 total output emission rate (kg/MWh)",
+      "AG1": "annual N2O total output emission rate (kg/MWh)",
+      "AI1": "annual CO2 equivalent total output emission rate (kg/MWh)",
+      "A6": 2023,
+      "B6": "CAMX",
+      "C6": "WECC California",
+      "AC6": "194.3512704",
+      "AE6": "0.01134",
+      "AG6": "0.0013608",
+      "AI6": "195.0402888"
+    },
+    "technical_guide_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-egrid2023-technical-guide.pdf",
+    "technical_guide_sha256_observed": "12164c665217f1b4d00ac6a8115a3806710dab79993d02959cdf7f7f66abd841",
+    "gwp_locator": "Printed page 12, section 3.1.1.2, Annual Emission Estimates for CH4, N2O, and CO2 equivalent",
+    "gwp_basis_observed": "100-year IPCC AR5 without climate-carbon feedbacks; CO2=1, CH4=28, N2O=265",
+    "currentness_basis": "Retained official EPA detailed-data, issues, and release-notes snapshots dated 2026-09-08 support eGRID2023 revision 2 and its June 12, 2025 release. The dated 2026-09-12 currentness observation was reviewed but was not independently recreated over the network."
+  },
+  "independent_arithmetic": {
+    "quantity_mwh": "1",
+    "co2_kg_co2e": "194.3512704 * 1 = 194.3512704",
+    "ch4_kg_co2e": "0.01134 * 28 * 1 = 0.31752",
+    "n2o_kg_co2e": "0.0013608 * 265 * 1 = 0.3606120",
+    "rounded_component_sum_kg_co2e": "194.3512704 + 0.31752 + 0.3606120 = 195.0294024",
+    "published_co2e_total_kg_per_mwh": "195.0402888",
+    "published_minus_component_sum_kg_co2e": "195.0402888 - 195.0294024 = 0.0108864",
+    "reporting_rounding": "ROUND_HALF_EVEN to 4 decimal places",
+    "reported_total_kg_co2e": "195.0403",
+    "assessment": "The product correctly uses EPA's published CO2e total as the authoritative total and separately discloses the small difference from recomputing the displayed gas components. It does not misleadingly claim that the displayed gas components sum to the published total."
+  },
+  "contract_and_security_results": {
+    "api_dispatch": "pass",
+    "exact_m53_decoder_binding": "pass",
+    "real_python_sorted_key_transport": "pass",
+    "replay_with_modified_display_and_recomputed_outer_hash": "refused_replay_binding_mismatch",
+    "fabricated_total_hash_gases_trace_or_reconciliation": "rejected",
+    "wrong_unit": "refused_unit_conversion_unapproved",
+    "missing_geography": "refused_geography_required",
+    "wrong_reporting_period": "refused_reporting_period_mismatch",
+    "quantity_other_than_one": "refused",
+    "release_eligible": false,
+    "release_state": "not_released"
+  },
+  "browser_results": {
+    "transport": "Final loopback HTTP request through the Vite proxy returned HTTP 200, status ok, total 195.0403, and result hash 9c63b2cb12fa2708f35d394e537ca5803e27f91c4647f33376abf75a6fb72b91.",
+    "rendered_values": "The UI displayed 195.0403 kg CO2e; CO2 194.3512704, CH4 0.31752, N2O 0.360612; canonical replay matched; the expanded trace displayed the published total, component sum 195.0294024, delta 0.0108864, source cells, hashes, GWP basis, and release_eligible=false.",
+    "refusal_state_clearing": "Wrong unit, missing geography, and wrong reporting period cleared the prior total and displayed their respective refusal states.",
+    "responsive_check": "At a 390 px browser viewport the document and body scroll widths did not exceed client width; no horizontal overflow was observed.",
+    "console": "No browser warnings or errors were observed during the final acceptance path."
+  },
+  "regression_and_build_results": {
+    "python": "10 passed: stationary_natural_gas_test.py plus location_based_electricity_test.py",
+    "site_api": "608 passed, 0 failed, 5289 assertions",
+    "site_web": "49 passed, 0 failed, 174 assertions",
+    "site_api_typecheck": "pass",
+    "site_web_typecheck": "pass",
+    "site_web_lint": "pass",
+    "git_diff_check": "pass; only line-ending warnings appeared for unrelated operations and memory files",
+    "production_bundle_exclusion": "The existing apps/site-web/dist contained none of 195.0402888, CAMX, Synthetic California office, m53-electricity-calculation-result-v1, or scope2-location-based-egrid-subregion. ResearchPreview uses an import.meta.env.DEV guarded lazy import, supporting production tree shaking. The production API entry does not import the local calculation server."
+  },
+  "commands_and_evidence": [
+    "Read AGENTS.md, operations/agents/README.md, operations/agents/qa-lead.md, operations/agents/accounting-validation.md, the M53 milestone document, roadmap, applicable CLAUDE.md files, and exact current diffs.",
+    "Computed SHA-256 for every reviewed implementation and evidence-binding file and for the retained EPA workbook and technical guide.",
+    "Inspected SRL23 headers and CAMX row 6 directly from the retained workbook and independently recomputed all Decimal arithmetic and reconciliation.",
+    "Ran python -m unittest stationary_natural_gas_test.py location_based_electricity_test.py -v.",
+    "Ran bun test src and bun run typecheck in apps/site-api.",
+    "Ran bun test src, bun run typecheck, and bun run lint in apps/site-web.",
+    "Ran final loopback HTTP, replay/tamper, malformed payload, refusal, and production-bundle string checks.",
+    "Exercised the final UI in the in-app browser, including expanded trace, refusal-state clearing, console inspection, and a 390 px responsive check.",
+    "Ran git diff --check and recorded the exact dirty working-tree boundary."
+  ],
+  "limitations": [
+    "No qualified human accounting, assurance, or legal review was performed; this artifact is independent software and accounting QA within the stated development scope.",
+    "The 2026-09-12 currentness observation records official EPA page observations but is not a byte-for-byte web archive. This reviewer did not use network access and independently corroborated source content and applicability from retained 2026-09-08 official EPA bytes.",
+    "The production bundle was not rebuilt during this review because the assignment allowed exactly one persistent review artifact and a build would rewrite dist. The existing dist was inspected, the development-only source guard was verified, and the author's recorded build result was considered supporting evidence.",
+    "The accepted calculation covers only the fixed synthetic 1 MWh CAMX 2023 example. It does not establish organizational inventory completeness, customer-data handling, a released factor corpus, other geographies, other periods, or arbitrary quantities.",
+    "The repository was dirty. Any change to a reviewed file invalidates this byte-bound review until its hash and behavior are reviewed again."
+  ],
+  "conclusion": "PASS for the bounded M53 local development milestone. The retained primary evidence, exact arithmetic and published-total reconciliation, decoder and replay boundaries, refusal behavior, UI, regression suite, and development-only release posture are coherent in the recorded bytes. RELEASE ACCEPTANCE remains false."
+}

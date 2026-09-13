@@ -5,9 +5,17 @@ const LOOPBACK_HOST = "127.0.0.1"
 const PORT = 3014
 const ALLOWED_ORIGIN = "http://127.0.0.1:5174"
 const MAX_BODY_BYTES = 64_000
-const enginePath = path.join(import.meta.dir, "stationary_natural_gas.py")
+const stationaryEnginePath = path.join(import.meta.dir, "stationary_natural_gas.py")
+const electricityEnginePath = path.join(import.meta.dir, "location_based_electricity.py")
 
 let engineBusy = false
+
+function chooseEngine(payload: unknown) {
+  const value = payload as { activity?: { electricity?: unknown }; record?: { contract_version?: unknown } } | null
+  if (value?.activity && "electricity" in value.activity) return electricityEnginePath
+  if (value?.record?.contract_version === "m53-electricity-calculation-result-v1") return electricityEnginePath
+  return stationaryEnginePath
+}
 
 export async function runEngine(payload: unknown) {
   const encoded = JSON.stringify(payload)
@@ -15,7 +23,7 @@ export async function runEngine(payload: unknown) {
   if (engineBusy) return { status: "error", error: { code: "calculator_busy", field: "system", message: "The local calculator is busy; wait for the current calculation to finish." } }
   engineBusy = true
   const python = Bun.env.NEUVETRA_PYTHON?.trim() || "python"
-  const process = Bun.spawn([python, enginePath], {
+  const process = Bun.spawn([python, chooseEngine(payload)], {
     stdin: new Blob([encoded]),
     stdout: "pipe",
     stderr: "pipe",

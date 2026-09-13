@@ -31,3 +31,35 @@ describe("M42 local calculation transport", () => {
     expect((await response.json()).error.code).toBe("forbidden")
   })
 })
+
+describe("M53 location-based electricity transport", () => {
+  test("dispatches to the electricity Decimal method", async () => {
+    const response = await runEngine({ action: "calculate", activity: {
+      asset_id: "Synthetic California office 001",
+      boundary: "Purchased electricity consumed by the reporting company",
+      geography: { country: "United States", state: "California", egrid_subregion: "CAMX" },
+      reporting_period: { start: "2023-01-01", end: "2023-12-31" },
+      electricity: "Grid-delivered purchased electricity",
+      quantity: "1",
+      unit: "MWh",
+    } }) as any
+    expect(response.status).toBe("ok")
+    expect(response.record.contract_version).toBe("m53-electricity-calculation-result-v1")
+    expect(response.record.total.unrounded).toBe("195.0402888")
+    expect(response.record.reconciliation.component_rounding_delta).toBe("0.0108864")
+  })
+
+  test("does not expand the fixed fixture to another quantity", async () => {
+    const response = await runEngine({ action: "calculate", activity: {
+      asset_id: "Synthetic California office 001",
+      boundary: "Purchased electricity consumed by the reporting company",
+      geography: { country: "United States", state: "California", egrid_subregion: "CAMX" },
+      reporting_period: { start: "2023-01-01", end: "2023-12-31" },
+      electricity: "Grid-delivered purchased electricity",
+      quantity: "2",
+      unit: "MWh",
+    } }) as any
+    expect(response.status).toBe("error")
+    expect(response.error.code).toBe("synthetic_fixture_invalid")
+  })
+})

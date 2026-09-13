@@ -1,4 +1,14 @@
-# Current continuation — M52 compiled offline integration accepted
+# Current continuation — M53 location-based electricity implementation in progress
+
+September 12, 2026. The board approved publication of the reviewed checkpoint and directed the next milestone. Commit `20511a8ebd4b91846113b867092b4e8f67434d0e` is pushed to the existing `work/scope2-answer-demo` PR branch and remote tracking matches.
+
+M53 fills the remaining Stage 3 method: fixed synthetic `1 MWh` purchased electricity, calendar 2023, explicit United States / California / CAMX geography, EPA eGRID2023 revision 2. The local Python Decimal method returns the published `195.0402888 kg CO2e` total, renders the rounded gas columns and their `0.0108864 kg CO2e` reconciliation, replays an exact exported record, and refuses wrong unit, missing geography, wrong period, altered quantity and fabricated browser payloads. Ten Python tests, all 608 API tests / 5,289 assertions, all 49 web tests / 174 assertions, both TypeScript checks, lint and the production build pass; the release bundle excludes M53. Browser result/replay/refusal/trace and 390-pixel width checks pass with no console warning/error. Independent accounting/product review `cdb6c5af…` passes the bounded development milestone with all six findings resolved; release acceptance remains false. Publish these exact accepted bytes to the existing PR, then begin a bounded Stage 4 company-workspace milestone.
+
+Obtain independent accounting and product review before changing M53 from in progress to complete. Do not release the factor/method or use customer data. No live model/provider work is part of this milestone.
+
+[M53 record](../docs/research/location-based-electricity-milestone-53.md)
+
+# Historical continuation — M52 compiled offline integration accepted
 
 September 13, 2026. **M52 is complete for its provider-disabled offline scope.** The exact compiled Windows launcher and composed research server passed the success path (`analyze → plan → verify`) with three synthetic provider-shaped envelopes, exact settled cost `3,000,000` nano-USD, empty stderr and one canonical JSON closure. `content_shape`, `inner_json`, `pre_capture`, `transport` and `timeout` each failed safely with no retry, carry, further dispatch or spend; transport and timeout preserve uncertainty. Replay, mutated-child, copied-wrapper and tampered-executable paths refused; loopback ports closed and disposable cleanup passed.
 
