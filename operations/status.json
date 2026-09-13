@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13T20:00:00.000Z",
+  "updated_at": "2026-09-13T22:09:00.000Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -86,21 +86,21 @@
     "m32_state": "published_to_current_pr_branch_remote_tracking_verified",
     "m32_commit": "01ff95f",
     "m32_evidence_commit": "3835744",
-    "m33_state": "offline_complete_independent_qa_pass_board_accepted_local_unpublished",
+    "m33_state": "offline_complete_independent_qa_pass_board_accepted_published_to_pr",
     "m33_commit": "e8718dfc0cabca0821d1c0cf5f252e0ec1d7e70c",
     "m33_evidence_commit": "ee083c3",
-    "local_head": "05b33953128d40c0698311fb2e069856f6741382",
-    "remote_tracking_commit": "05b33953128d40c0698311fb2e069856f6741382",
-    "local_commits_ahead_of_remote": 0,
-    "m34_state": "board_authorized_handoff_ready_not_started_no_publication",
+    "publication_audit_starting_commit": "ca233f5bdc2d4c9e229c7f3e134853f88d4f1282",
+    "publication_audit_starting_remote_match": true,
+    "publication_reconciliation_record": "docs/research/publication-reconciliation-2026-09-13.md",
+    "m34_state": "closed_zero_activity_before_frontend_or_provider_superseded_by_m35_no_publication",
     "m39_state": "closed_partial_live_acceptance_local_unpublished_no_release",
     "m40_state": "offline_complete_independent_qa_pass_local_unpublished_no_live_authorization",
     "m46_state": "closed_failed_non_reusable_no_publication",
-    "m47_state": "offline_complete_independent_qa_pass_unpublished",
+    "m47_state": "offline_complete_independent_qa_pass_product_fix_published_local_wrapper_archive_unpublished",
     "m48_state": "blocked_no_disjoint_case_zero_activity_unpublished",
-    "m49_state": "offline_complete_independent_qa_pass_unpublished_awaiting_paid_decision",
+    "m49_state": "offline_complete_independent_qa_pass_narrative_and_product_review_published_local_candidate_unpublished_superseded",
     "m50_state": "live_failed_safely_closed_no_retry_unpublished",
-    "m51_state": "v4_offline_complete_independent_product_and_technical_acceptance_unpublished",
+    "m51_state": "v4_offline_complete_independent_product_and_technical_acceptance_final_candidate_and_reviews_published_local_runtime_pins_unpublished",
     "m52_state": "offline_compiled_integration_complete_independent_product_and_technical_acceptance_published_to_pr",
     "m53_state": "complete_independent_accounting_and_product_acceptance_published_to_pr_unreleased",
     "m53_commit": "fbbbafdb96018cdf4720315b67b9ab28b9f50ef9",
@@ -184,14 +184,16 @@
     {
       "id": "M34-ONLINE",
       "owner": "new_task_ceo_with_cto_and_independent_qa",
-      "status": "authorized_not_started",
+      "status": "closed_zero_activity_superseded_by_m35",
       "title": "Validate the M33 provider pipeline contract in one bounded online website run",
       "scope": "Fresh website-epa-live-34; one unchanged W11 submission, approved EPA-only evidence, OpenRouter to Anthropic, at most5 new stages, zero carry/retries, diagnostic only",
       "acceptance": "Fresh immutable candidate and financial calculation; current provider/account plugin evidence; pinned runtimes; direct browser response capture proven before admission; first outcome and cost retained; fail-closed no-retry shutdown and independent closure QA",
+      "result": "The candidate and backend runtime became ready, but admission failed before frontend startup because the local permit executable was stale and not pinned to M34. Zero browser submissions, provider requests, model stages and paid cost occurred; five stages were retired. The run is permanently closed and M35 superseded it with a fresh reviewed candidate.",
       "evidence": [
-        "docs/research/provider-pipeline-live-handoff-34.md"
+        "local-only: operations/openrouter34-shutdown-evidence.json",
+        "local-only: evaluations/research-qa/openrouter34-closure-review-10.json"
       ],
-      "next_action": "Create fresh M34 candidate and authorization artifact from the current board approval, then obtain independent preflight before any credential or paid provider action."
+      "next_action": "Closed. Do not restart M34 or reuse its authorization or retired stages; preserve M35 as the superseding diagnostic."
     },
     {
       "id": "CONN-28",
@@ -1693,12 +1695,13 @@
     "next_gate": "M49 scope was approved, but execution requires a materially changed M50 adapter. Complete the M50 Windows policy, lifecycle, freeze and independent-review gates before requesting fresh exact M50 authorization."
   },
   "current_m50": {
-    "state": "v4_offline_complete_independent_qa_pass_awaiting_fresh_exact_paid_authorization",
+    "state": "live_failed_safely_closed_no_retry_superseded_by_m51_and_m52",
     "board_m49_scope_approved": true,
-    "m50_paid_authorization": false,
+    "m50_paid_authorization": true,
+    "authorization_state": "consumed_closed_no_reuse",
     "approval_scope": "Exact M43-H02 regression, direct OpenRouter-to-Anthropic, maximum five stages, zero retries/carry, $3.944535 conservative reservation.",
-    "blocker_found": null,
-    "resolution": "M50 v4 repaired and independently passed all reproduced adapter defects. Fresh exact-candidate authorization and short-lived launch evidence are the remaining gates.",
+    "blocker_found": "One authorized analyze request returned HTTP 200, then the application failed safely after response handling. The exact response-validation subtype was not retained, and the wrapper separately parsed ordinary stdout into contradictory zero-request accounting.",
+    "resolution": "M51 repaired bounded diagnostics and authoritative closure offline; M52 integrated them in the provider-disabled compiled workflow. M50 remains closed and non-reusable.",
     "candidate_sha256": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
     "manifest_sha256": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
     "rehearsal_sha256": "5900aff28ac5114b747600ba2df8d8767b8cbb3b67fe0e295529f7eb9ada2f6c",
@@ -1706,12 +1709,12 @@
     "product_review_sha256": "dc407f9d4466eea38e24a93346cc479e50763f7c19467f37d1a4c166a5b1cd85",
     "technical_review_sha256": "2041acd0184f4f62f84e7a61393d4c33aa4d3da963a0468f44cde0c7d47bb36c",
     "account_balance_observed_usd": "98.16",
-    "provider_requests": 0,
+    "provider_requests": 1,
     "credentials_accessed": false,
-    "paid_cost_usd": "0",
+    "paid_cost_usd": "0.033685",
     "publication": false,
     "release_acceptance": false,
     "active_workers": 0,
-    "next_gate": "Fresh exact-candidate paid authorization, then account/machine/source/browser evidence and one-use preflight inside their freshness windows."
+    "next_gate": "Closed. Do not rerun M50 or reuse its authorization; preserve the M51/M52 offline remediation and require a new milestone for any future live work."
   }
 }
