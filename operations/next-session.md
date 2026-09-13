@@ -1,4 +1,16 @@
-# Current continuation — M54 company workspace published; M55 feedback gate next
+# Current continuation — M55 synthetic bill intake accepted; publication and M56 feedback gate next
+
+September 13, 2026. **M55 is complete and independently accepted for its bounded local synthetic scope.** The M54 tenant workspace now preserves one exact fictional electricity-bill PDF, extracts its January 2023 service period and `12,345 kWh` deterministically, requires an explicit facility choice, appends the reviewed `12,346 kWh` correction as immutable version 2, and pins that exact version as `12.346000 MWh` to the existing 2023 draft. The UI truthfully ends at **Draft evidence — no emissions calculated**.
+
+Owner and administrator actions pass; the member is read-only; another tenant sees the same absence as an unknown record; signed-out actions refuse. All seven evidence and derived tables enforce forced row-level security. Duplicate commands converge, stale edits refuse, changed bytes refuse even with a claimed digest, and the ordinary production bundle excludes the M55 fixture and surface.
+
+Independent review `56e5807d323a136d0cc4041facb225cd2001341108d142f9b6d61f9915cb07e7` passed all 26 exact file bindings with zero material findings. Focused checks pass 40 tests / 176 assertions; full API 623 / 5,342, web 56 / 196 and database 18 / 101 pass, with type checks, lint, production build/exclusion, database ACL inspection, PDF verification and the browser role journey. Temporary listeners are closed.
+
+The CEO recommendation after board feedback is **M56: calculate a draft location-based electricity line from the exact reviewed bill version**. It should reuse M53's deterministic method and pinned factor lineage, preserve the bill-version link, show the calculation and rounding trace, and refuse stale, unreviewed, foreign or out-of-boundary evidence. It remains local and synthetic; market-based accounting, arbitrary/customer documents, hosted storage, deployment, merge, Stage 4 completion and release stay outside the milestone.
+
+[M55 record](../docs/research/synthetic-bill-milestone-55.md) · [M55 independent review](../evaluations/research-qa/milestone55-synthetic-bill-review-10.json) · [open PR](https://github.com/neuvetra-hq/neuvetra/pull/2)
+
+# Historical continuation — M54 company workspace published
 
 September 13, 2026. M53 is published at `fbbbafdb96018cdf4720315b67b9ab28b9f50ef9`. M54 is published at `b02d3812b54325a9f454815ffc6cd3dd4c49fe9d`; local `HEAD` and `origin/work/scope2-answer-demo` matched after each push.
 

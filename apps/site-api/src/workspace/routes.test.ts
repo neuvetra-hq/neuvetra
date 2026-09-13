@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import type { AuthenticatedUser } from "../lib/auth"
 import { createWorkspaceRoutes } from "./routes"
-import type { CompanyWorkspace, WorkspaceStore } from "./types"
+import type { CompanyWorkspace, SyntheticBill, WorkspaceStore } from "./types"
 
 const ORIGIN = "http://127.0.0.1:5174"
 const OWNER = "11111111-1111-4111-8111-111111111111"
@@ -26,6 +26,15 @@ const fixture: CompanyWorkspace = {
     version: 1,
   },
 }
+const billFixture: SyntheticBill = {
+  id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd", companyId: WORKSPACE_ID,
+  originalName: "neuvetra-m55-synthetic-electricity-bill.pdf", mediaType: "application/pdf", byteLength: 4605,
+  sha256: "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135", parserVersion: "m55-fixed-pdf-v1",
+  supplierName: "Synthetic Golden State Electric", accountLabel: "SYNTHETIC-0001", billNumber: "SYN-CA-2023-01",
+  servicePeriodStart: "2023-01-01", servicePeriodEnd: "2023-01-31",
+  sourceLocators: { servicePeriod: { startByte: 3119, endByte: 3147 }, electricityKwh: { startByte: 3384, endByte: 3394 } },
+  state: "needs_review", versions: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", version: 1, facilityId: null, electricityKwh: "12345.000", correctionReason: null }], draftActivity: null,
+}
 
 function setup() {
   const owners = new Map<string, string>()
@@ -37,6 +46,11 @@ function setup() {
     async findById(userId, workspaceId) {
       return owners.get(workspaceId) === userId ? fixture : null
     },
+    async canManage(userId, workspaceId) { return owners.get(workspaceId) === userId },
+    async ingestBill() { throw new Error("not configured") },
+    async correctBill() { throw new Error("not configured") },
+    async linkBill() { throw new Error("not configured") },
+    async findBill() { return null },
   }
   const users: Record<string, AuthenticatedUser> = {
     owner: { id: OWNER, phone: null, email: null, fullName: null },
@@ -106,6 +120,11 @@ describe("M54 authenticated workspace route", () => {
       store: {
         create: async () => { throw new Error("private database detail") },
         findById: async () => null,
+        canManage: async () => false,
+        ingestBill: async () => { throw new Error("not configured") },
+        correctBill: async () => { throw new Error("not configured") },
+        linkBill: async () => { throw new Error("not configured") },
+        findBill: async () => null,
       },
     })
     const response = await app.handle(request("/workspace", "owner", {
@@ -137,6 +156,11 @@ describe("M54 authenticated workspace route", () => {
       store: {
         create: async () => fixture,
         findById: async () => { throw new Error("private database detail") },
+        canManage: async () => false,
+        ingestBill: async () => { throw new Error("not configured") },
+        correctBill: async () => { throw new Error("not configured") },
+        linkBill: async () => { throw new Error("not configured") },
+        findBill: async () => null,
       },
     })
     const response = await app.handle(request(`/workspace/${WORKSPACE_ID}`, "owner"))
@@ -163,5 +187,29 @@ describe("M54 authenticated workspace route", () => {
       headers: { origin: "https://example.invalid", authorization: "Bearer owner" },
     }))
     expect(response.status).toBe(403)
+  })
+
+  test("bounds role-lookup failures on correction and link routes", async () => {
+    const app = createWorkspaceRoutes({
+      allowedOrigins: [ORIGIN],
+      validateUser: async () => ({ id: OWNER, phone: null, email: null, fullName: null }),
+      store: {
+        create: async () => fixture,
+        findById: async () => fixture,
+        canManage: async () => { throw new Error("private database detail") },
+        ingestBill: async () => billFixture,
+        correctBill: async () => billFixture,
+        linkBill: async () => billFixture,
+        findBill: async () => billFixture,
+      },
+    })
+    for (const [path, body] of [
+      [`/workspace/${WORKSPACE_ID}/bills/${billFixture.id}/corrections`, { facilityId: fixture.facility.id, priorVersionId: billFixture.versions[0].id, electricityKwh: "12346.000", reason: "Synthetic review exercise" }],
+      [`/workspace/${WORKSPACE_ID}/bills/${billFixture.id}/link`, { boundaryId: fixture.boundary.id, billVersionId: billFixture.versions[0].id }],
+    ] as const) {
+      const response = await app.handle(request(path, "owner", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }))
+      expect(response.status).toBe(503)
+      expect(await response.text()).not.toContain("private database detail")
+    }
   })
 })

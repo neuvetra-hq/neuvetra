@@ -1,5 +1,13 @@
 # Neuvetra board update
 
+September 13, 2026. **M55 synthetic electricity-bill intake is complete and independently accepted for its bounded local scope.** Inside the M54 tenant boundary, one exact fictional PDF is preserved, deterministically extracted at `12,345 kWh`, assigned only after an explicit facility choice, corrected to `12,346 kWh` as immutable version 2, and pinned as `12.346000 MWh` to the existing 2023 draft. The product states **Draft evidence — no emissions calculated**.
+
+Owner and administrator workflows pass; the member remains read-only; foreign and signed-out access refuses. Forced row-level security covers the original, extraction job, versions, activity, search, cache and audit records. Independent review `56e5807d…` passed all 26 exact bindings with zero material findings. Focused checks pass 40 / 176; full API 623 / 5,342, web 56 / 196 and database 18 / 101 pass, together with type checks, lint, production exclusion, ACL inspection, PDF verification and browser acceptance.
+
+This does not support customer or arbitrary PDFs, OCR, malware handling, hosted storage, a persisted failed-extraction lifecycle, emissions calculation, deployment, merge, Stage 4 completion or release. After board feedback, the CEO recommends M56: feed the exact reviewed bill version into M53's deterministic location-based calculation and preserve the factor, calculation and rounding trace in the draft.
+
+[M55 record](../docs/research/synthetic-bill-milestone-55.md) · [independent review](../evaluations/research-qa/milestone55-synthetic-bill-review-10.json) · [open PR](https://github.com/neuvetra-hq/neuvetra/pull/2)
+
 September 13, 2026. **M54 tenant-safe company workspace is complete for its bounded local synthetic scope and published to the existing PR at `b02d381`.** A synthetic signed-in owner can create and revisit one California company, facility and versioned draft reporting boundary in one transaction. Forced row-level security, scoped grants and composite keys prevent foreign reads, writes and cross-company links; unknown and foreign identifiers produce the same safe response. The local UI also demonstrates signed-out refusal and locks identity switching while requests are pending.
 
 Independent security/product/data review `446d646e…` passed after seven findings were repaired and rebound to all 20 reviewed file hashes. The focused suite passes 20 tests / 73 assertions; database 7 / 40, full API 617 / 5,311 and web 53 / 185 pass with all type checks, lint, production build/exclusion and browser acceptance. Stage 4 and release acceptance remain false: hosted Supabase, real authentication, durable storage, upload parsing, derived-store isolation, deployment and customer data were not tested.

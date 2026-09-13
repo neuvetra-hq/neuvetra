@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "review_id": "M55-INDEPENDENT-SECURITY-PRODUCT-DATA-QA",
+  "reviewed_at": "2026-09-13T13:04:00-07:00",
+  "reviewer_role": "independent QA with security, data, and product review",
+  "independence": "The reviewer did not author the M55 implementation and did not rely on author confidence as evidence.",
+  "candidate": {
+    "repository_head": "5d63954ec1b344c86f9cb73de2292b3b129697b9",
+    "branch": "work/scope2-answer-demo",
+    "state": "exact current uncommitted M55 candidate bytes",
+    "customer_data_used": false,
+    "network_or_provider_calls": false
+  },
+  "verdict": {
+    "bounded_local_milestone": "pass",
+    "milestone_gate_pass": true,
+    "material_open_findings": 0,
+    "release_acceptance": false,
+    "stage_4_complete": false,
+    "hosted_supabase_or_object_storage_validated": false,
+    "production_deployment_authorized": false,
+    "summary": "The hash-bound candidate passes the bounded local, synthetic, single-fixture evidence-intake milestone. It does not establish customer-document, hosted-service, production, deployment, merge, or release readiness."
+  },
+  "bindings": [
+    { "path": "docs/research/synthetic-bill-milestone-55-product-brief.md", "sha256": "d6c51b0db7a7e048962ecda423a72402b24e3a31319ddb9de0761eb098f0f19f", "bytes": 15624 },
+    { "path": "docs/research/synthetic-bill-milestone-55-technical-contract.md", "sha256": "3a502d2e8a4e7c0bd2d28d34c5ac2a37618b1e1ef476fbdb19e5b7061b3c4667", "bytes": 30448 },
+    { "path": "docs/research/synthetic-bill-milestone-55.md", "sha256": "b62b3c1b9dd7d4b98ed478efcd165b1fb0059785b9a98a2a41aed2432f535e23", "bytes": 5821 },
+    { "path": "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf", "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135", "bytes": 4605 },
+    { "path": "output/pdf/neuvetra-m55-synthetic-electricity-bill.manifest.json", "sha256": "4ab27c3afd071bd0a7236b51a6c57051cfa7c3f942f5d26e66ebeddf81b6705b", "bytes": 359 },
+    { "path": "packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql", "sha256": "c8941fb0d9359c8d2722475d509be229bcdbda93a7423a7d07cd42fbe2b014cf", "bytes": 23440 },
+    { "path": "packages/neuvetra-database/src/synthetic-bill-security.test.ts", "sha256": "1a04c9226146f3c2fb4cee88c64aba21f7e2824d212c256f4eeb042acd117355", "bytes": 8827 },
+    { "path": "packages/neuvetra-database/src/index.ts", "sha256": "f9ae6d83526846232b43d01ec65fb29dd349d1bef973a7d0d2ddce4be1f6fcd4", "bytes": 13448 },
+    { "path": "packages/neuvetra-database/src/index.test.ts", "sha256": "9908e7decfd8eff79d97fd85dad928c1417e4b869fc5957d9fa775c881781cd2", "bytes": 5231 },
+    { "path": "apps/site-api/src/workspace/synthetic-bill-parser.ts", "sha256": "1d5a4d9ddf69003497cb8e473d43789c48f989ced011ec70af93094f57c41bdf", "bytes": 2393 },
+    { "path": "apps/site-api/src/workspace/synthetic-bill-parser.test.ts", "sha256": "3bdd1c90703613b479836225aad1fb7f391fbfcc583f4f45c93e8e77c50226d2", "bytes": 2464 },
+    { "path": "apps/site-api/src/workspace/types.ts", "sha256": "5a08f912e7bd14731c5b056025965071ea28592b78752819ab8e9df5a0865b6d", "bytes": 2209 },
+    { "path": "apps/site-api/src/workspace/routes.ts", "sha256": "b4fa7fed74f60d43d98c062d0475f5f4c53c32c39dc74e7ac8d15a2846eb273d", "bytes": 11904 },
+    { "path": "apps/site-api/src/workspace/routes.test.ts", "sha256": "3d4165f500fb0e2a29b0098a7a45f8f7bf65a8a22ea65f027fcb03f437f4dd22", "bytes": 9003 },
+    { "path": "apps/site-api/src/workspace/server.ts", "sha256": "ed7e382adc591fb03aefd38f0eac246b7c9869cdd689806e8ef27dc564e968c5", "bytes": 3815 },
+    { "path": "apps/site-api/src/workspace/server.test.ts", "sha256": "2a3d56ba6504c536ecd96c409744b1342c47fc5ffb889e5a6cc28f792e177016", "bytes": 10229 },
+    { "path": "apps/site-web/package.json", "sha256": "60913dde8963c0f9dfd52d27b7c8d77de0ec79fea550be0adb468f3665ff4afc", "bytes": 992 },
+    { "path": "apps/site-web/src/components/CompanyWorkspaceDemo.tsx", "sha256": "0383a13ed667099a7f040c597b4a54950bc5040371cc01060d12072159bb2201", "bytes": 10121 },
+    { "path": "apps/site-web/src/index.css", "sha256": "4965f2a6cd2704228d99e6af01e7108af9bd06c15fcfab4fdbbc5c8beab85c26", "bytes": 43842 },
+    { "path": "apps/site-web/src/lib/workspace-api.ts", "sha256": "19fe457cc7c273359121b8c7bd31a44afe3de5563f6d928e9f637e7017a55be5", "bytes": 10651 },
+    { "path": "apps/site-web/src/lib/workspace-api.test.ts", "sha256": "7f47de3aa9609eef6659e2bdbb1c3581326ba354b4c5aca71faefa7eea535e86", "bytes": 6326 },
+    { "path": "apps/site-web/src/vite-env.d.ts", "sha256": "bf93342fcdb65c2d8c09ec7e4439a8dbedbfa7d9e884b4811b3624924b586f1c", "bytes": 111 },
+    { "path": "apps/site-web/vite.config.ts", "sha256": "cba2b1581ca8bd1d1f5057881604378ea8beaeabbcb777401515b98ac53aad36", "bytes": 2081 },
+    { "path": "apps/site-web/src/components/ResearchPreview.tsx", "sha256": "17ce70651f908d18f04e1da5e6232dd3ce1ab50d6f89c08156bf813fb08d5cbf", "bytes": 12395 },
+    { "path": "packages/neuvetra-database/src/migrations/0001_company_workspace.sql", "sha256": "cc596137d3011d400d3b253ebb52994bafe47f716c22601c4a316de259d7d739", "bytes": 8132 },
+    { "path": "packages/neuvetra-database/src/company-workspace.test.ts", "sha256": "7c31d82b76cfe0fdc9220489335a4506e38e20950a050275bfe077df9ccb319e", "bytes": 8008 }
+  ],
+  "checks": [
+    {
+      "name": "focused_m55_gate",
+      "result": "pass",
+      "evidence": "40 tests and 176 assertions: database 18/101, API workspace 15/53, browser boundary 7/22."
+    },
+    {
+      "name": "full_regression_suites",
+      "result": "pass",
+      "evidence": "API 623 tests/5,342 assertions; web 56/196; database 18/101."
+    },
+    {
+      "name": "static_quality_and_production_build",
+      "result": "pass",
+      "evidence": "API, web, and database type checks passed; web lint passed; Vite production build passed. The existing engine chunk produced a non-blocking size warning."
+    },
+    {
+      "name": "production_bundle_exclusion",
+      "result": "pass",
+      "evidence": "The final production dist contained zero matches for M54/M55 synthetic tokens, PDF filename, account/bill identifiers, correction reason, fixed quantities, M55 flag, and workspace bill route."
+    },
+    {
+      "name": "database_authorization_and_integrity",
+      "result": "pass",
+      "evidence": "All seven M55 tables reported enabled and forced RLS and authenticated read-only table ACLs. The three write functions reported SECURITY DEFINER, search_path=neuvetra, pg_temp, no PUBLIC execution, and authenticated execution. Tests exercised auth.uid identity, owner/admin writes, member read-only access, outsider invisibility, foreign facility/boundary refusal, direct mutation refusal, same-digest tenant independence, and bounded derived stores."
+    },
+    {
+      "name": "immutable_fixture_and_lineage",
+      "result": "pass",
+      "evidence": "The 4,605-byte PDF SHA-256 is 0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135. Manifest, parser, database exact-byte comparison, persisted rehash, version 1, corrected version 2, and version-pinned 12.346000 MWh draft link agree. Altered bytes with a falsely claimed pinned digest are rejected before persistence."
+    },
+    {
+      "name": "duplicate_and_atomic_behavior",
+      "result": "pass",
+      "evidence": "Constraint-backed intake/correction/link convergence produced one lineage under three concurrent calls; replay returned the existing IDs. Workspace plus fixed role seeding rolls back as one transaction when membership seeding fails, and non-owner bootstrap creates no partial workspace."
+    },
+    {
+      "name": "api_boundary",
+      "result": "pass",
+      "evidence": "Writes enforce trusted origin before auth/lookup, authenticate from bearer identity, reject extra or stale IDs/values, distinguish member 403 from inference-safe absent evidence 404, return idempotent repeated link results, and bound database and role-lookup exceptions without private details."
+    },
+    {
+      "name": "browser_contract_storage_and_accessibility",
+      "result": "pass",
+      "evidence": "The browser decoder enforces the exact document identity, dates, locators, state/version graph, corrected value, and pinned draft value. Requests carry fixed synthetic bearer identities outside bodies. Local storage retains only opaque workspace/evidence UUIDs. Busy controls disable identity switching and duplicate submissions; errors use an assertive alert and move focus, while missing facility returns focus to the described checkbox."
+    },
+    {
+      "name": "pdf_content_and_visual_inspection",
+      "result": "pass",
+      "evidence": "One unencrypted letter-size page, no JavaScript or form, visually legible with no clipping/overlap. It clearly labels itself fictional/no customer data and shows Synthetic Golden State Electric, SYNTHETIC-0001, SYN-CA-2023-01, January 1-31 2023, and 12,345 kWh. Exact source byte spans 3119:3147 and 3384:3394 resolve to the period and usage text."
+    }
+  ],
+  "findings": [
+    { "id": "M55-R01", "severity": "high", "status": "resolved", "finding": "Parser initially returned November dates while the frozen PDF and product contract required January.", "resolution": "Parser, payload, response, UI, and tests now consistently use 2023-01-01 through 2023-01-31." },
+    { "id": "M55-R02", "severity": "critical", "status": "resolved", "finding": "Database intake initially trusted the claimed digest and byte length rather than the supplied bytes.", "resolution": "The write function now compares the supplied bytea to the complete pinned PDF bytes before any insert; an altered-byte direct-RPC test fails atomically." },
+    { "id": "M55-R03", "severity": "high", "status": "resolved", "finding": "Draft linkage initially did not prove included facility membership or the exact 2023 operational-control draft/version-1 boundary.", "resolution": "The function now requires the exact tenant-scoped boundary attributes and an included boundary_facilities row." },
+    { "id": "M55-R04", "severity": "critical", "status": "resolved", "finding": "An intermediate database adapter bypassed the authenticated role for M55 operations and failed execution grants.", "resolution": "Bill operations now execute under the authenticated role with auth.uid-derived identity; executable ACL inspection and tests pass." },
+    { "id": "M55-R05", "severity": "high", "status": "resolved", "finding": "The API initially rejected an exact repeated link and did not bind correction/link commands to prior/current version IDs.", "resolution": "Strict priorVersionId and billVersionId bodies, stale refusal, constraint-backed convergence, and idempotent replay tests are present." },
+    { "id": "M55-R06", "severity": "medium", "status": "resolved", "finding": "The initial response and decoder omitted bill identity, service dates, and source locators and accepted inconsistent state/version graphs.", "resolution": "The bounded response and browser decoder now require exact identity, January dates, byte locators, lineage states, corrected quantity, and draft pin." },
+    { "id": "M55-R07", "severity": "high", "status": "resolved", "finding": "Initial role coverage lacked administrator success, member read-only behavior, and ordinary UI identities.", "resolution": "Fixed admin/member identities, tenant memberships, API behavior, browser controls, and database role tests were added." },
+    { "id": "M55-R08", "severity": "high", "status": "resolved", "finding": "Role lookup exceptions on correction/link initially escaped their bounded API error path.", "resolution": "Role lookup now runs inside the protected block and injected private-detail tests prove bounded 503 responses." },
+    { "id": "M55-R09", "severity": "high", "status": "resolved", "finding": "Workspace creation and fixed membership seeding initially committed in separate transactions and could leave partial state.", "resolution": "Fixed-role seeding now shares one transaction, the server restricts bootstrap to the fixed owner, and rollback/non-owner tests pass." },
+    { "id": "M55-R10", "severity": "medium", "status": "resolved", "finding": "Initial UI wording implied Stage 4 and rejected actions did not move focus to an error summary.", "resolution": "The UI now says M55 local development demonstration and provides focused alert/field error behavior." },
+    { "id": "M55-R11", "severity": "low", "status": "resolved", "finding": "The milestone initially called the write-only database summary cache an improvement over the null-cache proposal.", "resolution": "The record now calls it an isolation-only variance and states cache-hit/performance behavior is unmeasured." },
+    { "id": "M55-R12", "severity": "medium", "status": "resolved", "finding": "A status-only draft embedded the previous review artifact hash inside a file bound by that artifact, creating a stale self-reference after rebind.", "resolution": "The milestone now records the independent pass and artifact scope without embedding the mutable artifact hash; the final hash is retained externally in publication evidence." },
+    { "id": "M55-L01", "severity": "medium", "status": "accepted_bounded_limitation", "finding": "The exact admitted fixture has no reachable terminal failed-extraction database row; changed and parser-inconsistent bytes are rejected before persistence.", "disposition": "Explicitly disclosed in the milestone record. Acceptable only for this single exact fixture; persisted failure and retry lifecycle remain required before arbitrary or customer document intake." },
+    { "id": "M55-L02", "severity": "high", "status": "accepted_bounded_limitation", "finding": "PGlite and database-backed byte storage do not prove hosted PostgreSQL/Supabase or object-storage policy compatibility.", "disposition": "Explicitly excluded from this local milestone. Hosted validation is a future gate." },
+    { "id": "M55-L03", "severity": "high", "status": "accepted_bounded_limitation", "finding": "The fixed hash-gated PDF parser does not support arbitrary PDFs, OCR, malware scanning, customer documents, or general utility formats.", "disposition": "The UI, manifest, and milestone disclose the synthetic single-fixture boundary; all other bytes fail closed." }
+  ],
+  "required_repair": [],
+  "limitations": [
+    "The review covers exact uncommitted local bytes and one deterministic fixture only.",
+    "No hosted PostgreSQL/Supabase, object storage, durable worker, scale, retention/deletion, disaster recovery, or production authentication was exercised.",
+    "No customer data, model/provider, OCR, network service, factor selection, emissions calculation, filing, assurance, merge, deployment, publication, or release was used or authorized.",
+    "The database-backed summary cache is write-only in M55; cache-hit and performance behavior are unmeasured.",
+    "The production build emitted an existing engine chunk size warning; the build passed and the M55 exclusion scan was clean."
+  ]
+}

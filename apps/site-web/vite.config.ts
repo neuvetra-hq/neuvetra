@@ -1,13 +1,17 @@
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
+
+const configDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(configDir, "./src"),
+      "@m55-bill": path.resolve(configDir, "../../output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf"),
     },
   },
   server: {
@@ -17,11 +21,12 @@ export default defineConfig({
       strict: true,
       // The workspace also contains private evidence and operator files.
       allow: [
-        path.resolve(__dirname),
-        path.resolve(__dirname, "../../node_modules"),
-        path.resolve(__dirname, "../../data/research/answer-units/scope2-website.v1.json"),
-        path.resolve(__dirname, "../../data/research/answer-units/scope2-website.epa-inquiry.v1.json"),
-        path.resolve(__dirname, "../../data/research/answer-units/scope2-website.epa-acquisition.v1.json"),
+        path.resolve(configDir),
+        path.resolve(configDir, "../../node_modules"),
+        path.resolve(configDir, "../../data/research/answer-units/scope2-website.v1.json"),
+        path.resolve(configDir, "../../data/research/answer-units/scope2-website.epa-inquiry.v1.json"),
+        path.resolve(configDir, "../../data/research/answer-units/scope2-website.epa-acquisition.v1.json"),
+        path.resolve(configDir, "../../output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf"),
       ],
       deny: [
         ".env", ".env.*", "*.{crt,pem,key,p12,pfx,cer,der}", ".npmrc", ".yarnrc.yml", "**/.git/**",

@@ -30,10 +30,30 @@
 .workspace-record span { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
 .workspace-record strong { font-size: 1.08rem; font-weight: 500; }
 .workspace-boundary-note { max-width: 760px; margin-top: 1.5rem; color: var(--research-muted); font-size: .9rem; }
+.bill-panel { margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--research-line); border-radius: 10px; background: #131917; }
+.bill-panel-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: 1.5rem; }
+.bill-panel-heading h2 { margin-top: .5rem; font-size: 1.8rem; font-weight: 400; }
+.bill-panel-heading a { color: var(--research-accent); text-decoration: underline; text-underline-offset: 4px; }
+.bill-facts { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--research-line); margin-bottom: 1.5rem; }
+.bill-facts > div { display: flex; flex-direction: column; gap: .35rem; padding: 1rem; border-right: 1px solid var(--research-line); }
+.bill-facts > div:last-child { border-right: 0; }
+.bill-facts span, .bill-facts small { color: var(--research-muted); }
+.bill-facts span { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
+.bill-review { display: grid; gap: .8rem; margin: 1rem 0; padding: 1.25rem; background: #ffffff08; }
+.bill-review label { display: flex; align-items: center; gap: .7rem; }
+.bill-field-error { color: #efc28e; }
+.bill-source { margin: 1rem 0; color: var(--research-muted); font-size: .85rem; }
+.bill-history { margin-top: 1.5rem; }
+.bill-history h3 { margin-bottom: .75rem; font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--research-muted); }
+.bill-history p { padding: .6rem 0; border-top: 1px solid var(--research-line); }
+.bill-draft { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem; padding: 1rem; border-left: 3px solid var(--research-accent); background: #c5e6c80a; }
 
 @media (max-width: 760px) {
   .workspace-demo-heading { grid-template-columns: 1fr; }
   .workspace-record { grid-template-columns: 1fr; }
+  .bill-facts { grid-template-columns: 1fr; }
+  .bill-facts > div { border-right: 0; border-bottom: 1px solid var(--research-line); }
+  .bill-draft, .bill-panel-heading { flex-direction: column; }
   .workspace-record > div { border-right: 0; border-bottom: 1px solid var(--research-line); }
   .workspace-record > div:last-child { border-bottom: 0; }
 }

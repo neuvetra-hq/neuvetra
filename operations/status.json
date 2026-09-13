@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13T07:15:00.000Z",
+  "updated_at": "2026-09-13T20:00:00.000Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M54",
-    "name": "Tenant-safe company workspace foundation",
-    "status": "complete_independent_security_product_data_acceptance_published_to_pr",
-    "next_gate": "Collect board feedback, then decide whether to begin M55 synthetic bill evidence intake; Stage 4 and release acceptance remain false."
+    "id": "M55",
+    "name": "Synthetic electricity bill evidence intake",
+    "status": "complete_independent_security_product_data_acceptance_awaiting_pr_publication",
+    "next_gate": "Publish M55 to the existing PR, collect board feedback, then decide whether to begin M56 deterministic calculation from the reviewed bill version; Stage 4 and release acceptance remain false."
   },
   "completed_milestones": [
     {
@@ -30,6 +30,11 @@
       "id": "M54",
       "completed_at": "2026-09-13",
       "feedback": "docs/research/company-workspace-milestone-54.md"
+    },
+    {
+      "id": "M55",
+      "completed_at": "2026-09-13",
+      "feedback": "docs/research/synthetic-bill-milestone-55.md"
     }
   ],
   "runtime": {
@@ -37,18 +42,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M54 local browser acceptance completed; all temporary workspace/API preview listeners are closed. No persistent M54 service is running.",
+    "website_preview_state": "M55 local browser acceptance completed; all temporary workspace/API preview listeners are closed. No persistent M55 service is running.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M53 was published at fbbbafd. M54 passed its bounded local synthetic tenant-workspace gate after seven independent findings were repaired, then was published at b02d381. Stage 4 and release acceptance remain false."
+    "last_session_work": "M55 passed its bounded local synthetic bill-intake gate after independent challenge and all 26 exact bindings passed. Publication to the existing PR is the remaining delivery step. Stage 4 and release acceptance remain false."
   },
   "session_handoff": {
-    "saved_at": "2026-09-13T07:15:00.000Z",
+    "saved_at": "2026-09-13T20:00:00.000Z",
     "path": "operations/next-session.md",
-    "board_record": "docs/research/company-workspace-milestone-54.md",
-    "next_task": "Collect board feedback on M54, then decide whether to begin M55 synthetic bill evidence intake within the accepted tenant boundary.",
-    "execution_state": "m54_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
-    "review": "Focused M54 20 tests / 73 assertions, database 7 / 40, API 617 / 5,311, web 53 / 185, all type checks, web lint/build, production exclusion and browser paths pass. Independent review 446d646e passes all 20 bound file hashes after seven resolved findings.",
-    "scope": "Fixed synthetic local company/facility/versioned draft boundary with forced RLS, scoped grants and synthetic identities. No customer data, hosted Supabase, real authentication, durable storage, upload, deployment, merge or release."
+    "board_record": "docs/research/synthetic-bill-milestone-55.md",
+    "next_task": "Publish M55 to the existing PR, collect board feedback, then decide whether to begin M56 deterministic location-based calculation from the reviewed bill version.",
+    "execution_state": "m55_complete_independently_accepted_awaiting_pr_publication_no_stage4_or_release_acceptance",
+    "review": "Focused M55 40 tests / 176 assertions, API 623 / 5,342, web 56 / 196 and database 18 / 101 pass with type checks, lint/build, production exclusion, ACL inspection, PDF and browser evidence. Independent review 56e5807d passes all 26 exact bindings with zero material findings.",
+    "scope": "One exact fictional PDF, deterministic extraction, explicit facility assignment, immutable correction lineage and version-pinned draft evidence within the M54 tenant boundary. No customer data, arbitrary PDFs, OCR, hosted storage, calculation, deployment, merge or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -100,7 +105,10 @@
     "m53_state": "complete_independent_accounting_and_product_acceptance_published_to_pr_unreleased",
     "m53_commit": "fbbbafdb96018cdf4720315b67b9ab28b9f50ef9",
     "m54_state": "complete_independent_security_product_data_acceptance_published_to_pr_stage4_and_release_false",
-    "m54_commit": "b02d3812b54325a9f454815ffc6cd3dd4c49fe9d"
+    "m54_commit": "b02d3812b54325a9f454815ffc6cd3dd4c49fe9d",
+    "m55_state": "complete_independent_security_product_data_acceptance_awaiting_pr_publication_stage4_and_release_false",
+    "m55_review": "evaluations/research-qa/milestone55-synthetic-bill-review-10.json",
+    "m55_review_sha256": "56e5807d323a136d0cc4041facb225cd2001341108d142f9b6d61f9915cb07e7"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -895,6 +903,22 @@
         "evaluations/research-qa/milestone54-company-workspace-review-10.json"
       ],
       "next_action": "Collect board feedback, then decide whether to begin M55 synthetic bill evidence intake."
+    },
+    {
+      "id": "M55-SYNTHETIC-BILL-INTAKE",
+      "owner": "ceo_with_cpo_cto_and_independent_security_product_data_qa",
+      "status": "complete_independent_acceptance_awaiting_pr_publication",
+      "title": "Preserve, review and link one synthetic electricity bill",
+      "scope": "Exact fixed fictional PDF inside the M54 tenant boundary; deterministic extraction, explicit facility choice, immutable correction and version-pinned draft evidence; local development only.",
+      "acceptance": "Exact-byte preservation, source locators, role matrix, forced RLS across original and derived stores, changed-byte and stale-edit refusal, idempotent convergence, production exclusion, browser demonstration and independent review.",
+      "result": "Independent review 56e5807d passed all 26 exact file bindings with zero material findings. Focused 40/176, API 623/5,342, web 56/196 and database 18/101 pass. Stage 4 and release acceptance remain false.",
+      "evidence": [
+        "docs/research/synthetic-bill-milestone-55.md",
+        "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf",
+        "packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql",
+        "evaluations/research-qa/milestone55-synthetic-bill-review-10.json"
+      ],
+      "next_action": "Publish to the existing PR, collect board feedback, then decide whether to begin M56 deterministic calculation from the reviewed bill version."
     }
   ],
   "feedback_tasks": [
