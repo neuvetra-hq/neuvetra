@@ -1,6 +1,6 @@
 # Neuvetra board update
 
-September 13, 2026. **M55 synthetic electricity-bill intake is complete and independently accepted for its bounded local scope.** Inside the M54 tenant boundary, one exact fictional PDF is preserved, deterministically extracted at `12,345 kWh`, assigned only after an explicit facility choice, corrected to `12,346 kWh` as immutable version 2, and pinned as `12.346000 MWh` to the existing 2023 draft. The product states **Draft evidence — no emissions calculated**.
+September 13, 2026. **M55 synthetic electricity-bill intake is complete, independently accepted and published to the existing PR at `05b3395`.** Inside the M54 tenant boundary, one exact fictional PDF is preserved, deterministically extracted at `12,345 kWh`, assigned only after an explicit facility choice, corrected to `12,346 kWh` as immutable version 2, and pinned as `12.346000 MWh` to the existing 2023 draft. The product states **Draft evidence — no emissions calculated**.
 
 Owner and administrator workflows pass; the member remains read-only; foreign and signed-out access refuses. Forced row-level security covers the original, extraction job, versions, activity, search, cache and audit records. Independent review `56e5807d…` passed all 26 exact bindings with zero material findings. Focused checks pass 40 / 176; full API 623 / 5,342, web 56 / 196 and database 18 / 101 pass, together with type checks, lint, production exclusion, ACL inspection, PDF verification and browser acceptance.
 

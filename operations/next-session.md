@@ -1,6 +1,6 @@
-# Current continuation — M55 synthetic bill intake accepted; publication and M56 feedback gate next
+# Current continuation — M55 synthetic bill intake published; M56 feedback gate next
 
-September 13, 2026. **M55 is complete and independently accepted for its bounded local synthetic scope.** The M54 tenant workspace now preserves one exact fictional electricity-bill PDF, extracts its January 2023 service period and `12,345 kWh` deterministically, requires an explicit facility choice, appends the reviewed `12,346 kWh` correction as immutable version 2, and pins that exact version as `12.346000 MWh` to the existing 2023 draft. The UI truthfully ends at **Draft evidence — no emissions calculated**.
+September 13, 2026. **M55 is complete, independently accepted and published to the existing PR at `05b33953128d40c0698311fb2e069856f6741382`.** The M54 tenant workspace now preserves one exact fictional electricity-bill PDF, extracts its January 2023 service period and `12,345 kWh` deterministically, requires an explicit facility choice, appends the reviewed `12,346 kWh` correction as immutable version 2, and pins that exact version as `12.346000 MWh` to the existing 2023 draft. The UI truthfully ends at **Draft evidence — no emissions calculated**.
 
 Owner and administrator actions pass; the member is read-only; another tenant sees the same absence as an unknown record; signed-out actions refuse. All seven evidence and derived tables enforce forced row-level security. Duplicate commands converge, stale edits refuse, changed bytes refuse even with a claimed digest, and the ordinary production bundle excludes the M55 fixture and surface.
 
