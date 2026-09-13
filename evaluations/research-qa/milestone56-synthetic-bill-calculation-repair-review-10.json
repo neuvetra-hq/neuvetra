@@ -1,0 +1,151 @@
+{
+  "schema_version": "m56_synthetic_bill_calculation_independent_repair_review_v1",
+  "task_id": "M56-QA-REPAIR-01",
+  "reviewed_at": "2026-09-13T23:12:43Z",
+  "reviewer_role": "independent Head of QA with accounting, tenant-security, data-integrity and product challenge",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M56 implementation or milestone documents. This repair-review artifact is the reviewer's only persistent change.",
+  "review_scope": "Exact repaired M56 candidate for the single local synthetic M55 version-2 bill to M53-derived CAMX draft calculation, including arithmetic, immutable export/replay lineage, RLS and role boundaries, API and process behavior, browser decoding and accessibility evidence, idempotency, concurrency, production exclusion and regressions.",
+  "reviewed_git_state": {
+    "head": "d4a2301b0817cbd7e5805baa04a397455c8acefd",
+    "working_tree": "dirty and unpublished",
+    "binding": "This verdict applies only to the 20 exact candidate hashes and two critical dependency hashes below. Unrelated tracked or untracked files were outside scope."
+  },
+  "reviewed_file_sha256": {
+    "docs/research/synthetic-bill-calculation-milestone-56-product-brief.md": "bcc874dc8402bf9e3173432dd4cf6d3f06d634ca0f905b19c078a541f9e5763b",
+    "docs/research/synthetic-bill-calculation-milestone-56-technical-contract.md": "0f39cf9db7c2f3044d1f249f1c1069096328fc15f51a5be39dfc5c87895e7b2d",
+    "docs/research/synthetic-bill-calculation-milestone-56.md": "fdde64042d921d11f7b8ced66e53c39a4ae029d8414472327a93286291349268",
+    "apps/site-api/src/calculation/linked_bill_calculation.py": "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e",
+    "apps/site-api/src/calculation/linked_bill_calculation_test.py": "a9008b6a3e7c12b18b33391152c3966692773c151f6db8f1b21995ffba0f4a19",
+    "apps/site-api/src/calculation/server.ts": "376e4c671f3bfc166c978025291f09956b5549e91f2462d6ffa249b65724cd2c",
+    "apps/site-api/src/calculation/server.test.ts": "09c25b6426715a45987b638be68e57eacc2655f49cecd5c3b091d597d5e21e18",
+    "apps/site-api/src/workspace/types.ts": "4640dc92e1f1f39a0416e98bfd1123c2d12c581bfa2c465b1ae44ed8b51be35a",
+    "apps/site-api/src/workspace/routes.ts": "5e073867cdc8db8771ce1316c9ad682420bb9b9cc0eb2fef529ae7eff163cf64",
+    "apps/site-api/src/workspace/routes.test.ts": "65974d1325fa9d23e09b77278bf98f5a012bb760f379683972239c6112f1231c",
+    "apps/site-api/src/workspace/server.ts": "4b11cf0067dbd24d633e7323c5fef3725cfcc3c2ff42cc0115dae09b59f66adb",
+    "apps/site-api/src/workspace/server.test.ts": "3632a2c28737998d661bb31864c5118a5100d5d92ba70a6f62f41245b2311f22",
+    "apps/site-web/src/lib/workspace-api.ts": "87e742a090dc8f0434966a8933238a3b5ce67ee825384827c1df31e00f471b0a",
+    "apps/site-web/src/lib/workspace-api.test.ts": "7c2be537e118d699d7b3f69a7a1f81df8ca91891ac2ef9d1528793eb418fb5dc",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "1c1848223004f597b951b3d7f1b666058710cd93735953ca9f148f9a0664e8e2",
+    "apps/site-web/src/components/ResearchPreview.tsx": "c2f007e7c3d32e46dcc7bd69fca5be76af5e4680bae55ca4d236dfed77b4b637",
+    "apps/site-web/src/index.css": "bc401b693db70119ed9552fe25bb70fa68806725ff2b715031f858ef934dd957",
+    "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6",
+    "packages/neuvetra-database/src/index.ts": "91fc9a3f0cbc18184439048ce8c466d7c026cc56b1a2a1c22d54d3f792de7d94",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "be5319f75dc187daf517194c2408ca10f807641653af650f876be27157fe93b2"
+  },
+  "critical_dependency_sha256": {
+    "apps/site-api/src/calculation/location_based_electricity.py": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+    "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135"
+  },
+  "disposition": "pass_bounded_local_synthetic_milestone",
+  "milestone_gate_pass": true,
+  "accounting_arithmetic_pass": true,
+  "tenant_security_acceptance": true,
+  "product_acceptance": true,
+  "release_acceptance": false,
+  "resolved_findings": [
+    {
+      "id": "M56-R01",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "The UI downloads the exact bounded calculation envelope. Replay submits that complete envelope, reauthorizes the current tenant lineage, requires exact stored-envelope equality and recomputes through the deterministic adapter. A mutated result is rejected with 409 without replacing history."
+    },
+    {
+      "id": "M56-R02",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "The exported replay envelope binds calculation ID, canonical reviewed bill-version payload hash, authenticated creator, creation time and the complete hashed deterministic result. Its values are reconstructed from immutable tenant-linked rows and checked against the public summary before display or replay."
+    },
+    {
+      "id": "M56-R03",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "The browser decoder now requires exact outer and nested keys and pins the complete supported input, activity, conversion, method, factor geography/components/source locators, GWP source/values, gases, trace, total, reconciliation, classification and envelope relationships. Representative nested mutations are rejected."
+    },
+    {
+      "id": "M56-R04",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "Valid unreviewed state is separated from malformed input, and calculation/store failures return bounded 503 No result produced without private exception detail. Known idempotency conflict and replay mismatch remain finite 409 refusals."
+    },
+    {
+      "id": "M56-R05",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "Executable database tests now call the calculation writer and prove trusted owner/admin creation, authenticated direct-writer denial, member read-only access, outsider refusal, payload tamper rollback, duplicate convergence, one result and one audit event."
+    },
+    {
+      "id": "M56-R06",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "The schema stores a tenant-scoped UUID idempotency key and server-derived operation fingerprint. The server computes and verifies the canonical input hash before engine dispatch, checks a known key before work, shares identical concurrent work, and repeated same-key calls return the existing calculation."
+    },
+    {
+      "id": "M56-R07",
+      "severity": "material",
+      "status": "resolved",
+      "resolution": "The inspected UI adds exact-record download and replay, result and error focus, busy control disabling, live status/alert semantics, an expanded CO2e accessible label, full lineage text and role-based disabled mutations. These repairs align with the prior ordinary-browser evidence for the 390-pixel layout, result journey, replay, loopback-only traffic and clean console."
+    },
+    {
+      "id": "M56-R08",
+      "severity": "moderate",
+      "status": "resolved",
+      "resolution": "The API uses the exact M56_SYNTHETIC_BILL_CALCULATION guard and requires M54, M55 and M56 plus development/test runtime. Web composition likewise requires the three M54/M55/M56 development flags, and the ordinary production build excludes the workspace calculation code and fixture."
+    },
+    {
+      "id": "M56-R09",
+      "severity": "minor",
+      "status": "resolved",
+      "resolution": "The milestone record matches the independently rerun full counts: API 625/5362, web 57/207 and database 19/120."
+    }
+  ],
+  "open_findings": [],
+  "independent_arithmetic": {
+    "quantity_kwh": "12346.000",
+    "quantity_mwh": "12.346000",
+    "factor_kg_co2e_per_mwh": "195.0402888",
+    "total_expression": "12.346000 * 195.0402888",
+    "unrounded_kg_co2e": "2407.9674055248",
+    "display_kg_co2e": "2407.9674",
+    "rounding": "ROUND_HALF_EVEN to four decimal places; no intermediate rounding",
+    "co2_mass_and_co2e": "2399.4607843584",
+    "ch4_mass": "0.14000364",
+    "ch4_co2e": "3.92010192",
+    "n2o_mass": "0.0168004368",
+    "n2o_co2e": "4.452115752",
+    "component_sum_kg_co2e": "2407.8330020304",
+    "published_rate_delta_kg_co2e": "0.1344034944"
+  },
+  "reproduced_checks": {
+    "python_m53_and_m56": "6 passed",
+    "focused_site_api": "21 passed, 85 assertions",
+    "full_site_api": "625 passed, 5362 assertions",
+    "focused_site_web": "8 passed, 33 assertions",
+    "full_site_web": "57 passed, 207 assertions",
+    "database": "19 passed, 120 assertions",
+    "site_api_typecheck": "pass",
+    "site_web_typecheck": "pass",
+    "database_typecheck": "pass",
+    "site_web_lint": "pass",
+    "site_web_production_build": "pass with existing chunk-size warning",
+    "production_exclusion_scan": "pass: no tested M56 flag, contract, quantity/result, fixed PDF digest/name, method or factor strings in the ordinary production dist",
+    "git_diff_check": "pass"
+  },
+  "acceptance_evidence": [
+    "The accepted M53 implementation remains byte-identical and M56 remains a separate adapter with its own frozen hash.",
+    "Python Decimal execution reproduces the exact conversion, authoritative AI6 multiplication, display rounding and component reconciliation without intermediate rounding.",
+    "The API accepts no browser accounting overrides, bounds origin/auth/role/read/execution failures, and keeps the internal linked-bill adapter out of the public standalone calculation route.",
+    "The database calculation and audit tables use composite tenant foreign keys, enabled and forced RLS, member SELECT only, no authenticated writer grant, and a fixed-search-path security-definer writer reached only through the trusted store.",
+    "Owner and administrator can create; member can read but cannot mutate; outsider and signed-out requests do not reveal the result. Direct authenticated mutation and mixed-tenant or tampered writes fail.",
+    "The immutable export envelope binds the stored calculation, reviewed bill version, actor/time and complete result; revisit and replay return the same calculation while record mutation refuses.",
+    "The strict web decoder and UI preserve the supported accounting/source pins and development-only status. Browser storage remains limited to opaque workspace and evidence pointers.",
+    "All three development guards are required and the normal production build excludes M56 code/data strings."
+  ],
+  "limitations": [
+    "This pass proves only the fixed fictional January 2023 PGlite-backed local workflow and the exact reviewed hashes. It does not prove hosted PostgreSQL/Supabase behavior, production authentication, durable cross-process coordination or production operations.",
+    "The reviewer inspected the repaired accessibility behavior in code and tests and used the retained prior browser evidence described by the milestone. A fresh independent assistive-technology session was not run for this repair-only review.",
+    "The factor and method remain development candidates. This does not establish source currentness beyond the accepted dated evidence, a released factor set, filing fitness or assurance.",
+    "No provider or external network call, credential, customer data, hosted service, deployment, merge or release action was used."
+  ],
+  "required_repair": [],
+  "conclusion": "PASS for the exact bounded local synthetic M56 candidate. The repaired bytes close the prior material replay/export, lineage, decoder, error-boundary, database, idempotency, feature-guard and product-evidence gaps; exact accounting and regression gates pass. Stage 4 and release acceptance remain false."
+}

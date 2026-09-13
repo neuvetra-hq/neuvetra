@@ -1,6 +1,6 @@
 import { useRef, useState, type RefObject } from "react"
 import {
-  correctSyntheticBill, createSyntheticWorkspace, linkSyntheticBill, revisitSyntheticBill,
+  calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, linkSyntheticBill, replaySyntheticBillCalculation, revisitSyntheticBill,
   revisitSyntheticWorkspace, uploadSyntheticBill, type CompanyWorkspace, type SyntheticBill, type WorkspaceActor,
 } from "@/lib/workspace-api"
 import syntheticBillUrl from "@m55-bill"
@@ -19,6 +19,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   const [busy, setBusy] = useState(false)
   const statusRef = useRef<HTMLParagraphElement>(null)
   const facilityRef = useRef<HTMLInputElement>(null)
+  const resultRef = useRef<HTMLHeadingElement>(null)
 
   function showError(error: unknown, fallback: string) {
     setIsError(true)
@@ -62,6 +63,36 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
     finally { setBusy(false) }
   }
 
+  async function calculateBill() {
+    if (!workspace || !bill) return
+    setBusy(true); setIsError(false); setMessage("Calculating from the reviewed linked version…")
+    try {
+      const result = await calculateSyntheticBill(workspace.id, bill.id, actor)
+      setBill(result)
+      setMessage("Draft calculation saved with its activity, bill, factor, method, and source lineage.")
+      requestAnimationFrame(() => resultRef.current?.focus())
+    } catch (error) { setBill((current) => current ? { ...current, draftCalculation: null } : current); showError(error, "The draft calculation is unavailable.") }
+    finally { setBusy(false) }
+  }
+
+  async function replayCalculation() {
+    if (!workspace || !bill?.draftCalculation) return
+    setBusy(true); setIsError(false); setMessage("Reauthorizing the lineage and replaying the stored calculation…")
+    try {
+      const result = await replaySyntheticBillCalculation(workspace.id, bill.id, bill.draftCalculation.record, actor)
+      setBill(result); setMessage("Replay matched the same authorized lineage and exact deterministic result.")
+    } catch (error) { showError(error, "Replay could not be verified.") }
+    finally { setBusy(false) }
+  }
+
+  function downloadCalculation() {
+    if (!bill?.draftCalculation) return
+    const blob = new Blob([JSON.stringify(bill.draftCalculation.record, null, 2) + "\n"], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const anchor = document.createElement("a"); anchor.href = url; anchor.download = `neuvetra-m56-${bill.draftCalculation.id}.json`; anchor.click()
+    URL.revokeObjectURL(url)
+  }
+
   function reviewBill() {
     if (!facilityConfirmed) {
       setIsError(true); setMessage("Facility required. Choose the authorized facility before saving the review.")
@@ -79,9 +110,9 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   return (
     <section className="workspace-demo" aria-labelledby="workspace-heading">
       <div className="workspace-demo-heading"><div>
-        <p className="research-eyebrow">M55 local development demonstration</p>
-        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>Evidence starts with an original, then earns its place in a draft.</h1>
-        <p className="research-intro">Create one synthetic California workspace, intake its fictional electricity statement, review a correction, and pin that exact version to the 2023 draft.</p>
+        <p className="research-eyebrow">M56 local development demonstration</p>
+        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>A reviewed bill becomes a traceable draft calculation.</h1>
+        <p className="research-intro">Review one fictional California electricity statement, pin its exact version, and calculate with the development eGRID CAMX method while keeping every link inspectable.</p>
       </div><span className="research-outline-label">Local · synthetic · deterministic</span></div>
       <div className="workspace-identity" role="group" aria-label="Synthetic identity">
         {(["owner", "admin", "member", "outsider", "signed_out"] as const).map((item) => <button type="button" key={item} disabled={busy} aria-pressed={actor === item} onClick={() => changeActor(item)}>{item === "owner" ? "Signed-in owner" : item === "admin" ? "Administrator" : item === "member" ? "Read-only member" : item === "outsider" ? "Other tenant" : "Signed out"}</button>)}
@@ -106,11 +137,19 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
             {bill.state === "needs_review" && <div className="bill-review"><label><input ref={facilityRef} type="checkbox" checked={facilityConfirmed} aria-describedby={!facilityConfirmed && isError ? "facility-error" : undefined} onChange={(event) => { setFacilityConfirmed(event.target.checked); setIsError(false) }} /> Assign to {workspace.facility.name}</label>{!facilityConfirmed && isError && <p id="facility-error" className="bill-field-error">Facility required.</p>}<p>Reviewer override: 12,345 → <strong>12,346 kWh</strong></p><p>Reason: Synthetic review exercise</p><button className="research-primary-button" type="button" disabled={busy || (actor !== "owner" && actor !== "admin")} onClick={reviewBill}>Save reviewed correction</button></div>}
             {bill.state === "reviewed" && <button className="research-primary-button" type="button" disabled={busy || (actor !== "owner" && actor !== "admin")} onClick={() => updateBill("link")}>Link version 2 to 2023 draft</button>}
             <div className="bill-history"><h3>Immutable history</h3>{bill.versions.map((version) => <p key={version.id}><strong>Version {version.version}</strong> · {Number(version.electricityKwh).toLocaleString()} kWh{version.correctionReason ? ` · ${version.correctionReason}` : " · deterministic extraction"}</p>)}</div>
-            {bill.draftActivity && <div className="bill-draft"><strong>Draft evidence — no emissions calculated</strong><span>{Number(bill.draftActivity.quantityMwh).toLocaleString()} MWh · pinned to version 2</span></div>}
+            {bill.draftActivity && !bill.draftCalculation && <div className="bill-draft"><strong>Draft evidence — ready to calculate</strong><span>{bill.draftActivity.quantityMwh} MWh · pinned to version 2</span><button className="research-primary-button" type="button" disabled={busy || (actor !== "owner" && actor !== "admin")} onClick={calculateBill}>Calculate location-based draft</button>{actor === "member" && <small>Read-only members can inspect results but cannot create them.</small>}</div>}
+            {bill.draftCalculation && <div className="bill-calculation">
+              <p className="research-eyebrow">Draft calculation · development factor · not released</p>
+              <h3 ref={resultRef} tabIndex={-1}>Draft location-based result</h3>
+              <div className="bill-calculation-total"><strong>{Number(bill.draftCalculation.total.display).toLocaleString(undefined, { minimumFractionDigits: 4 })}</strong><span aria-label="kilograms of carbon dioxide equivalent">kg CO2e</span></div>
+              <dl><div><dt>Reviewed activity</dt><dd>{bill.draftCalculation.normalizedQuantityMwh} MWh</dd></div><div><dt>Factor</dt><dd>{bill.draftCalculation.factor.value} kg CO2e/MWh</dd></div><div><dt>Geography and year</dt><dd>CAMX · 2023 factor data</dd></div><div><dt>Evidence</dt><dd>Bill version {bill.draftCalculation.billVersion} · January 2023</dd></div><div><dt>Created</dt><dd>{new Date(bill.draftCalculation.createdAt).toLocaleString()} · actor {bill.draftCalculation.createdBy}</dd></div></dl>
+              <details><summary>Inspect exact calculation and lineage</summary><p>Unrounded: {bill.draftCalculation.total.unrounded} kg CO2e</p><p>Published AI6 total is authoritative. Component sum: {bill.draftCalculation.reconciliation.componentSum}; delta: {bill.draftCalculation.reconciliation.componentRoundingDelta} kg CO2e.</p><p>Source: EPA eGRID2023 revision 2 · {bill.draftCalculation.factor.sheet}!{bill.draftCalculation.factor.totalOutputCell}</p><p>Method: {bill.draftCalculation.method.id} · {bill.draftCalculation.method.version}</p><p className="bill-hash">Bill version {bill.draftCalculation.billVersionPayloadSha256}</p><p className="bill-hash">Input {bill.draftCalculation.inputSnapshotSha256}</p><p className="bill-hash">Result {bill.draftCalculation.resultPayloadSha256}</p></details>
+              <div className="calculation-actions"><button className="research-secondary-button" type="button" onClick={downloadCalculation}>Download exact record</button><button className="research-secondary-button" type="button" disabled={busy || (actor !== "owner" && actor !== "admin")} onClick={replayCalculation}>Replay and verify</button></div>
+            </div>}
           </>}
         </div>
       </>}
-      <p className="workspace-boundary-note">Development evidence only. The bill is fictional and contains no customer data. No factor, emissions result, filing, assurance, production database, merge, deployment or release is involved.</p>
+      <p className="workspace-boundary-note">Development evidence and draft calculation only. The bill is fictional and contains no customer data. The factor and method are not released. No filing, assurance, production database, merge, deployment or release is involved.</p>
     </section>
   )
 }

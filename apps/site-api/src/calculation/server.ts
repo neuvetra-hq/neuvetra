@@ -7,11 +7,13 @@ const ALLOWED_ORIGIN = "http://127.0.0.1:5174"
 const MAX_BODY_BYTES = 64_000
 const stationaryEnginePath = path.join(import.meta.dir, "stationary_natural_gas.py")
 const electricityEnginePath = path.join(import.meta.dir, "location_based_electricity.py")
+const linkedBillEnginePath = path.join(import.meta.dir, "linked_bill_calculation.py")
 
 let engineBusy = false
 
 function chooseEngine(payload: unknown) {
-  const value = payload as { activity?: { electricity?: unknown }; record?: { contract_version?: unknown } } | null
+  const value = payload as { action?: unknown; activity?: { electricity?: unknown }; record?: { contract_version?: unknown } } | null
+  if (value?.action === "calculate_linked_bill") return linkedBillEnginePath
   if (value?.activity && "electricity" in value.activity) return electricityEnginePath
   if (value?.record?.contract_version === "m53-electricity-calculation-result-v1") return electricityEnginePath
   return stationaryEnginePath
@@ -56,6 +58,11 @@ export function createCalculationRoutes() {
       if (!originAllowed(request)) {
         set.status = 403
         return { status: "error", error: { code: "forbidden", field: "origin", message: "This development endpoint accepts only the local Neuvetra preview." } }
+      }
+      const publicAction = (body as { action?: unknown } | null)?.action
+      if (publicAction !== "calculate" && publicAction !== "replay") {
+        set.status = 422
+        return { status: "error", error: { code: "request_contract_invalid", field: "request", message: "Use the calculation or replay contract." } }
       }
       const response = await runEngine(body)
       if (response?.status === "error") {

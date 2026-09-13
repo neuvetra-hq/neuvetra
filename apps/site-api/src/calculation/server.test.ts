@@ -32,6 +32,17 @@ describe("M42 local calculation transport", () => {
   })
 })
 
+test("keeps the linked-bill adapter internal to the authenticated workspace", async () => {
+  const app = createCalculationRoutes()
+  const response = await app.handle(new Request("http://localhost/calculation/run", {
+    method: "POST",
+    headers: { origin: "http://127.0.0.1:5174", "content-type": "application/json" },
+    body: JSON.stringify({ action: "calculate_linked_bill", binding: {} }),
+  }))
+  expect(response.status).toBe(422)
+  expect(await response.json()).toMatchObject({ status: "error", error: { code: "request_contract_invalid" } })
+})
+
 describe("M53 location-based electricity transport", () => {
   test("dispatches to the electricity Decimal method", async () => {
     const response = await runEngine({ action: "calculate", activity: {

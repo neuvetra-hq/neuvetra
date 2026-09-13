@@ -1,5 +1,16 @@
 import { PGlite, type Transaction } from "@electric-sql/pglite"
 
+function canonicalJson(value: unknown): string {
+  if (value === null || typeof value !== "object") return JSON.stringify(value)
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`
+  const object = value as Record<string, unknown>
+  return `{${Object.keys(object).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(object[key])}`).join(",")}}`
+}
+
+function sha256(value: unknown): string {
+  return new Bun.CryptoHasher("sha256").update(canonicalJson(value)).digest("hex")
+}
+
 export interface CompanyWorkspaceRecord {
   id: string
   companyName: string
@@ -60,6 +71,42 @@ export interface SyntheticBillRecord {
     quantityMwh: string
     status: "draft"
   }
+  draftCalculation: SyntheticDraftCalculation | null
+}
+
+export interface SyntheticDraftCalculation {
+  id: string
+  activityVersionId: string
+  billVersionId: string
+  evidenceId: string
+  facilityId: string
+  boundaryId: string
+  billVersion: 2
+  sourceQuantityKwh: "12346.000"
+  normalizedQuantityMwh: "12.346000"
+  status: "draft"
+  classification: "development_candidate"
+  releaseEligible: false
+  method: { id: "scope2-location-based-egrid-subregion"; version: "2023-r2-camx-v1"; implementationSha256: string; reviewedEngineSha256: string; authorityRecordSha256: string }
+  factor: { id: "epa-egrid2023-r2-camx-total-output"; version: "eGRID2023-revision-2"; candidateSha256: string; sourceSha256: string; sheet: "SRL23"; totalOutputCell: "AI6"; value: "195.0402888" }
+  gwpPolicy: { id: "epa-egrid2023-ar5-100-year"; version: "egrid2023-technical-guide-v1"; policySha256: string }
+  inputSnapshotSha256: string
+  resultPayloadSha256: string
+  total: { unrounded: "2407.9674055248"; display: "2407.9674"; unit: "kg CO2e"; rounding: string }
+  gasResults: Record<string, unknown>
+  reconciliation: { authority: string; componentSum: "2407.8330020304"; componentRoundingDelta: "0.1344034944"; explanation: string }
+  trace: Array<Record<string, unknown>>
+  billVersionPayloadSha256: string
+  createdBy: string
+  createdAt: string
+  record: Record<string, unknown>
+}
+
+export interface SyntheticCalculationLineage {
+  extractionId: string
+  parserVersion: "m55-fixed-pdf-v1"
+  previousBillVersionId: string
+  activityVersion: 1
 }
 
 interface WorkspaceRow {
@@ -98,6 +145,7 @@ interface BillVersionRow {
   facility_id: string | null
   electricity_kwh: string
   correction_reason: string | null
+  previous_version_id: string | null
 }
 
 interface ActivityRow {
@@ -105,6 +153,31 @@ interface ActivityRow {
   bill_version_id: string
   quantity_mwh: string
   status: "draft"
+}
+
+interface CalculationRow {
+  id: string
+  activity_version_id: string
+  bill_version_id: string
+  evidence_id: string
+  facility_id: string
+  boundary_id: string
+  source_quantity_kwh: string
+  normalized_quantity_mwh: string
+  status: "draft"
+  classification: "development_candidate"
+  release_eligible: false
+  adapter_implementation_sha256: string
+  reviewed_engine_sha256: string
+  authority_record_sha256: string
+  factor_candidate_sha256: string
+  source_sha256: string
+  gwp_policy_sha256: string
+  input_snapshot_sha256: string
+  result_payload_sha256: string
+  result_payload_json: string
+  created_by: string
+  created_at: string
 }
 
 const WORKSPACE_QUERY = `
@@ -165,6 +238,8 @@ export class DevelopmentWorkspaceDatabase {
     await db.exec(migration)
     const billMigration = await Bun.file(new URL("./migrations/0002_synthetic_bill_intake.sql", import.meta.url)).text()
     await db.exec(billMigration)
+    const calculationMigration = await Bun.file(new URL("./migrations/0003_synthetic_bill_calculation.sql", import.meta.url)).text()
+    await db.exec(calculationMigration)
     return new DevelopmentWorkspaceDatabase(db)
   }
 
@@ -244,7 +319,7 @@ export class DevelopmentWorkspaceDatabase {
     )
     if (evidence.rows.length !== 1) return null
     const versions = await tx.query<BillVersionRow>(
-      `select id, version, facility_id, electricity_kwh::text, correction_reason
+      `select id, version, facility_id, electricity_kwh::text, correction_reason, previous_version_id
        from neuvetra.bill_versions where company_id = $1 and evidence_id = $2 order by version`,
       [companyId, evidenceId],
     )
@@ -254,6 +329,16 @@ export class DevelopmentWorkspaceDatabase {
        where a.company_id = $1 and v.evidence_id = $2 order by a.version desc limit 1`,
       [companyId, evidenceId],
     )
+    const calculation = await tx.query<CalculationRow>(
+      `select c.id, c.activity_version_id, c.bill_version_id, c.evidence_id, c.facility_id, c.boundary_id,
+        c.source_quantity_kwh::text, c.normalized_quantity_mwh::text, c.status, c.classification, c.release_eligible,
+        c.adapter_implementation_sha256, c.reviewed_engine_sha256, c.authority_record_sha256, c.factor_candidate_sha256, c.source_sha256, c.gwp_policy_sha256,
+        c.input_snapshot_sha256, c.result_payload_sha256, c.result_payload_json, c.created_by, c.created_at::text
+       from neuvetra.inventory_calculation_results c
+       join neuvetra.bill_versions v on v.company_id = c.company_id and v.id = c.bill_version_id
+       where c.company_id = $1 and v.evidence_id = $2 limit 1`,
+      [companyId, evidenceId],
+    )
     const row = evidence.rows[0]!
     const activityRow = activity.rows[0]
     const draftActivity = activityRow ? {
@@ -261,6 +346,53 @@ export class DevelopmentWorkspaceDatabase {
       billVersionId: activityRow.bill_version_id,
       quantityMwh: activityRow.quantity_mwh,
       status: activityRow.status,
+    } : null
+    const calculationRow = calculation.rows[0]
+    const payload = calculationRow ? JSON.parse(calculationRow.result_payload_json) as Record<string, any> : null
+    if (calculationRow && payload) {
+      const unhashed = Object.fromEntries(Object.entries(payload).filter(([key]) => key !== "result_payload_sha256"))
+      if (canonicalJson(payload) !== calculationRow.result_payload_json || sha256(unhashed) !== calculationRow.result_payload_sha256 || sha256(payload.input_snapshot) !== calculationRow.input_snapshot_sha256) throw new Error("Stored calculation integrity check failed.")
+    }
+    const billVersionPayloadSha256 = versions.rows[1] ? sha256({
+      id: versions.rows[1].id, version: versions.rows[1].version, facilityId: versions.rows[1].facility_id,
+      electricityKwh: versions.rows[1].electricity_kwh, correctionReason: versions.rows[1].correction_reason,
+      previousVersionId: versions.rows[1].previous_version_id,
+    }) : null
+    const draftCalculation: SyntheticDraftCalculation | null = calculationRow && payload && billVersionPayloadSha256 ? {
+      id: calculationRow.id,
+      activityVersionId: calculationRow.activity_version_id,
+      billVersionId: calculationRow.bill_version_id,
+      evidenceId: calculationRow.evidence_id,
+      facilityId: calculationRow.facility_id,
+      boundaryId: calculationRow.boundary_id,
+      billVersion: 2,
+      sourceQuantityKwh: calculationRow.source_quantity_kwh as "12346.000",
+      normalizedQuantityMwh: calculationRow.normalized_quantity_mwh as "12.346000",
+      status: calculationRow.status,
+      classification: calculationRow.classification,
+      releaseEligible: calculationRow.release_eligible,
+      method: { id: payload.method.id, version: payload.method.version, implementationSha256: calculationRow.adapter_implementation_sha256, reviewedEngineSha256: calculationRow.reviewed_engine_sha256, authorityRecordSha256: calculationRow.authority_record_sha256 },
+      factor: {
+        id: payload.factor.id, version: payload.factor.version, candidateSha256: calculationRow.factor_candidate_sha256,
+        sourceSha256: calculationRow.source_sha256, sheet: payload.factor.source.sheet,
+        totalOutputCell: payload.factor.total_output_co2e.cell, value: payload.factor.total_output_co2e.value,
+      },
+      gwpPolicy: { id: payload.gwp_policy.id, version: payload.gwp_policy.version, policySha256: calculationRow.gwp_policy_sha256 },
+      inputSnapshotSha256: calculationRow.input_snapshot_sha256,
+      resultPayloadSha256: calculationRow.result_payload_sha256,
+      total: payload.total,
+      gasResults: payload.gas_results,
+      reconciliation: {
+        authority: payload.reconciliation.authority,
+        componentSum: payload.reconciliation.component_sum,
+        componentRoundingDelta: payload.reconciliation.component_rounding_delta,
+        explanation: payload.reconciliation.explanation,
+      },
+      trace: payload.trace,
+      billVersionPayloadSha256,
+      createdBy: calculationRow.created_by,
+      createdAt: calculationRow.created_at,
+      record: { calculationId: calculationRow.id, billVersionPayloadSha256, createdBy: calculationRow.created_by, createdAt: calculationRow.created_at, result: payload },
     } : null
     return {
       id: row.id,
@@ -288,6 +420,7 @@ export class DevelopmentWorkspaceDatabase {
         correctionReason: version.correction_reason,
       })),
       draftActivity,
+      draftCalculation,
     }
   }
 
@@ -335,6 +468,47 @@ export class DevelopmentWorkspaceDatabase {
 
   async findSyntheticBill(userId: string, companyId: string, evidenceId: string): Promise<SyntheticBillRecord | null> {
     return this.asUser(userId, (tx) => this.readBill(tx, companyId, evidenceId))
+  }
+
+  async findSyntheticCalculationLineage(userId: string, companyId: string, evidenceId: string): Promise<SyntheticCalculationLineage | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<{ extraction_id: string; parser_version: "m55-fixed-pdf-v1"; previous_bill_version_id: string; activity_version: 1 }>(
+        `select j.id extraction_id, j.parser_version, v.previous_version_id previous_bill_version_id, a.version activity_version
+         from neuvetra.extraction_jobs j
+         join neuvetra.bill_versions v on v.company_id = j.company_id and v.evidence_id = j.evidence_id and v.version = 2
+         join neuvetra.inventory_activity_versions a on a.company_id = v.company_id and a.bill_version_id = v.id
+         where j.company_id = $1 and j.evidence_id = $2 and j.status = 'completed'`,
+        [companyId, evidenceId],
+      )
+      const row = result.rows[0]
+      return row ? { extractionId: row.extraction_id, parserVersion: row.parser_version, previousBillVersionId: row.previous_bill_version_id, activityVersion: row.activity_version } : null
+    })
+  }
+
+  async findSyntheticCalculationIdempotency(userId: string, companyId: string, idempotencyKey: string): Promise<{ operationFingerprint: string } | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<{ operation_fingerprint: string }>("select operation_fingerprint from neuvetra.inventory_calculation_results where company_id = $1 and idempotency_key = $2", [companyId, idempotencyKey])
+      return result.rows[0] ? { operationFingerprint: result.rows[0].operation_fingerprint } : null
+    })
+  }
+
+  async createSyntheticBillCalculation(userId: string, companyId: string, evidenceId: string, activityId: string, idempotencyKey: string, operationFingerprint: string, resultPayload: Record<string, unknown>): Promise<SyntheticBillRecord> {
+    return this.asTrustedUser(userId, async (tx) => {
+      const bill = await this.readBill(tx, companyId, evidenceId)
+      if (!bill?.draftActivity || bill.draftActivity.id !== activityId) throw new Error("Linked draft evidence required.")
+      const suppliedResultHash = resultPayload.result_payload_sha256
+      const unhashed = Object.fromEntries(Object.entries(resultPayload).filter(([key]) => key !== "result_payload_sha256"))
+      const inputSnapshot = resultPayload.input_snapshot
+      if (typeof suppliedResultHash !== "string" || suppliedResultHash !== sha256(unhashed) || typeof resultPayload.input_snapshot_sha256 !== "string" || resultPayload.input_snapshot_sha256 !== sha256(inputSnapshot)) {
+        throw new Error("Calculation integrity check failed.")
+      }
+      const canonicalResultJson = canonicalJson(resultPayload)
+      await tx.query(
+        "select neuvetra.create_synthetic_bill_calculation($1, $2, $3, $4, $5, $6, $7, $8)",
+        [companyId, evidenceId, activityId, crypto.randomUUID(), crypto.randomUUID(), idempotencyKey, operationFingerprint, canonicalResultJson],
+      )
+      return (await this.readBill(tx, companyId, evidenceId))!
+    })
   }
 
   async close() {

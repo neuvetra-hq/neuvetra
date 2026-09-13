@@ -33,7 +33,7 @@ const billFixture: SyntheticBill = {
   supplierName: "Synthetic Golden State Electric", accountLabel: "SYNTHETIC-0001", billNumber: "SYN-CA-2023-01",
   servicePeriodStart: "2023-01-01", servicePeriodEnd: "2023-01-31",
   sourceLocators: { servicePeriod: { startByte: 3119, endByte: 3147 }, electricityKwh: { startByte: 3384, endByte: 3394 } },
-  state: "needs_review", versions: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", version: 1, facilityId: null, electricityKwh: "12345.000", correctionReason: null }], draftActivity: null,
+  state: "needs_review", versions: [{ id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee", version: 1, facilityId: null, electricityKwh: "12345.000", correctionReason: null }], draftActivity: null, draftCalculation: null,
 }
 
 function setup() {
@@ -50,6 +50,7 @@ function setup() {
     async ingestBill() { throw new Error("not configured") },
     async correctBill() { throw new Error("not configured") },
     async linkBill() { throw new Error("not configured") },
+    async calculateBill() { throw new Error("not configured") },
     async findBill() { return null },
   }
   const users: Record<string, AuthenticatedUser> = {
@@ -124,6 +125,7 @@ describe("M54 authenticated workspace route", () => {
         ingestBill: async () => { throw new Error("not configured") },
         correctBill: async () => { throw new Error("not configured") },
         linkBill: async () => { throw new Error("not configured") },
+        calculateBill: async () => { throw new Error("not configured") },
         findBill: async () => null,
       },
     })
@@ -160,6 +162,7 @@ describe("M54 authenticated workspace route", () => {
         ingestBill: async () => { throw new Error("not configured") },
         correctBill: async () => { throw new Error("not configured") },
         linkBill: async () => { throw new Error("not configured") },
+        calculateBill: async () => { throw new Error("not configured") },
         findBill: async () => null,
       },
     })
@@ -200,6 +203,7 @@ describe("M54 authenticated workspace route", () => {
         ingestBill: async () => billFixture,
         correctBill: async () => billFixture,
         linkBill: async () => billFixture,
+        calculateBill: async () => billFixture,
         findBill: async () => billFixture,
       },
     })
@@ -211,5 +215,23 @@ describe("M54 authenticated workspace route", () => {
       expect(response.status).toBe(503)
       expect(await response.text()).not.toContain("private database detail")
     }
+  })
+
+  test("returns a bounded 503 when calculation execution fails", async () => {
+    const linked = { ...billFixture, state: "linked_draft" as const, draftActivity: { id: "12121212-1212-4212-8212-121212121212", billVersionId: billFixture.versions[0]!.id, quantityMwh: "12.346000", status: "draft" as const } }
+    const app = createWorkspaceRoutes({
+      allowedOrigins: [ORIGIN], validateUser: async () => ({ id: OWNER, phone: null, email: null, fullName: null }),
+      store: { create: async () => fixture, findById: async () => fixture, canManage: async () => true, ingestBill: async () => billFixture, correctBill: async () => billFixture, linkBill: async () => billFixture, findBill: async () => linked, calculateBill: async () => { throw new Error("private engine or database detail") } },
+    })
+    const response = await app.handle(request(`/workspace/${WORKSPACE_ID}/bills/${billFixture.id}/calculate`, "owner", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idempotencyKey: crypto.randomUUID() }) }))
+    expect(response.status).toBe(503)
+    expect(await response.json()).toEqual({ error: "No result produced." })
+    const conflictApp = createWorkspaceRoutes({
+      allowedOrigins: [ORIGIN], validateUser: async () => ({ id: OWNER, phone: null, email: null, fullName: null }),
+      store: { create: async () => fixture, findById: async () => fixture, canManage: async () => true, ingestBill: async () => billFixture, correctBill: async () => billFixture, linkBill: async () => billFixture, findBill: async () => linked, calculateBill: async () => { throw new Error("Calculation request conflicts.") } },
+    })
+    const conflict = await conflictApp.handle(request(`/workspace/${WORKSPACE_ID}/bills/${billFixture.id}/calculate`, "owner", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ idempotencyKey: crypto.randomUUID() }) }))
+    expect(conflict.status).toBe(409)
+    expect(await conflict.json()).toEqual({ error: "Calculation request conflicts." })
   })
 })

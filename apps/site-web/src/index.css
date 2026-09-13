@@ -30,6 +30,16 @@
 .workspace-record span { font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; }
 .workspace-record strong { font-size: 1.08rem; font-weight: 500; }
 .workspace-boundary-note { max-width: 760px; margin-top: 1.5rem; color: var(--research-muted); font-size: .9rem; }
+.bill-calculation { margin-top: 1.25rem; padding: 1.5rem; border: 1px solid var(--research-line); background: rgba(255,255,255,.035); }
+.bill-calculation-total { display: flex; gap: .6rem; align-items: baseline; margin: .6rem 0 1.3rem; }
+.bill-calculation-total strong { font-size: clamp(2.1rem, 6vw, 4.2rem); font-weight: 350; letter-spacing: -.04em; }
+.bill-calculation dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--research-line); border: 1px solid var(--research-line); }
+.bill-calculation dl div { padding: 1rem; background: #0b0c0d; }
+.bill-calculation dt { color: var(--research-muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; }
+.bill-calculation dd { margin: .35rem 0 0; }
+.bill-calculation details { margin-top: 1.2rem; }
+.bill-calculation summary { cursor: pointer; font-weight: 500; }
+.bill-hash { overflow-wrap: anywhere; color: var(--research-muted); font-size: .78rem; }
 .bill-panel { margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--research-line); border-radius: 10px; background: #131917; }
 .bill-panel-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: 1.5rem; }
 .bill-panel-heading h2 { margin-top: .5rem; font-size: 1.8rem; font-weight: 400; }
@@ -51,6 +61,7 @@
 @media (max-width: 760px) {
   .workspace-demo-heading { grid-template-columns: 1fr; }
   .workspace-record { grid-template-columns: 1fr; }
+  .bill-calculation dl { grid-template-columns: 1fr; }
   .bill-facts { grid-template-columns: 1fr; }
   .bill-facts > div { border-right: 0; border-bottom: 1px solid var(--research-line); }
   .bill-draft, .bill-panel-heading { flex-direction: column; }

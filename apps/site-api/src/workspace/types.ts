@@ -34,6 +34,7 @@ export interface WorkspaceStore {
   ingestBill(userId: string, workspaceId: string, bytes: Uint8Array, sha256: string): Promise<SyntheticBill>
   correctBill(userId: string, workspaceId: string, evidenceId: string, facilityId: string): Promise<SyntheticBill>
   linkBill(userId: string, workspaceId: string, evidenceId: string, boundaryId: string): Promise<SyntheticBill>
+  calculateBill(userId: string, workspaceId: string, evidenceId: string, idempotencyKey: string): Promise<SyntheticBill>
   findBill(userId: string, workspaceId: string, evidenceId: string): Promise<SyntheticBill | null>
 }
 
@@ -67,5 +68,32 @@ export interface SyntheticBill {
     billVersionId: string
     quantityMwh: string
     status: "draft"
+  }
+  draftCalculation: null | {
+    id: string
+    activityVersionId: string
+    billVersionId: string
+    evidenceId: string
+    facilityId: string
+    boundaryId: string
+    billVersion: 2
+    sourceQuantityKwh: "12346.000"
+    normalizedQuantityMwh: "12.346000"
+    status: "draft"
+    classification: "development_candidate"
+    releaseEligible: false
+    method: { id: "scope2-location-based-egrid-subregion"; version: "2023-r2-camx-v1"; implementationSha256: string; reviewedEngineSha256: string; authorityRecordSha256: string }
+    factor: { id: "epa-egrid2023-r2-camx-total-output"; version: "eGRID2023-revision-2"; candidateSha256: string; sourceSha256: string; sheet: "SRL23"; totalOutputCell: "AI6"; value: "195.0402888" }
+    gwpPolicy: { id: "epa-egrid2023-ar5-100-year"; version: "egrid2023-technical-guide-v1"; policySha256: string }
+    inputSnapshotSha256: string
+    resultPayloadSha256: string
+    total: { unrounded: "2407.9674055248"; display: "2407.9674"; unit: "kg CO2e"; rounding: string }
+    gasResults: Record<string, unknown>
+    reconciliation: { authority: string; componentSum: "2407.8330020304"; componentRoundingDelta: "0.1344034944"; explanation: string }
+    trace: Array<Record<string, unknown>>
+    billVersionPayloadSha256: string
+    createdBy: string
+    createdAt: string
+    record: Record<string, unknown>
   }
 }

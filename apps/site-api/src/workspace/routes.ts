@@ -13,6 +13,9 @@ const READ_FAILED = { error: "Workspace is unavailable." } as const
 const EVIDENCE_NOT_FOUND = { error: "Evidence not found." } as const
 const FILE_REJECTED = { error: "This file cannot be processed in this demo." } as const
 const REVIEW_CONFLICT = { error: "This record changed; review the latest version." } as const
+const NO_RESULT = { error: "No result produced." } as const
+const REPLAY_FAILED = { error: "Replay could not be verified." } as const
+const CALCULATION_CONFLICT = { error: "Calculation request conflicts." } as const
 const INPUT_KEYS = ["companyName", "facilityName", "countryCode", "stateCode", "egridSubregion", "reportingYear", "approach"] as const
 
 interface WorkspaceRoutesDeps {
@@ -87,6 +90,22 @@ const billResponseSchema = t.Object({
   draftActivity: t.Union([t.Null(), t.Object({
     id: t.String({ format: "uuid" }), billVersionId: t.String({ format: "uuid" }), quantityMwh: t.String(), status: t.Literal("draft"),
   })]),
+  draftCalculation: t.Union([t.Null(), t.Object({
+    id: t.String({ format: "uuid" }), activityVersionId: t.String({ format: "uuid" }), billVersionId: t.String({ format: "uuid" }),
+    evidenceId: t.String({ format: "uuid" }), facilityId: t.String({ format: "uuid" }), boundaryId: t.String({ format: "uuid" }),
+    billVersion: t.Literal(2), sourceQuantityKwh: t.Literal("12346.000"), normalizedQuantityMwh: t.Literal("12.346000"),
+    status: t.Literal("draft"), classification: t.Literal("development_candidate"), releaseEligible: t.Literal(false),
+    method: t.Object({ id: t.Literal("scope2-location-based-egrid-subregion"), version: t.Literal("2023-r2-camx-v1"), implementationSha256: t.String(), reviewedEngineSha256: t.String(), authorityRecordSha256: t.String() }),
+    factor: t.Object({ id: t.Literal("epa-egrid2023-r2-camx-total-output"), version: t.Literal("eGRID2023-revision-2"), candidateSha256: t.String(), sourceSha256: t.String(), sheet: t.Literal("SRL23"), totalOutputCell: t.Literal("AI6"), value: t.Literal("195.0402888") }),
+    gwpPolicy: t.Object({ id: t.Literal("epa-egrid2023-ar5-100-year"), version: t.Literal("egrid2023-technical-guide-v1"), policySha256: t.String() }),
+    inputSnapshotSha256: t.String(), resultPayloadSha256: t.String(),
+    total: t.Object({ unrounded: t.Literal("2407.9674055248"), display: t.Literal("2407.9674"), unit: t.Literal("kg CO2e"), rounding: t.String() }),
+    gasResults: t.Record(t.String(), t.Unknown()),
+    reconciliation: t.Object({ authority: t.String(), componentSum: t.Literal("2407.8330020304"), componentRoundingDelta: t.Literal("0.1344034944"), explanation: t.String() }),
+    trace: t.Array(t.Record(t.String(), t.Unknown())),
+    billVersionPayloadSha256: t.String(), createdBy: t.String({ format: "uuid" }), createdAt: t.String(),
+    record: t.Record(t.String(), t.Unknown()),
+  })]),
 })
 
 export function createWorkspaceRoutes(deps: WorkspaceRoutesDeps) {
@@ -151,6 +170,43 @@ export function createWorkspaceRoutes(deps: WorkspaceRoutesDeps) {
       }
       try { return await deps.store.linkBill(user.id, params.id, params.evidenceId, value.boundaryId as string) }
       catch { set.status = 409; return REVIEW_CONFLICT }
+    }, { body: t.Unknown(), response: { 200: billResponseSchema, 401: t.Object({ error: t.String() }), 403: t.Object({ error: t.String() }), 404: t.Object({ error: t.String() }), 409: t.Object({ error: t.String() }), 422: t.Object({ error: t.String() }), 503: t.Object({ error: t.String() }) } })
+    .post("/:id/bills/:evidenceId/calculate", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser)
+      if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let bill
+      let canManage
+      try {
+        bill = await deps.store.findBill(user.id, params.id, params.evidenceId)
+        canManage = await deps.store.canManage(user.id, params.id)
+      } catch { set.status = 503; return READ_FAILED }
+      if (!bill) { set.status = 404; return EVIDENCE_NOT_FOUND }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).join("|") !== "idempotencyKey" || typeof value.idempotencyKey !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.idempotencyKey)) {
+        set.status = 422; return INVALID_REQUEST
+      }
+      if (!bill.draftActivity || bill.state !== "linked_draft") { set.status = 409; return REVIEW_CONFLICT }
+      try { return await deps.store.calculateBill(user.id, params.id, params.evidenceId, value.idempotencyKey) }
+      catch (error) { if (error instanceof Error && error.message === "Calculation request conflicts.") { set.status = 409; return CALCULATION_CONFLICT }; set.status = 503; return NO_RESULT }
+    }, { body: t.Unknown(), response: { 200: billResponseSchema, 401: t.Object({ error: t.String() }), 403: t.Object({ error: t.String() }), 404: t.Object({ error: t.String() }), 409: t.Object({ error: t.String() }), 422: t.Object({ error: t.String() }), 503: t.Object({ error: t.String() }) } })
+    .post("/:id/bills/:evidenceId/calculate/replay", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser)
+      if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let bill
+      let canManage
+      try {
+        bill = await deps.store.findBill(user.id, params.id, params.evidenceId)
+        canManage = await deps.store.canManage(user.id, params.id)
+      } catch { set.status = 503; return READ_FAILED }
+      if (!bill) { set.status = 404; return EVIDENCE_NOT_FOUND }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).sort().join("|") !== "idempotencyKey|record" || typeof value.idempotencyKey !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.idempotencyKey) || !bill.draftActivity || !bill.draftCalculation || JSON.stringify(value.record) !== JSON.stringify(bill.draftCalculation.record)) { set.status = 409; return REPLAY_FAILED }
+      try { return await deps.store.calculateBill(user.id, params.id, params.evidenceId, value.idempotencyKey) }
+      catch { set.status = 503; return NO_RESULT }
     }, { body: t.Unknown(), response: { 200: billResponseSchema, 401: t.Object({ error: t.String() }), 403: t.Object({ error: t.String() }), 404: t.Object({ error: t.String() }), 409: t.Object({ error: t.String() }), 422: t.Object({ error: t.String() }), 503: t.Object({ error: t.String() }) } })
     .get("/:id/bills/:evidenceId", async ({ params, request, set }) => {
       const origin = request.headers.get("origin")
