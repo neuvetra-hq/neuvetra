@@ -58,4 +58,4 @@ At a 390-pixel viewport, `innerWidth` and document `scrollWidth` both measured `
 
 This demonstrates one local PGlite-backed fictional bill only. It does not establish a released factor or method, hosted PostgreSQL/Supabase behavior, production authentication, customer-document processing, arbitrary quantities, other facilities/subregions/years, market-based Scope 2, complete inventories, filing or assurance. No model/provider request, credential, customer data, source expansion, deployment, merge or release occurred. Stage 4 and release acceptance remain false.
 
-The accepted M56 implementation and this status record were published to the existing PR at `8d3b2f0ac43d0c0175ef88e5d07675d9c59af348`. Stage 4, merge, deployment and release remain separate decisions.
+The accepted M56 implementation was published to the existing PR at `8d3b2f0ac43d0c0175ef88e5d07675d9c59af348`; this record reflects that publication. Stage 4, merge, deployment and release remain separate decisions.
