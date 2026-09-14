@@ -1,3 +1,4 @@
+import { createWorksheetRoutes } from "../workspace/m64-routes"
 import { HostedWorkspaceDatabase, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
@@ -81,9 +82,10 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       return access.workspace
     }),
   })
+  const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 9) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 10) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -121,6 +123,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
+      if (url.pathname.includes("/electricity-worksheet")) return worksheetRoutes(forwarded)
       return routes.handle(forwarded)
     }
     if (isGet) return await serveAsset(url.pathname) ?? json(404, { error: "Not found." })

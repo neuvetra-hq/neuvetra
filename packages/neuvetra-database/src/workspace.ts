@@ -1,3 +1,4 @@
+import { readElectricityWorksheet, validateWorksheetInput, validateWorksheetReview, type WorksheetInput, type WorksheetCorrection, type WorksheetReviewInput } from "./m64"
 import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
@@ -854,6 +855,27 @@ export class WorkspaceDatabase {
   })}
   async findDraftInventoryReportReview(userId:string,companyId:string,inventoryId:string,reportId:string):Promise<DraftInventoryReportReviewRecord|null>{return this.asUser(userId,tx=>this.readDraftInventoryReportReview(tx,companyId,inventoryId,reportId))}
 
+  async findElectricityWorksheet(userId: string, companyId: string) {
+    return this.asUser(userId, tx => readElectricityWorksheet(tx, companyId))
+  }
+  async saveElectricityWorksheet(userId: string, companyId: string, input: WorksheetInput | WorksheetCorrection, correction = false) {
+    validateWorksheetInput(input, correction)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.save_electricity_worksheet($1,$2::text::jsonb,$3)", [companyId, JSON.stringify(input), correction])
+      const result = await readElectricityWorksheet(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async reviewElectricityWorksheet(userId: string, companyId: string, input: WorksheetReviewInput) {
+    validateWorksheetReview(input)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.review_electricity_worksheet($1,$2::text::jsonb)", [companyId, JSON.stringify(input)])
+      const result = await readElectricityWorksheet(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
   async close() {
     await this.db.close()
   }
@@ -895,6 +917,7 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
     await db.exec(evidencePackMigration)
     await db.exec(await Bun.file(new URL("./migrations/0007_inventory_draft_report.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0008_inventory_draft_report_review.sql", import.meta.url)).text())
+    await db.exec(await Bun.file(new URL("./migrations/0010_manual_electricity_worksheet.sql", import.meta.url)).text())
     return new DevelopmentWorkspaceDatabase(db)
   }
 

@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, type WorkspaceConnection } from "@neuvetra/database"
+import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, revokeStagingAccess, M61_LIMITATION_ACKNOWLEDGMENTS, M64_LIMITATIONS, type WorkspaceConnection } from "@neuvetra/database"
 import { createStagingServer } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 
@@ -74,12 +74,43 @@ integration("M63 hosted SQL through staged API completes exact synthetic flow an
     expect(reportDownload.status).toBe(200)
     const reportBytes = await reportDownload.arrayBuffer()
     expect(new Bun.CryptoHasher("sha256").update(reportBytes).digest("hex")).toBe(report.reportSha256)
+    // M64 native-driver regression: JSON text must not become a JSON scalar.
+    // The fractional neighbor also catches NUMERIC intermediate division rounding.
+    const worksheetRoute = `${root}/electricity-worksheet`
+    const manual = { companyLabel: "Fictional Cedar Company", facilityLabel: "Fictional CAMX office", quantityKwh: "62499.999", period: "2023-01", geography: "CAMX", unit: "kWh", idempotencyKey: crypto.randomUUID() }
+    expect((await read(worksheetRoute)).versions).toEqual([])
+    expect((await request(worksheetRoute, "member", manual)).status).toBe(403)
+    expect((await request(worksheetRoute, "outsider")).status).toBe(404)
+    const worksheet = await read(worksheetRoute, "owner", manual)
+    const first = worksheet.versions[0]
+    expect(first.total).toMatchObject({ unrounded: "12190.0178549597112", display: "12190.0179" })
+    expect((await read(worksheetRoute, "owner", { ...manual, idempotencyKey: crypto.randomUUID() })).versions[0].id).toBe(first.id)
+    const reviewInput = { versionId: first.id, expectedResultSha256: first.resultSha256, decision: "accept_bounded_internal_draft", note: null, acknowledgedLimitations: [...M64_LIMITATIONS], idempotencyKey: crypto.randomUUID() }
+    expect((await request(`${worksheetRoute}/reviews`, "owner", reviewInput)).status).toBe(409)
+    const acceptedWorksheet = await read(`${worksheetRoute}/reviews`, "admin", reviewInput)
+    const firstReview = acceptedWorksheet.versions[0].review
+    expect(firstReview.reviewerId).toBe(admin)
+    const correctionInput = { ...manual, quantityKwh: "62500", idempotencyKey: crypto.randomUUID(), expectedVersionId: first.id, expectedResultSha256: first.resultSha256, correctionReason: "Corrected fractional synthetic entry" }
+    const corrections = await Promise.all([
+      read(`${worksheetRoute}/corrections`, "owner", correctionInput),
+      read(`${worksheetRoute}/corrections`, "owner", { ...correctionInput, idempotencyKey: crypto.randomUUID() }),
+    ])
+    const worksheetAfter = corrections[0]
+    expect(worksheetAfter.versions).toHaveLength(2)
+    expect(corrections[1].versions[1].id).toBe(worksheetAfter.versions[1].id)
+    expect(worksheetAfter.versions[1].total).toMatchObject({ unrounded: "12190.01805", display: "12190.0180" })
+    expect(worksheetAfter.versions[1].review).toBeNull()
+    expect(worksheetAfter.versions[0].review).toEqual(firstReview)
+    expect((await request(`${worksheetRoute}/corrections`, "owner", { ...correctionInput, quantityKwh: "1", idempotencyKey: crypto.randomUUID() })).status).toBe(409)
+    expect((await request(`${worksheetRoute}/corrections`, "owner", { ...correctionInput, quantityKwh: "1\n", idempotencyKey: crypto.randomUUID() })).status).toBe(422)
     await app.close(); app = await create()
     expect((await read("/session", "admin")).access.evidenceId).toBe(bill.id)
     expect(await read(`${reviewRoute}/current`, "member")).toEqual(decision)
     expect((await request(`${reviewRoute}/current`, "outsider")).status).toBe(404)
     expect((await request(`${reviewRoute}/current`, null)).status).toBe(401)
     expect((await read(`${annualRoot}/draft-reports/current`, "member")).reportSha256).toBe(report.reportSha256)
+    expect(await read(worksheetRoute, "member")).toEqual(worksheetAfter)
+    expect((await request(worksheetRoute, null)).status).toBe(401)
     await revokeStagingAccess(operator, member)
     expect((await request(`${reviewRoute}/current`, "member")).status).toBe(403)
   } finally { await app?.close(); await operator.close() }

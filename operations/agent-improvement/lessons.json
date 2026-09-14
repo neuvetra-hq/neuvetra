@@ -61,6 +61,18 @@
         "operations/agent-improvement/historical-evidence.json#L06"
       ],
       "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L07",
+      "owner_role": "data-database",
+      "trigger": "Exact decimal calculations or structured JSON parameters cross the production database driver.",
+      "required_check": "Persist independently derived boundary and half-even tie cases through the actual PostgreSQL driver, read them back through the API/frontend decoder, and run that regression in CI. Embedded database or in-memory arithmetic passes cannot substitute for the native driver boundary.",
+      "evidence": [
+        "docs/research/m64-accounting-implementation-review.md",
+        "evaluations/research-qa/milestone64-private-worksheet.md",
+        ".github/workflows/verify.yml"
+      ],
+      "status": "adopted_pending_effectiveness"
     }
   ]
 }

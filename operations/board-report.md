@@ -1,3 +1,7 @@
+# M64 underway
+
+The board authorized starting M64. Accounting approved strict synthetic quantity inputs and independently derived rounding cases. CTO owns database/API implementation; root owns guided entry and existing-host integration. Independent QA is dispatched in reused m63_data context after the runtime refused a fresh agent at its thread limit. This context authored M63 database/adapter/containment and source-manifest code, but no M64 code; its M64 review is independent, inherited M63 code receives regression checks. Requested critical routes are Astra/high; actual compute/cost remain unobserved. Implementation and independent local QA pass. Supplemental publication review and hosted deployment/browser verification remain pending. Preserve exact M63 report/review; rolling draft PR4 remains unmerged.
+
 # Neuvetra board update — M63 accepted; M64 selected
 
 The board has accepted the repaired live workflow. M63 is complete for private synthetic testing; the same saved report and manager review remain intact. Live readiness and signed-out refusal were rechecked, and all five checks on the deployed repair pass. The browser defect stays in the performance record rather than being erased by its fix.

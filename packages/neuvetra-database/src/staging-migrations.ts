@@ -4,7 +4,7 @@ import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audi
 export const STAGING_MIGRATIONS = [
   "0001_company_workspace.sql", "0002_synthetic_bill_intake.sql", "0003_synthetic_bill_calculation.sql",
   "0004_inventory_review.sql", "0005_annual_electricity_register.sql", "0006_inventory_evidence_pack.sql",
-  "0007_inventory_draft_report.sql", "0008_inventory_draft_report_review.sql", "0009_private_staging.sql",
+  "0007_inventory_draft_report.sql", "0008_inventory_draft_report_review.sql", "0009_private_staging.sql", "0010_manual_electricity_worksheet.sql",
 ] as const
 
 export async function readMigrationManifest() {
@@ -30,7 +30,16 @@ export async function migratePrivateStaging(db: WorkspaceConnection, approval: {
   await db.transaction(async tx => {
     await tx.query("select pg_advisory_xact_lock(630009)")
     const existing = await tx.query<{ present: boolean }>("select exists(select 1 from pg_namespace where nspname='neuvetra') present")
-    if (existing.rows[0]?.present) { await validateExisting(tx, approval.expectedProjectRef, manifest); return }
+    if (existing.rows[0]?.present) {
+      const receipts = await tx.query<{ name: string; sha256: string }>("select name,sha256 from neuvetra.schema_migrations order by name")
+      if (receipts.rows.length !== 9 && receipts.rows.length !== manifest.length) throw new Error("Unknown staging migration baseline.")
+      await validateExisting(tx, approval.expectedProjectRef, manifest.slice(0,receipts.rows.length))
+      for (const migration of manifest.slice(receipts.rows.length)) {
+        await tx.exec(migration.sql)
+        await tx.query("insert into neuvetra.schema_migrations(name,sha256) values($1,$2)",[migration.name,migration.sha256])
+      }
+      return
+    }
     // Supabase must provide real Auth; no fake users, auth function or role creation here.
     await tx.query("select auth.uid()")
     const auth = await tx.query<{ present: boolean }>("select to_regclass('auth.users') is not null and exists(select 1 from pg_roles where rolname='authenticated') present")

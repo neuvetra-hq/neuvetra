@@ -1,17 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T20:08:53.1330401Z",
+  "updated_at": "2026-09-14T20:46:22.324327+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M64",
     "name": "Guided synthetic electricity entry and versioned draft worksheet",
-    "status": "planned",
-    "next_gate": "Independent accounting approval of variable-input precision/range/rounding and expected cases before engineering implementation.",
+    "status": "in_progress",
+    "next_gate": "Publish reviewed M64 implementation to rolling PR4, verify six remote CI checks, controlled migration/image promotion and actual signed-in browser.",
     "evidence": [
       "docs/research/guided-electricity-entry-milestone-64.md",
-      "evaluations/research-qa/m63-board-closure.md"
+      "evaluations/research-qa/m63-board-closure.md",
+      "evaluations/research-qa/milestone64-private-worksheet.md"
     ]
   },
   "completed_milestones": [
@@ -88,23 +89,23 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M61 local browser acceptance completed end to end; all temporary M61 API and preview listeners are closed. No persistent M61 service is configured.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M61 passed the complete local browser workflow and independent QA. A second manager can record one immutable acceptance or routed change request for the exact M60 report hash, with a separately verified decision snapshot and exact audit binding."
+    "last_session_work": "Accounting and CTO implementation assignments finished. Independent M64 QA local gate passes; supplemental publication review running in reused m63_data context. Root owns hosted publication/browser verification."
   },
   "session_handoff": {
     "saved_at": "2026-09-14T17:08:58Z",
     "path": "operations/next-session.md",
     "board_record": "docs/research/inventory-draft-report-review-milestone-61.md",
-    "next_task": "Execute M62 merge readiness: resolve the inherited TBD GHG fixtures, reconcile the PR diff and pass exact remote CI before final merge authorization.",
-    "execution_state": "m61_complete_independently_accepted_published_to_pr_no_release_acceptance",
+    "next_task": "Complete M64 guided synthetic worksheet on rolling PR4.",
+    "execution_state": "m64_implementation_in_progress",
     "review": "Independent QA 922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5 passes after five resolved findings. Linux CI then exposed only a 5.066-second composed-test timeout against a 5-second default; the test-only 30-second deadline repair passed independent follow-up QA c63d8d236bf5f7321fbcff618839ce789627a3d3e2972340a51c83a270d8c42f, focused 4/131 and full API 625/5,451. Fresh Linux CI is pending. The broad historical test:ghg collector remains blocked by three inherited TBD expected values outside M61.",
-    "scope": "One immutable second-manager decision for the exact M60 synthetic report, with exact acknowledgements or one bounded route and note. No customer data, report revision, hosted persistence, assurance, deployment, merge or release."
+    "scope": "Bounded synthetic January2023 CAMX manual worksheet; immutable corrections and exact-version review."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
     "commit": "367497e750530c590c7eedd229e48a34e2daf8b8",
     "github_verified": true
   },
-  "working_branch": "codex/m57-inventory-review",
+  "working_branch": "codex/m63-private-staging",
   "publication": {
     "repository": "https://github.com/neuvetra-hq/neuvetra",
     "implementation_commit": "84d55b7fcfb4b0f127c5ede80b13e389652a0a80",
@@ -473,7 +474,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01–E06 and P01–P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00e2\u20ac\u201cE06 and P01\u00e2\u20ac\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",

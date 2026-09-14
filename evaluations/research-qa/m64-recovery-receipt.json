@@ -1,0 +1,198 @@
+{
+  "status": "passed",
+  "source": "m64_qa",
+  "target": "m64_qa_restore",
+  "tables": [
+    {
+      "name": "annual_inventory_audit_log",
+      "count": 55,
+      "sha256": "600c4e4a4502a3a5ad4bc03636b8ac4940f62a05986bd2b2a05bf5a82d98a474"
+    },
+    {
+      "name": "annual_inventory_review_decisions",
+      "count": 13,
+      "sha256": "1af1cee0f9881c8c9fbdb92128fe12f33aceeae8665f0995007d9cb53d3d3d51"
+    },
+    {
+      "name": "annual_inventory_versions",
+      "count": 14,
+      "sha256": "a3d3238fb8758c5d320583ed0b6c712cdc1c0ca7deeeabcee5c11f735839a9fb"
+    },
+    {
+      "name": "annual_source_register_versions",
+      "count": 28,
+      "sha256": "219b4fe92724c9149b8bfc85bf722ad48b1fecae193803543019abd0a7c2be9f"
+    },
+    {
+      "name": "audit_events",
+      "count": 46,
+      "sha256": "ca16a254382a673917a011f47855c1b29587ad94f2ce087d49e83f00f1da7c14"
+    },
+    {
+      "name": "bill_evidence",
+      "count": 17,
+      "sha256": "6cc9803d1ada0425fd2d7c0dcbf07cfda9e6f87024d0ca11cdf7cb7d29cf1dc1"
+    },
+    {
+      "name": "bill_summary_cache",
+      "count": 34,
+      "sha256": "de22697bde72f532206e61e02c8f8c9fe3660d7e8e2bcd25105179e8c39a30e2"
+    },
+    {
+      "name": "bill_versions",
+      "count": 34,
+      "sha256": "6b15d9c6a2599a19d69ac10e018bd9b08fef79c54c6d152e0bcd7fcbc6a664eb"
+    },
+    {
+      "name": "boundary_facilities",
+      "count": 46,
+      "sha256": "962f3f9adc501b03f3872f0a2f205225d1c588f7ca65e250c1a51fe4d9449267"
+    },
+    {
+      "name": "calculation_audit_log",
+      "count": 14,
+      "sha256": "17183a48958617ad2671b24ddceb07d062b32fb93348e2c85777f621c20e4120"
+    },
+    {
+      "name": "companies",
+      "count": 46,
+      "sha256": "d2c6061566f69d0c02c346ec46c424c70de933fa9280d6aaa2c5da58a23336f1"
+    },
+    {
+      "name": "company_members",
+      "count": 98,
+      "sha256": "0c4e60ddbb20add49e4331b9b381220fb49fd375c70791688b7ab664e3991331"
+    },
+    {
+      "name": "electricity_worksheet_audit",
+      "count": 23,
+      "sha256": "c5c2bb0bb220ac28aae2dd4bd4b3752c9c914ecbfaf6ea04f6217328b7f4ea98"
+    },
+    {
+      "name": "electricity_worksheet_requests",
+      "count": 29,
+      "sha256": "d13d0055e42051d1cddcdb11277690a07bfb9a888d763de013eac3f915b275ce"
+    },
+    {
+      "name": "electricity_worksheet_reviews",
+      "count": 6,
+      "sha256": "d0bf14b12563717c674f234786c0cc761c365dd16392dad255f3edb0c1c12dcc"
+    },
+    {
+      "name": "electricity_worksheet_versions",
+      "count": 17,
+      "sha256": "7cd99ba76ea7101fac0d488f6765466e7e957c568ce254f6f0dc5c3311fad11f"
+    },
+    {
+      "name": "evidence_audit_log",
+      "count": 51,
+      "sha256": "55aa1df71dcbe569f54fe069879987f31644e15ac346cd9c1eba70a9a06fb0d8"
+    },
+    {
+      "name": "evidence_search_documents",
+      "count": 17,
+      "sha256": "339a6aabf783de233c716ba91c8c3e0095a808ff66ddef51f3a0bdefc0f40cc6"
+    },
+    {
+      "name": "extraction_jobs",
+      "count": 17,
+      "sha256": "cd9b0a7093e2b904d37e76485a7f4dab193255c46784fcbf3dcafc7ee63380f3"
+    },
+    {
+      "name": "facilities",
+      "count": 46,
+      "sha256": "7dbe787c6a4048034ad173f3487c1b77f8b7b95ee00eace051fd913208f56f77"
+    },
+    {
+      "name": "inventory_activity_versions",
+      "count": 17,
+      "sha256": "f44bc840c47dd8503925f516cc51755455b829d63d4d128926cb5402d0f5c26a"
+    },
+    {
+      "name": "inventory_calculation_results",
+      "count": 14,
+      "sha256": "c4001bbccd74879392150323c961ad6cd9934ee749231b31747c70c33aabdbe6"
+    },
+    {
+      "name": "inventory_draft_report_audit_log",
+      "count": 13,
+      "sha256": "1a71af928cd3b34fcf5109d355b41653c5b305edce319fc6e1753ecb30609fc6"
+    },
+    {
+      "name": "inventory_draft_report_review_audit_log",
+      "count": 13,
+      "sha256": "a35912c1e7c91ee810b4da52166116d948a2b5bb56664c269b4a75945013fb40"
+    },
+    {
+      "name": "inventory_draft_report_review_decisions",
+      "count": 13,
+      "sha256": "c881de99912ab95ca37d3bcd188842ff866a7393d2d5b777db96b048879c8a8e"
+    },
+    {
+      "name": "inventory_draft_reports",
+      "count": 13,
+      "sha256": "601243f883dffab78c16b5fcef2550aa035e4e28f23180e8590f0395dc116f81"
+    },
+    {
+      "name": "inventory_evidence_pack_audit_log",
+      "count": 13,
+      "sha256": "98c92c4d8a764771c2b05b106df8e7f1b6e04fff0f2fefddfab909cc03818de8"
+    },
+    {
+      "name": "inventory_evidence_packs",
+      "count": 13,
+      "sha256": "5aa8fcb13cbe8f7c32d92c88361a72b56ee7597e43de1215c4c63d4321b2cc13"
+    },
+    {
+      "name": "inventory_review_audit_log",
+      "count": 28,
+      "sha256": "b5b21ad5190021651a601608b874cd181b0c85ba28b0d3c35062807c23df91c3"
+    },
+    {
+      "name": "inventory_review_decisions",
+      "count": 14,
+      "sha256": "096e746ff6897392dc96e5bb1cf3251a4e0e56652aad9c738a96ad3a57bc8a91"
+    },
+    {
+      "name": "inventory_versions",
+      "count": 14,
+      "sha256": "8bb6a895d508ca3e163bd1d0cddc8a868d30ec069517edd37d5b379dc780b5d7"
+    },
+    {
+      "name": "reporting_boundaries",
+      "count": 46,
+      "sha256": "c3e15e744120ac538cb233825f834fcf64ceb75185bd401430ccb06d5aa5276e"
+    },
+    {
+      "name": "schema_migrations",
+      "count": 10,
+      "sha256": "503ca0753ef137639d9adf9d053493c5c0c9958ccbdd1f50d6bf9bcaf40370be"
+    },
+    {
+      "name": "staging_access",
+      "count": 95,
+      "sha256": "49cb3d84239d005e69d5e2c3babaaa06e76e6cbcd721047d34824a4012ed0f26"
+    },
+    {
+      "name": "staging_target",
+      "count": 1,
+      "sha256": "929e71b4e9d2672edaae0d2fcd71d5978f055f6e7fd613b764d4a8e2fc04c969"
+    }
+  ],
+  "metadata": {
+    "tables": {
+      "sha256": "ac8d4d515c9881e07465ce68837bf3470c104a7beb3f64e232c80c2b501ff03e"
+    },
+    "policies": {
+      "sha256": "b4a9f2d5d4a9158a91bff0cccbbf1fbd6230a44e07db1f5744c88cebb7080afa"
+    },
+    "functions": {
+      "sha256": "22ccc54981316569faeaa499e4de56ebf159e40d296db5a428b4679c0dfe13aa"
+    },
+    "schema": {
+      "sha256": "66ea9c16683a0826613059b5f053baebe6705d0781f3a433b1c295daedc98d2f"
+    }
+  },
+  "worksheetsVerifiedUnderRestrictedRuntime": 3,
+  "notes": "Local pg_dump/pg_restore; all rows hashed in memory only; original runtime role remains nonowner NOSUPERUSER NOBYPASSRLS; no Auth provider restore claim"
+}

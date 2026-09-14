@@ -1,3 +1,7 @@
+# Current continuation — M64 implementation underway
+
+The board authorized starting M64. Accounting approved strict synthetic quantity inputs and independently derived rounding cases. CTO owns database/API implementation; root owns guided entry and existing-host integration. Independent QA is dispatched in reused m63_data context after the runtime refused a fresh agent at its thread limit. This context authored M63 database/adapter/containment and source-manifest code, but no M64 code; its M64 review is independent, inherited M63 code receives regression checks. Requested critical routes are Astra/high; actual compute/cost remain unobserved. Implementation and independent local QA pass. Supplemental publication review and hosted deployment/browser verification remain pending. Preserve exact M63 report/review; rolling draft PR4 remains unmerged.
+
 # Current continuation — M63 accepted; M64 selected
 
 The board accepted the repaired live browser and confirmed no further M63 browser action is needed. M63 is complete for private synthetic staging: real sign-in, saved workflow, exact report/review, tenant boundaries, compatible rollback and application restore. Published implementation 952ab025156e4d60a10ad0ac30b237fa8d0a8a15 has five successful checks; deployment 937f007f-5ecd-4fed-a84d-7d9194d60292 and actual signed-in browser verification pass. Fresh readiness200/signed-out401 pass. See operations/feedback/2026-09-14-milestone-63.md and evaluations/research-qa/m63-board-closure.md. Preserve the F03 escaped defect and strengthened L04 checks.

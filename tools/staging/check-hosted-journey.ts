@@ -132,7 +132,7 @@ export async function runHostedJourney(input: Input, readOnly: boolean, testDepe
     }
     if (readOnly) valid(prior?.baseline)
     const readiness = await json("hosted_readiness", "/ready", null)
-    valid(readiness.status === "ready" && readiness.profile === PROFILE && readiness.schemaVersion === 9 && readiness.legacyContainmentVerified === true)
+    valid(readiness.status === "ready" && readiness.profile === PROFILE && readiness.schemaVersion === 10 && readiness.legacyContainmentVerified === true)
     const config = await json("hosted_public_config", "/workspace-api/config", null)
     valid(config.profile === PROFILE && config.supabaseUrl === AUTH && config.anonKey === input.env.SUPABASE_ANON_KEY)
     for (const account of input.accounts) {

@@ -1,0 +1,16 @@
+import { useState, type RefObject } from "react"
+import { CompanyWorkspaceDemo } from "./CompanyWorkspaceDemo"
+import { ElectricityWorksheet } from "./ElectricityWorksheet"
+import type { HostedWorkspaceActor } from "@/lib/workspace-api"
+
+export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
+  const [panel, setPanel] = useState<"worksheet" | "example">("worksheet")
+  return <>
+    <nav className="worksheet-nav" aria-label="Workspace views">
+      <button type="button" aria-pressed={panel === "worksheet"} onClick={() => setPanel("worksheet")}>Electricity worksheet</button>
+      <button type="button" aria-pressed={panel === "example"} onClick={() => setPanel("example")}>Saved example report</button>
+    </nav>
+    <div hidden={panel !== "worksheet"}><ElectricityWorksheet actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} /></div>
+    <div hidden={panel !== "example"}><CompanyWorkspaceDemo headingRef={headingRef} staging={staging} /></div>
+  </>
+}

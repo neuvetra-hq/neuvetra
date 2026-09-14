@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
 import { createClient, type Session, type SupabaseClient } from "@supabase/supabase-js"
-import { CompanyWorkspaceDemo } from "./CompanyWorkspaceDemo"
+import { StagingWorkspace } from "./StagingWorkspace"
 import { decodeStagingAccess, decodeStagingConfig, type StagingAccess } from "@/lib/staging-session"
 
 interface ActiveSession { session: Session; access: StagingAccess; epoch: number; controller: AbortController }
@@ -122,6 +122,6 @@ export function PrivateStaging() {
     <p className="staging-notice">Synthetic company records only. This is a private testing environment, not a customer inventory, filing or assurance service.</p>
     <p role="status" aria-live="polite">{message}</p>
     {!active && !signedIn && <section className="staging-signin"><h1>Welcome back</h1><p>Use the account approved for this private staging environment.</p><form onSubmit={event => void signIn(event)}><label>Email<input type="email" autoComplete="username" required value={email} onChange={event => setEmail(event.target.value)} /></label><button type="button" disabled={!client || busy} onClick={() => void sendSignInLink()}>Email me a sign-in link</button><label>Password<input type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label><button type="submit" disabled={!client || busy}>{busy ? "Signing in…" : "Sign in with password"}</button></form><p>Access is by invitation. There is no public registration.</p></section>}
-    {active && <CompanyWorkspaceDemo key={`${active.session.user.id}:${active.epoch}`} headingRef={headingRef} staging={{ actor: { accessToken: active.session.access_token, userId: active.session.user.id, role: active.access.access.role, signal: active.controller.signal, onUnauthorized: () => clearSession.current() }, workspaceId: active.access.access.workspaceId, evidenceId: active.access.access.evidenceId }} />}
+    {active && <StagingWorkspace key={`${active.session.user.id}:${active.epoch}`} headingRef={headingRef} staging={{ actor: { accessToken: active.session.access_token, userId: active.session.user.id, role: active.access.access.role, signal: active.controller.signal, onUnauthorized: () => clearSession.current() }, workspaceId: active.access.access.workspaceId, evidenceId: active.access.access.evidenceId }} />}
   </main>
 }

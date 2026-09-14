@@ -1,0 +1,151 @@
+{
+  "verdict": "local_gate_pass_hosted_browser_acceptance_pending",
+  "scope": "exact reviewed product/test/operator inputs; not remote publication evidence",
+  "artifacts": [
+    {
+      "path": "docs/research/guided-electricity-entry-milestone-64.md",
+      "sha256": "6f6edd287c8f86e8246a8a293a40763b1eea288e0a27b78c32dd17f2880d8602",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "docs/research/m64-accounting-contract.md",
+      "sha256": "168b89553fa980bf4e590b646576a103334e277c305146a4bd04a77b959b9030",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-accounting-cases.json",
+      "sha256": "4976c3fbf79433e5a11e62669423a95dbdfcb799316f170c59f2543a88d6b9e8",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64.ts",
+      "sha256": "0350d4119306fea6744e292c7c417a66496f5aff2a529f1f3e0c0098e03f16c4",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "03500bcf6229e8d83d6bcf9c435f6740a38829f8d8fdfa5082b6acddf93354e4",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "46ae6c9fef00dc1f0c384d69d7e1842054035cc408ba836abc6e27d3e5f679c5",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "162c84d7f2c76bc32a813f189ed6deeea88b84df05c36879fa4343fbe2416a71",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "c20a4f9ee1812d35748a0182863c29a8cd0fcc37c2daae4f31ce7aa922a88e58",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m64-routes.ts",
+      "sha256": "71ef95e5e72073f08b58987e9fe887385211310dc73bb22f3967f93702a61f06",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "a8f1112bfd4bee82d03bb10bd4120fb9a78f2cfad61ebe4f8c5d5fa4bbc08316",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "sha256": "3fe4f222dcb9dcfeed969451ee6c6d52270424873f59d87397845deb3a72cbd7",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/lib/m64-api.ts",
+      "sha256": "ded475e119a841301670e3ba0fce222bf0021622e425edb95e7bbc795badb070",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/lib/m64-api.test.ts",
+      "sha256": "68609cf4dc3729a62fcd9c65fb8ff19a6379478d9c94cf58aed3203a5952f097",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/components/ElectricityWorksheet.tsx",
+      "sha256": "16f9f9be2464819eac7ab70a1d8db707b36d4376e65da74a6e98cb6650684b4a",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "92b927ae387a8fcd7648cb0e219b3aa212f4a34c2d7e341402a18dec762dd31e",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/components/PrivateStaging.tsx",
+      "sha256": "f086b1826c03181a733727d38c2ccf9fabbdf7b2c784b814d24923c4bd1ddbec",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "e27c3f50d67c2ea7da10f52a68bb343339405641a111f7bab27a4baeaa863007",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "tools/staging/upgrade-m64.ts",
+      "sha256": "fa32542907060dedff8ed32fd65aa51598cb92c7a93c3f93af66975cd1bfc947",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "tools/staging/check-m64-hosted.ts",
+      "sha256": "d9b6f9ea6ff6a897e1b16e87ec0f49919dd314bb9fe3e70095084b79ec0c8458",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "e99e9364e05ded5c51db16042c04e56948b88260656ac1bee97f0c52b69b01a1",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/milestone64-private-worksheet.md",
+      "sha256": "8273b448f5641689aea9f5836efce96f23ace643d37c43c0b99381e0e4914593",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-independent-contract.test.ts",
+      "sha256": "4a23937dc5d050f1074de833c20538ec6bcd8417416860c708123f8805f95f13",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-independent-postgres.test.ts",
+      "sha256": "ce46ea2f976443019e882d558cb4739f74d408cb876c5659705c573bf706eeca",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-baseline.ts",
+      "sha256": "5206bc7af398a9799019e3e60b0c87b2fec45c350a4d5a5c82142a9a8d7fcf44",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-recovery.ts",
+      "sha256": "9e4a3fed14391769f3b81f6158beda369bd440f7c34f091306937f7f2b2c7037",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-baseline-receipt.json",
+      "sha256": "ea9cbf11828648804e982fe9a5d89f04786730af56d8c263e479d600f263ea64",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-postgres-receipt.json",
+      "sha256": "3deb70a81696fc81473c0d1f943ace1c9fd260c4f9b7edb116754250b0c8f3d6",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "evaluations/research-qa/m64-recovery-receipt.json",
+      "sha256": "48778738323c6eec7301dcb7d039d666dfb28bbc989b7f32320cc1a31c131a93",
+      "normalization": "CRLF to LF only"
+    }
+  ]
+}

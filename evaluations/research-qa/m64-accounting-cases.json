@@ -1,0 +1,681 @@
+{
+  "schema_version": 1,
+  "policy_version": "m64-accounting-policy-v1",
+  "profile_id": "manual-synthetic-2023-01-camx-kwh-v1",
+  "classification": "public_engineering_expectations_not_held_out",
+  "scope": {
+    "start": "2023-01-01",
+    "end": "2023-01-31",
+    "country": "United States",
+    "state": "California",
+    "egrid_subregion": "CAMX",
+    "unit": "kWh",
+    "electricity": "Grid-delivered purchased electricity",
+    "synthetic": true,
+    "incomplete": true,
+    "release_eligible": false
+  },
+  "authority": {
+    "factor_value_kg_co2e_per_mwh": "195.0402888",
+    "factor_id": "epa-egrid2023-r2-camx-total-output",
+    "factor_version": "eGRID2023-revision-2",
+    "factor_candidate_sha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356",
+    "method_id": "scope2-location-based-egrid-subregion",
+    "method_version": "2023-r2-camx-v1",
+    "gwp_policy_sha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+    "workbook_sha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+    "source_locator": "SRL23!AI6",
+    "candidate_normalization_disclosure": "Pinned candidate 195.0402888 retained; raw XLSX XML value is 195.04028880000001."
+  },
+  "derivation": {
+    "method": "Standalone Python Decimal at precision96; no product imports. Every total and display independently cross-checked with integer-rational arithmetic.",
+    "integer_formula": "For integer milli-kWh n, kg CO2e = n * 1950402888 / 10^13. Four-place display rounds n * 1950402888 / 10^9 to nearest integer, ties to even.",
+    "source_checked_on": "2026-09-14",
+    "product_implementation_executed": false
+  },
+  "accepted_cases": [
+    {
+      "id": "zero",
+      "input_quantity": "0",
+      "expected": {
+        "quantity_kwh": "0.000",
+        "quantity_mwh": "0.000000",
+        "total_unrounded_kg_co2e": "0",
+        "total_display_kg_co2e": "0.0000",
+        "co2_kg": "0",
+        "ch4_kg": "0",
+        "n2o_kg": "0",
+        "ch4_kg_co2e": "0",
+        "n2o_kg_co2e": "0",
+        "component_sum_kg_co2e": "0",
+        "component_delta_kg_co2e": "0",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "zero_explicit_precision",
+      "input_quantity": "0.000",
+      "expected": {
+        "quantity_kwh": "0.000",
+        "quantity_mwh": "0.000000",
+        "total_unrounded_kg_co2e": "0",
+        "total_display_kg_co2e": "0.0000",
+        "co2_kg": "0",
+        "ch4_kg": "0",
+        "n2o_kg": "0",
+        "ch4_kg_co2e": "0",
+        "n2o_kg_co2e": "0",
+        "component_sum_kg_co2e": "0",
+        "component_delta_kg_co2e": "0",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "minimum_positive",
+      "input_quantity": "0.001",
+      "expected": {
+        "quantity_kwh": "0.001",
+        "quantity_mwh": "0.000001",
+        "total_unrounded_kg_co2e": "0.0001950402888",
+        "total_display_kg_co2e": "0.0002",
+        "co2_kg": "0.0001943512704",
+        "ch4_kg": "0.00000001134",
+        "n2o_kg": "0.0000000013608",
+        "ch4_kg_co2e": "0.00000031752",
+        "n2o_kg_co2e": "0.000000360612",
+        "component_sum_kg_co2e": "0.0001950294024",
+        "component_delta_kg_co2e": "0.0000000108864",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "second_increment",
+      "input_quantity": "0.002",
+      "expected": {
+        "quantity_kwh": "0.002",
+        "quantity_mwh": "0.000002",
+        "total_unrounded_kg_co2e": "0.0003900805776",
+        "total_display_kg_co2e": "0.0004",
+        "co2_kg": "0.0003887025408",
+        "ch4_kg": "0.00000002268",
+        "n2o_kg": "0.0000000027216",
+        "ch4_kg_co2e": "0.00000063504",
+        "n2o_kg_co2e": "0.000000721224",
+        "component_sum_kg_co2e": "0.0003900588048",
+        "component_delta_kg_co2e": "0.0000000217728",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "one_kwh",
+      "input_quantity": "1",
+      "expected": {
+        "quantity_kwh": "1.000",
+        "quantity_mwh": "0.001000",
+        "total_unrounded_kg_co2e": "0.1950402888",
+        "total_display_kg_co2e": "0.1950",
+        "co2_kg": "0.1943512704",
+        "ch4_kg": "0.00001134",
+        "n2o_kg": "0.0000013608",
+        "ch4_kg_co2e": "0.00031752",
+        "n2o_kg_co2e": "0.000360612",
+        "component_sum_kg_co2e": "0.1950294024",
+        "component_delta_kg_co2e": "0.0000108864",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "equivalent_spelling",
+      "input_quantity": "1.000",
+      "expected": {
+        "quantity_kwh": "1.000",
+        "quantity_mwh": "0.001000",
+        "total_unrounded_kg_co2e": "0.1950402888",
+        "total_display_kg_co2e": "0.1950",
+        "co2_kg": "0.1943512704",
+        "ch4_kg": "0.00001134",
+        "n2o_kg": "0.0000013608",
+        "ch4_kg_co2e": "0.00031752",
+        "n2o_kg_co2e": "0.000360612",
+        "component_sum_kg_co2e": "0.1950294024",
+        "component_delta_kg_co2e": "0.0000108864",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "fractional_spelling",
+      "input_quantity": "1.230",
+      "expected": {
+        "quantity_kwh": "1.230",
+        "quantity_mwh": "0.001230",
+        "total_unrounded_kg_co2e": "0.239899555224",
+        "total_display_kg_co2e": "0.2399",
+        "co2_kg": "0.239052062592",
+        "ch4_kg": "0.0000139482",
+        "n2o_kg": "0.000001673784",
+        "ch4_kg_co2e": "0.0003905496",
+        "n2o_kg_co2e": "0.00044355276",
+        "component_sum_kg_co2e": "0.239886164952",
+        "component_delta_kg_co2e": "0.000013390272",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "m53_scale",
+      "input_quantity": "1000",
+      "expected": {
+        "quantity_kwh": "1000.000",
+        "quantity_mwh": "1.000000",
+        "total_unrounded_kg_co2e": "195.0402888",
+        "total_display_kg_co2e": "195.0403",
+        "co2_kg": "194.3512704",
+        "ch4_kg": "0.01134",
+        "n2o_kg": "0.0013608",
+        "ch4_kg_co2e": "0.31752",
+        "n2o_kg_co2e": "0.360612",
+        "component_sum_kg_co2e": "195.0294024",
+        "component_delta_kg_co2e": "0.0108864",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "correction_initial",
+      "input_quantity": "12345",
+      "expected": {
+        "quantity_kwh": "12345.000",
+        "quantity_mwh": "12.345000",
+        "total_unrounded_kg_co2e": "2407.772365236",
+        "total_display_kg_co2e": "2407.7724",
+        "co2_kg": "2399.266433088",
+        "ch4_kg": "0.1399923",
+        "n2o_kg": "0.016799076",
+        "ch4_kg_co2e": "3.9197844",
+        "n2o_kg_co2e": "4.45175514",
+        "component_sum_kg_co2e": "2407.637972628",
+        "component_delta_kg_co2e": "0.134392608",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "m56_checkpoint",
+      "input_quantity": "12346",
+      "expected": {
+        "quantity_kwh": "12346.000",
+        "quantity_mwh": "12.346000",
+        "total_unrounded_kg_co2e": "2407.9674055248",
+        "total_display_kg_co2e": "2407.9674",
+        "co2_kg": "2399.4607843584",
+        "ch4_kg": "0.14000364",
+        "n2o_kg": "0.0168004368",
+        "ch4_kg_co2e": "3.92010192",
+        "n2o_kg_co2e": "4.452115752",
+        "component_sum_kg_co2e": "2407.8330020304",
+        "component_delta_kg_co2e": "0.1344034944",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "fractional_quantity",
+      "input_quantity": "12345.678",
+      "expected": {
+        "quantity_kwh": "12345.678",
+        "quantity_mwh": "12.345678",
+        "total_unrounded_kg_co2e": "2407.9046025518064",
+        "total_display_kg_co2e": "2407.9046",
+        "co2_kg": "2399.3982032493312",
+        "ch4_kg": "0.13999998852",
+        "n2o_kg": "0.0167999986224",
+        "ch4_kg_co2e": "3.91999967856",
+        "n2o_kg_co2e": "4.451999634936",
+        "component_sum_kg_co2e": "2407.7702025628272",
+        "component_delta_kg_co2e": "0.1343999889792",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "below_even_tie",
+      "input_quantity": "62499.999",
+      "expected": {
+        "quantity_kwh": "62499.999",
+        "quantity_mwh": "62.499999",
+        "total_unrounded_kg_co2e": "12190.0178549597112",
+        "total_display_kg_co2e": "12190.0179",
+        "co2_kg": "12146.9542056487296",
+        "ch4_kg": "0.70874998866",
+        "n2o_kg": "0.0850499986392",
+        "ch4_kg_co2e": "19.84499968248",
+        "n2o_kg_co2e": "22.538249639388",
+        "component_sum_kg_co2e": "12189.3374549705976",
+        "component_delta_kg_co2e": "0.6803999891136",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "even_tie",
+      "input_quantity": "62500",
+      "expected": {
+        "quantity_kwh": "62500.000",
+        "quantity_mwh": "62.500000",
+        "total_unrounded_kg_co2e": "12190.01805",
+        "total_display_kg_co2e": "12190.0180",
+        "co2_kg": "12146.9544",
+        "ch4_kg": "0.70875",
+        "n2o_kg": "0.08505",
+        "ch4_kg_co2e": "19.845",
+        "n2o_kg_co2e": "22.53825",
+        "component_sum_kg_co2e": "12189.33765",
+        "component_delta_kg_co2e": "0.6804",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "above_even_tie",
+      "input_quantity": "62500.001",
+      "expected": {
+        "quantity_kwh": "62500.001",
+        "quantity_mwh": "62.500001",
+        "total_unrounded_kg_co2e": "12190.0182450402888",
+        "total_display_kg_co2e": "12190.0182",
+        "co2_kg": "12146.9545943512704",
+        "ch4_kg": "0.70875001134",
+        "n2o_kg": "0.0850500013608",
+        "ch4_kg_co2e": "19.84500031752",
+        "n2o_kg_co2e": "22.538250360612",
+        "component_sum_kg_co2e": "12189.3378450294024",
+        "component_delta_kg_co2e": "0.6804000108864",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "odd_tie",
+      "input_quantity": "187500",
+      "expected": {
+        "quantity_kwh": "187500.000",
+        "quantity_mwh": "187.500000",
+        "total_unrounded_kg_co2e": "36570.05415",
+        "total_display_kg_co2e": "36570.0542",
+        "co2_kg": "36440.8632",
+        "ch4_kg": "2.12625",
+        "n2o_kg": "0.25515",
+        "ch4_kg_co2e": "59.535",
+        "n2o_kg_co2e": "67.61475",
+        "component_sum_kg_co2e": "36568.01295",
+        "component_delta_kg_co2e": "2.0412",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "below_ceiling",
+      "input_quantity": "999999.999",
+      "expected": {
+        "quantity_kwh": "999999.999",
+        "quantity_mwh": "999.999999",
+        "total_unrounded_kg_co2e": "195040.2886049597112",
+        "total_display_kg_co2e": "195040.2886",
+        "co2_kg": "194351.2702056487296",
+        "ch4_kg": "11.33999998866",
+        "n2o_kg": "1.3607999986392",
+        "ch4_kg_co2e": "317.51999968248",
+        "n2o_kg_co2e": "360.611999639388",
+        "component_sum_kg_co2e": "195029.4022049705976",
+        "component_delta_kg_co2e": "10.8863999891136",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "ceiling",
+      "input_quantity": "1000000",
+      "expected": {
+        "quantity_kwh": "1000000.000",
+        "quantity_mwh": "1000.000000",
+        "total_unrounded_kg_co2e": "195040.2888",
+        "total_display_kg_co2e": "195040.2888",
+        "co2_kg": "194351.2704",
+        "ch4_kg": "11.34",
+        "n2o_kg": "1.3608",
+        "ch4_kg_co2e": "317.52",
+        "n2o_kg_co2e": "360.612",
+        "component_sum_kg_co2e": "195029.4024",
+        "component_delta_kg_co2e": "10.8864",
+        "release_eligible": false
+      }
+    },
+    {
+      "id": "ceiling_explicit_precision",
+      "input_quantity": "1000000.000",
+      "expected": {
+        "quantity_kwh": "1000000.000",
+        "quantity_mwh": "1000.000000",
+        "total_unrounded_kg_co2e": "195040.2888",
+        "total_display_kg_co2e": "195040.2888",
+        "co2_kg": "194351.2704",
+        "ch4_kg": "11.34",
+        "n2o_kg": "1.3608",
+        "ch4_kg_co2e": "317.52",
+        "n2o_kg_co2e": "360.612",
+        "component_sum_kg_co2e": "195029.4024",
+        "component_delta_kg_co2e": "10.8864",
+        "release_eligible": false
+      }
+    }
+  ],
+  "rejected_quantity_cases": [
+    {
+      "id": "missing",
+      "quantity_field_present": false,
+      "input_quantity": null,
+      "expected": "reject_without_calculated_version",
+      "reason": "missing_field"
+    },
+    {
+      "id": "null",
+      "quantity_field_present": true,
+      "input_quantity": null,
+      "expected": "reject_without_calculated_version",
+      "reason": "wrong_type"
+    },
+    {
+      "id": "number",
+      "quantity_field_present": true,
+      "input_quantity": 1,
+      "expected": "reject_without_calculated_version",
+      "reason": "wrong_type"
+    },
+    {
+      "id": "boolean",
+      "quantity_field_present": true,
+      "input_quantity": true,
+      "expected": "reject_without_calculated_version",
+      "reason": "wrong_type"
+    },
+    {
+      "id": "array",
+      "quantity_field_present": true,
+      "input_quantity": [],
+      "expected": "reject_without_calculated_version",
+      "reason": "wrong_type"
+    },
+    {
+      "id": "object",
+      "quantity_field_present": true,
+      "input_quantity": {},
+      "expected": "reject_without_calculated_version",
+      "reason": "wrong_type"
+    },
+    {
+      "id": "empty",
+      "quantity_field_present": true,
+      "input_quantity": "",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "space",
+      "quantity_field_present": true,
+      "input_quantity": " ",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "leading_space",
+      "quantity_field_present": true,
+      "input_quantity": " 1",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "trailing_space",
+      "quantity_field_present": true,
+      "input_quantity": "1 ",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "final_newline",
+      "quantity_field_present": true,
+      "input_quantity": "1\n",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "negative",
+      "quantity_field_present": true,
+      "input_quantity": "-1",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "negative_zero",
+      "quantity_field_present": true,
+      "input_quantity": "-0",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "positive_sign",
+      "quantity_field_present": true,
+      "input_quantity": "+1",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "exponent",
+      "quantity_field_present": true,
+      "input_quantity": "1e3",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "leading_zero",
+      "quantity_field_present": true,
+      "input_quantity": "01",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "leading_zero_fraction",
+      "quantity_field_present": true,
+      "input_quantity": "00.1",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "leading_point",
+      "quantity_field_present": true,
+      "input_quantity": ".5",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "trailing_point",
+      "quantity_field_present": true,
+      "input_quantity": "1.",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "comma",
+      "quantity_field_present": true,
+      "input_quantity": "1,000",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "decimal_comma",
+      "quantity_field_present": true,
+      "input_quantity": "1,5",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "unicode_digit",
+      "quantity_field_present": true,
+      "input_quantity": "١",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "appended_unit",
+      "quantity_field_present": true,
+      "input_quantity": "1 kWh",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "nan",
+      "quantity_field_present": true,
+      "input_quantity": "NaN",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "infinity",
+      "quantity_field_present": true,
+      "input_quantity": "Infinity",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "extra_precision",
+      "quantity_field_present": true,
+      "input_quantity": "1.0000",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "below_increment",
+      "quantity_field_present": true,
+      "input_quantity": "0.0001",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    },
+    {
+      "id": "above_ceiling",
+      "quantity_field_present": true,
+      "input_quantity": "1000000.001",
+      "expected": "reject_without_calculated_version",
+      "reason": "out_of_range"
+    },
+    {
+      "id": "larger_integer",
+      "quantity_field_present": true,
+      "input_quantity": "1000001",
+      "expected": "reject_without_calculated_version",
+      "reason": "out_of_range"
+    },
+    {
+      "id": "too_many_digits",
+      "quantity_field_present": true,
+      "input_quantity": "10000000",
+      "expected": "reject_without_calculated_version",
+      "reason": "grammar"
+    }
+  ],
+  "rejected_context_cases": [
+    {
+      "field": "unit",
+      "value": "MWh"
+    },
+    {
+      "field": "unit",
+      "value": "kwh"
+    },
+    {
+      "field": "start",
+      "value": "2023-01-02"
+    },
+    {
+      "field": "end",
+      "value": "2023-02-01"
+    },
+    {
+      "field": "start",
+      "value": "2024-01-01"
+    },
+    {
+      "field": "egrid_subregion",
+      "value": "NWPP"
+    },
+    {
+      "field": "egrid_subregion",
+      "value": null
+    },
+    {
+      "field": "country",
+      "value": "Canada"
+    },
+    {
+      "field": "state",
+      "value": "Oregon"
+    },
+    {
+      "field": "factor_value",
+      "value": "195.0294024"
+    },
+    {
+      "field": "approach",
+      "value": "market-based"
+    },
+    {
+      "field": "synthetic",
+      "value": false
+    }
+  ],
+  "correction_cases": [
+    {
+      "id": "increase_one_kwh",
+      "from_case": "correction_initial",
+      "to_case": "m56_checkpoint",
+      "reason": "Correct synthetic transcription by one kWh.",
+      "expected_delta_kg_co2e": "0.1950402888",
+      "new_version_review": "unreviewed",
+      "prior_version_and_review": "unchanged"
+    },
+    {
+      "id": "correct_to_zero",
+      "from_case": "m56_checkpoint",
+      "to_case": "zero",
+      "reason": "Replace synthetic quantity with an explicit zero assertion.",
+      "expected_delta_kg_co2e": "-2407.9674055248",
+      "new_version_review": "unreviewed",
+      "prior_version_and_review": "unchanged"
+    },
+    {
+      "id": "equivalent_text_no_op",
+      "from_case": "one_kwh",
+      "to_case": "equivalent_spelling",
+      "reason": "Formatting only.",
+      "expected": "reject_no_new_correction_version"
+    },
+    {
+      "id": "correction_reason_missing",
+      "from_case": "correction_initial",
+      "to_case": "m56_checkpoint",
+      "reason": "",
+      "expected": "reject_no_new_correction_version"
+    },
+    {
+      "id": "correction_back_to_prior_quantity",
+      "sequence": [
+        "correction_initial",
+        "m56_checkpoint",
+        "correction_initial"
+      ],
+      "expected": "third_immutable_version_unreviewed_no_transfer_of_first_review"
+    },
+    {
+      "id": "retry_same_command",
+      "expected": "one_version_one_success_event_same_result"
+    },
+    {
+      "id": "stale_predecessor",
+      "expected": "reject_no_new_correction_version"
+    }
+  ],
+  "verification": {
+    "accepted_cases_decimal_and_integer_agree": 18,
+    "invalid_quantity_grammar_and_range_refusals": 30,
+    "product_api_database_browser": "not_executed_in_accounting_assignment",
+    "professional_assurance": false
+  }
+}
