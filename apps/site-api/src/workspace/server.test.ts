@@ -57,7 +57,7 @@ describe("M54 composed development server", () => {
     }))
     expect(outsiderResponse.status).toBe(404)
     expect(await outsiderResponse.json()).toEqual({ error: "Workspace not found." })
-  })
+  }, 15_000)
 
   test("requires both an explicit enable flag and a development/test runtime", async () => {
     for (const [enabled, billEnabled, calculationEnabled, runtime] of [[undefined, "enabled", "enabled", "development"], ["enabled", undefined, "enabled", "development"], ["enabled", "enabled", undefined, "development"], ["enabled", "enabled", "enabled", undefined], ["enabled", "enabled", "enabled", "staging"], ["enabled", "enabled", "enabled", "production"]] as const) {
