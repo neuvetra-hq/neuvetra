@@ -96,3 +96,9 @@
 **/.superpowers
 **/__pycache__
 **/*.tsbuildinfo
+
+!packages/neuvetra-database/src/m65.ts
+!packages/neuvetra-database/src/m65-contract.ts
+!packages/neuvetra-database/src/m65-template.ts
+!apps/site-api/src/workspace/m65-routes.ts
+!packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql

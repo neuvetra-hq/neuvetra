@@ -5,7 +5,7 @@ import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audi
 import { readMigrationManifest } from "./staging-migrations"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 10
+export const STAGING_SCHEMA_VERSION = 11
 export interface HostedWorkspaceOptions {
   connectionString: string
   expectedProjectRef: string
@@ -146,3 +146,4 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
     throw new Error("Staging memberships require explicit operator provisioning.")
   }
 }
+

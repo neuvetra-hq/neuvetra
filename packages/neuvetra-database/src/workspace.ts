@@ -1,3 +1,4 @@
+import { readWorksheetReports, validateWorksheetReportInput, type WorksheetReportInput } from "./m65"
 import { readElectricityWorksheet, validateWorksheetInput, validateWorksheetReview, type WorksheetInput, type WorksheetCorrection, type WorksheetReviewInput } from "./m64"
 import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
@@ -876,6 +877,27 @@ export class WorkspaceDatabase {
       return result
     })
   }
+  async findWorksheetReports(userId:string,companyId:string) {
+    return this.asUser(userId,async tx=>(await readWorksheetReports(tx,companyId))?.list??null)
+  }
+  async findWorksheetReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>(await readWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===reportId)??null)
+  }
+  async downloadWorksheetReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>{
+      const records=await readWorksheetReports(tx,companyId),report=records?.list.reports.find(r=>r.id===reportId)
+      return report?{report,bytes:records!.bytes.get(reportId)!}:null
+    })
+  }
+  async createWorksheetReport(userId:string,companyId:string,input:WorksheetReportInput) {
+    validateWorksheetReportInput(input)
+    return this.asTrustedUser(userId,async tx=>{
+      const created=await tx.query<{id:string}>("select neuvetra.create_worksheet_report($1,$2::text::jsonb) id",[companyId,JSON.stringify(input)])
+      const record=(await readWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===created.rows[0]?.id)
+      if(!record)throw new Error("Worksheet report unavailable.")
+      return record
+    })
+  }
   async close() {
     await this.db.close()
   }
@@ -918,7 +940,9 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
     await db.exec(await Bun.file(new URL("./migrations/0007_inventory_draft_report.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0008_inventory_draft_report_review.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0010_manual_electricity_worksheet.sql", import.meta.url)).text())
+    await db.exec(await Bun.file(new URL("./migrations/0011_worksheet_reports.sql", import.meta.url)).text())
     return new DevelopmentWorkspaceDatabase(db)
   }
 
 }
+

@@ -1,3 +1,7 @@
+# M65 implementation — local verification passed; deployment next
+
+M65 implementation is authorized and adds readable, printable immutable reports to current/historical saved worksheet versions. Accounting and independent local QA passed; print overlap was caught and repaired before deployment. The final candidate requires image CI, schema11 upgrade, hosted browser/API/restart checks and board feedback. M64 remains accepted; preserve the board's Version4 and original M63 report. See docs/research/m65-execution.md and evaluations/research-qa/m65-private-report.md with the print supplement. Roles are task-scoped, not persistent workers; actual compute/cost remains unknown.
+
 # M64 accepted and published; M65 selected
 
 The board accepted M64 after saving Version4: 25000.000 kWh -> 4876.0072 kg CO2e. Root verified the saved correction reason, three earlier versions and their review states, and persistence after refresh. Version4 remains awaiting a different manager review; board milestone acceptance does not create that review.

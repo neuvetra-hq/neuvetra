@@ -85,11 +85,34 @@ integration("M63 hosted SQL through staged API completes exact synthetic flow an
     const first = worksheet.versions[0]
     expect(first.total).toMatchObject({ unrounded: "12190.0178549597112", display: "12190.0179" })
     expect((await read(worksheetRoute, "owner", { ...manual, idempotencyKey: crypto.randomUUID() })).versions[0].id).toBe(first.id)
+    const reportInput = (v: any) => ({sourceVersionId:v.id,expectedInputSha256:v.inputSha256,expectedResultSha256:v.resultSha256,expectedReviewId:v.review?.id??null,expectedReviewSha256:v.review?.decisionSha256??null,idempotencyKey:crypto.randomUUID()})
+    const reportsRoute=`${worksheetRoute}/reports`
+    const unreviewedInput=reportInput(first)
+    expect((await request(reportsRoute,"member",unreviewedInput)).status).toBe(403)
+    const capturedReports=await Promise.all([read(reportsRoute,"owner",unreviewedInput),read(reportsRoute,"admin",{...unreviewedInput,idempotencyKey:crypto.randomUUID()})])
+    const unreviewedReport=capturedReports[0]
+    expect(capturedReports[1].id).toBe(unreviewedReport.id)
+    expect(unreviewedReport.reviewState).toBe("unreviewed")
+    const unreviewedDownload=await request(`${reportsRoute}/${unreviewedReport.id}/download`,"member")
+    expect(unreviewedDownload.status).toBe(200)
+    expect(unreviewedDownload.headers.get("content-security-policy")).toContain("sandbox")
+    const unreviewedBytes=await unreviewedDownload.arrayBuffer()
+    expect(new Bun.CryptoHasher("sha256").update(unreviewedBytes).digest("hex")).toBe(unreviewedReport.reportSha256)
+    const unreviewedHtml=new TextDecoder().decode(unreviewedBytes)
+    expect(unreviewedHtml).toContain(first.inputSha256)
+    expect(unreviewedHtml).toContain(first.method.sourceSha256)
+    expect(unreviewedHtml).not.toMatch(/\{\{[a-zA-Z0-9]+\}\}/)
+    expect((await request(`${reportsRoute}/${unreviewedReport.id}/download`,"outsider")).status).toBe(404)
+    expect((await request(`${reportsRoute}/${unreviewedReport.id}/download`,null)).status).toBe(401)
     const reviewInput = { versionId: first.id, expectedResultSha256: first.resultSha256, decision: "accept_bounded_internal_draft", note: null, acknowledgedLimitations: [...M64_LIMITATIONS], idempotencyKey: crypto.randomUUID() }
     expect((await request(`${worksheetRoute}/reviews`, "owner", reviewInput)).status).toBe(409)
     const acceptedWorksheet = await read(`${worksheetRoute}/reviews`, "admin", reviewInput)
     const firstReview = acceptedWorksheet.versions[0].review
     expect(firstReview.reviewerId).toBe(admin)
+    const reviewedReport=await read(reportsRoute,"admin",reportInput(acceptedWorksheet.versions[0]))
+    expect(reviewedReport.id).not.toBe(unreviewedReport.id)
+    expect(reviewedReport.reviewState).toBe("accepted_bounded_internal_draft")
+    expect((await read(reportsRoute,"owner",{...unreviewedInput,idempotencyKey:crypto.randomUUID()})).id).toBe(unreviewedReport.id)
     const correctionInput = { ...manual, quantityKwh: "62500", idempotencyKey: crypto.randomUUID(), expectedVersionId: first.id, expectedResultSha256: first.resultSha256, correctionReason: "Corrected fractional synthetic entry" }
     const corrections = await Promise.all([
       read(`${worksheetRoute}/corrections`, "owner", correctionInput),
@@ -103,6 +126,9 @@ integration("M63 hosted SQL through staged API completes exact synthetic flow an
     expect(worksheetAfter.versions[0].review).toEqual(firstReview)
     expect((await request(`${worksheetRoute}/corrections`, "owner", { ...correctionInput, quantityKwh: "1", idempotencyKey: crypto.randomUUID() })).status).toBe(409)
     expect((await request(`${worksheetRoute}/corrections`, "owner", { ...correctionInput, quantityKwh: "1\n", idempotencyKey: crypto.randomUUID() })).status).toBe(422)
+    const correctedReport=await read(reportsRoute,"owner",reportInput(worksheetAfter.versions[1]))
+    expect(correctedReport.reviewState).toBe("unreviewed")
+    expect(correctedReport.source.total.display).toBe("12190.0180")
     await app.close(); app = await create()
     expect((await read("/session", "admin")).access.evidenceId).toBe(bill.id)
     expect(await read(`${reviewRoute}/current`, "member")).toEqual(decision)
@@ -111,7 +137,49 @@ integration("M63 hosted SQL through staged API completes exact synthetic flow an
     expect((await read(`${annualRoot}/draft-reports/current`, "member")).reportSha256).toBe(report.reportSha256)
     expect(await read(worksheetRoute, "member")).toEqual(worksheetAfter)
     expect((await request(worksheetRoute, null)).status).toBe(401)
+    expect((await read(reportsRoute,"member")).reports).toHaveLength(3)
+    expect(await read(`${reportsRoute}/${unreviewedReport.id}`,"member")).toEqual(unreviewedReport)
+    expect(await (await request(`${reportsRoute}/${unreviewedReport.id}/download`,"member")).arrayBuffer()).toEqual(unreviewedBytes)
     await revokeStagingAccess(operator, member)
     expect((await request(`${reviewRoute}/current`, "member")).status).toBe(403)
+    expect((await request(`${reportsRoute}/${unreviewedReport.id}/download`,"member")).status).toBe(403)
   } finally { await app?.close(); await operator.close() }
 }, 30_000)
+
+integration("M65 queued review captures post-lock time and cannot invalidate an earlier unreviewed report",async()=>{
+ const REF="abcdefghijklmnopqrst",owner=crypto.randomUUID(),admin=crypto.randomUUID(),company=crypto.randomUUID()
+ const operator=createPostgresConnection(target!,{tls:false})
+ const runtimeUrl=new URL(target!);runtimeUrl.username="neuvetra_runtime"
+ const database=new (HostedWorkspaceDatabase as unknown as new(db:WorkspaceConnection,ref:string)=>HostedWorkspaceDatabase)(createPostgresConnection(runtimeUrl.toString(),{tls:false}),REF)
+ let review:Promise<unknown>|undefined
+ try{
+  for(const id of [owner,admin])await operator.query("insert into auth.users(id) values($1)",[id])
+  await provisionStagingRoster(operator,{expectedProjectRef:REF,workspaceId:company,ownerUserId:owner,members:[{userId:admin,role:"admin"}]})
+  const source=(await database.saveElectricityWorksheet(owner,company,{companyLabel:"Fictional queue",facilityLabel:"Fictional office",quantityKwh:"25000",period:"2023-01",geography:"CAMX",unit:"kWh",idempotencyKey:crypto.randomUUID()})).versions[0]!
+  const input={sourceVersionId:source.id,expectedInputSha256:source.inputSha256,expectedResultSha256:source.resultSha256,expectedReviewId:null,expectedReviewSha256:null,idempotencyKey:crypto.randomUUID()}
+  const reportId=await operator.transaction(async tx=>{
+   await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[owner])
+   await tx.query("select id from neuvetra.companies where id=$1 for update",[company])
+   const pid=(await tx.query<{pid:number}>("select pg_backend_pid() pid")).rows[0]!.pid
+   review=database.reviewElectricityWorksheet(admin,company,{versionId:source.id,expectedResultSha256:source.resultSha256,decision:"accept_bounded_internal_draft",note:null,acknowledgedLimitations:[...M64_LIMITATIONS],idempotencyKey:crypto.randomUUID()})
+   let waiting=false
+   for(let attempt=0;attempt<80;attempt++){
+    waiting=(await tx.query<{waiting:boolean}>("select exists(select 1 from pg_stat_activity where datname=current_database() and $1=any(pg_blocking_pids(pid))) waiting",[pid])).rows[0]!.waiting
+    if(waiting)break
+    await new Promise(resolve=>setTimeout(resolve,25))
+   }
+   expect(waiting).toBe(true)
+   const created=await tx.query<{id:string}>("select neuvetra.create_worksheet_report($1,$2::text::jsonb) id",[company,JSON.stringify(input)])
+   return created.rows[0]!.id
+  })
+  await review
+  const report=await database.findWorksheetReport(owner,company,reportId)
+  const current=await database.findElectricityWorksheet(owner,company)
+  expect(report?.reviewState).toBe("unreviewed")
+  expect(report?.source.review).toBeNull()
+  expect(current!.versions[0]!.review!.reviewedAt>=report!.createdAt).toBe(true)
+  expect((await database.createWorksheetReport(admin,company,{...input,idempotencyKey:crypto.randomUUID()})).id).toBe(reportId)
+  const download=await database.downloadWorksheetReport(admin,company,reportId)
+  expect(new TextDecoder().decode(download!.bytes)).toContain("No worksheet review was recorded when this report was created.")
+ }finally{await review?.catch(()=>{});await database.close();await operator.close()}
+},30000)

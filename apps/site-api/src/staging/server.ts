@@ -1,3 +1,4 @@
+import { createWorksheetReportRoutes } from "../workspace/m65-routes"
 import { createWorksheetRoutes } from "../workspace/m64-routes"
 import { HostedWorkspaceDatabase, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
@@ -82,10 +83,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       return access.workspace
     }),
   })
+  const reportRoutes = createWorksheetReportRoutes({ database, validateUser, origin: config.origin })
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 10) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 11) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -123,6 +125,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
+      if (url.pathname.includes("/electricity-worksheet/reports")) return reportRoutes(forwarded)
       if (url.pathname.includes("/electricity-worksheet")) return worksheetRoutes(forwarded)
       return routes.handle(forwarded)
     }
@@ -142,7 +145,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       headers.set("x-content-type-options", "nosniff")
       headers.set("referrer-policy", "no-referrer")
       headers.set("x-frame-options", "DENY")
-      headers.set("content-security-policy", `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' ${config.supabaseUrl}; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; object-src 'none'`)
+      if (!headers.has("content-security-policy")) headers.set("content-security-policy", `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' ${config.supabaseUrl}; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; object-src 'none'`)
       if (config.origin.startsWith("https:")) headers.set("strict-transport-security", "max-age=31536000")
       try { log({ event: "request", requestId, route: routeName(new URL(request.url).pathname), status: response.status, durationMs: Math.round(performance.now() - started) }) } catch { /* Log failures cannot disclose request contents or turn a committed write into a client failure. */ }
       return new Response(response.body, { status: response.status, headers })
@@ -165,3 +168,4 @@ if (import.meta.main) {
     process.exitCode = 1
   }
 }
+

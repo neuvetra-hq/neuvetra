@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type RefObject } from "react"
 import { LIMITATION_LABELS, WORKSHEET_LIMITATIONS, worksheetRequest, type ElectricityWorksheet as Worksheet, type WorksheetVersion } from "@/lib/m64-api"
+import { WorksheetReports } from "./WorksheetReports"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
 export function ElectricityWorksheet({ actor, workspaceId, headingRef }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null> }) {
@@ -79,6 +80,7 @@ export function ElectricityWorksheet({ actor, workspaceId, headingRef }: { actor
     {saved && !manager && !current && <p>A manager has not saved a worksheet yet. Your access is read-only.</p>}
     {current && <>
       <VersionCard version={current} label={editing ? "Previously saved result — unsaved edits are not calculated" : "Current saved draft"} />
+      {saved && !editing && <WorksheetReports key={current.id + (current.review?.id ?? "none")} actor={actor} worksheet={saved} version={current} />}
       {manager && !editing && <button type="button" disabled={busy} onClick={() => { setEditing(true); setMessage("Enter a corrected quantity and a reason. The saved result below will remain unchanged until you save.") }}>Correct this quantity</button>}
       {!manager && <p>Your access is read-only. A manager can correct or review this worksheet.</p>}
       {manager && current.createdBy === actor.userId && !current.review && <p>A different authorized manager must review this version. You cannot review your own entry.</p>}
@@ -91,7 +93,7 @@ export function ElectricityWorksheet({ actor, workspaceId, headingRef }: { actor
           <button type="submit">Save review decision</button>
         </fieldset>
       </form>}
-      {saved && saved.versions.length > 1 && <details className="worksheet-history"><summary>Previous versions ({saved.versions.length - 1})</summary>{saved.versions.slice(0, -1).reverse().map(v => <VersionCard key={v.id} version={v} label="Historical saved draft" />)}</details>}
+      {saved && saved.versions.length > 1 && <details className="worksheet-history"><summary>Previous versions ({saved.versions.length - 1})</summary>{saved.versions.slice(0, -1).reverse().map(v => <div key={v.id}><VersionCard version={v} label="Historical saved draft" /><WorksheetReports actor={actor} worksheet={saved} version={v} /></div>)}</details>}
     </>}
     <p className="worksheet-footnote">Synthetic manual entries only. This worksheet is incomplete and unreleased, with no assurance. It does not change the saved example report.</p>
   </section>

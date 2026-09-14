@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T21:41:58.588828+00:00",
+  "updated_at": "2026-09-14T21:53:25.220680+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M65",
     "name": "Readable exact-version synthetic worksheet report",
-    "status": "planned",
-    "next_gate": "Define report snapshot/authorization contract and accounting wording before implementation.",
+    "status": "in_progress",
+    "next_gate": "Integrated backend/frontend reports, independent accounting and QA, then existing-host deployment and browser demonstration.",
     "evidence": [
       "docs/research/worksheet-report-milestone-65.md",
       "operations/feedback/2026-09-14-milestone-64.md"
@@ -2029,5 +2029,15 @@
     "board_feedback": "accepted",
     "evidence": "docs/research/m64-hosted-verification.json",
     "commit": "2b2129505ab613e0861039f23e5a751c7f1b9465"
+  },
+  "current_m65": {
+    "status": "in_progress",
+    "implementation_authorized": true,
+    "backend_owner": "/root/m64_cto",
+    "accounting_owner": "/root/m64_accounting",
+    "qa_owner": "/root/m63_data",
+    "root_owner": "frontend, operators, publication and board communication",
+    "persistent_workers": false,
+    "compute_observed": null
   }
 }

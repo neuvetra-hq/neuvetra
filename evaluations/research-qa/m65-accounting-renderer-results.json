@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "kind": "independent_accounting_renderer_verification",
+  "runtime": "1.3.12",
+  "database": "local PGlite; actual application writer/read/report download; no hosted PostgreSQL",
+  "direct_renderer_cases": [
+    {
+      "case": "board_version4",
+      "review": "none",
+      "sha256": "926c147ceede15fd969b2b97e35aa1c2ee073dbb3d0bcea6770392b5911eb482",
+      "byte_length": 8112
+    },
+    {
+      "case": "board_version4",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "a3dce36c1c52074c79b3157b93c4f05ebf6543938a1eb6e40eb478d98dabfcb7",
+      "byte_length": 8355
+    },
+    {
+      "case": "board_version4",
+      "review": "changes_requested",
+      "sha256": "e80d7623ba5c3ee9ee57667d95776395f8b65a3870192bda40eb5045e015c104",
+      "byte_length": 8236
+    },
+    {
+      "case": "historical_example",
+      "review": "none",
+      "sha256": "7243fe9288a0b7fff3c520a90de3c8ae79790f0ed4e9e957d8db829195825f14",
+      "byte_length": 8150
+    },
+    {
+      "case": "historical_example",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "f56e8c1a502bff5d795ebbfabfc4f3c69a136b4cc022129de2ba3f43cb9d3f0b",
+      "byte_length": 8393
+    },
+    {
+      "case": "historical_example",
+      "review": "changes_requested",
+      "sha256": "f92c00dea5ea7672a51661c31c20b74126e40ec527593b2584a6de792cd28344",
+      "byte_length": 8274
+    },
+    {
+      "case": "explicit_zero",
+      "review": "none",
+      "sha256": "f2d7fa99899df4f9e6713c48d7d1e55ff2f66a81b16ec3515490a3e74f552873",
+      "byte_length": 8128
+    },
+    {
+      "case": "explicit_zero",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "b7f534ddf27d3fbea36cbeae9e871df6d8c2886fcdd8e51d1dee82fad260cd77",
+      "byte_length": 8371
+    },
+    {
+      "case": "explicit_zero",
+      "review": "changes_requested",
+      "sha256": "b125fad26fa73c32f46476169f8b676ed625f1189adb689ceb1e8cdbdac215b4",
+      "byte_length": 8252
+    },
+    {
+      "case": "minimum_positive",
+      "review": "none",
+      "sha256": "3ca15a5c7d5f765ca7365794b746a882cda621925edd57191bc10b94ac827e54",
+      "byte_length": 8142
+    },
+    {
+      "case": "minimum_positive",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "52f2c1c2d4d87ee25d81b2c0ab62642930f7a25bced145ef42e9eeb673a7ed92",
+      "byte_length": 8385
+    },
+    {
+      "case": "minimum_positive",
+      "review": "changes_requested",
+      "sha256": "90af27b74d4af490b2d25ae17d2cc2cc2b80e06e683653ea4fb70b44ebaa9c68",
+      "byte_length": 8266
+    },
+    {
+      "case": "half_even_down",
+      "review": "none",
+      "sha256": "2c5916b20d72bf7e343886e4471e1b4ab15ac8a7b014487ea0dfda3d1be0761a",
+      "byte_length": 8147
+    },
+    {
+      "case": "half_even_down",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "543d653aec1cf738167d98ad9fb7c8701d0b0fc349a0c417d584cfdc20341a66",
+      "byte_length": 8390
+    },
+    {
+      "case": "half_even_down",
+      "review": "changes_requested",
+      "sha256": "a820758bec1fc69e1644b86dfa36afeb1738433d8f352ba406a156b876c11858",
+      "byte_length": 8271
+    },
+    {
+      "case": "half_even_up",
+      "review": "none",
+      "sha256": "0d1b90f96830bb8ea12f5984a61230787b0a51bbb0350d181dca569fddb65936",
+      "byte_length": 8149
+    },
+    {
+      "case": "half_even_up",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "c372ce995161970ce6b118278151a4dac6051c9df928de2a28f5690051ef1559",
+      "byte_length": 8392
+    },
+    {
+      "case": "half_even_up",
+      "review": "changes_requested",
+      "sha256": "41b8d1eebdec7d72e731efe26cdaa4521e1faa5bbb522c295ef51b40750ba4be",
+      "byte_length": 8273
+    },
+    {
+      "case": "precision_regression",
+      "review": "none",
+      "sha256": "88361ff6fd2339abbbfc68e1b796857564dbc35dbe57fd65363a9eb1f0f7d27c",
+      "byte_length": 8155
+    },
+    {
+      "case": "precision_regression",
+      "review": "accept_bounded_internal_draft",
+      "sha256": "b60336813d3cae064fc7823fde07dbe9a0f4fa834e097142510d3bc7743ace7d",
+      "byte_length": 8398
+    },
+    {
+      "case": "precision_regression",
+      "review": "changes_requested",
+      "sha256": "55595a1c8059afcf6f69cef0e3ed43f9d801915ea7ff1e3ab9e15d6bd77e03ac",
+      "byte_length": 8279
+    }
+  ],
+  "persisted_report_cases": [
+    {
+      "case": "board_version4",
+      "unreviewed_report_sha256": "b5f1da40a5f12f2e32d4f45f8683a561f33e2f712bfb40b7df8be1f68d74326e",
+      "reviewed_report_sha256": "4c20294536ae066fd7a7dbc8325e6794f2c211c02b3bc5583a370f66f21e5359",
+      "decision": "accept_bounded_internal_draft"
+    },
+    {
+      "case": "historical_example",
+      "unreviewed_report_sha256": "609599bb8cf20aed87bf46e3c88dd8060ff46dc9e56e1e6fd42b706f9189ac94",
+      "reviewed_report_sha256": "b604fcba026a952992023c3f2af4c92a9cc6ac4426b1a4bb89365c2fed1cc1cf",
+      "decision": "changes_requested"
+    },
+    {
+      "case": "explicit_zero",
+      "unreviewed_report_sha256": "09a0c591db319fd4d16029ed39ce8e869c73f1ca097d925f8b9d86193dfc6240",
+      "reviewed_report_sha256": "0ae74d10873e7e00d64a8ee09f49d13451b3a0ab3d9c6aeb1ecca91b9044161e",
+      "decision": "accept_bounded_internal_draft"
+    },
+    {
+      "case": "minimum_positive",
+      "unreviewed_report_sha256": "74a345dd5bd7901eb0fb23c2ae2de7a88d5ce5b4e3cf9de9d802380ab5d78651",
+      "reviewed_report_sha256": "98bf6630877e7147e8b049907666e24348473f8514fdd39be4a9262415b064dd",
+      "decision": "changes_requested"
+    },
+    {
+      "case": "half_even_down",
+      "unreviewed_report_sha256": "7274ce6ddbe5e785ec9ba570e3ada935990e90fe2e72fa4df81750caf408e7e2",
+      "reviewed_report_sha256": "e5714c17bba0ea673f217f9953be08d3323e8e41bf57c372786e84883399175d",
+      "decision": "accept_bounded_internal_draft"
+    },
+    {
+      "case": "half_even_up",
+      "unreviewed_report_sha256": "3ef4caeca69b6af4837878c5855f214207cd21cc46d9fe7b2f7b86d94e028d5f",
+      "reviewed_report_sha256": "6e316c3b28c91cb88f50f7ed265b0269ab1c1349689fee2d8c24337d1324984d",
+      "decision": "changes_requested"
+    },
+    {
+      "case": "precision_regression",
+      "unreviewed_report_sha256": "078ad238e4f0389ec3eb0c3c6725c96dc1f24aed7d1c26f0d6c3dff4ea344ad0",
+      "reviewed_report_sha256": "dfb3b42e73fd04f0dfdf10f315568faa1fe86c73a67d3867b59131fda89ee6a7",
+      "decision": "accept_bounded_internal_draft"
+    }
+  ],
+  "immutable_unreviewed_reports_reopened_after_later_reviews_and_corrections": 7,
+  "visual_print_inspection": "not performed; root/QA owns actual rendered print check",
+  "authored_product_code": false,
+  "source_artifact_hashes": {
+    "packages/neuvetra-database/src/m65.ts": "880ec7c889e0c60f0efa2abf3eef849950d32dbccdeff0516c32c66016f6d911",
+    "packages/neuvetra-database/src/m65-template.ts": "6b1e4a084cf6841224040cbf10228380b8cd345b2012f876082d73313ecc8931",
+    "packages/neuvetra-database/src/m65-contract.ts": "61f2debef54cea1c7d4553b6ce60b8166483e6016e4b932a4c9c21c10bae9a89",
+    "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql": "821fcbd2601f21f7fa74370ef13e62a2941399d68b4774f0e09ffb09fe1ee983"
+  }
+}

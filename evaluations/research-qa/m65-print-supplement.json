@@ -1,0 +1,113 @@
+{
+  "profile": "neuvetra.m65.print-supplement.v1",
+  "status": "pass_local_integrated_repair_and_reviewed_chrome_print_fixtures",
+  "supersedes": "Only the two changed bindings in m65-local-review-manifest.json; original report and manifest retained",
+  "originalManifestSha256": "a075d4fd1f8716f510d15083d7ab3af22f4869eb55dd43d062bc41e5686d164a",
+  "unchangedOriginalArtifactBindings": 30,
+  "replacementBindings": [
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "previousCanonicalLfSha256": "e229dad855b1d0ac3703e72ee5ee7cfbf569f4fa71ddbd036f6221c8e9596b74",
+      "canonicalLfSha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "previousCanonicalLfSha256": "9032e4ae40eb3e7e04b9329dca5c2bbafc52197a94742cd7a3720a055cd06fb0",
+      "canonicalLfSha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    }
+  ],
+  "templateSha256": "cb279f0ec15cd492815dca2c4424e6d8852c0503f179fa0179482a0f087aa929",
+  "native": {
+    "database": "m65_qa_print",
+    "tests": 12,
+    "assertions": 218,
+    "originalRowsPreserved": 999
+  },
+  "frontendAndRenderer": {
+    "tests": 9,
+    "assertions": 174
+  },
+  "print": {
+    "producer": "Root-controlled actual Chrome Page.printToPDF; PNG rasterization by root",
+    "version": null,
+    "settings": {
+      "printBackground": true,
+      "preferCSSPageSize": true,
+      "otherSettings": "defaults; exact Chrome version unrecorded"
+    },
+    "independentVisualInspection": "all four repaired standard pages and all four long-input pages; no body/header/footer overlap or visible clipping; repeated five status qualifiers on every page",
+    "scope": "Synthetic report fixtures, not persisted hosted report downloads or browser-independent PDF reproducibility",
+    "localArtifacts": [
+      {
+        "path": ".superpowers/m65-browser-print-fixed.pdf",
+        "sha256": "378392123f5dcbb7edeedcdfe0d1d4626f3f24fc8677a4906a9ae84f99321bed",
+        "bytes": 106724
+      },
+      {
+        "path": ".superpowers/m65-browser-print-long.pdf",
+        "sha256": "cb890c5ca3b8d7b6e7687f5429fe4b4c9f614d9c801ccda1dbb7f7967d59f8e2",
+        "bytes": 107583
+      },
+      {
+        "path": ".superpowers/m65-print-fixed-1.png",
+        "sha256": "2b88bb8bb27a6f1d13ef3d420c3f89f03c25d985831bc981d9d063d26e2c5981",
+        "bytes": 103603
+      },
+      {
+        "path": ".superpowers/m65-print-fixed-2.png",
+        "sha256": "c8e6909a5e2f6291e3f836e13ae935c335efb21d6d6ef33fa621847986789212",
+        "bytes": 114969
+      },
+      {
+        "path": ".superpowers/m65-print-fixed-3.png",
+        "sha256": "3a77d7fd82693fea93cd0bc3a1faa5cd88ba7c7fb1b1380960537c01713ab56f",
+        "bytes": 148031
+      },
+      {
+        "path": ".superpowers/m65-print-fixed-4.png",
+        "sha256": "b12b6857c45ffa380eb2e8ce5589682a151378fef6ab530d179de43301cf2dd3",
+        "bytes": 100789
+      },
+      {
+        "path": ".superpowers/m65-print-long-1.png",
+        "sha256": "f6652d02cc7dc0cf86f0f8c5a9cff47c250dce0ee734194dfb93cb3bab446739",
+        "bytes": 91109
+      },
+      {
+        "path": ".superpowers/m65-print-long-2.png",
+        "sha256": "691d97a6a0f781e2326b24834224bf447820c8b5c8ee54d9708dfa39a0b63a42",
+        "bytes": 91653
+      },
+      {
+        "path": ".superpowers/m65-print-long-3.png",
+        "sha256": "7d9abee517f337831c3d3b3fe969b8c00602c983501f2fc4309320280a1a3689",
+        "bytes": 112247
+      },
+      {
+        "path": ".superpowers/m65-print-long-4.png",
+        "sha256": "28c517e5ed981bec02e1bd4357508cdbe0e7c3e43c3417f39d1032e9d02e70eb",
+        "bytes": 93352
+      }
+    ]
+  },
+  "qaArtifacts": [
+    {
+      "path": "evaluations/research-qa/m65-print-native-receipt.json",
+      "canonicalLfSha256": "841c4746db034b557e14e93402babd9dabb502e0182dacbfe445468487e23fe3"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-before-receipt.json",
+      "canonicalLfSha256": "d0bdd0752270196cfc64bbb9f0bf7b3f329ecb0744553f85cc352d02192eb0da"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-postgres.test.ts",
+      "canonicalLfSha256": "beadeb32be8832b44ec84cf9e5b716b4e3fc788edb6bedf35248ab625528bbb4"
+    }
+  ],
+  "pending": [
+    "actual Linux image CI",
+    "hosted migration and authenticated application journey",
+    "hosted refresh/restart and original record preservation",
+    "board demonstration and feedback"
+  ]
+}
