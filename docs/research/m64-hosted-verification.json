@@ -1,0 +1,544 @@
+{
+  "schema_version": 1,
+  "status": "hosted_and_browser_demonstration_pass_board_feedback_pending",
+  "observed_at": "2026-09-14T21:18:01.092467+00:00",
+  "host": "https://www.neuvetra.ai",
+  "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
+  "deployment": {
+    "id": "47822f07-a13a-4452-8ce7-bc4039edab2f",
+    "status": "SUCCESS",
+    "restart_verified": true,
+    "ready_http_status": 200,
+    "schema_version": 10
+  },
+  "ci": {
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/4",
+    "state": "open",
+    "draft": true,
+    "head": "ea31275cc11c7101e1bb116187867b2d782331b0",
+    "checks": [
+      {
+        "name": "Native PostgreSQL worksheet and tenant regression",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Typecheck, lint, unit tests and web builds",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Dedicated staging image and offline runtime smoke",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "GHG calculation specifications and engine",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Offline research catalog tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Role routing and evidence records",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "migration": {
+    "status": "m64_migration_committed",
+    "createdAt": "2026-09-14T21:06:15.800Z",
+    "project": "icockcoguyadhryzydvl",
+    "beforeVersion": 9,
+    "schemaVersion": 10,
+    "migrations": [
+      {
+        "name": "0001_company_workspace.sql",
+        "sha256": "cc596137d3011d400d3b253ebb52994bafe47f716c22601c4a316de259d7d739"
+      },
+      {
+        "name": "0002_synthetic_bill_intake.sql",
+        "sha256": "8c6b46209410d5611b1462ba694047dd4eb06dccf9de55fe65cee1d5bb9c6321"
+      },
+      {
+        "name": "0003_synthetic_bill_calculation.sql",
+        "sha256": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6"
+      },
+      {
+        "name": "0004_inventory_review.sql",
+        "sha256": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213"
+      },
+      {
+        "name": "0005_annual_electricity_register.sql",
+        "sha256": "3f288d293c93132c422505f8daf7fc6e52eac8e33128a248cd4e9ba5cb946b35"
+      },
+      {
+        "name": "0006_inventory_evidence_pack.sql",
+        "sha256": "2b786ee7c90b6cd65e398b0c8422d9e76f851a789a5318a7715039e123249dfd"
+      },
+      {
+        "name": "0007_inventory_draft_report.sql",
+        "sha256": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81"
+      },
+      {
+        "name": "0008_inventory_draft_report_review.sql",
+        "sha256": "c5e81967a5dcb08055d452816a1e687b204c59c6396014190897f965abc4a1cc"
+      },
+      {
+        "name": "0009_private_staging.sql",
+        "sha256": "10a0be42649a86fbf2f0e2ab826e6d856dfbe591a1090dc39b3d4872dc191e3f"
+      },
+      {
+        "name": "0010_manual_electricity_worksheet.sql",
+        "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+      }
+    ],
+    "reviewedMigrationHash": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52",
+    "clientTls": "verified CA and hostname",
+    "scope": "additive synthetic worksheet tables; M63 records retained"
+  },
+  "migration_transition": {
+    "initial_deployment": "97372ddb-8b0f-4b81-a868-f35f6e216641",
+    "observation": "Initial startup retries exhausted before migration; schema9 image returned503 after schema10 commit. Same reviewed image redeployed successfully after restricted database readiness passed. No data deletion or security bypass.",
+    "first_verified_ready_after_restart": "2026-09-14 after deployment47822f07 and deliberate service restart",
+    "precise_downtime_seconds": null
+  },
+  "live_api_exercise": {
+    "status": "pass",
+    "createdAt": "2026-09-14T21:11:03.036Z",
+    "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+    "stages": [
+      {
+        "name": "signed_out_refusal",
+        "status": 401
+      },
+      {
+        "name": "outsider_refusal",
+        "status": 403
+      },
+      {
+        "name": "member_write_refusal",
+        "status": 403
+      },
+      {
+        "name": "initial_read",
+        "status": 200
+      },
+      {
+        "name": "invalid_quantity_refusal",
+        "status": 422
+      },
+      {
+        "name": "invalid_quantity_refusal",
+        "status": 422
+      },
+      {
+        "name": "invalid_quantity_refusal",
+        "status": 422
+      },
+      {
+        "name": "invalid_quantity_refusal",
+        "status": 422
+      },
+      {
+        "name": "invalid_quantity_refusal",
+        "status": 422
+      },
+      {
+        "name": "invalid_quantity_refusal",
+        "status": 422
+      },
+      {
+        "name": "unsupported_context_refusal",
+        "status": 422
+      },
+      {
+        "name": "unsupported_context_refusal",
+        "status": 422
+      },
+      {
+        "name": "unsupported_context_refusal",
+        "status": 422
+      },
+      {
+        "name": "save_synthetic_first_version",
+        "status": 201
+      },
+      {
+        "name": "self_review_refusal",
+        "status": 409
+      },
+      {
+        "name": "second_manager_review",
+        "status": 201
+      },
+      {
+        "name": "concurrent_correction_b",
+        "status": 201
+      },
+      {
+        "name": "concurrent_correction_a",
+        "status": 201
+      },
+      {
+        "name": "member_revisit",
+        "status": 200
+      },
+      {
+        "name": "stale_correction_refusal",
+        "status": 409
+      }
+    ],
+    "versions": [
+      {
+        "id": "592cd78c-2ad0-41e4-a1c2-76d852141d36",
+        "version": 1,
+        "quantityKwh": "12345.678",
+        "total": {
+          "unit": "kg CO2e",
+          "display": "2407.9046",
+          "rounding": "half_even_4dp",
+          "unrounded": "2407.9046025518064"
+        },
+        "inputSha256": "25f872000e09b71328838288de4a6969677d6b0dbc3b7417f637d6d649d80dea",
+        "resultSha256": "5dcba7105d521dbadb0602eddd76a394d4dff1215761eb2e1b1beb4e30c191b6",
+        "reviewSha256": "33639e32100ffde9b0e6319c4df4b861c3929eff3b6e9969c5eb406d47068200"
+      },
+      {
+        "id": "bb12e133-602b-46e5-82dc-6faf98ae6f83",
+        "version": 2,
+        "quantityKwh": "62500.000",
+        "total": {
+          "unit": "kg CO2e",
+          "display": "12190.0180",
+          "rounding": "half_even_4dp",
+          "unrounded": "12190.01805"
+        },
+        "inputSha256": "a93822115a1c15fabea8cf1e427ec3c955f65c08feda35a0f3cd91018f8a56e3",
+        "resultSha256": "cdce30bc93d3dbfd22be03468620b50e744f1497fb16cb8037326133f45e07e5",
+        "reviewSha256": null
+      }
+    ],
+    "scope": "Real Auth, hosted API and actual frontend decoder. Separate real browser and native PostgreSQL QA required.",
+    "logouts": [
+      {
+        "role": "manager1",
+        "status": 204
+      },
+      {
+        "role": "manager2",
+        "status": 204
+      },
+      {
+        "role": "member",
+        "status": 204
+      },
+      {
+        "role": "outsider",
+        "status": 204
+      }
+    ]
+  },
+  "post_restart_revisit": {
+    "status": "pass",
+    "createdAt": "2026-09-14T21:16:13.146Z",
+    "applicationPostRequests": 0,
+    "realAuthSessionsClosed": true,
+    "results": [
+      {
+        "role": "manager1",
+        "httpStatus": 200,
+        "versions": [
+          {
+            "id": "592cd78c-2ad0-41e4-a1c2-76d852141d36",
+            "version": 1,
+            "inputSha256": "25f872000e09b71328838288de4a6969677d6b0dbc3b7417f637d6d649d80dea",
+            "resultSha256": "5dcba7105d521dbadb0602eddd76a394d4dff1215761eb2e1b1beb4e30c191b6",
+            "reviewSha256": "33639e32100ffde9b0e6319c4df4b861c3929eff3b6e9969c5eb406d47068200",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.9046",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.9046025518064"
+            }
+          },
+          {
+            "id": "bb12e133-602b-46e5-82dc-6faf98ae6f83",
+            "version": 2,
+            "inputSha256": "a93822115a1c15fabea8cf1e427ec3c955f65c08feda35a0f3cd91018f8a56e3",
+            "resultSha256": "cdce30bc93d3dbfd22be03468620b50e744f1497fb16cb8037326133f45e07e5",
+            "reviewSha256": "ff7f75307bf7916ece2d16f948df62851a69a293203a558084e1128ef1186162",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "12190.0180",
+              "rounding": "half_even_4dp",
+              "unrounded": "12190.01805"
+            }
+          },
+          {
+            "id": "adc02bf7-799e-429f-90ca-760038e99119",
+            "version": 3,
+            "inputSha256": "a27061855f61d3d06ec78b2e1ae551f78c2a30729c51cc4242ab7e185bf051ad",
+            "resultSha256": "0eb9943d9866ec5d9d143d83e223d8589451739094f7537337cd57a2279301c4",
+            "reviewSha256": null,
+            "total": {
+              "unit": "kg CO2e",
+              "display": "36570.0542",
+              "rounding": "half_even_4dp",
+              "unrounded": "36570.05415"
+            }
+          }
+        ]
+      },
+      {
+        "role": "member",
+        "httpStatus": 200,
+        "versions": [
+          {
+            "id": "592cd78c-2ad0-41e4-a1c2-76d852141d36",
+            "version": 1,
+            "inputSha256": "25f872000e09b71328838288de4a6969677d6b0dbc3b7417f637d6d649d80dea",
+            "resultSha256": "5dcba7105d521dbadb0602eddd76a394d4dff1215761eb2e1b1beb4e30c191b6",
+            "reviewSha256": "33639e32100ffde9b0e6319c4df4b861c3929eff3b6e9969c5eb406d47068200",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.9046",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.9046025518064"
+            }
+          },
+          {
+            "id": "bb12e133-602b-46e5-82dc-6faf98ae6f83",
+            "version": 2,
+            "inputSha256": "a93822115a1c15fabea8cf1e427ec3c955f65c08feda35a0f3cd91018f8a56e3",
+            "resultSha256": "cdce30bc93d3dbfd22be03468620b50e744f1497fb16cb8037326133f45e07e5",
+            "reviewSha256": "ff7f75307bf7916ece2d16f948df62851a69a293203a558084e1128ef1186162",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "12190.0180",
+              "rounding": "half_even_4dp",
+              "unrounded": "12190.01805"
+            }
+          },
+          {
+            "id": "adc02bf7-799e-429f-90ca-760038e99119",
+            "version": 3,
+            "inputSha256": "a27061855f61d3d06ec78b2e1ae551f78c2a30729c51cc4242ab7e185bf051ad",
+            "resultSha256": "0eb9943d9866ec5d9d143d83e223d8589451739094f7537337cd57a2279301c4",
+            "reviewSha256": null,
+            "total": {
+              "unit": "kg CO2e",
+              "display": "36570.0542",
+              "rounding": "half_even_4dp",
+              "unrounded": "36570.05415"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "m63_preservation": {
+    "baseline": {
+      "workspaceId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+      "billId": "1d1e8c65-705f-4106-9e22-8fdf5304d3d3",
+      "inventoryId": "c512c188-e9f5-497c-9edd-10b359b0140a",
+      "inventorySnapshotSha256": "25f4dbbe13f6934ec78f56c97dd0553262e2266c125f78f225b910d70dc7f49a",
+      "packId": "cd35f060-d0b9-4b59-b52c-e22ea267545c",
+      "archiveSha256": "5b24c964b82ca2b0fd4d9d0eb2fc3bea8e6790842660d27ea6019224a784a1eb",
+      "manifestSha256": "7a179dda23fde7eea8ebfb5c19f1538398d28d17aa68b4d5c0b33122b212a70e",
+      "lineageRootSha256": "e59931c483052d853903225ba36924a258a44318400e908bf23abd41d30805e6",
+      "reportId": "19db7ed1-2e68-4b00-803f-4091c51321f4",
+      "reportSha256": "4d208e345e939a8e024839713b7aac61504c7bae77b630ceddace39e1a124014",
+      "reviewId": "585267e7-cf65-4f66-b637-a526355e8a85",
+      "decisionSnapshotSha256": "38d027250a66451001de3c80ce7c707143f44b7d1d62a3a77179af1b734447ca"
+    },
+    "read_only_run": {
+      "status": "passed",
+      "mode": "read_only",
+      "startedAt": "2026-09-14T21:11:42.536Z",
+      "completedAt": "2026-09-14T21:12:45.674Z",
+      "applicationPostRequests": 0,
+      "exactPriorBaselineMatched": true,
+      "archiveLocalReplay": "verified_match",
+      "secondManagerDistinct": true,
+      "outsiderBoundary": "uninvited_auth_subject_403",
+      "signedOutBoundary": 401,
+      "overallInventoryCompleteness": "incomplete",
+      "releaseEligible": false,
+      "stages": [
+        {
+          "stage": "hosted_readiness",
+          "httpStatus": 200
+        },
+        {
+          "stage": "hosted_public_config",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_outsider",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_session_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_session_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "workspace_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "evidence_discovery",
+          "httpStatus": 200
+        },
+        {
+          "stage": "bill_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "register_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "annual_inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_local_replay",
+          "httpStatus": null
+        },
+        {
+          "stage": "report_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_report_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "outsider_pack_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_report_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "signed_out_review_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "unknown_workspace_refused",
+          "httpStatus": 404
+        }
+      ],
+      "authLogout": [
+        {
+          "role": "manager1",
+          "httpStatus": 204
+        },
+        {
+          "role": "manager2",
+          "httpStatus": 204
+        },
+        {
+          "role": "member",
+          "httpStatus": 204
+        },
+        {
+          "role": "outsider",
+          "httpStatus": 204
+        }
+      ],
+      "allAuthSessionsClosed": true
+    }
+  },
+  "browser": {
+    "executor": "/root",
+    "browser": "Chrome",
+    "tab_id": "851834538",
+    "actual_dom_and_screenshot_observed": true,
+    "actions": [
+      "Reloaded deployed image in existing invited board session.",
+      "Refreshed worksheet and observed version2:62500.000kWh,12190.0180kgCO2e.",
+      "Empty review acknowledgements blocked submission and focused first required checkbox.",
+      "Completed all seven acknowledgements and saved one bounded synthetic review of version2, authored by a different QA manager. This automated test record is not board milestone acceptance.",
+      "Negative correction -1 refused with explicit Nothing was saved error; prior accepted version2 remained visible and distinct from unsaved edits.",
+      "Corrected through the real form to187500kWh with a synthetic reason; version3 displayed36570.0542kgCO2e and exact36570.05415.",
+      "Inspected historical versions1/2: both reviews preserved; version3 unreviewed and self-review unavailable.",
+      "At390px viewport, screenshot showed readable wrapped controls/history/fingerprints; rendered content width375px, no horizontal overflow. Viewport reset.",
+      "Opened Saved example report and Revisit saved workspace: exact original report/review hashes rendered.",
+      "After service restart, reloaded browser and read same version3 input/result fingerprints."
+    ],
+    "final_version": 3,
+    "quantity_kwh": "187500.000",
+    "exact_kg_co2e": "36570.05415",
+    "display_kg_co2e": "36570.0542",
+    "input_sha256": "a27061855f61d3d06ec78b2e1ae551f78c2a30729c51cc4242ab7e185bf051ad",
+    "result_sha256": "0eb9943d9866ec5d9d143d83e223d8589451739094f7537337cd57a2279301c4",
+    "review": null,
+    "auth_scope": "Existing invited browser session reauthorized on reload. New manager/member Auth sign-in/logout sessions separately exercised by API; a fresh browser sign-in-link flow was not repeated.",
+    "left_open_for_board": true
+  },
+  "limits": [
+    "Synthetic/incomplete/unreleased/no assurance retained.",
+    "Invited second-tenant isolation exercised against actual local PostgreSQL with injected Auth, not a newly provisioned live second-tenant account. Live outsider/member/signedout boundaries passed.",
+    "Provider Auth restore, portable off-device recovery, scheduled backups and proactive alerting remain launch gaps.",
+    "PR4 remains draft and unmerged. Board feedback required before dependent milestone."
+  ]
+}

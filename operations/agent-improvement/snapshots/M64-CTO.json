@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "M64-CTO",
+  "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
+  "scope": "Exact published LF Git blob hashes. CTO domain implementation includes the later independently reviewed root-authored contract extraction; attribution preserved in extraction review. QA scope is local integration and packaging reviews; hosted handoff has separate evidence.",
+  "files": [
+    {
+      "path": "packages/neuvetra-database/src/m64.ts",
+      "sha256": "d358bb4741b788173baeeb671abb4222e0d11c795953ba85f0fed292da5f6156"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64-contract.ts",
+      "sha256": "73bcc47ff03122d2f254d244c0792b9e62745618cc4fe9f21854df115f5c5c1d"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "03500bcf6229e8d83d6bcf9c435f6740a38829f8d8fdfa5082b6acddf93354e4"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "46ae6c9fef00dc1f0c384d69d7e1842054035cc408ba836abc6e27d3e5f679c5"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "162c84d7f2c76bc32a813f189ed6deeea88b84df05c36879fa4343fbe2416a71"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m64-routes.ts",
+      "sha256": "71ef95e5e72073f08b58987e9fe887385211310dc73bb22f3967f93702a61f06"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "sha256": "3fe4f222dcb9dcfeed969451ee6c6d52270424873f59d87397845deb3a72cbd7"
+    },
+    {
+      "path": "docs/research/m64-technical-contract.md",
+      "sha256": "a227870fd8e8ab520173e67e672796547ecdc3b97fc6bf67e60cf9fef34cd93b"
+    }
+  ]
+}

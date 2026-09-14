@@ -4,25 +4,39 @@
   "role": "cto",
   "execution_context": "/root/m64_cto",
   "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M64-CTO.json",
+      "sha256": "ad64479594bdb3185133a987edf675ca2ae91740a80b54a553d32a171a3726d5"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m64-hosted-handoff.md"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root/m63_data",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m64-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M64-CTO.json",
+        "sha256": "ad64479594bdb3185133a987edf675ca2ae91740a80b54a553d32a171a3726d5"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": null,
@@ -50,5 +64,8 @@
     "cost_usd": null
   },
   "metrics_evidence": [],
-  "pilot_eligible": false
+  "pilot_eligible": false,
+  "notes": [
+    "Scoped role delivery complete; M64 awaits board feedback. Actual compute and cost remain unknown. First-review defects are retained in the bound reviews. QA artifact closure reviewed by root; product acceptance independently reviewed by M64 nonauthor /root/m63_data."
+  ]
 }

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "M64-QA",
+  "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
+  "scope": "Exact published LF Git blob hashes. CTO domain implementation includes the later independently reviewed root-authored contract extraction; attribution preserved in extraction review. QA scope is local integration and packaging reviews; hosted handoff has separate evidence.",
+  "files": [
+    {
+      "path": "evaluations/research-qa/milestone64-private-worksheet.md",
+      "sha256": "8273b448f5641689aea9f5836efce96f23ace643d37c43c0b99381e0e4914593"
+    },
+    {
+      "path": "evaluations/research-qa/m64-reviewed-artifacts.json",
+      "sha256": "1e8576daa1dc5f7b6d8aff41b3c7a464cb27af30749a193c0ee63a588c9e5384"
+    },
+    {
+      "path": "evaluations/research-qa/m64-review-supplement.json",
+      "sha256": "5e28a25113fbf0ab3bd3f63baf9b34f1a8dd144df5f9453bb8ad7888c54e3ed3"
+    },
+    {
+      "path": "evaluations/research-qa/m64-image-repair.md",
+      "sha256": "7b9f61e73f69d0abfbce412703e90401031e1abf9c99d8994af4afdec1db9362"
+    },
+    {
+      "path": "evaluations/research-qa/m64-contract-extraction-review.json",
+      "sha256": "0a758bca18f12cdb40cc2c38a9cb3fbfee6da743bf66ef84d17ceea1a9e4cad4"
+    }
+  ]
+}

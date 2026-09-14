@@ -1,18 +1,20 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T20:46:22.324327+00:00",
+  "updated_at": "2026-09-14T21:25:25.374257+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M64",
     "name": "Guided synthetic electricity entry and versioned draft worksheet",
-    "status": "in_progress",
-    "next_gate": "Publish reviewed M64 implementation to rolling PR4, verify six remote CI checks, controlled migration/image promotion and actual signed-in browser.",
+    "status": "awaiting_board_feedback",
+    "next_gate": "Board feedback on the deployed guided synthetic worksheet before dependent work.",
     "evidence": [
       "docs/research/guided-electricity-entry-milestone-64.md",
       "evaluations/research-qa/m63-board-closure.md",
-      "evaluations/research-qa/milestone64-private-worksheet.md"
+      "evaluations/research-qa/milestone64-private-worksheet.md",
+      "docs/research/m64-hosted-verification.json",
+      "evaluations/research-qa/m64-hosted-handoff.md"
     ]
   },
   "completed_milestones": [
@@ -87,18 +89,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M61 local browser acceptance completed end to end; all temporary M61 API and preview listeners are closed. No persistent M61 service is configured.",
-    "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "Accounting and CTO implementation assignments finished. Independent M64 QA local gate passes; supplemental publication review running in reused m63_data context. Root owns hosted publication/browser verification."
+    "website_preview_state": "M64 live on existing www.neuvetra.ai private synthetic staging; schema10, exact worksheet/history and original report verified; browser left open for board feedback.",
+    "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
+    "last_session_work": "M64 implementation, independent QA, six CI checks, hosted browser/API and restart checks passed. Scoped specialist deliveries closed; board feedback pending."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T17:08:58Z",
+    "saved_at": "2026-09-14T21:20:20.260531+00:00",
     "path": "operations/next-session.md",
-    "board_record": "docs/research/inventory-draft-report-review-milestone-61.md",
-    "next_task": "Complete M64 guided synthetic worksheet on rolling PR4.",
-    "execution_state": "m64_implementation_in_progress",
-    "review": "Independent QA 922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5 passes after five resolved findings. Linux CI then exposed only a 5.066-second composed-test timeout against a 5-second default; the test-only 30-second deadline repair passed independent follow-up QA c63d8d236bf5f7321fbcff618839ce789627a3d3e2972340a51c83a270d8c42f, focused 4/131 and full API 625/5,451. Fresh Linux CI is pending. The broad historical test:ghg collector remains blocked by three inherited TBD expected values outside M61.",
-    "scope": "Bounded synthetic January2023 CAMX manual worksheet; immutable corrections and exact-version review."
+    "board_record": "docs/research/m64-hosted-verification.json",
+    "next_task": "Collect board feedback on live M64 before selecting a dependent milestone.",
+    "execution_state": "m64_deployed_demonstration_pass_final_handoff_review_and_board_feedback_pending",
+    "review": "Independent native QA19/850, packaging review and hosted handoff accepted. Board feedback pending.",
+    "scope": "Synthetic guided January2023 CAMX electricity worksheet with immutable corrections and separate-manager review; no customer release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -1166,6 +1168,46 @@
         "docs/research/guided-electricity-entry-milestone-64.md",
         "evaluations/research-qa/m63-board-closure.md"
       ]
+    },
+    {
+      "id": "M64-ACCOUNTING",
+      "owner": "/root/m64_accounting",
+      "status": "complete",
+      "scope": "Independent bounded input policy, numerical expectations and implementation review",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M64-CTO",
+      "owner": "/root/m64_cto",
+      "status": "complete",
+      "scope": "Tenant-scoped immutable worksheet/database/API with actual-driver regression",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M64-QA",
+      "owner": "/root/m63_data",
+      "status": "complete",
+      "scope": "Independent local, packaging and hosted-evidence acceptance; reused context with prior M63 authorship disclosed",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M64-INTEGRATION",
+      "owner": "/root",
+      "status": "complete",
+      "scope": "Frontend, scoped existing-host upgrade, browser demonstration and publication",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -1967,5 +2009,23 @@
     "merged_at": "2026-09-14T17:54:47Z",
     "board_authorization": "Explicit yes to merge PR3 in this task",
     "deployed": false
+  },
+  "current_m64": {
+    "state": "deployed_awaiting_board_feedback",
+    "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
+    "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/4",
+    "draft": true,
+    "merged": false,
+    "deployment_id": "47822f07-a13a-4452-8ce7-bc4039edab2f",
+    "ci_checks_passed": 6,
+    "readiness_http": 200,
+    "schema_version": 10,
+    "synthetic_only": true,
+    "release_eligible": false,
+    "active_workers_excluding_root": 0,
+    "active_worker": null,
+    "persistent_workers": false,
+    "board_feedback": "pending",
+    "evidence": "docs/research/m64-hosted-verification.json"
   }
 }

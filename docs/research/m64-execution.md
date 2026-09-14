@@ -23,3 +23,7 @@ Existing Railway Site-Web and Supabase project only. Current pre-M64 deployed he
 Fresh encrypted application backup verified at `20260914T203506Z`:317154bytes, SHA256 `560e8142f1ba711e9169e5b27acf3c9a822c179422896c40a358d8a4347db6c5`, external recovery path `C:/Users/nimab/Neuvetra/m63-runtime/recovery/m63-application-20260914T203506Z.dump.dpapi`. This proves decryption/hash integrity, not a new restore drill. Existing M63 restore evidence remains historical. Provider Auth and portable off-device recovery remain gaps.
 
 Live migration, remote checks, hosted exercise, actual browser demonstration and final board feedback are pending in this execution snapshot. They must be recorded from observations before milestone completion. No customer release or professional assurance follows from this milestone.
+
+## Hosted handoff completed
+
+Implementation ea31275 passed all six remote checks and is deployed on the existing service at schema10. Live API, browser, original-report preservation and restart/readback passed. Final independent handoff accepted scoped role closure; M64 remains awaiting board feedback, with draft PR4 unmerged. Exact evidence and limitations: docs/research/m64-hosted-verification.json and evaluations/research-qa/m64-hosted-handoff.md. Earlier pending statements above describe earlier execution stages.
