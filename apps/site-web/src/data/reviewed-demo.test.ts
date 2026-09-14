@@ -6,20 +6,11 @@ import { isResearchAnswer } from "@/lib/research-api"
 import { loadReviewedDemoCases, REVIEWED_DEMO_MANIFEST } from "@/data/reviewed-demo"
 
 const siteWebDirectory = path.resolve(import.meta.dir, "../..")
-const repositoryDirectory = path.resolve(import.meta.dir, "../../../..")
-const originals: Record<string, string> = {
-  W11: ".superpowers/website-epa-live-35/W11-browser-response.body.bin",
-  W03: ".superpowers/website-epa-live-39/W03-browser-response.body.bin",
-  "EPA14-B01": ".superpowers/website-epa-live-40/EPA14-B01-browser-response.body.bin",
-}
-
 describe("preserved reviewed demo", () => {
-  test("the three development artifacts are exact hash-bound copies in the accepted order", async () => {
+  test("the three checked-in development artifacts match their accepted hashes and order", async () => {
     expect(REVIEWED_DEMO_MANIFEST.map((item) => item.id)).toEqual(["W11", "W03", "EPA14-B01"])
     for (const item of REVIEWED_DEMO_MANIFEST) {
       const bytes = await readFile(path.join(siteWebDirectory, item.artifact))
-      const original = await readFile(path.join(repositoryDirectory, originals[item.id]!))
-      expect(bytes.equals(original)).toBe(true)
       expect(createHash("sha256").update(bytes).digest("hex")).toBe(item.responseSha256)
       expect(isResearchAnswer(JSON.parse(bytes.toString("utf8")))).toBe(true)
     }

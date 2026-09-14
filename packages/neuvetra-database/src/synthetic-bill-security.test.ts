@@ -137,7 +137,7 @@ describe("M55 synthetic bill tenant and immutability boundary", () => {
       facility: { name: "Synthetic California office", country: "United States", state: "California", egrid_subregion: "CAMX" },
       boundary: { reporting_year: 2023, approach: "operational_control", status: "draft", version: 1 },
     }
-    const python = `${process.env.LOCALAPPDATA}\\Python\\bin\\python.exe`
+    const python = process.env.PYTHON ?? (process.platform === "win32" ? "python" : "python3")
     const child = Bun.spawnSync([python, "linked_bill_calculation.py"], {
       cwd: fileURLToPath(new URL("../../../apps/site-api/src/calculation/", import.meta.url)),
       stdin: new Blob([JSON.stringify({ action: "calculate_linked_bill", binding })]),
