@@ -1,0 +1,24 @@
+{
+  "profile": "neuvetra.m65.ci-test-supplement.v1",
+  "status": "pass_targeted_test_source_and_executed_offline_checks",
+  "reason": "Root reported exact publication allowlist omitted these two readiness/migration-count test updates; no omitted product change reported",
+  "scope": "schema11 readiness and eleven migration expectations; final EOF blank line has no test behavior",
+  "executed": {
+    "command": "bun test apps/site-api/src/staging/server.test.ts packages/neuvetra-database/src/hosted.test.ts",
+    "passed": 9,
+    "skipped": 9,
+    "assertions": 84,
+    "failed": 0
+  },
+  "nativeLimitation": "Named m63_integration opt-in suite not invoked; retained historical receipt preserved. Repaired candidate actual native independent suite already passed12/218 on m65_qa_print. Fresh Linux CI must run its own opted-in suite.",
+  "artifacts": [
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "canonicalLfSha256": "4ce78844213d826bad8287422d8f62fc5b780bb6ec84c1f8d7467e7a49317cc4"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "canonicalLfSha256": "b36c79ec7604bb78ff2e6e9b2f53dd4216acb11640e40ee56f8d972c6bb66dee"
+    }
+  ]
+}

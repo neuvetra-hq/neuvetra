@@ -1,0 +1,18 @@
+{
+  "profile": "neuvetra.m65.ui-label-supplement.v1",
+  "finding": "M65-UI-F04",
+  "verdict": "pass_exact_two_string_source_repair",
+  "discovery": "Root observed malformed Open report separators in actual hosted browser before board demonstration; independent QA did not operate that live browser",
+  "cause": "Root attributes mojibake to earlier Python default encoding; source contained two literal malformed separators",
+  "repair": "Replace exactly those two display separators with ASCII slash; no handler, state, authorization, decoder, report content or database change",
+  "independentEvidence": {
+    "reverseExactlyTwoStringEditsRecoversPriorBoundHash": true,
+    "priorCanonicalLfSha256": "55acc9e11391b491d54042dbd904d8efab856e5749c73e1f52eb1b21feb5c6bf",
+    "currentMojibakeOccurrences": 0,
+    "currentCanonicalLfSha256": "0bef2ba906b89cd30725a700d08a0303166990984721838a83609cafbeaf1742",
+    "path": "apps/site-web/src/components/WorksheetReports.tsx"
+  },
+  "testing": "Deterministic reverse-edit byte/hash comparison to prior frozen manifest. No new behavioral tests warranted for two static label literals; actual repaired deployment/browser remains a subsequent observation.",
+  "frozenEvidence": "Original local/print reports and manifests unchanged; this supplements only the component binding",
+  "limits": "No cloud calls, credentials, Git operations or product edits performed by QA. Prior M63 authorship/no M65 product authorship disclosed; inherited compute unknown. Hosted numerical/print success does not erase this escaped display defect."
+}
