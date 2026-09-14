@@ -25,8 +25,8 @@ function canonicalJson(value: unknown): string {
 }
 
 export async function createDevelopmentWorkspaceServer() {
-  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
-    throw new Error("The M54-M58 synthetic workspace server requires explicit development/test enable flags.")
+  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER !== "enabled" || Bun.env.M59_SYNTHETIC_EVIDENCE_PACK !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
+    throw new Error("The M54-M59 synthetic workspace server requires explicit development/test enable flags.")
   }
   const database = await DevelopmentWorkspaceDatabase.create([M54_OWNER_ID, M54_OUTSIDER_ID, M55_ADMIN_ID, M55_MEMBER_ID])
   const calculationFlights = new Map<string, Promise<Awaited<ReturnType<typeof database.createSyntheticBillCalculation>>>>()
@@ -138,6 +138,9 @@ export async function createDevelopmentWorkspaceServer() {
       findAnnualInventory: (userId, workspaceId) => database.findAnnualInventory(userId, workspaceId),
       createAnnualInventory: (userId, workspaceId, registerId, idempotencyKey) => database.createAnnualInventory(userId, workspaceId, registerId, idempotencyKey),
       reviewAnnualInventory: (userId, workspaceId, inventoryId, input) => database.reviewAnnualInventory(userId, workspaceId, inventoryId, input.decision, input.reasonCode, input.acknowledgedWarnings, input.expectedInventorySnapshotSha256, input.idempotencyKey),
+      createAnnualEvidencePack: (userId, workspaceId, inventoryId, expectedSnapshot, idempotencyKey) => database.createAnnualEvidencePack(userId, workspaceId, inventoryId, expectedSnapshot, idempotencyKey),
+      findAnnualEvidencePack: (userId, workspaceId, inventoryId) => database.findAnnualEvidencePack(userId, workspaceId, inventoryId),
+      replayAnnualEvidencePack: (userId, workspaceId, inventoryId, packId, archive) => database.replayAnnualEvidencePack(userId, workspaceId, inventoryId, packId, archive),
     },
   })
   const app = new Elysia({ normalize: false })
@@ -154,7 +157,7 @@ export async function createDevelopmentWorkspaceServer() {
 
 if (import.meta.main) {
   const { app, database } = await createDevelopmentWorkspaceServer()
-  const server = app.listen({ hostname: HOST, port: PORT, maxRequestBodySize: 16_384 })
+  const server = app.listen({ hostname: HOST, port: PORT, maxRequestBodySize: 300_000 })
   const stop = async () => {
     await server.stop()
     await database.close()
@@ -162,5 +165,5 @@ if (import.meta.main) {
   }
   process.once("SIGINT", stop)
   process.once("SIGTERM", stop)
-  console.info(`Neuvetra M58 synthetic annual register workspace listening on http://${HOST}:${PORT}`)
+  console.info(`Neuvetra M59 synthetic evidence-pack workspace listening on http://${HOST}:${PORT}`)
 }

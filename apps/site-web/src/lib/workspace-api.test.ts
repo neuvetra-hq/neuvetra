@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeSyntheticBill, decodeWorkspace, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type SyntheticInventory } from "./workspace-api"
+import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeEvidencePackMetadata, decodeEvidencePackReceipt, decodeSyntheticBill, decodeWorkspace, downloadEvidencePack, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type SyntheticInventory } from "./workspace-api"
 
 const fixture = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -93,6 +93,28 @@ describe("M54 workspace browser boundary", () => {
     }) as typeof fetch
     await expect(createSyntheticWorkspace("signed_out", fetcher)).rejects.toThrow("Authentication required")
     expect(new Headers(headers).has("authorization")).toBe(false)
+  })
+})
+
+describe("M59 evidence-pack browser boundary",()=>{
+  const pack={id:"45454545-4545-4545-8545-454545454545",companyId:fixture.id,inventoryId:"46464646-4646-4646-8646-464646464646",profile:"neuvetra.synthetic.inventory-evidence-pack.v1" as const,manifestSha256:"a".repeat(64),lineageRootSha256:"b".repeat(64),archiveSha256:"c".repeat(64),archiveByteLength:24000,entryCount:17 as const,createdBy:"47474747-4747-4747-8747-474747474747",createdAt:"2026-09-14T12:00:00.000Z"}
+  test("accepts exact metadata and reconstruction only",()=>{
+    expect(decodeEvidencePackMetadata(pack,{companyId:fixture.id,inventoryId:pack.inventoryId})).toEqual(pack)
+    for(const changed of [{...pack,extra:true},{...pack,entryCount:16},{...pack,archiveSha256:"bad"},{...pack,companyId:"48484848-4848-4848-8848-484848484848"}])expect(()=>decodeEvidencePackMetadata(changed,{companyId:fixture.id,inventoryId:pack.inventoryId})).toThrow("not recognized")
+    const receipt={status:"verified_match",profile:pack.profile,archiveSha256:pack.archiveSha256,manifestSha256:pack.manifestSha256,lineageRootSha256:pack.lineageRootSha256,entryCount:17,inventoryId:pack.inventoryId,reconstructed:{expected:12,reported:10,estimated:1,excluded:1,missing:0,reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"},overallInventoryCompleteness:"incomplete",releaseEligible:false}
+    expect(decodeEvidencePackReceipt(receipt,pack)).toEqual(receipt)
+    const reversed={...receipt,reconstructed:Object.fromEntries(Object.entries(receipt.reconstructed).reverse())}
+    expect(decodeEvidencePackReceipt(reversed,pack)).toEqual(reversed)
+    expect(()=>decodeEvidencePackReceipt({...receipt,reconstructed:{...receipt.reconstructed,includedMwh:"0.000000"}},pack)).toThrow("not recognized")
+  })
+  test("hashes downloaded bytes instead of trusting the response header",async()=>{
+    const bytes=new TextEncoder().encode("fixed evidence archive")
+    const archiveSha256=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),byte=>byte.toString(16).padStart(2,"0")).join("")
+    const exactPack={...pack,archiveSha256,archiveByteLength:bytes.byteLength}
+    const response=(body:Uint8Array)=>new Response(body,{status:200,headers:{"x-neuvetra-archive-sha256":archiveSha256,"content-type":"application/zip"}})
+    expect((await downloadEvidencePack(exactPack,"member",(async()=>response(bytes)) as typeof fetch)).size).toBe(bytes.byteLength)
+    const changed=bytes.slice();changed[0]^=1
+    await expect(downloadEvidencePack(exactPack,"member",(async()=>response(changed)) as typeof fetch)).rejects.toThrow("not recognized")
   })
 })
 

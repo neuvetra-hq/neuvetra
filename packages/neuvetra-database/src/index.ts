@@ -1,6 +1,8 @@
 import { PGlite, type Transaction } from "@electric-sql/pglite"
 import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
+import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
+export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
 
 function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value)
@@ -115,6 +117,11 @@ export interface SyntheticCalculationLineage {
   parserVersion: "m55-fixed-pdf-v1"
   previousBillVersionId: string
   activityVersion: 1
+}
+
+export interface EvidencePackRecord {
+  id:string;companyId:string;inventoryId:string;profile:"neuvetra.synthetic.inventory-evidence-pack.v1";manifestSha256:string;lineageRootSha256:string;
+  archiveSha256:string;archiveByteLength:number;entryCount:17;createdBy:string;createdAt:string;archive:Uint8Array
 }
 
 export const M57_WARNINGS = [
@@ -289,6 +296,8 @@ export class DevelopmentWorkspaceDatabase {
     await db.exec(inventoryMigration)
     const annualRegisterMigration = await Bun.file(new URL("./migrations/0005_annual_electricity_register.sql", import.meta.url)).text()
     await db.exec(annualRegisterMigration)
+    const evidencePackMigration = await Bun.file(new URL("./migrations/0006_inventory_evidence_pack.sql", import.meta.url)).text()
+    await db.exec(evidencePackMigration)
     return new DevelopmentWorkspaceDatabase(db)
   }
 
@@ -767,6 +776,53 @@ export class DevelopmentWorkspaceDatabase {
       if (!prior.rows[0]) await tx.query("select neuvetra.review_annual_inventory_v2($1,$2,$3,$4,$5,$6,$7,$8,$9)", [companyId,inventoryId,crypto.randomUUID(),crypto.randomUUID(),decision,reasonCode,acknowledgedWarnings,idempotencyKey,fingerprint])
       return (await this.readAnnualInventory(tx, companyId))!
     })
+  }
+
+  private async assembleAnnualEvidencePack(tx: Transaction, companyId: string, inventoryId: string): Promise<EvidencePackBuild> {
+    const workspaceRow=(await tx.query<WorkspaceRow>(WORKSPACE_QUERY,[companyId])).rows[0]
+    const [predecessorInventory,registers,annualInventory]=await Promise.all([this.readSyntheticInventory(tx,companyId),this.readAnnualRegisters(tx,companyId),this.readAnnualInventory(tx,companyId)])
+    if(!workspaceRow||!predecessorInventory?.decision||predecessorInventory.reviewState!=="approved_bounded_draft"||!annualInventory?.decision||annualInventory.id!==inventoryId||annualInventory.decision.outcome!=="approved_bounded_annual_location_draft")throw new Error("Approved annual inventory required.")
+    const link=await tx.query<{evidence_id:string}>("select evidence_id from neuvetra.inventory_calculation_results where company_id=$1 and id=$2",[companyId,predecessorInventory.calculationId])
+    const bill=link.rows[0]?await this.readBill(tx,companyId,link.rows[0].evidence_id):null
+    if(!bill?.draftActivity||!bill.draftCalculation)throw new Error("Approved annual inventory required.")
+    const eventRows=await tx.query<{id:string;company_id:string;actor_user_id:string;event_type:M59AuditEvent["eventType"];subject_id:string;event_meta:Record<string,unknown>;created_at:string}>(
+      "select id,company_id,actor_user_id,event_type,subject_id,event_meta,created_at::text from neuvetra.evidence_audit_log where company_id=$1 "+
+      "union all select id,company_id,actor_user_id,event_type,calculation_id subject_id,event_meta,created_at::text from neuvetra.calculation_audit_log where company_id=$1 "+
+      "union all select id,company_id,actor_user_id,event_type,subject_id,event_meta,created_at::text from neuvetra.inventory_review_audit_log where company_id=$1 "+
+      "union all select id,company_id,actor_user_id,event_type,subject_id,event_meta,created_at::text from neuvetra.annual_inventory_audit_log where company_id=$1 order by created_at,event_type,id",[companyId],
+    )
+    const expectedOrder=["bill.ingested","bill.corrected","bill.linked","calculation.created","inventory.version.created","inventory.review.recorded","annual_register.created","annual_register.completed","annual_inventory.created","annual_inventory.reviewed"]
+    const auditEvents=expectedOrder.map((eventType)=>{const row=eventRows.rows.find(item=>item.event_type===eventType);if(!row)throw new Error("Approved annual inventory required.");return{id:row.id,companyId:row.company_id,actorUserId:row.actor_user_id,eventType:row.event_type,subjectId:row.subject_id,metadata:row.event_meta,occurredAt:databaseInstant(row.created_at)}})
+    const [rawBillBytes,rawRegisterBytes,rawFixtureManifestBytes]=await Promise.all([
+      Bun.file(new URL("../../../output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf",import.meta.url)).bytes(),
+      Bun.file(new URL("../../../data/synthetic/m58-electricity-register-2023.json",import.meta.url)).bytes(),
+      Bun.file(new URL("../../../data/synthetic/m58-electricity-register-2023.manifest.json",import.meta.url)).bytes(),
+    ])
+    const{draftCalculation:calculation,...billSnapshot}=bill
+    const calculationSnapshot={...calculation,record:calculation.record.result as Record<string,unknown>}
+    return buildInventoryEvidenceArchive({workspace:toRecord(workspaceRow),bill:billSnapshot,calculation:calculationSnapshot,predecessorInventory,registers,annualInventory,rawBillBytes,rawRegisterBytes,rawFixtureManifestBytes,auditEvents} as Parameters<typeof buildInventoryEvidenceArchive>[0])
+  }
+
+  private async readAnnualEvidencePack(tx:Transaction,companyId:string,inventoryId:string):Promise<EvidencePackRecord|null>{
+    const result=await tx.query<{id:string;company_id:string;annual_inventory_version_id:string;profile:EvidencePackRecord["profile"];manifest_sha256:string;lineage_root_sha256:string;archive_bytes:Uint8Array;archive_sha256:string;archive_byte_length:number;entry_count:17;created_by:string;created_at:string}>("select id,company_id,annual_inventory_version_id,profile,manifest_sha256,lineage_root_sha256,archive_bytes,archive_sha256,archive_byte_length,entry_count,created_by,created_at::text from neuvetra.inventory_evidence_packs where company_id=$1 and annual_inventory_version_id=$2",[companyId,inventoryId])
+    const row=result.rows[0];if(!row)return null
+    const archive=new Uint8Array(row.archive_bytes)
+    if(row.profile!=="neuvetra.synthetic.inventory-evidence-pack.v1"||row.entry_count!==17||archive.byteLength!==row.archive_byte_length)throw new Error("Stored evidence pack failed integrity verification.")
+    try{verifyInventoryEvidenceArchive(archive,{archiveSha256:row.archive_sha256,manifestSha256:row.manifest_sha256,lineageRootSha256:row.lineage_root_sha256,companyId:row.company_id,inventoryId:row.annual_inventory_version_id})}catch{throw new Error("Stored evidence pack failed integrity verification.")}
+    return{id:row.id,companyId:row.company_id,inventoryId:row.annual_inventory_version_id,profile:row.profile,manifestSha256:row.manifest_sha256,lineageRootSha256:row.lineage_root_sha256,archiveSha256:row.archive_sha256,archiveByteLength:row.archive_byte_length,entryCount:row.entry_count,createdBy:row.created_by,createdAt:databaseInstant(row.created_at),archive}
+  }
+
+  async createAnnualEvidencePack(userId:string,companyId:string,inventoryId:string,expectedInventorySnapshotSha256:string,idempotencyKey:string):Promise<EvidencePackRecord>{
+    return this.asTrustedUser(userId,async(tx)=>{
+      const build=await this.assembleAnnualEvidencePack(tx,companyId,inventoryId)
+      const operationFingerprint=sha256({companyId,inventoryId,expectedInventorySnapshotSha256,profile:"neuvetra.synthetic.inventory-evidence-pack.v1"})
+      await tx.query("select neuvetra.create_inventory_evidence_pack($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)",[companyId,inventoryId,crypto.randomUUID(),crypto.randomUUID(),expectedInventorySnapshotSha256,build.manifestSha256,build.lineageRootSha256,build.archive,build.archiveSha256,build.archiveByteLength,idempotencyKey,operationFingerprint])
+      const record=await this.readAnnualEvidencePack(tx,companyId,inventoryId);if(!record)throw new Error("Evidence pack could not be read back.");return record
+    })
+  }
+  async findAnnualEvidencePack(userId:string,companyId:string,inventoryId:string):Promise<EvidencePackRecord|null>{return this.asUser(userId,tx=>this.readAnnualEvidencePack(tx,companyId,inventoryId))}
+  async replayAnnualEvidencePack(userId:string,companyId:string,inventoryId:string,packId:string,archive:Uint8Array):Promise<EvidencePackReceipt>{
+    return this.asUser(userId,async(tx)=>{const stored=await this.readAnnualEvidencePack(tx,companyId,inventoryId);if(!stored||stored.id!==packId)throw new Error("Evidence pack not found.");const current=await this.assembleAnnualEvidencePack(tx,companyId,inventoryId);if(current.archiveSha256!==stored.archiveSha256||current.archiveByteLength!==stored.archiveByteLength)throw new Error("Evidence pack is not current.");return verifyInventoryEvidenceArchive(archive,{archiveSha256:stored.archiveSha256,manifestSha256:stored.manifestSha256,lineageRootSha256:stored.lineageRootSha256,companyId,inventoryId,currentArchive:current.archive})})
   }
 
   async close() {

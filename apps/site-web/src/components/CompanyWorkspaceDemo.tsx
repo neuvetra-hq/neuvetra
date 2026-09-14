@@ -1,7 +1,7 @@
 import { useRef, useState, type RefObject } from "react"
 import {
-  ANNUAL_WARNINGS, calculateSyntheticBill, completeAnnualRegister, correctSyntheticBill, createAnnualInventory, createAnnualRegister, createSyntheticWorkspace, decideAnnualInventory, decideSyntheticInventory, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitAnnualInventory, revisitAnnualRegisters, revisitSyntheticBill, revisitSyntheticInventory,
-  revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type AnnualRegister, type CompanyWorkspace, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
+  ANNUAL_WARNINGS, calculateSyntheticBill, completeAnnualRegister, correctSyntheticBill, createAnnualInventory, createAnnualRegister, createEvidencePack, createSyntheticWorkspace, decideAnnualInventory, decideSyntheticInventory, downloadEvidencePack, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replayEvidencePack, replaySyntheticBillCalculation, revisitAnnualInventory, revisitAnnualRegisters, revisitEvidencePack, revisitSyntheticBill, revisitSyntheticInventory,
+  revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type AnnualRegister, type CompanyWorkspace, type EvidencePackMetadata, type EvidencePackReceipt, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
 } from "@/lib/workspace-api"
 import syntheticBillUrl from "@m55-bill"
 
@@ -15,6 +15,9 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   const [inventory, setInventory] = useState<SyntheticInventory | null>(null)
   const [annualRegisters, setAnnualRegisters] = useState<AnnualRegister[]>([])
   const [annualInventory, setAnnualInventory] = useState<AnnualInventory | null>(null)
+  const [evidencePack,setEvidencePack]=useState<EvidencePackMetadata|null>(null)
+  const [evidenceFile,setEvidenceFile]=useState<File|null>(null)
+  const [evidenceReceipt,setEvidenceReceipt]=useState<EvidencePackReceipt|null>(null)
   const [annualAcknowledged, setAnnualAcknowledged] = useState<string[]>([])
   const [acknowledged, setAcknowledged] = useState<string[]>([])
   const [savedId, setSavedId] = useState(() => window.localStorage.getItem(WORKSPACE_KEY) ?? "")
@@ -47,7 +50,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
           let registers: AnnualRegister[]=[]
           try { registers=await revisitAnnualRegisters(result.id,priorInventory,actor);setAnnualRegisters(registers) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
           const finalRegister=registers.find((item)=>item.version===2)
-          if(finalRegister)try { setAnnualInventory(await revisitAnnualInventory(result.id,finalRegister,actor)) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+          if(finalRegister)try { const annual=await revisitAnnualInventory(result.id,finalRegister,actor);setAnnualInventory(annual);if(annual.decision?.outcome==="approved_bounded_annual_location_draft")try{setEvidencePack(await revisitEvidencePack(annual,actor))}catch{setEvidencePack(null)} } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
         }
       }
       setMessage(action === "create" ? "Workspace created in one transaction." : "The saved workspace and its evidence were revisited.")
@@ -150,6 +153,9 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
     try{const result=await decideAnnualInventory(annualInventory,decision,actor);setAnnualInventory(result);setMessage("The independent M58 decision is recorded. The annual location-based draft remains incomplete and unreleased.")}
     catch(error){showError(error,"The annual review could not be recorded.")}finally{setBusy(false)}
   }
+  async function buildEvidencePack(){if(!annualInventory)return;setBusy(true);setIsError(false);setEvidenceReceipt(null);try{const result=await createEvidencePack(annualInventory,actor);setEvidencePack(result);setMessage("The deterministic 17-file evidence pack is sealed for this approved M58 inventory.")}catch(error){showError(error,"The evidence pack could not be created.")}finally{setBusy(false)}}
+  async function saveEvidencePack(){if(!evidencePack)return;setBusy(true);setIsError(false);try{const file=await downloadEvidencePack(evidencePack,actor);setEvidenceFile(file);const url=URL.createObjectURL(file);const anchor=document.createElement("a");anchor.href=url;anchor.download=file.name;anchor.click();URL.revokeObjectURL(url);setMessage("The exact M59 ZIP was downloaded and is ready for independent replay.")}catch(error){showError(error,"The evidence pack could not be downloaded.")}finally{setBusy(false)}}
+  async function verifyEvidencePack(){if(!evidencePack||!evidenceFile)return;setBusy(true);setIsError(false);setEvidenceReceipt(null);try{const result=await replayEvidencePack(evidencePack,evidenceFile,actor);setEvidenceReceipt(result);setMessage("Verified exact M58 pack: archive integrity, sealed lineage and deterministic arithmetic match the approved bounded annual location draft.")}catch(error){setEvidenceReceipt(null);showError(error,"The evidence pack could not be verified.")}finally{setBusy(false)}}
 
   function reviewBill() {
     if (!facilityConfirmed) {
@@ -161,7 +167,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   }
 
   function changeActor(next: WorkspaceActor) {
-    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAnnualRegisters([]); setAnnualInventory(null); setAcknowledged([]); setAnnualAcknowledged([]); setFacilityConfirmed(false)
+    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAnnualRegisters([]); setAnnualInventory(null);setEvidencePack(null);setEvidenceFile(null);setEvidenceReceipt(null); setAcknowledged([]); setAnnualAcknowledged([]); setFacilityConfirmed(false)
     setMessage(next === "owner" ? "Synthetic owner selected." : next === "admin" ? "Synthetic administrator selected." : next === "member" ? "Synthetic read-only member selected." : next === "outsider" ? "Synthetic outsider selected." : "Signed out.")
   }
 
@@ -170,9 +176,9 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   return (
     <section className="workspace-demo" aria-labelledby="workspace-heading">
       <div className="workspace-demo-heading"><div>
-        <p className="research-eyebrow">M58 local development demonstration</p>
-        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>Resolve a fixed annual electricity register without hiding exceptions.</h1>
-        <p className="research-intro">Carry January forward, add nine reported periods, estimate November from two reported months, exclude December with evidence, and require an independent review.</p>
+        <p className="research-eyebrow">M59 local development demonstration</p>
+        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>Package and replay the approved annual electricity evidence.</h1>
+        <p className="research-intro">Build one deterministic archive from the sealed M58 record, download its exact bytes, and independently reconstruct the bounded subtotal without hiding the estimate or exclusion.</p>
       </div><span className="research-outline-label">Local · synthetic · deterministic</span></div>
       <div className="workspace-identity" role="group" aria-label="Synthetic identity">
         {(["owner", "admin", "member", "outsider", "signed_out"] as const).map((item) => <button type="button" key={item} disabled={busy} aria-pressed={actor === item} onClick={() => changeActor(item)}>{item === "owner" ? "Signed-in owner" : item === "admin" ? "Administrator" : item === "member" ? "Read-only member" : item === "outsider" ? "Other tenant" : "Signed out"}</button>)}
@@ -235,6 +241,21 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
                 {currentAnnualRegister.totals && <div className="bill-calculation"><h3>Included annual draft subtotal</h3><div className="bill-calculation-total"><strong>{Number(currentAnnualRegister.totals.includedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})}</strong><span>kg CO2e</span></div><dl><div><dt>Reported</dt><dd>{currentAnnualRegister.totals.reportedMwh} MWh · {Number(currentAnnualRegister.totals.reportedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})} kg CO2e</dd></div><div><dt>Estimated</dt><dd>{currentAnnualRegister.totals.estimatedMwh} MWh · {Number(currentAnnualRegister.totals.estimatedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})} kg CO2e</dd></div><div><dt>Excluded</dt><dd>December · no quantity · not counted</dd></div></dl>{!annualInventory&&<button className="research-primary-button" type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")} onClick={sealAnnualInventory}>Seal inventory version 2</button>}</div>}
               </>}
               {annualInventory && <div className="inventory-decision"><h4>Inventory version 2 · {annualInventory.decision ? annualInventory.decision.outcome.replace(/_/g," ") : "awaiting independent review"}</h4><p><strong>Overall inventory completeness: incomplete.</strong> This resolved register still has one estimate, one exclusion, no market-based Scope 2, unreleased factors and methods, and no Scope 1 or Scope 3 assessment.</p><p className="bill-hash">Snapshot {annualInventory.snapshotSha256}</p>{!annualInventory.decision&&<>{ANNUAL_WARNINGS.map((warning)=><label key={warning}><input type="checkbox" checked={annualAcknowledged.includes(warning)} onChange={(event)=>setAnnualAcknowledged((current)=>event.target.checked?[...current,warning]:current.filter((item)=>item!==warning))}/>{warning.replace(/_/g," ")}</label>)}<div className="calculation-actions"><button type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")||ACTOR_IDS[actor as "owner"|"admin"]===annualInventory.submittedBy||annualAcknowledged.length!==ANNUAL_WARNINGS.length} onClick={()=>reviewAnnual("approve_bounded_annual_location_draft")}>Approve bounded annual draft</button><button type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")||ACTOR_IDS[actor as "owner"|"admin"]===annualInventory.submittedBy} onClick={()=>reviewAnnual("changes_requested")}>Request changes</button></div></>}</div>}
+            </section>}
+            {annualInventory?.decision?.outcome==="approved_bounded_annual_location_draft"&&<section className="inventory-review annual-register" aria-labelledby="evidence-pack-heading">
+              <p className="research-eyebrow">M59 · local synthetic inventory evidence pack</p>
+              <h3 id="evidence-pack-heading">Reproducible evidence handoff</h3>
+              <div className="inventory-state"><strong>Approved bounded annual location draft</strong><span>Overall inventory completeness: incomplete · release eligibility false</span></div>
+              <p>12 of 12 expected periods resolved: 10 reported, 1 estimated, 1 excluded. December is excluded with no quantity and is not counted.</p>
+              {!evidencePack&&<button className="research-primary-button" type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")} onClick={buildEvidencePack}>Create deterministic evidence pack</button>}
+              {evidencePack&&<div className="bill-calculation">
+                <h4>Sealed 17-file ZIP</h4>
+                <dl><div><dt>Included subtotal</dt><dd>139.281000 MWh · 27,165.4065 kg CO2e</dd></div><div><dt>Exact emissions</dt><dd>27165.4064643528 kg CO2e</dd></div><div><dt>Reported</dt><dd>126.788000 MWh · 24728.7681363744 kg CO2e</dd></div><div><dt>Estimated</dt><dd>12.493000 MWh · 2436.6383279784 kg CO2e</dd></div><div><dt>Archive size</dt><dd>{evidencePack.archiveByteLength.toLocaleString()} bytes · {evidencePack.entryCount} files</dd></div></dl>
+                <p className="bill-hash">Archive {evidencePack.archiveSha256}</p><p className="bill-hash">Manifest {evidencePack.manifestSha256}</p><p className="bill-hash">Lineage {evidencePack.lineageRootSha256}</p>
+                <div className="calculation-actions"><button className="research-secondary-button" type="button" disabled={busy} onClick={saveEvidencePack}>Download exact ZIP</button><label>Choose exact ZIP for replay<input type="file" accept=".zip,application/zip" disabled={busy} onChange={(event)=>{setEvidenceFile(event.target.files?.[0]??null);setEvidenceReceipt(null)}} /></label><button className="research-secondary-button" type="button" disabled={busy||!evidenceFile} onClick={verifyEvidencePack}>Verify evidence pack</button></div>
+                {evidenceReceipt&&<div className="inventory-history" role="status"><h4>Verified exact M58 pack</h4><p><strong>{Number(evidenceReceipt.reconstructed.includedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})} kg CO2e</strong> reconstructed from {evidenceReceipt.reconstructed.includedMwh} MWh.</p><p>Archive integrity, sealed lineage and deterministic arithmetic match. The inventory remains incomplete, synthetic and unreleased.</p></div>}
+              </div>}
+              <div className="inventory-warnings"><h4>Limits that remain</h4><ul><li>The development factor and method are unreleased.</li><li>This verifies deterministic integrity, not authenticity or assurance.</li><li>Market-based Scope 2, Scope 1 and Scope 3 remain outside this pack.</li></ul></div>
             </section>}
           </>}
         </div>

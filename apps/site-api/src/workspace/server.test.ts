@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test"
+import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 import { createDevelopmentWorkspaceServer, M54_OUTSIDER_TOKEN, M54_OWNER_TOKEN, M55_ADMIN_TOKEN, M55_MEMBER_TOKEN } from "./server"
 
 const ORIGIN = "http://127.0.0.1:5174"
@@ -20,7 +20,9 @@ describe("M54 composed development server", () => {
   const originalCalculationEnabled = Bun.env.M56_SYNTHETIC_BILL_CALCULATION
   const originalInventoryEnabled = Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
   const originalAnnualEnabled = Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER
+  const originalPackEnabled = Bun.env.M59_SYNTHETIC_EVIDENCE_PACK
   const originalRuntime = Bun.env.NODE_ENV
+  beforeEach(() => { Bun.env.M59_SYNTHETIC_EVIDENCE_PACK = "enabled" })
   afterEach(async () => {
     await close?.()
     close = undefined
@@ -34,6 +36,8 @@ describe("M54 composed development server", () => {
     else Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = originalInventoryEnabled
     if (originalAnnualEnabled === undefined) delete Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER
     else Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER = originalAnnualEnabled
+    if (originalPackEnabled === undefined) delete Bun.env.M59_SYNTHETIC_EVIDENCE_PACK
+    else Bun.env.M59_SYNTHETIC_EVIDENCE_PACK = originalPackEnabled
     if (originalRuntime === undefined) delete Bun.env.NODE_ENV
     else Bun.env.NODE_ENV = originalRuntime
   })
@@ -83,6 +87,8 @@ describe("M54 composed development server", () => {
       else Bun.env.NODE_ENV = runtime
       await expect(createDevelopmentWorkspaceServer()).rejects.toThrow("explicit development/test enable flags")
     }
+    Bun.env.M54_SYNTHETIC_WORKSPACE="enabled";Bun.env.M55_SYNTHETIC_BILL="enabled";Bun.env.M56_SYNTHETIC_BILL_CALCULATION="enabled";Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW="enabled";Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER="enabled";Bun.env.NODE_ENV="test";delete Bun.env.M59_SYNTHETIC_EVIDENCE_PACK
+    await expect(createDevelopmentWorkspaceServer()).rejects.toThrow("explicit development/test enable flags")
   })
 
   test("refuses non-owner bootstrap before creating any partial workspace", async () => {
@@ -294,6 +300,24 @@ describe("M54 composed development server", () => {
     const annualApproved=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/decisions`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M55_ADMIN_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({...annualDecision,idempotencyKey:crypto.randomUUID()})}))
     expect(annualApproved.status).toBe(201)
     expect(await annualApproved.json()).toMatchObject({overallInventoryCompleteness:"incomplete",releaseEligible:false,decision:{outcome:"approved_bounded_annual_location_draft",decidedBy:"33333333-3333-4333-8333-333333333333"}})
+    const packKey=crypto.randomUUID()
+    const packResponse=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M54_OWNER_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({expectedInventorySnapshotSha256:annual.snapshotSha256,idempotencyKey:packKey})}))
+    expect(packResponse.status).toBe(201)
+    const pack=await packResponse.json() as any
+    expect(pack).toMatchObject({companyId:workspace.id,inventoryId:annual.id,profile:"neuvetra.synthetic.inventory-evidence-pack.v1",entryCount:17})
+    expect(pack.archiveSha256).toMatch(/^[0-9a-f]{64}$/);expect(pack.manifestSha256).toMatch(/^[0-9a-f]{64}$/);expect(pack.archiveByteLength).toBeGreaterThan(4605)
+    const repeated=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M54_OWNER_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({expectedInventorySnapshotSha256:annual.snapshotSha256,idempotencyKey:crypto.randomUUID()})}))
+    expect(await repeated.json()).toEqual(pack)
+    const memberCannotCreate=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({expectedInventorySnapshotSha256:annual.snapshotSha256,idempotencyKey:crypto.randomUUID()})}));expect(memberCannotCreate.status).toBe(403)
+    const download=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs/${pack.id}/download`,{headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`}}));expect(download.status).toBe(200);expect(download.headers.get("x-neuvetra-archive-sha256")).toBe(pack.archiveSha256)
+    const archive=await download.arrayBuffer();expect(archive.byteLength).toBe(pack.archiveByteLength)
+    const replayForm=new FormData();replayForm.set("file",new File([archive],`neuvetra-m59-${annual.id}.zip`,{type:"application/zip"}))
+    const replay=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs/${pack.id}/replay`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`},body:replayForm}));expect(replay.status).toBe(200);expect(await replay.json()).toMatchObject({status:"verified_match",entryCount:17,reconstructed:{includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"},overallInventoryCompleteness:"incomplete",releaseEligible:false})
+    const tampered=new Uint8Array(archive);tampered[100]^=1;const tamperedForm=new FormData();tamperedForm.set("file",new File([tampered],"tampered.zip",{type:"application/zip"}));const refused=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs/${pack.id}/replay`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`},body:tamperedForm}));expect(refused.status).toBe(409)
+    const outsiderPack=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs/current`,{headers:{origin:ORIGIN,authorization:`Bearer ${M54_OUTSIDER_TOKEN}`}}));expect(outsiderPack.status).toBe(404)
+    const privileged=(database as unknown as {db:{exec:(sql:string)=>Promise<unknown>}}).db
+    await privileged.exec("alter table neuvetra.inventory_evidence_packs disable trigger evidence_pack_immutable; update neuvetra.inventory_evidence_packs set archive_bytes=set_byte(archive_bytes,0,0); alter table neuvetra.inventory_evidence_packs enable trigger evidence_pack_immutable")
+    const corruptedRead=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/evidence-packs/current`,{headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`}}));expect(corruptedRead.status).toBe(503);expect(await corruptedRead.json()).toEqual({error:"Workspace is unavailable."})
     const memberRegister=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-registers/2023`,{headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`}}));expect(memberRegister.status).toBe(200)
     const outsiderRegister=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-registers/2023`,{headers:{origin:ORIGIN,authorization:`Bearer ${M54_OUTSIDER_TOKEN}`}}));expect(outsiderRegister.status).toBe(404)
 
