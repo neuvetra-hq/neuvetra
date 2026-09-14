@@ -1,0 +1,9 @@
+# M63 role evidence closure
+
+Coordinator meta-review after board acceptance; this does not replace independent product QA. CTO and DATA artifact manifests were independently checked by M63-QA against exact working-file hashes and the published 952ab025 commit (allowing Git newline normalization). See evaluations/research-qa/m63-board-closure.md.
+
+The coordinator independently inspected the QA output manifest M63-QA (SHA-256 0e19590fa17e1e29c0b1a8e3bc77f8770f6980f91f3d733ba9713603285e9d27): the original technical review, browser follow-up and restored-cloud evidence. Its findings agree with the separately observed hosted status, preserved failed/passing browser-contract receipts, real signed-in Chrome revisit, and board acceptance. The QA author did not author this meta-review. Outcome acceptance is scoped to delivering an evidence-backed review that preserves limitations, not an assertion that QA never missed a defect.
+
+All three role records previously had empty artifacts and pending review/criteria despite implementation completion. Bind closure to the immutable snapshots. Their initial recorded state had insufficient closure evidence; use insufficient_evidence rather than inventing a clean first pass or attributing an integrated defect to the wrong author. No timed first-review or rework metric is reconstructed. CTO/QA preserve the same shared F03 escaped incident, counted once at parent milestone. All unobserved model, effort, token and cost values stay unknown; these records remain outside the measured efficiency pilot.
+
+This closure demonstrates finite dispatched role execution and reconciled evidence. It does not implement persistent workers or prove model efficiency gains. M64 planning was performed by the existing CTO context with CPO responsibility stated in its handoff, and independently challenged by QA; it is not an implementation worker running in the background.

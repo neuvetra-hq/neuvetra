@@ -1,20 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T19:53:13.6822002Z",
+  "updated_at": "2026-09-14T20:08:53.1330401Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M63",
-    "name": "Private staging: real sign-in and durable synthetic workflow",
-    "status": "in_progress",
-    "next_gate": "Confirm deployed browser repair through signed-in saved-workspace revisit, then collect renewed board feedback. Independent frontend contract passes for two actors, 22 GETs and no writes.",
+    "id": "M64",
+    "name": "Guided synthetic electricity entry and versioned draft worksheet",
+    "status": "planned",
+    "next_gate": "Independent accounting approval of variable-input precision/range/rounding and expected cases before engineering implementation.",
     "evidence": [
-      "docs/research/private-staging-milestone-63.md",
-      "evaluations/research-qa/milestone63-private-staging.md",
-      "docs/research/m63-hosted-access.json",
-      "evaluations/research-qa/m63-cloud-restore.json",
-      "evaluations/research-qa/m63-accepted-source-manifest.json"
+      "docs/research/guided-electricity-entry-milestone-64.md",
+      "evaluations/research-qa/m63-board-closure.md"
     ]
   },
   "completed_milestones": [
@@ -77,6 +74,11 @@
       "id": "M62",
       "completed_at": "2026-09-14",
       "feedback": "Board approved PR3 merge, then M63 private staging."
+    },
+    {
+      "id": "M63",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-63.md"
     }
   ],
   "runtime": {
@@ -1143,6 +1145,25 @@
         "evaluations/research-qa/milestone63-private-staging.md",
         "evaluations/research-qa/m63-accepted-source-manifest.json",
         "docs/research/m63-hosted-recovery.json"
+      ]
+    },
+    {
+      "id": "M63-DATA",
+      "owner": "/root/m63_data",
+      "status": "complete",
+      "scope": "Hosted schema, tenancy, migrations and source-manifest handoff",
+      "evidence": [
+        "operations/agent-improvement/runs/M63-DATA.json"
+      ]
+    },
+    {
+      "id": "M64-PLAN",
+      "owner": "/root/m63_cto",
+      "status": "complete",
+      "scope": "Read-only CPO/CTO next-milestone planning, independently challenged by QA; implementation not dispatched",
+      "evidence": [
+        "docs/research/guided-electricity-entry-milestone-64.md",
+        "evaluations/research-qa/m63-board-closure.md"
       ]
     }
   ],

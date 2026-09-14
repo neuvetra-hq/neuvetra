@@ -1,4 +1,12 @@
-# Current continuation - M63 private staging in progress
+# Current continuation — M63 accepted; M64 selected
+
+The board accepted the repaired live browser and confirmed no further M63 browser action is needed. M63 is complete for private synthetic staging: real sign-in, saved workflow, exact report/review, tenant boundaries, compatible rollback and application restore. Published implementation 952ab025156e4d60a10ad0ac30b237fa8d0a8a15 has five successful checks; deployment 937f007f-5ecd-4fed-a84d-7d9194d60292 and actual signed-in browser verification pass. Fresh readiness200/signed-out401 pass. See operations/feedback/2026-09-14-milestone-63.md and evaluations/research-qa/m63-board-closure.md. Preserve the F03 escaped defect and strengthened L04 checks.
+
+Next: M64 guided synthetic electricity entry and a versioned draft worksheet, scoped in docs/research/guided-electricity-entry-milestone-64.md. The first implementation dependency is independent accounting approval of the variable-input decimal/range/rounding policy and expected cases. Do not simply relax the fixed M63 fixture decoder. M64 implementation has not started; planning/review assignments are finite executions, not persistent agents. Use existing role routes, scoped delegation and independent QA. Keep the same rolling PR4; PR4 has not been merged. Recheck remote head and actual worker state before acting.
+
+No new hosting subscription. Customer launch, generalized uploads, new factors, billing and annual report generalization remain outside M64. Portable/Auth recovery, proactive alerts and scheduled backups remain explicit launch gaps.
+
+# Historical M63 implementation and browser-repair continuation
 
 Board feedback M63-F03: signed-in saved-workspace revisit rejected a successful calculation response. Exact frontend JSON object-order comparison fixed and independently reviewed in PR4 commit 2985ed3; original failure preserved. Recheck latest CI/deployment and verify the actual signed-in browser before renewed demonstration acceptance. See evaluations/research-qa/m63-browser-contract.md and the appended browser-contract receipt; do not treat prior API/recovery passes as browser proof.
 

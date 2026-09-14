@@ -1,4 +1,12 @@
-# Neuvetra board update — M63 browser defect under repair
+# Neuvetra board update — M63 accepted; M64 selected
+
+The board has accepted the repaired live workflow. M63 is complete for private synthetic testing; the same saved report and manager review remain intact. Live readiness and signed-out refusal were rechecked, and all five checks on the deployed repair pass. The browser defect stays in the performance record rather than being erased by its fix.
+
+The next milestone is M64: guided synthetic electricity entry and a versioned draft worksheet. Let an invited tester enter a fictional facility and an allowed January 2023 CAMX quantity, save it, correct it with a reason, and get an exact-version second-manager review. Accounting must independently approve variable inputs and expected results before engineering changes the fixed calculation contract. Existing annual reports, factors, tenant boundaries and synthetic/unreleased qualifications remain protected.
+
+Agent configuration validates for 11 roles. CTO planning and independent QA were actually dispatched for this closure; all three M63 role outcome records now bind completed work to exact reviewed artifact snapshots. This is assignment-driven execution, not an always-running cloud workforce, and model/cost savings remain unmeasured. M64 implementation has not started. [Next milestone](../docs/research/guided-electricity-entry-milestone-64.md) · [Board acceptance](feedback/2026-09-14-milestone-63.md).
+
+# Historical M63 browser repair
 
 September 14 board feedback: the signed-in hosted browser rejects the saved calculation with 'The calculation response was not recognized.' Root reproduced it through Revisit saved workspace. Prior API/recovery checks remain valid but were insufficient for browser acceptance. The exact property-order-dependent comparison is repaired; the same hosted response passes the actual frontend decoder, and independent source review plus 77 web tests pass. Repair commit 2985ed3 is published to PR4. Full frontend-chain and postdeployment signed-in browser verification remain pending; no saved records were changed.
 

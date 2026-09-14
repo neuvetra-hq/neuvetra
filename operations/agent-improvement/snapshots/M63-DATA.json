@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "task_id": "M63-DATA",
+  "implementation_commit": "952ab025156e4d60a10ad0ac30b237fa8d0a8a15",
+  "scope": "Immutable closure manifest of exact working-file bytes; source is retained at the recorded Git commit, newline-normalized Git blobs may differ",
+  "files": [
+    {
+      "path": "docs/research/m63-data-handoff.md",
+      "sha256": "045f465b1e5c24527a7232b05ff21455e4e002e119d63bf83843a137bbb2ff74"
+    },
+    {
+      "path": "packages/neuvetra-database/package.json",
+      "sha256": "8c7b9c7072144dc5cd4396b3752632ad65acda86281f475e8dc10873b4b5ee12"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "9caae3179be29364390fa5ac4b30f6c4fe1f2861c33ec9e320e88ab100806c76"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "4a9fe0eedd0dfea7413dc1a4b39443b9390a386243ec5c39171476cb76876a9a"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "9a7107b5caae1f27c1f7172494de5ae86ed5a49340258800abedd9cdae9a36ae"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "sha256": "8f475690887cabbebcd1b38117dac56e6f3c1bfe992bc4bbde762666a18e2118"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-audit.ts",
+      "sha256": "74aad85348aa282ecc810b946e7d9f0269b32e66ad12975fb0832e54e44eace2"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "d6005323ceff04d85c6b6442c1477fa40e4fc4800b5022e25c4ae9131fa8c261"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-operator.ts",
+      "sha256": "b95f1cff257cb8a66c67b21e0a87d31e117e1a9d6330bea6ddcd06250b625a7d"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-tls.ts",
+      "sha256": "a0f37f86f450a5b32a945895f96c474183a96ff0aad820bdbb9d209810ed5307"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "fcece6b3b98cf282f44e8926d6628258b1849f966d8c62e4daa2b9c8b2f8b565"
+    },
+    {
+      "path": "tools/staging/create-source-manifest.ts",
+      "sha256": "72fab03e40f9e99cabaf6452b0fac9effacf95739d9236d4f34529ca9f0de27c"
+    }
+  ]
+}

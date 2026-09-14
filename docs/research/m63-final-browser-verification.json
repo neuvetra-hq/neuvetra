@@ -1,0 +1,17 @@
+{
+  "observedAt": "2026-09-14T20:02:35.8704087Z",
+  "head": "952ab025156e4d60a10ad0ac30b237fa8d0a8a15",
+  "deployment": "937f007f-5ecd-4fed-a84d-7d9194d60292",
+  "deploymentStatus": "SUCCESS",
+  "successfulChecks": 5,
+  "readinessStatus": 200,
+  "browserRevisit": "passed in real signed-in Chrome; saved workspace and evidence revisited; complete calculation/inventory/pack/report/review rendered; no error",
+  "reportSha256": "4d208e345e939a8e024839713b7aac61504c7bae77b630ceddace39e1a124014",
+  "decisionSnapshotSha256": "38d027250a66451001de3c80ce7c707143f44b7d1d62a3a77179af1b734447ca",
+  "qualificationsPreserved": [
+    "incomplete",
+    "synthetic",
+    "unreleased",
+    "no assurance"
+  ]
+}

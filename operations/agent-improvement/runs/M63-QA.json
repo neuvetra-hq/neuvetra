@@ -4,25 +4,39 @@
   "role": "qa-lead",
   "execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root/m63_qa",
   "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M63-QA.json",
+      "sha256": "0e19590fa17e1e29c0b1a8e3bc77f8770f6980f91f3d733ba9713603285e9d27"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/m63-closure-review.md"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "operations/agent-improvement/m63-closure-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M63-QA.json",
+        "sha256": "0e19590fa17e1e29c0b1a8e3bc77f8770f6980f91f3d733ba9713603285e9d27"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "insufficient_evidence",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": 1,
@@ -62,5 +76,6 @@
   "escaped_defect_evidence": [
     "evaluations/research-qa/m63-browser-contract.md"
   ],
-  "escaped_defect_scope": "Shared M63-F03 board-discovered browser-contract incident; count once at parent milestone, not once per role. Earlier API/recovery acceptance did not exercise the frontend decoder."
+  "escaped_defect_scope": "Shared M63-F03 board-discovered browser-contract incident; count once at parent milestone, not once per role. Earlier API/recovery acceptance did not exercise the frontend decoder.",
+  "closure_note": "Original pending record lacked closure evidence; no first-pass success or per-author defect attribution is inferred. See m63-closure-review.md. Unknown compute metrics retained."
 }

@@ -2,7 +2,7 @@
 
 Neuvetra is the product name. The initial market and evidence scope are California and the United States. The first release should help a company understand a bounded set of reporting questions and produce a reproducible inventory draft with traceable inputs and methods. It should not claim to answer every question, eliminate uncertainty, provide assurance, or complete every regulated filing.
 
-This plan replaces the earlier FrontDesk-first sequence. The old code is preserved by the GitHub tag `checkpoint/pre-ghg-focus-2026-09-08` at `367497e750530c590c7eedd229e48a34e2daf8b8`. Current development continues on `work/neuvetra-ghg`. Historical `terrascope-*` folders remain source identifiers until a deliberate migration; they do not imply a second product brand. No production cutover has occurred.
+This plan replaces the earlier FrontDesk-first sequence. The old code is preserved by the GitHub tag `checkpoint/pre-ghg-focus-2026-09-08` at `367497e750530c590c7eedd229e48a34e2daf8b8`. Current delivery follows the active rolling PR and [continuation record](../operations/next-session.md). Historical `terrascope-*` folders remain source identifiers until a deliberate migration; they do not imply a second product brand. The existing public host now serves the board-approved private synthetic M63 workflow; this is not customer-launch or method-release approval.
 
 ## Working principles
 
