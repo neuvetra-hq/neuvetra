@@ -25,3 +25,9 @@ Deliver an implementation decision/plan or integrated change, as assigned, with 
 ## Done / escalation
 
 Done means the bounded technical path works under its acceptance conditions and is ready for independent review, or the assigned design is concretely reviewable. Report unresolved architecture, access, cost or product conflicts with a recommendation; do not hide them in defaults or broaden scope silently.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#cto). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Own the integrated contract across layers: actor state, canonical values, concurrency, evidence reconstruction and missing diagnostics (L01-L03, L06). Convert recurring findings into shared implementation patterns rather than repeated local patches.

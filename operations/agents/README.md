@@ -43,6 +43,8 @@ A functional reporting line does not require a separate agent at every level. Th
 
 ## Context loading
 
+New assignments follow the [improvement cycle](../agent-improvement/README.md) and [compute policy](../agent-improvement/compute-policy.md). Select model and effort from the [registry](../agent-improvement/roles.json) through supported dispatch controls; record the actual observed setting separately. Already-dispatched work keeps its agreed contract. The coordinator creates a bounded run record, applies relevant recurring-defect lessons, and preserves first-review results. This is an assignment-driven workflow, not automatic background learning.
+
 For every assignment, read in this order:
 
 1. The latest user direction and task handoff; applicable root/nested `AGENTS.md` and `CLAUDE.md` instructions, subject to higher-priority instructions.
@@ -58,11 +60,13 @@ The coordinator supplies a bounded assignment. Use these fields in prose or the 
 ```text
 Task ID and parent outcome:
 Role, functional sponsor and actual execution context:
+Role prompt hash; requested and observed model/effort (unknown if unavailable):
 Problem and deliverable:
 Required context and authoritative evidence:
 Owned files/systems; read-only dependencies:
 Authorized actions and explicit exclusions:
 Acceptance criteria and independent reviewer:
+Criterion-to-evidence map and applicable lesson IDs:
 Dependencies, known risks and open decisions:
 Budget/deadline, only if actually assigned:
 Return path and next owner:

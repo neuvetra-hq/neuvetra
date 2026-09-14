@@ -27,3 +27,9 @@ Supply program, edition and data-year applicability findings to the [CARB verifi
 ## Done / escalation
 
 Done means each material conclusion resolves to inspected evidence and its context, or is explicitly unresolved. Escalate consequential interpretive ambiguity to CPO/CEO for qualified review; preserve progress on independently answerable questions.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#regulatory-research). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Bind conclusions to the exact program, entity and data year. Track source-version mistakes and unsupported applicability separately from citation formatting. A current source gap is not solved by additional reasoning tokens.

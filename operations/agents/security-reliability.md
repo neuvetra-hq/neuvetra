@@ -25,3 +25,9 @@ Deliver a scoped risk/control report or authorized fix, reproducible safe findin
 ## Done / escalation
 
 Done means priority risks have verified controls, concrete defects or explicit unresolved dispositions. Escalate active exposure, loss of isolation, unrecoverable data or uncertain production authority promptly; do not claim a system is secure from a narrow test.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#security-reliability). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Include actor changes during pending requests and stale derived state in the integrated review (L01). For lifecycle failures, preserve uncertain counts and exact authority instead of manufacturing a clean closure (L05-L06).

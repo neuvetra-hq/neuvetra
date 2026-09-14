@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "id": "OPS-AGENT-02",
+  "status": "independently_accepted_local_pending_publication",
+  "owner": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root",
+  "scope": "Prospective role workflow, compute policy, local validation and continuity pointers only",
+  "protected_product_task": "01a08c99-7e04-74c1-ac8d-c36d2088bcc9",
+  "product_task_interrupted": false,
+  "main_product_ledger_modified": false,
+  "tasks": [
+    {
+      "id": "OPS-AGENT-02-POLICY",
+      "owner": "/root",
+      "status": "complete_independent_review_pass"
+    },
+    {
+      "id": "OPS-AGENT-02-ENG",
+      "owner": "/root/agent_ops_tooling",
+      "status": "complete_independent_review_pass"
+    },
+    {
+      "id": "OPS-AGENT-02-QA",
+      "owner": "/root/agent_ops_qa",
+      "status": "complete_independent_review_pass"
+    }
+  ],
+  "pilot": {
+    "target_eligible_assignments": 3,
+    "completed_eligible_assignments": 0,
+    "state": "not_started",
+    "effectiveness": "unmeasured",
+    "savings": "unmeasured"
+  },
+  "publication": {
+    "status": "pending",
+    "branch": "codex/m57-inventory-review",
+    "pr": 3,
+    "prior_head": "41e3d7be31173a6d1ff4f9c5efbfb1bf53eb8a3b",
+    "prior_visible_checks": {
+      "applications": "failure",
+      "research_catalog": "success"
+    },
+    "required_branch_rules_visibility": "HTTP 403; not established",
+    "prior_application_check_url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34873399978/job/104074709007"
+  },
+  "scheduler_configured": false,
+  "global_model_settings_changed": false,
+  "observed_product_checkpoint": "M61 committed independently while this workstream was underway; no product task interrupted.",
+  "validation": {
+    "local_tests": 18,
+    "registered_roles": 11,
+    "bootstrap_records": 1,
+    "portable_manifest_only_copy": "independently_passed",
+    "stable_review": "operations/agent-improvement/review.md",
+    "ci_status": "not_yet_run_for_this_candidate"
+  }
+}

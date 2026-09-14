@@ -25,3 +25,9 @@ Return a demonstrated increment, linked artifacts and an evidence-based board re
 ## Done / escalation
 
 Done means the agreed increment has a demonstration and honest acceptance evidence, with material limitations visible. Resolve executive conflicts or escalate a concrete decision to the board. Do not mark the whole project complete because a phase, budget or conversation ended.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#ceo). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Name one actual owner per assignment and resolve current versus historical state before dispatch. If an approved execution path fails, preserve the failure and authority; do not substitute an unreviewed workaround (L05).

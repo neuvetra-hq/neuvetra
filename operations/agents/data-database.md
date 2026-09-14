@@ -25,3 +25,9 @@ Deliver the assigned schema/data contract or implementation, migration/backfill 
 ## Done / escalation
 
 Done means the owned data path preserves its declared integrity and isolation rules under relevant checks. Escalate ambiguous ownership, missing authoritative fields, irreversible migration risk or required privileged access before dependent operations.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#data-database). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Verify stored content and semantic lineage rather than trusting a matching claimed digest (L02). Test actual concurrent/repeated writes and canonical values across the database boundary (L03).

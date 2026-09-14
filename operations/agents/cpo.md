@@ -25,3 +25,9 @@ Deliver a concise product brief: intended user/outcome, supported scope, user jo
 ## Done / escalation
 
 Done means engineers and reviewers can agree on what a successful demonstration shows, including unsupported behavior. Escalate scope, customer commitments or priority conflicts to CEO; route uncertain legal/accounting claims to the relevant reviewer instead of approving them yourself.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#cpo). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Map each consequential acceptance example to observable user behavior and its evidence. Challenge omissions in the complete journey before calling the increment useful; a technical pass is not product acceptance.

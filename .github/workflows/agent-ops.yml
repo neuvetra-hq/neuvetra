@@ -1,0 +1,45 @@
+name: Agent operating records
+
+on:
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'docs/roadmap-neuvetra-ghg.md'
+      - 'docs/research/carb-verifier-role-*'
+      - 'operations/agents/**'
+      - 'operations/agent-improvement/**'
+      - 'tools/agent_ops.py'
+      - 'tools/test_agent_ops.py'
+      - '.github/workflows/agent-ops.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'AGENTS.md'
+      - 'CLAUDE.md'
+      - 'docs/roadmap-neuvetra-ghg.md'
+      - 'docs/research/carb-verifier-role-*'
+      - 'operations/agents/**'
+      - 'operations/agent-improvement/**'
+      - 'tools/agent_ops.py'
+      - 'tools/test_agent_ops.py'
+      - '.github/workflows/agent-ops.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  agent-records:
+    name: Role routing and evidence records
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Challenge evidence and routing validation
+        run: python -B -m unittest discover -s tools -p test_agent_ops.py -v
+      - name: Validate current role records
+        run: python -B tools/agent_ops.py validate

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-14T17:09:39.622050+00:00",
+  "evidence_kind": "portable historical review locators and SHA256; originals may remain local/restricted",
+  "lessons": [
+    {
+      "id": "L01",
+      "historical_review_summary": "M54-R03 allowed a pending owner response after actor switching; M60-QA-04 found stale cross-actor browser state after the first passing review. Both recorded as repaired.",
+      "original_review_sources": [
+        {
+          "original_path": "evaluations/research-qa/milestone54-company-workspace-review-10.json",
+          "sha256": "446d646e99b2ce10bfb9f4963d7cb356ec09d6a38e1e2489bf2d3e1c5631e054",
+          "locator": "M54-R03"
+        },
+        {
+          "original_path": "evaluations/research-qa/milestone60-inventory-draft-report-10.json",
+          "sha256": "6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18",
+          "locator": "M60-QA-04"
+        }
+      ],
+      "scope": "Historical record-based lesson, not current product revalidation; findings were reviewed in the role assessment."
+    },
+    {
+      "id": "L02",
+      "historical_review_summary": "M59-QA-01 initially trusted persisted archive bytes/digests; M60-QA-01 accepted coordinated stored-report bytes/digest/length changes. Both recorded as repaired.",
+      "original_review_sources": [
+        {
+          "original_path": "evaluations/research-qa/milestone59-evidence-pack-10.json",
+          "sha256": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a",
+          "locator": "M59-QA-01"
+        },
+        {
+          "original_path": "evaluations/research-qa/milestone60-inventory-draft-report-10.json",
+          "sha256": "6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18",
+          "locator": "M60-QA-01"
+        }
+      ],
+      "scope": "Historical record-based lesson, not current product revalidation; findings were reviewed in the role assessment."
+    },
+    {
+      "id": "L03",
+      "historical_review_summary": "M58-QA-04 exposed timestamp normalization and JSON property-order assumptions; M59-QA-03 again exposed order-dependent receipt comparison. Recorded as repaired.",
+      "original_review_sources": [
+        {
+          "original_path": "evaluations/research-qa/milestone58-annual-register-10.json",
+          "sha256": "f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491",
+          "locator": "M58-QA-04"
+        },
+        {
+          "original_path": "evaluations/research-qa/milestone59-evidence-pack-10.json",
+          "sha256": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a",
+          "locator": "M59-QA-03"
+        }
+      ],
+      "scope": "Historical record-based lesson, not current product revalidation; findings were reviewed in the role assessment."
+    },
+    {
+      "id": "L04",
+      "historical_review_summary": "M56 initial QA found replay repeated creation rather than checking an export, and database tests never invoked the new calculation writer. Later repair review accepted the bounded candidate.",
+      "original_review_sources": [
+        {
+          "original_path": "evaluations/research-qa/milestone56-synthetic-bill-calculation-review-10.json",
+          "sha256": "58c0947d2227db526e269fdde39e8088471260111aa6869d8f6a2ac026f4e29d",
+          "locator": null
+        }
+      ],
+      "scope": "Historical record-based lesson, not current product revalidation; findings were reviewed in the role assessment."
+    },
+    {
+      "id": "L05",
+      "historical_review_summary": "M46 final validity review rejected a root permit workaround after the approved issuer failed; closure acceptance did not establish live success.",
+      "original_review_sources": [
+        {
+          "original_path": "evaluations/research-qa/openrouter46-final-execution-validity-review-10.json",
+          "sha256": "9a6e25087851aaf945a982793d36438c6635f8cf0b7a21df40b8e0cbad029bcf",
+          "locator": null
+        }
+      ],
+      "scope": "Historical record-based lesson, not current product revalidation; findings were reviewed in the role assessment."
+    },
+    {
+      "id": "L06",
+      "historical_review_summary": "M51 early reviews rejected incomplete or inconsistent evidence-chain diagnosis; the later v4 passed its offline scope.",
+      "original_review_sources": [
+        {
+          "original_path": "evaluations/research-qa/m51-offline-product-review-10.json",
+          "sha256": "72d8dc77d3a8a208390aaca9c5b34ed342aa2d03429eacd5f81007a5bca2e586",
+          "locator": null
+        },
+        {
+          "original_path": "evaluations/research-qa/m51-v4-offline-product-review-10.json",
+          "sha256": "aa721bb5c7756242398a05be9c7d2a003321abcd746d2a42c3e93e027e3eeb94",
+          "locator": null
+        }
+      ],
+      "scope": "Historical record-based lesson, not current product revalidation; findings were reviewed in the role assessment."
+    }
+  ]
+}
