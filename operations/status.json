@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T17:40:00-07:00",
+  "updated_at": "2026-09-14T10:08:58-07:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M60",
-    "name": "Verified-pack inventory draft report",
-    "status": "complete_independent_acceptance_published_to_pr",
-    "next_gate": "Collect board feedback, then decide whether to begin M61 draft-report review and change-request workflow; Stage 4 and release acceptance remain false."
+    "id": "M61",
+    "name": "Immutable second-manager draft-report review",
+    "status": "complete_independent_acceptance_committed_pending_pr_publication",
+    "next_gate": "Publish the exact M61 commit to PR #3, then complete M62 merge-readiness cleanup for the inherited TBD GHG fixtures and exact remote CI before requesting final merge authorization."
   },
   "completed_milestones": [
     {
@@ -60,6 +60,11 @@
       "id": "M60",
       "completed_at": "2026-09-14",
       "feedback": "docs/research/inventory-draft-report-milestone-60.md"
+    },
+    {
+      "id": "M61",
+      "completed_at": "2026-09-14",
+      "feedback": "docs/research/inventory-draft-report-review-milestone-61.md"
     }
   ],
   "runtime": {
@@ -67,18 +72,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M60 local browser acceptance completed end to end; all temporary M60 API and preview listeners are closed. No persistent M60 service is configured.",
+    "website_preview_state": "M61 local browser acceptance completed end to end. The temporary M61 API and preview are being closed; no persistent M61 service is configured.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M60 passed the complete local browser workflow and independent QA. The deterministic printable HTML report preserves 139.281000 MWh and 27165.4064643528 kg CO2e, all monthly states and exact source/decision lineage while repeating incomplete and release-ineligible status."
+    "last_session_work": "M61 passed the complete local browser workflow and independent QA. A second manager can record one immutable acceptance or routed change request for the exact M60 report hash, with a separately verified decision snapshot and exact audit binding."
   },
   "session_handoff": {
-    "saved_at": "2026-09-15T00:40:00.000Z",
+    "saved_at": "2026-09-14T17:08:58.000Z",
     "path": "operations/next-session.md",
-    "board_record": "docs/research/inventory-draft-report-milestone-60.md",
-    "next_task": "Collect board feedback, then define M61 draft-report review and change-request workflow.",
-    "execution_state": "m60_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
-    "review": "Independent QA 6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18 passes after four resolved material findings. API 625/5,430, web 67/269, database 26/244, all type checks, lint/build, production exclusion, diff checks and the end-to-end browser journey pass.",
-    "scope": "One deterministic self-contained printable HTML report from the freshly verified current M59 archive for the fixed fictional inventory. No customer data, PDF, filing, hosted persistence, assurance, deployment, merge or release."
+    "board_record": "docs/research/inventory-draft-report-review-milestone-61.md",
+    "next_task": "Publish M61 to PR #3, then execute M62 merge readiness: resolve the inherited TBD GHG fixtures, reconcile the PR diff and pass exact remote CI before final merge authorization.",
+    "execution_state": "m61_complete_independently_accepted_committed_pending_pr_publication_no_release_acceptance",
+    "review": "Independent QA 922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5 passes after five resolved findings. API 625/5,451, web 70/283, database 29/263, all type checks, lint/build, production exclusion and the end-to-end browser journey pass. The broad historical test:ghg collector remains blocked by three inherited TBD expected values outside M61.",
+    "scope": "One immutable second-manager decision for the exact M60 synthetic report, with exact acknowledgements or one bounded route and note. No customer data, report revision, hosted persistence, assurance, deployment, merge or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -153,13 +158,36 @@
     "m59_commit": "12341a61d7ef3187c05875ba91706b88a47155ea",
     "m59_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
     "m59_review": "evaluations/research-qa/milestone59-evidence-pack-10.json",
-    "m59_review_sha256": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a"
+    "m59_review_sha256": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a",
+    "m60_state": "complete_independent_product_data_security_accounting_acceptance_published_to_pr_stage4_and_release_false",
+    "m60_commit": "8393285d313c6e052d340095e1ee6834a5ec0bb9",
+    "m60_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
+    "m60_review": "evaluations/research-qa/milestone60-inventory-draft-report-10.json",
+    "m60_review_sha256": "6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18",
+    "m61_state": "complete_independent_product_data_security_accounting_acceptance_committed_pending_pr_publication_stage4_and_release_false",
+    "m61_commit": "b74803f23edb6b2eecdb4b1eb5af2c57796178a4",
+    "m61_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
+    "m61_review": "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json",
+    "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
     "daily_schedule": "preference_requested_not_activated"
   },
   "tasks": [
+    {
+      "id": "M61",
+      "owner": "ceo_with_cpo_cto_and_independent_qa",
+      "status": "complete_independent_acceptance_committed_pending_pr_publication",
+      "title": "Record one immutable second-manager decision for the exact M60 report",
+      "scope": "Fixed fictional local report; exact acceptance acknowledgements or one routed change note; no customer data, hosted persistence, merge, deployment or release",
+      "result": "Implementation commit b74803f23edb6b2eecdb4b1eb5af2c57796178a4 passed full checks and a clean browser role journey. Independent QA passed after five findings were repaired. The broad historical GHG collector still contains three inherited TBD fixtures outside M61.",
+      "evidence": [
+        "docs/research/inventory-draft-report-review-milestone-61.md",
+        "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json"
+      ],
+      "next_action": "Publish to PR #3, then complete M62 merge readiness and request final merge authorization."
+    },
     {
       "id": "M29-LIVE",
       "owner": "ceo_with_connection_and_independent_qa",

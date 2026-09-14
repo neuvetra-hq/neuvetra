@@ -1,4 +1,16 @@
-# Current continuation — M60 verified draft report complete and published
+# Current continuation — M61 second-manager report review complete; M62 merge readiness next
+
+September 14, 2026. **M61 is complete for its bounded local synthetic scope, independently accepted and committed at `b74803f23edb6b2eecdb4b1eb5af2c57796178a4` for publication to [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3).** A second authorized manager can record exactly one immutable acceptance of an exact M60 report hash after acknowledging all seven limitations, or one routed change request with a safe bounded note. Every read reconstructs M59, regenerates M60, recomputes the M61 decision hash and requires one exact matching audit event.
+
+Independent QA `922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5` passes after five material repairs. Full checks pass API 625/5,451, web 70/283, database 29/263, all ten type-check tasks, lint, builds, production exclusion and 12 bounded calculation checks. The clean browser journey accepted exact report `f013b628…` with decision snapshot `69a6520e…`; a member saw the same immutable result, another tenant saw no workspace, and signed-out access required authentication.
+
+The one remaining repository-wide merge-readiness issue is inherited: `bun run test:ghg` cannot collect three old `expected.value: TBD` examples in `ghg-kb/wiki/methodologies/scope-1-mobile-combustion.md`. M61 did not change that specification, loader or harness. The CEO recommendation is **M62: PR #3 merge readiness**—repair or retire those incomplete fixtures with approved evidence, reconcile the complete PR diff, confirm no secrets or unintended files, and require exact GitHub CI. Then request final board authorization to merge PR #3.
+
+Merging PR #3 completes the development checkpoint; it does not place M54–M61 on a live customer environment because those flows are guarded development-only synthetic demonstrations. A later staging-productionization milestone must replace local PGlite and synthetic identity with hosted authorized storage, identity, object retention, migrations, monitoring, backup/restore and rollback, followed by accounting, security and legal acceptance before public cutover.
+
+[M61 record](../docs/research/inventory-draft-report-review-milestone-61.md) · [M61 independent review](../evaluations/research-qa/milestone61-inventory-draft-report-review-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+# Historical continuation — M60 verified draft report complete and published
 
 September 14, 2026. **M60 is complete for its bounded local synthetic scope, independently accepted and published in PR #3 at implementation commit `8393285d313c6e052d340095e1ee6834a5ec0bb9`.** A freshly verified current M59 archive now produces a deterministic, self-contained and printable HTML inventory draft. It preserves all twelve monthly states, exact reported and estimated subtotals, December's null exclusion, source and factor lineage, and both M57/M58 review decisions.
 
