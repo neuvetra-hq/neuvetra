@@ -1,0 +1,281 @@
+{
+  "base": "8f1f587722bdf199dfe63d4fb34d783b4a9ecbb1",
+  "initial_head": "52f706790e1ac9e35da580898513bb0f5f0ed127",
+  "initial_changed_paths": [
+    ".github/workflows/agent-ops.yml",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "apps/site-api/src/workspace/routes.ts",
+    "apps/site-api/src/workspace/server.test.ts",
+    "apps/site-api/src/workspace/server.ts",
+    "apps/site-api/src/workspace/types.ts",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx",
+    "apps/site-web/src/components/ResearchPreview.tsx",
+    "apps/site-web/src/index.css",
+    "apps/site-web/src/lib/workspace-api.test.ts",
+    "apps/site-web/src/lib/workspace-api.ts",
+    "data/synthetic/m58-electricity-register-2023.json",
+    "data/synthetic/m58-electricity-register-2023.manifest.json",
+    "docs/research/annual-source-register-milestone-58.md",
+    "docs/research/carb-verifier-role-basis.md",
+    "docs/research/carb-verifier-role-qa.md",
+    "docs/research/carb-verifier-role-sources.json",
+    "docs/research/inventory-draft-report-milestone-60.md",
+    "docs/research/inventory-draft-report-review-milestone-61.md",
+    "docs/research/inventory-evidence-pack-milestone-59.md",
+    "docs/research/inventory-review-milestone-57.md",
+    "docs/roadmap-neuvetra-ghg.md",
+    "evaluations/research-qa/milestone57-inventory-review-10.json",
+    "evaluations/research-qa/milestone58-annual-register-10.json",
+    "evaluations/research-qa/milestone59-evidence-pack-10.json",
+    "evaluations/research-qa/milestone60-inventory-draft-report-10.json",
+    "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json",
+    "evaluations/research-qa/milestone61-linux-ci-timeout-followup-10.json",
+    "operations/agent-improvement/README.md",
+    "operations/agent-improvement/benchmarks.md",
+    "operations/agent-improvement/compute-observation.json",
+    "operations/agent-improvement/compute-policy.md",
+    "operations/agent-improvement/decision.md",
+    "operations/agent-improvement/historical-evidence.json",
+    "operations/agent-improvement/lessons.json",
+    "operations/agent-improvement/new-role-template.md",
+    "operations/agent-improvement/publication-files.json",
+    "operations/agent-improvement/review.md",
+    "operations/agent-improvement/roles.json",
+    "operations/agent-improvement/run-template.json",
+    "operations/agent-improvement/runs/OPS-AGENT-02.json",
+    "operations/agent-improvement/snapshots/OPS-AGENT-02.json",
+    "operations/agent-improvement/status.json",
+    "operations/agents/README.md",
+    "operations/agents/accounting-validation.md",
+    "operations/agents/carb-verifier.md",
+    "operations/agents/ceo.md",
+    "operations/agents/commercial-operations.md",
+    "operations/agents/cpo.md",
+    "operations/agents/cto.md",
+    "operations/agents/data-database.md",
+    "operations/agents/qa-lead.md",
+    "operations/agents/regulatory-research.md",
+    "operations/agents/security-reliability.md",
+    "operations/agents/software-engineering.md",
+    "operations/board-report.md",
+    "operations/next-session.md",
+    "operations/status.json",
+    "packages/neuvetra-database/src/index.ts",
+    "packages/neuvetra-database/src/m58.test.ts",
+    "packages/neuvetra-database/src/m58.ts",
+    "packages/neuvetra-database/src/m59.test.ts",
+    "packages/neuvetra-database/src/m59.ts",
+    "packages/neuvetra-database/src/m60.test.ts",
+    "packages/neuvetra-database/src/m60.ts",
+    "packages/neuvetra-database/src/m61.test.ts",
+    "packages/neuvetra-database/src/m61.ts",
+    "packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+    "packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+    "packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+    "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+    "packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts",
+    "tools/agent_ops.py",
+    "tools/test_agent_ops.py"
+  ],
+  "product_binding_checks": [
+    {
+      "path": "apps/site-api/src/workspace/routes.ts",
+      "sha256": "0c09ea50f6673f79f617efc55493bf24c3323b1ebf3969cf09ce6e9db0619c01",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-api/src/workspace/server.test.ts",
+      "sha256": "62c2bdae63ff8761d7120093912289de93d5c64fb58a8d1b26af0171fa64007e",
+      "prior_review": "evaluations\\research-qa\\milestone61-linux-ci-timeout-followup-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-api/src/workspace/server.ts",
+      "sha256": "4ba9d46b332750d8f4cd6e3e1bf512f6d6baf85628644135c142bbec9a1306cf",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-api/src/workspace/types.ts",
+      "sha256": "eb540e04f3efc0a19d59d67d52a00ab6fbb4dc33b18f30b0806d6384e346f514",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-web/src/components/CompanyWorkspaceDemo.tsx",
+      "sha256": "fb742bb125eae73ea918d6b827709df3c396b48545670be9c4f81aa487bb75ee",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-web/src/components/ResearchPreview.tsx",
+      "sha256": "4e52fd2a7f26374698f1e52860c54c2ef687fca1f96daf4736a06feef619c787",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-web/src/index.css",
+      "sha256": "a4cab0dc2225c34b854f666247414213ebe518e8731dd03906df06cc64c9045f",
+      "prior_review": "evaluations\\research-qa\\milestone57-inventory-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-web/src/lib/workspace-api.test.ts",
+      "sha256": "6aaa9cb28e9179314a9814005fa273fcc05fd887a1e76feb65893a76fbada5d3",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "apps/site-web/src/lib/workspace-api.ts",
+      "sha256": "248604132ce6357df0ba32c8cec929d8b0d6bcedb9e64be3d4bcaab2ad9f0fb9",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "data/synthetic/m58-electricity-register-2023.json",
+      "sha256": "44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "data/synthetic/m58-electricity-register-2023.manifest.json",
+      "sha256": "41bb93caa7cb7dc638c82cb20a9660b25976ff72ff7fa49c4a08af1559c27352",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "cfd5400cb4b907c3080d172060d4a5704f014bea37469e3ed76a332fa233c8e0",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m58.test.ts",
+      "sha256": "ecd02bb7676a22cea0acd35f5388f15bdbfda62f56abf219301158e0a5f101bd",
+      "prior_review": "evaluations\\research-qa\\milestone58-annual-register-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m58.ts",
+      "sha256": "26a2b542ca35d5368a166123b4b63bfbe60b5da04d058eaf3152d97ec311c009",
+      "prior_review": "evaluations\\research-qa\\milestone58-annual-register-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m59.test.ts",
+      "sha256": "c868aa2f44fdc67e628e9e3aacc0a7e115b5aaf5fc279f03158c79005df54ae2",
+      "prior_review": "evaluations\\research-qa\\milestone59-evidence-pack-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m59.ts",
+      "sha256": "da6a6729c8afccc4cd76ddde34d336a376d998b628a4231821c1ce1915cf54c5",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m60.test.ts",
+      "sha256": "fa43707d9be1d70a6e897c3f8e7de7c742e705c8e2931d117b57dfc7491df501",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m60.ts",
+      "sha256": "b906f599d648f56a01f20fed0de7ecef2313d0ac1f28c1b4fdfa884c3a75f21a",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m61.test.ts",
+      "sha256": "523701c8c08e86d25b4c356da2488900cca0af0edcc58e463fd3fae0c298d4f2",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m61.ts",
+      "sha256": "c2176b1b08ed6df88eb32ca5e546269b51fce8e169451a8f326c3b242ecf4f5f",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+      "sha256": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213",
+      "prior_review": "evaluations\\research-qa\\milestone58-annual-register-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+      "sha256": "3f288d293c93132c422505f8daf7fc6e52eac8e33128a248cd4e9ba5cb946b35",
+      "prior_review": "evaluations\\research-qa\\milestone58-annual-register-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+      "sha256": "2b786ee7c90b6cd65e398b0c8422d9e76f851a789a5318a7715039e123249dfd",
+      "prior_review": "evaluations\\research-qa\\milestone59-evidence-pack-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+      "sha256": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+      "sha256": "c5e81967a5dcb08055d452816a1e687b204c59c6396014190897f965abc4a1cc",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/synthetic-bill-security.test.ts",
+      "sha256": "c407f6b5d0bad4d262a3dea46d868cedfdb991516f34150296101c37df01afb4",
+      "prior_review": "evaluations\\research-qa\\milestone61-inventory-draft-report-review-10.json",
+      "binding_matches": true
+    }
+  ],
+  "limitations": [
+    "Prior exact review bindings establish version continuity, not a fresh re-review of every semantic claim.",
+    "Pattern scan is bounded and cannot prove all credential formats absent."
+  ],
+  "m62_candidate_paths_at_local_review": [
+    "CLAUDE.md",
+    ".github/workflows/verify.yml",
+    "ghg-kb/calculations/README.md",
+    "ghg-kb/calculations/spec_loader.py",
+    "ghg-kb/calculations/tests/test_harness.py",
+    "ghg-kb/calculations/tests/test_spec_readiness.py",
+    "ghg-kb/docs/specs/calculation-spec-schema.md",
+    "ghg-kb/wiki/log.md",
+    "ghg-kb/wiki/methodologies/scope-1-mobile-combustion.md",
+    "docs/research/m62-technical-handoff.md",
+    "docs/research/m62-accounting-disposition.md",
+    "docs/research/m62-pr-reconciliation.json",
+    "docs/research/pr3-merge-readiness-milestone-62.md",
+    "operations/agent-improvement/status.json",
+    "operations/agent-improvement/runs/M62-CTO.json",
+    "operations/agent-improvement/runs/M62-ACCOUNTING.json",
+    "operations/agent-improvement/runs/M62-QA.json",
+    "operations/status.json"
+  ],
+  "bounded_scan": {
+    "scanned_file_count": 91,
+    "matching_paths": [],
+    "patterns": "private-key markers; common OpenAI/Anthropic, GitHub and AWS access-key formats",
+    "sensitive_filename_matches": []
+  },
+  "product_binding_summary": {
+    "paths": 26,
+    "all_match": true
+  },
+  "m62_publication_manifest": "operations/agent-improvement/m62-publication-files.json",
+  "m62_final_manifest_scan": {
+    "file_count": 28,
+    "matching_paths": [],
+    "same_bounded_patterns": true
+  },
+  "fresh_base_recheck": "origin/main remains 8f1f587722bdf199dfe63d4fb34d783b4a9ecbb1 immediately before publication"
+}

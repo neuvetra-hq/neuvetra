@@ -1,6 +1,6 @@
 # calculation_spec — Schema and Conventions
 
-**Status:** v1 — locked 2026-04-25
+**Status:** v1.1 — readiness contract added 2026-09-14
 **Applies to:** every page in `wiki/methodologies/` that should be executable
 **Owners:** wiki maintainers (the YAML block) and `calculations/` engine maintainers (the consumer)
 
@@ -15,7 +15,7 @@
 - The arithmetic that combines them
 - Test cases that pin the methodology's behaviour
 
-If a methodology page has a `calculation_spec` block, the calculation engine considers it executable and the chatbot may compute under it. Without a spec, the methodology is documentation-only and the chatbot must refuse to compute and instead surface the prose.
+If a methodology page has an executable `calculation_spec` block, the calculation engine may compute under it. An explicitly deferred block preserves structured draft work while making the capability unavailable to calculation callers. Without a spec, the methodology is documentation-only and the chatbot must refuse to compute and instead surface the prose.
 
 The wiki remains the single source of truth (`CLAUDE.md`). Specs are extensions of methodology pages, not duplicates of them.
 
@@ -32,7 +32,22 @@ calculation_spec:
   formula: <string>                   # REQUIRED — natural-language form of the arithmetic
   output_unit: <string>               # REQUIRED — must equal CalculationResult.unit
   test_cases: [ ... ]                 # REQUIRED — at least one
+  readiness:                          # optional; absent means executable
+    status: executable | deferred
+    blockers: [<controlled code>, ...]
 ```
+
+### `readiness`
+
+Existing complete specs may omit `readiness`; omission means `status: executable`. An incomplete draft must declare `status: deferred` and one or more controlled blocker codes:
+
+- `implementation_missing` — no callable calculation module is available.
+- `factor_release_missing` — the required reviewed factor records are not released.
+- `approved_expectations_missing` — numerical test expectations are not approved.
+
+Executable specs cannot declare blockers. Deferred specs are available only through the loader's explicit inspection path (`include_deferred=True`); the normal runtime `load_spec()` path rejects them. The test harness retains each deferred test declaration as a separately identified skip with the blocker codes and also requires at least one real executable case, preventing a catalog of skips from appearing successful.
+
+A deferred case may use the literal `TBD` for `expected.value`. That marker is invalid in an executable spec. Promotion requires clearing every blocker, replacing every `TBD` with an approved finite number, providing the implementation and reviewed factors, changing the status to executable (or removing the readiness block), and passing the full GHG suite. Readiness metadata does not approve a methodology or factor release.
 
 ### `function_id`
 
@@ -113,7 +128,7 @@ test_cases:
       regulatory_context: <value>     # required (split to context at runtime)
       reporting_year: <integer>       # required (split to context at runtime)
     expected:
-      value: <number>                  # required
+      value: <finite number>           # required for executable specs; deferred may use literal TBD
       unit: <string>                   # required
       tolerance_pct: <number>          # default 0.5
     factor_used: <factor_id>           # optional but strongly recommended — asserts the resolver picked the right record
@@ -151,6 +166,9 @@ The `spec_loader` performs cheap structural validation on every load:
 1. All `REQUIRED_TOP_KEYS` present
 2. `inputs` is a non-empty list, every entry has `name` and `type`
 3. At least one `test_cases` entry
+4. Every test case has a non-empty name, an inputs mapping, and an expected mapping with a non-empty unit and finite, non-negative tolerance
+5. Every executable expected value is a finite number (numeric strings, booleans, `TBD`, NaN, and infinity are rejected)
+6. Deferred specs declare at least one controlled blocker; executable specs declare none
 
 Semantic validation (formula references declared inputs; `function_id` resolves to a real module; factor_query placeholders resolve) is enforced by the test harness — failures show up as visible test errors rather than hidden import errors.
 
@@ -163,7 +181,7 @@ When adding a `calculation_spec` to a methodology page:
 1. Pick a `function_id`. Create `calculations/<function_id>.py` with a `calculate()` entry function.
 2. Declare every input the methodology needs. Mark required vs optional. Set `unit_class` for any quantity that gets converted.
 3. Write the `factor_query` referencing real `emission_factors` columns.
-4. Write at least one `test_case` against a published worked example or a known reference value.
+4. Write at least one `test_case` against a published worked example or a known reference value. If the needed implementation, reviewed factor release, or approved expectation is missing, declare the whole spec deferred and name each blocker instead of inventing a number.
 5. Add the methodology id to `calculated_by` in the page frontmatter.
 6. Bump `last_updated` on the page.
 7. Run `pytest calculations/tests/` and verify green.

@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T10:08:58-07:00",
+  "updated_at": "2026-09-14T17:32:45.409081+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M61",
-    "name": "Immutable second-manager draft-report review",
-    "status": "complete_independent_acceptance_published_to_pr",
-    "next_gate": "Complete M62 merge-readiness cleanup for the inherited TBD GHG fixtures and exact remote CI before requesting final merge authorization."
+    "id": "M62",
+    "name": "PR3 merge readiness and explicit legacy calculation deferral",
+    "status": "in_progress",
+    "next_gate": "Publish reviewed M62 to PR3, verify exact remote checks, request final board merge decision."
   },
   "completed_milestones": [
     {
@@ -1073,6 +1073,43 @@
         "https://github.com/neuvetra-hq/neuvetra/pull/3"
       ],
       "next_action": "Collect board feedback, then decide whether to begin M61 draft-report review and change-request workflow."
+    },
+    {
+      "id": "M62-CTO",
+      "owner": "/root/m62_cto",
+      "status": "complete",
+      "title": "Strict legacy spec readiness and CI integration",
+      "allowed_actions": "Assigned loader, harness, tests, schema/readme and Verify workflow only",
+      "acceptance": "Explicit deferred mobile cases; executable invalid cases fail; nonzero real test coverage; broad GHG suite and independent review",
+      "evidence": [
+        "operations/agent-improvement/runs/M62-CTO.json"
+      ]
+    },
+    {
+      "id": "M62-ACCOUNTING",
+      "owner": "/root/m62_accounting",
+      "status": "complete",
+      "title": "Independent disposition of three unready legacy mobile cases",
+      "allowed_actions": "Read local dependency evidence and write named disposition only",
+      "acceptance": "All three cases classified from actual dependency evidence without invented values or source release",
+      "evidence": [
+        "operations/agent-improvement/runs/M62-ACCOUNTING.json"
+      ]
+    },
+    {
+      "id": "M62-QA",
+      "owner": "/root/role_evidence_review",
+      "status": "complete",
+      "title": "Independent integrated merge-readiness review",
+      "allowed_files": [
+        "evaluations/research-qa/milestone62-merge-readiness.md"
+      ],
+      "acceptance_criteria": [
+        "Challenge readiness, complete PR boundaries, evidence and checks independently"
+      ],
+      "evidence": [
+        "operations/agent-improvement/runs/M62-QA.json"
+      ]
     }
   ],
   "feedback_tasks": [

@@ -26,10 +26,16 @@
   ],
   "pilot": {
     "target_eligible_assignments": 3,
-    "completed_eligible_assignments": 0,
-    "state": "not_started",
-    "effectiveness": "unmeasured",
-    "savings": "unmeasured"
+    "completed_eligible_assignments": 3,
+    "state": "initial_workflow_pilot_reviewed",
+    "effectiveness": "narrow_readiness_outcome_demonstrated_model_causality_unmeasured",
+    "savings": "unmeasured",
+    "assignments": [
+      "M62-CTO",
+      "M62-ACCOUNTING",
+      "M62-QA"
+    ],
+    "review": "operations/agent-improvement/m62-pilot-review.md"
   },
   "publication": {
     "status": "implementation_published_remote_and_scoped_ci_verified",

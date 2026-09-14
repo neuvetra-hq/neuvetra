@@ -1,4 +1,12 @@
-# Current continuation — M61 second-manager report review complete; M62 merge readiness next
+# Current continuation - M62 merge-readiness candidate
+
+September 14, 2026. Role upgrades are already published and the adopted default/critical model routes remain in force. M62 has repaired the inherited GHG collector through explicit readiness: 43 checks pass and three unfinished mobile cases remain visible as deferred. No mobile factors or expected emissions were invented.
+
+Local application checks pass; all 26 changed product/data files match their latest reviewed versions. Independent M62 review and exact remote CI/publication are the remaining closure evidence. See [M62 record](../docs/research/pr3-merge-readiness-milestone-62.md) and [role pilot](agent-improvement/m62-pilot-review.md).
+
+After those gates pass, ask the board for the final PR #3 merge decision reserved in the M61 handoff. Merge is not deployment: the API retains development/test guards, the browser requires explicit preview flags, and ordinary production builds exclude the demo. A later staging-productionization milestone requires separate scoped acceptance before customer use. Do not start a dependent product milestone before the board's feedback.
+
+# Historical continuation — M61 second-manager report review complete; M62 merge readiness next
 
 September 14, 2026. **M61 is complete for its bounded local synthetic scope, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `b74803f23edb6b2eecdb4b1eb5af2c57796178a4`.** A second authorized manager can record exactly one immutable acceptance of an exact M60 report hash after acknowledging all seven limitations, or one routed change request with a safe bounded note. Every read reconstructs M59, regenerates M60, recomputes the M61 decision hash and requires one exact matching audit event.
 

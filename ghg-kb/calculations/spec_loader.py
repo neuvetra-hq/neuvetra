@@ -9,11 +9,15 @@ Public API:
     load_spec(methodology_id)   -> dict
     load_all_specs()            -> dict[methodology_id, spec]
     iter_test_cases(spec)       -> Iterable[TestCase]
+
+Pass ``include_deferred=True`` only for inspection and readiness reporting.
+Normal loading exposes executable specifications only.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from pathlib import Path
 from typing import Any, Iterable, Optional
 
@@ -52,11 +56,14 @@ def _read_frontmatter(path: Path) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def load_spec(methodology_id: str) -> dict[str, Any]:
+def load_spec(
+    methodology_id: str, *, include_deferred: bool = False
+) -> dict[str, Any]:
     """Load the calculation_spec for a single methodology by ID.
 
-    Raises SpecValidationError if the page exists but has no spec, or if the
-    spec fails basic structural validation.
+    Raises SpecValidationError if the page exists but has no spec, if the spec
+    fails structural validation, or if it is deferred and the caller did not
+    explicitly request inspection metadata.
     """
     page = METHODOLOGIES_DIR / f"{methodology_id}.md"
     if not page.exists():
@@ -71,11 +78,17 @@ def load_spec(methodology_id: str) -> dict[str, Any]:
     # Inject the methodology_id from the page id so callers don't have to
     # cross-reference it manually.
     spec.setdefault("methodology_id", fm.get("id", methodology_id))
+    readiness = get_spec_readiness(spec)
+    if readiness.status == "deferred" and not include_deferred:
+        raise SpecValidationError(
+            f"calculation_spec for '{methodology_id}' is deferred and cannot "
+            f"be loaded for execution; blockers: {list(readiness.blockers)}"
+        )
     return spec
 
 
-def load_all_specs() -> dict[str, dict[str, Any]]:
-    """Walk wiki/methodologies/ and return every page that has a spec.
+def load_all_specs(*, include_deferred: bool = False) -> dict[str, dict[str, Any]]:
+    """Return validated executable specs, plus deferred specs when requested.
 
     Pages without a calculation_spec block are silently skipped — they remain
     documentation-only methodologies.
@@ -88,6 +101,11 @@ def load_all_specs() -> dict[str, dict[str, Any]]:
         spec = fm["calculation_spec"]
         _validate_spec(spec, methodology_id=fm.get("id", page.stem))
         spec.setdefault("methodology_id", fm.get("id", page.stem))
+        if (
+            get_spec_readiness(spec).status == "deferred"
+            and not include_deferred
+        ):
+            continue
         out[spec["methodology_id"]] = spec
     return out
 
@@ -109,8 +127,49 @@ class TestCase:
     expected_unit: Optional[str] = None
 
 
+@dataclass(frozen=True)
+class DeferredTestCase:
+    """A declared case retained for readiness accounting, not execution."""
+
+    name: str
+    blockers: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class SpecReadiness:
+    """Machine-readable execution status for a calculation specification."""
+
+    status: str
+    blockers: tuple[str, ...] = ()
+
+
+ALLOWED_READINESS_STATUSES = {"executable", "deferred"}
+ALLOWED_DEFERRED_BLOCKERS = {
+    "implementation_missing",
+    "factor_release_missing",
+    "approved_expectations_missing",
+}
+
+
+def get_spec_readiness(spec: dict[str, Any]) -> SpecReadiness:
+    """Return readiness metadata; legacy specs default to executable."""
+    raw = spec.get("readiness")
+    if raw is None:
+        return SpecReadiness(status="executable")
+    return SpecReadiness(
+        status=raw["status"],
+        blockers=tuple(raw.get("blockers", [])),
+    )
+
+
 def iter_test_cases(spec: dict[str, Any]) -> Iterable[TestCase]:
-    """Yield TestCase objects from a spec's `test_cases` list."""
+    """Yield executable TestCase objects from a ready specification."""
+    readiness = get_spec_readiness(spec)
+    if readiness.status != "executable":
+        raise SpecValidationError(
+            f"calculation_spec for '{spec.get('methodology_id', '<unknown>')}' "
+            "is deferred; use iter_deferred_test_cases() for inspection"
+        )
     for tc in spec.get("test_cases", []):
         expected = tc.get("expected", {})
         yield TestCase(
@@ -120,6 +179,23 @@ def iter_test_cases(spec: dict[str, Any]) -> Iterable[TestCase]:
             tolerance_pct=float(expected.get("tolerance_pct", 0.5)),
             expected_factor_id=tc.get("factor_used"),
             expected_unit=expected.get("unit"),
+        )
+
+
+def iter_deferred_test_cases(
+    spec: dict[str, Any],
+) -> Iterable[DeferredTestCase]:
+    """Yield every declared case from an explicitly deferred specification."""
+    readiness = get_spec_readiness(spec)
+    if readiness.status != "deferred":
+        raise SpecValidationError(
+            f"calculation_spec for '{spec.get('methodology_id', '<unknown>')}' "
+            "is executable; use iter_test_cases()"
+        )
+    for tc in spec.get("test_cases", []):
+        yield DeferredTestCase(
+            name=tc["name"],
+            blockers=readiness.blockers,
         )
 
 
@@ -157,8 +233,117 @@ def _validate_spec(spec: dict[str, Any], *, methodology_id: str) -> None:
                 f"Input declaration in '{methodology_id}' missing name/type: {inp!r}"
             )
 
-    if not spec.get("test_cases"):
+    readiness = _validate_readiness(spec, methodology_id=methodology_id)
+
+    if not isinstance(spec.get("test_cases"), list) or not spec["test_cases"]:
         raise SpecValidationError(
             f"calculation_spec for '{methodology_id}' must include at least one "
             f"test_case (PRD §8.1 validation rule 3)"
         )
+
+    for index, test_case in enumerate(spec["test_cases"]):
+        _validate_test_case(
+            test_case,
+            methodology_id=methodology_id,
+            index=index,
+            executable=readiness.status == "executable",
+        )
+
+
+def _validate_readiness(
+    spec: dict[str, Any], *, methodology_id: str
+) -> SpecReadiness:
+    raw = spec.get("readiness")
+    if raw is None:
+        return SpecReadiness(status="executable")
+    if not isinstance(raw, dict):
+        raise SpecValidationError(
+            f"readiness for '{methodology_id}' must be a mapping"
+        )
+
+    status = raw.get("status")
+    if status not in ALLOWED_READINESS_STATUSES:
+        raise SpecValidationError(
+            f"readiness.status for '{methodology_id}' must be one of "
+            f"{sorted(ALLOWED_READINESS_STATUSES)}"
+        )
+
+    blockers = raw.get("blockers", [])
+    if not isinstance(blockers, list) or any(
+        not isinstance(blocker, str) for blocker in blockers
+    ):
+        raise SpecValidationError(
+            f"readiness.blockers for '{methodology_id}' must be a list of codes"
+        )
+    if len(blockers) != len(set(blockers)):
+        raise SpecValidationError(
+            f"readiness.blockers for '{methodology_id}' contains duplicates"
+        )
+    unknown = set(blockers) - ALLOWED_DEFERRED_BLOCKERS
+    if unknown:
+        raise SpecValidationError(
+            f"readiness.blockers for '{methodology_id}' contains unknown codes: "
+            f"{sorted(unknown)}"
+        )
+    if status == "executable" and blockers:
+        raise SpecValidationError(
+            f"executable calculation_spec for '{methodology_id}' cannot declare "
+            "readiness blockers"
+        )
+    if status == "deferred" and not blockers:
+        raise SpecValidationError(
+            f"deferred calculation_spec for '{methodology_id}' must declare at "
+            "least one readiness blocker"
+        )
+    return SpecReadiness(status=status, blockers=tuple(blockers))
+
+
+def _validate_test_case(
+    test_case: Any,
+    *,
+    methodology_id: str,
+    index: int,
+    executable: bool,
+) -> None:
+    label = f"test_case {index + 1} in '{methodology_id}'"
+    if not isinstance(test_case, dict):
+        raise SpecValidationError(f"{label} must be a mapping")
+    if not isinstance(test_case.get("name"), str) or not test_case["name"].strip():
+        raise SpecValidationError(f"{label} must have a non-empty name")
+    if not isinstance(test_case.get("inputs"), dict):
+        raise SpecValidationError(f"{label} must have an inputs mapping")
+
+    expected = test_case.get("expected")
+    if not isinstance(expected, dict):
+        raise SpecValidationError(f"{label} must have an expected mapping")
+    if not isinstance(expected.get("unit"), str) or not expected["unit"].strip():
+        raise SpecValidationError(f"{label} must have a non-empty expected.unit")
+
+    tolerance = expected.get("tolerance_pct", 0.5)
+    if not _is_finite_number(tolerance) or tolerance < 0:
+        raise SpecValidationError(
+            f"{label} expected.tolerance_pct must be a finite non-negative number"
+        )
+
+    value = expected.get("value")
+    if executable and not _is_finite_number(value):
+        raise SpecValidationError(
+            f"{label} expected.value must be a finite number for an executable "
+            "calculation_spec"
+        )
+    if not executable and not (
+        value == "TBD" or _is_finite_number(value)
+    ):
+        raise SpecValidationError(
+            f"{label} expected.value must be a finite number or the literal "
+            "'TBD' for a deferred calculation_spec"
+        )
+
+
+def _is_finite_number(value: Any) -> bool:
+    """True for finite int/float values, excluding booleans and numeric strings."""
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )

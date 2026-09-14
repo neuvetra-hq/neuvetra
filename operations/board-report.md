@@ -1,5 +1,13 @@
 # Neuvetra board update
 
+September 14, 2026. The role improvements are published. The first prospective pilot used explicit CTO/accounting routes and independent QA; measured savings and causal model improvements remain unknown.
+
+M62 fixes the repository merge blocker: the GHG suite reports **43 passed, 3 explicitly deferred**. The three mobile examples lack required implementation and approved factor/expectation evidence, so they remain unavailable. All 26 changed product/data files match accepted review versions and local application checks pass.
+
+Independent review closure, publication and exact GitHub checks remain pending. Once verified, PR #3 is ready for the board's final merge decision, not customer deployment. [M62 evidence](../docs/research/pr3-merge-readiness-milestone-62.md).
+
+# Historical M61 board update
+
 September 14, 2026. **M61 immutable second-manager report review is complete, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `b74803f23edb6b2eecdb4b1eb5af2c57796178a4`.** Acceptance requires all seven fixed limitations for one exact M60 report hash; a change request requires one bounded route and a safe 1–500 character note. The decision, report creator, inventory snapshot, archive, manifest, lineage root, reviewer and release-ineligible state are sealed in a canonical decision hash and matched to one immutable audit event.
 
 Independent QA `922bb010ad…` passes after five material findings were repaired. Full checks pass API 625/5,451, web 70/283, database 29/263, type checking, lint, builds and production exclusion. The clean browser path demonstrated second-manager acceptance, distinct report and decision hashes, member read-only access, tenant isolation and signed-out refusal. M61 remains local, synthetic, incomplete, unreleased and without assurance.
