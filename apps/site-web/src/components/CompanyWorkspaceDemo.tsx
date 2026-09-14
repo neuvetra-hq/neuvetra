@@ -1,7 +1,7 @@
 import { useRef, useState, type RefObject } from "react"
 import {
-  ANNUAL_WARNINGS, calculateSyntheticBill, completeAnnualRegister, correctSyntheticBill, createAnnualInventory, createAnnualRegister, createEvidencePack, createSyntheticWorkspace, decideAnnualInventory, decideSyntheticInventory, downloadEvidencePack, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replayEvidencePack, replaySyntheticBillCalculation, revisitAnnualInventory, revisitAnnualRegisters, revisitEvidencePack, revisitSyntheticBill, revisitSyntheticInventory,
-  revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type AnnualRegister, type CompanyWorkspace, type EvidencePackMetadata, type EvidencePackReceipt, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
+  ANNUAL_WARNINGS, calculateSyntheticBill, completeAnnualRegister, correctSyntheticBill, createAnnualInventory, createAnnualRegister, createDraftInventoryReport, createEvidencePack, createSyntheticWorkspace, decideAnnualInventory, decideSyntheticInventory, downloadDraftInventoryReport, downloadEvidencePack, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replayEvidencePack, replaySyntheticBillCalculation, revisitAnnualInventory, revisitAnnualRegisters, revisitEvidencePack, revisitSyntheticBill, revisitSyntheticInventory,
+  revisitDraftInventoryReport, revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type AnnualRegister, type CompanyWorkspace, type DraftInventoryReportMetadata, type EvidencePackMetadata, type EvidencePackReceipt, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
 } from "@/lib/workspace-api"
 import syntheticBillUrl from "@m55-bill"
 
@@ -18,6 +18,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   const [evidencePack,setEvidencePack]=useState<EvidencePackMetadata|null>(null)
   const [evidenceFile,setEvidenceFile]=useState<File|null>(null)
   const [evidenceReceipt,setEvidenceReceipt]=useState<EvidencePackReceipt|null>(null)
+  const [draftReport,setDraftReport]=useState<DraftInventoryReportMetadata|null>(null)
   const [annualAcknowledged, setAnnualAcknowledged] = useState<string[]>([])
   const [acknowledged, setAcknowledged] = useState<string[]>([])
   const [savedId, setSavedId] = useState(() => window.localStorage.getItem(WORKSPACE_KEY) ?? "")
@@ -38,7 +39,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   }
 
   async function runWorkspace(action: "create" | "revisit") {
-    setBusy(true); setIsError(false); setWorkspace(null); setBill(null); setInventory(null)
+    setBusy(true); setIsError(false); setWorkspace(null); setBill(null); setInventory(null);setAnnualRegisters([]);setAnnualInventory(null);setEvidencePack(null);setEvidenceFile(null);setEvidenceReceipt(null);setDraftReport(null)
     try {
       const result = action === "create" ? await createSyntheticWorkspace(actor) : await revisitSyntheticWorkspace(savedId, actor)
       setWorkspace(result); setSavedId(result.id); window.localStorage.setItem(WORKSPACE_KEY, result.id)
@@ -50,7 +51,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
           let registers: AnnualRegister[]=[]
           try { registers=await revisitAnnualRegisters(result.id,priorInventory,actor);setAnnualRegisters(registers) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
           const finalRegister=registers.find((item)=>item.version===2)
-          if(finalRegister)try { const annual=await revisitAnnualInventory(result.id,finalRegister,actor);setAnnualInventory(annual);if(annual.decision?.outcome==="approved_bounded_annual_location_draft")try{setEvidencePack(await revisitEvidencePack(annual,actor))}catch{setEvidencePack(null)} } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+          if(finalRegister)try { const annual=await revisitAnnualInventory(result.id,finalRegister,actor);setAnnualInventory(annual);if(annual.decision?.outcome==="approved_bounded_annual_location_draft")try{const pack=await revisitEvidencePack(annual,actor);setEvidencePack(pack);setDraftReport(await revisitDraftInventoryReport(annual,pack,actor))}catch(error){if(!(error instanceof Error)||error.message!=="Workspace not found.")throw error;setEvidencePack(null);setDraftReport(null)} } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
         }
       }
       setMessage(action === "create" ? "Workspace created in one transaction." : "The saved workspace and its evidence were revisited.")
@@ -156,6 +157,8 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   async function buildEvidencePack(){if(!annualInventory)return;setBusy(true);setIsError(false);setEvidenceReceipt(null);try{const result=await createEvidencePack(annualInventory,actor);setEvidencePack(result);setMessage("The deterministic 17-file evidence pack is sealed for this approved M58 inventory.")}catch(error){showError(error,"The evidence pack could not be created.")}finally{setBusy(false)}}
   async function saveEvidencePack(){if(!evidencePack)return;setBusy(true);setIsError(false);try{const file=await downloadEvidencePack(evidencePack,actor);setEvidenceFile(file);const url=URL.createObjectURL(file);const anchor=document.createElement("a");anchor.href=url;anchor.download=file.name;anchor.click();URL.revokeObjectURL(url);setMessage("The exact M59 ZIP was downloaded and is ready for independent replay.")}catch(error){showError(error,"The evidence pack could not be downloaded.")}finally{setBusy(false)}}
   async function verifyEvidencePack(){if(!evidencePack||!evidenceFile)return;setBusy(true);setIsError(false);setEvidenceReceipt(null);try{const result=await replayEvidencePack(evidencePack,evidenceFile,actor);setEvidenceReceipt(result);setMessage("Verified exact M58 pack: archive integrity, sealed lineage and deterministic arithmetic match the approved bounded annual location draft.")}catch(error){setEvidenceReceipt(null);showError(error,"The evidence pack could not be verified.")}finally{setBusy(false)}}
+  async function buildDraftReport(){if(!annualInventory||!evidencePack)return;setBusy(true);setIsError(false);try{const result=await createDraftInventoryReport(annualInventory,evidencePack,actor);setDraftReport(result);setMessage("The printable M60 draft was generated after server-side verification of the current evidence pack.")}catch(error){showError(error,"The draft report could not be generated.")}finally{setBusy(false)}}
+  async function saveDraftReport(){if(!draftReport)return;setBusy(true);setIsError(false);try{const file=await downloadDraftInventoryReport(draftReport,actor);const url=URL.createObjectURL(file),a=document.createElement("a");a.href=url;a.download=file.name;a.click();URL.revokeObjectURL(url);setMessage("The exact verified M60 HTML report was downloaded.")}catch(error){showError(error,"The draft report could not be downloaded.")}finally{setBusy(false)}}
 
   function reviewBill() {
     if (!facilityConfirmed) {
@@ -167,7 +170,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   }
 
   function changeActor(next: WorkspaceActor) {
-    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAnnualRegisters([]); setAnnualInventory(null);setEvidencePack(null);setEvidenceFile(null);setEvidenceReceipt(null); setAcknowledged([]); setAnnualAcknowledged([]); setFacilityConfirmed(false)
+    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAnnualRegisters([]); setAnnualInventory(null);setEvidencePack(null);setEvidenceFile(null);setEvidenceReceipt(null);setDraftReport(null); setAcknowledged([]); setAnnualAcknowledged([]); setFacilityConfirmed(false)
     setMessage(next === "owner" ? "Synthetic owner selected." : next === "admin" ? "Synthetic administrator selected." : next === "member" ? "Synthetic read-only member selected." : next === "outsider" ? "Synthetic outsider selected." : "Signed out.")
   }
 
@@ -176,9 +179,9 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   return (
     <section className="workspace-demo" aria-labelledby="workspace-heading">
       <div className="workspace-demo-heading"><div>
-        <p className="research-eyebrow">M59 local development demonstration</p>
-        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>Package and replay the approved annual electricity evidence.</h1>
-        <p className="research-intro">Build one deterministic archive from the sealed M58 record, download its exact bytes, and independently reconstruct the bounded subtotal without hiding the estimate or exclusion.</p>
+        <p className="research-eyebrow">M60 local development demonstration</p>
+        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>Turn verified annual evidence into a readable draft.</h1>
+        <p className="research-intro">Verify the sealed M59 archive, preserve every source and review decision, and generate a printable inventory draft without hiding the estimate, exclusion, or release limits.</p>
       </div><span className="research-outline-label">Local · synthetic · deterministic</span></div>
       <div className="workspace-identity" role="group" aria-label="Synthetic identity">
         {(["owner", "admin", "member", "outsider", "signed_out"] as const).map((item) => <button type="button" key={item} disabled={busy} aria-pressed={actor === item} onClick={() => changeActor(item)}>{item === "owner" ? "Signed-in owner" : item === "admin" ? "Administrator" : item === "member" ? "Read-only member" : item === "outsider" ? "Other tenant" : "Signed out"}</button>)}
@@ -257,6 +260,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
               </div>}
               <div className="inventory-warnings"><h4>Limits that remain</h4><ul><li>The development factor and method are unreleased.</li><li>This verifies deterministic integrity, not authenticity or assurance.</li><li>Market-based Scope 2, Scope 1 and Scope 3 remain outside this pack.</li></ul></div>
             </section>}
+            {evidencePack&&<section className="inventory-review annual-register" aria-labelledby="draft-report-heading"><p className="research-eyebrow">M60 · verified-pack draft report</p><h3 id="draft-report-heading">Human-readable inventory draft</h3><p>A self-contained printable report with every 2023 period, exact arithmetic, estimate and exclusion treatment, source hashes, and persistent incomplete, synthetic, unreleased and no-assurance labels.</p>{!draftReport?<button className="research-primary-button" type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")} onClick={buildDraftReport}>Generate verified draft report</button>:<div className="bill-calculation"><h4>Deterministic HTML report</h4><dl><div><dt>Included subtotal</dt><dd>139.281000 MWh · 27,165.4065 kg CO2e</dd></div><div><dt>Size</dt><dd>{draftReport.reportByteLength.toLocaleString()} bytes</dd></div></dl><p className="bill-hash">Report {draftReport.reportSha256}</p><p className="bill-hash">Source archive {draftReport.sourceArchiveSha256}</p><button className="research-secondary-button" type="button" disabled={busy} onClick={saveDraftReport}>Download printable HTML</button></div>}</section>}
           </>}
         </div>
       </>}

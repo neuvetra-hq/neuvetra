@@ -1,8 +1,10 @@
 import { PGlite, type Transaction } from "@electric-sql/pglite"
 import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
+import { buildDraftInventoryReport, hashReportBytes } from "./m60"
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
+export { M60_PROFILE, M60_MEDIA_TYPE, M60_MAX_REPORT_BYTES, buildDraftInventoryReport, hashReportBytes, type DraftInventoryReportBuild } from "./m60"
 
 function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value)
@@ -123,6 +125,7 @@ export interface EvidencePackRecord {
   id:string;companyId:string;inventoryId:string;profile:"neuvetra.synthetic.inventory-evidence-pack.v1";manifestSha256:string;lineageRootSha256:string;
   archiveSha256:string;archiveByteLength:number;entryCount:17;createdBy:string;createdAt:string;archive:Uint8Array
 }
+export interface DraftInventoryReportRecord{id:string;companyId:string;inventoryId:string;evidencePackId:string;profile:"neuvetra.synthetic.inventory-draft-report.v1";inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;reportSha256:string;reportByteLength:number;createdBy:string;createdAt:string;report:Uint8Array}
 
 export const M57_WARNINGS = [
   "annual_coverage_incomplete_1_of_12_months",
@@ -298,6 +301,7 @@ export class DevelopmentWorkspaceDatabase {
     await db.exec(annualRegisterMigration)
     const evidencePackMigration = await Bun.file(new URL("./migrations/0006_inventory_evidence_pack.sql", import.meta.url)).text()
     await db.exec(evidencePackMigration)
+    await db.exec(await Bun.file(new URL("./migrations/0007_inventory_draft_report.sql", import.meta.url)).text())
     return new DevelopmentWorkspaceDatabase(db)
   }
 
@@ -824,6 +828,28 @@ export class DevelopmentWorkspaceDatabase {
   async replayAnnualEvidencePack(userId:string,companyId:string,inventoryId:string,packId:string,archive:Uint8Array):Promise<EvidencePackReceipt>{
     return this.asUser(userId,async(tx)=>{const stored=await this.readAnnualEvidencePack(tx,companyId,inventoryId);if(!stored||stored.id!==packId)throw new Error("Evidence pack not found.");const current=await this.assembleAnnualEvidencePack(tx,companyId,inventoryId);if(current.archiveSha256!==stored.archiveSha256||current.archiveByteLength!==stored.archiveByteLength)throw new Error("Evidence pack is not current.");return verifyInventoryEvidenceArchive(archive,{archiveSha256:stored.archiveSha256,manifestSha256:stored.manifestSha256,lineageRootSha256:stored.lineageRootSha256,companyId,inventoryId,currentArchive:current.archive})})
   }
+
+  private async readDraftInventoryReport(tx:Transaction,companyId:string,inventoryId:string):Promise<DraftInventoryReportRecord|null>{
+    const row=(await tx.query<any>("select id,company_id,annual_inventory_version_id,evidence_pack_id,profile,inventory_snapshot_sha256,source_archive_sha256,source_manifest_sha256,source_lineage_root_sha256,report_bytes,report_sha256,report_byte_length,created_by,created_at::text from neuvetra.inventory_draft_reports where company_id=$1 and annual_inventory_version_id=$2",[companyId,inventoryId])).rows[0];if(!row)return null
+    const report=new Uint8Array(row.report_bytes),pack=await this.readAnnualEvidencePack(tx,companyId,inventoryId),inventory=await this.readAnnualInventory(tx,companyId),workspace=(await tx.query<WorkspaceRow>(WORKSPACE_QUERY,[companyId])).rows[0]
+    if(!pack||!inventory||!workspace)throw new Error("Stored draft inventory report failed integrity verification.")
+    const current=await this.assembleAnnualEvidencePack(tx,companyId,inventoryId)
+    if(current.archiveSha256!==pack.archiveSha256||current.archiveByteLength!==pack.archiveByteLength)throw new Error("Stored draft inventory report failed integrity verification.")
+    const rebuilt=buildDraftInventoryReport(pack.archive,{archiveSha256:pack.archiveSha256,manifestSha256:pack.manifestSha256,lineageRootSha256:pack.lineageRootSha256,companyId,inventoryId,currentArchive:current.archive},workspace.company_name)
+    const sameBytes=report.byteLength===rebuilt.report.byteLength&&report.every((byte,index)=>byte===rebuilt.report[index])
+    if(row.profile!==rebuilt.profile||row.evidence_pack_id!==pack.id||row.inventory_snapshot_sha256!==inventory.snapshotSha256||row.source_archive_sha256!==rebuilt.sourceArchiveSha256||row.source_manifest_sha256!==rebuilt.sourceManifestSha256||row.source_lineage_root_sha256!==rebuilt.sourceLineageRootSha256||report.byteLength!==row.report_byte_length||row.report_byte_length!==rebuilt.reportByteLength||hashReportBytes(report)!==row.report_sha256||row.report_sha256!==rebuilt.reportSha256||!sameBytes)throw new Error("Stored draft inventory report failed integrity verification.")
+    return{id:row.id,companyId:row.company_id,inventoryId:row.annual_inventory_version_id,evidencePackId:row.evidence_pack_id,profile:row.profile,inventorySnapshotSha256:row.inventory_snapshot_sha256,sourceArchiveSha256:row.source_archive_sha256,sourceManifestSha256:row.source_manifest_sha256,sourceLineageRootSha256:row.source_lineage_root_sha256,reportSha256:row.report_sha256,reportByteLength:row.report_byte_length,createdBy:row.created_by,createdAt:databaseInstant(row.created_at),report}
+  }
+  async createDraftInventoryReport(userId:string,companyId:string,inventoryId:string,packId:string,expectedInventorySnapshotSha256:string,expectedArchiveSha256:string,idempotencyKey:string):Promise<DraftInventoryReportRecord>{return this.asTrustedUser(userId,async tx=>{
+    const pack=await this.readAnnualEvidencePack(tx,companyId,inventoryId),inventory=await this.readAnnualInventory(tx,companyId),workspace=(await tx.query<WorkspaceRow>(WORKSPACE_QUERY,[companyId])).rows[0]
+    if(!pack||pack.id!==packId||pack.archiveSha256!==expectedArchiveSha256||!inventory||inventory.snapshotSha256!==expectedInventorySnapshotSha256||!workspace)throw new Error("Verified current evidence pack required.")
+    const current=await this.assembleAnnualEvidencePack(tx,companyId,inventoryId);if(current.archiveSha256!==pack.archiveSha256)throw new Error("Verified current evidence pack required.")
+    const built=buildDraftInventoryReport(pack.archive,{archiveSha256:pack.archiveSha256,manifestSha256:pack.manifestSha256,lineageRootSha256:pack.lineageRootSha256,companyId,inventoryId,currentArchive:current.archive},workspace.company_name)
+    const fingerprint=sha256({companyId,inventoryId,packId,expectedInventorySnapshotSha256,expectedArchiveSha256,profile:built.profile})
+    await tx.query("select neuvetra.create_inventory_draft_report($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)",[companyId,inventoryId,packId,crypto.randomUUID(),crypto.randomUUID(),expectedInventorySnapshotSha256,expectedArchiveSha256,built.report,built.reportSha256,built.reportByteLength,built.sourceManifestSha256,built.sourceLineageRootSha256,idempotencyKey,fingerprint])
+    const result=await this.readDraftInventoryReport(tx,companyId,inventoryId);if(!result)throw new Error("Draft inventory report could not be read back.");return result
+  })}
+  async findDraftInventoryReport(userId:string,companyId:string,inventoryId:string):Promise<DraftInventoryReportRecord|null>{return this.asUser(userId,tx=>this.readDraftInventoryReport(tx,companyId,inventoryId))}
 
   async close() {
     await this.db.close()

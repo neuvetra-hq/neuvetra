@@ -48,10 +48,13 @@ export interface WorkspaceStore {
   createAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string, expectedInventorySnapshotSha256: string, idempotencyKey: string): Promise<EvidencePackRecord>
   findAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string): Promise<EvidencePackRecord | null>
   replayAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string, packId: string, archive: Uint8Array): Promise<EvidencePackReceipt>
+  createDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string,packId:string,expectedInventorySnapshotSha256:string,expectedArchiveSha256:string,idempotencyKey:string):Promise<DraftInventoryReportRecord>
+  findDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string):Promise<DraftInventoryReportRecord|null>
 }
 
 export interface EvidencePackRecord { id:string;companyId:string;inventoryId:string;profile:"neuvetra.synthetic.inventory-evidence-pack.v1";manifestSha256:string;lineageRootSha256:string;archiveSha256:string;archiveByteLength:number;entryCount:17;createdBy:string;createdAt:string;archive:Uint8Array }
 export interface EvidencePackReceipt { status:"verified_match";profile:"neuvetra.synthetic.inventory-evidence-pack.v1";archiveSha256:string;manifestSha256:string;lineageRootSha256:string;entryCount:17;inventoryId:string;reconstructed:{expected:12;reported:10;estimated:1;excluded:1;missing:0;reportedMwh:"126.788000";reportedKgCo2e:"24728.7681363744";estimatedMwh:"12.493000";estimatedKgCo2e:"2436.6383279784";includedMwh:"139.281000";includedKgCo2e:"27165.4064643528";includedDisplayKgCo2e:"27165.4065"};overallInventoryCompleteness:"incomplete";releaseEligible:false }
+export interface DraftInventoryReportRecord{id:string;companyId:string;inventoryId:string;evidencePackId:string;profile:"neuvetra.synthetic.inventory-draft-report.v1";inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;reportSha256:string;reportByteLength:number;createdBy:string;createdAt:string;report:Uint8Array}
 
 export interface AnnualInventoryDecisionInput {
   decision: "approve_bounded_annual_location_draft" | "changes_requested"

@@ -75,3 +75,7 @@ export function verifyInventoryEvidenceArchive(bytes:Uint8Array,expected:Evidenc
   const rebuilt=buildInventoryEvidenceArchive(input);fail(equal(rebuilt.archive,bytes)&&rebuilt.manifestSha256===manifestSha256&&rebuilt.lineageRootSha256===manifest.lineageRootSha256);const{reconstructed}=validate(input);return{status:"verified_match",profile:M59_PROFILE,archiveSha256:rebuilt.archiveSha256,manifestSha256,lineageRootSha256:rebuilt.lineageRootSha256,entryCount:17,inventoryId:manifest.inventoryId as string,reconstructed,overallInventoryCompleteness:"incomplete",releaseEligible:false}
 }
 export function inspectInventoryEvidenceArchive(bytes:Uint8Array){return parseZip(bytes).map(e=>({name:e.name,method:"stored" as const,byteLength:e.bytes.length,sha256:sha256Bytes(e.bytes)}))}
+export function readVerifiedEvidencePackReportData(bytes:Uint8Array,expected:EvidencePackExpectation){
+  const verification=verifyInventoryEvidenceArchive(bytes,expected),map=new Map(parseZip(bytes).map(e=>[e.name,e.bytes]as const))
+  return{verification,workspace:required<M59WorkspaceSnapshot>(map,"workspace/workspace.json"),register:required<AnnualRegister>(map,"lineage/m58-register-version-2.json"),inventory:required<Omit<AnnualInventory,"decision">>(map,"lineage/m58-inventory-version-2.json"),m57Decision:required<M59PredecessorInventory["decision"]>(map,"lineage/m57-review-decision.json"),m58Decision:required<NonNullable<AnnualInventory["decision"]>>(map,"lineage/m58-review-decision.json"),calculation:required<M59CalculationSnapshot>(map,"lineage/m56-calculation-result.json")}
+}
