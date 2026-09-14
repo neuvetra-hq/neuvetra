@@ -31,7 +31,7 @@ The full repository check passes: all type checks, lint, tests and builds. The d
 
 The live local browser journey passed from a fresh fictional workspace through M55 bill review, M56 calculation, independent M57 review, M58 annual completion and independent review, M59 creation, exact download and replay. The demonstrated archive contained 17 files and 39,213 bytes. Owner and read-only-member replay both reconstructed the exact subtotal; outsider and signed-out access refused.
 
-Independent QA `3b200a71ecfd35953fcec2388774a34bedda9a85840fe7502d1b8b75c767fe77` is recorded in [milestone59-evidence-pack-10.json](../../evaluations/research-qa/milestone59-evidence-pack-10.json). All 20 bound files pass with no open material finding. The publication commit is recorded in the operational status after publication.
+Independent QA `39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a` is recorded in [milestone59-evidence-pack-10.json](../../evaluations/research-qa/milestone59-evidence-pack-10.json). All 20 bound files pass with no open material finding. The implementation is published at `12341a61d7ef3187c05875ba91706b88a47155ea`.
 
 ## Limits
 

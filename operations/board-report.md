@@ -1,5 +1,17 @@
 # Neuvetra board update
 
+September 14, 2026. **M59 deterministic inventory evidence pack is complete for its bounded local synthetic scope, independently accepted and published to [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `12341a6`.** The approved M58 annual record now exports as an exact 17-file, uncompressed ZIP with source bytes, manifests, calculation and inventory lineage, both review decisions, ordered audit history, authority records and a replay contract.
+
+Replay independently reconstructs `126.788000 MWh / 24728.7681363744 kg CO2e` reported, `12.493000 MWh / 2436.6383279784 kg CO2e` estimated and `139.281000 MWh / 27165.4064643528 kg CO2e` included, displayed as `27,165.4065 kg CO2e`. December remains excluded with no quantity. Overall inventory completeness remains **incomplete** and release eligibility remains false.
+
+The complete local browser workflow passed on a fresh database. Managers completed the required M57/M58 two-person review, the owner created and replayed the exact archive, a read-only member independently downloaded and replayed it, and foreign and signed-out access refused. The full repository check passes, including database 24/211, API 625/5,416, web 65/263, Python 12, lint, type checks, build and default-production M59 exclusion. Independent QA `39708ab99b…` passes all 20 bindings with no open material finding.
+
+M59 remains fictional and local in PGlite. It does not establish hosted retention, customer-data authorization, real evidence authenticity, filing readiness, professional assurance, deployment or release.
+
+CEO recommendation: M60 should generate a human-readable draft inventory report only from a verified M59 pack, preserving exact source and decision lineage, estimates, exclusions and incomplete/unreleased status.
+
+[M59 record](../docs/research/inventory-evidence-pack-milestone-59.md) · [independent review](../evaluations/research-qa/milestone59-evidence-pack-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
 September 13, 2026. **M58 annual location-based electricity register is complete for its bounded local synthetic scope, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at `38f7cde`.** It resolves twelve expected 2023 periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December carries no quantity and is never counted as zero.
 
 The exact approved M57 January result flows into immutable register version 1, register version 2 and inventory version 2. Tenant isolation, forced row-level security, immutable history, exact lineage, concurrent-command convergence and two-person review pass. The live browser journey reached the independent M58 approval and kept **overall inventory completeness: incomplete** adjacent to the result. Independent QA `f39e6a9513…` passes all 20 file bindings; database 21/186, API 625/5,399, web 63/253 and Python 12 pass. Release eligibility remains false.

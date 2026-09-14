@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13T23:20:00-07:00",
+  "updated_at": "2026-09-14T08:24:00-07:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M58",
-    "name": "Annual location-based electricity source register",
+    "id": "M59",
+    "name": "Deterministic inventory evidence pack and replay",
     "status": "complete_independent_acceptance_published_to_pr",
-    "next_gate": "Collect board feedback, then decide whether to begin M59 deterministic inventory evidence pack and replay; Stage 4 and release acceptance remain false."
+    "next_gate": "Collect board feedback, then decide whether to begin M60 verified-pack draft inventory report; Stage 4 and release acceptance remain false."
   },
   "completed_milestones": [
     {
@@ -50,6 +50,11 @@
       "id": "M58",
       "completed_at": "2026-09-13",
       "feedback": "docs/research/annual-source-register-milestone-58.md"
+    },
+    {
+      "id": "M59",
+      "completed_at": "2026-09-14",
+      "feedback": "docs/research/inventory-evidence-pack-milestone-59.md"
     }
   ],
   "runtime": {
@@ -57,18 +62,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M58 local browser acceptance completed end to end; all temporary M58 API and preview listeners are closed. No persistent M58 service is configured.",
+    "website_preview_state": "M59 local browser acceptance completed end to end; all temporary M59 API and preview listeners are closed. No persistent M59 service is configured.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M58 passed the full local browser workflow and independent QA. Twelve periods resolve as 10 reported, one estimated and one excluded; the included draft subtotal is 27,165.4065 kg CO2e while overall completeness and release eligibility remain false."
+    "last_session_work": "M59 passed the full local browser workflow and independent QA. The deterministic 17-file pack replays 139.281000 MWh and 27,165.4064643528 kg CO2e while preserving one estimate, one exclusion, incomplete status and release eligibility false."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T06:20:00.000Z",
+    "saved_at": "2026-09-14T15:24:00.000Z",
     "path": "operations/next-session.md",
-    "board_record": "docs/research/annual-source-register-milestone-58.md",
-    "next_task": "Collect board feedback, then define M59 deterministic inventory evidence pack and replay.",
-    "execution_state": "m58_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
-    "review": "Independent QA f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491 passes all 20 bound files. Database 21/186, API 625/5,399, web 63/253 and Python 12 pass with all type checks, lint/build, production exclusion, JSON/diff checks and the end-to-end browser journey.",
-    "scope": "One fixed fictional one-facility 2023 annual location-based electricity register with ten reported, one estimated and one excluded period, immutable inventory version 2 and two-person review. No customer data, market-based accounting, hosted persistence, deployment, merge or release."
+    "board_record": "docs/research/inventory-evidence-pack-milestone-59.md",
+    "next_task": "Collect board feedback, then define M60 verified-pack draft inventory report.",
+    "execution_state": "m59_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
+    "review": "Independent QA 39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a passes all 20 bound files. Database 24/211, API 625/5,416, web 65/263 and Python 12 pass with all type checks, lint/build, production exclusion, JSON/diff checks and the end-to-end browser journey.",
+    "scope": "One deterministic 17-file evidence pack for the fixed fictional approved M58 annual location inventory, with exact download and independent replay. No customer data, hosted persistence, filing, assurance, deployment, merge or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -138,7 +143,12 @@
     "m58_commit": "38f7cde",
     "m58_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
     "m58_review": "evaluations/research-qa/milestone58-annual-register-10.json",
-    "m58_review_sha256": "f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491"
+    "m58_review_sha256": "f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491",
+    "m59_state": "complete_independent_product_data_security_accounting_acceptance_published_to_pr_stage4_and_release_false",
+    "m59_commit": "12341a61d7ef3187c05875ba91706b88a47155ea",
+    "m59_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
+    "m59_review": "evaluations/research-qa/milestone59-evidence-pack-10.json",
+    "m59_review_sha256": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -982,6 +992,38 @@
         "https://github.com/neuvetra-hq/neuvetra/pull/3"
       ],
       "next_action": "Closed and published in PR #3 at 4d5827c. Collect board feedback, then decide whether to begin M58 annual location-based source register and missing-period completion workflow."
+    },
+    {
+      "id": "M58-ANNUAL-REGISTER",
+      "owner": "ceo_with_cpo_cto_and_independent_accounting_product_data_security_qa",
+      "status": "complete_independent_acceptance_published_to_pr",
+      "title": "Resolve the fixed 2023 annual location-based electricity register",
+      "scope": "Twelve fixed fictional one-facility periods with ten reported, one estimated and one excluded state, immutable inventory version 2 and two-person decision; local development only.",
+      "acceptance": "Exact M57 carry-forward, explicit period evidence and exceptions, deterministic totals, immutable tenant-scoped persistence, two-person review, production exclusion, browser demonstration and independent QA.",
+      "result": "Published at 38f7cde. Independent QA f39e6a95 passed all 20 bindings. Database 21/186, API 625/5,399, web 63/253 and Python 12 passed; included subtotal 139.281000 MWh and 27,165.4065 kg CO2e while overall completeness and release eligibility remained false.",
+      "evidence": [
+        "docs/research/annual-source-register-milestone-58.md",
+        "packages/neuvetra-database/src/migrations/0005_annual_source_register.sql",
+        "evaluations/research-qa/milestone58-annual-register-10.json",
+        "https://github.com/neuvetra-hq/neuvetra/pull/3"
+      ],
+      "next_action": "Closed and published in PR #3 at 38f7cde. M59 was subsequently completed."
+    },
+    {
+      "id": "M59-EVIDENCE-PACK",
+      "owner": "ceo_with_cpo_cto_and_independent_accounting_product_data_security_qa",
+      "status": "complete_independent_acceptance_published_to_pr",
+      "title": "Package and independently replay the approved annual inventory evidence",
+      "scope": "Exact deterministic 17-file ZIP from the fixed approved M58 inventory, with tenant-bound storage, download and independent arithmetic replay; local and synthetic only.",
+      "acceptance": "Exact archive order and bytes, manifest/component/lineage hashes, strict parser and arithmetic replay, immutable forced-RLS persistence, manager creation, member read/replay, tamper refusal, production exclusion, browser demonstration and independent QA.",
+      "result": "Published at 12341a61d7ef3187c05875ba91706b88a47155ea. Independent QA 39708ab9 passed all 20 bindings after four integrity findings were repaired. Database 24/211, API 625/5,416, web 65/263 and Python 12 pass. Replay reconstructs 139.281000 MWh and 27165.4064643528 kg CO2e; completeness and release eligibility remain false.",
+      "evidence": [
+        "docs/research/inventory-evidence-pack-milestone-59.md",
+        "packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+        "evaluations/research-qa/milestone59-evidence-pack-10.json",
+        "https://github.com/neuvetra-hq/neuvetra/pull/3"
+      ],
+      "next_action": "Collect board feedback, then decide whether to begin M60 verified-pack draft inventory report."
     }
   ],
   "feedback_tasks": [

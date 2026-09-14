@@ -1,4 +1,16 @@
-# Current continuation — M58 annual electricity register published; M59 evidence pack next
+# Current continuation — M59 evidence pack complete and published
+
+September 14, 2026. **M59 is complete for its bounded local synthetic scope, independently accepted and published in PR #3 at implementation commit `12341a61d7ef3187c05875ba91706b88a47155ea`.** The exact approved M58 record now produces a deterministic 17-file ZIP containing raw source bytes, manifests, register and inventory versions, calculation lineage, review decisions, audit history, authority records and a replay contract.
+
+Independent replay reconstructs ten reported, one estimated and one excluded period: `126.788000 MWh / 24728.7681363744 kg CO2e` reported, `12.493000 MWh / 2436.6383279784 kg CO2e` estimated, and `139.281000 MWh / 27165.4064643528 kg CO2e` included, displayed as `27,165.4065 kg CO2e`. December remains excluded with no quantity. Overall inventory completeness remains `incomplete` and release eligibility remains false.
+
+The live browser workflow passed end to end on a fresh database. A manager created the archive after two-person M57/M58 review; the exact download replayed for both an owner and a read-only member; another tenant saw no record; signed-out access refused. The demonstrated archive was 39,213 bytes. The full repository check, database 24/211, API 625/5,416, web 65/263, Python 12 and default-production M59 exclusion pass. Independent QA `39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a` passes all 20 bindings with no open material finding.
+
+The CEO recommendation is **M60: verified-pack draft inventory report**. Render a human-readable draft only from a successfully verified M59 archive, preserve the estimate and exclusion beside the result, expose source/decision lineage and keep incomplete, synthetic and unreleased status visible. Filing formats, customer data, hosted retention, professional assurance, deployment and release remain separate gates.
+
+[M59 record](../docs/research/inventory-evidence-pack-milestone-59.md) · [M59 independent review](../evaluations/research-qa/milestone59-evidence-pack-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+# Historical continuation — M58 annual electricity register published; M59 evidence pack next
 
 September 13, 2026. **M58 is complete for its bounded local synthetic scope, independently accepted and published in PR #3 at implementation commit `38f7cde`.** The 2023 one-facility register now resolves all twelve expected periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December has no quantity and is not treated as zero.
 
