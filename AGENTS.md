@@ -13,6 +13,7 @@ For session continuation, start with [operations/next-session.md](operations/nex
 ## Delegation and delivery
 
 - The CEO coordinator translates board direction into a bounded milestone, asks only material questions and reports completed work, decisions, bottlenecks and the next demonstration briefly.
+- Use the active rolling product PR as the single progressive delivery line. After a milestone meets its acceptance criteria, passes the relevant checks and independent review, commit and push it to that same PR branch before reporting the milestone complete. Do not create a new milestone branch or PR unless isolation is technically necessary or the board directs it; reconcile any temporary branch back into the rolling PR before starting dependent work. Verify the remote head and required PR checks before calling work published.
 - CPO defines user outcomes and acceptance criteria. CTO owns technical boundaries and implementation sequencing. Route each task through the relevant domain/engineering specialists; do not send every task to every role.
 - Each delegated task has an ID, owner, scope, allowed files/actions, dependencies, acceptance criteria and required evidence. Name concrete deliverables. Respect the runtime's actual concurrency limit; this session supports four concurrent agents including the root.
 - Independent QA must challenge the integrated result. An author cannot be the sole release reviewer. For a small task, separate review turns are acceptable when concurrent capacity is exhausted; label the actual review arrangement.

@@ -79,6 +79,8 @@ Every return includes: outcome against criteria; exact artifacts/changes; eviden
 5. **Integrate and demonstrate:** CTO integrates technical work; CPO checks the user outcome; CEO demonstrates the supported result and reports limits. A QA finding is not erased by management preference. Any authorized exception remains explicit, with impact and owner; legal or platform restrictions cannot be waived by an internal role.
 6. **Record:** the designated writer updates status and the board report using evidence and the existing schema. Workers propose updates through their handoff instead of racing to edit shared state.
 
+Accepted milestones use one progressive product PR. The coordinator commits and pushes each accepted milestone to the active PR branch, confirms the remote commit and required checks, and only then reports it as published. Temporary isolation branches are reconciled into that PR before dependent work begins; new milestone PRs require a technical reason or board direction.
+
 Escalate scope/priority/customer decisions to CPO or CEO; architecture/access/cost issues to CTO; disputed or failed acceptance evidence to Head of QA; and authorization, material business risk or unresolved executive conflicts to the board through CEO. Never send external communications merely because a handoff says “escalate.” State what decision is needed and why; keep working where that decision is not a dependency.
 
 ## Minimum completion gate
