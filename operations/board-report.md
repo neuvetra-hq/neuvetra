@@ -1,4 +1,6 @@
-# Neuvetra board update — M63 in progress
+# Neuvetra board update — M63 browser defect under repair
+
+September 14 board feedback: the signed-in hosted browser rejects the saved calculation with 'The calculation response was not recognized.' Root reproduced it through Revisit saved workspace. Prior API/recovery checks remain valid but were insufficient for browser acceptance. The exact property-order-dependent comparison is repaired; the same hosted response passes the actual frontend decoder, and independent source review plus 77 web tests pass. Repair commit 2985ed3 is published to PR4. Full frontend-chain and postdeployment signed-in browser verification remain pending; no saved records were changed.
 
 September 14, 2026. PR #3 was merged on the board's approval. M63 reuses the existing Railway website and Supabase test database; no new hosting service or subscription was added. The existing database has an encrypted recovery backup, reviewed legacy access containment and nine applied application migrations. Real provider sign-in and restricted database access pass for two managers and a member; an uninvited signed-in tester is refused.
 

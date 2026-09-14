@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T19:31:09.5105045Z",
+  "updated_at": "2026-09-14T19:53:13.6822002Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M63",
     "name": "Private staging: real sign-in and durable synthetic workflow",
     "status": "in_progress",
-    "next_gate": "Publish current reviewed operational evidence and collect board browser sign-in/use feedback before dependent milestone work.",
+    "next_gate": "Confirm deployed browser repair through signed-in saved-workspace revisit, then collect renewed board feedback. Independent frontend contract passes for two actors, 22 GETs and no writes.",
     "evidence": [
       "docs/research/private-staging-milestone-63.md",
       "evaluations/research-qa/milestone63-private-staging.md",

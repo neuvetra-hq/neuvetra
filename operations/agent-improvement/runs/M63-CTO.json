@@ -25,7 +25,7 @@
     "first_review": "pending",
     "material_findings_open": 0,
     "rework_cycles": null,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {
@@ -52,11 +52,15 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "parent_outcome": "M63",
-  "started_at": "2026-09-14T17:59:50.242585+00:00",
+  "started_at": "2026-09-14T10:59:50.242585-07:00",
   "lessons": [
     "L01",
     "L02",
     "L04",
     "L06"
-  ]
+  ],
+  "escaped_defect_evidence": [
+    "evaluations/research-qa/m63-browser-contract.md"
+  ],
+  "escaped_defect_scope": "Shared M63-F03 board-discovered browser-contract incident; count once at parent milestone, not once per role. Earlier API/recovery acceptance did not exercise the frontend decoder."
 }
