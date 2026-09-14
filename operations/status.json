@@ -1,17 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T21:53:25.220680+00:00",
+  "updated_at": "2026-09-14T22:58:58.438202+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M65",
     "name": "Readable exact-version synthetic worksheet report",
-    "status": "in_progress",
-    "next_gate": "Integrated backend/frontend reports, independent accounting and QA, then existing-host deployment and browser demonstration.",
+    "status": "awaiting_board_feedback",
+    "next_gate": "Board reviews the live exact-version report and print view; no dependent milestone before feedback.",
     "evidence": [
       "docs/research/worksheet-report-milestone-65.md",
-      "operations/feedback/2026-09-14-milestone-64.md"
+      "docs/research/m65-hosted-verification.json",
+      "evaluations/research-qa/m65-hosted-handoff.md"
     ]
   },
   "completed_milestones": [
@@ -91,16 +92,16 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M64 live on existing www.neuvetra.ai private synthetic staging; schema10, exact worksheet/history and original report verified; browser left open for board feedback.",
+    "website_preview_state": "M65 live on existing private synthetic staging; schema11; exact version4 and historical reports verified. Board review pending.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M64 board version4 verified and accepted; published head and live readiness rechecked. M65 scope selected; implementation not started."
+    "last_session_work": "M65 implemented, independently reviewed, published and deployed; exact reports survive restart. Print workflow repaired after user reported missing preview; see final hosted evidence."
   },
   "session_handoff": {
-    "current": "M64 accepted and published; M65 planned",
-    "next": "CTO report snapshot/authorization contract and accounting wording review",
+    "current": "M65 live; board feedback pending",
+    "next": "Review version4 report and print view before selecting dependent work",
     "evidence": [
-      "operations/feedback/2026-09-14-milestone-64.md",
-      "docs/research/worksheet-report-milestone-65.md"
+      "docs/research/m65-hosted-verification.json",
+      "evaluations/research-qa/m65-hosted-handoff.md"
     ]
   },
   "checkpoint": {
@@ -2012,7 +2013,7 @@
     "deployed": false
   },
   "current_m64": {
-    "state": "deployed_awaiting_board_feedback",
+    "state": "accepted",
     "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
     "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/4",
     "draft": true,
@@ -2031,13 +2032,23 @@
     "commit": "2b2129505ab613e0861039f23e5a751c7f1b9465"
   },
   "current_m65": {
-    "status": "in_progress",
+    "status": "awaiting_board_feedback",
     "implementation_authorized": true,
     "backend_owner": "/root/m64_cto",
     "accounting_owner": "/root/m64_accounting",
     "qa_owner": "/root/m63_data",
     "root_owner": "frontend, operators, publication and board communication",
     "persistent_workers": false,
-    "compute_observed": null
+    "compute_observed": null,
+    "implementation_commit": "3d6fdfa0e18d924c6495866f2db21c088089f9d5",
+    "deployment_id": "fe21d898-1b02-4960-9f72-20774ec3a6ef",
+    "ci_checks_passed": 6,
+    "schema_version": 11,
+    "active_workers_excluding_root": 0,
+    "final_gate": "Board milestone feedback before dependent work",
+    "release_eligible": false,
+    "synthetic_only": true,
+    "board_feedback": "pending",
+    "evidence": "docs/research/m65-hosted-verification.json"
   }
 }

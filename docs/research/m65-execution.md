@@ -1,3 +1,18 @@
+# M65 hosted implementation accepted for board handoff
+
+The final print-view entry point worked on deployed3d6fdfa0e18d924c6495866f2db21c088089f9d5. Root observed the prepared tab navigate to the generated report and the original worksheet controls become usable. The browser tool's URL policy blocked generated-document inspection; no workaround was attempted. The board then explicitly confirmed the report and native Ctrl+P preview looked correct. Independent hosted handoff passed with these observer boundaries preserved. Scoped CTO, accounting and QA deliveries are closed; broader milestone feedback remains pending. See evaluations/research-qa/m65-hosted-handoff.md and docs/research/m65-hosted-verification.json. The earlier checkpoints below are historical.
+
+# M65 live - final print-view check pending
+
+Implementation3d6fdfa0e18d924c6495866f2db21c088089f9d5 is published in rolling draft PR4; all six CI checks passed. Existing Railway deploymentfe21d898-1b02-4960-9f72-20774ec3a6ef is SUCCESS on schema11. The read-only hosted revisit at2026-09-14T22:51:04UTC preserved both exact reports, all four worksheet versions/reviews and the original M63 report/review. All four test Auth sessions closed204. No merge or new subscription.
+
+Current Version4 and historical Version2 opened correctly, the actual downloaded HTML hash matched, and narrow-screen/keyboard checks passed. The board reported no native preview from the embedded print action. The reviewed repair now opens a dedicated verified print view with browser Print instructions. Local action/decoder checks passed12/74; this is not native browser proof.
+
+Chrome blocked the final live reload because another extension panel was open. The board has been asked to close it. Next: inspect the deployed Open print view, verify browser Print, finalize independent hosted handoff and role records, publish the remaining evidence/closure documents, and collect board feedback. Do not call M65 complete or start dependent work yet. The three immutable role snapshots are prepared; role runs remain in progress. Temporary local PostgreSQL and report-preview services are stopped. No worker is currently executing outside root; no persistent agents or measured compute/cost savings are claimed.
+
+See docs/research/m65-hosted-verification.json and evaluations/research-qa/m65-print-view-supplement.md. Final handoff is explicitly still a draft. Existing earlier reports and supplements remain immutable historical evidence. Continuation helpers in .superpowers include m65-close-records.py (do not run before final acceptance) and m65-hosted-record.py (initial draft generator; do not rerun over newer verification).
+
+
 # M65 execution â€” exact saved worksheet reports
 
 Board authorized implementation after accepting M64. M65 adds immutable, authenticated, readable/printable HTML report snapshots for current and historical M64 versions. No method/factor/coverage expansion, customer data or new hosting subscription. Same rolling draft PR4; no merge authorized.

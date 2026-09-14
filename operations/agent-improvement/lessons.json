@@ -35,10 +35,11 @@
       "id": "L04",
       "owner_role": "software-engineering",
       "trigger": "Acceptance claims a writer, replay, permission or browser path works.",
-      "required_check": "Map each consequential criterion to a check that invokes the actual changed boundary; replay the exported record. Label mocked, partial or unrun checks accurately. For hosted browser acceptance, pass the real hosted responses through the actual frontend decoders and revisit the persisted workflow in a signed-in browser; an API-only journey does not satisfy this criterion.",
+      "required_check": "Map each consequential criterion to a check that invokes the actual changed boundary; replay the exported record. Label mocked, partial or unrun checks accurately. For hosted browser acceptance, pass the real hosted responses through the actual frontend decoders and revisit the persisted workflow in a signed-in browser; an API-only journey does not satisfy this criterion. For print/export, verify the actual user entry point, exact exported bytes and print presentation separately; generating a PDF alone does not prove the application print flow works.",
       "evidence": [
         "operations/agent-improvement/historical-evidence.json#L04",
-        "evaluations/research-qa/m63-browser-contract.md"
+        "evaluations/research-qa/m63-browser-contract.md",
+        "operations/agent-improvement/m65-review.md"
       ],
       "status": "adopted_pending_effectiveness"
     },

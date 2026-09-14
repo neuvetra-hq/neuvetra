@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "implementation_commit": "e074819677e46a92c7dc0a28fb580c93a0293f7b",
+  "canonicalization": "UTF-8 Git blob bytes with CRLF normalized to LF; no other normalization. Compact hash-only snapshot follows M64 convention; the immutable implementation commit retains file contents.",
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "note": "Reused execution contexts; inherited runtime settings and resource metrics unknown."
+  },
+  "task_id": "M65-ACCOUNTING",
+  "scope": "Accounting contract, independently derived expected cases and historical implementation review. The reviewer authored the contract/cases but no product calculator or renderer. Implementation-review raw-byte hashes and receipts bind the pre-print-repair implementation; they are not retroactively represented as review of the final template/migration. Separate final print supplement binds those changed files and rechecks seven numerical cases. No professional assurance, hosted acceptance or run closure is implied.",
+  "files": [
+    {
+      "path": "docs/research/m65-accounting-contract.md",
+      "sha256": "99fb087858f3b045e5f7152625cbaccf43c586da370b740c7f7780b1501915e1"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-cases.json",
+      "sha256": "8fb4751e72cbd732cbe539e25f30ca22e23a5152b85540b74efa7bd6fd87da1d"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-implementation-review.md",
+      "sha256": "90c4501612245505725fd6996a8ad7d467019709b4445250a829c1012c599c35"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-renderer-check.ts",
+      "sha256": "62d760c670fa1f24d3879cac017b88536499d76adad0c79d0e73ed08fc366e32"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-renderer-results.json",
+      "sha256": "402f9b77131133b5dfaa2600816a1ad6d5ac8600c5df027f7a78d68b4e5943b5"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-renderer-results-initial.json",
+      "sha256": "812570dca2e90b32f233e70d9cda1a90d88779947efca44f2c9b3f9d272c7236"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-v4-fixture.html",
+      "sha256": "926c147ceede15fd969b2b97e35aa1c2ee073dbb3d0bcea6770392b5911eb482"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m65-print-supplement.json",
+      "sha256": "c2600e557ed052962a59ed103a1e201e46a23cc813d8f0150da618724a323e94"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-supplement.md",
+      "sha256": "a0a1665c5e06eb5f4c1e83e291f69f73131f339bb2720554a43ec5e4d3810762"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-native-receipt.json",
+      "sha256": "841c4746db034b557e14e93402babd9dabb502e0182dacbfe445468487e23fe3"
+    }
+  ],
+  "validation": {
+    "historical_accounting": {
+      "direct_render_cases": 21,
+      "persisted_downloaded_reports": 14,
+      "historical_reports_unchanged": 7,
+      "persistence_runtime": "PGlite via actual application migrations and public methods; not native PostgreSQL"
+    },
+    "final_print_repair": "Independent QA supplemental native PostgreSQL 12 tests/218 assertions plus frontend/renderer 9 tests/174 assertions and eight visually inspected Chrome fixture pages. This supplement is not a new accounting-authored review.",
+    "historical_binding_note": "The implementation review distinguishes raw local hashes from canonical LF. Its pre-print canonical migration hash is 9032e4ae40eb3e7e04b9329dca5c2bbafc52197a94742cd7a3720a055cd06fb0."
+  },
+  "final_print_replacement_bindings": [
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "previousCanonicalLfSha256": "e229dad855b1d0ac3703e72ee5ee7cfbf569f4fa71ddbd036f6221c8e9596b74",
+      "canonicalLfSha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "previousCanonicalLfSha256": "9032e4ae40eb3e7e04b9329dca5c2bbafc52197a94742cd7a3720a055cd06fb0",
+      "canonicalLfSha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    }
+  ],
+  "template_content_sha256": "cb279f0ec15cd492815dca2c4424e6d8852c0503f179fa0179482a0f087aa929"
+}

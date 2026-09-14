@@ -4,25 +4,39 @@
   "role": "qa-lead",
   "execution_context": "/root/m63_data",
   "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M65-QA.json",
+      "sha256": "40fcd1a4b69934c31a76f005353f0206d3c64d3b11f36d361e5a1ac87e3c7d80"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m65-hosted-handoff.md"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m65-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M65-QA.json",
+        "sha256": "40fcd1a4b69934c31a76f005353f0206d3c64d3b11f36d361e5a1ac87e3c7d80"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "insufficient_evidence",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": null,
@@ -52,5 +66,46 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "parent_outcome": "M65 implementation",
-  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim."
+  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim.",
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m65-private-report.md",
+      "sha256": "c5053b9961ea6133fe2fd2ea884712d2587961d775a513f5845728a4310acb1b"
+    },
+    {
+      "path": "evaluations/research-qa/m65-local-review-manifest.json",
+      "sha256": "a075d4fd1f8716f510d15083d7ab3af22f4869eb55dd43d062bc41e5686d164a"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-supplement.md",
+      "sha256": "a0a1665c5e06eb5f4c1e83e291f69f73131f339bb2720554a43ec5e4d3810762"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-supplement.json",
+      "sha256": "c2600e557ed052962a59ed103a1e201e46a23cc813d8f0150da618724a323e94"
+    },
+    {
+      "path": "evaluations/research-qa/m65-ci-test-supplement.json",
+      "sha256": "fa8eb41027215e7862cfaf0f83fa7db53630255b78924393f8b2d27e1d0d0736"
+    },
+    {
+      "path": "evaluations/research-qa/m65-ui-label-supplement.json",
+      "sha256": "04d4000047313a06d6531e7ad42df547fb0fed430f3423045bec68b62cb7cb97"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-view-supplement.md",
+      "sha256": "ebffcc5ffc237efab3e91aec2698e2d6d79325898c40bebb277a2e3199c524e4"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-view-supplement.json",
+      "sha256": "d54d08733135dc7708d341984a5d4b5425c07b9661146d4de809b21df80c907f"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-view.test.ts",
+      "sha256": "413fd4e65e3fcfafbcb4998b3539653ac4f4ba1d821c658833d6189d548b177d"
+    }
+  ],
+  "notes": [
+    "Scoped role delivery complete; board feedback is a separate milestone gate. Initial findings and live UI-F04/F05 remain in evidence; QA first handoff lacked hosted evidence. Root authored the UI and these closure records; QA authored no M65 product code. Actual compute/cost unknown, no savings claim."
+  ]
 }

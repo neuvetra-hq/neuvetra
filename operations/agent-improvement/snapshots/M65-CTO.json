@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "implementation_commit": "e074819677e46a92c7dc0a28fb580c93a0293f7b",
+  "canonicalization": "UTF-8 Git blob bytes with CRLF normalized to LF; no other normalization. Compact hash-only snapshot follows M64 convention; the immutable implementation commit retains file contents.",
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "note": "Reused execution contexts; inherited runtime settings and resource metrics unknown."
+  },
+  "task_id": "M65-CTO",
+  "scope": "Backend/database/shared report contract and native API regression source at the pinned commit. Final print template and migration bindings are covered by the separate print supplement; original review bindings remain historical. Frontend, operator, CI/cloud publication and native print-dialog behavior are outside this snapshot acceptance scope. No run is closed by this snapshot.",
+  "files": [
+    {
+      "path": "packages/neuvetra-database/src/m65-contract.ts",
+      "sha256": "9ffb93e091aec3e5a2b8cafb7f7bacd8bc2a04280632663e802a8cf201bcff31"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "sha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.ts",
+      "sha256": "409a150611664efb3b45213714dc561b4a6a289fa6304c3cb56c15d2d6cf230e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "sha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "bd40668e73a75886b4fd5010052fb268986647b9da4584e164d220f4877b6ecc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "283fc74c5d3c2b8a9918ab6f517f8d4a25ddb8dc8f774903179e5b02ed261358"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "a4447cf299b306e31d99fd8ca09e38fcd8aed597b17db730f2f178e05a7567e8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "dd07dc900297c9075ce20586cd6a7e4182da49051b799cc08c37c804cd637c61"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m65-routes.ts",
+      "sha256": "bb997126708562b96086aa4ca88008f6e14d91811fcf8b045e52fdd8e7440fd1"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "b0e0566338592f4e33b4372b056c2c0eaadd2ee99498b627b81f06fdcb31a3ec"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "sha256": "d6da83c4d7ed2c09a01c84f4b9822c33adfbac8e10da9a3f222426e6b06d8c7b"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.test.ts",
+      "sha256": "08d955b6669f4757fbdd6e7e0a61a42e148292a0bdc91f28aac28b5a0e1331e2"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m65-local-review-manifest.json",
+      "sha256": "a075d4fd1f8716f510d15083d7ab3af22f4869eb55dd43d062bc41e5686d164a"
+    },
+    {
+      "path": "evaluations/research-qa/m65-private-report.md",
+      "sha256": "c5053b9961ea6133fe2fd2ea884712d2587961d775a513f5845728a4310acb1b"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-supplement.json",
+      "sha256": "c2600e557ed052962a59ed103a1e201e46a23cc813d8f0150da618724a323e94"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-supplement.md",
+      "sha256": "a0a1665c5e06eb5f4c1e83e291f69f73131f339bb2720554a43ec5e4d3810762"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-native-receipt.json",
+      "sha256": "841c4746db034b557e14e93402babd9dabb502e0182dacbfe445468487e23fe3"
+    }
+  ],
+  "validation": {
+    "independent_native": {
+      "tests": 12,
+      "assertions": 218,
+      "database": "m65_qa_print",
+      "postgres": "17.11",
+      "original_rows_preserved": 999
+    },
+    "independent_frontend_and_renderer": {
+      "tests": 9,
+      "assertions": 174
+    },
+    "print": "Root-produced Chrome Page.printToPDF fixtures; independent QA inspected all four standard and four long-input pages. This establishes fixture layout, not native print-dialog opening.",
+    "preserved_findings": [
+      "M65-QA-F01: unresolved fingerprint placeholders repaired before passing renderer checks.",
+      "M65-QA-F02: queued review timestamp ordering repaired additively and challenged on native PostgreSQL; original migration 0010 and rows preserved.",
+      "M65-PRINT-F03: fixed print header/footer overlap repaired and checked on fresh schema-10 clones; original schema-11 receipts retained."
+    ]
+  },
+  "template_content_sha256": "cb279f0ec15cd492815dca2c4424e6d8852c0503f179fa0179482a0f087aa929"
+}

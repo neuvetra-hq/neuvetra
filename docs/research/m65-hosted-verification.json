@@ -1,0 +1,607 @@
+{
+  "schema_version": 1,
+  "status": "hosted_and_browser_demonstration_pass_board_milestone_feedback_pending",
+  "observed_at": "2026-09-14T22:56:54.565713+00:00",
+  "host": "https://www.neuvetra.ai",
+  "implementation_commit": "e074819677e46a92c7dc0a28fb580c93a0293f7b",
+  "deployment": {
+    "id": "90228000-391e-45f7-98aa-d08eacd0979c",
+    "status": "SUCCESS",
+    "schema_version": 11,
+    "ready_http_status": 200,
+    "restart_verified": true,
+    "transition": "Initial deployment214cb425-e97e-4b7c-aac9-cdf214358e93 did not become ready around the schema upgrade. The same reviewed image was redeployed successfully. Exact outage duration/cause was not measured; no zero-downtime claim."
+  },
+  "ci": {
+    "head": "e074819677e46a92c7dc0a28fb580c93a0293f7b",
+    "checks": [
+      {
+        "name": "Offline research catalog tests",
+        "conclusion": "success"
+      },
+      {
+        "name": "Native PostgreSQL worksheet and tenant regression",
+        "conclusion": "success"
+      },
+      {
+        "name": "Dedicated staging image and offline runtime smoke",
+        "conclusion": "success"
+      },
+      {
+        "name": "GHG calculation specifications and engine",
+        "conclusion": "success"
+      },
+      {
+        "name": "Typecheck, lint, unit tests and web builds",
+        "conclusion": "success"
+      },
+      {
+        "name": "Role routing and evidence records",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "migration": {
+    "status": "m65_migration_committed",
+    "createdAt": "2026-09-14T22:25:21.803Z",
+    "project": "icockcoguyadhryzydvl",
+    "beforeVersion": 10,
+    "schemaVersion": 11,
+    "migrations": [
+      {
+        "name": "0001_company_workspace.sql",
+        "sha256": "cc596137d3011d400d3b253ebb52994bafe47f716c22601c4a316de259d7d739"
+      },
+      {
+        "name": "0002_synthetic_bill_intake.sql",
+        "sha256": "8c6b46209410d5611b1462ba694047dd4eb06dccf9de55fe65cee1d5bb9c6321"
+      },
+      {
+        "name": "0003_synthetic_bill_calculation.sql",
+        "sha256": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6"
+      },
+      {
+        "name": "0004_inventory_review.sql",
+        "sha256": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213"
+      },
+      {
+        "name": "0005_annual_electricity_register.sql",
+        "sha256": "3f288d293c93132c422505f8daf7fc6e52eac8e33128a248cd4e9ba5cb946b35"
+      },
+      {
+        "name": "0006_inventory_evidence_pack.sql",
+        "sha256": "2b786ee7c90b6cd65e398b0c8422d9e76f851a789a5318a7715039e123249dfd"
+      },
+      {
+        "name": "0007_inventory_draft_report.sql",
+        "sha256": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81"
+      },
+      {
+        "name": "0008_inventory_draft_report_review.sql",
+        "sha256": "c5e81967a5dcb08055d452816a1e687b204c59c6396014190897f965abc4a1cc"
+      },
+      {
+        "name": "0009_private_staging.sql",
+        "sha256": "10a0be42649a86fbf2f0e2ab826e6d856dfbe591a1090dc39b3d4872dc191e3f"
+      },
+      {
+        "name": "0010_manual_electricity_worksheet.sql",
+        "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+      },
+      {
+        "name": "0011_worksheet_reports.sql",
+        "sha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+      }
+    ],
+    "reviewedMigrationHash": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99",
+    "clientTls": "verified CA and hostname",
+    "scope": "additive immutable worksheet report tables; M63 and M64 records retained"
+  },
+  "backup": {
+    "created_at": "2026-09-14T21:58:43Z",
+    "encrypted_bytes": 355788,
+    "sha256": "aa4c91094052cec9d9bd07ae38e4977307d7e885fb0f1a354192d60529d8dc7b",
+    "scope": "Application-only; Windows identity DPAPI. Decryption/hash verified; not cloud-restored, not provider Auth or off-device recovery."
+  },
+  "hosted_attempts": [
+    {
+      "status": "failed",
+      "mode": "baseline",
+      "stage": "original_review",
+      "createdAt": "2026-09-14T21:56:10.292Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": false,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report",
+          "status": 200
+        },
+        {
+          "name": "original_review",
+          "status": 200
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ]
+    },
+    {
+      "status": "passed",
+      "mode": "baseline",
+      "stage": "original_review",
+      "createdAt": "2026-09-14T21:56:48.228Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report",
+          "status": 200
+        },
+        {
+          "name": "original_review",
+          "status": 200
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "baseline": ".superpowers/m65-hosted-baseline.json",
+      "versions": 4
+    },
+    {
+      "status": "passed",
+      "mode": "exercise",
+      "stage": "worksheet_unchanged",
+      "createdAt": "2026-09-14T22:30:01.470Z",
+      "applicationPostRequests": 6,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report",
+          "status": 200
+        },
+        {
+          "name": "original_review",
+          "status": 200
+        },
+        {
+          "name": "signed_out_reports",
+          "status": 401
+        },
+        {
+          "name": "outsider_reports",
+          "status": 403
+        },
+        {
+          "name": "member_create_refused",
+          "status": 403
+        },
+        {
+          "name": "concurrent_report",
+          "status": 201
+        },
+        {
+          "name": "create_report",
+          "status": 201
+        },
+        {
+          "name": "member_reports",
+          "status": 200
+        },
+        {
+          "name": "report_metadata",
+          "status": 200
+        },
+        {
+          "name": "report_bytes",
+          "status": 200
+        },
+        {
+          "name": "signed_out_download",
+          "status": 401
+        },
+        {
+          "name": "outsider_download",
+          "status": 403
+        },
+        {
+          "name": "member_create_refused",
+          "status": 403
+        },
+        {
+          "name": "create_report",
+          "status": 201
+        },
+        {
+          "name": "concurrent_report",
+          "status": 201
+        },
+        {
+          "name": "member_reports",
+          "status": 200
+        },
+        {
+          "name": "report_metadata",
+          "status": 200
+        },
+        {
+          "name": "report_bytes",
+          "status": 200
+        },
+        {
+          "name": "signed_out_download",
+          "status": 401
+        },
+        {
+          "name": "outsider_download",
+          "status": 403
+        },
+        {
+          "name": "worksheet_unchanged",
+          "status": 200
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "reports": [
+        {
+          "id": "9b1fded0-2af8-4945-a3b2-0b513b8f3f7c",
+          "version": 4,
+          "reportSha256": "7b5d3647fd8547b5cf6b54264117412b124753c217b6b3ac2f6b9c97bbe3ee2a",
+          "reportByteLength": 8255,
+          "reviewState": "unreviewed",
+          "reviewSha256": null
+        },
+        {
+          "id": "caeb5e16-5ba6-45b9-bab9-bf181b161ab3",
+          "version": 2,
+          "reportSha256": "212ecaa82f25e4cf3ddf49ac92e0b2054cbcb25509275cf6a70c762499b668d8",
+          "reportByteLength": 8514,
+          "reviewState": "accepted_bounded_internal_draft",
+          "reviewSha256": "ff7f75307bf7916ece2d16f948df62851a69a293203a558084e1128ef1186162"
+        }
+      ],
+      "originalAndWorksheetUnchanged": true
+    },
+    {
+      "status": "passed",
+      "mode": "revisit",
+      "stage": "worksheet_unchanged",
+      "createdAt": "2026-09-14T22:32:15.529Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report",
+          "status": 200
+        },
+        {
+          "name": "original_review",
+          "status": 200
+        },
+        {
+          "name": "signed_out_reports",
+          "status": 401
+        },
+        {
+          "name": "outsider_reports",
+          "status": 403
+        },
+        {
+          "name": "member_reports",
+          "status": 200
+        },
+        {
+          "name": "report_metadata",
+          "status": 200
+        },
+        {
+          "name": "report_bytes",
+          "status": 200
+        },
+        {
+          "name": "signed_out_download",
+          "status": 401
+        },
+        {
+          "name": "outsider_download",
+          "status": 403
+        },
+        {
+          "name": "member_reports",
+          "status": 200
+        },
+        {
+          "name": "report_metadata",
+          "status": 200
+        },
+        {
+          "name": "report_bytes",
+          "status": 200
+        },
+        {
+          "name": "signed_out_download",
+          "status": 401
+        },
+        {
+          "name": "outsider_download",
+          "status": 403
+        },
+        {
+          "name": "worksheet_unchanged",
+          "status": 200
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "reports": [
+        {
+          "id": "9b1fded0-2af8-4945-a3b2-0b513b8f3f7c",
+          "version": 4,
+          "reportSha256": "7b5d3647fd8547b5cf6b54264117412b124753c217b6b3ac2f6b9c97bbe3ee2a",
+          "reportByteLength": 8255,
+          "reviewState": "unreviewed",
+          "reviewSha256": null
+        },
+        {
+          "id": "caeb5e16-5ba6-45b9-bab9-bf181b161ab3",
+          "version": 2,
+          "reportSha256": "212ecaa82f25e4cf3ddf49ac92e0b2054cbcb25509275cf6a70c762499b668d8",
+          "reportByteLength": 8514,
+          "reviewState": "accepted_bounded_internal_draft",
+          "reviewSha256": "ff7f75307bf7916ece2d16f948df62851a69a293203a558084e1128ef1186162"
+        }
+      ],
+      "originalAndWorksheetUnchanged": true
+    },
+    {
+      "status": "passed",
+      "mode": "revisit",
+      "stage": "worksheet_unchanged",
+      "createdAt": "2026-09-14T22:51:04.001Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report",
+          "status": 200
+        },
+        {
+          "name": "original_review",
+          "status": 200
+        },
+        {
+          "name": "signed_out_reports",
+          "status": 401
+        },
+        {
+          "name": "outsider_reports",
+          "status": 403
+        },
+        {
+          "name": "member_reports",
+          "status": 200
+        },
+        {
+          "name": "report_metadata",
+          "status": 200
+        },
+        {
+          "name": "report_bytes",
+          "status": 200
+        },
+        {
+          "name": "signed_out_download",
+          "status": 401
+        },
+        {
+          "name": "outsider_download",
+          "status": 403
+        },
+        {
+          "name": "member_reports",
+          "status": 200
+        },
+        {
+          "name": "report_metadata",
+          "status": 200
+        },
+        {
+          "name": "report_bytes",
+          "status": 200
+        },
+        {
+          "name": "signed_out_download",
+          "status": 401
+        },
+        {
+          "name": "outsider_download",
+          "status": 403
+        },
+        {
+          "name": "worksheet_unchanged",
+          "status": 200
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "reports": [
+        {
+          "id": "9b1fded0-2af8-4945-a3b2-0b513b8f3f7c",
+          "version": 4,
+          "reportSha256": "7b5d3647fd8547b5cf6b54264117412b124753c217b6b3ac2f6b9c97bbe3ee2a",
+          "reportByteLength": 8255,
+          "reviewState": "unreviewed",
+          "reviewSha256": null
+        },
+        {
+          "id": "caeb5e16-5ba6-45b9-bab9-bf181b161ab3",
+          "version": 2,
+          "reportSha256": "212ecaa82f25e4cf3ddf49ac92e0b2054cbcb25509275cf6a70c762499b668d8",
+          "reportByteLength": 8514,
+          "reviewState": "accepted_bounded_internal_draft",
+          "reviewSha256": "ff7f75307bf7916ece2d16f948df62851a69a293203a558084e1128ef1186162"
+        }
+      ],
+      "originalAndWorksheetUnchanged": true
+    }
+  ],
+  "initial_probe_correction": "First baseline probe used the wrong original-review field. No application POST occurred. All four logout responses were204; its false allCreatedAuthSessionsClosed field conflated the assertion failure with logout failure. Corrected baseline and subsequent attempts retained separately.",
+  "browser": {
+    "observer": "root via Chrome automation; existing invited session restored, no new sign-in-link browser flow",
+    "current_version": 4,
+    "quantity_kwh": "25000.000",
+    "exact_kg_co2e": "4876.00722",
+    "display_kg_co2e": "4876.0072",
+    "review": null,
+    "create_current_report": "Observed returned existing immutable report9b1fded0-2af8-4945-a3b2-0b513b8f3f7c; no worksheet/review mutation.",
+    "historical_version": 2,
+    "historical_quantity_kwh": "62500.000",
+    "historical_exact_kg_co2e": "12190.01805",
+    "historical_display_kg_co2e": "12190.0180",
+    "historical_review": "accepted_bounded_internal_draft",
+    "historical_open": "Observed reportcaeb5e16-5ba6-45b9-bab9-bf181b161ab3 and captured reviewff7f75307bf7916ece2d16f948df62851a69a293203a558084e1128ef1186162.",
+    "download": "Actual Chrome-downloaded version4 HTML file SHA2567b5d3647fd8547b5cf6b54264117412b124753c217b6b3ac2f6b9c97bbe3ee2a matches8255-byte authenticated report.",
+    "refresh": "Existing Auth restored and all four source versions retained after reload.",
+    "responsive": "390x844 viewport; document width375, iframe313; observed wrapped subtotal and readable controls without page horizontal overflow; temporary viewport reset.",
+    "keyboard": "Tab from Close report focused Report fingerprint; Enter expanded exact historical report hash.",
+    "print_initial": "UI-F05: iframe print call left controls busy; user explicitly reported no preview. Reload recovered. Original template PDF pagination passed but did not establish button usability.",
+    "print_repair": "At3d6fdfa, actual Open print view created a preparation tab then navigated it to the generated report URL with the expected Synthetic Cedar Ltd title. The original worksheet showed verified-report-opened status and all controls enabled; ASCII labels were correct. Browser URL policy blocked generated-document inspection, so no tool workaround was attempted. The user then explicitly confirmed that the report and native Ctrl+P preview looked correct for25000.000kWh and4876.0072kgCO2e. This native preview observation is user-supplied, not claimed as tool-visible.",
+    "native_preview_confirmation": {
+      "observer": "board/user",
+      "answer": "Yes, the report and print preview look correct",
+      "requested_check": "Dedicated version4 report and Ctrl+P showing25000.000kWh and4876.0072kgCO2e",
+      "physical_print_performed": "not requested or claimed"
+    }
+  },
+  "local_review": [
+    "evaluations/research-qa/m65-private-report.md",
+    "evaluations/research-qa/m65-print-supplement.json",
+    "evaluations/research-qa/m65-accounting-implementation-review.md"
+  ],
+  "boundaries": [
+    "Synthetic, incomplete, unreleased; no assurance or filing approval.",
+    "Original M63 report/review and all four M64 source versions/reviews unchanged in baseline comparison and postrestart readback.",
+    "Live signed-out401 and uninvited403; active foreign-tenant404 tested with local native PostgreSQL, not represented as live foreign-tenant proof.",
+    "Manager create/member read and member-create refusal verified; fresh Auth sessions used by API probes and closed.",
+    "No new subscription, no PR4 merge, no factor/method release.",
+    "Current role assignments are finite; actual compute and cost unknown.",
+    "Board milestone feedback pending; no dependent milestone started."
+  ],
+  "final_implementation": {
+    "commit": "3d6fdfa0e18d924c6495866f2db21c088089f9d5",
+    "deployment_id": "fe21d898-1b02-4960-9f72-20774ec3a6ef",
+    "deployment_status": "SUCCESS",
+    "ci_checks_passed": 6,
+    "schema_version": 11,
+    "revisit_passed_at": "2026-09-14T22:51:04.001Z"
+  }
+}

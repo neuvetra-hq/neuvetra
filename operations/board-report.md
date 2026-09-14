@@ -1,3 +1,24 @@
+# M65 live - board review next
+
+Current and historical synthetic worksheet versions now have immutable, readable HTML reports with captured review state. Version4 remains25000.000kWh -> exact4876.00722 -> displayed4876.0072kgCO2e and unreviewed. All four original worksheet versions/reviews and the original M63 report/review are preserved. Reports survived a service restart and fresh authenticated readback.
+
+The live browser opened current and historical reports, downloaded the exact verified HTML, and exercised narrow-screen and keyboard controls. The original embedded Print action failed to show a preview for the board; the reviewed repair opens a dedicated verified print view with browser Print instructions. See docs/research/m65-hosted-verification.json for the final observed print outcome and exact deployment. Original failures and review evidence remain preserved. Six CI checks passed for the implementation. Same rolling draft PR4; no merge or new subscription.
+
+For review, open Electricity worksheet, Find saved reports for version4, then Open report. Use Open print view and the browser Print command (Ctrl+P or Command+P). Download HTML report saves the exact verified document. The report remains synthetic, incomplete, unreleased and without assurance. Board feedback is the next gate; do not start dependent M66 work yet.
+
+Scoped CTO, accounting and independent QA deliveries are closed after review; these are not persistent workers. Requested critical compute is recorded separately from unknown actual settings/cost. See evaluations/research-qa/m65-hosted-handoff.md and the immutable role snapshots. Historical sections below are retained as dated context, not current status.
+
+# M65 live - final print-view check pending
+
+Implementation3d6fdfa0e18d924c6495866f2db21c088089f9d5 is published in rolling draft PR4; all six CI checks passed. Existing Railway deploymentfe21d898-1b02-4960-9f72-20774ec3a6ef is SUCCESS on schema11. The read-only hosted revisit at2026-09-14T22:51:04UTC preserved both exact reports, all four worksheet versions/reviews and the original M63 report/review. All four test Auth sessions closed204. No merge or new subscription.
+
+Current Version4 and historical Version2 opened correctly, the actual downloaded HTML hash matched, and narrow-screen/keyboard checks passed. The board reported no native preview from the embedded print action. The reviewed repair now opens a dedicated verified print view with browser Print instructions. Local action/decoder checks passed12/74; this is not native browser proof.
+
+Chrome blocked the final live reload because another extension panel was open. The board has been asked to close it. Next: inspect the deployed Open print view, verify browser Print, finalize independent hosted handoff and role records, publish the remaining evidence/closure documents, and collect board feedback. Do not call M65 complete or start dependent work yet. The three immutable role snapshots are prepared; role runs remain in progress. Temporary local PostgreSQL and report-preview services are stopped. No worker is currently executing outside root; no persistent agents or measured compute/cost savings are claimed.
+
+See docs/research/m65-hosted-verification.json and evaluations/research-qa/m65-print-view-supplement.md. Final handoff is explicitly still a draft. Existing earlier reports and supplements remain immutable historical evidence. Continuation helpers in .superpowers include m65-close-records.py (do not run before final acceptance) and m65-hosted-record.py (initial draft generator; do not rerun over newer verification).
+
+
 # M65 implementation — local verification passed; deployment next
 
 M65 implementation is authorized and adds readable, printable immutable reports to current/historical saved worksheet versions. Accounting and independent local QA passed; print overlap was caught and repaired before deployment. The final candidate requires image CI, schema11 upgrade, hosted browser/API/restart checks and board feedback. M64 remains accepted; preserve the board's Version4 and original M63 report. See docs/research/m65-execution.md and evaluations/research-qa/m65-private-report.md with the print supplement. Roles are task-scoped, not persistent workers; actual compute/cost remains unknown.

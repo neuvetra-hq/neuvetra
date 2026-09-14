@@ -4,25 +4,39 @@
   "role": "accounting-validation",
   "execution_context": "/root/m64_accounting",
   "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M65-ACCOUNTING.json",
+      "sha256": "21a0406d1b55987b83cb6ddc558e121dc2214926c93f4b0feeeabdf0514fd1f4"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m65-hosted-handoff.md"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root/m63_data",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m65-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M65-ACCOUNTING.json",
+        "sha256": "21a0406d1b55987b83cb6ddc558e121dc2214926c93f4b0feeeabdf0514fd1f4"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": null,
@@ -52,5 +66,38 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "parent_outcome": "M65 implementation",
-  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim."
+  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim.",
+  "source_artifacts": [
+    {
+      "path": "docs/research/m65-accounting-contract.md",
+      "sha256": "99fb087858f3b045e5f7152625cbaccf43c586da370b740c7f7780b1501915e1"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-cases.json",
+      "sha256": "8fb4751e72cbd732cbe539e25f30ca22e23a5152b85540b74efa7bd6fd87da1d"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-implementation-review.md",
+      "sha256": "90c4501612245505725fd6996a8ad7d467019709b4445250a829c1012c599c35"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-renderer-check.ts",
+      "sha256": "62d760c670fa1f24d3879cac017b88536499d76adad0c79d0e73ed08fc366e32"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-renderer-results.json",
+      "sha256": "402f9b77131133b5dfaa2600816a1ad6d5ac8600c5df027f7a78d68b4e5943b5"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-renderer-results-initial.json",
+      "sha256": "812570dca2e90b32f233e70d9cda1a90d88779947efca44f2c9b3f9d272c7236"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-v4-fixture.html",
+      "sha256": "926c147ceede15fd969b2b97e35aa1c2ee073dbb3d0bcea6770392b5911eb482"
+    }
+  ],
+  "notes": [
+    "Scoped role delivery complete; board feedback is a separate milestone gate. Initial findings and live UI-F04/F05 remain in evidence; QA first handoff lacked hosted evidence. Root authored the UI and these closure records; QA authored no M65 product code. Actual compute/cost unknown, no savings claim."
+  ]
 }
