@@ -1,3 +1,29 @@
+# M66 local verification passed; publication and live demonstration next
+
+M66 links supported fictional bills to manually confirmed electricity quantities, immutable versions, manager review and readable reports. Accounting and independent QA passed the bounded local candidate. Repository checks and the native source-to-report restore passed. Root is publishing the reviewed changes to rolling draft PR4 and will verify CI/image checks before the existing-host schema12 upgrade. Live browser, restart/readback and board demonstration remain pending. Full-year coverage follows as M67 after M66 feedback. No new subscription or merge.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 supporting bills implementation underway
+
+The board clarified that M66 must finish first: link approved fictional bills to manually confirmed quantities, saved versions and immutable reports. Full-year electricity coverage is queued afterward as M67. The initial annual interpretation was incorrect; its preparation is parked outside product code. Scope: docs/research/source-linked-electricity-milestone-66.md. Accounting has approved both fixtures and the contract; backend implementation and independent QA remain pending. Root owns UI, publication and deployment. Preserve M63-M65 and reuse existing hosting.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 full-year electricity implementation underway
+
+The board chose full-year electricity coverage for M66 and requested it pushed and live. This supersedes the earlier bill-upload proposal. Scope: docs/research/annual-electricity-milestone-66.md. Accounting, CTO and independent QA have actual bounded assignments; root owns UI, publication and deployment. Preserve all M63-M65 records and reuse existing hosting. Unknown months are not zero; all12 entered months mean full-year electricity coverage, not complete company inventory.
+
+Historical entries below are superseded as next-action instructions.
+
+# M65 accepted; M66 selected
+
+The board accepted M65 after confirming the report and native print preview. See operations/feedback/2026-09-14-milestone-65.md. M65 remains private, synthetic, incomplete and unreleased; Version4 has no new worksheet review.
+
+Next is M66: link a supported fictional bill to a manually confirmed quantity, an evidence-bound saved version and its report. Reuse current storage/hosting. Source identity must be part of a new version and report contract; do not attach evidence retroactively to an accepted M64/M65 snapshot. Scope: docs/research/source-linked-electricity-milestone-66.md. CTO advisory review is delivered; implementation and independent contract review have not started. No other worker is currently executing.
+
+Historical entries below retain earlier checkpoints.
+
 # M65 live - board review next
 
 Current and historical synthetic worksheet versions now have immutable, readable HTML reports with captured review state. Version4 remains25000.000kWh -> exact4876.00722 -> displayed4876.0072kgCO2e and unreviewed. All four original worksheet versions/reviews and the original M63 report/review are preserved. Reports survived a service restart and fresh authenticated readback.

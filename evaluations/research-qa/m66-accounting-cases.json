@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "policy": "m66-source-accounting-policy-v1",
+  "scope": "original source-linked January2023 CAMX M66; annual deferredM67",
+  "classification": "public_synthetic_engineering_contract_not_held_out",
+  "source_A": {
+    "path": "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf",
+    "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+    "bytes": 4605,
+    "pages": 1,
+    "approved_page": 1,
+    "printed_quantity_kwh": "12345.000",
+    "period_start": "2023-01-01",
+    "period_end": "2023-01-31",
+    "independent_inspection": "SHA256, pypdf text and PDFium rendered-page visual inspection passed"
+  },
+  "source_B": {
+    "path": "output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf",
+    "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+    "bytes": 2480,
+    "pages": 1,
+    "approved_page": 1,
+    "printed_quantity_kwh": "12345.000",
+    "period_start": "2023-01-01",
+    "period_end": "2023-01-31",
+    "bill_number": "SYN-CA-2023-01-B",
+    "independent_inspection": "SHA256, pypdf text and PDFium rendered-page visual inspection passed; distinctbytes samequantity approved"
+  },
+  "numeric_derivation": "Standalone Decimal96 from retained candidate, cross-checked each total and four-place half-even with integer rational arithmetic. No product calculator import.",
+  "numerical_cases": [
+    {
+      "id": "match",
+      "input_quantity": "12345",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "12345.000",
+      "quantity_mwh": "12.345000",
+      "unrounded_kg_co2e": "2407.772365236",
+      "display_kg_co2e": "2407.7724",
+      "quantity_agreement": "matches_fixture",
+      "discrepancy_reason": null,
+      "require_discrepancy_reason": false
+    },
+    {
+      "id": "equivalent_match",
+      "input_quantity": "12345.000",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "12345.000",
+      "quantity_mwh": "12.345000",
+      "unrounded_kg_co2e": "2407.772365236",
+      "display_kg_co2e": "2407.7724",
+      "quantity_agreement": "matches_fixture",
+      "discrepancy_reason": null,
+      "require_discrepancy_reason": false
+    },
+    {
+      "id": "corrected_transcription",
+      "input_quantity": "12346",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "12346.000",
+      "quantity_mwh": "12.346000",
+      "unrounded_kg_co2e": "2407.9674055248",
+      "display_kg_co2e": "2407.9674",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "board_quantity_override",
+      "input_quantity": "25000",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "25000.000",
+      "quantity_mwh": "25.000000",
+      "unrounded_kg_co2e": "4876.00722",
+      "display_kg_co2e": "4876.0072",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "explicit_zero",
+      "input_quantity": "0",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "0.000",
+      "quantity_mwh": "0.000000",
+      "unrounded_kg_co2e": "0",
+      "display_kg_co2e": "0.0000",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "minimum",
+      "input_quantity": "0.001",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "0.001",
+      "quantity_mwh": "0.000001",
+      "unrounded_kg_co2e": "0.0001950402888",
+      "display_kg_co2e": "0.0002",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "half_even_down",
+      "input_quantity": "62500",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "62500.000",
+      "quantity_mwh": "62.500000",
+      "unrounded_kg_co2e": "12190.01805",
+      "display_kg_co2e": "12190.0180",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "half_even_up",
+      "input_quantity": "187500",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "187500.000",
+      "quantity_mwh": "187.500000",
+      "unrounded_kg_co2e": "36570.05415",
+      "display_kg_co2e": "36570.0542",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "precision_neighbor",
+      "input_quantity": "62499.999",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "62499.999",
+      "quantity_mwh": "62.499999",
+      "unrounded_kg_co2e": "12190.0178549597112",
+      "display_kg_co2e": "12190.0179",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    },
+    {
+      "id": "ceiling",
+      "input_quantity": "1000000",
+      "fixture_printed_quantity_kwh": "12345.000",
+      "source_page": 1,
+      "quantity_kwh": "1000000.000",
+      "quantity_mwh": "1000.000000",
+      "unrounded_kg_co2e": "195040.2888",
+      "display_kg_co2e": "195040.2888",
+      "quantity_agreement": "manual_quantity_differs",
+      "discrepancy_reason": "Synthetic exercise: manually selected quantity differs from the fictional bill.",
+      "require_discrepancy_reason": true
+    }
+  ],
+  "rejected_confirmation_cases": [
+    {
+      "id": "initial_mismatch_missing_reason",
+      "quantity": "12346",
+      "discrepancy_reason": null
+    },
+    {
+      "id": "initial_mismatch_empty_reason",
+      "quantity": "12346",
+      "discrepancy_reason": ""
+    },
+    {
+      "id": "initial_mismatch_blank_reason",
+      "quantity": "12346",
+      "discrepancy_reason": " "
+    },
+    {
+      "id": "zero_missing_reason",
+      "quantity": "0",
+      "discrepancy_reason": null
+    },
+    {
+      "id": "matching_with_stale_discrepancy_reason",
+      "quantity": "12345",
+      "discrepancy_reason": "Earlier override explanation"
+    },
+    {
+      "id": "missing_quantity",
+      "quantity": null,
+      "discrepancy_reason": "Missing is not zero"
+    },
+    {
+      "id": "wrong_page_zero",
+      "page": 0
+    },
+    {
+      "id": "wrong_page_two",
+      "page": 2
+    },
+    {
+      "id": "missing_page",
+      "page": null
+    },
+    {
+      "id": "no_explicit_confirmation",
+      "confirmation": false
+    }
+  ],
+  "source_lifecycle_cases": [
+    {
+      "id": "same_source_equivalent_quantity_retry",
+      "from_source": "A",
+      "to_source": "A",
+      "from_quantity": "12345",
+      "to_quantity": "12345.000",
+      "expected": "same canonical assertion converges; no artificial successor"
+    },
+    {
+      "id": "different_source_same_quantity",
+      "from_source": "A",
+      "to_source": "B",
+      "from_quantity": "12345",
+      "to_quantity": "12345",
+      "correction_reason_required": true,
+      "expected": "new immutable version,input/resultbinding,unreviewed; numerical total unchanged; historical review/report preserved"
+    },
+    {
+      "id": "quantity_change_same_source",
+      "from_source": "A",
+      "to_source": "A",
+      "from_quantity": "12345",
+      "to_quantity": "12346",
+      "correction_reason_required": true,
+      "discrepancy_reason_required": true,
+      "expected_delta_kg_co2e": "0.1950402888"
+    },
+    {
+      "id": "return_to_printed_quantity",
+      "from_quantity": "12346",
+      "to_quantity": "12345",
+      "correction_reason_required": true,
+      "new_discrepancy_reason": null,
+      "expected": "new version unreviewed; original mismatch/reason preserved"
+    },
+    {
+      "id": "altered_source_bytes_claiming_original_hash",
+      "expected": "reject before derived source-version/result succeeds"
+    },
+    {
+      "id": "stale_predecessor",
+      "expected": "reject conflicting save; equivalent prior command retries may resolve existing result"
+    },
+    {
+      "id": "historical_report_after_source_change",
+      "expected": "original captured source/hash/page/manualquantity/discrepancy/review/HTMLbytes unchanged"
+    }
+  ],
+  "required_claims": [
+    "Manual confirmation — not automated extraction or independent verification",
+    "Printed fictional bill quantity",
+    "Manually confirmed worksheet quantity",
+    "Manual worksheet quantity differs from the bill",
+    "Retained fictional bill linked to manual confirmation. This is not real customer or independently verified evidence.",
+    "Draft · Synthetic · Incomplete · Unreleased · No assurance"
+  ],
+  "product_execution": "not yet performed",
+  "implementation_field_mapping": {
+    "discrepancy_reason": "quantityDifferenceReason",
+    "fixture_printed_quantity_kwh": "printedQuantityKwh",
+    "confirming_actor": "evidence.confirmedBy",
+    "confirmation_time": "evidence.confirmedAt"
+  }
+}

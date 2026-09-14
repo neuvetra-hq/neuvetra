@@ -1,0 +1,35 @@
+{
+  "status": "passed_with_pagination_note",
+  "observed_at": "2026-09-14T23:45:41.005288+00:00",
+  "observer": "root",
+  "method": "Actual Chrome Page.printToPDF on local HTTP rendered report, followed by Poppler rendering and visual inspection of every page",
+  "normal_pages": 5,
+  "long_text_pages": 5,
+  "every_page_inspected": true,
+  "status_header_and_footer_each_page": true,
+  "overlap_or_clipping_observed": false,
+  "pagination_note": "A few label/value pairs straddle pages; text remains readable and no content is hidden. Browser settings may change pagination.",
+  "scope": "Ephemeral synthetic renderer examples, not saved hosted reports, native print-dialog acceptance or source verification",
+  "artifacts": [
+    {
+      "path": ".superpowers/m66-print-normal.pdf",
+      "sha256": "53fceff63447d40acd57234e96fc0ffd7260d331ec4afca43d683dab2e929acd"
+    },
+    {
+      "path": ".superpowers/m66-print-long.pdf",
+      "sha256": "a127b0e7ce98070d117422e9d8fe3580635bee397fe289d92fb05a8f278d3b49"
+    },
+    {
+      "path": ".superpowers/m66-print-normal.html",
+      "sha256": "d1fd681d7837376db3586dcaa4b1045da861d6206e212c6b1854f0e8e9470062"
+    },
+    {
+      "path": ".superpowers/m66-print-long.html",
+      "sha256": "76ef2c5455348999b2b9076d485303fffd232579775924a4321e88b0332d3788"
+    },
+    {
+      "path": ".superpowers/m66-preview.ts",
+      "sha256": "48cd63152139dd08d6c387c5c47e3e63d5fcd37a4326bd6ab73dcbe9617177db"
+    }
+  ]
+}

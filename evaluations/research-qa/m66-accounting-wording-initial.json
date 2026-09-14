@@ -1,0 +1,37 @@
+{
+  "kind": "M66 accounting first wording inspection",
+  "findings": [
+    {
+      "id": "M66-ACC-W01",
+      "status": "open",
+      "finding": "Report review needs source-specific manual confirmation versus document authentication qualification."
+    },
+    {
+      "id": "M66-ACC-W02",
+      "status": "open",
+      "finding": "Download status describes PDF as verified without specifying byte integrity."
+    },
+    {
+      "id": "M66-ACC-L01",
+      "status": "open",
+      "finding": "Same source and quantity rejects changed quantityDifferenceReason despite bound assertion correction policy."
+    },
+    {
+      "id": "M66-ACC-U01",
+      "status": "recommended_fix",
+      "finding": "Reset confirmation checkbox when confirmed entry fields change; source currently resets but quantity/difference do not."
+    }
+  ],
+  "inspected_files": {
+    "packages/neuvetra-database/src/m66-template.ts": "226ac0b125f1cf8cd4d390fdd715bf7c647b440f5ab571c77c4524e1b0f5bac9",
+    "apps/site-web/src/components/SourceElectricityWorksheet.tsx": "0c606367c713afb9905a854e07cfb73d41c8fb4c515e227620bc796c1b129d61",
+    "apps/site-web/src/lib/m66-api.ts": "23d40175896594ba3b1f30e3e0150f4ccc606a1dafe99e21495a29af82ec9715"
+  },
+  "execution": "source inspection; actual rendering/SQL review pending",
+  "hash_capture_timing": "Hashes were captured after findings were sent to active product writers. Template/UI repairs had already arrived by hash capture; these are checkpoint hashes, not immutable proof of original defect versions.",
+  "observed_original_text": {
+    "download_status": "The exact retained PDF was verified and downloaded. Open it to inspect page 1.",
+    "review_qualification": "This is a snapshot of a worksheet decision, not approval of this report presentation or assurance. (Source-specific manager decision qualification was absent.)",
+    "frontend_noop": "i > 0 && v.quantityKwh === value.versions[i-1].quantityKwh && source.id === value.versions[i-1].evidence.source.id"
+  }
+}

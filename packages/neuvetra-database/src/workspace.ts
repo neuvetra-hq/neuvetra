@@ -1,3 +1,6 @@
+import { readSourceElectricityWorksheet, validateSourceWorksheetInput, validateSourceWorksheetReview, type SourceWorksheetInput, type SourceWorksheetCorrection, type SourceWorksheetReviewInput } from "./m66"
+import { readSourceWorksheetReports, validateSourceWorksheetReportInput, type SourceWorksheetReportInput } from "./m66-report"
+import { readElectricitySources, validateElectricitySourceUpload } from "./m66-sources"
 import { readWorksheetReports, validateWorksheetReportInput, type WorksheetReportInput } from "./m65"
 import { readElectricityWorksheet, validateWorksheetInput, validateWorksheetReview, type WorksheetInput, type WorksheetCorrection, type WorksheetReviewInput } from "./m64"
 import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
@@ -898,6 +901,59 @@ export class WorkspaceDatabase {
       return record
     })
   }
+  async findSourceElectricityWorksheet(userId: string, companyId: string) {
+    return this.asUser(userId, tx => readSourceElectricityWorksheet(tx, companyId))
+  }
+  async saveSourceElectricityWorksheet(userId: string, companyId: string, input: SourceWorksheetInput | SourceWorksheetCorrection, correction = false) {
+    validateSourceWorksheetInput(input, correction)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.save_source_worksheet($1,$2::text::jsonb,$3)", [companyId, JSON.stringify(input), correction])
+      const result = await readSourceElectricityWorksheet(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async reviewSourceElectricityWorksheet(userId: string, companyId: string, input: SourceWorksheetReviewInput) {
+    validateSourceWorksheetReview(input)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.review_source_worksheet($1,$2::text::jsonb)", [companyId, JSON.stringify(input)])
+      const result = await readSourceElectricityWorksheet(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async findSourceWorksheetReports(userId:string,companyId:string) {
+    return this.asUser(userId,async tx=>(await readSourceWorksheetReports(tx,companyId))?.list??null)
+  }
+  async findSourceWorksheetReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>(await readSourceWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===reportId)??null)
+  }
+  async downloadSourceWorksheetReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>{
+      const records=await readSourceWorksheetReports(tx,companyId),report=records?.list.reports.find(r=>r.id===reportId)
+      return report?{report,bytes:records!.bytes.get(reportId)!}:null
+    })
+  }
+  async createSourceWorksheetReport(userId:string,companyId:string,input:SourceWorksheetReportInput) {
+    validateSourceWorksheetReportInput(input)
+    return this.asTrustedUser(userId,async tx=>{
+      const created=await tx.query<{id:string}>("select neuvetra.create_source_worksheet_report($1,$2::text::jsonb) id",[companyId,JSON.stringify(input)])
+      const record=(await readSourceWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===created.rows[0]?.id)
+      if(!record)throw new Error("Worksheet report unavailable.")
+      return record
+    })
+  }
+  async findElectricitySources(userId:string,companyId:string){return this.asUser(userId,async tx=>(await readElectricitySources(tx,companyId))?.list??null)}
+  async findElectricitySource(userId:string,companyId:string,sourceId:string){return this.asUser(userId,async tx=>(await readElectricitySources(tx,companyId))?.list.sources.find(s=>s.id===sourceId)??null)}
+  async downloadElectricitySource(userId:string,companyId:string,sourceId:string){return this.asUser(userId,async tx=>{const found=await readElectricitySources(tx,companyId),source=found?.list.sources.find(s=>s.id===sourceId);return source?{source,bytes:found!.bytes.get(sourceId)!}:null})}
+  async uploadElectricitySource(userId:string,companyId:string,name:string,type:string,bytes:Uint8Array,key:string){
+    validateElectricitySourceUpload(name,type,bytes,key)
+    return this.asTrustedUser(userId,async tx=>{
+      const created=await tx.query<{id:string}>("select neuvetra.upload_electricity_source($1,$2,$3,$4::text,$5) id",[companyId,name,type,Buffer.from(bytes).toString("hex"),key])
+      const result=(await readElectricitySources(tx,companyId))?.list.sources.find(s=>s.id===created.rows[0]?.id)
+      if(!result)throw new Error("Source unavailable.");return result
+    })
+  }
   async close() {
     await this.db.close()
   }
@@ -941,6 +997,7 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
     await db.exec(await Bun.file(new URL("./migrations/0008_inventory_draft_report_review.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0010_manual_electricity_worksheet.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0011_worksheet_reports.sql", import.meta.url)).text())
+    await db.exec(await Bun.file(new URL("./migrations/0012_source_electricity_worksheet.sql", import.meta.url)).text())
     return new DevelopmentWorkspaceDatabase(db)
   }
 

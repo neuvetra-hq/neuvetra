@@ -102,3 +102,15 @@
 !packages/neuvetra-database/src/m65-template.ts
 !apps/site-api/src/workspace/m65-routes.ts
 !packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql
+
+!packages/neuvetra-database/src/m66.ts
+!packages/neuvetra-database/src/m66-sources.ts
+!packages/neuvetra-database/src/m66-report.ts
+!packages/neuvetra-database/src/m66-template.ts
+!packages/neuvetra-database/src/m66-contract.ts
+!packages/neuvetra-database/src/m66-fixtures.ts
+!packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql
+!apps/site-api/src/workspace/m66-routes.ts
+!output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf
+!apps/site-api/src/workspace/m66-source-routes.ts
+!apps/site-api/src/workspace/m66-report-routes.ts
