@@ -1,4 +1,4 @@
-import type { ElectricityWorksheet, WorksheetInput, WorksheetCorrection, WorksheetReviewInput, WorksheetVersion } from "../../../../packages/neuvetra-database/src/m64"
+import type { ElectricityWorksheet, WorksheetInput, WorksheetCorrection, WorksheetReviewInput, WorksheetVersion } from "../../../../packages/neuvetra-database/src/m64-contract"
 import type { HostedWorkspaceActor } from "./workspace-api"
 
 export type { ElectricityWorksheet, WorksheetVersion }

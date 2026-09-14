@@ -52,6 +52,7 @@
 !packages/neuvetra-database/src/m60.ts
 !packages/neuvetra-database/src/m61.ts
 !packages/neuvetra-database/src/m64.ts
+!packages/neuvetra-database/src/m64-contract.ts
 !packages/neuvetra-database/src/migrations/
 !packages/neuvetra-database/src/migrations/0001_company_workspace.sql
 !packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql
