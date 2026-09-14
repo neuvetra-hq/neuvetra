@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "lessons": [
+    {
+      "id": "L01",
+      "owner_role": "security-reliability",
+      "trigger": "A workflow changes actor or tenant, including pending requests.",
+      "required_check": "Clear actor-owned derived state, reject late responses from an earlier actor, and exercise owner-to-member-to-outsider-to-signed-out transitions through the integrated boundary.",
+      "evidence": [
+        "operations/agent-improvement/historical-evidence.json#L01"
+      ],
+      "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L02",
+      "owner_role": "data-database",
+      "trigger": "Persisted bytes, claimed hashes or archive/report metadata are read.",
+      "required_check": "Revalidate content and semantic lineage against authoritative inputs; test coordinated bytes/hash/length corruption, not just one changed field.",
+      "evidence": [
+        "operations/agent-improvement/historical-evidence.json#L02"
+      ],
+      "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L03",
+      "owner_role": "cto",
+      "trigger": "Values cross database/API/browser boundaries.",
+      "required_check": "Specify canonical serialization, normalize timestamps, and check exact keys/values without accidental JSON property-order dependence. Exercise reordered equivalent payloads and changed-value refusals.",
+      "evidence": [
+        "operations/agent-improvement/historical-evidence.json#L03"
+      ],
+      "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L04",
+      "owner_role": "software-engineering",
+      "trigger": "Acceptance claims a writer, replay, permission or browser path works.",
+      "required_check": "Map each consequential criterion to a check that invokes the actual changed boundary; replay the exported record. Label mocked, partial or unrun checks accurately.",
+      "evidence": [
+        "operations/agent-improvement/historical-evidence.json#L04"
+      ],
+      "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L05",
+      "owner_role": "ceo",
+      "trigger": "An approved execution or authorization path fails.",
+      "required_check": "Preserve the failure and exact authority. Do not substitute a manual permit or bypass frozen provenance. Continue independent offline diagnosis and route the repaired path for review.",
+      "evidence": [
+        "operations/agent-improvement/historical-evidence.json#L05"
+      ],
+      "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L06",
+      "owner_role": "qa-lead",
+      "trigger": "A repair changes one field in a multi-record evidence or lifecycle contract.",
+      "required_check": "Challenge missing fields, allowed values, cross-record agreement and triggering lifecycle together; final review includes composed behavior, not only the latest reported symptom.",
+      "evidence": [
+        "operations/agent-improvement/historical-evidence.json#L06"
+      ],
+      "status": "adopted_pending_effectiveness"
+    }
+  ]
+}

@@ -1,5 +1,61 @@
 # Neuvetra board update
 
+September 14, 2026. The role improvements are published. The first prospective pilot used explicit CTO/accounting routes and independent QA; measured savings and causal model improvements remain unknown.
+
+M62 fixes the repository merge blocker: the GHG suite reports **43 passed, 3 explicitly deferred**. The three mobile examples lack required implementation and approved factor/expectation evidence, so they remain unavailable. All 26 changed product/data files match accepted review versions and local application checks pass.
+
+Independent QA passed; implementation `d4ffd292` is published and all four visible GitHub checks pass. PR #3 is ready for the board's final merge decision. Nothing was merged or deployed; required branch-rule settings are not visible (HTTP 403). [M62 evidence](../docs/research/pr3-merge-readiness-milestone-62.md).
+
+# Historical M61 board update
+
+September 14, 2026. **M61 immutable second-manager report review is complete, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `b74803f23edb6b2eecdb4b1eb5af2c57796178a4`.** Acceptance requires all seven fixed limitations for one exact M60 report hash; a change request requires one bounded route and a safe 1–500 character note. The decision, report creator, inventory snapshot, archive, manifest, lineage root, reviewer and release-ineligible state are sealed in a canonical decision hash and matched to one immutable audit event.
+
+Independent QA `922bb010ad…` passes after five material findings were repaired. Full checks pass API 625/5,451, web 70/283, database 29/263, type checking, lint, builds and production exclusion. The clean browser path demonstrated second-manager acceptance, distinct report and decision hashes, member read-only access, tenant isolation and signed-out refusal. M61 remains local, synthetic, incomplete, unreleased and without assurance.
+
+The first Linux CI run found one timing-only issue: the expanded composed API test finished in 5.066 seconds against a 5-second default after the other 624 tests passed. Its explicit deadline is now 30 seconds with no assertion or product-code change. Independent follow-up QA `c63d8d236…` passes focused 4/131 and full API 625/5,451; the repaired head still requires fresh Linux CI.
+
+**PR #3 should merge after M62 merge readiness.** M62 must resolve the three inherited `TBD` expectations that currently prevent the broad `test:ghg` collector from running, reconcile the PR diff and remote head, and pass exact GitHub CI. Merge then completes the development checkpoint. A live customer environment remains a later productionization gate because M54–M61 currently use development flags, synthetic identity and in-memory PGlite rather than hosted production identity, storage, operations and assurance controls.
+
+[M61 record](../docs/research/inventory-draft-report-review-milestone-61.md) · [M61 independent review](../evaluations/research-qa/milestone61-inventory-draft-report-review-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+September 14, 2026. **M60 verified inventory draft reporting is complete, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `8393285d313c6e052d340095e1ee6834a5ec0bb9`.** The exact verified M59 evidence pack now renders as a deterministic, self-contained printable HTML report with all twelve period states, exact calculation totals, source and factor lineage, and the complete M57/M58 decision trail.
+
+The report shows `139.281000 MWh` and `27165.4064643528 kg CO2e` while keeping the estimate, exclusion and incomplete coverage beside the result. Draft, synthetic, incomplete, unreleased, no-assurance and `releaseEligible=false` status repeat on every print page. Owner/admin creation, member access, tenant isolation and signed-out refusal passed in the live browser flow. Independent QA `6b57efc4c9…` passed after four material repairs; API 625/5,430, web 67/269, database 26/244, type checks, lint and build pass. All temporary services are stopped.
+
+The next recommended milestone is **M61: draft-report review and change-request workflow**. It should bind a second manager's review to the exact M60 report hash, preserve comments and change requests immutably, and route changes back to the relevant evidence or inventory version. Filing, customer data, hosted deployment, professional assurance, merge and release remain separate decisions.
+
+[M60 record](../docs/research/inventory-draft-report-milestone-60.md) · [M60 independent review](../evaluations/research-qa/milestone60-inventory-draft-report-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+---
+
+September 14, 2026. **M59 deterministic inventory evidence pack is complete for its bounded local synthetic scope, independently accepted and published to [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `12341a6`.** The approved M58 annual record now exports as an exact 17-file, uncompressed ZIP with source bytes, manifests, calculation and inventory lineage, both review decisions, ordered audit history, authority records and a replay contract.
+
+Replay independently reconstructs `126.788000 MWh / 24728.7681363744 kg CO2e` reported, `12.493000 MWh / 2436.6383279784 kg CO2e` estimated and `139.281000 MWh / 27165.4064643528 kg CO2e` included, displayed as `27,165.4065 kg CO2e`. December remains excluded with no quantity. Overall inventory completeness remains **incomplete** and release eligibility remains false.
+
+The complete local browser workflow passed on a fresh database. Managers completed the required M57/M58 two-person review, the owner created and replayed the exact archive, a read-only member independently downloaded and replayed it, and foreign and signed-out access refused. The full repository check passes, including database 24/211, API 625/5,416, web 65/263, Python 12, lint, type checks, build and default-production M59 exclusion. Independent QA `39708ab99b…` passes all 20 bindings with no open material finding.
+
+M59 remains fictional and local in PGlite. It does not establish hosted retention, customer-data authorization, real evidence authenticity, filing readiness, professional assurance, deployment or release.
+
+CEO recommendation: M60 should generate a human-readable draft inventory report only from a verified M59 pack, preserving exact source and decision lineage, estimates, exclusions and incomplete/unreleased status.
+
+[M59 record](../docs/research/inventory-evidence-pack-milestone-59.md) · [independent review](../evaluations/research-qa/milestone59-evidence-pack-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+September 13, 2026. **M58 annual location-based electricity register is complete for its bounded local synthetic scope, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at `38f7cde`.** It resolves twelve expected 2023 periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December carries no quantity and is never counted as zero.
+
+The exact approved M57 January result flows into immutable register version 1, register version 2 and inventory version 2. Tenant isolation, forced row-level security, immutable history, exact lineage, concurrent-command convergence and two-person review pass. The live browser journey reached the independent M58 approval and kept **overall inventory completeness: incomplete** adjacent to the result. Independent QA `f39e6a9513…` passes all 20 file bindings; database 21/186, API 625/5,399, web 63/253 and Python 12 pass. Release eligibility remains false.
+
+M58 remains fictional and local in PGlite. It does not add customer data, hosted persistence, market-based Scope 2, Scope 1 or 3, released factors or methods, filing, assurance, deployment or release.
+
+CEO recommendation: M59 should create a deterministic evidence pack and replay for the sealed M58 inventory, including both register versions, evidence and exception locators, calculation lineage, review decisions and integrity hashes. Independent acceptance should reconstruct the displayed subtotal from that package.
+
+[M58 record](../docs/research/annual-source-register-milestone-58.md) · [independent review](../evaluations/research-qa/milestone58-annual-register-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+September 13, 2026. **M57 bounded draft inventory review is complete, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at `4d5827c`.** The exact M56 calculation now sits in immutable 2023 inventory version 1, showing one covered month out of twelve, all four required limitations and release eligibility false. The owner cannot review their own submission; an administrator records the immutable bounded-draft decision; a member can inspect but not mutate; foreign access reveals no record.
+
+Independent QA `7ad7dde4…` passed the repaired exact candidate with no open finding. Python 12, API 625/5,372, web 60/224 and database 19/139 pass with type checks, lint, build, production exclusion and the browser role journey. M57 remains local and fictional; Stage 4, deployment, release and professional assurance remain false.
+
+CEO recommendation: M58 should add the annual location-based source register and missing-period completion workflow. It should make the expected facility-by-month grid explicit, preserve missing/reported/estimated/excluded states with evidence and reasons, add the remaining fictional monthly electricity inputs as immutable versions, and produce a newly reviewed inventory version. Market-based accounting, customer data, hosted persistence, deployment and release remain outside scope.
+
 September 13, 2026. **The publication audit through M55 found no pending product implementation under `apps/` or `packages/`.** M34 did run but closed before frontend admission or provider activity; it produced no missing product commit and M35 superseded it. The apparent M43 omission is its restricted evaluator package: the matrix contains the held-out answer key, and the generator/tests depend on it, so those exact reviewed files remain local. Rejected, failed, consumed and machine-bound run harnesses remain local historical evidence rather than current product code. [Reconciliation record](../docs/research/publication-reconciliation-2026-09-13.md).
 
 September 13, 2026. **M55 synthetic electricity-bill intake is complete, independently accepted and published to the existing PR at `05b3395`.** Inside the M54 tenant boundary, one exact fictional PDF is preserved, deterministically extracted at `12,345 kWh`, assigned only after an explicit facility choice, corrected to `12,346 kWh` as immutable version 2, and pinned as `12.346000 MWh` to the existing 2023 draft. The product states **Draft evidence — no emissions calculated**.

@@ -1,0 +1,167 @@
+{
+  "schema_version": "m60_inventory_draft_report_independent_qa_v1",
+  "task_id": "M60-FINAL-QA",
+  "reviewed_at": "2026-09-14T15:56:22Z",
+  "reviewer_role": "independent Head of QA with accounting, tenant-security, report-integrity, accessibility and product-claim challenge",
+  "reviewer_signature": "Neuvetra independent QA reviewer 10",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M60 implementation. The reviewer established the acceptance plan, reported three material defects before any implementation edit, and authored only this final review artifact.",
+  "reviewed_git_state": {
+    "base_head": "564d0e529532e2a9e8881c32f6d1be84336a5741",
+    "branch": "codex/m57-inventory-review",
+    "working_tree": "unstaged M60 candidate with unrelated historical untracked files outside scope",
+    "binding": "This verdict applies only to the exact SHA-256 bindings below. Any subsequent implementation change requires targeted re-review."
+  },
+  "verdict": {
+    "status": "PASS",
+    "milestone_gate_pass": true,
+    "release_acceptance": false,
+    "scope": "Bounded local-development M60 deterministic HTML draft report generated only from the fixed synthetic M59 evidence pack.",
+    "statement": "No material deterministic-report, accounting, source/decision-lineage, stored-integrity, tenant-security, role-state, API/browser-boundary, accessibility-contract, claim-boundary or production-exclusion blocker remains in the exact reviewed bytes. This does not approve customer evidence, hosted persistence, a filing, professional assurance, deployment or public release."
+  },
+  "exact_accounting_recalculation": {
+    "factor_kg_co2e_per_mwh": "195.0402888",
+    "reported_months_mwh": ["12.346000", "11.982000", "12.417000", "11.876000", "12.104000", "13.228000", "14.037000", "13.812000", "12.765000", "12.221000"],
+    "reported_mwh": "126.788000",
+    "reported_kg_co2e": "24728.7681363744",
+    "estimated_month": "2023-11",
+    "estimated_formula": "(12.765000 + 12.221000) / 2",
+    "estimated_mwh": "12.493000",
+    "estimated_kg_co2e": "2436.6383279784",
+    "excluded_month": "2023-12",
+    "excluded_quantity_mwh": null,
+    "excluded_kg_co2e": null,
+    "included_mwh": "139.281000",
+    "included_kg_co2e": "27165.4064643528",
+    "included_display_kg_co2e": "27165.4065",
+    "counts": {"expected": 12, "resolved": 12, "reported": 10, "estimated": 1, "excluded": 1, "missing": 0, "calculation_bearing": 11},
+    "overall_inventory_completeness": "incomplete",
+    "release_eligible": false,
+    "independent_method": "Python Decimal summation and multiplication from the exact packed monthly quantities and pinned factor, with no intermediate rounding and half-up display rounding only at four decimal places."
+  },
+  "report_contract": {
+    "profile": "neuvetra.synthetic.inventory-draft-report.v1",
+    "media_type": "text/html; charset=utf-8",
+    "maximum_bytes": 65536,
+    "determinism": "For fixed verified M59 archive bytes and fixed synthetic company name, report bytes and SHA-256 are identical.",
+    "source_bindings": ["company ID", "inventory ID", "evidence-pack ID", "inventory snapshot SHA-256", "archive SHA-256", "manifest SHA-256", "lineage-root SHA-256", "report SHA-256", "report byte length"],
+    "visible_limits": ["DRAFT", "SYNTHETIC", "INCOMPLETE", "UNRELEASED / NOT ELIGIBLE", "NO ASSURANCE", "releaseEligible=false"],
+    "print_behavior": "A fixed print header and footer repeat the complete status string on every printed page; @page margins reserve header and footer space.",
+    "lineage": "All twelve periods retain their state and evidence or treatment. The report exposes packed source names, hashes and locators; the November reason, formula and basis months; the December exclusion reason and null treatment; exact factor/method/GWP authority; and both M57 and M58 bounded internal decisions with IDs, outcomes, reason codes, warning acknowledgments, actors and timestamps."
+  },
+  "reviewed_file_sha256": {
+    "packages/neuvetra-database/src/m59.ts": "da6a6729c8afccc4cd76ddde34d336a376d998b628a4231821c1ce1915cf54c5",
+    "packages/neuvetra-database/src/m60.ts": "b906f599d648f56a01f20fed0de7ecef2313d0ac1f28c1b4fdfa884c3a75f21a",
+    "packages/neuvetra-database/src/m60.test.ts": "fa43707d9be1d70a6e897c3f8e7de7c742e705c8e2931d117b57dfc7491df501",
+    "packages/neuvetra-database/src/index.ts": "6af491e1c8d7260c8feb5eb46ace24e4efd4aaf8072d5fe77fe80672235d3da8",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "c407f6b5d0bad4d262a3dea46d868cedfdb991516f34150296101c37df01afb4",
+    "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81",
+    "apps/site-api/src/workspace/types.ts": "27d605480cb8fd915ed5e6a0b37b4f3eac495c51aeb31b72d3a1da49aa4ddb77",
+    "apps/site-api/src/workspace/routes.ts": "20dd4f8166cc080f5241ca03fc89bbd2f6d23ea5823fc8f29066387659de0a6b",
+    "apps/site-api/src/workspace/server.ts": "ba297c4625e8ecd2cb0350d95bbe214791ea8563acf21f1d5c5db5bbb3e877f4",
+    "apps/site-api/src/workspace/server.test.ts": "977c194588b16e70466d8285f1fe35b34396dbe4f9702906a335a6b1ba807f8d",
+    "apps/site-web/src/lib/workspace-api.ts": "0ada27f9b5fd82e944341037b80d95dd9d37dd828d0e9278241a44d3f88ec504",
+    "apps/site-web/src/lib/workspace-api.test.ts": "be1b1b3f9b5fa48594ca051070376eb5e110cedbe6dcb678e51298778f577e15",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "f68c3fa9b50ef43cbbbab8b440d83d69af961c36dc4b5aee3aca89429980d6d8",
+    "apps/site-web/src/components/ResearchPreview.tsx": "7dee59223e6ae6965fbf7f223232b06291818c16ccc04b44a33749ce1379aeef",
+    "docs/research/inventory-draft-report-milestone-60.md": "8cf69f1d137e02d86ec8c0dcc6f0dbc44adea997310102f48a6f7956ac927f56",
+    "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+    "data/synthetic/m58-electricity-register-2023.json": "44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29",
+    "data/synthetic/m58-electricity-register-2023.manifest.json": "41bb93caa7cb7dc638c82cb20a9660b25976ff72ff7fa49c4a08af1559c27352",
+    "evaluations/research-qa/milestone59-evidence-pack-10.json": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a"
+  },
+  "acceptance_evidence": [
+    {
+      "area": "verified-pack prerequisite and deterministic rendering",
+      "result": "PASS",
+      "evidence": "Creation revalidates stored M59 bytes, reconstructs the current archive from the approved database lineage, requires byte-equivalent current archive input and invokes the strict M59 verifier before report construction. Fixed inputs produce byte-identical HTML and digest. Changed archive bytes fail before rendering."
+    },
+    {
+      "area": "stored report integrity",
+      "result": "PASS",
+      "evidence": "Every read verifies the stored M59 pack, reconstructs the current pack, rebuilds the canonical report and compares profile, every pack/inventory binding, byte length, digest and exact report bytes. A privileged coordinated change to report bytes, digest and length returns a bounded 503. SQL also independently recomputes SHA-256 over report bytes at insertion."
+    },
+    {
+      "area": "accounting and exception presentation",
+      "result": "PASS",
+      "evidence": "Independent Decimal arithmetic matches all reported, estimated and included subtotals. The twelve-row report preserves ten reported months, November's named estimation reason/formula/basis and December's null quantity/emissions plus exclusion reason; excluded activity is not presented as zero or included in the subtotal."
+    },
+    {
+      "area": "source, method and decision lineage",
+      "result": "PASS",
+      "evidence": "The report reads lineage exclusively from the already verified pack. It exposes period source names, hashes and locators, factor/method/GWP identifiers and source hash, both bounded internal review records and the archive/manifest/lineage/inventory hashes. It explicitly denies assurance, certification and filing approval."
+    },
+    {
+      "area": "tenant roles, immutability and failures",
+      "result": "PASS",
+      "evidence": "Owner/admin creation and member read/download are enforced by API and SQL. Members cannot create; outsider reads return 404 and signed-out reads return 401. Both report and audit tables force RLS, use tenant-bound foreign keys, deny direct authenticated writes and reject update/delete. Malformed and stale requests fail without a report."
+    },
+    {
+      "area": "browser and accessibility contract",
+      "result": "PASS",
+      "evidence": "Browser metadata decoding binds exact IDs, profile, hashes, size and timestamps. Current-report reload uses the selected actor, accepts only exact pack/inventory-bound metadata and maps a tenant-safe 404 to no report. Downloads verify response length, server hash header and a fresh browser SHA-256 over bytes. The HTML has one main/h1, ordered headings, captioned tables, textual state labels, wrapping for long values, print-safe table blocks and repeating fixed print status header/footer with reserved page margins. Application status/error output retains live-region semantics."
+    },
+    {
+      "area": "browser role-state isolation",
+      "result": "PASS",
+      "evidence": "Workspace create/revisit clears annual registers, annual inventory, evidence-pack metadata, local ZIP, replay receipt and draft-report metadata before the request. Every actor change clears the same state before another identity can revisit. A member can reload the report through the member token, an outsider receives no report metadata, and signed-out access cannot reuse or display the prior actor's report state. The visible milestone heading now identifies M60 and its verified-evidence-to-readable-draft outcome."
+    },
+    {
+      "area": "production exclusion and claim boundary",
+      "result": "PASS",
+      "evidence": "The server requires cumulative M54-M60 flags plus development/test runtime, and the browser module is lazy-loaded only behind the exact seven-feature gate. The ordinary production JavaScript/HTML contains none of the M60 profile, flag, route, exact total, report heading or synthetic-report markers. The report remains synthetic, incomplete, unreleased, release-ineligible and without assurance or filing claims."
+    }
+  ],
+  "commands": [
+    {"command": "bun test packages/neuvetra-database/src/m60.test.ts", "result": "PASS: 5 tests including imported M59 coverage, 39 assertions"},
+    {"command": "bun test packages/neuvetra-database/src/synthetic-bill-security.test.ts packages/neuvetra-database/src/m59.test.ts packages/neuvetra-database/src/m60.test.ts", "result": "PASS: 14 tests, 177 assertions"},
+    {"command": "bun test apps/site-api/src/workspace/server.test.ts", "result": "PASS: 4 tests, 110 assertions"},
+    {"command": "bun test apps/site-web/src/lib/workspace-api.test.ts", "result": "PASS: 18 tests, 98 assertions, including selected-actor member reload, strict metadata rejection and outsider 404-to-null"},
+    {"command": "bun test packages/neuvetra-database/src", "result": "PASS: 26 tests, 244 assertions"},
+    {"command": "bun test apps/site-api/src", "result": "PASS: 625 tests, 5430 assertions"},
+    {"command": "bun test apps/site-web/src", "result": "PASS: 67 tests, 269 assertions"},
+    {"command": "python -m unittest discover -s apps/site-api/src/calculation -p *_test.py", "result": "PASS: 12 tests"},
+    {"command": "independent Python Decimal recalculation", "result": "PASS: 126.788000 reported MWh, 12.493000 estimated MWh, 139.281000 included MWh, 27165.4064643528000 exact kg CO2e, 27165.4065 displayed"},
+    {"command": "bun run typecheck", "result": "PASS: 10 packages"},
+    {"command": "bun run lint", "result": "PASS: zero errors; 44 pre-existing FrontDesk warnings"},
+    {"command": "bun run build", "result": "PASS: all configured builds"},
+    {"command": "default production JavaScript/HTML M60 marker scan", "result": "PASS: no profile, feature flag, route, exact total, report heading or M60 synthetic marker"},
+    {"command": "git diff --check 564d0e529532e2a9e8881c32f6d1be84336a5741", "result": "PASS: no whitespace errors; line-ending normalization warnings only"}
+  ],
+  "findings": [
+    {
+      "id": "M60-QA-01",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial read path accepted a coordinated stored report-byte, digest and length change because it did not rebuild the canonical report.",
+      "resolution_evidence": "Every read now reconstructs the current M59 archive, rebuilds the M60 report and requires exact byte and metadata equivalence. The coordinated mutation probe returns 503."
+    },
+    {
+      "id": "M60-QA-02",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial report omitted both review decisions and material source/factor lineage.",
+      "resolution_evidence": "The exact packed M57 and M58 decisions, period sources, hashes and locators, estimation/exclusion treatments and factor/method/GWP authority now render with claim-safe internal-review language."
+    },
+    {
+      "id": "M60-QA-03",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial warning notice appeared only once and did not keep the required status visible on every printed page.",
+      "resolution_evidence": "A fixed print header and footer repeat the full draft/synthetic/incomplete/unreleased/no-assurance/release-false status, with reserved @page margins and focused contract assertions."
+    },
+    {
+      "id": "M60-QA-04",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "After the first passing review, a later role-switch check found that M58/M59/M60 browser state was not comprehensively cleared or reloaded, allowing stale report metadata from a prior actor to remain in memory.",
+      "resolution_evidence": "Current create/revisit and actor-change paths clear every annual, evidence-pack, local-file, replay-receipt and draft-report value before further work. The strict current-report reader sends only the selected actor credential, binds returned metadata to the exact inventory and pack, returns null for the tenant-safe outsider 404, and refuses all other non-success responses. Focused browser tests pass for member reload, changed binding rejection and outsider absence; signed-out state is cleared before its authenticated workspace request can fail."
+    }
+  ],
+  "limitations": [
+    "Persistence and RLS execution evidence uses PGlite, not hosted Supabase/PostgreSQL. Hosted extension availability, grants and operational behavior require a later deployment-stage review.",
+    "All company, activity, source and identity data is fixed and synthetic. No customer data was used.",
+    "The report is deterministic HTML. Cross-browser print-engine pagination, physical printer output, PDF conversion and long-term archival rendering were not exhaustively qualified.",
+    "The reviewer inspected semantic and print CSS and exercised automated accessibility boundaries, but a separate manual assistive-technology session was not performed in this review turn.",
+    "M60 presents an incomplete, unreleased location-based Scope 2 development draft. It does not cover market-based Scope 2, Scope 1, Scope 3, filing formats, evidence authenticity, professional assurance, deployment or release."
+  ]
+}

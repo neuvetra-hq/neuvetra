@@ -1,0 +1,129 @@
+{
+  "schema_version": "m57_inventory_review_independent_qa_v1",
+  "task_id": "M57-FINAL-QA",
+  "reviewed_at": "2026-09-14T02:09:00Z",
+  "reviewer_role": "independent Head of QA with CARB-verifier, accounting, tenant-security, data-integrity and product challenge",
+  "reviewer_signature": "Neuvetra independent QA reviewer 10",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M57 implementation. This review artifact is the reviewer's only persistent change.",
+  "reviewed_git_state": {
+    "head": "8f1f587722bdf199dfe63d4fb34d783b4a9ecbb1",
+    "branch": "codex/m57-inventory-review",
+    "working_tree": "dirty and unpublished",
+    "binding": "This verdict applies only to the exact reviewed hashes below. Unrelated tracked and untracked files were outside scope."
+  },
+  "reviewed_candidate_file_sha256": {
+    "packages/neuvetra-database/src/migrations/0004_inventory_review.sql": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213",
+    "packages/neuvetra-database/src/index.ts": "f93f73e1ff6012c47eba0851ace9daa6ce726a1d76794118de5612a72ffde8d0",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "723a9300088f9c5e96ee4979ec2a3d0f042d12d8ded86c4f2b64355c1c8e4687",
+    "apps/site-api/src/workspace/types.ts": "205ebfdec6e718bc395f11637ad9185fbaf9bbf204cecc879d231b1a625184f3",
+    "apps/site-api/src/workspace/routes.ts": "a2a28d0bee121eb4e0cae003cb92d7527edadb34eb8078a595df5cf0bd9605dc",
+    "apps/site-api/src/workspace/server.ts": "004669249ba2da90543f57fd4ef71fa4e78dc5c6a7b24836dad97554ce5189d8",
+    "apps/site-api/src/workspace/server.test.ts": "1544ae89ac13af3bbe30f5004b3d04311fdcbbc6281169ef0e8e991084b575bb",
+    "apps/site-web/src/lib/workspace-api.ts": "136d52d1948aea2c37d2448001ca1a9f9528da6747ff45cd500f78a7c0639972",
+    "apps/site-web/src/lib/workspace-api.test.ts": "d02f17e392ac508ad81ad00112855463bc3d6c45913ea0d2df95c2830d8922e2",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "0fdd39ecb9bd0b9d709a1fdcd81ca26908026f5b1537c4110629e015f23d666f",
+    "apps/site-web/src/components/ResearchPreview.tsx": "00c9e95ec4779c2dfc439cd43ac34694ac4b1f9084b29ac1c401b9f48a12c27d",
+    "apps/site-web/src/index.css": "a4cab0dc2225c34b854f666247414213ebe518e8731dd03906df06cc64c9045f"
+  },
+  "reviewed_prerequisite_and_claim_file_sha256": {
+    "apps/site-api/src/calculation/location_based_electricity.py": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+    "apps/site-api/src/calculation/linked_bill_calculation.py": "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e",
+    "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6",
+    "evaluations/research-qa/milestone56-synthetic-bill-calculation-repair-review-10.json": "85fc46d5a63531e09b40351e210929ad3728911fad1a8c8ac8f93a87bf39b2a7",
+    "evaluations/research-qa/milestone56-publication-reconciliation-review-10.json": "25898a0ee9d59ec00f67a48237a19ce27a27208d238d28751407b312b12f558d",
+    "docs/research/inventory-review-milestone-57.md": "c0989c13800c1e9d3207e2a46920c925a424b7e2a6937664de47a727c70f78a7"
+  },
+  "verdict": "pass_bounded_local_synthetic_milestone",
+  "milestone_gate_pass": true,
+  "release_acceptance": false,
+  "acceptance_checks": [
+    {
+      "check": "two_person_gate",
+      "status": "pass",
+      "evidence": "Only an owner or administrator can submit or decide. The database locks the inventory row and refuses a decision when decided_by equals submitted_by. Approval requires the exact four ordered acknowledgments; changes_requested requires the exact alternate reason and no acknowledgments. The browser independently validates the decision pairing and distinct reviewer."
+    },
+    {
+      "check": "exact_m56_binding_and_arithmetic",
+      "status": "pass",
+      "evidence": "M53 remains SHA-256 4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c and the M56 adapter remains ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e. The M57 writer accepts only the tenant-linked draft M56 calculation with 12.346000 MWh, 2407.9674055248 unrounded kg CO2e, 2407.9674 display kg CO2e, development-candidate classification and release false. The immutable inventory snapshot binds calculation_id and result_payload_sha256."
+    },
+    {
+      "check": "completeness_denominator_and_warnings",
+      "status": "pass",
+      "evidence": "The schema fixes a transparent denominator of one expected facility across twelve monthly periods. Exactly January is covered; February through December are listed as missing. Complete and factor_release_eligible are permanently false. The four ordered warnings disclose incomplete annual coverage, absent market-based Scope 2, unreleased factor/method, and synthetic local work without assurance or Scope 1/3 assessment."
+    },
+    {
+      "check": "immutable_history_and_replayable_lineage",
+      "status": "pass",
+      "evidence": "Inventory versions, review decisions and audit events have update/delete rejection triggers. Composite company foreign keys bind boundary, calculation and decision lineage; snapshot and operation hashes are stored. One terminal decision per company/inventory converges identical repeats and refuses conflicting decisions. The exact source M56 calculation remains independently replayable under its accepted contract."
+    },
+    {
+      "check": "rls_acl_and_boundary_bypass",
+      "status": "pass",
+      "evidence": "All three M57 tables enable and force RLS, expose SELECT only to authenticated company members, and grant no authenticated writer path. Fixed-search-path security-definer functions rederive auth.uid and manager authority. The migration revokes authenticated insert/update/delete on reporting_boundaries and boundary_facilities, closing the prior direct boundary-status and link bypass. Executable PGlite tests prove forced RLS, member read-only access, outsider non-disclosure, self-review denial, direct authenticated writer denial and immutable history."
+    },
+    {
+      "check": "idempotency_concurrency_and_failure_behavior",
+      "status": "pass",
+      "evidence": "Tenant-scoped UUID idempotency keys and server-derived operation fingerprints are checked before writes. Constraint-backed inserts converge the fixed inventory and terminal review under row locks; mismatched calculation, snapshot, decision or fingerprint refuses. Route failures are mapped to bounded 409, 422 or 503 responses without database detail. The fixed local PGlite flow passes the existing concurrent calculation and duplicate-store regression suite."
+    },
+    {
+      "check": "api_browser_and_accessibility",
+      "status": "pass",
+      "evidence": "Write routes enforce exact same-origin, bearer authentication, manager authorization, UUID/SHA formats and exhaustive command-body keys. Reads preserve inference-safe 404. The repaired browser decoder requires exact outer, coverage, line and decision keys; exact missing months and warnings; request-bound company/calculation/inventory IDs; valid UTC instants; exact decision semantics; and a reviewer distinct from the submitter. UI controls disable during work, expose named labels and table caption, focus results/errors, announce status or alert, and keep read-only roles without mutation controls. Browser storage contains only opaque workspace and evidence IDs."
+    },
+    {
+      "check": "production_exclusion_and_claim_boundaries",
+      "status": "pass",
+      "evidence": "API startup requires all M54-M57 enable flags and development/test NODE_ENV. Web composition requires all four explicit synthetic flags. The ordinary production build contains none of the scanned M57 profile, warning, decision, result or feature-flag markers. Product text consistently says incomplete synthetic draft, missing months are not zero, market-based Scope 2 is absent, factor/method are unreleased, and the review is not filing approval, assurance or release."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "id": "M57-QA-01",
+      "severity": "material",
+      "status": "resolved",
+      "finding": "The first reviewed route bytes applied an inventoryId check to the collection GET route, making every authorized inventory revisit return 422.",
+      "resolution": "The invalid check was removed from GET and placed on the decision route. Independent focused and full API reruns pass, including member revisit."
+    },
+    {
+      "id": "M57-QA-02",
+      "severity": "material",
+      "status": "resolved",
+      "finding": "The first reviewed browser decoder accepted unbound IDs, unknown keys, substituted missing months, unparseable timestamps and incomplete or self-reviewed decision objects.",
+      "resolution": "The decoder now enforces the exhaustive fixed response graph and request relationships. Added adversarial mutations pass in the independently rerun web suite."
+    },
+    {
+      "id": "M57-QA-03",
+      "severity": "minor",
+      "status": "resolved",
+      "finding": "The milestone record initially retained the pre-repair web test count.",
+      "resolution": "The record now states the independently reproduced repaired total of 60 tests and 224 assertions."
+    }
+  ],
+  "open_findings": [],
+  "reproduced_checks": {
+    "python_calculation_discovery": "12 passed",
+    "focused_site_api_server": "4 passed, 52 assertions",
+    "full_site_api": "625 passed, 5372 assertions",
+    "focused_site_web_workspace_decoder": "11 passed, 53 assertions",
+    "full_site_web": "60 passed, 224 assertions",
+    "database": "19 passed, 139 assertions",
+    "site_api_typecheck": "pass",
+    "site_web_typecheck": "pass",
+    "database_typecheck": "pass",
+    "site_web_lint": "pass",
+    "site_web_production_build": "pass with existing chunk-size advisory",
+    "production_exclusion_scan": "pass: M57 profile, warning, approval/reason, exact result and feature-flag markers absent from ordinary production dist",
+    "git_diff_check": "pass; Git emitted only a line-ending normalization warning for server.test.ts"
+  },
+  "limitations": [
+    "This pass covers only the fixed fictional January 2023 local workflow and these exact hashes. It does not establish annual inventory completeness, market-based Scope 2, Scope 1 or Scope 3 coverage, factor release, filing fitness or assurance.",
+    "The database evidence uses in-memory PGlite. It does not prove hosted PostgreSQL/Supabase execution, production authentication, durable cross-process coordination or distributed concurrency.",
+    "The reviewer inspected accessibility behavior in source and tests and reconciled it with the recorded ordinary-browser owner-to-admin-to-member walkthrough. A fresh independent assistive-technology session was not performed.",
+    "The two-person gate is an internal synthetic workflow separation. It is not independent professional verification or assurance.",
+    "No provider or external network call, credential, customer data, hosted service, deployment, merge or release action was used."
+  ],
+  "required_repair": [],
+  "conclusion": "PASS for the exact bounded local synthetic M57 candidate. The repaired bytes preserve the accepted M53/M56 calculation, enforce the internal two-person gate and immutable tenant-bound incomplete inventory history, fail closed at API and browser boundaries, and remain excluded from the ordinary production bundle. Stage 4, merge, deployment, professional assurance and release acceptance remain false."
+}

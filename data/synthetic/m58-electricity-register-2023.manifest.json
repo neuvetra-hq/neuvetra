@@ -1,0 +1,7 @@
+{
+  "fixtureId": "m58-fixed-electricity-register-2023-v1",
+  "path": "data/synthetic/m58-electricity-register-2023.json",
+  "byteLength": 1095,
+  "sha256": "44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29",
+  "classification": "fixed_fictional_no_customer_data"
+}

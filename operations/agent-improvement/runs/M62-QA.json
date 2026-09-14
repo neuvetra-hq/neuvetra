@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "id": "M62-QA",
+  "role": "qa-lead",
+  "execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root/role_evidence_review",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M62-QA.json",
+      "sha256": "671d1638ae083e6306ad9914a2a70e717c10a9e70d104a07c4861353d49c3694"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/m62-qa-process-acceptance.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "operations/agent-improvement/m62-qa-process-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M62-QA.json",
+        "sha256": "671d1638ae083e6306ad9914a2a70e717c10a9e70d104a07c4861353d49c3694"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": true,
+  "parent_outcome": "M62",
+  "started_at": "2026-09-14T17:38:28.255437+00:00",
+  "routing_exception": "Fresh Astra/high spawn rejected: agent thread limit reached. Independent existing reviewer reused; model and effort unobserved. Requested route describes failed fresh dispatch, not verified reuse settings.",
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/milestone62-merge-readiness.md",
+      "sha256": "d3491a95f0d93dab25f68a10456e93dc8d6a922786653dac93163e1a85479871"
+    }
+  ]
+}

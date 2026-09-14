@@ -19,7 +19,12 @@ import importlib
 import pytest
 
 from calculations.base import CalculationContext, CalculationResult
-from calculations.spec_loader import iter_test_cases, load_all_specs
+from calculations.spec_loader import (
+    get_spec_readiness,
+    iter_deferred_test_cases,
+    iter_test_cases,
+    load_all_specs,
+)
 
 
 def _load_calculate_function(function_id: str):
@@ -36,19 +41,39 @@ def _spec_test_id(spec: dict, tc) -> str:
     return f"{spec['methodology_id']}::{tc.name}"
 
 
-def _all_specs_with_tests():
-    """Flatten (spec, test_case) pairs for parametrize."""
-    out = []
-    for mid, spec in load_all_specs().items():
-        for tc in iter_test_cases(spec):
-            out.append((spec, tc))
-    return out
+def _all_case_parameters():
+    """Collect executable cases and explicit skips for deferred declarations."""
+    parameters = []
+    executable_count = 0
+    for spec in load_all_specs(include_deferred=True).values():
+        readiness = get_spec_readiness(spec)
+        if readiness.status == "executable":
+            for tc in iter_test_cases(spec):
+                parameters.append(
+                    pytest.param(spec, tc, id=_spec_test_id(spec, tc))
+                )
+                executable_count += 1
+            continue
+
+        reason = "deferred: " + ", ".join(readiness.blockers)
+        for tc in iter_deferred_test_cases(spec):
+            parameters.append(
+                pytest.param(
+                    spec,
+                    tc,
+                    id=_spec_test_id(spec, tc),
+                    marks=pytest.mark.skip(reason=reason),
+                )
+            )
+    return parameters, executable_count
+
+
+CASE_PARAMETERS, EXECUTABLE_CASE_COUNT = _all_case_parameters()
 
 
 @pytest.mark.parametrize(
     "spec,tc",
-    _all_specs_with_tests(),
-    ids=[_spec_test_id(s, t) for s, t in _all_specs_with_tests()],
+    CASE_PARAMETERS,
 )
 def test_methodology_spec(spec, tc, factor_resolver):
     """Run one declared test_case through its methodology's calculate()."""
@@ -103,9 +128,17 @@ def test_methodology_spec(spec, tc, factor_resolver):
 
 
 def test_at_least_one_methodology_loaded():
-    """Sanity check: if this fails, the spec discovery layer is broken."""
+    """Sanity check: if this fails, executable spec discovery is broken."""
     specs = load_all_specs()
     assert specs, (
         "load_all_specs() returned no specs — either no methodology page has a "
         "calculation_spec block yet, or spec_loader is broken."
+    )
+
+
+def test_at_least_one_executable_case_collected():
+    """Prevent an all-deferred catalog from producing a false-green suite."""
+    assert EXECUTABLE_CASE_COUNT > 0, (
+        "No executable calculation_spec test cases were collected; deferred "
+        "case skips cannot satisfy the calculation harness."
     )

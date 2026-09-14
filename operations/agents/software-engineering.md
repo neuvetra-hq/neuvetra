@@ -25,3 +25,9 @@ Return the changed paths/version, behavior implemented, relevant check results, 
 ## Done / escalation
 
 Done means the assigned path is concrete, usable under its stated conditions and ready for independent review. Escalate incompatible contracts, missing product decisions or ownership conflicts to CTO with evidence and a recommended resolution; continue unrelated authorized work.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#software-engineering). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Exercise the actual changed writer, reader or user path for each consequential criterion (L04). Recompute replay from exported bytes when replay is promised, and test equivalent reordered values versus real mutations (L03).

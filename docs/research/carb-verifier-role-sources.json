@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "purpose": "Primary evidence for an internal CARB verifier role; no application-corpus approval",
+  "checked_at": "2026-09-09 20:11:23 UTC",
+  "runtime_eligible": false,
+  "source_root": "C:/Users/nimab/Neuvetra/research-sources/2026-09-09-carb-verifier",
+  "landing_pages_inspected_in_browser": [
+    "https://ww2.arb.ca.gov/carb-accredited-mrr-verifiers-ghg-emissions",
+    "https://ww2.arb.ca.gov/mrr-regulation",
+    "https://ww2.arb.ca.gov/rulemaking/2026/mrr2026"
+  ],
+  "retrieval_time_basis": "Local UTC LastWriteTime immediately following successful direct download",
+  "sources": [
+    {
+      "id": "carb-mrr-2026-revised-final-docx",
+      "publisher": "California Air Resources Board",
+      "title": "2026 MRR Final Regulation Order - revised alternative format",
+      "version": "Linked under Final Approval / OAL Action on 2026-09-09",
+      "canonical_url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/mrr/alt%20finalregorder.docx",
+      "file": "carb-mrr-2026-final-approved-order.docx",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-09-carb-verifier/carb-mrr-2026-final-approved-order.docx",
+      "bytes": 530404,
+      "sha256": "f4e57876225083d471e091a59fc5d68d7b1119d54c1d4eb8b944dbc96df097e4",
+      "retrieved_at": "2026-09-09T20:03:31.7412047Z",
+      "review_scope": "Preserved companion; content review pending",
+      "runtime_eligible": false
+    },
+    {
+      "id": "carb-mrr-2026-revised-final-pdf",
+      "publisher": "California Air Resources Board",
+      "title": "2026 MRR Final Regulation Order - revised final approval version",
+      "version": "Linked under Final Approval / OAL Action on 2026-09-09",
+      "canonical_url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/mrr/att_a-1%20finalregorder.pdf",
+      "file": "carb-mrr-2026-final-approved-order.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-09-carb-verifier/carb-mrr-2026-final-approved-order.pdf",
+      "bytes": 1919029,
+      "sha256": "9154ed1b45b610665aecfe7c2f7d2da65fe94d28cae897c1426c1b5036a82bb1",
+      "retrieved_at": "2026-09-09T20:03:31.5511794Z",
+      "pages": 273,
+      "review_scope": "Section 95132 accreditation excerpts, pages 239-241; visual page 240; full transition mapping not performed",
+      "runtime_eligible": false
+    },
+    {
+      "id": "carb-mrr-notice-2026-09-08",
+      "publisher": "California Air Resources Board",
+      "title": "Regulatory Notice: Regulation for the Mandatory Reporting of Greenhouse Gas Emissions",
+      "version": "September 8, 2026",
+      "canonical_url": "https://ww2.arb.ca.gov/sites/default/files/2026-09/2026-mrr-notice_2026-9-8.pdf",
+      "file": "carb-mrr-regulatory-notice-2026-09-08.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-09-carb-verifier/carb-mrr-regulatory-notice-2026-09-08.pdf",
+      "bytes": 76504,
+      "sha256": "4dd9e7034bf0c036da51c5d627b6a683fdff47400e3b525c0b932e78a93e7e03",
+      "retrieved_at": "2026-09-09T20:03:31.8942294Z",
+      "pages": 1,
+      "review_scope": "Complete text and visual page 1; distinguishes effect and data-year application",
+      "runtime_eligible": false
+    },
+    {
+      "id": "carb-verification-audit-checklist",
+      "publisher": "California Air Resources Board",
+      "title": "CARB Findings of Verification Services Audit",
+      "version": "Undated template linked from verifier page on 2026-09-09",
+      "canonical_url": "https://ww2.arb.ca.gov/sites/default/files/classic/cc/reporting/ghg-ver/verifiers/auditform.pdf",
+      "file": "carb-verification-services-audit-checklist.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-09-carb-verifier/carb-verification-services-audit-checklist.pdf",
+      "bytes": 179405,
+      "sha256": "3b551db5589c3396ba1e9b553e5e5c1dbe15de75669732a4b997ff9da0ad71e5",
+      "retrieved_at": "2026-09-09T20:02:06.2755064Z",
+      "pages": 3,
+      "review_scope": "Complete text; visual pages 2-3; role-design interpretation only",
+      "runtime_eligible": false
+    },
+    {
+      "id": "carb-verifier-faq-september-2026",
+      "publisher": "California Air Resources Board",
+      "title": "Frequently Asked Questions Regarding Accreditation Requirements for Verifiers for California's Mandatory GHG Reporting Program",
+      "version": "September 2026; next training 2027",
+      "canonical_url": "https://ww2.arb.ca.gov/sites/default/files/classic/cc/reporting/ghg-ver/mrr_verification_training_faq_2027.pdf",
+      "file": "carb-verifier-training-faq-2027.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-09-carb-verifier/carb-verifier-training-faq-2027.pdf",
+      "bytes": 170309,
+      "sha256": "a8b5754383e27dfb7e2c5d374c7cc542558cab0f764d0064b24e9f3f9b7323fb",
+      "retrieved_at": "2026-09-09T20:02:06.4435333Z",
+      "pages": 5,
+      "review_scope": "Complete text; visual page 1; role-design interpretation only",
+      "runtime_eligible": false
+    }
+  ]
+}

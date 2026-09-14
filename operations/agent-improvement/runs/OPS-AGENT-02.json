@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "id": "OPS-AGENT-02",
+  "role": "ceo",
+  "execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root",
+  "prompt_sha256": "4c23b0495339512e30b312ea00fb4594eb45827803f4304b58acb85cd599dea1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-AGENT-02.json",
+      "sha256": "a53b890e5522369a52587df24eac9c04f1889c605293c8a09cbcfcdf602c1733"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-11-ROLES",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-11-ROLES"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-ROUTING",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-ROUTING"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-EVIDENCE-GATES",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-EVIDENCE-GATES"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-UNKNOWN-METRICS",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-UNKNOWN-METRICS"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-ONBOARDING",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-ONBOARDING"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-NONINTERFERENCE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-NONINTERFERENCE"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-PORTABLE-PACKAGE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/review.md#AC-PORTABLE-PACKAGE"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root/agent_ops_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "operations/agent-improvement/review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/OPS-AGENT-02.json",
+        "sha256": "a53b890e5522369a52587df24eac9c04f1889c605293c8a09cbcfcdf602c1733"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": "gpt-6-astra",
+      "effort": "medium"
+    },
+    "observation_evidence": [
+      "operations/agent-improvement/compute-observation.json#current_root"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "scope": "Bootstrap of local role workflow and compute policy; excluded from three-assignment effectiveness pilot.",
+  "additional_author": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root/agent_ops_tooling",
+  "prompt_version_note": "Policy adopted during bootstrap; hash identifies coordinator instructions used for final integrated handoff, not a reconstructed historical dispatch.",
+  "source_artifacts": [
+    {
+      "path": ".github/workflows/agent-ops.yml",
+      "sha256": "11f4af6fc57af23819f1dcd8a1564567349893df5d008ec46fe4350c74bc6c50"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "5e183a8b46132a072d54bcf553700536139c5c1a97c6e1ff41f022edaec0122c"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "c69b0f499b799d21f8bcd98bd2e1a2abcfdee6d56def420d91870157d923ae5d"
+    },
+    {
+      "path": "docs/research/carb-verifier-role-basis.md",
+      "sha256": "e2232bbe54c07b6ed43c715cf5b3af12d0cd81c218ada0b8e9db19263e1682ae"
+    },
+    {
+      "path": "docs/research/carb-verifier-role-qa.md",
+      "sha256": "a521583b9d80b05126a84a3cc4388eac440cb5d6b59ff9936fd7a4f99b18a53b"
+    },
+    {
+      "path": "docs/research/carb-verifier-role-sources.json",
+      "sha256": "6022709396057f6474421c0a39d6f126ec2e1de35ef8b8e874055ee6bd1c0bd0"
+    },
+    {
+      "path": "docs/roadmap-neuvetra-ghg.md",
+      "sha256": "8ce20d82e9e46af77d53d2bf1ae3180530b8cf42df82b5abc9432bbd276d8fa6"
+    },
+    {
+      "path": "operations/agent-improvement/README.md",
+      "sha256": "03a922e2ec4c089c07d49a8dbd9587ccae258960fb29aa009c90ccc89629339e"
+    },
+    {
+      "path": "operations/agent-improvement/benchmarks.md",
+      "sha256": "c38e5b1ae0de3f1bd0a9dcb1eea52fd8932613af16ebd3922dfd0a349c884d9d"
+    },
+    {
+      "path": "operations/agent-improvement/compute-observation.json",
+      "sha256": "2ab07d21ff3ba22158105324af7919ce7c0bd36081129ec39393eab024802ede"
+    },
+    {
+      "path": "operations/agent-improvement/compute-policy.md",
+      "sha256": "ee5f66386564e3192fba2d4bdcbb9a272c43af09f9f8504e446854dba7fe477e"
+    },
+    {
+      "path": "operations/agent-improvement/decision.md",
+      "sha256": "1d1703ab06560fd9d4b35eaf38f76199d2178e0fce297d1bbdb6a51bf90e5cf4"
+    },
+    {
+      "path": "operations/agent-improvement/historical-evidence.json",
+      "sha256": "9ee4cdce815b3e9575a2f095f2a3bc98c87adb3b7c1759f4b206cd65ca686605"
+    },
+    {
+      "path": "operations/agent-improvement/lessons.json",
+      "sha256": "8e55569cf348db25d7081dcf7168b6dd805f615de102821a2f9341a30d62318f"
+    },
+    {
+      "path": "operations/agent-improvement/new-role-template.md",
+      "sha256": "b1daa400a0bb7a4279b483c07bbe25fc9b02dfb84055eefecf142bfc8c8f4daf"
+    },
+    {
+      "path": "operations/agent-improvement/publication-files.json",
+      "sha256": "6c2e6276f134327f19a7e143c25bb3ffbedc62ee9ac55bd35cbc9d57be929ecc"
+    },
+    {
+      "path": "operations/agent-improvement/roles.json",
+      "sha256": "f936b5d30a99c2a651f350c34506b880a114d2b9f0778471a51c66bf4d8d4266"
+    },
+    {
+      "path": "operations/agent-improvement/run-template.json",
+      "sha256": "868a2243c971ffec2d27cee91e657349cf3755f724375ee880fda2aeb0f652ed"
+    },
+    {
+      "path": "operations/agents/README.md",
+      "sha256": "db58f355ac9aa455658d3a6b86de516b5c9939abb09a670978d64982960b9cb0"
+    },
+    {
+      "path": "operations/agents/accounting-validation.md",
+      "sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36"
+    },
+    {
+      "path": "operations/agents/carb-verifier.md",
+      "sha256": "93dd7b6aaa7cb60fb6933b0f5bbef738b1882fc792a5f6dd58b90360ea4a7fd6"
+    },
+    {
+      "path": "operations/agents/ceo.md",
+      "sha256": "4c23b0495339512e30b312ea00fb4594eb45827803f4304b58acb85cd599dea1"
+    },
+    {
+      "path": "operations/agents/commercial-operations.md",
+      "sha256": "3d2337460547d3b5e161347417e515f185d26d7c2ec5e1e0cc4411c578947a32"
+    },
+    {
+      "path": "operations/agents/cpo.md",
+      "sha256": "fe5237292aafa6fe307801d3d9d07414110d11dc6ecd7812ee52ed77feacb2e6"
+    },
+    {
+      "path": "operations/agents/cto.md",
+      "sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1"
+    },
+    {
+      "path": "operations/agents/data-database.md",
+      "sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e"
+    },
+    {
+      "path": "operations/agents/qa-lead.md",
+      "sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94"
+    },
+    {
+      "path": "operations/agents/regulatory-research.md",
+      "sha256": "b8302825b83953d49d2783538b424498348aa20f322b1c2c1c0b5e011145a7f2"
+    },
+    {
+      "path": "operations/agents/security-reliability.md",
+      "sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3"
+    },
+    {
+      "path": "operations/agents/software-engineering.md",
+      "sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b"
+    },
+    {
+      "path": "tools/agent_ops.py",
+      "sha256": "7b101c4b6157c17ca46398a0f913d5745c4467d4927cfa82c8255258880001b3"
+    },
+    {
+      "path": "tools/test_agent_ops.py",
+      "sha256": "48e82b087007117cefb9e5772143d0e414dfc89eb3c8f19ad8214f62830d3b67"
+    }
+  ]
+}

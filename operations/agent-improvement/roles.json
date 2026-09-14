@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "policy_version": "2026-09-14.1",
+  "supported_models": {
+    "gpt-6-astra": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max",
+      "ultra"
+    ],
+    "gpt-5.6-sol": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max",
+      "ultra"
+    ],
+    "gpt-5.6-terra": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max",
+      "ultra"
+    ],
+    "gpt-5.6-luna": [
+      "low",
+      "medium",
+      "high",
+      "xhigh",
+      "max"
+    ]
+  },
+  "roles": [
+    {
+      "id": "ceo",
+      "prompt": "operations/agents/ceo.md",
+      "sponsor": "board",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#ceo"
+    },
+    {
+      "id": "cpo",
+      "prompt": "operations/agents/cpo.md",
+      "sponsor": "ceo",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#cpo"
+    },
+    {
+      "id": "cto",
+      "prompt": "operations/agents/cto.md",
+      "sponsor": "ceo",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#cto"
+    },
+    {
+      "id": "qa-lead",
+      "prompt": "operations/agents/qa-lead.md",
+      "sponsor": "ceo",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#qa-lead"
+    },
+    {
+      "id": "regulatory-research",
+      "prompt": "operations/agents/regulatory-research.md",
+      "sponsor": "cpo",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#regulatory-research"
+    },
+    {
+      "id": "accounting-validation",
+      "prompt": "operations/agents/accounting-validation.md",
+      "sponsor": "qa-lead",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#accounting-validation"
+    },
+    {
+      "id": "carb-verifier",
+      "prompt": "operations/agents/carb-verifier.md",
+      "sponsor": "qa-lead",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#carb-verifier"
+    },
+    {
+      "id": "data-database",
+      "prompt": "operations/agents/data-database.md",
+      "sponsor": "cto",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#data-database"
+    },
+    {
+      "id": "software-engineering",
+      "prompt": "operations/agents/software-engineering.md",
+      "sponsor": "cto",
+      "default": {
+        "model": "gpt-5.6-terra",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#software-engineering"
+    },
+    {
+      "id": "security-reliability",
+      "prompt": "operations/agents/security-reliability.md",
+      "sponsor": "cto",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#security-reliability"
+    },
+    {
+      "id": "commercial-operations",
+      "prompt": "operations/agents/commercial-operations.md",
+      "sponsor": "cpo",
+      "default": {
+        "model": "gpt-5.6-terra",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "benchmark": "operations/agent-improvement/benchmarks.md#commercial-operations"
+    }
+  ]
+}

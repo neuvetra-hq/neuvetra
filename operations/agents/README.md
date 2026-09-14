@@ -43,6 +43,8 @@ A functional reporting line does not require a separate agent at every level. Th
 
 ## Context loading
 
+New assignments follow the [improvement cycle](../agent-improvement/README.md) and [compute policy](../agent-improvement/compute-policy.md). Select model and effort from the [registry](../agent-improvement/roles.json) through supported dispatch controls; record the actual observed setting separately. Already-dispatched work keeps its agreed contract. The coordinator creates a bounded run record, applies relevant recurring-defect lessons, and preserves first-review results. This is an assignment-driven workflow, not automatic background learning.
+
 For every assignment, read in this order:
 
 1. The latest user direction and task handoff; applicable root/nested `AGENTS.md` and `CLAUDE.md` instructions, subject to higher-priority instructions.
@@ -58,11 +60,13 @@ The coordinator supplies a bounded assignment. Use these fields in prose or the 
 ```text
 Task ID and parent outcome:
 Role, functional sponsor and actual execution context:
+Role prompt hash; requested and observed model/effort (unknown if unavailable):
 Problem and deliverable:
 Required context and authoritative evidence:
 Owned files/systems; read-only dependencies:
 Authorized actions and explicit exclusions:
 Acceptance criteria and independent reviewer:
+Criterion-to-evidence map and applicable lesson IDs:
 Dependencies, known risks and open decisions:
 Budget/deadline, only if actually assigned:
 Return path and next owner:
@@ -78,6 +82,8 @@ Every return includes: outcome against criteria; exact artifacts/changes; eviden
 4. **Review:** QA checks the actual delivered version and acceptance criteria. Regulatory, accounting and security findings are reviewed by the appropriate independent role. Fixes return for targeted recheck; no need to rerun unrelated checks without a reason.
 5. **Integrate and demonstrate:** CTO integrates technical work; CPO checks the user outcome; CEO demonstrates the supported result and reports limits. A QA finding is not erased by management preference. Any authorized exception remains explicit, with impact and owner; legal or platform restrictions cannot be waived by an internal role.
 6. **Record:** the designated writer updates status and the board report using evidence and the existing schema. Workers propose updates through their handoff instead of racing to edit shared state.
+
+Accepted milestones use one progressive product PR. The coordinator commits and pushes each accepted milestone to the active PR branch, confirms the remote commit and required checks, and only then reports it as published. Temporary isolation branches are reconciled into that PR before dependent work begins; new milestone PRs require a technical reason or board direction.
 
 Escalate scope/priority/customer decisions to CPO or CEO; architecture/access/cost issues to CTO; disputed or failed acceptance evidence to Head of QA; and authorization, material business risk or unresolved executive conflicts to the board through CEO. Never send external communications merely because a handoff says “escalate.” State what decision is needed and why; keep working where that decision is not a dependency.
 

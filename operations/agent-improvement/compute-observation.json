@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-14T17:09:39.622050+00:00",
+  "method": "Read only session_meta parent/task identity and turn_context model/effort from selected local JSONL files; no conversation text, tool payloads, credentials or customer data retained. Observation is a snapshot, not continuous monitoring.",
+  "global_config_observation": {
+    "model": "gpt-6-astra",
+    "effort": "medium",
+    "service_tier": "default",
+    "source": "selected keys of local Codex config.toml"
+  },
+  "current_root": {
+    "execution_context": "/root",
+    "model": "gpt-6-astra",
+    "effort": "medium",
+    "source": "current task turn_context"
+  },
+  "product_root_continuation": {
+    "observed_distinct_settings": [
+      {
+        "model": "gpt-5.6-luna",
+        "effort": "high"
+      },
+      {
+        "model": "gpt-5.6-sol",
+        "effort": "medium"
+      }
+    ],
+    "last_observed": {
+      "model": "gpt-5.6-sol",
+      "effort": "medium"
+    },
+    "scope": "selected September 12 continuation file, not exhaustive historical role attribution"
+  },
+  "subagents": [
+    {
+      "session_file_basename": "rollout-2026-09-14T08-29-55-01a0a08a-060e-72e3-8a42-e72a1a09240e.jsonl",
+      "execution_context": "/root/m60_cpo",
+      "observed_context_count": 4,
+      "settings": [
+        {
+          "model": "gpt-5.6-sol",
+          "effort": "medium"
+        }
+      ]
+    },
+    {
+      "session_file_basename": "rollout-2026-09-14T08-30-03-01a0a08a-26fa-78b1-817f-187f8d4d717c.jsonl",
+      "execution_context": "/root/m60_cto",
+      "observed_context_count": 10,
+      "settings": [
+        {
+          "model": "gpt-5.6-sol",
+          "effort": "medium"
+        }
+      ]
+    },
+    {
+      "session_file_basename": "rollout-2026-09-14T08-30-08-01a0a08a-3afc-7da2-a8f5-dc6f90b4f403.jsonl",
+      "execution_context": "/root/m60_qa",
+      "observed_context_count": 6,
+      "settings": [
+        {
+          "model": "gpt-5.6-sol",
+          "effort": "medium"
+        }
+      ]
+    },
+    {
+      "session_file_basename": "rollout-2026-09-14T09-55-25-01a0a0d8-4cf6-73c3-9208-69f3a1470f0b.jsonl",
+      "execution_context": "/root/role_evidence_review",
+      "observed_context_count": 2,
+      "settings": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "medium"
+        }
+      ]
+    },
+    {
+      "session_file_basename": "rollout-2026-09-14T10-01-14-01a0a0dd-a2d9-71c1-942c-d8a5d8eb0de8.jsonl",
+      "execution_context": "/root/agent_ops_tooling",
+      "observed_context_count": 3,
+      "settings": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "medium"
+        }
+      ]
+    },
+    {
+      "session_file_basename": "rollout-2026-09-14T10-08-51-01a0a0e4-9b3f-7073-964e-c50a5bae577d.jsonl",
+      "execution_context": "/root/agent_ops_qa",
+      "observed_context_count": 1,
+      "settings": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "These settings do not establish causal performance effects or per-role cost.",
+    "No global settings or sibling tasks were modified.",
+    "Requested routes and observed contexts are separate."
+  ]
+}

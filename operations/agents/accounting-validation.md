@@ -27,3 +27,9 @@ Provide numerical findings to the [CARB verifier / GHG audit reviewer](carb-veri
 ## Done / escalation
 
 Done means method applicability and tested numerical expectations have an evidence-backed disposition. Escalate disputed standards or unavailable source tables to QA and regulatory research; block affected approval while continuing unaffected validation.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#accounting-validation). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Bind independent expectations to original source cells and context before comparing application output. Separate arithmetic correctness from factor applicability, completeness and estimation uncertainty; report each separately.

@@ -1,0 +1,51 @@
+{
+  "required_rule_visibility": 403,
+  "required_contexts": null,
+  "mergeable": true,
+  "mergeable_state": "clean",
+  "title": "Synthetic inventory review, evidence pack and report workflow (M57-M62)",
+  "pr": 3,
+  "head": "d4ffd292f0e85991aeb4f2b3db4331fdf571a11d",
+  "branch": "codex/m57-inventory-review",
+  "state": "open",
+  "checks": [
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34876730975/job/104085649644"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34876730975/job/104085649490"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34876730975/job/104085649349"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34876730976/job/104085649162"
+    }
+  ],
+  "observed_at": "2026-09-14T17:50:15.460169+00:00",
+  "scope": "Implementation commit receipt; later metadata-only commit may contain this record.",
+  "merged": false,
+  "deployed": false,
+  "final_board_merge_authorization": "pending",
+  "independent_review_path": "evaluations/research-qa/milestone62-merge-readiness.md",
+  "independent_review_git_blob_sha256": "7020f31327b1f1b0a6e6f55918abcfc3bede6e5277fed6fee91a06424b114433",
+  "receipt_files": [
+    "docs/research/m62-publication.json",
+    "docs/research/pr3-merge-readiness-milestone-62.md",
+    "operations/board-report.md",
+    "operations/next-session.md",
+    "operations/status.json"
+  ]
+}

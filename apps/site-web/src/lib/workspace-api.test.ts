@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decodeSyntheticBill, decodeWorkspace, linkSyntheticBill, replaySyntheticBillCalculation, revisitSyntheticWorkspace, uploadSyntheticBill } from "./workspace-api"
+import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideDraftInventoryReport, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeEvidencePackMetadata, decodeEvidencePackReceipt, decodeSyntheticBill, decodeWorkspace, downloadDraftInventoryReport, downloadEvidencePack, DRAFT_REPORT_LIMITATIONS, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitDraftInventoryReport, revisitDraftInventoryReportReview, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type DraftInventoryReportMetadata, type SyntheticInventory } from "./workspace-api"
 
 const fixture = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -96,6 +96,82 @@ describe("M54 workspace browser boundary", () => {
   })
 })
 
+describe("M59 evidence-pack browser boundary",()=>{
+  const pack={id:"45454545-4545-4545-8545-454545454545",companyId:fixture.id,inventoryId:"46464646-4646-4646-8646-464646464646",profile:"neuvetra.synthetic.inventory-evidence-pack.v1" as const,manifestSha256:"a".repeat(64),lineageRootSha256:"b".repeat(64),archiveSha256:"c".repeat(64),archiveByteLength:24000,entryCount:17 as const,createdBy:"47474747-4747-4747-8747-474747474747",createdAt:"2026-09-14T12:00:00.000Z"}
+  test("accepts exact metadata and reconstruction only",()=>{
+    expect(decodeEvidencePackMetadata(pack,{companyId:fixture.id,inventoryId:pack.inventoryId})).toEqual(pack)
+    for(const changed of [{...pack,extra:true},{...pack,entryCount:16},{...pack,archiveSha256:"bad"},{...pack,companyId:"48484848-4848-4848-8848-484848484848"}])expect(()=>decodeEvidencePackMetadata(changed,{companyId:fixture.id,inventoryId:pack.inventoryId})).toThrow("not recognized")
+    const receipt={status:"verified_match",profile:pack.profile,archiveSha256:pack.archiveSha256,manifestSha256:pack.manifestSha256,lineageRootSha256:pack.lineageRootSha256,entryCount:17,inventoryId:pack.inventoryId,reconstructed:{expected:12,reported:10,estimated:1,excluded:1,missing:0,reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"},overallInventoryCompleteness:"incomplete",releaseEligible:false}
+    expect(decodeEvidencePackReceipt(receipt,pack)).toEqual(receipt)
+    const reversed={...receipt,reconstructed:Object.fromEntries(Object.entries(receipt.reconstructed).reverse())}
+    expect(decodeEvidencePackReceipt(reversed,pack)).toEqual(reversed)
+    expect(()=>decodeEvidencePackReceipt({...receipt,reconstructed:{...receipt.reconstructed,includedMwh:"0.000000"}},pack)).toThrow("not recognized")
+  })
+  test("hashes downloaded bytes instead of trusting the response header",async()=>{
+    const bytes=new TextEncoder().encode("fixed evidence archive")
+    const archiveSha256=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),byte=>byte.toString(16).padStart(2,"0")).join("")
+    const exactPack={...pack,archiveSha256,archiveByteLength:bytes.byteLength}
+    const response=(body:Uint8Array)=>new Response(body,{status:200,headers:{"x-neuvetra-archive-sha256":archiveSha256,"content-type":"application/zip"}})
+    expect((await downloadEvidencePack(exactPack,"member",(async()=>response(bytes)) as typeof fetch)).size).toBe(bytes.byteLength)
+    const changed=bytes.slice();changed[0]^=1
+    await expect(downloadEvidencePack(exactPack,"member",(async()=>response(changed)) as typeof fetch)).rejects.toThrow("not recognized")
+  })
+})
+
+describe("M60 draft-report browser boundary",()=>{
+  const inventory={id:"52525252-5252-4252-8252-525252525252",companyId:fixture.id,snapshotSha256:"a".repeat(64)} as unknown as AnnualInventory,pack={id:"53535353-5353-4353-8353-535353535353",companyId:fixture.id,inventoryId:inventory.id,profile:"neuvetra.synthetic.inventory-evidence-pack.v1" as const,manifestSha256:"c".repeat(64),lineageRootSha256:"d".repeat(64),archiveSha256:"b".repeat(64),archiveByteLength:123,entryCount:17 as const,createdBy:"54545454-5454-4454-8454-545454545454",createdAt:"2026-09-14T12:00:00.000Z"}
+  test("revisits only through the selected actor and strictly decodes current metadata",async()=>{const report={id:"51515151-5151-4151-8151-515151515151",companyId:fixture.id,inventoryId:inventory.id,evidencePackId:pack.id,profile:"neuvetra.synthetic.inventory-draft-report.v1" as const,inventorySnapshotSha256:inventory.snapshotSha256,sourceArchiveSha256:pack.archiveSha256,sourceManifestSha256:pack.manifestSha256,sourceLineageRootSha256:pack.lineageRootSha256,reportSha256:"e".repeat(64),reportByteLength:9000,createdBy:pack.createdBy,createdAt:pack.createdAt};let authorization="";const fetcher=(async(_url:string|URL|Request,init?:RequestInit)=>{authorization=new Headers(init?.headers).get("authorization")??"";return Response.json(report)})as typeof fetch;expect(await revisitDraftInventoryReport(inventory,pack,"member",fetcher)).toEqual(report);expect(authorization).toBe("Bearer m55-synthetic-member");await expect(revisitDraftInventoryReport(inventory,pack,"member",(async()=>Response.json({...report,sourceArchiveSha256:"f".repeat(64)}))as typeof fetch)).rejects.toThrow("not recognized");expect(await revisitDraftInventoryReport(inventory,pack,"outsider",(async()=>Response.json({error:"Workspace not found."},{status:404}))as typeof fetch)).toBeNull()})
+  test("hashes downloaded HTML bytes",async()=>{const bytes=new TextEncoder().encode("<!doctype html><title>fixed report</title>"),hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),b=>b.toString(16).padStart(2,"0")).join(""),report={id:"51515151-5151-4151-8151-515151515151",companyId:fixture.id,inventoryId:inventory.id,evidencePackId:pack.id,profile:"neuvetra.synthetic.inventory-draft-report.v1" as const,inventorySnapshotSha256:inventory.snapshotSha256,sourceArchiveSha256:pack.archiveSha256,sourceManifestSha256:pack.manifestSha256,sourceLineageRootSha256:pack.lineageRootSha256,reportSha256:hash,reportByteLength:bytes.byteLength,createdBy:pack.createdBy,createdAt:pack.createdAt},response=(body:Uint8Array)=>new Response(body,{headers:{"x-neuvetra-report-sha256":hash,"content-type":"text/html"}});expect((await downloadDraftInventoryReport(report,"member",(async()=>response(bytes))as typeof fetch)).size).toBe(bytes.byteLength);const changed=bytes.slice();changed[0]^=1;await expect(downloadDraftInventoryReport(report,"member",(async()=>response(changed))as typeof fetch)).rejects.toThrow("not recognized")})
+})
+
+describe("M61 draft-report review browser boundary",()=>{
+  const report={id:"51515151-5151-4151-8151-515151515151",companyId:fixture.id,inventoryId:"52525252-5252-4252-8252-525252525252",evidencePackId:"53535353-5353-4353-8353-535353535353",profile:"neuvetra.synthetic.inventory-draft-report.v1",inventorySnapshotSha256:"a".repeat(64),sourceArchiveSha256:"b".repeat(64),sourceManifestSha256:"c".repeat(64),sourceLineageRootSha256:"d".repeat(64),reportSha256:"e".repeat(64),reportByteLength:9000,createdBy:"54545454-5454-4454-8454-545454545454",createdAt:"2026-09-14T12:00:00.000Z"} as DraftInventoryReportMetadata
+  const accepted={id:"56565656-5656-4656-8656-565656565656",companyId:report.companyId,reportId:report.id,profile:"neuvetra.synthetic.inventory-draft-report-review.v1",decision:"accept_bounded_internal_draft",outcome:"accepted_bounded_internal_draft",reasonCode:"exact_report_reviewed_for_bounded_internal_use",acknowledgedLimitations:[...DRAFT_REPORT_LIMITATIONS],changeRouteCode:null,changeNote:null,reportSha256:report.reportSha256,reportCreatedBy:report.createdBy,inventorySnapshotSha256:report.inventorySnapshotSha256,sourceArchiveSha256:report.sourceArchiveSha256,sourceManifestSha256:report.sourceManifestSha256,sourceLineageRootSha256:report.sourceLineageRootSha256,releaseEligible:false,decidedBy:"57575757-5757-4757-8757-575757575757",decidedAt:"2026-09-14T12:05:00.000Z"} as const
+  async function sealed<T extends Record<string,unknown>>(review:T){const r=review as typeof accepted,payload=["version=1",`companyId=${r.companyId}`,`reportId=${r.reportId}`,`profile=${r.profile}`,`decision=${r.decision}`,`outcome=${r.outcome}`,`reasonCode=${r.reasonCode}`,`acknowledgedLimitations=${r.acknowledgedLimitations.join(",")}`,`changeRouteCode=${r.changeRouteCode??"<null>"}`,`changeNote=${r.changeNote??"<null>"}`,`reportSha256=${r.reportSha256}`,`reportCreatedBy=${r.reportCreatedBy}`,`inventorySnapshotSha256=${r.inventorySnapshotSha256}`,`sourceArchiveSha256=${r.sourceArchiveSha256}`,`sourceManifestSha256=${r.sourceManifestSha256}`,`sourceLineageRootSha256=${r.sourceLineageRootSha256}`,"releaseEligible=false",`reviewerIdentity=${r.decidedBy}`].join("\n"),decisionSnapshotSha256=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(payload))),b=>b.toString(16).padStart(2,"0")).join("");return{...review,decisionSnapshotSha256}}
+  test("posts the exact report binding and strictly decodes acceptance",async()=>{const exact=await sealed(accepted);let sent:Record<string,unknown>|null=null;const fetcher=(async(_url:string|URL|Request,init?:RequestInit)=>{sent=JSON.parse(String(init?.body)) as Record<string,unknown>;return Response.json(exact,{status:201})})as typeof fetch;expect(await decideDraftInventoryReport(report,"admin",{decision:"accept_bounded_internal_draft",acknowledgedLimitations:DRAFT_REPORT_LIMITATIONS},fetcher)).toEqual(exact);expect(sent).toMatchObject({decision:"accept_bounded_internal_draft",expectedReportSha256:report.reportSha256,changeRouteCode:null,changeNote:null});await expect(revisitDraftInventoryReportReview(report,"member",(async()=>Response.json({...exact,decisionSnapshotSha256:"f".repeat(64)}))as typeof fetch)).rejects.toThrow("not recognized")})
+  test("accepts an HTML-looking note as inert data but rejects control characters from the response",async()=>{const changes=await sealed({...accepted,decision:"changes_requested",outcome:"changes_requested",reasonCode:"report_revision_required",acknowledgedLimitations:[],changeRouteCode:"report_presentation_revision_required",changeNote:"Show <script>alert('x')</script> as reviewer text."});expect(await revisitDraftInventoryReportReview(report,"member",(async()=>Response.json(changes))as typeof fetch)).toEqual(changes);await expect(revisitDraftInventoryReportReview(report,"member",(async()=>Response.json({...changes,changeNote:"bad\ttext"}))as typeof fetch)).rejects.toThrow("not recognized");expect(await revisitDraftInventoryReportReview(report,"outsider",(async()=>Response.json({error:"Workspace not found."},{status:404}))as typeof fetch)).toBeNull()})
+  test("uses one labelled decision group, conditional radio paths, linked note status and full hashes",async()=>{const source=await Bun.file(new URL("../components/CompanyWorkspaceDemo.tsx",import.meta.url)).text(),section=source.slice(source.indexOf('M61 · exact-report'),source.indexOf('</section>}',source.indexOf('M61 · exact-report')));expect(section.match(/<fieldset/g)).toHaveLength(1);expect(section).toContain("<legend>Choose one decision for this exact report</legend>");expect(section.match(/type="radio"/g)).toHaveLength(2);expect(section).toContain('aria-describedby="draft-report-note-remaining"');expect(section).toContain('id="draft-report-note-remaining"');expect(section).toContain("Exact report SHA-256: {draftReport.reportSha256}");expect(section).toContain("Decision snapshot SHA-256: {draftReportReview.decisionSnapshotSha256}");expect(section).not.toContain("slice(0,12)")})
+})
+
+describe("M58 annual register browser boundary",()=>{
+  const ids={register:"31313131-3131-4131-8131-313131313131",boundary:"32323232-3232-4232-8232-323232323232",inventory:"33333333-3333-4333-8333-333333333333",facility:"34343434-3434-4434-8434-343434343434",actor:"35353535-3535-4535-8535-353535353535"}
+  const months=Array.from({length:12},(_,i)=>`2023-${String(i+1).padStart(2,"0")}`)
+  const initial={id:ids.register,companyId:fixture.id,boundaryId:ids.boundary,previousInventoryVersionId:ids.inventory,version:1,reportingYear:2023,facilityId:ids.facility,status:"incomplete",counts:{expected:12,resolved:1,reported:1,estimated:0,excluded:0,missing:11,calculationBearing:1},periods:months.map((month,index)=>index===0?{month,state:"reported",version:1,quantityMwh:"12.346000",emissionsKgCo2e:"2407.9674055248",evidence:{source:"M56 calculation derived from M55 bill version 2",sha256:"a".repeat(64),locator:"service"},reason:null,method:null,formula:null,basisMonths:[]}:{month,state:"missing",version:1,quantityMwh:null,emissionsKgCo2e:null,evidence:null,reason:"awaiting_source",method:null,formula:null,basisMonths:[]}),totals:null,fixtureSha256:null,snapshotSha256:"b".repeat(64),createdBy:ids.actor,createdAt:"2026-09-13T12:00:00.000Z"}
+  test("accepts the exact initial denominator and rejects hidden zeroes",()=>{
+    expect(decodeAnnualRegister(initial,fixture.id)).toEqual(initial)
+    const changed=structuredClone(initial);changed.periods[11]!.quantityMwh="0.000000"
+    expect(()=>decodeAnnualRegister(changed,fixture.id)).toThrow("not recognized")
+    expect(()=>decodeAnnualRegister(initial,fixture.id,{version:2})).toThrow("not recognized")
+    expect(()=>decodeAnnualRegister(initial,fixture.id,{januaryEvidenceSha256:"f".repeat(64)})).toThrow("not recognized")
+  })
+  test("pins every final evidence locator and exception",()=>{
+    const q=["12.346000","11.982000","12.417000","11.876000","12.104000","13.228000","14.037000","13.812000","12.765000","12.221000","12.493000",null]
+    const e=["2407.9674055248","2336.9727404016","2421.8152660296","2316.2984697888","2360.7676556352","2579.9929402464","2737.7805338856","2693.8964689056","2489.689286532","2383.5873694248","2436.6383279784",null]
+    const hash="44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29"
+    const periods=months.map((month,index)=>index<10?{month,state:"reported",version:index===0?1:2,quantityMwh:q[index],emissionsKgCo2e:e[index],evidence:index===0?initial.periods[0]!.evidence:{source:"M58 fixed fictional electricity register",sha256:hash,locator:`rows[${index-1}]`},reason:null,method:null,formula:null,basisMonths:[]}:index===10?{month,state:"estimated",version:2,quantityMwh:q[index],emissionsKgCo2e:e[index],evidence:null,reason:"synthetic_november_statement_unavailable",method:"mean_of_prior_two_reported_months_v1",formula:"(12.765000 + 12.221000) / 2",basisMonths:["2023-09","2023-10"]}:{month,state:"excluded",version:2,quantityMwh:null,emissionsKgCo2e:null,evidence:{source:"M58 fixed fictional electricity register",sha256:hash,locator:"closureMemo"},reason:"outside_operational_control_after_lease_end",method:null,formula:null,basisMonths:[]})
+    const final={...initial,id:"37373737-3737-4737-8737-373737373737",version:2,status:"resolved_with_exceptions",counts:{expected:12,resolved:12,reported:10,estimated:1,excluded:1,missing:0,calculationBearing:11},periods,totals:{reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",reportedDisplayKgCo2e:"24728.7681",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",estimatedDisplayKgCo2e:"2436.6383",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"},fixtureSha256:hash}
+    expect(decodeAnnualRegister(final,fixture.id,{version:2})).toEqual(final)
+    const canonicalOrder={...final,counts:Object.fromEntries(Object.entries(final.counts).reverse()),totals:Object.fromEntries(Object.entries(final.totals).reverse())}
+    expect(decodeAnnualRegister(canonicalOrder,fixture.id,{version:2})).toEqual(canonicalOrder)
+    const lineage={version:2 as const,previousInventoryVersionId:final.previousInventoryVersionId,boundaryId:final.boundaryId,facilityId:final.facilityId,januaryEvidenceSha256:"a".repeat(64),januaryCalculationId:"41414141-4141-4141-8141-414141414141"}
+    const exactFinal={...final,periods:final.periods.map((period,index)=>index===0?{...period,evidence:{source:"M56 calculation derived from M55 bill version 2",sha256:"a".repeat(64),locator:"calculation 41414141-4141-4141-8141-414141414141; service 2023-01-01..2023-01-31"}}:period)}
+    expect(decodeAnnualRegister(exactFinal,fixture.id,lineage)).toEqual(exactFinal)
+    for(const changed of [{...exactFinal,boundaryId:"42424242-4242-4242-8242-424242424242"},{...exactFinal,facilityId:"43434343-4343-4343-8343-434343434343"},{...exactFinal,previousInventoryVersionId:"44444444-4444-4444-8444-444444444444"},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===0?{...p,evidence:{...(p.evidence as object),source:"other"}}:p)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===0?{...p,evidence:{...(p.evidence as object),locator:"calculation 45454545-4545-4545-8545-454545454545; service 2023-01-01..2023-01-31"}}:p)},{...exactFinal,fixtureSha256:"e".repeat(64)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===1?{...p,evidence:{...(p.evidence as object),source:"other"}}:p)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===9?{...p,evidence:{...(p.evidence as object),locator:"rows[0]"}}:p)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===11?{...p,evidence:{...(p.evidence as object),sha256:"e".repeat(64)}}:p)}]) expect(()=>decodeAnnualRegister(changed,fixture.id,lineage)).toThrow("not recognized")
+  })
+  test("requires incomplete and unreleased inventory version 2",()=>{
+    const totals={reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",reportedDisplayKgCo2e:"24728.7681",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",estimatedDisplayKgCo2e:"2436.6383",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"}
+    const annual={id:ids.inventory,companyId:fixture.id,boundaryId:ids.boundary,previousInventoryVersionId:"36363636-3636-4636-8636-363636363636",registerId:ids.register,registerSnapshotSha256:"c".repeat(64),version:2,reportingYear:2023,scope:"scope_2_location_based",periodResolution:"resolved_with_exceptions",overallInventoryCompleteness:"incomplete",releaseEligible:false,counts:{expected:12,resolved:12,reported:10,estimated:1,excluded:1,missing:0,calculationBearing:11},totals,warnings:[...ANNUAL_WARNINGS],snapshotSha256:"d".repeat(64),submittedBy:ids.actor,submittedAt:"2026-09-13T12:00:00.000Z",decision:null}
+    expect(decodeAnnualInventory(annual,fixture.id)).toEqual(annual)
+    expect(()=>decodeAnnualInventory({...annual,overallInventoryCompleteness:"complete"},fixture.id)).toThrow("not recognized")
+    expect(()=>decodeAnnualInventory({...annual,releaseEligible:true},fixture.id)).toThrow("not recognized")
+    const approved={...annual,decision:{id:"38383838-3838-4838-8838-383838383838",decision:"approve_bounded_annual_location_draft",outcome:"approved_bounded_annual_location_draft",reasonCode:"bounded_annual_location_register_reviewed",acknowledgedWarnings:[...ANNUAL_WARNINGS],decidedBy:"39393939-3939-4939-8939-393939393939",decidedAt:"2026-09-13T12:01:00.000Z"}}
+    const lineage={inventoryId:annual.id,registerId:annual.registerId,previousInventoryVersionId:annual.previousInventoryVersionId,boundaryId:annual.boundaryId,registerSnapshotSha256:annual.registerSnapshotSha256}
+    expect(decodeAnnualInventory(approved,fixture.id,lineage)).toEqual(approved)
+    for(const changed of [{...approved,registerId:"46464646-4646-4646-8646-464646464646"},{...approved,previousInventoryVersionId:"47474747-4747-4747-8747-474747474747"},{...approved,boundaryId:"48484848-4848-4848-8848-484848484848"},{...approved,registerSnapshotSha256:"e".repeat(64)}])expect(()=>decodeAnnualInventory(changed,fixture.id,lineage)).toThrow("not recognized")
+    for(const changed of [{...approved,decision:{...approved.decision,extra:true}},{...approved,decision:{...approved.decision,outcome:"changes_requested"}},{...approved,decision:{...approved.decision,acknowledgedWarnings:[]}},{...approved,decision:{...approved.decision,decidedBy:annual.submittedBy}},{...approved,decision:{...approved.decision,decidedAt:"later"}}])expect(()=>decodeAnnualInventory(changed,fixture.id)).toThrow("not recognized")
+  })
+})
+
 describe("M55 bill browser boundary", () => {
   test("accepts only the exact bounded bill response", () => {
     expect(decodeSyntheticBill(billFixture)).toEqual(billFixture)
@@ -150,5 +226,52 @@ describe("M56 draft calculation browser boundary", () => {
     await replaySyntheticBillCalculation(fixture.id, billFixture.id, calculatedFixture.draftCalculation.record, "admin", fetcher)
     expect(observed?.url).toBe(`/workspace-api/workspace/${fixture.id}/bills/${billFixture.id}/calculate/replay`)
     expect(JSON.parse(String(observed?.body))).toEqual({ idempotencyKey: expect.stringMatching(/^[0-9a-f-]{36}$/), record: calculatedFixture.draftCalculation.record })
+  })
+})
+
+describe("M57 inventory review browser boundary", () => {
+  const inventory: SyntheticInventory = {
+    id: "21212121-2121-4121-8121-212121212121", companyId: fixture.id, boundaryId: fixture.boundary.id, calculationId: calculatedFixture.draftCalculation.id,
+    version: 1, reportingYear: 2023, scope: "scope_2_location_based", reviewState: "awaiting_review", completeness: "incomplete", releaseEligible: false,
+    coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: ["2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12"] },
+    warnings: [...INVENTORY_WARNINGS], line: { facilityId: fixture.facility.id, servicePeriodStart: "2023-01-01", servicePeriodEnd: "2023-01-31", quantityMwh: "12.346000", subtotalKgCo2e: "2407.9674", calculationResultSha256: "b".repeat(64) },
+    snapshotSha256: "d".repeat(64), submittedBy: "11111111-1111-4111-8111-111111111111", submittedAt: "2026-09-13T12:00:00.000Z", decision: null,
+  }
+
+  test("accepts the exact incomplete snapshot and sends only bounded commands", async () => {
+    const observed: Array<{ url: string; body: unknown }> = []
+    const fetcher = (async (url: string | URL | Request, init?: RequestInit) => { observed.push({ url: String(url), body: init?.body }); return Response.json(inventory, { status: init?.method === "POST" ? 201 : 200 }) }) as typeof fetch
+    expect(await revisitSyntheticInventory(fixture.id, "member", fetcher)).toEqual(inventory)
+    await prepareSyntheticInventory(fixture.id, calculatedFixture.draftCalculation.id, "owner", fetcher)
+    await decideSyntheticInventory(inventory, "approve_bounded_draft", "admin", fetcher)
+    expect(JSON.parse(String(observed[1]!.body))).toEqual({ calculationId: calculatedFixture.draftCalculation.id, idempotencyKey: expect.stringMatching(/^[0-9a-f-]{36}$/) })
+    expect(JSON.parse(String(observed[2]!.body))).toEqual({ decision: "approve_bounded_draft", expectedInventorySnapshotSha256: inventory.snapshotSha256, acknowledgedWarnings: [...INVENTORY_WARNINGS], reasonCode: "bounded_synthetic_scope_reviewed", idempotencyKey: expect.stringMatching(/^[0-9a-f-]{36}$/) })
+  })
+
+  test("rejects completeness, release and warning drift", async () => {
+    for (const changed of [
+      { ...inventory, completeness: "complete" }, { ...inventory, releaseEligible: true }, { ...inventory, warnings: inventory.warnings.slice(1) },
+      { ...inventory, coverage: { ...inventory.coverage, coveredPeriods: 12 } }, { ...inventory, line: { ...inventory.line, subtotalKgCo2e: "2407.9675" } },
+      { ...inventory, injected: true }, { ...inventory, coverage: { ...inventory.coverage, injected: true } },
+      { ...inventory, coverage: { ...inventory.coverage, missingMonths: ["2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2024-01"] } },
+      { ...inventory, submittedAt: "sometime" }, { ...inventory, companyId: "99999999-9999-4999-8999-999999999999" },
+    ]) {
+      const fetcher = (async () => Response.json(changed)) as typeof fetch
+      await expect(revisitSyntheticInventory(fixture.id, "owner", fetcher)).rejects.toThrow("not recognized")
+    }
+  })
+
+  test("accepts only an exact two-person immutable decision", async () => {
+    const approved = { ...inventory, reviewState: "approved_bounded_draft" as const, decision: { id: "23232323-2323-4323-8323-232323232323", decision: "approve_bounded_draft" as const, outcome: "approved_bounded_draft" as const, acknowledgedWarnings: [...INVENTORY_WARNINGS], reasonCode: "bounded_synthetic_scope_reviewed", decidedBy: "22222222-2222-4222-8222-222222222222", decidedAt: "2026-09-13T12:01:00.000Z" } }
+    const fetcher = (value: unknown) => (async () => Response.json(value)) as typeof fetch
+    expect(await revisitSyntheticInventory(fixture.id, "member", fetcher(approved))).toEqual(approved)
+    for (const changed of [
+      { ...approved, decision: { ...approved.decision, extra: true } },
+      { ...approved, decision: { ...approved.decision, decision: "changes_requested" } },
+      { ...approved, decision: { ...approved.decision, reasonCode: "source_or_calculation_revision_required" } },
+      { ...approved, decision: { ...approved.decision, acknowledgedWarnings: [] } },
+      { ...approved, decision: { ...approved.decision, decidedBy: inventory.submittedBy } },
+      { ...approved, decision: { ...approved.decision, decidedAt: "tomorrow" } },
+    ]) await expect(revisitSyntheticInventory(fixture.id, "member", fetcher(changed))).rejects.toThrow("not recognized")
   })
 })

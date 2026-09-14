@@ -13,7 +13,7 @@ jurisdiction: Global
 scope: [1]
 business_size: any
 tags: [scope-1, combustion, mobile, fleet, vehicles, gasoline, diesel, on-road, off-road, carb-mrr]
-last_updated: 2026-04-25
+last_updated: 2026-09-14
 source_count: 4
 references:
   - ghg-protocol-corporate-standard
@@ -22,6 +22,12 @@ references:
   - carb-mrr-2018
 parent: scope-1
 calculation_spec:
+  readiness:
+    status: deferred
+    blockers:
+      - implementation_missing
+      - factor_release_missing
+      - approved_expectations_missing
   function_id: scope1_mobile_combustion_fuel
   version: 1
   inputs:
@@ -80,7 +86,7 @@ calculation_spec:
   output_unit: kg CO2e
   notes:
     - "Method: Fuel-based (Method 1 on this page). Distance-based (Method 2) will get a separate function_id `scope1_mobile_combustion_distance` in a later version."
-    - "Factor records of factor_type='combustion-mobile' must be loaded before this spec is executable. Pending factor extraction from EPA GHG Emission Factors Hub 2025 (Mobile Combustion sheet) and DEFRA 2024 (Passenger and Freight road tables)."
+    - "Factor records of factor_type='combustion-mobile' must be loaded before this spec is executable. Pending factor extraction from EPA GHG Emission Factors Hub 2025 (Mobile Combustion table within the Emission Factors Hub worksheet) and DEFRA 2024 (Passenger and Freight road tables)."
     - "Schema dependency: the emission_factors table needs a `vehicle_class` column and a `model_year_band` column. Tracked alongside the `unit_class` / `input_unit_canonical` / `required_by` enum schema fixes from the 2026-04-25 readiness audit."
   test_cases:
     - name: "Motor Gasoline — passenger car, 1,000 gallons (post-2010, US-national, CARB-MRR 2025)"
@@ -159,11 +165,11 @@ Any organisation that owns or operates vehicles or mobile equipment under its op
 
 ## Step-by-Step
 
-There are two methods. Choose the highest-tier method your data supports — the **fuel-based** method is preferred under EPA, GHG Protocol, and CARB MRR guidance, and is the executable v1 of this methodology. The **distance-based** method is the fallback when fuel records are unavailable.
+There are two methods. Choose the highest-tier method your data supports — the **fuel-based** method is preferred under EPA, GHG Protocol, and CARB MRR guidance, and is the planned v1 of this methodology. Execution is deferred pending reviewed factors, schema/resolver support, a calculation module and independently pinned expected results. The **distance-based** method is the fallback when fuel records are unavailable.
 
 ---
 
-### Method 1 — Fuel-Based (Recommended, executable)
+### Method 1 — Fuel-Based (Planned; execution deferred)
 
 Tracks fuel consumed by vehicle. Most accurate when fuel records exist (fleet fuel cards, bulk fuel deliveries with logbook attribution, sub-metered fuelling stations).
 
@@ -188,7 +194,7 @@ For mixed fleets where fuel cards do not distinguish vehicle class, allocate by 
 Emissions (kg CO₂e) = Fuel quantity × Mobile EF (kg CO₂e per fuel unit)
 ```
 
-The combined CO₂e factor incorporates CO₂, CH₄, and N₂O contributions weighted by GWP. Mobile factors are sourced from the EPA GHG Emission Factors Hub 2025 (Mobile Combustion table) and the DEFRA 2024 Conversion Factors and stored in the external database with `factor_type = 'combustion-mobile'`.
+The combined CO₂e factor incorporates CO₂, CH₄, and N₂O contributions weighted by GWP. The planned mobile factors require applicability review and extraction from candidate sources such as the EPA GHG Emission Factors Hub 2025 (Mobile Combustion table) and the DEFRA 2024 Conversion Factors. No mobile factor records are currently released in the external database; `factor_type = 'combustion-mobile'` remains a proposed schema dependency.
 
 For regulatory reporting requiring individual gas breakdown:
 

@@ -1,0 +1,32 @@
+{
+  "files": [
+    ".github/workflows/verify.yml",
+    "CLAUDE.md",
+    "docs/research/m62-accounting-disposition.md",
+    "docs/research/m62-pr-reconciliation.json",
+    "docs/research/m62-technical-handoff.md",
+    "docs/research/pr3-merge-readiness-milestone-62.md",
+    "evaluations/research-qa/milestone62-merge-readiness.md",
+    "ghg-kb/calculations/README.md",
+    "ghg-kb/calculations/spec_loader.py",
+    "ghg-kb/calculations/tests/test_harness.py",
+    "ghg-kb/calculations/tests/test_spec_readiness.py",
+    "ghg-kb/docs/specs/calculation-spec-schema.md",
+    "ghg-kb/wiki/log.md",
+    "ghg-kb/wiki/methodologies/scope-1-mobile-combustion.md",
+    "operations/agent-improvement/README.md",
+    "operations/agent-improvement/m62-pilot-review.md",
+    "operations/agent-improvement/m62-qa-process-acceptance.md",
+    "operations/agent-improvement/runs/M62-ACCOUNTING.json",
+    "operations/agent-improvement/runs/M62-CTO.json",
+    "operations/agent-improvement/runs/M62-QA.json",
+    "operations/agent-improvement/snapshots/M62-ACCOUNTING.json",
+    "operations/agent-improvement/snapshots/M62-CTO.json",
+    "operations/agent-improvement/snapshots/M62-QA.json",
+    "operations/agent-improvement/status.json",
+    "operations/board-report.md",
+    "operations/next-session.md",
+    "operations/status.json",
+    "operations/agent-improvement/m62-publication-files.json"
+  ]
+}

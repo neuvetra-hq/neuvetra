@@ -36,6 +36,46 @@ export interface WorkspaceStore {
   linkBill(userId: string, workspaceId: string, evidenceId: string, boundaryId: string): Promise<SyntheticBill>
   calculateBill(userId: string, workspaceId: string, evidenceId: string, idempotencyKey: string): Promise<SyntheticBill>
   findBill(userId: string, workspaceId: string, evidenceId: string): Promise<SyntheticBill | null>
+  findInventory?(userId: string, workspaceId: string): Promise<SyntheticInventory | null>
+  createInventory?(userId: string, workspaceId: string, calculationId: string, idempotencyKey: string): Promise<SyntheticInventory>
+  decideInventory?(userId: string, workspaceId: string, inventoryId: string, input: InventoryDecisionInput): Promise<SyntheticInventory>
+  findAnnualRegisters?(userId: string, workspaceId: string): Promise<AnnualRegister[]>
+  createAnnualRegister?(userId: string, workspaceId: string, previousInventoryVersionId: string, idempotencyKey: string): Promise<AnnualRegister>
+  completeAnnualRegister?(userId: string, workspaceId: string, registerId: string, expectedSnapshotSha256: string, idempotencyKey: string): Promise<AnnualRegister>
+  findAnnualInventory?(userId: string, workspaceId: string): Promise<AnnualInventory | null>
+  createAnnualInventory?(userId: string, workspaceId: string, registerId: string, idempotencyKey: string): Promise<AnnualInventory>
+  reviewAnnualInventory?(userId: string, workspaceId: string, inventoryId: string, input: AnnualInventoryDecisionInput): Promise<AnnualInventory>
+  createAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string, expectedInventorySnapshotSha256: string, idempotencyKey: string): Promise<EvidencePackRecord>
+  findAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string): Promise<EvidencePackRecord | null>
+  replayAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string, packId: string, archive: Uint8Array): Promise<EvidencePackReceipt>
+  createDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string,packId:string,expectedInventorySnapshotSha256:string,expectedArchiveSha256:string,idempotencyKey:string):Promise<DraftInventoryReportRecord>
+  findDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string):Promise<DraftInventoryReportRecord|null>
+  reviewDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string,reportId:string,input:DraftReportReviewInput):Promise<DraftInventoryReportReviewRecord>
+  findDraftInventoryReportReview?(userId:string,workspaceId:string,inventoryId:string,reportId:string):Promise<DraftInventoryReportReviewRecord|null>
+}
+
+export interface EvidencePackRecord { id:string;companyId:string;inventoryId:string;profile:"neuvetra.synthetic.inventory-evidence-pack.v1";manifestSha256:string;lineageRootSha256:string;archiveSha256:string;archiveByteLength:number;entryCount:17;createdBy:string;createdAt:string;archive:Uint8Array }
+export interface EvidencePackReceipt { status:"verified_match";profile:"neuvetra.synthetic.inventory-evidence-pack.v1";archiveSha256:string;manifestSha256:string;lineageRootSha256:string;entryCount:17;inventoryId:string;reconstructed:{expected:12;reported:10;estimated:1;excluded:1;missing:0;reportedMwh:"126.788000";reportedKgCo2e:"24728.7681363744";estimatedMwh:"12.493000";estimatedKgCo2e:"2436.6383279784";includedMwh:"139.281000";includedKgCo2e:"27165.4064643528";includedDisplayKgCo2e:"27165.4065"};overallInventoryCompleteness:"incomplete";releaseEligible:false }
+export interface DraftInventoryReportRecord{id:string;companyId:string;inventoryId:string;evidencePackId:string;profile:"neuvetra.synthetic.inventory-draft-report.v1";inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;reportSha256:string;reportByteLength:number;createdBy:string;createdAt:string;report:Uint8Array}
+
+export interface AnnualInventoryDecisionInput {
+  decision: "approve_bounded_annual_location_draft" | "changes_requested"
+  reasonCode: "bounded_annual_location_register_reviewed" | "source_or_calculation_revision_required"
+  acknowledgedWarnings: string[]
+  expectedInventorySnapshotSha256: string
+  idempotencyKey: string
+}
+
+export const INVENTORY_WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"] as const
+export interface InventoryDecisionInput { decision: "approve_bounded_draft" | "changes_requested"; expectedInventorySnapshotSha256: string; acknowledgedWarnings: string[]; reasonCode: "bounded_synthetic_scope_reviewed" | "source_or_calculation_revision_required"; idempotencyKey: string }
+export interface SyntheticInventory {
+  id: string; companyId: string; boundaryId: string; calculationId: string; version: 1; reportingYear: 2023; scope: "scope_2_location_based"
+  reviewState: "awaiting_review" | "approved_bounded_draft" | "changes_requested"; completeness: "incomplete"; releaseEligible: false
+  coverage: { expectedFacilities: 1; coveredFacilities: 1; expectedPeriods: 12; coveredPeriods: 1; coveredMonths: ["2023-01"]; missingMonths: string[] }
+  warnings: string[]
+  line: { facilityId: string; servicePeriodStart: "2023-01-01"; servicePeriodEnd: "2023-01-31"; quantityMwh: "12.346000"; subtotalKgCo2e: "2407.9674"; calculationResultSha256: string }
+  snapshotSha256: string; submittedBy: string; submittedAt: string
+  decision: null | { id: string; decision: "approve_bounded_draft" | "changes_requested"; outcome: "approved_bounded_draft" | "changes_requested"; acknowledgedWarnings: string[]; reasonCode: "bounded_synthetic_scope_reviewed" | "source_or_calculation_revision_required"; decidedBy: string; decidedAt: string }
 }
 
 export interface SyntheticBill {
@@ -97,3 +137,5 @@ export interface SyntheticBill {
     record: Record<string, unknown>
   }
 }
+import type { AnnualInventory, AnnualRegister, DraftInventoryReportReviewRecord, DraftReportReviewInput } from "@neuvetra/database"
+export type { AnnualInventory, AnnualRegister, DraftInventoryReportReviewRecord, DraftReportReviewInput } from "@neuvetra/database"

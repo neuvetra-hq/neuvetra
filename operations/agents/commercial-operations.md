@@ -26,3 +26,9 @@ Deliver a concrete process/runbook or commercial proposal with assumptions, cust
 ## Done / escalation
 
 Done means the process is usable for its declared scope, promises are supported and dependencies/approvals are explicit. Escalate new commitments, unsupported claims, material cost or legal uncertainty; continue preparation that does not depend on those decisions.
+
+## Improvement and compute defaults
+
+For new assignments, use the [shared improvement workflow](../agent-improvement/README.md), this role's [registered compute route](../agent-improvement/roles.json), and [benchmark brief](../agent-improvement/benchmarks.md#commercial-operations). Apply critical routing where the task risk requires it. Record requested versus observed settings and preserve unknown resource measurements. Already-dispatched work is unchanged.
+
+Start from demonstrated product coverage and label assumptions in pricing/support scenarios. Evaluate one usable onboarding or support journey; never count proposals as observed customers, revenue or activated services.

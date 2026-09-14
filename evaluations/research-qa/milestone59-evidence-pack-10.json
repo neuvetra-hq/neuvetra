@@ -1,0 +1,180 @@
+{
+  "schema_version": "m59_inventory_evidence_pack_independent_qa_v1",
+  "task_id": "M59-FINAL-QA",
+  "reviewed_at": "2026-09-14T15:21:46Z",
+  "reviewer_role": "independent Head of QA with accounting, tenant-security, archive-integrity, accessibility and product-claim challenge",
+  "reviewer_signature": "Neuvetra independent QA reviewer 10",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M59 implementation. This review artifact is the reviewer's only persistent change.",
+  "reviewed_git_state": {
+    "head": "f0e243b3c888398988fa5e0296ba564f2b7222dc",
+    "branch": "codex/m57-inventory-review",
+    "working_tree": "dirty and unpublished",
+    "binding": "This verdict applies only to the exact SHA-256 bindings below. Unrelated tracked and untracked files are outside scope."
+  },
+  "verdict": {
+    "status": "PASS",
+    "milestone_gate_pass": true,
+    "release_acceptance": false,
+    "scope": "Bounded local-development M59 deterministic evidence pack for the fixed synthetic, independently approved M58 annual inventory only.",
+    "statement": "No material archive-integrity, deterministic-replay, arithmetic, lineage, tenant-security, API/browser-boundary, accessibility, claim-boundary or production-exclusion blocker remains in the exact reviewed bytes. This does not approve a production database, customer evidence, filing, assurance, deployment or public release."
+  },
+  "exact_contract_recalculation": {
+    "factor_kg_co2e_per_mwh": "195.0402888",
+    "reported_mwh": "126.788000",
+    "reported_kg_co2e": "24728.7681363744",
+    "estimated_mwh": "12.493000",
+    "estimated_kg_co2e": "2436.6383279784",
+    "included_mwh": "139.281000",
+    "included_kg_co2e": "27165.4064643528",
+    "included_display_kg_co2e": "27165.4065",
+    "counts": {"expected": 12, "reported": 10, "estimated": 1, "excluded": 1, "missing": 0},
+    "overall_inventory_completeness": "incomplete",
+    "release_eligible": false,
+    "independent_method": "Python Decimal summation and multiplication from the exact M58 monthly quantities and pinned factor, with no intermediate rounding and half-up display rounding only at four decimals."
+  },
+  "archive_contract": {
+    "profile": "neuvetra.synthetic.inventory-evidence-pack.v1",
+    "compression": "ZIP_STORED",
+    "entry_count": 17,
+    "entry_order": [
+      "manifest.json",
+      "workspace/workspace.json",
+      "evidence/m55-bill.pdf",
+      "evidence/m55-bill-manifest.json",
+      "evidence/m58-register.json",
+      "evidence/m58-register-manifest.json",
+      "lineage/m55-bill.json",
+      "lineage/m56-calculation-result.json",
+      "lineage/m57-inventory-version.json",
+      "lineage/m57-review-decision.json",
+      "lineage/m58-register-version-1.json",
+      "lineage/m58-register-version-2.json",
+      "lineage/m58-inventory-version-2.json",
+      "lineage/m58-review-decision.json",
+      "lineage/audit-events.json",
+      "authority/calculation-authorities.json",
+      "replay/contract.json"
+    ],
+    "observed_live_local_example": {
+      "source": "CEO coordinator browser observation supplied to the independent reviewer; corroborative, not a replacement for byte-bound automated checks",
+      "archive_byte_length": 39213,
+      "archive_sha256_prefix": "95158cf9",
+      "manifest_sha256_prefix": "5c42e89a",
+      "lineage_root_sha256_prefix": "3a4fdec7",
+      "workflow": "owner create, owner and member exact replay, outsider not found, signed-out authentication required"
+    }
+  },
+  "reviewed_file_sha256": {
+    "packages/neuvetra-database/src/m59.ts": "0d321dfa27fc98e7d72645f4bd476e46cf41999fd2b593d78d9906edcdb762dc",
+    "packages/neuvetra-database/src/m59.test.ts": "c868aa2f44fdc67e628e9e3aacc0a7e115b5aaf5fc279f03158c79005df54ae2",
+    "packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql": "2b786ee7c90b6cd65e398b0c8422d9e76f851a789a5318a7715039e123249dfd",
+    "packages/neuvetra-database/src/index.ts": "2e050ff2c104ba41222f416a87778cd0f683dce3d4dff669e0e2bf7c63942497",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "5528c885ef228eefc686c54c390aaeb1ed7c46aad057d5549f335b1c5379929b",
+    "apps/site-api/src/workspace/types.ts": "d44f0d1b4c60c24c83ff3cc2a8bab94ae5cac650f0a32715ef95ec0866f7f29c",
+    "apps/site-api/src/workspace/routes.ts": "7cddbd36e14cbf5639324374fe8e97978bbe702f611e1ffe087762b20190841b",
+    "apps/site-api/src/workspace/server.ts": "f1801e307c47dd288d991653403d97da651c1f0728a46ca72defc77ba1d5c1d4",
+    "apps/site-api/src/workspace/server.test.ts": "a569f8d8adfad9dae2a9a05b13ce814766ee789d6386cf20f1a08c043941eb0d",
+    "apps/site-web/src/lib/workspace-api.ts": "c96afcfe396f77b243ee455bf671d8b63c8d227fbd318758a4a4c0d127fb7577",
+    "apps/site-web/src/lib/workspace-api.test.ts": "cf0cf22d0b46e7833c21d695d73ed443a52474a79304558086218bd012a22b2a",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "7ef1a0659226d0038a18adf077f144cf004224db5e55e93889b40dea8f6809ff",
+    "apps/site-web/src/components/ResearchPreview.tsx": "6b149ce95bab1b1b3e1408aca03a29b91f79220b56627968891d6b9bc9f2b58c",
+    "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+    "data/synthetic/m58-electricity-register-2023.json": "44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29",
+    "data/synthetic/m58-electricity-register-2023.manifest.json": "41bb93caa7cb7dc638c82cb20a9660b25976ff72ff7fa49c4a08af1559c27352",
+    "apps/site-api/src/calculation/location_based_electricity.py": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+    "apps/site-api/src/calculation/linked_bill_calculation.py": "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e",
+    "evaluations/research-qa/milestone57-inventory-review-10.json": "7ad7dde4eb3ff1766c5cf53daede7b13deb61722a7032ead999144d79259351a",
+    "evaluations/research-qa/milestone58-annual-register-10.json": "f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491"
+  },
+  "acceptance_evidence": [
+    {
+      "area": "deterministic ZIP and strict parser",
+      "result": "PASS",
+      "evidence": "The writer fixes ZIP_STORED method, timestamps, flags, extras, comments and the 17-entry order. The parser checks local and central signatures, method, flags, sizes, CRC32, names, offsets, counts and end record, then requires byte equality with a canonical rebuild. Independent review confirmed explicit probes for changed local CRC/path, central CRC/path and central-directory order, along with byte, metadata and current-archive tamper rejection."
+    },
+    {
+      "area": "manifest, component hashes, lineage and replay",
+      "result": "PASS",
+      "evidence": "The manifest binds every non-manifest entry's name, media type, byte length and SHA-256. Its manifest digest, ordered lineage leaves and lineage-root digest are cross-checked. Replay canonicalizes JSON entries, reconstructs the input graph, verifies fixed source bytes and authorities, rebuilds the archive byte-for-byte, and reproduces the exact M58 counts and arithmetic."
+    },
+    {
+      "area": "stored-byte integrity and immutable persistence",
+      "result": "PASS",
+      "evidence": "The SQL writer independently recomputes SHA-256 over archive_bytes and verifies length before insertion. Reads check profile, count and length and run the full archive verifier before returning bytes or metadata. A privileged byte-corruption probe causes a bounded 503 rather than serving corrupted content. Both pack and audit tables force RLS, have composite tenant foreign keys and immutable update/delete triggers, expose member-select only, and revoke writer execution from public and authenticated roles."
+    },
+    {
+      "area": "authorization, tenant isolation and prerequisite gate",
+      "result": "PASS",
+      "evidence": "Creation requires an authenticated owner/administrator at both API and SQL layers and an exact approved M58 inventory snapshot whose submitter and reviewer differ. Members can read, download and replay but cannot create. Outsider reads converge on 404 and signed-out access on 401. Direct authenticated writes fail."
+    },
+    {
+      "area": "idempotency, conflict and failure behavior",
+      "result": "PASS",
+      "evidence": "Unique tenant/inventory/profile and tenant/idempotency constraints converge duplicate commands. Operation fingerprints bind the immutable request lineage; mismatched reuse and non-equivalent logical duplicates conflict. Tampered replay returns bounded 409, absent data returns 404, and stored-integrity failure returns bounded 503 without private details."
+    },
+    {
+      "area": "API and browser boundary",
+      "result": "PASS",
+      "evidence": "Mutations require allowed origin, bearer identity, exact bodies and bounded file size. Success schemas bind exact profile, entry count, hashes, IDs, totals, completeness and release state. The browser decoders require exact keys and values independent of JSON property order. Download verification computes SHA-256 over received bytes in addition to checking length and response hash header; a same-length changed-byte probe is rejected. UI controls are role/busy gated and status/error output uses live-region semantics."
+    },
+    {
+      "area": "production exclusion and truthful claims",
+      "result": "PASS",
+      "evidence": "Server startup requires all M54-M59 flags plus development/test NODE_ENV, and the web component is lazy-loaded only behind all six feature flags. The ordinary production build contains no scanned M59 route/profile/flag/hash/total markers. The UI labels the pack local and synthetic and retains incomplete, release false, fictional bill, unreleased factor/method, no filing, no assurance, no production database and no deployment/release claims."
+    }
+  ],
+  "commands": [
+    {"command": "bun test packages/neuvetra-database/src/m59.test.ts", "result": "PASS: 3 tests, 14 assertions"},
+    {"command": "bun test packages/neuvetra-database/src/synthetic-bill-security.test.ts packages/neuvetra-database/src/m59.test.ts", "result": "PASS: 12 tests, 144 assertions"},
+    {"command": "bun test apps/site-api/src/workspace/server.test.ts", "result": "PASS: 4 tests, 96 assertions"},
+    {"command": "bun test apps/site-web/src/lib/workspace-api.test.ts", "result": "PASS: 16 tests, 92 assertions"},
+    {"command": "bun test packages/neuvetra-database/src", "result": "PASS: 24 tests, 211 assertions"},
+    {"command": "bun test apps/site-api/src", "result": "PASS: 625 tests, 5,416 assertions"},
+    {"command": "bun test apps/site-web/src", "result": "PASS: 65 tests, 263 assertions"},
+    {"command": "python -m unittest discover -s apps/site-api/src/calculation -p *_test.py", "result": "PASS: 12 tests"},
+    {"command": "bun run --cwd packages/neuvetra-database typecheck", "result": "PASS"},
+    {"command": "bun run --cwd apps/site-api typecheck", "result": "PASS"},
+    {"command": "bun run --cwd apps/site-web typecheck", "result": "PASS"},
+    {"command": "bun run --cwd apps/site-web lint", "result": "PASS"},
+    {"command": "bun run --cwd apps/site-web build", "result": "PASS; ordinary production bundle built successfully"},
+    {"command": "production dist M59 marker scan", "result": "PASS: no M59 profile, feature flag, route, synthetic marker, exact total or observed live digest prefixes found"},
+    {"command": "git diff --check", "result": "PASS: no whitespace error; Git emitted future CRLF-to-LF normalization warnings only"}
+  ],
+  "findings": [
+    {
+      "id": "M59-QA-01",
+      "severity": "critical",
+      "status": "resolved",
+      "finding": "The initial database read path could return persisted archive bytes and claimed digests without revalidating the archive.",
+      "resolution_evidence": "Current reads validate profile/count/length and execute the complete archive verifier against stored archive, manifest and lineage digests plus company and inventory lineage before any read/download succeeds; privileged corruption is covered by a bounded-503 lifecycle test."
+    },
+    {
+      "id": "M59-QA-02",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial SQL writer did not independently prove that archive_sha256 described archive_bytes.",
+      "resolution_evidence": "Migration 0006 now computes encode(sha256(request_archive_bytes),'hex') and rejects any mismatch before persistence."
+    },
+    {
+      "id": "M59-QA-03",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial browser download boundary trusted size and a server-provided digest header, while receipt comparison depended on JSON key insertion order.",
+      "resolution_evidence": "The browser now computes SHA-256 over downloaded bytes and compares it with hash-bound metadata and the response header. Receipt values are checked by exact keys/values without order dependence; reversed-order acceptance and same-length changed-byte rejection pass."
+    },
+    {
+      "id": "M59-QA-04",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial parser evidence did not explicitly isolate local/central CRC, local/central path and central-entry-order mutations.",
+      "resolution_evidence": "The focused core suite now mutates each of those fields independently and the strict parser rejects every mutation."
+    }
+  ],
+  "limitations": [
+    "Persistence and RLS execution evidence uses PGlite, not a hosted Supabase/PostgreSQL deployment; hosted extension availability, grants and operational behavior require later deployment-stage review.",
+    "All source data, identities and company records are fixed and synthetic. No customer data or external provider was used.",
+    "The reviewer relied on the CEO coordinator's recorded live browser journey and independently inspected accessibility code/tests, but did not repeat a manual assistive-technology, keyboard-only, 200-percent zoom or 390-pixel browser session in this final repair turn.",
+    "The ZIP profile is deliberately narrow and internally parsed; interoperability with arbitrary third-party ZIP tooling was not a release criterion and was not exhaustively tested.",
+    "The evidence pack preserves an incomplete, unreleased synthetic inventory. It is not assurance evidence, a filing package or proof that factors, methods, Scope 1, Scope 3 or market-based Scope 2 are complete or approved."
+  ]
+}

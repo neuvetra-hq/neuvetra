@@ -353,6 +353,21 @@ h1, h2, h3, p { margin: 0; }
 .calculation-actions { display: flex; gap: 10px; margin-top: 18px; }
 .calculation-actions button { flex: 1; min-height: 42px; padding: 8px 12px; border: 1px solid #c5e6c83b; border-radius: 4px; background: transparent; color: #c8d4cb; font-size: 11px; }
 .calculation-actions button:hover { border-color: var(--research-accent); color: var(--research-accent); }
+.inventory-prepare { margin-top: 18px; width: 100%; }
+.inventory-review { margin-top: 1.25rem; padding: 1.5rem; border: 1px solid #d0b86b66; background: #101310; }
+.inventory-review h3 { margin: .55rem 0 1rem; font-size: 1.8rem; }
+.inventory-state { display: flex; justify-content: space-between; gap: 1rem; padding: 1rem; border-left: 4px solid #d0b86b; background: #d0b86b12; }
+.inventory-state span { color: var(--research-muted); }
+.inventory-table-wrap { margin-top: 1.25rem; overflow-x: auto; }
+.inventory-review table { width: 100%; border-collapse: collapse; text-align: left; }
+.inventory-review caption { padding-bottom: .7rem; color: var(--research-muted); text-align: left; }
+.inventory-review th, .inventory-review td { padding: .8rem; border: 1px solid var(--research-line); white-space: nowrap; }
+.inventory-warnings { margin: 1.25rem 0; padding: 1rem; border: 1px solid #d0b86b55; }
+.inventory-warnings h4, .inventory-history h4 { margin: 0 0 .6rem; }
+.inventory-warnings li { margin: .4rem 0; }
+.inventory-decision { margin-top: 1.25rem; }
+.inventory-decision label { display: block; margin: .65rem 0; }
+.inventory-history { margin-top: 1.25rem; padding: 1rem; border-left: 4px solid var(--research-accent); background: #b8efc510; }
 .calculation-replay-ok { margin-top: 12px; color: var(--research-accent); font-size: 10px; text-align: center; }
 .calculation-error { flex: 1; min-height: 260px; padding: 45px 12px; text-align: center; }
 .calculation-error > span { display: inline-block; padding: 5px 9px; border: 1px solid #d6bf9160; border-radius: 999px; color: #decba5; font-family: ui-monospace, "Cascadia Mono", monospace; font-size: 9px; }
@@ -483,6 +498,7 @@ h1, h2, h3, p { margin: 0; }
   .calculation-card { padding: 20px; }
   .calculation-inputs > div { grid-template-columns: 1fr; gap: 4px; }
   .calculation-actions { flex-direction: column; }
+  .inventory-state { flex-direction: column; }
   .calculation-validation { padding: 20px; }
   .calculation-validation-buttons { grid-template-columns: 1fr; }
   .calculation-validation-buttons button { min-height: 58px; }
