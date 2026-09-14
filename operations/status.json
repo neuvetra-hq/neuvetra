@@ -1,20 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T21:25:25.374257+00:00",
+  "updated_at": "2026-09-14T21:41:58.588828+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M64",
-    "name": "Guided synthetic electricity entry and versioned draft worksheet",
-    "status": "awaiting_board_feedback",
-    "next_gate": "Board feedback on the deployed guided synthetic worksheet before dependent work.",
+    "id": "M65",
+    "name": "Readable exact-version synthetic worksheet report",
+    "status": "planned",
+    "next_gate": "Define report snapshot/authorization contract and accounting wording before implementation.",
     "evidence": [
-      "docs/research/guided-electricity-entry-milestone-64.md",
-      "evaluations/research-qa/m63-board-closure.md",
-      "evaluations/research-qa/milestone64-private-worksheet.md",
-      "docs/research/m64-hosted-verification.json",
-      "evaluations/research-qa/m64-hosted-handoff.md"
+      "docs/research/worksheet-report-milestone-65.md",
+      "operations/feedback/2026-09-14-milestone-64.md"
     ]
   },
   "completed_milestones": [
@@ -82,6 +79,11 @@
       "id": "M63",
       "completed_at": "2026-09-14",
       "feedback": "operations/feedback/2026-09-14-milestone-63.md"
+    },
+    {
+      "id": "M64",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-64.md"
     }
   ],
   "runtime": {
@@ -91,16 +93,15 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M64 live on existing www.neuvetra.ai private synthetic staging; schema10, exact worksheet/history and original report verified; browser left open for board feedback.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M64 implementation, independent QA, six CI checks, hosted browser/API and restart checks passed. Scoped specialist deliveries closed; board feedback pending."
+    "last_session_work": "M64 board version4 verified and accepted; published head and live readiness rechecked. M65 scope selected; implementation not started."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T21:20:20.260531+00:00",
-    "path": "operations/next-session.md",
-    "board_record": "docs/research/m64-hosted-verification.json",
-    "next_task": "Collect board feedback on live M64 before selecting a dependent milestone.",
-    "execution_state": "m64_deployed_demonstration_pass_final_handoff_review_and_board_feedback_pending",
-    "review": "Independent native QA19/850, packaging review and hosted handoff accepted. Board feedback pending.",
-    "scope": "Synthetic guided January2023 CAMX electricity worksheet with immutable corrections and separate-manager review; no customer release."
+    "current": "M64 accepted and published; M65 planned",
+    "next": "CTO report snapshot/authorization contract and accounting wording review",
+    "evidence": [
+      "operations/feedback/2026-09-14-milestone-64.md",
+      "docs/research/worksheet-report-milestone-65.md"
+    ]
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -2016,7 +2017,7 @@
     "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/4",
     "draft": true,
     "merged": false,
-    "deployment_id": "47822f07-a13a-4452-8ce7-bc4039edab2f",
+    "deployment_id": "8aaa07f4-a7bd-4eb8-be5d-04eb7b7c3956",
     "ci_checks_passed": 6,
     "readiness_http": 200,
     "schema_version": 10,
@@ -2025,7 +2026,8 @@
     "active_workers_excluding_root": 0,
     "active_worker": null,
     "persistent_workers": false,
-    "board_feedback": "pending",
-    "evidence": "docs/research/m64-hosted-verification.json"
+    "board_feedback": "accepted",
+    "evidence": "docs/research/m64-hosted-verification.json",
+    "commit": "2b2129505ab613e0861039f23e5a751c7f1b9465"
   }
 }

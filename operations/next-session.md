@@ -1,3 +1,11 @@
+# M64 accepted and published; M65 selected
+
+The board accepted M64 after saving Version4: 25000.000 kWh -> 4876.0072 kg CO2e. Root verified the saved correction reason, three earlier versions and their review states, and persistence after refresh. Version4 remains awaiting a different manager review; board milestone acceptance does not create that review.
+
+M64 code is already pushed and deployed: 2b2129505ab613e0861039f23e5a751c7f1b9465, six successful CI checks, Railway deployment 8aaa07f4-a7bd-4eb8-be5d-04eb7b7c3956 SUCCESS, live schema10 readiness verified September14. Draft PR4 stays the rolling delivery line and is unmerged. See operations/feedback/2026-09-14-milestone-64.md. Historical entries below retain earlier evidence and pending gates; they are superseded by this section.
+
+M65 is selected: a readable, printable report for an exact saved synthetic worksheet version. Freeze source and review snapshots so later corrections or reviews cannot rewrite an earlier report. Scope and acceptance: docs/research/worksheet-report-milestone-65.md. Implementation has not started. First implementation gate: CTO report identity/authorization contract and accounting wording review, then engineering and independent QA. Preserve M63 reports, M64 records and candidate/incomplete/unreleased qualifications. No new hosting subscription or customer launch.
+
 # M64 live — board feedback next
 
 M64 is deployed on the existing https://www.neuvetra.ai private synthetic site. Invited managers can enter fictional January 2023 CAMX electricity, save exact subtotals, correct with a reason and review another manager's exact version. The real browser exercised review, negative-input refusal, correction, history and narrow-screen layout. Version3 remains unreviewed after correction; historical reviews remain. The original M63 report/review hashes are unchanged. Service restart and new authenticated readback pass.
