@@ -5,12 +5,12 @@ title: "Neuvetra — overview"
 aliases: [company overview, neuvetra at a glance]
 status: active
 created: 2026-04-25
-updated: 2026-09-08
-discussed_in: [2026-09-08-neuvetra-ghg-focus]
+updated: 2026-09-12
+discussed_in: [2026-09-08-neuvetra-ghg-focus, 2026-09-09-answer-quality-and-session-handoff, 2026-09-11-neuvetra-m42-deterministic-calculation, 2026-09-11-neuvetra-m43-rag-pilot-readiness, 2026-09-12-neuvetra-m46-live-failure-and-m47-remediation, 2026-09-12-neuvetra-m49-h02-regression-readiness, 2026-09-12-neuvetra-m50-live-adapter-blocked, 2026-09-12-neuvetra-m50-v4-live-adapter-readiness, 2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation]
 tags: [overview, synthesis]
 related: [frontdesk, terrascope, site, multi-product-launch, stack, ceo, c-suite, spirit, parent-landing-experience, 2026-04-25-spirit-as-brand-icon, 2026-04-25-spirit-packaging, 2026-04-25-wiki-architecture-policy, 2026-04-26-neuvetra-kb-design, 2026-04-27-site-deploy-and-dns, 2026-04-28-consolidate-into-single-monorepo]
 mentions: [frontdesk, terrascope, site, spirit]
-sources: []
+sources: [2026-09-09-answer-quality-and-session-handoff-conv]
 ---
 
 # Neuvetra — overview
@@ -26,6 +26,10 @@ Neuvetra is now focused on one California/U.S. greenhouse-gas research and accou
 This page is the chatbot's "what is Neuvetra" answer. Every other curated page sits beneath it.
 
 ## Current state
+
+**September 12 product checkpoint:** [[2026-09-12-neuvetra-m46-live-failure-and-m47-remediation]] records the failed, sealed and non-reusable first M43 canary. [[2026-09-12-neuvetra-m47-v4-offline-closure]] records its accepted local repair, and [[2026-09-12-neuvetra-m48-heldout-selection-blocked]] records why no remaining M43 case is novel inside S01–S18. The board chose the regression route; [[2026-09-12-neuvetra-m49-h02-regression-readiness]] records its offline package. M50 v4 later made one approved analyze request and failed safely after exact $0.033685 settlement, with no answer or retry. [[2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation]] records that closure and the independently accepted M51 v4 provider-disabled diagnostic/wrapper repair. The exact M50 response subtype and live compatibility remain unknowable. No live rerun or publication is authorized. Customer pilot, tenant isolation and production remain open. M42 remains the first accepted local deterministic calculation slice. See [the current board report](../operations/board-report.md) and [handoff](../operations/next-session.md).
+
+**September 9 live validation and benchmark:** [[2026-09-09-scope2-benchmark]] supersedes the earlier queued-only handoff. The initial live EPA test met13/21 expectations; the isolated official ten-question benchmark scored0/20, with original failures preserved. General question handling and a separately reviewed EPA supplier inquiry were improved; a provider compatibility failure was independently diagnosed and repaired. New GHG Protocol hosted content remains separately held. Current local work is unpublished; no persistent agent team or scheduled continuation is configured.
 
 **September 8 correction:** the source repository is preserved at `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). Current GHG work must not inherit the completion claims below: the TypeScript calculator/database are throwing stubs, the Python suite has unfinished expectations, and the legacy RAG pipeline does not verify claim support. The new assessment and source manifests live in [`docs/research/`](../docs/research/). Signed-in Railway inspection confirms Site and FrontDesk still deploy from the old repositories; public FrontDesk API health failed. The following April sections are historical context, not current product scope or readiness.
 

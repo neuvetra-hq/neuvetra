@@ -1,0 +1,164 @@
+{
+  "schema_version": "m56_synthetic_bill_calculation_independent_review_v1",
+  "task_id": "M56-QA-FINAL",
+  "reviewed_at": "2026-09-13T23:30:00Z",
+  "reviewer_role": "independent Head of QA with accounting and tenant-security challenge",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M56 implementation or milestone documents. This review artifact is the reviewer's only persistent change.",
+  "review_scope": "Exact current M56 candidate for the single local synthetic M55 version-2 bill to M53-derived CAMX draft calculation, including arithmetic, immutable lineage, RLS and role boundaries, API/process behavior, browser decoding and UI claims, replay, concurrency, production exclusion, and regressions.",
+  "reviewed_git_state": {
+    "head": "ca233f5bdc2d4c9e229c7f3e134853f88d4f1282",
+    "working_tree": "dirty and unpublished",
+    "binding": "This verdict applies only to the 19 exact hashes below. Substantial unrelated untracked research and evaluation history was outside scope."
+  },
+  "reviewed_file_sha256": {
+    "docs/research/synthetic-bill-calculation-milestone-56-product-brief.md": "bcc874dc8402bf9e3173432dd4cf6d3f06d634ca0f905b19c078a541f9e5763b",
+    "docs/research/synthetic-bill-calculation-milestone-56-technical-contract.md": "0f39cf9db7c2f3044d1f249f1c1069096328fc15f51a5be39dfc5c87895e7b2d",
+    "docs/research/synthetic-bill-calculation-milestone-56.md": "8fd0f779919e4fa268f1ceaa0c36b04b3a3d3a4935c3dfc75f9c65e3c35e26f1",
+    "apps/site-api/src/calculation/linked_bill_calculation.py": "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e",
+    "apps/site-api/src/calculation/linked_bill_calculation_test.py": "a9008b6a3e7c12b18b33391152c3966692773c151f6db8f1b21995ffba0f4a19",
+    "apps/site-api/src/calculation/server.ts": "376e4c671f3bfc166c978025291f09956b5549e91f2462d6ffa249b65724cd2c",
+    "apps/site-api/src/calculation/server.test.ts": "09c25b6426715a45987b638be68e57eacc2655f49cecd5c3b091d597d5e21e18",
+    "apps/site-api/src/workspace/types.ts": "e64adcd78cce6d0a68ed1d9dbb314c5e9f790344ebbefc8ef321bbfb43b1bf7a",
+    "apps/site-api/src/workspace/routes.ts": "17d10a2775f4da901652a3d6a0925173f40eddc6eb96a1618e86a2d8a604bdd6",
+    "apps/site-api/src/workspace/routes.test.ts": "32be6e453cc52fc1a915ee874f2c376ff08f8ab1db1f1303a39bbe3d7a0828b0",
+    "apps/site-api/src/workspace/server.ts": "428a4db7fa22b895efd2c1f7f7d68e51972e24fbf9769dde92dd642f0402146d",
+    "apps/site-api/src/workspace/server.test.ts": "57d066182d49131cef7e3d2922487a6aa745bb1d9dfcd0d5edc561a7cecf75b8",
+    "apps/site-web/src/lib/workspace-api.ts": "7b32e6d0bf480bd2288d2e036966a6be6365c12fbfab596cf12800c60e820ccb",
+    "apps/site-web/src/lib/workspace-api.test.ts": "3f4670b6f0210507404f5ade8838ae27dd1472fdf3bb1267d46b3af6f8e3976d",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "5c91add0976e55526da3797b26b422ba4fea7ebf97117a154c6703dc4cbf6718",
+    "apps/site-web/src/index.css": "bc401b693db70119ed9552fe25bb70fa68806725ff2b715031f858ef934dd957",
+    "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql": "d168a860e6d02c5f30f4c2be4ec61e52fdd899896b70e164c59ea4fdd8daf470",
+    "packages/neuvetra-database/src/index.ts": "4429fa1ab7be140c365954694b2056f4219614f3e69a153e0695348b42f9a0b1",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "5bd04a6c2246d2ebc81ca13fdf52cf8c1d6ae932562be5d1bc3a70d425295916"
+  },
+  "disposition": "fail_material_acceptance_gaps",
+  "milestone_gate_pass": false,
+  "accounting_arithmetic_pass": true,
+  "tenant_security_acceptance": false,
+  "product_acceptance": false,
+  "release_acceptance": false,
+  "verified_strengths": [
+    "The accepted M53 implementation remains byte-identical at SHA-256 4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c.",
+    "M56 uses a separate adapter at SHA-256 ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e and verifies the M53 authority record, factor and GWP pins before scaling.",
+    "Independent Decimal arithmetic matches the candidate: exact conversion 12346.000 kWh / 1000 = 12.346000 MWh; unrounded total 2407.9674055248 kg CO2e; four-place ROUND_HALF_EVEN display 2407.9674; component sum 2407.8330020304; delta 0.1344034944.",
+    "The public standalone calculation route rejects the internal calculate_linked_bill action.",
+    "The two M56 tables enable and force RLS, expose tenant-member SELECT only, use composite company foreign keys, and the security-definer writer has a fixed search_path with PUBLIC execution revoked.",
+    "A fresh production web build completed and contained none of the tested M56 route, flag, contract, quantity, result, digest, method or factor strings."
+  ],
+  "findings": [
+    {
+      "id": "M56-R01",
+      "severity": "material",
+      "status": "open",
+      "finding": "The implemented replay is another empty-body create request, not replay of the complete stored or exported M56 record required by the product brief. There is no download action or exported-record contract, and no test mutates exported evidence, lineage, arithmetic, factor, method, implementation, classification or hash fields before replay.",
+      "evidence": "workspace-api.ts sends body {} to /calculate/replay; routes.ts calls the same calculateBill store method; CompanyWorkspaceDemo.tsx exposes replay but no download; workspace-api.test.ts tests only create and one display mutation.",
+      "required_repair": "Implement a bounded export/download and replay contract that accepts the complete record, reauthorizes lineage, recomputes exact hashes and arithmetic, requires full equality, and rejects systematic mutations without replacing stored history."
+    },
+    {
+      "id": "M56-R02",
+      "severity": "material",
+      "status": "open",
+      "finding": "Required immutable lineage is incomplete in the persisted/public contract. No canonical bill-version payload hash is bound. Actor and calculation creation time exist in database columns but are omitted from the returned record, decoder and UI; the claimed calculation timestamp is not displayed.",
+      "evidence": "The adapter BINDING_KEYS and input_snapshot omit a version payload hash; SyntheticDraftCalculation and readBill omit created_by/created_at; the UI renders no timestamp.",
+      "required_repair": "Add and verify the canonical reviewed-version payload hash, actor and creation time throughout storage, response, decoder, replay and visible lineage."
+    },
+    {
+      "id": "M56-R03",
+      "severity": "material",
+      "status": "open",
+      "finding": "The browser decoder validates selected values but is not an exact record validator. It does not enforce exact nested keys and complete values for gas records, trace expressions and units, total rounding, or reconciliation authority/explanation, and it only checks input/result hashes for hexadecimal shape instead of recomputing them.",
+      "evidence": "decodeSyntheticBill checks gas mass and selected CO2e values, trace step/result pairs and hash regexes; arbitrary extra nested fields, altered units/expressions/rounding/explanations and lying 64-character hashes are not rejected by those predicates.",
+      "required_repair": "Bind exact nested key sets and every material value, recompute canonical input/result hashes or compare to independently trusted pinned values, and add internally consistent fabrication tests."
+    },
+    {
+      "id": "M56-R04",
+      "severity": "material",
+      "status": "open",
+      "finding": "Calculation and replay routes map every engine/store/database exception to HTTP 409 Review the bill before calculating. Required timeout, malformed engine output and database failures must return bounded HTTP 503 No result produced; unreviewed evidence currently returns 422 rather than its specified review-required 409.",
+      "evidence": "Both route catch blocks unconditionally return REVIEW_CONFLICT with 409. No injected private-detail, engine failure, timeout or database rollback route test exists.",
+      "required_repair": "Use typed finite error mapping, add bounded 503 failure paths with private-detail exclusion, and distinguish invalid body from valid but unreviewed/stale state."
+    },
+    {
+      "id": "M56-R05",
+      "severity": "material",
+      "status": "open",
+      "finding": "The claimed database acceptance is not demonstrated. The 18-test/109-assertion database run never creates an M56 calculation or calls the new writer. It adds the tables only to generic RLS/read/update/delete loops.",
+      "evidence": "No calculation or create_synthetic_bill_calculation reference appears in any database *.test.ts beyond migration/table names. Owner/admin writer success, member/direct writer denial, foreign/mixed lineage, one audit event, canonical tamper, stale inputs, atomic rollback and conflict convergence lack executable database tests.",
+      "required_repair": "Add direct database tests for the full M56 writer and read boundary, all roles and tenant substitutions, exact lineage and payload/hash validation, append-only behavior, one-event convergence and transactional rollback."
+    },
+    {
+      "id": "M56-R06",
+      "severity": "material",
+      "status": "open",
+      "finding": "The technical idempotency contract is absent. There is no idempotency key or server-derived operation_fingerprint, so same-key/same-operation replay and same-key/different-operation conflict behavior cannot be enforced or tested.",
+      "evidence": "The calculate and replay bodies must be empty and the database schema has no idempotency key or fingerprint. Only identical local requests and the activity/method uniqueness constraint are exercised.",
+      "required_repair": "Implement the documented server-derived fingerprint and bounded idempotency-key semantics, or revise and independently approve the contract before review."
+    },
+    {
+      "id": "M56-R07",
+      "severity": "material",
+      "status": "open",
+      "finding": "Browser and accessibility claims are not supported by candidate evidence. There is no component-level M56 test or durable browser evidence for download/replay, member view-only behavior, signed-out/foreign refusal, success/error focus, screen-reader CO2e meaning, 200 percent zoom, 390-pixel layout, storage inspection or network isolation.",
+      "evidence": "The only new web test exercises the decoder, one altered display and the empty create body. The milestone narrative is candidate testimony, not independent browser evidence.",
+      "required_repair": "Add meaningful component tests and preserve independently reproducible browser evidence for the required role, focus, accessibility, responsive, storage and network paths."
+    },
+    {
+      "id": "M56-R08",
+      "severity": "moderate",
+      "status": "open",
+      "finding": "The implemented feature flag M56_SYNTHETIC_CALCULATION differs from the technical contract's exact M56_SYNTHETIC_BILL_CALCULATION flag.",
+      "evidence": "workspace/server.ts and server.test.ts use M56_SYNTHETIC_CALCULATION; the technical contract migration/rollback section requires M56_SYNTHETIC_BILL_CALCULATION.",
+      "required_repair": "Use the contracted flag or update the contract and all evidence consistently before final binding."
+    },
+    {
+      "id": "M56-R09",
+      "severity": "minor",
+      "status": "open",
+      "finding": "The milestone's assertion counts are stale: the independently rerun API suite passed 624 tests with 5,356 assertions, not 5,355; the web suite passed 57 tests with 200 assertions, not 199.",
+      "required_repair": "Refresh the candidate milestone counts after the final repaired suites."
+    }
+  ],
+  "independent_arithmetic": {
+    "quantity_kwh": "12346.000",
+    "quantity_mwh": "12.346000",
+    "factor_kg_co2e_per_mwh": "195.0402888",
+    "total_expression": "12.346000 * 195.0402888",
+    "unrounded_kg_co2e": "2407.9674055248",
+    "display_kg_co2e": "2407.9674",
+    "rounding": "ROUND_HALF_EVEN to four decimal places; no intermediate rounding",
+    "co2_mass_and_co2e": "2399.4607843584",
+    "ch4_mass": "0.14000364",
+    "ch4_co2e": "3.92010192",
+    "n2o_mass": "0.0168004368",
+    "n2o_co2e": "4.452115752",
+    "component_sum_kg_co2e": "2407.8330020304",
+    "published_rate_delta_kg_co2e": "0.1344034944"
+  },
+  "reproduced_checks": {
+    "python_m53_and_m56": "6 passed",
+    "focused_site_api": "17 passed, 72 assertions",
+    "full_site_api": "624 passed, 5356 assertions",
+    "focused_site_web": "8 passed, 26 assertions",
+    "full_site_web": "57 passed, 200 assertions",
+    "database": "18 passed, 109 assertions",
+    "site_api_typecheck": "pass",
+    "site_web_typecheck": "pass",
+    "database_typecheck": "pass",
+    "site_web_lint": "pass",
+    "site_web_production_build": "pass with existing engine chunk-size warning",
+    "production_exclusion_scan": "pass for tested M56 flags, route, contract, fixed quantity/result, PDF digest, method and factor strings",
+    "git_diff_check": "pass"
+  },
+  "limitations": [
+    "No provider, network, credential, customer data, hosted service, deployment, merge or release action was used.",
+    "The retained currentness observation was read as dated evidence and was not refreshed over the network. The factor and method remain development candidates.",
+    "PGlite does not prove hosted PostgreSQL/Supabase behavior, real authentication, durable coordination, storage governance or production operations.",
+    "Browser claims were not accepted because the required durable and independently reproducible evidence was absent; passing static web tests and a build do not replace that evidence.",
+    "This failure does not invalidate the accepted M53 or M55 milestones; it blocks only the current M56 candidate."
+  ],
+  "required_repair": [
+    "Resolve M56-R01 through M56-R08, rerun affected and full suites, refresh counts, then bind every repaired file to a new independent review.",
+    "Keep docs/research/synthetic-bill-calculation-milestone-56.md in candidate/pending state until the repaired bytes and ordinary browser journey pass."
+  ],
+  "conclusion": "FAIL. The exact M53 authority and M56 arithmetic are correct, adapter separation and production exclusion are credible, and existing suites are green. The current candidate does not meet its own immutable lineage, replay/export, strict decoder, error boundary, database-security, idempotency or browser/accessibility acceptance contracts. Milestone, Stage 4 and release acceptance remain false."
+}

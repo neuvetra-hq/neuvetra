@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "official_source_currentness_observation",
+  "observed_at": "2026-09-13T05:31:00Z",
+  "observer_timezone": "America/Los_Angeles",
+  "publisher": "U.S. Environmental Protection Agency",
+  "network_action": "read_only_official_web_review",
+  "observations": [
+    {
+      "url": "https://www.epa.gov/egrid",
+      "page_title": "Emissions & Generation Resource Integrated Database (eGRID)",
+      "page_last_updated": "2026-07-28",
+      "finding": "EPA identifies the latest eGRID update as data year 2023."
+    },
+    {
+      "url": "https://www.epa.gov/egrid/detailed-data",
+      "page_title": "Detailed Data",
+      "page_last_updated": "2026-05-20",
+      "finding": "EPA lists eGRID2023 revision 2 released 2025-06-12 and still presents eGRID2024 only as a planned January 2026 release."
+    },
+    {
+      "url": "https://www.epa.gov/egrid/frequent-questions-about-egrid",
+      "page_title": "Frequent Questions About eGRID",
+      "page_last_updated": "2026-07",
+      "finding": "EPA calls eGRID2023 the latest version and recommends matching historical inventory years to the corresponding data year when available."
+    },
+    {
+      "url": "https://www.epa.gov/system/files/documents/2025-01/egrid2023_technical_guide.pdf",
+      "page_title": "Technical Guide for eGRID2023",
+      "locator": "printed page 12, section 3.1.1.2 and Table 3-1",
+      "finding": "EPA states that eGRID2023 CO2e uses 100-year AR5 values without climate-carbon feedbacks: CO2 1, CH4 28 and N2O 265."
+    }
+  ],
+  "limits": [
+    "This record preserves observed official-page metadata and findings, not a byte-for-byte web archive.",
+    "The retained eGRID workbook remains a development candidate pending independent method and factor release approval.",
+    "A planned release date is not evidence that a dataset was published."
+  ]
+}

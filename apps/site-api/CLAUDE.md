@@ -1,8 +1,12 @@
-# `apps/site-api` — Site API (chat backend)
+# `apps/site-api` — isolated research pilot and retained chat backend
 
 > **Parent:** repo root `CLAUDE.md`. Read that first for monorepo conventions.
 
-Bun + Elysia API serving the Site's `/chat` endpoint. Live at `https://api.neuvetra.ai`. Multi-agent Claude backend with Vercel AI SDK + Langfuse OpenTelemetry tracing + XState orchestration.
+The current opt-in passage experiment uses `src/research-passages-server.ts` and `bun run start:research-passages`. Read its [scope, source pins and evaluation instructions](../../docs/milestones/m2-passage-retrieval.md) and [independent QA](../../docs/research/scope2-passages-qa.md). It has a separate reviewed release, semantic passage selection, drafting and fresh-context verification. It retains the same loopback port; do not run both research entry points together. Carry remaining model-stage allowances across restarts. The earlier fixed-statement pilot below and its evidence remain historical, separately runnable artifacts.
+
+The earlier `src/research-server.ts` is a separate local-only entry point for the fixed-statement Scope 2 pilot. It imports no inherited greeter, authentication, database or telemetry startup. Run `bun run start:research` with the [explicit research configuration](../../docs/milestones/m2-answer-demo.md); it binds only `127.0.0.1:3012`, uses origin 5174, defaults to provider-disabled, and validates independently reviewed evidence and source pins. Do not introduce watch-mode restarts around the in-memory model budget or expose this unauthenticated demo publicly.
+
+The historical Bun + Elysia `/chat` backend below remains separate. Its earlier deployment is at `https://api.neuvetra.ai`; these notes do not imply the new research service is deployed there. Vercel AI SDK, Langfuse and XState descriptions below apply to the retained backend.
 
 ## Stack
 
@@ -69,7 +73,7 @@ The `/chat` route has three hardening layers, all shipped 2026-04-27 ([[next.md]
 
 ### Single environment
 
-There is currently no separate dev/staging environment — production is the only target. `Bun.env.NODE_ENV ?? "development"` keys the Langfuse `environment` tag, which pre-stages the future split with no code change. See [[stack]] § Environments.
+The legacy marketing service has no separately verified staging deployment. The new private research preview has an isolated development scope in the existing Supabase/Pinecone resources and an explicit loopback server entry point at `src/research-composed-server.ts`; see [its runbook](../../docs/research/website-composed-runtime.md). It is not part of the production startup or the legacy `/chat` endpoint. `Bun.env.NODE_ENV ?? "development"` keys the legacy Langfuse environment tag. See [[stack]] § Environments for historical context.
 
 ### Repository-root deployment context
 

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task": "M32-RUNTIME-QA-FINAL",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "meaning": "offline_runtime_adapter_and_bounded_emergency_closure_review_only",
+  "run_id": "website-epa-live-32",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "allocation_sha256": "862da1cb1b51fdcfbfa8d09b2cfb52709ee6d909a2242ec6f5e98f69e3fc9508",
+  "runtime_validation_sha256": "7f1059a43a4a795616ae44bcd328bba1d972f1dfc79d69453bb0bdcbabffc82f",
+  "adapter_pins": {
+    "spending.ts": "4490c39e53874247d119190d494ab1277fe9189af8fc980f5bc9a32a3bfa06dd",
+    "runtime.ts": "01a425cd661dddedcffa1415a4bd32758a648bb17cb9dfc049b5b68137add31f",
+    "ingress.ts": "f540a2fec869db82417bf31c38d7b4a20800c784554e867b9867823957af23e0",
+    "isolated-proxy.ts": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432",
+    "launcher.ts": "c9b47a4c2ac49d751086fa430b41daf0f3dba1160b6f91ac67bbbbf803d59980",
+    "closure.ts": "59b64fbe5307a889058b44e6f4db788c88f6ec5c4efc1144156346602b374a0f",
+    "runtime.test.ts": "ccc909271afe65ee8c3c6ce6480ad62ae2d1fa24ea7afb34bb7b24b6d2d26f58",
+    "runtime-tsconfig.json": "e0f5596d2ed991699045c7af586ee817765ad331ab8d7ec2767fa2471324c796"
+  },
+  "validation": {
+    "tests_passed": 12,
+    "assertions": 81,
+    "failures": 0,
+    "scoped_typecheck": "pass",
+    "adapter_pins_rehashed": 8,
+    "candidate_pins_rehashed": 96
+  },
+  "prior_reviews_preserved": [
+    "evaluations/research-qa/openrouter32-runtime-review-10.json",
+    "evaluations/research-qa/openrouter32-runtime-recheck-10.json"
+  ],
+  "resolved": [
+    "Actual timeout/cancellation codes retained with bounded phase/abort diagnostics.",
+    "Observed response cost remains separate from durable settlement and original terminal failure; null ledger settlement remains unsettled.",
+    "Persisted trace validator enforces phase-specific keys, bounded finite values, receipt/input/output hashes, strict model/provider identity, identity-failure exclusion and cost/settlement relationships.",
+    "Closure rejects orphan traces, extra receipts/admissions, wrong associations and changed launch certificates; pins durable accounting/admission/ingress/trace evidence.",
+    "Pre-budget startup emergency closure accepts absent or partial initialization only with exact root no-dispatch attestation, unchanged launch/machine/candidate bindings, no receipts/admissions/ingress/traces/spending events and verified shutdown.",
+    "Damaged post-activity evidence closure retains raw byte hashes, leaves exact stages/current cost unknown, closes all five allocated slots and retains the full new reservation plus inherited uncertainty."
+  ],
+  "accounting": {
+    "prior_settled_nano_usd": 2811393000,
+    "prior_uncertainty_nano_usd": 1624850000,
+    "new_reservation_ceiling_nano_usd": 3937272500,
+    "corrupt_activity_retained_uncertainty_nano_usd": 5562122500,
+    "corrupt_activity_remaining_monitoring_target_nano_usd": 1626484500,
+    "corrupt_activity_exact_current_stages": null,
+    "corrupt_activity_exact_current_cost": null,
+    "verified_zero_activity_retired_stages": 5,
+    "verified_zero_activity_current_cost": 0,
+    "carry_allowed": false,
+    "restart_allowed": false
+  },
+  "remaining_integration": [
+    "Separate host review defects must be repaired and rechecked; refresh combined host/adapter certificate after all files stabilize.",
+    "Root must freeze/bind the complete executable startup and host integration, not just this offline candidate.",
+    "Attach terminal observation recorder to the owning in-memory controller; normal outcome closure still requires actual independent source/mechanical/semantic review and retained UI evidence.",
+    "Verify actual source/cloud readiness, exact PID/listener identity, empty current ledgers and one-use browser admission before any paid call.",
+    "Use normal closure only for intact journals. Use emergency closure only with independently reviewed real shutdown and exact durable-evidence inventory; never use zero-activity mode when any activity residue exists."
+  ],
+  "limitations": [
+    "No live runtime or provider reliability was demonstrated; this PASS is not standalone permission to execute.",
+    "Emergency closure depends on intact runtime-binding/launch/candidate/certificate records and truthful root shutdown/no-dispatch evidence. Corruption outside those bounded supported cases still requires manual forensic closure.",
+    "Full-reservation uncertainty is a conservative monitoring estimate, not a vendor-enforced charge ceiling or invoice finality.",
+    "Normal closure pins provider/accounting evidence; integrated terminal/browser artifacts remain the host/outcome integration responsibility.",
+    "Historical M30 costs/outcomes remain unresolved and unchanged."
+  ],
+  "release_acceptance": false,
+  "standalone_paid_execution_permitted": false,
+  "network_requests": 0,
+  "model_requests": 0,
+  "credentials_accessed": false,
+  "services_started": false
+}

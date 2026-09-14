@@ -47,3 +47,20 @@
 # Lock files — text but never auto-normalize (let Bun/npm own line endings)
 bun.lock      -text
 package-lock.json -text
+
+# Evaluation receipts and journals are hashed evidence; preserve recorded bytes.
+evaluations/research-qa/runs/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+evaluations/research-qa/runs/*.jsonl -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+operations/website-evaluation-allocation-*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Reviewed EPA catalogs are byte-pinned by the private runtime and source reviews.
+data/research/answer-units/scope2-website.epa-inquiry.v1.json -text whitespace=cr-at-eol
+data/research/answer-units/scope2-website.epa-acquisition.v1.json -text whitespace=cr-at-eol
+data/research/capabilities/scope2-website.epa-acquisition.v1.json -text whitespace=cr-at-eol
+data/research/capabilities/scope2-website.epa-inquiry.v1.json -text whitespace=cr-at-eol
+data/research/capabilities/scope2-website.epa-limitations.v1.json -text whitespace=cr-at-eol
+data/research/capabilities/scope2-website.epa-route.v1.json -text whitespace=cr-at-eol
+evaluations/research-qa/epa-capability-mapping-10.json -text whitespace=cr-at-eol
+evaluations/research-qa/epa-source-acquisition-candidate8-10.json -text whitespace=cr-at-eol
+evaluations/research-qa/epa-route-capability-candidate10-10.json -text whitespace=cr-at-eol
+evaluations/research-qa/epa-limitation-candidate11-source-10.json -text whitespace=cr-at-eol

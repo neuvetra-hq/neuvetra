@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "batch_id": "m2-passages-2026-09-08-04",
+  "status": "closed_live_gate_failed_seven_unused",
+  "offline_review": "Independent 37 passage tests / 260 assertions, actual-source mock pipeline and tracing review passed. Full API 117 tests / 504 assertions and typecheck passed. Root frontend 11 tests / 31 assertions, build and repository lint passed with existing FrontDesk warnings.",
+  "instrumentation": {
+    "entry": ".superpowers/research_traced_server.ts",
+    "sha256": "81e8923b42d84595e02cc876d7424476ea2a5fe0df5bec4359d6365611b53302",
+    "trace_directory": ".superpowers/passage-stage-traces-batch04",
+    "effects": "Same inputs, configured preflight, stage metadata, parsed results and exceptions; immutable private first-attempt traces. No reasoning content, signatures, headers or raw errors retained."
+  },
+  "scope": "Evaluate server-assigned IDs, drafting headroom, claim-local citation support and an Opus reasoning verifier across frozen regression questions",
+  "limit_selected_by": "coordinator",
+  "limit_is_board_imposed": false,
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "limits": {
+    "max_attempted_model_stages": 30,
+    "reserved_usd_per_attempt": 0.5,
+    "max_reserved_usd": 15,
+    "plan_and_draft": "claude-sonnet-5, thinking disabled, 1200 output tokens",
+    "verify": "claude-opus-5, adaptive thinking with omitted display, high effort, 8192 total output tokens including thinking",
+    "automatic_retries": 0
+  },
+  "plan": {
+    "live_regression_questions": 8,
+    "max_regression_stage_attempts": 24,
+    "followup_and_browser_max_stage_attempts": 6
+  },
+  "execution": {
+    "attempts_consumed": 23,
+    "remaining_attempts": 7,
+    "run_artifacts": ["evaluations/research-qa/runs/2026-09-08-scope2-passages-04.json"],
+    "run_sha256": "28611d4a1527c62d1a4ef0020d00971c4dd8294ff2c7806e307811a1afb19879",
+    "browser_result": "not_run_full_gate_failed",
+    "findings": "Five of eight mechanically released; four independently complete/source-supported. H-M01 likely false-negative review; H-S01 correctly withheld a timing overstatement; H-U02 still has an unsupported own-citation conclusion; H-T02 exceeded a facet limit 875/800. K-SOURCE now meets its required facets in this sample."
+  },
+  "code_snapshot": {
+    "path": "evaluations/research-qa/snapshots/scope2-passages-reasoning-code.zip",
+    "sha256": "8c34e9a633afffdf6772ba606c9c9ac4d8a73bec6fee0fd96c0d127a79e683d8",
+    "files": 16
+  },
+  "accounting_note": "Distinct coordinator-selected experiment. Prior failed batches and their unused allowances remain closed and counted. This conservative flat reservation covers configured output including reasoning and the bounded input envelope; it is not measured billing. Failed or uncertain attempts consume reservations. No automatic retries or implicit restart resets."
+}

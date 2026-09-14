@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-32",
+  "role": "root_coordinator",
+  "runtime_binding": {
+    "run_id": "website-epa-live-32",
+    "manifest_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+    "profile_sha256": "f294427a03cef4f16a2634b218d09f3b139c72a6e090db3a40ef4f20b57e6fb7",
+    "process_id": 20784,
+    "port": 3016
+  },
+  "backend_process_id": 20784,
+  "backend_process_absent": true,
+  "frontend_process_id": 36340,
+  "frontend_process_absent": true,
+  "ports_closed": [
+    3012,
+    3016,
+    5174,
+    5175
+  ],
+  "listeners_observed": [],
+  "ordinary_preview_paused": true,
+  "exact_command_lines_verified": true,
+  "backend_command": {
+    "interpreter": "C:/Users/nimab/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+    "wrapper": ".superpowers/openrouter-32/host-wrapper.py",
+    "mode": "serve"
+  },
+  "frontend_command": {
+    "executable": ".superpowers/review-tools/bun-windows-x64/bun.exe",
+    "entry": ".superpowers/openrouter-32/frontend-cli.ts"
+  },
+  "backend_shutdown_sha256": "8feb3f9786137ec5f5d2b3af51c5c314d543fcf5fb5745c5b3b154518282aed0",
+  "frontend_shutdown_sha256": "d94e29bd21ea5854b1140612ddc19eedc88d75f794536bd5f2bcae3bb8bce2cb",
+  "stop_sha256": "6150995104170e403189665064bdc242049a99142a40a785d455949ec795b947",
+  "no_restart": true,
+  "recorded_at": "2026-09-10T17:03:49.4934027-07:00"
+}

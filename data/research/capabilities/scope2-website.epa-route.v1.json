@@ -1,0 +1,728 @@
+{
+  "schema_version": 1,
+  "capability_catalog_id": "scope2-website-unit-capabilities",
+  "version": "3-epa-route",
+  "unit_catalog_sha256": "97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50",
+  "source_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "condition_catalog_sha256": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+  "review": {
+    "status": "approved_private",
+    "expires_at": "2026-09-15T23:20:32Z",
+    "source_review": {
+      "reviewer": "Root coordinator /root EPA source reviewer",
+      "disposition": "approved_private",
+      "record_path": "docs/research/epa-route-capability-review-19.md"
+    },
+    "qa_review": {
+      "reviewer": "Independent QA /root/qa_live",
+      "disposition": "approved_private",
+      "record_path": "evaluations/research-qa/epa-route-capability-candidate10-10.json"
+    }
+  },
+  "kinds": [
+    "definition",
+    "general_recommendation",
+    "conditional_rule",
+    "source_route",
+    "inquiry_step",
+    "explanation",
+    "limitation"
+  ],
+  "subjects": [
+    "accounting_methods",
+    "activity_records",
+    "agreement_period_alignment",
+    "certificate_quality_prerequisite",
+    "contract_certificate_claim",
+    "duplicate_consumption",
+    "electricity_units",
+    "factor_data_period",
+    "factor_update_adjustment",
+    "generation_boundary",
+    "grid_factor_source",
+    "grid_factor_uncertainty",
+    "grid_geography",
+    "market_procurement",
+    "methodology_adjustment",
+    "product_label_documentation",
+    "publisher_updates",
+    "reporting_methods",
+    "reporting_perspectives",
+    "source_date_recordkeeping",
+    "subregion_lookup",
+    "supplier_delivered_boundary",
+    "supplier_factor_inquiry"
+  ],
+  "units": [
+    {
+      "unit_id": "U01",
+      "capabilities": [
+        {
+          "id": "U01-C01",
+          "kind": "definition",
+          "subject": "accounting_methods",
+          "anchor": [
+            0,
+            268
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U01-L01",
+          "anchor": [
+            268,
+            390
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U02",
+      "capabilities": [
+        {
+          "id": "U02-C01",
+          "kind": "general_recommendation",
+          "subject": "reporting_methods",
+          "anchor": [
+            0,
+            213
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U02-L01",
+          "anchor": [
+            213,
+            341
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U03",
+      "capabilities": [
+        {
+          "id": "U03-C01",
+          "kind": "explanation",
+          "subject": "reporting_perspectives",
+          "anchor": [
+            0,
+            145
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U03-L01",
+          "anchor": [
+            145,
+            287
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U04",
+      "capabilities": [
+        {
+          "id": "U04-C01",
+          "kind": "general_recommendation",
+          "subject": "activity_records",
+          "anchor": [
+            0,
+            331
+          ]
+        },
+        {
+          "id": "U04-C02",
+          "kind": "source_route",
+          "subject": "activity_records",
+          "anchor": [
+            0,
+            150
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U04-L01",
+          "anchor": [
+            331,
+            407
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U05",
+      "capabilities": [
+        {
+          "id": "U05-C01",
+          "kind": "conditional_rule",
+          "subject": "duplicate_consumption",
+          "anchor": [
+            0,
+            358
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U05-L01",
+          "anchor": [
+            358,
+            447
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U06",
+      "capabilities": [
+        {
+          "id": "U06-C01",
+          "kind": "definition",
+          "subject": "electricity_units",
+          "anchor": [
+            0,
+            145
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U06-L01",
+          "anchor": [
+            145,
+            269
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U07",
+      "capabilities": [
+        {
+          "id": "U07-C01",
+          "kind": "explanation",
+          "subject": "generation_boundary",
+          "anchor": [
+            0,
+            335
+          ]
+        },
+        {
+          "id": "U07-C02",
+          "kind": "conditional_rule",
+          "subject": "generation_boundary",
+          "anchor": [
+            0,
+            271
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U07-L01",
+          "anchor": [
+            335,
+            404
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U08",
+      "capabilities": [
+        {
+          "id": "U08-C01",
+          "kind": "conditional_rule",
+          "subject": "grid_geography",
+          "anchor": [
+            0,
+            307
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U08-L01",
+          "anchor": [
+            307,
+            393
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U09",
+      "capabilities": [
+        {
+          "id": "U09-C01",
+          "kind": "source_route",
+          "subject": "grid_factor_source",
+          "anchor": [
+            0,
+            311
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U09-L01",
+          "anchor": [
+            311,
+            393
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U10",
+      "capabilities": [
+        {
+          "id": "U10-C01",
+          "kind": "source_route",
+          "subject": "publisher_updates",
+          "anchor": [
+            0,
+            330
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U10-L01",
+          "anchor": [
+            330,
+            394
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U11",
+      "capabilities": [
+        {
+          "id": "U11-C01",
+          "kind": "source_route",
+          "subject": "subregion_lookup",
+          "anchor": [
+            0,
+            192
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U11-L01",
+          "anchor": [
+            192,
+            260
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U12",
+      "capabilities": [
+        {
+          "id": "U12-C01",
+          "kind": "definition",
+          "subject": "market_procurement",
+          "anchor": [
+            0,
+            187
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U12-L01",
+          "anchor": [
+            187,
+            395
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U13",
+      "capabilities": [
+        {
+          "id": "U13-C01",
+          "kind": "conditional_rule",
+          "subject": "supplier_delivered_boundary",
+          "anchor": [
+            0,
+            458
+          ]
+        },
+        {
+          "id": "U13-C02",
+          "kind": "source_route",
+          "subject": "supplier_delivered_boundary",
+          "anchor": [
+            0,
+            171
+          ]
+        },
+        {
+          "id": "U13-C03",
+          "kind": "source_route",
+          "subject": "supplier_factor_inquiry",
+          "anchor": [
+            0,
+            170
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U13-L01",
+          "anchor": [
+            458,
+            519
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U14",
+      "capabilities": [
+        {
+          "id": "U14-C01",
+          "kind": "general_recommendation",
+          "subject": "certificate_quality_prerequisite",
+          "anchor": [
+            0,
+            240
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U14-L01",
+          "anchor": [
+            240,
+            486
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U15",
+      "capabilities": [
+        {
+          "id": "U15-C01",
+          "kind": "conditional_rule",
+          "subject": "contract_certificate_claim",
+          "anchor": [
+            0,
+            461
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U15-L01",
+          "anchor": [
+            461,
+            600
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U16",
+      "capabilities": [
+        {
+          "id": "U16-C01",
+          "kind": "conditional_rule",
+          "subject": "agreement_period_alignment",
+          "anchor": [
+            0,
+            472
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U16-L01",
+          "anchor": [
+            472,
+            581
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U17",
+      "capabilities": [
+        {
+          "id": "U17-C01",
+          "kind": "explanation",
+          "subject": "factor_data_period",
+          "anchor": [
+            0,
+            453
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U17-L01",
+          "anchor": [
+            338,
+            453
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U18",
+      "capabilities": [
+        {
+          "id": "U18-C01",
+          "kind": "conditional_rule",
+          "subject": "factor_update_adjustment",
+          "anchor": [
+            0,
+            459
+          ]
+        },
+        {
+          "id": "U18-C02",
+          "kind": "general_recommendation",
+          "subject": "factor_update_adjustment",
+          "anchor": [
+            0,
+            185
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U18-L01",
+          "anchor": [
+            459,
+            578
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U19",
+      "capabilities": [
+        {
+          "id": "U19-C01",
+          "kind": "conditional_rule",
+          "subject": "methodology_adjustment",
+          "anchor": [
+            0,
+            312
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U19-L01",
+          "anchor": [
+            312,
+            414
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U20",
+      "capabilities": [
+        {
+          "id": "U20-C01",
+          "kind": "limitation",
+          "subject": "grid_factor_uncertainty",
+          "anchor": [
+            0,
+            291
+          ]
+        },
+        {
+          "id": "U20-C02",
+          "kind": "explanation",
+          "subject": "grid_factor_uncertainty",
+          "anchor": [
+            0,
+            291
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U20-L01",
+          "anchor": [
+            291,
+            400
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U21",
+      "capabilities": [
+        {
+          "id": "U21-C01",
+          "kind": "general_recommendation",
+          "subject": "source_date_recordkeeping",
+          "anchor": [
+            0,
+            409
+          ]
+        },
+        {
+          "id": "U21-C02",
+          "kind": "explanation",
+          "subject": "source_date_recordkeeping",
+          "anchor": [
+            164,
+            409
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U21-L01",
+          "anchor": [
+            409,
+            505
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U22",
+      "capabilities": [
+        {
+          "id": "U22-C01",
+          "kind": "explanation",
+          "subject": "product_label_documentation",
+          "anchor": [
+            0,
+            381
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U22-L01",
+          "anchor": [
+            381,
+            482
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U23",
+      "capabilities": [
+        {
+          "id": "U23-C01",
+          "kind": "inquiry_step",
+          "subject": "supplier_factor_inquiry",
+          "anchor": [
+            0,
+            600
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U23-L01",
+          "anchor": [
+            600,
+            725
+          ]
+        }
+      ]
+    },
+    {
+      "unit_id": "U24",
+      "capabilities": [
+        {
+          "id": "U24-C01",
+          "kind": "source_route",
+          "subject": "grid_factor_source",
+          "anchor": [
+            342,
+            1024
+          ]
+        },
+        {
+          "id": "U24-C02",
+          "kind": "source_route",
+          "subject": "supplier_factor_inquiry",
+          "anchor": [
+            1026,
+            1188
+          ]
+        },
+        {
+          "id": "U24-C03",
+          "kind": "inquiry_step",
+          "subject": "supplier_factor_inquiry",
+          "anchor": [
+            1026,
+            1801
+          ]
+        },
+        {
+          "id": "U24-C04",
+          "kind": "conditional_rule",
+          "subject": "supplier_delivered_boundary",
+          "anchor": [
+            1276,
+            1505
+          ]
+        }
+      ],
+      "limits": [
+        {
+          "id": "U24-L01",
+          "anchor": [
+            134,
+            340
+          ]
+        },
+        {
+          "id": "U24-L02",
+          "anchor": [
+            1803,
+            1900
+          ]
+        },
+        {
+          "id": "U24-L03",
+          "anchor": [
+            1901,
+            2010
+          ]
+        },
+        {
+          "id": "U24-L04",
+          "anchor": [
+            2011,
+            2170
+          ]
+        }
+      ]
+    }
+  ],
+  "absence_policy": "No declared capability is available unless present in this exact released-unit mapping. Absence describes this release and is not a quoted external rule.",
+  "provenance": {
+    "reviewed_draft_sha256": "7951b2d5b0b366196188640852abc9ce117abed414320db0ff9303e6136db44f",
+    "qa_record_sha256": "de683c1d0f99ecff55ec038205126d933aa0b06573e8f3dd2fc03f55b440fd23",
+    "assembled_at": "2026-09-09T23:32:16.468045Z",
+    "approval_note": "Root and independent QA approved the exact additive U13-C03 candidate and proposed sidecar 7aae9f6b5d7a0e337f82ba54d05d2409df7305eea1771aa63522010cb3f92632. Direct source record SHA256 5a2da752df66553d65299634d8a108cc2c680fdde3a40668bbd29b4389ad0246. Only approval/provenance fields changed during assembly. All 24 unit objects, prior 33 capabilities, 27 limits, source/condition bytes and original expiry remain unchanged; no current-factor, eligibility or live-acceptance claim."
+  }
+}

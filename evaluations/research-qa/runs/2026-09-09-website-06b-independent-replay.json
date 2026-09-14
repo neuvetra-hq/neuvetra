@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-09T14:43:27.967Z",
+  "reviewer": "Independent AI QA /root/website_qa",
+  "disposition": "PASS_BOUNDED_OFFLINE_REPLAY",
+  "baseline_sha256": "5ca32e2f2d421481158f9dc68c0acabafba19f62b8ff87b4206ab6ac6f137280",
+  "old_freeze_sha256": "203603f227d64e87376fd2ae6adf30e0d2542d3f362412893d21c43e228c437c",
+  "new_freeze_sha256": "9ca6ff47270c57e71269da5f0c4c1eed3accc51f46ecbc3a0a5cfe1e0ff56bd1",
+  "profile_sha256": "ecd63437fcf498cc02f76ecd3c401fb6411ad7cbc6b3057b9b2f53dcfbaa4f4e",
+  "allowed_changed_paths": [
+    "apps/site-api/src/research-composed/selection.ts",
+    "apps/site-api/src/research-composed/composed.test.ts"
+  ],
+  "archived_old_47_file_set_verified": true,
+  "new_52_pins_verified": true,
+  "question_decisions_replayed": 18,
+  "stage_requests_outputs_reservations_bound": 36,
+  "exact_display_unit_occurrences": 37,
+  "original_F01_now_parses_unchanged": true,
+  "model_calls": 0,
+  "meaning": "Input quote typography only; unchanged eighteen actual decisions retain exact plan/review outputs. Does not reinterpret the failed first F01 as a live success. Explicit F01/F02 follow-up and actual browser still required.",
+  "cases": [
+    {
+      "id": "W01",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 1,
+          "stage": "plan",
+          "started_sha256": "cc8cf3cc895e5bfb9b0d30c96b3c98ebcb3b0b10f571be6125d6288e2024313e",
+          "completed_sha256": "c6ece37db8543c64d0d3d145b6f4d4ab9f6475f728815c91467eded51e5c36f9",
+          "reservation_sha256": "1d65a16a3dee07073092cbbae0330402eb7aaccbe463b53e9664d4653c6ef928"
+        },
+        {
+          "attempt": 2,
+          "stage": "verify",
+          "started_sha256": "03ce7a53bf240a103e31436fa07bc337e4d1b145c3a14c4a1f2976e8a7ea1d9b",
+          "completed_sha256": "92907d2b7b37468f8413ac7aa0a0e3cf494737d8f258334b5d1ea50ebef303b7",
+          "reservation_sha256": "4fb46b1cbdeffc919b6937be9edb6098ff3eeec62c599aff8fe8efb766dc7409"
+        }
+      ]
+    },
+    {
+      "id": "W02",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 3,
+          "stage": "plan",
+          "started_sha256": "dc28707c19bb7b059c9e2468797bad5c44d6a23e18a099b358b162de04034349",
+          "completed_sha256": "883902396224d075dacf68effe88aaa0434601f75008616325f408b717896359",
+          "reservation_sha256": "8aa435e344c64e87a7788a0d216d91d2d3b0ad5703d37a386320515249f4ea04"
+        },
+        {
+          "attempt": 4,
+          "stage": "verify",
+          "started_sha256": "c4ff9031c66070f4b4ad0aa1b3c6660ebd5d5a9ee2073f241ae9e59454a8c5f5",
+          "completed_sha256": "4ee55a70033c5bc18fc52e9290513ed6cf32c67cd30bff17299ad9bb9375a277",
+          "reservation_sha256": "2b8c66611b5f29f3a0e839ad2940d0ae4cf165f426ec6c20763e1bfcbe327fab"
+        }
+      ]
+    },
+    {
+      "id": "W03",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 5,
+          "stage": "plan",
+          "started_sha256": "d9c4ac7d1680e4ec47aedfdb47d3c935a3642194558ed9f94bdf892f808ca60a",
+          "completed_sha256": "ce26bd12c54aab1d42c0030076554c7035cd23aad391301be01bbbf6dccbf080",
+          "reservation_sha256": "ececa3e71020c91e43b710ef1d97441d4ff871976d70bd1150b5ed364aa9ae95"
+        },
+        {
+          "attempt": 6,
+          "stage": "verify",
+          "started_sha256": "f53d742983c2a3dd016287358a0cd115b2bc10d044746a5c9b72e4c58b5f5217",
+          "completed_sha256": "61bdee4e748607de2d2aa08d9b57dfde4611e903ccc1db6c4b88161bc297cbac",
+          "reservation_sha256": "1c7eef438926482bcae41ac45bcc5ae8ccfa61fa74313afe5799b03d10150150"
+        }
+      ]
+    },
+    {
+      "id": "W04",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 7,
+          "stage": "plan",
+          "started_sha256": "0a2277050e4e05923897c089f53191bdd9af82f944ecd41a0570238646944f92",
+          "completed_sha256": "e59c1dea20f2fc05b15e4ba90b3d6300e3b4dc202e27169ae2b8e5bccbef63c9",
+          "reservation_sha256": "6f98e832c7aab3f831b0cd712f9efc479873a979a7d3a38f9aa14669d7c1ff6c"
+        },
+        {
+          "attempt": 8,
+          "stage": "verify",
+          "started_sha256": "04cb63f588bb3b54ab36b3bf975b3fd3f7f53860ffa6f5a4836e464af414e1f8",
+          "completed_sha256": "08e4d3fe53814a2de1725eb75c9803f717d3e654e1aa5e9e94127ffa2df28c07",
+          "reservation_sha256": "d508edabeeceb36351a8f3b6624fb5a80c4f7c78a933d75918b9478e66959f85"
+        }
+      ]
+    },
+    {
+      "id": "W05",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 9,
+          "stage": "plan",
+          "started_sha256": "81e5800c75ccd2c668804658554c26e90b307843d612b92cae02ce47e943b786",
+          "completed_sha256": "dd138843c56e8151e910682e6a91842c70247c814783b1a6fdd57f6aea3c8937",
+          "reservation_sha256": "ba79bb0d98d6e246e6687f3b064ca2cbb63ef175379899aeb8d931f06f6685b8"
+        },
+        {
+          "attempt": 10,
+          "stage": "verify",
+          "started_sha256": "df55ac4973ad20ae351c3926d4e599e19566611fa0b4e05bfcf4ccedb4538ba1",
+          "completed_sha256": "a6b8fce61c79c06629b849970e1a5af3f08a828a764b1d139fc2241e84fbdcd8",
+          "reservation_sha256": "eb306d5ce0872881a6c26d420e9c920e9f7c0f34a2f7db577da9a433a309218e"
+        }
+      ]
+    },
+    {
+      "id": "W06",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 11,
+          "stage": "plan",
+          "started_sha256": "88a4161f82a9673056c535f3a8ceddfafd42486c3136ef0a16eca1242e7f5ca5",
+          "completed_sha256": "2f93597e342ba3a71be636088e14c19e45f93b1ab64acd7602c7de2dc427d76e",
+          "reservation_sha256": "e0c404ee61418591e1baec7d8455871aaa8c1b7f74e22589cbc59721e5d9eee8"
+        },
+        {
+          "attempt": 12,
+          "stage": "verify",
+          "started_sha256": "1cd2866b9abfdfb07f8c2cd882d1e6defb20703f293233669089c9fda2a8fb18",
+          "completed_sha256": "5c51eed2f7c7e71e1e64cbf820cdb95f8a90af3383f7ddc724f2f3b09e2926e5",
+          "reservation_sha256": "979b49a90bbd6f78d2c41ae4e7026b2e0aebc6cc20feb560294f7915f47ec0c4"
+        }
+      ]
+    },
+    {
+      "id": "W07",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 13,
+          "stage": "plan",
+          "started_sha256": "3cec21985f9ce2c9877f463564ae88c8f761e84651d106d9111e18954b8c074f",
+          "completed_sha256": "d25d2f7f2d6874e9b004efda647b9071bb5fc2651ea76167b22f802f0738c5d3",
+          "reservation_sha256": "7ebf147b9904712c6d7d0bef62f3a8074e9a4cfe83f802292a5a00b619f4cd90"
+        },
+        {
+          "attempt": 14,
+          "stage": "verify",
+          "started_sha256": "7ce0b8ea79227ca32507422a7c47cb091e5461680b35e3505e4f5d792478e9e6",
+          "completed_sha256": "86c2f187f646cbd7217674afe5cc971632ad6a8b26fc30641e9b7f0136a89e65",
+          "reservation_sha256": "033f7c5cb0f085e1ac208c38914ba5bbcb9b0cd62cad1860434643a65018e2a9"
+        }
+      ]
+    },
+    {
+      "id": "W08",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 15,
+          "stage": "plan",
+          "started_sha256": "deb04972fea98c187f799760690008ff7dd5a053e95d971beb85980d76be217c",
+          "completed_sha256": "7417b6cdcfaed1da8c7c3bbe757d4e6d43a62a96645c14e9ecd30824f6f5765c",
+          "reservation_sha256": "209aa0d9f0d4583516b33950cf9bb5daffca20f4d751062af59f1d5ac2aa47c6"
+        },
+        {
+          "attempt": 16,
+          "stage": "verify",
+          "started_sha256": "72a59e19696342d0fd37870ecc943c98be110dbdcd827b9fbfbe159f4f3a8ab4",
+          "completed_sha256": "9ad53a2f41f6013cfb0add1e51c9dc432a9311cf12f56f7c98aeef02ec4e0abe",
+          "reservation_sha256": "b5f45faadbdb924f63dfecc90465843535e401dd3e38ff8e07cde3afae6258af"
+        }
+      ]
+    },
+    {
+      "id": "W09",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 17,
+          "stage": "plan",
+          "started_sha256": "ed9de31aaa916ebea50d67ce028ab375f8628c0490abf510b9f8f2e4971fe751",
+          "completed_sha256": "74afdb6b0e223ae2ad3c044740a85fe546fff1cc12c9e34a4a59ef550a4d82bb",
+          "reservation_sha256": "daac62129f38c164c92b9a8d5870385957a94756523f1933ad891798b8439337"
+        },
+        {
+          "attempt": 18,
+          "stage": "verify",
+          "started_sha256": "429336487a500808998f0f373f9a97af2113bc93338311b0905a9282c5bf5081",
+          "completed_sha256": "a27bbc8d0e29bd6ceadb702d0cfeb54bdaa9e1b30f88ce630685a4ee20445014",
+          "reservation_sha256": "da24a92cb1243665bb9124fac0388e29884bfd7af3483a74914273b9818c1f07"
+        }
+      ]
+    },
+    {
+      "id": "W10",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 19,
+          "stage": "plan",
+          "started_sha256": "7d7273bb7069b770da2aab8534a51b87ea8fbff72b39059df0ff1fac901987ef",
+          "completed_sha256": "5d8da4f302f39fd6b0c19bec1f38220bcf8c7cfc74af853753a5efb65194e179",
+          "reservation_sha256": "ee67e33ef635962fec2d8683197c82567c25d5dd1cdeccf1fc5c64babe7b99c2"
+        },
+        {
+          "attempt": 20,
+          "stage": "verify",
+          "started_sha256": "e82c8beeb809c4fc1fe6209826946e7841deab7167cf939f13b2f285517bc455",
+          "completed_sha256": "165a16a03e5d810306003a4c9d1001b8ba340436b31870e78e1e9e3a252b2171",
+          "reservation_sha256": "099863631f309d5fdedfd2e81f79c846c545f1a1d2a80269dd863eb97d4ba2e5"
+        }
+      ]
+    },
+    {
+      "id": "W11",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 21,
+          "stage": "plan",
+          "started_sha256": "01eb6aacc5b33df060ce6f1ce7c270ecd6b3e2694012a4f07bfbef79f6f26969",
+          "completed_sha256": "d8d1cb02a4f1607afdef8f84d5547e1ab98424c7d0b8f88e7853c97e5f02cc1b",
+          "reservation_sha256": "278eebdc95416d9f5cc96201c78d8922fdb0e883506478d1b4df6a73f8cc2e8c"
+        },
+        {
+          "attempt": 22,
+          "stage": "verify",
+          "started_sha256": "b8ebdf4d8c7347d266fea9c69cefb538cf4f7701ecdd5702fcc9483870eee377",
+          "completed_sha256": "e1a0ce4222a7ba637964ae1cb4e5480cd5e9f2e3b246d402b6e0aa7d42b2bbc0",
+          "reservation_sha256": "0f93d822dfa641e54a44a32e84aa2ab806a7e78fa8ac22f5ff1f8986907901dd"
+        }
+      ]
+    },
+    {
+      "id": "W12",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 23,
+          "stage": "plan",
+          "started_sha256": "87281383c5a28a0f74d30dabe97bf41c93a1318b485538703b2e6dec2d2c13c6",
+          "completed_sha256": "c9fff78957089552ba9427b879b572de6253188473ce4808d0db1836c823192d",
+          "reservation_sha256": "69bb3ac80ef68912e00b16d2c6b2d03f0329213501ee227fa9e5399581005caf"
+        },
+        {
+          "attempt": 24,
+          "stage": "verify",
+          "started_sha256": "213dbb247da88472ab9c1476a9ccfeda62214e7b85bf879e18240cf8a301319d",
+          "completed_sha256": "be50e6d494ecd78357fe2af2465e5e9c51a2f082d4ab9aaf9c435bbe0cda147b",
+          "reservation_sha256": "8d812ea16ca19227402791e4c1f31094affafcb38ce291541d87f6da59e66fcb"
+        }
+      ]
+    },
+    {
+      "id": "W13",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 25,
+          "stage": "plan",
+          "started_sha256": "dbbedb1fed35866d74c1a69d9a69243d001dd06f44e35713353db66fdb76dce0",
+          "completed_sha256": "bf5064d592bb6335b77352ae30211dbc0eea04154843be2e04c179ea188db6ad",
+          "reservation_sha256": "08b868c132da64a31bbdd679b6c2515d7edb232475fbb41e0ecc3b412ec7eef1"
+        },
+        {
+          "attempt": 26,
+          "stage": "verify",
+          "started_sha256": "023ca646ea12475ddcac25e6cde343beefed1b3480d39f447280009ed0184545",
+          "completed_sha256": "77b894ae6fb59f9cdba2389f526e5204feb20fe94ee1bcf16a873f692250be02",
+          "reservation_sha256": "89e78cd1a1e84141eb05c40a54a37e062faef77eaf735cd613e1830d9ddacce4"
+        }
+      ]
+    },
+    {
+      "id": "W14",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 27,
+          "stage": "plan",
+          "started_sha256": "dc8aa059acf0ea386de2778faadf577ede931e771ac0824859054db56a3c0109",
+          "completed_sha256": "3134b9b9ed3624d472bf94c3527675e3d2bad60a56d5f30e88799a8b8bec997e",
+          "reservation_sha256": "e0e486a5e916c2409b495b50eeea330dec111cd7d39432647e1dccebc5a1b898"
+        },
+        {
+          "attempt": 28,
+          "stage": "verify",
+          "started_sha256": "e61fcede7a70bb2116c1bed6009598c988907eac01e368b446f1ae6fbc70c83c",
+          "completed_sha256": "7008e4ed92b15a356ad5fac0b251b4dfe16bb55fedb4202c8434b981d0976f81",
+          "reservation_sha256": "4c1d9a7d2131530900aaef9e65159d3dbcf5be94a5672199b16ae9861dd40540"
+        }
+      ]
+    },
+    {
+      "id": "W15",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 29,
+          "stage": "plan",
+          "started_sha256": "6417c63a5909bf575ac5ad12d0136a41f1aa96dc3ca112a4e0ce6b5f64ba9ac2",
+          "completed_sha256": "1b50aa040b4553f3884cc575220bcbddad7b9026572024cbe741525ea379d2df",
+          "reservation_sha256": "6df7049d2518fe5321f0bc5f026f6210f861f1a77dac23752874f6293c31788f"
+        },
+        {
+          "attempt": 30,
+          "stage": "verify",
+          "started_sha256": "d85bbc6f3de9bbca2821bdedd73b6427a737714b99d04e6e3f18eded93ce4e03",
+          "completed_sha256": "e8f6f5f8625d77d7424904864cf7a8b97625455ccc87241e78d66064da7aa881",
+          "reservation_sha256": "7c4637c05469734855621f6e7d725b49bec20b980659fda635c8eb49ef92b3ba"
+        }
+      ]
+    },
+    {
+      "id": "W16",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 31,
+          "stage": "plan",
+          "started_sha256": "88697df093b4316d65754e945626708fe2d465c0665d814572bf926496aa8092",
+          "completed_sha256": "870b8699f303f2fb134281e8fb7186f531a7a7215a756e7409ea475cccac5533",
+          "reservation_sha256": "1d3a2404f7c5170fe411231276371084bfa2dbcdc553bddc626d77f3b6ef40c9"
+        },
+        {
+          "attempt": 32,
+          "stage": "verify",
+          "started_sha256": "30f6a512915463ad6ee19695e7a4812aa6a456e25aa7496c171a704c6aed6a3a",
+          "completed_sha256": "3e44612ae52ac8ddf332919edc8b5b6a37665ca1ee83cfa0946c629fafe64398",
+          "reservation_sha256": "7afe4ebaa842026c1b7fedf61f07687f4c83ed00cddc296118a28f01ef063126"
+        }
+      ]
+    },
+    {
+      "id": "W17",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 33,
+          "stage": "plan",
+          "started_sha256": "2f00b5780efb4d34ff9a1178355f8bf7a300e6bb772db21354183151ee571cfd",
+          "completed_sha256": "a1bb67c663534074a27f4db513d247a211a9b35b0af2c7534e36e5630b3c301d",
+          "reservation_sha256": "f39dfc51f95d65fd32ac7637cc851721fec497930dc0d942a23d4cc78cb3e53d"
+        },
+        {
+          "attempt": 34,
+          "stage": "verify",
+          "started_sha256": "874414c356062d6faaca0b4de3f508d93015ffe97d9ef960ff61b791369433a4",
+          "completed_sha256": "26db0eb030af7abbdf896423ed487318f7410201406b329f4ddc1fc5138242a6",
+          "reservation_sha256": "fca55990c9c9f20bcad9c351b74faffa910763aa22e48eab84d29c479885924f"
+        }
+      ]
+    },
+    {
+      "id": "W18",
+      "plan_and_review_unchanged": true,
+      "stage_binding": [
+        {
+          "attempt": 35,
+          "stage": "plan",
+          "started_sha256": "080966bbeae16c3169763bae0fbc7aa028e210f201ab8bcc2d8c8c51f8b494ee",
+          "completed_sha256": "21d190bf43621341a44d3aa7c0573087aff320ff5c5de87ababa280981749ca3",
+          "reservation_sha256": "4ecc8f77a5925e9b1a41d5fd1dd998148efb8ce3f4b9b233bcf9b4554a979e45"
+        },
+        {
+          "attempt": 36,
+          "stage": "verify",
+          "started_sha256": "004623c820243f7a7a05a3821d9334dc06b138809db34ee4919e838b82a37aca",
+          "completed_sha256": "6761a9c57a44477d97e61ea35118ad23d93b4de030f49892c389814636362dd2",
+          "reservation_sha256": "40933fee56626af73cbae52bf91f4de2496aa0898ea19df5a9f9402d37eedc07"
+        }
+      ]
+    }
+  ]
+}

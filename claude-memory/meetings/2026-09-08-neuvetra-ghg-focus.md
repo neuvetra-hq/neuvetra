@@ -4,11 +4,11 @@ type: meeting
 title: "Neuvetra becomes the California and U.S. GHG product"
 status: active
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-09
 hats: [CEO, CPO, CTO]
 related: [frontdesk, terrascope, site, multi-product-launch, stack, 2026-04-25-calculator-implementation-strategy]
 mentions: [ceo, c-suite]
-sources: [2026-09-08-neuvetra-ghg-focus-conv]
+sources: [2026-09-08-neuvetra-ghg-focus-conv, 2026-09-09-carb-verifier-role-conv]
 tags: [strategy, ghg, product, research]
 ---
 
@@ -46,3 +46,19 @@ One Neuvetra GHG business. California and U.S. first. Notes before code, but ind
 The user subsequently defined the board role for themselves and requested a CEO-facing coordinator with CPO, CTO, independent Head of QA and specialist agents. Each role needs a clear reusable prompt, bounded tasks, evidence, reporting lines and permission to delegate relevant work within actual runtime limits. The coordinator rolls up very brief reports: completed work, important decisions and why, bottlenecks, current activity and the next demonstration. Roles must not fabricate activity when no worker is running.
 
 The initial implementation is [`AGENTS.md`](../../AGENTS.md), ten [role prompts](../../operations/agents/README.md), the [task ledger](../../operations/status.json) and [board report](../../operations/board-report.md). Task-scoped collaboration is available now; persistent cloud workers, durable scheduling, cloud source storage and a hosted operating dashboard remain future implementation. The daily reporting preference has been requested but no daily schedule is active. The user asked for work to be uploaded and testable, so milestone code and documentation belong on the working GitHub branch; raw source redistribution requires its own rights and storage treatment.
+
+**September 9 follow-up:** [[2026-09-09-answer-quality-and-session-handoff]] supersedes the dated implementation/next-action observations above without changing the company direction. Private EPA cloud storage and a local website were subsequently demonstrated; broader answer quality remains under correction. Persistent workers and scheduling are still absent. Resume from [operations/next-session.md](../../operations/next-session.md), not the earlier branch or visual-demo action list.
+
+### September 9: eleventh role, CARB verifier / GHG audit reviewer
+
+**Context:** The board requested a CARB verifier agent to review Scope 1, 2 and 3 audits and develop the company's deepest specialist GHG/CARB knowledge, supplying [CARB's verifier page](https://ww2.arb.ca.gov/carb-accredited-mrr-verifiers-ghg-emissions).
+
+**Options:** Expand the existing numerical validator alone, or add a dedicated whole-inventory/audit-workpaper reviewer that collaborates with it and regulatory research.
+
+**Call:** Add [carb-verifier](../../operations/agents/carb-verifier.md) as the eleventh defined role, reporting to Head of QA. It covers inventory completeness, audit plans and risk-based sampling, source/factor tracing, conformance and misstatement findings, workpaper sufficiency and corrective-action follow-up. Keep CARB MRR and corporate Scope 1-3 review as separate tracks.
+
+**Why:** A correct individual calculation does not establish a complete inventory or adequate audit evidence. The role provides a dedicated review owner without claiming that a prompt supplies CARB accreditation, professional experience or official sign-off authority. Internal agent separation does not resolve organizational conflicts of interest.
+
+**Consequences:** The [source brief and development backlog](../../docs/research/carb-verifier-role-basis.md) use inspected public CARB criteria and record a revised-final-order/transition-date finding. Five primary originals were retained locally with a separate manifest; application source approval was not expanded. Knowledge development through public training, held-out synthetic audit cases, reproducible calculations and qualified human calibration remains proposed. No persistent worker or automatic learning was activated. Use task `OPS-CARB-ROLE-01` in [the ledger](../../operations/status.json) for the independent instruction-review disposition.
+
+**Next:** Demonstrate the role on a small synthetic Scope 1/2 inventory and audit file with independently seeded omissions and evidence defects before expanding its demonstrated capabilities. Selection of later sector depth and human calibration remains open; role creation does not advance the dependent product milestone.

@@ -22,6 +22,7 @@ The coordinator owns the [status record](../status.json) and [board report](../b
 | [Head of QA](qa-lead.md) | CEO; independent of implementation | Review plan, independently checked evidence, defects and release-gate verdicts. |
 | [Regulatory researcher](regulatory-research.md) | CPO; QA for independent reviews | Primary-source applicability, chronology, citations and unresolved legal questions. |
 | [Accounting validator](accounting-validation.md) | Head of QA | Independently derived calculation expectations, accounting boundaries and method findings. |
+| [CARB verifier / GHG audit reviewer](carb-verifier.md) | Head of QA | CARB MRR and corporate Scope 1-3 audit readiness; inventory completeness, risk-based sampling, workpaper review and corrective-action findings. Internal AI role; no CARB accreditation or official sign-off. |
 | [Data / database specialist](data-database.md) | CTO | Source lineage, schemas, tenant isolation, migrations and data quality. |
 | [Software engineer](software-engineering.md) | CTO | Bounded application changes and relevant implementation verification. |
 | [Security / reliability specialist](security-reliability.md) | CTO for design; QA for independent review | Threats, controls, operational readiness, recovery and incident evidence. |

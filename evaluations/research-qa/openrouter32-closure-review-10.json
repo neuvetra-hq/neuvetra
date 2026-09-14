@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-32",
+  "role": "independent_qa",
+  "phase": "closure",
+  "disposition": "pass",
+  "purpose": "diagnostic_only_no_release",
+  "release_acceptance": false,
+  "closure_sha256": "ebaea4dd09e07e93bdba55a8c2a22122a1e10cd780d700c15b5fbba317b2964e",
+  "reviewed_evidence": {
+    "operations/openrouter32-shutdown-evidence.json": "0ea7bdf1bbd85eb3ec33461526921b5ccfe0518e91d74fa1843208adfabd648e",
+    "evaluations/research-qa/openrouter32-terminal-review-10.json": "14d36e65c9cdd42ef0c1785ea7893dd64694bd1e7a830943743e159573228bae",
+    ".superpowers/website-epa-live-32/W11-observed-ui.json": "cb47aebf729206326e69ba79348d90a22a9c2201fb8e7f825be3e64c41e45753",
+    ".superpowers/website-epa-live-32/closure.json": "ebaea4dd09e07e93bdba55a8c2a22122a1e10cd780d700c15b5fbba317b2964e"
+  },
+  "verification": {
+    "artifact_pins": 13,
+    "certificate_pins": 3,
+    "adapter_pins": 8,
+    "mismatches": 0,
+    "shutdown_receipt_hashes": "Both backend/frontend receipts match hash-bound root shutdown evidence.",
+    "spending": "Entire closure spending object exactly equals independent strict journal replay. One reserve followed by one response settlement; both traces pass persisted-row validation.",
+    "stages_used": 1,
+    "stages_retired": 4,
+    "carried_stages": 0,
+    "no_restart": true,
+    "cumulative_reserved_stages": 876,
+    "stop_reason": "identity",
+    "identity_failure_field": "pipeline",
+    "current_settled_nano_usd": 44565000,
+    "current_uncertain_nano_usd": 0,
+    "total_settled_nano_usd": 2855958000,
+    "historical_uncertain_nano_usd": 1624850000,
+    "remaining_monitoring_target_nano_usd": 5519192000,
+    "processes_independently_absent": [
+      20784,
+      36340
+    ],
+    "ports_independently_closed": [
+      3012,
+      3016,
+      5174,
+      5175
+    ],
+    "prior_M30": {
+      "closure_sha256": "0c35c8f46ffc35d722b1b98e8f534c156851f9fe08d1359a7465b64a92061e96",
+      "artifact_pins_rehashed": 63,
+      "snapshot_copies_rehashed": 577,
+      "mismatches": 0
+    },
+    "no_new_requests_or_restart_by_qa": true,
+    "credentials_accessed_by_qa": false
+  },
+  "outcome": "Closure is valid for a failed live identity verification with demonstrated finite pipeline diagnostic and independent response-cost settlement. It is not acceptance of the provider identity, answer or website reliability.",
+  "limitations": [
+    "Current browser response body was reconstructed, not directly captured. Root-reported visible result is unavailable; screenshot hash cannot be independently verified because no file was retained.",
+    "No consumable terminal QA record or successful same-process terminal recorder outcome is claimed. The runtime stopped on the durable identity event before manual review.",
+    "Closure's 13 artifact pins cover the runtime ledger; the supplemental observation and terminal-review hashes are explicitly bound by this independent review.",
+    "Historical uncertainty remains unresolved. Response-cost settlement supports internal monitoring, not invoice finality or a hard spending guarantee.",
+    "PASS concerns truthful shutdown, retirement, preserved accounting and evidence integrity only; release acceptance remains false."
+  ]
+}

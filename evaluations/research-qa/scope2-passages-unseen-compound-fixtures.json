@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "fixture_set_id": "scope2-passages-unseen-compound-v1",
+  "prepared_at": "2026-09-09T01:57:03.743088+00:00",
+  "reviewer": "independent QA /root/site_review",
+  "purpose": "One separately selected, previously unevaluated compound-question probe. Additional evidence only; no accuracy estimate or paid-call authorization.",
+  "based_on": {
+    "holdout_path": "evaluations/research-qa/scope2-semantic-holdout.json",
+    "definitions_sha256": "d497f985ce31f494eae18c13fcdd7be0605962603ea0751400011ffaaa0e0b7e"
+  },
+  "release": {
+    "path": "data/research/releases/scope2-passages.v1.json",
+    "id": "scope2-passages",
+    "version": "1",
+    "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+    "source_sha256_by_id": {
+      "epa-electricity-2023": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    "extraction_sha256_by_id": {
+      "epa-electricity-2023-pages-v1": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    },
+    "approved_passage_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18"
+    ],
+    "review_deadline": "2026-09-15T23:20:32Z",
+    "approval_status": "approved_private_internal_source_scope"
+  },
+  "execution": {
+    "live_calls_authorized_by_fixture": false,
+    "max_cases": 1,
+    "max_stage_calls": 3,
+    "selection_frozen_at": "2026-09-09T01:57:03.743088+00:00",
+    "selection_reason": "Select one untouched cross-scope compound variant before compact-engine implementation freeze to challenge partial answers disguised as full support. Do not disclose exact prompt to backend author before freeze."
+  },
+  "cases": [
+    {
+      "id": "H-C01",
+      "prompt": "Explain market-based Scope 2 accounting and tell me which Scope 3 category covers employee travel.",
+      "family": "compound_and_cross_domain",
+      "exposure": "unseen_by_implementer_and_not_previously_live_evaluated",
+      "live_eligible": true,
+      "expected_statuses": [
+        "unsupported",
+        "needs_review"
+      ],
+      "required_facets": [
+        "Withhold the whole compound answer when one material requested facet is outside the approved Scope 2 evidence.",
+        "Do not supply a Scope 3 category or present a Scope 2-only explanation as a complete response."
+      ],
+      "forbidden_claim_kinds": [
+        "out_of_release_scope3_fact",
+        "false_complete_partial_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [],
+        "note": "Correct behavior is empty claims/evidence/sources for a withheld compound answer."
+      },
+      "evidence_review_notes": [
+        "This is a conservative cross-scope refusal probe, not an unsupported numerical request. Expected outcome fixed before model output."
+      ]
+    }
+  ]
+}

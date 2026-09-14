@@ -1,0 +1,370 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "website-answer-units-05-independent-content-review",
+  "reviewed_at": "2026-09-09T13:54:02.007Z",
+  "reviewer": "Independent AI QA agent /root/website_qa",
+  "disposition": "approved_private",
+  "scope": "Exact authored content and companion relationships for a private reviewed-unit composition candidate; not runtime selection, browser, legal, commercial or production approval.",
+  "candidate": {
+    "path": "data/research/answer-units/scope2-website.v1.json",
+    "sha256": "c4972ad035fc331660eb2e37d12f5779a02d2942b093f2c35b65fee41cbf0803",
+    "bytes": 58536,
+    "review_metadata_state": "candidate at independent review"
+  },
+  "source_release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "condition_catalog_sha256": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+  "expires_at": "2026-09-15T23:20:32Z",
+  "attribution": "QA did not author catalog, runtime, source release or acceptance fixture. Separate independent AI source reviewer /root/source_review approved the same candidate. No qualified human assurance.",
+  "checks": {
+    "units_reviewed": 22,
+    "source_summaries": 19,
+    "explicit_interpretations": 3,
+    "source_passages_covered": 18,
+    "exact_own_source_anchors": 60,
+    "source_dependencies_complete": true,
+    "companion_graph_acyclic": true,
+    "unit_titles_and_full_text_reviewed": true,
+    "network_calls_by_qa": 0
+  },
+  "resolved_findings": [
+    {
+      "unit": "U20",
+      "finding": "Initial draft removed may/if uncertainty modality.",
+      "resolution": "Final text retains that factors may be even more uncertain if the data year differs from the purchase year."
+    },
+    {
+      "unit": "U19",
+      "finding": "Initial can-be wording weakened the source definition of methodology-change examples.",
+      "resolution": "Final text identifies the listed changes as examples and retains base-year policy."
+    },
+    {
+      "unit": "U16",
+      "finding": "Whole-year permission could be stated more explicitly.",
+      "resolution": "Final wording says the entire reporting year while retaining alignment and partial-period conditions."
+    }
+  ],
+  "special_assessments": [
+    {
+      "unit": "U03",
+      "assessment": "Modest explanation of separately labeled accounting perspectives, explicitly not EPA policy motive or universal law."
+    },
+    {
+      "unit": "U15",
+      "assessment": "Quality prerequisite appears within the permission text; no companion-only cure of an unconditional entitlement. Sale and separately conveyed certificates remain distinct."
+    },
+    {
+      "unit": "U21",
+      "assessment": "Recordkeeping practice labeled interpretation; different date concepts explained without creating an EPA filing rule."
+    },
+    {
+      "unit": "U22",
+      "assessment": "Preview evidence-assessment interpretation makes no actual label or instrument eligibility finding."
+    }
+  ],
+  "units": [
+    {
+      "id": "U01",
+      "type": "source_summary",
+      "title": "Two accounting perspectives",
+      "text_sha256": "d4e8a4a9abf23978cdbfb4ca709529a94ef5e87ba3a06b788f3c791ff96968be",
+      "passage_ids": [
+        "S01"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U02",
+      "type": "source_summary",
+      "title": "Reporting the two results",
+      "text_sha256": "e8481ece5281df5aa4b647a3194c24a913c89eb8f591f2b34b7ac05b23ac5b1a",
+      "passage_ids": [
+        "S01",
+        "S02"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U03",
+      "type": "reviewed_interpretation",
+      "title": "What separate results show",
+      "text_sha256": "d95bfcc3f791c6df37bf262e8e6fac8292560d01682c9ec24e94fbe7c52ef68b",
+      "passage_ids": [
+        "S01",
+        "S02"
+      ],
+      "required_unit_ids": [
+        "U01",
+        "U02"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U04",
+      "type": "source_summary",
+      "title": "Purchase records and the reporting period",
+      "text_sha256": "574522bb757b4e907e220c94f891ea1a982a398b35beaeb2cb7870743f1cd57e",
+      "passage_ids": [
+        "S03"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U05",
+      "type": "source_summary",
+      "title": "Supplier and delivery invoices",
+      "text_sha256": "49542841c6a5c6cd033d177e83e5b7947a56f7011406af448c802d77b5bffd91",
+      "passage_ids": [
+        "S03",
+        "S04"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U06",
+      "type": "source_summary",
+      "title": "Electricity activity units",
+      "text_sha256": "5ab015511ff6730649d5753e16bbfb01f096d90fd7710a23f4e3524de4b90905",
+      "passage_ids": [
+        "S05"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U07",
+      "type": "source_summary",
+      "title": "The generation-only factor boundary",
+      "text_sha256": "657b32d587ea80312ba310d4b19f1c9a9ab1ee5f2714c3d1628b5f4d7b568ad1",
+      "passage_ids": [
+        "S06"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U08",
+      "type": "source_summary",
+      "title": "Regional geography for grid electricity",
+      "text_sha256": "f3e1c5a58eca4f4ef4699685f2587e34abe5d479b7ff2beed2bebc343ed3ca74",
+      "passage_ids": [
+        "S06",
+        "S07"
+      ],
+      "required_unit_ids": [
+        "U07"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U09",
+      "type": "source_summary",
+      "title": "EPA eGRID as a regional source",
+      "text_sha256": "006aa2179e4fbc72e012867a75652702f766b1c71de7188c8ef2c493b1174f00",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S08"
+      ],
+      "required_unit_ids": [
+        "U08",
+        "U10",
+        "U20"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U10",
+      "type": "source_summary",
+      "title": "Checking the publisher’s update channels",
+      "text_sha256": "e2d3b444313768af262fd16247ef97ff4bd5491bae2200be0cb8d4c91cf3f69f",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S08",
+        "S09"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U11",
+      "type": "source_summary",
+      "title": "Researching the grid subregion",
+      "text_sha256": "ec62dcba71494ba44f6ceb5c388ac6915466e89902b870153dd6109b585ab373",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S10"
+      ],
+      "required_unit_ids": [
+        "U08"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U12",
+      "type": "source_summary",
+      "title": "Market evidence and the purchased product",
+      "text_sha256": "c41cd7c6ac36643f9e463105e689647d3381580860bb05045db8c40749faeb4f",
+      "passage_ids": [
+        "S06",
+        "S11"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U13",
+      "type": "source_summary",
+      "title": "Obtaining a supplier-specific factor",
+      "text_sha256": "8f12558c02be57cc62cfd3623508477045e2894df13bac31479f924e9274e41e",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S12",
+        "S15"
+      ],
+      "required_unit_ids": [
+        "U07",
+        "U16"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U14",
+      "type": "source_summary",
+      "title": "Certificate evidence and its quality prerequisite",
+      "text_sha256": "e245e0f44d52382586a1af78c4c4ac9a892ec044254f05073e527adc2b765d81",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S13"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U15",
+      "type": "source_summary",
+      "title": "Contracts and separately issued certificates",
+      "text_sha256": "4c6171e2a5a817f822728152567b13dadd7d908b11f542edd4f1def3d9f9d71c",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S13",
+        "S14"
+      ],
+      "required_unit_ids": [
+        "U14"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U16",
+      "type": "source_summary",
+      "title": "Agreement dates and inventory dates",
+      "text_sha256": "64ffb673dbf220129ad8c33bd5998f5e604fe94bd17e808ed4a6c07e78b3c244",
+      "passage_ids": [
+        "S15"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U17",
+      "type": "source_summary",
+      "title": "The period represented by a factor",
+      "text_sha256": "c5bd2c21cb6686589c459b58b1bbe00c90e29ad39cae35d000d206b107936a16",
+      "passage_ids": [
+        "S16",
+        "S17",
+        "S18"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U18",
+      "type": "source_summary",
+      "title": "The guide’s timing recommendation",
+      "text_sha256": "8e8e5950506bd205ecf6ca9723f3c2eddcb1dc7bf2939ce5946d5eaae3b0e934",
+      "passage_ids": [
+        "S16",
+        "S17",
+        "S18"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U19",
+      "type": "source_summary",
+      "title": "Methodology changes and prior-year adjustments",
+      "text_sha256": "3f969204d4bf7a66b147a68a579eff15fdd2eccb261595582a0fd6314fde5059",
+      "passage_ids": [
+        "S17"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U20",
+      "type": "source_summary",
+      "title": "Timing and averaging limitations",
+      "text_sha256": "65428479a938e4c05dd75ff70e6a79d224e01611540e3c45002e2dc8d23ddd1a",
+      "passage_ids": [
+        "S18"
+      ],
+      "required_unit_ids": [],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U21",
+      "type": "reviewed_interpretation",
+      "title": "Keeping source dates distinct",
+      "text_sha256": "d234647ab7a7c33fc4dc09b1fcb13458b69250812ac8446331bfbf9a2f1172b2",
+      "passage_ids": [
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S16",
+        "S17",
+        "S18"
+      ],
+      "required_unit_ids": [
+        "U10",
+        "U17",
+        "U20"
+      ],
+      "disposition": "approved_private"
+    },
+    {
+      "id": "U22",
+      "type": "reviewed_interpretation",
+      "title": "Assessing documentation behind a product label",
+      "text_sha256": "ec6b29cd33d15b686e4771df56320f4be271923b68124d38420114e10c6e7873",
+      "passage_ids": [
+        "S06",
+        "S11",
+        "S13",
+        "S14"
+      ],
+      "required_unit_ids": [
+        "U14",
+        "U15"
+      ],
+      "disposition": "approved_private"
+    }
+  ],
+  "remaining_gates": [
+    "Root must preserve exact approved content while recording review metadata and pin final catalog bytes.",
+    "Runtime must render only immutable approved unit/title/evidence text with required companion closure and explicit interpretation labels.",
+    "Semantic selection, whole-question completeness, scope, cloud failures and actual browser behavior need independent execution evidence.",
+    "All18 frozen natural questions remain unchanged; earlier revision04 failures remain historical evidence."
+  ]
+}

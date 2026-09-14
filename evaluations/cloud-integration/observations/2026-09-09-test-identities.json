@@ -1,0 +1,26 @@
+{
+  "project_ref": "icockcoguyadhryzydvl",
+  "run_id": "neuvetra-cloud-smoke-20260909",
+  "status": "complete",
+  "error": null,
+  "attempts": 4,
+  "automatic_retry": false,
+  "identities": [
+    {
+      "scope_id": "90000000-0000-4000-8000-00000000000a",
+      "email": "neuvetra-cloud-smoke-20260909-a@neuvetra.invalid",
+      "auth_user_id": "be70c99f-3d35-4ec5-937c-0de382e994be",
+      "phase": "signed_in",
+      "expires_at": 1788936302
+    },
+    {
+      "scope_id": "90000000-0000-4000-8000-00000000000b",
+      "email": "neuvetra-cloud-smoke-20260909-b@neuvetra.invalid",
+      "auth_user_id": "a9d01030-4010-4a9f-a45b-a16a842c9b59",
+      "phase": "signed_in",
+      "expires_at": 1788936302
+    }
+  ],
+  "credential_handling": "Current-user Windows DPAPI encrypted; no secrets in this record.",
+  "authorizations": "User explicitly approved two synthetic test accounts, private bucket and research API exposure on this task."
+}

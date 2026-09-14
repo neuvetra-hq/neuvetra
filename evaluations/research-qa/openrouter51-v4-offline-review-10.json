@@ -1,0 +1,182 @@
+{
+  "schema_version": "m51_v4_offline_technical_review.v1",
+  "task": "M51-TECH-QA-V4",
+  "role": "independent_technical_acceptance",
+  "reviewed_at": "2026-09-13T03:34:20Z",
+  "candidate_sha256": "2461e7b898f96b884c1075a406d4e0ba9877354f1b23581d8e50272bff115c55",
+  "manifest_sha256": "d7190718e52b5ee3c01e9683f2cd0c9cc41b052000d4a4a5f11f937e7037466e",
+  "rehearsal_sha256": "d842552dd2c2b6674ec3f7fc6a7cefce7c41efe36ba93e36ca712cb00f562c5f",
+  "disposition": "pass_provider_disabled_offline_technical_acceptance",
+  "technical_acceptance": true,
+  "milestone_complete": false,
+  "live_or_paid_execution_authorized": false,
+  "release_acceptance": false,
+  "freeze_integrity": {
+    "assigned_candidate_hash_matches": true,
+    "assigned_manifest_hash_matches": true,
+    "assigned_rehearsal_hash_matches": true,
+    "candidate_pins_checked": 24,
+    "manifest_pins_checked": 24,
+    "pin_maps_equal": true,
+    "pin_mismatches_before_validation": 0,
+    "pin_mismatches_after_validation": 0,
+    "post_validation_observed_at": "2026-09-13T03:34:02.1685725Z"
+  },
+  "frozen_lineage": {
+    "m50_live_execution_sha256": "3927c16d8896e6f98b96e939cf9c5b9dd853206c7ad0bcca13b836df5aa61d49",
+    "m50_product_outcome_sha256": "9786e6de938b4192dbb008db67ea69d91fc1a38ec61d317fa652088dc3d7474e",
+    "m50_technical_closure_sha256": "3dd8544b40ef1d51fb6c1bf0adb8b93466f3b5def3795637907dd32dd04f3c95",
+    "m51_v1_product_review_sha256": "72d8dc77d3a8a208390aaca9c5b34ed342aa2d03429eacd5f81007a5bca2e586",
+    "m51_v1_technical_review_sha256": "237052df7eb6089998f632d7665db2f42adbe25ac98663fad89669b47aa1f04b",
+    "m51_v2_product_review_sha256": "baa080b820593290c15d7231088cb7677d46f9ad6d136715f106a1d2c29ffcbb",
+    "m51_v2_technical_review_sha256": "b0826a2f8833a8821c994fa3378abbf851ec8fdd626f276b440b72cee3079ed7",
+    "m51_v3_product_review_sha256": "a70f47c98686c42441ed1db4520d8588da7d0e26732c7483a5e97a671cd96e7f",
+    "m51_v3_technical_review_sha256": "f92b1b4edd1c13b28425ba14d73a668bc4d42095840714044cb026521a056e7b",
+    "m50_disposition_preserved": "fail_live_execution_closed_no_retry",
+    "m50_exact_rejection_subtype_preserved": "unknown_not_reconstructable",
+    "m50_pinned_files_unchanged": true
+  },
+  "independent_validation": {
+    "focused_tests": {
+      "passed": 7,
+      "failed": 0,
+      "assertions": 40
+    },
+    "focused_typescript_check": "pass",
+    "provider_disabled_rehearsal": {
+      "exit": "pass",
+      "failure_details": ["inner_json", "content_shape"],
+      "provider_transport_calls": 0,
+      "synthetic_response_count": 2,
+      "logical_dispatches": 2,
+      "settled_nano_usd_per_case": [33685000, 33685000],
+      "no_more_dispatch": true,
+      "no_more_spend": true,
+      "global_fetch_calls": 0,
+      "network_listeners": 0,
+      "credential_reads": 0,
+      "evaluator_accessed": false,
+      "services_started": 0,
+      "fixture_is_actual_provider_output": false,
+      "paid_activity": false,
+      "disposable_cleanup_verified": true,
+      "semantic_output_matches_frozen_rehearsal": true,
+      "note": "Completion time and hashes containing bounded elapsed-time evidence may vary between disposable rehearsals; all governed semantic fields matched."
+    },
+    "independent_adversarial_probe": {
+      "fully_rebound_mutation_cases": 26,
+      "refused": 26,
+      "unexpected_accepts": 0,
+      "joint_backend_file_and_stdout_tamper_refused": true,
+      "transport_one_propagated_as": 1,
+      "missing_runtime_accounting": "null_unavailable",
+      "ordinary_shutdown_accounting": "null_unavailable",
+      "broken_closure_chain_accounting": "null_unavailable",
+      "temporary_probe_directories_removed": true,
+      "temporary_probe_source_removed": true
+    }
+  },
+  "accepted_controls": {
+    "safe_stage_schema_rejects_unknown_keys_and_noncanonical_values": true,
+    "complete_post_response_failed_event_required": true,
+    "required_stage_attempt_phase": "analyze/1/failed",
+    "required_code_http_stop": "provider_failure/200/end_turn",
+    "required_usage": "exact nonnegative integer input_tokens and output_tokens",
+    "required_elapsed_ms": "nonnegative safe integer",
+    "required_failure_phase": "decoding",
+    "required_failure_detail": "content_shape_or_inner_json",
+    "required_abort_source": "none",
+    "terminal_event_code_and_reason_reconciled": true,
+    "missing_core_diagnostic_fields_refused": 8,
+    "allowed_but_inconsistent_diagnostic_values_refused": 6,
+    "stage_unknown_key_refused": true,
+    "stage_filename_attempt_reconciled": true,
+    "duplicate_failed_stage_refused": true,
+    "stage_payload_sequence_reconciled": true,
+    "stage_record_hash_bound_into_terminal": true,
+    "terminal_exact_schema_and_fixed_semantics_enforced": true,
+    "payload_exact_schema_one_dispatch_and_stop_enforced": true,
+    "cost_exact_schema_settled_once_with_no_pending_or_uncertain_attempt_enforced": true,
+    "shutdown_exact_schema_controlled_no_retry_no_carry_and_nonnegative_counts_enforced": true,
+    "terminal_payload_cost_shutdown_hash_chain_enforced": true,
+    "canonical_closure_recomputed_from_sealed_runtime_before_wrapper_acceptance": true,
+    "canonical_closure_file_and_stdout_require_exact_single_line_byte_parity": true,
+    "prefix_suffix_duplicate_changed_and_jointly_changed_output_refused": true,
+    "authoritative_transport_count_propagates_without_defaulting_to_zero": true,
+    "untrusted_missing_or_broken_closure_never_claims_zero": true,
+    "exact_failed_native_cost_in_rehearsal_nano_usd": 33685000,
+    "no_additional_logical_dispatch_after_failure": true,
+    "no_retry_or_carry": true,
+    "no_answer_or_raw_provider_content_persisted": true,
+    "fixtures_labeled_sanitized_representative_not_actual_provider_output": true
+  },
+  "adversarial_cases": [
+    "missing code",
+    "missing http_status",
+    "missing stop_reason",
+    "missing usage",
+    "missing elapsed_ms",
+    "missing failure_phase",
+    "missing failure_detail",
+    "missing abort_source",
+    "provider_timeout code beside post-response terminal",
+    "HTTP 201 beside required HTTP 200",
+    "max_tokens beside end_turn contract failure",
+    "reading_body beside decoding terminal",
+    "router_identity detail outside bounded content/JSON failure",
+    "caller abort beside completed HTTP response",
+    "unknown failed-stage key",
+    "plan stage conflicting with completed analyze sequence",
+    "terminal extra key",
+    "terminal conflicting error code",
+    "payload extra key",
+    "payload extra dispatch",
+    "cost extra key",
+    "negative settled cost",
+    "shutdown extra key",
+    "negative transport count",
+    "filename attempt mismatch",
+    "duplicate failed-stage record"
+  ],
+  "commands_and_counts": [
+    {
+      "purpose": "candidate, manifest and all pin verification before and after execution",
+      "result": "24/24 candidate pins and 24/24 manifest pins matched twice; maps equal"
+    },
+    {
+      "purpose": "focused Bun test suite",
+      "result": "7 pass, 0 fail, 40 assertions"
+    },
+    {
+      "purpose": "focused TypeScript no-emit check",
+      "result": "pass"
+    },
+    {
+      "purpose": "provider-disabled composed-path rehearsal",
+      "result": "pass; two synthetic decoder failures, exact $0.033685 settlement per case, zero external activity, cleanup complete"
+    },
+    {
+      "purpose": "independent fully rebound schema, semantic, sequence and accounting probes",
+      "result": "26/26 malformed or contradictory chains refused; closure/stdout joint tamper refused; transport=1 propagated; missing, ordinary and broken evidence returned null/unavailable"
+    }
+  ],
+  "limitations": [
+    "The two fixtures are sanitized representative response shapes and do not reconstruct or prove the exact M50 provider rejection subtype.",
+    "This acceptance covers the frozen provider-disabled adapter and evidence contract. It does not validate a compiled Windows wrapper or a future live process chain.",
+    "Any future provider-enabled regression needs a new frozen candidate, independently reviewed secure wrapper integration, fresh evidence, exact cost scope and separate board authorization."
+  ],
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "evaluator_accessed": false,
+    "external_network_requests": 0,
+    "application_services_started": false,
+    "customer_data_accessed": false,
+    "source_expansion": false,
+    "author_or_shared_operations_files_modified": false,
+    "only_new_persistent_file_written": "evaluations/research-qa/openrouter51-v4-offline-review-10.json",
+    "commit_publish_merge_deploy_or_release": false
+  },
+  "conclusion": "PASS for provider-disabled offline technical acceptance of frozen M51 v4 candidate 2461e7b898f96b884c1075a406d4e0ba9877354f1b23581d8e50272bff115c55. Exact pins, focused tests, typecheck, composed-path rehearsal and independent fully rebound probes establish the bounded diagnostic, authoritative closure and fail-closed wrapper-accounting contract within the stated offline scope. This pass does not authorize live or paid execution."
+}

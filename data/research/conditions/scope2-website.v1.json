@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "release_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "reviewed_passage_ids": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05",
+    "S06",
+    "S07",
+    "S08",
+    "S09",
+    "S10",
+    "S11",
+    "S12",
+    "S13",
+    "S14",
+    "S15",
+    "S16",
+    "S17",
+    "S18"
+  ],
+  "conditions": [
+    {
+      "id": "S01-C01",
+      "passage_id": "S01",
+      "source_quote": "This document is aligned with the principles and methodologies defined in the GHG Protocol Scope 2 Guidance. However, it does not attempt to address all scope 2 issues.",
+      "applicability": "When describing the guidance coverage or its alignment with GHG Protocol, retain that it does not address all scope 2 issues; alignment does not mean complete coverage."
+    },
+    {
+      "id": "S01-C02",
+      "passage_id": "S01",
+      "source_quote": "The organization should quantify and report both totals in its GHG inventory.",
+      "applicability": "When describing dual reporting, preserve the recommendation to quantify and report both totals. The source says should; do not convert it into a universal legal mandate."
+    },
+    {
+      "id": "S01-C03",
+      "passage_id": "S01",
+      "source_quote": "The location-based method considers average emission factors for the electricity grids that provide electricity. The market- based method considers contractual arrangements under which the organization procures power from specific sources, such as renewable energy.",
+      "applicability": "When distinguishing the methods, retain the grid-average basis of location-based accounting and the contractual, specific-source basis of market-based accounting. Do not substitute supplier labels for contractual evidence or attribute an unstated author rationale."
+    },
+    {
+      "id": "S02-C01",
+      "passage_id": "S02",
+      "source_quote": "Organizations should calculate and report scope 2 emissions using two methods: one using location-based emission factors, and one using market-based emission factors. Both results should be clearly labeled according to the method used.",
+      "applicability": "When describing the two reported results, retain both methods and clear method-specific labels, with should/recommendation modality. Do not merge them into one reported total or assert universal legal compulsion."
+    },
+    {
+      "id": "S03-C01",
+      "passage_id": "S03",
+      "source_quote": "To quantify scope 2 emissions, the activity data needed are the amount of electricity that is purchased during the reporting year. Utility bills or other purchase records can be used to determine the amount of electricity purchased.",
+      "applicability": "When explaining activity data, retain the amount purchased during the reporting year. Utility bills or purchase records can establish that amount; the passage does not require one exclusive document type."
+    },
+    {
+      "id": "S03-C02",
+      "passage_id": "S03",
+      "source_quote": "This information on the electricity entering the organization’s facility is considered the best type of activity data as opposed to sub-metering data from within the facility, which may be incomplete.",
+      "applicability": "When comparing incoming electricity records with internal sub-metering, preserve the preference for facility-entry purchase data and the possibility that sub-metering is incomplete; do not claim every sub-meter is necessarily incomplete."
+    },
+    {
+      "id": "S04-C01",
+      "passage_id": "S04",
+      "source_quote": "Commodity electricity may be purchased from a provider other than the local distribution utility. In this situation, the reporting organization may receive invoices from both the commodity supplier as well as from the local distribution utility, who charges a fee for electricity delivery. It is recommended that the consumption from the local utility be used as the activity data, because this is based on electricity meters located at the organization’s facility. To avoid counting the same consumption twice, ensure that consumption from the commodity supplier is not also included in the activity data.",
+      "applicability": "When separate commodity and local-delivery invoices concern the same electricity, retain the recommendation to use local-utility metered consumption and avoid also counting the commodity-supplier consumption. Do not apply that duplication conclusion to unrelated purchases."
+    },
+    {
+      "id": "S05-C01",
+      "passage_id": "S05",
+      "source_quote": "For electricity, kilowatt-hours (kWh) or megawatt-hours (MWh) are most common.",
+      "applicability": "When describing electricity activity units, kWh and MWh are the most common units, not the only permitted units. This statement does not supply a conversion rule."
+    },
+    {
+      "id": "S06-C01",
+      "passage_id": "S06",
+      "source_quote": "Scope 2 emissions are generated from sources owned and operated by other entities, and include indirect emissions from generation only, meaning the emissions that occur through the use of purchased electricity, steam, heat, or cooling and are quantified at the point of generation. Therefore, emission factors for electricity, steam, heat, or cooling should not include the impact of transmission and distribution losses, nor emissions from fuel extraction or other activities upstream of the generation facility.",
+      "applicability": "When explaining the purchased-electricity factor boundary, retain generation-only emissions quantified at generation and the should-not-include boundary for transmission/distribution losses and upstream fuel activities. Do not describe a life-cycle factor as this same boundary."
+    },
+    {
+      "id": "S07-C01",
+      "passage_id": "S07",
+      "source_quote": "If an organization purchases electricity that is delivered through a grid, the organization should use published emission factors based on the geographic location of each of its facilities, corresponding to the average emission factor of generation facilities supplying power to the grid. It is recommended to use regional or subnational emission factors, representing a grid distribution area.",
+      "applicability": "When discussing electricity delivered through a grid, retain facility geography, published factors representing average generation supplying that grid, and the recommendation for regional/subnational grid-distribution areas. Do not extend the grid premise to direct-line supply."
+    },
+    {
+      "id": "S08-C01",
+      "passage_id": "S08",
+      "source_quote": "For operations in the U.S., the recommended regional factors are the total output subregion grid factors published by the EPA’s Emission & Generation Resource Integrated Database (eGRID) 4. The total output factors represent average emission factors for all plants generating electricity for the grid, including baseload, intermediate, and peaking units.",
+      "applicability": "When describing the recommended U.S. regional factor category, retain total-output eGRID subregion grid averages covering all generating plants, including baseload, intermediate and peaking units. This is a recommended category, not a current numeric factor selection."
+    },
+    {
+      "id": "S08-C02",
+      "passage_id": "S08",
+      "source_quote": "An eGRID subregion represents a portion of the U.S. power grid that is contained within a single North American Electric Reliability Council (NERC) region. Most of eGRID’s subregions consist of one or more power control areas (PCAs). eGRID subregions generally represent sections of the power grid that have similar emissions and resource mix characteristics and may be partially isolated by transmission constraints.",
+      "applicability": "When describing eGRID geography, retain the within-one-NERC-region definition and the qualified most/generally/may language about power-control areas, similar resource characteristics and transmission isolation. Do not turn those qualified descriptions into universal properties."
+    },
+    {
+      "id": "S09-C01",
+      "passage_id": "S09",
+      "source_quote": "EPA publishes a GHG Emission Factors Hub that contains the most recent eGRID subregion emission factors. There may be a delay between the release of a new version of eGRID and the update of the Emission Factors Hub. The most recent version of eGRID, along with supporting documentation and resources, is available at https://www.epa.gov/egrid.",
+      "applicability": "When describing EPA publication channels or their versions, preserve the possible delay between an eGRID release and the Hub update. The dated paragraph does not verify which version is available now or establish synchronized updates."
+    },
+    {
+      "id": "S10-C01",
+      "passage_id": "S10",
+      "source_quote": "To determine in which eGRID subregion an organization’s facilities are located, they can use the Power Profiler Tool. This tool allows users to enter their facility zip codes and utility names to identify the appropriate eGRID subregions.",
+      "applicability": "When explaining the documented Power Profiler discovery route, retain facility zip codes and utility names as its inputs and can-use modality. Naming the tool does not establish a completed facility lookup or make it the only possible route."
+    },
+    {
+      "id": "S11-C01",
+      "passage_id": "S11",
+      "source_quote": "The market-based method considers contractual arrangements under which the organization procures power from specific sources, such as fossil, renewable, or other generation facilities. Market-based emission factors reflect these arrangements.",
+      "applicability": "When characterizing market-based inputs, preserve the contractual arrangements for power from specific sources. This category description does not itself recognize a supplier renewable label as a usable factor or establish an individual instrument claim."
+    },
+    {
+      "id": "S11-C02",
+      "passage_id": "S11",
+      "source_quote": "The following are the types of market-based emission factors available, listed in order of preference based on the precision of the factors.",
+      "applicability": "When discussing the ordering in this overview, it ranks types of market-based emission factors by precision. Do not reinterpret it as a ranking of individual certificates, supplier labels or particular claims."
+    },
+    {
+      "id": "S12-C01",
+      "passage_id": "S12",
+      "source_quote": "An electricity supplier, such as a regulated utility or a deregulated supplier, may provide information to its customers on the emission factor associated with its electricity product. The product may be a standard product or a differentiated product.",
+      "applicability": "When discussing supplier factor information, preserve that a supplier may provide a factor associated with its standard or differentiated electricity product. Do not assert mandatory publication or that receiving information establishes eligibility."
+    },
+    {
+      "id": "S12-C02",
+      "passage_id": "S12",
+      "source_quote": "To be used in the market-based method, the emission factor must include all the electricity delivered by the supplier, including electricity it generates as well as electricity it purchases from others. An example of a factor that should not be used is a supplier emission factor that only includes generation facilities owned by the supplier, which does not represent the full set of generation facilities supplying the delivered electricity",
+      "applicability": "Any explanation of using a supplier-specific factor must preserve coverage of all delivered electricity, including the supplier own generation and electricity purchased from others. The supplier-owned-only example should not be used because it omits part of delivered supply."
+    },
+    {
+      "id": "S13-C01",
+      "passage_id": "S13",
+      "source_quote": "If an energy attribute certificate carries with it an emission factor, that factor can be used to quantify emissions in the market-based method.",
+      "applicability": "When saying a certificate factor can be used, preserve the premise that the certificate carries an emission factor. This permission remains subject to the separate quality-criteria condition; possession of a label alone is not that premise."
+    },
+    {
+      "id": "S13-C02",
+      "passage_id": "S13",
+      "source_quote": "Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the certificate.",
+      "applicability": "Any assertion that a certificate-based factor can be claimed or used, including when certificates are bundled with a contract, must retain the applicable quality-criteria review to ensure claimability. Do not present mere possession, bundling or a completed review without establishing claimability as sufficient."
+    },
+    {
+      "id": "S13-C03",
+      "passage_id": "S13",
+      "source_quote": "The emission factor is based on the specific source that the certificate represents, regardless of the energy resource used. Typically, these certificates represent renewable energy and may have an emission factor of zero, but they may in some cases have a non-zero emission factor (e.g., if there is a fossil-fuel or biomass generation component).",
+      "applicability": "When explaining what a certificate represents, retain the specific generating source regardless of energy resource. Only when a candidate also makes resource or factor-value assertions, preserve the typical/may qualifications and the possibility of non-zero cases; those examples need not be added to an answer. This condition does not authorize numerical-factor output or an eligibility decision."
+    },
+    {
+      "id": "S14-C01",
+      "passage_id": "S14",
+      "source_quote": "If there are no certificates associated with this generation, the contract itself carries the emission factor associated with the generation facility, regardless of the energy resource used.",
+      "applicability": "When saying the contract itself carries the generating-facility factor, retain the premise that no certificates are associated with that generation. Do not transfer the factor through both contract and separately issued certificates."
+    },
+    {
+      "id": "S14-C02",
+      "passage_id": "S14",
+      "source_quote": "Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed based on the contract.",
+      "applicability": "Any assertion that a factor can be claimed based on a contract must retain applicable quality-criteria review to ensure claimability. The contractual arrangement by itself does not establish an unconditional entitlement."
+    },
+    {
+      "id": "S14-C03",
+      "passage_id": "S14",
+      "source_quote": "If certificates are issued to the generating facility, the emission factor is conveyed by the certificates, rather than the contract.",
+      "applicability": "When certificates are issued to the generating facility, preserve that the certificates convey the factor rather than the contract. Do not equate holding the contract with holding separately conveyed attributes."
+    },
+    {
+      "id": "S14-C04",
+      "passage_id": "S14",
+      "source_quote": "If the certificates are bundled with the contract, the purchaser can claim the emission factor.",
+      "applicability": "When describing a purchaser claim through bundled certificates, retain bundling and the applicable certificate/contract quality prerequisites from the same source context. Do not present bundling alone as sufficient proof of claimability."
+    },
+    {
+      "id": "S14-C05",
+      "passage_id": "S14",
+      "source_quote": "If the certificates are sold to another entity, the purchaser cannot make that claim, and the energy should be assigned the residual mix factor if available, or the regional or national factor.",
+      "applicability": "When describing sale to another entity, preserve that the purchaser cannot make the certificate-factor claim. If the fallback consequence is mentioned, retain residual mix if available, otherwise regional or national factor; this does not authorize selecting a company fallback."
+    },
+    {
+      "id": "S15-C01",
+      "passage_id": "S15",
+      "source_quote": "An organization should consider the alignment of its inventory reporting year and the timeframes of its purchasing agreements. If those timeframes align, the agreement and the associated emission factors can be applied for the entire reporting year.",
+      "applicability": "When discussing whole-year agreement coverage, preserve the recommendation to consider reporting-year/agreement alignment and that aligned periods can support whole-year application, not an unconditional must or eligibility guarantee."
+    },
+    {
+      "id": "S15-C02",
+      "passage_id": "S15",
+      "source_quote": "If they do not align, such as if the reporting year is based on a fiscal year and a purchasing agreement is for a calendar year, the emission factors for a purchasing agreement should only be applied to the portion of the reporting covered by that agreement.",
+      "applicability": "When reporting and agreement periods do not align, preserve that factors should apply only to the portion covered by the agreement. Do not treat partial overlap as whole-year coverage or declare the entire agreement unusable solely because dates differ."
+    },
+    {
+      "id": "S15-C03",
+      "passage_id": "S15",
+      "source_quote": "A given reporting year may be covered by two different purchasing agreements, or there may be portions of the reporting year which are not covered by any purchasing agreement.",
+      "applicability": "When describing agreement coverage across a reporting year, preserve the possibility of different agreements and uncovered portions. Do not assume every reporting year has one agreement or complete coverage."
+    },
+    {
+      "id": "S16-C01",
+      "passage_id": "S16",
+      "source_quote": "All scope 2 emission factors represent the emissions profile for generation during a specific period of time. This emissions profile can change over time, due to changes in the resource mix and generation efficiency supplying the electricity. As a result, the emission factors may be updated periodically to reflect these changes.",
+      "applicability": "When describing factor updates, preserve that factors represent a specific generation period and may change with resource mix and generation efficiency. Do not imply factors are timeless or that every update is a methodology change."
+    },
+    {
+      "id": "S16-C02",
+      "passage_id": "S16",
+      "source_quote": "As such, it is recommended that organizations use the newest emission factors available at the time they calculate emissions for a reporting year. 5 Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.\n\n5 This applies whether an organization uses a calendar year period or other period for their GHG Inventory. For example, if an organization is calculating a GHG Inventory in August for a July through June reporting year, the inventory should use the newest factors available in August.",
+      "applicability": "When stating this guidance factor-timing recommendation, preserve newest available at the time of calculation for the reporting year, including calendar or other inventory periods. Keep calculation time and reporting period distinct; the recommendation does not identify the latest factor now or override other methods."
+    },
+    {
+      "id": "S16-C03",
+      "passage_id": "S16",
+      "source_quote": "Because these changes in emission factors do not represent a methodology change, prior years’ emissions need not be adjusted to reflect new factors.",
+      "applicability": "When saying prior years need not be adjusted, limit that statement to the described factor changes that are not methodology changes. Do not generalize it to never recalculate prior inventories; methodology changes have their separate source condition."
+    },
+    {
+      "id": "S17-C01",
+      "passage_id": "S17",
+      "source_quote": "At times, there may be changes in the methodology used to develop emission factors. In addition, an organization may change the type of emission factors being used due to availability of factors. These are examples of a methodology change in the organization’s GHG inventory, and in such cases, prior years’ emissions should be adjusted in a manner consistent with the organization’s base year adjustment policy.",
+      "applicability": "When discussing a methodology change, preserve the examples of changed factor-development methodology or factor type due to availability, and that prior emissions should be adjusted consistently with the organization base-year adjustment policy. Do not equate every ordinary update with such a change or invent a specific base-year policy."
+    },
+    {
+      "id": "S18-C01",
+      "passage_id": "S18",
+      "source_quote": "Average grid emission factors are not completely accurate because the factors vary by time of day and season based on what units are operating (e.g., base load vs. peaking load).",
+      "applicability": "When describing grid-average accuracy, preserve time-of-day and seasonal generation variation and the resulting imperfect accuracy. Do not claim an average factor is an exact facility-specific measurement."
+    },
+    {
+      "id": "S18-C02",
+      "passage_id": "S18",
+      "source_quote": "Factors may be even more uncertain if the data are calculated for a year that differs from the year of purchase.",
+      "applicability": "When data year differs from purchase year, preserve that uncertainty may increase. Do not turn that possibility into automatic invalidity or claim a quantified uncertainty effect."
+    },
+    {
+      "id": "S18-C03",
+      "passage_id": "S18",
+      "source_quote": "If using emission factors from eGRID, keep in mind that data may be out of date.",
+      "applicability": "When discussing eGRID data currency, preserve the possibility that data may be out of date. This caution does not establish either currentness or staleness of a particular live release."
+    }
+  ]
+}

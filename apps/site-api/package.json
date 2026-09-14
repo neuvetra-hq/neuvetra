@@ -4,12 +4,21 @@
   "private": true,
   "scripts": {
     "dev": "bun run --watch src/index.ts",
+    "dev:research": "bun run src/research-server.ts",
+    "start:research": "bun run src/research-server.ts",
+    "dev:research-passages": "bun run src/research-passages-server.ts",
+    "start:research-passages": "bun run src/research-passages-server.ts",
+    "dev:calculation": "bun run src/calculation/server.ts",
+    "start:calculation": "bun run src/calculation/server.ts",
+    "dev:workspace": "bun run src/workspace/server.ts",
+    "start:workspace": "bun run src/workspace/server.ts",
     "typecheck": "tsc --noEmit",
     "sync-kb": "bun run scripts/sync-kb-corpus.ts",
     "start": "bun run src/index.ts",
     "test": "bun test src"
   },
   "dependencies": {
+    "@neuvetra/database": "workspace:*",
     "@ai-sdk/anthropic": "^3.0.71",
     "@anthropic-ai/sdk": "^0.91.1",
     "@elysiajs/cors": "^1.4.1",

@@ -1,0 +1,45 @@
+{
+  "observation": "supabase_catalog_inventory_summary",
+  "observed_at": "2026-09-09T04:55:38.937Z",
+  "project_ref": "icockcoguyadhryzydvl",
+  "connection_mode": "direct",
+  "inventory_sha256": "023973c8eec1fbf690375272963ce2c5433e437be8b5e251b7fc1d21c13d03d5",
+  "ca_sha256": "700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7",
+  "session": [
+    {
+      "database": "postgres",
+      "database_role": "postgres",
+      "read_only": "on",
+      "superuser": false,
+      "bypass_rls": true,
+      "tls": true
+    }
+  ],
+  "schemas": [
+    {
+      "schema": "auth"
+    },
+    {
+      "schema": "frontdesk"
+    },
+    {
+      "schema": "public"
+    },
+    {
+      "schema": "site"
+    },
+    {
+      "schema": "storage"
+    },
+    {
+      "schema": "terrascope"
+    }
+  ],
+  "customer_rows_requested": 0,
+  "writes": 0,
+  "development_schema_present": false,
+  "storage_policy_count": 0,
+  "project_role": "existing_shared_site_and_frontdesk_project",
+  "legacy_access_finding": "public.users and six frontdesk tables have row-level security disabled and broad anon/authenticated table grants; app dependencies and schema-level reachability need review before any corrective mutation",
+  "limits": "Catalog and administrative access only. No proof of non-admin permissions, application connection, source ingestion or end-to-end retrieval."
+}

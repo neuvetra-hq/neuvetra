@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "fixture_set_id": "scope2-passages-final-holdout-v1",
+  "prepared_at": "2026-09-09T02:56:20.822613+00:00",
+  "reviewer": "independent QA /root/site_review",
+  "purpose": "Two fresh source-supported QA probes prepared before the next backend freeze: one activity-record concept and one supported-plus-excluded qualitative compound request. Preserve all earlier fixtures as regressions.",
+  "review": {
+    "author": "regulatory-research /root/terrascope_review",
+    "status": "approved_for_bounded_qa",
+    "reviewed_at": "2026-09-09T02:57:15.741Z",
+    "reviewed_candidate_sha256": "096b24209a0d35cd5923d7fef781bc7608dd0a6afe486007c3be0a180780d8c5"
+  },
+  "release": {
+    "path": "data/research/releases/scope2-passages.v1.json",
+    "id": "scope2-passages",
+    "version": "1",
+    "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+    "source_sha256_by_id": {
+      "epa-electricity-2023": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    "extraction_sha256_by_id": {
+      "epa-electricity-2023-pages-v1": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    },
+    "approved_passage_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18"
+    ],
+    "review_deadline": "2026-09-15T23:20:32Z",
+    "approval_status": "approved_private_internal_source_scope"
+  },
+  "execution": {
+    "live_calls_authorized_by_fixture": false,
+    "max_cases": 2,
+    "max_stage_calls": 6,
+    "selection_frozen_at": "2026-09-09T02:56:20.822613+00:00",
+    "selection_reason": "Freeze question wording and source expectations before implementation freeze and live observation. No known-failure-specific clause or selected answer text is supplied; no expectations may change to accommodate results."
+  },
+  "cases": [
+    {
+      "id": "F-ACT01",
+      "prompt": "In a general purchased-electricity inventory, why start with the utility's incoming-electricity records instead of internal sub-meter totals, and how should separate supply and delivery invoices be handled?",
+      "family": "activity_records_and_duplicate_consumption",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain that utility bills or other purchase records describe electricity entering the facility during the reporting year; internal sub-meter data may be incomplete.",
+        "When commodity supply and local distribution are separately billed, retain the recommendation to use local-utility consumption based on facility meters and avoid counting the commodity-supplier consumption again.",
+        "Keep this a general recordkeeping explanation: do not claim all sub-meter data are wrong, diagnose actual invoices, estimate consumption, or require personal company facts."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S03",
+          "S04"
+        ],
+        "note": "S03 and S04 are exact approved EPA PDF page 7 / printed page 4 paragraphs in Section 3.1. S04 requires S03. Equivalent approved support may qualify; IDs alone do not establish complete support."
+      },
+      "evidence_review_notes": [
+        "Author rehashed the pinned EPA original and re-extracted PDF page 7; both approved passage texts matched exactly. Preserve the source qualification that sub-metering may be incomplete, not always incomplete.",
+        "This case tests activity-data boundaries and duplicate record handling, not another grid/supplier factor paraphrase."
+      ]
+    },
+    {
+      "id": "F-SCOPE01",
+      "prompt": "Explain what records establish purchased-electricity activity for a reporting year, and also explain the accounting approach for purchased district steam. Keep both explanations qualitative.",
+      "family": "compound_supported_and_excluded_scope",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "unsupported"
+      ],
+      "required_facets": [
+        "Recognize that the electricity activity-record portion has support in S03, while the requested district-steam accounting approach is outside the approved electricity-only pilot.",
+        "Withhold a complete answer to the compound request under the existing all-material-facets policy; release no invented thermal-accounting approach or draft represented as complete.",
+        "Do not treat incidental steam/heat mentions within retained passages as approval of their accounting methods, and do not ask for company data to repair this source-coverage gap."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic",
+        "unreleased_thermal_accounting_method"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S03"
+        ],
+        "note": "S03 supports only the electricity subquestion. The approved release explicitly excludes steam/heat/cooling methods and organizational-boundary decisions; S05/S06 incidental mentions do not supply released thermal methods. No thermal passage is approved as support for the compound answer."
+      },
+      "evidence_review_notes": [
+        "This is an unsupported qualitative subject combination, not a request for numerical calculation, individual eligibility or a legal mandate.",
+        "Expected unsupported reflects a source/coverage boundary; transport failure, token truncation or a generic needs_review response is not a demonstrated correct scope decision."
+      ]
+    }
+  ]
+}

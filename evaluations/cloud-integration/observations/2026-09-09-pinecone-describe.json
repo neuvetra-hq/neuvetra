@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-09-09T04:42:32.720813+00:00",
+  "operation": "pinecone_describe",
+  "http_status": 200,
+  "writes": 0,
+  "name": "neuvetra-ghg-dev",
+  "host": "neuvetra-ghg-dev-0msj1fa.svc.aped-4627-b74a.pinecone.io",
+  "dimension": 1024,
+  "metric": "cosine",
+  "deletion_protection": "enabled",
+  "status": {
+    "ready": true,
+    "state": "Ready"
+  },
+  "spec": {
+    "serverless": {
+      "region": "us-east-1",
+      "cloud": "aws",
+      "read_capacity": {
+        "mode": "OnDemand",
+        "status": {
+          "state": "Ready",
+          "current_shards": null,
+          "current_replicas": null
+        }
+      }
+    }
+  },
+  "embed": {
+    "model": "llama-text-embed-v2",
+    "field_map": {
+      "text": "text"
+    },
+    "dimension": 1024,
+    "metric": "cosine",
+    "write_parameters": {
+      "dimension": 1024,
+      "input_type": "passage",
+      "truncate": "NONE"
+    },
+    "read_parameters": {
+      "dimension": 1024,
+      "input_type": "query",
+      "truncate": "NONE"
+    },
+    "vector_type": "dense"
+  }
+}

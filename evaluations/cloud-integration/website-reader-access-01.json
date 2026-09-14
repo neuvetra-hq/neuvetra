@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "id": "ordinary_reader_identity",
+      "passed": true,
+      "http_status": 200
+    },
+    {
+      "id": "membership_exactly_c",
+      "passed": true,
+      "http_status": 200,
+      "observed_count": 1
+    },
+    {
+      "id": "c_active_build",
+      "passed": true,
+      "http_status": 200,
+      "observed_count": 1
+    },
+    {
+      "id": "c_approved_release",
+      "passed": true,
+      "http_status": 200,
+      "observed_count": 1
+    },
+    {
+      "id": "c_18_approved_passages",
+      "passed": true,
+      "http_status": 200,
+      "observed_count": 18
+    },
+    {
+      "id": "c_private_original_bytes",
+      "passed": true,
+      "http_status": 200,
+      "verified_sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    {
+      "id": "a_b_passages_invisible",
+      "passed": true,
+      "http_status": 200,
+      "observed_count": 0
+    },
+    {
+      "id": "a_private_original_denied",
+      "passed": true,
+      "http_status": 400
+    },
+    {
+      "id": "b_private_original_denied",
+      "passed": true,
+      "http_status": 400
+    },
+    {
+      "id": "anonymous_c_rows_denied",
+      "passed": true,
+      "http_status": 401
+    },
+    {
+      "id": "anonymous_c_original_denied",
+      "passed": true,
+      "http_status": 400
+    },
+    {
+      "id": "forged_service_role_read_denied",
+      "passed": true,
+      "http_status": 401
+    }
+  ],
+  "stopped_reason": null,
+  "observed_at": "2026-09-09T07:19:25.439Z",
+  "project_ref": "icockcoguyadhryzydvl",
+  "scope_id": "90000000-0000-4000-8000-00000000000c",
+  "auth_user_id": "f00d7f73-53a9-4e0e-993b-33d47e0330cd",
+  "read_only": true,
+  "requests_attempted": 12,
+  "mutations_attempted": 0,
+  "rpc_execution": "untested_for_c_existing_execute_grant_review_retained",
+  "credentials_logged": false
+}

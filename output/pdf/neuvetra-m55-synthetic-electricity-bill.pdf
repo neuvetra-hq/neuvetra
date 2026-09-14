@@ -1,0 +1,180 @@
+%PDF-1.4
+%“Œ‹ž ReportLab Generated PDF document (opensource)
+1 0 obj
+<<
+/F1 2 0 R /F2 3 0 R
+>>
+endobj
+2 0 obj
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
+endobj
+3 0 obj
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
+endobj
+4 0 obj
+<<
+/Contents 8 0 R /MediaBox [ 0 0 612 792 ] /Parent 7 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+5 0 obj
+<<
+/PageMode /UseNone /Pages 7 0 R /Type /Catalog
+>>
+endobj
+6 0 obj
+<<
+/Author (Neuvetra local development fixture) /CreationDate (D:20000101000000+00'00') /Creator (anonymous) /Keywords () /ModDate (D:20000101000000+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (Fixed synthetic electricity bill; no customer data) /Title (Neuvetra M55 Synthetic Electricity Bill) /Trapped /False
+>>
+endobj
+7 0 obj
+<<
+/Count 1 /Kids [ 4 0 R ] /Type /Pages
+>>
+endobj
+8 0 obj
+<<
+/Length 3166
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+.086275 .196078 .168627 rg
+n 0 680 612 112 re f*
+1 1 1 rg
+BT /F2 18 Tf 21.6 TL ET
+BT 1 0 0 1 46 734 Tm (SYNTHETIC GOLDEN STATE ELECTRIC) Tj T* ET
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 46 714 Tm (SYNTHETIC DEVELOPMENT FIXTURE - NOT A REAL UTILITY BILL) Tj T* ET
+BT /F2 15 Tf 18 TL ET
+BT 1 0 0 1 436.79 734 Tm (Electric statement) Tj T* ET
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 431.423 714 Tm (Statement date: February 5, 2023) Tj T* ET
+.121569 .160784 .145098 rg
+BT /F2 10 Tf 12 TL ET
+BT 1 0 0 1 46 642 Tm (SERVICE FOR) Tj T* ET
+BT /F2 13 Tf 15.6 TL ET
+BT 1 0 0 1 46 622 Tm (Synthetic California office) Tj T* ET
+BT /F1 10 Tf 12 TL ET
+BT 1 0 0 1 46 605 Tm (100 Example Way) Tj T* ET
+BT 1 0 0 1 46 590 Tm (Oakland, CA 94607) Tj T* ET
+.933333 .956863 .941176 rg
+n
+358 572 m
+538 572 l
+542.4224 572 546 575.5776 546 580 c
+546 646 l
+546 650.4224 542.4224 654 538 654 c
+358 654 l
+353.5776 654 350 650.4224 350 646 c
+350 580 l
+350 575.5776 353.5776 572 358 572 c
+h
+f*
+.407843 .45098 .431373 rg
+BT /F2 8 Tf 9.6 TL ET
+BT 1 0 0 1 370 632 Tm (AMOUNT DUE) Tj T* ET
+.086275 .196078 .168627 rg
+BT /F2 25 Tf 30 TL ET
+BT 1 0 0 1 370 604 Tm ($2,150.70) Tj T* ET
+.407843 .45098 .431373 rg
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 370 587 Tm (Due February 22, 2023) Tj T* ET
+.121569 .160784 .145098 rg
+BT /F2 10 Tf 12 TL ET
+BT 1 0 0 1 46 540 Tm (STATEMENT DETAILS) Tj T* ET
+.85098 .886275 .866667 RG
+n 46 504 m 546 504 l S
+.407843 .45098 .431373 rg
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 46 514 Tm (ACCOUNT) Tj T* ET
+.121569 .160784 .145098 rg
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 455.536 514 Tm (SYNTHETIC-0001) Tj T* ET
+.85098 .886275 .866667 RG
+n 46 466 m 546 466 l S
+.407843 .45098 .431373 rg
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 46 476 Tm (BILL NUMBER) Tj T* ET
+.121569 .160784 .145098 rg
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 459.815 476 Tm (SYN-CA-2023-01) Tj T* ET
+.85098 .886275 .866667 RG
+n 46 428 m 546 428 l S
+.407843 .45098 .431373 rg
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 46 438 Tm (SERVICE PERIOD) Tj T* ET
+.121569 .160784 .145098 rg
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 396.807 438 Tm (January 1 - January 31, 2023) Tj T* ET
+.85098 .886275 .866667 RG
+n 46 390 m 546 390 l S
+.407843 .45098 .431373 rg
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 46 400 Tm (ELECTRICITY USAGE) Tj T* ET
+.121569 .160784 .145098 rg
+BT /F2 11 Tf 13.2 TL ET
+BT 1 0 0 1 486.083 400 Tm (12,345 kWh) Tj T* ET
+.086275 .196078 .168627 rg
+BT /F2 13 Tf 15.6 TL ET
+BT 1 0 0 1 46 344 Tm (Usage summary) Tj T* ET
+.933333 .956863 .941176 rg
+n
+54 240 m
+538 240 l
+542.4224 240 546 243.5776 546 248 c
+546 314 l
+546 318.4224 542.4224 322 538 322 c
+54 322 l
+49.5776 322 46 318.4224 46 314 c
+46 248 l
+46 243.5776 49.5776 240 54 240 c
+h
+f*
+.407843 .45098 .431373 rg
+BT /F1 9 Tf 10.8 TL ET
+BT 1 0 0 1 66 296 Tm (METERED ELECTRICITY) Tj T* ET
+.309804 .478431 .396078 rg
+n 66 257 360 18 re f*
+.086275 .196078 .168627 rg
+BT /F2 12 Tf 14.4 TL ET
+BT 1 0 0 1 438 260 Tm (12,345 kWh) Tj T* ET
+.407843 .45098 .431373 rg
+BT /F1 8 Tf 9.6 TL ET
+BT 1 0 0 1 46 74 Tm (This document is fictional and contains no customer data. Created only for Neuvetra M55 local testing.) Tj T* ET
+BT 1 0 0 1 505.08 74 Tm (Page 1 of 1) Tj T* ET
+ 
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000061 00000 n 
+0000000102 00000 n 
+0000000209 00000 n 
+0000000321 00000 n 
+0000000514 00000 n 
+0000000582 00000 n 
+0000000938 00000 n 
+0000000997 00000 n 
+trailer
+<<
+/ID 
+[<3f588c00ad3543f542d5a4911104d492><3f588c00ad3543f542d5a4911104d492>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 6 0 R
+/Root 5 0 R
+/Size 9
+>>
+startxref
+4214
+%%EOF

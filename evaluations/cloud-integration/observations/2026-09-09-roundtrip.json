@@ -1,0 +1,622 @@
+{
+  "operation": "synthetic_restricted_cloud_roundtrip",
+  "started_at": "2026-09-09T05:55:40.398418+00:00",
+  "adapter_sha256": "3ca78f070155d66be9565a7e9ca76b6cac9b6622c0aeacbfa1137226601dd23b",
+  "target_sha256": "fff2d429b00a4dc31806cf029d386de87be263efa2f55ec366b5e928dd5be055",
+  "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
+  "status": "passed",
+  "cases": [
+    {
+      "id": "CLOUD-S01",
+      "question": "How can the fictional team gather its building's power use without tallying the same delivery twice?",
+      "scope_label": "A",
+      "passed": true,
+      "result": {
+        "status": "evidence",
+        "scope_id": "90000000-0000-4000-8000-00000000000a",
+        "release_sha256": "eefae37ef35e416a2a95168bd771b395b77ee6cdfaf45a944e578c4fada3324a",
+        "candidate_ids": [
+          "A02",
+          "A01",
+          "A03"
+        ],
+        "evidence": [
+          {
+            "passage_id": "A02",
+            "text": "Juniper's fictional supply invoice and delivery invoice can describe the same electricity. The exercise records that delivered quantity once, rather than adding the two invoices as separate consumption.",
+            "text_sha256": "3e773fe64c12719d18467c46894cb7cec2ca6b5f13a62aa85beef52817921f1f",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-a",
+              "title": "Fictional Juniper electricity record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000a/sha256/5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01/source.txt",
+              "source_sha256": "5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01",
+              "extraction_sha256": "ef3460ad82070ded07136317260773859fda1e2c765a3553b968dd6167be2510",
+              "locator": "Synthetic document page 1 / A02"
+            }
+          },
+          {
+            "passage_id": "A01",
+            "text": "In this fictional Juniper exercise, utility invoices describe electricity entering the building. Internal room meters may omit equipment, so the exercise starts from incoming power records.",
+            "text_sha256": "3ed1b30f849991a85e847a065fd34eb58ccd5f2150fe8e03f84c3e088107888e",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-a",
+              "title": "Fictional Juniper electricity record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000a/sha256/5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01/source.txt",
+              "source_sha256": "5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01",
+              "extraction_sha256": "ef3460ad82070ded07136317260773859fda1e2c765a3553b968dd6167be2510",
+              "locator": "Synthetic document page 1 / A01"
+            }
+          },
+          {
+            "passage_id": "A03",
+            "text": "The Juniper exercise keeps the reporting window's beginning and ending dates beside an unchanged copy of the original record. This lets a reviewer check which period the fictional record describes.",
+            "text_sha256": "a91cf192f58b10f99dc3be1e9c5babf166cdc0d6684b23f81211888bd45a6aa7",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-a",
+              "title": "Fictional Juniper electricity record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000a/sha256/5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01/source.txt",
+              "source_sha256": "5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01",
+              "extraction_sha256": "ef3460ad82070ded07136317260773859fda1e2c765a3553b968dd6167be2510",
+              "locator": "Synthetic document page 1 / A03"
+            }
+          }
+        ],
+        "generated_answer": false
+      },
+      "events": [
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-7daf-7bc4-9b21-ae81017afb57"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-7fbd-7667-80d5-08650cac7317"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-814c-7244-9b4e-bf76c28b0c47"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-81e7-772d-b70e-b64a707e5d07"
+        },
+        {
+          "origin": "control",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200
+        },
+        {
+          "origin": "pinecone",
+          "method": "POST",
+          "request_bytes": 515,
+          "status": "complete",
+          "http_status": 200
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-85de-79a7-abed-9d1a8bd7217a"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-867b-7123-95e5-c5e061faf135"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-87be-78f7-a656-a39a54126848"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-883c-7565-a7c2-e326c6ae702c"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-88ab-74d1-b105-2608d38b7a18"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8934-710c-986c-dc3ca7bfaf4e"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8a45-7ea9-8425-17c4343e12e1"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8b51-70a2-a7d9-179e03f6e18a"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8c89-7017-b150-38586b01ce70"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8d0f-78c8-891d-ff636e0eceb5"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8d94-7843-b343-3b0c6d1a9f6d"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8e31-7980-827f-f1c64a1e1f99"
+        }
+      ]
+    },
+    {
+      "id": "CLOUD-S02",
+      "question": "What should the fictional team preserve so someone can later inspect when its evidence applies?",
+      "scope_label": "A",
+      "passed": true,
+      "result": {
+        "status": "evidence",
+        "scope_id": "90000000-0000-4000-8000-00000000000a",
+        "release_sha256": "eefae37ef35e416a2a95168bd771b395b77ee6cdfaf45a944e578c4fada3324a",
+        "candidate_ids": [
+          "A03",
+          "A02",
+          "A01"
+        ],
+        "evidence": [
+          {
+            "passage_id": "A03",
+            "text": "The Juniper exercise keeps the reporting window's beginning and ending dates beside an unchanged copy of the original record. This lets a reviewer check which period the fictional record describes.",
+            "text_sha256": "a91cf192f58b10f99dc3be1e9c5babf166cdc0d6684b23f81211888bd45a6aa7",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-a",
+              "title": "Fictional Juniper electricity record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000a/sha256/5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01/source.txt",
+              "source_sha256": "5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01",
+              "extraction_sha256": "ef3460ad82070ded07136317260773859fda1e2c765a3553b968dd6167be2510",
+              "locator": "Synthetic document page 1 / A03"
+            }
+          },
+          {
+            "passage_id": "A02",
+            "text": "Juniper's fictional supply invoice and delivery invoice can describe the same electricity. The exercise records that delivered quantity once, rather than adding the two invoices as separate consumption.",
+            "text_sha256": "3e773fe64c12719d18467c46894cb7cec2ca6b5f13a62aa85beef52817921f1f",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-a",
+              "title": "Fictional Juniper electricity record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000a/sha256/5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01/source.txt",
+              "source_sha256": "5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01",
+              "extraction_sha256": "ef3460ad82070ded07136317260773859fda1e2c765a3553b968dd6167be2510",
+              "locator": "Synthetic document page 1 / A02"
+            }
+          },
+          {
+            "passage_id": "A01",
+            "text": "In this fictional Juniper exercise, utility invoices describe electricity entering the building. Internal room meters may omit equipment, so the exercise starts from incoming power records.",
+            "text_sha256": "3ed1b30f849991a85e847a065fd34eb58ccd5f2150fe8e03f84c3e088107888e",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-a",
+              "title": "Fictional Juniper electricity record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000a/sha256/5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01/source.txt",
+              "source_sha256": "5414f37316a224485f93460a544a9f77a34a5f2913dfa0b55d41e8ac0e6ebc01",
+              "extraction_sha256": "ef3460ad82070ded07136317260773859fda1e2c765a3553b968dd6167be2510",
+              "locator": "Synthetic document page 1 / A01"
+            }
+          }
+        ],
+        "generated_answer": false
+      },
+      "events": [
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8eef-7111-a7ce-5e827cafab6a"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-8fe1-74f1-b321-c3b1fb32a405"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-90aa-780d-b906-912f7cf0614f"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-914a-7b24-b5a5-8b52189a9093"
+        },
+        {
+          "origin": "control",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200
+        },
+        {
+          "origin": "pinecone",
+          "method": "POST",
+          "request_bytes": 510,
+          "status": "complete",
+          "http_status": 200
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-95d8-7d1a-be93-ff4ecba76133"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9674-7e8e-baad-157995c1eae5"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-96fa-760e-8685-8fd64cfeb0ec"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9784-739f-b115-6ede059aae97"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9828-7c86-8878-962ad78d5eb8"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-989e-7d04-b0b4-e78e3d3ee87e"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-994f-75a5-84da-563c432ccc81"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-99f5-73ce-83ab-7ad72f269039"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9ab8-7b23-b61f-5e89328af00a"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9b2f-7a92-9d24-b6f4db23e7c1"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9bb5-78e4-b5cd-107e58c5a716"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9c2d-7fa2-9ecb-b78187143aee"
+        }
+      ]
+    },
+    {
+      "id": "CLOUD-S03",
+      "question": "What should the fictional team preserve so someone can later inspect when its evidence applies?",
+      "scope_label": "B",
+      "passed": true,
+      "result": {
+        "status": "evidence",
+        "scope_id": "90000000-0000-4000-8000-00000000000b",
+        "release_sha256": "cb0d76e24193eecb4de9ae2aa94b7d31aec62995e0db734810383cadaae7435d",
+        "candidate_ids": [
+          "B01",
+          "B02"
+        ],
+        "evidence": [
+          {
+            "passage_id": "B01",
+            "text": "Boreal's fictional private exercise gathers invoices for electricity entering its building. These Boreal records belong only to scope B and must not appear in Juniper's scope A evidence.",
+            "text_sha256": "de05eafad2bfac9fc9fad309cfa2b71cfd0bef01480ab6ec6089a36bb772afb6",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-b",
+              "title": "Fictional Boreal private record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000b/sha256/6712bc0c1aec3abd57d2606861e101f24409c23f64a7162070c7d21e01c60a00/source.txt",
+              "source_sha256": "6712bc0c1aec3abd57d2606861e101f24409c23f64a7162070c7d21e01c60a00",
+              "extraction_sha256": "ba59a67a581e78799a319b7d62d08c82dcaf213a85dd6847cd343f1885c00fcb",
+              "locator": "Synthetic document page 1 / B01"
+            }
+          },
+          {
+            "passage_id": "B02",
+            "text": "Boreal's fictional private worksheet preserves the beginning and ending dates of its reporting window and an unchanged original document. These private source records are available only to the Boreal test identity.",
+            "text_sha256": "709220b64beccb840f059d78002d597905e132453cecaef50263540b4acc313e",
+            "qualifications": [
+              "Fictional test content; not greenhouse-gas guidance."
+            ],
+            "citation": {
+              "source_id": "synthetic-b",
+              "title": "Fictional Boreal private record exercise",
+              "version": "synthetic-v1",
+              "authenticated_source_url": "https://icockcoguyadhryzydvl.supabase.co/storage/v1/object/authenticated/neuvetra-research-dev/90000000-0000-4000-8000-00000000000b/sha256/6712bc0c1aec3abd57d2606861e101f24409c23f64a7162070c7d21e01c60a00/source.txt",
+              "source_sha256": "6712bc0c1aec3abd57d2606861e101f24409c23f64a7162070c7d21e01c60a00",
+              "extraction_sha256": "ba59a67a581e78799a319b7d62d08c82dcaf213a85dd6847cd343f1885c00fcb",
+              "locator": "Synthetic document page 1 / B02"
+            }
+          }
+        ],
+        "generated_answer": false
+      },
+      "events": [
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9ca9-72d1-b5ee-e4b25c6176ef"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9d4d-7067-8592-a69b01d1babb"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9df8-73a0-a8b5-602956cd8469"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-9e6a-781e-868e-c260a9dd87aa"
+        },
+        {
+          "origin": "control",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200
+        },
+        {
+          "origin": "pinecone",
+          "method": "POST",
+          "request_bytes": 510,
+          "status": "complete",
+          "http_status": 200
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a154-71e9-b72d-7fbd4e2c71c1"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a38d-77a5-9711-4d784178de9d"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a4c5-7153-8ebc-443817462a11"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a529-7dc7-a704-46d4dfd632bb"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a5d8-7545-afb3-3a1e11173328"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a65a-7fd2-9225-ca0c90f12727"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a7ca-7bee-b05c-4bff22c333ff"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a83f-7f67-9f1e-afa15094a903"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a95e-7e46-afa4-2613c5085955"
+        },
+        {
+          "origin": "supabase",
+          "method": "GET",
+          "request_bytes": 0,
+          "status": "complete",
+          "http_status": 200,
+          "provider_request_id": "01a084bc-a9c8-774b-861f-f98fb746e002"
+        }
+      ]
+    }
+  ],
+  "customer_rows_requested": 0,
+  "generated_answers": 0,
+  "finished_at": "2026-09-09T05:55:51.826689+00:00",
+  "limits": "Six fictional passages; proves bounded provider/evidence path only. No GHG guidance, generated answer, useful ranking accuracy, or production readiness claim."
+}

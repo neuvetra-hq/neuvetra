@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-09T15:12:27.104410+00:00",
+  "state": "private_epa_website_demonstrated_awaiting_board_feedback",
+  "pinecone": {
+    "organization_name": "Neuvetra Inc.",
+    "organization_id": "-OafbCdZXBb8VKX5Tu9W",
+    "project_name": "Default",
+    "project_id": "a0ba5552-cf2a-4c01-bf53-58ce49dcbee3",
+    "plan_observed": "Starter",
+    "indexes_before_provisioning": 0,
+    "index_name": "neuvetra-ghg-dev",
+    "console_url": "https://app.pinecone.io/organizations/-OafbCdZXBb8VKX5Tu9W/projects/a0ba5552-cf2a-4c01-bf53-58ce49dcbee3/indexes/neuvetra-ghg-dev/configuration",
+    "cloud": "aws",
+    "region": "us-east-1",
+    "capacity": "serverless_on_demand",
+    "embedding_model": "llama-text-embed-v2",
+    "creation_dimension": 1024,
+    "creation_metric": "cosine",
+    "field_map": {
+      "text": "text"
+    },
+    "deletion_protection_observed": true,
+    "record_count_observed": 0,
+    "read_parameters_observed": {
+      "input_type": "query",
+      "dimension": 1024,
+      "truncate": "NONE"
+    },
+    "write_parameters_observed": {
+      "input_type": "passage",
+      "dimension": 1024,
+      "truncate": "NONE"
+    },
+    "configuration_observation": "Saved through the index configuration UI, then independently matched to the expected profile in a successful live API describe request.",
+    "api_host": "neuvetra-ghg-dev-0msj1fa.svc.aped-4627-b74a.pinecone.io",
+    "api_configuration_verified": true,
+    "api_describe_observation": "evaluations/cloud-integration/observations/2026-09-09-pinecone-describe.json",
+    "api_describe_observed_at": "2026-09-09T04:42:32.720813Z",
+    "required_before_ingestion": "Reviewed EPA source uploaded to separate C namespace; all18 owned manifest records verified. No broader corpus ingestion.",
+    "credential_state": "created_after_explicit_authorization_private_export_saved_live_read_verified",
+    "credential_detail": "User specifically authorized the All-permission server key after the earlier automatic rejection. NeuvetraDevelopment was created successfully. Browser clipboard transfer was unavailable; the user then saved PINECONE_API_KEY in the private export. A narrow private read authenticated the exact index describe request successfully (HTTP 200). No key value was exposed in chat or committed.",
+    "data_uploaded": true,
+    "verified_fixture_records": 6,
+    "record_count_observation_note": "Earlier zero-count console observation retained; later exact six manifest-owned vectors fetched and verified, not an unrestricted whole-index count.",
+    "verified_epa_records": 18
+  },
+  "supabase": {
+    "project_host": "icockcoguyadhryzydvl.supabase.co",
+    "dashboard_signed_in": false,
+    "dashboard_access": "Separate GitHub-email OAuth was not granted or needed; approved operations used the existing private project credentials.",
+    "project_role": "existing_shared_site_and_frontdesk_database_confirmed_by_catalog",
+    "rest_schema_http_status": 200,
+    "rest_resource_paths": [
+      "/",
+      "/users"
+    ],
+    "storage_bucket_list_http_status": 200,
+    "storage_buckets_observed": [],
+    "unexposed_schemas_inspected": true,
+    "customer_rows_requested": 0,
+    "writes": "Research migration; anon-only legacy containment; synthetic stage20; two test Auth users; private bucket and six objects; API schema addition; two memberships and two synthetic build activations. No customer records requested or modified. Separate approved C reader, EPA scope and25 staged rows, three EPA objects,18 Pinecone passages and C activation; A/B rows and grants/RLS unchanged by C publication.",
+    "rls_verified": false,
+    "database_inventory": {
+      "target_routing_check": "passed_without_connecting",
+      "first_attempt": "driver_initialization_failed_before_connection_Bun_default_export_shape",
+      "driver_correction": "installed_default_export_normalized_and_tested_without_connection",
+      "second_attempt": "inventory_tls_failed",
+      "third_attempt": "connection_with_official_CA_succeeded_but_inventory_session_guard_failed",
+      "fourth_attempt": "diagnostics_confirmed_pooler_backend_tls_false_and_read_only_on_after_all_catalog_queries_completed; retained_as_failed",
+      "fifth_attempt": "direct_connection_same_project_succeeded_with_verified_CA_hostname_and_backend_tls_true_read_only_on",
+      "catalog_rows_obtained": true,
+      "tls_verification_disabled": false,
+      "next_step": "Direct TLS inventory, migration and synthetic data path verified. Preserve existing schemas; address legacy authenticated authorization independently before production claims.",
+      "helper": "tools/cloud/database-inventory.ts",
+      "public_ca_provenance": "evaluations/cloud-integration/observations/2026-09-09-supabase-ca.json",
+      "successful_inventory_summary": "evaluations/cloud-integration/observations/2026-09-09-supabase-inventory-summary.json",
+      "successful_inventory_sha256": "023973c8eec1fbf690375272963ce2c5433e437be8b5e251b7fc1d21c13d03d5",
+      "reviewed_at": "2026-09-09T04:55:38.937Z",
+      "existing_access_finding": "Anonymous privileges removed and verified on public.users plus six FrontDesk tables. Authenticated/service-role grants preserved. RLS remains disabled on those legacy tables and privileged API authorization still needs repair."
+    },
+    "isolated_schema": "neuvetra_research_dev",
+    "isolated_schema_migration_committed": true,
+    "research_tables_rls_enabled": 8,
+    "legacy_anon_containment": "verified_all_8_privileges_and_column_access_denied_on_7_tables",
+    "legacy_anon_containment_observation": "evaluations/cloud-integration/observations/2026-09-09-legacy-anon-containment.json",
+    "test_auth_users_created": 3,
+    "research_bucket_created": true,
+    "research_data_api_exposure_configured": true,
+    "research_private_bucket": {
+      "id": "neuvetra-research-dev",
+      "public": false,
+      "file_size_limit": 1000000,
+      "allowed_mime_types": [
+        "application/octet-stream"
+      ],
+      "verified_objects": 9
+    },
+    "data_api": {
+      "before": [
+        "public",
+        "graphql_public"
+      ],
+      "after": [
+        "public",
+        "graphql_public",
+        "neuvetra_research_dev"
+      ],
+      "configuration_scope": "authenticator IN DATABASE postgres / pgrst.db_schemas",
+      "adoption_verified": true,
+      "rollback": "tools/cloud/data-api-exposure.ts mode rollback restores prior override absence after drift checks",
+      "limitation": "Explicit database setting takes precedence over Dashboard exposure settings until reset; no other exposure, grants or RLS changed by this operation."
+    },
+    "synthetic_rls_and_storage_checks": {
+      "passed": 22,
+      "identities": 2,
+      "cross_scope_membership_insert_attempts": 2,
+      "both_insert_denials_http": 403,
+      "legacy_authenticated_security_included": false
+    }
+  },
+  "application_integration": {
+    "pinecone": "live_synthetic_embed_upsert_fetch_and_three_searches_verified",
+    "supabase": "live_synthetic_private_sources_catalog_auth_membership_rls_storage_verified",
+    "current_answer_service_wiring": "Local website 5174 proxies research 3012, which uses approved ordinary reader C, private Supabase objects/catalog and Pinecone. Evaluation 3016 stopped.",
+    "migration_applied": true,
+    "synthetic_roundtrip": "passed_three_frozen_questions_exact_source_resolution",
+    "approved_source_upload": "Reviewed EPA December2023 purchased-electricity guide, extraction and18 passage release; private internal scope only.",
+    "answer_quality_gate": "18 baseline outcomes passed; original punctuation failure preserved; narrow 06b delta replayed 18 decisions unchanged; two explicit follow-ups and root/independent browser checks passed.",
+    "production_deployment": "not_performed",
+    "fixture": "evaluations/cloud-integration/synthetic-fixture.v1.json",
+    "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
+    "fixture_scope": "Six owned fictional passages, two scopes and three frozen queries. Tests storage, access and citation primitives; tiny corpus cannot establish ranking accuracy or answer quality.",
+    "independent_review": "docs/research/cloud-integration-qa.md",
+    "synthetic_stage_observation": "evaluations/cloud-integration/observations/2026-09-09-synthetic-stage.json",
+    "local_validation": {
+      "bun_tests": 46,
+      "bun_assertions": 464,
+      "python_tests": 53,
+      "strict_typescript": "passed",
+      "remote_ci": "passed_for_website_implementation_7aabba4a8aae6145e8134c21fc97d05827866bfc",
+      "website_repository_checks": "Final type checks, lint, tests and web builds passed; both remote Verify jobs passed for the recorded implementation commit."
+    },
+    "next_cloud_changes": "No further cloud writes needed for this milestone. Wider corpus/lifecycle/customer authorization remain future gated work.",
+    "synthetic_access_checks": "passed_22_live_checks",
+    "demo": "evaluations/cloud-integration/demo.html",
+    "demo_url": "http://127.0.0.1:5186/demo.html",
+    "demo_type": "Saved real test results with interactive account filters and citation details; not a live question UI or account login.",
+    "live_evidence": [
+      "evaluations/cloud-integration/observations/2026-09-09-stage-success.json",
+      "evaluations/cloud-integration/observations/2026-09-09-api-setting.json",
+      "evaluations/cloud-integration/observations/2026-09-09-api-adoption.json",
+      "evaluations/cloud-integration/observations/2026-09-09-publication-first-failure.json",
+      "evaluations/cloud-integration/observations/2026-09-09-storage-missing-diagnostic.json",
+      "evaluations/cloud-integration/observations/2026-09-09-publication.json",
+      "evaluations/cloud-integration/observations/2026-09-09-publication-verified.json",
+      "evaluations/cloud-integration/observations/2026-09-09-activation.json",
+      "evaluations/cloud-integration/observations/2026-09-09-roundtrip.json",
+      "evaluations/cloud-integration/observations/2026-09-09-access-checks.json"
+    ]
+  },
+  "local_setup": {
+    "direction": "stopped_at_user_request",
+    "wsl_attempt": "failed_REGDB_E_CLASSNOTREG",
+    "verified_microsoft_installer_downloaded": true,
+    "downloaded_installer_executed": false,
+    "docker_installed": false,
+    "emulator_started": false
+  },
+  "implementation_checkpoint": {
+    "commit": "7aabba4a8aae6145e8134c21fc97d05827866bfc",
+    "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/2",
+    "state": "open_unmerged",
+    "verification_run": "https://github.com/neuvetra-hq/neuvetra/actions/runs/34368250113",
+    "application_job": "passed",
+    "catalog_job": "passed",
+    "ci_warning": "actions/checkout@v4 targets deprecated Node 20; runner forced Node 24. Job succeeded."
+  },
+  "test_resource_lifecycle": {
+    "retained_for_development": true,
+    "synthetic_review_expires_at": "2026-09-10T05:30:00Z",
+    "automatic_renewal": false,
+    "automatic_cleanup": false,
+    "cleanup_scope": "Only the two recorded test Auth users, fixture-owned objects/vector namespaces and research rows; deactivate first. A cleanup runner/lifecycle test has not been implemented."
+  },
+  "private_epa_website": {
+    "scope_id": "90000000-0000-4000-8000-00000000000c",
+    "build_id": "63f0190c-9694-46db-9ea8-85445a80f6be",
+    "publication_receipt": "evaluations/cloud-integration/website-epa-publication-01.json",
+    "reader_access_receipt": "evaluations/cloud-integration/website-reader-access-01.json",
+    "live_access_reads_passed": 12,
+    "production_cutover": false,
+    "review_expires_at": "2026-09-15T23:20:32Z",
+    "qa": "docs/research/website-cloud-qa.md",
+    "runtime": "docs/research/website-composed-runtime.md",
+    "website_url": "http://localhost:5174/",
+    "independent_browser": "passed_one_actual_W01_submission_in_separate_QA_tab",
+    "preview_allocation": "operations/website-preview-allocation-01.json",
+    "board_feedback": "pending"
+  }
+}

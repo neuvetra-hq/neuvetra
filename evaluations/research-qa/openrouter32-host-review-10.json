@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "task": "M32-HOST-QA",
+  "role": "independent_qa",
+  "disposition": "fail",
+  "meaning": "offline_host_binding_and_zero_activity_preflight_incomplete",
+  "run_id": "website-epa-live-32",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "allocation_sha256": "862da1cb1b51fdcfbfa8d09b2cfb52709ee6d909a2242ec6f5e98f69e3fc9508",
+  "host_validation_sha256": "b5ad991a4c4d97504328a47f53a8bfd6a1111bc1a0b144a91c9267b1ee556953",
+  "host_pins": {
+    "host.ts": "35211d72f8f433b36e0dcf68013ed8aff16c37afd5a9febeebe99a6152fc618d",
+    "outcome.ts": "d424b450f65310cf45e08a8031e0f8375b4c4024b80ba2cb00459008a4a52dbc",
+    "vite-isolated.config.ts": "8a69c00ac8991b8eff3b0efc0ac3eea3f5395a92b2a127c9129f2ec7ac7be008",
+    "host.test.ts": "b6a077bf601b1a674bc04b9c459415cd0ebb8301306261755099b4e028cd34a8",
+    "outcome.test.ts": "edd6b2f15be14227ad1fc4279a661bb50a88feb909e181a21661f3edbb9a98a8",
+    "host-tsconfig.json": "88ed9ebba1c8e93e375934934fadb796d90dc6040b1c67f83f0afc1da0a2365a"
+  },
+  "adapter_pins_at_author_validation": {
+    "spending.ts": "4490c39e53874247d119190d494ab1277fe9189af8fc980f5bc9a32a3bfa06dd",
+    "runtime.ts": "16477e8e09a44619727029cbe029a764f0cf971601e996904d99d30c9d60c33a",
+    "ingress.ts": "f540a2fec869db82417bf31c38d7b4a20800c784554e867b9867823957af23e0",
+    "isolated-proxy.ts": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432",
+    "launcher.ts": "9e59aef04f609c938fe7657b92fb4448711e587f3a73f734ddee9e7f6ba150d1",
+    "closure.ts": "a4b56a1ceebb4007bd851017b89420d013e26b9c6ded83a59ded33581c3ded8f",
+    "runtime.test.ts": "241decda7b8dd652814580712ba34178abe37b25592ac0e4975f775a24f3a9d6",
+    "runtime-tsconfig.json": "e0f5596d2ed991699045c7af586ee817765ad331ab8d7ec2767fa2471324c796"
+  },
+  "validation": {
+    "tests_passed": 3,
+    "assertions": 199,
+    "failures": 0,
+    "host_typecheck": "pass",
+    "host_files_rehashed": 6,
+    "host_pin_mismatches": 0,
+    "concurrent_adapter_drift": [
+      "runtime.ts",
+      "launcher.ts",
+      "closure.ts"
+    ]
+  },
+  "blockers": [
+    {
+      "id": "H32-QA-1",
+      "file": "host.ts",
+      "finding": "validateHost asserts empty budget receipts/traces/admissions but does not replay spending or assert zero reservation/event/uncertainty state. The claimed zero-activity gate is incomplete.",
+      "required": "Read and validate the current runtime-bound spending journal, require only its initial header and zero current reservations/events/cost/uncertainty with inherited balances exact, and reject stop/closure/current ingress state. Add corrupt and nonzero spending preflight tests."
+    },
+    {
+      "id": "H32-QA-2",
+      "file": "host.ts",
+      "finding": "Neither hostPins nor candidate96pins bind the launched Bun executable, Vite entry or inherited apps/site-web/vite.config.ts. The inherited configuration supplies critical filesystem allow/deny rules, so those executed bytes may change without invalidating this host certificate.",
+      "required": "Bind and verify exact executable, Vite entry and inherited configuration before spawn in combined reviewed host evidence; record the exact command and sanitized environment. Add dependency mutation rejection checks."
+    }
+  ],
+  "passed_boundaries": [
+    "Exclusive frontend attempt prevents restart after success or failure; failed readiness attempts bounded child shutdown.",
+    "Live child and repeated HTTP200 checks at least1second apart required; intermittent readiness failure resets the interval.",
+    "Frontend environment is allowlisted and excludes provider credentials; private configuration preserves current filesystem exclusions and isolates5175-to3016 proxy.",
+    "Outcome requires one W11 root observation, independent review of exact observation bytes and runtime/claim/counter association.",
+    "Terminal completion requires valid cloud reviewed DTO and affirmative independent semantic/source/mechanical review; owning controller still enforces settled final verify and absence of prior stop.",
+    "Recording attempt is exclusive; finish/record error stops mechanically, and replay cannot call finish again."
+  ],
+  "integration_requirements": [
+    "Refresh adapter bindings after parallel repairs; current host-validation is not an exact combined executable certificate.",
+    "Attach the terminal recorder to the original live controller in the owning backend process; never reconstruct or reopen a ledger.",
+    "Add an affirmative completed-outcome fixture alongside rejection tests and end-to-end fixed-file claim/observation/QA binding checks.",
+    "Root and QA must verify actual PID/listener/frontend pairing and safely capture actual UI outcome; document response/capture artifacts in final closure.",
+    "Do not consume this failing host record as launch authorization."
+  ],
+  "limitations": [
+    "Pending closure repairs are assessed separately; this verdict identifies host-specific gaps.",
+    "The defects above were identified by direct preflight/control-flow review; tests currently exercise synthetic frontend readiness and outcome helpers.",
+    "No network, service, browser, credential or model call occurred in this review."
+  ],
+  "release_acceptance": false,
+  "paid_execution_permitted": false,
+  "network_requests": 0,
+  "model_requests": 0,
+  "services_started": false,
+  "credentials_accessed": false
+}

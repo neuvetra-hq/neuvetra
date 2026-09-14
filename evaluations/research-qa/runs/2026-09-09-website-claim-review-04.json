@@ -1,0 +1,2319 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "website-source-condition-verifier-04-independent-review",
+  "reviewed_at": "2026-09-09T13:43:30.648Z",
+  "reviewer": "Independent AI QA agent /root/website_qa",
+  "review_attribution": "Successor QA execution context after host refresh; did not author application, source catalog, acceptance fixture or private packets. Independent source AI /root/source_review corroborated source judgments. No qualified human assurance.",
+  "disposition": "QUALIFIED_PASS",
+  "scope": "Proceed to the separately frozen eighteen end-to-end website questions; this verifier-only result does not approve website promotion or production.",
+  "raw_results": [
+    {
+      "path": ".superpowers/website-claim-results-04.jsonl",
+      "sha256": "77852923e3fa383440dd8809dea04983ec738c5489fc1d02cdde4a0c419ce1d6",
+      "bytes": 73508
+    },
+    {
+      "path": ".superpowers/website-claim-results-04-recovery.jsonl",
+      "sha256": "b8944dc2bdea6434566ebe7d1beaf2da0b359b45916fa809471bbcc05884ff44",
+      "bytes": 77960
+    }
+  ],
+  "packet_sha256": "29be7d44a7cbc86462138e9a7780d18402bb937dc3a475558c1cf0a29d89ef4f",
+  "fixture_sha256": "9a97060e47b46dd6d6729967b51692ab38f89b91e5c0be74ad46bf3f037625cc",
+  "source_sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+  "condition_catalog_sha256": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+  "profile_sha256": "79c2244d1edc828148bac11d6000dd27525a006ccf330e1e0210cff0b05edfd0",
+  "code_pins": {
+    "apps/site-api/src/research-cloud/condition-ledger.ts": "6a330f9fa345da9e72b3872f1e6ae9fc67923c370a0a31b60b4ee55dda7d23a6",
+    "data/research/conditions/scope2-website.v1.json": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+    "apps/site-api/src/research-cloud/provider.ts": "0027330ff583e55ffa93ff576162e2f7fed03786d9d900e855c5d5c9785d98b8",
+    "apps/site-api/src/research-cloud/answer-contract.ts": "99e3fe9921d1224a3ab76c57d429e99a21b6e8f50ebde90b4fc5fd1ba1359280",
+    "apps/site-api/src/research-cloud/budget.ts": "b53c0d092e34c8ce5ac33f0d6ae08c65d7611cc63ff9037b999092205175d267",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/provider.ts": "958e512ffb04ff7af4bf622f17755a27a3d9cca80e3e184162f1ff4e81005b5b",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "72c2512e374c8889394c13f0d0549af33dc8cb5287fe36967213ffdef5b730a4"
+  },
+  "runner_sha256": [
+    "773b3909ab171dcddde587343ff3a281963dc19db0cefeb13fe92d23e11cff72",
+    "7a7dec8ab1c395d54a023b292f54cc92ab46adcb51debf1ca3a5a93d7d814ce0"
+  ],
+  "counts": {
+    "completed_controls": 24,
+    "mechanically_valid": 24,
+    "supported_controls_accepted": 12,
+    "flawed_controls_rejected": 12,
+    "observed_false_acceptances": 0,
+    "observed_false_rejections": 0,
+    "conservative_diagnostic_findings": 1,
+    "reserved_attempts": 25,
+    "completed_provider_outputs": 24,
+    "unknown_provider_outcomes": 1,
+    "allocation_before": 100,
+    "allocation_remaining": 75,
+    "prior_revisions_reserved": 95,
+    "combined_reserved": 120,
+    "combined_ceiling": 195
+  },
+  "interruption": {
+    "record": "evaluations/research-qa/runs/website-revision04-interruption.json",
+    "original_unknown_case": "C12",
+    "original_unknown_attempt": 12,
+    "original_reservation_sha256": "0da03adf0b885d75cb55c72e96e2025099f8140d801d124dcbc476626a1e1b8f",
+    "explicit_replacement_attempt": 25,
+    "unknown_charged": true,
+    "automatic_retries": 0
+  },
+  "binding": {
+    "all_packet_inputs_and_requests_reproduced": 24,
+    "completed_input_output_pairs_bound": 24,
+    "durable_reservations_bound": 25,
+    "completed_reviews_reparsed": 24,
+    "code_pins_bound": 8,
+    "network_calls_by_qa": 0
+  },
+  "limitations": [
+    {
+      "id": "QA04-D01",
+      "case": "C15",
+      "severity": "conservative_diagnostic",
+      "finding": "Correct relationship rejection includes an unnecessary S01-C02 condition failure: presenting two methods is not itself a dual-reporting assertion. Equivalent C16 meta-description is correctly not_applicable.",
+      "impact": "Does not change this genuinely flawed control rejection. Demonstrates imperfect applicability diagnostics and a remaining risk of unnecessary refusal. Do not claim perfect flags or universal verifier accuracy.",
+      "release_effect": "Retained limitation for bounded private natural-question evaluation; no source-supported positive control was rejected."
+    },
+    {
+      "id": "QA04-L02",
+      "finding": "Twenty-four deliberately selected paired controls are not population accuracy evidence. Original C12 provider outcome remains unknown; its explicit replacement is separately counted. Cloud retrieval, planning, drafting, correction and browser use are not measured here."
+    }
+  ],
+  "cases": [
+    {
+      "id": "C01",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Preserves recommendation and separate method labeling.",
+      "request_sha256": "0383e157bad8025ccf847b32501bb39c0544dc3eabb8e1bedd31be4ae7327bfd",
+      "stage_attempt": 1,
+      "started_sha256": "bff520f246573f99782159d75da0efa5a46f736757c277a2315f432e27e181e3",
+      "completed_sha256": "8d1c83ba7a735e868da9946ed382b75426ed6ea63a2a8ef909ff9720351cec8a",
+      "reservation_sha256": "a7bbd7097ba1eba6394fbb027c1215b545496bed8e2d24f2caf2b0e5b96d752a",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the document's coverage or its alignment with the GHG Protocol Scope 2 Guidance, so the 'does not address all scope 2 issues' caveat does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "applies",
+                "answer_quote": "EPA recommends reporting both accounting totals and clearly labeling which method produced each.",
+                "explanation": "The claim retains the recommendation to report both totals and states it as a recommendation ('recommends'), matching the source 'should' modality without converting it into a legal mandate.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize or distinguish the substantive basis of the location-based (grid-average) versus market-based (contractual) methods; it only addresses reporting and method labeling, so this definitional condition constrains no clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S02-C01",
+                "applicability": "applies",
+                "answer_quote": "EPA recommends reporting both accounting totals and clearly labeling which method produced each.",
+                "explanation": "Both separate totals are kept distinct (not merged) and the clear method-specific labeling requirement is retained under recommendation modality, matching S02.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01",
+              "S02"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C02",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects unsupported worldwide legal compulsion on support and modality.",
+      "request_sha256": "c026d8c530b9c2ee82cff9c847a8759a2b8666110469cd53d01facff26771a63",
+      "stage_attempt": 2,
+      "started_sha256": "83b43bdd7f4d944dfd7f7b59c9507a54df90dbb412ae4410dbfd7b43859f8e69",
+      "completed_sha256": "491fe7c9cc41631ebbe8d0d39572f227b668bdc987f6d3a369f1c98683071528",
+      "reservation_sha256": "8773d9632a52c8ad5dc978d9691a6d6c3d7cc7deb83248100cf6be9e2c69bf36",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the document's coverage of scope 2 issues or its alignment with the GHG Protocol Scope 2 Guidance, so the 'does not address all scope 2 issues' caveat does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S01 states organizations 'should quantify and report both totals in its GHG inventory' (PDF page 4 / printed page 1); the claim converts this recommendation into a legal compulsion, so the should-modality prerequisite is not preserved.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize what either method considers (grid-average factors vs. contractual arrangements), so this method-distinction condition does not constrain a factual clause of this claim.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S02-C01",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S02 (PDF page 9 / printed page 6) recommends both methods be calculated and reported with results 'clearly labeled according to the method used' using should-modality; the claim omits the labeling recommendation and asserts universal legal compulsion instead.",
+                "preserved": false
+              }
+            ],
+            "supported": false,
+            "conditions_complete": false,
+            "modality_preserved": false,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01",
+              "S02"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": false,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "'EPA makes both accounting methods legally compulsory for every company worldwide' is not supported by S01 or S02, which only recommend that organizations quantify and report both totals; neither paragraph states any legal compulsion or worldwide applicability (S01, PDF page 4; S02, PDF page 9)."
+          },
+          {
+            "target_id": "c1",
+            "code": "modality",
+            "explanation": "Source modality 'should quantify and report both totals' (S01) and 'should calculate and report ... should be clearly labeled' (S02) is recast as 'legally compulsory', upgrading a recommendation to a mandate."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omitted source prerequisites: S01's should-modality recommendation to quantify and report both totals, and S02's requirement that both results be clearly labeled according to the method used with should-modality (PDF pages 4 and 9)."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "The facet asks what the guidance recommends about reporting and labeling the two totals; the answer never states the recommendation to report both location-based and market-based totals or to label each result clearly by method (S02)."
+          },
+          {
+            "target_id": "answer",
+            "code": "scope",
+            "explanation": "The answer asserts a legal obligation applicable to every company worldwide, which falls within the excluded areas of company legal applicability/compliance and global reporting obligations for this conceptual U.S. purchased-electricity review."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C03",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Preserves all delivered product electricity, including own generation and purchases.",
+      "request_sha256": "3b123ad8f599719e2708c0f6c86ce5a8be8f58803b069856ed31eb14d3fe446c",
+      "stage_attempt": 3,
+      "started_sha256": "6cfe92d8e8251cb6cd5e284275732195ac27293ebf11cc7988f297e65c9c8856",
+      "completed_sha256": "6fc6a92a9ff9890f8862b42457835cc87e7a6261554888f144fbd17bbf996dfa",
+      "reservation_sha256": "f361dd4f80e7ea27a71c397a390e550f567935124925e0cad2a8d9f11a3f27e3",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "S06's generation-only boundary (no T&D losses or upstream fuel activities) governs which emissions stages a factor covers; claim c1 only states which electricity supply a supplier factor must span and makes no life-cycle or loss-inclusive assertion, so this boundary does not constrain any of its clauses.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "S11-C01 governs characterizations of market-based inputs as reflecting contractual arrangements for power from specific sources; c1 states a content requirement for a supplier's factor and does not characterize the market-based method or recognize any supplier label or instrument claim.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "c1 makes no statement about the order of preference or precision ranking of market-based factor types, so the ordering caveat does not constrain any factual clause of this claim.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "S12-C01 guards against asserting mandatory supplier publication or that receipt of supplier information establishes eligibility; c1 only sets out what an existing supplier factor must span and asserts neither publication duty nor eligibility.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C02",
+                "applicability": "applies",
+                "answer_quote": "The supplier factor must cover the delivered electricity product, including electricity the supplier generates and purchases from others.",
+                "explanation": "The claim preserves the requirement that the factor span the electricity delivered by the supplier, including its own generation as well as electricity purchased from others, matching the S12 prerequisite and its 'must' relationship.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "c1 makes no assertion about applying a factor for a whole reporting year or about alignment between the inventory year and agreement timeframes, so this alignment condition does not qualify any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim contains no temporal allocation statement about non-aligned reporting years and agreement periods; it addresses only the supply coverage of the factor.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "c1 does not describe agreement coverage across a reporting year or assume a single fully covering agreement, so the multiple/partial coverage caveat does not constrain it.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S12",
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C04",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects supplier-owned-only sufficiency on the actual supply boundary.",
+      "request_sha256": "626feaa441df2460ea8ccef941ae907557c22960b41f0d6c3a25d5ea8d1621e4",
+      "stage_attempt": 4,
+      "started_sha256": "554d2fcc08cf978116ea4628563b4ccce7a3cc97a3c5a8bde5b5bb1480a4ddf1",
+      "completed_sha256": "da2036cf4d96133d0e5b5091650c6bfb9d39b606bc0f271f40fbdd2f30362cf6",
+      "reservation_sha256": "bf0a1e34931a0730320ceac9df0245090efe25f3166f068cf7097c5042030bb5",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the factor's emissions boundary (generation-only, transmission/distribution losses, upstream fuel activities), so the S06 boundary condition does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize market-based inputs or contractual arrangements for power from specific sources; it only asserts sufficiency of supplier-owned generation.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about ordering or preference/precision among market-based factor types.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not describe suppliers providing factor information for standard or differentiated products, and asserts no mandatory publication or eligibility from receipt.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The claim asserts supplier-owned generating stations suffice, which reverses S12's requirement that the factor include all delivered electricity (own generation plus purchases from others) and its statement that an owned-only supplier factor should not be used (PDF page 10 / printed page 7).",
+                "preserved": false
+              },
+              {
+                "condition_id": "S15-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim says nothing about reporting-year and purchasing-agreement timeframe alignment or whole-year application.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about applying factors to a portion of a reporting year when periods do not align.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not describe coverage of a reporting year by multiple agreements or uncovered portions.",
+                "preserved": true
+              }
+            ],
+            "supported": false,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S12",
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "The wording \"A supplier's own generating stations are enough to represent all electricity it delivers\" contradicts its cited source: S12 (PDF page 10 / printed page 7) states the factor must include all electricity delivered by the supplier, including what it generates and what it purchases from others, and gives an owned-only supplier factor as an example that should not be used because it does not represent the full set of generation facilities supplying delivered electricity."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Condition S12-C02 is omitted/reversed: the claim drops the prerequisite that a supplier-specific factor cover all delivered electricity, including electricity purchased from others (S12, PDF page 10 / printed page 7)."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "Facet f1 (\"What electricity should a supplier-specific factor represent?\") is not answered: the only claim states the opposite of the cited requirement and never states that the factor should represent all electricity delivered by the supplier, including its own generation and electricity purchased from others."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C05",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Preserves non-aligned-period covered-portion limitation.",
+      "request_sha256": "6ccd71a2b100afbeb6442959f34b14d411d110a7d67f74052b9a877744e77758",
+      "stage_attempt": 5,
+      "started_sha256": "6f88917e73742f43da569ba0ce408848af179912d40bd9b5c0d06e86d0d207f7",
+      "completed_sha256": "5f62af75c162014e19d13a836fac446f258c986400d6d69c6c502231ac34f54b",
+      "reservation_sha256": "2910fa63110015820ce8944623ffae81b8953c4d3acb7aac950e5fb8bef2e0f3",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S15-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim addresses only the non-aligned case; it makes no assertion about applying an agreement's factor to an entire reporting year, so the alignment/whole-year prerequisite in S15 does not constrain any clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "applies",
+                "answer_quote": "When agreement and reporting dates differ, the agreement's factor should apply only to the covered part of the reporting period.",
+                "explanation": "The claim states the non-alignment trigger and the limitation to the covered portion with the same 'should' recommendation wording as S15, without declaring the agreement unusable or extending it to the whole year.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize coverage of the whole reporting year; it limits one agreement's factor to its covered portion and asserts nothing about the remaining portions being covered by one agreement or fully covered, so this condition constrains no clause of the claim.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C06",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects complete unusability and preserves the need for partial-coverage treatment.",
+      "request_sha256": "2345a491b6bdca6251af738a0cafa6c03495785d7a763292c263a6aa36e6c4ec",
+      "stage_attempt": 6,
+      "started_sha256": "4c50cfc9b2cda49fc1cbc83ed8da535cae601a5774c5e7ea211e133596649c49",
+      "completed_sha256": "46ab22a2ea0f919c49883e685649e7275b551efd4ef4abf0bd98c2e859d017f7",
+      "reservation_sha256": "1ca58ddf621ef159567ba74dff71c3ef6ae2c678d8f17cd707b035772b91c666",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S15-C01",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S15 recommends the organization 'should consider the alignment' and states aligned timeframes allow application 'for the entire reporting year'; the claim instead asserts an absolute unusability rule and preserves neither the recommendation nor the aligned-period allowance.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S15 states that where timeframes do not align, factors 'should only be applied to the portion of the reporting covered by that agreement'; the claim declares the agreement unusable in any part solely because dates differ, contradicting this condition.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S15 notes a reporting year may be covered by two different agreements or have uncovered portions; the claim's all-or-nothing wording excludes partial coverage and does not preserve this possibility.",
+                "preserved": false
+              }
+            ],
+            "supported": false,
+            "conditions_complete": false,
+            "modality_preserved": false,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "The wording 'unusable in any part of an inventory year unless its start and end dates exactly match' is not supported by S15 (PDF page 11 / printed page 8), which states that where timeframes do not align the emission factors 'should only be applied to the portion of the reporting covered by that agreement' — i.e., partial-period application, not total unusability."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omits S15's prerequisites: the recommendation to consider alignment and that aligned timeframes permit whole-year application (S15-C01); the partial-portion application rule for non-aligned periods (S15-C02); and the possibility of two agreements or uncovered portions within a reporting year (S15-C03). Source: S15, PDF page 11 / printed page 8."
+          },
+          {
+            "target_id": "c1",
+            "code": "modality",
+            "explanation": "S15 uses recommendation language ('should consider', 'should only be applied', 'may be covered'); the claim converts this into an absolute prohibition ('is unusable ... unless ... exactly match'), overstating the source modality (S15, PDF page 11 / printed page 8)."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "Facet f1 asks how a date difference affects the part of the period a factor can apply to; the only claim misstates the mechanism as total unusability and never states that factors apply to the covered portion of the reporting year, so the requested facet is not addressed."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C07",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Retains necessary certificate quality review without determining eligibility.",
+      "request_sha256": "1cfc24b8afaeb64b855c5f830978706238b56c52c83723953dcd35a4362bc694",
+      "stage_attempt": 7,
+      "started_sha256": "134a547b49fa0a26aae67fc90e6d226d8ea5981d534d3272f280672549257bd0",
+      "completed_sha256": "a06bf0e3128a2eb178bb76fa3edd715cfb23b920a2bf2867ad6c23a2fc4e5179",
+      "reservation_sha256": "ec2b9816646498f944709213c71fa5ed2b99d3fcc1f7107d0894ec338d3064fe",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about what an emission factor's boundary includes (generation-only, transmission/distribution losses or upstream fuel activities); it only states that quality conditions must be reviewed for claimability, so the S06 boundary condition does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize market-based inputs or treat any supplier label or arrangement as a usable factor; it only addresses the review of quality conditions, so the contractual-arrangements category description does not qualify any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim asserts no ordering, preference or precision ranking among factor types or individual certificates, so this ordering condition does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim grants no permission to use a certificate factor in the market-based method; it states only a review prerequisite for claimability, so the premise that a certificate carries an emission factor is not relied on by any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C02",
+                "applicability": "applies",
+                "answer_quote": "Certificate-based claims require review of the relevant quality conditions to establish that the factor can be claimed.",
+                "explanation": "The claim retains the quality-criteria review as the prerequisite for establishing that a certificate-based emission factor can be claimed, matching S13's directive to refer to the Section 4 quality criteria to ensure claimability (PDF page 10 / printed page 7).",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about the specific source a certificate represents, the energy resource, or zero/non-zero factor values, so the typical/may qualifications in S13 do not constrain it.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C08",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects bundling alone as sufficient claimability and omitted quality review.",
+      "request_sha256": "13f32b241cbc3763dd2436646cff96b62b9ffae21941782003f470c96eb83105",
+      "stage_attempt": 8,
+      "started_sha256": "2fe20144118a3c06f18977d09f9b51d16498616804a6cd9dcaf601243d157cf8",
+      "completed_sha256": "66b79fa3d4e6c30790a26cf3bf04ebedef1fd78e1a8612f3451b143bc721e6ca",
+      "reservation_sha256": "819b89396e7540a391173342b5bef0b34e5f249c6423778eb2cf08555194eda1",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about the factor boundary (generation-only, transmission/distribution losses, upstream fuel activities), so this S06 boundary condition does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize the market-based method's category of inputs (contractual arrangements for power from specific sources); it addresses only a bundled-certificate entitlement.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not discuss the ordering or preference of market-based factor types, so the precision-ranking condition constrains no clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C01",
+                "applicability": "applies",
+                "answer_quote": "Bundling a certificate with an electricity contract guarantees that its factor is eligible",
+                "explanation": "The clause presupposes the certificate carries an emission factor ('its factor'), matching S13's premise for use in the market-based method.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S13 requires referring to the Section 4 quality criteria to ensure a factor can be claimed based on the certificate; the claim instead states the factor is eligible 'without checking any other conditions', removing the prerequisite.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S13-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about what source the certificate represents, the energy resource, or zero/non-zero factor values, so this representational condition does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not assert that the contract itself carries the generating-facility factor; it addresses the bundled-certificate case, so the 'no certificates associated' premise is not engaged.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The claim asserts an entitlement to the factor through a certificate bundled with a contract, but omits S14's requirement to refer to the Section 4 quality criteria to ensure a factor can be claimed based on the contract; it expressly excludes any further conditions.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S14-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not address certificates issued to the generating facility and sold or held separately, so the 'certificates convey rather than the contract' condition constrains no clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C04",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S14 permits a purchaser claim where certificates are bundled, but only with the applicable certificate/contract quality prerequisites of the same paragraph and S13; the claim presents bundling alone as a guarantee of eligibility.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S14-C05",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim says nothing about certificates sold to another entity or fallback residual-mix/regional/national factors, so this condition does not constrain it.",
+                "preserved": true
+              }
+            ],
+            "supported": false,
+            "conditions_complete": false,
+            "modality_preserved": false,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": false,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "'guarantees that its factor is eligible, without checking any other conditions' is contradicted by the cited paragraphs: S13 (PDF p.10) and S14 (PDF p.10) each direct the reader to 'Refer to the quality criteria in Section 4 to ensure that an emission factor can be claimed'. No cited paragraph supports an unconditional guarantee or the absence of further conditions."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omitted prerequisites: the Section 4 quality-criteria review for a certificate-based claim (S13, PDF p.10) and for a contract-based claim (S14, PDF p.10). Bundling is presented as sufficient, whereas S14's bundled-certificate sentence operates within those quality prerequisites."
+          },
+          {
+            "target_id": "c1",
+            "code": "modality",
+            "explanation": "S14 states the purchaser 'can claim the emission factor'; the claim upgrades this permissive wording to 'guarantees that its factor is eligible', converting a conditional permission into an unconditional entitlement."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "The facet asks what role quality conditions play in claimability, but the only claim asserts eligibility is guaranteed 'without checking any other conditions', so the requested role of the Section 4 quality criteria (S13, S14) is never conveyed."
+          },
+          {
+            "target_id": "answer",
+            "code": "scope",
+            "explanation": "The answer states a conclusive eligibility outcome for a bundled certificate/contract factor, which falls under the excluded action 'Contract/certificate eligibility decisions'; only conceptual explanation of conditions is permitted."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C09",
+      "expected": "unsupported_citation",
+      "actual": "fail",
+      "independent_assessment": "Rejects missing own-citation support with citations_sufficient=false and aligned citation issue.",
+      "request_sha256": "eb285ec025fe9b44b4b8eb4dc163baade6673625f83f9143be387b1e87592423",
+      "stage_attempt": 9,
+      "started_sha256": "8bc8ecb4db1bc1eaf51bdfa9dd040fe84c8b6736410f6b8e3497bf8f94708031",
+      "completed_sha256": "e0069d8d9ef136e4a64cdd8f52d91403aca64e7d12fd3927bb5c90cd85f43a3a",
+      "reservation_sha256": "18127f1e7c26c351192ed9a0edf2c80a38bb346a1f954bedeec839b385cd2c69",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the purchased-electricity emission factor boundary (generation-only, exclusion of T&D losses or upstream fuel activities), so this S06 boundary prerequisite does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim contains no positive characterization of market-based emission factors or of an instrument's usability; it only denies sufficiency, so the S11 prerequisite that such factors reflect contractual arrangements for power from specific sources does not qualify any clause asserted here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not discuss the ordering or precision ranking of market-based factor types, so this S11 sentence about preference ordering does not constrain the claim's single factual clause.",
+                "preserved": true
+              }
+            ],
+            "supported": false,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": false,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "\"A supplier's renewable label alone does not establish certificate claimability\" has no basis in the claim's own paragraphs. S06 (PDF p.8) addresses only the generation-only factor boundary, and S11 (PDF p.10) only defines the market-based method and its ordered factor types; neither mentions supplier renewable labels, certificates, or the conditions for claiming a certificate-based factor. The negative assertion about claimability therefore exceeds the cited evidence."
+          },
+          {
+            "target_id": "c1",
+            "code": "citation",
+            "explanation": "The cited closure (S06, S11) does not include any paragraph on certificate claiming conditions. Statements on whether an emission factor can be claimed based on a certificate appear at S13 (PDF p.10, \"Refer to the quality criteria in Section 4...\") and S14 (PDF p.10, certificate retention/sale), which the claim does not cite; its own citations are insufficient."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C10",
+      "expected": "supported_synthesis",
+      "actual": "pass",
+      "independent_assessment": "Accepts bounded necessary-condition synthesis with its own certificate evidence.",
+      "request_sha256": "1eba848ab3e0f1ff64f144497d2f71581d1279518a64d8b82b1337c75bfc101c",
+      "stage_attempt": 10,
+      "started_sha256": "1a09ab775f3eb4bf6376262f8eb8b0d7e0a798b9baf7e33ab789fbbd3375936e",
+      "completed_sha256": "63ee453c8c5c6aecf963e01095fb5ef6858fadb2517472d5e5e6b33db6d75136",
+      "reservation_sha256": "9829d4be45076419c870f673df6e88cce4d6071a166acd96ad726e2d0af7bc2d",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about the purchased-electricity factor boundary, transmission/distribution losses or upstream fuel activities, so the generation-only boundary in S06 does not constrain any clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize market-based inputs or assert that a supplier renewable label is a usable market-based factor; it only denies sufficiency, so S11's category description does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim says nothing about the order of preference or precision ranking of market-based factor types, so this overview-ordering condition does not constrain any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not assert that a certificate's factor can be used in the market-based method, so the premise that the certificate carries an emission factor is not a prerequisite for this negative statement.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C02",
+                "applicability": "applies",
+                "answer_quote": "the relevant quality conditions require review",
+                "explanation": "The claim's assertion about claimability retains the quality-criteria review requirement from S13 (PDF page 10) and does not present a renewable label or possession as sufficient.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about what source a certificate represents, the energy resource, or zero/non-zero factor values, so this condition does not constrain it.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C11",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects ordinary factor updates as universally requiring historic restatement.",
+      "request_sha256": "a2045c3619963f1c421f4f7d09eba6fda2591f8493429440653d0d3364497591",
+      "stage_attempt": 11,
+      "started_sha256": "0f254933f02dfcab3afa537540a186584be527a2c1c24156c060f8f18570241b",
+      "completed_sha256": "f6a0fc23e68a519d174e96ac85fbf1cae0c8a659df8882a9a28baa0bf8157ab9",
+      "reservation_sha256": "b2ac51c44e283c8af14a05fa8aed9e417f16daab507f877ab4c7e0ec58cee0ee",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S16-C01",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S16 states factors represent a specific generation period and 'may be updated periodically' due to resource mix and efficiency changes; the claim treats updates as automatically triggering full historic recalculation and omits the period-specific update rationale.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S16-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S16 recommends using the newest factors available at the time emissions are calculated for a reporting year; the claim instead asserts newest-edition application to every historic inventory and drops the calculation-time/reporting-period distinction and the recommendation modality.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S16-C03",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S16 states prior years' emissions 'need not be adjusted to reflect new factors' because such changes are not a methodology change; the claim asserts the opposite, that all historic inventories must be recalculated.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S17-C01",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S17 limits prior-year adjustment to methodology changes (changed factor-development methodology or factor type due to availability) and ties it to the organization's base year adjustment policy; the claim equates ordinary updates with such a change and omits the base-year policy qualifier.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S18-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about grid-average accuracy or time-of-day/seasonal variation, so this accuracy caution does not constrain any factual clause of the claim.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S18-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not address uncertainty arising from a data year differing from the purchase year, so this condition does not qualify any clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S18-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about the currency or staleness of a particular eGRID release, so this caution does not constrain it.",
+                "preserved": true
+              }
+            ],
+            "supported": false,
+            "conditions_complete": false,
+            "modality_preserved": false,
+            "relationships_preserved": false,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S16",
+              "S17",
+              "S18"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "'Factor updates always require every historic inventory to be recalculated with the newest edition' contradicts its own cited paragraph S16 (PDF p.12 / printed p.9): 'Because these changes in emission factors do not represent a methodology change, prior years' emissions need not be adjusted to reflect new factors.' No cited paragraph supports mandatory recalculation for ordinary factor updates."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omits S16 conditions that factors cover a specific generation period and are updated periodically (S16-C01), that the newest-factor recommendation applies at the time of calculation for the reporting year (S16-C02), and that no prior-year adjustment is needed for non-methodology factor changes (S16-C03); also omits S17's limitation of prior-year adjustment to methodology changes handled per the organization's base year adjustment policy (S17-C01)."
+          },
+          {
+            "target_id": "c1",
+            "code": "modality",
+            "explanation": "S16 uses recommendation/permissive wording ('it is recommended', 'need not be adjusted') and S17 uses 'should be adjusted ... consistent with the organization's base year adjustment policy'; the claim converts this into an absolute requirement ('always require'), reversing the source modality."
+          },
+          {
+            "target_id": "c1",
+            "code": "relationship",
+            "explanation": "The claim asserts a causal/obligation link from factor updates to full historic recalculation. S16 explicitly negates that link (factor updates are not a methodology change), and S17 ties adjustment only to methodology changes; the asserted relationship exceeds and contradicts the claim's own paragraphs."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "The facet asks how the guidance distinguishes ordinary factor updates (S16: prior years need not be adjusted) from methodology changes (S17: prior years should be adjusted per base year adjustment policy). The single claim states the reverse of S16 and never presents the distinction, leaving the requested facet unanswered and requiring premise correction."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C13",
+      "expected": "unsupported_attributed_causal_relation",
+      "actual": "fail",
+      "independent_assessment": "Rejects unsupported causal attribution to EPA through the relationship flag; additional distinction condition diagnosis is conservative.",
+      "request_sha256": "2eba5318bc308fc8ebd90f94031a6eb4aefc943dfb1c9a773467ddb8df1285e3",
+      "stage_attempt": 13,
+      "started_sha256": "8106106f68cee62ebafe796276e97bade04c43cf5e62bc75868879a6b820409a",
+      "completed_sha256": "7bbc1449d98f5f745f7cb3f1c8529a2d7411f490603b817aba4c3d846e0bdce6",
+      "reservation_sha256": "3226758c539ab71797b1faf150868d3694937d062893aca0d1136667cc230c3d",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the document's coverage or its alignment with the GHG Protocol Scope 2 Guidance, so the 'does not address all scope 2 issues' caveat does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "applies",
+                "answer_quote": "the guidance recommends that an organization quantify and report both in its GHG inventory",
+                "explanation": "The claim states the dual quantify-and-report recommendation in recommendation ('recommends') modality, matching S01's 'should quantify and report both totals in its GHG inventory' without converting it into a legal mandate.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The clause 'the two totals are distinct' distinguishes the two methods but drops S01's basis for the distinction (location-based = average grid emission factors; market-based = contractual arrangements for specific sources) and instead uses the distinction as an unstated rationale for the recommendation.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S02-C01",
+                "applicability": "applies",
+                "answer_quote": "quantify and report both in its GHG inventory, with each result clearly labeled according to the method used",
+                "explanation": "Both results are kept separate and the clear method-specific labeling requirement of S02 is retained in recommendation modality, not merged into a single total or stated as legal compulsion.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": false,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01",
+              "S02"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "The claim relies on the two totals being 'distinct' but omits S01's stated basis for that distinction: the location-based method considers average emission factors for the electricity grids providing electricity, while the market-based method considers contractual arrangements for power from specific sources (S01, PDF page 4 / printed page 1)."
+          },
+          {
+            "target_id": "c1",
+            "code": "relationship",
+            "explanation": "'Because the two totals are distinct, the guidance recommends that an organization quantify and report both' attributes a rationale to EPA for the dual-reporting recommendation. S01 (PDF page 4 / printed page 1) and S02 (PDF page 9 / printed page 6) state the recommendation and the labeling instruction but give no reason for them; the causal 'because' exceeds the cited evidence."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C14",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Accepts source-attributed reporting and labeling recommendation without invented motive.",
+      "request_sha256": "93cdcd27743bec6857e6a96b78ffcc7586498e24387cf714032392ae57cffb7a",
+      "stage_attempt": 14,
+      "started_sha256": "0145ac91fe8f4d92b60809a87131abb14f136c2121c60fc6d4f35273d6197a44",
+      "completed_sha256": "18ea080d8f1feed14ae5550b74fc0b25dcf1d63d7d110e498bf0623727c6d037",
+      "reservation_sha256": "828ed3c8d9c4ca702a954725008d60e4f396e0d915666ecdd4cd74b2b422670b",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not assert anything about the document's alignment with the GHG Protocol or the completeness of its scope 2 coverage; it only reports the two totals and the reporting/labeling recommendation, so the 'does not address all scope 2 issues' caveat does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "applies",
+                "answer_quote": "recommends reporting both",
+                "explanation": "The claim retains the dual-reporting recommendation in recommendation modality, matching S01's 'should quantify and report both totals' without converting it into a legal mandate.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim merely names the location-based and market-based totals and does not characterize their bases (grid-average factors vs. contractual specific-source arrangements) or attribute a rationale, so this distinguishing condition does not constrain any factual clause of this claim.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S02-C01",
+                "applicability": "applies",
+                "answer_quote": "describes location-based and market-based accounting totals and recommends reporting both, with each result clearly labeled according to the method used",
+                "explanation": "Both methods are kept as two separate results and the clear method-specific labeling requirement is retained in 'recommends' modality, consistent with S02's 'should ... clearly labeled according to the method used'.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01",
+              "S02"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C15",
+      "expected": "unsupported_document_wide_absence",
+      "actual": "fail",
+      "independent_assessment": "Correctly rejects publication-wide absence. Extra S01-C02 missing-condition diagnosis overreaches its dual-reporting applicability trigger; conservative diagnostic limitation retained.",
+      "request_sha256": "4c5814ca048b7de6d4a06b6f57aafd9905aa012a14b4076e3eab8e9fcecb5b7c",
+      "stage_attempt": 15,
+      "started_sha256": "e554c8691688a9d55cb830070a6bce36d6bc4611537318d36c9c9ab1a0764cad",
+      "completed_sha256": "8f495f34b65b3cdd83972030da1f130d4a2f83e582dc0359e09c0d3468dac0e5",
+      "reservation_sha256": "3a694e447eb4ac2bb110d11b77736c5bac0557070811617b743fcac93c391c95",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the document's alignment with the GHG Protocol Scope 2 Guidance or the breadth of scope 2 issues covered, so the 'does not attempt to address all scope 2 issues' qualifier does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The claim describes the document as providing/presenting both quantification methods but omits the passage's accompanying recommendation that the organization should quantify and report both totals in its GHG inventory (S01, PDF page 4 / printed page 1).",
+                "preserved": false
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not distinguish or characterize the two methods (no description of grid-average versus contractual/specific-source bases), so this distinguishing condition does not constrain a factual clause of the claim.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": false,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omitted source prerequisite from S01 (PDF page 4 / printed page 1): 'The organization should quantify and report both totals in its GHG inventory.' The claim states only that both methods are presented, dropping the passage's should-level recommendation to quantify and report both totals."
+          },
+          {
+            "target_id": "c1",
+            "code": "relationship",
+            "explanation": "The absence clause 'The EPA document ... does not state a reason for providing two methods' is scoped to the whole publication, but the claim's only cited paragraph is the introductory passage S01. A single supplied paragraph cannot establish that the document as a whole states no rationale; the absence should be limited to the cited introductory passage."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "The facet asks what the cited introductory passage states about providing two methods. The answer omits material stated content from S01: that guidance for quantifying two scope 2 totals (location-based and market-based) is included, and that the organization should quantify and report both totals in its GHG inventory."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C16",
+      "expected": "supported_bounded_absence",
+      "actual": "pass",
+      "independent_assessment": "Accepts absence observation limited to the cited introductory paragraph.",
+      "request_sha256": "6eacc5069b4855e1781355c465557e32433911f115070949841c0d2e0b49ddb2",
+      "stage_attempt": 16,
+      "started_sha256": "ef5d0b2cbbe7d5d0abcfa0aa9f5ffedadf7d732f772afbd32146f4ce586c112a",
+      "completed_sha256": "452dc3eec009ed9182d063ef6e3ef32f53ba1f57f3535b96c6de31bcc28f8dae",
+      "reservation_sha256": "653ec5706c59353fd95f6f5ca9f1641ee47fd9ca46f08fa524c725cad793e33f",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the document's alignment with the GHG Protocol Scope 2 Guidance or the breadth of its coverage; it only describes what the introductory paragraph presents about the two methods, so the 'does not address all scope 2 issues' caveat does not qualify any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "No clause of the claim asserts a reporting duty, entitlement or mandate: it states only that the paragraph presents two quantification methods and defines their bases, and does not restate or strengthen 'should quantify and report both totals' into an obligation.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize or distinguish the substance of the two methods (no grid-average or contractual/supplier characterization is made); it only notes at a meta level that the paragraph 'defines their accounting bases', so the basis-fidelity requirement constrains no factual clause of this claim.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C17",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects unsupported recognition of a supplier renewable label despite adjacent supported method clauses.",
+      "request_sha256": "24d38100019019c00ad90760d9550e8417502795e1c88aa6b07759459b58f684",
+      "stage_attempt": 17,
+      "started_sha256": "29f4f180b78c0dc647a498e118e7ec2557825824c7fb5f06b1f0909a4ff8420f",
+      "completed_sha256": "2ff7b1182813c7cf6d7ea47058fbde5dac44c18971eba7de5c6827696c3eab78",
+      "reservation_sha256": "c58ab4615a9c6ec89a0855bf4a99df75653955617edc26e8b3d379d703b328e9",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim only characterizes the market-based method category and the ordering of factor types; it makes no factual clause about the generation-only factor boundary, transmission/distribution losses or upstream/life-cycle inclusions, so this S06 boundary condition does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S11 (PDF page 10) only describes that the method considers contractual arrangements for power from specific sources; it does not recognize a supplier renewable label as a usable market-based input. The claim's opening sentence asserts such recognition without the source prerequisite, and no wording in this claim ties the label to a contractual-arrangement factor type assessed under quality conditions.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "applies",
+                "answer_quote": "the available factor types are listed in order of preference based on their precision",
+                "explanation": "The claim states the ordering as applying to factor types ranked by precision, matching S11's sentence, and does not recast it as a ranking of individual certificates or particular claims.",
+                "preserved": true
+              }
+            ],
+            "supported": false,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "The sentence \"A supplier renewable label is a recognised market-based input\" has no support in the claim's cited paragraphs. S11 (PDF page 10 / printed page 7) only states that the market-based method considers contractual arrangements for power from specific sources and that types of market-based emission factors are listed in order of preference; neither S11 nor S06 recognizes a supplier renewable label as an input or factor type."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Condition S11-C01 is not preserved: the claim asserts recognition of a supplier renewable label as a market-based input while omitting S11's prerequisite that market-based factors reflect contractual arrangements under which power is procured from specific sources (S11, PDF page 10 / printed page 7). The category description in the cited paragraph does not establish an individual instrument or label claim."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C18",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Accepts contractual method overview and type-level precision ordering.",
+      "request_sha256": "ee2005de1261dd75282cb7a2f72ce59f5abac1d8b8ab115972d4930e0846d4f1",
+      "stage_attempt": 18,
+      "started_sha256": "17a09dc2a9b948b8ed7b4ab7dd70a2784e62407b3e097a6f3d9ecc5b1ab52eb1",
+      "completed_sha256": "3bda9de1e20a39357486c576d550e7fabbefc2eb480e596607b1965f6d963605",
+      "reservation_sha256": "6a0f169fc434628b529ac00fbbe050dbe692c5093e595d72a75db63e285577a2",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim only characterizes what the market-based method considers and how its factor types are ordered; it makes no statement about the scope of emissions covered by a factor (generation-only, transmission/distribution losses or upstream fuel activities), so the S06 boundary condition does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "applies",
+                "answer_quote": "The market-based method considers contractual arrangements under which an organization procures power from specific sources, such as fossil, renewable or other generation facilities. Its emission factors reflect those arrangements",
+                "explanation": "The claim retains the contractual-arrangement basis and the 'specific sources' framing, and does not treat any supplier label or individual instrument as an established usable factor.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "applies",
+                "answer_quote": "the available factor types are listed in order of preference based on their precision",
+                "explanation": "The claim keeps the ordering as applying to types of market-based emission factors ranked by precision, without reinterpreting it as a ranking of individual certificates, supplier labels or particular claims.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C19",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects omitted S13-C02/S14-C04 quality prerequisites; genuine quotes and attached qualifications do not substitute for answer conditions.",
+      "request_sha256": "2619ace74dbb39a5194799d0dfcf3046755ce71ace0f9efba2b65f5700a67980",
+      "stage_attempt": 19,
+      "started_sha256": "fb3bbcc356e290443abb50888a29b9ce66d972dbd8c06fdbf44c4e6d79cc164a",
+      "completed_sha256": "bd370ee832d936bfa412c3f6573ef773a14c9ef3970475f27574fdc4ad0e22b1",
+      "reservation_sha256": "b19da838643f3af506ed0e9b0bac7f442ad633147ecaaa185ca70736ad6535c4",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim only addresses which instrument conveys the factor (certificates vs. contract); it makes no assertion about what the emission factor includes, so the generation-only / no T&D-loss and no-upstream boundary in S06 does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize market-based inputs as a category or describe procurement from specific sources; it states a conveyance rule, so the S11 category description does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about ordering or preference/precision among market-based factor types, so the S11 ranking sentence does not constrain any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C01",
+                "applicability": "applies",
+                "answer_quote": "the emission factor is conveyed by the certificates rather than the contract",
+                "explanation": "The claim asserts a certificate-borne factor can be claimed; the premise that the certificate carries the emission factor is retained by stating the factor is conveyed by the certificates.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The claim asserts the purchaser can claim the certificate factor but omits S13's prerequisite to refer to the Section 4 quality criteria to ensure a factor can be claimed based on the certificate (S13, PDF page 10 / printed page 7).",
+                "preserved": false
+              },
+              {
+                "condition_id": "S13-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about what source the certificate represents, the energy resource, or factor values (zero/non-zero), so this representation/value qualification does not constrain any clause of this claim.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not assert that the contract itself carries the generating-facility factor; it addresses the case where certificates are issued, so the no-certificates premise does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion that a factor can be claimed based on the contract itself (it states the contract does not convey it), so the contract-based quality-criteria prerequisite does not constrain any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C03",
+                "applicability": "applies",
+                "answer_quote": "If certificates are issued to a generating facility, the emission factor is conveyed by the certificates rather than the contract.",
+                "explanation": "The claim preserves that where certificates are issued to the generating facility, the certificates rather than the contract convey the factor.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C04",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The claim presents bundling alone as sufficient for the purchaser to claim the factor, without retaining the applicable certificate/contract quality-criteria prerequisites from the same source context (S14 and S13, PDF page 10 / printed page 7).",
+                "preserved": false
+              },
+              {
+                "condition_id": "S14-C05",
+                "applicability": "applies",
+                "answer_quote": "when the certificates are sold to another entity, the purchaser cannot make that claim",
+                "explanation": "The claim preserves that sale of the certificates to another entity prevents the purchaser from making the certificate-factor claim; the fallback consequence is not mentioned, so no fallback wording is required.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "The claim states the purchaser \"can claim the factor\" when certificates are bundled, but omits the source prerequisite to refer to the Section 4 quality criteria to ensure an emission factor can be claimed based on the certificate (S13, PDF page 10 / printed page 7). Attached qualifications do not substitute for this prerequisite in the claim text."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Bundling is presented alone as sufficient for the purchaser's entitlement; the applicable certificate/contract quality-criteria review from the same source context (S14 and S13, PDF page 10 / printed page 7) is not retained in the claim."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "C20",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Accepts bundled certificate conveyance subject to quality review to ensure claimability; retains sale exclusion and no actual eligibility decision.",
+      "request_sha256": "6ac0a1d4187a85270e23fbef7fd296136f04ff84d59b282c5be6c67aff116550",
+      "stage_attempt": 20,
+      "started_sha256": "84b07e9189af27a7f7d5a72273ccb4ddca464ec8b6672bbb82cfcebd04db6baa",
+      "completed_sha256": "eba46df764a43b9e9f428227ad20363983c30bc676742285fd552ef3118202f0",
+      "reservation_sha256": "0aee66e03073173cb243411f861d22bb224d160c69d053ea134b7287eca399ad",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about the content or boundary of the emission factor (generation-only, transmission/distribution losses, upstream fuel activities); it addresses only which instrument conveys the factor, so the S06 boundary constrains no factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize the market-based method's inputs or categories generally, nor treat a supplier label as a usable factor; it restates the certificate-versus-contract conveyance rule of S14.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim states no ordering or preference among market-based factor types, so the precision-based ranking in S11 does not qualify any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C01",
+                "applicability": "applies",
+                "answer_quote": "If certificates are issued to a generating facility, the emission factor is conveyed by the certificates rather than the contract.",
+                "explanation": "The claim's use/claim of a certificate-based factor rests on the stated premise that the certificates carry (convey) the emission factor, matching S13's premise.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C02",
+                "applicability": "applies",
+                "answer_quote": "For certificates bundled with the contract, the purchaser can claim the factor subject to the applicable quality-criteria review to ensure claimability",
+                "explanation": "The claim conditions the purchaser's claim on the applicable quality-criteria review to ensure claimability, preserving the Section 4 prerequisite in S13.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S13-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no assertion about what resource the certificate represents or about factor values (zero/non-zero), so the specific-source and typical/may qualifications do not constrain its clauses.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not assert that the contract itself carries the generating-facility factor; it addresses the case where certificates are issued and expressly says the factor is conveyed by the certificates rather than the contract.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C02",
+                "applicability": "applies",
+                "answer_quote": "For certificates bundled with the contract, the purchaser can claim the factor subject to the applicable quality-criteria review to ensure claimability",
+                "explanation": "The purchaser-claim assertion involving the bundled contract retains the applicable quality-criteria review to ensure claimability, so no unconditional contractual entitlement is asserted.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C03",
+                "applicability": "applies",
+                "answer_quote": "If certificates are issued to a generating facility, the emission factor is conveyed by the certificates rather than the contract.",
+                "explanation": "The claim preserves that issued certificates, not the contract, convey the factor, exactly as stated in S14.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C04",
+                "applicability": "applies",
+                "answer_quote": "For certificates bundled with the contract, the purchaser can claim the factor subject to the applicable quality-criteria review to ensure claimability",
+                "explanation": "Bundling is retained as the trigger and is coupled with the quality-criteria prerequisite, so bundling alone is not presented as sufficient.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S14-C05",
+                "applicability": "applies",
+                "answer_quote": "if the certificates are sold to another entity, the purchaser cannot make that claim",
+                "explanation": "The claim preserves that sale to another entity bars the purchaser's certificate-factor claim; no fallback factor is asserted, so the residual-mix/regional detail need not be added.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "P01",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects supplied product factor usability without required delivered-electricity coverage.",
+      "request_sha256": "b7eff92b70a92af88902a5dae91d586e9e36990071ebd2f582920d3a4853ec93",
+      "stage_attempt": 21,
+      "started_sha256": "b26c74d20aa9375971c2ec83698a98846b4917138bc4e6711f93df63ac8f0ed8",
+      "completed_sha256": "826a36040271e7f08946570c745df05bd12fbcf27a168af8d4595f699f2111b3",
+      "reservation_sha256": "e8a543d6d478101fb395da114353d567e2f797fe54aef2126f46c144f4b248e9",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not describe the emission-factor boundary (generation-only, exclusion of T&D losses or upstream fuel activities) or characterize a life-cycle factor, so this boundary condition does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize what the market-based method considers (contractual arrangements for power from specific sources) nor derive usability from that category description; it only refers to the supplier product factor described in S12.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about ordering or preference among market-based factor types, so the precision-ranking condition does not constrain it.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C01",
+                "applicability": "applies",
+                "answer_quote": "A supplier can provide its customer with the emission factor for a differentiated electricity product",
+                "explanation": "The claim preserves the permissive statement that a supplier may provide customers a factor for its (differentiated) electricity product and names regulated utility or deregulated supplier, without asserting mandatory publication.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "The claim asserts the supplied differentiated-product factor 'can be used in the market-based method' but omits S12's prerequisite that the factor must include all electricity delivered by the supplier, including its own generation and purchases from others (S12, PDF page 10 / printed page 7).",
+                "preserved": false
+              },
+              {
+                "condition_id": "S15-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about applying a factor across a whole reporting year or about reporting-year/agreement timeframe alignment, so this alignment condition does not constrain its factual clauses.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not address non-aligned reporting and agreement periods or partial-period application of factors.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not describe agreement coverage across a reporting year, multiple agreements, or uncovered portions.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S12",
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Claim states the supplied differentiated-product factor 'can be used in the market-based method' without the S12 prerequisite that, to be used, the emission factor must include all electricity delivered by the supplier (its own generation plus electricity purchased from others), and that a supplier-owned-generation-only factor should not be used (S12, PDF page 10 / printed page 7). The requirement appears only in the support quote, not in the claim text."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "P02",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Accepts necessary full delivered-electricity coverage with permissive supplier information and no sufficiency from receipt.",
+      "request_sha256": "11886b8baefa5d18a3d60306fb4921af4154f372111996999d975ff85ce95980",
+      "stage_attempt": 22,
+      "started_sha256": "8db1f9b0d99b1515b030dc43645b8a5328217ac652a1e9d91e6a1daa8cece67c",
+      "completed_sha256": "c2d5e9a0732ce66455d9caead8b7824ab49304c05a633ba58b3cc3fd17618b87",
+      "reservation_sha256": "84e085faf2ff545d627e19e741c82e776fe80a3cc14b0fee28a2dd22bc0c9991",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S06-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the lifecycle boundary of the factor (generation-only, exclusion of T&D losses or upstream fuel activities); it addresses only which delivered electricity volumes a supplier factor must cover, so S06's boundary requirement does not constrain any factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not characterize market-based emission factors as a category or assert that a supplier product label is itself a recognized/usable factor; it only names the market-based method as the context of the coverage requirement, so S11's category description does not constrain a clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S11-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim contains no ordering or preference statement about types of market-based factors, so the precision-ranking qualification does not constrain any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C01",
+                "applicability": "applies",
+                "answer_quote": "A supplier can provide its customer with the emission factor for a differentiated electricity product.",
+                "explanation": "The claim keeps the permissive modality ('can provide') for supplier-supplied product factors and adds that 'receiving the information alone does not establish that condition,' matching S12's non-mandatory framing.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S12-C02",
+                "applicability": "applies",
+                "answer_quote": "To be used in the market-based method, that factor must include all electricity delivered by the supplier, both its own generation and electricity purchased from others",
+                "explanation": "The claim preserves the S12 prerequisite that a supplier factor used in the market-based method must cover all delivered electricity, including the supplier's own generation and purchases from others.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim asserts no application of a factor across a reporting year and grants no whole-year coverage; it states only a necessary content condition, so the reporting-year/agreement alignment recommendation does not qualify any clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about misaligned reporting and agreement periods or about allocating factors to portions of a year, so this partial-coverage requirement does not constrain a factual clause.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim does not describe agreement coverage across a reporting year or assume single/complete coverage, so the multiple-agreement/uncovered-portion possibility does not constrain a clause.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S12",
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "P03",
+      "expected": "unsupported",
+      "actual": "fail",
+      "independent_assessment": "Rejects whole-year application lacking alignment; merely considering timeframes is weaker than the actual prerequisite.",
+      "request_sha256": "52c4b2957c47f55ffdf07e1907a601abc14f81a2b63fcdb21ad921adc32f52e4",
+      "stage_attempt": 23,
+      "started_sha256": "aa4801bbb15cd3e435c646ab07c5713a314bdd5f7a0fc1120426d59a7a58234a",
+      "completed_sha256": "fefa8a42b623b4d14d02065531df242e046d2762e4392a73fdf5d955ec24c200",
+      "reservation_sha256": "cd15c62b28a995eab0213c7785f1e4bc3ea2d88e4effc5a151b2760afc7b54df",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S15-C01",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "S15 permits whole-year application only 'If those timeframes align'. Claim c1 states flatly that 'A purchasing agreement and its associated emission factors can be applied for the entire reporting year' with no alignment prerequisite; the second sentence only asks organizations to 'consider the timeframes', which is weaker and does not restate the if-align condition.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "applies",
+                "answer_quote": null,
+                "explanation": "Because c1 asserts whole-year application without limiting it to aligned periods, it also covers non-aligned cases, where S15 states factors 'should only be applied to the portion of the reporting covered by that agreement'. That partial-application limit appears nowhere in the claim.",
+                "preserved": false
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "c1 makes no factual clause about how many agreements cover a year or about uncovered portions; it states a permissive whole-year possibility, so the enumeration of two agreements or gap periods in S15 does not constrain any clause of this claim.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": false,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": false,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": false,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omitted prerequisite from S15 (PDF page 11 / printed page 8): whole-year application applies only 'If those timeframes align' between the inventory reporting year and the purchasing agreement. The claim's wording 'can be applied for the entire reporting year' is unconditional; 'consider the timeframes' does not restate the alignment condition."
+          },
+          {
+            "target_id": "c1",
+            "code": "condition",
+            "explanation": "Omitted limit from S15 (PDF page 11 / printed page 8): where periods do not align (e.g., fiscal vs. calendar year), factors 'should only be applied to the portion of the reporting covered by that agreement'. The claim's unqualified whole-year statement extends to non-aligned cases without this restriction."
+          },
+          {
+            "target_id": "f1",
+            "code": "completeness",
+            "explanation": "The facet asks under what timing circumstances whole-year application is described, but the answer never states the alignment circumstance (reporting-year timeframe matching the agreement timeframe) nor the non-aligned partial-period treatment from S15, leaving the requested timing condition unanswered."
+          }
+        ],
+        "decision": "fail"
+      }
+    },
+    {
+      "id": "P04",
+      "expected": "supported",
+      "actual": "pass",
+      "independent_assessment": "Accepts aligned whole-year and non-aligned covered-portion branches with source modality.",
+      "request_sha256": "3d080bd51be3658f810513e2184d3170a5e1465c45ce1c419561a44b597d882e",
+      "stage_attempt": 24,
+      "started_sha256": "d30a4ad6a68c25ce2d7c08c8d8ccc04239730bb3cf96c298e90d4987e1f78188",
+      "completed_sha256": "ce30dd20da0455dfbfd19febd140af1aa4a8e5c88ea96b68695ffd122f0f6e25",
+      "reservation_sha256": "28f672769b3e233bc2b8de313333927538d130371353dfae8efa095114de7d0a",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S15-C01",
+                "applicability": "applies",
+                "answer_quote": "When the inventory reporting year and the purchasing-agreement timeframes align, the agreement and its associated emission factors can be applied for the entire reporting year.",
+                "explanation": "The claim keeps alignment of reporting year and agreement timeframes as the prerequisite and uses permissive \"can be applied\", matching S15's conditional statement rather than an unconditional entitlement.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C02",
+                "applicability": "applies",
+                "answer_quote": "If they do not align, those factors should only be applied to the portion covered by that agreement.",
+                "explanation": "The non-alignment branch is preserved with the \"should only be applied to the portion covered\" limitation, as stated in S15, without declaring the agreement wholly unusable.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S15-C03",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "No clause of the claim asserts that a reporting year has a single agreement or complete coverage; it scopes factors per agreement to the covered portion, so S15's note about multiple agreements or uncovered portions does not constrain any factual clause here.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S15"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    },
+    {
+      "id": "C12",
+      "expected": "supported_synthesis",
+      "actual": "pass",
+      "independent_assessment": "Accepts modest comparison of the two visible accounting perspectives without attributed EPA rationale.",
+      "request_sha256": "d71c408026a4de8d66e160d21d6a00724b8d1e376b5341403962bee84fb8e8e9",
+      "stage_attempt": 25,
+      "started_sha256": "fc6b8aff19fba6bd98bc64c5d4b363ffffeb866420f359c09c32da271aded7e9",
+      "completed_sha256": "0e17dfe222f95a3614ed8584d9ea35204e679d3561b9c2aa4007bc13f11b4c35",
+      "reservation_sha256": "1540b95de1dba4f89bd582cc5f05f8a9e48fcf2269fcb204aa0bd1fc2046d2f2",
+      "review": {
+        "claims": [
+          {
+            "id": "c1",
+            "condition_reviews": [
+              {
+                "condition_id": "S01-C01",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim makes no statement about the document's coverage or its alignment with the GHG Protocol Scope 2 Guidance, so the 'does not address all scope 2 issues' caveat in S01 constrains no factual clause here.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C02",
+                "applicability": "not_applicable",
+                "answer_quote": null,
+                "explanation": "The claim asserts only what separate totals let a reader see; it states no reporting recommendation, duty or entitlement, so the S01 'should quantify and report both totals' recommendation is not converted or relied on as a mandate.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S01-C03",
+                "applicability": "applies",
+                "answer_quote": "Keeping the two accounting totals separate makes the grid-average and contractual procurement perspectives visible.",
+                "explanation": "The claim distinguishes the methods and keeps the grid-average basis for location-based accounting and the contractual procurement basis for market-based accounting, matching S01's definitions without adding supplier labels or an author rationale.",
+                "preserved": true
+              },
+              {
+                "condition_id": "S02-C01",
+                "applicability": "applies",
+                "answer_quote": "Keeping the two accounting totals separate makes the grid-average and contractual procurement perspectives visible.",
+                "explanation": "Both method-specific results remain distinct and separately identified in the claim; they are not merged into one total and no universal legal compulsion is asserted, consistent with S02's labeling recommendation.",
+                "preserved": true
+              }
+            ],
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S01",
+              "S02"
+            ]
+          }
+        ],
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "issues": [],
+        "decision": "pass"
+      }
+    }
+  ]
+}

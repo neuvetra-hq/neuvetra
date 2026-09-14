@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-09T14:32:00.683039+00:00",
+  "reviewer": "Independent AI QA agent /root/website_qa",
+  "disposition": "PASS",
+  "archive": {
+    "path": "evaluations/research-qa/runs/website-candidate-05.zip",
+    "sha256": "628afc555dd9500f77e6719d5745fccbf7e88bff2b9307b2e1b5652b22a8820b"
+  },
+  "source_run_sha256": "cce2f6245bbcb8db6163f60f8eadfe7921f38f527dc22d15cb6068b8c723f2e8",
+  "entries": 47,
+  "exact_recorded_pin_set_and_bytes": true,
+  "meaning": "All forty-seven exact runtime files recorded in revision05 are preserved. This is historical integrity evidence for a failed candidate, not approval to run it."
+}

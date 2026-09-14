@@ -1,0 +1,110 @@
+[
+  {
+    "id": "S01",
+    "qualifications": [
+      "This guidance explains U.S. grid-delivered purchased electricity; it does not determine a company's legal duties."
+    ]
+  },
+  {
+    "id": "S02",
+    "qualifications": [
+      "EPA's reporting recommendation is not a universal legal obligation."
+    ]
+  },
+  {
+    "id": "S03",
+    "qualifications": [
+      "This preview explains record collection; it does not prepare an inventory or estimate missing consumption."
+    ]
+  },
+  {
+    "id": "S04",
+    "qualifications": [
+      "Check supplier and delivery invoices for the same consumption; this preview cannot diagnose your records."
+    ]
+  },
+  {
+    "id": "S05",
+    "qualifications": [
+      "This preview covers electricity units; it does not convert units or cover purchased heat, steam or cooling."
+    ]
+  },
+  {
+    "id": "S06",
+    "qualifications": [
+      "These boundaries concern purchased grid electricity. Calculations of upstream emissions or transmission losses need separate methods."
+    ]
+  },
+  {
+    "id": "S07",
+    "qualifications": [
+      "Facility location matters; this preview does not assign a subregion or select a factor."
+    ]
+  },
+  {
+    "id": "S08",
+    "qualifications": [
+      "Check the source edition and its data year before use; this preview does not supply current numerical factors."
+    ]
+  },
+  {
+    "id": "S09",
+    "qualifications": [
+      "Dataset versions and factor values need a current check of EPA's publication pages."
+    ]
+  },
+  {
+    "id": "S10",
+    "qualifications": [
+      "This is EPA's documented lookup route; a current facility lookup still needs verification."
+    ]
+  },
+  {
+    "id": "S11",
+    "qualifications": [
+      "Supplier information must be assessed with the relevant quality conditions; this preview does not determine eligibility or choose a fallback factor."
+    ]
+  },
+  {
+    "id": "S12",
+    "qualifications": [
+      "The factor should describe the electricity delivered for the relevant product and period; receiving it does not establish eligibility."
+    ]
+  },
+  {
+    "id": "S13",
+    "qualifications": [
+      "Certificate conditions need review. No conclusion about eligibility, zero emissions or biomass accounting is made here."
+    ]
+  },
+  {
+    "id": "S14",
+    "qualifications": [
+      "Check who retains the certificates and which conditions apply. Contract eligibility, direct-line cases and fallback factors require separate review."
+    ]
+  },
+  {
+    "id": "S15",
+    "qualifications": [
+      "Compare the reporting dates with the agreement's coverage. This preview does not allocate a company's purchases or factors."
+    ]
+  },
+  {
+    "id": "S16",
+    "qualifications": [
+      "This is EPA's timing recommendation for this guidance. Keep factor data year, calculation date and inventory period distinct; do not treat it as a universal rule or selection of a current factor."
+    ]
+  },
+  {
+    "id": "S17",
+    "qualifications": [
+      "Applying a base-year policy or recalculating a historical inventory requires separate review."
+    ]
+  },
+  {
+    "id": "S18",
+    "qualifications": [
+      "A factor can have timing and averaging limitations; this preview does not quantify their effect or certify a dataset."
+    ]
+  }
+]

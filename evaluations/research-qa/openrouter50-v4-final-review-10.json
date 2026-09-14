@@ -1,0 +1,203 @@
+{
+  "schema_version": "m50_v4_frozen_independent_review.v1",
+  "task": "M50-V4-FROZEN-INDEPENDENT-QA",
+  "role": "independent_qa",
+  "reviewed_at": "2026-09-13T02:23:39.1971151Z",
+  "disposition": "pass",
+  "launchable": true,
+  "candidate_sha256": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
+  "manifest_sha256": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
+  "frozen_rehearsal_sha256": "5900aff28ac5114b747600ba2df8d8767b8cbb3b67fe0e295529f7eb9ada2f6c",
+  "approved_wrapper_sha256": "d03afae8f93fb698bec57892d55102eabe3c4d5cf9561d38f6a1c451bd883488",
+  "wrapper_child_pinset_sha256": "f9d362ae017d89b187ac62ee7808597205be3155e6cd16dafa98f5966d937fda",
+  "wrapper_source_sha256": "c7b790f2e9271492c67414804902a7bd600bdb8607a88571cb5996c20b17deea",
+  "freezer_sha256": "52ca9314114c06dade63bc41d1f8a597d8ce4ef888e65c9988cd1e1709f02cbb",
+  "scope": "Independent provider-disabled technical acceptance review of the exact frozen M50 v4 H02 regression candidate. The review did not access credentials or external networks, make provider/model requests, authorize paid use, change account or execution policy, commit, publish, or release.",
+  "independence": {
+    "reviewer_authored_candidate_or_implementation": false,
+    "reviewer_modified_author_bytes": false,
+    "note": "A double-freeze reconstruction attempted through a temporary redirected copy did not redirect because its textual substitution did not match; it therefore rewrote only the candidate and manifest twice with byte-identical content. Their SHA-256 values remained the assigned exact hashes. No implementation content changed."
+  },
+  "freeze_integrity": {
+    "candidate_pins_checked_each_pass": 87,
+    "candidate_pin_passes": 2,
+    "candidate_pin_mismatches": 0,
+    "manifest_author_pins_checked": 87,
+    "manifest_pin_mismatches": 0,
+    "candidate_manifest_pin_map_differences": 0,
+    "wrapper_child_pins_checked": 52,
+    "wrapper_child_pin_mismatches": 0,
+    "wrapper_child_pin_duplicates_absolute_or_traversal_paths": 0,
+    "wrapper_child_pinset_is_exact_candidate_subset": true,
+    "double_freeze_hashes_stable": true,
+    "double_freeze_candidate_sha256": "664df11d5b7ddcfe3c99d0fba8ae2b72a8ce19a50954fc27cb349b2f689eb0ee",
+    "double_freeze_manifest_sha256": "db31c8aac7191cb598bab2210f8d08e6814056ae58e22d75d031ea71d88624a7",
+    "v1_rejection_lineage": {
+      "candidate_sha256": "2c9cc0f9bb1613c190a9d61cd84b3c0d1ada6f3c724807e39dca7daa1acc66c6",
+      "manifest_sha256": "51f60a616b00b6a90e57cac2a154fde49c57349a03842d0a6afad714d1250d93",
+      "technical_review_sha256": "ff942735f3b82c8a6d598118766b5a324eaff9de2bea35f2961a205f726024a2",
+      "product_review_sha256": "c1d5277c0fe0ba0c77fbaee214b876ea037d852235bd7c95227831553e199156"
+    },
+    "v2_rejection_lineage": {
+      "candidate_sha256": "6fc89636ceaa1d42ccb71a5d4152d452b14da368d9f68e1b89b2e5e1d8daee25",
+      "manifest_sha256": "73e7e4bd8ccc4431c978ae142277d81a0ccef1382e1beff1b7c43a25bf2914bc",
+      "rehearsal_sha256": "84301d83e1d1b9168dd5fe9c7e47dc20956614f2063e623b92eb940d0f3f6f8c",
+      "technical_review_sha256": "e92cfc880eafc377aeaa46c550fbf67e8b17c3a71d99d63c19f33d1997f37ad0",
+      "blocked_review_sha256": "3eeaaaa587b175ec441f5efd822e758254b5cbbabc0fd2d39356cb96c3a379d2",
+      "product_review_sha256": "da484f2ad2a5e975370e5bb48dcb85162063890718ea05647a027a4173850966"
+    },
+    "v3_rejection_lineage": {
+      "candidate_sha256": "624f3cc235f05fe8de753be3c6be0a1acb49a79d24b57f577a8d45cd228459fb",
+      "manifest_sha256": "1a745a26e0b82a922c5362b7185a702b31e096ba233b43a3cbf16a539352092a",
+      "rehearsal_sha256": "584b73a34d411da7d5ae61ff76f3a42d38feeccc27ccb75e35309a4da86f5e4f",
+      "technical_review_sha256": "3bc6c8395387d0487b98a881d3596a5af041b10f105ffaa4d68ee6a07e90a746",
+      "product_review_sha256": "3e4e5a83aaee77605a3e2010e67ff5d4284b29a51a5ab9eb833b5d885739879d"
+    }
+  },
+  "acceptance": {
+    "case_and_provider_contract": {
+      "result": "pass",
+      "case_id": "M43-H02",
+      "evaluation_role": "regression_recombination_of_prior_W02_W09_semantics_not_novel_held_out",
+      "question_utf8_bytes": 128,
+      "question_sha256": "13e3e2bb76ecf7e7f1228b6f852076a433f181c2de12f42e90023028378542c3",
+      "endpoint": "https://openrouter.ai/api/v1/messages",
+      "method": "POST",
+      "redirect": "error",
+      "models": {
+        "analyze": "anthropic/claude-opus-5",
+        "plan": "anthropic/claude-sonnet-5",
+        "verify": "anthropic/claude-opus-5"
+      },
+      "provider_order": ["anthropic"],
+      "provider_only": ["anthropic"],
+      "provider_ignore": ["anthropic/fast"],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "max_price_exact": {
+        "opus": {"prompt": "5", "completion": "25"},
+        "sonnet": {"prompt": "2", "completion": "10"}
+      },
+      "speed": "standard",
+      "stream": false,
+      "plugins_tools_web_disabled": true,
+      "dynamic_body_byte_equality_to_application_builder": true
+    },
+    "stage_and_source_boundary": {
+      "result": "pass",
+      "explicit_success_sequence": ["analyze", "plan", "verify"],
+      "stage_specific_exact_schemas": true,
+      "unknown_top_nested_and_alias_fields_refused": true,
+      "nested_embedded_split_and_base64_evaluator_forms_refused_after_valid_analyze": true,
+      "x99_s100_invented_text_nested_unknown_source_and_unknown_catalog_forms_refused_after_valid_analyze": true,
+      "approved_model_visible_boundary": "exact pinned S01-S18-derived unit catalog",
+      "max_stages": 5,
+      "question_retries": 0,
+      "carried_stages": 0,
+      "stage_timeout_ms": 180000,
+      "question_timeout_ms": 240000,
+      "supervisor_timeout_ms": 1800000
+    },
+    "wrapper_and_admission": {
+      "result": "pass_provider_disabled",
+      "canonical_windows_executable": "C:/Users/nimab/OneDrive/Documents/ChatGPT/Neuvetra/.superpowers/openrouter-50-v4-bin/m50-wrapper-v4.exe",
+      "exact_executable_sha256": "d03afae8f93fb698bec57892d55102eabe3c4d5cf9561d38f6a1c451bd883488",
+      "windows_execution_succeeded": true,
+      "authenticode_status": "NotSigned",
+      "new_code_integrity_events_matching_v4_since_freeze": 0,
+      "embedded_canonical_child_hashes": 52,
+      "child_hashes_checked_before_attempt_capability_or_spawn": true,
+      "mutated_child_refused_before_attempt_and_runtime": true,
+      "manual_copy_tamper_replay_partial_and_wrong_path_cases_refused": true,
+      "unapproved_script_in_candidate_pin_or_execution_path": false,
+      "fresh_exact_candidate_authorization_required": true,
+      "authorization_materialization_and_consumption_one_use": true,
+      "browser_origin": "http://localhost:5175",
+      "localhost_post_required_and_127_post_refused": true,
+      "paid_authorization": false
+    },
+    "terminal_and_grader_boundary": {
+      "result": "pass_for_tested_paths",
+      "provider_disabled_complete_wrapper_lifecycles": 2,
+      "provider_transport_calls": 0,
+      "synthetic_success_stages": 3,
+      "capture_before_dispatch": true,
+      "runtime_reads_evaluator_key": false,
+      "runtime_uses_hash_only_evaluator_denylist": true,
+      "post_shutdown_grader_requires_success_terminal_payload_cost_and_shutdown_hash_chain": true,
+      "success_native_cost_settlement_required": true,
+      "validation_transport_pre_capture_timeout_supervisor_and_shutdown_before_terminal_failure_seals": true,
+      "double_stop_idempotent": true,
+      "no_restart_or_carry": true,
+      "cleanup_complete": true,
+      "closed_ports_after_review": [3012, 3016, 5174, 5175]
+    },
+    "cost": {
+      "result": "pass",
+      "expected_nano_usd": 271573000,
+      "expected_basis": "Arithmetic mean of preserved M46 same-pipeline settled costs 247266000 and 295880000 nano-USD.",
+      "independent_mean_recalculation_nano_usd": 271573000,
+      "conservative_local_reservation_nano_usd": 3944535000,
+      "vendor_billing_cap": false,
+      "later_admission_stops_on_unknown_or_uncertain_cost": true,
+      "native_success_settlement_and_failure_uncertainty_retention_tested": true
+    }
+  },
+  "test_results": {
+    "main_integrated_suite": {
+      "files": 5,
+      "tests_passed": 29,
+      "tests_failed": 0,
+      "assertions": 315
+    },
+    "independent_actual_path_probes": {
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "assertions": 41,
+      "cases": 8,
+      "coverage": [
+        "plan-stage top-level alias",
+        "plan-stage nested analysis alias",
+        "plan-stage source-card alias",
+        "missing provider order after valid analyze",
+        "missing max_price completion after valid analyze",
+        "verify-stage selected-unit alias",
+        "verify-stage nested selection addition",
+        "verify-stage nested selected-unit addition"
+      ]
+    },
+    "typecheck": {
+      "source_files": 14,
+      "result": "pass",
+      "exit_code": 0
+    },
+    "exploratory_probe_harness_corrections": [
+      "An initial probe used an undefined alias value, so JSON serialization removed the intended mutation and the successful response had no failure terminal; the corrected nonempty alias was refused.",
+      "A second probe expectation omitted the valid analysis-schema refusal label; widening only the QA assertion produced the final passing result. Neither failure was a product failure."
+    ]
+  },
+  "commands": [
+    ".superpowers/review-tools/bun-windows-x64/bun.exe test ./.superpowers/openrouter-50-v4/approved-wrapper.test.ts ./.superpowers/openrouter-50-v4/issuer.test.ts ./.superpowers/openrouter-50-v4/preflight.test.ts ./.superpowers/openrouter-50-v4/m50-v4.test.ts ./.superpowers/openrouter-50-v4/rehearsal.test.ts",
+    "node_modules/.bin/tsc.exe --noEmit --target ES2022 --module ESNext --moduleResolution Bundler --allowImportingTsExtensions --skipLibCheck --types bun <14 v4 source files>",
+    ".superpowers/review-tools/bun-windows-x64/bun.exe test ./evaluations/research-qa/.m50-v4-independent-probe.test.ts",
+    ".superpowers/review-tools/bun-windows-x64/bun.exe test ./evaluations/research-qa/.m50-v4-verify-schema-probe.test.ts",
+    "two complete SHA-256 passes over candidate.pins plus one pass over manifest.author_pins and wrapper child pinset",
+    "two deterministic v4 freeze reconstructions followed by exact top-level rehash",
+    "Get-WinEvent CodeIntegrity/Operational filtered to the v4 wrapper since freeze; Get-NetTCPConnection on 3012, 3016, 5174, 5175"
+  ],
+  "findings": [],
+  "limitations": [
+    "This is provider-disabled technical QA. It does not establish current account controls, source freshness, provider availability, live response quality, legal assurance, customer readiness, publication, deployment, or release acceptance.",
+    "The evaluator guard is accepted only for the declared canonical JSON and stage-encoding boundary. It does not detect arbitrary steganography and does not defend against a malicious same-user administrator who can rewrite approved files and evidence.",
+    "The preflight CLI hashes every candidate pin, including the evaluator-key file, before launch but does not parse, retain, or propagate evaluator content. This review interprets the candidate's post-shutdown grader statement as the runtime/model-content boundary; if intended as a literal claim that no prelaunch process reads the file bytes even to hash them, the wording is overbroad.",
+    "Fresh account, balance, route-control, machine, source, and exact-candidate consumable authorization evidence remains mandatory at launch. The frozen candidate itself has paid_authorization=false."
+  ],
+  "release_boundary": {
+    "technical_candidate_review": "pass",
+    "paid_execution_authorized": false,
+    "provider_request_allowed_by_this_review": false,
+    "commit_publication_deployment_or_release_authorized": false,
+    "next_gate": "Obtain fresh product acceptance if required, then a fresh consumable board authorization bound to this candidate and this review, plus all launch-time account, machine, and source evidence."
+  },
+  "conclusion": "PASS for the exact frozen M50 v4 technical candidate. The v4 repairs bind the reviewed transitive execution graph to the approved Windows wrapper before any attempt or spawn, require exact canonical provider policy bytes for every dynamic stage, reject tested evaluator/source/schema evasions at the real pre-dispatch boundary, and durably close cost, payload, terminal, and shutdown state across success and failure. This review does not authorize a paid request; fresh exact-candidate board authorization and launch evidence remain required."
+}

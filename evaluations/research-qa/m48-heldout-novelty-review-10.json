@@ -1,0 +1,201 @@
+{
+  "schema_version": "m48_heldout_novelty_review.v1",
+  "task": "M48-CPO",
+  "role": "independent_product_acceptance",
+  "reviewed_at": "2026-09-12T20:17:14.6213249Z",
+  "disposition": "fail_disjoint_selection_no_novel_case_in_approved_semantic_space",
+  "scope": "Text-readable prior run, candidate, request, response, trace, evaluation, grading and outcome artifacts for the approved S01-S18 EPA corpus; no implementation review or provider execution.",
+  "review_basis": {
+    "files_scanned_by_root": {
+      ".superpowers": 9929,
+      "tools": 95,
+      "evaluations": 680,
+      "operations": 149,
+      "docs": 174,
+      "data": 13,
+      "claude-memory": 90
+    },
+    "artifact_paths_matching_run_candidate_request_response_trace_admission_evaluation_grade_or_outcome": 5689,
+    "json_or_jsonl_artifact_paths_in_that_set": 3805,
+    "searches": [
+      "Exact case IDs, exact question strings and UTF-8 SHA-256 question digests.",
+      "Exact evaluator required-point and forbidden-claim strings.",
+      "Semantic-neighbor searches over question, original_question, prompt and request fields for grid/eGRID/currentness, document and agreement coverage, factor updates, methodology changes and base-year adjustments.",
+      "Manual comparison of W01-W18, EPA14-B01-B03, C01-C20, P01-P04, all M43 development and held-out rows, accepted outcomes and representative started/completed traces."
+    ],
+    "excluded_from_text_search": [
+      ".git, node_modules and .pnpm-store metadata or dependencies",
+      "Two access-denied vendored Python files under .superpowers/review-tools; they are tool packages, not Neuvetra run or evaluation records",
+      "Binary wrapper executables; they cannot contain preserved textual provider payloads and were outside this product-semantic review"
+    ]
+  },
+  "authoritative_hashes": {
+    "evaluations/research-qa/m43-pilot-evaluation-cases-v1.json": "9f6e68cbe55805f9737a8a908e23875b2bb5c1c77bd74d3d50feae69dd716e6d",
+    "evaluations/research-qa/m43-pilot-readiness-review-10.json": "0c986584466ecf1f1db9ef7bc1ab9c5d7939e5f5d4b1d5a22c497266ce5d9f25",
+    "data/research/releases/scope2-website.v1.json": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "tools/research/m43-heldout-first-batch-v1.json": "a2dc2014be922f5a795863203dedc92af066dce04cda7de06e5d52d257e7c17d",
+    "tools/research/m44-primary-exact-request-bodies-v1.json": "9e03022c49f02ae37be30b4a6cac4aa30342bd06dc0c7e4afabc0c0617acf6ae",
+    "tools/research/m45-primary-exact-request-bodies-v1.json": "2289f6b80ea165d093b2772910452772516af8996cdd903bd85877496ee4d115",
+    "tools/research/m46-primary-exact-request-bodies-v1.json": "4f6e9de2772d2e32ead6499b2c5b9278711a75c56938b2f2e08299eb688e81e4",
+    "evaluations/research-qa/website-cloud-acceptance.v1.json": "9a97060e47b46dd6d6729967b51692ab38f89b91e5c0be74ad46bf3f037625cc",
+    "evaluations/research-qa/epa-candidate10-epa21-outcomes-10.json": "eb38217d62206f5ec34830a14f07447fde240ea6a1e518c97f3518266eaae2be",
+    "evaluations/research-qa/runs/website-core-01.raw.jsonl": "3516ffdfc538929ff7ca811e441965b55ca0bae59b340ded4eb205442ec2b269",
+    ".superpowers/website-claim-packets-04.json": "29be7d44a7cbc86462138e9a7780d18402bb937dc3a475558c1cf0a29d89ef4f",
+    ".superpowers/website-evaluation-04/traces/011-started.json": "0f254933f02dfcab3afa537540a186584be527a2c1c24156c060f8f18570241b",
+    ".superpowers/website-evaluation-04/traces/011-completed.json": "f6a0fc23e68a519d174e96ac85fbf1cae0c8a659df8882a9a28baa0bf8157ab9",
+    ".superpowers/website-prerequisite-holdout.v1.json": "fd22f1e2f46855b1cf6d749faf303a02d1ebe70b00164ca4552aa156205e2e49",
+    ".superpowers/website-evaluation-04/traces/023-started.json": "aa4801bbb15cd3e435c646ab07c5713a314bdd5f7a0fc1120426d59a7a58234a",
+    ".superpowers/website-evaluation-04/traces/024-started.json": "d30a4ad6a68c25ce2d7c08c8d8ccc04239730bb3cf96c298e90d4987e1f78188",
+    ".superpowers/website-evaluation-04/traces/024-completed.json": "ce30dd20da0455dfbfd19febd140af1aa4a8e5c88ea96b68695ffd122f0f6e25"
+  },
+  "m43_h02_preserved_contract": {
+    "question": "How should I research a U.S. grid-average factor for a facility, and what should I verify before treating the result as current?",
+    "question_sha256": "13e3e2bb76ecf7e7f1228b6f852076a433f181c2de12f42e90023028378542c3",
+    "expected_answer_class": "qualified",
+    "expected_reason_code": "none",
+    "approved_evidence": [
+      { "id": "S06", "locator": "PDF page 8 / printed page 5", "role": "required_dependency" },
+      { "id": "S07", "locator": "PDF page 9 / printed page 6", "role": "geography_support" },
+      { "id": "S08", "locator": "PDF page 9 / printed page 6", "role": "egrid_support" },
+      { "id": "S09", "locator": "PDF page 9 / printed page 6", "role": "publication_timing_support" },
+      { "id": "S10", "locator": "PDF page 10 / printed page 7", "role": "lookup_route_support" },
+      { "id": "S18", "locator": "PDF page 17 / printed page 14", "role": "accuracy_and_staleness_support" }
+    ],
+    "required_points": [
+      "Use facility geography and prefer a regional or subnational grid area for grid-delivered electricity.",
+      "EPA recommends eGRID total-output subregion factors for U.S. operations and documents Power Profiler as a subregion lookup route using zip code and utility.",
+      "Check the current eGRID and Factors Hub editions because publication timing can differ and grid-average data can be stale or mismatched to the purchase year.",
+      "Do not assign a facility subregion, select a value or certify a latest dataset."
+    ],
+    "objective_grading": [
+      "Status qualified and reason_code none.",
+      "Each discovery, timing and accuracy claim has supporting citation and complete dependency closure.",
+      "All four required points present and no current number, facility subregion, synchronized-update claim or latest-dataset certification."
+    ]
+  },
+  "model_visible_versus_evaluator_only": {
+    "exact_h02_execution": "none_found",
+    "exact_h02_question_in_prior_model_payload": false,
+    "exact_h02_question_locations": [
+      "evaluations/research-qa/m43-pilot-evaluation-cases-v1.json",
+      "operations/status.json current M48 planning record only"
+    ],
+    "exact_h02_question_digest_occurrences_elsewhere": 0,
+    "exact_h02_answer_key_phrase_locations": [
+      "evaluations/research-qa/m43-pilot-evaluation-cases-v1.json only"
+    ],
+    "evaluator_only_for_any_future_run": [
+      "purpose, expected class/reason, required points, evidence roles, forbidden claims and objective checks",
+      "this review and all overlap judgments"
+    ],
+    "historically_model_visible": [
+      "The shared S01-S18 source release and reviewed unit/capability text, including H02-relevant U08-U11 and U20 content.",
+      "W02 and W09 questions, stage inputs and outputs.",
+      "Verifier claims and source context for the H03/H05 semantic neighbors described below."
+    ],
+    "truthful_label": "The exact H02 string and its M43 evaluator row were held out from prior H02 execution. The semantic task, source content and expected product behavior were not held out. M43 already described this as project-visible and not statistically blind."
+  },
+  "semantic_overlap_findings": [
+    {
+      "case_id": "M43-H02",
+      "question_sha256": "13e3e2bb76ecf7e7f1228b6f852076a433f181c2de12f42e90023028378542c3",
+      "semantic_product_disjoint": false,
+      "neighbors": [
+        {
+          "id": "W02",
+          "question": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+          "evidence": "The preserved live accepted outcome used U07-U11, U13, U16 and U20. Its independent task-fit finding explicitly covers U.S. eGRID total-output subregion data, geography, publisher and subregion routes, edition/data-year timing, and withholding latest values, numerical factors and eligibility determinations."
+        },
+        {
+          "id": "W09",
+          "question": "Why should I record both an electricity factor's data year and its publication edition, rather than treating either as automatically the inventory year?",
+          "evidence": "The preserved live accepted outcome used U10, U17, U20 and U21 and distinguished publisher edition, factor data period, calculation date, inventory period and timing/averaging limits."
+        }
+      ],
+      "verdict": "H02 recombines already live-tested discovery and currentness behavior. A pass would be a regression result under a new exact wording, not a novel held-out product result."
+    },
+    {
+      "case_id": "M43-H03",
+      "question_sha256": "160e8c9006181438e442b177b23f9faad6809e2e8b46e07df3243ba1eb691e90",
+      "semantic_product_disjoint": false,
+      "neighbors": [
+        {
+          "id": "M43-D04",
+          "evidence": "Near-twin fictional missing-document/full-year question with the same needs_input/context_required result, the exact same three required context IDs, and the same S06/S11/S12/S15 evidence family."
+        },
+        {
+          "id": "W06 and verifier P03/P04",
+          "evidence": "Agreement-period/full-year applicability and the aligned-versus-partial-year branches were previously exercised. P03/P04 were sent in started provider traces and P04 has a preserved passing completed trace."
+        },
+        {
+          "id": "W11",
+          "evidence": "Company-specific missing-context behavior was repeatedly exercised, although its factual subject differs from H03."
+        }
+      ],
+      "verdict": "The two-product framing changes the wording but not the product behavior or objective contract."
+    },
+    {
+      "case_id": "M43-H05",
+      "question_sha256": "ca5919524bc98917fb0d8e8d20ac117ab68082fbbbef044f19c74fe346e36215",
+      "semantic_product_disjoint": false,
+      "neighbors": [
+        {
+          "id": "verifier C11",
+          "question": "How does the guidance distinguish ordinary factor updates from methodology changes for prior inventory years?",
+          "evidence": "Its provider-visible candidate claim was 'Factor updates always require every historic inventory to be recalculated with the newest edition.' The started and completed provider traces preserve S16-S18 context and the evaluated result."
+        },
+        {
+          "id": "W09 and EPA14-B03",
+          "evidence": "Date/edition/currentness and base-year impact were already posed to the product; W09 has an accepted live answer and EPA14-B03 records the unresolved broader base-year/reference behavior."
+        }
+      ],
+      "verdict": "H05 is a user-facing restatement of a prior provider-visible verifier challenge and cannot be represented as a novel held-out semantic case."
+    }
+  ],
+  "selection": {
+    "selected_case_id": null,
+    "selected_question": null,
+    "reason": "No genuinely novel practical one-case behavior remains defensible inside the already exposed S01-S18 semantic space. Every major answerable topic, abstention class and relevant conditional branch has prior live, development, accepted-outcome or provider-visible verifier exposure. Creating a cosmetic paraphrase after reviewing these artifacts would not restore held-out validity.",
+    "smallest_truthful_product_acceptance_if_board_chooses_regression": {
+      "label": "one-case regression/recombination check",
+      "case": "M43-H02",
+      "acceptance": [
+        "One immutable question, one run, no question retry or cross-run stage carry.",
+        "Qualified/none result with all four frozen M43 H02 points, exact S06-S10/S18 citation and dependency closure, and zero forbidden claims.",
+        "No current numeric factor, facility subregion assignment, latest-dataset certification, customer data, publication or release claim.",
+        "All current runtime identity, source freshness, capture, terminal latency and exact cost gates pass independently."
+      ],
+      "claim_after_success": "The frozen system repeated previously exercised EPA grid-factor discovery and currentness behavior successfully for one new wording. It does not establish novel held-out generalization."
+    },
+    "requirements_for_a_future_genuinely_held_out_case": [
+      "Define a new practical user behavior from newly approved source coverage or an independently quarantined evaluation space that is absent from prior live, development and verifier inputs.",
+      "Have an evaluator author the question and objective key once after a semantic-neighbor audit, seal both, expose only the question to the answer pipeline, and prohibit tuning or rehearsal on that question or answer class.",
+      "Freeze source, request, runtime, identity, capture and cost evidence offline; require a separate exact paid-run authorization.",
+      "Keep the evaluator key unavailable to implementers and all model stages until terminal capture is sealed."
+    ]
+  },
+  "board_decision": {
+    "recommendation": "Do not authorize M43-H02, H03 or H05 as a disjoint held-out canary.",
+    "option_1": "If the board values a regression signal now, authorize exactly one H02 run and label it only as a regression/recombination check.",
+    "option_2": "If the board requires genuine held-out evidence, stop paid M48 preparation and open a later offline milestone for newly approved coverage plus quarantined case authoring before any paid request.",
+    "not_authorized_by_this_review": [
+      "provider or paid calls",
+      "source expansion",
+      "customer data",
+      "publication, deployment, release, merge or commit"
+    ]
+  },
+  "material_product_risk": "Calling any optional M43 case disjoint would inflate the evidence. A success could be mistaken for generalization when it only repeats behavior that shaped prior evaluation and product tuning; a failure would still be useful regression evidence but would not measure an unseen task.",
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "services_started": false,
+    "customer_data_used": false,
+    "source_expansion": false,
+    "implementation_files_modified": false,
+    "only_review_artifact_written": true,
+    "publication_deployment_release_merge_or_commit": false
+  }
+}

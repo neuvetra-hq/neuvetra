@@ -2,9 +2,11 @@
 
 > **Current direction — September 8, 2026:** [[2026-09-08-neuvetra-ghg-focus]] replaces the earlier multi-product priority. Neuvetra is the California/U.S. GHG product; TerraScope branding is retired and FrontDesk is deferred. The older entries remain historical context.
 
+> **Latest product milestone — September 12, 2026:** [[2026-09-12-neuvetra-m50-v4-live-failure-and-m51-remediation]] records the one-request M50 failed-safe closure and the independently accepted M51 v4 provider-disabled repair. No live rerun, publication or release is authorized. Read the current [board report](../operations/board-report.md), [ledger](../operations/status.json), and [operational handoff](../operations/next-session.md) before treating any runtime or task state as current.
+
 Catalog of every page in the C-level wiki, organized by type. The LLM reads this first on every Neuvetra question.
 
-> Last updated: 2026-04-28 (Graphify-inspired confidence-tagged provenance design for ghg-kb — strategic call closed [[2026-04-28-ghg-kb-confidence-provenance]]; brainstorm at Section 3 of 5, spec doc + impl plan pending. Earlier today: monorepo consolidation [[2026-04-28-consolidate-into-single-monorepo]] + [[frontdesk-sms-architecture]].)
+> Last updated: 2026-09-12 (M50 v4 failed safely and is closed; M51 v4 provider-disabled remediation is independently accepted.)
 
 ---
 
@@ -19,6 +21,7 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 > See `raw\README.md`. Conversations land in `raw\conversations\`; unclassified drops in `raw\inbox\`.
 
 **Conversations:**
+- [[2026-09-09-scope2-benchmark-conv]] — Board's benchmark request and explicit cloud-test approval
 - [[2026-04-25-domain-deployment-state-conv]] — Brand kickoff & domain / deployment state
 - [[2026-04-25-wiki-raw-layer-design-conv]] — Design wiki raw-layer architecture
 - [[2026-04-25-wiki-integrity-pass-conv]] — Wiki integrity pass & schema refinement
@@ -35,6 +38,7 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 ## People
 - [[ceo]] — Nima Birgani, CEO of Neuvetra
 - [[c-suite]] — Claude wearing CFO / CPO / CTO hats
+- [Agent role roster](../operations/agents/README.md) — Eleven defined roles, including the internal [CARB verifier / GHG audit reviewer](../operations/agents/carb-verifier.md) added September 9; roles are staffed only when work is dispatched.
 
 ## Products
 - [[frontdesk]] — AI voice front-desk for businesses
@@ -114,6 +118,13 @@ Catalog of every page in the C-level wiki, organized by type. The LLM reads this
 
 ## Meetings
 
+- [[2026-09-12-neuvetra-m49-h02-regression-readiness]] — Frozen one-case H02 regression package completed with product acceptance and independent QA; exact paid decision remains.
+- [[2026-09-12-neuvetra-m48-heldout-selection-blocked]] — No remaining M43 case is materially novel within S01–S18; M48 stopped before candidate or paid authorization.
+- [[2026-09-12-neuvetra-m47-v4-offline-closure]] — Frozen local wrapper provenance and H04 classification repair completed with independent QA.
+- [[2026-09-12-neuvetra-m46-live-failure-and-m47-remediation]] — M46 failed, sealed and non-reusable; original M47 remediation scope.
+- [[2026-09-11-neuvetra-m42-deterministic-calculation]] — First local deterministic Scope 1 natural-gas calculation, exact EPA source/policy lineage, replay, fail-closed validation and independent QA.
+- [[2026-09-10-voice-coordination-and-source-handoff]] — Voice-session recovery, source-collection controls, deferred refresh automation, M30 authorization boundary, and Pinecone/Supabase decision context.
+- [[2026-09-09-answer-quality-and-session-handoff]] — Board feedback, general answer corrections, separate source-use hold, EPA-only next step and truthful agent-execution status.
 - [[2026-09-08-neuvetra-ghg-focus]] — CEO refocuses Neuvetra on California/U.S. GHG; preserved repository tag, primary-source reassessment, deterministic accounting and staged demos.
 - [[2026-04-25-c-level-wiki-design]] — Designed and scaffolded this wiki
 - [[2026-04-25-domain-deployment-state]] — Captured `neuvetra.com` / `.ai` and FrontDesk live-deployment state

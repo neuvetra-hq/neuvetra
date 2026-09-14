@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "task": "M30-MANIFEST-QA",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "run_id": "website-epa-live-30",
+  "manifest_sha256": "9adc330c197ad780f29ec5fde247478f6310845f1deb3e87178ed3f7670073e7",
+  "purpose": "diagnostic_only_no_release",
+  "release_acceptance": false,
+  "committed_head": "c831da340e33dfe6e0bf3bc40bddd05232d10cef",
+  "active_deltas": [],
+  "runtime_evidence": [
+    {
+      "path": ".superpowers/launch-openrouter30-root.py",
+      "sha256": "54c74e0108d9707d3b0a6615b58a86fadae4b89ea1725d4fcb112545e57bf106"
+    },
+    {
+      "path": ".superpowers/launch-vite30-root.py",
+      "sha256": "2287426a5134ff4032493749fb2e5816aa8bf7463f30a4d754fff327671956b5"
+    },
+    {
+      "path": ".superpowers/openrouter-30/.env.development",
+      "sha256": "3c69693e5fe37d9dfdb2f7b83d4aedc17efb392c5c5f86b513a4b6014f7b72e9"
+    },
+    {
+      "path": ".superpowers/openrouter-30/browser-questions.prepared.json",
+      "sha256": "fc349f198e432565f9c1db35b54239a252c30aaf314e5c7dcdb2b02a17b3820c"
+    },
+    {
+      "path": ".superpowers/openrouter-30/changes.test.ts",
+      "sha256": "9d2846ef6ca732d04145d53af515e28e7d08906cb8a7387af147a88ed7cc8a64"
+    },
+    {
+      "path": ".superpowers/openrouter-30/cloud-observations.test.ts",
+      "sha256": "413b4eec0cca113c606782a609900fbd1a18a3e47a09b23d738dc5af3028fa7a"
+    },
+    {
+      "path": ".superpowers/openrouter-30/cloud-observations.ts",
+      "sha256": "c9544cfda6fc833d9f50e032f530e2f4983125b0304b410c39e29504833f9ccb"
+    },
+    {
+      "path": ".superpowers/openrouter-30/diagnostic-control.ts",
+      "sha256": "29f6f49a52d5910250784b75daba3ef382f519f13234a82d7eea5e7e55f9f30c"
+    },
+    {
+      "path": ".superpowers/openrouter-30/expected-active-deltas.json",
+      "sha256": "a5338d955b09046ec0b16f3a9625b7955c763aae07dc722e474e6078745f932f"
+    },
+    {
+      "path": ".superpowers/openrouter-30/failure-detail.test.ts",
+      "sha256": "e47a70e496cf3fc6f597e6a89e1017e0cfd16f7f49de1aaf610da0227fb9a25e"
+    },
+    {
+      "path": ".superpowers/openrouter-30/files.ts",
+      "sha256": "5c5efb975529dda48de24daef30e054128d8dd9b02e33e621cba4b7707b07b05"
+    },
+    {
+      "path": ".superpowers/openrouter-30/frontend-startup-test.py",
+      "sha256": "462e830eb6301c74a88e9daab14e35ca645236dfa27208bd06fbbcb284718fb8"
+    },
+    {
+      "path": ".superpowers/openrouter-30/handoff.md",
+      "sha256": "1fde797242bb6d33aef34556f21fe09a65c35771bc27e6c5dd713fb001c944fc"
+    },
+    {
+      "path": ".superpowers/openrouter-30/ingress.test.ts",
+      "sha256": "4af07cbb0f8270634285953d5b09727c3495632278f0f66192cd656a2925b1e1"
+    },
+    {
+      "path": ".superpowers/openrouter-30/ingress.ts",
+      "sha256": "e0361b1ad37b0539b5db5515f72465471c4753e1d4327378989c5c1d54eddddb"
+    },
+    {
+      "path": ".superpowers/openrouter-30/isolated-proxy.ts",
+      "sha256": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432"
+    },
+    {
+      "path": ".superpowers/openrouter-30/issue-budget-proposal.json",
+      "sha256": "f59b39ab2d55aa7a765b558db12307cfbb7fbeefeec5bdf5554bc35aeabcd9f0"
+    },
+    {
+      "path": ".superpowers/openrouter-30/issue-budget-proposal.test.ts",
+      "sha256": "f1236cc9efa8a0284fe62de31d44a4088fb27341a96fa23247f4860e6ea07ab6"
+    },
+    {
+      "path": ".superpowers/openrouter-30/issue-budget-proposal.ts",
+      "sha256": "2826294c6353589bea06b65d9955cf4271bbf8e0929cafad84596192ce1f7d0e"
+    },
+    {
+      "path": ".superpowers/openrouter-30/launcher-test.py",
+      "sha256": "ebbe70cef2edc2d0419ea2626f869ac07e4be923848d557b2028215210f65e29"
+    },
+    {
+      "path": ".superpowers/openrouter-30/packet-capacity.json",
+      "sha256": "896e03aa19e6f03c48d6e93c809802966e328f3b0bb1dcab9cbeec9f20d5135d"
+    },
+    {
+      "path": ".superpowers/openrouter-30/packet-capacity.test.ts",
+      "sha256": "fb8f45dba9bad9c6ce752c85f4f97d0f19e0f17b4017ae814caaee642d17233d"
+    },
+    {
+      "path": ".superpowers/openrouter-30/packet-capacity.ts",
+      "sha256": "49f4e098857205c214d7e88cf502839e67cf3c63ee708410eecad226fd8adc28"
+    },
+    {
+      "path": ".superpowers/openrouter-30/passive-counter.test.ts",
+      "sha256": "c0a220e0ab98bcdd74622ee906a1d02d15cfbbb316872ef2092105b219fa1713"
+    },
+    {
+      "path": ".superpowers/openrouter-30/passive.ts",
+      "sha256": "b33c82f3e9763b1cdf625379d12465174993b06464822b223b0e906c39bf4b97"
+    },
+    {
+      "path": ".superpowers/openrouter-30/phases.ts",
+      "sha256": "1c1691f833d78240a8ae61611e8daf639045bb648b22252b8bb5d5860eb07af0"
+    },
+    {
+      "path": ".superpowers/openrouter-30/prior.ts",
+      "sha256": "a029de2a3fe801c81e3e7291d7b6628831550ad6106ab714f28579305e01a040"
+    },
+    {
+      "path": ".superpowers/openrouter-30/provider-diagnostics.ts",
+      "sha256": "e2296280f6506828bc83f86c96bd45eafa497a5e6f2dcf65c69d5e89f75ad3ad"
+    },
+    {
+      "path": ".superpowers/openrouter-30/spending.ts",
+      "sha256": "32fb6f2a4c143cff0ea15dc24f29d713db71bb67a00c9f910c5d4f291ae1a68d"
+    },
+    {
+      "path": ".superpowers/openrouter-30/tsconfig.ingress.json",
+      "sha256": "cf8e87ce6ea94b9fe53fe4460acb650b3a40a87448ad717d7642687b25991b02"
+    },
+    {
+      "path": ".superpowers/openrouter-30/tsconfig.scaffolds.json",
+      "sha256": "b1d27a6da52d19a51518195daed5d285c5cc303e6c41d73f7bdd49b345147473"
+    },
+    {
+      "path": ".superpowers/openrouter-30/validation.json",
+      "sha256": "c7cef135bd4d64c260992866185e9d204e35235f06f30c39611788d146311f52"
+    },
+    {
+      "path": ".superpowers/openrouter-30/vite-isolated.config.ts",
+      "sha256": "dfa4c5d4bc9704c23d3e98e8f0c17aeb0db16b3711cca83e1edc59a65a53957a"
+    },
+    {
+      "path": ".superpowers/openrouter-30/vite-start-command.json",
+      "sha256": "33a87b1b9ba6c1c21984c0fd0d0e3ce64a23ce3f5c722656c8287c533b1ae0b4"
+    },
+    {
+      "path": ".superpowers/passive-browser-epa-live-30.ts",
+      "sha256": "75c227140a348aeb7b48e9ff6ecba0e22f22bcb3b169c5e821cec2851f3d1f6e"
+    },
+    {
+      "path": ".superpowers/prepare-epa-live-30.ts",
+      "sha256": "d3599d998653508073481fe7bb2963f00e88ea920f91dc7eac88242daf7e4924"
+    },
+    {
+      "path": ".superpowers/seal-epa-live-30.ts",
+      "sha256": "328dda52a45a26f052b2cf55feb32b474e3b15b4ee9ec6b21c0f0ea21000191b"
+    },
+    {
+      "path": ".superpowers/website-bootstrap-epa-live-30.ts",
+      "sha256": "76673a3f7594e979b5ded55e8683747e7bd9b560235a47fd380ba5513a6a2048"
+    },
+    {
+      "path": ".superpowers/website-launch-epa-live-30.py",
+      "sha256": "6617e9b5eb1bd494a82b81d484c57ed8af51976a1a803cafc68c75cba75cd206"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/context-boundary.test.ts",
+      "sha256": "814b3478d6469d199d05b955e4b944f9950ce500d3ca240c97bccef5a2683d19"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/provider-diagnostics.test.ts",
+      "sha256": "336b94db34cb7c003d0194aa4e6ea8bc5e6e0a1a3b727456bc07840472e6b02f"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter28-connection-diagnosis-10.json",
+      "sha256": "b7bc386f95381faf37183158d790ac93e9f58442f66646d5db04c42ddb38b06d"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter28-connection-review-10.json",
+      "sha256": "a0ecf00bdf4fc9d041a07184e93bc503aca96f621b9ea330874e84a39ffb9981"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter29-closure-review-10.json",
+      "sha256": "843f8ba1f435e7639df83535188feddca8c71e3413c95f70f016b207bccb7fd1"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter30-frontend-host-smoke-qa.json",
+      "sha256": "d08f75ccfcedb61be97376d504c16c268f96e86d251b705be93a1c721e8a9322"
+    },
+    {
+      "path": "evaluations/research-qa/openrouter30-frontend-host-smoke-root.json",
+      "sha256": "e2e699397964ac1306e60b1e835e66267d00095ca52490338123d4f846daddfd"
+    },
+    {
+      "path": "operations/website-evaluation-allocation-30.json",
+      "sha256": "b58ee224b65ba8e300e6a6f34f6efd7f25c408f4cecf9e6841695495401d83b1"
+    },
+    {
+      "path": "tools/research/cloud-read-diagnostics.ts",
+      "sha256": "9b5716e50c98a07b1bbeaf0562c0a9b0bea6c523f9cddf10bcd759f8a01e50f3"
+    }
+  ],
+  "evidence": {
+    "manifest_pins_rehashed": 578,
+    "snapshot_copies_rehashed": 577,
+    "snapshot_inventory_exact": true,
+    "snapshot_symlinks": false,
+    "private_nonce_or_token_paths": false,
+    "candidate_sha256": "9551a417868148c84eac7cb083e4599677389440df451aa8bd2bee37b63ef246",
+    "root_and_independent_candidate_arrays_exact": true,
+    "allocation_sha256": "b58ee224b65ba8e300e6a6f34f6efd7f25c408f4cecf9e6841695495401d83b1",
+    "paid_authorization": "Pinned separate user authorization: exact run30, three public questions and approved EPA evidence via OpenRouter,15new/0carry; honest instruction reference; no release or other run",
+    "profiles_recomputed": true,
+    "question_bytes_match_originals": [
+      "W03",
+      "W11",
+      "EPA14-B01"
+    ],
+    "source_review_expires_at": "2026-09-15T23:20:32Z",
+    "source_unexpired_at_review": true,
+    "closed29_loader_executed": true,
+    "closed29_reserved": 0,
+    "closed29_retired": 15,
+    "closed29_carry": 0,
+    "cumulative_actual_reserved": 869,
+    "cumulative_possible_reserved": 884,
+    "prior_settled_nano_usd": 2552456000,
+    "inherited_uncertainty_nano_usd": 446462500,
+    "remaining_monitoring_target_nano_usd": 7001081500,
+    "frontend_host_repair": "Exact root e2e699 and QA d08f75 smoke bindings, corrected freeze pins, one-use readiness launcher, host attestation and dependency checks; successful checks separated >=1000ms",
+    "directory_inventory": [
+      "runtime-snapshot",
+      "browser-questions.json",
+      "lineage.json",
+      "manifest.json",
+      "snapshot-index.json"
+    ],
+    "runtime_ready_budget_admission_trace_spending_records_absent": true,
+    "ports_3012_3016_5174_5175_closed": true,
+    "ports_method": "Actual .NET active TCP listener inventory",
+    "ordinary_preview_paused": true
+  },
+  "limitations": [
+    "User approval reference is the coordinator's pinned record; this review checks its scope and binding, not an independent transcript replay.",
+    "Historical cloud evidence remains dated; startup must perform actual cloud/source validation before any admission.",
+    "Host attestation is not OS sandbox detection. Execute the frontend through approved host permissions and verify its actual PID/listener and browser.",
+    "Root-document smoke/readiness does not prove browser module loading, semantic correctness, continuous health or future availability.",
+    "Historical run28 outcomes and inherited cost uncertainty remain unchanged. Monitoring allowance is not a hard billing guarantee.",
+    "This is manifest preflight only. Backend runtime identity and independent browser gate review are still required before UI admission."
+  ],
+  "network_calls": 0,
+  "model_requests": 0,
+  "credentials_accessed": false,
+  "services_started": false
+}

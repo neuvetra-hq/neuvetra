@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "task": "M30-FRONTEND-SMOKE-QA",
+  "role": "independent_qa",
+  "recorded_at": "2026-09-10T21:51:24.270470+00:00",
+  "disposition": "pass",
+  "root_evidence_sha256": "e2e699397964ac1306e60b1e835e66267d00095ca52490338123d4f846daddfd",
+  "executable": {
+    "path": ".superpowers/review-tools/bun-windows-x64/bun.exe",
+    "sha256": "7449b666a6f56302b5db1687116b94f3115e9eed04b26c14bd6ca1621efe7d99"
+  },
+  "arguments": [
+    "apps/site-web/node_modules/vite/bin/vite.js",
+    "--config",
+    ".superpowers/openrouter-29/vite-isolated.config.ts",
+    "--configLoader",
+    "native",
+    "--mode",
+    "development",
+    "--host",
+    "127.0.0.1",
+    "--port",
+    "5186",
+    "--strictPort"
+  ],
+  "config_sha256": "3ce642889cf270e926e4d11b82c95a89051d8df582ff5888798bff7f493f8720",
+  "vite_entry_sha256": "fa03478846d229651a3c6aa64833ba2c6cbf580a798b92bd8f47c7480bafb5d8",
+  "environment": {
+    "VITE_RESEARCH_PREVIEW_PAUSED": "true"
+  },
+  "environment_allowlist_only": true,
+  "host_execution": true,
+  "port": 5186,
+  "process_id": 35284,
+  "http_status": 200,
+  "root_document_sha256": "e5e047b448192966e4c3755302e7cd81d9a0d105df792bc88ab4af7cfe63c3fe",
+  "stdout_sha256": "e02f682d3fe8a061995d46b19ccbafed6687c61f9f52b68bef04c011a955e0dc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_empty": true,
+  "ready_line_observed": true,
+  "process_stopped": true,
+  "port_closed": true,
+  "closed29_all_files_unchanged": true,
+  "dependency_files_present": [
+    "react/cjs/react.development.js",
+    "react/cjs/react-jsx-runtime.development.js",
+    "react-dom/cjs/react-dom-client.development.js",
+    "react-router/dist/development/chunk-YQSHRJWW.mjs",
+    "three/build/three.core.js"
+  ],
+  "model_requests": 0,
+  "provider_requests": 0,
+  "external_requests": 0,
+  "evaluated_backend_started": false,
+  "qa_request_path_only": "GET http://127.0.0.1:5186/",
+  "error": null,
+  "diagnosis": "Exact installed dependencies are present, and the same isolated frontend config serves the root document in host execution. Historical access-denied optimization errors are consistent with an execution-boundary failure; this check does not establish the exact denied syscall or exclude transient filesystem/cache effects.",
+  "limitations": [
+    "Direct Bun directory reads in the current restricted context also succeeded; the historical denial was not reproduced by that narrower read-only probe.",
+    "Root frontend document readiness is not proof all browser-imported modules load or a question flow works. No browser JavaScript or backend API was exercised.",
+    "Existing optimizer/cache state was reused; no fresh dependency install or cold-cache claim.",
+    "Historical raw startup stderr/exit code were not durably captured; root tool-session report remains the evidence for the previous error."
+  ],
+  "release_acceptance": false
+}

@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "website-w07-paragraph-review-03",
+  "reviewed_at": "2026-09-09T08:05:59.220Z",
+  "reviewer": "Independent AI QA agent /root/site_review",
+  "review_attribution": "Independent AI source agent /root/terrascope_review corroborated all four actual judgments; no qualified human review.",
+  "disposition": "FAIL",
+  "raw_result": {
+    "path": ".superpowers/website-claim-results-03b.jsonl",
+    "sha256": "aea928c76d91b11fd3c1c208d0fd1fcf649a33d61d4fbce587332bbb0742de5e",
+    "bytes": 7096
+  },
+  "packet_sha256": "a5e9e96a1c28488861526a8a15ba1d7dd79b01711b6fcfb890371a73b2770f7f",
+  "profile_sha256": "21b5efc6a2089ed8d5ba834c0f0d33dd758c14f757dc0a44674c84140635b922",
+  "code_pins": {
+    "apps/site-api/src/research-cloud/provider.ts": "2eb5de9b554ff24931301cd27e886f9a57157ab3fef3b41d4e62744c70f89e01",
+    "apps/site-api/src/research-cloud/answer-contract.ts": "49521286fbca5ab700f947a87e1ca460ff0921f733b06e46289bbf8f72fb1037",
+    "apps/site-api/src/research-cloud/budget.ts": "b53c0d092e34c8ce5ac33f0d6ae08c65d7611cc63ff9037b999092205175d267",
+    "apps/site-api/src/research-passages/release.ts": "8c38597c2f9af3d68d3b1cda6965dbb89bd97c874c721ead8fdd40b80bd04a12",
+    "apps/site-api/src/research-passages/provider.ts": "958e512ffb04ff7af4bf622f17755a27a3d9cca80e3e184162f1ff4e81005b5b",
+    "apps/site-api/src/research-passages/numeric-policy.ts": "72c2512e374c8889394c13f0d0549af33dc8cb5287fe36967213ffdef5b730a4"
+  },
+  "runner_sha256": "c4e6cb89ea0db8197f9e50f88631aa72aaeab383b545fe10df8c5680947b5260",
+  "counts": {
+    "controls": 4,
+    "mechanically_valid": 4,
+    "matched_decisions": 3,
+    "false_acceptances": 1,
+    "false_rejections": 0,
+    "before": 59,
+    "after": 55,
+    "stages": 4,
+    "combined_original_reserved": 95,
+    "combined_original_ceiling": 150
+  },
+  "assessment": "C17 correctly detects unsupported supplier-label recognition. C18 and C20 supported controls pass. C19 falsely passes every flag despite omitting its material quality prerequisite; attached qualifications and a literal source sentence do not cure lost conditions. Frozen expectations remain unchanged. No website03 answers or promotion are justified by this failed gate.",
+  "bindings": "All four exact input/request hashes, eight stage events, four durable reservations, current 6 code pins and parsed reviews independently rebound. No API calls by QA.",
+  "cases": [
+    {
+      "id": "C17",
+      "expected": "unsupported",
+      "actual": "fail",
+      "target": "own_source_category_support",
+      "review": {
+        "decision": "fail",
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": false,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c1",
+            "supported": false,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          }
+        ],
+        "issues": [
+          {
+            "target_id": "c1",
+            "code": "support",
+            "explanation": "The opening sentence \"A supplier renewable label is a recognised market-based input\" is not supported by the claim's own paragraphs. S11 (PDF page 10 / printed page 7) only states that the market-based method considers contractual arrangements for power from specific sources (fossil, renewable, or other) and that factor types are listed in order of preference by precision; it says nothing about supplier labels or products being a recognised input. S06 (PDF page 8 / printed page 5) addresses only emission-factor boundaries (generation-only, no T&D or upstream). No cited paragraph identifies supplier-provided product information as an accepted market-based factor type."
+          }
+        ]
+      },
+      "request_sha256": "fe52bf98a939fe92cb1fd30a30cf8b9d30f2cf0fdb7b3a11774f7899dbc5ea19",
+      "stage_attempt": 1,
+      "started_sha256": "746ada70e595232ed3b626dd3331b0b5d6679fcc14a859a05389a997dcb68ff5",
+      "completed_sha256": "4671b5c155acd313304682da81ae993356e022c5ebe45086759416e70acf737c",
+      "reservation_sha256": "e9897ef65bf672aff35810bf1dfac6b80aecdbb2a838e6ff2be82c639e0dd45c"
+    },
+    {
+      "id": "C18",
+      "expected": "supported",
+      "actual": "pass",
+      "target": "own_source_category_support",
+      "review": {
+        "decision": "pass",
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c1",
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "request_sha256": "95d0fb11bca129234124a0e361f42416952013648d16e9c55808a81d0ecec586",
+      "stage_attempt": 2,
+      "started_sha256": "5def1fe6ff3f0e705733e749086e9961051e72f422d06cf810e52259c8344e2e",
+      "completed_sha256": "2ffbddc1b914ff686f77bb48cb0202517555fa7b712727267186566b1bebd605",
+      "reservation_sha256": "7ee205eaea90d284b0ed0c8feebc41c349abadd18fe257659bd63212a7dc5960"
+    },
+    {
+      "id": "C19",
+      "expected": "unsupported",
+      "actual": "pass",
+      "target": "conditions_complete",
+      "review": {
+        "decision": "pass",
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c1",
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "request_sha256": "a28958d0d31f3823b4021472432e208366cf6383e0a358f1f673eecea8d20402",
+      "stage_attempt": 3,
+      "started_sha256": "6200213b6da3bd717f4137fa2a47f89be986342354f09122235d4a39df21e03d",
+      "completed_sha256": "696e7fd166d43014459daa9a2ff9e503069ffa7b7505a78580cc4736544ac304",
+      "reservation_sha256": "14b65d91012910319441ff50f503d32ec110e5b6a5c08c536593923794455382"
+    },
+    {
+      "id": "C20",
+      "expected": "supported",
+      "actual": "pass",
+      "target": "conditions_complete",
+      "review": {
+        "decision": "pass",
+        "decomposition_complete": true,
+        "complete": true,
+        "relevant": true,
+        "scope_valid": true,
+        "context_sufficient": true,
+        "facets": [
+          {
+            "facet_id": "f1",
+            "complete": true,
+            "supported": true,
+            "claim_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "claims": [
+          {
+            "id": "c1",
+            "supported": true,
+            "conditions_complete": true,
+            "modality_preserved": true,
+            "relationships_preserved": true,
+            "citations_sufficient": true,
+            "passage_ids": [
+              "S06",
+              "S11",
+              "S13",
+              "S14"
+            ]
+          }
+        ],
+        "issues": []
+      },
+      "request_sha256": "3577a4205a12522be95c90b07d74d832c77ac71ebbd56d2605bacc9526a805bf",
+      "stage_attempt": 4,
+      "started_sha256": "649f22316934ac4c2353bf2ec5c2cf9846606c2d0b288343928edf3e2f21522b",
+      "completed_sha256": "1f50d6430a015aedfddfbf23cb28c4b76c204349e48226e731b44d04f49afd4f",
+      "reservation_sha256": "f7711b9e11ffa788f9559320b3201f71f0850697dd05c40ba41cd7700456bd80"
+    }
+  ],
+  "limitations": [
+    "Four exposed regression cases are not an accuracy estimate.",
+    "The source-condition omission remains an actual false approval despite multi-clause paragraph grouping.",
+    "The initial empty03 journal is a preserved zero-call local directory failure; this03b execution is the first four provider attempts."
+  ]
+}

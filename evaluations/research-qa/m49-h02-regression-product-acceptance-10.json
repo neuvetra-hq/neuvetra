@@ -1,0 +1,172 @@
+{
+  "schema_version": "m49_h02_regression_product_acceptance.v1",
+  "task": "M49-CPO",
+  "role": "independent_product_acceptance",
+  "reviewed_at": "2026-09-12T20:40:52.0338084Z",
+  "disposition": "pass_offline_regression_contract_and_static_evaluator_separation",
+  "live_run_authorized": false,
+  "novel_held_out_claim_allowed": false,
+  "release_acceptance": false,
+  "reviewed_hashes": {
+    "evaluations/research-qa/m43-pilot-evaluation-cases-v1.json": "9f6e68cbe55805f9737a8a908e23875b2bb5c1c77bd74d3d50feae69dd716e6d",
+    "evaluations/research-qa/m48-heldout-novelty-review-10.json": "4cd456bb20431ac34e6ad11c9bc21d070a0a8d93dd249c126e77b96c58308914",
+    "data/research/releases/scope2-website.v1.json": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "data/research/releases/scope2-passages.v1.json": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+    "tools/research/m49-h02-question-fixture-v1.json": "81f8b6c577a72c7c6d3445426041676ee54146ca97fa085f28dc10b46e4dde67",
+    "tools/research/m49-h02-evaluator-only-key-v1.json": "5d3a3d7398893e5db544689e18dcfd4f3733320ae3a8fb5190f9d5648228b441",
+    "tools/research/m49-h02-model-visible-source-boundary-v1.json": "e39e1963aca08eee005cc94c024e82401783515cda69941d4f036e01addb0cbf",
+    "tools/research/m49-h02-exact-request-v1.json": "3314822622ba31ee160d6ca8e55b1f4ddbbd8178a0c91013a2c881aafc6ff5e7",
+    "tools/research/m49-h02-cost-and-limits-v1.json": "f9ef30ca03a3644bef34761f1ae70a39b527cd920266ff57d6f7f30ead5bdf1b",
+    "tools/research/m49-build-assets.ts": "f436014baf63842bd969436a65d6fd94fe51d980e9095395956bb6c48ebafc6f",
+    "tools/research/m49-offline-candidate.test.ts": "59f193216395f5d22b67ebf08d49126513d1b6196ae22b55a31a8bedc7781d44",
+    "docs/research/m49-h02-regression-candidate.md": "deba6914efc0b8d16baa889992742a8826b8f16059e036f917bf799c401b53e2",
+    ".superpowers/openrouter-49/contract.ts": "7e6b9dbf1ccb4286e2890d7e26a48af7b44a44884f3bfdfa78a14890a73c6f5a",
+    ".superpowers/openrouter-49/production-path.ts": "a9ecd24e048767291e4b66fe7839e06996e067bc0655bfb3797ebea315d3db6e",
+    ".superpowers/openrouter-49/rehearsal.test.ts": "197bdeb7c3d69eb520a76aca4dbd958ec144efbcc48ae9b000d9be07ae14a514",
+    ".superpowers/openrouter-49/rehearse-workspace.py": "4451b03988bfbeb8e8d794a998fc6b4b3099aa7d529825f8f8714ad3bcd6fb2b",
+    ".superpowers/openrouter-49-v1-bin/m49-wrapper-v1.exe": "93dbae144918003d3d3da24a9e7ee9edf5c1604e69acd60930f904724e35de42"
+  },
+  "source_equivalence": {
+    "website_release_passages": 18,
+    "passage_release_passages": 18,
+    "passage_arrays_byte_equivalent_after_json_normalization": true,
+    "normalized_passage_array_sha256": "f55e447959052115b2591e130ebce16a74503d93abd7bdf445548e841449e9b2",
+    "both_releases_status": "approved"
+  },
+  "frozen_regression_contract": {
+    "case_id": "M43-H02",
+    "label": "regression_recombination_of_prior_W02_W09_semantics_not_novel_held_out",
+    "question": "How should I research a U.S. grid-average factor for a facility, and what should I verify before treating the result as current?",
+    "expected_answer_class": "qualified",
+    "expected_reason_code": "none",
+    "required_points": [
+      "Use facility geography and prefer a regional or subnational grid area for grid-delivered electricity.",
+      "EPA recommends eGRID total-output subregion factors for U.S. operations and documents Power Profiler as a subregion lookup route using zip code and utility.",
+      "Check the current eGRID and Factors Hub editions because publication timing can differ and grid-average data can be stale or mismatched to the purchase year.",
+      "The answer does not assign a facility subregion, select a value, or certify a latest dataset."
+    ],
+    "evidence_and_dependency_roles": [
+      {
+        "passage_id": "S06",
+        "locator": "PDF page 8 / printed page 5",
+        "role": "required_dependency",
+        "release_dependencies": []
+      },
+      {
+        "passage_id": "S07",
+        "locator": "PDF page 9 / printed page 6",
+        "role": "geography_support",
+        "release_dependencies": ["S06"]
+      },
+      {
+        "passage_id": "S08",
+        "locator": "PDF page 9 / printed page 6",
+        "role": "egrid_support",
+        "release_dependencies": ["S07", "S06"]
+      },
+      {
+        "passage_id": "S09",
+        "locator": "PDF page 9 / printed page 6",
+        "role": "publication_timing_support",
+        "release_dependencies": ["S08", "S07", "S06"]
+      },
+      {
+        "passage_id": "S10",
+        "locator": "PDF page 10 / printed page 7",
+        "role": "lookup_route_support",
+        "release_dependencies": ["S07", "S06"]
+      },
+      {
+        "passage_id": "S18",
+        "locator": "PDF page 17 / printed page 14",
+        "role": "accuracy_and_staleness_support",
+        "release_dependencies": []
+      }
+    ],
+    "forbidden_claims": [
+      "Any current numerical factor or facility subregion assignment.",
+      "The Factors Hub always updates at the same time as eGRID.",
+      "The retrieved dataset is certified as latest or accurate for a particular inventory."
+    ],
+    "objective_grading": [
+      "Status is qualified and reason_code is none.",
+      "Each discovery, timing and accuracy claim cites its supporting passage with complete dependency closure.",
+      "All four required points are present and no forbidden claim appears."
+    ],
+    "material_change_from_m43": "none; only the evaluation label is corrected from project-visible held-out to regression/recombination"
+  },
+  "evaluator_separation_review": {
+    "question_fixture_model_visible_fields": ["question"],
+    "exact_initial_analyze_request_body_sha256": "513d064d3f52a63d2a4adbe3eca2b7210c5f7b5fe2353c799e0fa883ca5e205e",
+    "exact_initial_analyze_request_body_bytes": 12398,
+    "initial_analyze_source_blind": true,
+    "model_visible_source_boundary": "all S01-S18 approved passages, not the evaluator-selected S06-S10/S18 subset",
+    "exact_evaluator_field_names_in_initial_body": 0,
+    "exact_evidence_role_labels_in_initial_body": 0,
+    "exact_required_point_forbidden_claim_or_objective_check_literals_in_initial_body": 0,
+    "exact_evaluator_field_names_in_model_visible_source_artifact": 0,
+    "exact_evidence_role_labels_in_model_visible_source_artifact": 0,
+    "exact_required_point_forbidden_claim_or_objective_check_literals_in_model_visible_source_artifact": 0,
+    "runtime_prompt_search": "No M43 H02 required-point, forbidden-claim, objective-check or evidence-role literal appears in the M49 runtime modules or the application provider/question-analysis prompts. The ordinary taxonomy and approved source text remain visible because they are product inputs, not evaluator answers.",
+    "evaluator_key_provider_payload_eligible": false,
+    "current_runtime_topology": "The provider-disabled production-path rehearsal reads the evaluator key only to validate separation and expected contract while provider traffic is impossible. The exact analyze builder serializes only the question and ordinary application contract. No provider request is created or sent.",
+    "future_dynamic_stage_gate": "Plan and verify request bodies depend on prior model output and therefore are not statically frozen. Before dispatch, each exact body must be captured and checked to contain only ordinary runtime output plus the full approved S01-S18 product boundary, with none of the evaluator key, selected evidence roles, M48 overlap reasoning or grading text. Evaluation must occur only after terminal response capture is sealed.",
+    "process_isolation_limit": "This review proves byte-level separation for the frozen exact analyze body and static model-visible source artifact. It does not establish separate operating-system processes for model execution and grading."
+  },
+  "claim_after_a_future_pass": {
+    "allowed": "For one exact run, the frozen system repeated previously exercised W02/W09 grid-factor discovery and currentness behavior under the new H02 wording, with the required evidence fidelity and safety boundaries.",
+    "not_allowed": [
+      "Novel held-out generalization or statistically blind performance.",
+      "Reliability, accuracy-rate, percentile, service-level or production-readiness claims beyond this one run.",
+      "A current numerical factor, current facility subregion assignment, latest-dataset certification or suitability for a particular inventory.",
+      "Company-specific applicability, legal or accounting assurance, customer-pilot readiness, publication, deployment or release acceptance."
+    ]
+  },
+  "future_pass_gate": {
+    "semantic": [
+      "Qualified/none terminal result.",
+      "All four frozen required points and zero forbidden claims.",
+      "Claim-specific S06-S10/S18 citation fidelity with complete transitive dependency closure.",
+      "No unsupported displayed material claim, numerical value, facility assignment or current-dataset certification."
+    ],
+    "mechanical": [
+      "Exactly one immutable H02 question; maximum five stages; zero question retries and zero cross-run carry.",
+      "Each provider-bound payload passes evaluator-separation inspection before dispatch.",
+      "Current source applicability, exact runtime identity, provider route, capture, deadline, shutdown and settled-cost checks all pass.",
+      "Any uncertain, pending or unmatched provider identity, pipeline, cost, source, response or capture event stops acceptance."
+    ],
+    "independent_grading": "required after immutable terminal capture; evaluator key must not be available to any model stage"
+  },
+  "verification": {
+    "static_and_issuer_suite": {
+      "tests_passed": 16,
+      "tests_failed": 0,
+      "assertions": 87
+    },
+    "final_rehearsal_test_runs": [
+      { "tests_passed": 1, "tests_failed": 0, "assertions": 26 },
+      { "tests_passed": 1, "tests_failed": 0, "assertions": 26 }
+    ],
+    "intermediate_concurrent_authoring_observation": "An earlier rehearsal invocation failed while the rehearsal artifact was still being modified. The reviewed final rehearsal and script hashes above then passed twice consecutively."
+  },
+  "remaining_gate_before_any_paid_decision": [
+    "Independent technical QA of the frozen complete M49 package and reproducibility.",
+    "Fresh official EPA source/currentness/applicability and all local release/catalog pin checks at the execution deadline.",
+    "Exact dynamic plan/verify payload separation checks and an evaluator-after-capture workflow.",
+    "Fresh account, provider route, plugin, balance, reservation, runtime binary, workspace and browser-origin checks.",
+    "Separate explicit board authorization naming this exact one-case regression, route, five-stage maximum, zero retries/carry and conservative reservation."
+  ],
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "external_network_requests": 0,
+    "services_started": false,
+    "customer_data_used": false,
+    "source_expansion": false,
+    "implementation_or_shared_status_files_modified": false,
+    "only_product_review_artifact_written": true,
+    "publication_deployment_release_merge_or_commit": false
+  },
+  "conclusion": "PASS for the frozen offline M49 regression label, unchanged H02 evaluator contract and static byte-level evaluator separation only. No live, novel-held-out, pilot, publication or release claim is established."
+}

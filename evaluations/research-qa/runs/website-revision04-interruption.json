@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-09T13:34:28.758466+00:00",
+  "run_id": "website-evaluation-04",
+  "event": "host_runtime_interruption",
+  "observed": "No website/evaluation Bun or Python processes and no listeners on 3012,3016,5174 after runtime refresh. Exec session registry also lost.",
+  "completed_controls": [
+    "C01",
+    "C02",
+    "C03",
+    "C04",
+    "C05",
+    "C06",
+    "C07",
+    "C08",
+    "C09",
+    "C10",
+    "C11"
+  ],
+  "uncertain_control": "C12",
+  "uncertain_attempt": 12,
+  "prior_journal_sha256": "77852923e3fa383440dd8809dea04983ec738c5489fc1d02cdde4a0c419ce1d6",
+  "original_journal_preserved": true,
+  "uncertain_attempt_still_charged": true,
+  "recovery_decision": "Run only unstarted C13-C20/P01-P04, then one explicit replacement C12 request using identical frozen packet. Original uncertain request remains in evidence and budget. No automatic retries.",
+  "allocation_unchanged": 100,
+  "runtime_code_unchanged": true
+}

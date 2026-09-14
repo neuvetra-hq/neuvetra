@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "batch_id": "m2-passages-2026-09-08-03",
+  "scope": "Independent evaluation of per-part answer allocation and completeness checks after observed incomplete flat answers",
+  "limit_selected_by": "coordinator",
+  "limit_is_board_imposed": false,
+  "status": "closed_live_gate_failed_eight_unused",
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "limits": {
+    "max_attempted_model_stages": 30,
+    "reserved_usd_per_attempt": 0.06,
+    "max_reserved_usd": 1.8,
+    "max_output_tokens_per_stage": 1200,
+    "automatic_retries": 0
+  },
+  "plan": {
+    "live_regression_questions": 8,
+    "max_regression_stage_attempts": 24,
+    "browser_demonstration_questions": 1,
+    "max_browser_stage_attempts": 3
+  },
+  "execution": {
+    "started_at": "2026-09-09T02:28:14.853598+00:00",
+    "attempts_consumed": 22,
+    "remaining_attempts": 8,
+    "run_artifacts": [
+      "evaluations/research-qa/runs/2026-09-08-scope2-passages-03.json"
+    ],
+    "browser_result": "not_run_release_gate_failed"
+  },
+  "accounting_note": "Separate coordinator-selected batch, not a board/provider limit or measured billing. Prior batches retain actual counts and unused allowance. No automatic retries. Restart only with remaining allowance. Old eight cases are regression evidence; the independent fresh positive probe uses the three carried-forward stages in batch02.",
+  "instrumentation": {
+    "entry": ".superpowers/research_traced_server.ts",
+    "sha256": "6b52629441f42b853cb690eb8244cfbe43694a1ca62f6e33b20142af63a80c67",
+    "private_trace_directory": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra\\.superpowers\\passage-stage-traces-batch03",
+    "effects": "Same config/routes and provider input/result; unique private traces. Trace-write failures withhold."
+  },
+  "code_snapshot": {
+    "path": "evaluations\\research-qa\\snapshots\\scope2-passages-facet-code.zip",
+    "sha256": "1118fdd9d19219755510fac6f42bfd8576a35524e02268bfd5745f53353e2eac",
+    "files": 16
+  },
+  "findings": [
+    "H-T02 and K-SOURCE repeated claim IDs across facet groups; server metadata assignment is the general correction.",
+    "H-T02 also used801characters against800in one group; drafting needs target headroom below hard bounds.",
+    "H-U02 dropped a material condition, strengthened modality and had incomplete claim-local support despite a passing critic.5/8were clean complete answers;6/8 mechanical acceptance is not semantic accuracy."
+  ],
+  "private_trace_inventory": {
+    "events": 45,
+    "sorted_map_sha256": "769169b9812bfa456df8f1dad733581191341dc65d1f09a053189c1c2831c851"
+  }
+}

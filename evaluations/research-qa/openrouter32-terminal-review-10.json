@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "run_id": "website-epa-live-32",
+  "role": "independent_qa",
+  "phase": "terminal_evidence_review",
+  "disposition": "failed_live_verification_with_diagnostic_success",
+  "runtime_binding": {
+    "run_id": "website-epa-live-32",
+    "manifest_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+    "profile_sha256": "f294427a03cef4f16a2634b218d09f3b139c72a6e090db3a40ef4f20b57e6fb7",
+    "process_id": 20784,
+    "port": 3016
+  },
+  "purpose": "diagnostic_only_no_release",
+  "release_acceptance": false,
+  "case_id": "W11",
+  "observation": {
+    "path": ".superpowers/website-epa-live-32/W11-observed-ui.json",
+    "sha256": "cb47aebf729206326e69ba79348d90a22a9c2201fb8e7f825be3e64c41e45753",
+    "direct_network_body_captured": false,
+    "screenshot_independently_verified": false,
+    "visible_UI_source": "Root's CUA observation and preserved accessibility text; no retained screenshot file available for independent inspection."
+  },
+  "terminal": {
+    "runtime_stop_reason": "identity",
+    "answer_accepted": false,
+    "mechanical_checks_passed": false,
+    "provider_identity_accepted": false,
+    "field_specific_diagnostic_demonstrated": true,
+    "response_cost_recovery_demonstrated": true,
+    "source_answer_support_assessed": false,
+    "explanation": "Exactly one analyze attempt failed at HTTP200 decoding/router_identity, field pipeline. Strict rejection remained active; response cost settled once without accepted identity metadata. The website answer failed and no plan/verify or correction occurred."
+  },
+  "evidence": {
+    "traces": "Both actual started/failed rows independently passed validatePersistedStage. Started receipt hash and actual request hash associate attempt1 with reserved analyze body; failed trace has no accepted identity metadata.",
+    "claim": "readIngressClaim independently validates admission/permit/question/body/binding linkage; observation ID da32df91-784f-4bc7-952f-41b2ab20538c matches root observation. One claim and one reserved attempt; no retry evidence.",
+    "claim_sha256": "840b139e96990bad17f7e5e76c94bae4e6c280a05740b3be53a2775e5c743f83",
+    "accounting": "Strict hash-chain readOpenRouterSpending replay validates exactly reserve then settle. Trace response cost and journal settlement agree.",
+    "runtime_processes_absent": [
+      20784,
+      36340
+    ],
+    "ports_closed": [
+      3012,
+      3016,
+      5174,
+      5175
+    ],
+    "backend_shutdown": "server_stop_returned true",
+    "frontend_shutdown": "frontend_stop_observed true",
+    "qa_network_or_model_calls": 0,
+    "qa_credentials_accessed": false
+  },
+  "finance": {
+    "attempts_used": 1,
+    "stages_unspent_to_retire": 4,
+    "carry": 0,
+    "current_settled_nano_usd": 44565000,
+    "current_uncertain_nano_usd": 0,
+    "total_settled_nano_usd": 2855958000,
+    "total_uncertain_nano_usd": 1624850000,
+    "total_exposure_nano_usd": 4480808000,
+    "remaining_monitoring_target_nano_usd": 5519192000,
+    "cumulative_actual_stages": 876,
+    "spending_head_sha256": "d305c5a11356018222f49cbfe7efe98df5dcb08bb4fa6cbc06e75a7ec7a7c24f",
+    "invoice_finality": false
+  },
+  "schema_decision": {
+    "write_consumable_terminal_qa": false,
+    "reason": "terminalDisposition requires transport cua_cdp_network_observation. Actual observation honestly declares visible result plus proxy claim and pinned-response reconstruction. Relabeling it would manufacture evidence. The owning backend already stopped; do not recreate controller or replay terminal recorder.",
+    "separate_review_required": true
+  },
+  "limitations": [
+    "The finite pipeline field identifies the failing predicate only: metadata pipeline was present and either non-array or nonempty. It does not establish exact raw value or historical M30 cause.",
+    "Diagnostic and independent response-cost settlement objectives demonstrated; successful strict provider verification and reliable answer objectives not met.",
+    "Reconstructed response bytes and inferred HTTP response status are not a captured current browser response. Claim and provider trace cannot fill that mechanical evidence gap.",
+    "Screenshot hash ac0b693e40d6421743723e9fb3af5f97720b112706474c76b2f92e1eda0db1c2 is root-reported and independently unverified; no screenshot artifact retained.",
+    "Preserve prior uncertainty and immutable failures. Root must close the run with four stages retired and no carry, pin this review and honest observation, then obtain independent closure review."
+  ]
+}

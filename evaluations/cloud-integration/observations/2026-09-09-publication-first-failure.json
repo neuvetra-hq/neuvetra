@@ -1,0 +1,27 @@
+{
+  "project_ref": "icockcoguyadhryzydvl",
+  "target_sha256": "fff2d429b00a4dc31806cf029d386de87be263efa2f55ec366b5e928dd5be055",
+  "fixture_sha256": "1d048902d03a948d27ea8fc9d08975970de794242a065ae83b0b743be2958098",
+  "stage_sha256": "b98ef3e1a52d294a5916f2b2f9cf8972d40a2445a25c6cb98597c05af0311ce5",
+  "stage_report_sha256": "b7466246fe66bdca75d90c8bdc760772a60854de2b94c3a99170d3a2d0ef0713",
+  "adapter_sha256": "8e739f4d83db26e3ff928d81cf2b8a230cd2d47c3648d601aa1319af0b7629ae",
+  "review_expires_at": "2026-09-10T05:30:00Z",
+  "activated": false,
+  "approvals_written": 0,
+  "operation": "publish_synthetic_artifacts",
+  "status": "failed_or_outcome_unconfirmed",
+  "phase": "bucket",
+  "observed_at": "2026-09-09T05:45:54.287522+00:00",
+  "readiness_verified": false,
+  "error": "provider_http_400",
+  "transport_events": [
+    {
+      "origin": "supabase",
+      "method": "GET",
+      "request_bytes": 0,
+      "status": "refused",
+      "http_status": 400,
+      "provider_request_id": "01a084b3-8c2a-7d84-83b7-2a612041097a"
+    }
+  ]
+}

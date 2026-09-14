@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "fixture_set_id": "scope2-passages-unseen-positive-v1",
+  "prepared_at": "2026-09-09T02:09:32.507896+00:00",
+  "reviewer": "independent QA /root/site_review",
+  "purpose": "One untouched positive source-workflow variant frozen before facet-engine implementation completes. No paid-call authorization or general accuracy claim.",
+  "based_on": {
+    "holdout_path": "evaluations/research-qa/scope2-semantic-holdout.json",
+    "definitions_sha256": "d497f985ce31f494eae18c13fcdd7be0605962603ea0751400011ffaaa0e0b7e"
+  },
+  "release": {
+    "path": "data/research/releases/scope2-passages.v1.json",
+    "id": "scope2-passages",
+    "version": "1",
+    "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+    "source_sha256_by_id": {
+      "epa-electricity-2023": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    "extraction_sha256_by_id": {
+      "epa-electricity-2023-pages-v1": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    },
+    "approved_passage_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18"
+    ],
+    "review_deadline": "2026-09-15T23:20:32Z",
+    "approval_status": "approved_private_internal_source_scope"
+  },
+  "execution": {
+    "live_calls_authorized_by_fixture": false,
+    "max_cases": 1,
+    "max_stage_calls": 3,
+    "selection_frozen_at": "2026-09-09T02:09:32.507896+00:00",
+    "selection_reason": "Challenge both sides of a supported factor-documentation comparison, using an untouched existing-family variant rather than a rehearsed wording. Exact prompt stays unseen by backend author until freeze."
+  },
+  "cases": [
+    {
+      "id": "H-S03",
+      "prompt": "Describe the evidence trail for a utility-specific factor compared with a grid-average factor; I do not need a number.",
+      "family": "factor_source_discovery",
+      "exposure": "unseen_by_implementer_and_not_previously_live_evaluated",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain the regional grid data/source trail through EPA eGRID total output subregion factors and the geographic basis, without selecting a numeric value.",
+        "Explain supplier-provided documentation for the electricity product delivered, including both utility-owned generation and purchased electricity; generic market/certificate definitions alone do not answer this facet.",
+        "Retain relevant product/period agreement coverage and source-edition checks as context, without certifying eligibility or claiming a current factor."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "unsupported_current_version",
+        "false_complete_partial_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S07",
+          "S08",
+          "S12",
+          "S15"
+        ],
+        "note": "Evidence alternatives are permitted; required semantic facets must be actually answered. ID presence alone is not sufficiency."
+      },
+      "evidence_review_notes": [
+        "No numerical result is requested. Source-publisher workflow and supplier delivered-product records are supported by the approved release."
+      ]
+    }
+  ]
+}

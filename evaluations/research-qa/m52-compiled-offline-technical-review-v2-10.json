@@ -1,0 +1,96 @@
+{
+  "schema_version": "m52_compiled_offline_technical_review_v8.final",
+  "task": "M52-TECH-QA-TIMESTAMP-FINAL",
+  "role": "independent_technical_acceptance",
+  "reviewed_at": "2026-09-13T05:10:00Z",
+  "candidate_sha256": "7b0d26e0d6f02fd4e8dfa62b9066a921062c9df301a7888cb4fa6511407a5941",
+  "manifest_sha256": "1a0ad4323b3e97efe7cbb76c624e642b71162092c7f66dc70cee0edfe427d32d",
+  "rehearsal_sha256": "5ec391ae1fc4f6c1a7de9941fc25acfbc76aa3fb6f24f60d8ab7690d5bc328d9",
+  "disposition": "pass_provider_disabled_offline_technical_acceptance",
+  "technical_acceptance": true,
+  "milestone_complete": false,
+  "live_or_paid_execution_authorized": false,
+  "release_acceptance": false,
+  "freeze_integrity": {
+    "assigned_candidate_hash_matches": true,
+    "assigned_manifest_hash_matches": true,
+    "assigned_rehearsal_hash_matches": true,
+    "manifest_pins_checked": 28,
+    "manifest_pin_mismatches": 0,
+    "candidate_manifest_pin_maps_equal": true,
+    "compiled_wrapper_sha256": "d48468453e3093ce6b16557e65412c3f1fb3f1922fda0671524619eedc081499",
+    "closure_sha256": "de2f9ef969bb3802af39363292dfcd621288856862035ffaf22759cf3192f9af",
+    "transitive_child_pins_checked": 48,
+    "transitive_child_pin_mismatches": 0
+  },
+  "independent_validation": {
+    "focused_tests": {
+      "files": [
+        ".superpowers/openrouter-52/preflight.test.ts",
+        ".superpowers/openrouter-52/issuer.test.ts"
+      ],
+      "passed": 13,
+      "failed": 0,
+      "assertions": 72
+    },
+    "clean_compiled_success": {
+      "exit_code": 0,
+      "terminal_kind": "success",
+      "completed_stages": ["analyze", "plan", "verify"],
+      "logical_dispatches": 3,
+      "provider_transport_calls": 0,
+      "synthetic_response_count": 3,
+      "settled_nano_usd": 3000000,
+      "exact_total_claimed": true,
+      "temporary_workspace_removed": true
+    },
+    "recorded_lifecycle_all_checks_passed": true,
+    "adversarial_rebinding": {
+      "duplicate_or_missing_completion": "refused",
+      "reservation_stage_or_body_mismatch": "refused",
+      "capture_digest_mismatch": "refused",
+      "external_endpoint_and_route_exact_false": "refused",
+      "rebound_reservation_estimate": "refused",
+      "root_discovery_outside_repository": "repaired_and_clean_success_reproduced"
+    }
+  },
+  "accepted_controls": {
+    "terminal_exact_schema_scenario_hash_and_body_binding": true,
+    "success_body_claim_evidence_source_release_qualification_and_timestamp_bounded_retrieval_metadata_grounding": true,
+    "composition_catalog_version_digest_wording_ordered_claim_and_unit_metadata_grounding": true,
+    "retrieval_checked_at_has_canonical_shape_and_lower_and_upper_bounds": true,
+    "retrieval_candidate_ids_selected_evidence_ids_and_canonical_nonfuture_timestamp_guard": true,
+    "failure_body_refusal_semantics": true,
+    "exact_success_analyze_plan_verify_stage_pairs": true,
+    "failure_completed_stage_prefix_binding": true,
+    "capture_filename_digest_schema_identity_model_endpoint_route_evaluator_source_and_predispatch_binding": true,
+    "reservation_attempt_stage_body_and_capture_binding": true,
+    "deterministic_estimate_recomputation_from_stage_and_body_bytes": true,
+    "fixed_reservation_ceiling_and_native_synthetic_settlement_checks": true,
+    "aggregate_pending_uncertain_and_exact_total_reconciliation": true,
+    "canonical_backend_file_and_single_stdout_record_parity": true,
+    "compiled_wrapper_child_pin_verification_before_capability_issuance": true,
+    "one_use_parent_and_capability_chain": true,
+    "provider_transport_disabled_and_logical_synthetic_external_counts_separate": true,
+    "synthetic_fixture_labeling_and_no_m50_subtype_recovery_claim": true,
+    "disposable_onedrive_cleanup_and_refusal_matrix_recorded": true
+  },
+  "findings": [],
+  "limitations": [
+    "This pass covers only the exact frozen provider-disabled M52 bytes. It does not authorize or validate live provider compatibility, credentials, paid execution, evaluator access, customer data, deployment, publication or release.",
+    "The response fixtures are synthetic provider-shaped envelopes and do not reconstruct the exact M50 rejection subtype.",
+    "The runtime parent trust boundary remains the canonical executable path and process relationship plus the externally frozen executable hash; live authorization requires its own board gate and fresh review."
+  ],
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "evaluator_accessed": false,
+    "external_network_requests": 0,
+    "customer_data_accessed": false,
+    "source_expansion": false,
+    "only_persistent_review_file_written": "evaluations/research-qa/m52-compiled-offline-technical-review-v2-10.json",
+    "commit_publish_merge_deploy_or_release": false
+  },
+  "conclusion": "PASS for provider-disabled offline technical acceptance of final timestamp-bound candidate 7b0d26e0d6f02fd4e8dfa62b9066a921062c9df301a7888cb4fa6511407a5941. Exact hashes, all 28 manifest pins and all 48 transitive child pins match; clean compiled success is independently reproducible; retrieval checked_at now has canonical shape and lower and upper bounds; and the previously demonstrated stage, capture, route, body, estimate and cost rebinding attacks remain closed. This pass does not authorize live or paid execution."
+}

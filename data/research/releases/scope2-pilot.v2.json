@@ -1,0 +1,753 @@
+{
+  "schema_version": 1,
+  "release_id": "scope2-pilot",
+  "version": "2",
+  "status": "approved",
+  "created_at": "2026-09-09T00:21:00.771714+00:00",
+  "scope": {
+    "topics": [
+      "scope2_general",
+      "location_based",
+      "market_based",
+      "dual_reporting",
+      "reporting_rationale"
+    ],
+    "jurisdiction": "U.S. purchased grid electricity; global qualifications retained only as separately reviewed comparative evidence",
+    "excluded": [
+      "Numerical factor selection and emissions calculations",
+      "Company legal applicability, compliance, assurance or regulatory filings",
+      "Contract/certificate eligibility decisions",
+      "On-site generation, direct-line supply, steam/heat/cooling and organizational boundary decisions",
+      "Current residual-mix availability or current numeric eGRID values",
+      "Scope 1/3, avoided emissions calculations or wider corporate inventories",
+      "Historical accounting-period applicability not independently prepared in this candidate",
+      "Treating draft/consultation text as effective accounting requirements"
+    ]
+  },
+  "review": {
+    "author": "regulatory-research",
+    "reviewer": "independent QA /root/site_review",
+    "reviewed_at": "2026-09-09T00:22:45Z",
+    "expires_at": "2026-09-15T23:20:32Z",
+    "status": "approved_internal_evaluation_subset",
+    "based_on_approved_release_sha256": "c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f",
+    "approval_scope": "Private internal research/evaluation only, including selected concise attributed EPA proposition/qualification/anchor text as input to the configured Anthropic model; no commercial clearance",
+    "inherited_source_evidence_approval": "Unchanged EPA source and E01-E06 retain their scoped v1 approval; independent QA additionally approved v2 P03 topic coverage and P05 synthesis at the recorded review time.",
+    "reviewed_candidate_sha256": "0cd75fe4933f94481e9abeddea22b8061d4992dff3b81ccd481826d8bf7c4fc6",
+    "approved_source_ids": [
+      "epa-electricity-2023"
+    ],
+    "approved_evidence_ids": [
+      "E01",
+      "E02",
+      "E03",
+      "E04",
+      "E05",
+      "E06"
+    ],
+    "approved_proposition_ids": [
+      "P01",
+      "P02",
+      "P03",
+      "P04",
+      "P05"
+    ],
+    "withheld_proposition_ids": [
+      "GP01",
+      "GP02",
+      "DP01"
+    ],
+    "expires_at_meaning": "Operational review deadline, not source expiration or regulatory effective date"
+  },
+  "intended_use": "Private internal source/evaluation pilot only; no production or commercial rights clearance",
+  "commercial_runtime_approval": false,
+  "sources": [
+    {
+      "id": "epa-electricity-2023",
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Purchased Electricity",
+      "version": "December 2023",
+      "source_type": "pdf",
+      "status": "published_guidance",
+      "canonical_url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-electricity-emissions-2023.pdf",
+      "sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+      "bytes": 396931,
+      "document_date": "2023-12",
+      "retrieved_at": "2026-09-08T21:07:20.661717+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "approved",
+      "review_status": "approved",
+      "intended_use": "Private internal research/evaluation only, including selected concise attributed EPA proposition/qualification/anchor text as input to the configured Anthropic model; no commercial clearance",
+      "commercial_runtime_approval": false,
+      "role": "candidate conceptual evidence",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "rights_basis": "Candidate use of brief EPA explanatory prose with attribution for internal research. EPA Copyright Status permits noncommercial/scientific/educational use but warns that commercial use and individual documents may differ; hosting alone is not clearance. No third-party tables, graphics or logos reproduced.",
+      "rights_url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+      "rights_scope": "approved_internal_research_evaluation_only",
+      "version_note": "Cover identifies December 2023 despite 2020-12 URL directory. Current EPA inventory page links this URL; existing bytes reused, not redownloaded for this passage review.",
+      "pages": 19,
+      "rights_decision": "Independent QA approved the selected concise internal-use subset, not the full publication, third-party content, commercial redistribution or production corpus."
+    },
+    {
+      "id": "ghgp-scope2-2015",
+      "title": "GHG Protocol Scope 2 Guidance",
+      "version": "2015 guidance; electronic copy includes April 7, 2025 correction",
+      "source_type": "pdf",
+      "status": "published_guidance",
+      "canonical_url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/ghg-scope-2-guidance.pdf",
+      "sha256": "b4f17030e5d723d5b9b65ed85592c5449dafe4f798eb845ed9db0465893c894a",
+      "bytes": 3446578,
+      "document_date": "2015",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "comparative evidence; rights hold",
+      "publisher": "World Resources Institute / WBCSD, GHG Protocol",
+      "rights_basis": "Original PDF page 119 states CC BY-NC-ND 3.0. Current Terms of Use, February 2023, also restrict commercial use and extraction. No blanket commercial or derived-corpus permission established.",
+      "rights_url": "https://ghgprotocol.org/terms-use",
+      "license_url": "https://creativecommons.org/licenses/by-nc-nd/3.0/",
+      "rights_scope": "withheld_pending_scope_specific_rights_review",
+      "pages": 120,
+      "version_note": "Publisher page still identifies 2015 guidance. Printed p50 contains April7 2025 correction. This copy is not asserted byte-identical to the original 2015 release."
+    },
+    {
+      "id": "ghgp-scope2-corrections",
+      "title": "Corrections to the Scope 2 Guidance",
+      "version": "Corrections through April 2025; publisher page label December 2022",
+      "source_type": "pdf",
+      "status": "published_guidance",
+      "canonical_url": "https://ghgprotocol.org/sites/default/files/2023-03/List%20of%20Corrections%20to%20the%20Scope%202%20Guidance.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/ghg-scope-2-corrections.pdf",
+      "sha256": "b7772e0d86764383b41f923bfcace305d239ac5baf39ad22ffb55f78ba9dacad",
+      "bytes": 135659,
+      "document_date": "2025-04",
+      "retrieved_at": "2026-09-08T21:02:32.840241+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "version review only; no numerical evidence",
+      "publisher": "GHG Protocol",
+      "pages": 2,
+      "rights_basis": "No separate permissive commercial license established; treat under GHG Protocol rights hold.",
+      "rights_scope": "withheld_pending_scope_specific_rights_review",
+      "rights_url": "https://ghgprotocol.org/terms-use",
+      "version_note": "Page1 lists February2020 and December2022 corrections; page2 adds April2025 correction. None of the selected conceptual spans is the corrected numerical table."
+    },
+    {
+      "id": "ghgp-scope2-consultation-2025",
+      "title": "Public Consultation – Scope 2",
+      "version": "October 2025 consultation; retained 51-page copy",
+      "source_type": "pdf",
+      "status": "draft",
+      "canonical_url": "https://ghgprotocol.org/sites/default/files/2025-10/GHG-Protocol-Scope2-Public-Consultation.pdf",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-refresh/ghg-protocol/ghgp-scope2-consultation.pdf",
+      "sha256": "2787ed3e7a05baa0b77289182ad6b18926299633b863fd47e97e4476eb18cf12",
+      "bytes": 923950,
+      "document_date": "2025-10-20",
+      "retrieved_at": "2026-09-08T21:51:05.585500+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "status comparison only; never effective accounting requirements",
+      "publisher": "GHG Protocol",
+      "pages": 51,
+      "rights_basis": "No commercial runtime or extraction permission established; status comparison only, pending independent review.",
+      "rights_scope": "withheld_pending_scope_specific_rights_review",
+      "rights_url": "https://ghgprotocol.org/terms-use",
+      "legal_status": "consultation proposal, not an enacted law or published replacement standard"
+    },
+    {
+      "id": "ghgp-update-process-20260908",
+      "title": "GHG Protocol Corporate Suite of Standards and Guidance Update Process",
+      "version": "Page snapshot September 8, 2026",
+      "source_type": "html",
+      "status": "announcement",
+      "canonical_url": "https://ghgprotocol.org/ghg-protocol-corporate-suite-standards-and-guidance-update-process",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-refresh/ghg-protocol/ghgp-update-process-current-page.html",
+      "sha256": "10bcb3e56c73e351e5512c3990755de6ab882670f6093a4e19c3ed4df8095536",
+      "bytes": 59887,
+      "document_date": null,
+      "retrieved_at": "2026-09-08T21:51:06.718097+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "time-sensitive status comparison only",
+      "publisher": "GHG Protocol",
+      "rights_basis": "Publisher website terms; no unrestricted commercial use established.",
+      "rights_scope": "withheld_pending_scope_specific_rights_review",
+      "rights_url": "https://ghgprotocol.org/terms-use",
+      "version_note": "Current page read again during passage review. Status is publisher communication, not legal incorporation. Transition FAQ applies until publisher communicates otherwise."
+    },
+    {
+      "id": "ghgp-scope2-publication-20260908",
+      "title": "Scope 2 Guidance: publisher publication page",
+      "version": "Page snapshot September 8, 2026",
+      "source_type": "html",
+      "status": "announcement",
+      "canonical_url": "https://ghgprotocol.org/scope-2-guidance",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-refresh/ghg-protocol/ghgp-scope2-current-page.html",
+      "sha256": "4c41dfe5ae9c34488ce6e6d6f4cc6b92642a8c473a12bcba2a4bbc44475b1861",
+      "bytes": 68919,
+      "document_date": null,
+      "retrieved_at": "2026-09-08T21:51:06.319880+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "publication link and consultation chronology only",
+      "publisher": "GHG Protocol",
+      "rights_basis": "Publisher website terms; no unrestricted commercial use established.",
+      "rights_scope": "withheld_pending_scope_specific_rights_review",
+      "rights_url": "https://ghgprotocol.org/terms-use"
+    },
+    {
+      "id": "epa-inventory-publication-20260908",
+      "title": "Scope 1 and Scope 2 Inventory Guidance",
+      "version": "Page snapshot September 8, 2026",
+      "source_type": "html",
+      "status": "announcement",
+      "canonical_url": "https://www.epa.gov/climateleadership/scope-1-and-scope-2-inventory-guidance",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-scope2-pilot/epa-inventory-current-page.html",
+      "sha256": "172ce86e13528e5b1f09cb6241f7cb7c46b187e676024c267d5fea1469963734",
+      "bytes": 65096,
+      "document_date": null,
+      "retrieved_at": "2026-09-08T23:14:28.885262+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "publisher-link provenance only",
+      "publisher": "U.S. EPA",
+      "rights_scope": "internal_research_evaluation_only_pending_independent_review",
+      "rights_basis": "Review EPA Copyright Status and individual content; no blanket commercial clearance."
+    },
+    {
+      "id": "epa-rights-20260908",
+      "title": "EPA Disclaimers",
+      "version": "Page snapshot September 8, 2026",
+      "source_type": "html",
+      "status": "announcement",
+      "canonical_url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+      "local_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08-scope2-pilot/epa-rights-page.html",
+      "sha256": "898cb8c9e2a4d79ccf796c5dda3ea0ecd5d54714c65222436ac4b05e08c591ee",
+      "bytes": 62077,
+      "document_date": null,
+      "retrieved_at": "2026-09-08T23:14:28.986315+00:00",
+      "checked_on": "2026-09-08",
+      "integrity_checked_at": "2026-09-08T23:17:16.106696+00:00",
+      "rights_review": "pending",
+      "review_status": "pending",
+      "intended_use": "private internal research and evaluation; short attributed factual summaries and locator anchors only",
+      "commercial_runtime_approval": false,
+      "role": "rights review evidence only",
+      "publisher": "U.S. EPA",
+      "rights_scope": "internal_research_evaluation_only_pending_independent_review",
+      "rights_basis": "Review EPA Copyright Status and individual content; no blanket commercial clearance."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E01",
+      "source_id": "epa-electricity-2023",
+      "locator": "PDF page 4 (1-based), printed page 1; Section 1, third body paragraph; method definitions",
+      "excerpt": "average emission factors",
+      "review_status": "approved",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 4,
+        "printed_page": "1",
+        "section": "Section 1, third body paragraph; method definitions",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "9251f3cb490531dff28a922403184268f9fc8ad64cdafe373c8e822bee3a78fc",
+        "context_start": 1517,
+        "context_end_exclusive": 2372,
+        "context_sha256": "2d24a4602a50b405b8f130a5dab3bb6fe4eeed084c68a78b8b20325dcaa96358",
+        "excerpt_start_in_context": 626
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "E02",
+      "source_id": "epa-electricity-2023",
+      "locator": "PDF page 10 (1-based), printed page 7; Section 3.3.2, introduction and certificate/contract paragraphs",
+      "excerpt": "quality criteria",
+      "review_status": "approved",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 10,
+        "printed_page": "7",
+        "section": "Section 3.3.2, introduction and certificate/contract paragraphs",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "321313cc78ab0efe7fe97ab0c47eab88d788aaeaef37613dacd76a8622ddf3ec",
+        "context_start": 681,
+        "context_end_exclusive": 2867,
+        "context_sha256": "5f42319e439a2eb72b879f56c3217f2b269b19859f7321c1dd19d81dfe2d9a50",
+        "excerpt_start_in_context": 666
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "E03",
+      "source_id": "epa-electricity-2023",
+      "locator": "PDF page 9 (1-based), printed page 6; Section 3.3 opening paragraph, before 3.3.1",
+      "excerpt": "Both results",
+      "review_status": "approved",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 9,
+        "printed_page": "6",
+        "section": "Section 3.3 opening paragraph, before 3.3.1",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "f7bd719520160e18d1cc8fc8cdb619965c39d606f2339bb71c8f91ee0e48ea79",
+        "context_start": 187,
+        "context_end_exclusive": 422,
+        "context_sha256": "fcb71acc74e0b6066ef363a0c5f83ec44e50b457c13e1705456ce686a1f7fddf",
+        "excerpt_start_in_context": 167
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "E04",
+      "source_id": "epa-electricity-2023",
+      "locator": "PDF page 7 (1-based), printed page 4; Section 3.1, first paragraph",
+      "excerpt": "reporting year",
+      "review_status": "approved",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 7,
+        "printed_page": "4",
+        "section": "Section 3.1, first paragraph",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "a658f97ee6d95b6700644c4c75fd834f364ef282911c71cbccba4da4e49a85be",
+        "context_start": 563,
+        "context_end_exclusive": 996,
+        "context_sha256": "a757b4a19397b1d91aec32006e74f38be8625c55f21b4c37489059e50a71885a",
+        "excerpt_start_in_context": 115
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "E05",
+      "source_id": "epa-electricity-2023",
+      "locator": "PDF page 9 (1-based), printed page 6; Section 3.3.1, item 2 first paragraph",
+      "excerpt": "geographic location",
+      "review_status": "approved",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 9,
+        "printed_page": "6",
+        "section": "Section 3.3.1, item 2 first paragraph",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "f7bd719520160e18d1cc8fc8cdb619965c39d606f2339bb71c8f91ee0e48ea79",
+        "context_start": 1915,
+        "context_end_exclusive": 2309,
+        "context_sha256": "1999a0370b332edfd8e691e35b3753da1c9976c2d4f121b8fca2252e3d32e507",
+        "excerpt_start_in_context": 143
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "E06",
+      "source_id": "epa-electricity-2023",
+      "locator": "PDF page 11 (1-based), printed page 8; Section 3.3.3, last paragraph",
+      "excerpt": "purchasing agreements",
+      "review_status": "approved",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 11,
+        "printed_page": "8",
+        "section": "Section 3.3.3, last paragraph",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "0665e6bdcfff603ed1c51398f1105dce036f6ca3005ae2d195cceb48e16b645a",
+        "context_start": 3641,
+        "context_end_exclusive": 4325,
+        "context_sha256": "53357a40ebf00ccfd4762277d6f926833025a1a1bfe6c713a1c34b3f6ffcc705",
+        "excerpt_start_in_context": 104
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "G01",
+      "source_id": "ghgp-scope2-2015",
+      "locator": "PDF page 10 (1-based), printed page 8; Section 1.5.1, both paragraphs",
+      "excerpt": "dual reporting",
+      "review_status": "pending",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 10,
+        "printed_page": "8",
+        "section": "Section 1.5.1, both paragraphs",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "41c0d53ff788c67b43e0594ad42c9cb9d7fee5a9eba6daa4fae561078faeb892",
+        "context_start": 1209,
+        "context_end_exclusive": 1974,
+        "context_sha256": "488819ea6eec544cceb4ae9111f705565d15fb158cbeb57339bb29db72b5f088",
+        "excerpt_start_in_context": 317
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "G02",
+      "source_id": "ghgp-scope2-2015",
+      "locator": "PDF page 45 (1-based), printed page 43; Section 6.2, applicability paragraph and first bullet",
+      "excerpt": "any market",
+      "review_status": "pending",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 45,
+        "printed_page": "43",
+        "section": "Section 6.2, applicability paragraph and first bullet",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "a0bf9dea2c54c5623a2d42fd6ff213959263ae5d7988985352ceeda125175a96",
+        "context_start": 1016,
+        "context_end_exclusive": 2153,
+        "context_sha256": "e52d38883a87af6dd0948dc018167ee6e8379ca2d04254f3cc91259ad27b4181",
+        "excerpt_start_in_context": 640
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "G03",
+      "source_id": "ghgp-scope2-2015",
+      "locator": "PDF page 46 (1-based), printed page 44; Section 6.2 continuation, first bullet and following paragraph",
+      "excerpt": "entire corporate inventory",
+      "review_status": "pending",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 46,
+        "printed_page": "44",
+        "section": "Section 6.2 continuation, first bullet and following paragraph",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "95be1c2afcd6e0f704e452fb6b59d2687850aa3325aa7e1b5395fd4379ad0670",
+        "context_start": 22,
+        "context_end_exclusive": 949,
+        "context_sha256": "b33bb5d28e4dbccb60ba88503ccb8d4691c34c9054af1c187c18183a14f3261b",
+        "excerpt_start_in_context": 178
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "G04",
+      "source_id": "ghgp-scope2-2015",
+      "locator": "PDF page 28 (1-based), printed page 26; Section 4.1.2, second paragraph before Table 4.1",
+      "excerpt": "qualifying contractual instruments",
+      "review_status": "pending",
+      "role": "concept",
+      "locator_detail": {
+        "pdf_page_1_based": 28,
+        "printed_page": "26",
+        "section": "Section 4.1.2, second paragraph before Table 4.1",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "691ea5ed14a719300ea714c4f2d36fd91dcc770a94c62e74c046f25ae83ea30b",
+        "context_start": 783,
+        "context_end_exclusive": 1384,
+        "context_sha256": "250fa5e18b563c60d5d428ddd55405efee3600f25ede4365af066c259b9ca2e5",
+        "excerpt_start_in_context": 121
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "D01",
+      "source_id": "ghgp-scope2-consultation-2025",
+      "locator": "PDF page 4 (1-based), printed page 4; Section 2, first paragraph",
+      "excerpt": "proposed revisions",
+      "review_status": "pending",
+      "role": "publication_status_only",
+      "locator_detail": {
+        "pdf_page_1_based": 4,
+        "printed_page": "4",
+        "section": "Section 2, first paragraph",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "276103bfb35901b939f021f4f8afbf86d9408bbfab0e464d3945110418f3eb5f",
+        "context_start": 65,
+        "context_end_exclusive": 929,
+        "context_sha256": "3b5e4a861c83678943b79eed097190a597f996713372861be2b4ce875d6cddc8",
+        "excerpt_start_in_context": 179
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "D02",
+      "source_id": "ghgp-update-process-20260908",
+      "locator": "FAQ: When will updates to GHG Protocol standards and guidance go into effect?; final sentence",
+      "excerpt": "stay in effect",
+      "review_status": "pending",
+      "role": "publication_status_only",
+      "locator_detail": {
+        "pdf_page_1_based": null,
+        "printed_page": null,
+        "section": "FAQ: When will updates to GHG Protocol standards and guidance go into effect?; final sentence",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "58fc085cea1f4e512f59d9ce626544a176eb480cb153144e00f53b2640b5c001",
+        "context_start": 7356,
+        "context_end_exclusive": 7473,
+        "context_sha256": "4e6ecfcc1c3064ed639e5a5e73c3ce9a42520646bd5f459373be21ff0ab3b20c",
+        "excerpt_start_in_context": 103
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    },
+    {
+      "id": "D03",
+      "source_id": "ghgp-scope2-publication-20260908",
+      "locator": "Main Scope 2 Guidance introduction; consultation paragraph",
+      "excerpt": "January 31, 2026",
+      "review_status": "pending",
+      "role": "publication_status_only",
+      "locator_detail": {
+        "pdf_page_1_based": null,
+        "printed_page": null,
+        "section": "Main Scope 2 Guidance introduction; consultation paragraph",
+        "normalization": "Unicode NFKC; replace each whitespace run with one ASCII space; strip ends; HTML text nodes in document order excluding script/style",
+        "normalized_page_sha256": "58896f63af59285661eea47b48c613e161372f752435adcc7163698e3e97601a",
+        "context_start": 2510,
+        "context_end_exclusive": 2678,
+        "context_sha256": "e927b642d02dd630a8b1bf43bdc95990bbbc7ad141f1304c6ba824e64adb7971",
+        "excerpt_start_in_context": 151
+      },
+      "support_note": "Excerpt is a short locator anchor, not the full supporting passage. Reviewer must read the bounded original context and qualifications."
+    }
+  ],
+  "propositions": [
+    {
+      "id": "P01",
+      "text": "For grid-delivered purchased electricity, location-based accounting uses the average emissions profile of the relevant electricity grid.",
+      "evidence_ids": [
+        "E01",
+        "E05"
+      ],
+      "qualifications": [
+        "This explanation excludes direct-line and on-site generation cases."
+      ],
+      "keywords": [
+        "location based",
+        "grid",
+        "average",
+        "electricity",
+        "scope 2"
+      ],
+      "topic": "location_based"
+    },
+    {
+      "id": "P02",
+      "text": "Market-based accounting reflects electricity procurement arrangements; a contract or certificate does not automatically qualify its factor for use.",
+      "evidence_ids": [
+        "E01",
+        "E02"
+      ],
+      "qualifications": [
+        "Contractual evidence and applicable quality criteria require review. This pilot cannot validate a purchase or select a factor."
+      ],
+      "keywords": [
+        "market based",
+        "contract",
+        "certificate",
+        "supplier",
+        "electricity",
+        "scope 2"
+      ],
+      "topic": "market_based"
+    },
+    {
+      "id": "P03",
+      "text": "EPA recommends reporting separately labeled location-based and market-based Scope 2 totals.",
+      "evidence_ids": [
+        "E03"
+      ],
+      "qualifications": [
+        "This is U.S.-focused inventory guidance, not a determination of legal reporting duties or a universal rule for every market."
+      ],
+      "keywords": [
+        "two methods",
+        "both",
+        "dual",
+        "report",
+        "difference",
+        "scope 2"
+      ],
+      "topic": "dual_reporting"
+    },
+    {
+      "id": "P04",
+      "text": "Relevant electricity evidence depends on facility location, reporting year, and supplier or contractual coverage.",
+      "evidence_ids": [
+        "E02",
+        "E04",
+        "E05",
+        "E06"
+      ],
+      "qualifications": [
+        "This is a bounded synthesis for requesting context, not a sufficient checklist for selecting a factor."
+      ],
+      "keywords": [
+        "which factor",
+        "office",
+        "location",
+        "period",
+        "supplier",
+        "context"
+      ],
+      "topic": "scope2_general"
+    },
+    {
+      "id": "GP01",
+      "text": "Under the GHG Protocol guidance, operations in markets offering product- or supplier-specific contractual data trigger dual reporting.",
+      "evidence_ids": [
+        "G01",
+        "G02",
+        "G03"
+      ],
+      "qualifications": [
+        "If this applies anywhere in a multi-region inventory, the market-based total covers the whole inventory, with the specified fallback where necessary. Do not infer that a company can opt out simply because it bought no certificates. The guidance also describes location-only conditions."
+      ],
+      "keywords": [
+        "dual reporting",
+        "global",
+        "markets",
+        "both"
+      ],
+      "topic": "scope2_general",
+      "runtime_use": "withheld_pending_rights_and_domain_review"
+    },
+    {
+      "id": "GP02",
+      "text": "A market-based result allocates emissions through qualifying contractual evidence; it does not necessarily represent the emissions caused by that buyer’s electricity consumption.",
+      "evidence_ids": [
+        "G04"
+      ],
+      "qualifications": [
+        "Do not equate an inventory allocation with proof of avoided grid emissions."
+      ],
+      "keywords": [
+        "physical",
+        "caused",
+        "market based",
+        "avoided"
+      ],
+      "topic": "market_based",
+      "runtime_use": "withheld_pending_rights_and_domain_review"
+    },
+    {
+      "id": "DP01",
+      "text": "The October 2025 Scope 2 consultation is proposed revision material. Its consultation closed in January 2026; the publisher says existing guidance continues until it communicates otherwise.",
+      "evidence_ids": [
+        "D01",
+        "D02",
+        "D03"
+      ],
+      "qualifications": [
+        "Status checked September 8, 2026. This is publisher status, not regulator adoption; no new effective standard is inferred from a draft."
+      ],
+      "keywords": [
+        "draft",
+        "consultation",
+        "new standard",
+        "effective",
+        "2025",
+        "2026"
+      ],
+      "topic": "scope2_general",
+      "runtime_use": "status_comparison_only_withheld_pending_review"
+    },
+    {
+      "id": "P05",
+      "text": "Reporting both keeps the grid-average perspective and the contractual procurement perspective visible.",
+      "evidence_ids": [
+        "E01",
+        "E03"
+      ],
+      "qualifications": [
+        "This is an explanatory synthesis of EPA guidance, not a determination that every company is legally required to report both."
+      ],
+      "keywords": [
+        "why",
+        "report",
+        "reporting",
+        "both",
+        "dual",
+        "rationale",
+        "recommend"
+      ],
+      "topic": "reporting_rationale"
+    }
+  ],
+  "product_policy": {
+    "factor_selection_released": false,
+    "calculations_released": false,
+    "missing_context_fields": [
+      "facility location",
+      "inventory/reporting period",
+      "grid versus other supply arrangement",
+      "electricity supplier and contractual evidence"
+    ],
+    "missing_context_behavior": "Request relevant facts and disclose that this pilot cannot select numeric factors even when those facts are supplied.",
+    "unsupported_behavior": "Explain the release coverage limit; do not calculate, file, invent factor values or imply legal applicability.",
+    "draft_behavior": "Keep proposals separate; if status evidence is withheld, stale or unreleased, report stale_or_conflicting rather than answer from it.",
+    "attribution": "Display canonical primary source and exact locator for every rendered proposition."
+  },
+  "author_checks": {
+    "status": "completed_self_check_only",
+    "source_sha256": "Copied unchanged from approved v1; all original source hashes preserved",
+    "passage_checks": "Original source/evidence records copied unchanged from approved v1; no new source span or excerpt",
+    "independent_review": "Completed by independent QA /root/site_review for EPA source, E01-E06 and P01-P05 only; comparative sources/evidence/propositions remain pending/withheld",
+    "rights_approval": "EPA-only private internal evaluation approval, including selected concise attributed text to configured Anthropic, remains scoped; commercial clearance absent",
+    "model_calls": "none"
+  },
+  "source_checks": [
+    {
+      "url": "https://ghgprotocol.org/scope-2-guidance",
+      "checked_on": "2026-09-08",
+      "result": "Live publisher page links retained 2015 guidance and corrections; page label December2022 understates latest correction inside sheet."
+    },
+    {
+      "url": "https://ghgprotocol.org/ghg-protocol-corporate-suite-standards-and-guidance-update-process",
+      "checked_on": "2026-09-08",
+      "result": "Live transition FAQ retains existing-guidance language; no final replacement established in this bounded check."
+    },
+    {
+      "url": "https://ghgprotocol.org/terms-use",
+      "checked_on": "2026-09-08",
+      "result": "Read in browser tool; terms last updated February2023, commercial reuse/extraction restrictions; no new local snapshot."
+    },
+    {
+      "url": "https://www.epa.gov/climateleadership/scope-1-and-scope-2-inventory-guidance",
+      "checked_on": "2026-09-08",
+      "result": "Current inventory page directly links retained December2023 electricity guidance."
+    },
+    {
+      "url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+      "checked_on": "2026-09-08",
+      "result": "Copyright Status and third-party exceptions inspected; no blanket commercial rights asserted."
+    }
+  ],
+  "change_record": {
+    "base_version": "1",
+    "base_sha256": "c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f",
+    "trigger": "Board concept question asks difference, why both are reported, and contains a universal must premise",
+    "changes": [
+      "P03 topic changed from scope2_general to dual_reporting without changing text, evidence, qualifications or keywords",
+      "P05 added as bounded synthesis of E01 and E03 under reporting_rationale",
+      "scope topics extended to keep reporting applicability and rationale distinct from context proposition P04"
+    ],
+    "historical_reviewed_candidate_sha256": "6ea304f71b3306df7b52f65e4ac843319a947d4249353685a8adbcc966138683",
+    "unchanged": "All original source records, evidence records, old proposition text and qualifications, product policy and exclusions"
+  }
+}

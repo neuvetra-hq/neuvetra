@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "batch_id": "m2-passages-2026-09-08-05",
+  "status": "closed_live_gate_failed_six_unused",
+  "offline_review": "Independent 38 passage tests / 284 assertions and exact run04 snapshot comparison passed; only draft profile and truthful generation metadata differ in behavior. Full API 118 tests / 528 assertions and typecheck passed. Prompts, schema, request builder, hard guards and approved evidence unchanged.",
+  "instrumentation": {
+    "entry": ".superpowers/research_traced_server.ts",
+    "sha256": "81e8923b42d84595e02cc876d7424476ea2a5fe0df5bec4359d6365611b53302",
+    "trace_directory": ".superpowers/passage-stage-traces-batch05"
+  },
+  "scope": "Compare the complete pipeline with only drafting changed from disabled-thinking Sonnet1200 to adaptive-high Opus8192, retaining run04 prompts, schemas, hard limits, evidence and frozen questions",
+  "limit_selected_by": "coordinator",
+  "limit_is_board_imposed": false,
+  "release_sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+  "limits": {
+    "max_attempted_model_stages": 30,
+    "reserved_usd_per_attempt": 0.5,
+    "max_reserved_usd": 15,
+    "plan": "claude-sonnet-5, thinking disabled, 1200 output tokens",
+    "draft_and_verify": "claude-opus-5, adaptive thinking with omitted display, high effort, 8192 total output tokens including thinking",
+    "automatic_retries": 0
+  },
+  "plan": {
+    "live_regression_questions": 8,
+    "max_regression_stage_attempts": 24,
+    "followup_and_browser_max_stage_attempts": 6
+  },
+  "execution": {
+    "attempts_consumed": 24,
+    "remaining_attempts": 6,
+    "run_artifacts": ["evaluations/research-qa/runs/2026-09-08-scope2-passages-05.json"],
+    "run_sha256": "111437473764badb55454d2cdeebd09e6b550945c7ab1359fa6b330ac17c1f10",
+    "browser_result": "not_run_release_gate_failed",
+    "findings": "Three of eight mechanically released, two independently clean complete answers. H-U02 omits a necessary quality prerequisite in one claim. Five answers withheld for a mix of unnecessary unsupported rationale, stronger wording and possibly over-strict review; not all are proved false negatives. The draft profile change did not pass the observed gate."
+  },
+  "code_snapshot": {
+    "path": "evaluations/research-qa/snapshots/scope2-passages-drafting-code.zip",
+    "sha256": "2b989294c0b2e88a96b1fb83b6e9bb92092292d1f338caa999ba4735801f92f5",
+    "files": 16
+  },
+  "accounting_note": "Distinct coordinator-selected experiment, not a provider account limit or measured billing. Prior failed batches and their unused allowances remain closed and counted. No implicit retry, expectation change, or carry-over relabeling. Failed or uncertain attempts consume reservations."
+}

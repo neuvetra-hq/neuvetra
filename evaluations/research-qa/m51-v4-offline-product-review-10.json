@@ -1,0 +1,198 @@
+{
+  "schema_version": "m51_v4_offline_product_review.v1",
+  "task": "M51-v4-CPO",
+  "role": "independent_product_acceptance",
+  "reviewed_at": "2026-09-13T03:36:28.1352180Z",
+  "candidate_sha256": "2461e7b898f96b884c1075a406d4e0ba9877354f1b23581d8e50272bff115c55",
+  "manifest_sha256": "d7190718e52b5ee3c01e9683f2cd0c9cc41b052000d4a4a5f11f937e7037466e",
+  "rehearsal_sha256": "d842552dd2c2b6674ec3f7fc6a7cefce7c41efe36ba93e36ca712cb00f562c5f",
+  "disposition": "pass_bounded_provider_disabled_product_acceptance",
+  "product_acceptance": true,
+  "milestone_complete": false,
+  "milestone_completion_condition": "A separate independent technical review of the same frozen bytes must also pass before the M51 milestone is called complete.",
+  "live_or_paid_execution_authorized": false,
+  "release_acceptance": false,
+  "freeze_integrity": {
+    "assigned_candidate_hash_matches": true,
+    "assigned_manifest_hash_matches": true,
+    "assigned_rehearsal_hash_matches": true,
+    "manifest_pins_checked": 24,
+    "manifest_pin_mismatches": 0,
+    "candidate_manifest_and_rehearsal_checked_again_after_probes": true
+  },
+  "reviewed_implementation_hashes": {
+    ".superpowers/openrouter-51/safe-stage.ts": "4c69fdbf4464af19802963588e0e2b877e5dd671d4a1a04f7405ba3cc5048fad",
+    ".superpowers/openrouter-51/closure.ts": "66ec9a47efe48fb964066890efaf852e653baf8f5a39070fde90b0d0713f9ee5",
+    ".superpowers/openrouter-51/offline-backend.ts": "22038bc0edb0b25b82050d4dd3a4c90ac0b1ccfd38d53d989a51607c31805d43",
+    ".superpowers/openrouter-51/offline-wrapper.ts": "695b3a2af25134fc8ef11199992150a9e3ec44df9dacb4d35aaaee603fe19e57",
+    ".superpowers/openrouter-51/rehearse.ts": "df8bea1cdb6431f6ff12421159856f034b2ac37ad4dffa7dface8d9418dced0f",
+    ".superpowers/openrouter-51/m51.test.ts": "f0faf65755f9edeee9887d5166103fab6c8b5832a6a8b1578eea33c0bfd47641"
+  },
+  "product_outcome": {
+    "preserved_m50_disposition": "fail_live_execution_closed_no_retry",
+    "preserved_m50_exact_rejection_subtype": "unknown_not_reconstructable",
+    "fixture_claim": "The inner_json and content_shape records are sanitized representative response shapes, not actual retained provider output.",
+    "safe_failure_diagnosis": "The bounded failure evidence is complete and mutually consistent: analyze, attempt 1, failed, provider_failure, HTTP 200, end_turn, nonnegative safe-integer token usage and elapsed time, decoding, content_shape or inner_json, and abort_source none.",
+    "authoritative_accounting": "The wrapper reports transport and synthetic counts only after validating the complete terminal, payload, cost, shutdown and failed-stage chain. Missing or ordinary shutdown-shaped evidence returns null/unavailable instead of zero.",
+    "answer_and_retry_boundary": "The successor emits no research answer, makes no external provider transport, performs no retry or carry, and prevents further dispatch and spend after the representative failure.",
+    "wrapper_closure": "The wrapper requires one exact canonical closure file/stdout record and recomputes it from the bound source records before acceptance; ordinary log text and jointly altered closure/stdout bytes are refused."
+  },
+  "independent_validation": {
+    "focused_tests": {
+      "passed": 7,
+      "failed": 0,
+      "assertions": 40
+    },
+    "focused_typescript_check": "pass",
+    "provider_disabled_rehearsal": {
+      "result": "pass",
+      "failure_details": [
+        "inner_json",
+        "content_shape"
+      ],
+      "provider_transport_calls": 0,
+      "synthetic_response_count": 2,
+      "logical_dispatches": 2,
+      "settled_nano_usd_per_case": [
+        33685000,
+        33685000
+      ],
+      "global_fetch_calls": 0,
+      "network_listeners": 0,
+      "credential_reads": 0,
+      "evaluator_accessed": false,
+      "services_started": 0,
+      "fixture_is_actual_provider_output": false,
+      "disposable_cleanup_verified": true,
+      "semantic_result_matches_frozen_rehearsal": true,
+      "note": "Completion time and elapsed-dependent backend-result digests are observational and were not treated as deterministic fixture values."
+    },
+    "valid_production_shaped_probe": {
+      "accepted": true,
+      "stage": "analyze",
+      "attempt": 1,
+      "code": "provider_failure",
+      "http_status": 200,
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 4132,
+        "output_tokens": 521
+      },
+      "elapsed_is_nonnegative_safe_integer": true,
+      "failure_phase": "decoding",
+      "failure_detail": "inner_json",
+      "abort_source": "none",
+      "router_identity_field": null,
+      "router_pipeline_failure": null,
+      "exact_cost_nano_usd": 33685000,
+      "provider_transport_calls": 0
+    },
+    "adversarial_refusals": [
+      {
+        "case": "code and failure_detail omitted with dependent hashes rebound",
+        "result": "m51_post_response_event_refused"
+      },
+      {
+        "case": "provider_timeout and awaiting_headers substituted with dependent hashes rebound",
+        "result": "m51_post_response_event_refused"
+      },
+      {
+        "case": "stop_reason omitted with dependent hashes rebound",
+        "result": "m51_post_response_event_refused"
+      },
+      {
+        "case": "fractional usage or negative elapsed with dependent hashes rebound",
+        "result": "m51_stage_record_refused"
+      },
+      {
+        "case": "router identity field added to the post-response event with dependent hashes rebound",
+        "result": "m51_stage_record_refused"
+      },
+      {
+        "case": "failed stage changed to plan with dependent hashes rebound",
+        "result": "m51_post_response_event_refused"
+      },
+      {
+        "case": "failed-stage filename changed to attempt 2 with dependent hashes rebound",
+        "result": "m51_failed_stage_evidence_refused"
+      },
+      {
+        "case": "unknown failed-stage field added with dependent hashes rebound",
+        "result": "m51_stage_record_refused"
+      },
+      {
+        "case": "terminal reason changed with shutdown hash rebound",
+        "result": "m51_terminal_refused"
+      },
+      {
+        "case": "payload dispatch count or extra field changed with terminal and shutdown hashes rebound",
+        "result": "m51_payload_refused"
+      },
+      {
+        "case": "negative cost changed with terminal and shutdown hashes rebound",
+        "result": "m51_cost_refused"
+      },
+      {
+        "case": "cost source changed without terminal rebinding",
+        "result": "m51_closure_binding_refused"
+      },
+      {
+        "case": "shutdown terminal digest altered",
+        "result": "m51_closure_binding_refused"
+      },
+      {
+        "case": "shutdown kind changed to an ordinary record",
+        "result": "m51_shutdown_refused"
+      },
+      {
+        "case": "ordinary shutdown-shaped record without the full chain",
+        "result": "null counts with accounting_source unavailable"
+      },
+      {
+        "case": "backend-result file and stdout jointly changed",
+        "result": "m51_backend_recomputation_refused"
+      }
+    ],
+    "temporary_probe_files_removed": true
+  },
+  "replacement_criteria_from_v1_v2_v3": {
+    "complete_failure_accounting_chain_required_before_counts": true,
+    "ordinary_shutdown_cannot_invent_zero": true,
+    "canonical_closure_recomputed_before_stdout_acceptance": true,
+    "joint_closure_and_stdout_tamper_refused": true,
+    "safe_stage_keys_enums_and_numbers_bounded": true,
+    "filename_attempt_and_payload_stage_sequence_reconciled": true,
+    "failed_stage_hash_bound_into_terminal": true,
+    "complete_post_response_fields_required": true,
+    "terminal_and_failed_event_semantics_reconciled": true
+  },
+  "blocking_findings": [],
+  "claim_boundary": {
+    "allowed": "The frozen M51 v4 provider-disabled successor passes the bounded offline product contract: it preserves either representative decoding subtype as a complete safe failed-stage event, derives one internally consistent closure and accounting story, rejects the tested ordinary-log and source/closure tampering cases, and performs no external provider, credential, evaluator, service or paid activity.",
+    "not_allowed": [
+      "The exact M50 provider rejection subtype has been reconstructed.",
+      "The sanitized fixtures are actual retained provider responses.",
+      "M43-H02 has passed or been evaluated.",
+      "A compiled Windows wrapper or future live process chain has been validated.",
+      "A live or paid retry is authorized.",
+      "The application is deployable, publishable, releasable or production ready from this offline acceptance."
+    ]
+  },
+  "remaining_gates": [
+    "Obtain a PASS from the separate independent technical reviewer on the same frozen candidate, manifest, rehearsal and 24-pin set before closing M51.",
+    "Any future live successor requires a newly frozen secure Windows wrapper integration, fresh current source/account/machine evidence, an exact cost scope and separate board authorization."
+  ],
+  "review_activity": {
+    "provider_or_model_requests": 0,
+    "paid_actions": 0,
+    "credentials_accessed": false,
+    "evaluator_accessed": false,
+    "external_network_requests": 0,
+    "application_services_started": false,
+    "source_expansion": false,
+    "implementation_or_shared_operations_files_modified": false,
+    "only_new_persistent_file_written": "evaluations/research-qa/m51-v4-offline-product-review-10.json",
+    "commit_publish_merge_deploy_or_release": false
+  },
+  "conclusion": "PASS for bounded provider-disabled product acceptance of frozen M51 v4 candidate 2461e7b898f96b884c1075a406d4e0ba9877354f1b23581d8e50272bff115c55. All v1-v3 product blockers are repaired in the reviewed scope. This PASS neither closes the separate technical gate nor authorizes any live, paid, publication, deployment or release action."
+}

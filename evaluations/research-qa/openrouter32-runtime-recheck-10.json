@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task": "M32-RUNTIME-QA-RECHECK",
+  "role": "independent_qa",
+  "disposition": "fail",
+  "run_id": "website-epa-live-32",
+  "meaning": "two_recording_defects_fixed_persisted_trace_validation_still_incomplete",
+  "candidate_sha256": "26abf3bdb6c1bd62123e8d1aa337fe2624317ad8e412b6dc7aaeabeaefa70650",
+  "runtime_validation_sha256": "18a2047b7c4e1acc84454b565bfaf086517ca92a4e26fbd39b3e42cacf1b002b",
+  "adapter_pins": {
+    "spending.ts": "4490c39e53874247d119190d494ab1277fe9189af8fc980f5bc9a32a3bfa06dd",
+    "runtime.ts": "16477e8e09a44619727029cbe029a764f0cf971601e996904d99d30c9d60c33a",
+    "ingress.ts": "f540a2fec869db82417bf31c38d7b4a20800c784554e867b9867823957af23e0",
+    "isolated-proxy.ts": "b28b27c3def420544a17084c213278c4bb8b370b0e899f293744fb8ed80ca432",
+    "launcher.ts": "9e59aef04f609c938fe7657b92fb4448711e587f3a73f734ddee9e7f6ba150d1",
+    "closure.ts": "a4b56a1ceebb4007bd851017b89420d013e26b9c6ded83a59ded33581c3ded8f",
+    "runtime.test.ts": "241decda7b8dd652814580712ba34178abe37b25592ac0e4975f775a24f3a9d6",
+    "runtime-tsconfig.json": "e0f5596d2ed991699045c7af586ee817765ad331ab8d7ec2767fa2471324c796"
+  },
+  "prior_review": {
+    "path": "evaluations/research-qa/openrouter32-runtime-review-10.json",
+    "sha256": "cce536c0bba85cd50d62a061c3a83528d7290311899b9be1acaab284b617fd78"
+  },
+  "validation": {
+    "tests_passed": 10,
+    "assertions": 53,
+    "failures": 0,
+    "scoped_typecheck": "pass",
+    "adapter_pins_rehashed": 8,
+    "candidate_pins_rehashed": 96
+  },
+  "resolved": [
+    "provider_timeout and request_cancelled are preserved by finite recorder allowlist.",
+    "Observed valid cost survives failed durable settlement as cost_settlement=unsettled without fabricating validated identity; original terminal code retained.",
+    "Closure pins budget, spending, admission, ingress, launch certificates and traces; verifies candidate96pins and receipt/runtime/attempt associations; rejects orphan and extra records."
+  ],
+  "remaining_blockers": [
+    {
+      "file": "closure.ts",
+      "finding": "Stored trace validation checks name/attempt/stage/runtime and some receipt/cost relations but never validates the stored finite diagnostic/identity schema. A matched terminal row with an arbitrary router_identity_field, failure code/detail, raw extra fields or invalid openrouter identity is not rejected by the current checks.",
+      "required": "Validate exact phase-specific persisted trace keys and values, including hashes, safe codes/fields/identity metadata and cost_settlement consistency. Add adversarial mutation tests on otherwise valid associated terminal records."
+    }
+  ],
+  "prelaunch_dependencies": [
+    "Implement honest closure for startup before budget/policy.json exists; current helper requires that file and must not fabricate it.",
+    "Specify damaged-ledger/I/O-failure closure preserving raw evidence and conservative uncertainty. Current strict spending replay appropriately refuses a corrupt settlement journal, so the existing closeRuntime cannot close that failure path.",
+    "Complete root host/frontend integration, bounded cloud diagnostics, actual UI terminal-outcome handoff and complete executable manifest/independent preflight.",
+    "On partial startup failure ensure exact process shutdown even if ready record creation or runtime verification fails."
+  ],
+  "limitations": [
+    "No live startup, credentials, network or model requests occurred.",
+    "Remaining stored-metadata finding is from direct control-flow review; author tests do not exercise malformed associated terminal records.",
+    "This FAIL record cannot serve as a launch permission; original FAIL remains unchanged."
+  ],
+  "release_acceptance": false,
+  "paid_execution_permitted": false,
+  "network_requests": 0,
+  "model_requests": 0,
+  "credentials_accessed": false,
+  "services_started": false
+}

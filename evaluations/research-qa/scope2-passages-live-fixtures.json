@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "fixture_set_id": "scope2-passages-live-v1",
+  "prepared_at": "2026-09-09T01:25:26.135491+00:00",
+  "reviewer": "independent QA /root/site_review",
+  "purpose": "Seven unseen semantic variants plus the known sourcing question. Supported conceptual scope only; negatives are separate offline controls.",
+  "based_on": {
+    "holdout_path": "evaluations/research-qa/scope2-semantic-holdout.json",
+    "definitions_sha256": "d497f985ce31f494eae18c13fcdd7be0605962603ea0751400011ffaaa0e0b7e"
+  },
+  "release": {
+    "path": "data/research/releases/scope2-passages.v1.json",
+    "id": "scope2-passages",
+    "version": "1",
+    "sha256": "62860478454f5537a3055a40ae1283fa567a39db75989409dc55cc33bd3577c7",
+    "source_sha256_by_id": {
+      "epa-electricity-2023": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"
+    },
+    "extraction_sha256_by_id": {
+      "epa-electricity-2023-pages-v1": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"
+    },
+    "approved_passage_ids": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18"
+    ],
+    "review_deadline": "2026-09-15T23:20:32Z",
+    "approval_status": "approved_private_internal_source_scope"
+  },
+  "execution": {
+    "live_calls_authorized_by_fixture": false,
+    "max_cases": 8,
+    "max_stage_calls": 24,
+    "selection_frozen_at": "2026-09-09T01:25:26.135491+00:00",
+    "selection_reason": "Freeze seven independently authored variants across six concept/sourcing/premise/intent families plus the known source-discovery anchor before implementation freeze. Original evidence supports these facets; no expectation may change to accommodate an observed result."
+  },
+  "cases": [
+    {
+      "id": "H-M01",
+      "prompt": "What separates a grid-average footprint from one based on electricity purchasing contracts?",
+      "family": "method_semantics",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Contrast average generation on the supplying grid with the contractual procurement perspective.",
+        "Explain both perspectives without requiring company facts for a general definition."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S01"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "H-R01",
+      "prompt": "For a U.S. Scope 2 inventory, what is the point of presenting a pair of totals rather than just one?",
+      "family": "reporting_and_premises",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain why the two perspectives are visible in separately reported totals.",
+        "Retain EPA recommendation framing; do not turn it into a universal legal requirement."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S01",
+          "S02"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "H-S01",
+      "prompt": "Where is regional electricity carbon-intensity data published, and what records are needed to substantiate a provider-specific figure?",
+      "family": "factor_source_discovery",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Identify EPA eGRID total output subregion factors as the U.S. regional discovery source.",
+        "Explain that supplier information should describe the electricity product delivered, including generated and purchased electricity.",
+        "Distinguish finding source documentation from validating an individual factor; dates or agreement coverage matter without assigning a value."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S08",
+          "S12",
+          "S15"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "H-S02",
+      "prompt": "Which EPA dataset would I consult to document a grid-average electricity factor, without choosing a value for my facilities?",
+      "family": "factor_source_discovery",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Identify eGRID and its total output subregion data category for U.S. regional grid factors.",
+        "Explain documentation/source discovery without selecting a value or asking for company facts unnecessarily.",
+        "Do not assert a latest version from a December 2023 source."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S08",
+          "S09"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "H-N01",
+      "prompt": "For a team that tracks electricity in kWh, explain the two Scope 2 methods without doing any arithmetic.",
+      "family": "incidental_numeric_context",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain both accounting perspectives despite incidental kWh terminology.",
+        "Perform no arithmetic and make no unnecessary request for company consumption."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S01"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "H-U02",
+      "prompt": "Can a renewable certificate be used for market-based accounting just because the seller calls it certified?",
+      "family": "supplier_assertions",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain that a certificate label alone does not establish eligibility; applicable quality conditions must be checked.",
+        "Distinguish general documentary conditions from deciding whether this certificate qualifies.",
+        "Do not infer zero emissions or present a complete quality-criteria checklist from the excluded Section 4."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S13"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "H-T02",
+      "prompt": "Explain location-based accounting when a facility gets normal grid power; I am not asking about its street address.",
+      "family": "terminology_and_intent",
+      "exposure": "unseen_by_implementer_before_freeze",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain the average emissions of the electricity grid supplying the facility.",
+        "Do not misread the question as requesting a street-address lookup or facility-specific factor."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S01",
+          "S07"
+        ],
+        "note": "Alternatives and dependency citations can be valid. ID presence is not entailment or completeness proof."
+      },
+      "evidence_review_notes": [
+        "Judge every factual clause, conditions and full question coverage against the original EPA document. Semantic review remains a human assessment."
+      ]
+    },
+    {
+      "id": "K-SOURCE",
+      "prompt": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+      "family": "factor_source_discovery",
+      "exposure": "known_board_question",
+      "live_eligible": true,
+      "expected_statuses": [
+        "qualified"
+      ],
+      "required_facets": [
+        "Explain how to discover U.S. regional grid-average data in EPA eGRID total output subregion factors.",
+        "Explain supplier-specific documentation for the electricity product delivered, including both owned generation and purchased electricity.",
+        "Keep geographic/source-document discovery distinct from an actual value selection or verification of an individual supplier factor.",
+        "Retain relevant product, period and quality limitations without inventing a full eligibility workflow."
+      ],
+      "forbidden_claim_kinds": [
+        "numeric_calculation",
+        "individual_factor_eligibility",
+        "legal_applicability",
+        "unsupported_current_version",
+        "false_complete_answer",
+        "unnecessary_company_diagnostic"
+      ],
+      "expected_support": {
+        "nonexclusive_passage_ids": [
+          "S08",
+          "S12",
+          "S15"
+        ],
+        "note": "Alternative approved support is allowed; assess semantic support rather than exact citation selection."
+      },
+      "evidence_review_notes": [
+        "This is the one known anchor; it is not counted as unseen evidence."
+      ]
+    }
+  ]
+}

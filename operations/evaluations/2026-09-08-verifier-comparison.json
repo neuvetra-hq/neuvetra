@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "experiment_id": "m2-verifier-reasoning-2026-09-08-01",
+  "status": "complete_independently_reviewed_diagnostic_only",
+  "scope": "Two exposed source/claim packets independently judged good/bad, each checked once by Sonnet5adaptivehigh and Opus5adaptivehigh under identical frozen prompts and schema",
+  "max_attempts": 4,
+  "max_output_tokens": 4096,
+  "reserved_usd_per_attempt": 0.5,
+  "max_reserved_usd": 2,
+  "limit_selected_by": "coordinator",
+  "limit_is_board_imposed": false,
+  "automatic_retries": 0,
+  "attempts_consumed": 4,
+  "attempts_remaining": 0,
+  "run_artifact": "evaluations/research-qa/runs/2026-09-08-verifier-comparison-01.json",
+  "run_sha256": "e8fe5b3da28b9a2fcb25a7b7f52dbdefaea21115eb209a4b924cef4778241db4",
+  "harness_sha256": "cb281f87083ec8e78218906455661b82e14189127043343c0c0f89f2c4066566",
+  "manifest_sha256": "b73907d6804fefceb1beab0d482f1c8b86a1e24ea17a2eeacef9ec373ebbb10f",
+  "result": "Opus rejected the bad answer's c4 and accepted the good answer, but missed c1's claim-local citation gap. Both Sonnet attempts exhausted 4096 output tokens entirely in thinking, producing no verdict. The comparison does not isolate thinking from the changed token cap or establish general accuracy.",
+  "baseline": "Recorded run03 Sonnet5 thinking-disabled verdict passed both packets, including the flawed answer. This is not a balanced or unseen accuracy benchmark.",
+  "interpretation": "A bounded model configuration comparison, not proof of correctness. Source and model judgments require independent review. Omitted thinking remains billable. Reservations are not measured billing."
+}

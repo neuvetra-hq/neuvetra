@@ -23,6 +23,8 @@ The FrontDesk services confirm Railway as the origin host behind Cloudflare. The
 
 ## Railway environment export
 
+**Later export check, September 8:** the currently supplied `C:/Users/nimab/Neuvetra/env.json.txt` has an `ANTHROPIC_API_KEY` assignment. A name-only scan found no `OPENAI_API_KEY`, `PINECONE_API_KEY`, `PINECONE_INDEX_HOST` or `PINECONE_INDEX_NAME` assignments. The earlier export description below is historical and must not be treated as a description of this later file. The private passage experiment successfully used Anthropic; it has no Pinecone or Supabase connection. Other credential stores and live projects remain unverified. See the [data-flow audit](research/data-flow-audit.md).
+
 The user-provided `env.json.txt` is stored outside this repository. Read-only inspection found 31 populated FrontDesk API variables, including database/Supabase, Twilio/Retell, Google/Microsoft OAuth and Stripe configuration. The Stripe secret-key prefix identifies test mode, and `PORT` matches the configured 3000 target. `STRIPE_WEBHOOK_SECRET` is absent from this export; that alone does not establish the complete live service environment. This file contains no Site Anthropic, Langfuse or Pinecone keys. Credential validity and external accounts were not tested. Secret values are deliberately omitted from these notes and from Git/Docker build contexts.
 
 ## Recorded hosting topology
@@ -106,6 +108,10 @@ For each web Dockerfile, supply the arguments listed above with `--build-arg NAM
 Docker was unavailable during this cleanup. Actual container builds remain unverified. All three frontend application builds passed, and the pinned static-server command served the built Site homepage, a nested SPA fallback route and a JavaScript asset successfully. These checks and source-path inspection provide narrower evidence than running the images.
 
 ## Dashboard items still to resolve
+
+Latest follow-up: the explicitly authorized fictional-data cloud test is complete. The API adopted `public, graphql_public, neuvetra_research_dev`; two test accounts, private Storage, six manifest-owned vectors, three retrieval cases and 22 access checks are verified. The database override takes precedence over Dashboard exposure settings until reset; the exact guarded reset is documented in [the API helper](../tools/cloud/README-data-api.md). This is a standalone tested evidence path and [saved demo](../evaluations/cloud-integration/demo.html), with no production application cutover or new approved greenhouse-gas answer. [Current cloud state](../operations/cloud-development.json) supersedes the earlier blocked staging observation below.
+
+Development-cloud follow-up on September 9, 2026 UTC: the supplied Pinecone key and direct Supabase connection are now verified. An isolated research schema was applied; legacy anonymous table privileges were contained while signed-in/backend grants were preserved. This has not deployed or connected the answering application. Synthetic staging failed and rolled back; its correction is tested locally only. Further cloud settings, source uploads and real user-isolation checks remain held. See [the current cloud record](../operations/cloud-development.json) for evidence and limitations; earlier ENV/key assessments in this document describe their original observations.
 
 1. Reconfirm the recorded dashboard assignments immediately before a cutover. Establish staging, a rollback plan and backups; current staging availability is unknown. Do not deploy unfinished GHG functionality merely by repointing the services.
 2. Confirm DNS ownership and fix FrontDesk's missing `www` domain and API public health failure if maintaining those services. Railway origin hosting is now verified; the earlier Vercel note is historical.

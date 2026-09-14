@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task": "M31-QA-FINAL",
+  "role": "independent_qa",
+  "disposition": "pass",
+  "scope": "Offline provider identity diagnostics and same-response cost recovery",
+  "release_acceptance": false,
+  "reviewed_files": {
+    "apps/site-api/src/research-composed/openrouter.ts": "9e86b9c5c5ca92b6a6ff23a616684b09b9c34c15c37499ea3df18b46d619e59f",
+    "apps/site-api/src/research-composed/provider.ts": "0a2aa0a36746bc705f190da5878a38b9e5f1bc709f64fa651d87a5dd43343030",
+    "apps/site-api/src/research-composed/openrouter.test.ts": "002d8996952f929e4d12652919655ee28342a87887c4aced564444d2267a64ce",
+    "apps/site-api/src/research-composed/provider-diagnostics.test.ts": "21988c8e233034d6a2c3c339d67e601501215adf84ca59087b221cbe0dcdeba9"
+  },
+  "semantic_profile_sha256": "885cb919e745544b576e942aa246d3b847eaed17106bf7ffb53335d36f11684b",
+  "openrouter_profile_sha256": "f294427a03cef4f16a2634b218d09f3b139c72a6e090db3a40ef4f20b57e6fb7",
+  "validation": {
+    "targeted_tests_passed": 72,
+    "targeted_tests_failed": 0,
+    "targeted_assertions": 887,
+    "test_files": ["openrouter.test.ts", "provider-diagnostics.test.ts", "provider-timeout.test.ts", "demand-selection.test.ts"],
+    "api_typecheck": "pass",
+    "scoped_git_diff_whitespace": "pass",
+    "independent_additional_boundary_cases": 7,
+    "independent_boundary_cases_passed": 7,
+    "boundary_cases": [
+      "HTTP200 invalid identity with zero native cost settles zero and still rejects",
+      "HTTP200 invalid identity with fractional nanoUSD cost preserves upward rounding and rejects",
+      "HTTP200 invalid identity with settlement exception attempts settlement once, retains uncertainty and original router_identity failure",
+      "HTTP201 invalid identity and valid cost remains uncertain",
+      "HTTP202 invalid identity and valid cost remains uncertain",
+      "HTTP200 error envelope and valid cost remains uncertain",
+      "HTTP200 invalid identity with out-of-range cost remains uncertain"
+    ],
+    "boundary_test_method": "Independent inline synthetic injected fetch responses and in-memory accounting; no added application test file or real network request",
+    "all_boundary_cases": "One injected POST per invocation, rejection retained, no duplicate settlement, no accepted identity metadata, no synthetic secret marker in terminal event"
+  },
+  "findings": {
+    "initial_defect": "Native cost extraction did not enforce the documented HTTP200-only boundary. Independent HTTP201 reproduction settled1000000nanoUSD despite identity rejection; the same response.ok path also admitted202 for extraction.",
+    "correction": "nativeOpenRouterCost now requires response.status===200; author added201/202 regressions and independent checks confirm both remain uncertain.",
+    "strict_identity": "Original Anthropic/model/routing/cache/BYOK/attempt enforcement remains rejecting. First-failed field diagnostics return finite constants rather than raw values.",
+    "cost_separation": "Validated native cost is kept in openrouter_cost independently of accepted identity metadata. Identity or content failure still rejects and preserves its original classification.",
+    "failure_accounting": "Missing, invalid, error-envelope and non200 costs remain uncertain; no new failure-path generation lookup or provider retry; at-most-one settlement attempt.",
+    "profile_binding": "Identity helper, finite field list, billing policy and provider execution are bound into the updated OpenRouter profile; semantic profile unchanged."
+  },
+  "historical_integrity": {
+    "run": "website-epa-live-30",
+    "closure_sha256": "0c35c8f46ffc35d722b1b98e8f534c156851f9fe08d1359a7465b64a92061e96",
+    "frozen_snapshot_copies_rehashed_unchanged": 577,
+    "closure_artifact_pins_rehashed_unchanged": 63,
+    "active_application_edits": "Intentional new uncommitted version; old frozen manifest cannot be reused for live execution",
+    "retrospective_outcomes_or_costs_changed": false
+  },
+  "public_documentation": [
+    {
+      "url": "https://openrouter.ai/docs/cookbook/administration/usage-accounting",
+      "independently_browsed": true,
+      "finding": "Vendor documentation defines usage.cost as the account charge and distinguishes upstream provider inference cost."
+    },
+    {
+      "url": "https://openrouter.ai/docs/guides/features/router-metadata",
+      "independently_browsed": true,
+      "finding": "Opted-in router metadata accompanies successful completion responses, including the Messages route, for routing and cost attribution."
+    }
+  ],
+  "limitations": [
+    "Accepting same-response usage.cost independently of identity validity is an explicit internal monitoring trust policy for the fixed OpenRouter POST, not invoice finality or a hard billing guarantee.",
+    "The exact M30 identity field and actual failed-attempt cost remain unresolved; synthetic evidence cannot retrospectively settle that charge.",
+    "No live provider reliability, three-case website success, release readiness or production acceptance is demonstrated.",
+    "Mandatory trace-callback exception behavior is preserved rather than redesigned.",
+    "Only the four named application files were reviewed; unrelated operational edits are outside this verdict."
+  ],
+  "provider_requests": 0,
+  "model_requests": 0,
+  "credentials_accessed": false,
+  "services_started": false,
+  "public_documentation_browsing": true,
+  "reviewer_authored_application_changes": false
+}

@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "task": "M33-QA-02",
+  "role": "independent_qa",
+  "reviewed_at": "2026-09-10T20:40:23.4737379-07:00",
+  "disposition": "pass_offline_pipeline_integrity_repair",
+  "release_acceptance": false,
+  "reviewed_base": {
+    "branch": "work/scope2-answer-demo",
+    "head": "383574425d77ff6c8e28ff0d2c4b44a47f2c4934",
+    "state": "uncommitted M33 implementation and record"
+  },
+  "reviewed_files": {
+    "apps/site-api/src/research-composed/openrouter.ts": "4c22cff66ff92ad0f5518214eb875f085f1cbb4f399279b70d2315b41f7b3431",
+    "apps/site-api/src/research-composed/provider.ts": "d6db5fbba45a9d35f5145405694119192857f17f18a1816d4897bb6845b85385",
+    "apps/site-api/src/research-composed/openrouter.test.ts": "0ff3cf202c3f5f7267df210362eeaa0271a079e806586883cf8858bd3b98ef20",
+    "apps/site-api/src/research-composed/provider-diagnostics.test.ts": "4c7cedbe80299c22c269f267db1bcf5ccea87031cd38815747558f9f43ac1a9f",
+    "docs/research/provider-pipeline-milestone-33.md": "c6c6e25c3c527b840152e719baae7ba1828ae2792ffc27870e29c75ca67f3f24"
+  },
+  "independence": {
+    "reviewer_authored_reviewed_implementation": false,
+    "reviewer_authored_reviewed_tests": false,
+    "reviewer_authored_milestone_record": false,
+    "reviewer_authored_only_this_review_artifact": true
+  },
+  "primary_evidence_decision": {
+    "sources": [
+      {
+        "url": "https://openrouter.ai/docs/guides/features/router-metadata",
+        "reviewed_locator": "Field Reference, Pipeline Stages, and Stability",
+        "decision": "Pipeline entries report material request or response effects, stage kinds may grow, and unknown stages are opaque. This supports rejecting every nonempty pipeline while decoding unrelated additive metadata permissively."
+      },
+      {
+        "url": "https://openrouter.ai/docs/guides/features/plugins/overview",
+        "reviewed_locator": "Default Plugin Settings and Plugin precedence",
+        "decision": "Request controls may be affected by account or organization plugin policy; metadata must therefore remain an observed processing-integrity gate."
+      },
+      {
+        "url": "https://openrouter.ai/docs/guides/features/message-transforms",
+        "reviewed_locator": "context-compression",
+        "decision": "Context compression changes prompt content and is a material effect under the current Neuvetra policy."
+      }
+    ],
+    "m32_boundary": "M32 retained only the failed field name and not the pipeline value. It supplies no positive fixture and no evidence for a benign nonempty form.",
+    "accepted_contract": "Only an absent pipeline or an empty array may pass. A non-array is shape; every nonempty array is material_effect. No new provider behavior is admitted.",
+    "weakened_predicate": false
+  },
+  "validation": {
+    "focused_tests": {
+      "command": "bun test src/research-composed/openrouter.test.ts src/research-composed/provider-diagnostics.test.ts",
+      "working_directory": "apps/site-api",
+      "passed": 26,
+      "failed": 0,
+      "assertions": 669
+    },
+    "full_composed_suite": {
+      "command": "bun test src/research-composed",
+      "working_directory": "apps/site-api",
+      "passed": 409,
+      "failed": 0,
+      "assertions": 4230
+    },
+    "typecheck": {
+      "command": "bunx tsc --noEmit -p tsconfig.json",
+      "working_directory": "apps/site-api",
+      "result": "pass"
+    },
+    "whitespace": {
+      "command": "git diff --check -- apps/site-api/src/research-composed/openrouter.ts apps/site-api/src/research-composed/provider.ts apps/site-api/src/research-composed/openrouter.test.ts apps/site-api/src/research-composed/provider-diagnostics.test.ts docs/research/provider-pipeline-milestone-33.md",
+      "result": "pass"
+    },
+    "independent_inline_probe": {
+      "method": "Bun inline imports with synthetic in-memory response objects, injected fetch, in-memory stage events and accounting; no application file added",
+      "assertions": 148,
+      "failed": 0,
+      "stages": [
+        "analyze",
+        "plan",
+        "verify"
+      ],
+      "covered": [
+        "Absent and empty pipelines pass for all three stages.",
+        "Null, scalar, string and object values return shape and fail validation.",
+        "Malformed, nested, sparse, plugin-like, unknown and very large nonempty arrays return material_effect and fail validation with constant-time length inspection.",
+        "Pipeline-only failures emit router_pipeline and a finite label without router_identity_field or accepted openrouter identity metadata.",
+        "A sensitive nested marker is absent from terminal events.",
+        "Valid native HTTP-200 cost settles once despite rejection; missing cost becomes uncertain without a metadata lookup; settlement failure preserves router_pipeline and adds uncertainty.",
+        "A simultaneous response-model conflict remains an identity failure while the independent pipeline predicate remains material_effect."
+      ],
+      "initial_probe_correction": "The first probe attempt incorrectly used a JavaScript default parameter for the intended missing-cost case, restoring the cost and causing the QA expectation to fail. The corrected hasCost switch produced the reported 148-pass result; this was a probe defect, not an application defect."
+    },
+    "profile_binding": {
+      "semantic_answering_policy_sha256": "885cb919e745544b576e942aa246d3b847eaed17106bf7ffb53335d36f11684b",
+      "m32_openrouter_profile_sha256": "f294427a03cef4f16a2634b218d09f3b139c72a6e090db3a40ef4f20b57e6fb7",
+      "m33_openrouter_profile_sha256": "29f88895c9c67676e48701bd9aad6d42eed0bd86e573b4d3e197127b807e2b99",
+      "result": "The semantic answering policy is unchanged and the OpenRouter transport/diagnostic profile changes intentionally. M32 run artifacts cannot be reused."
+    }
+  },
+  "findings": {
+    "identity_separation": "Pipeline processing is no longer mislabeled as provider identity. Strict requested, response and selected model/provider, strategy, attempt, BYOK, cache, endpoint and optional-attempt identity checks remain in force.",
+    "fail_closed_processing": "The implementation accepts only absence or an empty array. It does not inspect, retain, normalize or approve any nonempty stage and cannot silently accept a future stage kind.",
+    "diagnostic_safety": "Only router_pipeline plus shape or material_effect is retained. Raw pipeline values and nested data do not enter the stage event.",
+    "accounting_separation": "Valid same-response cost can settle the one rejected POST without creating accepted identity or an answer. Missing or invalid cost remains uncertain, settlement failure cannot authorize later work, and no failure-path generation lookup or provider retry was added.",
+    "additive_metadata": "Unrelated additive router metadata remains ignored rather than becoming an approval or a failure, consistent with the documented stability boundary.",
+    "defects": []
+  },
+  "actions": {
+    "network_requests": 0,
+    "provider_or_model_requests": 0,
+    "credential_reads": 0,
+    "services_started": 0,
+    "browser_operations": 0,
+    "paid_actions": 0,
+    "reviewed_application_edits_by_qa": 0
+  },
+  "limitations": [
+    "This PASS covers only the pinned offline M33 implementation, tests and milestone record. It does not establish the value or cause observed in M32.",
+    "Synthetic responses do not establish that current account and request controls will produce an absent or empty live pipeline.",
+    "No live provider verification, answer correctness, browser mechanics, invoice finality, deployment or release acceptance is demonstrated.",
+    "A later paid check requires a newly frozen profile and run package, current primary-source recheck, bounded cost/stage/no-retry rules, mechanical capture plan, independent preflight and separate board authorization. M32 must not be replayed."
+  ],
+  "verdict": "PASS for the M33 offline provider-pipeline integrity repair; not live or release acceptance."
+}

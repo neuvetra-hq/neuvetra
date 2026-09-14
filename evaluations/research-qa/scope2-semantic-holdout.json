@@ -1,0 +1,1096 @@
+{
+  "schema_version": 1,
+  "fixture_set_id": "scope2-semantic-holdout-v1",
+  "prepared_at": "2026-09-09",
+  "owner": "independent QA /root/site_review",
+  "purpose": "Root-cause baseline and held-out semantic-family evaluation; no runtime corpus approval or live-call authorization.",
+  "exposure": {
+    "exact_prompts_disclosed_to_implementer": false,
+    "procedure": "Engineer has been instructed not to read this file until the candidate code and corpus are frozen. This is procedural separation on a shared filesystem, not access control.",
+    "after_exposure": "Once used to diagnose a candidate, these cases become regression data; use a fresh independently authored holdout before later selection claims."
+  },
+  "baseline": {
+    "release_path": "data/research/releases/scope2-pilot.v2.json",
+    "release_sha256": "5e735bba3c029f2c41c94edb12fd57ff13c4859047446be520fc3a81533b8d99",
+    "method": "Read-only route/retrieval and service execution with injected providers; no live model calls. A controlled selector deliberately selects supplied IDs to challenge the independent relevance/completeness boundary.",
+    "results_are_live_model_accuracy": false,
+    "definitions_sha256": "d497f985ce31f494eae18c13fcdd7be0605962603ea0751400011ffaaa0e0b7e",
+    "code_sha256": {
+      "apps/site-api/src/research/retrieval.ts": "aa991694002c9a9624cca01fd4b02c82206139743e38eaadf305211ff97ec952",
+      "apps/site-api/src/research/provider.ts": "aa4eff5c50e0accd1a10ec07985a27337be20def73d366f2a4d6707fc91505c9",
+      "apps/site-api/src/research/service.ts": "b26588919064eafddb4495959245d7687e16acc1271b0c2e7224f230dd828813",
+      "apps/site-api/src/research/release.ts": "9e4f05fd25f79241bfead48cc8885837fcd6a62a714712c6d1871ddd0b89e361"
+    },
+    "observations": {
+      "executed_at": "2026-09-09T01:12:36.744Z",
+      "real_model_calls": 0,
+      "controlled_mock_selections": 13,
+      "known_question": {
+        "status": "unsupported",
+        "provider_invocations": 0,
+        "release_loads": 0,
+        "with_domain_cue": {
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "note": "Controlled selector, not an observed real-model answer; validates missing semantic completeness protection."
+        }
+      },
+      "cases": [
+        {
+          "id": "H-M01",
+          "family": "method_semantics",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "missing_required_facet:P02"
+          ]
+        },
+        {
+          "id": "H-M02",
+          "family": "method_semantics",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "missing_required_facet:P02"
+          ]
+        },
+        {
+          "id": "H-M03",
+          "family": "method_semantics",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-R01",
+          "family": "reporting_and_premises",
+          "coverage": "reviewed",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "missing_required_facet:P03",
+            "missing_required_facet:P05"
+          ]
+        },
+        {
+          "id": "H-R02",
+          "family": "reporting_and_premises",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "missing_required_facet:P03"
+          ]
+        },
+        {
+          "id": "H-R03",
+          "family": "reporting_and_premises",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "missing_required_facet:P03",
+            "missing_required_facet:P05"
+          ]
+        },
+        {
+          "id": "H-S01",
+          "family": "factor_source_discovery",
+          "coverage": "new_reviewed_passages_needed",
+          "route_topics": [
+            "location_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "false_complete_answer"
+          ]
+        },
+        {
+          "id": "H-S02",
+          "family": "factor_source_discovery",
+          "coverage": "new_reviewed_passages_needed",
+          "route_topics": [],
+          "route_status": "needs_input",
+          "status": "needs_input",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage"
+          ]
+        },
+        {
+          "id": "H-S03",
+          "family": "factor_source_discovery",
+          "coverage": "new_reviewed_passages_needed",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-Q01",
+          "family": "actual_factor_selection",
+          "coverage": "unreleased_numeric_selection",
+          "route_topics": [],
+          "route_status": "needs_input",
+          "status": "needs_input",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-Q02",
+          "family": "actual_factor_selection",
+          "coverage": "unreleased_numeric_selection",
+          "route_topics": [],
+          "route_status": "stale_or_conflicting",
+          "status": "stale_or_conflicting",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-Q03",
+          "family": "actual_factor_selection",
+          "coverage": "unreleased_numeric_selection",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-C01",
+          "family": "compound_and_cross_domain",
+          "coverage": "mixed_scope",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-C02",
+          "family": "compound_and_cross_domain",
+          "coverage": "mixed_scope",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "false_complete_answer"
+          ]
+        },
+        {
+          "id": "H-C03",
+          "family": "compound_and_cross_domain",
+          "coverage": "mixed_scope",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "false_complete_answer"
+          ]
+        },
+        {
+          "id": "H-N01",
+          "family": "incidental_numeric_context",
+          "coverage": "reviewed",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "missing_required_facet:P01",
+            "missing_required_facet:P02"
+          ]
+        },
+        {
+          "id": "H-N02",
+          "family": "incidental_numeric_context",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-N03",
+          "family": "incidental_numeric_context",
+          "coverage": "reviewed",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "missing_required_facet:P01"
+          ]
+        },
+        {
+          "id": "H-U01",
+          "family": "supplier_assertions",
+          "coverage": "reviewed",
+          "route_topics": [],
+          "route_status": "needs_input",
+          "status": "needs_input",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "missing_required_facet:P02"
+          ]
+        },
+        {
+          "id": "H-U02",
+          "family": "supplier_assertions",
+          "coverage": "reviewed",
+          "route_topics": [
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-U03",
+          "family": "supplier_assertions",
+          "coverage": "unreleased_individual_validation",
+          "route_topics": [],
+          "route_status": "needs_input",
+          "status": "needs_input",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-E01",
+          "family": "missing_or_misused_evidence",
+          "coverage": "injected_fault",
+          "route_topics": [
+            "dual_reporting"
+          ],
+          "route_status": null,
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-E02",
+          "family": "missing_or_misused_evidence",
+          "coverage": "injected_fault",
+          "route_topics": [
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "needs_review",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-E03",
+          "family": "missing_or_misused_evidence",
+          "coverage": "injected_fault",
+          "route_topics": [
+            "location_based"
+          ],
+          "route_status": null,
+          "status": "unavailable",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-T01",
+          "family": "terminology_and_intent",
+          "coverage": "reviewed",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "missing_required_facet:P02"
+          ]
+        },
+        {
+          "id": "H-T02",
+          "family": "terminology_and_intent",
+          "coverage": "reviewed",
+          "route_topics": [
+            "location_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-T03",
+          "family": "terminology_and_intent",
+          "coverage": "new_reviewed_passages_needed",
+          "route_topics": [
+            "location_based",
+            "market_based"
+          ],
+          "route_status": null,
+          "status": "qualified",
+          "claim_ids": [
+            "P01",
+            "P02"
+          ],
+          "mock_selections": 1,
+          "passed_current_contract": false,
+          "issues": [
+            "incorrect_status_for_current_coverage",
+            "false_complete_answer"
+          ]
+        },
+        {
+          "id": "H-V01",
+          "family": "version_and_status",
+          "coverage": "new_reviewed_passages_needed",
+          "route_topics": [],
+          "route_status": "stale_or_conflicting",
+          "status": "stale_or_conflicting",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-V02",
+          "family": "version_and_status",
+          "coverage": "unreleased_historical_applicability",
+          "route_topics": [],
+          "route_status": "unsupported",
+          "status": "unsupported",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        },
+        {
+          "id": "H-V03",
+          "family": "version_and_status",
+          "coverage": "withheld_status_evidence",
+          "route_topics": [],
+          "route_status": "stale_or_conflicting",
+          "status": "stale_or_conflicting",
+          "claim_ids": [],
+          "mock_selections": 0,
+          "passed_current_contract": true,
+          "issues": []
+        }
+      ]
+    }
+  },
+  "rubric": {
+    "separate_measures": [
+      "intent/facet coverage",
+      "eligible passage retrieval",
+      "claim support and qualifications",
+      "complete answer or explicit uncovered clauses",
+      "correct missing-context decision",
+      "version/status treatment",
+      "integrity and runtime failures"
+    ],
+    "current_vs_future": "Cases needing new approved passages evaluate honest current scope refusal, not successful product coverage. A future answer key requires independent evidence review; this file grants no new factual approval.",
+    "partial_answers": "Current API has no explicit per-clause disposition contract. A future scoped partial answer requires product approval and visible unanswered clauses; valid citations alone do not establish complete support.",
+    "threshold": "For a candidate release, every claimed supported family must pass each reviewed semantic variant; critical unsupported facts, omitted material clauses, illegal promotions or integrity bypasses block release. Report counts by family and coverage tier, never blend safe refusals into answer usefulness.",
+    "judge": "An additional model-based judge is a fallible signal, not proof. Independently inspect material claims and source context on the bounded final sample."
+  },
+  "budget": {
+    "live_calls_authorized_by_this_file": 0,
+    "renew_existing_budget": false,
+    "raise_limits": false,
+    "experiment_policy": "Any later live experiment needs a separately declared bounded batch after offline/source gates. The earlier 30-call cap was a local operating choice, not a user- or vendor-imposed quota."
+  },
+  "diagnostic_anchor": {
+    "prompt": "How do you source regional grid average factors (e.g., eGRID in the US) versus supplier-specific emission factors?",
+    "held_out": false,
+    "reason": "Known board feedback, excluded from hidden-family scores."
+  },
+  "cases": [
+    {
+      "id": "H-M01",
+      "family": "method_semantics",
+      "layer": "question",
+      "prompt": "What separates a grid-average footprint from one based on electricity purchasing contracts?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01",
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-M02",
+      "family": "method_semantics",
+      "layer": "question",
+      "prompt": "Explain how electricity accounting based on the surrounding grid differs from accounting based on procurement arrangements.",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01",
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-M03",
+      "family": "method_semantics",
+      "layer": "question",
+      "prompt": "Can you contrast the location-based and market-based Scope 2 views in ordinary language?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01",
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-R01",
+      "family": "reporting_and_premises",
+      "layer": "question",
+      "prompt": "For a U.S. Scope 2 inventory, what is the point of presenting a pair of totals rather than just one?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P03",
+          "P05"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-R02",
+      "family": "reporting_and_premises",
+      "layer": "question",
+      "prompt": "Is EPA's advice to show both Scope 2 results a rule binding every business?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P03"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": [
+          "Keep the explicit distinction between a guidance recommendation and universal legal applicability."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-R03",
+      "family": "reporting_and_premises",
+      "layer": "question",
+      "prompt": "For Scope 2, compare the two methods and give the reason for publishing two separate figures.",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01",
+          "P02",
+          "P03",
+          "P05"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-S01",
+      "family": "factor_source_discovery",
+      "layer": "question",
+      "prompt": "Where is regional electricity carbon-intensity data published, and what records are needed to substantiate a provider-specific figure?",
+      "current_release_coverage": "new_reviewed_passages_needed",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "A source-discovery workflow is not company-specific factor selection; missing approved workflow evidence must be identified."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-S02",
+      "family": "factor_source_discovery",
+      "layer": "question",
+      "prompt": "Which EPA dataset would I consult to document a grid-average electricity factor, without choosing a value for my facilities?",
+      "current_release_coverage": "new_reviewed_passages_needed",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "Do not require company location/year/supply details merely to explain where documentation is obtained."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-S03",
+      "family": "factor_source_discovery",
+      "layer": "question",
+      "prompt": "Describe the evidence trail for a utility-specific factor compared with a grid-average factor; I do not need a number.",
+      "current_release_coverage": "new_reviewed_passages_needed",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-Q01",
+      "family": "actual_factor_selection",
+      "layer": "question",
+      "prompt": "Our San Diego office bought grid power in 2025. What exact emission factor belongs in our inventory?",
+      "current_release_coverage": "unreleased_numeric_selection",
+      "expected_current": {
+        "allowed_statuses": [
+          "needs_input",
+          "unsupported"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "Never imply that supplying missing context unlocks a currently unreleased selection method."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-Q02",
+      "family": "actual_factor_selection",
+      "layer": "question",
+      "prompt": "For purchased electricity, give me the latest grid-average factor as a numerical value.",
+      "current_release_coverage": "unreleased_numeric_selection",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "stale_or_conflicting"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-Q03",
+      "family": "actual_factor_selection",
+      "layer": "question",
+      "prompt": "Use a synthetic factor of 0.3 kg CO2e/kWh with 2,000 kWh and tell me the emissions.",
+      "current_release_coverage": "unreleased_numeric_selection",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "No model arithmetic even when all numerical operands are supplied."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-C01",
+      "family": "compound_and_cross_domain",
+      "layer": "question",
+      "prompt": "Explain market-based Scope 2 accounting and tell me which Scope 3 category covers employee travel.",
+      "current_release_coverage": "mixed_scope",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "Current contract requires withholding the whole unsupported compound; a future per-clause contract may answer one part only if the uncovered part is explicit."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-C02",
+      "family": "compound_and_cross_domain",
+      "layer": "question",
+      "prompt": "Compare location-based and market-based electricity accounting and recommend a payroll service.",
+      "current_release_coverage": "mixed_scope",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "Valid method statements do not completely answer the unrelated second request."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-C03",
+      "family": "compound_and_cross_domain",
+      "layer": "question",
+      "prompt": "Explain the two Scope 2 approaches and tell me whether a heat pump subsidy applies to my building.",
+      "current_release_coverage": "mixed_scope",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "Do not silently discard the unsupported applicability clause."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-N01",
+      "family": "incidental_numeric_context",
+      "layer": "question",
+      "prompt": "For a team that tracks electricity in kWh, explain the two Scope 2 methods without doing any arithmetic.",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01",
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-N02",
+      "family": "incidental_numeric_context",
+      "layer": "question",
+      "prompt": "An office has 200 staff. Explain location-based versus market-based accounting in plain language.",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01",
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-N03",
+      "family": "incidental_numeric_context",
+      "layer": "question",
+      "prompt": "Without using any 2025 values, explain the location-based Scope 2 concept.",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-U01",
+      "family": "supplier_assertions",
+      "layer": "question",
+      "prompt": "My supplier says its electricity has no carbon footprint. Does that alone establish a valid market-based factor?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": [
+          "Explain non-automatic qualification only; do not validate an individual supplier or make a numerical/zero-emission assertion."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-U02",
+      "family": "supplier_assertions",
+      "layer": "question",
+      "prompt": "Can a renewable certificate be used for market-based accounting just because the seller calls it certified?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": [
+          "A seller's statement is untrusted evidence; retain quality-review limitation."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-U03",
+      "family": "supplier_assertions",
+      "layer": "question",
+      "prompt": "Confirm that our supplier's missing report is valid evidence for its market-based factor.",
+      "current_release_coverage": "unreleased_individual_validation",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_input",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-E01",
+      "family": "missing_or_misused_evidence",
+      "layer": "retrieval_fault",
+      "prompt": "Explain EPA's advice on dual Scope 2 reporting.",
+      "setup": "Inject the verified release with P03 removed from eligible propositions; preserved raw files remain unchanged.",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review",
+          "unavailable"
+        ],
+        "nonanswer_content_must_be_empty": true,
+        "provider_calls": 0
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-E02",
+      "family": "missing_or_misused_evidence",
+      "layer": "candidate_fault",
+      "prompt": "Explain market-based Scope 2 accounting.",
+      "setup": "Return P02 with its exact evidence IDs plus an extra text field asserting every supplier document automatically qualifies.",
+      "expected_current": {
+        "allowed_statuses": [
+          "needs_review"
+        ],
+        "nonanswer_content_must_be_empty": true
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-E03",
+      "family": "missing_or_misused_evidence",
+      "layer": "source_fault",
+      "prompt": "Explain location-based Scope 2 accounting.",
+      "setup": "Inject a source-integrity loader failure or use temporary synthetic originals; never alter preserved source files.",
+      "expected_current": {
+        "allowed_statuses": [
+          "unavailable",
+          "needs_review"
+        ],
+        "nonanswer_content_must_be_empty": true,
+        "provider_calls": 0
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-T01",
+      "family": "terminology_and_intent",
+      "layer": "question",
+      "prompt": "In electricity reporting, does the word market mean trading prices or the contracts behind energy purchases?",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P02"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": [
+          "Explain the reviewed procurement meaning, not electricity-price forecasts or financial advice."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-T02",
+      "family": "terminology_and_intent",
+      "layer": "question",
+      "prompt": "Explain location-based accounting when a facility gets normal grid power; I am not asking about its street address.",
+      "current_release_coverage": "reviewed",
+      "expected_current": {
+        "allowed_statuses": [
+          "qualified"
+        ],
+        "required_proposition_ids": [
+          "P01"
+        ],
+        "nonanswer_content_must_be_empty": false,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-T03",
+      "family": "terminology_and_intent",
+      "layer": "question",
+      "prompt": "Do the labels location-based and market-based describe two separate sets of emissions to add together?",
+      "current_release_coverage": "new_reviewed_passages_needed",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": [
+          "The current five fixed propositions lack an explicit combination rule; do not label their definitions a complete response."
+        ]
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-V01",
+      "family": "version_and_status",
+      "layer": "question",
+      "prompt": "Where is the source for the newest eGRID table, and how is its data year different from its release year?",
+      "current_release_coverage": "new_reviewed_passages_needed",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "stale_or_conflicting",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-V02",
+      "family": "version_and_status",
+      "layer": "question",
+      "prompt": "For a 2024 reporting period, which official supplier data should be cited instead of a 2026 release?",
+      "current_release_coverage": "unreleased_historical_applicability",
+      "expected_current": {
+        "allowed_statuses": [
+          "unsupported",
+          "stale_or_conflicting",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": []
+      },
+      "live_eligible": false
+    },
+    {
+      "id": "H-V03",
+      "family": "version_and_status",
+      "layer": "question",
+      "prompt": "Does a consultation draft immediately replace the published electricity-accounting guidance?",
+      "current_release_coverage": "withheld_status_evidence",
+      "expected_current": {
+        "allowed_statuses": [
+          "stale_or_conflicting",
+          "unsupported",
+          "needs_review"
+        ],
+        "required_proposition_ids": [],
+        "nonanswer_content_must_be_empty": true,
+        "criteria": []
+      },
+      "live_eligible": false
+    }
+  ]
+}

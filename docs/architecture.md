@@ -2,6 +2,8 @@
 
 **Historical foundation, superseded product priority:** the September 8 CEO direction makes Neuvetra the sole GHG product, retires TerraScope branding and defers FrontDesk. The boundaries below describe the preserved source layout. Use [the current delivery plan](roadmap-neuvetra-ghg.md) and [GHG architecture proposal](research/product-architecture.md) for new work.
 
+**Current private pilot:** Site now contains an isolated Scope 2 research handler and question workspace. `research-server.ts` on loopback 3012 loads a pinned EPA evidence release and uses a budgeted model for reviewed-proposition selection. It does not use the historical greeter corpus or a tenant database. The [pilot runbook](milestones/m2-answer-demo.md) governs this increment; the historical ownership table below does not describe its new answer boundary.
+
 The company website, FrontDesk and Terrascope are independent applications. They share engineering conventions and identity; they do not share business behavior merely because their folders are in one repository.
 
 ## Ownership

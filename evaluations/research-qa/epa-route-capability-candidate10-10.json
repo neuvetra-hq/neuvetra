@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "task_id": "M2-EPA-19-INDEPENDENT-SOURCE-QA",
+  "reviewed_at": "2026-09-09T23:31:11.811Z",
+  "reviewer": "/root/qa_live",
+  "independence": "Reviewer did not author the candidate, source annotation, catalog or runtime; this is an internal AI review, not professional assurance.",
+  "disposition": "pass_for_exact_additive_annotation_and_separately_reviewed_assembly",
+  "candidate": {
+    "path": ".superpowers/epa-route-19/source/candidate.json",
+    "sha256": "7951b2d5b0b366196188640852abc9ce117abed414320db0ff9303e6136db44f"
+  },
+  "proposed_sidecar": {
+    "path": ".superpowers/epa-route-19/source/proposed-sidecar.json",
+    "sha256": "7aae9f6b5d7a0e337f82ba54d05d2409df7305eea1771aa63522010cb3f92632",
+    "version": "3-epa-route",
+    "release_ready": false
+  },
+  "source_map": {
+    "path": ".superpowers/epa-route-19/source/source-map.md",
+    "sha256": "58c79b103fc8b2c91afd04602aaad7780407a3b8f65b896e7fbccfe5e0deef29"
+  },
+  "root_source_review": {
+    "path": "docs/research/epa-route-capability-review-19.md",
+    "sha256": "5a2da752df66553d65299634d8a108cc2c680fdde3a40668bbd29b4389ad0246"
+  },
+  "input_pins": {
+    "data/research/answer-units/scope2-website.epa-acquisition.v1.json": "97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50",
+    "data/research/capabilities/scope2-website.epa-acquisition.v1.json": "d768f4beea51ae5cf8cc1ca21f8e7eba8ecdc00dd7994e118ed1a55f15b138fe",
+    "data/research/releases/scope2-website.v1.json": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f",
+    "data/research/conditions/scope2-website.v1.json": "063adbadbe9c70493a81228931c4e4ec4a833633d12c83e2ab48616bd876d2c6",
+    "docs/research/epa-capability-source-review-13.md": "330f4e379cfe5588c6a2f773af34068cd2680087f9264b3bd1bb196b6812a857",
+    "docs/research/epa-source-acquisition-review-17.md": "4b0d6aaf4e20ebf6ecb03670a5c1332fa2983c3d73dbd011ca580754df87e6ec",
+    "evaluations/research-qa/epa-capability-mapping-10.json": "5994a65ef9a1167cc70dcd2fa982c580996f87ec25bd5b6cd6ad74d6f1427d2f",
+    "evaluations/research-qa/epa-source-acquisition-candidate8-10.json": "eb95230bcf755f7488996f6f0a4522243613b225649ed0da7585864d2f25deca"
+  },
+  "addition": {
+    "id": "U13-C03",
+    "kind": "source_route",
+    "subject": "supplier_factor_inquiry",
+    "anchor": [
+      0,
+      170
+    ]
+  },
+  "evidence": {
+    "unit_id": "U13",
+    "quote": "An electricity supplier, including a regulated utility or deregulated supplier, may provide the factor associated with its standard or differentiated electricity product.",
+    "quote_sha256": "d78fc61e4558b8ae35ab461ed6f83113f9c3cf09b65cb03880f5c03632106eb3",
+    "passage_id": "S12",
+    "condition_id": "S12-C01",
+    "locator": "PDF page 10 / printed page 7",
+    "passage_sha256": "285139790841b1b65805ec32aefdd22f6ff193dd205b8f21da14c2091308dd54",
+    "source_pdf_sha256": "14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3",
+    "extraction_sha256": "6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4",
+    "source_offset_verified_against_retained_extraction": true
+  },
+  "independent_checks": {
+    "input_pins_rehashed": 8,
+    "unit_count": 24,
+    "prior_capabilities_preserved": 33,
+    "total_capabilities": 34,
+    "limits_preserved": 27,
+    "prior_23_other_unit_entries_deep_equal": true,
+    "U13_existing_entry_only_additive": true,
+    "original_U13_C02_anchor_preserved": [
+      0,
+      171
+    ],
+    "new_anchor_exact": [
+      0,
+      170
+    ],
+    "all_unit_source_condition_bytes_unchanged": true,
+    "required_unit_ids": [
+      "U07",
+      "U16"
+    ],
+    "passage_closure": [
+      "S06",
+      "S11",
+      "S12",
+      "S15"
+    ],
+    "expiry_unchanged": "2026-09-15T23:20:32Z"
+  },
+  "semantic_disposition": "The existing first sentence supports a route to ask an electricity supplier for its standard or differentiated product factor. The may qualifier does not promise publication, availability of a particular number, or market-based eligibility. Full unchanged delivered-electricity, purchased-from-others, non-eligibility and agreement-period companion qualifications remain. S12 supports this interpretation; S10 does not.",
+  "limitations": [
+    "This approves the exact annotation, not the pending sidecar placeholders or a runtime release.",
+    "Assemble a separate version with real review provenance and preserve historical capability bytes.",
+    "Exact route labels and size eligibility are only necessary support checks; complete fresh semantic review remains required.",
+    "Tightening affirmative route labels must not create new special absence claims; every cumulative route need remains on ordinary full review.",
+    "No source rights expansion, new source acquisition, FAQ key use, live request or production mutation occurred."
+  ],
+  "provider_io": 0
+}

@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "turbo run dev --filter=site-web",
     "dev:site": "turbo run dev --filter=site-web --filter=site-api",
+    "dev:research": "cd apps/site-api && bun run start:research",
+    "dev:research:passages": "cd apps/site-api && bun run start:research-passages",
     "dev:frontdesk": "turbo run dev --filter=frontdesk-web --filter=frontdesk-api",
     "dev:terrascope": "turbo run dev --filter=terrascope-web --filter=terrascope-api",
     "dev:all": "turbo run dev",

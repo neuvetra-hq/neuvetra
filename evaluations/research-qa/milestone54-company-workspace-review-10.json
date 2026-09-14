@@ -1,0 +1,158 @@
+{
+  "schema_version": "m54_company_workspace_independent_review_v1",
+  "task_id": "M54-INDEPENDENT-SECURITY-PRODUCT-DATA-QA",
+  "reviewed_at": "2026-09-13T07:13:00Z",
+  "reviewer_role": "independent Head of QA with security, data, and product review",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed implementation or its repairs. The reviewer's only intended persistent change is this review artifact.",
+  "review_scope": "Exact current uncommitted M54 bytes for the bounded local synthetic company-workspace milestone: PostgreSQL schema and PGlite harness, tenant policies and grants, atomic bootstrap, API identity/body/origin/error boundaries, development-server guards, browser decoder and development UI, production-bundle exclusion, truthful milestone claims, and local regressions.",
+  "reviewed_git_state": {
+    "head": "fbbbafdb96018cdf4720315b67b9ab28b9f50ef9",
+    "working_tree": "dirty and unpublished",
+    "binding": "This review applies only to the file hashes below. The repository also contained substantial unrelated untracked historical work, which was not reviewed or modified."
+  },
+  "reviewed_file_sha256": {
+    "apps/site-api/package.json": "447003d7a5deec69db6c66991fd6d6bd692b826c979a2d6f0d0c17e27b4ceef7",
+    "apps/site-api/src/workspace/types.ts": "5c97dbdd2879417b711261abc046a1cb8485c79e7b4779fcbfeb481873e6da16",
+    "apps/site-api/src/workspace/routes.ts": "b1d10d6cdd79e5e1a5691814f2927074adc2de71f083d5e1565ad2abf9fb189d",
+    "apps/site-api/src/workspace/routes.test.ts": "1e47a2ccce445ef1575b810c627c79d940478aeca143036185ae373f155e223f",
+    "apps/site-api/src/workspace/server.ts": "945ec8d43cce3f677380dc87ba3a7c64f70e42650eea1315af1774ff851c7847",
+    "apps/site-api/src/workspace/server.test.ts": "6b9d87ef2510aacbf2f0c887a6716cc0bf5b7f13ce2c649ef965309e60190dd4",
+    "apps/site-web/src/components/ResearchPreview.tsx": "17ce70651f908d18f04e1da5e6232dd3ce1ab50d6f89c08156bf813fb08d5cbf",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "f8213ca940a27a8ad0839bfb349dc85adddb5e649c464fdcf8b0275d98fdb7b9",
+    "apps/site-web/src/lib/workspace-api.ts": "f4c38cced53f6b6a8751ac8c09e1ab341ca545463f0f5553d77df61e68b88876",
+    "apps/site-web/src/lib/workspace-api.test.ts": "2ac6b4f996a58ba05f75480bc89a810bbd3cd8aa6d10381868b22e09ab3b15d8",
+    "apps/site-web/src/index.css": "347f6fc156dcbe0d7de8800e445808150456f8519a0c53167a444544a5863570",
+    "apps/site-web/vite.config.ts": "0bd1d8ced84079a1dbe53679a5c1ff08087e3c2e1f3c18abd6995856b76f4dad",
+    "bun.lock": "56e0341f6cd80c9b1b0d434fe3a7702be5814ed40363519b48859d41eb0d16b8",
+    "packages/neuvetra-database/package.json": "a3bc28f50362a67b24e6fa2ae0bcf8eb7cbe10d2192174dbb6317f4311848a92",
+    "packages/neuvetra-database/tsconfig.json": "59df1d38578b962ac503cff8bc3b23d41a7f85d78b2138e2ab70b990844899fc",
+    "packages/neuvetra-database/src/index.ts": "6012a135787324dd212249d8b2ad6d9e8144dfceaa6f04e1536a66990cf4d403",
+    "packages/neuvetra-database/src/index.test.ts": "1cf0681e2b6d454fe2f4042e2be6931a1331cb639cc66b8ba997b18d7cef8028",
+    "packages/neuvetra-database/src/company-workspace.test.ts": "7c31d82b76cfe0fdc9220489335a4506e38e20950a050275bfe077df9ccb319e",
+    "packages/neuvetra-database/src/migrations/0001_company_workspace.sql": "cc596137d3011d400d3b253ebb52994bafe47f716c22601c4a316de259d7d739",
+    "docs/research/company-workspace-milestone-54.md": "15007d8187515db661ce024bfde163da1093e93913b982d9e5baa4b04fa67331"
+  },
+  "disposition": "pass_bounded_local_synthetic_company_workspace",
+  "security_acceptance": true,
+  "data_acceptance": true,
+  "product_acceptance": true,
+  "milestone_gate_pass": true,
+  "stage_4_acceptance": false,
+  "release_acceptance": false,
+  "release_boundary": "This pass covers only the local, memory-only, fixed-synthetic M54 tenant root. It does not approve a hosted Supabase migration, real authentication, customer data, bill upload, storage/search/job/cache/log isolation, calculation persistence, deployment, merge, release, assurance, or launch.",
+  "findings": [
+    {
+      "id": "M54-R01",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The original SQL test claimed cross-company link refusal without constructing a second company or attempting such a link, and did not exercise admin behavior or the full member/outsider write surface.",
+      "resolution_evidence": "The final SQL suite creates two tenant roots, attempts to attach the second tenant's facility to the first tenant's boundary, confirms the original link remains, proves owner/admin writes, and proves member/outsider insert, update, and delete denial across facilities, reporting boundaries, and boundary-facility links."
+    },
+    {
+      "id": "M54-R02",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "POST /workspace initially accepted an additional userId field and returned 201, weakening the fixed request and identity boundary even though the field was ignored.",
+      "resolution_evidence": "The route now performs an exact key-and-value parse after authentication, returns bounded HTTP 422 for any extra or changed field, and the test expects the ownership override attempt to fail."
+    },
+    {
+      "id": "M54-R03",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "Synthetic identity controls remained enabled while an authorized request was pending, allowing an owner response to be rendered after the visible actor had been switched to another tenant.",
+      "resolution_evidence": "All identity controls are disabled while busy. The final browser flow also clears the displayed record immediately when the actor changes."
+    },
+    {
+      "id": "M54-R04",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The initial development server rejected only NODE_ENV=production. An intermediate repair exposed options that could override a real production runtime and start the server programmatically.",
+      "resolution_evidence": "The exported factory now reads Bun.env directly and starts only when M54_SYNTHETIC_WORKSPACE equals enabled and NODE_ENV equals development or test. Tests mutate and restore the real environment and prove unset, staging, and production states fail closed."
+    },
+    {
+      "id": "M54-R05",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "A workspace creation exception, including a duplicate-key database message, could reach the HTTP response body.",
+      "resolution_evidence": "Creation failures now return only HTTP 409 and the fixed message Workspace could not be created; the test injects a private database detail and proves it is absent."
+    },
+    {
+      "id": "M54-R06",
+      "severity": "material",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "A workspace lookup exception was independently reproduced as HTTP 500 with the exact thrown private database detail in the response body.",
+      "resolution_evidence": "Lookup failures now return only HTTP 503 and the fixed message Workspace is unavailable; the regression test injects a private database detail and proves it is absent."
+    },
+    {
+      "id": "M54-R07",
+      "severity": "minor",
+      "status": "resolved_in_reviewed_bytes",
+      "finding": "The milestone record retained pre-repair test counts and described only the earlier production guard.",
+      "resolution_evidence": "The final record reports database 7/40, API 617/5,311, web 53/185, focused M54 20/73, and the exact two-part startup guard."
+    }
+  ],
+  "database_and_rls_results": {
+    "engine": "PGlite 0.3.16, PostgreSQL-in-WASM, fresh in-memory database per test",
+    "tenant_tables": [
+      "companies",
+      "company_members",
+      "facilities",
+      "reporting_boundaries",
+      "boundary_facilities",
+      "audit_events"
+    ],
+    "rls_metadata": "Independent pg_class inspection returned relrowsecurity=true and relforcerowsecurity=true for all six tenant tables.",
+    "security_definer_controls": "is_company_member, can_manage_company, and create_company_workspace are SECURITY DEFINER, use search_path=neuvetra, pg_temp, revoke PUBLIC execute, and grant execute only to authenticated. Qualified relations and auth.uid-derived identity were inspected.",
+    "table_grants": "authenticated receives SELECT on all six tables; only facilities, reporting_boundaries, and boundary_facilities receive INSERT/UPDATE/DELETE. Companies, memberships, and audit events have no authenticated write grant.",
+    "identity": "The harness sets request.jwt.claim.sub transaction-locally, auth.uid() resolves it, and application methods always set the authenticated role before tenant SQL.",
+    "atomic_bootstrap": "create_company_workspace executes company, owner membership, facility, reporting boundary, link, and audit inserts in one database function call. A duplicate fixed company is rejected and the first complete workspace remains readable.",
+    "role_behavior": "Owner and admin can mutate the three supported child-table write surfaces; member can read but cannot mutate; outsider sees zero rows and cannot insert, update, delete, or cross-link.",
+    "cross_company_integrity": "Composite foreign keys bind boundary_id and facility_id to the same company_id. The final executable test creates a second tenant and rejects a real mixed-company link."
+  },
+  "api_and_browser_contract_results": {
+    "post_origin": "An untrusted or absent POST Origin is rejected before authentication and storage access.",
+    "get_origin": "An explicit foreign GET Origin is rejected; an Origin-less authenticated same-origin browser read through the local proxy is accepted.",
+    "authentication": "Missing and invalid fixed synthetic bearer tokens return HTTP 401. The request body cannot select a user or tenant.",
+    "request_shape": "Only the seven fixed synthetic input fields and values are accepted; an added userId is HTTP 422.",
+    "inference_boundary": "Unknown and foreign valid workspace identifiers return the same HTTP 404 body: Workspace not found.",
+    "error_sanitization": "Injected create and read store exceptions return bounded 409/503 responses without the thrown database detail.",
+    "decoder": "The browser accepts only the exact fixed company, geography, facility, eGRID subregion, reporting year, boundary approach/status/version, UUID shapes, and exact object keys.",
+    "startup_guard": "The loopback server requires both an explicit M54 enable flag and an explicit development/test runtime; it fails closed for unset, staging, and production states.",
+    "independent_browser_flow": "Through the final loopback API and Vite proxy, the reviewer observed owner creation with Synthetic Acme, Inc., Synthetic California office, US/CA, CAMX, 2023 operational control, draft version 1; owner revisit; Other tenant returning Workspace not found; signed out returning Authentication required; and record clearing on actor change.",
+    "accessibility": "The rendered demo exposes a level-one heading, a named synthetic-identity group, labeled actor controls, buttons with disabled states, and a polite live status region.",
+    "production_bundle_exclusion": "A fresh production build completed. Eight M54 markers were absent from dist: both synthetic tokens, both fixture names, /workspace-api, the workspace heading, CompanyWorkspaceDemo, and synthetic-m54."
+  },
+  "regression_and_build_results": {
+    "focused_m54": "20 passed, 0 failed, 73 assertions: database 7/40, API workspace 9/22, browser contract 4/11",
+    "site_api": "617 passed, 0 failed, 5,311 assertions",
+    "site_web": "53 passed, 0 failed, 185 assertions",
+    "database_typecheck": "pass",
+    "site_api_typecheck": "pass",
+    "site_web_typecheck": "pass",
+    "site_web_lint": "pass",
+    "site_web_production_build": "pass; Vite transformed 64 modules; existing chunk-size advisory only",
+    "git_diff_check": "pass for the exact M54 paths; only the existing CRLF-to-LF warning for vite.config.ts appeared",
+    "service_shutdown": "pass; local ports 3015 and 5174 were closed after browser review"
+  },
+  "commands_and_evidence": [
+    "Read AGENTS.md, operations/agents/README.md, QA, security, data, and CPO role prompts, the current roadmap, the M54 milestone record, and every exact M54 implementation/test/config byte.",
+    "Queried pg_class RLS and FORCE RLS flags, pg_proc SECURITY DEFINER/search_path/ACL metadata, and information_schema authenticated table grants from a fresh migrated PGlite database.",
+    "Ran bun test src and bun run typecheck in packages/neuvetra-database.",
+    "Ran bun test src/workspace, bun test src, and bun run typecheck in apps/site-api.",
+    "Ran bun test src/lib/workspace-api.test.ts, bun test src, bun run typecheck, bun run lint, and bun run build in apps/site-web.",
+    "Probed initial extra-body acceptance, actual-production-environment override, raw create error, and raw read error behavior; returned each finding to the author and rechecked the repaired bytes.",
+    "Scanned the fresh production dist for eight M54 component, endpoint, fixture, flag, and token markers.",
+    "Ran the final local browser flow through the Vite proxy and real PGlite-backed API for owner create/revisit, foreign-tenant refusal, signed-out refusal, record clearing, and accessible status rendering.",
+    "Computed SHA-256 for all 20 reviewed M54 files, ran scoped git diff --check, and confirmed local review services were stopped."
+  ],
+  "limitations": [
+    "PGlite is PostgreSQL-compatible test evidence, not proof that the migration, ownership, auth schema references, RLS policies, or grants behave identically in the hosted Supabase project. No hosted migration was run.",
+    "Authentication uses two fixed non-secret synthetic tokens and a transaction-local auth.uid simulation. No real JWT, Supabase session, OTP, token expiry, refresh, or authenticator/anon role path was tested.",
+    "Storage is memory-only and is lost when the process stops. No persistence, backup, restore, rollback, schema-upgrade, or concurrent multi-process behavior was tested.",
+    "M54 establishes only the relational tenant root. Bill files, parsers, object storage, search, background jobs, caches, logs, calculation persistence, retention, and deletion are absent and therefore receive no isolation acceptance.",
+    "The audit event is immutable to the authenticated application role in this schema, but privileged database operators remain outside this bounded test and no production audit-retention control was reviewed.",
+    "No customer data, secrets, external network, production system, qualified penetration test, or human legal/accounting/assurance review was involved.",
+    "The repository was dirty. Any change to a reviewed file invalidates this byte-bound review until the changed hash and affected behavior are reviewed again."
+  ],
+  "conclusion": "PASS for the exact bounded M54 local synthetic company-workspace milestone. The reviewed bytes establish an executable PostgreSQL tenant root with forced RLS, scoped grants, auth.uid-based policies, atomic owner bootstrap, composite link integrity, fail-closed synthetic API and development guards, strict browser decoding, truthful local UI behavior, and production-bundle exclusion. Stage 4 as a whole and RELEASE ACCEPTANCE remain false."
+}

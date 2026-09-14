@@ -8,6 +8,8 @@ Build one Neuvetra greenhouse-gas research and accounting application for Califo
 
 Read the current [board report](operations/board-report.md), [task ledger](operations/status.json), relevant company notes and source evidence before changing code. Notes record intent and history; they are not proof of present law, source applicability or software correctness. Keep dated evidence, proposed work and demonstrated outcomes distinct.
 
+For session continuation, start with [operations/next-session.md](operations/next-session.md). It records completed revision07/08 work and the queued EPA-only live validation; the separate source-expansion hold does not block that preparation. Recheck dated runtime/source observations before execution. A queued task or saved note is not a running worker.
+
 ## Delegation and delivery
 
 - The CEO coordinator translates board direction into a bounded milestone, asks only material questions and reports completed work, decisions, bottlenecks and the next demonstration briefly.
