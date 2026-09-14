@@ -368,5 +368,5 @@ describe("M54 composed development server", () => {
     expect(await foreign.json()).toEqual({ error: "Evidence not found." })
     const signedOut = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/bills/${extracted.id}`))
     expect(signedOut.status).toBe(401)
-  })
+  }, 30_000)
 })

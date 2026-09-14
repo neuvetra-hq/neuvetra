@@ -4,6 +4,8 @@ September 14, 2026. **M61 immutable second-manager report review is complete, in
 
 Independent QA `922bb010ad…` passes after five material findings were repaired. Full checks pass API 625/5,451, web 70/283, database 29/263, type checking, lint, builds and production exclusion. The clean browser path demonstrated second-manager acceptance, distinct report and decision hashes, member read-only access, tenant isolation and signed-out refusal. M61 remains local, synthetic, incomplete, unreleased and without assurance.
 
+The first Linux CI run found one timing-only issue: the expanded composed API test finished in 5.066 seconds against a 5-second default after the other 624 tests passed. Its explicit deadline is now 30 seconds with no assertion or product-code change. Independent follow-up QA `c63d8d236…` passes focused 4/131 and full API 625/5,451; the repaired head still requires fresh Linux CI.
+
 **PR #3 should merge after M62 merge readiness.** M62 must resolve the three inherited `TBD` expectations that currently prevent the broad `test:ghg` collector from running, reconcile the PR diff and remote head, and pass exact GitHub CI. Merge then completes the development checkpoint. A live customer environment remains a later productionization gate because M54–M61 currently use development flags, synthetic identity and in-memory PGlite rather than hosted production identity, storage, operations and assurance controls.
 
 [M61 record](../docs/research/inventory-draft-report-review-milestone-61.md) · [M61 independent review](../evaluations/research-qa/milestone61-inventory-draft-report-review-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)

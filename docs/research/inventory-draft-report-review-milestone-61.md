@@ -28,6 +28,8 @@ Focused checks passed database 3 tests / 19 assertions, API 4 / 131 and web 21 /
 
 The clean browser journey accepted report SHA-256 `f013b628b101a1eb8fec991f3e45f83bd0d061e9a3468ed10846d68d964f28df` and displayed distinct decision snapshot SHA-256 `69a6520e52bf816df00a852abc0643e822dc02ad3b137f5968a58463232df865`. The read-only member saw the same immutable decision, another tenant received `Workspace not found`, and signed-out access required authentication. The demonstrated values remain fixed fictional data and are not release evidence.
 
+The first Linux CI run exposed a timing-only issue: this composed M54–M61 test completed in 5.066 seconds against Bun's default 5-second deadline after 624 other API tests passed. Its explicit timeout is now 30 seconds; no assertion, fixture, setup, teardown or product behavior changed. Independent follow-up QA `evaluations/research-qa/milestone61-linux-ci-timeout-followup-10.json`, SHA-256 `c63d8d236bf5f7321fbcff618839ce789627a3d3e2972340a51c83a270d8c42f`, passes the exact test-file hash after focused 4/131 and full API 625/5,451 checks. A fresh Linux CI run remains required for final remote confirmation.
+
 ## Deferred work
 
 A `changes_requested` decision does not edit the immutable M60 report. Report revision and resubmission require a later versioned-report milestone. Hosted persistence, production identity validation, source/factor/method release, and independent accounting, security and legal review remain separate gates.
