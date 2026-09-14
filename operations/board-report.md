@@ -1,4 +1,13 @@
-# Neuvetra board update
+# Neuvetra board update — M63 in progress
+
+September 14, 2026. PR #3 was merged on the board's approval. M63 reuses the existing Railway website and Supabase test database; no new hosting service or subscription was added. The existing database has an encrypted recovery backup, reviewed legacy access containment and nine applied application migrations. Real provider sign-in and restricted database access pass for two managers and a member; an uninvited signed-in tester is refused.
+
+The locally reviewed implementation is in draft [PR #4](https://github.com/neuvetra-hq/neuvetra/pull/4), commit `4f454718c4050c432b1599f1edc91940f3edcf2e`, with all five remote checks successful, including the actual Linux image. Independent local recovery reproduces saved reports, hashes and access controls. One browser cancellation defect was repaired and retested.
+
+The hosted workflow, service restart, compatible deployment rollback and independent application-backup restore now pass. Recovery preserved all 31 tables/54 records, security metadata and exact report/archive/review hashes. The existing site is live at https://www.neuvetra.ai; the approved sign-in email reached the board Gmail. Board browser sign-in and use feedback remain the next demonstration gate before dependent work. Provider-owned defaults are explicitly deferred behind verified access containment; provider Auth restoration and portable off-device recovery are outside the demonstrated recovery scope. [M63 record](../docs/research/private-staging-milestone-63.md).
+
+# Historical M62 board update
+
 
 September 14, 2026. The role improvements are published. The first prospective pilot used explicit CTO/accounting routes and independent QA; measured savings and causal model improvements remain unknown.
 

@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "M63-QA independent from implementation authors",
+  "scope": "accepted M63 implementation and reviewed operator helpers including repaired all-application-FK orphan cleanup; private synthetic staging only",
+  "reviewedAt": "2026-09-14T19:31:42.6721338Z",
+  "implementationCommit": "4f454718c4050c432b1599f1edc91940f3edcf2e",
+  "baseCommit": "0127b9e12358b4e2d687acec1be30365d3e293a4",
+  "hashMeaning": "SHA-256 of exact current filesystem bytes; git newline normalization may differ",
+  "priorSourceSnapshot": "qa-reviewed-candidate-v1.json",
+  "files": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "bytes": 7442,
+      "sha256": "5aac138a075720af24ce70a33ad7c72bce2d7a3ed942c3a2e02fece79e34ee56",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 1398,
+      "sha256": "d74b736eac25865e7908d969105428dc1e7edbb89bf7445d65e8b575ac46bcc5",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/staging/assets.ts",
+      "bytes": 2060,
+      "sha256": "a6718b5eb89dc633aaf913a9b498fcbee5ca86db278ad584c7107d013d6078e4",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/staging/config.ts",
+      "bytes": 3406,
+      "sha256": "5f5160c29c12358bf4a77cfb0dcd63374328a1d2ac552af4e99533fa4162e622",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "bytes": 9194,
+      "sha256": "69784437015704e7657cc3241e0f50f27d6528a48c34b773047c08bea6f2848c",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "bytes": 12144,
+      "sha256": "089ce9597f1cafbae3a8563ae7b2ae6d063a7aa4d4257c15938ea6c6688a7867",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "bytes": 10130,
+      "sha256": "7b3d4f4cc48775f147f7ecfad38957412bd555c845d41e3428d457c6ca512be8",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/workspace/server.ts",
+      "bytes": 3992,
+      "sha256": "0a0afe38b2435c93421d5089a676ee9b1f3ed29c591e86dcccd204ec3a085340",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-api/src/workspace/service.ts",
+      "bytes": 10398,
+      "sha256": "472ecee939c60cd0c5f679cb7cf19b3d08ac7016095195e94cb67c4e67a87209",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/package.json",
+      "bytes": 1130,
+      "sha256": "2458dd22627b3319ef16f90659133bec22c868dd4ee37feac867e61c0927636c",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/scripts/finalize-staging.ts",
+      "bytes": 169,
+      "sha256": "77cb6b545d0f3adde2707f94047ce4169d78014e92f4dd805fc8f89c0324a562",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/components/CompanyWorkspaceDemo.tsx",
+      "bytes": 42986,
+      "sha256": "4476d726863ae44b6cdb3409f6e4a3e1bec0c83d9976de9244256e52b3805e5d",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/components/PrivateStaging.tsx",
+      "bytes": 7808,
+      "sha256": "13a4be9dc76c90b9ba9a3cef470283e8824d1788dd37e97434e25bc703d1b84f",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/lib/staging-session.test.ts",
+      "bytes": 5377,
+      "sha256": "439f34340e25537625e5ae0ddb2ca6544a5e2c3f6d19f5a33041c45e5500dd4c",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/lib/staging-session.ts",
+      "bytes": 2493,
+      "sha256": "9502bff7878ed99043915ce7742b1a1f01552d436cc4b257bf983886c22f0277",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/lib/workspace-api.ts",
+      "bytes": 74111,
+      "sha256": "0e1a4106b1e91423c72c04d3750f4b520afe242d45594825faf3ae45d0db788f",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "bytes": 1379,
+      "sha256": "88fae9efeda960df7e319dd011a96d93a739bf114d3a6eb2d3aa938349ea7fcb",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/src/staging.tsx",
+      "bytes": 284,
+      "sha256": "0365f3eaad0a7358efed73dea9121c76a1f299a15daba0e104dbb8b7e0e07e6e",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/staging.html",
+      "bytes": 437,
+      "sha256": "24d5a61bddadce9f33ab2a6bf569cb029c7c908d44518da16dcea68b9ed8a999",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/tsconfig.node.json",
+      "bytes": 223,
+      "sha256": "11bf5ba65b7b45ffff26d62df5934ddac338473e6763a76eef6fddc147b0b328",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "apps/site-web/vite.staging.config.ts",
+      "bytes": 401,
+      "sha256": "d5d4a498aa072a06e9fc4b07621984017a9fcd804f17b5dbcd24f86ac4326641",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "bun.lock",
+      "bytes": 284089,
+      "sha256": "baad26994363c56f91d913fd2b3c87d75833521c10884a6caa94fd6dd9f0084f",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "bytes": 5507,
+      "sha256": "c8b2b186aea24d6421c9e9f2111450d82e8677e4b06850a4de6634e784cea4d0",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "bytes": 3277,
+      "sha256": "761b2dd60f3acc6d2a4206495b269ccfbc9717dd7590665d73100c5cf52cfc6a",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/package.json",
+      "bytes": 414,
+      "sha256": "8c7b9c7072144dc5cd4396b3752632ad65acda86281f475e8dc10873b4b5ee12",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "bytes": 25435,
+      "sha256": "9caae3179be29364390fa5ac4b30f6c4fe1f2861c33ec9e320e88ab100806c76",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "bytes": 9987,
+      "sha256": "4a9fe0eedd0dfea7413dc1a4b39443b9390a386243ec5c39171476cb76876a9a",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "bytes": 157,
+      "sha256": "9a7107b5caae1f27c1f7172494de5ae86ed5a49340258800abedd9cdae9a36ae",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "bytes": 5702,
+      "sha256": "8f475690887cabbebcd1b38117dac56e6f3c1bfe992bc4bbde762666a18e2118",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-audit.ts",
+      "bytes": 10284,
+      "sha256": "74aad85348aa282ecc810b946e7d9f0269b32e66ad12975fb0832e54e44eace2",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "bytes": 8158,
+      "sha256": "d6005323ceff04d85c6b6442c1477fa40e4fc4800b5022e25c4ae9131fa8c261",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-operator.ts",
+      "bytes": 3523,
+      "sha256": "b95f1cff257cb8a66c67b21e0a87d31e117e1a9d6330bea6ddcd06250b625a7d",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-tls.ts",
+      "bytes": 1774,
+      "sha256": "a0f37f86f450a5b32a945895f96c474183a96ff0aad820bdbb9d209810ed5307",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "bytes": 70584,
+      "sha256": "fcece6b3b98cf282f44e8926d6628258b1849f966d8c62e4daa2b9c8b2f8b565",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "railway.staging.toml",
+      "bytes": 1128,
+      "sha256": "814f6bb2272f8ab5ef53ea0819dbdeac4f02c0e582ec2454d3d0a7cd9eb1ba04",
+      "review": "integrated_implementation_review"
+    },
+    {
+      "path": "tools/staging/apply-existing.ts",
+      "bytes": 2848,
+      "sha256": "bf741eb8901e16957de386db98760a21dd32564af6dfa6977f23fdb1ad3aaf48",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/backup-existing.ps1",
+      "bytes": 4844,
+      "sha256": "c70b82d75059aa2c97e2a64c2e65d68f9c0ade1637d5abeee0bcdaa84ce10d38",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/check-containment.ts",
+      "bytes": 2052,
+      "sha256": "cffc77c2d675f248dbebab156cfb06e571aa9b3bb6ec25d10fe11ea8a3017e4e",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/check-hosted-journey.ts",
+      "bytes": 25498,
+      "sha256": "39dd6c43d28beffaca1cc691991f7a75618d6ae3755c579d64964adc0f906f2d",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/check-live-access.ts",
+      "bytes": 2992,
+      "sha256": "60c8d5ee29229f7ac636859570d1af82bc3cef0faba8b975bf710906ad5be185",
+      "review": "operator source and receipt review; final publication follow-up independently confirms removal of one blank EOF line from staged source, with no semantic change"
+    },
+    {
+      "path": "tools/staging/configure-railway.ps1",
+      "bytes": 1562,
+      "sha256": "02d8b9f90e8be4b2fee85ac13ad280be26f0c483607ddf53992cef7ca0a2fa70",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/create-source-manifest.ts",
+      "bytes": 9637,
+      "sha256": "72fab03e40f9e99cabaf6452b0fac9effacf95739d9236d4f34529ca9f0de27c",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/plan-existing.ts",
+      "bytes": 1511,
+      "sha256": "3a20bb2de76bc3f6b31f79aefefebc5a61d1e35f94b4322658fa29b2d250d741",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/provision-existing.ts",
+      "bytes": 4790,
+      "sha256": "0f8c0b596758f3780ca8b881a718729e9f0d51657d9960e4903137bcae4fdf36",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/read-existing-catalog.ts",
+      "bytes": 5051,
+      "sha256": "33724f3b17cc6745fbc15335ad44f94afff5e764d0762fccaafe57ba0a586f64",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/run-private.ps1",
+      "bytes": 1227,
+      "sha256": "82e8564202b2a90debcef3cbe1ba198d44ec867f725468ccc18d0c272a4ba3cf",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/seal-private.ps1",
+      "bytes": 1027,
+      "sha256": "7cd8c0570e57a32763db799beefe2fec5776a95b29288066f1161346f6abc2e3",
+      "review": "operator_source_and_receipt_review"
+    },
+    {
+      "path": "tools/staging/cleanup-orphan-test-auth.ts",
+      "bytes": 14865,
+      "sha256": "3f89afff9079b709989763383e4289bec6bf1bcdbbf28356f83f4dc7994e308f",
+      "review": "independent source review after all-application-FK repair and removal of invalid backend-pooler-TLS assertion; strict client TLS retained; ten independent predicate probes"
+    }
+  ],
+  "publicationWhitespaceFollowUp": "Only tools/staging/check-live-access.ts entry updated after comparison with staged bytes; one trailing LF removed. Prior v4 snapshot remains historical; this copied publication manifest supersedes that single entry."
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-09-14T19:30:09.4412924Z",
+  "host": "https://www.neuvetra.ai",
+  "project": "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+  "service": "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+  "deployment": "a0b88ee1-a3a2-4d7b-a742-40faede1a781",
+  "commit": "4f454718c4050c432b1599f1edc91940f3edcf2e",
+  "restartCommandAcknowledged": true,
+  "postRestartJourney": "passed; exact baseline hashes; zero application POSTs",
+  "boardEmailDeliveryConfirmed": true,
+  "boardBrowserSignIn": "pending",
+  "applicationArchiveSha256": "c71f862fae79d8bffffa976245764e544dd4f5dfea59647d92c7573430616a5f",
+  "applicationRestore": "independently passed: 31 tables, 54 rows, exact catalog and report/archive/review hashes; provider Auth excluded",
+  "rollback": "passed: provider rollback of compatible same-commit image and variables; exact baseline hashes, zero application POSTs afterward",
+  "rollbackDeployment": "77f75a77-4e79-4949-b71b-b39f72b5e978",
+  "replacedDeployment": "a532badf-8199-4304-8797-ef6bbc72f45e"
+}

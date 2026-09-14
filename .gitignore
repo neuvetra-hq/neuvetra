@@ -80,3 +80,6 @@ __pycache__/
 /data/research/candidates/scope2-website.v2.manifest.json
 /data/research/candidates/scope2-website.v2.spec.json
 /data/research/candidates/scope2-website.v2.units.json
+
+# Generated private staging browser bundle
+/apps/site-web/dist-staging/

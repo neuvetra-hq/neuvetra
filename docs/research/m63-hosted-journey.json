@@ -1,0 +1,477 @@
+{
+  "schemaVersion": 1,
+  "host": "https://www.neuvetra.ai",
+  "baseline": {
+    "workspaceId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+    "billId": "1d1e8c65-705f-4106-9e22-8fdf5304d3d3",
+    "inventoryId": "c512c188-e9f5-497c-9edd-10b359b0140a",
+    "inventorySnapshotSha256": "25f4dbbe13f6934ec78f56c97dd0553262e2266c125f78f225b910d70dc7f49a",
+    "packId": "cd35f060-d0b9-4b59-b52c-e22ea267545c",
+    "archiveSha256": "5b24c964b82ca2b0fd4d9d0eb2fc3bea8e6790842660d27ea6019224a784a1eb",
+    "manifestSha256": "7a179dda23fde7eea8ebfb5c19f1538398d28d17aa68b4d5c0b33122b212a70e",
+    "lineageRootSha256": "e59931c483052d853903225ba36924a258a44318400e908bf23abd41d30805e6",
+    "reportId": "19db7ed1-2e68-4b00-803f-4091c51321f4",
+    "reportSha256": "4d208e345e939a8e024839713b7aac61504c7bae77b630ceddace39e1a124014",
+    "reviewId": "585267e7-cf65-4f66-b637-a526355e8a85",
+    "decisionSnapshotSha256": "38d027250a66451001de3c80ce7c707143f44b7d1d62a3a77179af1b734447ca"
+  },
+  "runs": [
+    {
+      "status": "passed",
+      "mode": "resumable_journey",
+      "startedAt": "2026-09-14T19:20:00.908Z",
+      "completedAt": "2026-09-14T19:21:11.692Z",
+      "applicationPostRequests": 1,
+      "exactPriorBaselineMatched": false,
+      "archiveLocalReplay": "verified_match",
+      "secondManagerDistinct": true,
+      "outsiderBoundary": "uninvited_auth_subject_403",
+      "signedOutBoundary": 401,
+      "overallInventoryCompleteness": "incomplete",
+      "releaseEligible": false,
+      "stages": [
+        {
+          "stage": "hosted_readiness",
+          "httpStatus": 200
+        },
+        {
+          "stage": "hosted_public_config",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_outsider",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_session_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_session_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "workspace_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "evidence_discovery",
+          "httpStatus": 200
+        },
+        {
+          "stage": "bill_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "register_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "annual_inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_local_replay",
+          "httpStatus": null
+        },
+        {
+          "stage": "pack_server_replay",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_report_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "outsider_pack_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_report_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "signed_out_review_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "unknown_workspace_refused",
+          "httpStatus": 404
+        }
+      ],
+      "authLogout": [
+        {
+          "role": "manager1",
+          "httpStatus": 204
+        },
+        {
+          "role": "manager2",
+          "httpStatus": 204
+        },
+        {
+          "role": "member",
+          "httpStatus": 204
+        },
+        {
+          "role": "outsider",
+          "httpStatus": 204
+        }
+      ],
+      "allAuthSessionsClosed": true
+    },
+    {
+      "status": "passed",
+      "mode": "read_only",
+      "startedAt": "2026-09-14T19:21:59.438Z",
+      "completedAt": "2026-09-14T19:23:02.591Z",
+      "applicationPostRequests": 0,
+      "exactPriorBaselineMatched": true,
+      "archiveLocalReplay": "verified_match",
+      "secondManagerDistinct": true,
+      "outsiderBoundary": "uninvited_auth_subject_403",
+      "signedOutBoundary": 401,
+      "overallInventoryCompleteness": "incomplete",
+      "releaseEligible": false,
+      "stages": [
+        {
+          "stage": "hosted_readiness",
+          "httpStatus": 200
+        },
+        {
+          "stage": "hosted_public_config",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_outsider",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_session_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_session_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "workspace_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "evidence_discovery",
+          "httpStatus": 200
+        },
+        {
+          "stage": "bill_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "register_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "annual_inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_local_replay",
+          "httpStatus": null
+        },
+        {
+          "stage": "report_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_report_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "outsider_pack_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_report_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "signed_out_review_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "unknown_workspace_refused",
+          "httpStatus": 404
+        }
+      ],
+      "authLogout": [
+        {
+          "role": "manager1",
+          "httpStatus": 204
+        },
+        {
+          "role": "manager2",
+          "httpStatus": 204
+        },
+        {
+          "role": "member",
+          "httpStatus": 204
+        },
+        {
+          "role": "outsider",
+          "httpStatus": 204
+        }
+      ],
+      "allAuthSessionsClosed": true
+    },
+    {
+      "status": "passed",
+      "mode": "read_only",
+      "startedAt": "2026-09-14T19:28:33.790Z",
+      "completedAt": "2026-09-14T19:29:48.165Z",
+      "applicationPostRequests": 0,
+      "exactPriorBaselineMatched": true,
+      "archiveLocalReplay": "verified_match",
+      "secondManagerDistinct": true,
+      "outsiderBoundary": "uninvited_auth_subject_403",
+      "signedOutBoundary": 401,
+      "overallInventoryCompleteness": "incomplete",
+      "releaseEligible": false,
+      "stages": [
+        {
+          "stage": "hosted_readiness",
+          "httpStatus": 200
+        },
+        {
+          "stage": "hosted_public_config",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "sign_in_outsider",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager1",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_manager2",
+          "httpStatus": 200
+        },
+        {
+          "stage": "session_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_session_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_session_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "workspace_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "evidence_discovery",
+          "httpStatus": 200
+        },
+        {
+          "stage": "bill_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "register_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "annual_inventory_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "pack_local_replay",
+          "httpStatus": null
+        },
+        {
+          "stage": "report_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_revisit",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_download_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "report_review_member",
+          "httpStatus": 200
+        },
+        {
+          "stage": "outsider_report_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "outsider_pack_refused",
+          "httpStatus": 403
+        },
+        {
+          "stage": "signed_out_report_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "signed_out_review_refused",
+          "httpStatus": 401
+        },
+        {
+          "stage": "unknown_workspace_refused",
+          "httpStatus": 404
+        }
+      ],
+      "authLogout": [
+        {
+          "role": "manager1",
+          "httpStatus": 204
+        },
+        {
+          "role": "manager2",
+          "httpStatus": 204
+        },
+        {
+          "role": "member",
+          "httpStatus": 204
+        },
+        {
+          "role": "outsider",
+          "httpStatus": 204
+        }
+      ],
+      "allAuthSessionsClosed": true
+    }
+  ]
+}

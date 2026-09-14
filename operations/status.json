@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T17:59:50.242585+00:00",
+  "updated_at": "2026-09-14T19:31:09.5105045Z",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,8 +8,14 @@
     "id": "M63",
     "name": "Private staging: real sign-in and durable synthetic workflow",
     "status": "in_progress",
-    "next_gate": "Implement and independently verify an isolated staging candidate, including auth, durable tenant data and recovery; then demonstrate privately.",
-    "evidence": []
+    "next_gate": "Publish current reviewed operational evidence and collect board browser sign-in/use feedback before dependent milestone work.",
+    "evidence": [
+      "docs/research/private-staging-milestone-63.md",
+      "evaluations/research-qa/milestone63-private-staging.md",
+      "docs/research/m63-hosted-access.json",
+      "evaluations/research-qa/m63-cloud-restore.json",
+      "evaluations/research-qa/m63-accepted-source-manifest.json"
+    ]
   },
   "completed_milestones": [
     {
@@ -83,7 +89,7 @@
     "last_session_work": "M61 passed the complete local browser workflow and independent QA. A second manager can record one immutable acceptance or routed change request for the exact M60 report hash, with a separately verified decision snapshot and exact audit binding."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T17:08:58.000Z",
+    "saved_at": "2026-09-14T17:08:58Z",
     "path": "operations/next-session.md",
     "board_record": "docs/research/inventory-draft-report-review-milestone-61.md",
     "next_task": "Execute M62 merge readiness: resolve the inherited TBD GHG fixtures, reconcile the PR diff and pass exact remote CI before final merge authorization.",
@@ -465,7 +471,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u2013E06 and P01\u2013P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01–E06 and P01–P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1120,16 +1126,24 @@
     {
       "id": "M63-CTO",
       "owner": "/root/m63_cto",
-      "status": "in_progress",
+      "status": "complete",
       "scope": "Architecture and implementation boundaries",
-      "evidence": []
+      "evidence": [
+        "evaluations/research-qa/milestone63-private-staging.md",
+        "evaluations/research-qa/m63-accepted-source-manifest.json",
+        "docs/research/m63-hosted-recovery.json"
+      ]
     },
     {
       "id": "M63-QA",
       "owner": "/root/m63_qa",
-      "status": "in_progress",
+      "status": "complete",
       "scope": "Independent security and acceptance review",
-      "evidence": []
+      "evidence": [
+        "evaluations/research-qa/milestone63-private-staging.md",
+        "evaluations/research-qa/m63-accepted-source-manifest.json",
+        "docs/research/m63-hosted-recovery.json"
+      ]
     }
   ],
   "feedback_tasks": [
