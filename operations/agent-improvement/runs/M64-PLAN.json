@@ -7,7 +7,7 @@
   "artifacts": [
     {
       "path": "docs/research/guided-electricity-entry-milestone-64.md",
-      "sha256": "3f9c100daa8821b82845630333e6ae159b9f9693030539761055ac56e6060fa9"
+      "sha256": "6f6edd287c8f86e8246a8a293a40763b1eea288e0a27b78c32dd17f2880d8602"
     }
   ],
   "criteria": [
@@ -30,7 +30,7 @@
     "reviewed_artifacts": [
       {
         "path": "docs/research/guided-electricity-entry-milestone-64.md",
-        "sha256": "3f9c100daa8821b82845630333e6ae159b9f9693030539761055ac56e6060fa9"
+        "sha256": "6f6edd287c8f86e8246a8a293a40763b1eea288e0a27b78c32dd17f2880d8602"
       }
     ]
   },
@@ -67,5 +67,6 @@
   "pilot_eligible": false,
   "scope": "Read-only CPO/CTO planning continuation, critical variable-calculation and tenant boundary sequencing; coordinator wrote the final brief from the delivered recommendation. Implementation not started.",
   "compute_note": "Reused existing critical M63 CTO execution context; no new model override applied, actual runtime settings/cost unobserved. Not an efficiency experiment.",
-  "parent_outcome": "M64 milestone selection only"
+  "parent_outcome": "M64 milestone selection only",
+  "publication_binding_note": "809b4e8 first CI rejected Windows CRLF artifact hashes; corrected to exact published LF Git blob bytes without semantic artifact changes. Original failure retained in board closure review."
 }

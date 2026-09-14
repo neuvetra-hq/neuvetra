@@ -7,7 +7,7 @@
   "artifacts": [
     {
       "path": "operations/agent-improvement/snapshots/M63-DATA.json",
-      "sha256": "f8f2e3a00e17bf907d63149017e7284ebc5134a79fecf57ceab2943b14503485"
+      "sha256": "7e25a21694750f376c0089dce6e22e12cca0dc792df5ddacff738f0221abd80a"
     }
   ],
   "criteria": [
@@ -30,7 +30,7 @@
     "reviewed_artifacts": [
       {
         "path": "operations/agent-improvement/snapshots/M63-DATA.json",
-        "sha256": "f8f2e3a00e17bf907d63149017e7284ebc5134a79fecf57ceab2943b14503485"
+        "sha256": "7e25a21694750f376c0089dce6e22e12cca0dc792df5ddacff738f0221abd80a"
       }
     ]
   },
@@ -67,5 +67,6 @@
   "pilot_eligible": false,
   "parent_outcome": "M63",
   "started_at": "2026-09-14T11:12:42.507481-07:00",
-  "closure_note": "Original pending record lacked closure evidence; no first-pass success or per-author defect attribution is inferred. See m63-closure-review.md. Unknown compute metrics retained."
+  "closure_note": "Original pending record lacked closure evidence; no first-pass success or per-author defect attribution is inferred. See m63-closure-review.md. Unknown compute metrics retained.",
+  "publication_binding_note": "809b4e8 first CI rejected Windows CRLF artifact hashes; corrected to exact published LF Git blob bytes without semantic artifact changes. Original failure retained in board closure review."
 }

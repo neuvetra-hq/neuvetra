@@ -51,3 +51,20 @@ Two concrete execution clarifications were returned and are now explicit in the 
 QA re-read the completed M63-CTO, M63-DATA and M63-QA records and the coordinator's `operations/agent-improvement/m63-closure-review.md`. Each record now binds one immutable snapshot, passing criteria and an explicit review context. CTO/DATA use this independent QA acceptance; the QA-output record uses the separate coordinator meta-review. The earlier administrative evidence gap is resolved. Initial insufficient-evidence status, the shared F03 escape, unknown compute/resource measurements and non-pilot status are preserved. The coordinator reports the fresh structural validator passes 11 roles / 7 run records; that structural check is not treated as a measure of competence or savings.
 
 **M63 closure accepted for its bounded private synthetic scope, including the board's feedback. M64 planning accepted with accounting validation first.** This report is frozen for exact-file publication; current remote publication/check verification remains coordinator-owned. No additional product test, cloud action or user browser action is required by this review.
+
+## Cross-platform publication failure and corrected bindings
+
+Publication `809b4e8a602ba95bc898652a548658284d6d6ebc` failed the role-validator CI check: the run records bound the reviewed Windows CRLF serialization, while Git published LF-normalized artifacts. This is a real administrative publication defect, preserved here rather than described as a first-pass successful closure. It does not change the product/browser evidence.
+
+Root rewrote the three M63 closure manifests and M64 plan to their exact existing Git blob bytes, and updated only their artifact/reviewed-artifact digests plus an explicit publication note. QA independently compared every repaired artifact byte-for-byte with that published commit and checked all eight run bindings. Apart from those digests and the explanatory note, all four run records are structurally identical to their published predecessors: initial review history, shared F03 escape, unknown metrics/compute and review contexts remain intact. No product source changed. Existing Git attributes specify text with LF endings for all four artifacts, so no attribute-policy change was required.
+
+The **accepted canonical publication bindings** are now:
+
+| Artifact | SHA-256 of exact published LF bytes |
+|---|---|
+| M63-CTO closure manifest | `b519c4e50a841581fc65a4ce15e704c1ad75bbc0ec83bec116bdccccf38bab8d` |
+| M63-DATA closure manifest | `7e25a21694750f376c0089dce6e22e12cca0dc792df5ddacff738f0221abd80a` |
+| M63-QA closure manifest | `8700859fa33352552768ae631ebc7607515cf347c029175111f5a4ed10f13b59` |
+| M64 guided-electricity plan | `6f6edd287c8f86e8246a8a293a40763b1eea288e0a27b78c32dd17f2880d8602` |
+
+These canonical bindings supersede the earlier Windows-serialization hashes for publication; the original acceptance hashes above remain historical evidence. QA's check of its own manifest here is only byte/provenance equivalence, not self-approval of the review's substantive quality; the coordinator's distinct meta-review remains the substantive reviewer. Independent receipt: `C:\Users\nimab\Neuvetra\m63-runtime\qa-publication-binding-repair.json`. The coordinator reports the corrected structural validator passes 11 roles / 8 run records. **Updated bindings accepted; report frozen again for republication.** Fresh remote CI remains the coordinator's final publication check.

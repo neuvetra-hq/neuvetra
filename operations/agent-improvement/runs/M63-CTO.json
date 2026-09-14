@@ -7,7 +7,7 @@
   "artifacts": [
     {
       "path": "operations/agent-improvement/snapshots/M63-CTO.json",
-      "sha256": "385a1721b248ac5e2bd02de6b02012f53a04553cc8338884c14466ae0a488627"
+      "sha256": "b519c4e50a841581fc65a4ce15e704c1ad75bbc0ec83bec116bdccccf38bab8d"
     }
   ],
   "criteria": [
@@ -30,7 +30,7 @@
     "reviewed_artifacts": [
       {
         "path": "operations/agent-improvement/snapshots/M63-CTO.json",
-        "sha256": "385a1721b248ac5e2bd02de6b02012f53a04553cc8338884c14466ae0a488627"
+        "sha256": "b519c4e50a841581fc65a4ce15e704c1ad75bbc0ec83bec116bdccccf38bab8d"
       }
     ]
   },
@@ -77,5 +77,6 @@
     "evaluations/research-qa/m63-browser-contract.md"
   ],
   "escaped_defect_scope": "Shared M63-F03 board-discovered browser-contract incident; count once at parent milestone, not once per role. Earlier API/recovery acceptance did not exercise the frontend decoder.",
-  "closure_note": "Original pending record lacked closure evidence; no first-pass success or per-author defect attribution is inferred. See m63-closure-review.md. Unknown compute metrics retained."
+  "closure_note": "Original pending record lacked closure evidence; no first-pass success or per-author defect attribution is inferred. See m63-closure-review.md. Unknown compute metrics retained.",
+  "publication_binding_note": "809b4e8 first CI rejected Windows CRLF artifact hashes; corrected to exact published LF Git blob bytes without semantic artifact changes. Original failure retained in board closure review."
 }
