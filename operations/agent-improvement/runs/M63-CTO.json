@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "M63-CTO",
+  "role": "cto",
+  "execution_context": "01a0a0d7-e503-7583-9ea3-e1ff16a4a580:/root/m63_cto",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": [],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M63",
+  "started_at": "2026-09-14T17:59:50.242585+00:00",
+  "lessons": [
+    "L01",
+    "L02",
+    "L04",
+    "L06"
+  ]
+}

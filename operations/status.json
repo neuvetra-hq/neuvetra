@@ -1,18 +1,15 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T17:50:15.501203+00:00",
+  "updated_at": "2026-09-14T17:59:50.242585+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M62",
-    "name": "PR3 merge readiness and explicit legacy calculation deferral",
-    "status": "complete",
-    "next_gate": "Final board approval to merge PR3; no merge or deployment performed.",
-    "evidence": [
-      "docs/research/m62-publication.json",
-      "evaluations/research-qa/milestone62-merge-readiness.md"
-    ]
+    "id": "M63",
+    "name": "Private staging: real sign-in and durable synthetic workflow",
+    "status": "in_progress",
+    "next_gate": "Implement and independently verify an isolated staging candidate, including auth, durable tenant data and recovery; then demonstrate privately.",
+    "evidence": []
   },
   "completed_milestones": [
     {
@@ -69,6 +66,11 @@
       "id": "M61",
       "completed_at": "2026-09-14",
       "feedback": "docs/research/inventory-draft-report-review-milestone-61.md"
+    },
+    {
+      "id": "M62",
+      "completed_at": "2026-09-14",
+      "feedback": "Board approved PR3 merge, then M63 private staging."
     }
   ],
   "runtime": {
@@ -1114,6 +1116,20 @@
       "evidence": [
         "operations/agent-improvement/runs/M62-QA.json"
       ]
+    },
+    {
+      "id": "M63-CTO",
+      "owner": "/root/m63_cto",
+      "status": "in_progress",
+      "scope": "Architecture and implementation boundaries",
+      "evidence": []
+    },
+    {
+      "id": "M63-QA",
+      "owner": "/root/m63_qa",
+      "status": "in_progress",
+      "scope": "Independent security and acceptance review",
+      "evidence": []
     }
   ],
   "feedback_tasks": [
@@ -1908,5 +1924,12 @@
     "release_acceptance": false,
     "active_workers": 0,
     "next_gate": "Closed. Do not rerun M50 or reuse its authorization; preserve the M51/M52 offline remediation and require a new milestone for any future live work."
+  },
+  "pr3_merge": {
+    "merged": true,
+    "merge_commit": "0127b9e12358b4e2d687acec1be30365d3e293a4",
+    "merged_at": "2026-09-14T17:54:47Z",
+    "board_authorization": "Explicit yes to merge PR3 in this task",
+    "deployed": false
   }
 }

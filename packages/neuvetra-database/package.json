@@ -14,5 +14,8 @@
     "@electric-sql/pglite": "^0.3.14",
     "@types/bun": "latest",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "postgres": "3.4.9"
   }
 }

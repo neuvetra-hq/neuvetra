@@ -212,6 +212,9 @@
     "packages/neuvetra-database": {
       "name": "@neuvetra/database",
       "version": "0.0.0",
+      "dependencies": {
+        "postgres": "3.4.9",
+      },
       "devDependencies": {
         "@electric-sql/pglite": "^0.3.14",
         "@types/bun": "latest",

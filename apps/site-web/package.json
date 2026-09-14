@@ -9,7 +9,8 @@
     "preview": "vite preview --configLoader runner",
     "typecheck": "tsc -b",
     "lint": "eslint .",
-    "test": "bun test src"
+    "test": "bun test src",
+    "build:staging": "tsc -b && vite build --config vite.staging.config.ts --configLoader runner && bun run scripts/finalize-staging.ts"
   },
   "dependencies": {
     "@fontsource-variable/jost": "^5.2.8",

@@ -1,4 +1,10 @@
-# Current continuation - M62 complete; board merge decision next
+# Current continuation - M63 private staging in progress
+
+September 14, 2026. PR #3 merged to main at `0127b9e12358b4e2d687acec1be30365d3e293a4`, verified by GitHub and ancestry. The board approved M63: real sign-in, durable hosted storage, tenant isolation, monitoring and recovery/rollback for the existing synthetic inventory-to-reviewed-report flow. No customer deployment is authorized by this milestone.
+
+Work now uses `codex/m63-private-staging` from merged main; a new rolling PR is technically necessary because PR #3 is closed. The other product task was observed idle. CTO architecture and independent QA have been dispatched; records distinguish requested critical Astra/high from unobserved runtime settings. Root owns this ledger and cloud inventory. The board subsequently authorized reusing and overwriting existing public test services and database/schema; no current customers/users exist. Reuse Railway Site-Web and the existing Supabase project, with reviewed legacy grant containment and an encrypted recovery backup. Railway CLI authorization is scoped to Neuvetra-AI and completed. No new paid hosting is planned. Do not weaken local demo guards or reuse legacy authenticated access without validating isolation.
+
+# Historical continuation - M62 complete; board merge decision next
 
 September 14, 2026. Role upgrades are already published and the adopted default/critical model routes remain in force. M62 has repaired the inherited GHG collector through explicit readiness: 43 checks pass and three unfinished mobile cases remain visible as deferred. No mobile factors or expected emissions were invented.
 

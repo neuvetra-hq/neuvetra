@@ -17,7 +17,10 @@ export interface CompanyWorkspace {
   }
 }
 
-export type WorkspaceActor = "owner" | "admin" | "member" | "outsider" | "signed_out"
+export type SyntheticWorkspaceActor = "owner" | "admin" | "member" | "outsider" | "signed_out"
+export interface HostedWorkspaceActor { accessToken: string; userId: string; role: "owner" | "admin" | "member"; signal?: AbortSignal; onUnauthorized?: () => void }
+export type WorkspaceActor = SyntheticWorkspaceActor | HostedWorkspaceActor
+export function assertWorkspaceActorActive(actor: WorkspaceActor): void { if (typeof actor === "object") actor.signal?.throwIfAborted() }
 export const INVENTORY_WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"] as const
 export interface SyntheticInventory {
   id: string; companyId: string; boundaryId: string; calculationId: string; version: 1; reportingYear: 2023; scope: "scope_2_location_based"
@@ -174,10 +177,25 @@ export function decodeSyntheticBill(value: unknown): SyntheticBill {
   return value as unknown as SyntheticBill
 }
 
+/** Bind requests to this exact signed-in component; never mutate a global identity. */
+function workspaceFetch(actor: WorkspaceActor): typeof fetch {
+  if (typeof actor !== "object") return fetch
+  return (async (input: RequestInfo | URL, init?: RequestInit) => {
+    actor.signal?.throwIfAborted()
+    const response = await fetch(input, { ...init, signal: actor.signal })
+    actor.signal?.throwIfAborted()
+    if (response.status === 401 || response.status === 403) actor.onUnauthorized?.()
+    return response
+  }) as typeof fetch
+}
+
 function authorization(actor: WorkspaceActor, contentType = false) {
   const headers = new Headers()
   if (contentType) headers.set("content-type", "application/json")
-  if (actor !== "signed_out") headers.set("authorization", `Bearer ${TOKENS[actor]}`)
+  if (typeof actor === "object") {
+    if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
+    headers.set("authorization", `Bearer ${actor.accessToken}`)
+  } else if (actor !== "signed_out") headers.set("authorization", `Bearer ${TOKENS[actor]}`)
   return headers
 }
 
@@ -265,7 +283,7 @@ export function decodeAnnualInventory(value: unknown, companyId: string, expecte
 
 async function responseJson(response: Response) { const body: unknown=await response.json().catch(()=>null); if (!response.ok) { if (object(body)&&typeof body.error==="string") throw new Error(body.error); throw new Error("The annual register is unavailable.") } return body }
 
-export async function createSyntheticWorkspace(actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function createSyntheticWorkspace(actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const response = await fetcher("/workspace-api/workspace", {
     method: "POST",
     headers: authorization(actor, true),
@@ -274,25 +292,25 @@ export async function createSyntheticWorkspace(actor: WorkspaceActor, fetcher: t
   return decodeResponse(response)
 }
 
-export async function revisitSyntheticWorkspace(workspaceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function revisitSyntheticWorkspace(workspaceId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId)) throw new Error("The saved workspace identifier is invalid.")
   const response = await fetcher(`/workspace-api/workspace/${workspaceId}`, { headers: authorization(actor) })
   return decodeResponse(response)
 }
 
-export async function uploadSyntheticBill(workspaceId: string, actor: WorkspaceActor, file: File, fetcher: typeof fetch = fetch) {
+export async function uploadSyntheticBill(workspaceId: string, actor: WorkspaceActor, file: File, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId)) throw new Error("The saved workspace identifier is invalid.")
   const body = new FormData()
   body.set("file", file)
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/bills`, { method: "POST", headers: authorization(actor), body }))
 }
 
-export async function revisitSyntheticBill(workspaceId: string, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function revisitSyntheticBill(workspaceId: string, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId) || !uuid(evidenceId)) throw new Error("The saved bill identifier is invalid.")
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/bills/${evidenceId}`, { headers: authorization(actor) }))
 }
 
-export async function correctSyntheticBill(workspace: CompanyWorkspace, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function correctSyntheticBill(workspace: CompanyWorkspace, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const current = await revisitSyntheticBill(workspace.id, evidenceId, actor, fetcher)
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspace.id}/bills/${evidenceId}/corrections`, {
     method: "POST", headers: authorization(actor, true),
@@ -300,48 +318,48 @@ export async function correctSyntheticBill(workspace: CompanyWorkspace, evidence
   }))
 }
 
-export async function linkSyntheticBill(workspace: CompanyWorkspace, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function linkSyntheticBill(workspace: CompanyWorkspace, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const current = await revisitSyntheticBill(workspace.id, evidenceId, actor, fetcher)
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspace.id}/bills/${evidenceId}/link`, {
     method: "POST", headers: authorization(actor, true), body: JSON.stringify({ boundaryId: workspace.boundary.id, billVersionId: current.versions.find((version) => version.version === 2)?.id }),
   }))
 }
 
-export async function calculateSyntheticBill(workspaceId: string, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function calculateSyntheticBill(workspaceId: string, evidenceId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId) || !uuid(evidenceId)) throw new Error("The saved bill identifier is invalid.")
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/bills/${evidenceId}/calculate`, {
     method: "POST", headers: authorization(actor, true), body: JSON.stringify({ idempotencyKey: crypto.randomUUID() }),
   }))
 }
 
-export async function replaySyntheticBillCalculation(workspaceId: string, evidenceId: string, record: Record<string, unknown>, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function replaySyntheticBillCalculation(workspaceId: string, evidenceId: string, record: Record<string, unknown>, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId) || !uuid(evidenceId)) throw new Error("The saved bill identifier is invalid.")
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/bills/${evidenceId}/calculate/replay`, {
     method: "POST", headers: authorization(actor, true), body: JSON.stringify({ idempotencyKey: crypto.randomUUID(), record }),
   }))
 }
 
-export async function revisitSyntheticInventory(workspaceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function revisitSyntheticInventory(workspaceId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId)) throw new Error("The saved workspace identifier is invalid.")
   return decodeInventoryResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/inventories/2023/scope2`, { headers: authorization(actor) }), { companyId: workspaceId })
 }
 
-export async function prepareSyntheticInventory(workspaceId: string, calculationId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function prepareSyntheticInventory(workspaceId: string, calculationId: string, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   if (!uuid(workspaceId) || !uuid(calculationId)) throw new Error("The calculation identifier is invalid.")
   return decodeInventoryResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/inventories/2023/scope2/versions`, { method: "POST", headers: authorization(actor, true), body: JSON.stringify({ calculationId, idempotencyKey: crypto.randomUUID() }) }), { companyId: workspaceId, calculationId })
 }
 
-export async function decideSyntheticInventory(inventory: SyntheticInventory, decision: "approve_bounded_draft" | "changes_requested", actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function decideSyntheticInventory(inventory: SyntheticInventory, decision: "approve_bounded_draft" | "changes_requested", actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const approval = decision === "approve_bounded_draft"
   return decodeInventoryResponse(await fetcher(`/workspace-api/workspace/${inventory.companyId}/inventories/${inventory.id}/decisions`, {
     method: "POST", headers: authorization(actor, true), body: JSON.stringify({ decision, expectedInventorySnapshotSha256: inventory.snapshotSha256, acknowledgedWarnings: approval ? INVENTORY_WARNINGS : [], reasonCode: approval ? "bounded_synthetic_scope_reviewed" : "source_or_calculation_revision_required", idempotencyKey: crypto.randomUUID() }),
   }), { companyId: inventory.companyId, calculationId: inventory.calculationId, inventoryId: inventory.id })
 }
 
-export async function createAnnualRegister(inventory: SyntheticInventory, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function createAnnualRegister(inventory: SyntheticInventory, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   return decodeAnnualRegister(await responseJson(await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-registers/2023`, { method:"POST", headers:authorization(actor,true), body:JSON.stringify({ previousInventoryVersionId:inventory.id, idempotencyKey:crypto.randomUUID() }) })), inventory.companyId,{version:1,previousInventoryVersionId:inventory.id,januaryEvidenceSha256:inventory.line.calculationResultSha256,januaryCalculationId:inventory.calculationId})
 }
-export async function revisitAnnualRegisters(workspaceId: string, predecessor: SyntheticInventory, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function revisitAnnualRegisters(workspaceId: string, predecessor: SyntheticInventory, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const value=await responseJson(await fetcher(`/workspace-api/workspace/${workspaceId}/annual-registers/2023`, { headers:authorization(actor) })); if (!Array.isArray(value) || value.length > 2) throw new Error("The annual register response was not recognized.")
   if (value.length === 0) return []
   const initialRaw=value.find((item)=>object(item)&&item.version===1)
@@ -350,19 +368,19 @@ export async function revisitAnnualRegisters(workspaceId: string, predecessor: S
   if (!finalRaw) return [initial]
   return [initial,decodeAnnualRegister(finalRaw,workspaceId,{version:2,previousInventoryVersionId:predecessor.id,boundaryId:initial.boundaryId,facilityId:initial.facilityId,januaryEvidenceSha256:predecessor.line.calculationResultSha256,januaryCalculationId:predecessor.calculationId})]
 }
-export async function completeAnnualRegister(register: AnnualRegister, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function completeAnnualRegister(register: AnnualRegister, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const january=register.periods[0]!.evidence
   const calculationId=object(january)&&typeof january.locator==="string" ? january.locator.match(/^calculation ([0-9a-f-]{36}); service 2023-01-01\.\.2023-01-31$/)?.[1] : undefined
   if (!object(january) || !calculationId) throw new Error("The annual register response was not recognized.")
   return decodeAnnualRegister(await responseJson(await fetcher(`/workspace-api/workspace/${register.companyId}/annual-registers/${register.id}/complete`, { method:"POST", headers:authorization(actor,true), body:JSON.stringify({ expectedRegisterSnapshotSha256:register.snapshotSha256,fixtureId:"m58-fixed-electricity-register-2023-v1",idempotencyKey:crypto.randomUUID() }) })), register.companyId,{version:2,previousInventoryVersionId:register.previousInventoryVersionId,boundaryId:register.boundaryId,facilityId:register.facilityId,januaryEvidenceSha256:january.sha256,januaryCalculationId:calculationId})
 }
-export async function createAnnualInventory(register: AnnualRegister, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function createAnnualInventory(register: AnnualRegister, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   return decodeAnnualInventory(await responseJson(await fetcher(`/workspace-api/workspace/${register.companyId}/annual-inventories/2023/scope2/versions`, { method:"POST",headers:authorization(actor,true),body:JSON.stringify({ registerId:register.id,idempotencyKey:crypto.randomUUID() }) })),register.companyId,{registerId:register.id,previousInventoryVersionId:register.previousInventoryVersionId,boundaryId:register.boundaryId,registerSnapshotSha256:register.snapshotSha256})
 }
-export async function revisitAnnualInventory(workspaceId: string, register: AnnualRegister, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function revisitAnnualInventory(workspaceId: string, register: AnnualRegister, actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   return decodeAnnualInventory(await responseJson(await fetcher(`/workspace-api/workspace/${workspaceId}/annual-inventories/2023/scope2`,{headers:authorization(actor)})),workspaceId,{registerId:register.id,previousInventoryVersionId:register.previousInventoryVersionId,boundaryId:register.boundaryId,registerSnapshotSha256:register.snapshotSha256})
 }
-export async function decideAnnualInventory(inventory: AnnualInventory, decision: "approve_bounded_annual_location_draft" | "changes_requested", actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+export async function decideAnnualInventory(inventory: AnnualInventory, decision: "approve_bounded_annual_location_draft" | "changes_requested", actor: WorkspaceActor, fetcher: typeof fetch = workspaceFetch(actor)) {
   const approval=decision==="approve_bounded_annual_location_draft"
   return decodeAnnualInventory(await responseJson(await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/decisions`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify({decision,reasonCode:approval?"bounded_annual_location_register_reviewed":"source_or_calculation_revision_required",acknowledgedWarnings:approval?ANNUAL_WARNINGS:[],expectedInventorySnapshotSha256:inventory.snapshotSha256,idempotencyKey:crypto.randomUUID()})})),inventory.companyId,{inventoryId:inventory.id,registerId:inventory.registerId,previousInventoryVersionId:inventory.previousInventoryVersionId,boundaryId:inventory.boundaryId,registerSnapshotSha256:inventory.registerSnapshotSha256})
 }
@@ -380,15 +398,15 @@ export function decodeEvidencePackReceipt(value:unknown,pack:EvidencePackMetadat
   return value as unknown as EvidencePackReceipt
 }
 async function packJson(response:Response,expected:{companyId:string;inventoryId:string;packId?:string}){const body:unknown=await response.json().catch(()=>null);if(!response.ok){if(object(body)&&typeof body.error==="string")throw new Error(body.error);throw new Error("The evidence pack is unavailable.")}return decodeEvidencePackMetadata(body,expected)}
-export async function createEvidencePack(inventory:AnnualInventory,actor:WorkspaceActor,fetcher:typeof fetch=fetch){return packJson(await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/evidence-packs`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify({expectedInventorySnapshotSha256:inventory.snapshotSha256,idempotencyKey:crypto.randomUUID()})}),{companyId:inventory.companyId,inventoryId:inventory.id})}
-export async function revisitEvidencePack(inventory:AnnualInventory,actor:WorkspaceActor,fetcher:typeof fetch=fetch){return packJson(await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/evidence-packs/current`,{headers:authorization(actor)}),{companyId:inventory.companyId,inventoryId:inventory.id})}
-export async function downloadEvidencePack(pack:EvidencePackMetadata,actor:WorkspaceActor,fetcher:typeof fetch=fetch){const response=await fetcher(`/workspace-api/workspace/${pack.companyId}/annual-inventories/${pack.inventoryId}/evidence-packs/${pack.id}/download`,{headers:authorization(actor)});if(!response.ok)throw new Error("The evidence pack is unavailable.");const bytes=await response.arrayBuffer();const digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),byte=>byte.toString(16).padStart(2,"0")).join("");if(bytes.byteLength!==pack.archiveByteLength||response.headers.get("x-neuvetra-archive-sha256")!==pack.archiveSha256||digest!==pack.archiveSha256)throw new Error("The evidence pack download was not recognized.");return new File([bytes],`neuvetra-m59-${pack.inventoryId}.zip`,{type:"application/zip"})}
-export async function replayEvidencePack(pack:EvidencePackMetadata,file:File,actor:WorkspaceActor,fetcher:typeof fetch=fetch){if(file.type!=="application/zip"||file.size!==pack.archiveByteLength)throw new Error("Choose the exact downloaded M59 ZIP file.");const body=new FormData();body.set("file",file);const response=await fetcher(`/workspace-api/workspace/${pack.companyId}/annual-inventories/${pack.inventoryId}/evidence-packs/${pack.id}/replay`,{method:"POST",headers:authorization(actor),body});const value:unknown=await response.json().catch(()=>null);if(!response.ok){if(object(value)&&typeof value.error==="string")throw new Error(value.error);throw new Error("The evidence pack could not be verified.")}return decodeEvidencePackReceipt(value,pack)}
+export async function createEvidencePack(inventory:AnnualInventory,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){return packJson(await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/evidence-packs`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify({expectedInventorySnapshotSha256:inventory.snapshotSha256,idempotencyKey:crypto.randomUUID()})}),{companyId:inventory.companyId,inventoryId:inventory.id})}
+export async function revisitEvidencePack(inventory:AnnualInventory,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){return packJson(await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/evidence-packs/current`,{headers:authorization(actor)}),{companyId:inventory.companyId,inventoryId:inventory.id})}
+export async function downloadEvidencePack(pack:EvidencePackMetadata,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){const response=await fetcher(`/workspace-api/workspace/${pack.companyId}/annual-inventories/${pack.inventoryId}/evidence-packs/${pack.id}/download`,{headers:authorization(actor)});if(!response.ok)throw new Error("The evidence pack is unavailable.");const bytes=await response.arrayBuffer();const digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),byte=>byte.toString(16).padStart(2,"0")).join("");if(bytes.byteLength!==pack.archiveByteLength||response.headers.get("x-neuvetra-archive-sha256")!==pack.archiveSha256||digest!==pack.archiveSha256)throw new Error("The evidence pack download was not recognized.");assertWorkspaceActorActive(actor);return new File([bytes],`neuvetra-m59-${pack.inventoryId}.zip`,{type:"application/zip"})}
+export async function replayEvidencePack(pack:EvidencePackMetadata,file:File,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){if(file.type!=="application/zip"||file.size!==pack.archiveByteLength)throw new Error("Choose the exact downloaded M59 ZIP file.");const body=new FormData();body.set("file",file);const response=await fetcher(`/workspace-api/workspace/${pack.companyId}/annual-inventories/${pack.inventoryId}/evidence-packs/${pack.id}/replay`,{method:"POST",headers:authorization(actor),body});const value:unknown=await response.json().catch(()=>null);if(!response.ok){if(object(value)&&typeof value.error==="string")throw new Error(value.error);throw new Error("The evidence pack could not be verified.")}return decodeEvidencePackReceipt(value,pack)}
 function decodeDraftReport(value:unknown,inventory:AnnualInventory,pack:EvidencePackMetadata):DraftInventoryReportMetadata{if(!object(value)||!exactKeys(value,["id","companyId","inventoryId","evidencePackId","profile","inventorySnapshotSha256","sourceArchiveSha256","sourceManifestSha256","sourceLineageRootSha256","reportSha256","reportByteLength","createdBy","createdAt"])||!uuid(value.id)||value.companyId!==inventory.companyId||value.inventoryId!==inventory.id||value.evidencePackId!==pack.id||value.profile!=="neuvetra.synthetic.inventory-draft-report.v1"||value.inventorySnapshotSha256!==inventory.snapshotSha256||value.sourceArchiveSha256!==pack.archiveSha256||value.sourceManifestSha256!==pack.manifestSha256||value.sourceLineageRootSha256!==pack.lineageRootSha256||typeof value.reportSha256!=="string"||!/^[0-9a-f]{64}$/.test(value.reportSha256)||!Number.isInteger(value.reportByteLength)||Number(value.reportByteLength)<1||Number(value.reportByteLength)>65536||!uuid(value.createdBy)||!instant(value.createdAt))throw new Error("The draft report response was not recognized.");return value as unknown as DraftInventoryReportMetadata}
-export async function createDraftInventoryReport(inventory:AnnualInventory,pack:EvidencePackMetadata,actor:WorkspaceActor,fetcher:typeof fetch=fetch){const response=await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/draft-reports`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify({evidencePackId:pack.id,expectedArchiveSha256:pack.archiveSha256,expectedInventorySnapshotSha256:inventory.snapshotSha256,idempotencyKey:crypto.randomUUID()})}),value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report could not be created.");return decodeDraftReport(value,inventory,pack)}
-export async function revisitDraftInventoryReport(inventory:AnnualInventory,pack:EvidencePackMetadata,actor:WorkspaceActor,fetcher:typeof fetch=fetch){const response=await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/draft-reports/current`,{headers:authorization(actor)});if(response.status===404)return null;const value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report is unavailable.");return decodeDraftReport(value,inventory,pack)}
-export async function downloadDraftInventoryReport(report:DraftInventoryReportMetadata,actor:WorkspaceActor,fetcher:typeof fetch=fetch){const response=await fetcher(`/workspace-api/workspace/${report.companyId}/annual-inventories/${report.inventoryId}/draft-reports/${report.id}/download`,{headers:authorization(actor)});if(!response.ok)throw new Error("The draft report is unavailable.");const bytes=await response.arrayBuffer(),digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),b=>b.toString(16).padStart(2,"0")).join("");if(bytes.byteLength!==report.reportByteLength||response.headers.get("x-neuvetra-report-sha256")!==report.reportSha256||digest!==report.reportSha256)throw new Error("The draft report download was not recognized.");return new File([bytes],`neuvetra-m60-${report.inventoryId}.html`,{type:"text/html"})}
+export async function createDraftInventoryReport(inventory:AnnualInventory,pack:EvidencePackMetadata,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){const response=await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/draft-reports`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify({evidencePackId:pack.id,expectedArchiveSha256:pack.archiveSha256,expectedInventorySnapshotSha256:inventory.snapshotSha256,idempotencyKey:crypto.randomUUID()})}),value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report could not be created.");return decodeDraftReport(value,inventory,pack)}
+export async function revisitDraftInventoryReport(inventory:AnnualInventory,pack:EvidencePackMetadata,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){const response=await fetcher(`/workspace-api/workspace/${inventory.companyId}/annual-inventories/${inventory.id}/draft-reports/current`,{headers:authorization(actor)});if(response.status===404)return null;const value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report is unavailable.");return decodeDraftReport(value,inventory,pack)}
+export async function downloadDraftInventoryReport(report:DraftInventoryReportMetadata,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){const response=await fetcher(`/workspace-api/workspace/${report.companyId}/annual-inventories/${report.inventoryId}/draft-reports/${report.id}/download`,{headers:authorization(actor)});if(!response.ok)throw new Error("The draft report is unavailable.");const bytes=await response.arrayBuffer(),digest=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)),b=>b.toString(16).padStart(2,"0")).join("");if(bytes.byteLength!==report.reportByteLength||response.headers.get("x-neuvetra-report-sha256")!==report.reportSha256||digest!==report.reportSha256)throw new Error("The draft report download was not recognized.");assertWorkspaceActorActive(actor);return new File([bytes],`neuvetra-m60-${report.inventoryId}.html`,{type:"text/html"})}
 function decodeDraftReportReview(value:unknown,report:DraftInventoryReportMetadata):DraftInventoryReportReview{if(!object(value)||!exactKeys(value,["id","companyId","reportId","profile","decision","outcome","reasonCode","acknowledgedLimitations","changeRouteCode","changeNote","reportSha256","reportCreatedBy","inventorySnapshotSha256","sourceArchiveSha256","sourceManifestSha256","sourceLineageRootSha256","decisionSnapshotSha256","releaseEligible","decidedBy","decidedAt"])||!uuid(value.id)||value.companyId!==report.companyId||value.reportId!==report.id||value.profile!=="neuvetra.synthetic.inventory-draft-report-review.v1"||value.reportSha256!==report.reportSha256||value.reportCreatedBy!==report.createdBy||value.inventorySnapshotSha256!==report.inventorySnapshotSha256||value.sourceArchiveSha256!==report.sourceArchiveSha256||value.sourceManifestSha256!==report.sourceManifestSha256||value.sourceLineageRootSha256!==report.sourceLineageRootSha256||typeof value.decisionSnapshotSha256!=="string"||!/^[0-9a-f]{64}$/.test(value.decisionSnapshotSha256)||value.releaseEligible!==false||!uuid(value.decidedBy)||value.decidedBy===report.createdBy||!instant(value.decidedAt)||!Array.isArray(value.acknowledgedLimitations))throw new Error("The draft report review response was not recognized.");const accepted=value.decision==="accept_bounded_internal_draft"&&value.outcome==="accepted_bounded_internal_draft"&&value.reasonCode==="exact_report_reviewed_for_bounded_internal_use"&&JSON.stringify(value.acknowledgedLimitations)===JSON.stringify(DRAFT_REPORT_LIMITATIONS)&&value.changeRouteCode===null&&value.changeNote===null;const note=value.changeNote;const changes=value.decision==="changes_requested"&&value.outcome==="changes_requested"&&value.reasonCode==="report_revision_required"&&value.acknowledgedLimitations.length===0&&DRAFT_REPORT_CHANGE_ROUTES.includes(value.changeRouteCode as DraftReportChangeRoute)&&typeof note==="string"&&note===note.trim()&&note.length>=1&&note.length<=500&&!DRAFT_REPORT_CONTROL_CHARACTER.test(note);if(!accepted&&!changes)throw new Error("The draft report review response was not recognized.");return value as unknown as DraftInventoryReportReview}
 async function verifyDraftReportReviewSnapshot(review:DraftInventoryReportReview){const payload=["version=1",`companyId=${review.companyId}`,`reportId=${review.reportId}`,`profile=${review.profile}`,`decision=${review.decision}`,`outcome=${review.outcome}`,`reasonCode=${review.reasonCode}`,`acknowledgedLimitations=${review.acknowledgedLimitations.join(",")}`,`changeRouteCode=${review.changeRouteCode??"<null>"}`,`changeNote=${review.changeNote??"<null>"}`,`reportSha256=${review.reportSha256}`,`reportCreatedBy=${review.reportCreatedBy}`,`inventorySnapshotSha256=${review.inventorySnapshotSha256}`,`sourceArchiveSha256=${review.sourceArchiveSha256}`,`sourceManifestSha256=${review.sourceManifestSha256}`,`sourceLineageRootSha256=${review.sourceLineageRootSha256}`,"releaseEligible=false",`reviewerIdentity=${review.decidedBy}`].join("\n"),hash=Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(payload))),byte=>byte.toString(16).padStart(2,"0")).join("");if(hash!==review.decisionSnapshotSha256)throw new Error("The draft report review response was not recognized.");return review}
-export async function decideDraftInventoryReport(report:DraftInventoryReportMetadata,actor:WorkspaceActor,input:{decision:"accept_bounded_internal_draft";acknowledgedLimitations:readonly string[]}|{decision:"changes_requested";changeRouteCode:DraftReportChangeRoute;changeNote:string},fetcher:typeof fetch=fetch){const acceptance=input.decision==="accept_bounded_internal_draft";const body={decision:input.decision,reasonCode:acceptance?"exact_report_reviewed_for_bounded_internal_use":"report_revision_required",acknowledgedLimitations:acceptance?[...input.acknowledgedLimitations]:[],changeRouteCode:acceptance?null:input.changeRouteCode,changeNote:acceptance?null:input.changeNote,expectedReportSha256:report.reportSha256,idempotencyKey:crypto.randomUUID()};const response=await fetcher(`/workspace-api/workspace/${report.companyId}/annual-inventories/${report.inventoryId}/draft-reports/${report.id}/decisions`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify(body)}),value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report review could not be recorded.");return verifyDraftReportReviewSnapshot(decodeDraftReportReview(value,report))}
-export async function revisitDraftInventoryReportReview(report:DraftInventoryReportMetadata,actor:WorkspaceActor,fetcher:typeof fetch=fetch){const response=await fetcher(`/workspace-api/workspace/${report.companyId}/annual-inventories/${report.inventoryId}/draft-reports/${report.id}/decisions/current`,{headers:authorization(actor)});if(response.status===404)return null;const value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report review is unavailable.");return verifyDraftReportReviewSnapshot(decodeDraftReportReview(value,report))}
+export async function decideDraftInventoryReport(report:DraftInventoryReportMetadata,actor:WorkspaceActor,input:{decision:"accept_bounded_internal_draft";acknowledgedLimitations:readonly string[]}|{decision:"changes_requested";changeRouteCode:DraftReportChangeRoute;changeNote:string},fetcher: typeof fetch = workspaceFetch(actor)){const acceptance=input.decision==="accept_bounded_internal_draft";const body={decision:input.decision,reasonCode:acceptance?"exact_report_reviewed_for_bounded_internal_use":"report_revision_required",acknowledgedLimitations:acceptance?[...input.acknowledgedLimitations]:[],changeRouteCode:acceptance?null:input.changeRouteCode,changeNote:acceptance?null:input.changeNote,expectedReportSha256:report.reportSha256,idempotencyKey:crypto.randomUUID()};const response=await fetcher(`/workspace-api/workspace/${report.companyId}/annual-inventories/${report.inventoryId}/draft-reports/${report.id}/decisions`,{method:"POST",headers:authorization(actor,true),body:JSON.stringify(body)}),value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report review could not be recorded.");return verifyDraftReportReviewSnapshot(decodeDraftReportReview(value,report))}
+export async function revisitDraftInventoryReportReview(report:DraftInventoryReportMetadata,actor:WorkspaceActor,fetcher: typeof fetch = workspaceFetch(actor)){const response=await fetcher(`/workspace-api/workspace/${report.companyId}/annual-inventories/${report.inventoryId}/draft-reports/${report.id}/decisions/current`,{headers:authorization(actor)});if(response.status===404)return null;const value:unknown=await response.json().catch(()=>null);if(!response.ok)throw new Error(object(value)&&typeof value.error==="string"?value.error:"The draft report review is unavailable.");return verifyDraftReportReviewSnapshot(decodeDraftReportReview(value,report))}
