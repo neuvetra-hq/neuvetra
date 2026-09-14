@@ -1,4 +1,16 @@
-# Current continuation — M59 evidence pack complete and published
+# Current continuation — M60 verified draft report complete and published
+
+September 14, 2026. **M60 is complete for its bounded local synthetic scope, independently accepted and published in PR #3 at implementation commit `8393285d313c6e052d340095e1ee6834a5ec0bb9`.** A freshly verified current M59 archive now produces a deterministic, self-contained and printable HTML inventory draft. It preserves all twelve monthly states, exact reported and estimated subtotals, December's null exclusion, source and factor lineage, and both M57/M58 review decisions.
+
+The report displays `139.281000 MWh / 27165.4064643528 kg CO2e`, with `27165.4065` shown at display precision. Every print page repeats draft, synthetic, incomplete, unreleased, no-assurance and `releaseEligible=false` status. Owner/admin creation, member read/download, another-tenant absence and signed-out refusal all passed through each actor's own authorization after the browser-state repair.
+
+Independent QA `6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18` passes after four material findings were repaired. The full check passes API 625/5,430, web 67/269, database 26/244, all ten type-check tasks, lint and build. The browser journey passed and all temporary listeners are closed. This is not a PDF, filing, customer workflow, hosted deployment, assurance or release.
+
+The CEO recommendation is **M61: draft-report review and change-request workflow**. Let a second authorized manager review one exact M60 report hash, record bounded comments or request a change, and preserve a tamper-evident decision trail. A change must return to the applicable upstream evidence or inventory step before generating a new report version. Keep professional assurance, filing formats, customer data, deployment and release outside the milestone.
+
+[M60 record](../docs/research/inventory-draft-report-milestone-60.md) · [M60 independent review](../evaluations/research-qa/milestone60-inventory-draft-report-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+# Historical continuation — M59 evidence pack complete and published
 
 September 14, 2026. **M59 is complete for its bounded local synthetic scope, independently accepted and published in PR #3 at implementation commit `12341a61d7ef3187c05875ba91706b88a47155ea`.** The exact approved M58 record now produces a deterministic 17-file ZIP containing raw source bytes, manifests, register and inventory versions, calculation lineage, review decisions, audit history, authority records and a replay contract.
 

@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T08:24:00-07:00",
+  "updated_at": "2026-09-14T17:40:00-07:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M59",
-    "name": "Deterministic inventory evidence pack and replay",
+    "id": "M60",
+    "name": "Verified-pack inventory draft report",
     "status": "complete_independent_acceptance_published_to_pr",
-    "next_gate": "Collect board feedback, then decide whether to begin M60 verified-pack draft inventory report; Stage 4 and release acceptance remain false."
+    "next_gate": "Collect board feedback, then decide whether to begin M61 draft-report review and change-request workflow; Stage 4 and release acceptance remain false."
   },
   "completed_milestones": [
     {
@@ -55,6 +55,11 @@
       "id": "M59",
       "completed_at": "2026-09-14",
       "feedback": "docs/research/inventory-evidence-pack-milestone-59.md"
+    },
+    {
+      "id": "M60",
+      "completed_at": "2026-09-14",
+      "feedback": "docs/research/inventory-draft-report-milestone-60.md"
     }
   ],
   "runtime": {
@@ -62,18 +67,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M59 local browser acceptance completed end to end; all temporary M59 API and preview listeners are closed. No persistent M59 service is configured.",
+    "website_preview_state": "M60 local browser acceptance completed end to end; all temporary M60 API and preview listeners are closed. No persistent M60 service is configured.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M59 passed the full local browser workflow and independent QA. The deterministic 17-file pack replays 139.281000 MWh and 27,165.4064643528 kg CO2e while preserving one estimate, one exclusion, incomplete status and release eligibility false."
+    "last_session_work": "M60 passed the complete local browser workflow and independent QA. The deterministic printable HTML report preserves 139.281000 MWh and 27165.4064643528 kg CO2e, all monthly states and exact source/decision lineage while repeating incomplete and release-ineligible status."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T15:24:00.000Z",
+    "saved_at": "2026-09-15T00:40:00.000Z",
     "path": "operations/next-session.md",
-    "board_record": "docs/research/inventory-evidence-pack-milestone-59.md",
-    "next_task": "Collect board feedback, then define M60 verified-pack draft inventory report.",
-    "execution_state": "m59_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
-    "review": "Independent QA 39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a passes all 20 bound files. Database 24/211, API 625/5,416, web 65/263 and Python 12 pass with all type checks, lint/build, production exclusion, JSON/diff checks and the end-to-end browser journey.",
-    "scope": "One deterministic 17-file evidence pack for the fixed fictional approved M58 annual location inventory, with exact download and independent replay. No customer data, hosted persistence, filing, assurance, deployment, merge or release."
+    "board_record": "docs/research/inventory-draft-report-milestone-60.md",
+    "next_task": "Collect board feedback, then define M61 draft-report review and change-request workflow.",
+    "execution_state": "m60_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
+    "review": "Independent QA 6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18 passes after four resolved material findings. API 625/5,430, web 67/269, database 26/244, all type checks, lint/build, production exclusion, diff checks and the end-to-end browser journey pass.",
+    "scope": "One deterministic self-contained printable HTML report from the freshly verified current M59 archive for the fixed fictional inventory. No customer data, PDF, filing, hosted persistence, assurance, deployment, merge or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -1024,6 +1029,22 @@
         "https://github.com/neuvetra-hq/neuvetra/pull/3"
       ],
       "next_action": "Collect board feedback, then decide whether to begin M60 verified-pack draft inventory report."
+    },
+    {
+      "id": "M60-INVENTORY-DRAFT-REPORT",
+      "owner": "ceo_with_cpo_cto_and_independent_product_data_security_qa",
+      "status": "complete_independent_acceptance_published_to_pr",
+      "title": "Render the verified annual inventory as a bounded printable draft",
+      "scope": "Exact deterministic HTML from the freshly verified current M59 archive, with complete source, factor, decision and monthly-state lineage; local and synthetic only.",
+      "acceptance": "Exact totals and period states, deterministic bytes and hash, immutable forced-RLS persistence, manager creation, member read/download, tenant isolation, signed-out refusal, print-page status repetition, production exclusion, browser demonstration and independent QA.",
+      "result": "Implementation commit 8393285d313c6e052d340095e1ee6834a5ec0bb9. Independent QA 6b57efc4 passed after four material repairs. API 625/5,430, web 67/269 and database 26/244 pass with type checks, lint and build. The report shows 139.281000 MWh and 27165.4064643528 kg CO2e while completeness and release eligibility remain false.",
+      "evidence": [
+        "docs/research/inventory-draft-report-milestone-60.md",
+        "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+        "evaluations/research-qa/milestone60-inventory-draft-report-10.json",
+        "https://github.com/neuvetra-hq/neuvetra/pull/3"
+      ],
+      "next_action": "Collect board feedback, then decide whether to begin M61 draft-report review and change-request workflow."
     }
   ],
   "feedback_tasks": [

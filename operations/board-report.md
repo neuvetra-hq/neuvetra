@@ -1,5 +1,15 @@
 # Neuvetra board update
 
+September 14, 2026. **M60 verified inventory draft reporting is complete, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `8393285d313c6e052d340095e1ee6834a5ec0bb9`.** The exact verified M59 evidence pack now renders as a deterministic, self-contained printable HTML report with all twelve period states, exact calculation totals, source and factor lineage, and the complete M57/M58 decision trail.
+
+The report shows `139.281000 MWh` and `27165.4064643528 kg CO2e` while keeping the estimate, exclusion and incomplete coverage beside the result. Draft, synthetic, incomplete, unreleased, no-assurance and `releaseEligible=false` status repeat on every print page. Owner/admin creation, member access, tenant isolation and signed-out refusal passed in the live browser flow. Independent QA `6b57efc4c9…` passed after four material repairs; API 625/5,430, web 67/269, database 26/244, type checks, lint and build pass. All temporary services are stopped.
+
+The next recommended milestone is **M61: draft-report review and change-request workflow**. It should bind a second manager's review to the exact M60 report hash, preserve comments and change requests immutably, and route changes back to the relevant evidence or inventory version. Filing, customer data, hosted deployment, professional assurance, merge and release remain separate decisions.
+
+[M60 record](../docs/research/inventory-draft-report-milestone-60.md) · [M60 independent review](../evaluations/research-qa/milestone60-inventory-draft-report-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+---
+
 September 14, 2026. **M59 deterministic inventory evidence pack is complete for its bounded local synthetic scope, independently accepted and published to [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at implementation commit `12341a6`.** The approved M58 annual record now exports as an exact 17-file, uncompressed ZIP with source bytes, manifests, calculation and inventory lineage, both review decisions, ordered audit history, authority records and a replay contract.
 
 Replay independently reconstructs `126.788000 MWh / 24728.7681363744 kg CO2e` reported, `12.493000 MWh / 2436.6383279784 kg CO2e` estimated and `139.281000 MWh / 27165.4064643528 kg CO2e` included, displayed as `27,165.4065 kg CO2e`. December remains excluded with no quantity. Overall inventory completeness remains **incomplete** and release eligibility remains false.

@@ -22,3 +22,13 @@ The fixed synthetic report shows all 12 periods, including each reported period'
 The report visibly remains a synthetic, incomplete, unreleased bounded draft with no assurance or filing claim. Fixed print-only headers and footers repeat `DRAFT`, `SYNTHETIC`, `INCOMPLETE`, `UNRELEASED / NOT ELIGIBLE`, `NO ASSURANCE`, and `releaseEligible=false` on every printed page using reserved page margins. The bounded internal decisions are expressly identified as neither assurance nor verification, certification, or filing approval. It covers location-based Scope 2 electricity only. Market-based Scope 2, Scope 1, and Scope 3 are outside this milestone, and the development factor and method remain unreleased.
 
 The API and UI require every M54–M60 development flag and a development or test runtime. The ordinary production build excludes the workspace demonstration.
+
+## Acceptance and publication
+
+Implementation commit `8393285d313c6e052d340095e1ee6834a5ec0bb9` passed the complete repository check: all ten type-check tasks, API 625 tests / 5,430 assertions, web 67 / 269, database 26 / 244, lint with zero errors, and the production build. The focused M60 suite passed 5 tests / 39 assertions, the composed API suite passed 4 / 110, the security suite passed 9 / 138, and the final browser boundary suite passed 18 / 98. The default-production bundle contains no M60 surface.
+
+The clean browser demonstration created the M54–M60 chain, downloaded and locally rehashed the exact report as an owner, reloaded and downloaded it through a member's own authorization, and refused both another tenant and a signed-out actor after clearing prior state. The demonstrated report was 7,997 bytes with SHA-256 `1ce88cc2770c848cae9d729ee74199bba1fc0251eaed6dabd6a75a09527c7582`. All temporary listeners were then closed.
+
+Independent QA found and caused repair of four material issues: semantic stored-report tampering, missing report lineage, print-page status repetition, and stale actor-bound browser state. Final review `6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18` passes the exact accepted tree with no open material finding.
+
+M60 is published to [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3). It is not merged, deployed, released, assured or eligible for filing.
