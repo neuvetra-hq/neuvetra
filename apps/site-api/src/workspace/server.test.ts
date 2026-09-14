@@ -18,6 +18,7 @@ describe("M54 composed development server", () => {
   const originalEnabled = Bun.env.M54_SYNTHETIC_WORKSPACE
   const originalBillEnabled = Bun.env.M55_SYNTHETIC_BILL
   const originalCalculationEnabled = Bun.env.M56_SYNTHETIC_BILL_CALCULATION
+  const originalInventoryEnabled = Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
   const originalRuntime = Bun.env.NODE_ENV
   afterEach(async () => {
     await close?.()
@@ -28,6 +29,8 @@ describe("M54 composed development server", () => {
     else Bun.env.M55_SYNTHETIC_BILL = originalBillEnabled
     if (originalCalculationEnabled === undefined) delete Bun.env.M56_SYNTHETIC_BILL_CALCULATION
     else Bun.env.M56_SYNTHETIC_BILL_CALCULATION = originalCalculationEnabled
+    if (originalInventoryEnabled === undefined) delete Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
+    else Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = originalInventoryEnabled
     if (originalRuntime === undefined) delete Bun.env.NODE_ENV
     else Bun.env.NODE_ENV = originalRuntime
   })
@@ -36,6 +39,7 @@ describe("M54 composed development server", () => {
     Bun.env.M54_SYNTHETIC_WORKSPACE = "enabled"
     Bun.env.M55_SYNTHETIC_BILL = "enabled"
     Bun.env.M56_SYNTHETIC_BILL_CALCULATION = "enabled"
+    Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = "enabled"
     Bun.env.NODE_ENV = "test"
     const { app, database } = await createDevelopmentWorkspaceServer()
     close = () => database.close()
@@ -60,13 +64,15 @@ describe("M54 composed development server", () => {
   }, 15_000)
 
   test("requires both an explicit enable flag and a development/test runtime", async () => {
-    for (const [enabled, billEnabled, calculationEnabled, runtime] of [[undefined, "enabled", "enabled", "development"], ["enabled", undefined, "enabled", "development"], ["enabled", "enabled", undefined, "development"], ["enabled", "enabled", "enabled", undefined], ["enabled", "enabled", "enabled", "staging"], ["enabled", "enabled", "enabled", "production"]] as const) {
+    for (const [enabled, billEnabled, calculationEnabled, inventoryEnabled, runtime] of [[undefined, "enabled", "enabled", "enabled", "development"], ["enabled", undefined, "enabled", "enabled", "development"], ["enabled", "enabled", undefined, "enabled", "development"], ["enabled", "enabled", "enabled", undefined, "development"], ["enabled", "enabled", "enabled", "enabled", undefined], ["enabled", "enabled", "enabled", "enabled", "staging"], ["enabled", "enabled", "enabled", "enabled", "production"]] as const) {
       if (enabled === undefined) delete Bun.env.M54_SYNTHETIC_WORKSPACE
       else Bun.env.M54_SYNTHETIC_WORKSPACE = enabled
       if (billEnabled === undefined) delete Bun.env.M55_SYNTHETIC_BILL
       else Bun.env.M55_SYNTHETIC_BILL = billEnabled
       if (calculationEnabled === undefined) delete Bun.env.M56_SYNTHETIC_BILL_CALCULATION
       else Bun.env.M56_SYNTHETIC_BILL_CALCULATION = calculationEnabled
+      if (inventoryEnabled === undefined) delete Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
+      else Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = inventoryEnabled
       if (runtime === undefined) delete Bun.env.NODE_ENV
       else Bun.env.NODE_ENV = runtime
       await expect(createDevelopmentWorkspaceServer()).rejects.toThrow("explicit development/test enable flags")
@@ -77,6 +83,7 @@ describe("M54 composed development server", () => {
     Bun.env.M54_SYNTHETIC_WORKSPACE = "enabled"
     Bun.env.M55_SYNTHETIC_BILL = "enabled"
     Bun.env.M56_SYNTHETIC_BILL_CALCULATION = "enabled"
+    Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = "enabled"
     Bun.env.NODE_ENV = "test"
     const { app, database } = await createDevelopmentWorkspaceServer()
     close = () => database.close()
@@ -94,6 +101,7 @@ describe("M54 composed development server", () => {
     Bun.env.M54_SYNTHETIC_WORKSPACE = "enabled"
     Bun.env.M55_SYNTHETIC_BILL = "enabled"
     Bun.env.M56_SYNTHETIC_BILL_CALCULATION = "enabled"
+    Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = "enabled"
     Bun.env.NODE_ENV = "test"
     const { app, database } = await createDevelopmentWorkspaceServer()
     close = () => database.close()
@@ -215,6 +223,29 @@ describe("M54 composed development server", () => {
     expect(await refusedReplay.json()).toEqual({ error: "Replay could not be verified." })
     const memberCalculatedRead = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/bills/${extracted.id}`, { headers: { origin: ORIGIN, authorization: `Bearer ${M55_MEMBER_TOKEN}` } }))
     expect((await memberCalculatedRead.json() as { draftCalculation: { id: string } }).draftCalculation.id).toBe(calculationBody.draftCalculation.id)
+
+    const prepareKey = crypto.randomUUID()
+    const preparedResponse = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/inventories/2023/scope2/versions`, {
+      method: "POST", headers: { origin: ORIGIN, authorization: `Bearer ${M54_OWNER_TOKEN}`, "content-type": "application/json" },
+      body: JSON.stringify({ calculationId: calculationBody.draftCalculation.id, idempotencyKey: prepareKey }),
+    }))
+    expect(preparedResponse.status).toBe(201)
+    const prepared = await preparedResponse.json() as { id: string; reviewState: string; completeness: string; releaseEligible: boolean; snapshotSha256: string; warnings: string[]; coverage: { coveredPeriods: number; expectedPeriods: number; missingMonths: string[] }; line: { quantityMwh: string; subtotalKgCo2e: string }; submittedBy: string; decision: null }
+    expect(prepared).toMatchObject({ reviewState: "awaiting_review", completeness: "incomplete", releaseEligible: false, coverage: { coveredPeriods: 1, expectedPeriods: 12 }, line: { quantityMwh: "12.346000", subtotalKgCo2e: "2407.9674" }, submittedBy: "11111111-1111-4111-8111-111111111111", decision: null })
+    expect(prepared.coverage.missingMonths).toHaveLength(11)
+    expect(prepared.warnings).toEqual(["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"])
+
+    const decisionBody = { decision: "approve_bounded_draft", expectedInventorySnapshotSha256: prepared.snapshotSha256, acknowledgedWarnings: prepared.warnings, reasonCode: "bounded_synthetic_scope_reviewed", idempotencyKey: crypto.randomUUID() }
+    const selfReview = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/inventories/${prepared.id}/decisions`, { method: "POST", headers: { origin: ORIGIN, authorization: `Bearer ${M54_OWNER_TOKEN}`, "content-type": "application/json" }, body: JSON.stringify(decisionBody) }))
+    expect(selfReview.status).toBe(409)
+    const approvedResponse = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/inventories/${prepared.id}/decisions`, { method: "POST", headers: { origin: ORIGIN, authorization: `Bearer ${M55_ADMIN_TOKEN}`, "content-type": "application/json" }, body: JSON.stringify({ ...decisionBody, idempotencyKey: crypto.randomUUID() }) }))
+    expect(approvedResponse.status).toBe(201)
+    const approved = await approvedResponse.json() as { reviewState: string; completeness: string; releaseEligible: boolean; decision: { decidedBy: string; outcome: string } }
+    expect(approved).toMatchObject({ reviewState: "approved_bounded_draft", completeness: "incomplete", releaseEligible: false, decision: { decidedBy: "33333333-3333-4333-8333-333333333333", outcome: "approved_bounded_draft" } })
+    const memberInventory = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/inventories/2023/scope2`, { headers: { origin: ORIGIN, authorization: `Bearer ${M55_MEMBER_TOKEN}` } }))
+    expect(memberInventory.status).toBe(200)
+    const outsiderInventory = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/inventories/2023/scope2`, { headers: { origin: ORIGIN, authorization: `Bearer ${M54_OUTSIDER_TOKEN}` } }))
+    expect(outsiderInventory.status).toBe(404)
 
     const foreign = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/bills/${extracted.id}`, {
       headers: { origin: ORIGIN, authorization: `Bearer ${M54_OUTSIDER_TOKEN}` },

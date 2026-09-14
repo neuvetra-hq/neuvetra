@@ -18,6 +18,15 @@ export interface CompanyWorkspace {
 }
 
 export type WorkspaceActor = "owner" | "admin" | "member" | "outsider" | "signed_out"
+export const INVENTORY_WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"] as const
+export interface SyntheticInventory {
+  id: string; companyId: string; boundaryId: string; calculationId: string; version: 1; reportingYear: 2023; scope: "scope_2_location_based"
+  reviewState: "awaiting_review" | "approved_bounded_draft" | "changes_requested"; completeness: "incomplete"; releaseEligible: false
+  coverage: { expectedFacilities: 1; coveredFacilities: 1; expectedPeriods: 12; coveredPeriods: 1; coveredMonths: ["2023-01"]; missingMonths: string[] }
+  warnings: string[]; line: { facilityId: string; servicePeriodStart: "2023-01-01"; servicePeriodEnd: "2023-01-31"; quantityMwh: "12.346000"; subtotalKgCo2e: "2407.9674"; calculationResultSha256: string }
+  snapshotSha256: string; submittedBy: string; submittedAt: string
+  decision: null | { id: string; decision: "approve_bounded_draft" | "changes_requested"; outcome: "approved_bounded_draft" | "changes_requested"; acknowledgedWarnings: string[]; reasonCode: string; decidedBy: string; decidedAt: string }
+}
 
 export interface SyntheticBill {
   id: string
@@ -175,6 +184,35 @@ async function decodeBillResponse(response: Response) {
   return decodeSyntheticBill(body)
 }
 
+const MISSING_INVENTORY_MONTHS = ["2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2023-12"] as const
+
+function instant(value: unknown): value is string {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value) && Number.isFinite(Date.parse(value))
+}
+
+function decodeInventory(value: unknown, expected: { companyId?: string; calculationId?: string; inventoryId?: string } = {}): SyntheticInventory {
+  if (!object(value) || !exactKeys(value, ["id", "companyId", "boundaryId", "calculationId", "version", "reportingYear", "scope", "reviewState", "completeness", "releaseEligible", "coverage", "warnings", "line", "snapshotSha256", "submittedBy", "submittedAt", "decision"]) || !uuid(value.id) || !uuid(value.companyId) || !uuid(value.boundaryId) || !uuid(value.calculationId) || value.version !== 1 || value.reportingYear !== 2023 || value.scope !== "scope_2_location_based" || !["awaiting_review", "approved_bounded_draft", "changes_requested"].includes(String(value.reviewState)) || value.completeness !== "incomplete" || value.releaseEligible !== false) throw new Error("The inventory response was not recognized.")
+  if ((expected.companyId && value.companyId !== expected.companyId) || (expected.calculationId && value.calculationId !== expected.calculationId) || (expected.inventoryId && value.id !== expected.inventoryId)) throw new Error("The inventory response was not recognized.")
+  if (!object(value.coverage) || !exactKeys(value.coverage, ["expectedFacilities", "coveredFacilities", "expectedPeriods", "coveredPeriods", "coveredMonths", "missingMonths"]) || value.coverage.expectedFacilities !== 1 || value.coverage.coveredFacilities !== 1 || value.coverage.expectedPeriods !== 12 || value.coverage.coveredPeriods !== 1 || JSON.stringify(value.coverage.coveredMonths) !== JSON.stringify(["2023-01"]) || JSON.stringify(value.coverage.missingMonths) !== JSON.stringify(MISSING_INVENTORY_MONTHS)) throw new Error("The inventory response was not recognized.")
+  if (JSON.stringify(value.warnings) !== JSON.stringify(INVENTORY_WARNINGS) || !object(value.line) || !exactKeys(value.line, ["facilityId", "servicePeriodStart", "servicePeriodEnd", "quantityMwh", "subtotalKgCo2e", "calculationResultSha256"]) || !uuid(value.line.facilityId) || value.line.servicePeriodStart !== "2023-01-01" || value.line.servicePeriodEnd !== "2023-01-31" || value.line.quantityMwh !== "12.346000" || value.line.subtotalKgCo2e !== "2407.9674" || !/^[0-9a-f]{64}$/.test(String(value.line.calculationResultSha256)) || !/^[0-9a-f]{64}$/.test(String(value.snapshotSha256)) || !uuid(value.submittedBy) || !instant(value.submittedAt)) throw new Error("The inventory response was not recognized.")
+  if (value.reviewState === "awaiting_review" && value.decision !== null) throw new Error("The inventory response was not recognized.")
+  if (value.reviewState !== "awaiting_review") {
+    const decision = value.decision
+    if (!object(decision) || !exactKeys(decision, ["id", "decision", "outcome", "acknowledgedWarnings", "reasonCode", "decidedBy", "decidedAt"]) || !uuid(decision.id) || decision.outcome !== value.reviewState || decision.decision !== (value.reviewState === "approved_bounded_draft" ? "approve_bounded_draft" : "changes_requested") || !uuid(decision.decidedBy) || decision.decidedBy === value.submittedBy || !instant(decision.decidedAt)) throw new Error("The inventory response was not recognized.")
+    const approved = decision.decision === "approve_bounded_draft" && decision.reasonCode === "bounded_synthetic_scope_reviewed" && JSON.stringify(decision.acknowledgedWarnings) === JSON.stringify(INVENTORY_WARNINGS)
+    const changesRequested = decision.decision === "changes_requested" && decision.reasonCode === "source_or_calculation_revision_required" && JSON.stringify(decision.acknowledgedWarnings) === "[]"
+    if (!approved && !changesRequested) throw new Error("The inventory response was not recognized.")
+  }
+  return value as unknown as SyntheticInventory
+}
+
+async function decodeInventoryResponse(response: Response, expected: { companyId?: string; calculationId?: string; inventoryId?: string } = {}) {
+  if (response.status === 404) throw new Error("Inventory not found.")
+  const body: unknown = await response.json().catch(() => null)
+  if (!response.ok) { if (object(body) && typeof body.error === "string") throw new Error(body.error); throw new Error("The inventory is unavailable.") }
+  return decodeInventory(body, expected)
+}
+
 export async function createSyntheticWorkspace(actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
   const response = await fetcher("/workspace-api/workspace", {
     method: "POST",
@@ -229,4 +267,21 @@ export async function replaySyntheticBillCalculation(workspaceId: string, eviden
   return decodeBillResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/bills/${evidenceId}/calculate/replay`, {
     method: "POST", headers: authorization(actor, true), body: JSON.stringify({ idempotencyKey: crypto.randomUUID(), record }),
   }))
+}
+
+export async function revisitSyntheticInventory(workspaceId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+  if (!uuid(workspaceId)) throw new Error("The saved workspace identifier is invalid.")
+  return decodeInventoryResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/inventories/2023/scope2`, { headers: authorization(actor) }), { companyId: workspaceId })
+}
+
+export async function prepareSyntheticInventory(workspaceId: string, calculationId: string, actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+  if (!uuid(workspaceId) || !uuid(calculationId)) throw new Error("The calculation identifier is invalid.")
+  return decodeInventoryResponse(await fetcher(`/workspace-api/workspace/${workspaceId}/inventories/2023/scope2/versions`, { method: "POST", headers: authorization(actor, true), body: JSON.stringify({ calculationId, idempotencyKey: crypto.randomUUID() }) }), { companyId: workspaceId, calculationId })
+}
+
+export async function decideSyntheticInventory(inventory: SyntheticInventory, decision: "approve_bounded_draft" | "changes_requested", actor: WorkspaceActor, fetcher: typeof fetch = fetch) {
+  const approval = decision === "approve_bounded_draft"
+  return decodeInventoryResponse(await fetcher(`/workspace-api/workspace/${inventory.companyId}/inventories/${inventory.id}/decisions`, {
+    method: "POST", headers: authorization(actor, true), body: JSON.stringify({ decision, expectedInventorySnapshotSha256: inventory.snapshotSha256, acknowledgedWarnings: approval ? INVENTORY_WARNINGS : [], reasonCode: approval ? "bounded_synthetic_scope_reviewed" : "source_or_calculation_revision_required", idempotencyKey: crypto.randomUUID() }),
+  }), { companyId: inventory.companyId, calculationId: inventory.calculationId, inventoryId: inventory.id })
 }

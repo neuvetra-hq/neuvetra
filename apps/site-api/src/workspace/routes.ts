@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { checkOrigin } from "../lib/origin-check"
-import type { WorkspaceStore } from "./types"
+import { INVENTORY_WARNINGS, type WorkspaceStore } from "./types"
 import { parseSyntheticBill, SYNTHETIC_BILL_NAME, SYNTHETIC_BILL_SHA256, SYNTHETIC_BILL_SIZE } from "./synthetic-bill-parser"
 
 const AUTH_REQUIRED = { error: "Authentication required." } as const
@@ -16,7 +16,10 @@ const REVIEW_CONFLICT = { error: "This record changed; review the latest version
 const NO_RESULT = { error: "No result produced." } as const
 const REPLAY_FAILED = { error: "Replay could not be verified." } as const
 const CALCULATION_CONFLICT = { error: "Calculation request conflicts." } as const
+const INVENTORY_NOT_FOUND = { error: "Inventory not found." } as const
+const INVENTORY_CONFLICT = { error: "Inventory review conflicts." } as const
 const INPUT_KEYS = ["companyName", "facilityName", "countryCode", "stateCode", "egridSubregion", "reportingYear", "approach"] as const
+const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 interface WorkspaceRoutesDeps {
   allowedOrigins: readonly string[]
@@ -108,8 +111,53 @@ const billResponseSchema = t.Object({
   })]),
 })
 
+const inventoryResponseSchema = t.Object({
+  id: t.String({ format: "uuid" }), companyId: t.String({ format: "uuid" }), boundaryId: t.String({ format: "uuid" }), calculationId: t.String({ format: "uuid" }),
+  version: t.Literal(1), reportingYear: t.Literal(2023), scope: t.Literal("scope_2_location_based"),
+  reviewState: t.Union([t.Literal("awaiting_review"), t.Literal("approved_bounded_draft"), t.Literal("changes_requested")]), completeness: t.Literal("incomplete"), releaseEligible: t.Literal(false),
+  coverage: t.Object({ expectedFacilities: t.Literal(1), coveredFacilities: t.Literal(1), expectedPeriods: t.Literal(12), coveredPeriods: t.Literal(1), coveredMonths: t.Tuple([t.Literal("2023-01")]), missingMonths: t.Array(t.String()) }),
+  warnings: t.Array(t.String()),
+  line: t.Object({ facilityId: t.String({ format: "uuid" }), servicePeriodStart: t.Literal("2023-01-01"), servicePeriodEnd: t.Literal("2023-01-31"), quantityMwh: t.Literal("12.346000"), subtotalKgCo2e: t.Literal("2407.9674"), calculationResultSha256: t.String() }),
+  snapshotSha256: t.String(), submittedBy: t.String({ format: "uuid" }), submittedAt: t.String(),
+  decision: t.Union([t.Null(), t.Object({ id: t.String({ format: "uuid" }), decision: t.Union([t.Literal("approve_bounded_draft"), t.Literal("changes_requested")]), outcome: t.Union([t.Literal("approved_bounded_draft"), t.Literal("changes_requested")]), acknowledgedWarnings: t.Array(t.String()), reasonCode: t.Union([t.Literal("bounded_synthetic_scope_reviewed"), t.Literal("source_or_calculation_revision_required")]), decidedBy: t.String({ format: "uuid" }), decidedAt: t.String() })]),
+})
+
 export function createWorkspaceRoutes(deps: WorkspaceRoutesDeps) {
   return new Elysia({ prefix: "/workspace" })
+    .post("/:id/inventories/2023/scope2/versions", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser)
+      if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let canManage
+      try { canManage = await deps.store.canManage(user.id, params.id) } catch { set.status = 503; return READ_FAILED }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).sort().join("|") !== "calculationId|idempotencyKey" || typeof value.calculationId !== "string" || typeof value.idempotencyKey !== "string" || !UUID_V4.test(value.calculationId) || !UUID_V4.test(value.idempotencyKey)) { set.status = 422; return INVALID_REQUEST }
+      try { set.status = 201; return await deps.store.createInventory!(user.id, params.id, value.calculationId, value.idempotencyKey) }
+      catch (error) { if (error instanceof Error && error.message.includes("conflict")) { set.status = 409; return INVENTORY_CONFLICT }; set.status = 503; return READ_FAILED }
+    }, { body: t.Unknown(), response: { 201: inventoryResponseSchema, 401: t.Object({ error: t.String() }), 403: t.Object({ error: t.String() }), 409: t.Object({ error: t.String() }), 422: t.Object({ error: t.String() }), 503: t.Object({ error: t.String() }) } })
+    .get("/:id/inventories/2023/scope2", async ({ params, request, set }) => {
+      const origin = request.headers.get("origin"); if (origin && !deps.allowedOrigins.includes(origin)) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      try { const inventory = await deps.store.findInventory!(user.id, params.id); if (!inventory) { set.status = 404; return INVENTORY_NOT_FOUND }; return inventory }
+      catch { set.status = 503; return READ_FAILED }
+    }, { response: { 200: inventoryResponseSchema, 401: t.Object({ error: t.String() }), 403: t.Object({ error: t.String() }), 404: t.Object({ error: t.String() }), 503: t.Object({ error: t.String() }) } })
+    .post("/:id/inventories/:inventoryId/decisions", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let canManage; try { canManage = await deps.store.canManage(user.id, params.id) } catch { set.status = 503; return READ_FAILED }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      if (!UUID_V4.test(params.inventoryId)) { set.status = 422; return INVALID_REQUEST }
+      const value = body as Record<string, unknown>
+      const exactKeys = value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).sort().join("|") === "acknowledgedWarnings|decision|expectedInventorySnapshotSha256|idempotencyKey|reasonCode"
+      const uuid = typeof value?.idempotencyKey === "string" && UUID_V4.test(value.idempotencyKey)
+      const sha = typeof value?.expectedInventorySnapshotSha256 === "string" && /^[0-9a-f]{64}$/.test(value.expectedInventorySnapshotSha256)
+      const approval = value?.decision === "approve_bounded_draft" && value.reasonCode === "bounded_synthetic_scope_reviewed" && JSON.stringify(value.acknowledgedWarnings) === JSON.stringify(INVENTORY_WARNINGS)
+      const changes = value?.decision === "changes_requested" && value.reasonCode === "source_or_calculation_revision_required" && Array.isArray(value.acknowledgedWarnings) && value.acknowledgedWarnings.length === 0
+      if (!exactKeys || !uuid || !sha || (!approval && !changes)) { set.status = 422; return INVALID_REQUEST }
+      try { set.status = 201; return await deps.store.decideInventory!(user.id, params.id, params.inventoryId, value as any) }
+      catch (error) { if (error instanceof Error && (error.message.includes("conflict") || error.message.includes("contract mismatch"))) { set.status = 409; return INVENTORY_CONFLICT }; set.status = 503; return READ_FAILED }
+    }, { body: t.Unknown(), response: { 201: inventoryResponseSchema, 401: t.Object({ error: t.String() }), 403: t.Object({ error: t.String() }), 409: t.Object({ error: t.String() }), 422: t.Object({ error: t.String() }), 503: t.Object({ error: t.String() }) } })
     .post("/:id/bills", async ({ body, params, request, set }) => {
       if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
       const user = await authenticate(request, deps.validateUser)

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decodeSyntheticBill, decodeWorkspace, linkSyntheticBill, replaySyntheticBillCalculation, revisitSyntheticWorkspace, uploadSyntheticBill } from "./workspace-api"
+import { calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, decodeSyntheticBill, decodeWorkspace, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type SyntheticInventory } from "./workspace-api"
 
 const fixture = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -150,5 +150,52 @@ describe("M56 draft calculation browser boundary", () => {
     await replaySyntheticBillCalculation(fixture.id, billFixture.id, calculatedFixture.draftCalculation.record, "admin", fetcher)
     expect(observed?.url).toBe(`/workspace-api/workspace/${fixture.id}/bills/${billFixture.id}/calculate/replay`)
     expect(JSON.parse(String(observed?.body))).toEqual({ idempotencyKey: expect.stringMatching(/^[0-9a-f-]{36}$/), record: calculatedFixture.draftCalculation.record })
+  })
+})
+
+describe("M57 inventory review browser boundary", () => {
+  const inventory: SyntheticInventory = {
+    id: "21212121-2121-4121-8121-212121212121", companyId: fixture.id, boundaryId: fixture.boundary.id, calculationId: calculatedFixture.draftCalculation.id,
+    version: 1, reportingYear: 2023, scope: "scope_2_location_based", reviewState: "awaiting_review", completeness: "incomplete", releaseEligible: false,
+    coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: ["2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12"] },
+    warnings: [...INVENTORY_WARNINGS], line: { facilityId: fixture.facility.id, servicePeriodStart: "2023-01-01", servicePeriodEnd: "2023-01-31", quantityMwh: "12.346000", subtotalKgCo2e: "2407.9674", calculationResultSha256: "b".repeat(64) },
+    snapshotSha256: "d".repeat(64), submittedBy: "11111111-1111-4111-8111-111111111111", submittedAt: "2026-09-13T12:00:00.000Z", decision: null,
+  }
+
+  test("accepts the exact incomplete snapshot and sends only bounded commands", async () => {
+    const observed: Array<{ url: string; body: unknown }> = []
+    const fetcher = (async (url: string | URL | Request, init?: RequestInit) => { observed.push({ url: String(url), body: init?.body }); return Response.json(inventory, { status: init?.method === "POST" ? 201 : 200 }) }) as typeof fetch
+    expect(await revisitSyntheticInventory(fixture.id, "member", fetcher)).toEqual(inventory)
+    await prepareSyntheticInventory(fixture.id, calculatedFixture.draftCalculation.id, "owner", fetcher)
+    await decideSyntheticInventory(inventory, "approve_bounded_draft", "admin", fetcher)
+    expect(JSON.parse(String(observed[1]!.body))).toEqual({ calculationId: calculatedFixture.draftCalculation.id, idempotencyKey: expect.stringMatching(/^[0-9a-f-]{36}$/) })
+    expect(JSON.parse(String(observed[2]!.body))).toEqual({ decision: "approve_bounded_draft", expectedInventorySnapshotSha256: inventory.snapshotSha256, acknowledgedWarnings: [...INVENTORY_WARNINGS], reasonCode: "bounded_synthetic_scope_reviewed", idempotencyKey: expect.stringMatching(/^[0-9a-f-]{36}$/) })
+  })
+
+  test("rejects completeness, release and warning drift", async () => {
+    for (const changed of [
+      { ...inventory, completeness: "complete" }, { ...inventory, releaseEligible: true }, { ...inventory, warnings: inventory.warnings.slice(1) },
+      { ...inventory, coverage: { ...inventory.coverage, coveredPeriods: 12 } }, { ...inventory, line: { ...inventory.line, subtotalKgCo2e: "2407.9675" } },
+      { ...inventory, injected: true }, { ...inventory, coverage: { ...inventory.coverage, injected: true } },
+      { ...inventory, coverage: { ...inventory.coverage, missingMonths: ["2023-02", "2023-03", "2023-04", "2023-05", "2023-06", "2023-07", "2023-08", "2023-09", "2023-10", "2023-11", "2024-01"] } },
+      { ...inventory, submittedAt: "sometime" }, { ...inventory, companyId: "99999999-9999-4999-8999-999999999999" },
+    ]) {
+      const fetcher = (async () => Response.json(changed)) as typeof fetch
+      await expect(revisitSyntheticInventory(fixture.id, "owner", fetcher)).rejects.toThrow("not recognized")
+    }
+  })
+
+  test("accepts only an exact two-person immutable decision", async () => {
+    const approved = { ...inventory, reviewState: "approved_bounded_draft" as const, decision: { id: "23232323-2323-4323-8323-232323232323", decision: "approve_bounded_draft" as const, outcome: "approved_bounded_draft" as const, acknowledgedWarnings: [...INVENTORY_WARNINGS], reasonCode: "bounded_synthetic_scope_reviewed", decidedBy: "22222222-2222-4222-8222-222222222222", decidedAt: "2026-09-13T12:01:00.000Z" } }
+    const fetcher = (value: unknown) => (async () => Response.json(value)) as typeof fetch
+    expect(await revisitSyntheticInventory(fixture.id, "member", fetcher(approved))).toEqual(approved)
+    for (const changed of [
+      { ...approved, decision: { ...approved.decision, extra: true } },
+      { ...approved, decision: { ...approved.decision, decision: "changes_requested" } },
+      { ...approved, decision: { ...approved.decision, reasonCode: "source_or_calculation_revision_required" } },
+      { ...approved, decision: { ...approved.decision, acknowledgedWarnings: [] } },
+      { ...approved, decision: { ...approved.decision, decidedBy: inventory.submittedBy } },
+      { ...approved, decision: { ...approved.decision, decidedAt: "tomorrow" } },
+    ]) await expect(revisitSyntheticInventory(fixture.id, "member", fetcher(changed))).rejects.toThrow("not recognized")
   })
 })

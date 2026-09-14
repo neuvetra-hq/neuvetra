@@ -36,6 +36,21 @@ export interface WorkspaceStore {
   linkBill(userId: string, workspaceId: string, evidenceId: string, boundaryId: string): Promise<SyntheticBill>
   calculateBill(userId: string, workspaceId: string, evidenceId: string, idempotencyKey: string): Promise<SyntheticBill>
   findBill(userId: string, workspaceId: string, evidenceId: string): Promise<SyntheticBill | null>
+  findInventory?(userId: string, workspaceId: string): Promise<SyntheticInventory | null>
+  createInventory?(userId: string, workspaceId: string, calculationId: string, idempotencyKey: string): Promise<SyntheticInventory>
+  decideInventory?(userId: string, workspaceId: string, inventoryId: string, input: InventoryDecisionInput): Promise<SyntheticInventory>
+}
+
+export const INVENTORY_WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"] as const
+export interface InventoryDecisionInput { decision: "approve_bounded_draft" | "changes_requested"; expectedInventorySnapshotSha256: string; acknowledgedWarnings: string[]; reasonCode: "bounded_synthetic_scope_reviewed" | "source_or_calculation_revision_required"; idempotencyKey: string }
+export interface SyntheticInventory {
+  id: string; companyId: string; boundaryId: string; calculationId: string; version: 1; reportingYear: 2023; scope: "scope_2_location_based"
+  reviewState: "awaiting_review" | "approved_bounded_draft" | "changes_requested"; completeness: "incomplete"; releaseEligible: false
+  coverage: { expectedFacilities: 1; coveredFacilities: 1; expectedPeriods: 12; coveredPeriods: 1; coveredMonths: ["2023-01"]; missingMonths: string[] }
+  warnings: string[]
+  line: { facilityId: string; servicePeriodStart: "2023-01-01"; servicePeriodEnd: "2023-01-31"; quantityMwh: "12.346000"; subtotalKgCo2e: "2407.9674"; calculationResultSha256: string }
+  snapshotSha256: string; submittedBy: string; submittedAt: string
+  decision: null | { id: string; decision: "approve_bounded_draft" | "changes_requested"; outcome: "approved_bounded_draft" | "changes_requested"; acknowledgedWarnings: string[]; reasonCode: "bounded_synthetic_scope_reviewed" | "source_or_calculation_revision_required"; decidedBy: string; decidedAt: string }
 }
 
 export interface SyntheticBill {

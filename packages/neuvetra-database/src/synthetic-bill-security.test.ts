@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url"
 const migration1 = await Bun.file(new URL("./migrations/0001_company_workspace.sql", import.meta.url)).text()
 const migration2 = await Bun.file(new URL("./migrations/0002_synthetic_bill_intake.sql", import.meta.url)).text()
 const migration3 = await Bun.file(new URL("./migrations/0003_synthetic_bill_calculation.sql", import.meta.url)).text()
+const migration4 = await Bun.file(new URL("./migrations/0004_inventory_review.sql", import.meta.url)).text()
 const fixture = new Uint8Array(await Bun.file(new URL("../../../output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf", import.meta.url)).arrayBuffer())
 const OWNER = "11111111-1111-4111-8111-111111111111"
 const OUTSIDER = "22222222-2222-4222-8222-222222222222"
@@ -15,7 +16,9 @@ const FACILITY = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
 const BOUNDARY = "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
 const OTHER_COMPANY = "dddddddd-dddd-4ddd-8ddd-dddddddddddd"
 const OTHER_FACILITY = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
-const TABLES = ["bill_evidence", "extraction_jobs", "bill_versions", "inventory_activity_versions", "evidence_search_documents", "bill_summary_cache", "evidence_audit_log", "inventory_calculation_results", "calculation_audit_log"] as const
+const TABLES = ["bill_evidence", "extraction_jobs", "bill_versions", "inventory_activity_versions", "evidence_search_documents", "bill_summary_cache", "evidence_audit_log", "inventory_calculation_results", "calculation_audit_log", "inventory_versions", "inventory_review_decisions", "inventory_review_audit_log"] as const
+const WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"]
+function canonicalJson(value: unknown): string { if (value === null || typeof value !== "object") return JSON.stringify(value); if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`; const item = value as Record<string, unknown>; return `{${Object.keys(item).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(item[key])}`).join(",")}}` }
 
 describe("M55 synthetic bill tenant and immutability boundary", () => {
   let db: PGlite
@@ -25,7 +28,7 @@ describe("M55 synthetic bill tenant and immutability boundary", () => {
       insert into auth.users values ('${OWNER}'), ('${OUTSIDER}'), ('${ADMIN}'), ('${MEMBER}');
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
       grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;
-      ${migration1} ${migration2} ${migration3}`)
+      ${migration1} ${migration2} ${migration3} ${migration4}`)
     await createWorkspace(OWNER, COMPANY, FACILITY, BOUNDARY, "Synthetic Acme, Inc.", "Synthetic California office")
     await createWorkspace(OUTSIDER, OTHER_COMPANY, OTHER_FACILITY, "99999999-9999-4999-8999-999999999999", "Synthetic Other, Inc.", "Synthetic other office")
     await db.query("insert into neuvetra.company_members (company_id,user_id,role) values ($1,$2,'admin'),($1,$3,'member')", [COMPANY, ADMIN, MEMBER])
@@ -159,5 +162,20 @@ describe("M55 synthetic bill tenant and immutability boundary", () => {
     await expect(asTrusted(OUTSIDER, writeSql, [COMPANY, ids[0], activityId, crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID(), fingerprint, JSON.stringify(record)])).rejects.toThrow()
     expect((await db.query("select id from neuvetra.inventory_calculation_results")).rows).toHaveLength(1)
     expect((await db.query("select id from neuvetra.calculation_audit_log")).rows).toHaveLength(1)
+
+    const calculationId = created.rows[0]!.id
+    const snapshot = { profile: "m57-synthetic-scope2-inventory-v1", companyId: COMPANY, boundaryId: BOUNDARY, calculationId, calculationResultSha256: (record as any).result_payload_sha256, reportingYear: 2023, scope: "scope_2_location_based", coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: ["2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12"] }, warnings: WARNINGS, complete: false, releaseEligible: false }
+    const snapshotSha = new Bun.CryptoHasher("sha256").update(canonicalJson(snapshot)).digest("hex")
+    const inventoryId = crypto.randomUUID(); const inventoryFingerprint = "a".repeat(64)
+    await asTrusted(OWNER, "select neuvetra.create_synthetic_scope2_inventory($1,$2,$3,$4,$5,$6,$7)", [COMPANY, calculationId, inventoryId, crypto.randomUUID(), crypto.randomUUID(), inventoryFingerprint, snapshotSha])
+    expect((await asUser(MEMBER, "select complete, factor_release_eligible, covered_periods, expected_periods from neuvetra.inventory_versions")).rows).toEqual([{ complete: false, factor_release_eligible: false, covered_periods: 1, expected_periods: 12 }])
+    expect((await asUser(OUTSIDER, "select id from neuvetra.inventory_versions")).rows).toEqual([])
+    const reviewSql = "select neuvetra.record_synthetic_inventory_review($1,$2,$3,$4,$5,$6,$7,$8,$9)"
+    await expect(asTrusted(OWNER, reviewSql, [COMPANY, inventoryId, crypto.randomUUID(), crypto.randomUUID(), "approve_bounded_draft", "bounded_synthetic_scope_reviewed", WARNINGS, crypto.randomUUID(), "b".repeat(64)])).rejects.toThrow()
+    await expect(asUser(MEMBER, reviewSql, [COMPANY, inventoryId, crypto.randomUUID(), crypto.randomUUID(), "approve_bounded_draft", "bounded_synthetic_scope_reviewed", WARNINGS, crypto.randomUUID(), "b".repeat(64)])).rejects.toThrow()
+    await asTrusted(ADMIN, reviewSql, [COMPANY, inventoryId, crypto.randomUUID(), crypto.randomUUID(), "approve_bounded_draft", "bounded_synthetic_scope_reviewed", WARNINGS, crypto.randomUUID(), "b".repeat(64)])
+    expect((await asUser(MEMBER, "select outcome, inventory_status_after from neuvetra.inventory_review_decisions")).rows).toEqual([{ outcome: "approved_bounded_draft", inventory_status_after: "approved_bounded_draft" }])
+    await expect(asTrusted(ADMIN, "update neuvetra.inventory_review_decisions set outcome='changes_requested'")).rejects.toThrow("immutable")
+    expect((await db.query("select event_type from neuvetra.inventory_review_audit_log order by created_at")).rows).toEqual([{ event_type: "inventory.version.created" }, { event_type: "inventory.review.recorded" }])
   })
 })

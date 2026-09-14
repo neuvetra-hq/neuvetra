@@ -109,6 +109,33 @@ export interface SyntheticCalculationLineage {
   activityVersion: 1
 }
 
+export const M57_WARNINGS = [
+  "annual_coverage_incomplete_1_of_12_months",
+  "market_based_scope2_not_included",
+  "factor_and_method_not_released",
+  "synthetic_local_only_no_assurance",
+] as const
+
+export interface SyntheticInventoryReview {
+  id: string
+  companyId: string
+  boundaryId: string
+  calculationId: string
+  version: 1
+  reportingYear: 2023
+  scope: "scope_2_location_based"
+  reviewState: "awaiting_review" | "approved_bounded_draft" | "changes_requested"
+  completeness: "incomplete"
+  releaseEligible: false
+  coverage: { expectedFacilities: 1; coveredFacilities: 1; expectedPeriods: 12; coveredPeriods: 1; coveredMonths: ["2023-01"]; missingMonths: string[] }
+  warnings: string[]
+  line: { facilityId: string; servicePeriodStart: "2023-01-01"; servicePeriodEnd: "2023-01-31"; quantityMwh: "12.346000"; subtotalKgCo2e: "2407.9674"; calculationResultSha256: string }
+  snapshotSha256: string
+  submittedBy: string
+  submittedAt: string
+  decision: null | { id: string; decision: "approve_bounded_draft" | "changes_requested"; outcome: "approved_bounded_draft" | "changes_requested"; acknowledgedWarnings: string[]; reasonCode: "bounded_synthetic_scope_reviewed" | "source_or_calculation_revision_required"; decidedBy: string; decidedAt: string }
+}
+
 interface WorkspaceRow {
   id: string
   company_name: string
@@ -180,6 +207,16 @@ interface CalculationRow {
   created_at: string
 }
 
+interface InventoryRow {
+  id: string; company_id: string; boundary_id: string; calculation_id: string; version: 1; reporting_year: 2023
+  scope: "scope_2_location_based"; expected_facilities: 1; covered_facilities: 1; expected_periods: 12; covered_periods: 1
+  covered_months: ["2023-01"]; missing_months: string[]; complete: false; factor_release_eligible: false; warning_codes: string[]
+  calculation_result_sha256: string; snapshot_sha256: string; submitted_by: string; submitted_at: string
+  facility_id: string; service_period_start: "2023-01-01"; service_period_end: "2023-01-31"; normalized_quantity_mwh: "12.346000"; display_kg_co2e: "2407.9674"
+  decision_id: string | null; decision: "approve_bounded_draft" | "changes_requested" | null; outcome: "approved_bounded_draft" | "changes_requested" | null
+  acknowledged_warning_codes: string[] | null; reason_code: "bounded_synthetic_scope_reviewed" | "source_or_calculation_revision_required" | null; decided_by: string | null; decided_at: string | null
+}
+
 const WORKSPACE_QUERY = `
   select c.id, c.name company_name, c.country_code, c.state_code,
     f.id facility_id, f.name facility_name, f.egrid_subregion,
@@ -240,6 +277,8 @@ export class DevelopmentWorkspaceDatabase {
     await db.exec(billMigration)
     const calculationMigration = await Bun.file(new URL("./migrations/0003_synthetic_bill_calculation.sql", import.meta.url)).text()
     await db.exec(calculationMigration)
+    const inventoryMigration = await Bun.file(new URL("./migrations/0004_inventory_review.sql", import.meta.url)).text()
+    await db.exec(inventoryMigration)
     return new DevelopmentWorkspaceDatabase(db)
   }
 
@@ -296,6 +335,13 @@ export class DevelopmentWorkspaceDatabase {
   async findWorkspace(userId: string, workspaceId: string): Promise<CompanyWorkspaceRecord | null> {
     return this.asUser(userId, async (tx) => {
       const result = await tx.query<WorkspaceRow>(WORKSPACE_QUERY, [workspaceId])
+      return result.rows.length === 1 ? toRecord(result.rows[0]!) : null
+    })
+  }
+
+  async findSyntheticWorkspaceForUser(userId: string): Promise<CompanyWorkspaceRecord | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<WorkspaceRow>(WORKSPACE_QUERY.replace("where c.id = $1", "where c.created_by = $1 and c.name = 'Synthetic Acme, Inc.'"), [userId])
       return result.rows.length === 1 ? toRecord(result.rows[0]!) : null
     })
   }
@@ -470,6 +516,13 @@ export class DevelopmentWorkspaceDatabase {
     return this.asUser(userId, (tx) => this.readBill(tx, companyId, evidenceId))
   }
 
+  async findSyntheticBillByCalculation(userId: string, companyId: string, calculationId: string): Promise<SyntheticBillRecord | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<{ evidence_id: string }>("select evidence_id from neuvetra.inventory_calculation_results where company_id = $1 and id = $2", [companyId, calculationId])
+      return result.rows[0] ? this.readBill(tx, companyId, result.rows[0].evidence_id) : null
+    })
+  }
+
   async findSyntheticCalculationLineage(userId: string, companyId: string, evidenceId: string): Promise<SyntheticCalculationLineage | null> {
     return this.asUser(userId, async (tx) => {
       const result = await tx.query<{ extraction_id: string; parser_version: "m55-fixed-pdf-v1"; previous_bill_version_id: string; activity_version: 1 }>(
@@ -508,6 +561,72 @@ export class DevelopmentWorkspaceDatabase {
         [companyId, evidenceId, activityId, crypto.randomUUID(), crypto.randomUUID(), idempotencyKey, operationFingerprint, canonicalResultJson],
       )
       return (await this.readBill(tx, companyId, evidenceId))!
+    })
+  }
+
+  private async readSyntheticInventory(tx: Transaction, companyId: string): Promise<SyntheticInventoryReview | null> {
+    const result = await tx.query<InventoryRow>(
+      `select i.id, i.company_id, i.boundary_id, i.calculation_id, i.version, i.reporting_year, i.scope,
+        i.expected_facilities, i.covered_facilities, i.expected_periods, i.covered_periods, i.covered_months, i.missing_months,
+        i.complete, i.factor_release_eligible, i.warning_codes, i.calculation_result_sha256, i.snapshot_sha256,
+        i.submitted_by, i.created_at::text submitted_at, c.facility_id, v.service_period_start::text, v.service_period_end::text,
+        c.normalized_quantity_mwh::text, c.display_kg_co2e::text,
+        d.id decision_id, d.decision, d.outcome, d.acknowledged_warning_codes, d.reason_code, d.decided_by, d.decided_at::text
+       from neuvetra.inventory_versions i
+       join neuvetra.inventory_calculation_results c on c.company_id = i.company_id and c.id = i.calculation_id
+       join neuvetra.bill_versions v on v.company_id = c.company_id and v.id = c.bill_version_id
+       left join neuvetra.inventory_review_decisions d on d.company_id = i.company_id and d.inventory_version_id = i.id
+       where i.company_id = $1 and i.version = 1`, [companyId],
+    )
+    const row = result.rows[0]
+    if (!row) return null
+    const snapshot = {
+      profile: "m57-synthetic-scope2-inventory-v1", companyId: row.company_id, boundaryId: row.boundary_id, calculationId: row.calculation_id,
+      calculationResultSha256: row.calculation_result_sha256, reportingYear: 2023, scope: "scope_2_location_based",
+      coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: row.missing_months },
+      warnings: [...M57_WARNINGS], complete: false, releaseEligible: false,
+    }
+    if (sha256(snapshot) !== row.snapshot_sha256 || row.complete || row.factor_release_eligible || canonicalJson(row.warning_codes) !== canonicalJson(M57_WARNINGS)) throw new Error("Stored inventory integrity check failed.")
+    return {
+      id: row.id, companyId: row.company_id, boundaryId: row.boundary_id, calculationId: row.calculation_id, version: 1, reportingYear: 2023,
+      scope: "scope_2_location_based", reviewState: row.outcome ?? "awaiting_review", completeness: "incomplete", releaseEligible: false,
+      coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: row.missing_months },
+      warnings: [...M57_WARNINGS],
+      line: { facilityId: row.facility_id, servicePeriodStart: row.service_period_start, servicePeriodEnd: row.service_period_end, quantityMwh: row.normalized_quantity_mwh, subtotalKgCo2e: row.display_kg_co2e, calculationResultSha256: row.calculation_result_sha256 },
+      snapshotSha256: row.snapshot_sha256, submittedBy: row.submitted_by, submittedAt: row.submitted_at,
+      decision: row.decision_id && row.decision && row.outcome && row.reason_code && row.decided_by && row.decided_at ? {
+        id: row.decision_id, decision: row.decision, outcome: row.outcome, acknowledgedWarnings: row.acknowledged_warning_codes ?? [], reasonCode: row.reason_code, decidedBy: row.decided_by, decidedAt: row.decided_at,
+      } : null,
+    }
+  }
+
+  async findSyntheticInventory(userId: string, companyId: string): Promise<SyntheticInventoryReview | null> {
+    return this.asUser(userId, (tx) => this.readSyntheticInventory(tx, companyId))
+  }
+
+  async findSyntheticInventoryIdempotency(userId: string, companyId: string, idempotencyKey: string): Promise<{ operationFingerprint: string } | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<{ operation_fingerprint: string }>(`select operation_fingerprint from neuvetra.inventory_versions where company_id = $1 and idempotency_key = $2
+        union all select operation_fingerprint from neuvetra.inventory_review_decisions where company_id = $1 and idempotency_key = $2`, [companyId, idempotencyKey])
+      return result.rows[0] ? { operationFingerprint: result.rows[0].operation_fingerprint } : null
+    })
+  }
+
+  async createSyntheticInventory(userId: string, companyId: string, calculationId: string, idempotencyKey: string, operationFingerprint: string, snapshotSha256: string): Promise<SyntheticInventoryReview> {
+    return this.asTrustedUser(userId, async (tx) => {
+      await tx.query("select neuvetra.create_synthetic_scope2_inventory($1,$2,$3,$4,$5,$6,$7)", [companyId, calculationId, crypto.randomUUID(), crypto.randomUUID(), idempotencyKey, operationFingerprint, snapshotSha256])
+      const inventory = await this.readSyntheticInventory(tx, companyId)
+      if (!inventory) throw new Error("Inventory could not be read back.")
+      return inventory
+    })
+  }
+
+  async recordSyntheticInventoryReview(userId: string, companyId: string, inventoryId: string, decision: "approve_bounded_draft" | "changes_requested", reasonCode: string, acknowledgments: string[], idempotencyKey: string, operationFingerprint: string): Promise<SyntheticInventoryReview> {
+    return this.asTrustedUser(userId, async (tx) => {
+      await tx.query("select neuvetra.record_synthetic_inventory_review($1,$2,$3,$4,$5,$6,$7,$8,$9)", [companyId, inventoryId, crypto.randomUUID(), crypto.randomUUID(), decision, reasonCode, acknowledgments, idempotencyKey, operationFingerprint])
+      const inventory = await this.readSyntheticInventory(tx, companyId)
+      if (!inventory) throw new Error("Inventory could not be read back.")
+      return inventory
     })
   }
 

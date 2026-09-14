@@ -3,6 +3,7 @@ import { Elysia } from "elysia"
 import type { AuthenticatedUser } from "../lib/auth"
 import { runEngine } from "../calculation/server"
 import { createWorkspaceRoutes } from "./routes"
+import { INVENTORY_WARNINGS, type InventoryDecisionInput } from "./types"
 
 const HOST = "127.0.0.1"
 const PORT = Number(Bun.env.M54_WORKSPACE_PORT ?? 3015)
@@ -24,8 +25,8 @@ function canonicalJson(value: unknown): string {
 }
 
 export async function createDevelopmentWorkspaceServer() {
-  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
-    throw new Error("The M54/M55/M56 synthetic workspace server requires explicit development/test enable flags.")
+  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
+    throw new Error("The M54/M55/M56/M57 synthetic workspace server requires explicit development/test enable flags.")
   }
   const database = await DevelopmentWorkspaceDatabase.create([M54_OWNER_ID, M54_OUTSIDER_ID, M55_ADMIN_ID, M55_MEMBER_ID])
   const calculationFlights = new Map<string, Promise<Awaited<ReturnType<typeof database.createSyntheticBillCalculation>>>>()
@@ -41,9 +42,17 @@ export async function createDevelopmentWorkspaceServer() {
     store: {
       create: async (userId, input) => {
         if (userId !== M54_OWNER_ID) throw new Error("Only the fixed synthetic owner can create this workspace.")
-        return database.createWorkspaceWithSyntheticMembers(userId, input, [
-          { userId: M55_ADMIN_ID, role: "admin" }, { userId: M55_MEMBER_ID, role: "member" },
-        ])
+        const existing = await database.findSyntheticWorkspaceForUser(userId)
+        if (existing) return existing
+        try {
+          return await database.createWorkspaceWithSyntheticMembers(userId, input, [
+            { userId: M55_ADMIN_ID, role: "admin" }, { userId: M55_MEMBER_ID, role: "member" },
+          ])
+        } catch {
+          const raced = await database.findSyntheticWorkspaceForUser(userId)
+          if (raced) return raced
+          throw new Error("Workspace could not be created.")
+        }
       },
       findById: (userId, workspaceId) => database.findWorkspace(userId, workspaceId),
       canManage: (userId, workspaceId) => database.canManageWorkspace(userId, workspaceId),
@@ -91,6 +100,38 @@ export async function createDevelopmentWorkspaceServer() {
         try { return await flight } finally { calculationFlights.delete(flightKey) }
       },
       findBill: (userId, workspaceId, evidenceId) => database.findSyntheticBill(userId, workspaceId, evidenceId),
+      findInventory: (userId, workspaceId) => database.findSyntheticInventory(userId, workspaceId),
+      createInventory: async (userId, workspaceId, calculationId, idempotencyKey) => {
+        const existing = await database.findSyntheticInventory(userId, workspaceId)
+        if (existing) {
+          if (existing.calculationId !== calculationId) throw new Error("Inventory request conflicts.")
+          return existing
+        }
+        const workspace = await database.findWorkspace(userId, workspaceId)
+        if (!workspace) throw new Error("Inventory source not found.")
+        const snapshot = {
+          profile: "m57-synthetic-scope2-inventory-v1", companyId: workspaceId, boundaryId: workspace.boundary.id, calculationId,
+          calculationResultSha256: "", reportingYear: 2023, scope: "scope_2_location_based",
+          coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: ["2023-02","2023-03","2023-04","2023-05","2023-06","2023-07","2023-08","2023-09","2023-10","2023-11","2023-12"] },
+          warnings: [...INVENTORY_WARNINGS], complete: false, releaseEligible: false,
+        }
+        const allBills = await database.findSyntheticBillByCalculation(userId, workspaceId, calculationId)
+        if (!allBills?.draftCalculation || allBills.draftCalculation.id !== calculationId) throw new Error("Inventory source not found.")
+        snapshot.calculationResultSha256 = allBills.draftCalculation.resultPayloadSha256
+        const snapshotSha = new Bun.CryptoHasher("sha256").update(canonicalJson(snapshot)).digest("hex")
+        const fingerprint = new Bun.CryptoHasher("sha256").update(`${workspaceId}:${calculationId}:${snapshotSha}`).digest("hex")
+        const prior = await database.findSyntheticInventoryIdempotency(userId, workspaceId, idempotencyKey)
+        if (prior && prior.operationFingerprint !== fingerprint) throw new Error("Inventory request conflicts.")
+        return database.createSyntheticInventory(userId, workspaceId, calculationId, idempotencyKey, fingerprint, snapshotSha)
+      },
+      decideInventory: async (userId, workspaceId, inventoryId, input: InventoryDecisionInput) => {
+        const inventory = await database.findSyntheticInventory(userId, workspaceId)
+        if (!inventory || inventory.id !== inventoryId || inventory.snapshotSha256 !== input.expectedInventorySnapshotSha256) throw new Error("Inventory review conflicts.")
+        const fingerprint = new Bun.CryptoHasher("sha256").update(canonicalJson({ userId, inventoryId, ...input, idempotencyKey: undefined })).digest("hex")
+        const prior = await database.findSyntheticInventoryIdempotency(userId, workspaceId, input.idempotencyKey)
+        if (prior && prior.operationFingerprint !== fingerprint) throw new Error("Inventory review conflicts.")
+        return database.recordSyntheticInventoryReview(userId, workspaceId, inventoryId, input.decision, input.reasonCode, input.acknowledgedWarnings, input.idempotencyKey, fingerprint)
+      },
     },
   })
   const app = new Elysia({ normalize: false })
@@ -115,5 +156,5 @@ if (import.meta.main) {
   }
   process.once("SIGINT", stop)
   process.once("SIGTERM", stop)
-  console.info(`Neuvetra M56 synthetic calculation workspace listening on http://${HOST}:${PORT}`)
+  console.info(`Neuvetra M57 synthetic inventory review workspace listening on http://${HOST}:${PORT}`)
 }

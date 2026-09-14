@@ -1,16 +1,19 @@
 import { useRef, useState, type RefObject } from "react"
 import {
-  calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, linkSyntheticBill, replaySyntheticBillCalculation, revisitSyntheticBill,
-  revisitSyntheticWorkspace, uploadSyntheticBill, type CompanyWorkspace, type SyntheticBill, type WorkspaceActor,
+  calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticBill, revisitSyntheticInventory,
+  revisitSyntheticWorkspace, uploadSyntheticBill, type CompanyWorkspace, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
 } from "@/lib/workspace-api"
 import syntheticBillUrl from "@m55-bill"
 
 const WORKSPACE_KEY = "neuvetra:m54:synthetic-workspace-id"
 const BILL_KEY = "neuvetra:m55:synthetic-bill-id"
+const ACTOR_IDS = { owner: "11111111-1111-4111-8111-111111111111", admin: "33333333-3333-4333-8333-333333333333" } as const
 export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTMLHeadingElement | null> }) {
   const [actor, setActor] = useState<WorkspaceActor>("owner")
   const [workspace, setWorkspace] = useState<CompanyWorkspace | null>(null)
   const [bill, setBill] = useState<SyntheticBill | null>(null)
+  const [inventory, setInventory] = useState<SyntheticInventory | null>(null)
+  const [acknowledged, setAcknowledged] = useState<string[]>([])
   const [savedId, setSavedId] = useState(() => window.localStorage.getItem(WORKSPACE_KEY) ?? "")
   const [savedBillId, setSavedBillId] = useState(() => window.localStorage.getItem(BILL_KEY) ?? "")
   const [facilityConfirmed, setFacilityConfirmed] = useState(false)
@@ -20,6 +23,7 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   const statusRef = useRef<HTMLParagraphElement>(null)
   const facilityRef = useRef<HTMLInputElement>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
+  const inventoryRef = useRef<HTMLHeadingElement>(null)
 
   function showError(error: unknown, fallback: string) {
     setIsError(true)
@@ -28,11 +32,14 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   }
 
   async function runWorkspace(action: "create" | "revisit") {
-    setBusy(true); setIsError(false); setWorkspace(null); setBill(null)
+    setBusy(true); setIsError(false); setWorkspace(null); setBill(null); setInventory(null)
     try {
       const result = action === "create" ? await createSyntheticWorkspace(actor) : await revisitSyntheticWorkspace(savedId, actor)
       setWorkspace(result); setSavedId(result.id); window.localStorage.setItem(WORKSPACE_KEY, result.id)
-      if (savedBillId) setBill(await revisitSyntheticBill(result.id, savedBillId, actor))
+      if (savedBillId) {
+        setBill(await revisitSyntheticBill(result.id, savedBillId, actor))
+        try { setInventory(await revisitSyntheticInventory(result.id, actor)) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+      }
       setMessage(action === "create" ? "Workspace created in one transaction." : "The saved workspace and its evidence were revisited.")
     } catch (error) { showError(error, "The workspace is unavailable.") }
     finally { setBusy(false) }
@@ -93,6 +100,21 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
     URL.revokeObjectURL(url)
   }
 
+  async function prepareInventory() {
+    if (!workspace || !bill?.draftCalculation) return
+    setBusy(true); setIsError(false); setMessage("Sealing the exact calculation and completeness warnings into inventory version 1…")
+    try { const result = await prepareSyntheticInventory(workspace.id, bill.draftCalculation.id, actor); setInventory(result); setMessage("Inventory version 1 is sealed and awaiting the other manager's review."); requestAnimationFrame(() => inventoryRef.current?.focus()) }
+    catch (error) { showError(error, "The inventory could not be prepared.") } finally { setBusy(false) }
+  }
+
+  async function decideInventory(decision: "approve_bounded_draft" | "changes_requested") {
+    if (!inventory) return
+    if (decision === "approve_bounded_draft" && acknowledged.length !== INVENTORY_WARNINGS.length) { setIsError(true); setMessage("Acknowledge every visible limitation before approving this bounded draft."); requestAnimationFrame(() => statusRef.current?.focus()); return }
+    setBusy(true); setIsError(false)
+    try { const result = await decideSyntheticInventory(inventory, decision, actor); setInventory(result); setMessage(decision === "approve_bounded_draft" ? "Independent decision recorded. The bounded draft is approved for internal development and remains incomplete and unreleased." : "Changes requested in immutable review history."); requestAnimationFrame(() => inventoryRef.current?.focus()) }
+    catch (error) { showError(error, "The inventory decision could not be recorded.") } finally { setBusy(false) }
+  }
+
   function reviewBill() {
     if (!facilityConfirmed) {
       setIsError(true); setMessage("Facility required. Choose the authorized facility before saving the review.")
@@ -103,16 +125,16 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   }
 
   function changeActor(next: WorkspaceActor) {
-    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setFacilityConfirmed(false)
+    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAcknowledged([]); setFacilityConfirmed(false)
     setMessage(next === "owner" ? "Synthetic owner selected." : next === "admin" ? "Synthetic administrator selected." : next === "member" ? "Synthetic read-only member selected." : next === "outsider" ? "Synthetic outsider selected." : "Signed out.")
   }
 
   return (
     <section className="workspace-demo" aria-labelledby="workspace-heading">
       <div className="workspace-demo-heading"><div>
-        <p className="research-eyebrow">M56 local development demonstration</p>
-        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>A reviewed bill becomes a traceable draft calculation.</h1>
-        <p className="research-intro">Review one fictional California electricity statement, pin its exact version, and calculate with the development eGRID CAMX method while keeping every link inspectable.</p>
+        <p className="research-eyebrow">M57 local development demonstration</p>
+        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>One exact calculation enters an honest inventory review.</h1>
+        <p className="research-intro">Seal the accepted fictional January result into a versioned 2023 Scope 2 draft, show what is missing, and require the other manager's immutable decision.</p>
       </div><span className="research-outline-label">Local · synthetic · deterministic</span></div>
       <div className="workspace-identity" role="group" aria-label="Synthetic identity">
         {(["owner", "admin", "member", "outsider", "signed_out"] as const).map((item) => <button type="button" key={item} disabled={busy} aria-pressed={actor === item} onClick={() => changeActor(item)}>{item === "owner" ? "Signed-in owner" : item === "admin" ? "Administrator" : item === "member" ? "Read-only member" : item === "outsider" ? "Other tenant" : "Signed out"}</button>)}
@@ -145,11 +167,29 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
               <dl><div><dt>Reviewed activity</dt><dd>{bill.draftCalculation.normalizedQuantityMwh} MWh</dd></div><div><dt>Factor</dt><dd>{bill.draftCalculation.factor.value} kg CO2e/MWh</dd></div><div><dt>Geography and year</dt><dd>CAMX · 2023 factor data</dd></div><div><dt>Evidence</dt><dd>Bill version {bill.draftCalculation.billVersion} · January 2023</dd></div><div><dt>Created</dt><dd>{new Date(bill.draftCalculation.createdAt).toLocaleString()} · actor {bill.draftCalculation.createdBy}</dd></div></dl>
               <details><summary>Inspect exact calculation and lineage</summary><p>Unrounded: {bill.draftCalculation.total.unrounded} kg CO2e</p><p>Published AI6 total is authoritative. Component sum: {bill.draftCalculation.reconciliation.componentSum}; delta: {bill.draftCalculation.reconciliation.componentRoundingDelta} kg CO2e.</p><p>Source: EPA eGRID2023 revision 2 · {bill.draftCalculation.factor.sheet}!{bill.draftCalculation.factor.totalOutputCell}</p><p>Method: {bill.draftCalculation.method.id} · {bill.draftCalculation.method.version}</p><p className="bill-hash">Bill version {bill.draftCalculation.billVersionPayloadSha256}</p><p className="bill-hash">Input {bill.draftCalculation.inputSnapshotSha256}</p><p className="bill-hash">Result {bill.draftCalculation.resultPayloadSha256}</p></details>
               <div className="calculation-actions"><button className="research-secondary-button" type="button" onClick={downloadCalculation}>Download exact record</button><button className="research-secondary-button" type="button" disabled={busy || (actor !== "owner" && actor !== "admin")} onClick={replayCalculation}>Replay and verify</button></div>
+              {!inventory && <button className="research-primary-button inventory-prepare" type="button" disabled={busy || (actor !== "owner" && actor !== "admin")} onClick={prepareInventory}>Prepare 2023 Scope 2 review</button>}
             </div>}
+            {inventory && <section className="inventory-review" aria-labelledby="inventory-review-heading">
+              <p className="research-eyebrow">Inventory version {inventory.version} · immutable snapshot</p>
+              <h3 id="inventory-review-heading" ref={inventoryRef} tabIndex={-1}>{inventory.reviewState === "awaiting_review" ? "Awaiting independent review" : inventory.reviewState === "approved_bounded_draft" ? "Approved bounded draft" : "Changes requested"}</h3>
+              <div className="inventory-state"><strong>Incomplete synthetic draft</strong><span>1 of 12 monthly periods · reporting boundary remains draft</span></div>
+              <div className="inventory-table-wrap"><table><caption>Current draft subtotal; this is not a complete company emissions total.</caption><thead><tr><th>Facility</th><th>Period</th><th>Activity</th><th>Location-based subtotal</th></tr></thead><tbody><tr><td>{workspace.facility.name}</td><td>Jan 1–31, 2023</td><td>{inventory.line.quantityMwh} MWh</td><td>{Number(inventory.line.subtotalKgCo2e).toLocaleString(undefined, { minimumFractionDigits: 4 })} kg CO2e</td></tr></tbody></table></div>
+              <div className="inventory-warnings"><h4>Limitations that remain after review</h4><ul>
+                <li>Only January is covered; February–December have no represented evidence. Missing months are not treated as zero.</li>
+                <li>Market-based Scope 2 is not included.</li><li>The factor and method are development candidates and are not released.</li><li>This local synthetic review is not assurance; Scope 1 and Scope 3 are not assessed.</li>
+              </ul></div>
+              <details><summary>Inspect sealed inventory lineage</summary><p>Calculation {inventory.calculationId}</p><p className="bill-hash">Result {inventory.line.calculationResultSha256}</p><p className="bill-hash">Inventory {inventory.snapshotSha256}</p><p>Submitted by {inventory.submittedBy} at {new Date(inventory.submittedAt).toLocaleString()}.</p></details>
+              {!inventory.decision && <div className="inventory-decision">
+                <p><strong>The submitter cannot review this version.</strong> Switch to the other authorized manager, revisit the workspace, and acknowledge each limitation.</p>
+                {INVENTORY_WARNINGS.map((warning, index) => <label key={warning}><input type="checkbox" checked={acknowledged.includes(warning)} onChange={(event) => setAcknowledged((current) => event.target.checked ? [...current, warning] : current.filter((item) => item !== warning))} /> {index === 0 ? "Annual coverage is only 1 of 12 months" : index === 1 ? "Market-based Scope 2 is absent" : index === 2 ? "Factor and method are unreleased" : "Synthetic local work is not assurance"}</label>)}
+                <div className="calculation-actions"><button type="button" disabled={busy || (actor !== "owner" && actor !== "admin") || ACTOR_IDS[actor as "owner" | "admin"] === inventory.submittedBy || acknowledged.length !== INVENTORY_WARNINGS.length} onClick={() => decideInventory("approve_bounded_draft")}>Approve bounded draft</button><button type="button" disabled={busy || (actor !== "owner" && actor !== "admin") || ACTOR_IDS[actor as "owner" | "admin"] === inventory.submittedBy} onClick={() => decideInventory("changes_requested")}>Request changes</button></div>
+              </div>}
+              {inventory.decision && <div className="inventory-history"><h4>Immutable decision history</h4><p><strong>{inventory.decision.outcome === "approved_bounded_draft" ? "Approved bounded draft" : "Changes requested"}</strong> · {new Date(inventory.decision.decidedAt).toLocaleString()} · reviewer {inventory.decision.decidedBy}</p><p>Completeness remains incomplete. Release eligibility remains false.</p></div>}
+            </section>}
           </>}
         </div>
       </>}
-      <p className="workspace-boundary-note">Development evidence and draft calculation only. The bill is fictional and contains no customer data. The factor and method are not released. No filing, assurance, production database, merge, deployment or release is involved.</p>
+      <p className="workspace-boundary-note">Local synthetic evidence and bounded draft review only. The bill is fictional and contains no customer data. The factor and method are not released. No filing, assurance, production database, deployment or release is involved.</p>
     </section>
   )
 }
