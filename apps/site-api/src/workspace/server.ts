@@ -25,8 +25,8 @@ function canonicalJson(value: unknown): string {
 }
 
 export async function createDevelopmentWorkspaceServer() {
-  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER !== "enabled" || Bun.env.M59_SYNTHETIC_EVIDENCE_PACK !== "enabled" || Bun.env.M60_SYNTHETIC_DRAFT_REPORT !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
-    throw new Error("The M54-M60 synthetic workspace server requires explicit development/test enable flags.")
+  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER !== "enabled" || Bun.env.M59_SYNTHETIC_EVIDENCE_PACK !== "enabled" || Bun.env.M60_SYNTHETIC_DRAFT_REPORT !== "enabled" || Bun.env.M61_SYNTHETIC_DRAFT_REPORT_REVIEW !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
+    throw new Error("The M54-M61 synthetic workspace server requires explicit development/test enable flags.")
   }
   const database = await DevelopmentWorkspaceDatabase.create([M54_OWNER_ID, M54_OUTSIDER_ID, M55_ADMIN_ID, M55_MEMBER_ID])
   const calculationFlights = new Map<string, Promise<Awaited<ReturnType<typeof database.createSyntheticBillCalculation>>>>()
@@ -143,6 +143,8 @@ export async function createDevelopmentWorkspaceServer() {
       replayAnnualEvidencePack: (userId, workspaceId, inventoryId, packId, archive) => database.replayAnnualEvidencePack(userId, workspaceId, inventoryId, packId, archive),
       createDraftInventoryReport:(userId,workspaceId,inventoryId,packId,inventorySha,archiveSha,key)=>database.createDraftInventoryReport(userId,workspaceId,inventoryId,packId,inventorySha,archiveSha,key),
       findDraftInventoryReport:(userId,workspaceId,inventoryId)=>database.findDraftInventoryReport(userId,workspaceId,inventoryId),
+      reviewDraftInventoryReport:(userId,workspaceId,inventoryId,reportId,input)=>database.reviewDraftInventoryReport(userId,workspaceId,inventoryId,reportId,input),
+      findDraftInventoryReportReview:(userId,workspaceId,inventoryId,reportId)=>database.findDraftInventoryReportReview(userId,workspaceId,inventoryId,reportId),
     },
   })
   const app = new Elysia({ normalize: false })
@@ -167,5 +169,5 @@ if (import.meta.main) {
   }
   process.once("SIGINT", stop)
   process.once("SIGTERM", stop)
-  console.info(`Neuvetra M60 synthetic draft-report workspace listening on http://${HOST}:${PORT}`)
+  console.info(`Neuvetra M61 synthetic draft-report review workspace listening on http://${HOST}:${PORT}`)
 }

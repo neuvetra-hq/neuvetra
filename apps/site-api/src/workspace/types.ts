@@ -50,6 +50,8 @@ export interface WorkspaceStore {
   replayAnnualEvidencePack?(userId: string, workspaceId: string, inventoryId: string, packId: string, archive: Uint8Array): Promise<EvidencePackReceipt>
   createDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string,packId:string,expectedInventorySnapshotSha256:string,expectedArchiveSha256:string,idempotencyKey:string):Promise<DraftInventoryReportRecord>
   findDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string):Promise<DraftInventoryReportRecord|null>
+  reviewDraftInventoryReport?(userId:string,workspaceId:string,inventoryId:string,reportId:string,input:DraftReportReviewInput):Promise<DraftInventoryReportReviewRecord>
+  findDraftInventoryReportReview?(userId:string,workspaceId:string,inventoryId:string,reportId:string):Promise<DraftInventoryReportReviewRecord|null>
 }
 
 export interface EvidencePackRecord { id:string;companyId:string;inventoryId:string;profile:"neuvetra.synthetic.inventory-evidence-pack.v1";manifestSha256:string;lineageRootSha256:string;archiveSha256:string;archiveByteLength:number;entryCount:17;createdBy:string;createdAt:string;archive:Uint8Array }
@@ -135,5 +137,5 @@ export interface SyntheticBill {
     record: Record<string, unknown>
   }
 }
-import type { AnnualInventory, AnnualRegister } from "@neuvetra/database"
-export type { AnnualInventory, AnnualRegister } from "@neuvetra/database"
+import type { AnnualInventory, AnnualRegister, DraftInventoryReportReviewRecord, DraftReportReviewInput } from "@neuvetra/database"
+export type { AnnualInventory, AnnualRegister, DraftInventoryReportReviewRecord, DraftReportReviewInput } from "@neuvetra/database"

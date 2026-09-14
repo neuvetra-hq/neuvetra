@@ -2,9 +2,11 @@ import { PGlite, type Transaction } from "@electric-sql/pglite"
 import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
+import { M61_PROFILE, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput } from "./m61"
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
 export { M60_PROFILE, M60_MEDIA_TYPE, M60_MAX_REPORT_BYTES, buildDraftInventoryReport, hashReportBytes, type DraftInventoryReportBuild } from "./m60"
+export { M61_PROFILE, M61_LIMITATION_ACKNOWLEDGMENTS, M61_CHANGE_ROUTE_CODES, draftReportDecisionSnapshotPayload, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput, type DraftReportDecisionSnapshotInput, type DraftReportReviewDecision, type DraftReportReviewReason, type DraftReportChangeRouteCode } from "./m61"
 
 function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value)
@@ -126,6 +128,7 @@ export interface EvidencePackRecord {
   archiveSha256:string;archiveByteLength:number;entryCount:17;createdBy:string;createdAt:string;archive:Uint8Array
 }
 export interface DraftInventoryReportRecord{id:string;companyId:string;inventoryId:string;evidencePackId:string;profile:"neuvetra.synthetic.inventory-draft-report.v1";inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;reportSha256:string;reportByteLength:number;createdBy:string;createdAt:string;report:Uint8Array}
+export interface DraftInventoryReportReviewRecord{id:string;companyId:string;reportId:string;profile:typeof M61_PROFILE;decision:"accept_bounded_internal_draft"|"changes_requested";outcome:"accepted_bounded_internal_draft"|"changes_requested";reasonCode:"exact_report_reviewed_for_bounded_internal_use"|"report_revision_required";acknowledgedLimitations:string[];changeRouteCode:DraftReportReviewInput["changeRouteCode"];changeNote:string|null;reportSha256:string;reportCreatedBy:string;inventorySnapshotSha256:string;sourceArchiveSha256:string;sourceManifestSha256:string;sourceLineageRootSha256:string;decisionSnapshotSha256:string;releaseEligible:false;decidedBy:string;decidedAt:string}
 
 export const M57_WARNINGS = [
   "annual_coverage_incomplete_1_of_12_months",
@@ -302,6 +305,7 @@ export class DevelopmentWorkspaceDatabase {
     const evidencePackMigration = await Bun.file(new URL("./migrations/0006_inventory_evidence_pack.sql", import.meta.url)).text()
     await db.exec(evidencePackMigration)
     await db.exec(await Bun.file(new URL("./migrations/0007_inventory_draft_report.sql", import.meta.url)).text())
+    await db.exec(await Bun.file(new URL("./migrations/0008_inventory_draft_report_review.sql", import.meta.url)).text())
     return new DevelopmentWorkspaceDatabase(db)
   }
 
@@ -850,6 +854,31 @@ export class DevelopmentWorkspaceDatabase {
     const result=await this.readDraftInventoryReport(tx,companyId,inventoryId);if(!result)throw new Error("Draft inventory report could not be read back.");return result
   })}
   async findDraftInventoryReport(userId:string,companyId:string,inventoryId:string):Promise<DraftInventoryReportRecord|null>{return this.asUser(userId,tx=>this.readDraftInventoryReport(tx,companyId,inventoryId))}
+
+  private async readDraftInventoryReportReview(tx:Transaction,companyId:string,inventoryId:string,reportId:string):Promise<DraftInventoryReportReviewRecord|null>{
+    const report=await this.readDraftInventoryReport(tx,companyId,inventoryId);if(!report||report.id!==reportId)return null
+    const row=(await tx.query<any>("select id,company_id,report_id,profile,decision,outcome,reason_code,acknowledged_limitations,change_route_code,change_note,report_sha256,report_created_by,inventory_snapshot_sha256,source_archive_sha256,source_manifest_sha256,source_lineage_root_sha256,decision_snapshot_sha256,release_eligible,decided_by,decided_at::text from neuvetra.inventory_draft_report_review_decisions where company_id=$1 and report_id=$2",[companyId,reportId])).rows[0];if(!row)return null
+    try{validateDraftReportReviewInput({decision:row.decision,reasonCode:row.reason_code,acknowledgedLimitations:row.acknowledged_limitations,changeRouteCode:row.change_route_code,changeNote:row.change_note})}catch{throw new Error("Stored draft report review failed integrity verification.")}
+    const expectedOutcome=row.decision==="accept_bounded_internal_draft"?"accepted_bounded_internal_draft":"changes_requested"
+    const decisionSnapshotSha256=hashDraftReportDecisionSnapshot({companyId:row.company_id,reportId:row.report_id,profile:row.profile,decision:row.decision,outcome:row.outcome,reasonCode:row.reason_code,acknowledgedLimitations:row.acknowledged_limitations,changeRouteCode:row.change_route_code,changeNote:row.change_note,reportSha256:row.report_sha256,reportCreatedBy:row.report_created_by,inventorySnapshotSha256:row.inventory_snapshot_sha256,sourceArchiveSha256:row.source_archive_sha256,sourceManifestSha256:row.source_manifest_sha256,sourceLineageRootSha256:row.source_lineage_root_sha256,releaseEligible:false,reviewerIdentity:row.decided_by})
+    if(row.profile!==M61_PROFILE||row.outcome!==expectedOutcome||row.release_eligible!==false||row.decided_by===report.createdBy||row.report_created_by!==report.createdBy||row.report_sha256!==report.reportSha256||row.inventory_snapshot_sha256!==report.inventorySnapshotSha256||row.source_archive_sha256!==report.sourceArchiveSha256||row.source_manifest_sha256!==report.sourceManifestSha256||row.source_lineage_root_sha256!==report.sourceLineageRootSha256||row.decision_snapshot_sha256!==decisionSnapshotSha256)throw new Error("Stored draft report review failed integrity verification.")
+    const audits=(await tx.query<{company_id:string;decision_id:string;report_id:string;actor_user_id:string;event_type:string;event_meta:Record<string,unknown>}>("select company_id,decision_id,report_id,actor_user_id,event_type,event_meta from neuvetra.inventory_draft_report_review_audit_log where company_id=$1 and report_id=$2",[companyId,reportId])).rows
+    const audit=audits[0],expectedAudit={decision:row.decision,report_sha256:row.report_sha256,report_created_by:row.report_created_by,decision_snapshot_sha256:row.decision_snapshot_sha256,change_route_code:row.change_route_code}
+    if(audits.length!==1||!audit||audit.company_id!==row.company_id||audit.report_id!==row.report_id||audit.decision_id!==row.id||audit.actor_user_id!==row.decided_by||audit.event_type!=="inventory_draft_report.reviewed"||canonicalJson(audit.event_meta)!==canonicalJson(expectedAudit))throw new Error("Stored draft report review failed integrity verification.")
+    return{id:row.id,companyId:row.company_id,reportId:row.report_id,profile:row.profile,decision:row.decision,outcome:row.outcome,reasonCode:row.reason_code,acknowledgedLimitations:[...row.acknowledged_limitations],changeRouteCode:row.change_route_code,changeNote:row.change_note,reportSha256:row.report_sha256,reportCreatedBy:row.report_created_by,inventorySnapshotSha256:row.inventory_snapshot_sha256,sourceArchiveSha256:row.source_archive_sha256,sourceManifestSha256:row.source_manifest_sha256,sourceLineageRootSha256:row.source_lineage_root_sha256,decisionSnapshotSha256:row.decision_snapshot_sha256,releaseEligible:false,decidedBy:row.decided_by,decidedAt:databaseInstant(row.decided_at)}
+  }
+
+  async reviewDraftInventoryReport(userId:string,companyId:string,inventoryId:string,reportId:string,input:DraftReportReviewInput):Promise<DraftInventoryReportReviewRecord>{return this.asTrustedUser(userId,async tx=>{
+    validateDraftReportReviewInput(input)
+    const report=await this.readDraftInventoryReport(tx,companyId,inventoryId)
+    if(!report||report.id!==reportId||report.reportSha256!==input.expectedReportSha256||report.createdBy===userId)throw new Error("Draft report review conflicts.")
+    const outcome=input.decision==="accept_bounded_internal_draft"?"accepted_bounded_internal_draft":"changes_requested"
+    const decisionSnapshotSha256=hashDraftReportDecisionSnapshot({companyId,reportId,profile:M61_PROFILE,decision:input.decision,outcome,reasonCode:input.reasonCode,acknowledgedLimitations:input.acknowledgedLimitations,changeRouteCode:input.changeRouteCode,changeNote:input.changeNote,reportSha256:report.reportSha256,reportCreatedBy:report.createdBy,inventorySnapshotSha256:report.inventorySnapshotSha256,sourceArchiveSha256:report.sourceArchiveSha256,sourceManifestSha256:report.sourceManifestSha256,sourceLineageRootSha256:report.sourceLineageRootSha256,releaseEligible:false,reviewerIdentity:userId})
+    const operationFingerprint=sha256({userId,companyId,inventoryId,reportId,decision:input.decision,reasonCode:input.reasonCode,acknowledgedLimitations:input.acknowledgedLimitations,changeRouteCode:input.changeRouteCode,changeNote:input.changeNote,reportSha256:report.reportSha256,reportCreatedBy:report.createdBy,inventorySnapshotSha256:report.inventorySnapshotSha256,sourceArchiveSha256:report.sourceArchiveSha256,sourceManifestSha256:report.sourceManifestSha256,sourceLineageRootSha256:report.sourceLineageRootSha256,decisionSnapshotSha256})
+    await tx.query("select neuvetra.review_inventory_draft_report($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)",[companyId,inventoryId,reportId,crypto.randomUUID(),crypto.randomUUID(),input.decision,input.reasonCode,input.acknowledgedLimitations,input.changeRouteCode,input.changeNote,report.reportSha256,report.inventorySnapshotSha256,report.sourceArchiveSha256,report.sourceManifestSha256,report.sourceLineageRootSha256,report.createdBy,decisionSnapshotSha256,input.idempotencyKey,operationFingerprint])
+    const result=await this.readDraftInventoryReportReview(tx,companyId,inventoryId,reportId);if(!result)throw new Error("Draft report review could not be read back.");return result
+  })}
+  async findDraftInventoryReportReview(userId:string,companyId:string,inventoryId:string,reportId:string):Promise<DraftInventoryReportReviewRecord|null>{return this.asUser(userId,tx=>this.readDraftInventoryReportReview(tx,companyId,inventoryId,reportId))}
 
   async close() {
     await this.db.close()

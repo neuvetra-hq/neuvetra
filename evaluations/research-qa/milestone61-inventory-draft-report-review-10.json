@@ -1,0 +1,163 @@
+{
+  "schema_version": "m61_inventory_draft_report_review_independent_qa_v1",
+  "task_id": "M61-FINAL-QA",
+  "reviewed_at": "2026-09-14T16:54:44.7140915Z",
+  "reviewer_role": "independent Head of QA with accounting-lineage, tenant-security, decision-integrity, accessibility and product-claim challenge",
+  "reviewer_signature": "Neuvetra independent QA reviewer 10",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M61 implementation or repairs. The reviewer independently inspected the candidate, reported M61-QA-01 through M61-QA-05 before certification, re-reviewed the repairs, ran the recorded checks, and authored only this final QA artifact.",
+  "reviewed_git_state": {
+    "base_head": "00d4d545c5477c510ec50a71507a52e3c33fd197",
+    "branch": "codex/m57-inventory-review",
+    "working_tree": "uncommitted M61 candidate with unrelated historical untracked files outside scope",
+    "binding": "This verdict applies only to the exact SHA-256 bindings below. Any subsequent implementation change requires targeted re-review."
+  },
+  "verdict": {
+    "status": "PASS",
+    "milestone_gate_pass": true,
+    "release_acceptance": false,
+    "scope": "Bounded local-development M61 second-manager terminal review of one exact M60 synthetic HTML draft report.",
+    "statement": "No material fresh-upstream-verification, decision-binding, stored-integrity, tenant-security, self-review, one-terminal-decision, idempotency, API/browser-boundary, actor-state, accessibility, note-safety, claim-boundary or production-exclusion blocker remains in the exact reviewed bytes. This does not approve customer evidence, hosted persistence, distributed production concurrency, a filing, professional assurance, deployment or public release."
+  },
+  "decision_contract": {
+    "profile": "neuvetra.synthetic.inventory-draft-report-review.v1",
+    "terminal_decisions": ["accept_bounded_internal_draft", "changes_requested"],
+    "authorized_creator_roles": ["owner", "administrator"],
+    "self_review": "refused by application logic and the security-definer SQL function",
+    "acceptance_requirements": "Exact reason and exact ordered seven-limitation acknowledgement; no route or note.",
+    "change_requirements": "Exact reason, no limitation acknowledgements, exactly one fixed route, and one trimmed 1-500 character note without C0 or DEL control characters.",
+    "release_eligible": false,
+    "decision_snapshot": "Canonical version-1 newline payload binds tenant, report, profile, decision, outcome, reason, acknowledgements, route, note, full report hash, report creator, inventory/archive/manifest/lineage hashes, false release state and reviewer identity. TypeScript and SQL independently compute SHA-256; database and browser reads recompute it.",
+    "audit_binding": "Every read requires exactly one tenant-scoped immutable audit event and exact agreement on company, decision, report, actor, event type, decision, report hash, report creator, decision snapshot and change route."
+  },
+  "reviewed_file_sha256": {
+    "packages/neuvetra-database/src/m61.ts": "c2176b1b08ed6df88eb32ca5e546269b51fce8e169451a8f326c3b242ecf4f5f",
+    "packages/neuvetra-database/src/m61.test.ts": "523701c8c08e86d25b4c356da2488900cca0af0edcc58e463fd3fae0c298d4f2",
+    "packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql": "c5e81967a5dcb08055d452816a1e687b204c59c6396014190897f965abc4a1cc",
+    "packages/neuvetra-database/src/index.ts": "cfd5400cb4b907c3080d172060d4a5704f014bea37469e3ed76a332fa233c8e0",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "c407f6b5d0bad4d262a3dea46d868cedfdb991516f34150296101c37df01afb4",
+    "apps/site-api/src/workspace/types.ts": "eb540e04f3efc0a19d59d67d52a00ab6fbb4dc33b18f30b0806d6384e346f514",
+    "apps/site-api/src/workspace/routes.ts": "0c09ea50f6673f79f617efc55493bf24c3323b1ebf3969cf09ce6e9db0619c01",
+    "apps/site-api/src/workspace/server.ts": "4ba9d46b332750d8f4cd6e3e1bf512f6d6baf85628644135c142bbec9a1306cf",
+    "apps/site-api/src/workspace/server.test.ts": "41f8bc1dd305454286615fb3db353b74ac50b2e66f813132a7a0117b06ebfcf5",
+    "apps/site-web/src/lib/workspace-api.ts": "248604132ce6357df0ba32c8cec929d8b0d6bcedb9e64be3d4bcaab2ad9f0fb9",
+    "apps/site-web/src/lib/workspace-api.test.ts": "6aaa9cb28e9179314a9814005fa273fcc05fd887a1e76feb65893a76fbada5d3",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "fb742bb125eae73ea918d6b827709df3c396b48545670be9c4f81aa487bb75ee",
+    "apps/site-web/src/components/ResearchPreview.tsx": "4e52fd2a7f26374698f1e52860c54c2ef687fca1f96daf4736a06feef619c787",
+    "docs/research/inventory-draft-report-review-milestone-61.md": "f74746213d7de5134b22c1718d5343d98def0351c6d6919ce3d7abeab19f9a7c",
+    "packages/neuvetra-database/src/m59.ts": "da6a6729c8afccc4cd76ddde34d336a376d998b628a4231821c1ce1915cf54c5",
+    "packages/neuvetra-database/src/m60.ts": "b906f599d648f56a01f20fed0de7ecef2313d0ac1f28c1b4fdfa884c3a75f21a",
+    "packages/neuvetra-database/src/m60.test.ts": "fa43707d9be1d70a6e897c3f8e7de7c742e705c8e2931d117b57dfc7491df501",
+    "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81",
+    "data/synthetic/m58-electricity-register-2023.json": "44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29",
+    "data/synthetic/m58-electricity-register-2023.manifest.json": "41bb93caa7cb7dc638c82cb20a9660b25976ff72ff7fa49c4a08af1559c27352",
+    "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+    "evaluations/research-qa/milestone59-evidence-pack-10.json": "39708ab99b96734b51f461f7c274a226304d8e44ce24d8663b59cc3f4bc74a8a",
+    "evaluations/research-qa/milestone60-inventory-draft-report-10.json": "6b57efc4c986716abff2e77c3043a471a70f97207a4c0e93fbdd4acd23589b18"
+  },
+  "acceptance_evidence": [
+    {
+      "area": "fresh M59 and M60 verification",
+      "result": "PASS",
+      "evidence": "Create and read enter through the M60 read path, which verifies stored M59 bytes, reconstructs the current evidence pack, regenerates the deterministic report, and checks exact report bytes and metadata before any M61 decision is accepted or returned. Changed report and evidence-pack bytes fail closed."
+    },
+    {
+      "area": "canonical decision and creator binding",
+      "result": "PASS",
+      "evidence": "The canonical decision snapshot contains the full M60 report hash and report creator plus every upstream hash, exact terminal decision semantics, route/note or fixed acknowledgements, release false and reviewer identity. SQL independently recomputes the exact payload before insertion, and both database and browser reads recompute it."
+    },
+    {
+      "area": "stored decision and audit integrity",
+      "result": "PASS",
+      "evidence": "Decision and audit tables force RLS and reject update/delete. Reads require one exact audit event matching the decision row. A corrupted seal, changed report binding, coordinated valid-looking decision plus recomputed seal, coordinated M60 byte/hash/length mutation and changed M59 bytes all return bounded failures."
+    },
+    {
+      "area": "roles, self-review and tenant isolation",
+      "result": "PASS",
+      "evidence": "Only owner/admin managers may create a decision, the M60 creator is refused at both application and SQL layers, members may read, outsiders receive 404 and signed-out requests receive 401. Tenant-bound foreign keys, forced RLS and server-derived identity prevent cross-tenant decision access."
+    },
+    {
+      "area": "one terminal decision, replay and concurrency boundary",
+      "result": "PASS",
+      "evidence": "A unique company/report key permits one terminal decision. The security-definer function locks the exact report row, same-operation replay converges on the stored result, and changed replay or a different terminal decision conflicts. The database constraints remain the final race arbiter. Hosted/distributed concurrency is outside this local PGlite proof."
+    },
+    {
+      "area": "strict API and browser contract",
+      "result": "PASS",
+      "evidence": "The mutation route accepts exactly seven request keys and fixed decision shapes. Response decoding requires the exact field set, UUIDs, timestamp, full hashes, report creator, different reviewer, decision-specific semantics and false release eligibility, then independently verifies the decision snapshot with Web Crypto. Tenant-safe review absence maps only 404 to null."
+    },
+    {
+      "area": "browser actor-state isolation",
+      "result": "PASS",
+      "evidence": "Workspace create/revisit and every actor change clear all M58, M59, M60 and M61 data plus decision choice, limitation acknowledgements and note before loading through the selected actor. Authorized member reload works, outsider absence cannot preserve metadata, and signed-out state has no stale decision display."
+    },
+    {
+      "area": "wording, accessibility and note handling",
+      "result": "PASS",
+      "evidence": "The visible M61 heading and decision history preserve incomplete, synthetic, unreleased and no-assurance limits. One fieldset and legend contain two mutually exclusive radio decisions; conditional controls follow the selected path; the remaining-character status is programmatically linked to the textarea; complete report and decision hashes remain visible. Errors use an assertive alert and receive focus. HTML-looking notes render as React text, while C0 and DEL controls are rejected."
+    },
+    {
+      "area": "production exclusion",
+      "result": "PASS",
+      "evidence": "The API requires cumulative M54-M61 enable flags and development/test runtime. The browser loads the demo only when all eight exact Vite values are present. The ordinary production output contains no M61 profile, feature value, heading or decision route."
+    }
+  ],
+  "commands": [
+    {"command": "bun test packages/neuvetra-database/src/m61.test.ts", "result": "PASS: 3 tests, 19 assertions"},
+    {"command": "bun test apps/site-api/src/workspace/server.test.ts", "result": "PASS: 4 tests, 131 assertions, including self-review, role/RLS, replay/conflict, audit equality and coordinated decision/report/evidence tamper paths"},
+    {"command": "bun test apps/site-web/src/lib/workspace-api.test.ts", "result": "PASS: 21 tests, 112 assertions, including strict M61 response/snapshot decoding, actor reload/absence, note controls and accessibility source contract"},
+    {"command": "bun test packages/neuvetra-database/src", "result": "PASS: 29 tests, 263 assertions"},
+    {"command": "bun test apps/site-api/src", "result": "PASS: 625 tests, 5451 assertions"},
+    {"command": "bun test apps/site-web/src", "result": "PASS: 70 tests, 283 assertions"},
+    {"command": "python -m unittest discover -s apps/site-api/src/calculation -p *_test.py", "result": "PASS: 12 tests"},
+    {"command": "python -m pytest ghg-kb/calculations/tests -q", "result": "PRE-EXISTING COLLECTION FAILURE: scope-1-mobile-combustion.md contains three value: TBD fixtures; the page, loader and harness are byte-unchanged from HEAD, and HEAD contains the same TBD values from initial commit 6466770550039a09fb978084c677c06ea96dedbe"},
+    {"command": "bun run typecheck", "result": "PASS: 10 configured package tasks"},
+    {"command": "bun run lint", "result": "PASS: zero errors; 44 pre-existing FrontDesk warnings"},
+    {"command": "bun run build", "result": "PASS: all configured builds; existing bundle-size advisories only"},
+    {"command": "ordinary production output M61 marker scan", "result": "PASS: no M61 profile, feature value, heading or decision route"},
+    {"command": "git diff --check HEAD", "result": "PASS: no whitespace errors; line-ending normalization warning only"}
+  ],
+  "findings": [
+    {
+      "id": "M61-QA-01",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial decision record lacked a canonical decision snapshot SHA-256.",
+      "resolution_evidence": "An explicitly ordered canonical payload is now hashed by TypeScript, independently recomputed by SQL before insert, stored, returned, and recomputed on database and browser reads."
+    },
+    {
+      "id": "M61-QA-02",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial decision did not explicitly bind the M60 report creator identity.",
+      "resolution_evidence": "reportCreatedBy is now a typed stored field, foreign key, canonical-snapshot input, API response field, browser-verified binding and audit value; it is compared to the freshly verified M60 report on every read."
+    },
+    {
+      "id": "M61-QA-03",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The initial UI used parallel action sections rather than one labelled mutually exclusive decision group and lacked a linked remaining-character count.",
+      "resolution_evidence": "The current UI has one fieldset/legend, two radios, conditional inputs for the selected path, and a programmatically linked live remaining-character status."
+    },
+    {
+      "id": "M61-QA-04",
+      "severity": "medium",
+      "status": "resolved",
+      "finding": "The initial UI truncated the report hash and did not display the canonical decision hash.",
+      "resolution_evidence": "The complete report SHA-256 is visible before and after review, and the complete decision snapshot SHA-256 is visible in immutable decision history with wrapping."
+    },
+    {
+      "id": "M61-QA-05",
+      "severity": "high",
+      "status": "resolved",
+      "finding": "The first repaired read path recomputed the decision snapshot solely from the decision row, allowing a coordinated valid-looking decision mutation plus recomputed hash to contradict the immutable audit event without detection.",
+      "resolution_evidence": "Every read now requires exactly one matching immutable audit event and compares identity, tenant/report/decision keys, event type and all audit metadata. The coordinated decision-and-seal mutation probe leaves the audit unchanged and returns 503."
+    }
+  ],
+  "limitations": [
+    "Persistence, forced RLS and concurrency evidence uses PGlite, not hosted Supabase/PostgreSQL. Hosted extension availability, grants, transaction scheduling and distributed concurrency require a later deployment-stage review.",
+    "All company, activity, source, report and identity data is fixed and synthetic. No customer data was used.",
+    "The reviewer inspected semantic markup, focus behavior and automated source-level accessibility contracts, but did not perform a separate manual screen-reader session in this review turn.",
+    "The broad legacy ghg-kb pytest collection remains blocked by three pre-existing TBD expected values in the mobile-combustion specification. M61 does not touch that specification, loader or harness; the bounded application calculation suite passes 12 tests.",
+    "M61 records one immutable terminal review only. A change request does not revise the M60 report. Report versioning, source/factor/method release, production identity, customer use, filing formats, professional assurance, deployment and release remain outside this milestone."
+  ]
+}
