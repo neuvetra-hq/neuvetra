@@ -1,0 +1,128 @@
+{
+  "schema_version": "m58_annual_register_independent_qa_v1",
+  "task_id": "M58-FINAL-QA",
+  "reviewed_at": "2026-09-14T06:16:26Z",
+  "reviewer_role": "independent Head of QA with accounting, tenant-security, data-integrity, accessibility and product-claim challenge",
+  "reviewer_signature": "Neuvetra independent QA reviewer 10",
+  "independent_authorship_disclosure": "The reviewer did not author the reviewed M58 implementation. This review artifact is the reviewer's only persistent change.",
+  "reviewed_git_state": {
+    "head": "9495a68b59af7d8a8733c7614c14d497d8f1657d",
+    "branch": "codex/m57-inventory-review",
+    "working_tree": "dirty and unpublished",
+    "binding": "This verdict applies only to the exact SHA-256 bindings below. Unrelated tracked and untracked files are outside scope."
+  },
+  "verdict": {
+    "status": "PASS",
+    "milestone_gate_pass": true,
+    "release_acceptance": false,
+    "scope": "Bounded local-development M58 fixed-fictional annual electricity register, deterministic roll-up and independent internal review workflow only.",
+    "statement": "No material QA, accounting, tenant-security, lineage, idempotency, browser-boundary or production-exclusion blocker remains in the exact reviewed bytes. This does not approve a production database, factor/method release, customer use, filing, assurance, deployment or public release."
+  },
+  "exact_contract_recalculation": {
+    "factor_kg_co2e_per_mwh": "195.0402888",
+    "reported_months_mwh": ["12.346000", "11.982000", "12.417000", "11.876000", "12.104000", "13.228000", "14.037000", "13.812000", "12.765000", "12.221000"],
+    "november_estimate_mwh": "12.493000",
+    "november_formula": "(12.765000 + 12.221000) / 2",
+    "december": "excluded with null quantity after lease end; never represented as zero",
+    "reported_subtotal": {"mwh": "126.788000", "kg_co2e": "24728.7681363744", "display_kg_co2e": "24728.7681"},
+    "estimated_subtotal": {"mwh": "12.493000", "kg_co2e": "2436.6383279784", "display_kg_co2e": "2436.6383"},
+    "included_total": {"mwh": "139.281000", "kg_co2e": "27165.4064643528", "display_kg_co2e": "27165.4065"},
+    "counts": {"expected": 12, "resolved": 12, "reported": 10, "estimated": 1, "excluded": 1, "missing": 0, "calculation_bearing": 11},
+    "overall_inventory_completeness": "incomplete",
+    "release_eligible": false,
+    "independent_method": "Integer/Decimal-place recomputation from the stated monthly quantities and exact factor; no intermediate rounding."
+  },
+  "reviewed_file_sha256": {
+    "data/synthetic/m58-electricity-register-2023.json": "44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29",
+    "data/synthetic/m58-electricity-register-2023.manifest.json": "41bb93caa7cb7dc638c82cb20a9660b25976ff72ff7fa49c4a08af1559c27352",
+    "packages/neuvetra-database/src/m58.ts": "26a2b542ca35d5368a166123b4b63bfbe60b5da04d058eaf3152d97ec311c009",
+    "packages/neuvetra-database/src/m58.test.ts": "ecd02bb7676a22cea0acd35f5388f15bdbfda62f56abf219301158e0a5f101bd",
+    "packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql": "3f288d293c93132c422505f8daf7fc6e52eac8e33128a248cd4e9ba5cb946b35",
+    "packages/neuvetra-database/src/index.ts": "9c281b95390e2161e2c9a4b5b04ca8d8201f229dd7c8b33dd286dd8bfad17e08",
+    "packages/neuvetra-database/src/synthetic-bill-security.test.ts": "3d22d9485cdf7a68d358c669e11d1a1809811aa2f990a18269fdf667343d65e2",
+    "apps/site-api/src/workspace/types.ts": "73886355a268fab6e0d7a23b02dc13f0bf19aeabf17c8b5b993e2e9e56e41a04",
+    "apps/site-api/src/workspace/routes.ts": "e52c1282b1b5cba7dcf92540a309c36514d585a758e6df6a9d47d647cfec8c16",
+    "apps/site-api/src/workspace/server.ts": "561cf3efb5cd26121918215981e2170db569f6ce2836d2202cef3c9a2fe7bf1c",
+    "apps/site-api/src/workspace/server.test.ts": "fe857f55ca561ebec777544fcdbbc8ef31b0dfe835ea38fefe1c4feb63f031da",
+    "apps/site-web/src/lib/workspace-api.ts": "3d027f0e991f2b8cf0763249e1103988892ade27e8eea0910682afee83055417",
+    "apps/site-web/src/lib/workspace-api.test.ts": "def588ec24b079bff8e0d61f7852a5e28caa16224e1dd4c72357e963fd2358fc",
+    "apps/site-web/src/components/CompanyWorkspaceDemo.tsx": "1a16e32a911305a87360f7ec7249d7fb1e314a717b2e9763635f410be987516a",
+    "apps/site-web/src/components/ResearchPreview.tsx": "dc5f78fedab373910becfbe0f24c8ffa6aca6f371fe690536deffe8b532032f8",
+    "apps/site-api/src/calculation/location_based_electricity.py": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+    "apps/site-api/src/calculation/linked_bill_calculation.py": "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e",
+    "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6",
+    "packages/neuvetra-database/src/migrations/0004_inventory_review.sql": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213",
+    "evaluations/research-qa/milestone57-inventory-review-10.json": "7ad7dde4eb3ff1766c5cf53daede7b13deb61722a7032ead999144d79259351a"
+  },
+  "acceptance_evidence": [
+    {
+      "area": "fixed source and arithmetic",
+      "result": "PASS",
+      "evidence": "The 1,095-byte fixture hashes to 44cf813b...dc29 and matches its manifest. Exact integer arithmetic proves all ten reported monthly results, the November mean, the reported/estimated/included subtotals and half-up four-decimal display values."
+    },
+    {
+      "area": "tenant, RLS, ACL and immutable lineage",
+      "result": "PASS",
+      "evidence": "Migration 0005 enables and forces RLS on all four M58 tables, gives authenticated identities select-only member policies, revokes public function execution, uses fixed search paths and composite tenant foreign keys, and applies immutable update/delete triggers. Executable tests cover direct-writer denial, member visibility, outsider non-visibility, self-review refusal, member review refusal, a distinct administrator decision, and tamper rollback."
+    },
+    {
+      "area": "exact persistence contract",
+      "result": "PASS",
+      "evidence": "Security-definer writers construct and compare full exact JSONB for register v1, completed register v2 and annual inventory v2. Non-sparse probes reject wrong facility, changed monthly emissions, evidence locator, estimate formula, expected count and reported subtotal before persistence. Readback rechecks canonical text, payload hash and stored hash."
+    },
+    {
+      "area": "idempotency, concurrency and audit",
+      "result": "PASS",
+      "evidence": "Real Database methods were exercised concurrently and with same-key retry and different-key repeat for register creation, register completion and inventory creation; each returned one stable object ID. Fingerprints bind immutable inputs rather than generated IDs, database uniqueness selects the logical winner, readback verifies canonical integrity, and audit uniqueness prevents duplicate success events."
+    },
+    {
+      "area": "API and browser boundary",
+      "result": "PASS",
+      "evidence": "Mutation routes require allowed origin, authenticated bearer identity, manager role and exact body keys; reads preserve same absence behavior for absent/foreign data; failures return bounded bodies. Success schemas are structured. Database timestamp text is normalized to strict UTC ISO instants before response. The browser decoder enforces exact keys and values independent of JSON property order, month order, quantities, emissions, warnings, decisions, timestamps, source/hash/locators and request-bound predecessor, boundary, facility, register and snapshot lineage. Local storage contains only workspace and bill pointers."
+    },
+    {
+      "area": "two-person review and product claims",
+      "result": "PASS",
+      "evidence": "Owner/administrator manage, member reads, outsider is withheld, submitter cannot review, and a different manager must record the terminal decision. UI text keeps one estimate and one exclusion visible, labels exclusion as no quantity, states overall completeness is incomplete and release eligibility false, and preserves all six warnings. Status/alert live regions, disabled busy/role controls, semantic table/caption and text state labels are present."
+    },
+    {
+      "area": "development-only and production exclusion",
+      "result": "PASS",
+      "evidence": "Server composition requires M54 through M58 enable flags and NODE_ENV development/test. The ordinary web production build succeeded; a scan of dist found none of the M58 fixture ID/hash, totals, state/warning markers, route strings or feature flag."
+    },
+    {
+      "area": "live local integration demonstration",
+      "result": "PASS",
+      "evidence": "The CEO coordinator's live browser workflow visibly completed owner preparation through distinct-administrator M58 approval, showing 12/12 resolved, 10 reported, one estimated, one excluded, zero missing, 27165.4065 kg CO2e included subtotal, December as excluded with no quantity, and overall completeness incomplete with release eligibility false. The reviewer independently re-ran the exact post-repair automated and build gates."
+    }
+  ],
+  "commands": [
+    {"command": "bun test src", "cwd": "packages/neuvetra-database", "result": "PASS: 21 tests, 186 assertions"},
+    {"command": "bun test src", "cwd": "apps/site-api", "result": "PASS: 625 tests, 5,399 assertions"},
+    {"command": "bun test src", "cwd": "apps/site-web", "result": "PASS: 63 tests, 253 assertions"},
+    {"command": "bun test src/workspace/server.test.ts", "cwd": "apps/site-api", "result": "PASS: 4 tests, 79 assertions"},
+    {"command": "bun test src/lib/workspace-api.test.ts", "cwd": "apps/site-web", "result": "PASS: 14 tests, 82 assertions"},
+    {"command": "bun test src/synthetic-bill-security.test.ts src/m58.test.ts", "cwd": "packages/neuvetra-database", "result": "PASS: 11 tests, 129 assertions"},
+    {"command": "bun run typecheck", "cwd": "packages/neuvetra-database", "result": "PASS"},
+    {"command": "bun run typecheck", "cwd": "apps/site-api", "result": "PASS"},
+    {"command": "bun run typecheck", "cwd": "apps/site-web", "result": "PASS"},
+    {"command": "bun run lint", "cwd": "apps/site-web", "result": "PASS"},
+    {"command": "bun run build", "cwd": "apps/site-web", "result": "PASS"},
+    {"command": "python -m unittest discover -s apps/site-api/src/calculation -p *_test.py -v", "cwd": "repository root", "result": "PASS: 12 tests"},
+    {"command": "production dist marker scan", "cwd": "repository root", "result": "PASS: no M58 fixture ID/hash, totals, state/warning markers, routes or feature flag found"},
+    {"command": "git diff --check", "cwd": "repository root", "result": "PASS: no whitespace error; Git emitted only a future CRLF-to-LF normalization warning for server.test.ts"}
+  ],
+  "findings": [
+    {"id": "M58-QA-01", "severity": "high", "status": "resolved", "finding": "Persistence validation originally accepted sparse and non-sparse lineage/accounting mutations.", "resolution_evidence": "Full expected JSONB comparisons and representative rollback probes now bind facility, monthly evidence/arithmetic, estimate formula, counts, totals, warnings and predecessor/register lineage."},
+    {"id": "M58-QA-02", "severity": "high", "status": "resolved", "finding": "Browser decoding originally left successful-response lineage relationships underbound.", "resolution_evidence": "Current callers and decoders cross-bind M57 predecessor, v1/v2 register, January calculation evidence, boundary, facility, register ID and register snapshot; adversarial mutations fail."},
+    {"id": "M58-QA-03", "severity": "critical", "status": "resolved", "finding": "Generated output IDs in fingerprints/snapshots originally broke same-key retry and real concurrent convergence.", "resolution_evidence": "Fingerprints now bind immutable inputs, logical existing rows are checked before ID generation, database conflict readback selects the immutable-input winner, and real Database method concurrency/retry/repeat tests converge."},
+    {"id": "M58-QA-04", "severity": "high", "status": "resolved", "finding": "Live integration exposed PostgreSQL timestamp text that did not satisfy the strict browser ISO contract and exact-value checks that incorrectly depended on JSON property insertion order.", "resolution_evidence": "Database reads now normalize M57/M58 timestamps to UTC ISO with lifecycle assertions. Annual counts/totals validate exact key sets and values independent of property order, including a reversed-order acceptance test. The complete live workflow then rendered the exact accepted totals and incomplete/unreleased state."}
+  ],
+  "limitations": [
+    "Persistence execution evidence uses PGlite, not a hosted Supabase/PostgreSQL deployment; hosted behavior and operational grants still require a later independent deployment-stage review.",
+    "The fixture, users and companies are synthetic. No customer data or production service was used.",
+    "The reviewer inspected accessibility semantics and automated behavior but did not perform a fresh assistive-technology, 200-percent zoom or 390-pixel manual browser session in this review turn.",
+    "Database cryptographic payload hashes and operation fingerprints are computed in the trusted TypeScript store and verified on read; SQL writers enforce exact fixed payload objects and hash-field binding but do not independently recompute SHA-256.",
+    "The factor and method remain unreleased, market-based Scope 2 is absent, one month is estimated, one is excluded, Scope 1 and Scope 3 are unassessed, and no assurance or filing conclusion is supported."
+  ]
+}

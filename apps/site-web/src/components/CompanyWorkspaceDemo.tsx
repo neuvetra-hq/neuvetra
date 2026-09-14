@@ -1,7 +1,7 @@
 import { useRef, useState, type RefObject } from "react"
 import {
-  calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticBill, revisitSyntheticInventory,
-  revisitSyntheticWorkspace, uploadSyntheticBill, type CompanyWorkspace, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
+  ANNUAL_WARNINGS, calculateSyntheticBill, completeAnnualRegister, correctSyntheticBill, createAnnualInventory, createAnnualRegister, createSyntheticWorkspace, decideAnnualInventory, decideSyntheticInventory, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitAnnualInventory, revisitAnnualRegisters, revisitSyntheticBill, revisitSyntheticInventory,
+  revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type AnnualRegister, type CompanyWorkspace, type SyntheticBill, type SyntheticInventory, type WorkspaceActor,
 } from "@/lib/workspace-api"
 import syntheticBillUrl from "@m55-bill"
 
@@ -13,6 +13,9 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   const [workspace, setWorkspace] = useState<CompanyWorkspace | null>(null)
   const [bill, setBill] = useState<SyntheticBill | null>(null)
   const [inventory, setInventory] = useState<SyntheticInventory | null>(null)
+  const [annualRegisters, setAnnualRegisters] = useState<AnnualRegister[]>([])
+  const [annualInventory, setAnnualInventory] = useState<AnnualInventory | null>(null)
+  const [annualAcknowledged, setAnnualAcknowledged] = useState<string[]>([])
   const [acknowledged, setAcknowledged] = useState<string[]>([])
   const [savedId, setSavedId] = useState(() => window.localStorage.getItem(WORKSPACE_KEY) ?? "")
   const [savedBillId, setSavedBillId] = useState(() => window.localStorage.getItem(BILL_KEY) ?? "")
@@ -38,7 +41,14 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
       setWorkspace(result); setSavedId(result.id); window.localStorage.setItem(WORKSPACE_KEY, result.id)
       if (savedBillId) {
         setBill(await revisitSyntheticBill(result.id, savedBillId, actor))
-        try { setInventory(await revisitSyntheticInventory(result.id, actor)) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+        let priorInventory: SyntheticInventory | null = null
+        try { priorInventory=await revisitSyntheticInventory(result.id, actor);setInventory(priorInventory) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+        if (priorInventory) {
+          let registers: AnnualRegister[]=[]
+          try { registers=await revisitAnnualRegisters(result.id,priorInventory,actor);setAnnualRegisters(registers) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+          const finalRegister=registers.find((item)=>item.version===2)
+          if(finalRegister)try { setAnnualInventory(await revisitAnnualInventory(result.id,finalRegister,actor)) } catch (error) { if (!(error instanceof Error) || error.message !== "Inventory not found.") throw error }
+        }
       }
       setMessage(action === "create" ? "Workspace created in one transaction." : "The saved workspace and its evidence were revisited.")
     } catch (error) { showError(error, "The workspace is unavailable.") }
@@ -115,6 +125,32 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
     catch (error) { showError(error, "The inventory decision could not be recorded.") } finally { setBusy(false) }
   }
 
+  async function beginAnnualRegister() {
+    if (!workspace || !inventory) return
+    setBusy(true); setIsError(false)
+    try { const result=await createAnnualRegister(inventory,actor); setAnnualRegisters([result]); setMessage("The fixed 2023 register now shows January reported and eleven missing periods.") }
+    catch(error){ showError(error,"The annual register could not be created.") } finally { setBusy(false) }
+  }
+  async function finishAnnualRegister() {
+    const initial=annualRegisters.find((item)=>item.version===1); if(!initial)return
+    setBusy(true);setIsError(false)
+    try { const result=await completeAnnualRegister(initial,actor);setAnnualRegisters([initial,result]);setMessage("All 12 expected periods are resolved: 10 reported, one estimated, and one excluded.") }
+    catch(error){showError(error,"The annual register could not be completed.")}finally{setBusy(false)}
+  }
+  async function sealAnnualInventory() {
+    const register=annualRegisters.find((item)=>item.version===2);if(!register)return
+    setBusy(true);setIsError(false)
+    try{const result=await createAnnualInventory(register,actor);setAnnualInventory(result);setMessage("Inventory version 2 is sealed and awaiting the other manager's review.")}
+    catch(error){showError(error,"Inventory version 2 could not be sealed.")}finally{setBusy(false)}
+  }
+  async function reviewAnnual(decision:"approve_bounded_annual_location_draft"|"changes_requested") {
+    if(!annualInventory)return
+    if(decision==="approve_bounded_annual_location_draft"&&annualAcknowledged.length!==ANNUAL_WARNINGS.length){showError(new Error("Acknowledge every annual-draft limitation before approval."),"");return}
+    setBusy(true);setIsError(false)
+    try{const result=await decideAnnualInventory(annualInventory,decision,actor);setAnnualInventory(result);setMessage("The independent M58 decision is recorded. The annual location-based draft remains incomplete and unreleased.")}
+    catch(error){showError(error,"The annual review could not be recorded.")}finally{setBusy(false)}
+  }
+
   function reviewBill() {
     if (!facilityConfirmed) {
       setIsError(true); setMessage("Facility required. Choose the authorized facility before saving the review.")
@@ -125,16 +161,18 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
   }
 
   function changeActor(next: WorkspaceActor) {
-    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAcknowledged([]); setFacilityConfirmed(false)
+    setActor(next); setIsError(false); setWorkspace(null); setBill(null); setInventory(null); setAnnualRegisters([]); setAnnualInventory(null); setAcknowledged([]); setAnnualAcknowledged([]); setFacilityConfirmed(false)
     setMessage(next === "owner" ? "Synthetic owner selected." : next === "admin" ? "Synthetic administrator selected." : next === "member" ? "Synthetic read-only member selected." : next === "outsider" ? "Synthetic outsider selected." : "Signed out.")
   }
+
+  const currentAnnualRegister = annualRegisters.find((item) => item.version === 2) ?? annualRegisters.find((item) => item.version === 1) ?? null
 
   return (
     <section className="workspace-demo" aria-labelledby="workspace-heading">
       <div className="workspace-demo-heading"><div>
-        <p className="research-eyebrow">M57 local development demonstration</p>
-        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>One exact calculation enters an honest inventory review.</h1>
-        <p className="research-intro">Seal the accepted fictional January result into a versioned 2023 Scope 2 draft, show what is missing, and require the other manager's immutable decision.</p>
+        <p className="research-eyebrow">M58 local development demonstration</p>
+        <h1 id="workspace-heading" ref={headingRef} tabIndex={-1}>Resolve a fixed annual electricity register without hiding exceptions.</h1>
+        <p className="research-intro">Carry January forward, add nine reported periods, estimate November from two reported months, exclude December with evidence, and require an independent review.</p>
       </div><span className="research-outline-label">Local · synthetic · deterministic</span></div>
       <div className="workspace-identity" role="group" aria-label="Synthetic identity">
         {(["owner", "admin", "member", "outsider", "signed_out"] as const).map((item) => <button type="button" key={item} disabled={busy} aria-pressed={actor === item} onClick={() => changeActor(item)}>{item === "owner" ? "Signed-in owner" : item === "admin" ? "Administrator" : item === "member" ? "Read-only member" : item === "outsider" ? "Other tenant" : "Signed out"}</button>)}
@@ -185,6 +223,18 @@ export function CompanyWorkspaceDemo({ headingRef }: { headingRef: RefObject<HTM
                 <div className="calculation-actions"><button type="button" disabled={busy || (actor !== "owner" && actor !== "admin") || ACTOR_IDS[actor as "owner" | "admin"] === inventory.submittedBy || acknowledged.length !== INVENTORY_WARNINGS.length} onClick={() => decideInventory("approve_bounded_draft")}>Approve bounded draft</button><button type="button" disabled={busy || (actor !== "owner" && actor !== "admin") || ACTOR_IDS[actor as "owner" | "admin"] === inventory.submittedBy} onClick={() => decideInventory("changes_requested")}>Request changes</button></div>
               </div>}
               {inventory.decision && <div className="inventory-history"><h4>Immutable decision history</h4><p><strong>{inventory.decision.outcome === "approved_bounded_draft" ? "Approved bounded draft" : "Changes requested"}</strong> · {new Date(inventory.decision.decidedAt).toLocaleString()} · reviewer {inventory.decision.decidedBy}</p><p>Completeness remains incomplete. Release eligibility remains false.</p></div>}
+            </section>}
+            {inventory?.decision?.outcome === "approved_bounded_draft" && <section className="inventory-review annual-register" aria-labelledby="annual-register-heading">
+              <p className="research-eyebrow">M58 · fixed fictional 2023 source register</p>
+              <h3 id="annual-register-heading">Annual location-based electricity</h3>
+              {!currentAnnualRegister && <button className="research-primary-button" type="button" disabled={busy || (actor!=="owner"&&actor!=="admin")} onClick={beginAnnualRegister}>Create fixed annual register</button>}
+              {currentAnnualRegister && <>
+                <div className="inventory-state"><strong>{currentAnnualRegister.counts.resolved} of 12 expected periods resolved</strong><span>{currentAnnualRegister.counts.reported} reported · {currentAnnualRegister.counts.estimated} estimated · {currentAnnualRegister.counts.excluded} excluded · {currentAnnualRegister.counts.missing} missing</span></div>
+                <div className="inventory-table-wrap"><table><caption>Fixed facility-by-month register. Excluded means no quantity and is never treated as zero.</caption><thead><tr><th>Month</th><th>State</th><th>Version</th><th>Activity</th><th>Evidence or reason</th></tr></thead><tbody>{currentAnnualRegister.periods.map((period)=><tr key={period.month}><td>{period.month}</td><td><strong>{period.state}</strong></td><td>{period.version}</td><td>{period.quantityMwh ? `${period.quantityMwh} MWh` : period.state==="excluded" ? "No quantity — excluded" : "Missing"}</td><td>{period.state==="estimated" ? `${period.reason}; ${period.formula}` : period.state==="excluded" ? `${period.reason}; control ended 2023-11-30` : period.evidence?.source ?? period.reason}</td></tr>)}</tbody></table></div>
+                {currentAnnualRegister.version===1 && <button className="research-primary-button" type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")} onClick={finishAnnualRegister}>Add fixed remaining synthetic periods</button>}
+                {currentAnnualRegister.totals && <div className="bill-calculation"><h3>Included annual draft subtotal</h3><div className="bill-calculation-total"><strong>{Number(currentAnnualRegister.totals.includedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})}</strong><span>kg CO2e</span></div><dl><div><dt>Reported</dt><dd>{currentAnnualRegister.totals.reportedMwh} MWh · {Number(currentAnnualRegister.totals.reportedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})} kg CO2e</dd></div><div><dt>Estimated</dt><dd>{currentAnnualRegister.totals.estimatedMwh} MWh · {Number(currentAnnualRegister.totals.estimatedDisplayKgCo2e).toLocaleString(undefined,{minimumFractionDigits:4})} kg CO2e</dd></div><div><dt>Excluded</dt><dd>December · no quantity · not counted</dd></div></dl>{!annualInventory&&<button className="research-primary-button" type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")} onClick={sealAnnualInventory}>Seal inventory version 2</button>}</div>}
+              </>}
+              {annualInventory && <div className="inventory-decision"><h4>Inventory version 2 · {annualInventory.decision ? annualInventory.decision.outcome.replace(/_/g," ") : "awaiting independent review"}</h4><p><strong>Overall inventory completeness: incomplete.</strong> This resolved register still has one estimate, one exclusion, no market-based Scope 2, unreleased factors and methods, and no Scope 1 or Scope 3 assessment.</p><p className="bill-hash">Snapshot {annualInventory.snapshotSha256}</p>{!annualInventory.decision&&<>{ANNUAL_WARNINGS.map((warning)=><label key={warning}><input type="checkbox" checked={annualAcknowledged.includes(warning)} onChange={(event)=>setAnnualAcknowledged((current)=>event.target.checked?[...current,warning]:current.filter((item)=>item!==warning))}/>{warning.replace(/_/g," ")}</label>)}<div className="calculation-actions"><button type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")||ACTOR_IDS[actor as "owner"|"admin"]===annualInventory.submittedBy||annualAcknowledged.length!==ANNUAL_WARNINGS.length} onClick={()=>reviewAnnual("approve_bounded_annual_location_draft")}>Approve bounded annual draft</button><button type="button" disabled={busy||(actor!=="owner"&&actor!=="admin")||ACTOR_IDS[actor as "owner"|"admin"]===annualInventory.submittedBy} onClick={()=>reviewAnnual("changes_requested")}>Request changes</button></div></>}</div>}
             </section>}
           </>}
         </div>

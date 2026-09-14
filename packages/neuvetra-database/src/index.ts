@@ -1,4 +1,6 @@
 import { PGlite, type Transaction } from "@electric-sql/pglite"
+import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, multiplyMwh, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
+export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 
 function canonicalJson(value: unknown): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value)
@@ -9,6 +11,12 @@ function canonicalJson(value: unknown): string {
 
 function sha256(value: unknown): string {
   return new Bun.CryptoHasher("sha256").update(canonicalJson(value)).digest("hex")
+}
+
+function databaseInstant(value: string): string {
+  const instant = new Date(value)
+  if (!Number.isFinite(instant.getTime())) throw new Error("Stored timestamp is invalid.")
+  return instant.toISOString()
 }
 
 export interface CompanyWorkspaceRecord {
@@ -279,6 +287,8 @@ export class DevelopmentWorkspaceDatabase {
     await db.exec(calculationMigration)
     const inventoryMigration = await Bun.file(new URL("./migrations/0004_inventory_review.sql", import.meta.url)).text()
     await db.exec(inventoryMigration)
+    const annualRegisterMigration = await Bun.file(new URL("./migrations/0005_annual_electricity_register.sql", import.meta.url)).text()
+    await db.exec(annualRegisterMigration)
     return new DevelopmentWorkspaceDatabase(db)
   }
 
@@ -593,9 +603,9 @@ export class DevelopmentWorkspaceDatabase {
       coverage: { expectedFacilities: 1, coveredFacilities: 1, expectedPeriods: 12, coveredPeriods: 1, coveredMonths: ["2023-01"], missingMonths: row.missing_months },
       warnings: [...M57_WARNINGS],
       line: { facilityId: row.facility_id, servicePeriodStart: row.service_period_start, servicePeriodEnd: row.service_period_end, quantityMwh: row.normalized_quantity_mwh, subtotalKgCo2e: row.display_kg_co2e, calculationResultSha256: row.calculation_result_sha256 },
-      snapshotSha256: row.snapshot_sha256, submittedBy: row.submitted_by, submittedAt: row.submitted_at,
+      snapshotSha256: row.snapshot_sha256, submittedBy: row.submitted_by, submittedAt: databaseInstant(row.submitted_at),
       decision: row.decision_id && row.decision && row.outcome && row.reason_code && row.decided_by && row.decided_at ? {
-        id: row.decision_id, decision: row.decision, outcome: row.outcome, acknowledgedWarnings: row.acknowledged_warning_codes ?? [], reasonCode: row.reason_code, decidedBy: row.decided_by, decidedAt: row.decided_at,
+        id: row.decision_id, decision: row.decision, outcome: row.outcome, acknowledgedWarnings: row.acknowledged_warning_codes ?? [], reasonCode: row.reason_code, decidedBy: row.decided_by, decidedAt: databaseInstant(row.decided_at),
       } : null,
     }
   }
@@ -627,6 +637,135 @@ export class DevelopmentWorkspaceDatabase {
       const inventory = await this.readSyntheticInventory(tx, companyId)
       if (!inventory) throw new Error("Inventory could not be read back.")
       return inventory
+    })
+  }
+
+  private async readAnnualRegisters(tx: Transaction, companyId: string): Promise<AnnualRegister[]> {
+    const result = await tx.query<{ payload_json: string; snapshot_sha256: string; created_by: string; created_at: string }>(
+      `select payload_json, snapshot_sha256, created_by, created_at::text from neuvetra.annual_source_register_versions where company_id=$1 order by version`, [companyId],
+    )
+    return result.rows.map((row) => {
+      const payload = JSON.parse(row.payload_json) as Omit<AnnualRegister, "createdBy" | "createdAt">
+      const { snapshotSha256: _stored, ...unhashed } = payload
+      if (canonicalJson(payload) !== row.payload_json || sha256(unhashed) !== row.snapshot_sha256 || payload.snapshotSha256 !== row.snapshot_sha256) throw new Error("Stored annual register integrity check failed.")
+      return { ...payload, createdBy: row.created_by, createdAt: databaseInstant(row.created_at) }
+    })
+  }
+
+  async findAnnualRegisters(userId: string, companyId: string): Promise<AnnualRegister[]> {
+    return this.asUser(userId, (tx) => this.readAnnualRegisters(tx, companyId))
+  }
+
+  async createAnnualRegister(userId: string, companyId: string, previousInventoryVersionId: string, idempotencyKey: string): Promise<AnnualRegister> {
+    return this.asTrustedUser(userId, async (tx) => {
+      const existing = await tx.query<{ operation_fingerprint: string }>("select operation_fingerprint from neuvetra.annual_source_register_versions where company_id=$1 and idempotency_key=$2", [companyId, idempotencyKey])
+      const workspace = (await tx.query<WorkspaceRow>(WORKSPACE_QUERY, [companyId])).rows[0]
+      if (!workspace) throw new Error("Workspace not found.")
+      const predecessor = await this.readSyntheticInventory(tx, companyId)
+      if (!predecessor || predecessor.id !== previousInventoryVersionId || predecessor.reviewState !== "approved_bounded_draft") throw new Error("Approved predecessor required.")
+      const fingerprint = sha256({ companyId, previousInventoryVersionId })
+      if (existing.rows[0]?.operation_fingerprint !== undefined && existing.rows[0].operation_fingerprint !== fingerprint) throw new Error("Annual register request conflicts.")
+      const stored = (await this.readAnnualRegisters(tx, companyId)).find((item) => item.version === 1)
+      const registerId = stored?.id ?? crypto.randomUUID()
+      const periods: AnnualPeriod[] = Array.from({ length: 12 }, (_, index) => {
+        const month = `2023-${String(index + 1).padStart(2, "0")}`
+        if (index === 0) return { month, state: "reported", version: 1, quantityMwh: "12.346000", emissionsKgCo2e: "2407.9674055248", evidence: { source: "M56 calculation derived from M55 bill version 2", sha256: predecessor.line.calculationResultSha256, locator: `calculation ${predecessor.calculationId}; service 2023-01-01..2023-01-31` }, reason: null, method: null, formula: null, basisMonths: [] } satisfies AnnualPeriod
+        return { month, state: "missing", version: 1, quantityMwh: null, emissionsKgCo2e: null, evidence: null, reason: "awaiting_source", method: null, formula: null, basisMonths: [] } satisfies AnnualPeriod
+      })
+      const base = { id: registerId, companyId, boundaryId: workspace.boundary_id, previousInventoryVersionId, version: 1 as const, reportingYear: 2023 as const, facilityId: workspace.facility_id, status: "incomplete" as const, counts: { expected: 12 as const, resolved: 1, reported: 1, estimated: 0, excluded: 0, missing: 11, calculationBearing: 1 }, periods, totals: null, fixtureSha256: null }
+      const snapshotSha256 = sha256(base)
+      const payload = { ...base, snapshotSha256 }
+      if (stored) {
+        const { createdBy: _createdBy, createdAt: _createdAt, ...storedPayload } = stored
+        if (canonicalJson(storedPayload) !== canonicalJson(payload)) throw new Error("Stored annual register conflicts with its approved predecessor.")
+        return stored
+      }
+      await tx.query("select neuvetra.create_annual_source_register($1,$2,$3,$4,$5,$6,$7,$8)", [companyId, previousInventoryVersionId, registerId, crypto.randomUUID(), canonicalJson(payload), snapshotSha256, idempotencyKey, fingerprint])
+      return (await this.readAnnualRegisters(tx, companyId))[0]!
+    })
+  }
+
+  async completeAnnualRegister(userId: string, companyId: string, registerId: string, expectedSnapshotSha256: string, idempotencyKey: string): Promise<AnnualRegister> {
+    return this.asTrustedUser(userId, async (tx) => {
+      const registers = await this.readAnnualRegisters(tx, companyId)
+      const initial = registers.find((item) => item.id === registerId && item.version === 1)
+      if (!initial || initial.snapshotSha256 !== expectedSnapshotSha256) throw new Error("Annual register request conflicts.")
+      const fixtureBytes = new Uint8Array(await Bun.file(new URL("../../../data/synthetic/m58-electricity-register-2023.json", import.meta.url)).arrayBuffer())
+      const fixtureSha256 = new Bun.CryptoHasher("sha256").update(fixtureBytes).digest("hex")
+      if (fixtureBytes.byteLength !== M58_FIXTURE_BYTES || fixtureSha256 !== M58_FIXTURE_SHA256) throw new Error("Fixed annual register fixture integrity check failed.")
+      const completed = registers.find((item) => item.version === 2)
+      const evidence = { source: "M58 fixed fictional electricity register", sha256: fixtureSha256, locator: "" }
+      const periods: AnnualPeriod[] = M58_REPORTED.map(([month, quantityMwh], index) => ({
+        month, state: "reported", version: month === "2023-01" ? 1 : 2, quantityMwh,
+        emissionsKgCo2e: multiplyMwh(quantityMwh), evidence: month === "2023-01" ? initial.periods[0]!.evidence : { ...evidence, locator: `rows[${index - 1}]` },
+        reason: null, method: null, formula: null, basisMonths: [],
+      }))
+      periods.push({ month: "2023-11", state: "estimated", version: 2, quantityMwh: "12.493000", emissionsKgCo2e: "2436.6383279784", evidence: null, reason: "synthetic_november_statement_unavailable", method: "mean_of_prior_two_reported_months_v1", formula: "(12.765000 + 12.221000) / 2", basisMonths: ["2023-09", "2023-10"] })
+      periods.push({ month: "2023-12", state: "excluded", version: 2, quantityMwh: null, emissionsKgCo2e: null, evidence: { ...evidence, locator: "closureMemo" }, reason: "outside_operational_control_after_lease_end", method: null, formula: null, basisMonths: [] })
+      const registerId2 = completed?.id ?? crypto.randomUUID()
+      const base = { id: registerId2, companyId, boundaryId: initial.boundaryId, previousInventoryVersionId: initial.previousInventoryVersionId, version: 2 as const, reportingYear: 2023 as const, facilityId: initial.facilityId, status: "resolved_with_exceptions" as const, counts: { expected: 12 as const, resolved: 12, reported: 10, estimated: 1, excluded: 1, missing: 0, calculationBearing: 11 }, periods, totals: M58_TOTALS, fixtureSha256 }
+      const snapshotSha256 = sha256(base)
+      const payload = { ...base, snapshotSha256 }
+      const fingerprint = sha256({ companyId, registerId, expectedSnapshotSha256, fixtureSha256 })
+      const prior = await tx.query<{ operation_fingerprint: string }>("select operation_fingerprint from neuvetra.annual_source_register_versions where company_id=$1 and idempotency_key=$2", [companyId, idempotencyKey])
+      if (prior.rows[0] && prior.rows[0].operation_fingerprint !== fingerprint) throw new Error("Annual register request conflicts.")
+      if (completed) {
+        const { createdBy: _createdBy, createdAt: _createdAt, ...storedPayload } = completed
+        if (canonicalJson(storedPayload) !== canonicalJson(payload)) throw new Error("Stored completed register conflicts with its source register.")
+        return completed
+      }
+      if (!prior.rows[0]) await tx.query("select neuvetra.complete_annual_source_register($1,$2,$3,$4,$5,$6,$7,$8,$9)", [companyId, registerId, registerId2, crypto.randomUUID(), canonicalJson(payload), fixtureSha256, snapshotSha256, idempotencyKey, fingerprint])
+      return (await this.readAnnualRegisters(tx, companyId)).find((item) => item.version === 2)!
+    })
+  }
+
+  private async readAnnualInventory(tx: Transaction, companyId: string): Promise<AnnualInventory | null> {
+    const result = await tx.query<{ payload_json: string; snapshot_sha256: string; submitted_by: string; submitted_at: string; decision_id: string | null; decision: AnnualInventory["decision"] extends infer D ? string | null : never; reason_code: string | null; acknowledged_warning_codes: string[] | null; decided_by: string | null; decided_at: string | null }>(
+      `select i.payload_json,i.snapshot_sha256,i.submitted_by,i.submitted_at::text,d.id decision_id,d.decision,d.reason_code,d.acknowledged_warning_codes,d.decided_by,d.decided_at::text
+       from neuvetra.annual_inventory_versions i left join neuvetra.annual_inventory_review_decisions d on d.company_id=i.company_id and d.annual_inventory_version_id=i.id where i.company_id=$1 and i.version=2`, [companyId],
+    )
+    const row = result.rows[0]; if (!row) return null
+    const payload = JSON.parse(row.payload_json) as Omit<AnnualInventory, "submittedBy" | "submittedAt" | "decision">
+    const { snapshotSha256: _stored, ...unhashed } = payload
+    if (canonicalJson(payload) !== row.payload_json || sha256(unhashed) !== row.snapshot_sha256 || payload.snapshotSha256 !== row.snapshot_sha256) throw new Error("Stored annual inventory integrity check failed.")
+    const decision = row.decision_id && row.decision && row.reason_code && row.decided_by && row.decided_at ? {
+      id: row.decision_id, decision: row.decision as "approve_bounded_annual_location_draft" | "changes_requested", outcome: (row.decision === "approve_bounded_annual_location_draft" ? "approved_bounded_annual_location_draft" : "changes_requested") as AnnualInventory["decision"] extends infer D ? any : never,
+      reasonCode: row.reason_code as "bounded_annual_location_register_reviewed" | "source_or_calculation_revision_required", acknowledgedWarnings: row.acknowledged_warning_codes ?? [], decidedBy: row.decided_by, decidedAt: databaseInstant(row.decided_at),
+    } : null
+    return { ...payload, submittedBy: row.submitted_by, submittedAt: databaseInstant(row.submitted_at), decision }
+  }
+
+  async findAnnualInventory(userId: string, companyId: string): Promise<AnnualInventory | null> { return this.asUser(userId, (tx) => this.readAnnualInventory(tx, companyId)) }
+
+  async createAnnualInventory(userId: string, companyId: string, registerId: string, idempotencyKey: string): Promise<AnnualInventory> {
+    return this.asTrustedUser(userId, async (tx) => {
+      const register = (await this.readAnnualRegisters(tx, companyId)).find((item) => item.id === registerId && item.version === 2)
+      if (!register || !register.totals) throw new Error("Resolved annual register required.")
+      const existingInventory = await this.readAnnualInventory(tx, companyId)
+      const inventoryId = existingInventory?.id ?? crypto.randomUUID()
+      const base = { id: inventoryId, companyId, boundaryId: register.boundaryId, previousInventoryVersionId: register.previousInventoryVersionId, registerId, registerSnapshotSha256: register.snapshotSha256, version: 2 as const, reportingYear: 2023 as const, scope: "scope_2_location_based" as const, periodResolution: "resolved_with_exceptions" as const, overallInventoryCompleteness: "incomplete" as const, releaseEligible: false as const, counts: { expected: 12 as const, resolved: 12 as const, reported: 10 as const, estimated: 1 as const, excluded: 1 as const, missing: 0 as const, calculationBearing: 11 as const }, totals: M58_TOTALS, warnings: [...M58_WARNINGS] }
+      const snapshotSha256 = sha256(base); const payload = { ...base, snapshotSha256 }; const fingerprint = sha256({ companyId, registerId, registerSnapshotSha256: register.snapshotSha256 })
+      const prior = await tx.query<{ operation_fingerprint: string }>("select operation_fingerprint from neuvetra.annual_inventory_versions where company_id=$1 and idempotency_key=$2", [companyId,idempotencyKey])
+      if (prior.rows[0] && prior.rows[0].operation_fingerprint !== fingerprint) throw new Error("Annual inventory request conflicts.")
+      if (existingInventory) {
+        const { submittedBy: _submittedBy, submittedAt: _submittedAt, decision: _decision, ...storedPayload } = existingInventory
+        if (canonicalJson(storedPayload) !== canonicalJson(payload)) throw new Error("Stored annual inventory conflicts with its resolved register.")
+        return existingInventory
+      }
+      if (!prior.rows[0]) await tx.query("select neuvetra.create_annual_inventory_v2($1,$2,$3,$4,$5,$6,$7,$8)", [companyId,registerId,inventoryId,crypto.randomUUID(),canonicalJson(payload),snapshotSha256,idempotencyKey,fingerprint])
+      return (await this.readAnnualInventory(tx, companyId))!
+    })
+  }
+
+  async reviewAnnualInventory(userId: string, companyId: string, inventoryId: string, decision: "approve_bounded_annual_location_draft" | "changes_requested", reasonCode: string, acknowledgedWarnings: string[], expectedSnapshotSha256: string, idempotencyKey: string): Promise<AnnualInventory> {
+    return this.asTrustedUser(userId, async (tx) => {
+      const inventory = await this.readAnnualInventory(tx, companyId)
+      if (!inventory || inventory.id !== inventoryId || inventory.snapshotSha256 !== expectedSnapshotSha256) throw new Error("Annual inventory review conflicts.")
+      const fingerprint = sha256({ userId, inventoryId, decision, reasonCode, acknowledgedWarnings, expectedSnapshotSha256 })
+      const prior = await tx.query<{ operation_fingerprint: string }>("select operation_fingerprint from neuvetra.annual_inventory_review_decisions where company_id=$1 and idempotency_key=$2", [companyId,idempotencyKey])
+      if (prior.rows[0] && prior.rows[0].operation_fingerprint !== fingerprint) throw new Error("Annual inventory review conflicts.")
+      if (!prior.rows[0]) await tx.query("select neuvetra.review_annual_inventory_v2($1,$2,$3,$4,$5,$6,$7,$8,$9)", [companyId,inventoryId,crypto.randomUUID(),crypto.randomUUID(),decision,reasonCode,acknowledgedWarnings,idempotencyKey,fingerprint])
+      return (await this.readAnnualInventory(tx, companyId))!
     })
   }
 

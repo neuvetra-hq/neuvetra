@@ -19,6 +19,7 @@ describe("M54 composed development server", () => {
   const originalBillEnabled = Bun.env.M55_SYNTHETIC_BILL
   const originalCalculationEnabled = Bun.env.M56_SYNTHETIC_BILL_CALCULATION
   const originalInventoryEnabled = Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
+  const originalAnnualEnabled = Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER
   const originalRuntime = Bun.env.NODE_ENV
   afterEach(async () => {
     await close?.()
@@ -31,6 +32,8 @@ describe("M54 composed development server", () => {
     else Bun.env.M56_SYNTHETIC_BILL_CALCULATION = originalCalculationEnabled
     if (originalInventoryEnabled === undefined) delete Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
     else Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = originalInventoryEnabled
+    if (originalAnnualEnabled === undefined) delete Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER
+    else Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER = originalAnnualEnabled
     if (originalRuntime === undefined) delete Bun.env.NODE_ENV
     else Bun.env.NODE_ENV = originalRuntime
   })
@@ -40,6 +43,7 @@ describe("M54 composed development server", () => {
     Bun.env.M55_SYNTHETIC_BILL = "enabled"
     Bun.env.M56_SYNTHETIC_BILL_CALCULATION = "enabled"
     Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = "enabled"
+    Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER = "enabled"
     Bun.env.NODE_ENV = "test"
     const { app, database } = await createDevelopmentWorkspaceServer()
     close = () => database.close()
@@ -64,7 +68,7 @@ describe("M54 composed development server", () => {
   }, 15_000)
 
   test("requires both an explicit enable flag and a development/test runtime", async () => {
-    for (const [enabled, billEnabled, calculationEnabled, inventoryEnabled, runtime] of [[undefined, "enabled", "enabled", "enabled", "development"], ["enabled", undefined, "enabled", "enabled", "development"], ["enabled", "enabled", undefined, "enabled", "development"], ["enabled", "enabled", "enabled", undefined, "development"], ["enabled", "enabled", "enabled", "enabled", undefined], ["enabled", "enabled", "enabled", "enabled", "staging"], ["enabled", "enabled", "enabled", "enabled", "production"]] as const) {
+    for (const [enabled, billEnabled, calculationEnabled, inventoryEnabled, annualEnabled, runtime] of [[undefined, "enabled", "enabled", "enabled", "enabled", "development"], ["enabled", undefined, "enabled", "enabled", "enabled", "development"], ["enabled", "enabled", undefined, "enabled", "enabled", "development"], ["enabled", "enabled", "enabled", undefined, "enabled", "development"], ["enabled", "enabled", "enabled", "enabled", undefined, "development"], ["enabled", "enabled", "enabled", "enabled", "enabled", undefined], ["enabled", "enabled", "enabled", "enabled", "enabled", "staging"], ["enabled", "enabled", "enabled", "enabled", "enabled", "production"]] as const) {
       if (enabled === undefined) delete Bun.env.M54_SYNTHETIC_WORKSPACE
       else Bun.env.M54_SYNTHETIC_WORKSPACE = enabled
       if (billEnabled === undefined) delete Bun.env.M55_SYNTHETIC_BILL
@@ -73,6 +77,8 @@ describe("M54 composed development server", () => {
       else Bun.env.M56_SYNTHETIC_BILL_CALCULATION = calculationEnabled
       if (inventoryEnabled === undefined) delete Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW
       else Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = inventoryEnabled
+      if (annualEnabled === undefined) delete Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER
+      else Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER = annualEnabled
       if (runtime === undefined) delete Bun.env.NODE_ENV
       else Bun.env.NODE_ENV = runtime
       await expect(createDevelopmentWorkspaceServer()).rejects.toThrow("explicit development/test enable flags")
@@ -84,6 +90,7 @@ describe("M54 composed development server", () => {
     Bun.env.M55_SYNTHETIC_BILL = "enabled"
     Bun.env.M56_SYNTHETIC_BILL_CALCULATION = "enabled"
     Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = "enabled"
+    Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER = "enabled"
     Bun.env.NODE_ENV = "test"
     const { app, database } = await createDevelopmentWorkspaceServer()
     close = () => database.close()
@@ -102,6 +109,7 @@ describe("M54 composed development server", () => {
     Bun.env.M55_SYNTHETIC_BILL = "enabled"
     Bun.env.M56_SYNTHETIC_BILL_CALCULATION = "enabled"
     Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW = "enabled"
+    Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER = "enabled"
     Bun.env.NODE_ENV = "test"
     const { app, database } = await createDevelopmentWorkspaceServer()
     close = () => database.close()
@@ -230,9 +238,10 @@ describe("M54 composed development server", () => {
       body: JSON.stringify({ calculationId: calculationBody.draftCalculation.id, idempotencyKey: prepareKey }),
     }))
     expect(preparedResponse.status).toBe(201)
-    const prepared = await preparedResponse.json() as { id: string; reviewState: string; completeness: string; releaseEligible: boolean; snapshotSha256: string; warnings: string[]; coverage: { coveredPeriods: number; expectedPeriods: number; missingMonths: string[] }; line: { quantityMwh: string; subtotalKgCo2e: string }; submittedBy: string; decision: null }
+    const prepared = await preparedResponse.json() as { id: string; reviewState: string; completeness: string; releaseEligible: boolean; snapshotSha256: string; warnings: string[]; coverage: { coveredPeriods: number; expectedPeriods: number; missingMonths: string[] }; line: { quantityMwh: string; subtotalKgCo2e: string }; submittedBy: string; submittedAt:string; decision: null }
     expect(prepared).toMatchObject({ reviewState: "awaiting_review", completeness: "incomplete", releaseEligible: false, coverage: { coveredPeriods: 1, expectedPeriods: 12 }, line: { quantityMwh: "12.346000", subtotalKgCo2e: "2407.9674" }, submittedBy: "11111111-1111-4111-8111-111111111111", decision: null })
     expect(prepared.coverage.missingMonths).toHaveLength(11)
+    expect(prepared.submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
     expect(prepared.warnings).toEqual(["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"])
 
     const decisionBody = { decision: "approve_bounded_draft", expectedInventorySnapshotSha256: prepared.snapshotSha256, acknowledgedWarnings: prepared.warnings, reasonCode: "bounded_synthetic_scope_reviewed", idempotencyKey: crypto.randomUUID() }
@@ -246,6 +255,47 @@ describe("M54 composed development server", () => {
     expect(memberInventory.status).toBe(200)
     const outsiderInventory = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/inventories/2023/scope2`, { headers: { origin: ORIGIN, authorization: `Bearer ${M54_OUTSIDER_TOKEN}` } }))
     expect(outsiderInventory.status).toBe(404)
+
+    const registerKey=crypto.randomUUID()
+    const concurrentRegisters=await Promise.all(Array.from({length:3},()=>database.createAnnualRegister(prepared.submittedBy,workspace.id,prepared.id,registerKey)))
+    expect(new Set(concurrentRegisters.map((item)=>item.id)).size).toBe(1)
+    expect((await database.createAnnualRegister(prepared.submittedBy,workspace.id,prepared.id,registerKey)).id).toBe(concurrentRegisters[0]!.id)
+    expect((await database.createAnnualRegister(prepared.submittedBy,workspace.id,prepared.id,crypto.randomUUID())).id).toBe(concurrentRegisters[0]!.id)
+    const registerResponse = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-registers/2023`, { method:"POST", headers:{ origin:ORIGIN, authorization:`Bearer ${M54_OWNER_TOKEN}`, "content-type":"application/json" }, body:JSON.stringify({ previousInventoryVersionId:prepared.id,idempotencyKey:crypto.randomUUID() }) }))
+    expect(registerResponse.status).toBe(201)
+    const initialRegister=await registerResponse.json() as any
+    expect(initialRegister).toMatchObject({version:1,status:"incomplete",counts:{expected:12,resolved:1,reported:1,missing:11},totals:null})
+    expect(initialRegister.createdAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
+    expect(initialRegister.periods.map((period:any)=>period.state)).toEqual(["reported",...Array(11).fill("missing")])
+    const completionKey=crypto.randomUUID()
+    const concurrentCompletions=await Promise.all(Array.from({length:3},()=>database.completeAnnualRegister(prepared.submittedBy,workspace.id,initialRegister.id,initialRegister.snapshotSha256,completionKey)))
+    expect(new Set(concurrentCompletions.map((item)=>item.id)).size).toBe(1)
+    expect((await database.completeAnnualRegister(prepared.submittedBy,workspace.id,initialRegister.id,initialRegister.snapshotSha256,completionKey)).id).toBe(concurrentCompletions[0]!.id)
+    expect((await database.completeAnnualRegister(prepared.submittedBy,workspace.id,initialRegister.id,initialRegister.snapshotSha256,crypto.randomUUID())).id).toBe(concurrentCompletions[0]!.id)
+    const completedResponse=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-registers/${initialRegister.id}/complete`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M54_OWNER_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({expectedRegisterSnapshotSha256:initialRegister.snapshotSha256,fixtureId:"m58-fixed-electricity-register-2023-v1",idempotencyKey:crypto.randomUUID()})}))
+    expect(completedResponse.status).toBe(201)
+    const completed=await completedResponse.json() as any
+    expect(completed).toMatchObject({version:2,status:"resolved_with_exceptions",counts:{expected:12,resolved:12,reported:10,estimated:1,excluded:1,missing:0,calculationBearing:11},totals:{reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"}})
+    expect(completed.periods[10]).toMatchObject({month:"2023-11",state:"estimated",quantityMwh:"12.493000",method:"mean_of_prior_two_reported_months_v1",basisMonths:["2023-09","2023-10"]})
+    expect(completed.periods[11]).toMatchObject({month:"2023-12",state:"excluded",quantityMwh:null,emissionsKgCo2e:null,reason:"outside_operational_control_after_lease_end"})
+    const annualKey=crypto.randomUUID()
+    const concurrentAnnuals=await Promise.all(Array.from({length:3},()=>database.createAnnualInventory(prepared.submittedBy,workspace.id,completed.id,annualKey)))
+    expect(new Set(concurrentAnnuals.map((item)=>item.id)).size).toBe(1)
+    expect((await database.createAnnualInventory(prepared.submittedBy,workspace.id,completed.id,annualKey)).id).toBe(concurrentAnnuals[0]!.id)
+    expect((await database.createAnnualInventory(prepared.submittedBy,workspace.id,completed.id,crypto.randomUUID())).id).toBe(concurrentAnnuals[0]!.id)
+    const annualResponse=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/2023/scope2/versions`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M54_OWNER_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({registerId:completed.id,idempotencyKey:crypto.randomUUID()})}))
+    expect(annualResponse.status).toBe(201)
+    const annual=await annualResponse.json() as any
+    expect(annual).toMatchObject({version:2,periodResolution:"resolved_with_exceptions",overallInventoryCompleteness:"incomplete",releaseEligible:false,counts:{resolved:12,reported:10,estimated:1,excluded:1,missing:0},decision:null})
+    expect(annual.submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
+    const annualDecision={decision:"approve_bounded_annual_location_draft",reasonCode:"bounded_annual_location_register_reviewed",acknowledgedWarnings:annual.warnings,expectedInventorySnapshotSha256:annual.snapshotSha256,idempotencyKey:crypto.randomUUID()}
+    const annualSelf=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/decisions`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M54_OWNER_TOKEN}`,"content-type":"application/json"},body:JSON.stringify(annualDecision)}))
+    expect(annualSelf.status).toBe(409)
+    const annualApproved=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-inventories/${annual.id}/decisions`,{method:"POST",headers:{origin:ORIGIN,authorization:`Bearer ${M55_ADMIN_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({...annualDecision,idempotencyKey:crypto.randomUUID()})}))
+    expect(annualApproved.status).toBe(201)
+    expect(await annualApproved.json()).toMatchObject({overallInventoryCompleteness:"incomplete",releaseEligible:false,decision:{outcome:"approved_bounded_annual_location_draft",decidedBy:"33333333-3333-4333-8333-333333333333"}})
+    const memberRegister=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-registers/2023`,{headers:{origin:ORIGIN,authorization:`Bearer ${M55_MEMBER_TOKEN}`}}));expect(memberRegister.status).toBe(200)
+    const outsiderRegister=await app.handle(new Request(`http://localhost/workspace/${workspace.id}/annual-registers/2023`,{headers:{origin:ORIGIN,authorization:`Bearer ${M54_OUTSIDER_TOKEN}`}}));expect(outsiderRegister.status).toBe(404)
 
     const foreign = await app.handle(new Request(`http://localhost/workspace/${workspace.id}/bills/${extracted.id}`, {
       headers: { origin: ORIGIN, authorization: `Bearer ${M54_OUTSIDER_TOKEN}` },

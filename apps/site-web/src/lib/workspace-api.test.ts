@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, decodeSyntheticBill, decodeWorkspace, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type SyntheticInventory } from "./workspace-api"
+import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeSyntheticBill, decodeWorkspace, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type SyntheticInventory } from "./workspace-api"
 
 const fixture = {
   id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -93,6 +93,45 @@ describe("M54 workspace browser boundary", () => {
     }) as typeof fetch
     await expect(createSyntheticWorkspace("signed_out", fetcher)).rejects.toThrow("Authentication required")
     expect(new Headers(headers).has("authorization")).toBe(false)
+  })
+})
+
+describe("M58 annual register browser boundary",()=>{
+  const ids={register:"31313131-3131-4131-8131-313131313131",boundary:"32323232-3232-4232-8232-323232323232",inventory:"33333333-3333-4333-8333-333333333333",facility:"34343434-3434-4434-8434-343434343434",actor:"35353535-3535-4535-8535-353535353535"}
+  const months=Array.from({length:12},(_,i)=>`2023-${String(i+1).padStart(2,"0")}`)
+  const initial={id:ids.register,companyId:fixture.id,boundaryId:ids.boundary,previousInventoryVersionId:ids.inventory,version:1,reportingYear:2023,facilityId:ids.facility,status:"incomplete",counts:{expected:12,resolved:1,reported:1,estimated:0,excluded:0,missing:11,calculationBearing:1},periods:months.map((month,index)=>index===0?{month,state:"reported",version:1,quantityMwh:"12.346000",emissionsKgCo2e:"2407.9674055248",evidence:{source:"M56 calculation derived from M55 bill version 2",sha256:"a".repeat(64),locator:"service"},reason:null,method:null,formula:null,basisMonths:[]}:{month,state:"missing",version:1,quantityMwh:null,emissionsKgCo2e:null,evidence:null,reason:"awaiting_source",method:null,formula:null,basisMonths:[]}),totals:null,fixtureSha256:null,snapshotSha256:"b".repeat(64),createdBy:ids.actor,createdAt:"2026-09-13T12:00:00.000Z"}
+  test("accepts the exact initial denominator and rejects hidden zeroes",()=>{
+    expect(decodeAnnualRegister(initial,fixture.id)).toEqual(initial)
+    const changed=structuredClone(initial);changed.periods[11]!.quantityMwh="0.000000"
+    expect(()=>decodeAnnualRegister(changed,fixture.id)).toThrow("not recognized")
+    expect(()=>decodeAnnualRegister(initial,fixture.id,{version:2})).toThrow("not recognized")
+    expect(()=>decodeAnnualRegister(initial,fixture.id,{januaryEvidenceSha256:"f".repeat(64)})).toThrow("not recognized")
+  })
+  test("pins every final evidence locator and exception",()=>{
+    const q=["12.346000","11.982000","12.417000","11.876000","12.104000","13.228000","14.037000","13.812000","12.765000","12.221000","12.493000",null]
+    const e=["2407.9674055248","2336.9727404016","2421.8152660296","2316.2984697888","2360.7676556352","2579.9929402464","2737.7805338856","2693.8964689056","2489.689286532","2383.5873694248","2436.6383279784",null]
+    const hash="44cf813b31bf92a13e15a5432e26cd931355df7ded4684248759a50876dbdc29"
+    const periods=months.map((month,index)=>index<10?{month,state:"reported",version:index===0?1:2,quantityMwh:q[index],emissionsKgCo2e:e[index],evidence:index===0?initial.periods[0]!.evidence:{source:"M58 fixed fictional electricity register",sha256:hash,locator:`rows[${index-1}]`},reason:null,method:null,formula:null,basisMonths:[]}:index===10?{month,state:"estimated",version:2,quantityMwh:q[index],emissionsKgCo2e:e[index],evidence:null,reason:"synthetic_november_statement_unavailable",method:"mean_of_prior_two_reported_months_v1",formula:"(12.765000 + 12.221000) / 2",basisMonths:["2023-09","2023-10"]}:{month,state:"excluded",version:2,quantityMwh:null,emissionsKgCo2e:null,evidence:{source:"M58 fixed fictional electricity register",sha256:hash,locator:"closureMemo"},reason:"outside_operational_control_after_lease_end",method:null,formula:null,basisMonths:[]})
+    const final={...initial,id:"37373737-3737-4737-8737-373737373737",version:2,status:"resolved_with_exceptions",counts:{expected:12,resolved:12,reported:10,estimated:1,excluded:1,missing:0,calculationBearing:11},periods,totals:{reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",reportedDisplayKgCo2e:"24728.7681",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",estimatedDisplayKgCo2e:"2436.6383",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"},fixtureSha256:hash}
+    expect(decodeAnnualRegister(final,fixture.id,{version:2})).toEqual(final)
+    const canonicalOrder={...final,counts:Object.fromEntries(Object.entries(final.counts).reverse()),totals:Object.fromEntries(Object.entries(final.totals).reverse())}
+    expect(decodeAnnualRegister(canonicalOrder,fixture.id,{version:2})).toEqual(canonicalOrder)
+    const lineage={version:2 as const,previousInventoryVersionId:final.previousInventoryVersionId,boundaryId:final.boundaryId,facilityId:final.facilityId,januaryEvidenceSha256:"a".repeat(64),januaryCalculationId:"41414141-4141-4141-8141-414141414141"}
+    const exactFinal={...final,periods:final.periods.map((period,index)=>index===0?{...period,evidence:{source:"M56 calculation derived from M55 bill version 2",sha256:"a".repeat(64),locator:"calculation 41414141-4141-4141-8141-414141414141; service 2023-01-01..2023-01-31"}}:period)}
+    expect(decodeAnnualRegister(exactFinal,fixture.id,lineage)).toEqual(exactFinal)
+    for(const changed of [{...exactFinal,boundaryId:"42424242-4242-4242-8242-424242424242"},{...exactFinal,facilityId:"43434343-4343-4343-8343-434343434343"},{...exactFinal,previousInventoryVersionId:"44444444-4444-4444-8444-444444444444"},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===0?{...p,evidence:{...(p.evidence as object),source:"other"}}:p)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===0?{...p,evidence:{...(p.evidence as object),locator:"calculation 45454545-4545-4545-8545-454545454545; service 2023-01-01..2023-01-31"}}:p)},{...exactFinal,fixtureSha256:"e".repeat(64)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===1?{...p,evidence:{...(p.evidence as object),source:"other"}}:p)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===9?{...p,evidence:{...(p.evidence as object),locator:"rows[0]"}}:p)},{...exactFinal,periods:exactFinal.periods.map((p,index)=>index===11?{...p,evidence:{...(p.evidence as object),sha256:"e".repeat(64)}}:p)}]) expect(()=>decodeAnnualRegister(changed,fixture.id,lineage)).toThrow("not recognized")
+  })
+  test("requires incomplete and unreleased inventory version 2",()=>{
+    const totals={reportedMwh:"126.788000",reportedKgCo2e:"24728.7681363744",reportedDisplayKgCo2e:"24728.7681",estimatedMwh:"12.493000",estimatedKgCo2e:"2436.6383279784",estimatedDisplayKgCo2e:"2436.6383",includedMwh:"139.281000",includedKgCo2e:"27165.4064643528",includedDisplayKgCo2e:"27165.4065"}
+    const annual={id:ids.inventory,companyId:fixture.id,boundaryId:ids.boundary,previousInventoryVersionId:"36363636-3636-4636-8636-363636363636",registerId:ids.register,registerSnapshotSha256:"c".repeat(64),version:2,reportingYear:2023,scope:"scope_2_location_based",periodResolution:"resolved_with_exceptions",overallInventoryCompleteness:"incomplete",releaseEligible:false,counts:{expected:12,resolved:12,reported:10,estimated:1,excluded:1,missing:0,calculationBearing:11},totals,warnings:[...ANNUAL_WARNINGS],snapshotSha256:"d".repeat(64),submittedBy:ids.actor,submittedAt:"2026-09-13T12:00:00.000Z",decision:null}
+    expect(decodeAnnualInventory(annual,fixture.id)).toEqual(annual)
+    expect(()=>decodeAnnualInventory({...annual,overallInventoryCompleteness:"complete"},fixture.id)).toThrow("not recognized")
+    expect(()=>decodeAnnualInventory({...annual,releaseEligible:true},fixture.id)).toThrow("not recognized")
+    const approved={...annual,decision:{id:"38383838-3838-4838-8838-383838383838",decision:"approve_bounded_annual_location_draft",outcome:"approved_bounded_annual_location_draft",reasonCode:"bounded_annual_location_register_reviewed",acknowledgedWarnings:[...ANNUAL_WARNINGS],decidedBy:"39393939-3939-4939-8939-393939393939",decidedAt:"2026-09-13T12:01:00.000Z"}}
+    const lineage={inventoryId:annual.id,registerId:annual.registerId,previousInventoryVersionId:annual.previousInventoryVersionId,boundaryId:annual.boundaryId,registerSnapshotSha256:annual.registerSnapshotSha256}
+    expect(decodeAnnualInventory(approved,fixture.id,lineage)).toEqual(approved)
+    for(const changed of [{...approved,registerId:"46464646-4646-4646-8646-464646464646"},{...approved,previousInventoryVersionId:"47474747-4747-4747-8747-474747474747"},{...approved,boundaryId:"48484848-4848-4848-8848-484848484848"},{...approved,registerSnapshotSha256:"e".repeat(64)}])expect(()=>decodeAnnualInventory(changed,fixture.id,lineage)).toThrow("not recognized")
+    for(const changed of [{...approved,decision:{...approved.decision,extra:true}},{...approved,decision:{...approved.decision,outcome:"changes_requested"}},{...approved,decision:{...approved.decision,acknowledgedWarnings:[]}},{...approved,decision:{...approved.decision,decidedBy:annual.submittedBy}},{...approved,decision:{...approved.decision,decidedAt:"later"}}])expect(()=>decodeAnnualInventory(changed,fixture.id)).toThrow("not recognized")
   })
 })
 

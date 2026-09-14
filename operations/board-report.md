@@ -1,5 +1,15 @@
 # Neuvetra board update
 
+September 13, 2026. **M58 annual location-based electricity register is complete for its bounded local synthetic scope and independently accepted.** It resolves twelve expected 2023 periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December carries no quantity and is never counted as zero.
+
+The exact approved M57 January result flows into immutable register version 1, register version 2 and inventory version 2. Tenant isolation, forced row-level security, immutable history, exact lineage, concurrent-command convergence and two-person review pass. The live browser journey reached the independent M58 approval and kept **overall inventory completeness: incomplete** adjacent to the result. Independent QA `f39e6a9513…` passes all 20 file bindings; database 21/186, API 625/5,399, web 63/253 and Python 12 pass. Release eligibility remains false.
+
+M58 remains fictional and local in PGlite. It does not add customer data, hosted persistence, market-based Scope 2, Scope 1 or 3, released factors or methods, filing, assurance, deployment or release.
+
+CEO recommendation: M59 should create a deterministic evidence pack and replay for the sealed M58 inventory, including both register versions, evidence and exception locators, calculation lineage, review decisions and integrity hashes. Independent acceptance should reconstruct the displayed subtotal from that package.
+
+[M58 record](../docs/research/annual-source-register-milestone-58.md) · [independent review](../evaluations/research-qa/milestone58-annual-register-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
 September 13, 2026. **M57 bounded draft inventory review is complete, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at `4d5827c`.** The exact M56 calculation now sits in immutable 2023 inventory version 1, showing one covered month out of twelve, all four required limitations and release eligibility false. The owner cannot review their own submission; an administrator records the immutable bounded-draft decision; a member can inspect but not mutate; foreign access reveals no record.
 
 Independent QA `7ad7dde4…` passed the repaired exact candidate with no open finding. Python 12, API 625/5,372, web 60/224 and database 19/139 pass with type checks, lint, build, production exclusion and the browser role journey. M57 remains local and fictional; Stage 4, deployment, release and professional assurance remain false.

@@ -39,6 +39,20 @@ export interface WorkspaceStore {
   findInventory?(userId: string, workspaceId: string): Promise<SyntheticInventory | null>
   createInventory?(userId: string, workspaceId: string, calculationId: string, idempotencyKey: string): Promise<SyntheticInventory>
   decideInventory?(userId: string, workspaceId: string, inventoryId: string, input: InventoryDecisionInput): Promise<SyntheticInventory>
+  findAnnualRegisters?(userId: string, workspaceId: string): Promise<AnnualRegister[]>
+  createAnnualRegister?(userId: string, workspaceId: string, previousInventoryVersionId: string, idempotencyKey: string): Promise<AnnualRegister>
+  completeAnnualRegister?(userId: string, workspaceId: string, registerId: string, expectedSnapshotSha256: string, idempotencyKey: string): Promise<AnnualRegister>
+  findAnnualInventory?(userId: string, workspaceId: string): Promise<AnnualInventory | null>
+  createAnnualInventory?(userId: string, workspaceId: string, registerId: string, idempotencyKey: string): Promise<AnnualInventory>
+  reviewAnnualInventory?(userId: string, workspaceId: string, inventoryId: string, input: AnnualInventoryDecisionInput): Promise<AnnualInventory>
+}
+
+export interface AnnualInventoryDecisionInput {
+  decision: "approve_bounded_annual_location_draft" | "changes_requested"
+  reasonCode: "bounded_annual_location_register_reviewed" | "source_or_calculation_revision_required"
+  acknowledgedWarnings: string[]
+  expectedInventorySnapshotSha256: string
+  idempotencyKey: string
 }
 
 export const INVENTORY_WARNINGS = ["annual_coverage_incomplete_1_of_12_months", "market_based_scope2_not_included", "factor_and_method_not_released", "synthetic_local_only_no_assurance"] as const
@@ -112,3 +126,5 @@ export interface SyntheticBill {
     record: Record<string, unknown>
   }
 }
+import type { AnnualInventory, AnnualRegister } from "@neuvetra/database"
+export type { AnnualInventory, AnnualRegister } from "@neuvetra/database"

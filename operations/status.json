@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-13T21:20:00-07:00",
+  "updated_at": "2026-09-13T23:20:00-07:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M57",
-    "name": "Bounded draft inventory review and approval gate",
-    "status": "complete_independent_acceptance_published_to_pr",
-    "next_gate": "Collect board feedback, then decide whether to begin M58 annual location-based source register and missing-period completion workflow; Stage 4 and release acceptance remain false."
+    "id": "M58",
+    "name": "Annual location-based electricity source register",
+    "status": "complete_independent_acceptance_publication_in_progress",
+    "next_gate": "Publish the exact accepted M58 commit to PR #3, then collect board feedback on M59 deterministic inventory evidence pack and replay; release acceptance remains false."
   },
   "completed_milestones": [
     {
@@ -45,6 +45,11 @@
       "id": "M57",
       "completed_at": "2026-09-13",
       "feedback": "docs/research/inventory-review-milestone-57.md"
+    },
+    {
+      "id": "M58",
+      "completed_at": "2026-09-13",
+      "feedback": "docs/research/annual-source-register-milestone-58.md"
     }
   ],
   "runtime": {
@@ -52,18 +57,18 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M57 local browser acceptance completed; all temporary workspace/API preview listeners are closed. No persistent M57 service is running.",
+    "website_preview_state": "M58 local browser acceptance completed end to end; all temporary M58 API and preview listeners are closed. No persistent M58 service is configured.",
     "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M57 passed independent QA and was published in PR #3 at 4d5827c. The exact M56 line now creates one immutable, two-person-reviewed 2023 inventory version while completeness remains incomplete and release eligibility remains false."
+    "last_session_work": "M58 passed the full local browser workflow and independent QA. Twelve periods resolve as 10 reported, one estimated and one excluded; the included draft subtotal is 27,165.4065 kg CO2e while overall completeness and release eligibility remain false."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T04:20:00.000Z",
+    "saved_at": "2026-09-14T06:20:00.000Z",
     "path": "operations/next-session.md",
-    "board_record": "docs/research/inventory-review-milestone-57.md",
-    "next_task": "Collect board feedback, then define M58 as a bounded annual location-based source register and missing-period completion workflow.",
-    "execution_state": "m57_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
-    "review": "Independent QA 7ad7dde4 passed the repaired exact candidate with no open findings. Python 12, API 625/5,372, web 60/224 and database 19/139 passed with all type checks, lint/build, production exclusion, diff checks and the browser role journey.",
-    "scope": "One fixed fictional January 2023 line in immutable 2023 inventory version 1, exact 1-of-12 completeness and four warnings, two-person decision, tenant RLS and immutable audit history. No customer data, market-based accounting, hosted persistence, deployment, merge or release."
+    "board_record": "docs/research/annual-source-register-milestone-58.md",
+    "next_task": "Publish the exact M58 commit to PR #3, collect board feedback, then define M59 deterministic inventory evidence pack and replay.",
+    "execution_state": "m58_complete_independently_accepted_publication_in_progress_no_release_acceptance",
+    "review": "Independent QA f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491 passes all 20 bound files. Database 21/186, API 625/5,399, web 63/253 and Python 12 pass with all type checks, lint/build, production exclusion, JSON/diff checks and the end-to-end browser journey.",
+    "scope": "One fixed fictional one-facility 2023 annual location-based electricity register with ten reported, one estimated and one excluded period, immutable inventory version 2 and two-person review. No customer data, market-based accounting, hosted persistence, deployment, merge or release."
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
@@ -406,7 +411,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01–E06 and P01–P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u2013E06 and P01\u2013P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",

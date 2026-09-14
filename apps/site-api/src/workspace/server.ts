@@ -7,7 +7,7 @@ import { INVENTORY_WARNINGS, type InventoryDecisionInput } from "./types"
 
 const HOST = "127.0.0.1"
 const PORT = Number(Bun.env.M54_WORKSPACE_PORT ?? 3015)
-const ORIGIN = "http://127.0.0.1:5174"
+const ORIGINS = ["http://127.0.0.1:5174", "http://127.0.0.1:5175", "http://127.0.0.1:5176"] as const
 export const M54_OWNER_ID = "11111111-1111-4111-8111-111111111111"
 export const M54_OUTSIDER_ID = "22222222-2222-4222-8222-222222222222"
 export const M55_ADMIN_ID = "33333333-3333-4333-8333-333333333333"
@@ -25,8 +25,8 @@ function canonicalJson(value: unknown): string {
 }
 
 export async function createDevelopmentWorkspaceServer() {
-  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
-    throw new Error("The M54/M55/M56/M57 synthetic workspace server requires explicit development/test enable flags.")
+  if (Bun.env.M54_SYNTHETIC_WORKSPACE !== "enabled" || Bun.env.M55_SYNTHETIC_BILL !== "enabled" || Bun.env.M56_SYNTHETIC_BILL_CALCULATION !== "enabled" || Bun.env.M57_SYNTHETIC_INVENTORY_REVIEW !== "enabled" || Bun.env.M58_SYNTHETIC_ANNUAL_REGISTER !== "enabled" || (Bun.env.NODE_ENV !== "development" && Bun.env.NODE_ENV !== "test")) {
+    throw new Error("The M54-M58 synthetic workspace server requires explicit development/test enable flags.")
   }
   const database = await DevelopmentWorkspaceDatabase.create([M54_OWNER_ID, M54_OUTSIDER_ID, M55_ADMIN_ID, M55_MEMBER_ID])
   const calculationFlights = new Map<string, Promise<Awaited<ReturnType<typeof database.createSyntheticBillCalculation>>>>()
@@ -37,7 +37,7 @@ export async function createDevelopmentWorkspaceServer() {
     [M55_MEMBER_TOKEN]: { id: M55_MEMBER_ID, phone: null, email: "member@example.invalid", fullName: "Synthetic member" },
   }
   const routes = createWorkspaceRoutes({
-    allowedOrigins: [ORIGIN],
+    allowedOrigins: ORIGINS,
     validateUser: async (token) => users[token] ?? null,
     store: {
       create: async (userId, input) => {
@@ -132,6 +132,12 @@ export async function createDevelopmentWorkspaceServer() {
         if (prior && prior.operationFingerprint !== fingerprint) throw new Error("Inventory review conflicts.")
         return database.recordSyntheticInventoryReview(userId, workspaceId, inventoryId, input.decision, input.reasonCode, input.acknowledgedWarnings, input.idempotencyKey, fingerprint)
       },
+      findAnnualRegisters: (userId, workspaceId) => database.findAnnualRegisters(userId, workspaceId),
+      createAnnualRegister: (userId, workspaceId, previousInventoryVersionId, idempotencyKey) => database.createAnnualRegister(userId, workspaceId, previousInventoryVersionId, idempotencyKey),
+      completeAnnualRegister: (userId, workspaceId, registerId, expectedSnapshotSha256, idempotencyKey) => database.completeAnnualRegister(userId, workspaceId, registerId, expectedSnapshotSha256, idempotencyKey),
+      findAnnualInventory: (userId, workspaceId) => database.findAnnualInventory(userId, workspaceId),
+      createAnnualInventory: (userId, workspaceId, registerId, idempotencyKey) => database.createAnnualInventory(userId, workspaceId, registerId, idempotencyKey),
+      reviewAnnualInventory: (userId, workspaceId, inventoryId, input) => database.reviewAnnualInventory(userId, workspaceId, inventoryId, input.decision, input.reasonCode, input.acknowledgedWarnings, input.expectedInventorySnapshotSha256, input.idempotencyKey),
     },
   })
   const app = new Elysia({ normalize: false })
@@ -156,5 +162,5 @@ if (import.meta.main) {
   }
   process.once("SIGINT", stop)
   process.once("SIGTERM", stop)
-  console.info(`Neuvetra M57 synthetic inventory review workspace listening on http://${HOST}:${PORT}`)
+  console.info(`Neuvetra M58 synthetic annual register workspace listening on http://${HOST}:${PORT}`)
 }

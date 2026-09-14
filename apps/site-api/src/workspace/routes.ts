@@ -3,6 +3,7 @@ import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { checkOrigin } from "../lib/origin-check"
 import { INVENTORY_WARNINGS, type WorkspaceStore } from "./types"
 import { parseSyntheticBill, SYNTHETIC_BILL_NAME, SYNTHETIC_BILL_SHA256, SYNTHETIC_BILL_SIZE } from "./synthetic-bill-parser"
+import { M58_WARNINGS } from "@neuvetra/database"
 
 const AUTH_REQUIRED = { error: "Authentication required." } as const
 const NOT_FOUND = { error: "Workspace not found." } as const
@@ -122,8 +123,75 @@ const inventoryResponseSchema = t.Object({
   decision: t.Union([t.Null(), t.Object({ id: t.String({ format: "uuid" }), decision: t.Union([t.Literal("approve_bounded_draft"), t.Literal("changes_requested")]), outcome: t.Union([t.Literal("approved_bounded_draft"), t.Literal("changes_requested")]), acknowledgedWarnings: t.Array(t.String()), reasonCode: t.Union([t.Literal("bounded_synthetic_scope_reviewed"), t.Literal("source_or_calculation_revision_required")]), decidedBy: t.String({ format: "uuid" }), decidedAt: t.String() })]),
 })
 
+const errorResponseSchema = t.Object({ error: t.String() })
+const annualTotalsSchema = t.Object({
+  reportedMwh:t.Literal("126.788000"),reportedKgCo2e:t.Literal("24728.7681363744"),reportedDisplayKgCo2e:t.Literal("24728.7681"),
+  estimatedMwh:t.Literal("12.493000"),estimatedKgCo2e:t.Literal("2436.6383279784"),estimatedDisplayKgCo2e:t.Literal("2436.6383"),
+  includedMwh:t.Literal("139.281000"),includedKgCo2e:t.Literal("27165.4064643528"),includedDisplayKgCo2e:t.Literal("27165.4065"),
+})
+const annualCountsSchema=t.Object({expected:t.Literal(12),resolved:t.Number(),reported:t.Number(),estimated:t.Number(),excluded:t.Number(),missing:t.Number(),calculationBearing:t.Number()})
+const annualEvidenceSchema=t.Object({source:t.String(),sha256:t.String({pattern:"^[0-9a-f]{64}$"}),locator:t.String()})
+const annualPeriodSchema=t.Object({month:t.String(),state:t.Union([t.Literal("missing"),t.Literal("reported"),t.Literal("estimated"),t.Literal("excluded")]),version:t.Union([t.Literal(1),t.Literal(2)]),quantityMwh:t.Union([t.String(),t.Null()]),emissionsKgCo2e:t.Union([t.String(),t.Null()]),evidence:t.Union([annualEvidenceSchema,t.Null()]),reason:t.Union([t.String(),t.Null()]),method:t.Union([t.String(),t.Null()]),formula:t.Union([t.String(),t.Null()]),basisMonths:t.Array(t.String())})
+const annualRegisterResponseSchema=t.Object({id:t.String({format:"uuid"}),companyId:t.String({format:"uuid"}),boundaryId:t.String({format:"uuid"}),previousInventoryVersionId:t.String({format:"uuid"}),version:t.Union([t.Literal(1),t.Literal(2)]),reportingYear:t.Literal(2023),facilityId:t.String({format:"uuid"}),status:t.Union([t.Literal("incomplete"),t.Literal("resolved_with_exceptions")]),counts:annualCountsSchema,periods:t.Array(annualPeriodSchema,{minItems:12,maxItems:12}),totals:t.Union([annualTotalsSchema,t.Null()]),fixtureSha256:t.Union([t.String({pattern:"^[0-9a-f]{64}$"}),t.Null()]),snapshotSha256:t.String({pattern:"^[0-9a-f]{64}$"}),createdBy:t.String({format:"uuid"}),createdAt:t.String()})
+const annualInventoryResponseSchema=t.Object({id:t.String({format:"uuid"}),companyId:t.String({format:"uuid"}),boundaryId:t.String({format:"uuid"}),previousInventoryVersionId:t.String({format:"uuid"}),registerId:t.String({format:"uuid"}),registerSnapshotSha256:t.String({pattern:"^[0-9a-f]{64}$"}),version:t.Literal(2),reportingYear:t.Literal(2023),scope:t.Literal("scope_2_location_based"),periodResolution:t.Literal("resolved_with_exceptions"),overallInventoryCompleteness:t.Literal("incomplete"),releaseEligible:t.Literal(false),counts:annualCountsSchema,totals:annualTotalsSchema,warnings:t.Array(t.String()),snapshotSha256:t.String({pattern:"^[0-9a-f]{64}$"}),submittedBy:t.String({format:"uuid"}),submittedAt:t.String(),decision:t.Union([t.Null(),t.Object({id:t.String({format:"uuid"}),decision:t.Union([t.Literal("approve_bounded_annual_location_draft"),t.Literal("changes_requested")]),outcome:t.Union([t.Literal("approved_bounded_annual_location_draft"),t.Literal("changes_requested")]),reasonCode:t.Union([t.Literal("bounded_annual_location_register_reviewed"),t.Literal("source_or_calculation_revision_required")]),acknowledgedWarnings:t.Array(t.String()),decidedBy:t.String({format:"uuid"}),decidedAt:t.String()})])})
+
 export function createWorkspaceRoutes(deps: WorkspaceRoutesDeps) {
   return new Elysia({ prefix: "/workspace" })
+    .post("/:id/annual-registers/2023", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let canManage; try { canManage = await deps.store.canManage(user.id, params.id) } catch { set.status = 503; return READ_FAILED }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).sort().join("|") !== "idempotencyKey|previousInventoryVersionId" || typeof value.previousInventoryVersionId !== "string" || typeof value.idempotencyKey !== "string" || !UUID_V4.test(value.previousInventoryVersionId) || !UUID_V4.test(value.idempotencyKey)) { set.status = 422; return INVALID_REQUEST }
+      try { set.status = 201; return await deps.store.createAnnualRegister!(user.id, params.id, value.previousInventoryVersionId, value.idempotencyKey) }
+      catch (error) { set.status = error instanceof Error && (error.message.includes("conflict") || error.message.includes("predecessor")) ? 409 : 503; return set.status === 409 ? INVENTORY_CONFLICT : READ_FAILED }
+    }, { body: t.Unknown(), response: { 201: annualRegisterResponseSchema, 401: errorResponseSchema, 403: errorResponseSchema, 409: errorResponseSchema, 422: errorResponseSchema, 503: errorResponseSchema } })
+    .get("/:id/annual-registers/2023", async ({ params, request, set }) => {
+      const origin = request.headers.get("origin"); if (origin && !deps.allowedOrigins.includes(origin)) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      try { const registers = await deps.store.findAnnualRegisters!(user.id, params.id); if (!registers.length) { set.status = 404; return INVENTORY_NOT_FOUND }; return registers }
+      catch { set.status = 503; return READ_FAILED }
+    }, { response: { 200: t.Array(annualRegisterResponseSchema), 401: errorResponseSchema, 403: errorResponseSchema, 404: errorResponseSchema, 503: errorResponseSchema } })
+    .post("/:id/annual-registers/:registerId/complete", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let canManage; try { canManage = await deps.store.canManage(user.id, params.id) } catch { set.status = 503; return READ_FAILED }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      if (!UUID_V4.test(params.registerId) || !value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).sort().join("|") !== "expectedRegisterSnapshotSha256|fixtureId|idempotencyKey" || value.fixtureId !== "m58-fixed-electricity-register-2023-v1" || typeof value.expectedRegisterSnapshotSha256 !== "string" || !/^[0-9a-f]{64}$/.test(value.expectedRegisterSnapshotSha256) || typeof value.idempotencyKey !== "string" || !UUID_V4.test(value.idempotencyKey)) { set.status = 422; return INVALID_REQUEST }
+      try { set.status = 201; return await deps.store.completeAnnualRegister!(user.id, params.id, params.registerId, value.expectedRegisterSnapshotSha256, value.idempotencyKey) }
+      catch (error) { set.status = error instanceof Error && error.message.includes("conflict") ? 409 : 503; return set.status === 409 ? INVENTORY_CONFLICT : READ_FAILED }
+    }, { body: t.Unknown(), response: { 201: annualRegisterResponseSchema, 401: errorResponseSchema, 403: errorResponseSchema, 409: errorResponseSchema, 422: errorResponseSchema, 503: errorResponseSchema } })
+    .post("/:id/annual-inventories/2023/scope2/versions", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let canManage; try { canManage = await deps.store.canManage(user.id, params.id) } catch { set.status = 503; return READ_FAILED }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      if (!value || typeof value !== "object" || Array.isArray(value) || Object.keys(value).sort().join("|") !== "idempotencyKey|registerId" || typeof value.registerId !== "string" || !UUID_V4.test(value.registerId) || typeof value.idempotencyKey !== "string" || !UUID_V4.test(value.idempotencyKey)) { set.status = 422; return INVALID_REQUEST }
+      try { set.status = 201; return await deps.store.createAnnualInventory!(user.id, params.id, value.registerId, value.idempotencyKey) }
+      catch (error) { set.status = error instanceof Error && (error.message.includes("conflict") || error.message.includes("required")) ? 409 : 503; return set.status === 409 ? INVENTORY_CONFLICT : READ_FAILED }
+    }, { body: t.Unknown(), response: { 201: annualInventoryResponseSchema, 401: errorResponseSchema, 403: errorResponseSchema, 409: errorResponseSchema, 422: errorResponseSchema, 503: errorResponseSchema } })
+    .get("/:id/annual-inventories/2023/scope2", async ({ params, request, set }) => {
+      const origin = request.headers.get("origin"); if (origin && !deps.allowedOrigins.includes(origin)) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      try { const inventory = await deps.store.findAnnualInventory!(user.id, params.id); if (!inventory) { set.status = 404; return INVENTORY_NOT_FOUND }; return inventory }
+      catch { set.status = 503; return READ_FAILED }
+    }, { response: { 200: annualInventoryResponseSchema, 401: errorResponseSchema, 403: errorResponseSchema, 404: errorResponseSchema, 503: errorResponseSchema } })
+    .post("/:id/annual-inventories/:inventoryId/decisions", async ({ body, params, request, set }) => {
+      if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
+      const user = await authenticate(request, deps.validateUser); if (!user) { set.status = 401; return AUTH_REQUIRED }
+      let canManage; try { canManage = await deps.store.canManage(user.id, params.id) } catch { set.status = 503; return READ_FAILED }
+      if (!canManage) { set.status = 403; return FORBIDDEN }
+      const value = body as Record<string, unknown>
+      const exact = value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).sort().join("|") === "acknowledgedWarnings|decision|expectedInventorySnapshotSha256|idempotencyKey|reasonCode"
+      const approval = value?.decision === "approve_bounded_annual_location_draft" && value.reasonCode === "bounded_annual_location_register_reviewed" && JSON.stringify(value.acknowledgedWarnings) === JSON.stringify(M58_WARNINGS)
+      const changes = value?.decision === "changes_requested" && value.reasonCode === "source_or_calculation_revision_required" && Array.isArray(value.acknowledgedWarnings) && value.acknowledgedWarnings.length === 0
+      if (!UUID_V4.test(params.inventoryId) || !exact || typeof value.idempotencyKey !== "string" || !UUID_V4.test(value.idempotencyKey) || typeof value.expectedInventorySnapshotSha256 !== "string" || !/^[0-9a-f]{64}$/.test(value.expectedInventorySnapshotSha256) || (!approval && !changes)) { set.status = 422; return INVALID_REQUEST }
+      try { set.status = 201; return await deps.store.reviewAnnualInventory!(user.id, params.id, params.inventoryId, value as any) }
+      catch (error) { set.status = error instanceof Error && (error.message.includes("conflict") || error.message.includes("contract")) ? 409 : 503; return set.status === 409 ? INVENTORY_CONFLICT : READ_FAILED }
+    }, { body: t.Unknown(), response: { 201: annualInventoryResponseSchema, 401: errorResponseSchema, 403: errorResponseSchema, 409: errorResponseSchema, 422: errorResponseSchema, 503: errorResponseSchema } })
     .post("/:id/inventories/2023/scope2/versions", async ({ body, params, request, set }) => {
       if (!checkOrigin(request.headers, deps.allowedOrigins).allowed) { set.status = 403; return FORBIDDEN }
       const user = await authenticate(request, deps.validateUser)

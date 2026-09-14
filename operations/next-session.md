@@ -1,4 +1,16 @@
-# Current continuation — M57 bounded draft inventory review published; M58 completion workflow next
+# Current continuation — M58 annual electricity register accepted; publication in progress
+
+September 13, 2026. **M58 is complete for its bounded local synthetic scope and passed independent review.** The 2023 one-facility register now resolves all twelve expected periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December has no quantity and is not treated as zero.
+
+The owner carries forward the exact approved M57 January result, completes immutable register version 2 and seals inventory version 2. A different authorized manager records the decision. Tenant isolation, forced row-level security, immutable history, full-payload validation and same-key/different-key/concurrent convergence pass. The live browser workflow passed end to end after repairing ISO timestamp normalization and canonical JSON property-order handling. Independent QA `f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491` passes all 20 bound implementation files; database 21/186, API 625/5,399, web 63/253 and Python 12 pass with all type checks, lint, build, production exclusion, JSON and diff checks.
+
+All twelve register periods are resolved, but overall inventory completeness remains `incomplete` beside the result. Release eligibility remains false because the register includes one estimate and one exclusion, lacks market-based Scope 2 and Scope 1/3 assessment, and uses unreleased development factors and methods. This is fictional PGlite evidence, not hosted persistence, filing, assurance, deployment or release.
+
+The CEO recommendation is **M59: deterministic inventory evidence pack and replay**. Export the sealed M58 inventory, both register versions, period evidence and exceptions, calculation lineage, decisions and hashes as one reproducible local package, then require an independent reconstruction of the displayed subtotal.
+
+[M58 record](../docs/research/annual-source-register-milestone-58.md) · [M58 independent review](../evaluations/research-qa/milestone58-annual-register-10.json) · [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3)
+
+# Historical continuation — M57 bounded draft inventory review published; M58 completion workflow next
 
 September 13, 2026. **M57 is complete, independently accepted and published in PR #3 at implementation commit `4d5827c6d3a0dd9f01fd3364bcb5aa237e786884`.** The accepted M56 line is now sealed in immutable 2023 Scope 2 location-based inventory version 1. It displays `12.346000 MWh` and `2,407.9674 kg CO2e`, with a transparent denominator of one facility across twelve monthly periods and January as the sole covered month.
 
