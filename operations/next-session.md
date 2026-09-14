@@ -1,6 +1,6 @@
-# Current continuation — M58 annual electricity register accepted; publication in progress
+# Current continuation — M58 annual electricity register published; M59 evidence pack next
 
-September 13, 2026. **M58 is complete for its bounded local synthetic scope and passed independent review.** The 2023 one-facility register now resolves all twelve expected periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December has no quantity and is not treated as zero.
+September 13, 2026. **M58 is complete for its bounded local synthetic scope, independently accepted and published in PR #3 at implementation commit `38f7cde`.** The 2023 one-facility register now resolves all twelve expected periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December has no quantity and is not treated as zero.
 
 The owner carries forward the exact approved M57 January result, completes immutable register version 2 and seals inventory version 2. A different authorized manager records the decision. Tenant isolation, forced row-level security, immutable history, full-payload validation and same-key/different-key/concurrent convergence pass. The live browser workflow passed end to end after repairing ISO timestamp normalization and canonical JSON property-order handling. Independent QA `f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491` passes all 20 bound implementation files; database 21/186, API 625/5,399, web 63/253 and Python 12 pass with all type checks, lint, build, production exclusion, JSON and diff checks.
 

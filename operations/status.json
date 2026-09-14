@@ -7,8 +7,8 @@
   "milestone": {
     "id": "M58",
     "name": "Annual location-based electricity source register",
-    "status": "complete_independent_acceptance_publication_in_progress",
-    "next_gate": "Publish the exact accepted M58 commit to PR #3, then collect board feedback on M59 deterministic inventory evidence pack and replay; release acceptance remains false."
+    "status": "complete_independent_acceptance_published_to_pr",
+    "next_gate": "Collect board feedback, then decide whether to begin M59 deterministic inventory evidence pack and replay; Stage 4 and release acceptance remain false."
   },
   "completed_milestones": [
     {
@@ -65,8 +65,8 @@
     "saved_at": "2026-09-14T06:20:00.000Z",
     "path": "operations/next-session.md",
     "board_record": "docs/research/annual-source-register-milestone-58.md",
-    "next_task": "Publish the exact M58 commit to PR #3, collect board feedback, then define M59 deterministic inventory evidence pack and replay.",
-    "execution_state": "m58_complete_independently_accepted_publication_in_progress_no_release_acceptance",
+    "next_task": "Collect board feedback, then define M59 deterministic inventory evidence pack and replay.",
+    "execution_state": "m58_complete_independently_accepted_published_to_pr_no_stage4_or_release_acceptance",
     "review": "Independent QA f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491 passes all 20 bound files. Database 21/186, API 625/5,399, web 63/253 and Python 12 pass with all type checks, lint/build, production exclusion, JSON/diff checks and the end-to-end browser journey.",
     "scope": "One fixed fictional one-facility 2023 annual location-based electricity register with ten reported, one estimated and one excluded period, immutable inventory version 2 and two-person review. No customer data, market-based accounting, hosted persistence, deployment, merge or release."
   },
@@ -133,7 +133,12 @@
     "m57_commit": "4d5827c6d3a0dd9f01fd3364bcb5aa237e786884",
     "m57_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
     "m57_review": "evaluations/research-qa/milestone57-inventory-review-10.json",
-    "m57_review_sha256": "7ad7dde4eb3ff1766c5cf53daede7b13deb61722a7032ead999144d79259351a"
+    "m57_review_sha256": "7ad7dde4eb3ff1766c5cf53daede7b13deb61722a7032ead999144d79259351a",
+    "m58_state": "complete_independent_product_data_security_acceptance_published_to_pr_stage4_and_release_false",
+    "m58_commit": "38f7cde",
+    "m58_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
+    "m58_review": "evaluations/research-qa/milestone58-annual-register-10.json",
+    "m58_review_sha256": "f39e6a9513823ca68b85ee5665cc031f71b3e788991787f837aa38369c9c8491"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",

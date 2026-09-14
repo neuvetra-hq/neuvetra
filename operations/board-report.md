@@ -1,6 +1,6 @@
 # Neuvetra board update
 
-September 13, 2026. **M58 annual location-based electricity register is complete for its bounded local synthetic scope and independently accepted.** It resolves twelve expected 2023 periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December carries no quantity and is never counted as zero.
+September 13, 2026. **M58 annual location-based electricity register is complete for its bounded local synthetic scope, independently accepted and published in [PR #3](https://github.com/neuvetra-hq/neuvetra/pull/3) at `38f7cde`.** It resolves twelve expected 2023 periods as ten reported, one estimated and one excluded. The included draft subtotal is `139.281000 MWh` and `27,165.4065 kg CO2e`; December carries no quantity and is never counted as zero.
 
 The exact approved M57 January result flows into immutable register version 1, register version 2 and inventory version 2. Tenant isolation, forced row-level security, immutable history, exact lineage, concurrent-command convergence and two-person review pass. The live browser journey reached the independent M58 approval and kept **overall inventory completeness: incomplete** adjacent to the result. Independent QA `f39e6a9513…` passes all 20 file bindings; database 21/186, API 625/5,399, web 63/253 and Python 12 pass. Release eligibility remains false.
 
