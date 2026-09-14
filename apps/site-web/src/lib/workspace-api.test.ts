@@ -1,4 +1,5 @@
 import { describe, expect, test } from "bun:test"
+import { createRequire } from "node:module"
 import { ANNUAL_WARNINGS, calculateSyntheticBill, correctSyntheticBill, createSyntheticWorkspace, decideDraftInventoryReport, decideSyntheticInventory, decodeAnnualInventory, decodeAnnualRegister, decodeEvidencePackMetadata, decodeEvidencePackReceipt, decodeSyntheticBill, decodeWorkspace, downloadDraftInventoryReport, downloadEvidencePack, DRAFT_REPORT_LIMITATIONS, INVENTORY_WARNINGS, linkSyntheticBill, prepareSyntheticInventory, replaySyntheticBillCalculation, revisitDraftInventoryReport, revisitDraftInventoryReportReview, revisitSyntheticInventory, revisitSyntheticWorkspace, uploadSyntheticBill, type AnnualInventory, type DraftInventoryReportMetadata, type SyntheticInventory } from "./workspace-api"
 
 const fixture = {
@@ -208,6 +209,36 @@ describe("M55 bill browser boundary", () => {
 })
 
 describe("M56 draft calculation browser boundary", () => {
+  test("accepts a JSONB-reordered calculation record without relaxing exact values or array order", async () => {
+    // Use the database package's actual PostgreSQL JSONB implementation rather
+    // than a hand-written key sorter; the browser must accept this wire shape.
+    const { PGlite } = createRequire(new URL("../../../../packages/neuvetra-database/package.json", import.meta.url))("@electric-sql/pglite")
+    const db = await PGlite.create()
+    try {
+      const result = await db.query("select $1::jsonb as record", [JSON.stringify(calculatedFixture.draftCalculation.record)])
+      const saved = { ...structuredClone(calculatedFixture), draftCalculation: { ...structuredClone(calculatedFixture.draftCalculation), record: result.rows[0].record } }
+      expect(JSON.stringify(saved.draftCalculation.record.result.total)).not.toBe(JSON.stringify(saved.draftCalculation.total))
+      expect(JSON.stringify(saved.draftCalculation.record.result.gas_results)).not.toBe(JSON.stringify(saved.draftCalculation.gasResults))
+      expect(JSON.stringify(saved.draftCalculation.record.result.trace)).not.toBe(JSON.stringify(saved.draftCalculation.trace))
+      expect(decodeSyntheticBill(saved)).toEqual(saved)
+      for (const [path, replacement] of [
+        [["total", "display"], "2407.9675"],
+        [["total", "extra"], true],
+        [["gas_results", "ch4", "mass"], 0.14000364],
+        [["gas_results", "ch4", "extra"], true],
+        [["trace"], [...saved.draftCalculation.record.result.trace].reverse()],
+        [["trace", "0", "extra"], true],
+        [["result_payload_sha256"], "0".repeat(64)],
+      ] as const) {
+        const changed = structuredClone(saved)
+        setPath(changed.draftCalculation.record.result, path, replacement)
+        expect(() => decodeSyntheticBill(changed)).toThrow("not recognized")
+      }
+      const missing = structuredClone(saved)
+      delete missing.draftCalculation.record.result.total.rounding
+      expect(() => decodeSyntheticBill(missing)).toThrow("not recognized")
+    } finally { await db.close() }
+  })
   test("binds the exact calculation and sends no user-supplied accounting input", async () => {
     expect(decodeSyntheticBill(calculatedFixture)).toEqual(calculatedFixture)
     expect(() => decodeSyntheticBill({ ...calculatedFixture, draftCalculation: { ...calculatedFixture.draftCalculation, total: { ...calculatedFixture.draftCalculation.total, display: "2407.9675" } } })).toThrow("not recognized")
