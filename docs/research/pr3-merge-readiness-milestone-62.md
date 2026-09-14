@@ -1,6 +1,6 @@
 # M62 — PR #3 merge readiness
 
-Date: September 14, 2026. State: local checks passed; independent review and publication closure pending. Board direction: confirm the adopted role improvements and proceed to the next milestone. M61 is complete; its product task was observed idle before this assignment. The coordinator now owns the M62 product ledger and records.
+Date: September 14, 2026. State: complete for bounded merge readiness; final board merge decision pending. Board direction: confirm the adopted role improvements and proceed to the next milestone. M61 is complete; its product task was observed idle before this assignment. The coordinator now owns the M62 product ledger and records.
 
 ## Product outcome and authority
 
@@ -40,4 +40,4 @@ The three-assignment role pilot is recorded separately. It demonstrates the work
 
 ## Closure
 
-Independent review and exact remote publication/check receipts will complete this gate. The final board merge decision remains pending. Required branch-rule settings previously returned HTTP 403 and are not established merely by visible CI success.
+Independent technical and metadata QA passed. Published implementation `d4ffd292f0e85991aeb4f2b3db4331fdf571a11d` is verified on PR #3 with all four visible GitHub checks successful: applications, GHG calculations, research catalog and role evidence. GitHub reports mergeable with clean status. See [exact publication receipt](m62-publication.json). Required branch-rule settings still return HTTP 403; their configuration is not independently established. The final board merge decision remains pending; nothing was merged or deployed. This later receipt changes operational metadata only.

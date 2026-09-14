@@ -1,10 +1,10 @@
-# Current continuation - M62 merge-readiness candidate
+# Current continuation - M62 complete; board merge decision next
 
 September 14, 2026. Role upgrades are already published and the adopted default/critical model routes remain in force. M62 has repaired the inherited GHG collector through explicit readiness: 43 checks pass and three unfinished mobile cases remain visible as deferred. No mobile factors or expected emissions were invented.
 
-Local application checks pass; all 26 changed product/data files match their latest reviewed versions. Independent M62 review and exact remote CI/publication are the remaining closure evidence. See [M62 record](../docs/research/pr3-merge-readiness-milestone-62.md) and [role pilot](agent-improvement/m62-pilot-review.md).
+Local application checks pass; all 26 changed product/data files match their latest reviewed versions. Independent M62 technical and closure reviews passed. Implementation `d4ffd292f0e85991aeb4f2b3db4331fdf571a11d` is published to PR #3 with all four visible GitHub checks successful. [Publication receipt](../docs/research/m62-publication.json) records exact links and HTTP 403 for branch-rule configuration. See [M62 record](../docs/research/pr3-merge-readiness-milestone-62.md) and [role pilot](agent-improvement/m62-pilot-review.md).
 
-After those gates pass, ask the board for the final PR #3 merge decision reserved in the M61 handoff. Merge is not deployment: the API retains development/test guards, the browser requires explicit preview flags, and ordinary production builds exclude the demo. A later staging-productionization milestone requires separate scoped acceptance before customer use. Do not start a dependent product milestone before the board's feedback.
+The remaining step is the final PR #3 board merge decision reserved in the M61 handoff. Nothing has been merged or deployed. Merge is not deployment: the API retains development/test guards, the browser requires explicit preview flags, and ordinary production builds exclude the demo. A later staging-productionization milestone requires separate scoped acceptance before customer use. Do not start a dependent product milestone before the board's feedback.
 
 # Historical continuation — M61 second-manager report review complete; M62 merge readiness next
 

@@ -1,14 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T17:32:45.409081+00:00",
+  "updated_at": "2026-09-14T17:50:15.501203+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M62",
     "name": "PR3 merge readiness and explicit legacy calculation deferral",
-    "status": "in_progress",
-    "next_gate": "Publish reviewed M62 to PR3, verify exact remote checks, request final board merge decision."
+    "status": "complete",
+    "next_gate": "Final board approval to merge PR3; no merge or deployment performed.",
+    "evidence": [
+      "docs/research/m62-publication.json",
+      "evaluations/research-qa/milestone62-merge-readiness.md"
+    ]
   },
   "completed_milestones": [
     {

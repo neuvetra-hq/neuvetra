@@ -4,7 +4,7 @@ September 14, 2026. The role improvements are published. The first prospective p
 
 M62 fixes the repository merge blocker: the GHG suite reports **43 passed, 3 explicitly deferred**. The three mobile examples lack required implementation and approved factor/expectation evidence, so they remain unavailable. All 26 changed product/data files match accepted review versions and local application checks pass.
 
-Independent review closure, publication and exact GitHub checks remain pending. Once verified, PR #3 is ready for the board's final merge decision, not customer deployment. [M62 evidence](../docs/research/pr3-merge-readiness-milestone-62.md).
+Independent QA passed; implementation `d4ffd292` is published and all four visible GitHub checks pass. PR #3 is ready for the board's final merge decision. Nothing was merged or deployed; required branch-rule settings are not visible (HTTP 403). [M62 evidence](../docs/research/pr3-merge-readiness-milestone-62.md).
 
 # Historical M61 board update
 
