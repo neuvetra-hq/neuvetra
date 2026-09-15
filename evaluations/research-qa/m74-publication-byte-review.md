@@ -7,3 +7,5 @@ Removed one redundant blank line at end of the new backend fixture to satisfy th
 Attribution clarification: S01 was repaired by the original operator author `/root/m73_accounting` under root coordination, then independently accepted by `/root/m74_cto`. The security report's “Root repaired” wording refers to the coordinated work; root did not author that repair.
 
 Remote required checks and actual hosted transition are still pending; local acceptance is not milestone completion.
+
+First remote records check failed because coordinator-authored evidence references used Windows backslashes. These mutable run/status references were normalized to repository-relative forward slashes; accepted artifact bytes and product code were unchanged. The failed check is preserved in CI history. Local validation is rerun and a fresh remote check is required.

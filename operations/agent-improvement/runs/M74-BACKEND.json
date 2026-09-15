@@ -16,8 +16,8 @@
       "status": "pass",
       "evidence": [
         "evaluations/research-qa/m74-independent-accounting-review.md",
-        "evaluations\\research-qa\\m74-security-review.md",
-        "evaluations\\research-qa\\m74-integrated-qa-review.md"
+        "evaluations/research-qa/m74-security-review.md",
+        "evaluations/research-qa/m74-integrated-qa-review.md"
       ],
       "reason": null
     }
@@ -28,8 +28,8 @@
     "verdict": "pass",
     "evidence": [
       "evaluations/research-qa/m74-independent-accounting-review.md",
-      "evaluations\\research-qa\\m74-security-review.md",
-      "evaluations\\research-qa\\m74-integrated-qa-review.md"
+      "evaluations/research-qa/m74-security-review.md",
+      "evaluations/research-qa/m74-integrated-qa-review.md"
     ],
     "reviewed_artifacts": [
       {

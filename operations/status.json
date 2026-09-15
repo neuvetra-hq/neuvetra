@@ -2593,7 +2593,7 @@
     "hosted_upgrade": "not_started",
     "operator_finding": "S01 repaired independently accepted",
     "automatic_deployment": false,
-    "security_review": "evaluations\\research-qa\\m74-security-review.md",
-    "integrated_review": "evaluations\\research-qa\\m74-integrated-qa-review.md"
+    "security_review": "evaluations/research-qa/m74-security-review.md",
+    "integrated_review": "evaluations/research-qa/m74-integrated-qa-review.md"
   }
 }
