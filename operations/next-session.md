@@ -1,3 +1,15 @@
+# M72 live; final hosted verification and demonstration pending
+
+The existing site is healthy at schema15 on reviewed application commit ecfedcbfb27b18a1ebebfd960314d68299cb4a28. A fresh encrypted application backup was independently restored with exact rows, catalog and role metadata. Migration0015 preserved all165original rows. The hosted synthetic save/correction/distinct-review/export exercise passed108stages and preserved legacy records/downloads. An actual service restart succeeded; the 57-stage exact read-only revisit passed with zero writes and all acquired sessions closed.
+
+Root is publishing reviewed operator/evidence records to the same rolling draft PR5, which remains unmerged. OPS delivery is complete; scoped QA/security report deliveries are complete with the visual acceptance gate withheld. No persistent workers are implied. Fresh hosted browser verification is blocked by an open Chrome extension panel pausing automation; the board was asked to close it. Complete that demonstration before declaring the milestone finished or starting dependent work. No provider/Auth disaster recovery, actual corporate totals, source/method release or full-MVP/assurance claim.
+
+California corporate reporting is first. Relevant Nevada, Canadian or other operations stay in the corporate boundary where logically necessary; separate regional reporting products follow later. Preserve all local backup/recovery fixtures, existing data and earlier receipts. Schema14 images cannot serve committed15; use the reviewed schema15 fix-forward plan.
+
+Evidence: docs/research/m72-rollout-evidence.md; docs/research/m72-rollout-plan.md; evaluations/research-qa/m72-security-review.md; evaluations/research-qa/m72-qa-review.md.
+
+Historical entries below are superseded as current execution instructions.
+
 # M71 published to PR5; saved-register board feedback next
 
 The saved California-first synthetic coverage register is independently reviewed and published to rolling draft PR5, branch codex/corporate-mvp. Implementation b887da126b4d7e08958ed0042214f579560efacf passed all six remote checks, including the clean application build, native PostgreSQL regression and dedicated staging image. The coordinator verifies this closure commit's exact remote head/checks separately before the final report. PR5 remains unmerged.

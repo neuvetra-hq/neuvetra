@@ -1,0 +1,45 @@
+# M72 hosted acceptance contract
+
+Date: 2026-09-15. Owner: `/root/m72_qa`, QA lead. Requested compute: gpt-6-astra/high; observed settings unknown. No product authorship by this reviewer. This reviewer authored the journey helper and its offline tests; security review of that helper must be supplied by the separate non-author reviewer. Internal agent independence does not establish professional assurance independence.
+
+## Scope and authority
+
+The coordinator reports board acceptance of M71 and authorization to roll it out on the existing private host. The leading saved continuation still describes M71's historical publication and pending board feedback; the newer board instruction supplied in the assignment supersedes that execution gate. Root owns credentials, current host/project observations, migration/deployment, browser use and publication. QA has made no hosted call and has not read credentials or the unrelated ENV export.
+
+Target product is the reviewed M71 synthetic corporate coverage register, canonical migration 0015 SHA-256 `2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19`, initially reported PR5 head `ecfedcbfb27b18a1ebebfd960314d68299cb4a28`. Root must verify the actual deployed source and required checks afresh. No corpus/method release, corporate emissions total, legal applicability decision, external assurance, other-jurisdiction product or full corporate MVP is in this acceptance.
+
+## Required evidence
+
+| Criterion | Evidence and acceptance |
+| --- | --- |
+| Fresh infrastructure identity | Root records actual existing Railway service/deployment/source and Supabase project; no new host or account. Reviewed exact source is deployed, all required PR checks pass. |
+| Safe schema upgrade and recovery | Independent operations/security review of schema-14 receipt hashes, current row/role inventory, private backup and verified recovery; only additive canonical 0015 applied; receipt and original row hashes preserved. |
+| Fresh M63–M68 baseline | Run helper `baseline` before migration. Discover current evidence, inventory, registers, reports and reviews through authenticated APIs; decode actual M64–M68 responses; verify every listed source/report download and M63 evidence archive replay. Pin record hashes and exact download hashes/lengths without historical fixed version counts. |
+| Hosted schema 15 | `exercise` verifies ready/private profile, schema 15, legacy containment, matching public Auth configuration and admitted synthetic roster. |
+| Empty then saved M71 | Initial real API register decodes with no versions; synthetic save yields version 1, no emissions or assurance, incomplete corporate coverage and all 15 Scope 3 categories. Real browser shows the empty state before mutation and then the saved state. |
+| Correction, retry, review | Exact save and correction retries create no duplicate versions; conflicting retry is 409. Manager1 appends a label correction; prior version is preserved. Contributor review is 409; member save/review is 403. Non-contributor manager2 reviews the exact successor and repeat review is idempotent. |
+| Exact exports and preserved legacy | Earlier M71 download retains exact canonical version bytes with no later review injected. Member downloads every M71 version. Every original M63–M68 record/review/download matches baseline before and after exercise. Native row preservation is checked independently because API discovery cannot inventory inaccessible historical rows. |
+| Isolation | Real signed-out request is 401, approved existing outsider is 403 at the hosted admission boundary; member can read/export but cannot save/review. No new accounts or arbitrary tenant probes. |
+| Browser usability | Root demonstrates the actual hosted coverage entry point, saved correction/history, separate review display, visible unresolved boundary/evidence/method/requirements gaps, actual earlier download, keyboard actions and narrow layout. Exact downloaded bytes are compared to the API export. API decoder checks alone do not pass this criterion. |
+| Restart persistence | Root records an actual service restart and new observed deployment/runtime identity. Helper `revisit` is read-only and verifies every legacy hash plus exact saved M71 history/reviews/export hashes against successful exercise. Repeat actual signed-in browser read after restart. A revisit alone is not proof that a restart occurred. |
+| Closure | Every created Auth session is logged out; failure receipts remain retained; helper, product, operations and security evidence is independently reviewed. Commit/push to existing rolling PR and verify remote head/checks before publication claim. |
+
+## Reviewer-operated helper
+
+File: `tools/staging/check-m72-hosted.ts`. Root supplies the existing encrypted-config wrapper's decrypted JSON on stdin with one additional nonsecret field: `"mode":"baseline"`, `"exercise"` or `"revisit"`. Credentials never appear in arguments, environment, outputs or receipts. The helper reads no credential file and makes no call at import. Existing host and Auth project are fixed; record IDs are discovered and UUID-validated. Only `exercise` permits application POSTs, only under this roster workspace's corporate-inventory route. Auth sign-in/logout occur in all modes and are not application writes.
+
+The fixed local receipt is `.superpowers/m72-hosted-journey.json`. It contains sanitized stages/statuses, synthetic M71 data and legacy record/download hashes. Do not commit credentials or broad private recovery artifacts. The first accepted legacy baseline is immutable; attempts append. Baseline requires schema 14, later modes require schema 15. Exercise requires a fresh empty M71 register and refuses after an earlier recorded attempt with application POSTs. If execution stops or any mutation check fails, preserve the receipt and inspect/reconcile actual current state before any reattempt; do not delete history to bypass this guard. Revisit requires a passed exercise and exact equality, so later browser changes require a separately reviewed successor baseline rather than silently allowing arbitrary drift.
+
+## Initial offline results and pending verdict
+
+Initial author run: 6 passed, 29 assertions. Independent security F02 then reproduced three failures: sign-in timeout, malformed successful Auth response and oversized token each falsely claimed all sessions closed. The helper now tracks every started sign-in until a usable cleanup token is retained; an unknown session cannot claim closure. This failure and repair concern the harness, not hosted product behavior.
+
+Added a separate author guard against replacing unreadable or differently bound prior evidence. Current combined run of `evaluations/research-qa/m72-qa-helper.test.ts` and `evaluations/research-qa/m72-security-hosted-helper.test.ts`: 10 passed, 47 assertions. Checks cover pinned input/mode, canonical comparison, missing baseline/revisit prerequisites, accepted-baseline overwrite refusal, corrupt/bound-receipt preservation, wrong-subject cleanup, uncertain sessions, secret-free receipt and sanitized receipt failure. Final targeted TypeScript check of helper and both test files passed. Independent security accepted helper SHA-256 `43c0f854025acda23453f4f6e28953ebfa2d8673ef5ae0cf4c59e7f941c054c5`, including both repairs. These mocked failure-path checks are not hosted acceptance and do not prove the successful journey.
+
+Initial scoped verdict: **insufficient evidence for hosted acceptance**. Hosted baseline, actual rollout, successful journey, browser demonstration, restart/revisit and recovery evidence are pending coordinator execution. Keep failures and later repair evidence distinct. Lessons applied: L02 exact retained bytes and L04 real public boundaries/browser evidence.
+
+## Final observed disposition
+
+See [M72 independent hosted product QA](m72-qa-review.md). Root executed baseline (49 stages), actual schema-15 exercise (108 stages) and actual restart/read-only revisit (57 stages). QA independently inspected retained receipts, decoded the M71 history, recomputed exact exports, compared all baseline hashes and checked native original-row preservation; these scoped API/recovery/persistence criteria pass. Independent security supplied exact application-archive restoration and separate restricted-runtime reconstruction evidence. All 165 original rows remain after exercise, and all acquired journey Auth sessions closed.
+
+Fresh hosted browser demonstration remains **blocked**: the Chrome extension's open UI paused automation; the old M68 view was observed, but reload was unavailable. No new hosted M71 screenshot, visual empty/saved register, actual browser download, keyboard/narrow layout or post-restart browser result is claimed. This missing criterion prevents a full hosted visual acceptance verdict; prior local M71 browser passes do not replace it. Publication and exact final remote-head/deployment observations remain root-owned. Final journey receipt SHA-256 `091ec754a83735f82b91e8eec9fd23a1eb5d476c7493d1f9510bc139e8a8f2ea` binds the reviewed observation.

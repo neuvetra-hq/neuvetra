@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "createdAt": "2026-09-15T13:44:31.483Z",
+  "database": "m72_security_hosted_restore01",
+  "scope": "Actual separate restricted runtime connection reconstructs M64-M68 records and retained bytes equal to independently reviewed live pre-rollout baseline; local Auth UUIDs only",
+  "recordChecks": 9,
+  "downloadChecks": 14,
+  "baselineReceiptSha256": "da769a6faa2a57bd1beefd27f6da1cddf1a1027e5189e8f10a37255c3b94c50e",
+  "restoreReceiptSha256": "e60de88d4c8182639e5896add7ec88d070c9fc36daf1e804a6695066cb10002e"
+}

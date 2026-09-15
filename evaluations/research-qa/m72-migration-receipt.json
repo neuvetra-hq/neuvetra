@@ -1,0 +1,2284 @@
+{
+  "status": "m72_migration_committed",
+  "createdAt": "2026-09-15T13:46:59.802Z",
+  "project": "icockcoguyadhryzydvl",
+  "beforeVersion": 14,
+  "schemaVersion": 15,
+  "reviewedMigrationHash": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19",
+  "reviewedCommit": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+  "gateSha256": "18a4e08905ca1dc16acd33f8eff3d73e2da8b7c2561e9f4a5cf1bbc8e491895e",
+  "backupArchiveSha256": "1363f9bd0c4cc0dd007c7dcc3ff89db9c7cf1faa06826597a74c8c1ab8d46bfd",
+  "oldRowsPreserved": true,
+  "rolesAndMembershipsPreserved": true,
+  "before": {
+    "tables": [
+      {
+        "name": "annual_electricity_evidence_audit",
+        "count": 5,
+        "sha256": "950d86c45a0ca8878ea6dc20da22b3d0dedf1f0d8f32a1d65be16d5665a8ec21",
+        "rowHashes": [
+          "2ddca09403330f6d2c3abce16d72246697e211bd2a2987a4816900e599fbbe57",
+          "646effba3a3985ad89f8abb8d108b9e6b33b46c566145f8cbe5d8160a220ba8e",
+          "6b32956d62e6f679f06bc6ea1e8b3bb57a4a2a667df6e68c9b9b7bab7d5778c6",
+          "74f256f237a4b34e36519cce86c8038c59c5762a42533819df4a707fb8362c9e",
+          "81433bea7f22ed546138bb977a24c548ca6dea8d8be105fb6f6767bd05086aa3"
+        ]
+      },
+      {
+        "name": "annual_electricity_evidence_requests",
+        "count": 5,
+        "sha256": "0ee92a089582c093fb6f3817b2d1a74bb7a437586ca3df33d9c7fef5f4fd20e9",
+        "rowHashes": [
+          "83e1ce295a263ddac259024e9b7f397094bc1b20d7d03d83a0d56bfd788fc706",
+          "bcadce12998850ec763e7ada41978623c8d883150c20aeaf2cd5a50cdf937a6a",
+          "be7225e792e50393333d10936a3c5a43c401a05d74c53d3cf07ccab71da48f86",
+          "cf5dde9baae4c4cc5240a824ef0db9c921f3f79d62c44ccb2107801642333ffd",
+          "def87a34136769ff56460bfcb894e6daf226f44fc0f91ff74ca4ede9d385c09b"
+        ]
+      },
+      {
+        "name": "annual_electricity_evidence_reviews",
+        "count": 1,
+        "sha256": "05ac884add5a4386039f16df0dc75cba53433439324450566ddba44e15f7aed9",
+        "rowHashes": [
+          "9c2c447a02cb739cd9cd5e8347e2a872ad3f4f37a78627ff740e3dd9b2ed3f9a"
+        ]
+      },
+      {
+        "name": "annual_electricity_evidence_versions",
+        "count": 4,
+        "sha256": "21f7ab68226efe35f1cbd64482fd960700960b822997678e66819c9d4794dbfd",
+        "rowHashes": [
+          "25995afd26930404709f21c9ebbc67a6855c914a860e4731bb027c059da02bef",
+          "706fab9288479ec3598e0140e645a21094f57b70ab6ba43b7b6ad4634c2e99da",
+          "73d0e4811a48881c93b2531e1bdc6900c9999011a44b9a85388a306fb91fad9a",
+          "e4286e935ce8931ae57e905e9c91f743e23f8787d19457db2d306684bf85568f"
+        ]
+      },
+      {
+        "name": "annual_electricity_report_audit",
+        "count": 3,
+        "sha256": "49b577b6988e29bb6b62adb3584fe8a09e9e49bb71c9cecfcbe50381ed40bd72",
+        "rowHashes": [
+          "66d73770d35c55dc34979fbd5668462f90873466c6257b60620cef98ece2cca0",
+          "709ce596de169c1189c749865161190c3dc69ca093d35fb2f5cd466c201cfb26",
+          "99c8ab17834ded48afba5ba64da210fce83510ca5606c4708d4b4ccdbfe10778"
+        ]
+      },
+      {
+        "name": "annual_electricity_report_requests",
+        "count": 3,
+        "sha256": "a5e9f2363d686a084a4e57d3bdfbe7bd86970ea8c2f312301ac1ac82239f4379",
+        "rowHashes": [
+          "2140b4e7f8b1f8c40316caff967dc877cd485f18eca011319fc66f5718901d89",
+          "dd95a7baf9a73a050495612913fcdda298460165e440e2917a2b7fa3f4c325ad",
+          "fb9963fe8d21205b3c2ad668a17ac7f1c8dec47e1b05431f13e0ff42e43f2e84"
+        ]
+      },
+      {
+        "name": "annual_electricity_reports",
+        "count": 3,
+        "sha256": "d5aa77c85ec1074717109b9fb5ab2db05d78d26a6ec7b256e3a15de8ed9dbd9b",
+        "rowHashes": [
+          "c718e50290cf3a21fd8f1751f2c914ae6817f709dffc7b4b68475b552f76cbce",
+          "fcab6561b6feb99ccf842308b4046604f98efedb537ace4d5588a67bcf27f588",
+          "ffc0762ddf7272c17c6142a0ebe53f874838227cc2ec1789ab676b48e07f3e18"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_audit",
+        "count": 5,
+        "sha256": "5877cbdd30da105b5c18d6e43296a5273715324ab2e94dd0c616a197156f307c",
+        "rowHashes": [
+          "00af94baa281fb1f9c7093a1e2d25f022fc2c495aa5e29838c95f26d8abb2cec",
+          "0a18ec69a61d1f291520061f41887b645c9b5e2767b6dfb5bc0b8602b6ac0a19",
+          "5fb7e48eec82d25f5318e0d8e8667aa9805b3ea7b3bd13c55da819f146527095",
+          "6ea748fd73ea1c1bae99fa03c8f2f0d712ae9754eddc694eb03e377263446c5b",
+          "b84c296f2c7a1222bda42332c16e62f0f05f39899dad94bf6e4605ea3797935f"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_requests",
+        "count": 5,
+        "sha256": "51fef18afaa46c3744b079efc4de1db205e6a4279f0dd4016eaa7652e2d38ac1",
+        "rowHashes": [
+          "53fdaa64a3f5a21545c5c0ecb421501862f50f47a24b5f2088dd1dd036cf6d06",
+          "548bf3a0628f74f397b46c1aed821fde8f20869df561f417c268feedd6027138",
+          "901569dd01319251e95ca55f704e8b956b7a39ddd528bc58ac00438e89021d04",
+          "c7ed120478bbcea1880a4742b542593c57a87eac18f8aeb97c49a70e43c729a9",
+          "ff488cb52be8b6919d9e6a076d5909d45c0e02bd11ba0f52cc89b600e1512a79"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_reviews",
+        "count": 1,
+        "sha256": "a9dd2ef1e8d79545d64a0c02fcc9bf6e04d7de058a173db1b9f216d83d5bf27d",
+        "rowHashes": [
+          "93bb1998eaba6c72e6b19a15c48cdb6914adc5f6a267b82a81298564f018b2b9"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_versions",
+        "count": 4,
+        "sha256": "f62e5284cb56d275dc322c63da0463ecb6827280c8e6ed042971450581d6ffb8",
+        "rowHashes": [
+          "28bed1e12c6d1f8d2cad21a2415f56612cd6424aee215277a02de1139f58b9b2",
+          "3ab5a77a806c0301fb3d83f83a7319781094bbca5111656302736e851a4901f4",
+          "9eb4e849f7acef55d393d5017772a62fccd2c95c714ec89b0e8b095f0bab98b3",
+          "b43c66a7b3169a863938cecbb5e0b4237296719b9ba63e1302a75f2ad119bd7a"
+        ]
+      },
+      {
+        "name": "annual_evidence_report_audit",
+        "count": 4,
+        "sha256": "7925b79c9ff52d97c7ef0739e687a1dc1e2851de35f6849bb86c6891d596ff80",
+        "rowHashes": [
+          "4dfd9c9fadca9ae791a6566fe25dbf2a6731b7b3cf0ce1c80f2ca389045ad28c",
+          "76fa4026bddc206d8ba202de885ade299bf483cf660a60c929b0438b8d2e07aa",
+          "9ce1422ada72aa30d7bd6e510939ddcfc828d3202fe63951ed17ec36130a39a3",
+          "f64f0b3af67fbebd7d34cd9ede432598e2ac6da6751ee34272fb95cf00165f92"
+        ]
+      },
+      {
+        "name": "annual_evidence_report_requests",
+        "count": 4,
+        "sha256": "2fb0ab0155529fe17aaa3d95b08db4c029b812242d5d8629a9ba4fc28121bd60",
+        "rowHashes": [
+          "0342668f6c60a22fb6245849bf9495c980ba31b20c5d8875c992d798d048f986",
+          "114d4fa41b28d77a807855c83c5d7a07b568dc8f98f541763347dc019d925be1",
+          "b3391327b6f747982bee40d1719adc21ea2e88fec7ff2ab014d7f888da10955c",
+          "d139b5b4037e0ef5abc23b2e3fa31628bafb29f66f00ea5625c33fae349db384"
+        ]
+      },
+      {
+        "name": "annual_evidence_reports",
+        "count": 4,
+        "sha256": "0bd69093b853a522ce8ab93fd87330418678404f108aef48f58a7262023dc776",
+        "rowHashes": [
+          "1249522a4aa9a73088c88ed9decdedf01c0d03283167695a71e4ee701579e84d",
+          "2ec522e64612f60a038aa384339a41a4b32a54d469f481cd83b7e8b5872f48ad",
+          "3fb05e0c753b2aea5ee8d1ccdfbcd2a78e135818be9adc74629e014d3a4680f2",
+          "c8c6adb4568ac0e575c5f9db5b5911e09f2d327370e43c4b47effaaa887ff02e"
+        ]
+      },
+      {
+        "name": "annual_inventory_audit_log",
+        "count": 4,
+        "sha256": "a912b2adee2052f7e8cc39aa204620c3650222e15619787c0cce3aab4a968805",
+        "rowHashes": [
+          "173bd4e84ad2a1302ebcf9f4ce66d977369f56c5dabd4c6e26d59b6bc28deddc",
+          "19b673239d5ca6d5d554ebcf460bcae855242b7ac0bf319f3def4a3039b4d406",
+          "45c446867be0e60cbf0b45811967fe0d59c26c68b27f57a79e9f7f89b5869445",
+          "d3095fee8479f027ac8b581d5a5f7f8fa76353bbf511afd63530dbb1231e0116"
+        ]
+      },
+      {
+        "name": "annual_inventory_review_decisions",
+        "count": 1,
+        "sha256": "94415328107d8954aa25826222e50ce8872d7166ea2d688b3f3e3d576ad71191",
+        "rowHashes": [
+          "4c1ea884d1299838c45390a7c35fd46d34f1d6f45a1eb093180dead251b4bc00"
+        ]
+      },
+      {
+        "name": "annual_inventory_versions",
+        "count": 1,
+        "sha256": "192181f45a67fca92472bc54954c869d9785b3be4ca875812525bf8c43f50eb3",
+        "rowHashes": [
+          "657dd478ae085e8905ce0fdb340c7d2ddf9a4cb697bd09c67c3e4781950db9c4"
+        ]
+      },
+      {
+        "name": "annual_source_register_versions",
+        "count": 2,
+        "sha256": "ea8e3b28d7fa5c0a1e7329e6171cfbb9c2b3d0def60b3609ace38da45caa1742",
+        "rowHashes": [
+          "1555a2cb6f423ccd5ccba5723130349dd87f637fe939416e68774d969839f8b2",
+          "184d2bb72c8717780d890af50e4a43aa110bec627fae9a5cb13342afb1abca0c"
+        ]
+      },
+      {
+        "name": "audit_events",
+        "count": 1,
+        "sha256": "5fb5c396b668ca1b8b8cb271c795ac9354c213836c49f085d3d75d0d6cb98304",
+        "rowHashes": [
+          "f4a003847753626c8ea9bb4060af205b71930ffad0a727c1e6239c06d075c283"
+        ]
+      },
+      {
+        "name": "bill_evidence",
+        "count": 1,
+        "sha256": "cbfd8431b7d06bbb7b2ae47a79b95bc606131ff10789a2f410cb4b03088dff65",
+        "rowHashes": [
+          "539a6e65c13335b7477a9bfb2e9ef82b1289efea91e10cfcdcb91ddefe3b697f"
+        ]
+      },
+      {
+        "name": "bill_summary_cache",
+        "count": 2,
+        "sha256": "4f9c4d20d326522db97fc52a7e23506e47fb2023291f776e74ce15e435f8351f",
+        "rowHashes": [
+          "44854330fa275f00e60e034d4007ba8f95917f05d6350230d81691ede44d6da2",
+          "bec35c86c3c7ea7a265669b1ff88a933169df5e3482c0d706729ceca5d32a242"
+        ]
+      },
+      {
+        "name": "bill_versions",
+        "count": 2,
+        "sha256": "0a25c23d0b176bf0685d040c0316d7d932bd9daa60e3900ed27a2a19b9bef333",
+        "rowHashes": [
+          "80f255c89a95458e18a829d1ee10b8edb90f5efab47b076d302c5abb84a5b7f0",
+          "f1e85893c9066cc80fe198e595eb8cd24ce0cd766eb145a6c072d3ef5ecbe377"
+        ]
+      },
+      {
+        "name": "boundary_facilities",
+        "count": 1,
+        "sha256": "d8140ba7c097c8af67da9ce20121fc6597f1670da9971de149c2fa88b0746b8e",
+        "rowHashes": [
+          "416b981868c1f99962cf8c878988fa551b59c6e9ed6979cd4cdf0cd9713cb219"
+        ]
+      },
+      {
+        "name": "calculation_audit_log",
+        "count": 1,
+        "sha256": "3ec3b37a40e12954ece6102cbfd41252b31cb01ffd662635610d7a7ae1b9d1a5",
+        "rowHashes": [
+          "a825d8eceb7575a21d1b45d359bc43b2545d32ff04630a7c3b61cf2ae1b60e47"
+        ]
+      },
+      {
+        "name": "companies",
+        "count": 1,
+        "sha256": "036f3d7b8866ac5a2deda69d8fca91812cd61bf4458e514360ae5b82188eb209",
+        "rowHashes": [
+          "efeb0c1e4de595125d7a144e0b449da03cbf7c7769e6f420b86c42e4d10735cc"
+        ]
+      },
+      {
+        "name": "company_members",
+        "count": 4,
+        "sha256": "daf03dceb06da62fe556d4fc63788c48bdda183ddf269d6c7aec462af635e1f1",
+        "rowHashes": [
+          "0c592f888038d5141629f5b04be2dfe9d6d5ca969bd5c3098886fab61d5595cc",
+          "43fa9d70d198d5117014ed0c234a1c063870cd89ed9690f81cc0df4a11afc771",
+          "67a21241e0ba7334dfedd3d2a6b86233c46c304359bdfdb18a478501759c6d3a",
+          "791786c702e458f9d85a3b064e665fd3b8829abaaab86b6476232e16d248e5bc"
+        ]
+      },
+      {
+        "name": "electricity_source_audit",
+        "count": 2,
+        "sha256": "c1b61aadd83545b89218988484d54ec61b06c9648c2f6b1df02bbcf361a18d26",
+        "rowHashes": [
+          "36a6f130864d91d307306b8d4489df73899d331ec0baff58ca40e1aec723b0af",
+          "ae9464d712208ac2ce125cb978f63d2528b9f1f40c862c843d52511b6a163cfe"
+        ]
+      },
+      {
+        "name": "electricity_source_requests",
+        "count": 3,
+        "sha256": "86fc62f93ab13364133549f94555e1cfb251764e39869cfe592af0daccb0bea4",
+        "rowHashes": [
+          "43e9464d7a80a3703b8b22faf2ba9ce82551c369d5b23aa9d9855fb7efc2d4f5",
+          "badec9c99b812ff03b139403f40b53723708de8f6672356eef570b8e6732dd4a",
+          "f569efbdbd54b6a97ad04558cc827f34e77025c07b3433ddd6c8a4421a92afe2"
+        ]
+      },
+      {
+        "name": "electricity_sources",
+        "count": 2,
+        "sha256": "0e6c866df6762678ea599830e707aab303c827331cc12065d1ed81ba2adf6e9e",
+        "rowHashes": [
+          "b9d929fc9835a27b3571b307d197383bc11488be579099b6466d9bb9e505c93c",
+          "bbe13ebe1c95885b1d9c19aa8d7aebfe405b1eb7a8e015b06cc174a352415166"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_audit",
+        "count": 6,
+        "sha256": "a7eb393efd0db01eb6ff23e9ba1a37e4edb79fde719f43f4cb426dceb7a7c565",
+        "rowHashes": [
+          "609a9cbdbb1376a6aa964891289b5c82e0000e77953a97631f687a3315610bdb",
+          "6348cc0ea944702145fc0d6440c1c49f6bbaae56c290887ddebbcf0de2ee0888",
+          "8b8adf9c2e0eb4fdcc9c6152526fbdb69f6573c6c8dd712989009cc3809d70a6",
+          "8cc56ab961bfe441d3f86f5e60253cb7588849250f58632e9b0dbdcd1b389354",
+          "99586ed6488ae41600d840136cb8476db7e6f9a35696be7cf1dde68895d0de9c",
+          "9c86c0dcc978be0aeec3141374fb9456778c5319b51bf2fc1436b28fa349c1fc"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_requests",
+        "count": 6,
+        "sha256": "6c602c9007ba4bebc971b05f426c6a593153b078979a2268639b9006da36d081",
+        "rowHashes": [
+          "0c3789630e3aa7cee730b403020f4078663cd65fbf20da7a6a6de8046035b88b",
+          "40735d439381372975ea615b0360e792ab1072ffcf86c0e3c32ce439f481704a",
+          "564a67f6258ff0a22a08102477957e97c79c8c3979870df3e6c44d26a5daf8d0",
+          "5f8845c2e30a513b895f642da0366712ba405b13a365205c28bd23918e54dad3",
+          "631fa42ebb1415e8888c7657b6d38b25fd178d9ccf55c40d405f53c06e107367",
+          "a88d64440abdaaa1cab1ce66fb7f3eff215f95bcc30926996b37c5ee5e6c4279"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_reviews",
+        "count": 2,
+        "sha256": "0951bf01bd1c4cd52e3ae253f0d5e21d91e5f56355a7b68a110ef9a1cc1f75df",
+        "rowHashes": [
+          "0eb7aa85f269414b9c396f77d820ebcba08ed0b1654cdcdd55006d4fa6c935a8",
+          "93c6590949ee0ba33168e73ddd82e31d83a8d7702fe901a8c61f2290a9cacab6"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_versions",
+        "count": 4,
+        "sha256": "034d05f2da7b5c2f45595eec1ff5744326404db0f9987cf6de9177920949fc0e",
+        "rowHashes": [
+          "752fb56cb131fb707f4dafa96cc05d6b242d27c59d61fcc62203d68b495079d9",
+          "89d6b14a8176217476c688242d969d60195abea890f43a0435a92128987bfe17",
+          "aea5b2865f99542606a4d6df636c16ee8c66b40282bd0852c64410c9a74de73a",
+          "db32fe290f8175659b249d456af5601ae8f18cf88fcb18edb775ec047888f5ab"
+        ]
+      },
+      {
+        "name": "evidence_audit_log",
+        "count": 3,
+        "sha256": "0e1eba1879e4ad66979eba03e5f1c71297e87fa675fd3b56d2960cf411edd892",
+        "rowHashes": [
+          "5755e9a7dbdfb3eae1723d126c3ba6c126cc1f4612c398eb1ecd7304e258d121",
+          "75b8c14cbc2a0be0b39b1e2bfd9654d14c771968a2bb5c1799fc5073d8ad31b7",
+          "bafd4af994332fb55c96ce2844a3917e48b1f99cf9f4bd591de342b822cd6518"
+        ]
+      },
+      {
+        "name": "evidence_search_documents",
+        "count": 1,
+        "sha256": "57db0e7f5096f92e5b5c2736868536dd85672f45a4f99a934e5aa91be53faea1",
+        "rowHashes": [
+          "c527601892d0aa631462c2c1b92cbbdcd1c9423aa15468561e684f23a47418d8"
+        ]
+      },
+      {
+        "name": "extraction_jobs",
+        "count": 1,
+        "sha256": "8bcbee6b636c676eb08807f1f04d9e3c40aa2038010046038b3cd4710702cb27",
+        "rowHashes": [
+          "86b503c308a9cf13510009f8b38696f14ffede072f8868c9bee4a526270bed70"
+        ]
+      },
+      {
+        "name": "facilities",
+        "count": 1,
+        "sha256": "db460b0355b1e114bd9b145b7de42b98fdcc8607ffb6894c5064f7541bff4cf0",
+        "rowHashes": [
+          "bfd8c66b7302345cfe39226c4a154fd00cff5bdc98641c70527e8640ed607609"
+        ]
+      },
+      {
+        "name": "inventory_activity_versions",
+        "count": 1,
+        "sha256": "70224b95a554d19fb53d19f6b3bba7adc9281e7c52127b65dce5689e6474d75f",
+        "rowHashes": [
+          "cbf1fb3641f08c33738895542887c15b325ef8cde5461a6521841231eeea96ce"
+        ]
+      },
+      {
+        "name": "inventory_calculation_results",
+        "count": 1,
+        "sha256": "73859876ca78443e1c210220f0adcd281e96b283c994a569bdb890fe2faebe2b",
+        "rowHashes": [
+          "f056508771c0a5864ed58a23337cb8fb60e22aec2efc4e4d9e61335efc346906"
+        ]
+      },
+      {
+        "name": "inventory_draft_report_audit_log",
+        "count": 1,
+        "sha256": "929b604af9ca5b56ab9978d8ec2283f103e6857d347a63be53b0000c1c1db47e",
+        "rowHashes": [
+          "6289a170fed1a89340b565ae9fe901f7839c8d9f97d32b4e3d03507935d2e521"
+        ]
+      },
+      {
+        "name": "inventory_draft_report_review_audit_log",
+        "count": 1,
+        "sha256": "f70d523183e2f7995c9efbf51465d63051f6a957b961c8857d70f6635e0b4235",
+        "rowHashes": [
+          "d92bea85913e4fc0c0fa0bc7fd92c9f1f7582b48588d31f143b09a9569874777"
+        ]
+      },
+      {
+        "name": "inventory_draft_report_review_decisions",
+        "count": 1,
+        "sha256": "644353d4a05238a64e75cb8053178f15decf68e6ace73cb24f3135237d7eda63",
+        "rowHashes": [
+          "3be4693f228f03a0695a6e15b614629d04fdeed9f081d6c28766245bb2bd99b2"
+        ]
+      },
+      {
+        "name": "inventory_draft_reports",
+        "count": 1,
+        "sha256": "cee98738ed3f325b1866b51a93d1b6b1644428db262539f204eefd708d50448b",
+        "rowHashes": [
+          "d2088f240f53e9f4b499db8a4c8894500e3f28199df85d30423e18f572bcbca8"
+        ]
+      },
+      {
+        "name": "inventory_evidence_pack_audit_log",
+        "count": 1,
+        "sha256": "2ac5bee0bdaf1bc4b85d8f6683b0d651cbcfa8c4b071ec1bd36033468b931d18",
+        "rowHashes": [
+          "031c29925581a5cb0bd23e77bf61b243f201d14661b40039c97a42f2c97e9c59"
+        ]
+      },
+      {
+        "name": "inventory_evidence_packs",
+        "count": 1,
+        "sha256": "6d0bc03bb70e1e6281302f7ad28cc02b679662c9326d429a81f9ad762f1d973a",
+        "rowHashes": [
+          "3c716e3abb545462c9fb4d5f136c8121079052adb03ed948772b7c96342e54c5"
+        ]
+      },
+      {
+        "name": "inventory_review_audit_log",
+        "count": 2,
+        "sha256": "49f304aa32d9669c0ba9afaaee3d76ee51e844f92ea45fbe3beb57d5e2cf9dae",
+        "rowHashes": [
+          "9d005aad9fbb09eab3d554b4c3ba1d133c1db4207edeac501b4cc66dae77ece1",
+          "d3e3750d4133ca8da5701afff508e26eb63f7bfe7459aed5e2a79ef700b9966a"
+        ]
+      },
+      {
+        "name": "inventory_review_decisions",
+        "count": 1,
+        "sha256": "8f5a3720e2eef4dc1ca3ed0a8cd4ae120c85cadaa399615c39363bd25bdea961",
+        "rowHashes": [
+          "5b7688ff5691dc9c6e85da680e688f5d7047bc265c54ffc1b6e0d29b553c5da2"
+        ]
+      },
+      {
+        "name": "inventory_versions",
+        "count": 1,
+        "sha256": "01b1513487bbe477f91aebb16341a965e105a354459046789f8ae9645592f047",
+        "rowHashes": [
+          "3e18926cba070338933a9c480b610c35fddc4a62dc23a6062596f605e451775d"
+        ]
+      },
+      {
+        "name": "reporting_boundaries",
+        "count": 1,
+        "sha256": "b278ba2fd83ac5b87a9c30a16db9c7ecd5b89f53d813a0686da56f64b222253d",
+        "rowHashes": [
+          "4ee4c8a60bad1898f7577a21bf2c44fabfd05a1ad9825b164e07d36b0982bc33"
+        ]
+      },
+      {
+        "name": "schema_migrations",
+        "count": 14,
+        "sha256": "3ea25ef3a0c28c28d3596b6ba6211d9bce74e30e246b324345ac74302d22440e",
+        "rowHashes": [
+          "23987e352257f084b077b6b1fe89aa03b546e369cdce28e9e6c502f5fefaf613",
+          "4b21d5394b5f3eb0c239a7262f99aaf607bf6b11818dc32ac03961acd7b39021",
+          "60e54e0f568dceb944df0dce60d09293862c265905ac82032c618885ad21249c",
+          "736293fd6a6b0ad3eac585aac62b32b9628b90cd1efdea3e02b8781a0ba12e2c",
+          "75d816d93f78595a11c035029d4797181afd2595c8101089b4082d8f995d0019",
+          "863f0d7510ce9915bae0debbdef44fa1c94c9303c808bb2a26253c6fe2c7cd1c",
+          "8d933d80740d36beb7974d8f65c1a120888a399eb8dcba7f1460a58a15858227",
+          "8efc331839b7c63a62c8173a5bb33112e8497062b4be39a18a37575b485ca0fa",
+          "918df6e3dbf4b08bdb631c9de0a018bfb20494f3cabecde359f10f0f761cdb6c",
+          "9b3d127cd300b57957bacc22e2cb42b1423086e13110ca1fbf5ea7c6bd2cd3ff",
+          "b3e1473bbc50f82e83085940c30d404044bf6d0354e11919e3d751ed1f877a80",
+          "b7a9d0bc28c82d1d10236f82966dc6ad3362b26b72dc986b8494c098957f1dcc",
+          "fcf6d03807cec30337cb59a8e1f76b48b74e8764aa188662d3c189d18cbe56ab",
+          "ff8b4e53505f6fc350f46ed6bee72433cfefceb36c21da0fb16d8c01580f89b3"
+        ]
+      },
+      {
+        "name": "source_worksheet_audit",
+        "count": 4,
+        "sha256": "cf282ba1f23fea004f26e5138bee768149028b1f7787a88942b283d42ae6ee15",
+        "rowHashes": [
+          "3a69637487319b24be58c0c899ee758afa78aa8642c5d05d448d48ef2daeab1e",
+          "6309808ee2b56d08a42f5c82ef9697a5d9353f43d137c7cefba89d2742435b7a",
+          "868199393bfcf7eefd20ee722f851f1938390249a4d4ccdc398215ff16864fa5",
+          "fd3593a66e189de554fc5f8477c93d3bc30b1412966200ccb9c6b75ecbd6964c"
+        ]
+      },
+      {
+        "name": "source_worksheet_report_audit",
+        "count": 3,
+        "sha256": "4878f7a32a7c2c9a1bc8ed7ac4ced7777ac29de4286879a82fe1b005daceff29",
+        "rowHashes": [
+          "122f3d653a0feeb980738829ddc26b9ed15fa80c9c31fa74341a0558dc9c2bb3",
+          "68fd93ea86faeae5aeb6b7c0459eda65b2fad112381a3e3dd57ca143e1ffe528",
+          "6bf2e4eecbd9f9178a8fb0ada864b42af348a7062759a64b379c0626be86df41"
+        ]
+      },
+      {
+        "name": "source_worksheet_report_requests",
+        "count": 3,
+        "sha256": "d12ff424384829bb19a9520abfc4e2be483964f8afaf0c1e72ebf8065d72224b",
+        "rowHashes": [
+          "3db9ec1fb1cb30ee8f0845f48eb9e4363a62fd05a5b125fbd50f0803a2c77e8b",
+          "420f53dfb31c50e98aa590a2da0d269cf0cd5404a50f9425614137fe90530347",
+          "9530e683c824cbd1cf3844d35ddec511aaaf1a8728b206d08a1226ebd4faab88"
+        ]
+      },
+      {
+        "name": "source_worksheet_reports",
+        "count": 3,
+        "sha256": "67f04f32e02d729644c6927443bfe0ff5a82d80cb5bcf2bc74a54d128ecbae93",
+        "rowHashes": [
+          "87ecc8458fbd17274e5790859046bc881a7b6364b709010826a28395c0d833f8",
+          "c7d39164d0ec7b56e03f95432b67f04199c38abe86fd86b0ae344052ce6798eb",
+          "edab6ab627f31dc36bd7083cf85f888b5f2b0c8b4c1396b32b4d7994dfa0bcbe"
+        ]
+      },
+      {
+        "name": "source_worksheet_requests",
+        "count": 4,
+        "sha256": "61c1fbb2e092bd05a7df013730a5fd8b62bb8bc07c3072f8535da36e3efd5133",
+        "rowHashes": [
+          "279effb38493855874af82341bfd32e3f84405a05abffbe397fdd651bd08a6dc",
+          "9e797e9df8d177bfa8d2b0bc7d1818e4a09eb84cc585a7da9ec03864224b293a",
+          "b69a9823e7b835dc47cb1f64262f42de9fba1081fd5ce07138c586e1c921eca5",
+          "e9152d99d2d1bd38de247963f2fb8eb3b64dc6a6fc946d4ccba4a1af8faf146d"
+        ]
+      },
+      {
+        "name": "source_worksheet_reviews",
+        "count": 1,
+        "sha256": "3bc1d8a36d1bc947685b151a18a731b3b68ec72b8bb51da81e7c851125603f03",
+        "rowHashes": [
+          "7bde67cf23a5312ac0217675cff843cc2a6260c7333734304a44693ed91638ee"
+        ]
+      },
+      {
+        "name": "source_worksheet_versions",
+        "count": 3,
+        "sha256": "a2bc7ffb6596d1d0a9cb2a7e7d3447a76c9789279f63157aeda40d3fa7297b9d",
+        "rowHashes": [
+          "c41fc7ece2fdec01c8dfc3ba90c9b6102cfa0692358e9f420ba450fe4d18372a",
+          "ce0d64bcf936723a800742272821e2095c530231dad8ec70e8051c142dee674b",
+          "dd47c179fecd6fafcc70bc6f1fcf5ce27218732e9dfc6c177972fee796451ae6"
+        ]
+      },
+      {
+        "name": "staging_access",
+        "count": 4,
+        "sha256": "025961a20dd636f8e980fc8886a77a55a2cb113501066fa5d02b926eba43566e",
+        "rowHashes": [
+          "03662e1bb872d0b343527b4dfa2759c997102399bd29829c58abf85f9c4c454e",
+          "1b582569b5c579891976e442b9e116fddfcbc5ffcfa36a77f60e981958f10399",
+          "1c13d850b8f02dffda0b49d926871eaa2d61d72c98f84b5258a10298be79c081",
+          "609664c5a38f493a219b433787ee35423b183e5e5988539ba71a888212fc9ff9"
+        ]
+      },
+      {
+        "name": "staging_target",
+        "count": 1,
+        "sha256": "716cf46bb893de6b878044fa3734f28dcc3f7f24b49b5b71708c05bc7a0478ec",
+        "rowHashes": [
+          "5c610176750f9981a703023d77549877964f4402a2109bcb852aae8c4735c4c0"
+        ]
+      },
+      {
+        "name": "worksheet_report_audit",
+        "count": 2,
+        "sha256": "627ca311baaa40d3d6d643f5884922525dbd1c5f1f9cb584028dad977e99ce73",
+        "rowHashes": [
+          "4d574b9022c3038b22669ea6da66cce8a035b42fe8a81a039fdcc2e27fae89a1",
+          "ba85d6d929ba9680614bd28b4466e38e351b9272661c34243909d70ad93a6f6f"
+        ]
+      },
+      {
+        "name": "worksheet_report_requests",
+        "count": 5,
+        "sha256": "e065a3523d353037ae2c47215c507740856d64f08c608a96b7e5cbe11d2f6696",
+        "rowHashes": [
+          "11ea432541a415cf9b7d6dfe38a17d2fdef8d7547d455805ae44971ad754ff43",
+          "1c974420e623ea388642857ce56002e5854cd6764022b59474729bca21a435c7",
+          "2fc170f2910543bf059433d414c165b1c34272a8578168b431558b56897d79c1",
+          "8601172f9851778b9bee4975810f7420e56ec3f460c445654068bb971580b585",
+          "aa0ef4476f33c9e8c837659e341f9764639fb695756c4ee27498c4f7a5ed392f"
+        ]
+      },
+      {
+        "name": "worksheet_reports",
+        "count": 2,
+        "sha256": "228c39d6ca13aba665ba3aa1e6494eb3294a4b8c9c745af6ba75051ef8bf943d",
+        "rowHashes": [
+          "b6f4ee327a368ca185cde64ec921f331d218334af6b7dc6a953790672960453c",
+          "dc75082a63e5a86f0c73e63d9707e43c8746e44ea3a2960073e840eb50f8bd5f"
+        ]
+      }
+    ],
+    "metadata": {
+      "tables": "9bb4797b96b90c4885141f06220921f7a8fa8e7ad9181a9f27e221cb801a1dad",
+      "policies": "cbda881dffdec5be7cc7933864974cb5cb0dc1759d0741d4d1cb5e0f06adb71f",
+      "functions": "f2cbae6bafa169e35b3047c1ea90480f090a17499f6f1358ffa72e632cbcdfc0",
+      "schema": "888d0ecce7feef9dd656503e77ada898efd1db37bbe169f7adb9f55202dcd7ee",
+      "constraints": "b5ed0497e1249679108d228e566146a3c408a4c3e6b9aa3a6e5fb5ebcdf90a97"
+    },
+    "roles": [
+      {
+        "rolname": "anon",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "authenticated",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "authenticator",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "dashboard_user",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": false,
+        "rolreplication": true,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "neuvetra_runtime",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "pgbouncer",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "postgres",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "service_role",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_admin",
+        "rolsuper": true,
+        "rolinherit": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_auth_admin",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": true,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_etl_admin",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_privileged_role",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_read_only_user",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_realtime_admin",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_replication_admin",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_storage_admin",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": true,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      }
+    ],
+    "memberships": [
+      {
+        "role": "anon",
+        "member": "authenticator",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "anon",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "authenticated",
+        "member": "authenticator",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "authenticated",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "authenticator",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "authenticator",
+        "member": "supabase_storage_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "neuvetra_runtime",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": false,
+        "set_option": false
+      },
+      {
+        "role": "pg_create_subscription",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_monitor",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_monitor",
+        "member": "supabase_etl_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_monitor",
+        "member": "supabase_read_only_user",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_data",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_data",
+        "member": "supabase_etl_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_data",
+        "member": "supabase_read_only_user",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_settings",
+        "member": "pg_monitor",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_stats",
+        "member": "pg_monitor",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_signal_backend",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_stat_scan_tables",
+        "member": "pg_monitor",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "service_role",
+        "member": "authenticator",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "service_role",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "supabase_privileged_role",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "supabase_privileged_role",
+        "member": "supabase_etl_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      }
+    ],
+    "defaultAcls": [
+      {
+        "owner": "postgres",
+        "schema": "frontdesk",
+        "kind": "r",
+        "acl": "{service_role=arwd/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "public",
+        "kind": "S",
+        "acl": "{postgres=rwU/postgres,service_role=w/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "public",
+        "kind": "f",
+        "acl": "{postgres=X/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "public",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/postgres,service_role=Dxtm/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "site",
+        "kind": "r",
+        "acl": "{service_role=arwd/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "storage",
+        "kind": "S",
+        "acl": "{postgres=rwU/postgres,anon=rwU/postgres,authenticated=rwU/postgres,service_role=rwU/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "storage",
+        "kind": "f",
+        "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "storage",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "terrascope",
+        "kind": "r",
+        "acl": "{service_role=arwd/postgres}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "extensions",
+        "kind": "S",
+        "acl": "{postgres=r*w*U*/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "extensions",
+        "kind": "f",
+        "acl": "{postgres=X*/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "extensions",
+        "kind": "r",
+        "acl": "{postgres=a*r*w*d*D*x*t*m*/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,anon=arwdDxtm/supabase_admin,authenticated=arwdDxtm/supabase_admin,service_role=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql_public",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql_public",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql_public",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,anon=arwdDxtm/supabase_admin,authenticated=arwdDxtm/supabase_admin,service_role=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "public",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "public",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "public",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,anon=arwdDxtm/supabase_admin,authenticated=arwdDxtm/supabase_admin,service_role=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "realtime",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,dashboard_user=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "realtime",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,dashboard_user=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "realtime",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,dashboard_user=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_auth_admin",
+        "schema": "auth",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_auth_admin,dashboard_user=rwU/supabase_auth_admin}"
+      },
+      {
+        "owner": "supabase_auth_admin",
+        "schema": "auth",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_auth_admin,dashboard_user=X/supabase_auth_admin}"
+      },
+      {
+        "owner": "supabase_auth_admin",
+        "schema": "auth",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_auth_admin,dashboard_user=arwdDxtm/supabase_auth_admin}"
+      }
+    ],
+    "dependencies": [
+      {
+        "schema": "auth",
+        "relation": "users"
+      }
+    ]
+  },
+  "after": {
+    "tables": [
+      {
+        "name": "annual_electricity_evidence_audit",
+        "count": 5,
+        "sha256": "950d86c45a0ca8878ea6dc20da22b3d0dedf1f0d8f32a1d65be16d5665a8ec21",
+        "rowHashes": [
+          "2ddca09403330f6d2c3abce16d72246697e211bd2a2987a4816900e599fbbe57",
+          "646effba3a3985ad89f8abb8d108b9e6b33b46c566145f8cbe5d8160a220ba8e",
+          "6b32956d62e6f679f06bc6ea1e8b3bb57a4a2a667df6e68c9b9b7bab7d5778c6",
+          "74f256f237a4b34e36519cce86c8038c59c5762a42533819df4a707fb8362c9e",
+          "81433bea7f22ed546138bb977a24c548ca6dea8d8be105fb6f6767bd05086aa3"
+        ]
+      },
+      {
+        "name": "annual_electricity_evidence_requests",
+        "count": 5,
+        "sha256": "0ee92a089582c093fb6f3817b2d1a74bb7a437586ca3df33d9c7fef5f4fd20e9",
+        "rowHashes": [
+          "83e1ce295a263ddac259024e9b7f397094bc1b20d7d03d83a0d56bfd788fc706",
+          "bcadce12998850ec763e7ada41978623c8d883150c20aeaf2cd5a50cdf937a6a",
+          "be7225e792e50393333d10936a3c5a43c401a05d74c53d3cf07ccab71da48f86",
+          "cf5dde9baae4c4cc5240a824ef0db9c921f3f79d62c44ccb2107801642333ffd",
+          "def87a34136769ff56460bfcb894e6daf226f44fc0f91ff74ca4ede9d385c09b"
+        ]
+      },
+      {
+        "name": "annual_electricity_evidence_reviews",
+        "count": 1,
+        "sha256": "05ac884add5a4386039f16df0dc75cba53433439324450566ddba44e15f7aed9",
+        "rowHashes": [
+          "9c2c447a02cb739cd9cd5e8347e2a872ad3f4f37a78627ff740e3dd9b2ed3f9a"
+        ]
+      },
+      {
+        "name": "annual_electricity_evidence_versions",
+        "count": 4,
+        "sha256": "21f7ab68226efe35f1cbd64482fd960700960b822997678e66819c9d4794dbfd",
+        "rowHashes": [
+          "25995afd26930404709f21c9ebbc67a6855c914a860e4731bb027c059da02bef",
+          "706fab9288479ec3598e0140e645a21094f57b70ab6ba43b7b6ad4634c2e99da",
+          "73d0e4811a48881c93b2531e1bdc6900c9999011a44b9a85388a306fb91fad9a",
+          "e4286e935ce8931ae57e905e9c91f743e23f8787d19457db2d306684bf85568f"
+        ]
+      },
+      {
+        "name": "annual_electricity_report_audit",
+        "count": 3,
+        "sha256": "49b577b6988e29bb6b62adb3584fe8a09e9e49bb71c9cecfcbe50381ed40bd72",
+        "rowHashes": [
+          "66d73770d35c55dc34979fbd5668462f90873466c6257b60620cef98ece2cca0",
+          "709ce596de169c1189c749865161190c3dc69ca093d35fb2f5cd466c201cfb26",
+          "99c8ab17834ded48afba5ba64da210fce83510ca5606c4708d4b4ccdbfe10778"
+        ]
+      },
+      {
+        "name": "annual_electricity_report_requests",
+        "count": 3,
+        "sha256": "a5e9f2363d686a084a4e57d3bdfbe7bd86970ea8c2f312301ac1ac82239f4379",
+        "rowHashes": [
+          "2140b4e7f8b1f8c40316caff967dc877cd485f18eca011319fc66f5718901d89",
+          "dd95a7baf9a73a050495612913fcdda298460165e440e2917a2b7fa3f4c325ad",
+          "fb9963fe8d21205b3c2ad668a17ac7f1c8dec47e1b05431f13e0ff42e43f2e84"
+        ]
+      },
+      {
+        "name": "annual_electricity_reports",
+        "count": 3,
+        "sha256": "d5aa77c85ec1074717109b9fb5ab2db05d78d26a6ec7b256e3a15de8ed9dbd9b",
+        "rowHashes": [
+          "c718e50290cf3a21fd8f1751f2c914ae6817f709dffc7b4b68475b552f76cbce",
+          "fcab6561b6feb99ccf842308b4046604f98efedb537ace4d5588a67bcf27f588",
+          "ffc0762ddf7272c17c6142a0ebe53f874838227cc2ec1789ab676b48e07f3e18"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_audit",
+        "count": 5,
+        "sha256": "5877cbdd30da105b5c18d6e43296a5273715324ab2e94dd0c616a197156f307c",
+        "rowHashes": [
+          "00af94baa281fb1f9c7093a1e2d25f022fc2c495aa5e29838c95f26d8abb2cec",
+          "0a18ec69a61d1f291520061f41887b645c9b5e2767b6dfb5bc0b8602b6ac0a19",
+          "5fb7e48eec82d25f5318e0d8e8667aa9805b3ea7b3bd13c55da819f146527095",
+          "6ea748fd73ea1c1bae99fa03c8f2f0d712ae9754eddc694eb03e377263446c5b",
+          "b84c296f2c7a1222bda42332c16e62f0f05f39899dad94bf6e4605ea3797935f"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_requests",
+        "count": 5,
+        "sha256": "51fef18afaa46c3744b079efc4de1db205e6a4279f0dd4016eaa7652e2d38ac1",
+        "rowHashes": [
+          "53fdaa64a3f5a21545c5c0ecb421501862f50f47a24b5f2088dd1dd036cf6d06",
+          "548bf3a0628f74f397b46c1aed821fde8f20869df561f417c268feedd6027138",
+          "901569dd01319251e95ca55f704e8b956b7a39ddd528bc58ac00438e89021d04",
+          "c7ed120478bbcea1880a4742b542593c57a87eac18f8aeb97c49a70e43c729a9",
+          "ff488cb52be8b6919d9e6a076d5909d45c0e02bd11ba0f52cc89b600e1512a79"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_reviews",
+        "count": 1,
+        "sha256": "a9dd2ef1e8d79545d64a0c02fcc9bf6e04d7de058a173db1b9f216d83d5bf27d",
+        "rowHashes": [
+          "93bb1998eaba6c72e6b19a15c48cdb6914adc5f6a267b82a81298564f018b2b9"
+        ]
+      },
+      {
+        "name": "annual_electricity_worksheet_versions",
+        "count": 4,
+        "sha256": "f62e5284cb56d275dc322c63da0463ecb6827280c8e6ed042971450581d6ffb8",
+        "rowHashes": [
+          "28bed1e12c6d1f8d2cad21a2415f56612cd6424aee215277a02de1139f58b9b2",
+          "3ab5a77a806c0301fb3d83f83a7319781094bbca5111656302736e851a4901f4",
+          "9eb4e849f7acef55d393d5017772a62fccd2c95c714ec89b0e8b095f0bab98b3",
+          "b43c66a7b3169a863938cecbb5e0b4237296719b9ba63e1302a75f2ad119bd7a"
+        ]
+      },
+      {
+        "name": "annual_evidence_report_audit",
+        "count": 4,
+        "sha256": "7925b79c9ff52d97c7ef0739e687a1dc1e2851de35f6849bb86c6891d596ff80",
+        "rowHashes": [
+          "4dfd9c9fadca9ae791a6566fe25dbf2a6731b7b3cf0ce1c80f2ca389045ad28c",
+          "76fa4026bddc206d8ba202de885ade299bf483cf660a60c929b0438b8d2e07aa",
+          "9ce1422ada72aa30d7bd6e510939ddcfc828d3202fe63951ed17ec36130a39a3",
+          "f64f0b3af67fbebd7d34cd9ede432598e2ac6da6751ee34272fb95cf00165f92"
+        ]
+      },
+      {
+        "name": "annual_evidence_report_requests",
+        "count": 4,
+        "sha256": "2fb0ab0155529fe17aaa3d95b08db4c029b812242d5d8629a9ba4fc28121bd60",
+        "rowHashes": [
+          "0342668f6c60a22fb6245849bf9495c980ba31b20c5d8875c992d798d048f986",
+          "114d4fa41b28d77a807855c83c5d7a07b568dc8f98f541763347dc019d925be1",
+          "b3391327b6f747982bee40d1719adc21ea2e88fec7ff2ab014d7f888da10955c",
+          "d139b5b4037e0ef5abc23b2e3fa31628bafb29f66f00ea5625c33fae349db384"
+        ]
+      },
+      {
+        "name": "annual_evidence_reports",
+        "count": 4,
+        "sha256": "0bd69093b853a522ce8ab93fd87330418678404f108aef48f58a7262023dc776",
+        "rowHashes": [
+          "1249522a4aa9a73088c88ed9decdedf01c0d03283167695a71e4ee701579e84d",
+          "2ec522e64612f60a038aa384339a41a4b32a54d469f481cd83b7e8b5872f48ad",
+          "3fb05e0c753b2aea5ee8d1ccdfbcd2a78e135818be9adc74629e014d3a4680f2",
+          "c8c6adb4568ac0e575c5f9db5b5911e09f2d327370e43c4b47effaaa887ff02e"
+        ]
+      },
+      {
+        "name": "annual_inventory_audit_log",
+        "count": 4,
+        "sha256": "a912b2adee2052f7e8cc39aa204620c3650222e15619787c0cce3aab4a968805",
+        "rowHashes": [
+          "173bd4e84ad2a1302ebcf9f4ce66d977369f56c5dabd4c6e26d59b6bc28deddc",
+          "19b673239d5ca6d5d554ebcf460bcae855242b7ac0bf319f3def4a3039b4d406",
+          "45c446867be0e60cbf0b45811967fe0d59c26c68b27f57a79e9f7f89b5869445",
+          "d3095fee8479f027ac8b581d5a5f7f8fa76353bbf511afd63530dbb1231e0116"
+        ]
+      },
+      {
+        "name": "annual_inventory_review_decisions",
+        "count": 1,
+        "sha256": "94415328107d8954aa25826222e50ce8872d7166ea2d688b3f3e3d576ad71191",
+        "rowHashes": [
+          "4c1ea884d1299838c45390a7c35fd46d34f1d6f45a1eb093180dead251b4bc00"
+        ]
+      },
+      {
+        "name": "annual_inventory_versions",
+        "count": 1,
+        "sha256": "192181f45a67fca92472bc54954c869d9785b3be4ca875812525bf8c43f50eb3",
+        "rowHashes": [
+          "657dd478ae085e8905ce0fdb340c7d2ddf9a4cb697bd09c67c3e4781950db9c4"
+        ]
+      },
+      {
+        "name": "annual_source_register_versions",
+        "count": 2,
+        "sha256": "ea8e3b28d7fa5c0a1e7329e6171cfbb9c2b3d0def60b3609ace38da45caa1742",
+        "rowHashes": [
+          "1555a2cb6f423ccd5ccba5723130349dd87f637fe939416e68774d969839f8b2",
+          "184d2bb72c8717780d890af50e4a43aa110bec627fae9a5cb13342afb1abca0c"
+        ]
+      },
+      {
+        "name": "audit_events",
+        "count": 1,
+        "sha256": "5fb5c396b668ca1b8b8cb271c795ac9354c213836c49f085d3d75d0d6cb98304",
+        "rowHashes": [
+          "f4a003847753626c8ea9bb4060af205b71930ffad0a727c1e6239c06d075c283"
+        ]
+      },
+      {
+        "name": "bill_evidence",
+        "count": 1,
+        "sha256": "cbfd8431b7d06bbb7b2ae47a79b95bc606131ff10789a2f410cb4b03088dff65",
+        "rowHashes": [
+          "539a6e65c13335b7477a9bfb2e9ef82b1289efea91e10cfcdcb91ddefe3b697f"
+        ]
+      },
+      {
+        "name": "bill_summary_cache",
+        "count": 2,
+        "sha256": "4f9c4d20d326522db97fc52a7e23506e47fb2023291f776e74ce15e435f8351f",
+        "rowHashes": [
+          "44854330fa275f00e60e034d4007ba8f95917f05d6350230d81691ede44d6da2",
+          "bec35c86c3c7ea7a265669b1ff88a933169df5e3482c0d706729ceca5d32a242"
+        ]
+      },
+      {
+        "name": "bill_versions",
+        "count": 2,
+        "sha256": "0a25c23d0b176bf0685d040c0316d7d932bd9daa60e3900ed27a2a19b9bef333",
+        "rowHashes": [
+          "80f255c89a95458e18a829d1ee10b8edb90f5efab47b076d302c5abb84a5b7f0",
+          "f1e85893c9066cc80fe198e595eb8cd24ce0cd766eb145a6c072d3ef5ecbe377"
+        ]
+      },
+      {
+        "name": "boundary_facilities",
+        "count": 1,
+        "sha256": "d8140ba7c097c8af67da9ce20121fc6597f1670da9971de149c2fa88b0746b8e",
+        "rowHashes": [
+          "416b981868c1f99962cf8c878988fa551b59c6e9ed6979cd4cdf0cd9713cb219"
+        ]
+      },
+      {
+        "name": "calculation_audit_log",
+        "count": 1,
+        "sha256": "3ec3b37a40e12954ece6102cbfd41252b31cb01ffd662635610d7a7ae1b9d1a5",
+        "rowHashes": [
+          "a825d8eceb7575a21d1b45d359bc43b2545d32ff04630a7c3b61cf2ae1b60e47"
+        ]
+      },
+      {
+        "name": "companies",
+        "count": 1,
+        "sha256": "036f3d7b8866ac5a2deda69d8fca91812cd61bf4458e514360ae5b82188eb209",
+        "rowHashes": [
+          "efeb0c1e4de595125d7a144e0b449da03cbf7c7769e6f420b86c42e4d10735cc"
+        ]
+      },
+      {
+        "name": "company_members",
+        "count": 4,
+        "sha256": "daf03dceb06da62fe556d4fc63788c48bdda183ddf269d6c7aec462af635e1f1",
+        "rowHashes": [
+          "0c592f888038d5141629f5b04be2dfe9d6d5ca969bd5c3098886fab61d5595cc",
+          "43fa9d70d198d5117014ed0c234a1c063870cd89ed9690f81cc0df4a11afc771",
+          "67a21241e0ba7334dfedd3d2a6b86233c46c304359bdfdb18a478501759c6d3a",
+          "791786c702e458f9d85a3b064e665fd3b8829abaaab86b6476232e16d248e5bc"
+        ]
+      },
+      {
+        "name": "corporate_inventory_audit",
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "rowHashes": []
+      },
+      {
+        "name": "corporate_inventory_heads",
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "rowHashes": []
+      },
+      {
+        "name": "corporate_inventory_requests",
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "rowHashes": []
+      },
+      {
+        "name": "corporate_inventory_reviews",
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "rowHashes": []
+      },
+      {
+        "name": "corporate_inventory_versions",
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "rowHashes": []
+      },
+      {
+        "name": "electricity_source_audit",
+        "count": 2,
+        "sha256": "c1b61aadd83545b89218988484d54ec61b06c9648c2f6b1df02bbcf361a18d26",
+        "rowHashes": [
+          "36a6f130864d91d307306b8d4489df73899d331ec0baff58ca40e1aec723b0af",
+          "ae9464d712208ac2ce125cb978f63d2528b9f1f40c862c843d52511b6a163cfe"
+        ]
+      },
+      {
+        "name": "electricity_source_requests",
+        "count": 3,
+        "sha256": "86fc62f93ab13364133549f94555e1cfb251764e39869cfe592af0daccb0bea4",
+        "rowHashes": [
+          "43e9464d7a80a3703b8b22faf2ba9ce82551c369d5b23aa9d9855fb7efc2d4f5",
+          "badec9c99b812ff03b139403f40b53723708de8f6672356eef570b8e6732dd4a",
+          "f569efbdbd54b6a97ad04558cc827f34e77025c07b3433ddd6c8a4421a92afe2"
+        ]
+      },
+      {
+        "name": "electricity_sources",
+        "count": 2,
+        "sha256": "0e6c866df6762678ea599830e707aab303c827331cc12065d1ed81ba2adf6e9e",
+        "rowHashes": [
+          "b9d929fc9835a27b3571b307d197383bc11488be579099b6466d9bb9e505c93c",
+          "bbe13ebe1c95885b1d9c19aa8d7aebfe405b1eb7a8e015b06cc174a352415166"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_audit",
+        "count": 6,
+        "sha256": "a7eb393efd0db01eb6ff23e9ba1a37e4edb79fde719f43f4cb426dceb7a7c565",
+        "rowHashes": [
+          "609a9cbdbb1376a6aa964891289b5c82e0000e77953a97631f687a3315610bdb",
+          "6348cc0ea944702145fc0d6440c1c49f6bbaae56c290887ddebbcf0de2ee0888",
+          "8b8adf9c2e0eb4fdcc9c6152526fbdb69f6573c6c8dd712989009cc3809d70a6",
+          "8cc56ab961bfe441d3f86f5e60253cb7588849250f58632e9b0dbdcd1b389354",
+          "99586ed6488ae41600d840136cb8476db7e6f9a35696be7cf1dde68895d0de9c",
+          "9c86c0dcc978be0aeec3141374fb9456778c5319b51bf2fc1436b28fa349c1fc"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_requests",
+        "count": 6,
+        "sha256": "6c602c9007ba4bebc971b05f426c6a593153b078979a2268639b9006da36d081",
+        "rowHashes": [
+          "0c3789630e3aa7cee730b403020f4078663cd65fbf20da7a6a6de8046035b88b",
+          "40735d439381372975ea615b0360e792ab1072ffcf86c0e3c32ce439f481704a",
+          "564a67f6258ff0a22a08102477957e97c79c8c3979870df3e6c44d26a5daf8d0",
+          "5f8845c2e30a513b895f642da0366712ba405b13a365205c28bd23918e54dad3",
+          "631fa42ebb1415e8888c7657b6d38b25fd178d9ccf55c40d405f53c06e107367",
+          "a88d64440abdaaa1cab1ce66fb7f3eff215f95bcc30926996b37c5ee5e6c4279"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_reviews",
+        "count": 2,
+        "sha256": "0951bf01bd1c4cd52e3ae253f0d5e21d91e5f56355a7b68a110ef9a1cc1f75df",
+        "rowHashes": [
+          "0eb7aa85f269414b9c396f77d820ebcba08ed0b1654cdcdd55006d4fa6c935a8",
+          "93c6590949ee0ba33168e73ddd82e31d83a8d7702fe901a8c61f2290a9cacab6"
+        ]
+      },
+      {
+        "name": "electricity_worksheet_versions",
+        "count": 4,
+        "sha256": "034d05f2da7b5c2f45595eec1ff5744326404db0f9987cf6de9177920949fc0e",
+        "rowHashes": [
+          "752fb56cb131fb707f4dafa96cc05d6b242d27c59d61fcc62203d68b495079d9",
+          "89d6b14a8176217476c688242d969d60195abea890f43a0435a92128987bfe17",
+          "aea5b2865f99542606a4d6df636c16ee8c66b40282bd0852c64410c9a74de73a",
+          "db32fe290f8175659b249d456af5601ae8f18cf88fcb18edb775ec047888f5ab"
+        ]
+      },
+      {
+        "name": "evidence_audit_log",
+        "count": 3,
+        "sha256": "0e1eba1879e4ad66979eba03e5f1c71297e87fa675fd3b56d2960cf411edd892",
+        "rowHashes": [
+          "5755e9a7dbdfb3eae1723d126c3ba6c126cc1f4612c398eb1ecd7304e258d121",
+          "75b8c14cbc2a0be0b39b1e2bfd9654d14c771968a2bb5c1799fc5073d8ad31b7",
+          "bafd4af994332fb55c96ce2844a3917e48b1f99cf9f4bd591de342b822cd6518"
+        ]
+      },
+      {
+        "name": "evidence_search_documents",
+        "count": 1,
+        "sha256": "57db0e7f5096f92e5b5c2736868536dd85672f45a4f99a934e5aa91be53faea1",
+        "rowHashes": [
+          "c527601892d0aa631462c2c1b92cbbdcd1c9423aa15468561e684f23a47418d8"
+        ]
+      },
+      {
+        "name": "extraction_jobs",
+        "count": 1,
+        "sha256": "8bcbee6b636c676eb08807f1f04d9e3c40aa2038010046038b3cd4710702cb27",
+        "rowHashes": [
+          "86b503c308a9cf13510009f8b38696f14ffede072f8868c9bee4a526270bed70"
+        ]
+      },
+      {
+        "name": "facilities",
+        "count": 1,
+        "sha256": "db460b0355b1e114bd9b145b7de42b98fdcc8607ffb6894c5064f7541bff4cf0",
+        "rowHashes": [
+          "bfd8c66b7302345cfe39226c4a154fd00cff5bdc98641c70527e8640ed607609"
+        ]
+      },
+      {
+        "name": "inventory_activity_versions",
+        "count": 1,
+        "sha256": "70224b95a554d19fb53d19f6b3bba7adc9281e7c52127b65dce5689e6474d75f",
+        "rowHashes": [
+          "cbf1fb3641f08c33738895542887c15b325ef8cde5461a6521841231eeea96ce"
+        ]
+      },
+      {
+        "name": "inventory_calculation_results",
+        "count": 1,
+        "sha256": "73859876ca78443e1c210220f0adcd281e96b283c994a569bdb890fe2faebe2b",
+        "rowHashes": [
+          "f056508771c0a5864ed58a23337cb8fb60e22aec2efc4e4d9e61335efc346906"
+        ]
+      },
+      {
+        "name": "inventory_draft_report_audit_log",
+        "count": 1,
+        "sha256": "929b604af9ca5b56ab9978d8ec2283f103e6857d347a63be53b0000c1c1db47e",
+        "rowHashes": [
+          "6289a170fed1a89340b565ae9fe901f7839c8d9f97d32b4e3d03507935d2e521"
+        ]
+      },
+      {
+        "name": "inventory_draft_report_review_audit_log",
+        "count": 1,
+        "sha256": "f70d523183e2f7995c9efbf51465d63051f6a957b961c8857d70f6635e0b4235",
+        "rowHashes": [
+          "d92bea85913e4fc0c0fa0bc7fd92c9f1f7582b48588d31f143b09a9569874777"
+        ]
+      },
+      {
+        "name": "inventory_draft_report_review_decisions",
+        "count": 1,
+        "sha256": "644353d4a05238a64e75cb8053178f15decf68e6ace73cb24f3135237d7eda63",
+        "rowHashes": [
+          "3be4693f228f03a0695a6e15b614629d04fdeed9f081d6c28766245bb2bd99b2"
+        ]
+      },
+      {
+        "name": "inventory_draft_reports",
+        "count": 1,
+        "sha256": "cee98738ed3f325b1866b51a93d1b6b1644428db262539f204eefd708d50448b",
+        "rowHashes": [
+          "d2088f240f53e9f4b499db8a4c8894500e3f28199df85d30423e18f572bcbca8"
+        ]
+      },
+      {
+        "name": "inventory_evidence_pack_audit_log",
+        "count": 1,
+        "sha256": "2ac5bee0bdaf1bc4b85d8f6683b0d651cbcfa8c4b071ec1bd36033468b931d18",
+        "rowHashes": [
+          "031c29925581a5cb0bd23e77bf61b243f201d14661b40039c97a42f2c97e9c59"
+        ]
+      },
+      {
+        "name": "inventory_evidence_packs",
+        "count": 1,
+        "sha256": "6d0bc03bb70e1e6281302f7ad28cc02b679662c9326d429a81f9ad762f1d973a",
+        "rowHashes": [
+          "3c716e3abb545462c9fb4d5f136c8121079052adb03ed948772b7c96342e54c5"
+        ]
+      },
+      {
+        "name": "inventory_review_audit_log",
+        "count": 2,
+        "sha256": "49f304aa32d9669c0ba9afaaee3d76ee51e844f92ea45fbe3beb57d5e2cf9dae",
+        "rowHashes": [
+          "9d005aad9fbb09eab3d554b4c3ba1d133c1db4207edeac501b4cc66dae77ece1",
+          "d3e3750d4133ca8da5701afff508e26eb63f7bfe7459aed5e2a79ef700b9966a"
+        ]
+      },
+      {
+        "name": "inventory_review_decisions",
+        "count": 1,
+        "sha256": "8f5a3720e2eef4dc1ca3ed0a8cd4ae120c85cadaa399615c39363bd25bdea961",
+        "rowHashes": [
+          "5b7688ff5691dc9c6e85da680e688f5d7047bc265c54ffc1b6e0d29b553c5da2"
+        ]
+      },
+      {
+        "name": "inventory_versions",
+        "count": 1,
+        "sha256": "01b1513487bbe477f91aebb16341a965e105a354459046789f8ae9645592f047",
+        "rowHashes": [
+          "3e18926cba070338933a9c480b610c35fddc4a62dc23a6062596f605e451775d"
+        ]
+      },
+      {
+        "name": "reporting_boundaries",
+        "count": 1,
+        "sha256": "b278ba2fd83ac5b87a9c30a16db9c7ecd5b89f53d813a0686da56f64b222253d",
+        "rowHashes": [
+          "4ee4c8a60bad1898f7577a21bf2c44fabfd05a1ad9825b164e07d36b0982bc33"
+        ]
+      },
+      {
+        "name": "schema_migrations",
+        "count": 15,
+        "sha256": "b0a820b0328b643df58c60842151a4505d86aad9497410f8226ea79d2285f0c5",
+        "rowHashes": [
+          "23987e352257f084b077b6b1fe89aa03b546e369cdce28e9e6c502f5fefaf613",
+          "2862c3ba134f37a2d90c9a13f6c240c731d76f82dca77105c84c93d491c505bd",
+          "4b21d5394b5f3eb0c239a7262f99aaf607bf6b11818dc32ac03961acd7b39021",
+          "60e54e0f568dceb944df0dce60d09293862c265905ac82032c618885ad21249c",
+          "736293fd6a6b0ad3eac585aac62b32b9628b90cd1efdea3e02b8781a0ba12e2c",
+          "75d816d93f78595a11c035029d4797181afd2595c8101089b4082d8f995d0019",
+          "863f0d7510ce9915bae0debbdef44fa1c94c9303c808bb2a26253c6fe2c7cd1c",
+          "8d933d80740d36beb7974d8f65c1a120888a399eb8dcba7f1460a58a15858227",
+          "8efc331839b7c63a62c8173a5bb33112e8497062b4be39a18a37575b485ca0fa",
+          "918df6e3dbf4b08bdb631c9de0a018bfb20494f3cabecde359f10f0f761cdb6c",
+          "9b3d127cd300b57957bacc22e2cb42b1423086e13110ca1fbf5ea7c6bd2cd3ff",
+          "b3e1473bbc50f82e83085940c30d404044bf6d0354e11919e3d751ed1f877a80",
+          "b7a9d0bc28c82d1d10236f82966dc6ad3362b26b72dc986b8494c098957f1dcc",
+          "fcf6d03807cec30337cb59a8e1f76b48b74e8764aa188662d3c189d18cbe56ab",
+          "ff8b4e53505f6fc350f46ed6bee72433cfefceb36c21da0fb16d8c01580f89b3"
+        ]
+      },
+      {
+        "name": "source_worksheet_audit",
+        "count": 4,
+        "sha256": "cf282ba1f23fea004f26e5138bee768149028b1f7787a88942b283d42ae6ee15",
+        "rowHashes": [
+          "3a69637487319b24be58c0c899ee758afa78aa8642c5d05d448d48ef2daeab1e",
+          "6309808ee2b56d08a42f5c82ef9697a5d9353f43d137c7cefba89d2742435b7a",
+          "868199393bfcf7eefd20ee722f851f1938390249a4d4ccdc398215ff16864fa5",
+          "fd3593a66e189de554fc5f8477c93d3bc30b1412966200ccb9c6b75ecbd6964c"
+        ]
+      },
+      {
+        "name": "source_worksheet_report_audit",
+        "count": 3,
+        "sha256": "4878f7a32a7c2c9a1bc8ed7ac4ced7777ac29de4286879a82fe1b005daceff29",
+        "rowHashes": [
+          "122f3d653a0feeb980738829ddc26b9ed15fa80c9c31fa74341a0558dc9c2bb3",
+          "68fd93ea86faeae5aeb6b7c0459eda65b2fad112381a3e3dd57ca143e1ffe528",
+          "6bf2e4eecbd9f9178a8fb0ada864b42af348a7062759a64b379c0626be86df41"
+        ]
+      },
+      {
+        "name": "source_worksheet_report_requests",
+        "count": 3,
+        "sha256": "d12ff424384829bb19a9520abfc4e2be483964f8afaf0c1e72ebf8065d72224b",
+        "rowHashes": [
+          "3db9ec1fb1cb30ee8f0845f48eb9e4363a62fd05a5b125fbd50f0803a2c77e8b",
+          "420f53dfb31c50e98aa590a2da0d269cf0cd5404a50f9425614137fe90530347",
+          "9530e683c824cbd1cf3844d35ddec511aaaf1a8728b206d08a1226ebd4faab88"
+        ]
+      },
+      {
+        "name": "source_worksheet_reports",
+        "count": 3,
+        "sha256": "67f04f32e02d729644c6927443bfe0ff5a82d80cb5bcf2bc74a54d128ecbae93",
+        "rowHashes": [
+          "87ecc8458fbd17274e5790859046bc881a7b6364b709010826a28395c0d833f8",
+          "c7d39164d0ec7b56e03f95432b67f04199c38abe86fd86b0ae344052ce6798eb",
+          "edab6ab627f31dc36bd7083cf85f888b5f2b0c8b4c1396b32b4d7994dfa0bcbe"
+        ]
+      },
+      {
+        "name": "source_worksheet_requests",
+        "count": 4,
+        "sha256": "61c1fbb2e092bd05a7df013730a5fd8b62bb8bc07c3072f8535da36e3efd5133",
+        "rowHashes": [
+          "279effb38493855874af82341bfd32e3f84405a05abffbe397fdd651bd08a6dc",
+          "9e797e9df8d177bfa8d2b0bc7d1818e4a09eb84cc585a7da9ec03864224b293a",
+          "b69a9823e7b835dc47cb1f64262f42de9fba1081fd5ce07138c586e1c921eca5",
+          "e9152d99d2d1bd38de247963f2fb8eb3b64dc6a6fc946d4ccba4a1af8faf146d"
+        ]
+      },
+      {
+        "name": "source_worksheet_reviews",
+        "count": 1,
+        "sha256": "3bc1d8a36d1bc947685b151a18a731b3b68ec72b8bb51da81e7c851125603f03",
+        "rowHashes": [
+          "7bde67cf23a5312ac0217675cff843cc2a6260c7333734304a44693ed91638ee"
+        ]
+      },
+      {
+        "name": "source_worksheet_versions",
+        "count": 3,
+        "sha256": "a2bc7ffb6596d1d0a9cb2a7e7d3447a76c9789279f63157aeda40d3fa7297b9d",
+        "rowHashes": [
+          "c41fc7ece2fdec01c8dfc3ba90c9b6102cfa0692358e9f420ba450fe4d18372a",
+          "ce0d64bcf936723a800742272821e2095c530231dad8ec70e8051c142dee674b",
+          "dd47c179fecd6fafcc70bc6f1fcf5ce27218732e9dfc6c177972fee796451ae6"
+        ]
+      },
+      {
+        "name": "staging_access",
+        "count": 4,
+        "sha256": "025961a20dd636f8e980fc8886a77a55a2cb113501066fa5d02b926eba43566e",
+        "rowHashes": [
+          "03662e1bb872d0b343527b4dfa2759c997102399bd29829c58abf85f9c4c454e",
+          "1b582569b5c579891976e442b9e116fddfcbc5ffcfa36a77f60e981958f10399",
+          "1c13d850b8f02dffda0b49d926871eaa2d61d72c98f84b5258a10298be79c081",
+          "609664c5a38f493a219b433787ee35423b183e5e5988539ba71a888212fc9ff9"
+        ]
+      },
+      {
+        "name": "staging_target",
+        "count": 1,
+        "sha256": "716cf46bb893de6b878044fa3734f28dcc3f7f24b49b5b71708c05bc7a0478ec",
+        "rowHashes": [
+          "5c610176750f9981a703023d77549877964f4402a2109bcb852aae8c4735c4c0"
+        ]
+      },
+      {
+        "name": "worksheet_report_audit",
+        "count": 2,
+        "sha256": "627ca311baaa40d3d6d643f5884922525dbd1c5f1f9cb584028dad977e99ce73",
+        "rowHashes": [
+          "4d574b9022c3038b22669ea6da66cce8a035b42fe8a81a039fdcc2e27fae89a1",
+          "ba85d6d929ba9680614bd28b4466e38e351b9272661c34243909d70ad93a6f6f"
+        ]
+      },
+      {
+        "name": "worksheet_report_requests",
+        "count": 5,
+        "sha256": "e065a3523d353037ae2c47215c507740856d64f08c608a96b7e5cbe11d2f6696",
+        "rowHashes": [
+          "11ea432541a415cf9b7d6dfe38a17d2fdef8d7547d455805ae44971ad754ff43",
+          "1c974420e623ea388642857ce56002e5854cd6764022b59474729bca21a435c7",
+          "2fc170f2910543bf059433d414c165b1c34272a8578168b431558b56897d79c1",
+          "8601172f9851778b9bee4975810f7420e56ec3f460c445654068bb971580b585",
+          "aa0ef4476f33c9e8c837659e341f9764639fb695756c4ee27498c4f7a5ed392f"
+        ]
+      },
+      {
+        "name": "worksheet_reports",
+        "count": 2,
+        "sha256": "228c39d6ca13aba665ba3aa1e6494eb3294a4b8c9c745af6ba75051ef8bf943d",
+        "rowHashes": [
+          "b6f4ee327a368ca185cde64ec921f331d218334af6b7dc6a953790672960453c",
+          "dc75082a63e5a86f0c73e63d9707e43c8746e44ea3a2960073e840eb50f8bd5f"
+        ]
+      }
+    ],
+    "metadata": {
+      "tables": "63a596aefae34c9ded7406aa2cc343aa9215841a5562756857fcce72b7079101",
+      "policies": "72b2df30bd53ecb57ead312e4d222f9945adc862ea27e3c416af0b207326edc5",
+      "functions": "d784083fa154305297f0ab81b7553bc640e94a388440ab71025d785d44f15d97",
+      "schema": "888d0ecce7feef9dd656503e77ada898efd1db37bbe169f7adb9f55202dcd7ee",
+      "constraints": "4793e9951e5363f33c040ec346f62f4cb17dd6c26dd5b00b32d102ceb4539214"
+    },
+    "roles": [
+      {
+        "rolname": "anon",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "authenticated",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "authenticator",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "dashboard_user",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": false,
+        "rolreplication": true,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "neuvetra_runtime",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "pgbouncer",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "postgres",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "service_role",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_admin",
+        "rolsuper": true,
+        "rolinherit": true,
+        "rolcreaterole": true,
+        "rolcreatedb": true,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_auth_admin",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": true,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_etl_admin",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_privileged_role",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_read_only_user",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": true
+      },
+      {
+        "rolname": "supabase_realtime_admin",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": false,
+        "rolreplication": false,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_replication_admin",
+        "rolsuper": false,
+        "rolinherit": true,
+        "rolcreaterole": false,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": true,
+        "rolbypassrls": false
+      },
+      {
+        "rolname": "supabase_storage_admin",
+        "rolsuper": false,
+        "rolinherit": false,
+        "rolcreaterole": true,
+        "rolcreatedb": false,
+        "rolcanlogin": true,
+        "rolreplication": false,
+        "rolbypassrls": false
+      }
+    ],
+    "memberships": [
+      {
+        "role": "anon",
+        "member": "authenticator",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "anon",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "authenticated",
+        "member": "authenticator",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "authenticated",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "authenticator",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "authenticator",
+        "member": "supabase_storage_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "neuvetra_runtime",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": false,
+        "set_option": false
+      },
+      {
+        "role": "pg_create_subscription",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_monitor",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_monitor",
+        "member": "supabase_etl_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_monitor",
+        "member": "supabase_read_only_user",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_data",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_data",
+        "member": "supabase_etl_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_data",
+        "member": "supabase_read_only_user",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_settings",
+        "member": "pg_monitor",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_read_all_stats",
+        "member": "pg_monitor",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_signal_backend",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "pg_stat_scan_tables",
+        "member": "pg_monitor",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "service_role",
+        "member": "authenticator",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": false,
+        "set_option": true
+      },
+      {
+        "role": "service_role",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": true,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "supabase_privileged_role",
+        "member": "postgres",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      },
+      {
+        "role": "supabase_privileged_role",
+        "member": "supabase_etl_admin",
+        "grantor": "supabase_admin",
+        "admin_option": false,
+        "inherit_option": true,
+        "set_option": true
+      }
+    ],
+    "defaultAcls": [
+      {
+        "owner": "postgres",
+        "schema": "frontdesk",
+        "kind": "r",
+        "acl": "{service_role=arwd/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "public",
+        "kind": "S",
+        "acl": "{postgres=rwU/postgres,service_role=w/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "public",
+        "kind": "f",
+        "acl": "{postgres=X/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "public",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/postgres,service_role=Dxtm/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "site",
+        "kind": "r",
+        "acl": "{service_role=arwd/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "storage",
+        "kind": "S",
+        "acl": "{postgres=rwU/postgres,anon=rwU/postgres,authenticated=rwU/postgres,service_role=rwU/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "storage",
+        "kind": "f",
+        "acl": "{postgres=X/postgres,anon=X/postgres,authenticated=X/postgres,service_role=X/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "storage",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/postgres,anon=arwdDxtm/postgres,authenticated=arwdDxtm/postgres,service_role=arwdDxtm/postgres}"
+      },
+      {
+        "owner": "postgres",
+        "schema": "terrascope",
+        "kind": "r",
+        "acl": "{service_role=arwd/postgres}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "extensions",
+        "kind": "S",
+        "acl": "{postgres=r*w*U*/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "extensions",
+        "kind": "f",
+        "acl": "{postgres=X*/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "extensions",
+        "kind": "r",
+        "acl": "{postgres=a*r*w*d*D*x*t*m*/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,anon=arwdDxtm/supabase_admin,authenticated=arwdDxtm/supabase_admin,service_role=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql_public",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql_public",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "graphql_public",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,anon=arwdDxtm/supabase_admin,authenticated=arwdDxtm/supabase_admin,service_role=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "public",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,anon=rwU/supabase_admin,authenticated=rwU/supabase_admin,service_role=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "public",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,anon=X/supabase_admin,authenticated=X/supabase_admin,service_role=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "public",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,anon=arwdDxtm/supabase_admin,authenticated=arwdDxtm/supabase_admin,service_role=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "realtime",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_admin,dashboard_user=rwU/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "realtime",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_admin,dashboard_user=X/supabase_admin}"
+      },
+      {
+        "owner": "supabase_admin",
+        "schema": "realtime",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_admin,dashboard_user=arwdDxtm/supabase_admin}"
+      },
+      {
+        "owner": "supabase_auth_admin",
+        "schema": "auth",
+        "kind": "S",
+        "acl": "{postgres=rwU/supabase_auth_admin,dashboard_user=rwU/supabase_auth_admin}"
+      },
+      {
+        "owner": "supabase_auth_admin",
+        "schema": "auth",
+        "kind": "f",
+        "acl": "{postgres=X/supabase_auth_admin,dashboard_user=X/supabase_auth_admin}"
+      },
+      {
+        "owner": "supabase_auth_admin",
+        "schema": "auth",
+        "kind": "r",
+        "acl": "{postgres=arwdDxtm/supabase_auth_admin,dashboard_user=arwdDxtm/supabase_auth_admin}"
+      }
+    ],
+    "dependencies": [
+      {
+        "schema": "auth",
+        "relation": "users"
+      }
+    ]
+  }
+}

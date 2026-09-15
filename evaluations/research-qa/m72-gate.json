@@ -1,0 +1,16 @@
+{
+  "backupReceipt": ".superpowers/m72-backup-receipt.json",
+  "reviewedCommit": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+  "maintenanceConfirmed": true,
+  "independentReview": "evaluations/research-qa/m72-security-review.md",
+  "backupReceiptSha256": "10517618c1bf765105801686f39d807b092430220ecd3213b7c933c732e8e9b0",
+  "project": "icockcoguyadhryzydvl",
+  "restoreReceipt": "evaluations/research-qa/m72-security-hosted-restore.json",
+  "restoreReceiptSha256": "e60de88d4c8182639e5896add7ec88d070c9fc36daf1e804a6695066cb10002e",
+  "createdAt": "2026-09-15T13:46:40.9453984Z",
+  "status": "m72_independent_operator_gate_passed",
+  "providerRecoveryExclusionAccepted": true,
+  "schema15ForwardRecoveryReviewed": true,
+  "maintenanceEvidence": "Railway deploymentRemove true; subsequent activeDeployments empty and origin /ready HTTP404",
+  "reviewedMigrationHash": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19"
+}

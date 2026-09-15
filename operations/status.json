@@ -1,20 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T07:08:22.002610+00:00",
+  "updated_at": "2026-09-15T14:01:33.866032+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M71",
-    "name": "Saved California corporate coverage register",
-    "status": "complete_bounded_synthetic_register",
-    "next_gate": "Collect board feedback on the saved California-first register before a dependent milestone. Hosted rollout remains a separate fresh backup/migration/deployment gate.",
+    "id": "M72",
+    "name": "Existing-host corporate coverage rollout",
+    "status": "technical_rollout_verified_visual_pending",
+    "next_gate": "Publish and verify exact rolling PR5 head/checks; finish fresh hosted browser demonstration after Chrome extension panel is closed, then collect board feedback.",
     "evidence": [
-      "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
-      "evaluations/research-qa/m71-qa-review.md",
-      "evaluations/research-qa/m71-security-review.md",
-      "evaluations/research-qa/m71-browser-verification.md",
-      "docs/research/m71-publication.json"
+      "operations/feedback/2026-09-15-milestone-71.md",
+      "docs/research/m71-operating-notes.md"
     ]
   },
   "completed_milestones": [
@@ -502,7 +499,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01â€“E06 and P01â€“P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01Ã¢â‚¬â€œE06 and P01Ã¢â‚¬â€œP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1294,6 +1291,36 @@
         "operations/agent-improvement/runs/M71-QA.json"
       ],
       "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
+    },
+    {
+      "id": "M72-OPS",
+      "owner": "/root/m72_ops",
+      "status": "complete",
+      "scope": "Bounded data-database M72 rollout assignment",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-OPS.json"
+      ],
+      "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
+    },
+    {
+      "id": "M72-SECURITY",
+      "owner": "/root/m72_security",
+      "status": "complete",
+      "scope": "Bounded security-reliability M72 rollout assignment",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-SECURITY.json"
+      ],
+      "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
+    },
+    {
+      "id": "M72-QA",
+      "owner": "/root/m72_qa",
+      "status": "complete",
+      "scope": "Bounded qa-lead M72 rollout assignment",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-QA.json"
+      ],
+      "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
     }
   ],
   "feedback_tasks": [
@@ -2288,10 +2315,34 @@
     "local_demo": "http://127.0.0.1:37171",
     "local_postgres": "running; isolated task-owned synthetic fixtures; files preserved",
     "workers": "scoped assignments complete; no persistent workers",
-    "board_feedback": "pending working saved-register demonstration feedback",
+    "board_feedback": "accepted; bounded existing-host rollout authorized",
     "implementation_commit": "b887da126b4d7e08958ed0042214f579560efacf",
     "remote_implementation_checks": "six successful required checks",
     "publication": "Reviewed implementation published to rolling draft PR5; root verifies closure commit separately.",
     "publication_record": "docs/research/m71-publication.json"
+  },
+  "current_m72": {
+    "status": "technical_rollout_verified_visual_pending",
+    "scope": "Existing-host synthetic corporate coverage; not actual corporate MVP",
+    "branch": "codex/corporate-mvp",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "published_head_rechecked": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+    "head_checks": "six success observed 2026-09-15T13:31:46.066982+00:00",
+    "hosted_mutations": true,
+    "paid_requests": 0,
+    "merge_authorized": false,
+    "hosted_schema": 15,
+    "hosted_application_commit": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+    "hosted_deployment": "da0a050a-7ce0-42b3-acfc-900c8416b56b",
+    "backup_restore": "Fresh encrypted application archive independently restored; provider Auth recovery excluded",
+    "migration": "Committed0015; all165original rows and role metadata preserved",
+    "api_exercise": "Passed108stages; two versions, separate review, exact exports and unchanged legacy records",
+    "restart": "Actual restart and57stage read-only revisit passed; exact register/reviews/exports and legacyrecords preserved",
+    "browser": "Blocked: Chrome extension panel paused automation; user asked to close it",
+    "product_direction": "California reporting first; logically necessary operations elsewhere remain within corporate inventory coverage, separate regional reporting products later",
+    "workers": "Scoped specialist report deliveries complete; no persistent workers",
+    "publication": "Reviewed records prepared for rolling PR5; coordinator verifies remote head/checks after push",
+    "evidence": "docs/research/m72-rollout-evidence.md",
+    "board_feedback": "Pending fresh hosted visual demonstration"
   }
 }

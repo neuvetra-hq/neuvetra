@@ -1,0 +1,63 @@
+[
+  {
+    "id": "da0a050a-7ce0-42b3-acfc-900c8416b56b",
+    "status": "SUCCESS",
+    "createdAt": "2026-09-15T13:47:48.320Z",
+    "meta": {
+      "branch": "codex/corporate-mvp",
+      "buildOnly": false,
+      "commitAuthor": "",
+      "commitHash": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+      "commitMessage": "Record M71 reviewed publication and demonstration",
+      "fileServiceManifest": {},
+      "ignoreWatchPatterns": false,
+      "imageDigest": "sha256:7e8d7e0549ba1ed66f7414f1f227c01bba77a51a43e0120fba8a58ea3aa44799",
+      "logsV2": true,
+      "nixpacksProviders": [],
+      "plan": "hobby",
+      "propertyFileMapping": {},
+      "reason": "deploy",
+      "repo": "neuvetra-hq/neuvetra",
+      "rootDirectory": "/",
+      "runtime": "V2",
+      "serviceManifest": {
+        "build": {
+          "buildCommand": null,
+          "buildEnvironment": "V3",
+          "builder": "DOCKERFILE",
+          "dockerfilePath": "Dockerfile.staging",
+          "nixpacksConfigPath": null,
+          "nixpacksPlan": null,
+          "watchPatterns": []
+        },
+        "deploy": {
+          "cronSchedule": null,
+          "drainingSeconds": null,
+          "healthcheckPath": "/ready",
+          "healthcheckTimeout": null,
+          "ipv6EgressEnabled": false,
+          "limitOverride": null,
+          "multiRegionConfig": {
+            "us-east4-eqdc4a": {
+              "numReplicas": 1
+            }
+          },
+          "numReplicas": 1,
+          "overlapSeconds": null,
+          "preDeployCommand": null,
+          "preDeployTimeoutSeconds": null,
+          "region": null,
+          "registryCredentials": null,
+          "requiredMountPath": null,
+          "restartPolicyMaxRetries": 10,
+          "restartPolicyType": "ON_FAILURE",
+          "runtime": "V2",
+          "sleepApplication": false,
+          "startCommand": null,
+          "useLegacyStacker": false
+        }
+      },
+      "volumeMounts": []
+    }
+  }
+]
