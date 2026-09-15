@@ -36,7 +36,7 @@ test("explicit database CA accepts certificates only and never disables TLS veri
 const testUrl = process.env.M63_TEST_DATABASE_URL
 if (testUrl) {
   const url = new URL(testUrl)
-  if (url.hostname !== "127.0.0.1" || url.pathname !== "/m63_integration" || url.username !== "m63_test_admin" || url.search || url.hash) throw new Error("M63 tests require the named disposable loopback database.")
+  if (url.hostname !== "127.0.0.1" || !["/m63_integration", "/m67_author"].includes(url.pathname) || url.username !== "m63_test_admin" || url.search || url.hash) throw new Error("M63 tests require the named disposable loopback database.")
 }
 const pg = testUrl ? describe : describe.skip
 pg("M63 actual PostgreSQL runtime boundary", () => {
@@ -258,7 +258,7 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     const decision = await database.reviewDraftInventoryReport(admin, company, annual.id, report.id, reviewInput)
     await another.close()
     another = construct(createPostgresConnection(runtimeUrl(), { tls:false,maxConnections:2 }))
-    expect(await another.checkReadiness()).toMatchObject({schemaVersion:12})
+    expect(await another.checkReadiness()).toMatchObject({schemaVersion:13})
     expect(await another.findDraftInventoryReportReview(member,company,annual.id,report.id)).toEqual(decision)
     expect((await another.findDraftInventoryReport(member,company,annual.id))?.reportSha256).toBe(report.reportSha256)
     expect((await another.findAnnualEvidencePack(member,company,annual.id))?.archiveSha256).toBe(pack.archiveSha256)
