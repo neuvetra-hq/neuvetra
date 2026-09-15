@@ -20,12 +20,21 @@ describe('M73 operator admission and preservation gates',()=>{
  })
  test('canonical15 is independently pinned and wrong, missing or reordered receipts refuse',async()=>{
   const m=await readMigrationManifest();expect(hashManifestValue(m.slice(0,15).map(({name,sha256})=>({name,sha256})))).toBe(BASELINE_MANIFEST_SHA256)
+  if(m.length>=16)expect(m[15]?.sha256).toBe(MIGRATION)
+  if(m.length>16){
+   // Retired operators must fail closed when the repository has moved beyond their reviewed schema.
+   let queried=false;const futureTx={query:async()=>{queried=true;throw Error('Unexpected database access')}} as any
+   await expect(canonicalReceipts(futureTx,15)).rejects.toThrow('M73 gate refused')
+   await expect(canonicalReceipts(futureTx,16)).rejects.toThrow('M73 gate refused')
+   expect(queried).toBe(false)
+   return
+  }
   const receipts=m.slice(0,15).map(({name,sha256})=>({name,sha256}));const tx=(rows:unknown[])=>({query:async(sql:string)=>({rows:sql.includes('schema_migrations')?rows:[{project_ref:'icockcoguyadhryzydvl',profile:'neuvetra.private-synthetic-staging.v1'}]})}) as any
   expect((await canonicalReceipts(tx(receipts),15)).length).toBe(m.length)
   await expect(canonicalReceipts(tx(receipts.slice(1)),15)).rejects.toThrow()
   await expect(canonicalReceipts(tx([...receipts].reverse()),15)).rejects.toThrow()
   await expect(canonicalReceipts(tx(receipts.map((r,i)=>i===14?{...r,sha256:'0'.repeat(64)}:r)),15)).rejects.toThrow()
-  if(!/^[a-f0-9]{64}$/.test(MIGRATION))await expect(canonicalReceipts(tx(receipts),16)).rejects.toThrow()
+  if(m.length<16||!/^[a-f0-9]{64}$/.test(MIGRATION))await expect(canonicalReceipts(tx(receipts),16)).rejects.toThrow()
   else expect(m[15]?.sha256).toBe(MIGRATION)
  })
 })
