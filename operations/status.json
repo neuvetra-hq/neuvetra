@@ -1,16 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T23:37:22.514990+00:00",
+  "updated_at": "2026-09-15T23:42:45.732041+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M74",
     "name": "Two-evidence mobile-diesel source workpaper",
-    "status": "hosted_accepted_final_publication_checks",
-    "next_gate": "Publish independently reviewed tests-only clock repair; verify final remote checks/live identity, then M75 controlled-vehicle register reconciliation.",
+    "status": "complete",
+    "next_gate": "M75 controlled-vehicle register reconciliation under standing California-first Scope1 approval.",
     "evidence": [
-      "operations/feedback/2026-09-15-scope1-standing-approval.md"
+      "docs/research/m74-final-publication.json",
+      "evaluations/research-qa/m74-hosted-acceptance.md",
+      "evaluations/research-qa/m74-clock-review.md"
     ]
   },
   "completed_milestones": [
@@ -108,6 +110,11 @@
       "id": "M73",
       "completed_at": "2026-09-15",
       "feedback": "operations/feedback/2026-09-15-scope1-standing-approval.md"
+    },
+    {
+      "id": "M74",
+      "completed_at": "2026-09-15",
+      "feedback": "operations/feedback/2026-09-15-m74-live-migration-approval.md"
     }
   ],
   "runtime": {
@@ -2572,7 +2579,7 @@
     "independent_hosted": "pass evaluations/research-qa/m73-hosted-acceptance.md"
   },
   "current_m74": {
-    "status": "hosted_accepted_final_publication_checks",
+    "status": "complete",
     "baseline": "ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7",
     "hosted_schema": 17,
     "active_assignments": [],
@@ -2604,12 +2611,12 @@
     "automatic_deployment": true,
     "security_review": "evaluations/research-qa/m74-security-review.md",
     "integrated_review": "evaluations/research-qa/m74-integrated-qa-review.md",
-    "remote_candidate": "61d4376f3f9d7db62292b7d6a28058003a9a9e96",
+    "remote_candidate": "2438d1a75fcd5eae1295a42fb6a5e37935bf5f41",
     "remote_initial_failures": [
       "Windows path in root-authored evidence records; repaired3e35698",
       "Legacy operator test expected old-schema admission under17; independently repaired61d4376"
     ],
-    "required_checks": "f5d7383_six_pass; 7fca72f_five_pass_one_failed_expired_catalog_clock",
+    "required_checks": "six_pass_2438d1a75fcd5eae1295a42fb6a5e37935bf5f41",
     "approval_dependency": null,
     "prior_service_restore_deployment": "2b1f48de-0d01-48f3-8f9b-85294b7d9f51",
     "prior_service_restore_status": "verified_success_ready16",
@@ -2625,6 +2632,7 @@
     "next": "M75 mobile fleet reconciliation under standing approval",
     "clock_repair_review": "evaluations/research-qa/m74-clock-review.md",
     "clock_repair": "independently_passed_tests_only",
-    "research_catalog": "expired_requires_separate_source_review"
+    "research_catalog": "expired_requires_separate_source_review",
+    "final_publication": "docs/research/m74-final-publication.json"
   }
 }

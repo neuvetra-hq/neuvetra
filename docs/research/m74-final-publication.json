@@ -1,0 +1,50 @@
+{
+  "automaticDeploymentRestored": true,
+  "requiredChecks": [
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "remoteHead": "2438d1a75fcd5eae1295a42fb6a5e37935bf5f41",
+  "draftPr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "merged": false,
+  "deploymentId": "b849d413-6a8a-406c-bf3e-73dd71137117",
+  "deploymentCommit": "f5d7383e9624027d5169578012e261a789a268e8",
+  "implementationCommit": "f5d7383e9624027d5169578012e261a789a268e8",
+  "imageDigest": "sha256:9c4af30f3ff54ee40f6eecd833cca2774bdc7fd67787b045ca65d52ab244c306",
+  "observedAt": "2026-09-15T23:42:05.6319509Z",
+  "closureContainsOnlyRecordsAndOfflineTestChanges": true,
+  "ready": {
+    "status": "ready",
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 17,
+    "legacyContainmentVerified": true
+  }
+}
