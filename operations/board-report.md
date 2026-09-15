@@ -1,3 +1,15 @@
+# M68 live demonstration passed; board feedback next
+
+Annual electricity and bills is live on the existing private staging service. Browser-saved evidence version 4 links one retained January bill to annual version 4: twelve entered months, one document month, eleven missing-document months, and an unresolved January quantity discrepancy. The subtotal remains 301,000.000 kWh / 58,707.1269 kg CO2e. Version 4 is unreviewed; methods/factors remain synthetic development candidates, unreleased and without assurance.
+
+Implementation c0c750a7acdd4ef1641a84b648f6795cdafa2848 is pushed to the milestone and rolling PR4 branches, with all six required checks passed. Existing Railway deployment d3960976-bb9a-4d8b-b490-0837caa667a1 is successful on schema 14. The actual HTML and source downloads match stored bytes. Four evidence versions/four reports and M63–M67 records survived a service restart. Local native test service is stopped; data is preserved. Independent hosted handoff passed; closure records are published with this delivery.
+
+The browser is open to Annual electricity and bills and its version 4 report. Collect board feedback before advancing dependent product work. Print-entry action opened its report tab; browser security blocked inspecting the temporary Blob URL, so native print preview is not claimed. Embedded report and exact HTML download were verified. Independent RAG work may continue within its own reviewed scope; M68 remains the rolling integrator. No new subscription, PR merge or persistent worker.
+
+Evidence: docs/research/m68-hosted-verification.json, evaluations/research-qa/m68-hosted-v4-report.html and evaluations/research-qa/m68-hosted-handoff.md.
+
+Historical entries below are superseded as next-action instructions.
+
 # M68 local reviews passed; publication and hosted demonstration pending
 
 Independent accounting and integrated QA passed the reviewed candidate after the Docker packaging finding was repaired. Native persistence, exact arithmetic/source/report checks, frontend actions and a local restore passed. The fresh encrypted pre-upgrade application backup is verified; it excludes Auth and is not a hosted restore drill. Root is publishing to existing rolling PR4, then verifying CI, upgrading the existing database and demonstrating the deployed workflow.

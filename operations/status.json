@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T02:51:42.335694+00:00",
+  "updated_at": "2026-09-15T03:47:14.460716+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -2125,15 +2125,19 @@
     "board_acceptance_scope": "Workflow accepted; board did not independently verify numbers; no application review decision or method release."
   },
   "current_m68": {
-    "status": "local_reviews_passed_publication_pending",
+    "status": "complete_bounded_hosted_board_feedback_pending",
     "board_authorized": true,
     "scope": "docs/research/evidence-annual-electricity-milestone-68.md",
     "base_commit": "ad008741e4d3750af7de6e4791e2adc524c6713d",
     "branch": "codex/m68-bill-evidence",
     "rolling_branch": "codex/m63-private-staging",
     "rolling_pr": 4,
-    "publication": "pending",
-    "deployment": "pending",
+    "publication": "Reviewed implementation and closure evidence on authorized milestone and rolling PR4 branches; exact final remote checks verified by coordinator before completion report",
+    "deployment": {
+      "id": "d3960976-bb9a-4d8b-b490-0837caa667a1",
+      "status": "SUCCESS",
+      "schema": 14
+    },
     "sole_publisher_and_ledger_writer": "M68 task 01a0a2ea-3548-77e2-9cb5-8615809d9d5f",
     "parallel_rag_task": "01a0a2ea-42d4-7f22-82be-6ddf6dba1aa9",
     "specialist_limit": "Accounting and QA ran concurrently after RAG explicitly lent its idle slot; both local review deliveries complete.",
@@ -2141,6 +2145,14 @@
     "accounting_design": "docs/research/m68-accounting-contract.md",
     "hosted_baseline": "Passed 24 stages; zero application POSTs; four temporary Auth sessions closed. Exact M63-M67 source/report preservation.",
     "accounting_implementation": "docs/research/m68-accounting-implementation-review.md",
-    "independent_qa": "evaluations/research-qa/m68-local-review.md"
+    "independent_qa": "evaluations/research-qa/m68-local-review.md",
+    "implementation_commit": "c0c750a7acdd4ef1641a84b648f6795cdafa2848",
+    "hosted_evidence": "docs/research/m68-hosted-verification.json",
+    "board_feedback": "pending before dependent product milestone",
+    "current_evidence_version": 4,
+    "current_evidence_review": "unreviewed",
+    "reports": 4,
+    "local_postgres": "stopped; files preserved",
+    "independent_hosted_handoff": "evaluations/research-qa/m68-hosted-handoff.md"
   }
 }
