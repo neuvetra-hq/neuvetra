@@ -1,19 +1,20 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T07:03:32.311845+00:00",
+  "updated_at": "2026-09-15T07:08:22.002610+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M71",
     "name": "Saved California corporate coverage register",
-    "status": "reviewed_publication_pending",
-    "next_gate": "Push exact reviewed candidate to rolling PR5; verify remote head and required checks; collect board feedback on the working local demonstration.",
+    "status": "complete_bounded_synthetic_register",
+    "next_gate": "Collect board feedback on the saved California-first register before a dependent milestone. Hosted rollout remains a separate fresh backup/migration/deployment gate.",
     "evidence": [
       "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
       "evaluations/research-qa/m71-qa-review.md",
       "evaluations/research-qa/m71-security-review.md",
-      "evaluations/research-qa/m71-browser-verification.md"
+      "evaluations/research-qa/m71-browser-verification.md",
+      "docs/research/m71-publication.json"
     ]
   },
   "completed_milestones": [
@@ -2272,7 +2273,7 @@
     "board_feedback": "accepted_direction_then_California_first_refinement"
   },
   "current_m71": {
-    "status": "reviewed_publication_pending",
+    "status": "complete_bounded_synthetic_register",
     "supported_profile": "California-first synthetic 2025 office/distribution group; necessary operations elsewhere retained with unsupported gaps",
     "regional_expansion": "deferred",
     "paid_requests": 0,
@@ -2287,6 +2288,10 @@
     "local_demo": "http://127.0.0.1:37171",
     "local_postgres": "running; isolated task-owned synthetic fixtures; files preserved",
     "workers": "scoped assignments complete; no persistent workers",
-    "board_feedback": "pending working saved-register demonstration feedback"
+    "board_feedback": "pending working saved-register demonstration feedback",
+    "implementation_commit": "b887da126b4d7e08958ed0042214f579560efacf",
+    "remote_implementation_checks": "six successful required checks",
+    "publication": "Reviewed implementation published to rolling draft PR5; root verifies closure commit separately.",
+    "publication_record": "docs/research/m71-publication.json"
   }
 }

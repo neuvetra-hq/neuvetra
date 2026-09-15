@@ -1,0 +1,54 @@
+{
+  "milestone": "M71",
+  "scope": "Saved synthetic California-first corporate coverage register",
+  "implementation_commit": "b887da126b4d7e08958ed0042214f579560efacf",
+  "publication": {
+    "observed_at": "2026-09-15T07:08:05.506398+00:00",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "sha": "b887da126b4d7e08958ed0042214f579560efacf",
+    "draft": true,
+    "state": "open",
+    "checks": [
+      {
+        "name": "GHG calculation specifications and engine",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Dedicated staging image and offline runtime smoke",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Offline research catalog tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Native PostgreSQL worksheet and tenant regression",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Typecheck, lint, unit tests and web builds",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Role routing and evidence records",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "status": "pending",
+    "status_count": 0
+  },
+  "staged_and_committed_files": 62,
+  "exact_reviewed_bytes": true,
+  "independent_qa": "evaluations/research-qa/m71-qa-review.md",
+  "independent_security": "evaluations/research-qa/m71-security-review.md",
+  "browser": "evaluations/research-qa/m71-browser-verification.md",
+  "hosted_deployment": false,
+  "board_feedback": "pending saved-register demonstration feedback",
+  "closure_commit_checks": "Coordinator verifies the closure commit remote head and required checks separately before the final report."
+}

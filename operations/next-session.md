@@ -1,3 +1,17 @@
+# M71 published to PR5; saved-register board feedback next
+
+The saved California-first synthetic coverage register is independently reviewed and published to rolling draft PR5, branch codex/corporate-mvp. Implementation b887da126b4d7e08958ed0042214f579560efacf passed all six remote checks, including the clean application build, native PostgreSQL regression and dedicated staging image. The coordinator verifies this closure commit's exact remote head/checks separately before the final report. PR5 remains unmerged.
+
+The working local demonstration at http://127.0.0.1:37171 saves coverage, appends corrections, records a separate non-contributor manager review and downloads exact earlier bytes. All 15 Scope 3 categories and unresolved boundary/evidence/method gaps remain visible. Actual browser, service restart, independent restore, original-row preservation and security checks passed. Scoped specialists are complete; no persistent workers. Local PostgreSQL and the local demonstration remain running for board review.
+
+California reporting is the first product focus; logically necessary operations elsewhere stay in the company boundary with unsupported gaps. Separate Nevada/Canada reporting products are deferred. This milestone does not deliver corporate emissions totals, released methods, legal determination, external assurance or a hosted M71 deployment. No paid requests occurred.
+
+Collect board feedback before a dependent milestone. Hosted rollout, if next, needs fresh existing-service observations and the backup/migration/deployment gate in docs/research/m71-operating-notes.md. Do not recreate historical branches or overwrite earlier fixtures. Preserve .tmp local evidence and the pre-existing untracked M68 dump.
+
+Evidence: docs/research/m71-publication.json; evaluations/research-qa/m71-qa-review.md; evaluations/research-qa/m71-security-review.md; evaluations/research-qa/m71-browser-verification.md.
+
+Historical entries below are superseded as current execution instructions.
+
 # M71 reviewed; publication and board demonstration
 
 The saved California-first synthetic coverage register passed independent QA and security review. Actual browser save, correction, separate review, exact earlier download, keyboard/narrow layout and local HTTP restart passed; independent restoration preserved all original records. Source snapshot: operations/agent-improvement/snapshots/M71-INTEGRATED.json. Earlier failed findings and repaired harness cases remain in the review reports.
