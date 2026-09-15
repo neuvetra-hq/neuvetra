@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T01:03:17.499308+00:00",
+  "updated_at": "2026-09-15T01:44:07.559814+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M67",
     "name": "Full-year electricity coverage",
-    "status": "in_progress",
-    "next_gate": "Publish independently reviewed M67 candidate, verify image CI, then upgrade and test the existing live service.",
+    "status": "awaiting_board_feedback",
+    "next_gate": "Board reviews the live M67 version 4 annual worksheet and report before the next dependent milestone.",
     "evidence": [
-      "docs/research/annual-electricity-milestone-67.md",
-      "operations/feedback/2026-09-14-milestone-66.md"
+      "docs/research/m67-hosted-verification.json",
+      "evaluations/research-qa/m67-hosted-handoff.md"
     ]
   },
   "completed_milestones": [
@@ -101,16 +101,16 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M66 accepted and live; M67 contract preparation underway.",
+    "website_preview_state": "M67 full-year worksheet and version 4 report live and independently reviewed; board feedback pending.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M66 closure pushed. M67 reviewed contracts passed; CTO backend, root annual UI/operators, independent accounting and QA implementation review are dispatched."
+    "last_session_work": "Scoped engineering, accounting and QA deliveries closed. Local PostgreSQL stopped; no persistent agent workers."
   },
   "session_handoff": {
-    "current": "M66 board accepted and published; M67 annual electricity contracts underway.",
-    "next": "Board reviews version3 and its retained bill/report before M67 full-year coverage",
+    "current": "M67 implementation pushed, six checks passed, live schema 13 and post-restart verification passed.",
+    "next": "Board reviews Full-year electricity version 4 and its report. Keep synthetic, incomplete and unreleased status.",
     "evidence": [
-      "docs/research/m66-hosted-verification.json",
-      "evaluations/research-qa/m66-hosted-handoff.md"
+      "docs/research/m67-hosted-verification.json",
+      "evaluations/research-qa/m67-hosted-handoff.md"
     ]
   },
   "checkpoint": {
@@ -2092,18 +2092,28 @@
     "final_deployment_id": "405765fc-a4fe-4fd1-b310-d4a615c0decf"
   },
   "current_m67": {
-    "status": "local_verification_passed",
+    "status": "live_verified_board_feedback_pending",
     "scope": "docs/research/annual-electricity-milestone-67.md",
     "board_authorized": true,
     "implementation_started": true,
-    "publication": "not_yet",
+    "publication": "implementation_pushed_all_six_checks_passed_completion_records_ready",
     "prior_m66_accepted": true,
     "design_review": "evaluations/research-qa/m67-review-plan.md",
     "baseline_tables": 48,
     "baseline_rows": 1488,
-    "active_workers_excluding_root": 1,
+    "active_workers_excluding_root": 0,
     "local_review": "evaluations/research-qa/m67-local-review.md",
     "independent_combined_tests": 33,
-    "independent_combined_assertions": 1571
+    "independent_combined_assertions": 1571,
+    "implementation_commit": "dd1a09f00901f562ce1c7966b53326c8ee21bc98",
+    "deployment_id": "3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938",
+    "schema_version": 13,
+    "hosted_operator_result": "passed_36_stages_8_application_posts_sessions_closed",
+    "remaining_gate": "Board demonstration feedback; no next dependent milestone started.",
+    "hosted_review": "evaluations/research-qa/m67-hosted-handoff.md",
+    "hosted_verification": "docs/research/m67-hosted-verification.json",
+    "hosted_snapshot": "docs/research/m67-hosted-snapshot.json",
+    "annual_versions": 4,
+    "annual_reports": 3
   }
 }

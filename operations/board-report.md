@@ -1,3 +1,15 @@
+# M67 live — board review next
+
+Full-year electricity coverage is implemented, pushed and live on the existing hosting. Version 4 contains eleven months at 25,000 kWh and December at 26,000 kWh: 301,000.000 kWh and 58,707.1269 kg CO2e. Missing months remain distinct from zero. Four annual versions and three reports survived a service restart; M63–M66 records are unchanged. The downloaded report matches stored HTML bytes exactly.
+
+Implementation dd1a09f00901f562ce1c7966b53326c8ee21bc98 passed all six checks and deployed as 3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938 on schema 13. Independent hosted handoff passed. Original CI, packaging and browser session-reset defects remain documented with their repairs. Same-account focus/reconfirmation now preserves the editing form. Completion records are being published to the same draft PR4, without merging.
+
+The live browser is open to Full-year electricity and its version 4 report. Board feedback is pending before the next dependent milestone. These are fictional manual entries without linked bills; full electricity coverage does not mean a complete company inventory. Version 4 is unreviewed, and factors/methods remain unreleased with no assurance. Native print-dialog feedback is not claimed. Scoped role work is closed, local test PostgreSQL is stopped, and no persistent workers or new subscription were created.
+
+Evidence: docs/research/m67-hosted-verification.json, docs/research/m67-hosted-snapshot.json, evaluations/research-qa/m67-hosted-handoff.md. Actual agent compute/cost remains unknown.
+
+Historical entries below are superseded as next-action instructions.
+
 # M66 accepted; M67 full-year coverage underway
 
 The board accepted M66 and authorized M67. M66 final commit9afde82631e321c0c084454c97a24a2f463a9456 is pushed with six successful checks and live in existing Railway deployment405765fc-a4fe-4fd1-b310-d4a615c0decf, schema12. See operations/feedback/2026-09-14-milestone-66.md. PR4 remains unmerged; worksheet Version3 remains unreviewed and all synthetic/unreleased boundaries persist.
