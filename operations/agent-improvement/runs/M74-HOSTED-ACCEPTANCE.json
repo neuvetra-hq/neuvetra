@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "M74-HOSTED-ACCEPTANCE",
+  "role": "security-reliability",
+  "execution_context": "/root/m74_cto",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-HOSTED-ACCEPTED1.json",
+      "sha256": "2a77961c05f7e378d75d1074d4faad4d536da7cd744b2b9b615c5629c53a984b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M74-ACTUAL-HOSTED-PRESERVATION-AND-RESTART",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-hosted-acceptance.md",
+        "docs/research/m74-publication.json"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-hosted-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-HOSTED-ACCEPTED1.json",
+        "sha256": "2a77961c05f7e378d75d1074d4faad4d536da7cd744b2b9b615c5629c53a984b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused independent security reviewer; no product/operator implementation authorship; actual inherited compute unknown. Review actual committed migration, journaled exercise/restart/revisit and browser evidence. Root sole host/Git writer.",
+    "Root accepts independent final review deliverable after actual live exercise11POSTs, real restart and0POST revisit with all verificationAuth sessions closed. Automatic deployment restored; final record publication/checks are verified separately."
+  ]
+}

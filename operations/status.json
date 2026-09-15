@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T22:46:25.979234+00:00",
+  "updated_at": "2026-09-15T23:19:20.729813+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -1509,6 +1509,15 @@
       "evidence": [
         "operations/agent-improvement/runs/M74-SECURITY-RECOVERY.json"
       ]
+    },
+    {
+      "id": "M74-HOSTED-ACCEPTANCE",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "evaluations/research-qa/m74-hosted-acceptance.md",
+        "operations/agent-improvement/snapshots/M74-HOSTED-ACCEPTED1.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2563,7 +2572,7 @@
     "independent_hosted": "pass evaluations/research-qa/m73-hosted-acceptance.md"
   },
   "current_m74": {
-    "status": "awaiting_specific_live_migration_approval",
+    "status": "hosted_independently_accepted",
     "baseline": "ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7",
     "hosted_schema": 16,
     "active_assignments": [],
@@ -2590,9 +2599,9 @@
     "browser_evidence": "evaluations/research-qa/m74-browser-verification.md",
     "print_observation": "board_confirmed_native_window_appeared",
     "hosted_baseline": "passed_zero_application_posts",
-    "hosted_upgrade": "auto_review_rejected_before_execution",
+    "hosted_upgrade": "verified_schema17",
     "operator_finding": "S01 repaired independently accepted",
-    "automatic_deployment": false,
+    "automatic_deployment": true,
     "security_review": "evaluations/research-qa/m74-security-review.md",
     "integrated_review": "evaluations/research-qa/m74-integrated-qa-review.md",
     "remote_candidate": "61d4376f3f9d7db62292b7d6a28058003a9a9e96",
@@ -2601,11 +2610,18 @@
       "Legacy operator test expected old-schema admission under17; independently repaired61d4376"
     ],
     "required_checks": "six_pass",
-    "approval_dependency": "Board explicitly approve live staging schema16-to17 migration",
+    "approval_dependency": null,
     "prior_service_restore_deployment": "2b1f48de-0d01-48f3-8f9b-85294b7d9f51",
     "prior_service_restore_status": "verified_success_ready16",
     "candidate1_gate": "historical_not_reusable_after_restore_request",
-    "live_implementation": "3f92fdac0bf1e681db634410ad455b61faaed790",
-    "live_schema": 16
+    "live_implementation": "f5d7383e9624027d5169578012e261a789a268e8",
+    "live_schema": 17,
+    "specific_live_migration_approved": true,
+    "deployment": "b849d413-6a8a-406c-bf3e-73dd71137117",
+    "deployment_candidate": "f5d7383e9624027d5169578012e261a789a268e8",
+    "migration_receipt": ".superpowers/m74-hosted-migration-candidate2.json",
+    "hosted_acceptance": "evaluations/research-qa/m74-hosted-acceptance.md",
+    "publication": "docs/research/m74-publication.json",
+    "next": "M75 mobile fleet reconciliation under standing approval"
   }
 }

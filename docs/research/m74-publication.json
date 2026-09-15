@@ -1,0 +1,131 @@
+{
+  "observedAt": "2026-09-15T23:16:24.641591+00:00",
+  "status": "hosted_independently_accepted",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "implementationCommit": "f5d7383e9624027d5169578012e261a789a268e8",
+  "deployment": {
+    "deploymentStatus": "SUCCESS",
+    "restartMutationAcknowledged": true,
+    "ready": {
+      "status": "ready",
+      "profile": "neuvetra.private-synthetic-staging.v1",
+      "schemaVersion": 17,
+      "legacyContainmentVerified": true
+    },
+    "status": "m74_actual_service_restart_observed",
+    "observedAt": "2026-09-15T23:11:34.3094987Z",
+    "commit": "f5d7383e9624027d5169578012e261a789a268e8",
+    "deploymentId": "b849d413-6a8a-406c-bf3e-73dd71137117",
+    "image": "sha256:9c4af30f3ff54ee40f6eecd833cca2774bdc7fd67787b045ca65d52ab244c306"
+  },
+  "requiredChecks": [
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "migration": {
+    "sha256": "079b0be0f068b5c7072662355f05a042ff2ced942d0546971429cb873cc1c66a",
+    "beforeVersion": 16,
+    "schemaVersion": 17,
+    "oldRowsPreserved": true,
+    "oldContentBytesPreserved": true,
+    "oldTableCount": 74,
+    "newTableCount": 83
+  },
+  "journey": {
+    "journalSha256": "b43b8827772abf3c940a0e0925873a25d59dbda114bfb62a7e740cbbba2dd488",
+    "exerciseEventSha256": "9f4311805721816088ae6f1b46f334817175ebf038386ad9ea126b07bd90c3e1",
+    "revisitEventSha256": "a6e3090a0a4958e726bdb96200f9ff61e11cedb51badb12b7716a51613f25f3b",
+    "attempts": [
+      {
+        "mode": "baseline",
+        "createdAt": "2026-09-15T22:14:52.081Z",
+        "attemptSequence": 1,
+        "status": "passed",
+        "stage": "m71_export",
+        "applicationPostRequests": 0,
+        "allCreatedAuthSessionsClosed": true
+      },
+      {
+        "mode": "exercise",
+        "createdAt": "2026-09-15T23:10:03.331Z",
+        "attemptSequence": 5,
+        "status": "passed",
+        "stage": "m71_export",
+        "applicationPostRequests": 11,
+        "allCreatedAuthSessionsClosed": true
+      },
+      {
+        "mode": "revisit",
+        "createdAt": "2026-09-15T23:15:49.245Z",
+        "attemptSequence": 32,
+        "status": "passed",
+        "stage": "m74_report",
+        "applicationPostRequests": 0,
+        "allCreatedAuthSessionsClosed": true
+      }
+    ],
+    "versions": [
+      {
+        "version": 1,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "10351.5321",
+          "rounding": "half_even_4dp",
+          "unrounded": "10351.53209375"
+        },
+        "review": "accepted_bounded_internal"
+      },
+      {
+        "version": 2,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "10357.3758",
+          "rounding": "half_even_4dp",
+          "unrounded": "10357.37584375"
+        },
+        "review": null
+      }
+    ],
+    "reportCount": 2,
+    "downloadCount": 8
+  },
+  "limitations": [
+    "Synthetic supported vehicle only; corporate Scope1 incomplete.",
+    "Factors/methods unreleased; no filing or assurance determination.",
+    "Application-schema recovery only; provider/Auth recovery excluded.",
+    "Native print appearance confirmed by board; physical/PDF pagination unverified."
+  ],
+  "independentAcceptance": {
+    "path": "evaluations/research-qa/m74-hosted-acceptance.md",
+    "sha256": "832ed5127740572af73d080434858d77c1e680bb1f837862499755db9c5722dc"
+  },
+  "automaticDeploymentRestored": true
+}

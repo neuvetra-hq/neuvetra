@@ -1,3 +1,21 @@
+# M74 live diesel-vehicle increment independently accepted
+
+The bounded supported diesel-vehicle workpaper is live: separate fuel/mileage evidence, deterministic gas-level calculation, separate internal review, immutable mileage correction, exact report downloads and persisted history. Actual host exercise passed11POSTs (6success,5expected authorization refusals), then a real service restart and0POST revisit preserved both vehicle versions,2reports,8vehicle downloads and all earlier gas/electricity/corporate records. All verificationAuth sessions closed. Actual hosted browser history/report/download and390px checks passed; native print appearance was previously confirmed by board, no physical/PDF/pagination claim.
+
+Independent final review: evaluations/research-qa/m74-hosted-acceptance.md. Actual committed schema17 preserved74oldtables/198oldrows, added9emptytables+1migrationreceipt. Live deploymentb849d413-6a8a-406c-bf3e-73dd71137117 runs checkedf5d7383e9624027d5169578012e261a789a268e8 with image sha256:9c4af30f3ff54ee40f6eecd833cca2774bdc7fd67787b045ca65d52ab244c306. Automatic deployment restored. Never return to schema16 code; use17-compatible forward recovery. Final record commit/remote checks and unchanged live identity are verified by root after publication; recheck fresh state on continuation.
+
+Standing approval continues through supported-profile Scope1; specific live16-to17 migration approval recorded separately after auto-review required it. No routine milestone permission stops. M75 next: complete controlled-vehicle register reconciliation; additional applicable unsupported profiles remain blocking and need separate methods. Do not call single-vehicle support completefleet/Scope1. California remains first; include relevant interstate operations; regional product expansion deferred. Methods/factors still unreleased; no filing or assurance determination.
+
+All scoped specialists complete, not persistent workers. Same rolling draftPR5, no merge. Root owns host/Git/commonrecords. Evidence docs/research/m74-publication.json and M74-HOSTED-ACCEPTED1 snapshot. Preserve private backups/journal/fixtures and all historical failures. Earlier sections below are historical.
+
+# M74 live schema17 committed; checked application deployment underway
+
+Board specifically approved the live migration after the prior automatic-review rejection. Fresh stopped-writer receipt observed2026-09-15T23:00:17Z. Exact reviewed16-to17 migration committed successfully and verified old rows/content/roles preserved. Evidence .superpowers/m74-hosted-migration-candidate2.json. Do not reapply or return to schema16 code.
+
+Checked commitf5d7383e9624027d5169578012e261a789a268e8 passed all six required remote checks. Deploymentb849d413-6a8a-406c-bf3e-73dd71137117 requested for that exact commit; readiness17, journaled live exercise, actual restart/zero-write revisit and browser acceptance remain pending. Automatic deployment still paused. Root alone owns host/Git/records. Continue to completion under specific migration and standing milestone approvals; no merge.
+
+Earlier approval-pending and schema16-restoration sections below are historical. California Scope1 and factor/method release remain incomplete.
+
 # M74 ready; prior site restored, specific live-migration approval pending
 
 Restored deployment2b1f48de-0d01-48f3-8f9b-85294b7d9f51 is SUCCESS at previous M73 commit3f92fdac0bf1e681db634410ad455b61faaed790. Actual https://www.neuvetra.ai/ready returned ready/schema16/legacyContainmentVerifiedtrue after restoration. No M74 database migration executed. Automatic deployment remains intentionally paused so schema17 code is not automatically sent to unchanged schema16.
