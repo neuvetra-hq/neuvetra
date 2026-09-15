@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T20:17:54.664466+00:00",
+  "updated_at": "2026-09-15T20:25:29.686108+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -2473,15 +2473,14 @@
   "current_m73_verification": {
     "candidate2_accounting": "pass bounded synthetic profile; 447 independently derived checks and 5 tests/46 assertions",
     "candidate2_security": "pass; native41, authority6, pure45 assertions; no open material findings",
-    "recovery": "pass; actualDPAPIbackup/new55472restore67tables176rows,49independentassertions and14downloads133998bytes",
+    "recovery": "Fresh20:15 archive/isolated restore passed independent80assertions,67tables176rows,14exactdownloads.",
     "browser": "M73-P09 passed actual print invocation with direct board confirmation; no print/PDF/pagination fidelity claim. Prior workflow and390px checks pass.",
     "hosted_change": false,
     "published": false,
-    "active_assignments": [
-      "M73-FRESH-RECOVERY-2015"
-    ],
+    "active_assignments": [],
     "source_release": false,
     "candidate3_accounting": "pass; exactCSS-onlydiff and62targetedindependentchecks, freshnative3tests85assertions",
-    "hosted_baseline": "pass schema15; applicationPOST0, allcreatedAuthsessionsclosed; journalfile22e92d0bac2d73acd585983872895e95173f2c2a33845d1cf3579ade1cc04bd8"
+    "hosted_baseline": "pass schema15; applicationPOST0, allcreatedAuthsessionsclosed; journalfile22e92d0bac2d73acd585983872895e95173f2c2a33845d1cf3579ade1cc04bd8",
+    "remote_checks": "First publishedd7e464a:5pass, native receipt count expected15received16. Independently reviewed test-only correction; rerun pending."
   }
 }
