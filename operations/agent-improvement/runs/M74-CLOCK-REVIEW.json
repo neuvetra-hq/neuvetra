@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M74-CLOCK-REVIEW",
+  "role": "security-reliability",
+  "execution_context": "/root/m74_cto",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-CLOCK-REVIEW-ACCEPTED1.json",
+      "sha256": "4ad4ae0b2b6aab63f8ed2b56083bf45c06557f2210681a430b53288c8858f2ab"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "HISTORICAL-TEST-CLOCK-AND-CURRENT-EXPIRY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-clock-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-clock-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-CLOCK-REVIEW-ACCEPTED1.json",
+        "sha256": "4ad4ae0b2b6aab63f8ed2b56083bf45c06557f2210681a430b53288c8858f2ab"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded follow-up in existing context after earlier fresh-context runtime limit; requested registry settings are manifest only, inherited actual compute unknown. Root owns Git/host/shared records. Do not renew source reviews or weaken production expiry. Lessons L02 exact artifact bytes and L04 actual boundary evidence.",
+    "Independent expiry-boundary/default real-clock checks passed; full API639passed8environment skips5662assertions; production/catalog bytes unchanged. Remote checks separately pending."
+  ]
+}

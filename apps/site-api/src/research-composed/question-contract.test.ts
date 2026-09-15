@@ -1,6 +1,6 @@
 import { planTestInput } from './test-plan-input';
 import { LEGACY_CAPABILITY_SHA as CAPABILITY_SHA, parseCapabilities, capabilityInput, type SupportRequirement } from './capabilities'
-import { describe, expect, test } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, setSystemTime, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
 import { contractGuidance, questionFragment, questionIndex, questionTokens } from './question-contract'
 import { analyzeSelectionContract, parseSelection, parseSelectionReview, selectionForReview, type SelectionProposal, type SelectionReview } from './selection'
@@ -12,6 +12,10 @@ import { analysisInput, parseQuestionAnalysis } from './question-analysis'
 import { initialDemand, demandInput, demandSelectionCorrection } from './demand-selection'
 
 const now = Date.parse('2026-09-12T12:00:00Z')
+// These retained parser and service fixtures describe the approved historical
+// release at `now`; aligning the test clock is not current-release approval.
+beforeEach(() => setSystemTime(new Date(now)))
+afterEach(() => setSystemTime())
 const catalogBytes = readFileSync(new URL('../../../../data/research/answer-units/scope2-website.epa-inquiry.v1.json', import.meta.url))
 const catalogSha = 'adb43b8a9e90cbe85f382988dedc16e16f82f7a596e0bcf5f5e98ba2f84630cd'
 const release = parsePassageRelease(JSON.parse(readFileSync(new URL('../../../../data/research/releases/scope2-website.v1.json', import.meta.url)).toString()), now)

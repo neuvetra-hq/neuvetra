@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T23:19:20.729813+00:00",
+  "updated_at": "2026-09-15T23:37:22.514990+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M74",
     "name": "Two-evidence mobile-diesel source workpaper",
-    "status": "implementation_in_progress",
-    "next_gate": "Complete strict M74 backend/frontend, native validation, independent accounting/security/QA, exact publication and hosted rollout. Continue sequential Scope1 milestones under standing approval.",
+    "status": "hosted_accepted_final_publication_checks",
+    "next_gate": "Publish independently reviewed tests-only clock repair; verify final remote checks/live identity, then M75 controlled-vehicle register reconciliation.",
     "evidence": [
       "operations/feedback/2026-09-15-scope1-standing-approval.md"
     ]
@@ -2572,20 +2572,20 @@
     "independent_hosted": "pass evaluations/research-qa/m73-hosted-acceptance.md"
   },
   "current_m74": {
-    "status": "hosted_independently_accepted",
+    "status": "hosted_accepted_final_publication_checks",
     "baseline": "ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7",
-    "hosted_schema": 16,
+    "hosted_schema": 17,
     "active_assignments": [],
     "standing_approval": true,
-    "hosted_changes": false,
+    "hosted_changes": true,
     "definition_snapshot": "operations/agent-improvement/snapshots/M74-PLANNING-CANDIDATE1.json",
-    "independent_accounting_checkpoint": "Source and frozen independent expectations complete; implementation review pending candidate freeze; reviewer idle.",
+    "independent_accounting_checkpoint": "Independent accounting and hosted acceptance completed; see frozen reviews.",
     "frontend_review": {
       "status": "bounded_pass",
       "tests": 46,
       "assertions": 191,
       "snapshot": "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json",
-      "native_browser": "pending"
+      "native_browser": "hosted_verified"
     },
     "integrated_candidate": "operations/agent-improvement/snapshots/M74-INTEGRATED-ACCEPTED2.json",
     "operator_candidate": "operations/agent-improvement/snapshots/M74-OPERATORS-ACCEPTED2.json",
@@ -2593,8 +2593,8 @@
     "root_dpapi_rehearsal": ".tmp/m74-ops-1789509920941/author-result.json",
     "local_browser": "http://127.0.0.1:37176",
     "local_limitations": [
-      "Full repository check stops on missing unrelated FrontDesk drizzle-orm dependency; targeted web/API/database typechecks, web lint/build and M73native85assertions pass.",
-      "Local browser still needs correction/report downloads/restart/narrow/print. No hosted change or publication."
+      "Full local repository check historically stopped on unrelated missing FrontDesk dependency; earlier deployed commit passed full CI.",
+      "Retained Scope2 research catalog reviews expired2026-09-15T23:20:32Z; renewal not authorized by a software test repair."
     ],
     "browser_evidence": "evaluations/research-qa/m74-browser-verification.md",
     "print_observation": "board_confirmed_native_window_appeared",
@@ -2609,7 +2609,7 @@
       "Windows path in root-authored evidence records; repaired3e35698",
       "Legacy operator test expected old-schema admission under17; independently repaired61d4376"
     ],
-    "required_checks": "six_pass",
+    "required_checks": "f5d7383_six_pass; 7fca72f_five_pass_one_failed_expired_catalog_clock",
     "approval_dependency": null,
     "prior_service_restore_deployment": "2b1f48de-0d01-48f3-8f9b-85294b7d9f51",
     "prior_service_restore_status": "verified_success_ready16",
@@ -2622,6 +2622,9 @@
     "migration_receipt": ".superpowers/m74-hosted-migration-candidate2.json",
     "hosted_acceptance": "evaluations/research-qa/m74-hosted-acceptance.md",
     "publication": "docs/research/m74-publication.json",
-    "next": "M75 mobile fleet reconciliation under standing approval"
+    "next": "M75 mobile fleet reconciliation under standing approval",
+    "clock_repair_review": "evaluations/research-qa/m74-clock-review.md",
+    "clock_repair": "independently_passed_tests_only",
+    "research_catalog": "expired_requires_separate_source_review"
   }
 }
