@@ -1,0 +1,1439 @@
+{
+  "status": "passed_hosted_checks_board_feedback_pending",
+  "recordedAt": "2026-09-15T00:15:21.236121+00:00",
+  "implementation": {
+    "commit": "63791ac4d6628651fc53c3de79f7db4791b48114",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/4",
+    "draft": true,
+    "merged": false,
+    "ciChecksPassed": 6,
+    "deploymentId": "56c457f9-2c27-4f68-bd62-3eec6d1687f7",
+    "deploymentStatus": "SUCCESS",
+    "schemaVersion": 12,
+    "origin": "https://www.neuvetra.ai"
+  },
+  "migration": {
+    "from": 11,
+    "to": 12,
+    "sha256": "1e1cc0742cdb3f6f48301202923a1405b2aa21a02010cf8d5233cfef8a5d1a26",
+    "committedAt": "2026-09-14T23:54:57.971Z",
+    "receipt": "C:/Users/nimab/Neuvetra/m63-runtime/recovery/m66-schema12-upgrade.json"
+  },
+  "backup": {
+    "applicationOnly": true,
+    "authProviderExcluded": true,
+    "createdAt": "2026-09-14T23:39:46Z",
+    "bytes": 398709,
+    "sha256": "518f1921a1c166503676dc6237015aeefb8278601161174fc63e35b8735d2cfb",
+    "protection": "Windows DPAPI current user; not off-device recovery proof"
+  },
+  "hostedAttempts": [
+    {
+      "status": "passed",
+      "mode": "baseline",
+      "stage": "original_m63_review",
+      "createdAt": "2026-09-14T23:39:09.330Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "original_worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report_list",
+          "status": 200
+        },
+        {
+          "name": "original_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "original_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "original_m63_report",
+          "status": 200
+        },
+        {
+          "name": "original_m63_review",
+          "status": 200
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "baseline": ".superpowers/m66-hosted-baseline.json"
+    },
+    {
+      "status": "passed",
+      "mode": "exercise",
+      "stage": "outsider_report_bytes",
+      "createdAt": "2026-09-14T23:57:31.092Z",
+      "applicationPostRequests": 11,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "original_worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report_list",
+          "status": 200
+        },
+        {
+          "name": "original_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "original_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "original_m63_report",
+          "status": 200
+        },
+        {
+          "name": "original_m63_review",
+          "status": 200
+        },
+        {
+          "name": "signed_out_sources",
+          "status": 401
+        },
+        {
+          "name": "outsider_sources",
+          "status": 403
+        },
+        {
+          "name": "source_worksheet",
+          "status": 200
+        },
+        {
+          "name": "member_upload_refused",
+          "status": 403
+        },
+        {
+          "name": "upload",
+          "status": 201
+        },
+        {
+          "name": "upload_retry",
+          "status": 201
+        },
+        {
+          "name": "member_upload_refused",
+          "status": 403
+        },
+        {
+          "name": "upload",
+          "status": 201
+        },
+        {
+          "name": "upload_retry",
+          "status": 201
+        },
+        {
+          "name": "save_initial",
+          "status": 201
+        },
+        {
+          "name": "review_initial",
+          "status": 201
+        },
+        {
+          "name": "capture_initial",
+          "status": 201
+        },
+        {
+          "name": "replace_source_only",
+          "status": 201
+        },
+        {
+          "name": "capture_replacement",
+          "status": 201
+        },
+        {
+          "name": "member_source_list",
+          "status": 200
+        },
+        {
+          "name": "source_metadata",
+          "status": 200
+        },
+        {
+          "name": "source_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_source_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_metadata",
+          "status": 200
+        },
+        {
+          "name": "source_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_source_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_report_list",
+          "status": 200
+        },
+        {
+          "name": "source_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_report_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_report_bytes",
+          "status": 403
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "preservedM63M64M65": true,
+      "worksheet": {
+        "profile": "neuvetra.synthetic.source-electricity-worksheet.v1",
+        "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+        "synthetic": true,
+        "complete": false,
+        "releaseEligible": false,
+        "assurance": "none",
+        "limitations": [
+          "synthetic_manual_confirmation",
+          "document_attachment_not_verification",
+          "overall_inventory_incomplete",
+          "january_2023_camx_only",
+          "market_based_scope2_not_included",
+          "factor_and_method_not_released",
+          "scope_1_and_scope_3_not_assessed",
+          "no_assurance"
+        ],
+        "versions": [
+          {
+            "id": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "version": 1,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+                "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m55-fictional-bill-a",
+                "mediaType": "application/pdf",
+                "byteLength": 4605,
+                "uploadedAt": "2026-09-14T23:56:12.727Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:32.773Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "1f57f726dd7248d0fbc98763a748e2d7630936002b76fce6c7ba7bd42365092e",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": null,
+            "previousVersionId": null,
+            "createdAt": "2026-09-14T23:56:32.773Z",
+            "review": {
+              "id": "94883074-2582-4ad9-94ed-17673046f3b1",
+              "note": null,
+              "decision": "accept_bounded_internal_draft",
+              "versionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+              "reviewerId": "01dcc43f-ceec-43e4-bb8a-1644980c7f1c",
+              "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+              "decisionSha256": "6aebbc5cd7023f44b034e9c9e1ba55e13147a9a79c7526294a9b38bf50b71667",
+              "acknowledgedLimitations": [
+                "synthetic_manual_confirmation",
+                "document_attachment_not_verification",
+                "overall_inventory_incomplete",
+                "january_2023_camx_only",
+                "market_based_scope2_not_included",
+                "factor_and_method_not_released",
+                "scope_1_and_scope_3_not_assessed",
+                "no_assurance"
+              ],
+              "reviewedAt": "2026-09-14T23:56:38.991Z"
+            }
+          },
+          {
+            "id": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "version": 2,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "9a31f745-2f83-4d5d-ac90-3f6ac848c041",
+                "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m66-fictional-bill-b",
+                "mediaType": "application/pdf",
+                "byteLength": 2480,
+                "uploadedAt": "2026-09-14T23:56:24.019Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:49.608Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "e4d6dd3bf0b0f1d3da6155fc9ba278e1cf1837762e24e9170de8ad15ba0abe16",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "c88070c8501e2d15132069505b443e85a4045d49b0fec5460f5e5503cbc0f057",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": "Testing replacement with alternate fictional bill B; quantity unchanged.",
+            "previousVersionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+            "createdAt": "2026-09-14T23:56:49.608Z",
+            "review": null
+          }
+        ]
+      },
+      "sources": [
+        {
+          "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "fixtureId": "m55-fictional-bill-a",
+          "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+          "mediaType": "application/pdf",
+          "byteLength": 4605,
+          "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+          "printedQuantityKwh": "12345.000",
+          "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "uploadedAt": "2026-09-14T23:56:12.727Z"
+        },
+        {
+          "id": "9a31f745-2f83-4d5d-ac90-3f6ac848c041",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "fixtureId": "m66-fictional-bill-b",
+          "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+          "mediaType": "application/pdf",
+          "byteLength": 2480,
+          "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+          "printedQuantityKwh": "12345.000",
+          "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "uploadedAt": "2026-09-14T23:56:24.019Z"
+        }
+      ],
+      "reports": [
+        {
+          "id": "b888a143-4db2-43d7-983e-c414625f1a1f",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "profile": "neuvetra.synthetic.source-electricity-report.v1",
+          "sourceVersionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+          "sourceVersion": 1,
+          "inputSha256": "1f57f726dd7248d0fbc98763a748e2d7630936002b76fce6c7ba7bd42365092e",
+          "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+          "reviewId": "94883074-2582-4ad9-94ed-17673046f3b1",
+          "reviewSha256": "6aebbc5cd7023f44b034e9c9e1ba55e13147a9a79c7526294a9b38bf50b71667",
+          "reviewState": "accepted_bounded_internal_draft",
+          "templateVersion": "m66-source-january-camx-report-v1",
+          "templateSha256": "4cba116499e744b8348488d320402c5f48bb05fcdf0a51930e3c56c0bbabaa3a",
+          "reportSha256": "1e005c4af9625ef3045caff7d8689d2911baf78dbaf632aa7c71abe5d9c328c0",
+          "reportByteLength": 10189,
+          "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "createdAt": "2026-09-14T23:56:44.157Z",
+          "synthetic": true,
+          "complete": false,
+          "releaseEligible": false,
+          "assurance": "none",
+          "source": {
+            "id": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "review": {
+              "id": "94883074-2582-4ad9-94ed-17673046f3b1",
+              "note": null,
+              "decision": "accept_bounded_internal_draft",
+              "versionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+              "reviewedAt": "2026-09-14T23:56:38.991Z",
+              "reviewerId": "01dcc43f-ceec-43e4-bb8a-1644980c7f1c",
+              "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+              "decisionSha256": "6aebbc5cd7023f44b034e9c9e1ba55e13147a9a79c7526294a9b38bf50b71667",
+              "acknowledgedLimitations": [
+                "synthetic_manual_confirmation",
+                "document_attachment_not_verification",
+                "overall_inventory_incomplete",
+                "january_2023_camx_only",
+                "market_based_scope2_not_included",
+                "factor_and_method_not_released",
+                "scope_1_and_scope_3_not_assessed",
+                "no_assurance"
+              ]
+            },
+            "version": 1,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+                "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m55-fictional-bill-a",
+                "mediaType": "application/pdf",
+                "byteLength": 4605,
+                "uploadedAt": "2026-09-14T23:56:12.727Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:32.773Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdAt": "2026-09-14T23:56:32.773Z",
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "1f57f726dd7248d0fbc98763a748e2d7630936002b76fce6c7ba7bd42365092e",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": null,
+            "previousVersionId": null
+          }
+        },
+        {
+          "id": "0c38c8b5-0efc-4dc1-9f2a-74aa2a1df137",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "profile": "neuvetra.synthetic.source-electricity-report.v1",
+          "sourceVersionId": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+          "sourceVersion": 2,
+          "inputSha256": "e4d6dd3bf0b0f1d3da6155fc9ba278e1cf1837762e24e9170de8ad15ba0abe16",
+          "resultSha256": "c88070c8501e2d15132069505b443e85a4045d49b0fec5460f5e5503cbc0f057",
+          "reviewId": null,
+          "reviewSha256": null,
+          "reviewState": "unreviewed",
+          "templateVersion": "m66-source-january-camx-report-v1",
+          "templateSha256": "4cba116499e744b8348488d320402c5f48bb05fcdf0a51930e3c56c0bbabaa3a",
+          "reportSha256": "a7307dac610dc15c175b4de2eac71be12dcbfc590b3ca1737004a219343121bf",
+          "reportByteLength": 9942,
+          "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "createdAt": "2026-09-14T23:56:54.973Z",
+          "synthetic": true,
+          "complete": false,
+          "releaseEligible": false,
+          "assurance": "none",
+          "source": {
+            "id": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "review": null,
+            "version": 2,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "9a31f745-2f83-4d5d-ac90-3f6ac848c041",
+                "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m66-fictional-bill-b",
+                "mediaType": "application/pdf",
+                "byteLength": 2480,
+                "uploadedAt": "2026-09-14T23:56:24.019Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:49.608Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdAt": "2026-09-14T23:56:49.608Z",
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "e4d6dd3bf0b0f1d3da6155fc9ba278e1cf1837762e24e9170de8ad15ba0abe16",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "c88070c8501e2d15132069505b443e85a4045d49b0fec5460f5e5503cbc0f057",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": "Testing replacement with alternate fictional bill B; quantity unchanged.",
+            "previousVersionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0"
+          }
+        }
+      ]
+    },
+    {
+      "status": "passed",
+      "mode": "revisit",
+      "stage": "outsider_report_bytes",
+      "createdAt": "2026-09-15T00:05:41.380Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "stages": [
+        {
+          "name": "readiness",
+          "status": 200
+        },
+        {
+          "name": "original_worksheet",
+          "status": 200
+        },
+        {
+          "name": "original_report_list",
+          "status": 200
+        },
+        {
+          "name": "original_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "original_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "original_m63_report",
+          "status": 200
+        },
+        {
+          "name": "original_m63_review",
+          "status": 200
+        },
+        {
+          "name": "signed_out_sources",
+          "status": 401
+        },
+        {
+          "name": "outsider_sources",
+          "status": 403
+        },
+        {
+          "name": "source_worksheet",
+          "status": 200
+        },
+        {
+          "name": "member_source_list",
+          "status": 200
+        },
+        {
+          "name": "source_metadata",
+          "status": 200
+        },
+        {
+          "name": "source_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_source_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_metadata",
+          "status": 200
+        },
+        {
+          "name": "source_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_source_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_report_list",
+          "status": 200
+        },
+        {
+          "name": "source_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_report_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_report_bytes",
+          "status": 403
+        },
+        {
+          "name": "source_report_bytes",
+          "status": 200
+        },
+        {
+          "name": "outsider_report_bytes",
+          "status": 403
+        },
+        {
+          "name": "logout_manager1",
+          "status": 204
+        },
+        {
+          "name": "logout_manager2",
+          "status": 204
+        },
+        {
+          "name": "logout_member",
+          "status": 204
+        },
+        {
+          "name": "logout_outsider",
+          "status": 204
+        }
+      ],
+      "preservedM63M64M65": true,
+      "worksheet": {
+        "profile": "neuvetra.synthetic.source-electricity-worksheet.v1",
+        "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+        "synthetic": true,
+        "complete": false,
+        "releaseEligible": false,
+        "assurance": "none",
+        "limitations": [
+          "synthetic_manual_confirmation",
+          "document_attachment_not_verification",
+          "overall_inventory_incomplete",
+          "january_2023_camx_only",
+          "market_based_scope2_not_included",
+          "factor_and_method_not_released",
+          "scope_1_and_scope_3_not_assessed",
+          "no_assurance"
+        ],
+        "versions": [
+          {
+            "id": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "version": 1,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+                "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m55-fictional-bill-a",
+                "mediaType": "application/pdf",
+                "byteLength": 4605,
+                "uploadedAt": "2026-09-14T23:56:12.727Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:32.773Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "1f57f726dd7248d0fbc98763a748e2d7630936002b76fce6c7ba7bd42365092e",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": null,
+            "previousVersionId": null,
+            "createdAt": "2026-09-14T23:56:32.773Z",
+            "review": {
+              "id": "94883074-2582-4ad9-94ed-17673046f3b1",
+              "note": null,
+              "decision": "accept_bounded_internal_draft",
+              "versionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+              "reviewerId": "01dcc43f-ceec-43e4-bb8a-1644980c7f1c",
+              "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+              "decisionSha256": "6aebbc5cd7023f44b034e9c9e1ba55e13147a9a79c7526294a9b38bf50b71667",
+              "acknowledgedLimitations": [
+                "synthetic_manual_confirmation",
+                "document_attachment_not_verification",
+                "overall_inventory_incomplete",
+                "january_2023_camx_only",
+                "market_based_scope2_not_included",
+                "factor_and_method_not_released",
+                "scope_1_and_scope_3_not_assessed",
+                "no_assurance"
+              ],
+              "reviewedAt": "2026-09-14T23:56:38.991Z"
+            }
+          },
+          {
+            "id": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "version": 2,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "9a31f745-2f83-4d5d-ac90-3f6ac848c041",
+                "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m66-fictional-bill-b",
+                "mediaType": "application/pdf",
+                "byteLength": 2480,
+                "uploadedAt": "2026-09-14T23:56:24.019Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:49.608Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "e4d6dd3bf0b0f1d3da6155fc9ba278e1cf1837762e24e9170de8ad15ba0abe16",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "c88070c8501e2d15132069505b443e85a4045d49b0fec5460f5e5503cbc0f057",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": "Testing replacement with alternate fictional bill B; quantity unchanged.",
+            "previousVersionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+            "createdAt": "2026-09-14T23:56:49.608Z",
+            "review": null
+          },
+          {
+            "id": "77f83e4f-82da-452b-9526-b76ef1ffea6f",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "4876.0072",
+              "rounding": "half_even_4dp",
+              "unrounded": "4876.00722"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "version": 3,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+                "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m55-fictional-bill-a",
+                "mediaType": "application/pdf",
+                "byteLength": 4605,
+                "uploadedAt": "2026-09-14T23:56:12.727Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-15T00:01:44.461Z",
+              "confirmedBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+              "quantityDifferenceReason": "Synthetic browser test: intentionally entered 25000 kWh to check the discrepancy workflow; the fictional bill states 12345 kWh."
+            },
+            "createdBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+            "geography": "CAMX",
+            "inputSha256": "89452f4d218c15571f4dd4c30490be37f8b7b2f1794d4440394c604a2a5f32b2",
+            "quantityKwh": "25000.000",
+            "quantityMwh": "25.000000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "697fa93da91715202a776cf603241de4d610208dfbecb4a24efe71b6a5772c06",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": "Testing bill A with a different manually confirmed quantity in the live M66 browser workflow.",
+            "previousVersionId": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+            "createdAt": "2026-09-15T00:01:44.461Z",
+            "review": null
+          }
+        ]
+      },
+      "sources": [
+        {
+          "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "fixtureId": "m55-fictional-bill-a",
+          "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+          "mediaType": "application/pdf",
+          "byteLength": 4605,
+          "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+          "printedQuantityKwh": "12345.000",
+          "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "uploadedAt": "2026-09-14T23:56:12.727Z"
+        },
+        {
+          "id": "9a31f745-2f83-4d5d-ac90-3f6ac848c041",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "fixtureId": "m66-fictional-bill-b",
+          "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+          "mediaType": "application/pdf",
+          "byteLength": 2480,
+          "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+          "printedQuantityKwh": "12345.000",
+          "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "uploadedAt": "2026-09-14T23:56:24.019Z"
+        }
+      ],
+      "reports": [
+        {
+          "id": "b888a143-4db2-43d7-983e-c414625f1a1f",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "profile": "neuvetra.synthetic.source-electricity-report.v1",
+          "sourceVersionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+          "sourceVersion": 1,
+          "inputSha256": "1f57f726dd7248d0fbc98763a748e2d7630936002b76fce6c7ba7bd42365092e",
+          "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+          "reviewId": "94883074-2582-4ad9-94ed-17673046f3b1",
+          "reviewSha256": "6aebbc5cd7023f44b034e9c9e1ba55e13147a9a79c7526294a9b38bf50b71667",
+          "reviewState": "accepted_bounded_internal_draft",
+          "templateVersion": "m66-source-january-camx-report-v1",
+          "templateSha256": "4cba116499e744b8348488d320402c5f48bb05fcdf0a51930e3c56c0bbabaa3a",
+          "reportSha256": "1e005c4af9625ef3045caff7d8689d2911baf78dbaf632aa7c71abe5d9c328c0",
+          "reportByteLength": 10189,
+          "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "createdAt": "2026-09-14T23:56:44.157Z",
+          "synthetic": true,
+          "complete": false,
+          "releaseEligible": false,
+          "assurance": "none",
+          "source": {
+            "id": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "review": {
+              "id": "94883074-2582-4ad9-94ed-17673046f3b1",
+              "note": null,
+              "decision": "accept_bounded_internal_draft",
+              "versionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0",
+              "reviewedAt": "2026-09-14T23:56:38.991Z",
+              "reviewerId": "01dcc43f-ceec-43e4-bb8a-1644980c7f1c",
+              "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+              "decisionSha256": "6aebbc5cd7023f44b034e9c9e1ba55e13147a9a79c7526294a9b38bf50b71667",
+              "acknowledgedLimitations": [
+                "synthetic_manual_confirmation",
+                "document_attachment_not_verification",
+                "overall_inventory_incomplete",
+                "january_2023_camx_only",
+                "market_based_scope2_not_included",
+                "factor_and_method_not_released",
+                "scope_1_and_scope_3_not_assessed",
+                "no_assurance"
+              ]
+            },
+            "version": 1,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+                "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m55-fictional-bill-a",
+                "mediaType": "application/pdf",
+                "byteLength": 4605,
+                "uploadedAt": "2026-09-14T23:56:12.727Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:32.773Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdAt": "2026-09-14T23:56:32.773Z",
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "1f57f726dd7248d0fbc98763a748e2d7630936002b76fce6c7ba7bd42365092e",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "032c265e0071cc939d79670684984b73283bfd6563b68822193013401ae02715",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": null,
+            "previousVersionId": null
+          }
+        },
+        {
+          "id": "0c38c8b5-0efc-4dc1-9f2a-74aa2a1df137",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "profile": "neuvetra.synthetic.source-electricity-report.v1",
+          "sourceVersionId": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+          "sourceVersion": 2,
+          "inputSha256": "e4d6dd3bf0b0f1d3da6155fc9ba278e1cf1837762e24e9170de8ad15ba0abe16",
+          "resultSha256": "c88070c8501e2d15132069505b443e85a4045d49b0fec5460f5e5503cbc0f057",
+          "reviewId": null,
+          "reviewSha256": null,
+          "reviewState": "unreviewed",
+          "templateVersion": "m66-source-january-camx-report-v1",
+          "templateSha256": "4cba116499e744b8348488d320402c5f48bb05fcdf0a51930e3c56c0bbabaa3a",
+          "reportSha256": "a7307dac610dc15c175b4de2eac71be12dcbfc590b3ca1737004a219343121bf",
+          "reportByteLength": 9942,
+          "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "createdAt": "2026-09-14T23:56:54.973Z",
+          "synthetic": true,
+          "complete": false,
+          "releaseEligible": false,
+          "assurance": "none",
+          "source": {
+            "id": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "review": null,
+            "version": 2,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "9a31f745-2f83-4d5d-ac90-3f6ac848c041",
+                "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m66-fictional-bill-b",
+                "mediaType": "application/pdf",
+                "byteLength": 2480,
+                "uploadedAt": "2026-09-14T23:56:24.019Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-14T23:56:49.608Z",
+              "confirmedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+              "quantityDifferenceReason": null
+            },
+            "createdAt": "2026-09-14T23:56:49.608Z",
+            "createdBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "geography": "CAMX",
+            "inputSha256": "e4d6dd3bf0b0f1d3da6155fc9ba278e1cf1837762e24e9170de8ad15ba0abe16",
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "c88070c8501e2d15132069505b443e85a4045d49b0fec5460f5e5503cbc0f057",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": "Testing replacement with alternate fictional bill B; quantity unchanged.",
+            "previousVersionId": "2b7a73f9-2998-42db-8596-13c73e03d2d0"
+          }
+        },
+        {
+          "id": "7a91d5d6-dcc2-4c4e-8747-0a7cd38deb08",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "profile": "neuvetra.synthetic.source-electricity-report.v1",
+          "sourceVersionId": "77f83e4f-82da-452b-9526-b76ef1ffea6f",
+          "sourceVersion": 3,
+          "inputSha256": "89452f4d218c15571f4dd4c30490be37f8b7b2f1794d4440394c604a2a5f32b2",
+          "resultSha256": "697fa93da91715202a776cf603241de4d610208dfbecb4a24efe71b6a5772c06",
+          "reviewId": null,
+          "reviewSha256": null,
+          "reviewState": "unreviewed",
+          "templateVersion": "m66-source-january-camx-report-v1",
+          "templateSha256": "4cba116499e744b8348488d320402c5f48bb05fcdf0a51930e3c56c0bbabaa3a",
+          "reportSha256": "da347a656ff5c70288b28c63285525d583cdd7750fed87da1e2257d79cc3a31b",
+          "reportByteLength": 10021,
+          "createdBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+          "createdAt": "2026-09-15T00:02:28.776Z",
+          "synthetic": true,
+          "complete": false,
+          "releaseEligible": false,
+          "assurance": "none",
+          "source": {
+            "id": "77f83e4f-82da-452b-9526-b76ef1ffea6f",
+            "unit": "kWh",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "4876.0072",
+              "rounding": "half_even_4dp",
+              "unrounded": "4876.00722"
+            },
+            "method": {
+              "id": "scope2-location-based-egrid-subregion",
+              "cell": "AI6",
+              "sheet": "SRL23",
+              "policy": "m64-accounting-policy-v1",
+              "version": "2023-r2-camx-v1",
+              "factorId": "epa-egrid2023-r2-camx-total-output",
+              "factorUnit": "kg CO2e/MWh",
+              "factorValue": "195.0402888",
+              "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+              "factorVersion": "eGRID2023-revision-2",
+              "classification": "development_candidate",
+              "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+              "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+              "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+              "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+            },
+            "period": "2023-01",
+            "review": null,
+            "version": 3,
+            "evidence": {
+              "page": 1,
+              "source": {
+                "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+                "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+                "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+                "fixtureId": "m55-fictional-bill-a",
+                "mediaType": "application/pdf",
+                "byteLength": 4605,
+                "uploadedAt": "2026-09-14T23:56:12.727Z",
+                "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+                "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+                "printedQuantityKwh": "12345.000"
+              },
+              "confirmedAt": "2026-09-15T00:01:44.461Z",
+              "confirmedBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+              "quantityDifferenceReason": "Synthetic browser test: intentionally entered 25000 kWh to check the discrepancy workflow; the fictional bill states 12345 kWh."
+            },
+            "createdAt": "2026-09-15T00:01:44.461Z",
+            "createdBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+            "geography": "CAMX",
+            "inputSha256": "89452f4d218c15571f4dd4c30490be37f8b7b2f1794d4440394c604a2a5f32b2",
+            "quantityKwh": "25000.000",
+            "quantityMwh": "25.000000",
+            "companyLabel": "Synthetic Cedar Ltd",
+            "resultSha256": "697fa93da91715202a776cf603241de4d610208dfbecb4a24efe71b6a5772c06",
+            "facilityLabel": "Synthetic California office",
+            "correctionReason": "Testing bill A with a different manually confirmed quantity in the live M66 browser workflow.",
+            "previousVersionId": "f5fa7680-4430-411e-8fe3-574f4f1f7575"
+          }
+        }
+      ]
+    }
+  ],
+  "browser": {
+    "origin": "https://www.neuvetra.ai",
+    "actor": "existing board account",
+    "uploadedFixture": "A via actual file chooser; existing source deduplicated",
+    "downloadedSource": {
+      "path": "C:/Users/nimab/Downloads/neuvetra-m55-synthetic-electricity-bill.pdf",
+      "bytes": 4605,
+      "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+      "note": "20-second download-event wait timed out; subsequent actual file appeared and exact hash matched. This is not a failed file download."
+    },
+    "manualConfirmationResetOnQuantityChange": true,
+    "savedVersion": {
+      "id": "77f83e4f-82da-452b-9526-b76ef1ffea6f",
+      "unit": "kWh",
+      "total": {
+        "unit": "kg CO2e",
+        "display": "4876.0072",
+        "rounding": "half_even_4dp",
+        "unrounded": "4876.00722"
+      },
+      "method": {
+        "id": "scope2-location-based-egrid-subregion",
+        "cell": "AI6",
+        "sheet": "SRL23",
+        "policy": "m64-accounting-policy-v1",
+        "version": "2023-r2-camx-v1",
+        "factorId": "epa-egrid2023-r2-camx-total-output",
+        "factorUnit": "kg CO2e/MWh",
+        "factorValue": "195.0402888",
+        "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+        "factorVersion": "eGRID2023-revision-2",
+        "classification": "development_candidate",
+        "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+        "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+        "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+        "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+      },
+      "period": "2023-01",
+      "version": 3,
+      "evidence": {
+        "page": 1,
+        "source": {
+          "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+          "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+          "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+          "fixtureId": "m55-fictional-bill-a",
+          "mediaType": "application/pdf",
+          "byteLength": 4605,
+          "uploadedAt": "2026-09-14T23:56:12.727Z",
+          "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+          "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+          "printedQuantityKwh": "12345.000"
+        },
+        "confirmedAt": "2026-09-15T00:01:44.461Z",
+        "confirmedBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+        "quantityDifferenceReason": "Synthetic browser test: intentionally entered 25000 kWh to check the discrepancy workflow; the fictional bill states 12345 kWh."
+      },
+      "createdBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+      "geography": "CAMX",
+      "inputSha256": "89452f4d218c15571f4dd4c30490be37f8b7b2f1794d4440394c604a2a5f32b2",
+      "quantityKwh": "25000.000",
+      "quantityMwh": "25.000000",
+      "companyLabel": "Synthetic Cedar Ltd",
+      "resultSha256": "697fa93da91715202a776cf603241de4d610208dfbecb4a24efe71b6a5772c06",
+      "facilityLabel": "Synthetic California office",
+      "correctionReason": "Testing bill A with a different manually confirmed quantity in the live M66 browser workflow.",
+      "previousVersionId": "f5fa7680-4430-411e-8fe3-574f4f1f7575",
+      "createdAt": "2026-09-15T00:01:44.461Z",
+      "review": null
+    },
+    "savedReport": {
+      "id": "7a91d5d6-dcc2-4c4e-8747-0a7cd38deb08",
+      "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+      "profile": "neuvetra.synthetic.source-electricity-report.v1",
+      "sourceVersionId": "77f83e4f-82da-452b-9526-b76ef1ffea6f",
+      "sourceVersion": 3,
+      "inputSha256": "89452f4d218c15571f4dd4c30490be37f8b7b2f1794d4440394c604a2a5f32b2",
+      "resultSha256": "697fa93da91715202a776cf603241de4d610208dfbecb4a24efe71b6a5772c06",
+      "reviewId": null,
+      "reviewSha256": null,
+      "reviewState": "unreviewed",
+      "templateVersion": "m66-source-january-camx-report-v1",
+      "templateSha256": "4cba116499e744b8348488d320402c5f48bb05fcdf0a51930e3c56c0bbabaa3a",
+      "reportSha256": "da347a656ff5c70288b28c63285525d583cdd7750fed87da1e2257d79cc3a31b",
+      "reportByteLength": 10021,
+      "createdBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+      "createdAt": "2026-09-15T00:02:28.776Z",
+      "synthetic": true,
+      "complete": false,
+      "releaseEligible": false,
+      "assurance": "none",
+      "source": {
+        "id": "77f83e4f-82da-452b-9526-b76ef1ffea6f",
+        "unit": "kWh",
+        "total": {
+          "unit": "kg CO2e",
+          "display": "4876.0072",
+          "rounding": "half_even_4dp",
+          "unrounded": "4876.00722"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m64-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-01-camx-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "period": "2023-01",
+        "review": null,
+        "version": 3,
+        "evidence": {
+          "page": 1,
+          "source": {
+            "id": "e555303e-118c-4ecd-8711-3f38ae9bc552",
+            "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+            "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+            "fixtureId": "m55-fictional-bill-a",
+            "mediaType": "application/pdf",
+            "byteLength": 4605,
+            "uploadedAt": "2026-09-14T23:56:12.727Z",
+            "uploadedBy": "7f0c488a-a645-4a9a-97b1-f043e77322a8",
+            "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+            "printedQuantityKwh": "12345.000"
+          },
+          "confirmedAt": "2026-09-15T00:01:44.461Z",
+          "confirmedBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+          "quantityDifferenceReason": "Synthetic browser test: intentionally entered 25000 kWh to check the discrepancy workflow; the fictional bill states 12345 kWh."
+        },
+        "createdAt": "2026-09-15T00:01:44.461Z",
+        "createdBy": "84fedcf2-d26a-47a5-87fb-49050450b678",
+        "geography": "CAMX",
+        "inputSha256": "89452f4d218c15571f4dd4c30490be37f8b7b2f1794d4440394c604a2a5f32b2",
+        "quantityKwh": "25000.000",
+        "quantityMwh": "25.000000",
+        "companyLabel": "Synthetic Cedar Ltd",
+        "resultSha256": "697fa93da91715202a776cf603241de4d610208dfbecb4a24efe71b6a5772c06",
+        "facilityLabel": "Synthetic California office",
+        "correctionReason": "Testing bill A with a different manually confirmed quantity in the live M66 browser workflow.",
+        "previousVersionId": "f5fa7680-4430-411e-8fe3-574f4f1f7575"
+      }
+    },
+    "downloadedHtml": {
+      "path": "C:/Users/nimab/Downloads/synthetic-worksheet-v3-7a91d5d6-dcc2-4c4e-8747-0a7cd38deb08.html",
+      "bytes": 10021,
+      "sha256": "da347a656ff5c70288b28c63285525d583cdd7750fed87da1e2257d79cc3a31b"
+    },
+    "printView": {
+      "keyboardEnterOpenedNewTab": true,
+      "observedTitle": "Source-linked synthetic electricity worksheet report \u2014 Synthetic Cedar Ltd",
+      "parentBusyStateReleased": true,
+      "nativePrintDialog": "not observed; M66 board print feedback remains separate",
+      "blobInspection": "not attempted; existing browser URL policy does not allow inspecting generated blob reports",
+      "renderedPdfLayoutEvidence": "docs/research/m66-print-layout-verification.json"
+    },
+    "responsive": {
+      "narrowClientWidth": 375,
+      "narrowScrollWidth": 375,
+      "restoredClientWidth": 1703,
+      "restoredScrollWidth": 1703,
+      "keyboardTabFromPrintToDownload": true,
+      "temporaryOverrideCleared": true,
+      "note": "Browser-wide viewport reset did not clear the parent tab while the print tab was selected. Scoped parent clear restored width1703; automation response was delayed. No application data changed."
+    },
+    "screenshot": "docs/research/m66-live-browser.png"
+  },
+  "restart": {
+    "deploymentId": "56c457f9-2c27-4f68-bd62-3eec6d1687f7",
+    "requestAccepted": true,
+    "readinessAfterRestart": {
+      "status": "ready",
+      "schemaVersion": 12,
+      "legacyContainmentVerified": true
+    },
+    "freshAuthenticatedReadback": "2026-09-15T00:05:41.380Z",
+    "applicationPostRequests": 0,
+    "allPreviousM66AndM63M64M65Preserved": true
+  },
+  "limits": {
+    "synthetic": true,
+    "complete": false,
+    "releaseEligible": false,
+    "assurance": "none",
+    "nativePrintDialogAcceptance": false,
+    "boardMilestoneFeedback": "pending",
+    "fullYearMilestone": "M67 after M66 feedback",
+    "persistentWorkers": false,
+    "observedComputeAndCost": null
+  }
+}

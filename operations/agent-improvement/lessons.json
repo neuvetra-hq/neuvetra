@@ -57,9 +57,12 @@
       "id": "L06",
       "owner_role": "qa-lead",
       "trigger": "A repair changes one field in a multi-record evidence or lifecycle contract.",
-      "required_check": "Challenge missing fields, allowed values, cross-record agreement and triggering lifecycle together; final review includes composed behavior, not only the latest reported symptom.",
+      "required_check": "Challenge missing fields, allowed values, cross-record agreement and triggering lifecycle together. For additive version contracts, independently exercise each permitted single-field correction through persistence and the actual frontend decoder, including explanation-only, label-only and source-only successors. Compare the full effective-input tuple for no-op rejection; final review covers composed behavior.",
       "evidence": [
-        "operations/agent-improvement/historical-evidence.json#L06"
+        "operations/agent-improvement/historical-evidence.json#L06",
+        "evaluations/research-qa/m66-local-review.md",
+        "evaluations/research-qa/m66-independent-frontend.test.ts",
+        ".github/workflows/verify.yml"
       ],
       "status": "adopted_pending_effectiveness"
     },

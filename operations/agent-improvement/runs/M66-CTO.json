@@ -4,25 +4,39 @@
   "role": "cto",
   "execution_context": "/root/m64_cto",
   "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M66-CTO.json",
+      "sha256": "ff383e1a3306a8aa69793a44003040074bd95fac5101659eed75fc0afbaddaa3"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m66-hosted-handoff.md"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root/m63_data",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m66-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M66-CTO.json",
+        "sha256": "ff383e1a3306a8aa69793a44003040074bd95fac5101659eed75fc0afbaddaa3"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": null,
@@ -52,5 +66,122 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "parent_outcome": "M66 source-linked electricity",
-  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim."
+  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim.",
+  "source_artifacts": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "eae7e1a199686c560b9121a0784dfae5901f2e0c75f295d109c4f2bbda121a83"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "fc5ed445a8fa6997a00556e60be516ba3844c355af5f4139c51432973e863c79"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "sha256": "6e0207024429b352ee52f3f2ac5a9d0590d4ae8b717d0745a4fbd836b98b87d9"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "6233214c65c2728c7fff025e227322f32ba188d61cdf85ab50f0c75d858540c4"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "aad83488bd1ffbb4c3cc07c8d789c8eb473bf4a08316c36a79136b36ccad34f1"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-postgres.test.ts",
+      "sha256": "627c280e679f7b0c031f40890de14c1bc0bb162498a324484325401add3b29e3"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-report-routes.ts",
+      "sha256": "9e18c54ee19418562eb92d15effd350112050b8c5dc0ec1d6d8dfa62d255200f"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-routes.ts",
+      "sha256": "e4a51b8939d3149b2474520a52a36701e164c83b98d2cd8bec25ee5437fc9b9f"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-source-routes.ts",
+      "sha256": "5a0f4dea5e551c6e4a10105ac38be30239bb0371cfd7303610645b6e593d7cc9"
+    },
+    {
+      "path": "apps/site-web/src/components/SourceElectricityWorksheet.tsx",
+      "sha256": "dc6113b5f7e9946504d455b8c0f91ad5caa06cfc32acc02cc695827d1d13541d"
+    },
+    {
+      "path": "apps/site-web/src/components/SourceWorksheetReports.tsx",
+      "sha256": "4259e91d5e00f7692adc7898176b57f3f31ea679bef368c3879782c5ec273fb0"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "3afffb1154493a7ddeef78029f7c1d9e2eb09c6c0da0a2e18952c1412b07ea47"
+    },
+    {
+      "path": "apps/site-web/src/lib/m66-api.ts",
+      "sha256": "11cbf0b6528e37259c6e330c58ce8cd8f41abd4d7ae11f141f6a49966ad823ae"
+    },
+    {
+      "path": "apps/site-web/src/lib/m66-report-api.ts",
+      "sha256": "aa0ec66748483274b63271013521105b473a54a4f1a4f543b3fb7f23d7bce0be"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "0897c5c1bb0908cf991b768221c5ae48afff7cc13de7b5e871f0105bc3a0d291"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "500327d6e1be1189c25037efd21779e276c9b72bf87587082df3f290942cd3ea"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "afeba51208de5d77eafcec07d6c4dfe917281fe39509a440fec49c45ce2a2ad1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-contract.ts",
+      "sha256": "ffbb76b1c144130369d93a88f586bc431cdb8a8eba2d6a285ef5d849c5662049"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-fixtures.ts",
+      "sha256": "2c78d1fc9a8e5a288303e495094fe3ea8b4b076692e1e2a2ed17bb859eaaeeae"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-report.ts",
+      "sha256": "0efacc1b94280cbf960e8c755b208499416dc114fd0405fdb4d956e36a8903d0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-sources.ts",
+      "sha256": "85068701fca36379fd4fe7f3e6b4afed63ff96acfc75f4cd14a9338f2001ca20"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-template.ts",
+      "sha256": "226ac0b125f1cf8cd4d390fdd715bf7c647b440f5ab571c77c4524e1b0f5bac9"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66.ts",
+      "sha256": "5805119822a1500cd7e6b05703bd6262ff7471d2ac7c8567a7fffb1fab8e3912"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "sha256": "1e1cc0742cdb3f6f48301202923a1405b2aa21a02010cf8d5233cfef8a5d1a26"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "2e4c44a5635a02c32cc278d836ca1369dd27febc7ba706d924c9720a4e8387a6"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "86a691957d3c21effb9f217ba5ae48b866642730d896cb7288a4fb46e56a0cef"
+    },
+    {
+      "path": "tools/staging/check-m66-hosted.ts",
+      "sha256": "73770680b1892ac6fa3b7acf5676bf4d91d5d99346b7dd587151df8a9a505060"
+    },
+    {
+      "path": "tools/staging/upgrade-m66.ts",
+      "sha256": "2b4ba436e82241871e3eacf60f7e2a70cd2100414276c120557c1cf3d9dd5856"
+    }
+  ],
+  "notes": [
+    "Scoped role delivery closed; board milestone feedback remains separate. CTO bundle is integrated engineering including root-owned UI/operators, not sole CTO authorship. Initial product findings, QA harness corrections, browser download event timeout and viewport automation delay remain disclosed. Actual compute/cost unknown; no savings or general competence claim."
+  ]
 }

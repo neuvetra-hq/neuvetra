@@ -1,3 +1,13 @@
+# M66 live — board review next
+
+Supporting bills now stay linked to manually confirmed electricity quantities, saved versions and immutable reports. The live browser saved Version3: 25000.000kWh → 4876.0072kgCO2e, with the fictional bill's printed12345.000kWh and an explicit discrepancy explanation. Version3 is unreviewed; earlier source/review/report history remains unchanged. Exact PDF and HTML downloads, three versions, two bills and three reports passed post-restart readback; M63–M65 are preserved.
+
+Implementation63791ac4d6628651fc53c3de79f7db4791b48114 is pushed to rolling draft PR4; six checks passed. Existing Railway deployment56c457f9-2c27-4f68-bd62-3eec6d1687f7 is SUCCESS on schema12. No new subscription or merge. See docs/research/m66-hosted-verification.json for exact observations. Native M66 print-dialog feedback is not claimed; the verified print view opened, and local Chrome print layouts were inspected.
+
+For review, open Bill-linked worksheet and its Version3 report. The retained bill, printed/manual quantities, discrepancy reason and preserved earlier versions are available. Full-year electricity coverage follows as M67 after M66 board feedback. These remain synthetic, incomplete, unreleased drafts without assurance. Independent hosted handoff passed. Scoped role deliveries are closed; role contexts are not persistent workers and actual compute/cost is unknown.
+
+Historical entries below are superseded as next-action instructions.
+
 # M66 local verification passed; publication and live demonstration next
 
 M66 links supported fictional bills to manually confirmed electricity quantities, immutable versions, manager review and readable reports. Accounting and independent QA passed the bounded local candidate. Repository checks and the native source-to-report restore passed. Root is publishing the reviewed changes to rolling draft PR4 and will verify CI/image checks before the existing-host schema12 upgrade. Live browser, restart/readback and board demonstration remain pending. Full-year coverage follows as M67 after M66 feedback. No new subscription or merge.

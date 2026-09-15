@@ -1,17 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T23:47:26.038319+00:00",
+  "updated_at": "2026-09-15T00:16:34.646897+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M66",
     "name": "Supporting bills linked to worksheet reports",
-    "status": "in_progress",
-    "next_gate": "Independent local candidate review, exact PR head and CI image checks, then existing-host upgrade and browser demonstration",
+    "status": "awaiting_board_feedback",
+    "next_gate": "Board reviews the live bill-linked worksheet/report; full-year coverage follows as M67 after feedback.",
     "evidence": [
       "docs/research/source-linked-electricity-milestone-66.md",
-      "operations/feedback/2026-09-14-milestone-65.md"
+      "docs/research/m66-hosted-verification.json",
+      "evaluations/research-qa/m66-hosted-handoff.md"
     ]
   },
   "completed_milestones": [
@@ -96,16 +97,16 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M65 live on existing private synthetic staging; schema11; exact version4 and historical reports verified. Board review pending.",
+    "website_preview_state": "M66 live on existing private synthetic staging; schema12; bill-linked versions and exact reports verified after restart. Board feedback pending.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M65 accepted by board; M66 source-linked synthetic entry scoped with read-only CTO advice."
+    "last_session_work": "M66 implemented, independently reviewed locally, pushed and deployed. Live browser saved source-linked version3 with25000kWh=>4876.0072kgCO2e, distinct printedquantity/discrepancy and exactdownloadedbytes; post-restart preservedallrecords."
   },
   "session_handoff": {
-    "current": "M66 source-linked implementation authorized and underway",
-    "next": "Source-bound backend and upload UI, independent QA, publication and existing-host demonstration",
+    "current": "M66 live and independently reviewed; board feedback pending",
+    "next": "Board reviews version3 and its retained bill/report before M67 full-year coverage",
     "evidence": [
-      "docs/research/source-linked-electricity-milestone-66.md",
-      "operations/feedback/2026-09-14-milestone-65.md"
+      "docs/research/m66-hosted-verification.json",
+      "evaluations/research-qa/m66-hosted-handoff.md"
     ]
   },
   "checkpoint": {
@@ -2056,17 +2057,25 @@
     "evidence": "docs/research/m65-hosted-verification.json"
   },
   "current_m66": {
-    "status": "in_progress",
+    "status": "awaiting_board_feedback",
     "implementation_started": true,
     "board_scope": "Supporting bills first; full-year coverage follows as M67",
     "backend_owner": "/root/m64_cto",
     "accounting_owner": "/root/m64_accounting",
     "qa_owner": "/root/m63_data",
     "root_owner": "UI/operators/publication/cloud/records",
-    "active_workers_excluding_root": 1,
+    "active_workers_excluding_root": 0,
     "persistent_workers": false,
     "compute_observed": null,
-    "local_verification": "Repository checks passed; accounting wording passed; independent native and restoration tests passed; local candidate handoff pending",
-    "next_milestone": "M67 full-year electricity after M66 demonstration and feedback"
+    "local_verification": "Independent local and hosted handoff passed; final evidence publication and board feedback separate",
+    "next_milestone": "M67 full-year electricity after M66 demonstration and feedback",
+    "implementation_commit": "63791ac4d6628651fc53c3de79f7db4791b48114",
+    "deployment_id": "56c457f9-2c27-4f68-bd62-3eec6d1687f7",
+    "ci_checks_passed": 6,
+    "schema_version": 12,
+    "release_eligible": false,
+    "synthetic_only": true,
+    "board_feedback": "pending",
+    "evidence": "docs/research/m66-hosted-verification.json"
   }
 }

@@ -4,25 +4,39 @@
   "role": "qa-lead",
   "execution_context": "/root/m63_data",
   "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M66-QA.json",
+      "sha256": "7b85c4f4b6484dcd008c42652e64b670c512bc48029337f2bf19906137037287"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m66-hosted-handoff.md"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m66-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M66-QA.json",
+        "sha256": "7b85c4f4b6484dcd008c42652e64b670c512bc48029337f2bf19906137037287"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": null,
@@ -52,5 +66,50 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "parent_outcome": "M66 source-linked electricity",
-  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim."
+  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim.",
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m66-acceptance-plan.md",
+      "sha256": "467f2b49311232be640d55b1ae6dbf1e40bf1cbe024804632fcdf3d2ce6ad4b9"
+    },
+    {
+      "path": "evaluations/research-qa/m66-baseline-receipt.json",
+      "sha256": "a44c277cb4fc00ca715acefdcbee87bbb33b875de56c19a0e6ccf3ad3c7f36a5"
+    },
+    {
+      "path": "evaluations/research-qa/m66-fixture-generator-supplement.json",
+      "sha256": "0525c96f032a09e408a34bc55624168c0897509e8560e0013da4eac8dd4d6dea"
+    },
+    {
+      "path": "evaluations/research-qa/m66-independent-frontend.test.ts",
+      "sha256": "fa0b7397f64409794d8c51141b61ee48ef80df3a33c87fcdab748ebededabb6f"
+    },
+    {
+      "path": "evaluations/research-qa/m66-independent-postgres.test.ts",
+      "sha256": "f123177e260940269167f842788236eb8c2ecce8a2e85597282d137f1258d953"
+    },
+    {
+      "path": "evaluations/research-qa/m66-independent-renderer.test.ts",
+      "sha256": "ab78a56c88fb776e75a8ab5c1f790ea17e8d15bf0afd2adb86d05fe7f216acc1"
+    },
+    {
+      "path": "evaluations/research-qa/m66-local-artifact-manifest.json",
+      "sha256": "99d892c7d44c302a07df8d36b25259b10a351a5e35b352b9c36823a1489416cd"
+    },
+    {
+      "path": "evaluations/research-qa/m66-local-review.md",
+      "sha256": "e172a42f22d2a0fc144838702fb2a828b6c5a2ed8ef88cc87e7ee2cbff180fe1"
+    },
+    {
+      "path": "evaluations/research-qa/m66-restore-check.ts",
+      "sha256": "7f2fb4e0ca244e71ccc6c9b35cc2489cc990c534c445dbb80eec7b5c7c979b4a"
+    },
+    {
+      "path": "evaluations/research-qa/m66-restore-receipt.json",
+      "sha256": "ea5b569af190e3a6d0fb40e36e476f0716d3ec3903bdd0be1734a5ea0a11b701"
+    }
+  ],
+  "notes": [
+    "Scoped role delivery closed; board milestone feedback remains separate. CTO bundle is integrated engineering including root-owned UI/operators, not sole CTO authorship. Initial product findings, QA harness corrections, browser download event timeout and viewport automation delay remain disclosed. Actual compute/cost unknown; no savings or general competence claim."
+  ]
 }

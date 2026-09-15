@@ -25,3 +25,7 @@ Hosted upgrade, source-to-report exercise, browser test, restart/readback and fi
 ## Roles
 
 CTO/backend: `/root/m64_cto`; independent accounting: `/root/m64_accounting`; independent QA: `/root/m63_data`; root: UI, operators, integration and deployment. Historical context names do not change the current bounded assignments. Requested critical compute is recorded separately from unknown observed settings and cost. These are task-scoped workers, not persistent agents.
+
+## Hosted follow-through
+
+Implementation63791ac4d6628651fc53c3de79f7db4791b48114 passed all six CI checks and deployed as56c457f9-2c27-4f68-bd62-3eec6d1687f7. Migration12 committed at2026-09-14T23:54:57.971Z. The37-stage hosted exercise and28-stage zero-write post-restart revisit passed, preserving M63–M65 and three M66versions/twoPDFs/threeHTMLreports. The browser uploaded/downloaded fixtureA, saved version3 with an explicit discrepancy, created/downloaded its report and opened its print view. Exact values and limitations are in m66-hosted-verification.json. Board milestone feedback remains the next gate.
