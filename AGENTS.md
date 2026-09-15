@@ -4,6 +4,8 @@ The user is the board. The root coordinator acts as the CEO-facing agent and own
 
 ## Current mission
 
+The board's primary goal is **corporate Scope 1, 2 and 3 reporting under California SB 253**, supported by GHG Protocol accounting and preparation for independent external assurance. Apply this goal to every future milestone, AI/RAG preparation and evaluation, verifier role, UI, database and semantic-layer decision. Corporate inventory and assurance readiness take priority over industrial CARB MRR specialization. Read [the corporate reporting direction](docs/corporate-reporting-direction.md) for the cross-layer requirements. This is product direction, not a claim of complete coverage, legal compliance or accreditation.
+
 Build one Neuvetra greenhouse-gas research and accounting application for California and the United States. TerraScope branding is retired; FrontDesk is preserved and deferred. The checkpoint is `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). Current direction in [docs/roadmap-neuvetra-ghg.md](docs/roadmap-neuvetra-ghg.md) and [the strategy record](claude-memory/meetings/2026-09-08-neuvetra-ghg-focus.md) supersedes earlier multi-product/EU-first assumptions.
 
 Read the current [board report](operations/board-report.md), [task ledger](operations/status.json), relevant company notes and source evidence before changing code. Notes record intent and history; they are not proof of present law, source applicability or software correctness. Keep dated evidence, proposed work and demonstrated outcomes distinct.
@@ -11,6 +13,8 @@ Read the current [board report](operations/board-report.md), [task ledger](opera
 For session continuation, start with the leading current section of [operations/next-session.md](operations/next-session.md), then reconcile it with the latest board instruction and observed task activity. Earlier milestone sections are historical evidence, not current execution orders. Recheck dated runtime/source observations before execution. A queued task or saved note is not a running worker.
 
 ## Delegation and delivery
+
+- First actual MVP means reliable corporate Scope 1, 2 and 3 reports for supported California customers, with reconciled inventory coverage, applicable-requirements evidence and a traceable assurance package. Synthetic electricity milestones are interim increments. Follow the [MVP acceptance target](docs/corporate-reporting-direction.md#first-actual-mvp-acceptance-target); expose missing data and unsupported requirements instead of claiming completeness. EU/Canada expansion follows this MVP. External assurance remains an independent judgment, not an automatic stamp.
 
 - The CEO coordinator translates board direction into a bounded milestone, asks only material questions and reports completed work, decisions, bottlenecks and the next demonstration briefly.
 - Use the active rolling product PR as the single progressive delivery line. After a milestone meets its acceptance criteria, passes the relevant checks and independent review, commit and push it to that same PR branch before reporting the milestone complete. Do not create a new milestone branch or PR unless isolation is technically necessary or the board directs it; reconcile any temporary branch back into the rolling PR before starting dependent work. Verify the remote head and required PR checks before calling work published.

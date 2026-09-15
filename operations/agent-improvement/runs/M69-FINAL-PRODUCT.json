@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "M69-FINAL-PRODUCT",
+  "role": "qa-lead",
+  "execution_context": "/root/m69_product",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    { "path": "operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json", "sha256": "4c5797db24446c86aeb61f156b97a788337d8f8b8ecbb9995139572d0972188f" }
+  ],
+  "criteria": [
+    { "id": "AC-01", "status": "pass", "evidence": ["evaluations/research-qa/m69-final-product-accepted-v3.md"], "reason": "The final exact candidate, 36 pins, P1 question, U04/U05 claims, S03/S04 citations, dependencies and qualifications passed product review." },
+    { "id": "AC-02", "status": "pass", "evidence": ["evaluations/research-qa/m69-final-product-review.md", "evaluations/research-qa/m69-final-product-accepted-v3.md"], "reason": "The first review's factor-date substitution remained preserved; the final candidate replaced that question with the source-reviewed purchased-electricity-records question." },
+    { "id": "AC-03", "status": "pass", "evidence": ["evaluations/research-qa/m69-final-product-review.md", "evaluations/research-qa/m69-final-product-accepted-v3.md"], "reason": "The first review's false cloud retrieval metadata remained preserved; the final answer records local verified files, no search and provider-disabled fixture execution." },
+    { "id": "AC-04", "status": "not_applicable", "evidence": [], "reason": "Live provider accuracy, account admission and customer integration are outside this completed offline product-review assignment and remain separately unproved." }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": ["operations/m69-preflight/independent-review.json"],
+    "reviewed_artifacts": [
+      { "path": "operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json", "sha256": "4c5797db24446c86aeb61f156b97a788337d8f8b8ecbb9995139572d0972188f" }
+    ]
+  },
+  "outcome": { "status": "complete", "first_review": "fail", "material_findings_open": 0, "rework_cycles": 2, "escaped_defects": null, "repeated_findings": [] },
+  "compute": { "requested": { "model": "gpt-6-astra", "effort": "high" }, "observed": { "model": null, "effort": null }, "observation_evidence": [] },
+  "metrics": { "elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M69 bounded RAG readiness",
+  "lessons": ["L02", "L04"],
+  "notes": ["The first failed candidate and F1/F2 findings remain in m69-final-product-review.md; the intermediate product pass with open security findings remains in m69-final-product-recheck.md.", "The final product review passed the exact offline candidate and immutable snapshot after two material rework cycles. Live accuracy and account admission remain unproved. No paid request, source release or deployment occurred in this assignment."]
+}

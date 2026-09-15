@@ -1,0 +1,42 @@
+{
+  "status": "passed_bounded_layout",
+  "createdAt": "2026-09-15T00:51:58.526560+00:00",
+  "templateSha256": "7af3039e0a9b9e6a013013e1e274d805e685b500a6eb305079ef2c0f052e13ff",
+  "renderer": "Actual Chrome Page.printToPDF via supported browser CDP, CSS page size and print background",
+  "samples": [
+    {
+      "path": ".superpowers/m67-print-normal.html",
+      "sha256": "7c472b547715c3b5f802da103f1f6bc8fc140bca4174f29db72b849baea94fcd",
+      "bytes": 11509
+    },
+    {
+      "path": ".superpowers/m67-print-normal.pdf",
+      "sha256": "00611575ab96c4e562125c037c1e274cb5f17797c34fa784ccb9a291be55b646",
+      "bytes": 141019
+    },
+    {
+      "path": ".superpowers/m67-print-long.html",
+      "sha256": "43842f5d9a58b73bc6212417a56388607a3077e72465fae4e3281f535d1d1aea",
+      "bytes": 13140
+    },
+    {
+      "path": ".superpowers/m67-print-long.pdf",
+      "sha256": "533f1a5a5773045e84f8f93b3f3d9c7e4b9153c10a0bf7c19e4ac23159a85940",
+      "bytes": 141417
+    }
+  ],
+  "normalPages": 5,
+  "longPages": 5,
+  "all10PageRendersVisuallyInspected": true,
+  "observations": [
+    "All12 month rows fit together on page2 in both samples.",
+    "No overlapping or clipped text; long escaped labels/review/correction text readable.",
+    "Some definition labels split from values across page breaks; readable continuation, not missing data.",
+    "Draft/synthetic/incomplete/unreleased/no-assurance footer repeated on every page."
+  ],
+  "limits": [
+    "Local synthetic generated fixtures, not persisted cloud reports.",
+    "Browser native print dialog not observed; PDF rendering is separate evidence.",
+    "Browser/PDF bytes do not equal immutable HTML bytes."
+  ]
+}

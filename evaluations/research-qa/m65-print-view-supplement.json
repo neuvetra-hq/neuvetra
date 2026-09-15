@@ -1,0 +1,57 @@
+{
+  "profile": "neuvetra.m65.print-view-supplement.v1",
+  "finding": "M65-UI-F05",
+  "verdict": "provisional_pass_source_and_local_lifecycle_only",
+  "originalFailure": "Board confirmed no native print preview after root clicked live Print report; workspace remained busy until reload. Root observed no console error. QA did not operate the live browser.",
+  "reviewArrangement": "Reused prior M63 author/QA context; no M65 product authorship; actual inherited compute unknown",
+  "checks": {
+    "componentActionClosure": {
+      "tests": 7,
+      "assertions": 44,
+      "passed": true,
+      "method": "Actual component code before JSX return, transpiled with only test instrumentation and injected hook/browser boundaries; no React DOM or native popup renderer"
+    },
+    "verifiedDownloadDecoder": {
+      "tests": 5,
+      "assertions": 30,
+      "passed": true
+    }
+  },
+  "supersedesComponentBindings": [
+    "55acc9e11391b491d54042dbd904d8efab856e5749c73e1f52eb1b21feb5c6bf",
+    "0bef2ba906b89cd30725a700d08a0303166990984721838a83609cafbeaf1742"
+  ],
+  "artifacts": [
+    {
+      "path": "apps/site-web/src/components/WorksheetReports.tsx",
+      "canonicalLfSha256": "5229bb9ad5a81ae911201bc985825ecc234325562bf23579d9732b036374a8d8"
+    },
+    {
+      "path": "apps/site-web/src/lib/m65-api.ts",
+      "canonicalLfSha256": "bfdbf394cae49759f1117374730002f2bb36bd384227d59ce6599c4d99cfedd0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "canonicalLfSha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "canonicalLfSha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-view.test.ts",
+      "canonicalLfSha256": "413fd4e65e3fcfafbcb4998b3539653ac4f4ba1d821c658833d6189d548b177d"
+    },
+    {
+      "path": "evaluations/research-qa/m65-independent-frontend.test.ts",
+      "canonicalLfSha256": "02411a0eaaf9ad481f43033504a0443a667a5a760e1493f4b669107c9d39b5a1"
+    }
+  ],
+  "unchanged": "Template, migration, report contract/bytes and existing verified-download decoder remain unchanged; previous frozen receipts historical",
+  "pending": [
+    "Actual new image build and deployed exact revision",
+    "Actual live Open print view action without blocked/busy workspace",
+    "User-visible browser Print invocation from verified dedicated view",
+    "Final hosted handoff and board acceptance"
+  ]
+}

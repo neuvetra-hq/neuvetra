@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "id": "M69-PRODUCT",
+  "role": "cpo",
+  "execution_context": "/root/m69_product",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {"path": "evaluations/research-qa/m69-product-evaluation.md", "sha256": "6aa00ae019ab515189a0c0360bac3b3c2f47943141910beb721454b505516866"},
+    {"path": "evaluations/research-qa/m69-product-evaluation.test.ts", "sha256": "70a3849619ea0a82fa400b067d605b503db7b84d47ecfe9f2e863f39172be755"}
+  ],
+  "criteria": [
+    {"id": "AC-01", "status": "pass", "evidence": ["evaluations/research-qa/m69-product-evaluation.md"], "reason": null},
+    {"id": "AC-02", "status": "pending", "evidence": [], "reason": "Independent final QA of the exact compiled/live candidate and source binding remains required."}
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "pending", "material_findings_open": 0, "rework_cycles": null, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-5.6-sol", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M69 bounded RAG readiness",
+  "lessons": [],
+  "notes": ["Offline product evidence-map and refusal contract only; no provider request, credential, customer data, source release, deployment or paid authorization."]
+}

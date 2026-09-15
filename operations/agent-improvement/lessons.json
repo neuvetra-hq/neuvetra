@@ -15,9 +15,10 @@
       "id": "L02",
       "owner_role": "data-database",
       "trigger": "Persisted bytes, claimed hashes or archive/report metadata are read.",
-      "required_check": "Revalidate content and semantic lineage against authoritative inputs; test coordinated bytes/hash/length corruption, not just one changed field.",
+      "required_check": "Revalidate content and semantic lineage against authoritative inputs; test coordinated bytes/hash/length corruption, not just one changed field. Before publishing byte-pinned review artifacts, hash the exact staged Git blobs, then the committed blobs, and compare both with the accepted hashes. Filesystem-only validation is insufficient because Git may normalize line endings. Preserve approved bytes with explicit attributes where required.",
       "evidence": [
-        "operations/agent-improvement/historical-evidence.json#L02"
+        "operations/agent-improvement/historical-evidence.json#L02",
+        "evaluations/research-qa/m66-publication-supplement.md"
       ],
       "status": "adopted_pending_effectiveness"
     },
@@ -35,9 +36,11 @@
       "id": "L04",
       "owner_role": "software-engineering",
       "trigger": "Acceptance claims a writer, replay, permission or browser path works.",
-      "required_check": "Map each consequential criterion to a check that invokes the actual changed boundary; replay the exported record. Label mocked, partial or unrun checks accurately.",
+      "required_check": "Map each consequential criterion to a check that invokes the actual changed boundary; replay the exported record. Label mocked, partial or unrun checks accurately. For hosted browser acceptance, pass the real hosted responses through the actual frontend decoders and revisit the persisted workflow in a signed-in browser; an API-only journey does not satisfy this criterion. For print/export, verify the actual user entry point, exact exported bytes and print presentation separately; generating a PDF alone does not prove the application print flow works.",
       "evidence": [
-        "operations/agent-improvement/historical-evidence.json#L04"
+        "operations/agent-improvement/historical-evidence.json#L04",
+        "evaluations/research-qa/m63-browser-contract.md",
+        "operations/agent-improvement/m65-review.md"
       ],
       "status": "adopted_pending_effectiveness"
     },
@@ -55,9 +58,24 @@
       "id": "L06",
       "owner_role": "qa-lead",
       "trigger": "A repair changes one field in a multi-record evidence or lifecycle contract.",
-      "required_check": "Challenge missing fields, allowed values, cross-record agreement and triggering lifecycle together; final review includes composed behavior, not only the latest reported symptom.",
+      "required_check": "Challenge missing fields, allowed values, cross-record agreement and triggering lifecycle together. For additive version contracts, independently exercise each permitted single-field correction through persistence and the actual frontend decoder, including explanation-only, label-only and source-only successors. Compare the full effective-input tuple for no-op rejection; final review covers composed behavior.",
       "evidence": [
-        "operations/agent-improvement/historical-evidence.json#L06"
+        "operations/agent-improvement/historical-evidence.json#L06",
+        "evaluations/research-qa/m66-local-review.md",
+        "evaluations/research-qa/m66-independent-frontend.test.ts",
+        ".github/workflows/verify.yml"
+      ],
+      "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L07",
+      "owner_role": "data-database",
+      "trigger": "Exact decimal calculations or structured JSON parameters cross the production database driver.",
+      "required_check": "Persist independently derived boundary and half-even tie cases through the actual PostgreSQL driver, read them back through the API/frontend decoder, and run that regression in CI. Embedded database or in-memory arithmetic passes cannot substitute for the native driver boundary.",
+      "evidence": [
+        "docs/research/m64-accounting-implementation-review.md",
+        "evaluations/research-qa/milestone64-private-worksheet.md",
+        ".github/workflows/verify.yml"
       ],
       "status": "adopted_pending_effectiveness"
     }

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "m69_board_decision",
+  "disposition": "pass",
+  "authority": "board",
+  "recorded_at": "2026-09-15T03:17:38.518Z",
+  "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+  "executable_sha256": "aa66fc95bfa373e2716bbecaa1f44bfff88685729cc0770c1a102dae73daf126",
+  "question_sha256": "3d07f2af45ca8e0b538f8b8678747c95f3b38d5ab076d6638f3bf417bbb15cd4",
+  "scope": "One public synthetic electricity-record question through the existing OpenRouter-to-Anthropic route using only approved EPA S01-S18 evidence.",
+  "maximum_stages": 5,
+  "retry": false,
+  "carry": false,
+  "one_use": true,
+  "reservation_nano_usd": 3948410000,
+  "source_mode": "verified_local_corpus_no_cloud_index",
+  "customer_data": false,
+  "internal_estimate_not_provider_cap_acknowledged": true,
+  "excluded": ["M50 authorization reuse", "customer data", "source expansion", "subscription", "deployment", "publication", "release", "PR merge"]
+}

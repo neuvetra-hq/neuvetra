@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kind": "m69_independent_review",
+  "disposition": "pass",
+  "recorded_at": "2026-09-15T03:41:10.5018114Z",
+  "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+  "executable_sha256": "aa66fc95bfa373e2716bbecaa1f44bfff88685729cc0770c1a102dae73daf126",
+  "reservation_nano_usd": 3948410000,
+  "pins_verified": 36,
+  "product": {
+    "disposition": "pass",
+    "path": "evaluations/research-qa/m69-final-product-accepted-v3.md",
+    "sha256": "3a3e709b5406d67ee1bb4863626ccbdd77069c429ca6d30a651de7cdc53c63e9",
+    "snapshot_path": "operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json",
+    "snapshot_sha256": "4c5797db24446c86aeb61f156b97a788337d8f8b8ecbb9995139572d0972188f"
+  },
+  "security": {
+    "disposition": "pass",
+    "path": "evaluations/research-qa/m69-security-final-accepted.md",
+    "sha256": "901453017f7321b9de4985063e91126abf6b16c550ab62c1fe23fd663ae9e083"
+  },
+  "focused_test_result": {
+    "tests_passed": 33,
+    "tests_failed": 0,
+    "assertions": 218
+  },
+  "scope": "offline candidate integrity, bounded execution, closure validation, exact P1 product answer and citation provenance",
+  "live_provider_accuracy": "unproven",
+  "account_gate": "blocked",
+  "provider_requests": 0,
+  "paid_cost_nano_usd": 0
+}

@@ -1,0 +1,39 @@
+{
+  "status": "normal_layout_visually_checked",
+  "checked_at": "2026-09-15T03:17:40.843102+00:00",
+  "scope": "Local synthetic renderer sample with selected M67 annual values and two January documents; not a persisted M68 report or hosted browser acceptance.",
+  "template_sha256": "69bbb2738c0abf8893bb8636640408b41cd5cab4d91ec3b1ef6ead7013c13604",
+  "renderer": "Actual Chrome Page.printToPDF, printBackground=true, preferCSSPageSize=true; PDFium PNG rendering at 1.3x for visual inspection.",
+  "pages": 6,
+  "inspected_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "observations": [
+    "All twelve month rows together on page 2.",
+    "No observed clipping, text overlap or footer collision.",
+    "Draft/synthetic/incomplete/unreleased/no-assurance qualification repeats in reserved print margins.",
+    "Document metadata spans pages and one correction-reason label/value pair crosses pages5/6; content remains readable."
+  ],
+  "limitations": [
+    "Native Ctrl+P did not visibly open print preview through the extension.",
+    "Long-note sample generated, but its requested download was not observed on disk before tool-session refresh; long-note PDF pages have not been visually checked.",
+    "Generated PDF bytes differ from authoritative HTML report bytes and do not establish hosted persistence."
+  ],
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m68-print-normal.pdf",
+      "sha256": "c02752d23be999b3daecd20efa201f32288179c71c5c9b5aca949a15f2cd1c2a",
+      "bytes": 127690
+    },
+    {
+      "path": "evaluations/research-qa/m68-print-normal.html",
+      "sha256": "3f94b62c6882d6b2f002ac84cbe04af5b674d69c71adc62de3beaa0f575eb45f",
+      "bytes": 11405
+    }
+  ]
+}

@@ -1,0 +1,416 @@
+{
+  "status": "passed_hosted_checks_board_feedback_pending",
+  "implementationCommit": "0435474372e9d0badaab6d44d7ccb1d53f61e564",
+  "deploymentId": "c6543a80-ebb3-442a-9d7b-4e285d3a564b",
+  "schemaVersion": 13,
+  "migrationSha256": "6ff7c3d21766d5e07a9f922ea92a0c59e7f34a685104d640d09dccf9872eb763",
+  "allSixCiChecks": "passed",
+  "observedAt": "2026-09-15T01:20:04.286Z",
+  "applicationPostRequests": 8,
+  "stages": [
+    {
+      "name": "readiness",
+      "status": 200
+    },
+    {
+      "name": "original_worksheet",
+      "status": 200
+    },
+    {
+      "name": "original_report_list",
+      "status": 200
+    },
+    {
+      "name": "original_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "original_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "original_m63_report",
+      "status": 200
+    },
+    {
+      "name": "original_m63_review",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_worksheet",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_sources",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_source_bytes",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_source_bytes",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_reports",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "preserved_m66_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "signed_out_annual",
+      "status": 401
+    },
+    {
+      "name": "outsider_annual",
+      "status": 403
+    },
+    {
+      "name": "annual_worksheet",
+      "status": 200
+    },
+    {
+      "name": "member_annual_save_refused",
+      "status": 403
+    },
+    {
+      "name": "all_missing_refused",
+      "status": 422
+    },
+    {
+      "name": "save_partial_year",
+      "status": 201
+    },
+    {
+      "name": "retry_partial_year",
+      "status": 201
+    },
+    {
+      "name": "review_partial_year",
+      "status": 201
+    },
+    {
+      "name": "capture_partial_year",
+      "status": 201
+    },
+    {
+      "name": "complete_year",
+      "status": 201
+    },
+    {
+      "name": "capture_full_year",
+      "status": 201
+    },
+    {
+      "name": "member_annual_read",
+      "status": 200
+    },
+    {
+      "name": "annual_report_list",
+      "status": 200
+    },
+    {
+      "name": "annual_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "outsider_annual_report_bytes",
+      "status": 403
+    },
+    {
+      "name": "annual_report_bytes",
+      "status": 200
+    },
+    {
+      "name": "outsider_annual_report_bytes",
+      "status": 403
+    },
+    {
+      "name": "logout_manager1",
+      "status": 204
+    },
+    {
+      "name": "logout_manager2",
+      "status": 204
+    },
+    {
+      "name": "logout_member",
+      "status": 204
+    },
+    {
+      "name": "logout_outsider",
+      "status": 204
+    }
+  ],
+  "allCreatedAuthSessionsClosed": true,
+  "preservedM63M64M65M66": true,
+  "versions": [
+    {
+      "id": "30459a7a-9b71-4f9e-bdb8-06f3cca86911",
+      "version": 1,
+      "createdAt": "2026-09-15T01:19:29.389Z",
+      "inputSha256": "b80046c2bc06b41ca5ed561dc4850bd3681c75d4d3ac06a449dade433072bc3c",
+      "resultSha256": "d9e6ac7a78f816bdf56aa9f39a0b5f53ff029924b261b23c1fd8c628173e5697",
+      "quantityKwh": "25000.000",
+      "total": {
+        "unit": "kg CO2e",
+        "display": "4876.0072",
+        "rounding": "half_even_4dp",
+        "unrounded": "4876.00722"
+      },
+      "coverage": {
+        "knownMonths": 1,
+        "missingMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "electricityComplete": false
+      }
+    },
+    {
+      "id": "f7aea98b-5cbe-4768-ba74-69f802cf06f4",
+      "version": 2,
+      "createdAt": "2026-09-15T01:19:45.378Z",
+      "inputSha256": "64ab34e02848f96a13beb662afdfc371718a3d52d0fa3f99090abdc61f3dcd29",
+      "resultSha256": "9ffd398b5aad2823a6fd50cf9b1cf4bba7144ad782f4749de535002d81f1f379",
+      "quantityKwh": "300000.000",
+      "total": {
+        "unit": "kg CO2e",
+        "display": "58512.0866",
+        "rounding": "half_even_4dp",
+        "unrounded": "58512.08664"
+      },
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    }
+  ],
+  "reports": [
+    {
+      "id": "442a2ce4-c58f-437a-b7b5-389035829b00",
+      "sourceVersion": 1,
+      "reportSha256": "7f677a760e362b8d92fa883b345d210b36d80f8f2fbb00e253d32473d5941d77",
+      "reportByteLength": 11923,
+      "reviewState": "accepted_bounded_internal_draft",
+      "templateSha256": "7af3039e0a9b9e6a013013e1e274d805e685b500a6eb305079ef2c0f052e13ff"
+    },
+    {
+      "id": "72fe9b1d-7eb3-4bae-96a2-6ce52865dbc1",
+      "sourceVersion": 2,
+      "reportSha256": "69f54e9a27af9e19b8a6f3c9257eb90fcf8b643ec8dbe9cbce88f4b4494a17f7",
+      "reportByteLength": 11571,
+      "reviewState": "unreviewed",
+      "templateSha256": "7af3039e0a9b9e6a013013e1e274d805e685b500a6eb305079ef2c0f052e13ff"
+    }
+  ],
+  "limitations": [
+    "Synthetic manual entries with no linked bills",
+    "Electricity coverage only; company inventory incomplete",
+    "Unreleased candidate method and factor; no assurance",
+    "Native print dialog not verified",
+    "No PR merge or new subscription"
+  ],
+  "repairedCommit": "dd1a09f00901f562ce1c7966b53326c8ee21bc98",
+  "repairedDeploymentId": "3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938",
+  "repairedCiChecksPassed": 6,
+  "browser": {
+    "observedAt": "2026-09-15T01:38:43.820133+00:00",
+    "originalFinding": "M67-UI-F01 / QA M67-AUTH-F01 preserved; repeated correction reset before repair.",
+    "repairResult": "Correction form remained open across multiple browser interactions and sign-in rechecks; two corrections saved. No provider event trace or native React instrumentation claimed.",
+    "partialVersion": {
+      "version": 3,
+      "id": "359f060c-02f6-405a-8177-4cbd3e8f4b91",
+      "quantityKwh": "275000.000",
+      "displayKgCo2e": "53636.0794",
+      "knownMonths": 11,
+      "missingMonths": [
+        "2023-12"
+      ]
+    },
+    "fullVersion": {
+      "version": 4,
+      "id": "712a9b9e-2f9c-4949-99b3-e694c65ac2fc",
+      "createdAt": "2026-09-15T01:35:54.689Z",
+      "quantityKwh": "301000.000",
+      "exactKgCo2e": "58707.1269288",
+      "displayKgCo2e": "58707.1269",
+      "knownMonths": 12,
+      "inputSha256": "054cd3c4fff115e3fdae6f8a723f9edec967fa43d6601e8fcb3ab248aafa80e2",
+      "resultSha256": "b7cf8e4544582190f50b49ef5de6b4f6690a78ee401657cd5e8667601bbc370b",
+      "review": "unreviewed"
+    },
+    "report": {
+      "id": "7a397d67-fff9-46c5-b47e-745ea98847c4",
+      "bytes": 11593,
+      "downloadSha256": "605bcec72c1b4ce2bdc169d2a561a87ecfd2a11cec8d1de423f56625e072a2b9",
+      "createdAt": "2026-09-15T01:36:09.089Z",
+      "iframeVerified": true,
+      "allTwelveRowsVerified": true,
+      "printTabTitleObserved": "Synthetic annual electricity worksheet report — Synthetic Cedar Ltd",
+      "nativePrintDialogObserved": false
+    },
+    "automationLimits": [
+      "Empty-string fill did not clear the controlled field; Ctrl+A and Backspace succeeded and visible Not entered was verified before saving.",
+      "One version4 visibility wait timed out although the next DOM snapshot showed the correctly saved version; no duplicate save was issued.",
+      "No viewport override used during this final live test."
+    ]
+  },
+  "historicalFirstBrowserAttempt": "M67-UI-F01: twice opening corrections reset the signed-in workspace; no browser correction saved. CTO repair and independent review pending.",
+  "historicalFirstBrowserAttemptNote": "Superseded by repaired browser section; use M67-AUTH-F01 for this auth defect, avoiding the earlier encoding finding label.",
+  "restart": {
+    "deploymentId": "3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938",
+    "explicitRestart": true,
+    "readbackAt": "2026-09-15T01:39:31.826Z",
+    "status": "passed",
+    "applicationPostRequests": 0,
+    "allCreatedAuthSessionsClosed": true,
+    "stages": [
+      {
+        "name": "readiness",
+        "status": 200
+      },
+      {
+        "name": "original_worksheet",
+        "status": 200
+      },
+      {
+        "name": "original_report_list",
+        "status": 200
+      },
+      {
+        "name": "original_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "original_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "original_m63_report",
+        "status": 200
+      },
+      {
+        "name": "original_m63_review",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_worksheet",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_sources",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_source_bytes",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_source_bytes",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_reports",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "preserved_m66_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "signed_out_annual",
+        "status": 401
+      },
+      {
+        "name": "outsider_annual",
+        "status": 403
+      },
+      {
+        "name": "annual_worksheet",
+        "status": 200
+      },
+      {
+        "name": "member_annual_read",
+        "status": 200
+      },
+      {
+        "name": "annual_report_list",
+        "status": 200
+      },
+      {
+        "name": "annual_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "outsider_annual_report_bytes",
+        "status": 403
+      },
+      {
+        "name": "annual_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "outsider_annual_report_bytes",
+        "status": 403
+      },
+      {
+        "name": "annual_report_bytes",
+        "status": 200
+      },
+      {
+        "name": "outsider_annual_report_bytes",
+        "status": 403
+      },
+      {
+        "name": "logout_manager1",
+        "status": 204
+      },
+      {
+        "name": "logout_manager2",
+        "status": 204
+      },
+      {
+        "name": "logout_member",
+        "status": 204
+      },
+      {
+        "name": "logout_outsider",
+        "status": 204
+      }
+    ],
+    "annualVersions": 4,
+    "annualReports": 3,
+    "preservedM63M64M65M66": true,
+    "downloadBytesMatchAuthenticatedStoredReport": true
+  }
+}

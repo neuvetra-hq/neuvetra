@@ -1,0 +1,31 @@
+{
+  "finding": "M65-QA-F03",
+  "status": "actual original Chrome print overlaps independently confirmed on pages1and2",
+  "artifacts": [
+    {
+      "path": ".superpowers/m65-browser-print.pdf",
+      "sha256": "330bc5ca9e691d58a3d6def2018ef8a7b6234ce9e13d55ca62c3c7a704df78a9",
+      "bytes": 108028
+    },
+    {
+      "path": ".superpowers/m65-print-1.png",
+      "sha256": "70e9a6ee37c0f3088447652bf37392fca6b7a2059fdb3b26f985d967ceab35e3",
+      "bytes": 98851
+    },
+    {
+      "path": ".superpowers/m65-print-2.png",
+      "sha256": "4e0d95e1b0c23a41d5b6199e2c21629af44bb5741b6a9e23464a19083d7d16c2",
+      "bytes": 116900
+    },
+    {
+      "path": ".superpowers/m65-print-3.png",
+      "sha256": "367e711e11bedbd5fea2e91934e5f9513f12d6059b9c2c589091b4e2c7cd5786",
+      "bytes": 149641
+    },
+    {
+      "path": ".superpowers/m65-print-4.png",
+      "sha256": "e03a60e9adf3521a101b3f3c2ff29449cd4b43110d2ab374c4dba86f25099f82",
+      "bytes": 97928
+    }
+  ]
+}

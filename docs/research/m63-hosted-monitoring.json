@@ -1,0 +1,200 @@
+{
+  "observedAt": "2026-09-14T19:31:40.3822730Z",
+  "deployment": "77f75a77-4e79-4949-b71b-b39f72b5e978",
+  "readinessStatus": 200,
+  "requestEvents": [
+    {
+      "timestamp": "2026-09-14T19:28:41.494659506Z",
+      "event": "request",
+      "route": "ready",
+      "status": 200,
+      "durationMs": 1786,
+      "requestId": "52a89759-97a0-48be-b8d3-7d5561f586e2"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:41.494666401Z",
+      "event": "request",
+      "route": "config",
+      "status": 200,
+      "durationMs": 1290,
+      "requestId": "c0bf037d-b651-44e1-a84f-4e1da89beddf"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:43.423320731Z",
+      "event": "request",
+      "route": "session",
+      "status": 200,
+      "durationMs": 3141,
+      "requestId": "f04c9196-b760-4baa-b915-e619c5058fe5"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:46.428075382Z",
+      "event": "request",
+      "route": "session",
+      "status": 200,
+      "durationMs": 3154,
+      "requestId": "11af5d1a-aff3-4a1b-8466-3f67dcbbf0d5"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:49.587064095Z",
+      "event": "request",
+      "route": "session",
+      "status": 200,
+      "durationMs": 3167,
+      "requestId": "aae676c4-bc3a-4fe8-909f-fc4b0eac5933"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:52.715269558Z",
+      "event": "request",
+      "route": "session",
+      "status": 403,
+      "durationMs": 3037,
+      "requestId": "4f9194bb-a775-442f-b4da-74bed3fbfb56"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:54.413350821Z",
+      "event": "request",
+      "route": "session",
+      "status": 401,
+      "durationMs": 1286,
+      "requestId": "0bf8913a-27a0-4502-9306-8e82e0d098cb"
+    },
+    {
+      "timestamp": "2026-09-14T19:28:57.473541044Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 3158,
+      "requestId": "e2f16e87-970f-4fcc-8915-76283ffe012b"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:00.533488818Z",
+      "event": "request",
+      "route": "session",
+      "status": 200,
+      "durationMs": 2936,
+      "requestId": "1eeb9859-4713-453e-8452-987377051dff"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:03.852955480Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 3369,
+      "requestId": "6e6bcfe5-75bf-4474-a854-6f95b05f8bee"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:07.014096363Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 3059,
+      "requestId": "f07bb596-9512-489e-abdd-09acc1142703"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:10.568607243Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 3284,
+      "requestId": "5d45b31b-7e12-417c-bb12-14c1278a90bb"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:13.598300606Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 2885,
+      "requestId": "262ae38c-69c2-43b2-a992-dedfaf4394f6"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:16.804579148Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 3331,
+      "requestId": "7c3970ab-b2df-4aee-a5ea-9cdd413a2d8d"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:19.823315222Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 2852,
+      "requestId": "e101b2dd-7325-49b0-b3ef-f26989a812d9"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:24.862469690Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 4789,
+      "requestId": "fdcf58a5-52bb-4278-b90e-739056aa6b85"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:30.152511175Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 4698,
+      "requestId": "a9d2dde2-0f39-4c9d-aaca-ede0e4f4c572"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:35.419534347Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 5413,
+      "requestId": "98a81d8e-9fdb-468b-8998-56a091fff1b6"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:40.147435558Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 200,
+      "durationMs": 5119,
+      "requestId": "84104b1f-3c16-4459-ae56-ce881852b2f7"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:42.137480255Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 403,
+      "durationMs": 1743,
+      "requestId": "6af871dc-d96a-41a5-a09f-8197972eb7ab"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:44.092888762Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 403,
+      "durationMs": 1822,
+      "requestId": "5538d400-ec39-4228-81bd-1b1823f828d3"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:45.315333368Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 401,
+      "durationMs": 1296,
+      "requestId": "d4eee11c-4cb3-4a3d-9c1f-95db8990cbcc"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:47.272546198Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 401,
+      "durationMs": 1289,
+      "requestId": "f5be1dea-d40a-474c-b638-acff0e5d27ee"
+    },
+    {
+      "timestamp": "2026-09-14T19:29:50.324537009Z",
+      "event": "request",
+      "route": "workspace",
+      "status": 404,
+      "durationMs": 3011,
+      "requestId": "044c8f8b-5bb8-4307-8f82-a8b6f41dff0d"
+    }
+  ],
+  "scope": "observed health and sanitized request logs; no proactive alert drill"
+}

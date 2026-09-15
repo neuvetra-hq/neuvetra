@@ -1,0 +1,308 @@
+{
+  "observedAt": "2026-09-15T00:48:50.821Z",
+  "scope": "Executed pure report renderer against independently derived case inputs in three captured review states. No database, native browser or print-layout execution.",
+  "templateSha256": "7af3039e0a9b9e6a013013e1e274d805e685b500a6eb305079ef2c0f052e13ff",
+  "checks": [
+    {
+      "case": "january_25000_partial",
+      "state": "unreviewed",
+      "knownMonths": 1,
+      "subtotal": "4876.0072",
+      "sha256": "181adfa996677317857290f2df0cf66dd915ffec22133c8ff7f5a8552f1f28c7",
+      "bytes": 11593
+    },
+    {
+      "case": "january_25000_partial",
+      "state": "accepted",
+      "knownMonths": 1,
+      "subtotal": "4876.0072",
+      "sha256": "86bea884224569567738bf4442f4b7bd121e31cdbe6c8114e1a6aecfd1f3ece8",
+      "bytes": 11915
+    },
+    {
+      "case": "january_25000_partial",
+      "state": "changes_requested",
+      "knownMonths": 1,
+      "subtotal": "4876.0072",
+      "sha256": "7adbb06d4bd7dc3215150edb64c222becb84058811c2304e54591e06e48059e7",
+      "bytes": 11698
+    },
+    {
+      "case": "january_25000_remaining_zero",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "4876.0072",
+      "sha256": "0c914baccc6164138e214ed5a261af25885513e3b0225457dde281048079ab90",
+      "bytes": 11365
+    },
+    {
+      "case": "january_25000_remaining_zero",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "4876.0072",
+      "sha256": "99e48e51afb14d574db97953a936b43ccd9994245bb7a055c58440228a5a7436",
+      "bytes": 11687
+    },
+    {
+      "case": "january_25000_remaining_zero",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "4876.0072",
+      "sha256": "d5a40a46212c9c3e87d40b8be6790de33effd0e531d4cf836fcf79f0666c7ffe",
+      "bytes": 11470
+    },
+    {
+      "case": "twelve_25000",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "58512.0866",
+      "sha256": "0453bac47146c38540f2d320442aca250a53527d1cffcfa4ce8fd21beff7df06",
+      "bytes": 11501
+    },
+    {
+      "case": "twelve_25000",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "58512.0866",
+      "sha256": "18899f9e9ced03ab8bbf85bf0c95199c6d55561151982a9146dfb8f2de55b811",
+      "bytes": 11823
+    },
+    {
+      "case": "twelve_25000",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "58512.0866",
+      "sha256": "6457ff8e00392c94d154bb97789cc2e8bab79fba6e59d262ab01f78ba1629bd8",
+      "bytes": 11606
+    },
+    {
+      "case": "all_zero",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "0.0000",
+      "sha256": "3fdc63694f1735546bb8d0899e2ab78b270774dbb8d75de5eea5bd5c60d9e215",
+      "bytes": 11336
+    },
+    {
+      "case": "all_zero",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "0.0000",
+      "sha256": "02bc5ea8e8b3c5d0ecd8c8df069aaae814e268978db18a82e5915506da7b42d2",
+      "bytes": 11658
+    },
+    {
+      "case": "all_zero",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "0.0000",
+      "sha256": "24943768fe06d1ce665005a5b6c1b351434e9f32934197b8d849d3bfa1a14d6c",
+      "bytes": 11441
+    },
+    {
+      "case": "one_zero_remaining_missing",
+      "state": "unreviewed",
+      "knownMonths": 1,
+      "subtotal": "0.0000",
+      "sha256": "14fa1408c0cc3cd719fdc9f11d6acb1b1b82296b94fd2e764e468d2548c9f50c",
+      "bytes": 11564
+    },
+    {
+      "case": "one_zero_remaining_missing",
+      "state": "accepted",
+      "knownMonths": 1,
+      "subtotal": "0.0000",
+      "sha256": "eb276771d41b7b6953f8ced116f0635eb4e05c524fdcf19cecfaf61f7cc83ea5",
+      "bytes": 11886
+    },
+    {
+      "case": "one_zero_remaining_missing",
+      "state": "changes_requested",
+      "knownMonths": 1,
+      "subtotal": "0.0000",
+      "sha256": "e5562f179181b7cd4ba44239feef091e71a22727c1aed0f580bb80c59010223e",
+      "bytes": 11669
+    },
+    {
+      "case": "twelve_one",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "2.3405",
+      "sha256": "adb47876222a031eb55ff495ff9f651c603f9110d96bf43fc9e3b75d3a1cc6ba",
+      "bytes": 11420
+    },
+    {
+      "case": "twelve_one",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "2.3405",
+      "sha256": "5b835c1681783ac9d26099957699b6cb2381f769263b4156c13c667c48dd1a67",
+      "bytes": 11742
+    },
+    {
+      "case": "twelve_one",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "2.3405",
+      "sha256": "4c57a4f283e9e039a42fcad4c8e9ec1694d0f0f3f28b1c44546a6b56049035ad",
+      "bytes": 11525
+    },
+    {
+      "case": "twelve_minimum",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "0.0023",
+      "sha256": "8baaaba917eb76687434020fa64ca4890154d1186b18541da1a0ea21946210ca",
+      "bytes": 11458
+    },
+    {
+      "case": "twelve_minimum",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "0.0023",
+      "sha256": "9a84ea1621c15cb10b314f109e0a708d7939131f15ffe323a18371944071fbb8",
+      "bytes": 11780
+    },
+    {
+      "case": "twelve_minimum",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "0.0023",
+      "sha256": "5528066ad1960687fe4e69420a57b1163031f6fa1da4dbd3d7b5caaa2d92a8d1",
+      "bytes": 11563
+    },
+    {
+      "case": "aggregate_even_tie",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "12190.0180",
+      "sha256": "0c3fc61cc675c60c8e4826e6fa47e70806af534a93b65f0091545d4ce7c882b8",
+      "bytes": 11386
+    },
+    {
+      "case": "aggregate_even_tie",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "12190.0180",
+      "sha256": "6684ca8f4a1be1fa2ace2fb5ca22d836b1f5abc3e0364e6c4da8a62a047a3cd3",
+      "bytes": 11708
+    },
+    {
+      "case": "aggregate_even_tie",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "12190.0180",
+      "sha256": "626335ddbeabf895f1ac23a70c644d2d780e9c7c7dd01f05a14ed50304b1d3c2",
+      "bytes": 11491
+    },
+    {
+      "case": "aggregate_odd_tie",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "36570.0542",
+      "sha256": "d1df7af0b43894057837f1240fd388ab0815deaf50845a8d901566a185645a16",
+      "bytes": 11390
+    },
+    {
+      "case": "aggregate_odd_tie",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "36570.0542",
+      "sha256": "205033168d0d7e37053af33ebbcf9ac7ae327beac614749bb72711de076a4b22",
+      "bytes": 11712
+    },
+    {
+      "case": "aggregate_odd_tie",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "36570.0542",
+      "sha256": "cb9e3beb396c6c612f733b0b67042ae57a49570b352fcc7b0486e0fb23ad0720",
+      "bytes": 11495
+    },
+    {
+      "case": "twelve_maximum",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "2340483.4656",
+      "sha256": "d8f2ce82a6e3b72fbe2057c33132f211175f1d19aac368e450c951b683881a0c",
+      "bytes": 11592
+    },
+    {
+      "case": "twelve_maximum",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "2340483.4656",
+      "sha256": "fa0b7688aea7502bef8d17c82080475a998ecaf3b2a0a2fec07a0f4facb71b68",
+      "bytes": 11914
+    },
+    {
+      "case": "twelve_maximum",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "2340483.4656",
+      "sha256": "979b23977b9abc2482de04f21436144678a38c7e90c516c8f6f23e9ba3cab7ae",
+      "bytes": 11697
+    },
+    {
+      "case": "twelve_below_maximum",
+      "state": "unreviewed",
+      "knownMonths": 12,
+      "subtotal": "2340483.4633",
+      "sha256": "63a11154892782e8d6b6d66d4b77edbb8d30696825e6f38242ce6880c9d7f236",
+      "bytes": 11685
+    },
+    {
+      "case": "twelve_below_maximum",
+      "state": "accepted",
+      "knownMonths": 12,
+      "subtotal": "2340483.4633",
+      "sha256": "349cfe4e0ade31df2306299803e667e3737f4adee845054fff1bb5f98118cd9c",
+      "bytes": 12007
+    },
+    {
+      "case": "twelve_below_maximum",
+      "state": "changes_requested",
+      "knownMonths": 12,
+      "subtotal": "2340483.4633",
+      "sha256": "dc5ccb1d1795e7425f3f4353d901d3276a9067eed8bf00b4777f1e2fb1d106c4",
+      "bytes": 11790
+    },
+    {
+      "case": "mixed_partial",
+      "state": "unreviewed",
+      "knownMonths": 3,
+      "subtotal": "2408.1445",
+      "sha256": "25250a550f64c55ab8984398d1608743fe34f9a0003b503dd6ea2f22b601c536",
+      "bytes": 11553
+    },
+    {
+      "case": "mixed_partial",
+      "state": "accepted",
+      "knownMonths": 3,
+      "subtotal": "2408.1445",
+      "sha256": "16461e07c5acab8368c15d1f6129404ec56c68e52de7b277e9184614b1851970",
+      "bytes": 11875
+    },
+    {
+      "case": "mixed_partial",
+      "state": "changes_requested",
+      "knownMonths": 3,
+      "subtotal": "2408.1445",
+      "sha256": "557d7e795cd73b9260d1ee66a312db257bc95d415ef35696491a821c6742d1e9",
+      "bytes": 11658
+    }
+  ],
+  "sha256": {
+    "docs/research/m67-accounting-contract.md": "299405d311f009aaebd8dffa8e213d74511297236f426c550f87cf3fd484b2f1",
+    "evaluations/research-qa/m67-accounting-cases.json": "06ab494cc6cba1cbfbc5808517f990743ceb33e2531611d50fab5d9b5224956c",
+    "packages/neuvetra-database/src/m67-contract.ts": "359fd19312980632339e0c57e6e0ce42fb283648508804908d3370a00a4de9e3",
+    "packages/neuvetra-database/src/m67.ts": "68c4b4687de3401161b206a016b92d045f3c1240577523b4a962d830f3ddfd71",
+    "packages/neuvetra-database/src/m67-report.ts": "d40ae347acbaaf8e65a357a84103e68ef3ca5f5d54a961b4510c45e7af75b087",
+    "packages/neuvetra-database/src/m67-template.ts": "18a2e1650223d83b9525339137125ff9f614e2574835bb94a4178f9e296ac807",
+    "apps/site-web/src/components/AnnualElectricityWorksheet.tsx": "5a28ee829258cff878aa611ab664824ab1ff73473c75146e9ebf1bf992326ddc",
+    "apps/site-web/src/components/AnnualWorksheetReports.tsx": "b652d485ee8fa3991aad62090b218667eaef1c56a8c2d3baf50f3627261822eb",
+    "apps/site-web/src/lib/m67-api.ts": "6718402c1013a6ebc2adee34d02a4a671f29f29e81d003c8e685508ed893dde2",
+    "apps/site-web/src/lib/m67-report-api.ts": "339c34280707c66257a40e18717bbe27ecf008ace9c527e8a2fb627879043e44",
+    "evaluations/research-qa/m67-accounting-report-check.ts": "7b8d01eaaf471d61ea174cdc99dd2ebc53ed6b961086bdd9e3a4ebe9f615ce0a"
+  }
+}

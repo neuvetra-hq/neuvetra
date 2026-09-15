@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "task_id": "M64-ACCOUNTING",
+  "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
+  "scope": "Exact published LF Git blob hashes. CTO domain implementation includes the later independently reviewed root-authored contract extraction; attribution preserved in extraction review. QA scope is local integration and packaging reviews; hosted handoff has separate evidence.",
+  "files": [
+    {
+      "path": "docs/research/m64-accounting-contract.md",
+      "sha256": "168b89553fa980bf4e590b646576a103334e277c305146a4bd04a77b959b9030"
+    },
+    {
+      "path": "evaluations/research-qa/m64-accounting-cases.json",
+      "sha256": "4976c3fbf79433e5a11e62669423a95dbdfcb799316f170c59f2543a88d6b9e8"
+    },
+    {
+      "path": "docs/research/m64-accounting-implementation-review.md",
+      "sha256": "a844612d3dea23b12854b6f7e23da6cc7101af20f7d1c85fac85b19979474cef"
+    }
+  ]
+}

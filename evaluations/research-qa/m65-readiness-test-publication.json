@@ -1,0 +1,16 @@
+{
+  "status": "pass_targeted_readiness_test_update",
+  "reviewer": "root",
+  "author": "/root/m64_cto",
+  "scope": "Root independently inspected exact diff: readiness and migration count expectations advance from10 to11, matching reviewed manifest/server. No assertion removal or changed authorization outcome. These two files were omitted from initial publication allowlist, which was derived from the32-artifact QA manifest. Application implementation unchanged.",
+  "artifacts": [
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "4ce78844213d826bad8287422d8f62fc5b780bb6ec84c1f8d7467e7a49317cc4"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "b36c79ec7604bb78ff2e6e9b2f53dd4216acb11640e40ee56f8d972c6bb66dee"
+    }
+  ]
+}

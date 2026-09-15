@@ -1,0 +1,533 @@
+{
+  "status": "passed",
+  "scope": "actual local pg_dump/pg_restore plus exact table/metadata hashes and restricted runtime source-to-report reads; not cloud/provider Auth/off-device recovery",
+  "sourceDatabase": "m66_qa",
+  "restoredDatabase": "m66_qa_restore",
+  "schemaVersion": 12,
+  "tables": 48,
+  "records": 1488,
+  "allTableHashesIdentical": true,
+  "allFourMetadataGroupsIdentical": true,
+  "sourceWorksheetCompanies": 6,
+  "sourceWorksheetVersions": 43,
+  "sourceFilesVerified": 12,
+  "sourceReportsVerified": 39,
+  "manifests": [
+    {
+      "tables": [
+        {
+          "name": "annual_inventory_audit_log",
+          "count": 67,
+          "sha256": "61c1d414641dea4ba8f524a55e749d2d46ff5109d9e80147170d82b50585e742"
+        },
+        {
+          "name": "annual_inventory_review_decisions",
+          "count": 16,
+          "sha256": "a740ef16c7fd613df68b959c687daad847bf3ffa498823120df3dc40197b8ad4"
+        },
+        {
+          "name": "annual_inventory_versions",
+          "count": 17,
+          "sha256": "c9347ceb8f0c3aa5a54428fbbdcfc3874d3f73de1c261469ae690c6a098e879e"
+        },
+        {
+          "name": "annual_source_register_versions",
+          "count": 34,
+          "sha256": "0cdc702e31c2f13c9df9ef3a6b5c0ee149f9093667015ac5666acd1b2a744587"
+        },
+        {
+          "name": "audit_events",
+          "count": 54,
+          "sha256": "0d99ba62bd7224b1ee1a15513c136cbb99e3a136d1960fd00b4cdf79545d4b91"
+        },
+        {
+          "name": "bill_evidence",
+          "count": 20,
+          "sha256": "a0897d4b26a83488dc7277e17d59d44e661ad719806c35d641237b1f88318721"
+        },
+        {
+          "name": "bill_summary_cache",
+          "count": 40,
+          "sha256": "c306afa8906cd07ea0b69a293d003ef7b321adb30ed79a002791deaa6a2fa0cd"
+        },
+        {
+          "name": "bill_versions",
+          "count": 40,
+          "sha256": "bb18f6a61535ee3a07811350ab2a98796b670a37d73e361a0cf911668c61811c"
+        },
+        {
+          "name": "boundary_facilities",
+          "count": 54,
+          "sha256": "3703224ab5c07a4cc328e18e05ce8fca91b11c69999b8a2a419bf70dc652c5dc"
+        },
+        {
+          "name": "calculation_audit_log",
+          "count": 17,
+          "sha256": "34e95f046d918a7667755a863dea20d5cd45303eedccb24593021728a686d1ea"
+        },
+        {
+          "name": "companies",
+          "count": 54,
+          "sha256": "45f754bf2e317363cc34618570cbd4f99440980efdcbf7cac6c2104eb3e06fa4"
+        },
+        {
+          "name": "company_members",
+          "count": 116,
+          "sha256": "fc3a1c1eba58545853866a9757f270c9c18561ba7eb2b145392ac84cc149b1b6"
+        },
+        {
+          "name": "electricity_source_audit",
+          "count": 12,
+          "sha256": "cc194bcb8942070796e8e2badc58d9e5005b9c891d4e48558856e5545b8abde9"
+        },
+        {
+          "name": "electricity_source_requests",
+          "count": 17,
+          "sha256": "6ec71a858bb02accf29c117e07fd3229502857fcb07827049346f91d9b8746ba"
+        },
+        {
+          "name": "electricity_sources",
+          "count": 12,
+          "sha256": "489cee22718b5e59754786257c10318bf17f98efb379e7c28c381a83c35f78cd"
+        },
+        {
+          "name": "electricity_worksheet_audit",
+          "count": 22,
+          "sha256": "48dfda2c1e0716ebc1b03d8757817ae275b24741bc5020ad7b0d8a1bc24ecb7a"
+        },
+        {
+          "name": "electricity_worksheet_requests",
+          "count": 26,
+          "sha256": "0ebe736190eceffe45448a3f56b4b01a4baeed2f7d9fd8bdff1c68b0dad3ed1c"
+        },
+        {
+          "name": "electricity_worksheet_reviews",
+          "count": 6,
+          "sha256": "f88530653261cdef5463febca26395c77638e1c21d6f7495921bd07ba5a50b6f"
+        },
+        {
+          "name": "electricity_worksheet_versions",
+          "count": 16,
+          "sha256": "73ce2d50ffe26071ef6721530e62517ce53782caf5e6f6139bd042244f0b93e0"
+        },
+        {
+          "name": "evidence_audit_log",
+          "count": 60,
+          "sha256": "660a787204874c2b3d8b8d8e5fc3de6d3d3e5a832a2f608d5d7c69edc3ad875d"
+        },
+        {
+          "name": "evidence_search_documents",
+          "count": 20,
+          "sha256": "d00833e9634309631c4b8ea093f210855cc7ac4fd3ddd8fb8f164277b743704e"
+        },
+        {
+          "name": "extraction_jobs",
+          "count": 20,
+          "sha256": "7a3cf825ada87cc5782918a866e633546bdc0e35cc9f0d43bd8ae1120d60c316"
+        },
+        {
+          "name": "facilities",
+          "count": 54,
+          "sha256": "a8400c428f675c1871b218d826bcf6a8846cf49c66ce417aea8c8563a568056c"
+        },
+        {
+          "name": "inventory_activity_versions",
+          "count": 20,
+          "sha256": "dcea676897775bd80db62d481566d946adc2b06fd31938ebb3f90fea75ca06d3"
+        },
+        {
+          "name": "inventory_calculation_results",
+          "count": 17,
+          "sha256": "ce40efc14d8776e124b8355d627e3e9e4e57ae38d0c15311b30e971c9d6a07b0"
+        },
+        {
+          "name": "inventory_draft_report_audit_log",
+          "count": 16,
+          "sha256": "96349f1aa91fd1cfd70fff20ac2af365886b3833dc4df4a0fed331053c78e9d7"
+        },
+        {
+          "name": "inventory_draft_report_review_audit_log",
+          "count": 16,
+          "sha256": "adbc053be68ad28553c5e1c76defe0cf04315e299f6319bfc6782ef9b6d0c0f5"
+        },
+        {
+          "name": "inventory_draft_report_review_decisions",
+          "count": 16,
+          "sha256": "bd3d09a1dd3b145d53a8b3e5dbaa6daf65c80bd410d2bf8d123475e4d1cb707e"
+        },
+        {
+          "name": "inventory_draft_reports",
+          "count": 16,
+          "sha256": "58336d2c6233a06ee50359af20aefccf1ced8124221422e942ea1699d24d941b"
+        },
+        {
+          "name": "inventory_evidence_pack_audit_log",
+          "count": 16,
+          "sha256": "f74b435d30b36bc567ff7bc0ab1dbfb0f0c83185c147bf5c246d873d555adfd5"
+        },
+        {
+          "name": "inventory_evidence_packs",
+          "count": 16,
+          "sha256": "68d9f32ae67244076ad9b362b7d7e5b9fd60c9e931e2696c11fa2fb50a2709a0"
+        },
+        {
+          "name": "inventory_review_audit_log",
+          "count": 34,
+          "sha256": "a479faa2cedf61d6f1c779094ea4ad535cc5d7c2fc7ed65b0eb78e6118d3c1a7"
+        },
+        {
+          "name": "inventory_review_decisions",
+          "count": 17,
+          "sha256": "e71d22a9df917517775e134760864327a8fc7ac50a2f2eb32cfee5d9d791fc2c"
+        },
+        {
+          "name": "inventory_versions",
+          "count": 17,
+          "sha256": "e7af3928723a879508e079d23977dadd81474653970db1f3691b4f384a24b797"
+        },
+        {
+          "name": "reporting_boundaries",
+          "count": 54,
+          "sha256": "f84f3c3c24044b359b78539abb60e4109dfa49da7e6cb827fdf2b6da15234e52"
+        },
+        {
+          "name": "schema_migrations",
+          "count": 12,
+          "sha256": "0274794c5b35fbb5396d3c4b936d9d37d0c2744083bb404c0b7ff5ff1fec1069"
+        },
+        {
+          "name": "source_worksheet_audit",
+          "count": 50,
+          "sha256": "fe5f7a7add7bd121852896f5f2cbc0bc79a15fab632eeaf21df1fa64655ddffa"
+        },
+        {
+          "name": "source_worksheet_report_audit",
+          "count": 39,
+          "sha256": "10bcbb3931eb02c4b06884f5e94bb5b8fe7f8c5d0cbb1d25e5db67e7d5b7f833"
+        },
+        {
+          "name": "source_worksheet_report_requests",
+          "count": 42,
+          "sha256": "6bfda0ac8356388c7538cd5aca43547e66c70018ac129cb0e88e16be98f38778"
+        },
+        {
+          "name": "source_worksheet_reports",
+          "count": 39,
+          "sha256": "1808040faa40cd8e79207a44966d44b6ff3d0b6482452f6fcf9fc3d1b2d1d3ef"
+        },
+        {
+          "name": "source_worksheet_requests",
+          "count": 50,
+          "sha256": "327894116830ebfc5d649d64f3445cf0aa2b4f891f99f79f3da0b9f8a9721b54"
+        },
+        {
+          "name": "source_worksheet_reviews",
+          "count": 7,
+          "sha256": "5450466fc6b98640e13ebe2a7b2db6b5ebae0b2ffae0baba2c85fab0e49f0558"
+        },
+        {
+          "name": "source_worksheet_versions",
+          "count": 43,
+          "sha256": "a10227f060901385619600e5b4d96b2af7fdc93d9e93a68986b658723e52228e"
+        },
+        {
+          "name": "staging_access",
+          "count": 112,
+          "sha256": "1892930d32963d6621473421195714e0b78bb04a48564dec8fee601e0c397388"
+        },
+        {
+          "name": "staging_target",
+          "count": 1,
+          "sha256": "929e71b4e9d2672edaae0d2fcd71d5978f055f6e7fd613b764d4a8e2fc04c969"
+        },
+        {
+          "name": "worksheet_report_audit",
+          "count": 14,
+          "sha256": "affd231b238da3767f809e5095394de0f977243e3e12b7909f98e2f64c3ed514"
+        },
+        {
+          "name": "worksheet_report_requests",
+          "count": 16,
+          "sha256": "9a90d65978acc06ff9acddf250664ff8a6476fe792758b8cbf937120bbc8740a"
+        },
+        {
+          "name": "worksheet_reports",
+          "count": 14,
+          "sha256": "290a35650731778d7236a01b954e24b3371bae50fec0f46ca9caac527486d555"
+        }
+      ],
+      "metadata": {
+        "tables": {
+          "sha256": "268f083acdb8fe6a1a9f76f04391313fb1865024b74a0de9e9a392276712216d"
+        },
+        "policies": {
+          "sha256": "1f1f15a093090357a1299e02ec1082380679b564899d200d6ac3c4712050e4be"
+        },
+        "functions": {
+          "sha256": "f9a13df7d9087b0a90aa44d652d681b5014b13510646666b20856fd2cda59b3f"
+        },
+        "schema": {
+          "sha256": "66ea9c16683a0826613059b5f053baebe6705d0781f3a433b1c295daedc98d2f"
+        }
+      }
+    },
+    {
+      "tables": [
+        {
+          "name": "annual_inventory_audit_log",
+          "count": 67,
+          "sha256": "61c1d414641dea4ba8f524a55e749d2d46ff5109d9e80147170d82b50585e742"
+        },
+        {
+          "name": "annual_inventory_review_decisions",
+          "count": 16,
+          "sha256": "a740ef16c7fd613df68b959c687daad847bf3ffa498823120df3dc40197b8ad4"
+        },
+        {
+          "name": "annual_inventory_versions",
+          "count": 17,
+          "sha256": "c9347ceb8f0c3aa5a54428fbbdcfc3874d3f73de1c261469ae690c6a098e879e"
+        },
+        {
+          "name": "annual_source_register_versions",
+          "count": 34,
+          "sha256": "0cdc702e31c2f13c9df9ef3a6b5c0ee149f9093667015ac5666acd1b2a744587"
+        },
+        {
+          "name": "audit_events",
+          "count": 54,
+          "sha256": "0d99ba62bd7224b1ee1a15513c136cbb99e3a136d1960fd00b4cdf79545d4b91"
+        },
+        {
+          "name": "bill_evidence",
+          "count": 20,
+          "sha256": "a0897d4b26a83488dc7277e17d59d44e661ad719806c35d641237b1f88318721"
+        },
+        {
+          "name": "bill_summary_cache",
+          "count": 40,
+          "sha256": "c306afa8906cd07ea0b69a293d003ef7b321adb30ed79a002791deaa6a2fa0cd"
+        },
+        {
+          "name": "bill_versions",
+          "count": 40,
+          "sha256": "bb18f6a61535ee3a07811350ab2a98796b670a37d73e361a0cf911668c61811c"
+        },
+        {
+          "name": "boundary_facilities",
+          "count": 54,
+          "sha256": "3703224ab5c07a4cc328e18e05ce8fca91b11c69999b8a2a419bf70dc652c5dc"
+        },
+        {
+          "name": "calculation_audit_log",
+          "count": 17,
+          "sha256": "34e95f046d918a7667755a863dea20d5cd45303eedccb24593021728a686d1ea"
+        },
+        {
+          "name": "companies",
+          "count": 54,
+          "sha256": "45f754bf2e317363cc34618570cbd4f99440980efdcbf7cac6c2104eb3e06fa4"
+        },
+        {
+          "name": "company_members",
+          "count": 116,
+          "sha256": "fc3a1c1eba58545853866a9757f270c9c18561ba7eb2b145392ac84cc149b1b6"
+        },
+        {
+          "name": "electricity_source_audit",
+          "count": 12,
+          "sha256": "cc194bcb8942070796e8e2badc58d9e5005b9c891d4e48558856e5545b8abde9"
+        },
+        {
+          "name": "electricity_source_requests",
+          "count": 17,
+          "sha256": "6ec71a858bb02accf29c117e07fd3229502857fcb07827049346f91d9b8746ba"
+        },
+        {
+          "name": "electricity_sources",
+          "count": 12,
+          "sha256": "489cee22718b5e59754786257c10318bf17f98efb379e7c28c381a83c35f78cd"
+        },
+        {
+          "name": "electricity_worksheet_audit",
+          "count": 22,
+          "sha256": "48dfda2c1e0716ebc1b03d8757817ae275b24741bc5020ad7b0d8a1bc24ecb7a"
+        },
+        {
+          "name": "electricity_worksheet_requests",
+          "count": 26,
+          "sha256": "0ebe736190eceffe45448a3f56b4b01a4baeed2f7d9fd8bdff1c68b0dad3ed1c"
+        },
+        {
+          "name": "electricity_worksheet_reviews",
+          "count": 6,
+          "sha256": "f88530653261cdef5463febca26395c77638e1c21d6f7495921bd07ba5a50b6f"
+        },
+        {
+          "name": "electricity_worksheet_versions",
+          "count": 16,
+          "sha256": "73ce2d50ffe26071ef6721530e62517ce53782caf5e6f6139bd042244f0b93e0"
+        },
+        {
+          "name": "evidence_audit_log",
+          "count": 60,
+          "sha256": "660a787204874c2b3d8b8d8e5fc3de6d3d3e5a832a2f608d5d7c69edc3ad875d"
+        },
+        {
+          "name": "evidence_search_documents",
+          "count": 20,
+          "sha256": "d00833e9634309631c4b8ea093f210855cc7ac4fd3ddd8fb8f164277b743704e"
+        },
+        {
+          "name": "extraction_jobs",
+          "count": 20,
+          "sha256": "7a3cf825ada87cc5782918a866e633546bdc0e35cc9f0d43bd8ae1120d60c316"
+        },
+        {
+          "name": "facilities",
+          "count": 54,
+          "sha256": "a8400c428f675c1871b218d826bcf6a8846cf49c66ce417aea8c8563a568056c"
+        },
+        {
+          "name": "inventory_activity_versions",
+          "count": 20,
+          "sha256": "dcea676897775bd80db62d481566d946adc2b06fd31938ebb3f90fea75ca06d3"
+        },
+        {
+          "name": "inventory_calculation_results",
+          "count": 17,
+          "sha256": "ce40efc14d8776e124b8355d627e3e9e4e57ae38d0c15311b30e971c9d6a07b0"
+        },
+        {
+          "name": "inventory_draft_report_audit_log",
+          "count": 16,
+          "sha256": "96349f1aa91fd1cfd70fff20ac2af365886b3833dc4df4a0fed331053c78e9d7"
+        },
+        {
+          "name": "inventory_draft_report_review_audit_log",
+          "count": 16,
+          "sha256": "adbc053be68ad28553c5e1c76defe0cf04315e299f6319bfc6782ef9b6d0c0f5"
+        },
+        {
+          "name": "inventory_draft_report_review_decisions",
+          "count": 16,
+          "sha256": "bd3d09a1dd3b145d53a8b3e5dbaa6daf65c80bd410d2bf8d123475e4d1cb707e"
+        },
+        {
+          "name": "inventory_draft_reports",
+          "count": 16,
+          "sha256": "58336d2c6233a06ee50359af20aefccf1ced8124221422e942ea1699d24d941b"
+        },
+        {
+          "name": "inventory_evidence_pack_audit_log",
+          "count": 16,
+          "sha256": "f74b435d30b36bc567ff7bc0ab1dbfb0f0c83185c147bf5c246d873d555adfd5"
+        },
+        {
+          "name": "inventory_evidence_packs",
+          "count": 16,
+          "sha256": "68d9f32ae67244076ad9b362b7d7e5b9fd60c9e931e2696c11fa2fb50a2709a0"
+        },
+        {
+          "name": "inventory_review_audit_log",
+          "count": 34,
+          "sha256": "a479faa2cedf61d6f1c779094ea4ad535cc5d7c2fc7ed65b0eb78e6118d3c1a7"
+        },
+        {
+          "name": "inventory_review_decisions",
+          "count": 17,
+          "sha256": "e71d22a9df917517775e134760864327a8fc7ac50a2f2eb32cfee5d9d791fc2c"
+        },
+        {
+          "name": "inventory_versions",
+          "count": 17,
+          "sha256": "e7af3928723a879508e079d23977dadd81474653970db1f3691b4f384a24b797"
+        },
+        {
+          "name": "reporting_boundaries",
+          "count": 54,
+          "sha256": "f84f3c3c24044b359b78539abb60e4109dfa49da7e6cb827fdf2b6da15234e52"
+        },
+        {
+          "name": "schema_migrations",
+          "count": 12,
+          "sha256": "0274794c5b35fbb5396d3c4b936d9d37d0c2744083bb404c0b7ff5ff1fec1069"
+        },
+        {
+          "name": "source_worksheet_audit",
+          "count": 50,
+          "sha256": "fe5f7a7add7bd121852896f5f2cbc0bc79a15fab632eeaf21df1fa64655ddffa"
+        },
+        {
+          "name": "source_worksheet_report_audit",
+          "count": 39,
+          "sha256": "10bcbb3931eb02c4b06884f5e94bb5b8fe7f8c5d0cbb1d25e5db67e7d5b7f833"
+        },
+        {
+          "name": "source_worksheet_report_requests",
+          "count": 42,
+          "sha256": "6bfda0ac8356388c7538cd5aca43547e66c70018ac129cb0e88e16be98f38778"
+        },
+        {
+          "name": "source_worksheet_reports",
+          "count": 39,
+          "sha256": "1808040faa40cd8e79207a44966d44b6ff3d0b6482452f6fcf9fc3d1b2d1d3ef"
+        },
+        {
+          "name": "source_worksheet_requests",
+          "count": 50,
+          "sha256": "327894116830ebfc5d649d64f3445cf0aa2b4f891f99f79f3da0b9f8a9721b54"
+        },
+        {
+          "name": "source_worksheet_reviews",
+          "count": 7,
+          "sha256": "5450466fc6b98640e13ebe2a7b2db6b5ebae0b2ffae0baba2c85fab0e49f0558"
+        },
+        {
+          "name": "source_worksheet_versions",
+          "count": 43,
+          "sha256": "a10227f060901385619600e5b4d96b2af7fdc93d9e93a68986b658723e52228e"
+        },
+        {
+          "name": "staging_access",
+          "count": 112,
+          "sha256": "1892930d32963d6621473421195714e0b78bb04a48564dec8fee601e0c397388"
+        },
+        {
+          "name": "staging_target",
+          "count": 1,
+          "sha256": "929e71b4e9d2672edaae0d2fcd71d5978f055f6e7fd613b764d4a8e2fc04c969"
+        },
+        {
+          "name": "worksheet_report_audit",
+          "count": 14,
+          "sha256": "affd231b238da3767f809e5095394de0f977243e3e12b7909f98e2f64c3ed514"
+        },
+        {
+          "name": "worksheet_report_requests",
+          "count": 16,
+          "sha256": "9a90d65978acc06ff9acddf250664ff8a6476fe792758b8cbf937120bbc8740a"
+        },
+        {
+          "name": "worksheet_reports",
+          "count": 14,
+          "sha256": "290a35650731778d7236a01b954e24b3371bae50fec0f46ca9caac527486d555"
+        }
+      ],
+      "metadata": {
+        "tables": {
+          "sha256": "268f083acdb8fe6a1a9f76f04391313fb1865024b74a0de9e9a392276712216d"
+        },
+        "policies": {
+          "sha256": "1f1f15a093090357a1299e02ec1082380679b564899d200d6ac3c4712050e4be"
+        },
+        "functions": {
+          "sha256": "f9a13df7d9087b0a90aa44d652d681b5014b13510646666b20856fd2cda59b3f"
+        },
+        "schema": {
+          "sha256": "66ea9c16683a0826613059b5f053baebe6705d0781f3a433b1c295daedc98d2f"
+        }
+      }
+    }
+  ]
+}

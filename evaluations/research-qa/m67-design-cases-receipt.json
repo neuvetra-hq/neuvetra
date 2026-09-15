@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "scope": "independent Decimal96 and integer aggregate check; no SQL/product/frontend execution",
+  "acceptedCases": 12,
+  "monthSlots": 144,
+  "directInvalidQuantityCases": 15,
+  "assertions": 1005,
+  "caseCanonicalLfSha256": "06ab494cc6cba1cbfbc5808517f990743ceb33e2531611d50fab5d9b5224956c",
+  "checkerSha256": "678491544524f96e9076c95d4e91c987a52186592d9df486a1820b772be7eb48",
+  "contractCanonicalLfSha256": "299405d311f009aaebd8dffa8e213d74511297236f426c550f87cf3fd484b2f1",
+  "rootProvidedBaseline": {
+    "path": ".superpowers/m67_qa-schema12-baseline.json",
+    "rawSha256": "c824b49f47ed07800ba6e18dd400ee05d8fa3d772799d19285c9df837b2031a1",
+    "database": "m67_qa",
+    "tables": 48,
+    "records": 1488,
+    "independentlyQueriedDatabase": false
+  }
+}

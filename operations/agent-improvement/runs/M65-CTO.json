@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "M65-CTO",
+  "role": "cto",
+  "execution_context": "/root/m64_cto",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M65-CTO.json",
+      "sha256": "5d1ee93c1d4ae499d89f67b015634ea3099fb6c386c70b981224ee1a5a6cac09"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m65-hosted-handoff.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m63_data",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m65-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M65-CTO.json",
+        "sha256": "5d1ee93c1d4ae499d89f67b015634ea3099fb6c386c70b981224ee1a5a6cac09"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M65 implementation",
+  "compute_note": "Reused scoped execution context; actual inherited settings and resource metrics unknown. Critical policy requested; no runtime override claim.",
+  "source_artifacts": [
+    {
+      "path": "packages/neuvetra-database/src/m65-contract.ts",
+      "sha256": "9ffb93e091aec3e5a2b8cafb7f7bacd8bc2a04280632663e802a8cf201bcff31"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "sha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.ts",
+      "sha256": "409a150611664efb3b45213714dc561b4a6a289fa6304c3cb56c15d2d6cf230e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "sha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "bd40668e73a75886b4fd5010052fb268986647b9da4584e164d220f4877b6ecc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "283fc74c5d3c2b8a9918ab6f517f8d4a25ddb8dc8f774903179e5b02ed261358"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "a4447cf299b306e31d99fd8ca09e38fcd8aed597b17db730f2f178e05a7567e8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "dd07dc900297c9075ce20586cd6a7e4182da49051b799cc08c37c804cd637c61"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m65-routes.ts",
+      "sha256": "bb997126708562b96086aa4ca88008f6e14d91811fcf8b045e52fdd8e7440fd1"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "b0e0566338592f4e33b4372b056c2c0eaadd2ee99498b627b81f06fdcb31a3ec"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "sha256": "d6da83c4d7ed2c09a01c84f4b9822c33adfbac8e10da9a3f222426e6b06d8c7b"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.test.ts",
+      "sha256": "08d955b6669f4757fbdd6e7e0a61a42e148292a0bdc91f28aac28b5a0e1331e2"
+    }
+  ],
+  "notes": [
+    "Scoped role delivery complete; board feedback is a separate milestone gate. Initial findings and live UI-F04/F05 remain in evidence; QA first handoff lacked hosted evidence. Root authored the UI and these closure records; QA authored no M65 product code. Actual compute/cost unknown, no savings claim."
+  ]
+}

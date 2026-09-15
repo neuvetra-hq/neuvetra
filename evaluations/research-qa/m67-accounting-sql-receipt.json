@@ -1,0 +1,70 @@
+{
+  "observedAt": "2026-09-15T00:46:29.364Z",
+  "scope": "Actual migration helper functions loaded into separate in-memory PGlite; no full migration, native driver, persisted lifecycle, role, cloud or browser verification.",
+  "results": [
+    {
+      "id": "january_25000_partial",
+      "exact": "4876.00722",
+      "display": "4876.0072"
+    },
+    {
+      "id": "january_25000_remaining_zero",
+      "exact": "4876.00722",
+      "display": "4876.0072"
+    },
+    {
+      "id": "twelve_25000",
+      "exact": "58512.08664",
+      "display": "58512.0866"
+    },
+    {
+      "id": "all_zero",
+      "exact": "0",
+      "display": "0.0000"
+    },
+    {
+      "id": "one_zero_remaining_missing",
+      "exact": "0",
+      "display": "0.0000"
+    },
+    {
+      "id": "twelve_one",
+      "exact": "2.3404834656",
+      "display": "2.3405"
+    },
+    {
+      "id": "twelve_minimum",
+      "exact": "0.0023404834656",
+      "display": "0.0023"
+    },
+    {
+      "id": "aggregate_even_tie",
+      "exact": "12190.01805",
+      "display": "12190.0180"
+    },
+    {
+      "id": "aggregate_odd_tie",
+      "exact": "36570.05415",
+      "display": "36570.0542"
+    },
+    {
+      "id": "twelve_maximum",
+      "exact": "2340483.4656",
+      "display": "2340483.4656"
+    },
+    {
+      "id": "twelve_below_maximum",
+      "exact": "2340483.4632595165344",
+      "display": "2340483.4633"
+    },
+    {
+      "id": "mixed_partial",
+      "exact": "2408.1445021070304",
+      "display": "2408.1445"
+    }
+  ],
+  "helperSha256": "b59a4df24a358fcd42aa833ffb6c082660e6c7aa54bed95827ebe4c1822bcb90",
+  "migrationSha256": "d8f0d2acf749012bb1ae87d522e174d4c881fb9ee466afafd4fd8194c52ffc26",
+  "migrationUnchangedDuringRun": true,
+  "casesSha256": "06ab494cc6cba1cbfbc5808517f990743ceb33e2531611d50fab5d9b5224956c"
+}

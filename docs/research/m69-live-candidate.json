@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "kind": "m69_reviewable_live_candidate",
+  "run_id": "m69-electricity-records-canary-01",
+  "reservation_nano_usd": 3948410000,
+  "question_sha256": "3d07f2af45ca8e0b538f8b8678747c95f3b38d5ab076d6638f3bf417bbb15cd4",
+  "source_mode": "verified_local_corpus_no_cloud_index",
+  "pins": [
+    {
+      "path": "apps/site-api/src/research-cloud/answer-contract.ts",
+      "sha256": "99e3fe9921d1224a3ab76c57d429e99a21b6e8f50ebde90b4fc5fd1ba1359280"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/answer.ts",
+      "sha256": "12d9d854c5cfe09eee6b2bf740ce8c05bc59f9c58657ffe88685b37a48c41bd3"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/budget.ts",
+      "sha256": "03a8dcae298ed9a8f626cee81b7c91ac585b511b5b8b06d7e5224e12d4994a64"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/condition-ledger.ts",
+      "sha256": "6a330f9fa345da9e72b3872f1e6ae9fc67923c370a0a31b60b4ee55dda7d23a6"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/draft-repair.ts",
+      "sha256": "54dbe58b5301fce921991874835542a04ee4b4943acbf60a697e3f28bba9fb72"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/provider.ts",
+      "sha256": "0027330ff583e55ffa93ff576162e2f7fed03786d9d900e855c5d5c9785d98b8"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/repository.ts",
+      "sha256": "ad1e34814331815a91f4f6ed2f3f7413a2aab5f14f346d3f417647126c98ec91"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/routes.ts",
+      "sha256": "3bbfeb3cca0dae9eefe42b2982cb148681688ddba536036378b6c018b6ced355"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/session.ts",
+      "sha256": "0ecef277fdbe379a86e0fd06fb37f788ad7d3240ef16df5511d96c9b285efaa2"
+    },
+    {
+      "path": "apps/site-api/src/research-cloud/types.ts",
+      "sha256": "786e7dd048a44dc123d767b90e982792048cd9cf89123e57ad08df25e0b77cca"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/answer.ts",
+      "sha256": "a52f961ae2f70267b89b1cbca6bcef12fc777498825a05dd6776ffab81351317"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/capabilities.ts",
+      "sha256": "4ad502be837a7e6afb7351956d2f43a52ccf820b9042c8d147338dbb0628bc5c"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/catalog-absence.ts",
+      "sha256": "037afe6f97a03dfc961b1d24f59786b6155523edabec094eee7a8e110cbfd8ba"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/catalog.ts",
+      "sha256": "1a45f413445f5cca8626f380b160dd6aef55961a944cd0a6b2b9d04878b920ab"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/demand-selection.ts",
+      "sha256": "9dd522014fcbd760efaa21fc6655d39d49d8f91f03ec1a1113dd91999623a5e6"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/openrouter.ts",
+      "sha256": "4c22cff66ff92ad0f5518214eb875f085f1cbb4f399279b70d2315b41f7b3431"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/provider.ts",
+      "sha256": "d6db5fbba45a9d35f5145405694119192857f17f18a1816d4897bb6845b85385"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/question-analysis.ts",
+      "sha256": "b9fdf1f36ef5f48ee6763b16fdcfe28071ec3ea4cf62deeec366d86eb567aa92"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/question-contract.ts",
+      "sha256": "f034a8c5da4495c36b46435a08dc046a19d42a148da825b27801fc250ec49c88"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/selection.ts",
+      "sha256": "e19c4648487967896a02a4d2dfd98e7d6c6fd3d5c95bac22c87a3848d4c4faa7"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/size-bundles.ts",
+      "sha256": "cdaf993b2793b9250125ac42ac8326cfceb16f1a8bff440e3af3a7a07af67a78"
+    },
+    {
+      "path": "apps/site-api/src/research-composed/test-plan-input.ts",
+      "sha256": "0bead92a57081a9802c3381793a34d9c45a307c6db09e369c92dc1df9fe44482"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/config.ts",
+      "sha256": "2fdb19e6d88f33b33869fa8fdb9d5d83ca8c6a3f0439e6b391c135267e5a3cf4"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/numeric-policy.ts",
+      "sha256": "72c2512e374c8889394c13f0d0549af33dc8cb5287fe36967213ffdef5b730a4"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/provider.ts",
+      "sha256": "958e512ffb04ff7af4bf622f17755a27a3d9cca80e3e184162f1ff4e81005b5b"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/release.ts",
+      "sha256": "10d1256c10293392c6e3bd0d3225b3bee79378740cc26a370d474b6ec74e6bea"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/routes.ts",
+      "sha256": "a28554aadaaa430d4e19690d0978f0546349d5d650bdb87130fe8e54f6b1601f"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/service.ts",
+      "sha256": "1a69a93c458c2c571745accf55196bfaa8f6beaa4b35cb4c897837b1773a63f0"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/types.ts",
+      "sha256": "a700ff3729a984a40e2712af5adc81aa83faac90578193a41773769d69b8a5fa"
+    },
+    {
+      "path": "apps/site-api/src/research-passages/validation.ts",
+      "sha256": "59b6540b4833e0dc24e25defc6e2ce7503bec9e98dc7f191c0e6facfb9ee7933"
+    },
+    {
+      "path": "data/research/answer-units/scope2-website.epa-acquisition.v1.json",
+      "sha256": "97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50"
+    },
+    {
+      "path": "data/research/capabilities/scope2-website.epa-limitations.v1.json",
+      "sha256": "a7724c245fed1fd3a9dd08a82886c107b54905693039150f33359b2ed629e2c2"
+    },
+    {
+      "path": "data/research/releases/scope2-website.v1.json",
+      "sha256": "38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"
+    },
+    {
+      "path": "tools/research/m69-canary-launcher.ts",
+      "sha256": "94efdaac3d2984e7dc94899cefdbf999630518179a938ddf92e93bc645d12f23"
+    },
+    {
+      "path": "tools/research/m69-canary-runtime.ts",
+      "sha256": "10ab17b090033b11f36a140f5af001c9875172d42592dc86c6cde2f038462b20"
+    },
+    {
+      "path": "tools/research/m69-canary.ts",
+      "sha256": "11355fcb21cea6aed2f657445b6809f147d918181119848446df0b233585fd31"
+    }
+  ],
+  "preparation_sha256": "a1e1d804b4ad491f813d8e08d9265752919db62b5ae998a36951ddee9d702dcf"
+}

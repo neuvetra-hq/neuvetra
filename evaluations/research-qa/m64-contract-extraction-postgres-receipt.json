@@ -1,0 +1,185 @@
+{
+  "status": "legacy_preservation_passed",
+  "database": "m64_qa",
+  "runtime": "PostgreSQL local dedicated fixture; API auth injected; no hosted deployment claim",
+  "checks": "arithmetic, direct SQL refusals, API roles, invited second tenant, review/version integrity, concurrency, revocation, decoder, reconnection, original M63 preservation",
+  "legacy": [
+    {
+      "name": "audit_events",
+      "originalRows": 46,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "evidence_search_documents",
+      "originalRows": 17,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "339a6aabf783de233c716ba91c8c3e0095a808ff66ddef51f3a0bdefc0f40cc6"
+    },
+    {
+      "name": "bill_versions",
+      "originalRows": 34,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "6b15d9c6a2599a19d69ac10e018bd9b08fef79c54c6d152e0bcd7fcbc6a664eb"
+    },
+    {
+      "name": "boundary_facilities",
+      "originalRows": 46,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "companies",
+      "originalRows": 46,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "company_members",
+      "originalRows": 98,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "annual_inventory_audit_log",
+      "originalRows": 55,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "600c4e4a4502a3a5ad4bc03636b8ac4940f62a05986bd2b2a05bf5a82d98a474"
+    },
+    {
+      "name": "annual_inventory_versions",
+      "originalRows": 14,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "a3d3238fb8758c5d320583ed0b6c712cdc1c0ca7deeeabcee5c11f735839a9fb"
+    },
+    {
+      "name": "bill_evidence",
+      "originalRows": 17,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "6cc9803d1ada0425fd2d7c0dcbf07cfda9e6f87024d0ca11cdf7cb7d29cf1dc1"
+    },
+    {
+      "name": "inventory_calculation_results",
+      "originalRows": 14,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "c4001bbccd74879392150323c961ad6cd9934ee749231b31747c70c33aabdbe6"
+    },
+    {
+      "name": "extraction_jobs",
+      "originalRows": 17,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "cd9b0a7093e2b904d37e76485a7f4dab193255c46784fcbf3dcafc7ee63380f3"
+    },
+    {
+      "name": "facilities",
+      "originalRows": 46,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "inventory_draft_report_review_audit_log",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "a35912c1e7c91ee810b4da52166116d948a2b5bb56664c269b4a75945013fb40"
+    },
+    {
+      "name": "reporting_boundaries",
+      "originalRows": 46,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "inventory_review_decisions",
+      "originalRows": 14,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "096e746ff6897392dc96e5bb1cf3251a4e0e56652aad9c738a96ad3a57bc8a91"
+    },
+    {
+      "name": "schema_migrations",
+      "originalRows": 10,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "staging_target",
+      "originalRows": 1,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "inventory_versions",
+      "originalRows": 14,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "8bb6a895d508ca3e163bd1d0cddc8a868d30ec069517edd37d5b379dc780b5d7"
+    },
+    {
+      "name": "staging_access",
+      "originalRows": 95,
+      "allOriginalRowsUnchanged": true
+    },
+    {
+      "name": "inventory_evidence_packs",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "5aa8fcb13cbe8f7c32d92c88361a72b56ee7597e43de1215c4c63d4321b2cc13"
+    },
+    {
+      "name": "annual_inventory_review_decisions",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "1af1cee0f9881c8c9fbdb92128fe12f33aceeae8665f0995007d9cb53d3d3d51"
+    },
+    {
+      "name": "annual_source_register_versions",
+      "originalRows": 28,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "219b4fe92724c9149b8bfc85bf722ad48b1fecae193803543019abd0a7c2be9f"
+    },
+    {
+      "name": "bill_summary_cache",
+      "originalRows": 34,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "de22697bde72f532206e61e02c8f8c9fe3660d7e8e2bcd25105179e8c39a30e2"
+    },
+    {
+      "name": "calculation_audit_log",
+      "originalRows": 14,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "17183a48958617ad2671b24ddceb07d062b32fb93348e2c85777f621c20e4120"
+    },
+    {
+      "name": "evidence_audit_log",
+      "originalRows": 51,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "55aa1df71dcbe569f54fe069879987f31644e15ac346cd9c1eba70a9a06fb0d8"
+    },
+    {
+      "name": "inventory_activity_versions",
+      "originalRows": 17,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "f44bc840c47dd8503925f516cc51755455b829d63d4d128926cb5402d0f5c26a"
+    },
+    {
+      "name": "inventory_draft_report_audit_log",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "1a71af928cd3b34fcf5109d355b41653c5b305edce319fc6e1753ecb30609fc6"
+    },
+    {
+      "name": "inventory_draft_report_review_decisions",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "c881de99912ab95ca37d3bcd188842ff866a7393d2d5b777db96b048879c8a8e"
+    },
+    {
+      "name": "inventory_draft_reports",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "601243f883dffab78c16b5fcef2550aa035e4e28f23180e8590f0395dc116f81"
+    },
+    {
+      "name": "inventory_evidence_pack_audit_log",
+      "originalRows": 13,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "98c92c4d8a764771c2b05b106df8e7f1b6e04fff0f2fefddfab909cc03818de8"
+    },
+    {
+      "name": "inventory_review_audit_log",
+      "originalRows": 28,
+      "allOriginalRowsUnchanged": true,
+      "sha256": "b5b21ad5190021651a601608b874cd181b0c85ba28b0d3c35062807c23df91c3"
+    }
+  ]
+}

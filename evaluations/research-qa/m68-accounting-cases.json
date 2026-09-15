@@ -1,0 +1,1368 @@
+{
+  "policy": "m68-accounting-evidence-v1",
+  "kind": "independently_derived_design_expectations_not_runtime_results",
+  "accepted": [
+    {
+      "id": "january_match_no_link",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "12345.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 0,
+        "unambiguousDocumentMonths": 0,
+        "missingDocumentMonths": [
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "12345.000",
+        "exactKgCo2e": "2407.772365236",
+        "displayKgCo2e": "2407.7724"
+      }
+    },
+    {
+      "id": "january_match_one_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "12345.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": null
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "12345.000",
+        "exactKgCo2e": "2407.772365236",
+        "displayKgCo2e": "2407.7724"
+      }
+    },
+    {
+      "id": "january_match_replacement_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "12345.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [
+        {
+          "fixture": "B",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": null
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "12345.000",
+        "exactKgCo2e": "2407.772365236",
+        "displayKgCo2e": "2407.7724"
+      }
+    },
+    {
+      "id": "january_match_overlap",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "12345.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": null
+        },
+        {
+          "fixture": "B",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": null
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 0,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [
+          "2023-01"
+        ],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "12345.000",
+        "exactKgCo2e": "2407.772365236",
+        "displayKgCo2e": "2407.7724"
+      }
+    },
+    {
+      "id": "january_mismatch_one_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ]
+      },
+      "annualReuse": {
+        "quantityKwh": "25000.000",
+        "exactKgCo2e": "4876.00722",
+        "displayKgCo2e": "4876.0072"
+      }
+    },
+    {
+      "id": "january_mismatch_overlap",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        },
+        {
+          "fixture": "B",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 0,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [
+          "2023-01"
+        ],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ]
+      },
+      "annualReuse": {
+        "quantityKwh": "25000.000",
+        "exactKgCo2e": "4876.00722",
+        "displayKgCo2e": "4876.0072"
+      }
+    },
+    {
+      "id": "january_zero_one_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ]
+      },
+      "annualReuse": {
+        "quantityKwh": "0.000",
+        "exactKgCo2e": "0",
+        "displayKgCo2e": "0.0000"
+      }
+    },
+    {
+      "id": "january_zero_no_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 0,
+        "unambiguousDocumentMonths": 0,
+        "missingDocumentMonths": [
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "0.000",
+        "exactKgCo2e": "0",
+        "displayKgCo2e": "0.0000"
+      }
+    },
+    {
+      "id": "january_missing_february_entered_no_links",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "1.000"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "links": [],
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-01",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 0,
+        "unambiguousDocumentMonths": 0,
+        "missingDocumentMonths": [
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "1.000",
+        "exactKgCo2e": "0.1950402888",
+        "displayKgCo2e": "0.1950"
+      }
+    },
+    {
+      "id": "twelve_zeros_no_bills",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0.000"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0.000"
+        }
+      ],
+      "links": [],
+      "coverage": {
+        "enteredMonths": 12,
+        "missingInputMonths": [],
+        "linkedDocumentMonths": 0,
+        "unambiguousDocumentMonths": 0,
+        "missingDocumentMonths": [
+          "2023-01",
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": []
+      },
+      "annualReuse": {
+        "quantityKwh": "0.000",
+        "exactKgCo2e": "0",
+        "displayKgCo2e": "0.0000"
+      }
+    },
+    {
+      "id": "twelve_25000_one_january_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "25000.000"
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 12,
+        "missingInputMonths": [],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ]
+      },
+      "annualReuse": {
+        "quantityKwh": "300000.000",
+        "exactKgCo2e": "58512.08664",
+        "displayKgCo2e": "58512.0866"
+      }
+    },
+    {
+      "id": "m67_board_vector_one_january_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "25000.000"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "26000.000"
+        }
+      ],
+      "links": [
+        {
+          "fixture": "B",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 12,
+        "missingInputMonths": [],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ]
+      },
+      "annualReuse": {
+        "quantityKwh": "301000.000",
+        "exactKgCo2e": "58707.1269288",
+        "displayKgCo2e": "58707.1269"
+      }
+    },
+    {
+      "id": "twelve_minimum_one_january_bill",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0.001"
+        }
+      ],
+      "links": [
+        {
+          "fixture": "A",
+          "month": "2023-01",
+          "sourcePage": 1,
+          "manualConfirmation": true,
+          "quantityDifferenceReason": "Fictional manual amount intentionally differs."
+        }
+      ],
+      "coverage": {
+        "enteredMonths": 12,
+        "missingInputMonths": [],
+        "linkedDocumentMonths": 1,
+        "unambiguousDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "overlappingDocumentMonths": [],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ]
+      },
+      "annualReuse": {
+        "quantityKwh": "0.012",
+        "exactKgCo2e": "0.0023404834656",
+        "displayKgCo2e": "0.0023"
+      }
+    }
+  ],
+  "refusals": [
+    {
+      "id": "same_source_id_twice",
+      "expected": "Refuse before creating successful version; no double count."
+    },
+    {
+      "id": "same_bytes_different_source_ids",
+      "expected": "Refuse duplicate source hashes; no manufactured overlap."
+    },
+    {
+      "id": "january_document_linked_to_february",
+      "expected": "Refuse; February statement date is not service period."
+    },
+    {
+      "id": "january_document_linked_to_missing_january",
+      "expected": "Refuse confirmed link to null quantity."
+    },
+    {
+      "id": "unsupported_page",
+      "expected": "Refuse page 0, page 2, missing or noninteger locator."
+    },
+    {
+      "id": "unsupported_or_changed_original_bytes",
+      "expected": "Refuse despite coordinated claimed hash/length metadata."
+    },
+    {
+      "id": "mismatch_missing_reason",
+      "expected": "Refuse even when correction reason exists."
+    },
+    {
+      "id": "one_of_two_mismatches_missing_reason",
+      "expected": "Refuse; each link needs its own discrepancy explanation."
+    },
+    {
+      "id": "matching_quantity_nonnull_reason",
+      "expected": "Refuse; canonical equality requires null."
+    },
+    {
+      "id": "mismatch_blank_or_unsafe_reason",
+      "expected": "Refuse under existing M66 safe-text rules."
+    },
+    {
+      "id": "missing_manual_confirmation",
+      "expected": "Refuse implicit upload-only confirmation."
+    },
+    {
+      "id": "unowned_source_or_annual_version",
+      "expected": "Refuse cross-tenant linkage."
+    },
+    {
+      "id": "annual_snapshot_claimed_hashes_disagree",
+      "expected": "Refuse; selected authoritative M67 snapshot governs."
+    },
+    {
+      "id": "fabricated_coverage_or_period_metadata",
+      "expected": "Refuse claimed coverage inconsistent with original sources and rows."
+    }
+  ],
+  "lifecycle": [
+    {
+      "id": "add_A_to_no_links",
+      "expected": "New version; January leaves missing-document list; total unchanged; unreviewed."
+    },
+    {
+      "id": "replace_A_with_B",
+      "expected": "New version despite identical quantities/coverage; old source/report bytes unchanged."
+    },
+    {
+      "id": "add_B_to_A",
+      "expected": "New version; linked months stays 1, unambiguous becomes 0, overlap January; total unchanged."
+    },
+    {
+      "id": "remove_B_from_overlap",
+      "expected": "New version; overlap empty, unambiguous 1, no numerical change."
+    },
+    {
+      "id": "remove_final_link",
+      "expected": "New version; all twelve months missing documents; total unchanged."
+    },
+    {
+      "id": "explanation_only_change",
+      "expected": "New version and new review required, even with identical source/annual version."
+    },
+    {
+      "id": "annual_version_only_same_totals",
+      "expected": "New version for new immutable annual identity, even if only a label changed."
+    },
+    {
+      "id": "january_to_null_new_annual_version",
+      "expected": "Requires removing January links; no transfer to another month."
+    },
+    {
+      "id": "mismatch_to_match_new_annual_version",
+      "expected": "Clear link discrepancy reasons; new version unreviewed."
+    },
+    {
+      "id": "link_order_only_or_quantity_format_only",
+      "expected": "Canonical no-op; no successor for equivalent effective inputs."
+    },
+    {
+      "id": "correction_reason_only",
+      "expected": "Canonical no-op when annual version, links and discrepancy reasons unchanged."
+    },
+    {
+      "id": "late_review_after_report",
+      "expected": "Old report stays unreviewed; a new report may capture later decision."
+    }
+  ]
+}

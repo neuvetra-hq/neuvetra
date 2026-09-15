@@ -6,6 +6,8 @@ Neuvetra is the California/U.S. GHG product. TerraScope branding is retired; Fro
 
 ## What exists now
 
+All roles follow the board's [corporate reporting direction](../../docs/corporate-reporting-direction.md): corporate Scope 1, 2 and 3 reporting under SB 253 is the shared objective. CPO maps milestones and UI to that outcome; CTO and data specialists carry corporate boundaries, lineage and isolation into the database and semantic layer; research, accounting and QA evaluate the same corporate use cases. The verifier's primary track is corporate inventory and assurance readiness. MRR work requires a separately relevant assignment. New roles inherit this direction during onboarding.
+
 This directory contains reusable instructions for an LLM with an authorized task and suitable tools. It does **not** implement persistent workers, a cloud scheduler, an agent service, durable execution, automatic recovery or a production approval system. A prompt file is not a running agent. A role is staffed only when an actual execution context is assigned and recorded.
 
 The current collaboration environment allows **four concurrent agents including the root coordinator**. Use no more than three concurrent delegates; all nested delegates count toward the same limit. Recheck actual platform capabilities when moving providers. Do not invent a model, tool, permission, concurrency limit or background execution capability. Work can be sequential when capacity is full.

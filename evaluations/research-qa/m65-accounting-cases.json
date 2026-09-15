@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "policy": "m65-accounting-report-policy-v1",
+  "classification": "public_synthetic_report_expectations_not_held_out",
+  "method": "existing M64 policy; standalone Python Decimal96 and integer rational parity",
+  "numerical_cases": [
+    {
+      "id": "board_version4",
+      "quantity_kwh": "25000.000",
+      "quantity_mwh": "25.000000",
+      "total_unrounded_kg_co2e": "4876.00722",
+      "total_display_kg_co2e": "4876.0072"
+    },
+    {
+      "id": "historical_example",
+      "quantity_kwh": "12346.000",
+      "quantity_mwh": "12.346000",
+      "total_unrounded_kg_co2e": "2407.9674055248",
+      "total_display_kg_co2e": "2407.9674"
+    },
+    {
+      "id": "explicit_zero",
+      "quantity_kwh": "0.000",
+      "quantity_mwh": "0.000000",
+      "total_unrounded_kg_co2e": "0",
+      "total_display_kg_co2e": "0.0000"
+    },
+    {
+      "id": "minimum_positive",
+      "quantity_kwh": "0.001",
+      "quantity_mwh": "0.000001",
+      "total_unrounded_kg_co2e": "0.0001950402888",
+      "total_display_kg_co2e": "0.0002"
+    },
+    {
+      "id": "half_even_down",
+      "quantity_kwh": "62500.000",
+      "quantity_mwh": "62.500000",
+      "total_unrounded_kg_co2e": "12190.01805",
+      "total_display_kg_co2e": "12190.0180"
+    },
+    {
+      "id": "half_even_up",
+      "quantity_kwh": "187500.000",
+      "quantity_mwh": "187.500000",
+      "total_unrounded_kg_co2e": "36570.05415",
+      "total_display_kg_co2e": "36570.0542"
+    },
+    {
+      "id": "precision_regression",
+      "quantity_kwh": "62499.999",
+      "quantity_mwh": "62.499999",
+      "total_unrounded_kg_co2e": "12190.0178549597112",
+      "total_display_kg_co2e": "12190.0179"
+    }
+  ],
+  "required_status": [
+    "Draft",
+    "Synthetic",
+    "Incomplete",
+    "Unreleased",
+    "No assurance"
+  ],
+  "review_cases": [
+    {
+      "state": "none",
+      "text": "No worksheet review was recorded when this report was created.",
+      "later_review": "earlier report remains byte-identical and unreviewed-at-capture; new request may create new snapshot"
+    },
+    {
+      "state": "accept_bounded_internal_draft",
+      "text": "The worksheet version was accepted for bounded internal use.",
+      "report_approval": false
+    },
+    {
+      "state": "changes_requested",
+      "text": "A manager requested changes to this worksheet version.",
+      "required": "exact escaped note and decision/source binding",
+      "report_approval": false
+    }
+  ],
+  "required_review_qualification": "This is a snapshot of a worksheet decision, not approval of this report presentation or assurance.",
+  "zero_vs_missing": "zero source renders exact0/display0.0000; missing source refuses report creation, never fabricated zero",
+  "historical_identity": "explicit selected historical version remains eligible; mismatched version/hash/review binding refuses",
+  "source_observation_limit": "Board Version4 quantity comes from root board acceptance observation; other cases are fixtures, not asserted live stored versions.",
+  "implementation_review": "pending"
+}

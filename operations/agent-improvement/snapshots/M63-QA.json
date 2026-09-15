@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "task_id": "M63-QA",
+  "implementation_commit": "952ab025156e4d60a10ad0ac30b237fa8d0a8a15",
+  "scope": "Immutable closure manifest of exact working-file bytes; source is retained at the recorded Git commit, newline-normalized Git blobs may differ",
+  "files": [
+    {
+      "path": "evaluations/research-qa/m63-browser-contract.md",
+      "sha256": "49766d3741b9c4e1db3681f4d20a5ff8d627d01e26e51372bd0408af94679252"
+    },
+    {
+      "path": "evaluations/research-qa/m63-cloud-restore.json",
+      "sha256": "7dc74252d8599e2a6b76ade57cd3eae05b314c89c57f7b2a0ee09a6930b08a9e"
+    },
+    {
+      "path": "evaluations/research-qa/milestone63-private-staging.md",
+      "sha256": "1378ab9dfcac0844dea044d55d4133afc671f21b99499cff32e5208ac28800db"
+    }
+  ]
+}

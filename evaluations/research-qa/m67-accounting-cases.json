@@ -1,0 +1,2189 @@
+{
+  "schema_version": 1,
+  "policy": "m67-accounting-policy-v1",
+  "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+  "classification": "public_independent_synthetic_engineering_expectations_not_held_out",
+  "authority": {
+    "factor": "195.0402888",
+    "factor_unit": "kg CO2e/MWh",
+    "factor_id": "epa-egrid2023-r2-camx-total-output",
+    "factor_version": "eGRID2023-revision-2",
+    "source_locator": "SRL23!AI6",
+    "source_sha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+    "candidate_sha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356",
+    "gwp_sha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5"
+  },
+  "derivation": "Standalone Python Decimal precision96; aggregate exact sum matched sum of all exact monthly results and independent integer rational quotient/remainder half-even. No product imports.",
+  "accepted_cases": [
+    {
+      "id": "january_25000_partial",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          }
+        ],
+        "quantity_kwh": "25000.000",
+        "quantity_mwh": "25.000000",
+        "total_unrounded_kg_co2e": "4876.00722",
+        "total_display_kg_co2e": "4876.0072",
+        "sum_of_monthly_displays_kg_co2e": "4876.0072",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 1,
+          "missingMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "electricityComplete": false
+        },
+        "subtotal_label": "Entered-month electricity subtotal",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "january_25000_remaining_zero",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          }
+        ],
+        "quantity_kwh": "25000.000",
+        "quantity_mwh": "25.000000",
+        "total_unrounded_kg_co2e": "4876.00722",
+        "total_display_kg_co2e": "4876.0072",
+        "sum_of_monthly_displays_kg_co2e": "4876.0072",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "twelve_25000",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "25000"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "25000"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "25000.000",
+            "quantity_mwh": "25.000000",
+            "unrounded_kg_co2e": "4876.00722",
+            "display_kg_co2e": "4876.0072"
+          }
+        ],
+        "quantity_kwh": "300000.000",
+        "quantity_mwh": "300.000000",
+        "total_unrounded_kg_co2e": "58512.08664",
+        "total_display_kg_co2e": "58512.0866",
+        "sum_of_monthly_displays_kg_co2e": "58512.0864",
+        "display_minus_sum_month_displays_kg_co2e": "0.0002",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "all_zero",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          }
+        ],
+        "quantity_kwh": "0.000",
+        "quantity_mwh": "0.000000",
+        "total_unrounded_kg_co2e": "0",
+        "total_display_kg_co2e": "0.0000",
+        "sum_of_monthly_displays_kg_co2e": "0.0000",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "one_zero_remaining_missing",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          }
+        ],
+        "quantity_kwh": "0.000",
+        "quantity_mwh": "0.000000",
+        "total_unrounded_kg_co2e": "0",
+        "total_display_kg_co2e": "0.0000",
+        "sum_of_monthly_displays_kg_co2e": "0.0000",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 1,
+          "missingMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "electricityComplete": false
+        },
+        "subtotal_label": "Entered-month electricity subtotal",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "twelve_one",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "1"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "1"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "1.000",
+            "quantity_mwh": "0.001000",
+            "unrounded_kg_co2e": "0.1950402888",
+            "display_kg_co2e": "0.1950"
+          }
+        ],
+        "quantity_kwh": "12.000",
+        "quantity_mwh": "0.012000",
+        "total_unrounded_kg_co2e": "2.3404834656",
+        "total_display_kg_co2e": "2.3405",
+        "sum_of_monthly_displays_kg_co2e": "2.3400",
+        "display_minus_sum_month_displays_kg_co2e": "0.0005",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "twelve_minimum",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0.001"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          }
+        ],
+        "quantity_kwh": "0.012",
+        "quantity_mwh": "0.000012",
+        "total_unrounded_kg_co2e": "0.0023404834656",
+        "total_display_kg_co2e": "0.0023",
+        "sum_of_monthly_displays_kg_co2e": "0.0024",
+        "display_minus_sum_month_displays_kg_co2e": "-0.0001",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "aggregate_even_tie",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "62499.999"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "62499.999",
+            "quantity_mwh": "62.499999",
+            "unrounded_kg_co2e": "12190.0178549597112",
+            "display_kg_co2e": "12190.0179"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          }
+        ],
+        "quantity_kwh": "62500.000",
+        "quantity_mwh": "62.500000",
+        "total_unrounded_kg_co2e": "12190.01805",
+        "total_display_kg_co2e": "12190.0180",
+        "sum_of_monthly_displays_kg_co2e": "12190.0181",
+        "display_minus_sum_month_displays_kg_co2e": "-0.0001",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "aggregate_odd_tie",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "187499.999"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "0.001"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "0"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "187499.999",
+            "quantity_mwh": "187.499999",
+            "unrounded_kg_co2e": "36570.0539549597112",
+            "display_kg_co2e": "36570.0540"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "0.001",
+            "quantity_mwh": "0.000001",
+            "unrounded_kg_co2e": "0.0001950402888",
+            "display_kg_co2e": "0.0002"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          }
+        ],
+        "quantity_kwh": "187500.000",
+        "quantity_mwh": "187.500000",
+        "total_unrounded_kg_co2e": "36570.05415",
+        "total_display_kg_co2e": "36570.0542",
+        "sum_of_monthly_displays_kg_co2e": "36570.0542",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "twelve_maximum",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "1000000"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "1000000"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "1000000.000",
+            "quantity_mwh": "1000.000000",
+            "unrounded_kg_co2e": "195040.2888",
+            "display_kg_co2e": "195040.2888"
+          }
+        ],
+        "quantity_kwh": "12000000.000",
+        "quantity_mwh": "12000.000000",
+        "total_unrounded_kg_co2e": "2340483.4656",
+        "total_display_kg_co2e": "2340483.4656",
+        "sum_of_monthly_displays_kg_co2e": "2340483.4656",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "twelve_below_maximum",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": "999999.999"
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": "999999.999"
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": "999999.999",
+            "quantity_mwh": "999.999999",
+            "unrounded_kg_co2e": "195040.2886049597112",
+            "display_kg_co2e": "195040.2886"
+          }
+        ],
+        "quantity_kwh": "11999999.988",
+        "quantity_mwh": "11999.999988",
+        "total_unrounded_kg_co2e": "2340483.4632595165344",
+        "total_display_kg_co2e": "2340483.4633",
+        "sum_of_monthly_displays_kg_co2e": "2340483.4632",
+        "display_minus_sum_month_displays_kg_co2e": "0.0001",
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "subtotal_label": "Full-year electricity subtotal — all 12 months entered",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    },
+    {
+      "id": "mixed_partial",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": "12345.678"
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": "1.230"
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": "0"
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "expected": {
+        "months": [
+          {
+            "month": "2023-01",
+            "quantity_kwh": "12345.678",
+            "quantity_mwh": "12.345678",
+            "unrounded_kg_co2e": "2407.9046025518064",
+            "display_kg_co2e": "2407.9046"
+          },
+          {
+            "month": "2023-02",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-03",
+            "quantity_kwh": "1.230",
+            "quantity_mwh": "0.001230",
+            "unrounded_kg_co2e": "0.239899555224",
+            "display_kg_co2e": "0.2399"
+          },
+          {
+            "month": "2023-04",
+            "quantity_kwh": "0.000",
+            "quantity_mwh": "0.000000",
+            "unrounded_kg_co2e": "0",
+            "display_kg_co2e": "0.0000"
+          },
+          {
+            "month": "2023-05",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-06",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-07",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-08",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-09",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-10",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-11",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          },
+          {
+            "month": "2023-12",
+            "quantity_kwh": null,
+            "quantity_mwh": null,
+            "unrounded_kg_co2e": null,
+            "display_kg_co2e": null
+          }
+        ],
+        "quantity_kwh": "12346.908",
+        "quantity_mwh": "12.346908",
+        "total_unrounded_kg_co2e": "2408.1445021070304",
+        "total_display_kg_co2e": "2408.1445",
+        "sum_of_monthly_displays_kg_co2e": "2408.1445",
+        "display_minus_sum_month_displays_kg_co2e": "0.0000",
+        "coverage": {
+          "knownMonths": 3,
+          "missingMonths": [
+            "2023-02",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "electricityComplete": false
+        },
+        "subtotal_label": "Entered-month electricity subtotal",
+        "complete": false,
+        "releaseEligible": false,
+        "evidenceBasis": "synthetic_manual_without_linked_bills"
+      }
+    }
+  ],
+  "rejected_cases": [
+    {
+      "id": "all_missing",
+      "months": [
+        {
+          "month": "2023-01",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-03",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-04",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-05",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-06",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-07",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-08",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-09",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-10",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-11",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-12",
+          "quantityKwh": null
+        }
+      ],
+      "expected": "Reject save; no version, result, report, review or success audit event."
+    },
+    {
+      "id": "empty_string",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "space",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": " ",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "newline",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "1\n",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "unicode_digit",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "١",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "negative_zero",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "-0",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "positive_sign",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "+1",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "leading_zero",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "01",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "exponent",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "1e3",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "grouping",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "1,000",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "excess_precision",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "1.0000",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "above_monthly_bound",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "1000000.001",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "above_monthly_integer",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": "1000001",
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "json_number",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": 1,
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "boolean",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": false,
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "array",
+      "base_case": "january_25000_partial",
+      "replace_january_quantity": [],
+      "expected": "reject_without_side_effect"
+    },
+    {
+      "id": "eleven_rows",
+      "base_case": "january_25000_partial",
+      "mutation": "omit December row",
+      "expected": "reject"
+    },
+    {
+      "id": "thirteen_rows",
+      "base_case": "january_25000_partial",
+      "mutation": "append duplicate January row",
+      "expected": "reject"
+    },
+    {
+      "id": "duplicate_month",
+      "base_case": "january_25000_partial",
+      "mutation": "Replace February month with 2023-01.",
+      "expected": "reject"
+    },
+    {
+      "id": "out_of_order",
+      "base_case": "january_25000_partial",
+      "mutation": "swap January and February rows",
+      "expected": "reject"
+    },
+    {
+      "id": "wrong_year",
+      "base_case": "january_25000_partial",
+      "mutation": "January month becomes 2024-01.",
+      "expected": "reject"
+    },
+    {
+      "id": "missing_quantity_field",
+      "base_case": "january_25000_partial",
+      "mutation": "Omit quantityKwh key from February instead of explicit null.",
+      "expected": "reject"
+    },
+    {
+      "id": "unsupported_evidence_inheritance",
+      "base_case": "january_25000_partial",
+      "mutation": "attach M66 bill/source/review identity",
+      "expected": "reject unsupported annual fields; never grant evidence coverage"
+    }
+  ],
+  "lifecycle_cases": [
+    {
+      "id": "missing_to_zero",
+      "base_case": "one_zero_remaining_missing",
+      "change": {
+        "month": "2023-02",
+        "quantityKwh": "0"
+      },
+      "expected": "New version; coverage 2/12; aggregate remains zero; fresh review required."
+    },
+    {
+      "id": "zero_to_missing",
+      "base_case": "all_zero",
+      "change": {
+        "month": "2023-02",
+        "quantityKwh": null
+      },
+      "expected": "New version; coverage 11/12; aggregate remains zero; electricityComplete false; fresh review required."
+    },
+    {
+      "id": "clear_final_entered_month",
+      "base_case": "one_zero_remaining_missing",
+      "change": {
+        "month": "2023-01",
+        "quantityKwh": null
+      },
+      "expected": "Reject correction atomically; prior version/report remain intact."
+    },
+    {
+      "id": "quantity_reallocation",
+      "base_case": "january_25000_partial",
+      "changes": [
+        {
+          "month": "2023-01",
+          "quantityKwh": null
+        },
+        {
+          "month": "2023-02",
+          "quantityKwh": "25000"
+        }
+      ],
+      "expected": "New version despite unchanged aggregate and count; new missing-month list; fresh review required."
+    },
+    {
+      "id": "label_only",
+      "base_case": "january_25000_partial",
+      "change": "Change only the fictional facility label.",
+      "expected": "New version and fresh review; actual frontend must accept the valid successor."
+    },
+    {
+      "id": "formatting_only",
+      "base_case": "january_25000_partial",
+      "change": {
+        "month": "2023-01",
+        "quantityKwh": "25000.000"
+      },
+      "expected": "Canonical no-op; no new correction version."
+    },
+    {
+      "id": "reason_only",
+      "base_case": "january_25000_partial",
+      "change": "Only correction reason changes; no effective input change.",
+      "expected": "No-op refusal."
+    },
+    {
+      "id": "later_review_and_correction",
+      "expected": "Captured historical annual report bytes and review state remain unchanged; no M66 decision inheritance."
+    }
+  ],
+  "verification": {
+    "accepted_exact_aggregate_cases": 12,
+    "month_slots_checked": 144,
+    "all_null_policy": "CPO requires at least one entered month; supersedes preliminary saveable-empty proposal.",
+    "product_sql_frontend_or_hosted_execution": false,
+    "professional_assurance": false
+  }
+}

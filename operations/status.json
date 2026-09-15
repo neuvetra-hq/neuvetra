@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-14T17:50:15.501203+00:00",
+  "updated_at": "2026-09-15T04:53:04.184445+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M62",
-    "name": "PR3 merge readiness and explicit legacy calculation deferral",
-    "status": "complete",
-    "next_gate": "Final board approval to merge PR3; no merge or deployment performed.",
+    "id": "M68",
+    "name": "Annual electricity with supporting bills",
+    "status": "in_progress",
+    "next_gate": "Independent accounting contract review, backend/UI implementation and integrated QA.",
     "evidence": [
-      "docs/research/m62-publication.json",
-      "evaluations/research-qa/milestone62-merge-readiness.md"
+      "docs/research/evidence-annual-electricity-milestone-68.md",
+      "operations/feedback/2026-09-14-milestone-67.md"
     ]
   },
   "completed_milestones": [
@@ -69,6 +69,36 @@
       "id": "M61",
       "completed_at": "2026-09-14",
       "feedback": "docs/research/inventory-draft-report-review-milestone-61.md"
+    },
+    {
+      "id": "M62",
+      "completed_at": "2026-09-14",
+      "feedback": "Board approved PR3 merge, then M63 private staging."
+    },
+    {
+      "id": "M63",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-63.md"
+    },
+    {
+      "id": "M64",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-64.md"
+    },
+    {
+      "id": "M65",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-65.md"
+    },
+    {
+      "id": "M66",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-66.md"
+    },
+    {
+      "id": "M67",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-67.md"
     }
   ],
   "runtime": {
@@ -76,25 +106,25 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M61 local browser acceptance completed end to end; all temporary M61 API and preview listeners are closed. No persistent M61 service is configured.",
-    "background_continuation": "Not configured for Neuvetra. When the board asked who was working on September 9, previous assignments had finished and no matching local automation was found. The subsequently dispatched readiness and QA assignments completed. This status file does not run workers.",
-    "last_session_work": "M61 passed the complete local browser workflow and independent QA. A second manager can record one immutable acceptance or routed change request for the exact M60 report hash, with a separately verified decision snapshot and exact audit binding."
+    "website_preview_state": "M67 hosted and workflow accepted; M68 under implementation, not deployed.",
+    "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
+    "last_session_work": "M68 independent accounting design review complete. CTO backend implementation active as sole M68 specialist; root UI/operators in progress."
   },
   "session_handoff": {
-    "saved_at": "2026-09-14T17:08:58.000Z",
-    "path": "operations/next-session.md",
-    "board_record": "docs/research/inventory-draft-report-review-milestone-61.md",
-    "next_task": "Execute M62 merge readiness: resolve the inherited TBD GHG fixtures, reconcile the PR diff and pass exact remote CI before final merge authorization.",
-    "execution_state": "m61_complete_independently_accepted_published_to_pr_no_release_acceptance",
-    "review": "Independent QA 922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5 passes after five resolved findings. Linux CI then exposed only a 5.066-second composed-test timeout against a 5-second default; the test-only 30-second deadline repair passed independent follow-up QA c63d8d236bf5f7321fbcff618839ce789627a3d3e2972340a51c83a270d8c42f, focused 4/131 and full API 625/5,451. Fresh Linux CI is pending. The broad historical test:ghg collector remains blocked by three inherited TBD expected values outside M61.",
-    "scope": "One immutable second-manager decision for the exact M60 synthetic report, with exact acknowledgements or one bounded route and note. No customer data, report revision, hosted persistence, assurance, deployment, merge or release."
+    "current": "M67 workflow accepted. M68 authorized on isolated milestone Git branch at exact published M67 head; technical contract drafted, accounting design review active.",
+    "next": "Complete M68 implementation and independent review; push milestone branch and integrate reviewed commits into rolling draft PR4, then verify CI/deploy/demonstrate. RAG readiness progresses independently.",
+    "evidence": [
+      "operations/feedback/2026-09-14-milestone-67.md",
+      "docs/research/m67-hosted-verification.json",
+      "evaluations/research-qa/m67-hosted-handoff.md"
+    ]
   },
   "checkpoint": {
     "tag": "checkpoint/pre-ghg-focus-2026-09-08",
     "commit": "367497e750530c590c7eedd229e48a34e2daf8b8",
     "github_verified": true
   },
-  "working_branch": "codex/m57-inventory-review",
+  "working_branch": "codex/m63-private-staging",
   "publication": {
     "repository": "https://github.com/neuvetra-hq/neuvetra",
     "implementation_commit": "84d55b7fcfb4b0f127c5ede80b13e389652a0a80",
@@ -463,7 +493,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u2013E06 and P01\u2013P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00e2\u20ac\u201cE06 and P01\u00e2\u20ac\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1114,6 +1144,87 @@
       "evidence": [
         "operations/agent-improvement/runs/M62-QA.json"
       ]
+    },
+    {
+      "id": "M63-CTO",
+      "owner": "/root/m63_cto",
+      "status": "complete",
+      "scope": "Architecture and implementation boundaries",
+      "evidence": [
+        "evaluations/research-qa/milestone63-private-staging.md",
+        "evaluations/research-qa/m63-accepted-source-manifest.json",
+        "docs/research/m63-hosted-recovery.json"
+      ]
+    },
+    {
+      "id": "M63-QA",
+      "owner": "/root/m63_qa",
+      "status": "complete",
+      "scope": "Independent security and acceptance review",
+      "evidence": [
+        "evaluations/research-qa/milestone63-private-staging.md",
+        "evaluations/research-qa/m63-accepted-source-manifest.json",
+        "docs/research/m63-hosted-recovery.json"
+      ]
+    },
+    {
+      "id": "M63-DATA",
+      "owner": "/root/m63_data",
+      "status": "complete",
+      "scope": "Hosted schema, tenancy, migrations and source-manifest handoff",
+      "evidence": [
+        "operations/agent-improvement/runs/M63-DATA.json"
+      ]
+    },
+    {
+      "id": "M64-PLAN",
+      "owner": "/root/m63_cto",
+      "status": "complete",
+      "scope": "Read-only CPO/CTO next-milestone planning, independently challenged by QA; implementation not dispatched",
+      "evidence": [
+        "docs/research/guided-electricity-entry-milestone-64.md",
+        "evaluations/research-qa/m63-board-closure.md"
+      ]
+    },
+    {
+      "id": "M64-ACCOUNTING",
+      "owner": "/root/m64_accounting",
+      "status": "complete",
+      "scope": "Independent bounded input policy, numerical expectations and implementation review",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M64-CTO",
+      "owner": "/root/m64_cto",
+      "status": "complete",
+      "scope": "Tenant-scoped immutable worksheet/database/API with actual-driver regression",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M64-QA",
+      "owner": "/root/m63_data",
+      "status": "complete",
+      "scope": "Independent local, packaging and hosted-evidence acceptance; reused context with prior M63 authorship disclosed",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M64-INTEGRATION",
+      "owner": "/root",
+      "status": "complete",
+      "scope": "Frontend, scoped existing-host upgrade, browser demonstration and publication",
+      "evidence": [
+        "docs/research/m64-hosted-verification.json",
+        "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -1417,6 +1528,12 @@
       "decision": "Accept M43 as offline pilot-readiness preparation and put only the exact H01-then-H04 paid canary to a board decision",
       "why": "The new14-case EPA-only matrix and two-question fixture pass independent source,semantic,mechanical,latency,cost and leakage review without making a provider request.",
       "evidence": "claude-memory/meetings/2026-09-11-neuvetra-m43-rag-pilot-readiness.md"
+    },
+    {
+      "id": "M67-SCOPE",
+      "decision": "Accept M66 and start manual full-year2023CAMX electricity coverage, preserving separate M66 bill evidence.",
+      "why": "Board approved demonstrated M66 and authorized full-year coverage next. Missing months must stay distinguishable from zero and evidence must not be inferred.",
+      "evidence": "docs/research/annual-electricity-milestone-67.md"
     }
   ],
   "open_dependencies": [
@@ -1908,5 +2025,151 @@
     "release_acceptance": false,
     "active_workers": 0,
     "next_gate": "Closed. Do not rerun M50 or reuse its authorization; preserve the M51/M52 offline remediation and require a new milestone for any future live work."
+  },
+  "pr3_merge": {
+    "merged": true,
+    "merge_commit": "0127b9e12358b4e2d687acec1be30365d3e293a4",
+    "merged_at": "2026-09-14T17:54:47Z",
+    "board_authorization": "Explicit yes to merge PR3 in this task",
+    "deployed": false
+  },
+  "current_m64": {
+    "state": "accepted",
+    "implementation_commit": "ea31275cc11c7101e1bb116187867b2d782331b0",
+    "pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/4",
+    "draft": true,
+    "merged": false,
+    "deployment_id": "8aaa07f4-a7bd-4eb8-be5d-04eb7b7c3956",
+    "ci_checks_passed": 6,
+    "readiness_http": 200,
+    "schema_version": 10,
+    "synthetic_only": true,
+    "release_eligible": false,
+    "active_workers_excluding_root": 0,
+    "active_worker": null,
+    "persistent_workers": false,
+    "board_feedback": "accepted",
+    "evidence": "docs/research/m64-hosted-verification.json",
+    "commit": "2b2129505ab613e0861039f23e5a751c7f1b9465"
+  },
+  "current_m65": {
+    "status": "complete",
+    "implementation_authorized": true,
+    "backend_owner": "/root/m64_cto",
+    "accounting_owner": "/root/m64_accounting",
+    "qa_owner": "/root/m63_data",
+    "root_owner": "frontend, operators, publication and board communication",
+    "persistent_workers": false,
+    "compute_observed": null,
+    "implementation_commit": "3d6fdfa0e18d924c6495866f2db21c088089f9d5",
+    "deployment_id": "fe21d898-1b02-4960-9f72-20774ec3a6ef",
+    "ci_checks_passed": 6,
+    "schema_version": 11,
+    "active_workers_excluding_root": 0,
+    "final_gate": "Accepted; next milestone selection",
+    "release_eligible": false,
+    "synthetic_only": true,
+    "board_feedback": "accepted",
+    "evidence": "docs/research/m65-hosted-verification.json"
+  },
+  "current_m66": {
+    "status": "complete_board_accepted",
+    "implementation_started": true,
+    "board_scope": "Supporting bills first; full-year coverage follows as M67",
+    "backend_owner": "/root/m64_cto",
+    "accounting_owner": "/root/m64_accounting",
+    "qa_owner": "/root/m63_data",
+    "root_owner": "UI/operators/publication/cloud/records",
+    "active_workers_excluding_root": 0,
+    "persistent_workers": false,
+    "compute_observed": null,
+    "local_verification": "Independent local and hosted handoff passed; final publication and all18 committed artifact hashes verified; board accepted.",
+    "next_milestone": "M67 full-year electricity authorized and contract preparation underway",
+    "implementation_commit": "63791ac4d6628651fc53c3de79f7db4791b48114",
+    "ci_checks_passed": 6,
+    "schema_version": 12,
+    "release_eligible": false,
+    "synthetic_only": true,
+    "board_feedback": "operations/feedback/2026-09-14-milestone-66.md",
+    "evidence": "docs/research/m66-hosted-verification.json",
+    "board_status": "accepted",
+    "final_publication_commit": "9afde82631e321c0c084454c97a24a2f463a9456",
+    "initial_implementation_deployment_id": "56c457f9-2c27-4f68-bd62-3eec6d1687f7",
+    "final_deployment_id": "405765fc-a4fe-4fd1-b310-d4a615c0decf"
+  },
+  "current_m67": {
+    "status": "complete_board_accepted",
+    "scope": "docs/research/annual-electricity-milestone-67.md",
+    "board_authorized": true,
+    "implementation_started": true,
+    "publication": "implementation_pushed_all_six_checks_passed_completion_records_ready",
+    "prior_m66_accepted": true,
+    "design_review": "evaluations/research-qa/m67-review-plan.md",
+    "baseline_tables": 48,
+    "baseline_rows": 1488,
+    "active_workers_excluding_root": 0,
+    "local_review": "evaluations/research-qa/m67-local-review.md",
+    "independent_combined_tests": 33,
+    "independent_combined_assertions": 1571,
+    "implementation_commit": "dd1a09f00901f562ce1c7966b53326c8ee21bc98",
+    "deployment_id": "3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938",
+    "schema_version": 13,
+    "hosted_operator_result": "passed_36_stages_8_application_posts_sessions_closed",
+    "remaining_gate": "No open M67 scope blocker. M68 explicitly authorized separately.",
+    "hosted_review": "evaluations/research-qa/m67-hosted-handoff.md",
+    "hosted_verification": "docs/research/m67-hosted-verification.json",
+    "hosted_snapshot": "docs/research/m67-hosted-snapshot.json",
+    "annual_versions": 4,
+    "annual_reports": 3,
+    "board_feedback": "operations/feedback/2026-09-14-milestone-67.md",
+    "board_acceptance_scope": "Workflow accepted; board did not independently verify numbers; no application review decision or method release."
+  },
+  "current_m68": {
+    "status": "complete_bounded_hosted_board_feedback_pending",
+    "board_authorized": true,
+    "scope": "docs/research/evidence-annual-electricity-milestone-68.md",
+    "base_commit": "ad008741e4d3750af7de6e4791e2adc524c6713d",
+    "branch": "codex/m68-bill-evidence",
+    "rolling_branch": "codex/m63-private-staging",
+    "rolling_pr": 4,
+    "publication": "Reviewed implementation and closure evidence on authorized milestone and rolling PR4 branches; exact final remote checks verified by coordinator before completion report",
+    "deployment": {
+      "id": "d3960976-bb9a-4d8b-b490-0837caa667a1",
+      "status": "SUCCESS",
+      "schema": 14
+    },
+    "sole_publisher_and_ledger_writer": "M68 task 01a0a2ea-3548-77e2-9cb5-8615809d9d5f",
+    "parallel_rag_task": "01a0a2ea-42d4-7f22-82be-6ddf6dba1aa9",
+    "specialist_limit": "Accounting and QA ran concurrently after RAG explicitly lent its idle slot; both local review deliveries complete.",
+    "m67_acceptance_reconciliation": "Copied exact four local-only acceptance records from actual original checkout after inspecting differences; historical proposal retained, explicit new authorization separately recorded.",
+    "accounting_design": "docs/research/m68-accounting-contract.md",
+    "hosted_baseline": "Passed 24 stages; zero application POSTs; four temporary Auth sessions closed. Exact M63-M67 source/report preservation.",
+    "accounting_implementation": "docs/research/m68-accounting-implementation-review.md",
+    "independent_qa": "evaluations/research-qa/m68-local-review.md",
+    "implementation_commit": "c0c750a7acdd4ef1641a84b648f6795cdafa2848",
+    "hosted_evidence": "docs/research/m68-hosted-verification.json",
+    "board_feedback": "pending before dependent product milestone",
+    "current_evidence_version": 4,
+    "current_evidence_review": "unreviewed",
+    "reports": 4,
+    "local_postgres": "stopped; files preserved",
+    "independent_hosted_handoff": "evaluations/research-qa/m68-hosted-handoff.md"
+  },
+  "current_m69": {
+    "status": "offline_preparation_integrated_live_blocked",
+    "board_publication_approved": true,
+    "approved_commit": "ca1b6b593d10572d9a4d7182dc61ae631806983b",
+    "integrated_commit": "621f1b2",
+    "scope": "Reviewed offline RAG preparation; no customer application or hosted schema change",
+    "paid_run_authorized_by_this_approval": false,
+    "paid_run_performed": false,
+    "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+    "live_gate": "blocked: existing credential unavailable for executable binding; dated source/account evidence must be rechecked before future live action",
+    "integration_record": "docs/research/m69-integration.md",
+    "independent_review": "evaluations/research-qa/m69-integration-review.md",
+    "publication": "Reviewed source milestone branch and integrated rolling PR4 delivery; final exact remote checks verified by coordinator before completion report",
+    "source_repair_commit": "7cb1bd6a5495841612f3a6452acbe9440e0b36b1",
+    "integrated_repair_commit": "9efc31f",
+    "validation": "34 tests /225assertions pass; role checker passes"
   }
 }

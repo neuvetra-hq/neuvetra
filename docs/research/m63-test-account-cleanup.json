@@ -1,0 +1,14 @@
+{
+  "observedAt": "2026-09-14T19:32:52.3201192Z",
+  "status": "orphan_accounts_banned",
+  "count": 4,
+  "ids": [
+    "4e0fffb2-3621-4197-b64f-674e20da8ef2",
+    "59556b2b-436a-42ae-a5e6-2b27e0d303f0",
+    "830df4f3-9e29-4b7b-bffd-054126b98ba7",
+    "919b3da0-86e3-40ee-8470-e5a9280cafb5"
+  ],
+  "method": "reversible provider Auth ban; exact reviewed IDs and all application-schema FK exclusions; API returned matching ID and future banned_until for each",
+  "boardAndActiveQaExcluded": true,
+  "dataDeleted": false
+}

@@ -64,3 +64,16 @@ evaluations/research-qa/epa-capability-mapping-10.json -text whitespace=cr-at-eo
 evaluations/research-qa/epa-source-acquisition-candidate8-10.json -text whitespace=cr-at-eol
 evaluations/research-qa/epa-route-capability-candidate10-10.json -text whitespace=cr-at-eol
 evaluations/research-qa/epa-limitation-candidate11-source-10.json -text whitespace=cr-at-eol
+
+# M66 accepted review bundles bind their original bytes, including line endings.
+operations/agent-improvement/snapshots/M66-CTO.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M66-ACCOUNTING.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M66-QA.json -text whitespace=cr-at-eol
+
+# M68 immutable review evidence preserves reviewed file bytes.
+evaluations/research-qa/m68-* -text whitespace=cr-at-eol
+docs/research/m68-accounting-* -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M68-*.json -text whitespace=cr-at-eol
+# M69 accepted candidate/review bundles bind their original bytes, including line endings.
+docs/research/m69-canary-preparation.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json -text whitespace=cr-at-eol

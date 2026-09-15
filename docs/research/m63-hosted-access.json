@@ -1,0 +1,41 @@
+{
+  "status": "live_database_and_auth_pass",
+  "ready": {
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 9,
+    "legacyContainmentVerified": true
+  },
+  "results": [
+    {
+      "role": "manager1",
+      "realSignIn": true,
+      "serverVerified": true,
+      "rosterAccess": true,
+      "hostedSessionStatus": 200
+    },
+    {
+      "role": "manager2",
+      "realSignIn": true,
+      "serverVerified": true,
+      "rosterAccess": true,
+      "hostedSessionStatus": 200
+    },
+    {
+      "role": "member",
+      "realSignIn": true,
+      "serverVerified": true,
+      "rosterAccess": true,
+      "hostedSessionStatus": 200
+    },
+    {
+      "role": "outsider",
+      "realSignIn": true,
+      "serverVerified": true,
+      "rosterAccess": false,
+      "hostedSessionStatus": 403
+    }
+  ],
+  "signedOutStatus": 401,
+  "scope": "live provider Auth, restricted SQL and deployed HTTP session boundary; not full workflow",
+  "logoutStatus": 204
+}

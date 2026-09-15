@@ -1,0 +1,171 @@
+{
+  "profile": "neuvetra.m65.independent-local-qa.v1",
+  "date": "2026-09-14",
+  "verdict": "pass_local_integration_and_source_operator_image_review_only",
+  "canonicalization": "UTF-8 bytes with CRLF normalized to LF; no other normalization",
+  "executor": "reused /root/m63_data; prior M63 product authorship; no M65 product authorship",
+  "requestedCompute": "Astra/high",
+  "observedInheritedCompute": null,
+  "runtime": {
+    "bun": "1.3.12",
+    "postgres": "17.11",
+    "database": "m65_qa",
+    "host": "127.0.0.1",
+    "port": 55463,
+    "auth": "dedicated local trust fixtures; no hosted Auth tested"
+  },
+  "checks": {
+    "native": {
+      "tests": 12,
+      "assertions": 218,
+      "passed": true
+    },
+    "frontendAndRenderer": {
+      "tests": 9,
+      "assertions": 174,
+      "passed": true
+    },
+    "baseline": {
+      "tables": 35,
+      "rows": 999,
+      "originalRowsPreserved": true
+    }
+  },
+  "pending": [
+    "actual Linux image CI",
+    "hosted migration/readiness and authenticated browser journey",
+    "rendered browser print pages including long labels and repeated qualifications",
+    "hosted refresh/restart/reopen and M63/M64 preservation",
+    "board demonstration and feedback"
+  ],
+  "artifacts": [
+    {
+      "path": "docs/research/worksheet-report-milestone-65.md",
+      "sha256": "22acc379dc44216b50e35e72fbe4e0cf415986dcaf35f4cca2bc9c101884f0c9"
+    },
+    {
+      "path": "evaluations/research-qa/m65-plan-review.md",
+      "sha256": "a90950c4210ec29248d1af9a5601b215e560c6d525a06b4f434542e9dda1a5d4"
+    },
+    {
+      "path": "docs/research/m65-accounting-contract.md",
+      "sha256": "99fb087858f3b045e5f7152625cbaccf43c586da370b740c7f7780b1501915e1"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-cases.json",
+      "sha256": "8fb4751e72cbd732cbe539e25f30ca22e23a5152b85540b74efa7bd6fd87da1d"
+    },
+    {
+      "path": "evaluations/research-qa/m65-accounting-implementation-review.md",
+      "sha256": "90c4501612245505725fd6996a8ad7d467019709b4445250a829c1012c599c35"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-contract.ts",
+      "sha256": "9ffb93e091aec3e5a2b8cafb7f7bacd8bc2a04280632663e802a8cf201bcff31"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "sha256": "e229dad855b1d0ac3703e72ee5ee7cfbf569f4fa71ddbd036f6221c8e9596b74"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.ts",
+      "sha256": "409a150611664efb3b45213714dc561b4a6a289fa6304c3cb56c15d2d6cf230e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "sha256": "9032e4ae40eb3e7e04b9329dca5c2bbafc52197a94742cd7a3720a055cd06fb0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "bd40668e73a75886b4fd5010052fb268986647b9da4584e164d220f4877b6ecc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "283fc74c5d3c2b8a9918ab6f517f8d4a25ddb8dc8f774903179e5b02ed261358"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "a4447cf299b306e31d99fd8ca09e38fcd8aed597b17db730f2f178e05a7567e8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "dd07dc900297c9075ce20586cd6a7e4182da49051b799cc08c37c804cd637c61"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m65-routes.ts",
+      "sha256": "bb997126708562b96086aa4ca88008f6e14d91811fcf8b045e52fdd8e7440fd1"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "b0e0566338592f4e33b4372b056c2c0eaadd2ee99498b627b81f06fdcb31a3ec"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "sha256": "d6da83c4d7ed2c09a01c84f4b9822c33adfbac8e10da9a3f222426e6b06d8c7b"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.test.ts",
+      "sha256": "08d955b6669f4757fbdd6e7e0a61a42e148292a0bdc91f28aac28b5a0e1331e2"
+    },
+    {
+      "path": "apps/site-web/src/lib/m65-api.ts",
+      "sha256": "bfdbf394cae49759f1117374730002f2bb36bd384227d59ce6599c4d99cfedd0"
+    },
+    {
+      "path": "apps/site-web/src/components/WorksheetReports.tsx",
+      "sha256": "55acc9e11391b491d54042dbd904d8efab856e5749c73e1f52eb1b21feb5c6bf"
+    },
+    {
+      "path": "apps/site-web/src/components/ElectricityWorksheet.tsx",
+      "sha256": "b3f656c4fc3391fdc48489e891051ce5e9c00e345e817a67bee42c9bed11f94d"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "e953b29263bb3f3891788cbbf9c94b2d5b198e9032eed50c66fe1e7a364d5e3e"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "1f8bdc2697af552ed49386e2c6c387f6ddce62c65663740c6471937dc4bf9aef"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "sha256": "b2e7deead5ca132bf49c5384bb531572b9003b273d471df181c68e1515bc4d02"
+    },
+    {
+      "path": "tools/staging/upgrade-m65.ts",
+      "sha256": "8460aa1cc9204d79366a25906f21080c687ed1a30c0f9bb98d9ca40d995f4c50"
+    },
+    {
+      "path": "tools/staging/check-m65-hosted.ts",
+      "sha256": "234faabdf367689114b4c731b1d6ea66a10344c91510b9542f55265d34e4d1f8"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "777baf3f36c1b3e0757e4bb1a5a818dcfaa56177e76e414e3da60dc36e12d0eb"
+    },
+    {
+      "path": "evaluations/research-qa/m65-baseline.ts",
+      "sha256": "167924476021491460fc56354200ea5f71ad3621e88a7e12727b300cb34902db"
+    },
+    {
+      "path": "evaluations/research-qa/m65-baseline-receipt.json",
+      "sha256": "60a8703693ddc8fdf9e987925185ebff8d8550ac4f064e9488d6b9045003fd84"
+    },
+    {
+      "path": "evaluations/research-qa/m65-independent-frontend.test.ts",
+      "sha256": "02411a0eaaf9ad481f43033504a0443a667a5a760e1493f4b669107c9d39b5a1"
+    },
+    {
+      "path": "evaluations/research-qa/m65-independent-renderer.test.ts",
+      "sha256": "79edebfeeb5a7ad60839f3f1d70bcdcb18186dead61f938d008862fa04b7cefa"
+    },
+    {
+      "path": "evaluations/research-qa/m65-independent-postgres.test.ts",
+      "sha256": "3a764f106be84f18e0edfac89fc238867f76f1fd91be99815fce016b42966014"
+    }
+  ]
+}

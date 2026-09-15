@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "scope": "real hosted GET responses through actual frontend decoders; corrupted counterexamples in memory only; no browser rendering or application mutations",
+  "runs": [
+    {
+      "status": "browser_contract_failed",
+      "applicationPostRequests": 0,
+      "stage": "frontend_bill_calculation",
+      "httpStatus": 200,
+      "decoderLocation": {
+        "line": 161,
+        "column": 615
+      },
+      "authLogoutAcknowledged": true,
+      "observedAt": "2026-09-14T19:47:27.448Z"
+    },
+    {
+      "status": "browser_bill_contract_passed",
+      "applicationPostRequests": 0,
+      "stage": "frontend_bill_calculation",
+      "httpStatus": 200,
+      "authLogoutAcknowledged": true,
+      "observedAt": "2026-09-14T19:48:28.421Z"
+    },
+    {
+      "status": "browser_contract_passed",
+      "actors": [
+        {
+          "role": "manager1",
+          "frontendStagesPassed": 11,
+          "originalComparisonDiagnosis": {
+            "totalStringifyEqual": false,
+            "gasResultsStringifyEqual": true,
+            "traceStringifyEqual": true
+          },
+          "malformedResponsesRefused": [
+            "workspace_year",
+            "bill_record_value",
+            "bill_record_extra_key",
+            "bill_trace_array_order",
+            "predecessor_release",
+            "register_excluded_quantity",
+            "annual_release",
+            "archive_length",
+            "report_source_binding",
+            "review_self_approval",
+            "archive_byte_corruption",
+            "report_byte_corruption"
+          ],
+          "baselineHashesMatched": true,
+          "archiveSha256": "5b24c964b82ca2b0fd4d9d0eb2fc3bea8e6790842660d27ea6019224a784a1eb",
+          "reportSha256": "4d208e345e939a8e024839713b7aac61504c7bae77b630ceddace39e1a124014",
+          "decisionSnapshotSha256": "38d027250a66451001de3c80ce7c707143f44b7d1d62a3a77179af1b734447ca"
+        },
+        {
+          "role": "member",
+          "frontendStagesPassed": 11,
+          "originalComparisonDiagnosis": {
+            "totalStringifyEqual": false,
+            "gasResultsStringifyEqual": true,
+            "traceStringifyEqual": true
+          },
+          "malformedResponsesRefused": [
+            "workspace_year",
+            "bill_record_value",
+            "bill_record_extra_key",
+            "bill_trace_array_order",
+            "predecessor_release",
+            "register_excluded_quantity",
+            "annual_release",
+            "archive_length",
+            "report_source_binding",
+            "review_self_approval",
+            "archive_byte_corruption",
+            "report_byte_corruption"
+          ],
+          "baselineHashesMatched": true,
+          "archiveSha256": "5b24c964b82ca2b0fd4d9d0eb2fc3bea8e6790842660d27ea6019224a784a1eb",
+          "reportSha256": "4d208e345e939a8e024839713b7aac61504c7bae77b630ceddace39e1a124014",
+          "decisionSnapshotSha256": "38d027250a66451001de3c80ce7c707143f44b7d1d62a3a77179af1b734447ca"
+        }
+      ],
+      "applicationPostRequests": 0,
+      "applicationGetRequests": 22,
+      "decoderSourceSha256": "f30e9b2044831c07a5b3bc2442c5e8774d40edc32f66fd789a9d6c368acad979",
+      "stages": [
+        {
+          "actor": "manager1",
+          "stage": "frontend_session",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_workspace",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_bill_calculation",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_predecessor_inventory",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_both_registers",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_annual_inventory",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_evidence_pack",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_archive_download",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_draft_report",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_report_download",
+          "httpStatus": 200
+        },
+        {
+          "actor": "manager1",
+          "stage": "frontend_second_manager_review",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_session",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_workspace",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_bill_calculation",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_predecessor_inventory",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_both_registers",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_annual_inventory",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_evidence_pack",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_archive_download",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_draft_report",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_report_download",
+          "httpStatus": 200
+        },
+        {
+          "actor": "member",
+          "stage": "frontend_second_manager_review",
+          "httpStatus": 200
+        }
+      ],
+      "authLogouts": [
+        {
+          "role": "manager1",
+          "httpStatus": 204
+        },
+        {
+          "role": "member",
+          "httpStatus": 204
+        }
+      ],
+      "authLogoutAcknowledged": true,
+      "observedAt": "2026-09-14T19:52:52.335Z"
+    }
+  ]
+}

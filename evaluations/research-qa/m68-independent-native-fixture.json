@@ -1,0 +1,4867 @@
+{
+  "company": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+  "annual": {
+    "profile": "neuvetra.synthetic.annual-electricity-worksheet.v1",
+    "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+    "synthetic": true,
+    "complete": false,
+    "releaseEligible": false,
+    "assurance": "none",
+    "limitations": [
+      "synthetic_manual_input",
+      "no_bills_linked_to_annual_worksheet",
+      "overall_inventory_incomplete",
+      "calendar_2023_camx_single_facility_only",
+      "missing_months_not_zero",
+      "market_based_scope2_not_included",
+      "factor_and_method_not_released",
+      "scope_1_and_scope_3_not_assessed",
+      "no_assurance"
+    ],
+    "versions": [
+      {
+        "id": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "0.0000",
+          "rounding": "half_even_4dp",
+          "unrounded": "0"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-02",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-03",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-04",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-05",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-06",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-07",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-08",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-09",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-10",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-11",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-12",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          }
+        ],
+        "version": 1,
+        "coverage": {
+          "knownMonths": 1,
+          "missingMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "electricityComplete": false
+        },
+        "createdAt": "2026-09-15T03:13:43.180Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598",
+        "quantityKwh": "0.000",
+        "quantityMwh": "0.000000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": null,
+        "previousVersionId": null,
+        "review": {
+          "id": "4b21f317-e824-4d13-a0ef-16d8173dd777",
+          "note": null,
+          "decision": "accept_bounded_internal_draft",
+          "versionId": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+          "reviewedAt": "2026-09-15T03:13:43.191Z",
+          "reviewerId": "b7569fa4-9e85-447f-ba01-7f905426c857",
+          "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+          "decisionSha256": "4ca4cd5006d78a8a90e66ac05776c06d93592af48e8002c8bc0a327f8a20e9c6",
+          "acknowledgedLimitations": [
+            "synthetic_manual_input",
+            "no_bills_linked_to_annual_worksheet",
+            "overall_inventory_incomplete",
+            "calendar_2023_camx_single_facility_only",
+            "missing_months_not_zero",
+            "market_based_scope2_not_included",
+            "factor_and_method_not_released",
+            "scope_1_and_scope_3_not_assessed",
+            "no_assurance"
+          ]
+        }
+      },
+      {
+        "id": "17a9ba96-5dc2-48fb-a5ed-7c30e31074fa",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "0.0000",
+          "rounding": "half_even_4dp",
+          "unrounded": "0"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-02",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-03",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-04",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-05",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-06",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-07",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-08",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-09",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-10",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-11",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-12",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          }
+        ],
+        "version": 2,
+        "coverage": {
+          "knownMonths": 1,
+          "missingMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "electricityComplete": false
+        },
+        "createdAt": "2026-09-15T03:13:43.296Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "145b65ff446b3edac6e33fde52a070c019e9db379be3c9a619e10783e1ace089",
+        "quantityKwh": "0.000",
+        "quantityMwh": "0.000000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "0aaca1404b26f14add666dba6bef522a3db2c9c87ee8a1d706ea91d9b4c48e78",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Only changed the fictional facility label",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+        "review": null
+      },
+      {
+        "id": "fe756789-12fe-4312-b940-62684361573c",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "2.1454",
+          "rounding": "half_even_4dp",
+          "unrounded": "2.1454431768"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-02",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-03",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-04",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-05",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-06",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-07",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-08",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-09",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-10",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-11",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          },
+          {
+            "month": "2023-12",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.1950",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.1950402888"
+            },
+            "quantityKwh": "1.000",
+            "quantityMwh": "0.001000"
+          }
+        ],
+        "version": 3,
+        "coverage": {
+          "knownMonths": 11,
+          "missingMonths": [
+            "2023-01"
+          ],
+          "electricityComplete": false
+        },
+        "createdAt": "2026-09-15T03:13:43.382Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "b78376f2632861ed158d1557ddbcc8bb381b741c4a42683e89c6d2b43d8b83f4",
+        "quantityKwh": "11.000",
+        "quantityMwh": "0.011000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "c391f41e44eb19c74e11b46b7e77dcbb2c2c3543dcfa2605c192e7faef6d9c7d",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "17a9ba96-5dc2-48fb-a5ed-7c30e31074fa",
+        "review": null
+      },
+      {
+        "id": "9ef3ae5f-7012-4d92-bc97-fe6c2259bdcc",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "2407.7724",
+          "rounding": "half_even_4dp",
+          "unrounded": "2407.772365236"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "2407.7724",
+              "rounding": "half_even_4dp",
+              "unrounded": "2407.772365236"
+            },
+            "quantityKwh": "12345.000",
+            "quantityMwh": "12.345000"
+          },
+          {
+            "month": "2023-02",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-03",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-04",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-05",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-06",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-07",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-08",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-09",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-10",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-11",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-12",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          }
+        ],
+        "version": 4,
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "createdAt": "2026-09-15T03:13:43.419Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "b1ed451428eb12420d2f4d56364e3e20c57b8b435f58cd9aeea9b874f51d4a10",
+        "quantityKwh": "12345.000",
+        "quantityMwh": "12.345000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "c5ea5e9e244be22b886cf31da20798416520e2df03216e400d2343fb54c8f6d0",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "fe756789-12fe-4312-b940-62684361573c",
+        "review": null
+      },
+      {
+        "id": "c61166e6-1e07-462d-93df-f15045edbe67",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "0.0002",
+          "rounding": "half_even_4dp",
+          "unrounded": "0.0001950402888"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0002",
+              "rounding": "half_even_4dp",
+              "unrounded": "0.0001950402888"
+            },
+            "quantityKwh": "0.001",
+            "quantityMwh": "0.000001"
+          },
+          {
+            "month": "2023-02",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-03",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-04",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-05",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-06",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-07",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-08",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-09",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-10",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-11",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-12",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          }
+        ],
+        "version": 5,
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "createdAt": "2026-09-15T03:13:43.538Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "2f4d4a26e85e72051f6802b6bc032e0f7199983558fa23e1f81d7ef3717271bd",
+        "quantityKwh": "0.001",
+        "quantityMwh": "0.000001",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "4607c475afdb6b405c77c7367e15cfe01d08f373351da85bdebf54d478ae4390",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "9ef3ae5f-7012-4d92-bc97-fe6c2259bdcc",
+        "review": null
+      },
+      {
+        "id": "cf29ec0e-1dc8-4ca8-81e5-b73fe6b6e0ff",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "12190.0180",
+          "rounding": "half_even_4dp",
+          "unrounded": "12190.01805"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "12190.0180",
+              "rounding": "half_even_4dp",
+              "unrounded": "12190.01805"
+            },
+            "quantityKwh": "62500.000",
+            "quantityMwh": "62.500000"
+          },
+          {
+            "month": "2023-02",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-03",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-04",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-05",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-06",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-07",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-08",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-09",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-10",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-11",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-12",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          }
+        ],
+        "version": 6,
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "createdAt": "2026-09-15T03:13:43.573Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "fb7c12fc94583f7fb5aba188fbfe4d36adf4b07e4dd6713097104a1de63370b9",
+        "quantityKwh": "62500.000",
+        "quantityMwh": "62.500000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "8b1e7ef1809d36a6ba31b114c50ca03b4754c6d0a4763c64926c9013308a0f08",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "c61166e6-1e07-462d-93df-f15045edbe67",
+        "review": null
+      },
+      {
+        "id": "3a202a6c-e7ca-4e8c-93f5-27ce4b88f1cc",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "36570.0542",
+          "rounding": "half_even_4dp",
+          "unrounded": "36570.05415"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "36570.0542",
+              "rounding": "half_even_4dp",
+              "unrounded": "36570.05415"
+            },
+            "quantityKwh": "187500.000",
+            "quantityMwh": "187.500000"
+          },
+          {
+            "month": "2023-02",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-03",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-04",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-05",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-06",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-07",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-08",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-09",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-10",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-11",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-12",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          }
+        ],
+        "version": 7,
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "createdAt": "2026-09-15T03:13:43.606Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "b687f21dc6c23c218e7d6686f26072a0bbafc595ec43134adc5d4d46b323a2c8",
+        "quantityKwh": "187500.000",
+        "quantityMwh": "187.500000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "82202df94b83304c02f353c538ea139d7b65ef7d8a2b2f6ffd0d9e76f02a8db3",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "cf29ec0e-1dc8-4ca8-81e5-b73fe6b6e0ff",
+        "review": null
+      },
+      {
+        "id": "0b15a5a0-a3e8-4dcf-aa60-b17d360cd654",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "195040.2888",
+          "rounding": "half_even_4dp",
+          "unrounded": "195040.2888"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "195040.2888",
+              "rounding": "half_even_4dp",
+              "unrounded": "195040.2888"
+            },
+            "quantityKwh": "1000000.000",
+            "quantityMwh": "1000.000000"
+          },
+          {
+            "month": "2023-02",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-03",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-04",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-05",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-06",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-07",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-08",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-09",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-10",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-11",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-12",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          }
+        ],
+        "version": 8,
+        "coverage": {
+          "knownMonths": 12,
+          "missingMonths": [],
+          "electricityComplete": true
+        },
+        "createdAt": "2026-09-15T03:13:43.644Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "70d0c6718518572220ccd0142a2e8b0903d6ec84e7e3a6723cbcd4af2719dd86",
+        "quantityKwh": "1000000.000",
+        "quantityMwh": "1000.000000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "dbe53392daae70ce6754052408876b596de4015407ccae6bea66484dfd31d504",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": "Independent annual input correction",
+        "previousVersionId": "3a202a6c-e7ca-4e8c-93f5-27ce4b88f1cc",
+        "review": null
+      }
+    ]
+  },
+  "evidence": {
+    "profile": "neuvetra.synthetic.annual-electricity-evidence.v1",
+    "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+    "synthetic": true,
+    "complete": false,
+    "releaseEligible": false,
+    "assurance": "none",
+    "limitations": [
+      "synthetic_manual_confirmation",
+      "document_attachment_not_verification",
+      "only_january_2023_bill_fixtures_supported",
+      "overlapping_documents_not_summed",
+      "overall_inventory_incomplete",
+      "calendar_2023_camx_single_facility_only",
+      "missing_months_not_zero",
+      "market_based_scope2_not_included",
+      "factor_and_method_not_released",
+      "scope_1_and_scope_3_not_assessed",
+      "no_assurance"
+    ],
+    "versions": [
+      {
+        "id": "66e430f9-4788-4a4b-87fb-e5e9e909647d",
+        "links": [],
+        "annual": {
+          "id": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 1,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.180Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": null,
+          "previousVersionId": null
+        },
+        "version": 1,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.207Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "b20749bb42b5689c61413c893de0b48c6b7a7b2b48c8f25be63828114469d56b",
+        "resultSha256": "19faffac474076088a5b3c78686540e257eecdfa38478b50e91b01c322937da4",
+        "correctionReason": null,
+        "previousVersionId": null,
+        "review": null
+      },
+      {
+        "id": "c89c148d-af58-4b49-9939-d0f4a91b2de6",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "1b30e603-c7a9-4b55-b9c9-a91027f62dcc",
+              "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m55-fictional-bill-a",
+              "mediaType": "application/pdf",
+              "byteLength": 4605,
+              "uploadedAt": "2026-09-15T03:13:43.148Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.222Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Zero differs from printed usage"
+          }
+        ],
+        "annual": {
+          "id": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 1,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.180Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": null,
+          "previousVersionId": null
+        },
+        "version": 2,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [
+            "2023-01"
+          ],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 1
+        },
+        "createdAt": "2026-09-15T03:13:43.222Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "a3f0156043215f091b0dd6e20a970312feaef08af2721c07aafc71e6186c569a",
+        "resultSha256": "6b7cda64838ec856141ec2f04b2f25b356eb1462632fb8791ab413a51f826787",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "66e430f9-4788-4a4b-87fb-e5e9e909647d",
+        "review": null
+      },
+      {
+        "id": "e7e1ef69-1404-4f8e-a0c0-eafaf917d02e",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "12e4e68b-87a8-41b1-9a7e-7cfd492936d3",
+              "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m66-fictional-bill-b",
+              "mediaType": "application/pdf",
+              "byteLength": 2480,
+              "uploadedAt": "2026-09-15T03:13:43.162Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.267Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Zero differs from printed usage"
+          }
+        ],
+        "annual": {
+          "id": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 1,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.180Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": null,
+          "previousVersionId": null
+        },
+        "version": 3,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [
+            "2023-01"
+          ],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 1
+        },
+        "createdAt": "2026-09-15T03:13:43.267Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "717b912ea7ebe57ad755df47fe89e75d7e85a3b4fbb2028d50de5004704b800b",
+        "resultSha256": "67a77e6411b10fd6967705dd7f165e08cb9194ea4a758f1c2294b7de262048b5",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "c89c148d-af58-4b49-9939-d0f4a91b2de6",
+        "review": null
+      },
+      {
+        "id": "708a01e6-3bd2-49a9-8bda-a5b32351b850",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "12e4e68b-87a8-41b1-9a7e-7cfd492936d3",
+              "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m66-fictional-bill-b",
+              "mediaType": "application/pdf",
+              "byteLength": 2480,
+              "uploadedAt": "2026-09-15T03:13:43.162Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.282Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Revised explanation; discrepancy remains"
+          }
+        ],
+        "annual": {
+          "id": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 1,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.180Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": null,
+          "previousVersionId": null
+        },
+        "version": 4,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [
+            "2023-01"
+          ],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 1
+        },
+        "createdAt": "2026-09-15T03:13:43.282Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "d950d61ea27f0d1c5f668c47d3917c994d8096b636f384ea0020426600eaa925",
+        "resultSha256": "2f2edcdb4ef6553ed78b4fe88ae3a69ca72d961b59b443639196ee275589e554",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "e7e1ef69-1404-4f8e-a0c0-eafaf917d02e",
+        "review": null
+      },
+      {
+        "id": "fc0bc4b6-1920-4b1a-b120-d01085dd4af8",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "12e4e68b-87a8-41b1-9a7e-7cfd492936d3",
+              "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m66-fictional-bill-b",
+              "mediaType": "application/pdf",
+              "byteLength": 2480,
+              "uploadedAt": "2026-09-15T03:13:43.162Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.309Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Revised explanation; discrepancy remains"
+          }
+        ],
+        "annual": {
+          "id": "17a9ba96-5dc2-48fb-a5ed-7c30e31074fa",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 2,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.296Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "145b65ff446b3edac6e33fde52a070c019e9db379be3c9a619e10783e1ace089",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "0aaca1404b26f14add666dba6bef522a3db2c9c87ee8a1d706ea91d9b4c48e78",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Only changed the fictional facility label",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7"
+        },
+        "version": 5,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [
+            "2023-01"
+          ],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 1
+        },
+        "createdAt": "2026-09-15T03:13:43.309Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "479db0b2e2ed4c34e324bfee541132a6f87a4753f8bc2b4e0787d81a5a03ecd5",
+        "resultSha256": "02b0773989a05a0fedf47a964d37fc9c4dd4d9a32c9124b59568e32f8ed96ccb",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "708a01e6-3bd2-49a9-8bda-a5b32351b850",
+        "review": null
+      },
+      {
+        "id": "e7a8c15e-a0ca-4cd0-b937-1a7550ee0851",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "12e4e68b-87a8-41b1-9a7e-7cfd492936d3",
+              "sha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m66-fictional-bill-b",
+              "mediaType": "application/pdf",
+              "byteLength": 2480,
+              "uploadedAt": "2026-09-15T03:13:43.162Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m66-synthetic-electricity-bill-b.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.334Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Unresolved B"
+          },
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "1b30e603-c7a9-4b55-b9c9-a91027f62dcc",
+              "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m55-fictional-bill-a",
+              "mediaType": "application/pdf",
+              "byteLength": 4605,
+              "uploadedAt": "2026-09-15T03:13:43.148Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.334Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Unresolved A"
+          }
+        ],
+        "annual": {
+          "id": "17a9ba96-5dc2-48fb-a5ed-7c30e31074fa",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 2,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.296Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "145b65ff446b3edac6e33fde52a070c019e9db379be3c9a619e10783e1ace089",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "0aaca1404b26f14add666dba6bef522a3db2c9c87ee8a1d706ea91d9b4c48e78",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Only changed the fictional facility label",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7"
+        },
+        "version": 6,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [
+            "2023-01"
+          ],
+          "overlappingDocumentMonths": [
+            "2023-01"
+          ],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.334Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "c1318b92d5c4d26daa8a7550e429d632f427a0bd51d6b6857cff9386663962f1",
+        "resultSha256": "5ca1e6e65c949b1b0a0acf1abd00e6b6c158857fe43aabdb12c353b51ddbebc5",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "fc0bc4b6-1920-4b1a-b120-d01085dd4af8",
+        "review": null
+      },
+      {
+        "id": "272a4ec9-d529-4830-b13d-c5fd61d82aa2",
+        "links": [],
+        "annual": {
+          "id": "17a9ba96-5dc2-48fb-a5ed-7c30e31074fa",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0000",
+            "rounding": "half_even_4dp",
+            "unrounded": "0"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-03",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-04",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-05",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-06",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-07",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-08",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-09",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-10",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-11",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-12",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            }
+          ],
+          "review": null,
+          "version": 2,
+          "coverage": {
+            "knownMonths": 1,
+            "missingMonths": [
+              "2023-02",
+              "2023-03",
+              "2023-04",
+              "2023-05",
+              "2023-06",
+              "2023-07",
+              "2023-08",
+              "2023-09",
+              "2023-10",
+              "2023-11",
+              "2023-12"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.296Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "145b65ff446b3edac6e33fde52a070c019e9db379be3c9a619e10783e1ace089",
+          "quantityKwh": "0.000",
+          "quantityMwh": "0.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "0aaca1404b26f14add666dba6bef522a3db2c9c87ee8a1d706ea91d9b4c48e78",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Only changed the fictional facility label",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7"
+        },
+        "version": 7,
+        "coverage": {
+          "enteredMonths": 1,
+          "missingInputMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.360Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "1dc3a0df71b8a2bc7e7ee32f94ab0fce53683e32c7ba1402d6bbbc65da61a8cc",
+        "resultSha256": "f72d9f8ce67cff67ff6a142602ae9fa67dfd4c506f662dd9e66ef07028abf404",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "e7a8c15e-a0ca-4cd0-b937-1a7550ee0851",
+        "review": null
+      },
+      {
+        "id": "e1db7964-b5f2-4856-8593-e7dcd0041a61",
+        "links": [],
+        "annual": {
+          "id": "fe756789-12fe-4312-b940-62684361573c",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "2.1454",
+            "rounding": "half_even_4dp",
+            "unrounded": "2.1454431768"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": null,
+              "quantityKwh": null,
+              "quantityMwh": null
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.1950",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.1950402888"
+              },
+              "quantityKwh": "1.000",
+              "quantityMwh": "0.001000"
+            }
+          ],
+          "review": null,
+          "version": 3,
+          "coverage": {
+            "knownMonths": 11,
+            "missingMonths": [
+              "2023-01"
+            ],
+            "electricityComplete": false
+          },
+          "createdAt": "2026-09-15T03:13:43.382Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "b78376f2632861ed158d1557ddbcc8bb381b741c4a42683e89c6d2b43d8b83f4",
+          "quantityKwh": "11.000",
+          "quantityMwh": "0.011000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "c391f41e44eb19c74e11b46b7e77dcbb2c2c3543dcfa2605c192e7faef6d9c7d",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "17a9ba96-5dc2-48fb-a5ed-7c30e31074fa"
+        },
+        "version": 8,
+        "coverage": {
+          "enteredMonths": 11,
+          "missingInputMonths": [
+            "2023-01"
+          ],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.395Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "3a47f74326e3fca051415e3ccb9e46f2473c61dbbfdb596fc5df803579beeec3",
+        "resultSha256": "dbc4e40319fe6de97df466b692d33ece896a3597316ccee3310a8918416d39e0",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "272a4ec9-d529-4830-b13d-c5fd61d82aa2",
+        "review": null
+      },
+      {
+        "id": "d7562ecd-b898-40f6-997b-3c9558a53150",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "1b30e603-c7a9-4b55-b9c9-a91027f62dcc",
+              "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m55-fictional-bill-a",
+              "mediaType": "application/pdf",
+              "byteLength": 4605,
+              "uploadedAt": "2026-09-15T03:13:43.148Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.435Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": null
+          }
+        ],
+        "annual": {
+          "id": "9ef3ae5f-7012-4d92-bc97-fe6c2259bdcc",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "2407.7724",
+            "rounding": "half_even_4dp",
+            "unrounded": "2407.772365236"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "2407.7724",
+                "rounding": "half_even_4dp",
+                "unrounded": "2407.772365236"
+              },
+              "quantityKwh": "12345.000",
+              "quantityMwh": "12.345000"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 4,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.419Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "b1ed451428eb12420d2f4d56364e3e20c57b8b435f58cd9aeea9b874f51d4a10",
+          "quantityKwh": "12345.000",
+          "quantityMwh": "12.345000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "c5ea5e9e244be22b886cf31da20798416520e2df03216e400d2343fb54c8f6d0",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "fe756789-12fe-4312-b940-62684361573c"
+        },
+        "version": 9,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 1
+        },
+        "createdAt": "2026-09-15T03:13:43.435Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "db086092201d5fc2b2616cff66342dddd04120a38cc0b316cb3a248c512220cb",
+        "resultSha256": "dd1299c1a2f4c130b343af5213ae7e05fe097adab367537297eac63aa8c53cae",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "e1db7964-b5f2-4856-8593-e7dcd0041a61",
+        "review": null
+      },
+      {
+        "id": "8fc26cea-f644-4d47-9f90-e3638daf6fd7",
+        "links": [],
+        "annual": {
+          "id": "c61166e6-1e07-462d-93df-f15045edbe67",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "0.0002",
+            "rounding": "half_even_4dp",
+            "unrounded": "0.0001950402888"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0002",
+                "rounding": "half_even_4dp",
+                "unrounded": "0.0001950402888"
+              },
+              "quantityKwh": "0.001",
+              "quantityMwh": "0.000001"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 5,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.538Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "2f4d4a26e85e72051f6802b6bc032e0f7199983558fa23e1f81d7ef3717271bd",
+          "quantityKwh": "0.001",
+          "quantityMwh": "0.000001",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "4607c475afdb6b405c77c7367e15cfe01d08f373351da85bdebf54d478ae4390",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "9ef3ae5f-7012-4d92-bc97-fe6c2259bdcc"
+        },
+        "version": 10,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.556Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "4b7fd1b959462afe29f766ad4abbdadf93a1dec0adefa2101715019dd0198579",
+        "resultSha256": "fdd19401ac52fcba159c89d6852df68f9e2e938eddfc2f04dc2ebb8f860d199a",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "d7562ecd-b898-40f6-997b-3c9558a53150",
+        "review": null
+      },
+      {
+        "id": "fe6a3854-f5fb-4601-97f1-10ef331d4647",
+        "links": [],
+        "annual": {
+          "id": "cf29ec0e-1dc8-4ca8-81e5-b73fe6b6e0ff",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "12190.0180",
+            "rounding": "half_even_4dp",
+            "unrounded": "12190.01805"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "12190.0180",
+                "rounding": "half_even_4dp",
+                "unrounded": "12190.01805"
+              },
+              "quantityKwh": "62500.000",
+              "quantityMwh": "62.500000"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 6,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.573Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "fb7c12fc94583f7fb5aba188fbfe4d36adf4b07e4dd6713097104a1de63370b9",
+          "quantityKwh": "62500.000",
+          "quantityMwh": "62.500000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "8b1e7ef1809d36a6ba31b114c50ca03b4754c6d0a4763c64926c9013308a0f08",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "c61166e6-1e07-462d-93df-f15045edbe67"
+        },
+        "version": 11,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.589Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "d27f3a97e8a827cf04917b45cdc1767e9b8031cc4910f0c4b3456d89a140c9de",
+        "resultSha256": "6eaf815f1b235f97fdf455892bef29c70e1556f44b90178fcf21d6f0d8648324",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "8fc26cea-f644-4d47-9f90-e3638daf6fd7",
+        "review": null
+      },
+      {
+        "id": "5dfefe80-e748-4634-9ec0-47f715a1277d",
+        "links": [],
+        "annual": {
+          "id": "3a202a6c-e7ca-4e8c-93f5-27ce4b88f1cc",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "36570.0542",
+            "rounding": "half_even_4dp",
+            "unrounded": "36570.05415"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "36570.0542",
+                "rounding": "half_even_4dp",
+                "unrounded": "36570.05415"
+              },
+              "quantityKwh": "187500.000",
+              "quantityMwh": "187.500000"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 7,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.606Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "b687f21dc6c23c218e7d6686f26072a0bbafc595ec43134adc5d4d46b323a2c8",
+          "quantityKwh": "187500.000",
+          "quantityMwh": "187.500000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "82202df94b83304c02f353c538ea139d7b65ef7d8a2b2f6ffd0d9e76f02a8db3",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "cf29ec0e-1dc8-4ca8-81e5-b73fe6b6e0ff"
+        },
+        "version": 12,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.623Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "ccfa6be06f574f44f7b0fa74d3066c3b3f17924ef4fe7f2be4e66bad7968f4c1",
+        "resultSha256": "292a629e7cedcad140b51918cc68b3176cee62e7ea1b09a8c9a3ea53878e47ee",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "fe6a3854-f5fb-4601-97f1-10ef331d4647",
+        "review": null
+      },
+      {
+        "id": "0710b0cd-7857-422b-bc2d-71b898151785",
+        "links": [],
+        "annual": {
+          "id": "0b15a5a0-a3e8-4dcf-aa60-b17d360cd654",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "195040.2888",
+            "rounding": "half_even_4dp",
+            "unrounded": "195040.2888"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "195040.2888",
+                "rounding": "half_even_4dp",
+                "unrounded": "195040.2888"
+              },
+              "quantityKwh": "1000000.000",
+              "quantityMwh": "1000.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 8,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.644Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "70d0c6718518572220ccd0142a2e8b0903d6ec84e7e3a6723cbcd4af2719dd86",
+          "quantityKwh": "1000000.000",
+          "quantityMwh": "1000.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "dbe53392daae70ce6754052408876b596de4015407ccae6bea66484dfd31d504",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "3a202a6c-e7ca-4e8c-93f5-27ce4b88f1cc"
+        },
+        "version": 13,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.662Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "5498930c0eb2b55260d77aa801cd27370b2d94365f4e42b025c0b925ae56deb0",
+        "resultSha256": "6d5b24533df6eeaddbe4d5ad51442e2473b027cd85bd24449bc7e3936686ad13",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "5dfefe80-e748-4634-9ec0-47f715a1277d",
+        "review": null
+      },
+      {
+        "id": "15eb2797-9a55-4b87-a336-98a88457167e",
+        "links": [
+          {
+            "page": 1,
+            "month": "2023-01",
+            "source": {
+              "id": "1b30e603-c7a9-4b55-b9c9-a91027f62dcc",
+              "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+              "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+              "fixtureId": "m55-fictional-bill-a",
+              "mediaType": "application/pdf",
+              "byteLength": 4605,
+              "uploadedAt": "2026-09-15T03:13:43.148Z",
+              "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+              "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+              "printedQuantityKwh": "12345.000"
+            },
+            "periodEnd": "2023-01-31",
+            "confirmedAt": "2026-09-15T03:13:43.767Z",
+            "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "periodStart": "2023-01-01",
+            "quantityDifferenceReason": "Concurrent A"
+          }
+        ],
+        "annual": {
+          "id": "0b15a5a0-a3e8-4dcf-aa60-b17d360cd654",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "195040.2888",
+            "rounding": "half_even_4dp",
+            "unrounded": "195040.2888"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "195040.2888",
+                "rounding": "half_even_4dp",
+                "unrounded": "195040.2888"
+              },
+              "quantityKwh": "1000000.000",
+              "quantityMwh": "1000.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 8,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.644Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "70d0c6718518572220ccd0142a2e8b0903d6ec84e7e3a6723cbcd4af2719dd86",
+          "quantityKwh": "1000000.000",
+          "quantityMwh": "1000.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "dbe53392daae70ce6754052408876b596de4015407ccae6bea66484dfd31d504",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "3a202a6c-e7ca-4e8c-93f5-27ce4b88f1cc"
+        },
+        "version": 14,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 1,
+          "missingDocumentMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [
+            "2023-01"
+          ],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 1
+        },
+        "createdAt": "2026-09-15T03:13:43.767Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "828ec042ac64de9d3da743e65fce3beb4e20576c680872950c9ef62f09bcdb98",
+        "resultSha256": "8cfd18d30eb23980c2dccb8778ef3234be39aea9bb8e6236c0032db4f8a2d7e5",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "0710b0cd-7857-422b-bc2d-71b898151785",
+        "review": {
+          "id": "384f5b85-7f2c-444a-a311-2ad04737054e",
+          "note": null,
+          "decision": "accept_bounded_internal_draft",
+          "versionId": "15eb2797-9a55-4b87-a336-98a88457167e",
+          "reviewedAt": "2026-09-15T03:13:43.881Z",
+          "reviewerId": "b7569fa4-9e85-447f-ba01-7f905426c857",
+          "resultSha256": "8cfd18d30eb23980c2dccb8778ef3234be39aea9bb8e6236c0032db4f8a2d7e5",
+          "decisionSha256": "b203c9aae726837cc2d4f494d38b769b47656a4862433fadc3b075ef2c21164c",
+          "acknowledgedLimitations": [
+            "synthetic_manual_confirmation",
+            "document_attachment_not_verification",
+            "only_january_2023_bill_fixtures_supported",
+            "overlapping_documents_not_summed",
+            "overall_inventory_incomplete",
+            "calendar_2023_camx_single_facility_only",
+            "missing_months_not_zero",
+            "market_based_scope2_not_included",
+            "factor_and_method_not_released",
+            "scope_1_and_scope_3_not_assessed",
+            "no_assurance"
+          ]
+        }
+      },
+      {
+        "id": "af6720c6-e117-4ece-8fc6-668fb9c5e6c4",
+        "links": [],
+        "annual": {
+          "id": "0b15a5a0-a3e8-4dcf-aa60-b17d360cd654",
+          "unit": "kWh",
+          "year": 2023,
+          "total": {
+            "unit": "kg CO2e",
+            "display": "195040.2888",
+            "rounding": "half_even_4dp",
+            "unrounded": "195040.2888"
+          },
+          "method": {
+            "id": "scope2-location-based-egrid-subregion",
+            "cell": "AI6",
+            "sheet": "SRL23",
+            "policy": "m67-accounting-policy-v1",
+            "version": "2023-r2-camx-v1",
+            "factorId": "epa-egrid2023-r2-camx-total-output",
+            "factorUnit": "kg CO2e/MWh",
+            "factorValue": "195.0402888",
+            "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+            "factorVersion": "eGRID2023-revision-2",
+            "classification": "development_candidate",
+            "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+            "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+            "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+            "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+          },
+          "months": [
+            {
+              "month": "2023-01",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "195040.2888",
+                "rounding": "half_even_4dp",
+                "unrounded": "195040.2888"
+              },
+              "quantityKwh": "1000000.000",
+              "quantityMwh": "1000.000000"
+            },
+            {
+              "month": "2023-02",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-03",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-04",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-05",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-06",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-07",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-08",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-09",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-10",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-11",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            },
+            {
+              "month": "2023-12",
+              "total": {
+                "unit": "kg CO2e",
+                "display": "0.0000",
+                "rounding": "half_even_4dp",
+                "unrounded": "0"
+              },
+              "quantityKwh": "0.000",
+              "quantityMwh": "0.000000"
+            }
+          ],
+          "review": null,
+          "version": 8,
+          "coverage": {
+            "knownMonths": 12,
+            "missingMonths": [],
+            "electricityComplete": true
+          },
+          "createdAt": "2026-09-15T03:13:43.644Z",
+          "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "geography": "CAMX",
+          "inputSha256": "70d0c6718518572220ccd0142a2e8b0903d6ec84e7e3a6723cbcd4af2719dd86",
+          "quantityKwh": "1000000.000",
+          "quantityMwh": "1000.000000",
+          "companyLabel": "Synthetic QA <draft>",
+          "resultSha256": "dbe53392daae70ce6754052408876b596de4015407ccae6bea66484dfd31d504",
+          "evidenceBasis": "synthetic_manual_without_linked_bills",
+          "facilityLabel": "Independent fictional facility",
+          "correctionReason": "Independent annual input correction",
+          "previousVersionId": "3a202a6c-e7ca-4e8c-93f5-27ce4b88f1cc"
+        },
+        "version": 15,
+        "coverage": {
+          "enteredMonths": 12,
+          "missingInputMonths": [],
+          "linkedDocumentMonths": 0,
+          "missingDocumentMonths": [
+            "2023-01",
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "quantityDifferenceMonths": [],
+          "overlappingDocumentMonths": [],
+          "unambiguousDocumentMonths": 0
+        },
+        "createdAt": "2026-09-15T03:13:43.975Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "inputSha256": "6a2c43f4d1539ad8853bc72cafb23726d36de74ae2573a3b8555581ba74b2712",
+        "resultSha256": "61755779310f700d4edf0515fa628f32223ec9ea04c4fd26245ff67cc8fe8827",
+        "correctionReason": "Independent evidence correction",
+        "previousVersionId": "15eb2797-9a55-4b87-a336-98a88457167e",
+        "review": null
+      }
+    ]
+  },
+  "report": {
+    "id": "e2af9f83-ca95-4e4c-8066-0aab312deded",
+    "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+    "profile": "neuvetra.synthetic.annual-electricity-evidence-report.v1",
+    "sourceVersionId": "c89c148d-af58-4b49-9939-d0f4a91b2de6",
+    "sourceVersion": 2,
+    "inputSha256": "a3f0156043215f091b0dd6e20a970312feaef08af2721c07aafc71e6186c569a",
+    "resultSha256": "6b7cda64838ec856141ec2f04b2f25b356eb1462632fb8791ab413a51f826787",
+    "reviewId": null,
+    "reviewSha256": null,
+    "reviewState": "unreviewed",
+    "templateVersion": "m68-annual-evidence-report-v1",
+    "templateSha256": "69bbb2738c0abf8893bb8636640408b41cd5cab4d91ec3b1ef6ead7013c13604",
+    "reportSha256": "3e7a9af8b27df74bc04e703c35e50b085c4223be94cb20c7c420aaecd7052127",
+    "reportByteLength": 11108,
+    "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+    "createdAt": "2026-09-15T03:13:43.237Z",
+    "synthetic": true,
+    "complete": false,
+    "releaseEligible": false,
+    "assurance": "none",
+    "source": {
+      "id": "c89c148d-af58-4b49-9939-d0f4a91b2de6",
+      "links": [
+        {
+          "page": 1,
+          "month": "2023-01",
+          "source": {
+            "id": "1b30e603-c7a9-4b55-b9c9-a91027f62dcc",
+            "sha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",
+            "companyId": "db2cca34-1abd-4b08-a411-d277c9dbc514",
+            "fixtureId": "m55-fictional-bill-a",
+            "mediaType": "application/pdf",
+            "byteLength": 4605,
+            "uploadedAt": "2026-09-15T03:13:43.148Z",
+            "uploadedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+            "originalName": "neuvetra-m55-synthetic-electricity-bill.pdf",
+            "printedQuantityKwh": "12345.000"
+          },
+          "periodEnd": "2023-01-31",
+          "confirmedAt": "2026-09-15T03:13:43.222Z",
+          "confirmedBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+          "periodStart": "2023-01-01",
+          "quantityDifferenceReason": "Zero differs from printed usage"
+        }
+      ],
+      "annual": {
+        "id": "7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7",
+        "unit": "kWh",
+        "year": 2023,
+        "total": {
+          "unit": "kg CO2e",
+          "display": "0.0000",
+          "rounding": "half_even_4dp",
+          "unrounded": "0"
+        },
+        "method": {
+          "id": "scope2-location-based-egrid-subregion",
+          "cell": "AI6",
+          "sheet": "SRL23",
+          "policy": "m67-accounting-policy-v1",
+          "version": "2023-r2-camx-v1",
+          "factorId": "epa-egrid2023-r2-camx-total-output",
+          "factorUnit": "kg CO2e/MWh",
+          "factorValue": "195.0402888",
+          "sourceSha256": "3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab",
+          "factorVersion": "eGRID2023-revision-2",
+          "classification": "development_candidate",
+          "gwpPolicySha256": "fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5",
+          "accountingProfile": "manual-synthetic-2023-camx-monthly-kwh-v1",
+          "reviewedEngineSha256": "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c",
+          "factorCandidateSha256": "8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356"
+        },
+        "months": [
+          {
+            "month": "2023-01",
+            "total": {
+              "unit": "kg CO2e",
+              "display": "0.0000",
+              "rounding": "half_even_4dp",
+              "unrounded": "0"
+            },
+            "quantityKwh": "0.000",
+            "quantityMwh": "0.000000"
+          },
+          {
+            "month": "2023-02",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-03",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-04",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-05",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-06",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-07",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-08",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-09",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-10",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-11",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          },
+          {
+            "month": "2023-12",
+            "total": null,
+            "quantityKwh": null,
+            "quantityMwh": null
+          }
+        ],
+        "review": null,
+        "version": 1,
+        "coverage": {
+          "knownMonths": 1,
+          "missingMonths": [
+            "2023-02",
+            "2023-03",
+            "2023-04",
+            "2023-05",
+            "2023-06",
+            "2023-07",
+            "2023-08",
+            "2023-09",
+            "2023-10",
+            "2023-11",
+            "2023-12"
+          ],
+          "electricityComplete": false
+        },
+        "createdAt": "2026-09-15T03:13:43.180Z",
+        "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+        "geography": "CAMX",
+        "inputSha256": "6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598",
+        "quantityKwh": "0.000",
+        "quantityMwh": "0.000000",
+        "companyLabel": "Synthetic QA <draft>",
+        "resultSha256": "c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a",
+        "evidenceBasis": "synthetic_manual_without_linked_bills",
+        "facilityLabel": "Independent fictional facility",
+        "correctionReason": null,
+        "previousVersionId": null
+      },
+      "review": null,
+      "version": 2,
+      "coverage": {
+        "enteredMonths": 1,
+        "missingInputMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "linkedDocumentMonths": 1,
+        "missingDocumentMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "quantityDifferenceMonths": [
+          "2023-01"
+        ],
+        "overlappingDocumentMonths": [],
+        "unambiguousDocumentMonths": 1
+      },
+      "createdAt": "2026-09-15T03:13:43.222Z",
+      "createdBy": "1403934e-48d2-4c30-ae19-1feb91486014",
+      "inputSha256": "a3f0156043215f091b0dd6e20a970312feaef08af2721c07aafc71e6186c569a",
+      "resultSha256": "6b7cda64838ec856141ec2f04b2f25b356eb1462632fb8791ab413a51f826787",
+      "correctionReason": "Independent evidence correction",
+      "previousVersionId": "66e430f9-4788-4a4b-87fb-e5e9e909647d"
+    }
+  },
+  "reportHtml": "<!doctype html>\n<html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'\"><title>Synthetic annual electricity and bill evidence</title><style>body{font:16px/1.5 system-ui,sans-serif;color:#182820;max-width:900px;margin:30px auto;padding:0 22px}h1{font-size:1.8rem}h2{font-size:1.2rem;margin-top:1.8rem}p,dd,td{overflow-wrap:anywhere}dl{display:grid;grid-template-columns:160px minmax(0,1fr);gap:7px 18px}dt{font-weight:650}dd{margin:0}.notice{border:2px solid #927130;padding:14px}.subtotal{font-size:2rem;font-weight:700}table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:.85rem}th,td{border:1px solid #a1aea5;padding:5px;text-align:left;vertical-align:top}thead{display:table-header-group}tr{break-inside:avoid}.identity{font-size:.75rem}.note{white-space:pre-wrap}@media(max-width:500px){dl{display:block}dd{margin-bottom:10px}}@page{size:auto;margin:24mm 15mm 22mm;@top-center{content:\"Draft · Synthetic · Incomplete company inventory · Unreleased · No assurance\";font:700 8pt system-ui}@bottom-center{content:\"Draft · Synthetic · No assurance · Page \" counter(page);font:700 8pt system-ui}}@media print{body{font-size:10pt;margin:0;padding:0;max-width:none}h1{font-size:20pt}h2{break-after:avoid}p,dd{orphans:3;widows:3}dl{display:block}dt{margin-top:7px}.identity{font-size:8pt}table{font-size:8pt}}</style></head><body>\n<main><p>Neuvetra · Saved evidence snapshot</p><h1>Synthetic annual electricity and bill evidence</h1><div class=\"notice\"><strong>Draft · Synthetic · Incomplete company inventory · Unreleased · No assurance</strong><p>One fictional CAMX facility, calendar 2023, location-based Scope 2. Manual entries and document attachment do not verify consumption, authenticate bills or grant filing approval.</p></div>\n<h2>Entered-month electricity subtotal</h2><p class=\"subtotal\">0.0000 kg CO2e</p><p>Exact subtotal before display rounding: 0 kg CO2e. Manual annual quantity: 0.000 kWh / 0.000000 MWh.</p><p>Totals reuse the exact selected annual version. Bill quantities are never added, substituted, prorated or annualized. Exact monthly values are summed before half-even rounding to four decimal places; displayed monthly results may not sum to the displayed subtotal. Precision does not establish measurement certainty.</p><dl><dt>Fictional company</dt><dd>Synthetic QA &lt;draft&gt;</dd><dt>Fictional facility</dt><dd>Independent fictional facility</dd></dl>\n<h2>Entered months and attached documents</h2><p>1 / 12 months entered; 1 / 12 months with attached documents. 1 month(s) with one attached document (not verified).</p><dl><dt>Missing input months</dt><dd>2023-02, 2023-03, 2023-04, 2023-05, 2023-06, 2023-07, 2023-08, 2023-09, 2023-10, 2023-11, 2023-12</dd><dt>Missing document months</dt><dd>2023-02, 2023-03, 2023-04, 2023-05, 2023-06, 2023-07, 2023-08, 2023-09, 2023-10, 2023-11, 2023-12</dd><dt>Overlapping document months</dt><dd>None</dd><dt>Quantity difference months</dt><dd>2023-01</dd></dl><p>These are separate, overlapping diagnostics; their counts must not be added. An explanation or manager decision does not clear a quantity difference. Two January bills describe the same consumption and are an unresolved overlap, never independent loads. Twelve entered months do not establish a complete company inventory or complete evidence.</p>\n<h2>Monthly manual entries</h2><p>Missing is not zero. An explicit zero remains a manual assertion and still needs documentation. The historical annual version retains its original manual/no-bill basis; this separate evidence version adds the links listed below.</p><table><thead><tr><th>Month</th><th>Manual kWh</th><th>Exact kg CO2e</th><th>Displayed kg CO2e</th><th>Documents</th></tr></thead><tbody><tr><th scope=\"row\">2023-01</th><td>0.000</td><td>0</td><td>0.0000</td><td>One attached document (not verified)</td></tr><tr><th scope=\"row\">2023-02</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-03</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-04</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-05</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-06</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-07</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-08</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-09</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-10</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-11</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr><tr><th scope=\"row\">2023-12</th><td>Not entered</td><td>Not entered</td><td>Not entered</td><td>Missing document</td></tr></tbody></table>\n<h2>Retained January documents</h2><p>Both supported fictional fixtures cover January 1–31, 2023, page 1 only. Statement dates do not establish February consumption. Each link records manual confirmation.</p><h3>Document slot 1</h3><dl><dt>File</dt><dd>neuvetra-m55-synthetic-electricity-bill.pdf</dd><dt>Printed quantity (kWh)</dt><dd>12345.000</dd><dt>Page</dt><dd>1</dd><dt>Service starts</dt><dd>2023-01-01</dd><dt>Service ends</dt><dd>2023-01-31</dd><dt>Difference explanation</dt><dd>Zero differs from printed usage</dd><dt>Confirmed by</dt><dd>1403934e-48d2-4c30-ae19-1feb91486014</dd><dt>Confirmed at (UTC)</dt><dd>2026-09-15T03:13:43.222Z</dd><dt>Source ID</dt><dd>1b30e603-c7a9-4b55-b9c9-a91027f62dcc</dd><dt>Source SHA-256</dt><dd>0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135</dd><dt>Source byte length</dt><dd>4605</dd><dt>Uploaded by</dt><dd>1403934e-48d2-4c30-ae19-1feb91486014</dd><dt>Uploaded at (UTC)</dt><dd>2026-09-15T03:13:43.148Z</dd></dl><p>Manual quantity differs from the fictional bill. Explanation recorded; difference remains.</p><h3>Document slot 2</h3><dl><dt>File</dt><dd>No document linked</dd><dt>Printed quantity (kWh)</dt><dd>Not linked</dd><dt>Page</dt><dd>Not linked</dd><dt>Service starts</dt><dd>Not linked</dd><dt>Service ends</dt><dd>Not linked</dd><dt>Difference explanation</dt><dd>No discrepancy explanation recorded</dd><dt>Confirmed by</dt><dd>Not linked</dd><dt>Confirmed at (UTC)</dt><dd>Not linked</dd><dt>Source ID</dt><dd>Not linked</dd><dt>Source SHA-256</dt><dd>Not linked</dd><dt>Source byte length</dt><dd>Not linked</dd><dt>Uploaded by</dt><dd>Not linked</dd><dt>Uploaded at (UTC)</dt><dd>Not linked</dd></dl><p>No document linked.</p><h2>Captured evidence review</h2><p><strong>Unreviewed at report capture</strong></p><p>A different manager reviews this exact bounded draft; the decision does not authenticate documents, verify inputs, approve report presentation, release methods or provide assurance. No annual-worksheet or predecessor review is inherited.</p><dl><dt>Reviewer</dt><dd>Not recorded</dd><dt>Reviewed at (UTC)</dt><dd>Not recorded</dd><dt>Review ID</dt><dd>Not recorded</dd><dt>Decision fingerprint</dt><dd>Not recorded</dd></dl><p class=\"note\">No change-request note</p><p>Acknowledgments: None</p>\n<h2>Pinned method and limitations</h2><p>Annual 2023 CAMX regional average factor, applied to each entered month; not a month-specific factor. Operational control; grid-delivered purchased electricity consumed by the reporting company. Market-based Scope 2, Scope 1, Scope 3 and other facilities are not assessed. Factor and method remain unreleased development candidates.</p><dl><dt>Method</dt><dd>scope2-location-based-egrid-subregion</dd><dt>Method version</dt><dd>2023-r2-camx-v1</dd><dt>Candidate factor</dt><dd>epa-egrid2023-r2-camx-total-output</dd><dt>Factor version</dt><dd>eGRID2023-revision-2</dd><dt>Rate (kg CO2e/MWh)</dt><dd>195.0402888</dd><dt>Workbook SHA-256</dt><dd>3dfbbcf2f949d58d5b2dbee3aab8150bd04a0c8ebb730ba1cd37a013bd4450ab</dd><dt>Candidate SHA-256</dt><dd>8770ae6238df8525e5250850fab248c934be33f459ed19cc1fa24bd0718cb356</dd><dt>GWP policy SHA-256</dt><dd>fd9fd8973012da1a232dad7fc00db3013194751a92b34ab21dfd4f7b2c5148c5</dd><dt>Reviewed engine SHA-256</dt><dd>4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c</dd></dl><p>EPA eGRID2023 revision 2, SRL23!AI6 (A6=2023, B6=CAMX, C6=WECC California). AR5, 100 years, without climate-carbon feedbacks; CO2 1, CH4 28, N2O 265. 1 MWh = 1,000 kWh. <a href=\"https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_metric_rev2.xlsx\" rel=\"noreferrer\">EPA source workbook</a>.</p>\n<h2>Version and report identity</h2><dl class=\"identity\"><dt>Evidence version</dt><dd>2</dd><dt>Evidence ID</dt><dd>c89c148d-af58-4b49-9939-d0f4a91b2de6</dd><dt>Evidence saved at</dt><dd>2026-09-15T03:13:43.222Z</dd><dt>Evidence author</dt><dd>1403934e-48d2-4c30-ae19-1feb91486014</dd><dt>Previous evidence version</dt><dd>66e430f9-4788-4a4b-87fb-e5e9e909647d</dd><dt>Evidence correction reason</dt><dd>Independent evidence correction</dd><dt>Evidence input SHA-256</dt><dd>a3f0156043215f091b0dd6e20a970312feaef08af2721c07aafc71e6186c569a</dd><dt>Evidence result SHA-256</dt><dd>6b7cda64838ec856141ec2f04b2f25b356eb1462632fb8791ab413a51f826787</dd><dt>Annual version</dt><dd>1</dd><dt>Annual ID</dt><dd>7be6ea42-a1a5-43b3-87b1-a5de97d3e1e7</dd><dt>Annual input SHA-256</dt><dd>6d7c3ba80659b27d0dfa20972adcb9e15eab3aeced08f6f956dec38f81de4598</dd><dt>Annual result SHA-256</dt><dd>c20b10eab6ae2067a46f4b7730b90b4389d01b628b5054bab5dfebf4109c932a</dd><dt>Annual correction reason</dt><dd>Not recorded</dd><dt>Company ID</dt><dd>db2cca34-1abd-4b08-a411-d277c9dbc514</dd><dt>Report ID</dt><dd>e2af9f83-ca95-4e4c-8066-0aab312deded</dd><dt>Captured at (UTC)</dt><dd>2026-09-15T03:13:43.237Z</dd><dt>Report creator</dt><dd>1403934e-48d2-4c30-ae19-1feb91486014</dd><dt>Report profile</dt><dd>neuvetra.synthetic.annual-electricity-evidence-report.v1</dd><dt>Template version</dt><dd>m68-annual-evidence-report-v1</dd><dt>Template SHA-256</dt><dd>69bbb2738c0abf8893bb8636640408b41cd5cab4d91ec3b1ef6ead7013c13604</dd><dt>Snapshot identity SHA-256</dt><dd>870bc357817b5156ba250fcc5f126f63401b38b1f1878aab919ae54131d6835f</dd></dl><p>The report freezes this selected evidence version, its exact annual version, retained sources and captured review state. Later corrections or decisions do not change these bytes. Authenticated source downloads resolve exact retained PDFs; HTML does not embed PDF bytes. The download receipt binds all UTF-8 HTML bytes; browser print/PDF bytes may vary. This report does not claim to be the latest version.</p></main></body></html>\n"
+}

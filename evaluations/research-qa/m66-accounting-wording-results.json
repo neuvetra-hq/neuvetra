@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "runtime": "1.3.12",
+  "rendered_cases": [
+    {
+      "case": "match-A",
+      "sha256": "6ac73b98b5578601b457aeb415c1bcaee7b3f96397ede37f449cfa987003beff",
+      "bytes": 9904
+    },
+    {
+      "case": "match-B",
+      "sha256": "ea5f323f67f85ce2a18cfd3e3177aa007e0f5e7dc3e8529ec0e653bc87d0d122",
+      "bytes": 9906
+    },
+    {
+      "case": "equivalent_match-A",
+      "sha256": "6f45041b3558903b6a0d1f4c0ac27583ad5635220560591c23520fe2360a0667",
+      "bytes": 9904
+    },
+    {
+      "case": "equivalent_match-B",
+      "sha256": "9a85c03de24ae719fd965c2550f28f0ab435424f41da49cdf102dfe6352b9167",
+      "bytes": 9906
+    },
+    {
+      "case": "corrected_transcription-A",
+      "sha256": "12641c7526207b0472a2025255c2b987ba50795759a0baead13c2355c67956df",
+      "bytes": 9893
+    },
+    {
+      "case": "corrected_transcription-B",
+      "sha256": "e7010c4ef99608ddf519cb402ac98582be17e6ad57bcb439caf196b6cdc33a6f",
+      "bytes": 9895
+    },
+    {
+      "case": "board_quantity_override-A",
+      "sha256": "4f4d9109a4cb12970186847ce82d7ba3a5a016dc7d9ec16e6c933f3271d3a41d",
+      "bytes": 9888
+    },
+    {
+      "case": "board_quantity_override-B",
+      "sha256": "54ac50086e7650707ffec8bf6e272cf1357fc1caedfea886d74f12dc89fdc874",
+      "bytes": 9890
+    },
+    {
+      "case": "explicit_zero-A",
+      "sha256": "f91a242c604d200f1bcaa68d9cab8cbe7930c8b2a9016c443f1e93b5d87c05c1",
+      "bytes": 9867
+    },
+    {
+      "case": "explicit_zero-B",
+      "sha256": "ec6dadbd278ee41dbf90034c4a6996493e01e339a1d3eb36b8076b55fa809631",
+      "bytes": 9869
+    },
+    {
+      "case": "minimum-A",
+      "sha256": "9b41dcf2ce037c563ea1d0cab18f67e8908ff938512197a3446b84eaced3d7be",
+      "bytes": 9881
+    },
+    {
+      "case": "minimum-B",
+      "sha256": "502d6ac1d2e0abbc3ba32cc2ef3633f4ad242a046392ad359439308e447c7a8f",
+      "bytes": 9883
+    },
+    {
+      "case": "half_even_down-A",
+      "sha256": "e2703063416cad496a0187c5966b9da79aa4789313bbdf15ff4b8507689ba682",
+      "bytes": 9890
+    },
+    {
+      "case": "half_even_down-B",
+      "sha256": "9b3bec646c4afee7cecf05f0d32632d037d24b79ddb44a139970a87d8559ab5a",
+      "bytes": 9892
+    },
+    {
+      "case": "half_even_up-A",
+      "sha256": "0966c45af104623704cef8f6a283d0c0e14304d688d68561f95072b5a65d66d8",
+      "bytes": 9893
+    },
+    {
+      "case": "half_even_up-B",
+      "sha256": "e89ce749f85bd1f727f51960e38fb9fa9bc5f86cba08c2187ac1b3f5e2e93266",
+      "bytes": 9895
+    },
+    {
+      "case": "precision_neighbor-A",
+      "sha256": "9b4e63c4eef4e0680001624c22129721236fc0a13640d6e0e3d4e70284f8552e",
+      "bytes": 9898
+    },
+    {
+      "case": "precision_neighbor-B",
+      "sha256": "ea316b8772b9634b47b4ed7c0d5fdd27dad4b2fcfd770b405e3d272ca9aa4bae",
+      "bytes": 9900
+    },
+    {
+      "case": "ceiling-A",
+      "sha256": "ec2d5ecd6b3820a9605aebcfd1e280c8eeaecbc1ec67d1b0b10a24a7db654f6c",
+      "bytes": 9897
+    },
+    {
+      "case": "ceiling-B",
+      "sha256": "64c58d8ddfd40a304b9338a5233a0d86d2729226d475ac9de4cb99dfd9926d29",
+      "bytes": 9899
+    },
+    {
+      "case": "accept_bounded_internal_draft",
+      "sha256": "177bfc8ed17b6ffe806eccea2cd288515488833e76d3b0ac0319f971eefac0f3",
+      "bytes": 10181
+    },
+    {
+      "case": "changes_requested",
+      "sha256": "593de6507ba92b12fc8a00713f2da6e8ac6d8b38a22c3ef04ebddaa0625faa19",
+      "bytes": 9960
+    }
+  ],
+  "reason_only_correction_actual_frontend_decoder": "pass",
+  "source_artifact_raw_sha256": {
+    "packages/neuvetra-database/src/m66-template.ts": "226ac0b125f1cf8cd4d390fdd715bf7c647b440f5ab571c77c4524e1b0f5bac9",
+    "packages/neuvetra-database/src/m66-report.ts": "0efacc1b94280cbf960e8c755b208499416dc114fd0405fdb4d956e36a8903d0",
+    "apps/site-web/src/components/SourceElectricityWorksheet.tsx": "0c606367c713afb9905a854e07cfb73d41c8fb4c515e227620bc796c1b129d61",
+    "apps/site-web/src/lib/m66-api.ts": "11cbf0b6528e37259c6e330c58ce8cd8f41abd4d7ae11f141f6a49966ad823ae"
+  },
+  "scope": "direct actual renderer and frontend decoder with synthetic records; no SQL/cloud/browser/print execution"
+}

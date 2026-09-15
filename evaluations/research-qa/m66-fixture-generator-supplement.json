@@ -1,0 +1,17 @@
+{
+  "verdict": "pass_source_review_for_publication",
+  "scope": "One additional offline synthetic fixture generator; existing local manifest remains frozen.",
+  "path": "tools/staging/create-m66-fixture.py",
+  "rawSha256": "76fa27dce8460fac5a2e7ebd5980ca05717b7a20cdd700657329f70b6eadbeaa",
+  "canonicalLfSha256": "76fa27dce8460fac5a2e7ebd5980ca05717b7a20cdd700657329f70b6eadbeaa",
+  "checks": [
+    "Python syntax parsed without executing generator.",
+    "Only fixed fictional January2023 content,12345kWh,one-page ReportLab output at approved fixtureB path; no network, secrets or runtime import.",
+    "ReportLab invariant=1 is set; no claim of byte reproducibility across unpinned ReportLab versions.",
+    "The already-approved PDF remains the byte-identity authority. Generator was not rerun and must not silently replace a bound PDF during publication."
+  ],
+  "limitations": [
+    "Invoking the generator writes the named PDF path. Any regeneration requires fixture hash and visual/accounting reapproval."
+  ],
+  "reviewer": "Reused independent M66 QA context; no authorship of this generator."
+}

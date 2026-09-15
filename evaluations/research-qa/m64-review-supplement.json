@@ -1,0 +1,76 @@
+{
+  "profile": "neuvetra.m64.review-supplement.v1",
+  "date": "2026-09-14",
+  "verdict": "local_gate_pass_hosted_browser_acceptance_pending",
+  "scope": "Eight additional necessary test/helper/process/document artifacts; frozen original report and 29-artifact manifest preserved; no product changes by this reviewer",
+  "executor": "Reused /root/m63_data context; M64 nonauthor; prior M63 author disclosed in frozen report; requested Astra/high, actual inherited settings unobservable",
+  "priorBinding": {
+    "path": "evaluations/research-qa/m64-reviewed-artifacts.json",
+    "sha256": "1e8576daa1dc5f7b6d8aff41b3c7a464cb27af30749a193c0ee63a588c9e5384",
+    "all29ArtifactHashesRechecked": true,
+    "reportSha256": "8273b448f5641689aea9f5836efce96f23ace643d37c43c0b99381e0e4914593"
+  },
+  "validation": {
+    "command": "bun test apps/site-api/src/staging/server.test.ts apps/site-api/src/workspace/m64-routes.test.ts packages/neuvetra-database/src/hosted.test.ts packages/neuvetra-database/src/m64.test.ts",
+    "passed": 13,
+    "failed": 0,
+    "skipped": 9,
+    "assertions": 174,
+    "skipReason": "Native opt-in deliberately absent; retained M63 databases unchanged. Prior independently executed dedicated M64 native checks remain bound in the original report."
+  },
+  "qualifications": [
+    "The accounting implementation review embeds earlier hashes for m64.ts, SQL0010 and two tests that differ from current canonical hashes; no claim is made that those earlier hashes bind final bytes. Final exact arithmetic, persistence and decoder behavior were independently retested and frozen in the original QA report.",
+    "Hosted image, migration, real Auth/browser interaction, remote required checks and board feedback remain separate acceptance gates.",
+    "No cloud connection, credential read, Git action, product edit or nested delegation occurred during this supplement."
+  ],
+  "artifacts": [
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "dbde903174a1b11e292c91ea5593163f8870875ee16b735d6db97dda92b796c2",
+      "normalization": "CRLF to LF only",
+      "review": "Schema10 fixture readiness and existing-project containment remain explicit. Existing auth, current membership, path/origin/body, private error and static-root checks remain meaningful."
+    },
+    {
+      "path": "apps/site-api/src/workspace/m64-routes.test.ts",
+      "sha256": "3b2461ab1c934c1f5f17e970024640456632544e4db67937603e962abf09c9fa",
+      "normalization": "CRLF to LF only",
+      "review": "Exercises real route plus embedded database; malformed inputs, role boundaries, both ties, exact different-manager review and stale correction. Does not claim real provider authentication."
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "87c1863f2f69c1bfa141cc1b3135957f8ec796b3a10852859f36f935303b66d3",
+      "normalization": "CRLF to LF only",
+      "review": "Exact schema10 receipt assertions retain guarded opt-in native fixture, restricted role, containment/inheritance, transaction identity, immutable M63 history and pool-replacement checks. This supplemental run skips native tests explicitly."
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64.test.ts",
+      "sha256": "91b9d381ea61051ca5cf9f661d51ae7d5998ea79a388af38ba5cb84881e970c9",
+      "normalization": "CRLF to LF only",
+      "review": "Persists distinct canonical public accounting examples through SQL reader; arithmetic, immutable review lineage, duplicate convergence, zero and stale correction checks. Embedded execution is distinct from native QA."
+    },
+    {
+      "path": "tools/staging/check-hosted-journey.ts",
+      "sha256": "b3d449ad01603890f82d44f8f190721e89045eee78e9fdeec7681b0b38a094f9",
+      "normalization": "CRLF to LF only",
+      "review": "Readiness now requires schema10 and containment. Receipt schemaVersion1 remains a separate receipt-format version. Read-only journey still requires previous baseline and gates application mutations. No live execution by reviewer."
+    },
+    {
+      "path": "operations/agent-improvement/lessons.json",
+      "sha256": "9775e104a359140b007e9b294ebd93304eaa4bc29bfa19f15d9ec74eee47320e",
+      "normalization": "CRLF to LF only",
+      "review": "L07 requires actual PostgreSQL driver/persistence/API/frontend regression from independent decimal cases; adopted_pending_effectiveness avoids an unsupported effectiveness or compute-causality claim."
+    },
+    {
+      "path": "docs/research/m64-technical-contract.md",
+      "sha256": "a227870fd8e8ab520173e67e672796547ecdc3b97fc6bf67e60cf9fef34cd93b",
+      "normalization": "CRLF to LF only",
+      "review": "Matches final version/hash/review/tenant semantics, decimal repair, text-to-jsonb repair, one-statement read snapshot and controlled schema9-to10 deployment boundary. Author test counts and pending native checks are historical author handoff evidence."
+    },
+    {
+      "path": "docs/research/m64-accounting-implementation-review.md",
+      "sha256": "a844612d3dea23b12854b6f7e23da6cc7101af20f7d1c85fac85b19979474cef",
+      "normalization": "CRLF to LF only",
+      "review": "Preserves numerical first-review defect and repair, public expectation coverage, PGlite-only limits and no assurance. Embedded artifact hash table identifies an earlier review stage; final exact hashes are bound by the frozen QA manifest and this supplement."
+    }
+  ]
+}

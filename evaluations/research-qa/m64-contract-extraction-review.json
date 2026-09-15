@@ -1,0 +1,98 @@
+{
+  "profile": "neuvetra.m64.contract-extraction-review.v1",
+  "date": "2026-09-14",
+  "verdict": "source_and_native_repair_accepted_for_push_actual_linux_image_ci_required_before_migration",
+  "finding": "M64-IMAGE-F01 second CI iteration: root reports f91a821 web image typecheck failed because a browser type-only import still caused TypeScript to check backend Bun.CryptoHasher. First packaging repair did not remove this cross-environment typecheck dependency.",
+  "authorship": "Root authored extraction/packaging repair. Reused M64 QA nonauthor /root/m63_data performed this review. Prior M63 authorship and unknown inherited compute remain disclosed; no professional assurance.",
+  "changes": [
+    "First20 lines of constants/interfaces extracted verbatim into import-free, Bun-free m64-contract.ts.",
+    "Backend m64.ts imports and reexports the same contract; remaining implementation is byte-identical.",
+    "Frontend changes only its type import target to m64-contract.ts.",
+    "Docker web stage copies only the contract; runtime copies both modules; one exact context exception added."
+  ],
+  "exactComparison": {
+    "method": "Reconstruct original m64.ts by concatenating canonical contract bytes with backend lines after its two new import/reexport lines; compare SHA256 to original frozen binding. Reverse the frontend import target and compare original frozen hash. Reverse exactly the stated Docker/context edits and compare previous image-review hashes.",
+    "reconstructedBackendSha256": "0350d4119306fea6744e292c7c417a66496f5aff2a529f1f3e0c0098e03f16c4",
+    "reconstructedFrontendSha256": "ded475e119a841301670e3ba0fce222bf0021622e425edb95e7bbc795badb070",
+    "allComparisonsPassed": true,
+    "unchangedOriginalArtifacts": 27,
+    "unchangedSqlMigrationSha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+  },
+  "validation": [
+    {
+      "check": "Contract TypeScript program with ES2022/DOM libs, strict:true, types:[] (no Bun/Node ambient types), noEmit:true",
+      "status": "passed",
+      "diagnostics": 0
+    },
+    {
+      "check": "Independent actual PostgreSQL and contract suite rerun on dedicated m64_qa",
+      "status": "passed",
+      "tests": 19,
+      "assertions": 850,
+      "failures": 0,
+      "detail": "Executed a temporary exact copy of the frozen native test with only its receipt destination changed to a new path, plus the unchanged contract test. Temporary duplicate test removed afterward. Original frozen receipts and tests were preserved. Real arithmetic, native driver/API, tenant, concurrency, corruption, decoder and original M63 preservation checks passed."
+    }
+  ],
+  "supersedes": [
+    {
+      "binding": "evaluations/research-qa/m64-reviewed-artifacts.json",
+      "onlyPaths": [
+        "packages/neuvetra-database/src/m64.ts",
+        "apps/site-web/src/lib/m64-api.ts"
+      ],
+      "reason": "Original hashes remain valid historical evidence; use new exact hashes below for these two extracted-module paths. Other27 original artifact hashes remain unchanged."
+    },
+    {
+      "binding": "evaluations/research-qa/m64-image-repair.md",
+      "onlyPaths": [
+        "Dockerfile.staging",
+        "Dockerfile.staging.dockerignore"
+      ],
+      "reason": "Second packaging iteration requires new exact Docker/context hashes."
+    }
+  ],
+  "priorEvidencePreserved": {
+    "reportSha256": "8273b448f5641689aea9f5836efce96f23ace643d37c43c0b99381e0e4914593",
+    "originalManifestSha256": "1e8576daa1dc5f7b6d8aff41b3c7a464cb27af30749a193c0ee63a588c9e5384",
+    "supplementSha256": "5e28a25113fbf0ab3bd3f63baf9b34f1a8dd144df5f9453bb8ad7888c54e3ed3",
+    "firstImageRepairSha256": "7b9f61e73f69d0abfbce412703e90401031e1abf9c99d8994af4afdec1db9362"
+  },
+  "limits": [
+    "No Docker runtime exists locally for this reviewer; no Linux image pass is claimed. Actual exact-head Linux image build and offline runtime smoke must pass before migration.",
+    "Root reports unchanged staging-C2m9lF1j.js and a separate1/57 native API recheck; those are root evidence, not independently rebuilt bundle evidence in this assignment.",
+    "No SQL, policy, numerical, hash-sequence or runtime authorization change is introduced by extraction, as demonstrated by exact reconstruction plus native regression.",
+    "No cloud queries, credentials, Git, product edits or nested-agent activity by this reviewer. Hosted/browser and remote publication acceptance remain separate."
+  ],
+  "artifacts": [
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "86694f5b9cb6f7c65e56e100a8b40e99dd221ed9b6b9ecddf0839fffbf844c16",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "sha256": "404caa172cb3d92854819bf1aef29c16292659eeae5fc9f6b4d6f2168a3bb0cd",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64.ts",
+      "sha256": "d358bb4741b788173baeeb671abb4222e0d11c795953ba85f0fed292da5f6156",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64-contract.ts",
+      "sha256": "73bcc47ff03122d2f254d244c0792b9e62745618cc4fe9f21854df115f5c5c1d",
+      "normalization": "CRLF to LF only"
+    },
+    {
+      "path": "apps/site-web/src/lib/m64-api.ts",
+      "sha256": "715b14901ef209af877d252ad3a64ce02fd3754b42acc0da52f01b421f73d8df",
+      "normalization": "CRLF to LF only"
+    }
+  ],
+  "additionalEvidence": {
+    "path": "evaluations/research-qa/m64-contract-extraction-postgres-receipt.json",
+    "sha256": "ffb2e6bfae75715e4713f5529621ed211a17392d7bffcd52838cddff12389c40",
+    "scope": "Native rerun M63 preservation observations only; overall run verdict and counts are in this review"
+  }
+}

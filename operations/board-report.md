@@ -1,4 +1,176 @@
-# Neuvetra board update
+# M69 offline integration approved; no paid run
+
+Future work follows the board’s [corporate Scope 1, 2 and 3 reporting direction](../docs/corporate-reporting-direction.md), across milestones, AI/verifier preparation, UI, database and semantic layer. This strategy does not change existing release or board-feedback gates.
+
+The board directly approved publishing and integrating the reviewed offline M69 preparation into existing draft PR4. The candidate is unchanged; byte-preservation and role-record handoff defects were repaired, and all 34 offline integration tests / 225 assertions pass. Independent integration QA passed the exact committed candidate and repaired records. This offline delivery is published to the same PR after final remote checks.
+
+M69 adds research preparation, pinned evidence and tests only. It adds no customer-facing research feature or hosted schema change. The existing credential is unavailable for executable binding; live admission remains blocked and no paid request was made. Dated source/account/endpoint observations must be rechecked before any later live action. This approval does not authorize a paid run.
+
+M68 remains live, with its final evidence commit 2a4dd4f verified on all six checks and deployment e0b8f912-a48a-49a2-9041-4820dba2a647. Its version 4 is unreviewed; board workflow feedback remains pending before dependent accounting expansion. See docs/research/m69-integration.md and evaluations/research-qa/m69-integration-review.md.
+
+Historical entries below are superseded as next-action instructions.
+
+# M68 live demonstration passed; board feedback next
+
+Annual electricity and bills is live on the existing private staging service. Browser-saved evidence version 4 links one retained January bill to annual version 4: twelve entered months, one document month, eleven missing-document months, and an unresolved January quantity discrepancy. The subtotal remains 301,000.000 kWh / 58,707.1269 kg CO2e. Version 4 is unreviewed; methods/factors remain synthetic development candidates, unreleased and without assurance.
+
+Implementation c0c750a7acdd4ef1641a84b648f6795cdafa2848 is pushed to the milestone and rolling PR4 branches, with all six required checks passed. Existing Railway deployment d3960976-bb9a-4d8b-b490-0837caa667a1 is successful on schema 14. The actual HTML and source downloads match stored bytes. Four evidence versions/four reports and M63–M67 records survived a service restart. Local native test service is stopped; data is preserved. Independent hosted handoff passed; closure records are published with this delivery.
+
+The browser is open to Annual electricity and bills and its version 4 report. Collect board feedback before advancing dependent product work. Print-entry action opened its report tab; browser security blocked inspecting the temporary Blob URL, so native print preview is not claimed. Embedded report and exact HTML download were verified. Independent RAG work may continue within its own reviewed scope; M68 remains the rolling integrator. No new subscription, PR merge or persistent worker.
+
+Evidence: docs/research/m68-hosted-verification.json, evaluations/research-qa/m68-hosted-v4-report.html and evaluations/research-qa/m68-hosted-handoff.md.
+
+Historical entries below are superseded as next-action instructions.
+
+# M68 local reviews passed; publication and hosted demonstration pending
+
+Independent accounting and integrated QA passed the reviewed candidate after the Docker packaging finding was repaired. Native persistence, exact arithmetic/source/report checks, frontend actions and a local restore passed. The fresh encrypted pre-upgrade application backup is verified; it excludes Auth and is not a hosted restore drill. Root is publishing to existing rolling PR4, then verifying CI, upgrading the existing database and demonstrating the deployed workflow.
+
+Historical entries below are superseded as next-action instructions.
+
+# M68 authorized — evidence contract and implementation
+
+M67 workflow acceptance has been deliberately reconciled from the original checkout's four local-only records. The board did not personally audit every number; annual version 4 remains unreviewed and methods remain unreleased. The new board instruction authorizes M68 implementation, publication and deployment on existing infrastructure.
+
+M68 connects exact saved annual entries to retained supported fictional January bills. Entered coverage and document coverage remain distinct, with visible gaps, overlapping periods and quantity discrepancies. Scope: docs/research/evidence-annual-electricity-milestone-68.md. CTO contract is delivered; independent accounting design review is active. Backend implementation and integrated QA remain pending.
+
+The board explicitly authorizes milestone Git branches. M68 uses codex/m68-bill-evidence based on ad008741; reviewed committed work must be pushed and integrated into codex/m63-private-staging / existing draft PR4. No PR merge into its base branch is authorized. M68 is the sole publisher/deployer/shared-ledger writer. Independent RAG readiness uses codex/m69-rag-readiness and hands reviewed commits to M68. One specialist slot is allocated to each task until coordinated otherwise. No new subscriptions or persistent agents.
+
+Historical entries below are superseded as next-action instructions.
+
+# M67 workflow accepted — next scope proposed
+
+The board accepts M67 workflow and explicitly has not independently checked every number. Numerical validation remains supported by the independent accounting and QA evidence. M67 is complete within its synthetic annual-electricity scope; version 4 remains unreviewed in the application, and the method/factor remain unreleased. See operations/feedback/2026-09-14-milestone-67.md.
+
+Proposed M68 is evidence-backed annual electricity: connect supported fictional bills to monthly entries, distinguish entered-month coverage from evidence coverage, surface gaps and discrepancies, and retain exact source/version/report history. No M68 implementation or worker is active. Define its acceptance criteria and supported bill-period rules before implementation. Publish this acceptance record with the next delivery.
+
+Bigger picture: a working private synthetic accounting workflow spans substantial workspace functionality and early draft-reporting capabilities. A real customer pilot still needs supported/released methods, appropriate inventory scope, real evidence intake and operational/security readiness. Commercial billing and controlled launch remain later work. The numbered roadmap stages overlap; M67 does not certify every acceptance criterion in stages 1–5.
+
+Historical entries below are superseded as next-action instructions.
+
+# M67 live — board review next
+
+Full-year electricity coverage is implemented, pushed and live on the existing hosting. Version 4 contains eleven months at 25,000 kWh and December at 26,000 kWh: 301,000.000 kWh and 58,707.1269 kg CO2e. Missing months remain distinct from zero. Four annual versions and three reports survived a service restart; M63–M66 records are unchanged. The downloaded report matches stored HTML bytes exactly.
+
+Implementation dd1a09f00901f562ce1c7966b53326c8ee21bc98 passed all six checks and deployed as 3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938 on schema 13. Independent hosted handoff passed. Original CI, packaging and browser session-reset defects remain documented with their repairs. Same-account focus/reconfirmation now preserves the editing form. Completion records are being published to the same draft PR4, without merging.
+
+The live browser is open to Full-year electricity and its version 4 report. Board feedback is pending before the next dependent milestone. These are fictional manual entries without linked bills; full electricity coverage does not mean a complete company inventory. Version 4 is unreviewed, and factors/methods remain unreleased with no assurance. Native print-dialog feedback is not claimed. Scoped role work is closed, local test PostgreSQL is stopped, and no persistent workers or new subscription were created.
+
+Evidence: docs/research/m67-hosted-verification.json, docs/research/m67-hosted-snapshot.json, evaluations/research-qa/m67-hosted-handoff.md. Actual agent compute/cost remains unknown.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 accepted; M67 full-year coverage underway
+
+The board accepted M66 and authorized M67. M66 final commit9afde82631e321c0c084454c97a24a2f463a9456 is pushed with six successful checks and live in existing Railway deployment405765fc-a4fe-4fd1-b310-d4a615c0decf, schema12. See operations/feedback/2026-09-14-milestone-66.md. PR4 remains unmerged; worksheet Version3 remains unreviewed and all synthetic/unreleased boundaries persist.
+
+M67 adds twelve manual monthly entries, explicit missing-versus-zero coverage, deterministic annual subtotal, version corrections, different-manager review and immutable report. Existing bill-linked January evidence is preserved separately; it cannot support unprovided months. Scope: docs/research/annual-electricity-milestone-67.md. Technical/accounting contracts passed independent design review. CTO backend and root UI/operators are in implementation; accounting and QA are dispatched for independent implementation review. Root owns UI, publication and shared records. No new subscription or persistent workers.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 live — board review next
+
+Supporting bills now stay linked to manually confirmed electricity quantities, saved versions and immutable reports. The live browser saved Version3: 25000.000kWh → 4876.0072kgCO2e, with the fictional bill's printed12345.000kWh and an explicit discrepancy explanation. Version3 is unreviewed; earlier source/review/report history remains unchanged. Exact PDF and HTML downloads, three versions, two bills and three reports passed post-restart readback; M63–M65 are preserved.
+
+Implementation63791ac4d6628651fc53c3de79f7db4791b48114 is pushed to rolling draft PR4; six checks passed. Existing Railway deployment56c457f9-2c27-4f68-bd62-3eec6d1687f7 is SUCCESS on schema12. No new subscription or merge. See docs/research/m66-hosted-verification.json for exact observations. Native M66 print-dialog feedback is not claimed; the verified print view opened, and local Chrome print layouts were inspected.
+
+For review, open Bill-linked worksheet and its Version3 report. The retained bill, printed/manual quantities, discrepancy reason and preserved earlier versions are available. Full-year electricity coverage follows as M67 after M66 board feedback. These remain synthetic, incomplete, unreleased drafts without assurance. Independent hosted handoff passed. Scoped role deliveries are closed; role contexts are not persistent workers and actual compute/cost is unknown.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 local verification passed; publication and live demonstration next
+
+M66 links supported fictional bills to manually confirmed electricity quantities, immutable versions, manager review and readable reports. Accounting and independent QA passed the bounded local candidate. Repository checks and the native source-to-report restore passed. Root is publishing the reviewed changes to rolling draft PR4 and will verify CI/image checks before the existing-host schema12 upgrade. Live browser, restart/readback and board demonstration remain pending. Full-year coverage follows as M67 after M66 feedback. No new subscription or merge.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 supporting bills implementation underway
+
+The board clarified that M66 must finish first: link approved fictional bills to manually confirmed quantities, saved versions and immutable reports. Full-year electricity coverage is queued afterward as M67. The initial annual interpretation was incorrect; its preparation is parked outside product code. Scope: docs/research/source-linked-electricity-milestone-66.md. Accounting has approved both fixtures and the contract; backend implementation and independent QA remain pending. Root owns UI, publication and deployment. Preserve M63-M65 and reuse existing hosting.
+
+Historical entries below are superseded as next-action instructions.
+
+# M66 full-year electricity implementation underway
+
+The board chose full-year electricity coverage for M66 and requested it pushed and live. This supersedes the earlier bill-upload proposal. Scope: docs/research/annual-electricity-milestone-66.md. Accounting, CTO and independent QA have actual bounded assignments; root owns UI, publication and deployment. Preserve all M63-M65 records and reuse existing hosting. Unknown months are not zero; all12 entered months mean full-year electricity coverage, not complete company inventory.
+
+Historical entries below are superseded as next-action instructions.
+
+# M65 accepted; M66 selected
+
+The board accepted M65 after confirming the report and native print preview. See operations/feedback/2026-09-14-milestone-65.md. M65 remains private, synthetic, incomplete and unreleased; Version4 has no new worksheet review.
+
+Next is M66: link a supported fictional bill to a manually confirmed quantity, an evidence-bound saved version and its report. Reuse current storage/hosting. Source identity must be part of a new version and report contract; do not attach evidence retroactively to an accepted M64/M65 snapshot. Scope: docs/research/source-linked-electricity-milestone-66.md. CTO advisory review is delivered; implementation and independent contract review have not started. No other worker is currently executing.
+
+Historical entries below retain earlier checkpoints.
+
+# M65 live - board review next
+
+Current and historical synthetic worksheet versions now have immutable, readable HTML reports with captured review state. Version4 remains25000.000kWh -> exact4876.00722 -> displayed4876.0072kgCO2e and unreviewed. All four original worksheet versions/reviews and the original M63 report/review are preserved. Reports survived a service restart and fresh authenticated readback.
+
+The live browser opened current and historical reports, downloaded the exact verified HTML, and exercised narrow-screen and keyboard controls. The original embedded Print action failed to show a preview for the board; the reviewed repair opens a dedicated verified print view with browser Print instructions. See docs/research/m65-hosted-verification.json for the final observed print outcome and exact deployment. Original failures and review evidence remain preserved. Six CI checks passed for the implementation. Same rolling draft PR4; no merge or new subscription.
+
+For review, open Electricity worksheet, Find saved reports for version4, then Open report. Use Open print view and the browser Print command (Ctrl+P or Command+P). Download HTML report saves the exact verified document. The report remains synthetic, incomplete, unreleased and without assurance. Board feedback is the next gate; do not start dependent M66 work yet.
+
+Scoped CTO, accounting and independent QA deliveries are closed after review; these are not persistent workers. Requested critical compute is recorded separately from unknown actual settings/cost. See evaluations/research-qa/m65-hosted-handoff.md and the immutable role snapshots. Historical sections below are retained as dated context, not current status.
+
+# M65 live - final print-view check pending
+
+Implementation3d6fdfa0e18d924c6495866f2db21c088089f9d5 is published in rolling draft PR4; all six CI checks passed. Existing Railway deploymentfe21d898-1b02-4960-9f72-20774ec3a6ef is SUCCESS on schema11. The read-only hosted revisit at2026-09-14T22:51:04UTC preserved both exact reports, all four worksheet versions/reviews and the original M63 report/review. All four test Auth sessions closed204. No merge or new subscription.
+
+Current Version4 and historical Version2 opened correctly, the actual downloaded HTML hash matched, and narrow-screen/keyboard checks passed. The board reported no native preview from the embedded print action. The reviewed repair now opens a dedicated verified print view with browser Print instructions. Local action/decoder checks passed12/74; this is not native browser proof.
+
+Chrome blocked the final live reload because another extension panel was open. The board has been asked to close it. Next: inspect the deployed Open print view, verify browser Print, finalize independent hosted handoff and role records, publish the remaining evidence/closure documents, and collect board feedback. Do not call M65 complete or start dependent work yet. The three immutable role snapshots are prepared; role runs remain in progress. Temporary local PostgreSQL and report-preview services are stopped. No worker is currently executing outside root; no persistent agents or measured compute/cost savings are claimed.
+
+See docs/research/m65-hosted-verification.json and evaluations/research-qa/m65-print-view-supplement.md. Final handoff is explicitly still a draft. Existing earlier reports and supplements remain immutable historical evidence. Continuation helpers in .superpowers include m65-close-records.py (do not run before final acceptance) and m65-hosted-record.py (initial draft generator; do not rerun over newer verification).
+
+
+# M65 implementation — local verification passed; deployment next
+
+M65 implementation is authorized and adds readable, printable immutable reports to current/historical saved worksheet versions. Accounting and independent local QA passed; print overlap was caught and repaired before deployment. The final candidate requires image CI, schema11 upgrade, hosted browser/API/restart checks and board feedback. M64 remains accepted; preserve the board's Version4 and original M63 report. See docs/research/m65-execution.md and evaluations/research-qa/m65-private-report.md with the print supplement. Roles are task-scoped, not persistent workers; actual compute/cost remains unknown.
+
+# M64 accepted and published; M65 selected
+
+The board accepted M64 after saving Version4: 25000.000 kWh -> 4876.0072 kg CO2e. Root verified the saved correction reason, three earlier versions and their review states, and persistence after refresh. Version4 remains awaiting a different manager review; board milestone acceptance does not create that review.
+
+M64 code is already pushed and deployed: 2b2129505ab613e0861039f23e5a751c7f1b9465, six successful CI checks, Railway deployment 8aaa07f4-a7bd-4eb8-be5d-04eb7b7c3956 SUCCESS, live schema10 readiness verified September14. Draft PR4 stays the rolling delivery line and is unmerged. See operations/feedback/2026-09-14-milestone-64.md. Historical entries below retain earlier evidence and pending gates; they are superseded by this section.
+
+M65 is selected: a readable, printable report for an exact saved synthetic worksheet version. Freeze source and review snapshots so later corrections or reviews cannot rewrite an earlier report. Scope and acceptance: docs/research/worksheet-report-milestone-65.md. Implementation has not started. First implementation gate: CTO report identity/authorization contract and accounting wording review, then engineering and independent QA. Preserve M63 reports, M64 records and candidate/incomplete/unreleased qualifications. No new hosting subscription or customer launch.
+
+# M64 live — board feedback next
+
+M64 is deployed on the existing https://www.neuvetra.ai private synthetic site. Invited managers can enter fictional January 2023 CAMX electricity, save exact subtotals, correct with a reason and review another manager's exact version. The real browser exercised review, negative-input refusal, correction, history and narrow-screen layout. Version3 remains unreviewed after correction; historical reviews remain. The original M63 report/review hashes are unchanged. Service restart and new authenticated readback pass.
+
+All six remote CI checks passed for implementation ea31275; existing-service deployment47822f07 is healthy on schema10. Two predeployment numerical/driver defects and two packaging iterations were repaired and preserved in evidence. Startup retries before migration required redeploying the same image afterward; no records were deleted. A local OneDrive index mapping issue was recovered using a preserved alternate index, then synchronized. No new hosting subscription or PR merge. Final independent handoff review passed; all scoped specialist deliveries are closed. Board feedback is the next product gate.
+
+The browser is left on Electricity worksheet. For the board demonstration: choose Correct this quantity, enter an invented quantity and a reason, then Save corrected version; use Previous versions to compare. A new version always needs a different authorized manager's review. This remains synthetic, incomplete and unreleased, with no assurance. New Auth sessions were tested through API and the existing browser reauthorized on reload; a fresh browser sign-in-link flow was not repeated.
+
+See docs/research/m64-hosted-verification.json and evaluations/research-qa/milestone64-private-worksheet.md. No persistent cloud agents or automatic improvement scheduler is claimed. Accounting, CTO and QA used bounded assignments; actual compute/cost metrics remain unknown. L07 now requires the native PostgreSQL driver/decoder regression in CI. Await board feedback before M65 or other dependent work.
+
+# M64 underway
+
+The board authorized starting M64. Accounting approved strict synthetic quantity inputs and independently derived rounding cases. CTO owns database/API implementation; root owns guided entry and existing-host integration. Independent QA is dispatched in reused m63_data context after the runtime refused a fresh agent at its thread limit. This context authored M63 database/adapter/containment and source-manifest code, but no M64 code; its M64 review is independent, inherited M63 code receives regression checks. Requested critical routes are Astra/high; actual compute/cost remain unobserved. Implementation and independent local QA pass. Supplemental publication review and hosted deployment/browser verification remain pending. Preserve exact M63 report/review; rolling draft PR4 remains unmerged.
+
+# Neuvetra board update — M63 accepted; M64 selected
+
+The board has accepted the repaired live workflow. M63 is complete for private synthetic testing; the same saved report and manager review remain intact. Live readiness and signed-out refusal were rechecked, and all five checks on the deployed repair pass. The browser defect stays in the performance record rather than being erased by its fix.
+
+The next milestone is M64: guided synthetic electricity entry and a versioned draft worksheet. Let an invited tester enter a fictional facility and an allowed January 2023 CAMX quantity, save it, correct it with a reason, and get an exact-version second-manager review. Accounting must independently approve variable inputs and expected results before engineering changes the fixed calculation contract. Existing annual reports, factors, tenant boundaries and synthetic/unreleased qualifications remain protected.
+
+Agent configuration validates for 11 roles. CTO planning and independent QA were actually dispatched for this closure; all three M63 role outcome records now bind completed work to exact reviewed artifact snapshots. This is assignment-driven execution, not an always-running cloud workforce, and model/cost savings remain unmeasured. M64 implementation has not started. [Next milestone](../docs/research/guided-electricity-entry-milestone-64.md) · [Board acceptance](feedback/2026-09-14-milestone-63.md).
+
+# Historical M63 browser repair
+
+September 14 board feedback: the signed-in hosted browser rejects the saved calculation with 'The calculation response was not recognized.' Root reproduced it through Revisit saved workspace. Prior API/recovery checks remain valid but were insufficient for browser acceptance. The exact property-order-dependent comparison is repaired; the same hosted response passes the actual frontend decoder, and independent source review plus 77 web tests pass. Repair commit 2985ed3 is published to PR4. Full frontend-chain and postdeployment signed-in browser verification remain pending; no saved records were changed.
+
+September 14, 2026. PR #3 was merged on the board's approval. M63 reuses the existing Railway website and Supabase test database; no new hosting service or subscription was added. The existing database has an encrypted recovery backup, reviewed legacy access containment and nine applied application migrations. Real provider sign-in and restricted database access pass for two managers and a member; an uninvited signed-in tester is refused.
+
+The locally reviewed implementation is in draft [PR #4](https://github.com/neuvetra-hq/neuvetra/pull/4), commit `4f454718c4050c432b1599f1edc91940f3edcf2e`, with all five remote checks successful, including the actual Linux image. Independent local recovery reproduces saved reports, hashes and access controls. One browser cancellation defect was repaired and retested.
+
+The hosted workflow, service restart, compatible deployment rollback and independent application-backup restore now pass. Recovery preserved all 31 tables/54 records, security metadata and exact report/archive/review hashes. The existing site is live at https://www.neuvetra.ai; the approved sign-in email reached the board Gmail. Board browser sign-in and use feedback remain the next demonstration gate before dependent work. Provider-owned defaults are explicitly deferred behind verified access containment; provider Auth restoration and portable off-device recovery are outside the demonstrated recovery scope. [M63 record](../docs/research/private-staging-milestone-63.md).
+
+# Historical M62 board update
+
 
 September 14, 2026. The role improvements are published. The first prospective pilot used explicit CTO/accounting routes and independent QA; measured savings and causal model improvements remain unknown.
 

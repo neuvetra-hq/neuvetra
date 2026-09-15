@@ -1,0 +1,176 @@
+{
+  "status": "exact-clone",
+  "source": "m63_integration",
+  "target": "m64_qa",
+  "tables": [
+    {
+      "name": "annual_inventory_audit_log",
+      "count": 55,
+      "sha256": "600c4e4a4502a3a5ad4bc03636b8ac4940f62a05986bd2b2a05bf5a82d98a474"
+    },
+    {
+      "name": "annual_inventory_review_decisions",
+      "count": 13,
+      "sha256": "1af1cee0f9881c8c9fbdb92128fe12f33aceeae8665f0995007d9cb53d3d3d51"
+    },
+    {
+      "name": "annual_inventory_versions",
+      "count": 14,
+      "sha256": "a3d3238fb8758c5d320583ed0b6c712cdc1c0ca7deeeabcee5c11f735839a9fb"
+    },
+    {
+      "name": "annual_source_register_versions",
+      "count": 28,
+      "sha256": "219b4fe92724c9149b8bfc85bf722ad48b1fecae193803543019abd0a7c2be9f"
+    },
+    {
+      "name": "audit_events",
+      "count": 40,
+      "sha256": "6218a31d6d3cac312a850c59198cfa9c8fbef4b45f4e13fb61fdc28259c36bcd"
+    },
+    {
+      "name": "bill_evidence",
+      "count": 17,
+      "sha256": "6cc9803d1ada0425fd2d7c0dcbf07cfda9e6f87024d0ca11cdf7cb7d29cf1dc1"
+    },
+    {
+      "name": "bill_summary_cache",
+      "count": 34,
+      "sha256": "de22697bde72f532206e61e02c8f8c9fe3660d7e8e2bcd25105179e8c39a30e2"
+    },
+    {
+      "name": "bill_versions",
+      "count": 34,
+      "sha256": "6b15d9c6a2599a19d69ac10e018bd9b08fef79c54c6d152e0bcd7fcbc6a664eb"
+    },
+    {
+      "name": "boundary_facilities",
+      "count": 40,
+      "sha256": "fcccefee14654673fe2a47da25b4f4fafccb87f5a6d4346c5c1cabb03154ab00"
+    },
+    {
+      "name": "calculation_audit_log",
+      "count": 14,
+      "sha256": "17183a48958617ad2671b24ddceb07d062b32fb93348e2c85777f621c20e4120"
+    },
+    {
+      "name": "companies",
+      "count": 40,
+      "sha256": "d17977d88852e1318d4f8501b1b4c36005af918723bfb5415d0990a974f4d2e0"
+    },
+    {
+      "name": "company_members",
+      "count": 80,
+      "sha256": "7124da37c33f68651b5b82c1058ddba098e3f57dbe5891eccb632a2a5709ee77"
+    },
+    {
+      "name": "evidence_audit_log",
+      "count": 51,
+      "sha256": "55aa1df71dcbe569f54fe069879987f31644e15ac346cd9c1eba70a9a06fb0d8"
+    },
+    {
+      "name": "evidence_search_documents",
+      "count": 17,
+      "sha256": "339a6aabf783de233c716ba91c8c3e0095a808ff66ddef51f3a0bdefc0f40cc6"
+    },
+    {
+      "name": "extraction_jobs",
+      "count": 17,
+      "sha256": "cd9b0a7093e2b904d37e76485a7f4dab193255c46784fcbf3dcafc7ee63380f3"
+    },
+    {
+      "name": "facilities",
+      "count": 40,
+      "sha256": "048a157f79fce4a1c93f973fcc4e04d983e725c563742657b41a60a45c809e67"
+    },
+    {
+      "name": "inventory_activity_versions",
+      "count": 17,
+      "sha256": "f44bc840c47dd8503925f516cc51755455b829d63d4d128926cb5402d0f5c26a"
+    },
+    {
+      "name": "inventory_calculation_results",
+      "count": 14,
+      "sha256": "c4001bbccd74879392150323c961ad6cd9934ee749231b31747c70c33aabdbe6"
+    },
+    {
+      "name": "inventory_draft_report_audit_log",
+      "count": 13,
+      "sha256": "1a71af928cd3b34fcf5109d355b41653c5b305edce319fc6e1753ecb30609fc6"
+    },
+    {
+      "name": "inventory_draft_report_review_audit_log",
+      "count": 13,
+      "sha256": "a35912c1e7c91ee810b4da52166116d948a2b5bb56664c269b4a75945013fb40"
+    },
+    {
+      "name": "inventory_draft_report_review_decisions",
+      "count": 13,
+      "sha256": "c881de99912ab95ca37d3bcd188842ff866a7393d2d5b777db96b048879c8a8e"
+    },
+    {
+      "name": "inventory_draft_reports",
+      "count": 13,
+      "sha256": "601243f883dffab78c16b5fcef2550aa035e4e28f23180e8590f0395dc116f81"
+    },
+    {
+      "name": "inventory_evidence_pack_audit_log",
+      "count": 13,
+      "sha256": "98c92c4d8a764771c2b05b106df8e7f1b6e04fff0f2fefddfab909cc03818de8"
+    },
+    {
+      "name": "inventory_evidence_packs",
+      "count": 13,
+      "sha256": "5aa8fcb13cbe8f7c32d92c88361a72b56ee7597e43de1215c4c63d4321b2cc13"
+    },
+    {
+      "name": "inventory_review_audit_log",
+      "count": 28,
+      "sha256": "b5b21ad5190021651a601608b874cd181b0c85ba28b0d3c35062807c23df91c3"
+    },
+    {
+      "name": "inventory_review_decisions",
+      "count": 14,
+      "sha256": "096e746ff6897392dc96e5bb1cf3251a4e0e56652aad9c738a96ad3a57bc8a91"
+    },
+    {
+      "name": "inventory_versions",
+      "count": 14,
+      "sha256": "8bb6a895d508ca3e163bd1d0cddc8a868d30ec069517edd37d5b379dc780b5d7"
+    },
+    {
+      "name": "reporting_boundaries",
+      "count": 40,
+      "sha256": "1f3f033fdbc925432147856f74f2c51c2292e4892de8b174c46449d5b31fb00b"
+    },
+    {
+      "name": "schema_migrations",
+      "count": 9,
+      "sha256": "62dc6e92a3d75e37454255e92f0936e98e16d5a91a805bca55bb6b2bfd95104b"
+    },
+    {
+      "name": "staging_access",
+      "count": 80,
+      "sha256": "81da5a8e745534e0d1612943aaa233f708ea9fe0347ea8970ab0cdaf2ba30fed"
+    },
+    {
+      "name": "staging_target",
+      "count": 1,
+      "sha256": "929e71b4e9d2672edaae0d2fcd71d5978f055f6e7fd613b764d4a8e2fc04c969"
+    }
+  ],
+  "metadata": {
+    "tables": {
+      "sha256": "2de3b260a66d0e0d8cfd828deef8d5712ee5d9b181a306c9c2ffaf17cf573174"
+    },
+    "policies": {
+      "sha256": "481172f006accb00d234362a3d2716ebbd5b018c9f0b3dd67dc506273f0d2159"
+    },
+    "functions": {
+      "sha256": "85f8b379fe9d396de8b507706feb7e1d8d9798c632d07cc2e133c60b888e27a2"
+    },
+    "schema": {
+      "sha256": "66ea9c16683a0826613059b5f053baebe6705d0781f3a433b1c295daedc98d2f"
+    }
+  }
+}

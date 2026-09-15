@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M67-ACCOUNTING",
+  "role": "accounting-validation",
+  "execution_context": "/root/m64_accounting",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M67-ACCOUNTING.json",
+      "sha256": "1ec0d9950a56b4a85dbf424cd0f86450f2c717e3637fadde791c24cba6ad1ca4"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m67-hosted-handoff.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m63_data",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m67-hosted-handoff.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M67-ACCOUNTING.json",
+        "sha256": "1ec0d9950a56b4a85dbf424cd0f86450f2c717e3637fadde791c24cba6ad1ca4"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M67 full-year electricity coverage",
+  "compute_note": "Existing context reused for continuity; actual inherited settings and metrics unknown. Requested critical route is not an observed override.",
+  "notes": [
+    "Scoped role delivery complete; board milestone acceptance remains pending. Root reviews QA artifacts, not its own product release. Independent QA reviews integrated engineering/accounting.",
+    "Original packaging, stale CI assertion and browser auth-lifetime defects remain recorded with repairs. Actual compute, cost and comparable quality metrics remain unknown; no savings claim."
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "profile": "neuvetra.m65.print-repair-native-qa.v1",
+  "status": "passed",
+  "database": "m65_qa_print",
+  "migrationSha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99",
+  "templateSha256": "cb279f0ec15cd492815dca2c4424e6d8852c0503f179fa0179482a0f087aa929",
+  "tests": 21,
+  "assertions": 392,
+  "originalBaselineTables": 35,
+  "originalRowsPreserved": 999,
+  "priorDatabaseAndReceiptPreserved": true,
+  "printVisualAcceptance": "pending separate repaired artifact review",
+  "artifacts": [
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "canonicalLfSha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "canonicalLfSha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-postgres.test.ts",
+      "canonicalLfSha256": "beadeb32be8832b44ec84cf9e5b716b4e3fc788edb6bedf35248ab625528bbb4"
+    },
+    {
+      "path": "evaluations/research-qa/m65-independent-frontend.test.ts",
+      "canonicalLfSha256": "02411a0eaaf9ad481f43033504a0443a667a5a760e1493f4b669107c9d39b5a1"
+    },
+    {
+      "path": "evaluations/research-qa/m65-independent-renderer.test.ts",
+      "canonicalLfSha256": "79edebfeeb5a7ad60839f3f1d70bcdcb18186dead61f938d008862fa04b7cefa"
+    },
+    {
+      "path": "evaluations/research-qa/m65-baseline-receipt.json",
+      "canonicalLfSha256": "60a8703693ddc8fdf9e987925185ebff8d8550ac4f064e9488d6b9045003fd84"
+    },
+    {
+      "path": "evaluations/research-qa/m65-print-before-receipt.json",
+      "canonicalLfSha256": "d0bdd0752270196cfc64bbb9f0bf7b3f329ecb0744553f85cc352d02192eb0da"
+    }
+  ]
+}

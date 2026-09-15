@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "M65-PLAN",
+  "role": "cto",
+  "execution_context": "/root/m64_cto",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M65-PLAN.json",
+      "sha256": "7b6b8bffb8f0e7cfcec5c213db05f5037615285d5ee4948f590fe190659bf088"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m65-plan-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m63_data",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m65-plan-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M65-PLAN.json",
+        "sha256": "7b6b8bffb8f0e7cfcec5c213db05f5037615285d5ee4948f590fe190659bf088"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "scope": "Planning only; coordinator wrote final brief from CTO recommendation. Reviewer checked immutable snapshot. M65 implementation not started.",
+  "compute_note": "Routine policy requested Sol/high; reused existing contexts without changing inherited settings. Actual settings unknown. Not a compute efficiency experiment."
+}

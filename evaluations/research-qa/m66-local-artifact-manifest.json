@@ -1,0 +1,264 @@
+{
+  "scope": "M66 source-linked local integrated review; hosted/image/native-browser gates pending",
+  "hashPolicy": "Text binds UTF-8 canonical LF and observed raw bytes; PDFs/PNGs bind raw bytes. No file changed by binding.",
+  "artifacts": [
+    {
+      "path": "docs/research/source-linked-electricity-milestone-66.md",
+      "rawSha256": "423f8fb69c25d779c719ddcecb9bf2a9fbc476dbac9e380c1b76daec2d850f15",
+      "canonicalLfSha256": "982a9bbcd8eae3817fbe717311f182d4f8b2ca39f8aca4338aa3d1e6424b736e"
+    },
+    {
+      "path": "docs/research/m66-accounting-contract.md",
+      "rawSha256": "62cbd54f7bbe025c9d2852461f10f3a7b2d7bb5803eff42d2d8a30f72d3b55b2",
+      "canonicalLfSha256": "62cbd54f7bbe025c9d2852461f10f3a7b2d7bb5803eff42d2d8a30f72d3b55b2"
+    },
+    {
+      "path": "docs/research/m66-print-layout-verification.json",
+      "rawSha256": "18cab74eceb6dd9e6e65583576c893f60a695f8446c79797f7da5017dc99b7bc",
+      "canonicalLfSha256": "987072eb0260ee2f74adeca577a1f9b014c1b341e5b1fc77cd6c83e33dffa096"
+    },
+    {
+      "path": "evaluations/research-qa/m66-accounting-cases.json",
+      "rawSha256": "c8f26abfceef2ee47ace6709479a00d4a93a430920c48edda60bea31e2102f2d",
+      "canonicalLfSha256": "c8f26abfceef2ee47ace6709479a00d4a93a430920c48edda60bea31e2102f2d"
+    },
+    {
+      "path": "evaluations/research-qa/m66-accounting-wording-review.md",
+      "rawSha256": "bd46b8c22b157cd5dd7d8f713a0209c4a6ec1f35b46e96cb12df1dc72fe42afd",
+      "canonicalLfSha256": "bd46b8c22b157cd5dd7d8f713a0209c4a6ec1f35b46e96cb12df1dc72fe42afd"
+    },
+    {
+      "path": "evaluations/research-qa/m66-accounting-wording-results.json",
+      "rawSha256": "f46f581c452b8e4cb09fe9e6d0d1623e0a5aa901f3bad6e04b3920324d162928",
+      "canonicalLfSha256": "f46f581c452b8e4cb09fe9e6d0d1623e0a5aa901f3bad6e04b3920324d162928"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-contract.ts",
+      "rawSha256": "ffbb76b1c144130369d93a88f586bc431cdb8a8eba2d6a285ef5d849c5662049",
+      "canonicalLfSha256": "ffbb76b1c144130369d93a88f586bc431cdb8a8eba2d6a285ef5d849c5662049"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-fixtures.ts",
+      "rawSha256": "2c78d1fc9a8e5a288303e495094fe3ea8b4b076692e1e2a2ed17bb859eaaeeae",
+      "canonicalLfSha256": "2c78d1fc9a8e5a288303e495094fe3ea8b4b076692e1e2a2ed17bb859eaaeeae"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-sources.ts",
+      "rawSha256": "85068701fca36379fd4fe7f3e6b4afed63ff96acfc75f4cd14a9338f2001ca20",
+      "canonicalLfSha256": "85068701fca36379fd4fe7f3e6b4afed63ff96acfc75f4cd14a9338f2001ca20"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66.ts",
+      "rawSha256": "5805119822a1500cd7e6b05703bd6262ff7471d2ac7c8567a7fffb1fab8e3912",
+      "canonicalLfSha256": "5805119822a1500cd7e6b05703bd6262ff7471d2ac7c8567a7fffb1fab8e3912"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-report.ts",
+      "rawSha256": "0efacc1b94280cbf960e8c755b208499416dc114fd0405fdb4d956e36a8903d0",
+      "canonicalLfSha256": "0efacc1b94280cbf960e8c755b208499416dc114fd0405fdb4d956e36a8903d0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-template.ts",
+      "rawSha256": "226ac0b125f1cf8cd4d390fdd715bf7c647b440f5ab571c77c4524e1b0f5bac9",
+      "canonicalLfSha256": "226ac0b125f1cf8cd4d390fdd715bf7c647b440f5ab571c77c4524e1b0f5bac9"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "rawSha256": "1e1cc0742cdb3f6f48301202923a1405b2aa21a02010cf8d5233cfef8a5d1a26",
+      "canonicalLfSha256": "1e1cc0742cdb3f6f48301202923a1405b2aa21a02010cf8d5233cfef8a5d1a26"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "rawSha256": "86a691957d3c21effb9f217ba5ae48b866642730d896cb7288a4fb46e56a0cef",
+      "canonicalLfSha256": "86a691957d3c21effb9f217ba5ae48b866642730d896cb7288a4fb46e56a0cef"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "rawSha256": "afeba51208de5d77eafcec07d6c4dfe917281fe39509a440fec49c45ce2a2ad1",
+      "canonicalLfSha256": "d32e49eeb0edaeac56c7329e27c3e797064dce244fe39402768fefab7a0e7b72"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "rawSha256": "500327d6e1be1189c25037efd21779e276c9b72bf87587082df3f290942cd3ea",
+      "canonicalLfSha256": "6425803e960572b59feaf504bafc501cf52395add29b0f754fa31bae443e1c00"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "rawSha256": "2e4c44a5635a02c32cc278d836ca1369dd27febc7ba706d924c9720a4e8387a6",
+      "canonicalLfSha256": "844a4a4284331e302a8259a2dfb49f8e70dba778f6a53a3c18a9157bafaa43a4"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "rawSha256": "0897c5c1bb0908cf991b768221c5ae48afff7cc13de7b5e871f0105bc3a0d291",
+      "canonicalLfSha256": "512036859f6ba65dcedbcb50d08cb46e013d50cf337911db3d40bf96d4353d66"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-routes.ts",
+      "rawSha256": "e4a51b8939d3149b2474520a52a36701e164c83b98d2cd8bec25ee5437fc9b9f",
+      "canonicalLfSha256": "c3e712a338460c6621f4392c65514fa90bea34527e88a3fdde80e178cb0ebf7a"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-source-routes.ts",
+      "rawSha256": "5a0f4dea5e551c6e4a10105ac38be30239bb0371cfd7303610645b6e593d7cc9",
+      "canonicalLfSha256": "5a0f4dea5e551c6e4a10105ac38be30239bb0371cfd7303610645b6e593d7cc9"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-report-routes.ts",
+      "rawSha256": "9e18c54ee19418562eb92d15effd350112050b8c5dc0ec1d6d8dfa62d255200f",
+      "canonicalLfSha256": "31efe31373ec3d817201229948301a0d3d06063b231588feb0578444fd3cfbf4"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-postgres.test.ts",
+      "rawSha256": "627c280e679f7b0c031f40890de14c1bc0bb162498a324484325401add3b29e3",
+      "canonicalLfSha256": "627c280e679f7b0c031f40890de14c1bc0bb162498a324484325401add3b29e3"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "rawSha256": "aad83488bd1ffbb4c3cc07c8d789c8eb473bf4a08316c36a79136b36ccad34f1",
+      "canonicalLfSha256": "fb6359c14dce410eb1e6c00bb5c4929146c2732bdddfc6640a415872aa39ac29"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "rawSha256": "6233214c65c2728c7fff025e227322f32ba188d61cdf85ab50f0c75d858540c4",
+      "canonicalLfSha256": "8d6e0441f81e7a02103a7bbab805ff6df09b1adbb3298e596dd6db2f013d2d45"
+    },
+    {
+      "path": "apps/site-web/src/lib/m66-api.ts",
+      "rawSha256": "11cbf0b6528e37259c6e330c58ce8cd8f41abd4d7ae11f141f6a49966ad823ae",
+      "canonicalLfSha256": "474c533c10289f980a75311d1ad743b607a3000f29327ccba195775e3b43a5c4"
+    },
+    {
+      "path": "apps/site-web/src/lib/m66-report-api.ts",
+      "rawSha256": "aa0ec66748483274b63271013521105b473a54a4f1a4f543b3fb7f23d7bce0be",
+      "canonicalLfSha256": "9478f05f4a25b920da3a1c4cfb91bdd67ba73fa168d4ff3596fa51e430dc6ad4"
+    },
+    {
+      "path": "apps/site-web/src/components/SourceElectricityWorksheet.tsx",
+      "rawSha256": "dc6113b5f7e9946504d455b8c0f91ad5caa06cfc32acc02cc695827d1d13541d",
+      "canonicalLfSha256": "91b71336783ac88298a217b1e656669079c275b85973cdd7e5f9702b90860aed"
+    },
+    {
+      "path": "apps/site-web/src/components/SourceWorksheetReports.tsx",
+      "rawSha256": "4259e91d5e00f7692adc7898176b57f3f31ea679bef368c3879782c5ec273fb0",
+      "canonicalLfSha256": "8e14dbd1ff5356a44ac071564c78589b6a2136be6573c81a85b92d9c2a7f4f6b"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "rawSha256": "3afffb1154493a7ddeef78029f7c1d9e2eb09c6c0da0a2e18952c1412b07ea47",
+      "canonicalLfSha256": "3888d9ac2c0399429d1e2de5a06f25705d39f880a19cef7ac0450c007a74b7f6"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "rawSha256": "fc5ed445a8fa6997a00556e60be516ba3844c355af5f4139c51432973e863c79",
+      "canonicalLfSha256": "e7d3b8905c4ce54af45c5fdc4cc3aaec145c9dd2e5853c95c05cc351b2be0b8b"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "rawSha256": "6e0207024429b352ee52f3f2ac5a9d0590d4ae8b717d0745a4fbd836b98b87d9",
+      "canonicalLfSha256": "a1e1e9913d6a0b99aae256b19168440f92f00f70c3ee916aad72293eda54cbb2"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "rawSha256": "eae7e1a199686c560b9121a0784dfae5901f2e0c75f295d109c4f2bbda121a83",
+      "canonicalLfSha256": "6968a121f7033335cfaf0f84dcc436250dae6917615f35cae8abe4e0fa716e68"
+    },
+    {
+      "path": "tools/staging/upgrade-m66.ts",
+      "rawSha256": "2b4ba436e82241871e3eacf60f7e2a70cd2100414276c120557c1cf3d9dd5856",
+      "canonicalLfSha256": "ea68e6571bb335518371bfd0b5e14af610c4ebfd2e2810774ca2f13680ef2264"
+    },
+    {
+      "path": "tools/staging/check-m66-hosted.ts",
+      "rawSha256": "73770680b1892ac6fa3b7acf5676bf4d91d5d99346b7dd587151df8a9a505060",
+      "canonicalLfSha256": "4f955834b7da0c95c5a06c33ef34c374c19ceb70cd59f4e1260556f6fe58cb7b"
+    },
+    {
+      "path": "evaluations/research-qa/m66-acceptance-plan.md",
+      "rawSha256": "467f2b49311232be640d55b1ae6dbf1e40bf1cbe024804632fcdf3d2ce6ad4b9",
+      "canonicalLfSha256": "467f2b49311232be640d55b1ae6dbf1e40bf1cbe024804632fcdf3d2ce6ad4b9"
+    },
+    {
+      "path": "evaluations/research-qa/m66-baseline.ts",
+      "rawSha256": "26747ba49cf0ed20a0df6c1bdb837e5024dfa9d7742a5e22e621d4aff0e15ac8",
+      "canonicalLfSha256": "7ccf5a5c51918594ed673d66e0a8efc30811d4d1ef11db5b68a43cbbc79a5940"
+    },
+    {
+      "path": "evaluations/research-qa/m66-baseline-receipt.json",
+      "rawSha256": "a44c277cb4fc00ca715acefdcbee87bbb33b875de56c19a0e6ccf3ad3c7f36a5",
+      "canonicalLfSha256": "a44c277cb4fc00ca715acefdcbee87bbb33b875de56c19a0e6ccf3ad3c7f36a5"
+    },
+    {
+      "path": "evaluations/research-qa/m66-independent-postgres.test.ts",
+      "rawSha256": "f123177e260940269167f842788236eb8c2ecce8a2e85597282d137f1258d953",
+      "canonicalLfSha256": "f123177e260940269167f842788236eb8c2ecce8a2e85597282d137f1258d953"
+    },
+    {
+      "path": "evaluations/research-qa/m66-independent-frontend.test.ts",
+      "rawSha256": "fa0b7397f64409794d8c51141b61ee48ef80df3a33c87fcdab748ebededabb6f",
+      "canonicalLfSha256": "77a82e95e9ef91415b2330678b8d6f36e9c865541b705fd81d5ca844bf60fa71"
+    },
+    {
+      "path": "evaluations/research-qa/m66-independent-renderer.test.ts",
+      "rawSha256": "ab78a56c88fb776e75a8ab5c1f790ea17e8d15bf0afd2adb86d05fe7f216acc1",
+      "canonicalLfSha256": "0d33c224cfc5fe4b7b05c26aef2ae560c14d911e37a89ab6f899204ac33e33c3"
+    },
+    {
+      "path": "evaluations/research-qa/m66-restore-check.ts",
+      "rawSha256": "7f2fb4e0ca244e71ccc6c9b35cc2489cc990c534c445dbb80eec7b5c7c979b4a",
+      "canonicalLfSha256": "76906b4a3113dfcee0cadede1890efb34d70dd340fd41305e9d2f57941102375"
+    },
+    {
+      "path": "evaluations/research-qa/m66-restore-receipt.json",
+      "rawSha256": "ea5b569af190e3a6d0fb40e36e476f0716d3ec3903bdd0be1734a5ea0a11b701",
+      "canonicalLfSha256": "ea5b569af190e3a6d0fb40e36e476f0716d3ec3903bdd0be1734a5ea0a11b701"
+    },
+    {
+      "path": "output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf",
+      "rawSha256": "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135"
+    },
+    {
+      "path": "output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf",
+      "rawSha256": "83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f"
+    }
+  ],
+  "independentlyViewedPrintPages": [
+    {
+      "path": ".superpowers/m66-print-normal-1.png",
+      "rawSha256": "c308619d88bcfe6278f2dfdf62b47e3e30364ad011821c1973ec2c139aed612e",
+      "independentlyViewed": true
+    },
+    {
+      "path": ".superpowers/m66-print-long-3.png",
+      "rawSha256": "18e07de5203ebf69261d97dcc9d247d973738b369beb147ed81dd210c642af71",
+      "independentlyViewed": true
+    },
+    {
+      "path": ".superpowers/m66-print-long-5.png",
+      "rawSha256": "8d750cd16297327f21fd0c9f90686657c7bfe393e2a9ee916dd3c70e633fb208",
+      "independentlyViewed": true
+    }
+  ],
+  "nativeVerification": {
+    "database": "m66_qa",
+    "postgresVersion": "17.11",
+    "tests": 17,
+    "assertions": 295,
+    "status": "passed",
+    "originalRowsPreserved": 1113
+  },
+  "frontendAndRenderer": {
+    "tests": 11,
+    "assertions": 258,
+    "status": "passed"
+  },
+  "recovery": {
+    "database": "m66_qa_restore",
+    "tables": 48,
+    "records": 1488,
+    "companies": 6,
+    "versions": 43,
+    "pdfFiles": 12,
+    "reports": 39,
+    "allTableAndMetadataHashesMatch": true
+  }
+}
