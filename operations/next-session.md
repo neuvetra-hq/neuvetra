@@ -1,3 +1,23 @@
+# M74 ready; prior site restored, specific live-migration approval pending
+
+Restored deployment2b1f48de-0d01-48f3-8f9b-85294b7d9f51 is SUCCESS at previous M73 commit3f92fdac0bf1e681db634410ad455b61faaed790. Actual https://www.neuvetra.ai/ready returned ready/schema16/legacyContainmentVerifiedtrue after restoration. No M74 database migration executed. Automatic deployment remains intentionally paused so schema17 code is not automatically sent to unchanged schema16.
+
+All six required checks passed on61d4376. Specific board approval for the live16-to17 migration remains pending in the current task; automatic approval review rejected it before execution despite broader standing milestone approval. Do not retry without that answer. Follow the immediately following section's fresh-maintenance/gate/backup instructions once authorized. Local records capture both CI repairs and the restored live state. Root owns publication; reviewers complete. Scope1 and method release remain incomplete.
+
+Earlier sections below are historical.
+
+# M74 publication checks passed; live migration awaiting specific board approval
+
+All six required checks passed for remote61d4376f3f9d7db62292b7d6a28058003a9a9e96. Product/review evidence is published on rolling draftPR5; no merge. Automatic deployment is paused.
+
+Root stopped old deployment30c5a4af and verified REMOVED plus readiness404 at2026-09-15T22:43:47Z. The exact16-to17 migration tool was rejected by automatic approval review BEFORE execution: broad milestone approval was judged insufficiently specific for this hosted shared-database change. No migration command executed. Root asked the board explicitly to approve the live16-to17 migration and explained the rejection. This approval is pending; do not retry or bypass it.
+
+To restore service while pending, root requested the exact previous M73 commit3f92fdac through deployment2b1f48de-0d01-48f3-8f9b-85294b7d9f51. Verify its actual SUCCESS/readiness16 before calling service restored. The candidate1 maintenance/gate receipts are now HISTORICAL: a new deployment was requested after them. If the board approves, stop and verify every current writer, create new exclusive maintenance/gate receipt paths, recheck backup age and immutable source state, then execute the reviewed migration. Never reuse a stale stopped-writer attestation.
+
+The encrypted hosted backup from22:17:58Z and independent74table/198row local restore are retained. Recheck its four-hour age before use. Independent reviews/print/browsers passed within their bounded claims. Root alone owns host/Git/records; specialists complete. California Scope1 remains incomplete and methods unreleased.
+
+Earlier sections below are historical.
+
 # M74 local acceptance passed; controlled publication next
 
 Independent accounting, security/recovery and integration reviews passed. S01 recovery-proof validation repaired and independently retested. Actual local save/review/correction/download/restart and390px checks passed; board confirmed native print-window appearance. No physical/PDF/pagination claim. Source/method release and corporate Scope1 completeness remain unresolved.

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T22:26:28.884878+00:00",
+  "updated_at": "2026-09-15T22:46:25.979234+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -2563,7 +2563,7 @@
     "independent_hosted": "pass evaluations/research-qa/m73-hosted-acceptance.md"
   },
   "current_m74": {
-    "status": "local_accepted_publication_pending",
+    "status": "awaiting_specific_live_migration_approval",
     "baseline": "ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7",
     "hosted_schema": 16,
     "active_assignments": [],
@@ -2590,10 +2590,22 @@
     "browser_evidence": "evaluations/research-qa/m74-browser-verification.md",
     "print_observation": "board_confirmed_native_window_appeared",
     "hosted_baseline": "passed_zero_application_posts",
-    "hosted_upgrade": "not_started",
+    "hosted_upgrade": "auto_review_rejected_before_execution",
     "operator_finding": "S01 repaired independently accepted",
     "automatic_deployment": false,
     "security_review": "evaluations/research-qa/m74-security-review.md",
-    "integrated_review": "evaluations/research-qa/m74-integrated-qa-review.md"
+    "integrated_review": "evaluations/research-qa/m74-integrated-qa-review.md",
+    "remote_candidate": "61d4376f3f9d7db62292b7d6a28058003a9a9e96",
+    "remote_initial_failures": [
+      "Windows path in root-authored evidence records; repaired3e35698",
+      "Legacy operator test expected old-schema admission under17; independently repaired61d4376"
+    ],
+    "required_checks": "six_pass",
+    "approval_dependency": "Board explicitly approve live staging schema16-to17 migration",
+    "prior_service_restore_deployment": "2b1f48de-0d01-48f3-8f9b-85294b7d9f51",
+    "prior_service_restore_status": "verified_success_ready16",
+    "candidate1_gate": "historical_not_reusable_after_restore_request",
+    "live_implementation": "3f92fdac0bf1e681db634410ad455b61faaed790",
+    "live_schema": 16
   }
 }
