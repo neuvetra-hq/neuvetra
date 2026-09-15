@@ -137,3 +137,13 @@
 !packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql
 !apps/site-api/src/workspace/m71-routes.ts
 apps/site-web/src/m71-local-preview.tsx
+
+!packages/neuvetra-database/src/m73.ts
+!packages/neuvetra-database/src/m73-contract.ts
+!packages/neuvetra-database/src/m73-validation.ts
+!packages/neuvetra-database/src/m73-report.ts
+!packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql
+!apps/site-api/src/workspace/m73-routes.ts
+!apps/site-api/src/calculation/m73-authority.ts
+!apps/site-api/src/calculation/m73_stationary_natural_gas.py
+!apps/site-api/src/calculation/stationary_natural_gas.py

@@ -1,3 +1,45 @@
+# M73 local checkpoint ready; native print verification outstanding
+
+Candidate3 implements the bounded California2025 natural-gas source workflow with saved corporate boundary, statement/manual confirmation, deterministic calculation, immutable corrections, separate review and readable exact reports. Independent accounting/security/recovery reviews passed. Actual browser save/review/correction/history/download/restart and390px screen checks passed; V-F01 wrapping and HJ-F01 response-journaling defects are repaired and their failures preserved. Scoped specialists are complete; no worker remains active or persistent.
+
+The remaining local acceptance blocker is M73-P09 native print appearance/pagination. The real Print report action was invoked, but its native surface is unobservable and the original tab paused. Board input was requested to confirm/close the print preview. Silence is not confirmation and independent visual review has not waived this gate. Current usable candidate3 preview: http://127.0.0.1:37175/ (Chrome tab851834854); pending print tab851834844 belongs to the preserved candidate2 report. Normal viewport restored. Candidate1/2 databases/receipts remain untouched; only candidate3 preview server is intended to stay running.
+
+No M73 hosted maintenance, migration, deployment or remote publication has occurred. Live M72 remains ac359261d53d1800a8a64f3183c15a92c42572aa/schema15, freshly observed2026-09-15. Actual hosted read-only baseline passed with0applicationPOSTs and all created Auth sessions closed. Fresh encrypted application backup and isolated55472 restore passed independent reconstruction:67tables/176rows,14downloads/133998bytes. Provider/Auth and off-device recovery are excluded. The backup was made2026-09-15 around16:24UTC: recheck under-four-hour age and full locked state; use new archive/restore paths if stale, never overwrite historical recovery evidence.
+
+After print verification, continue the already-authorized rollout through codex/corporate-mvp and draft PR5. Reconcile actual Git head/activity first. Complete required remote checks, verify exact16-compatible forward recovery, stop/verify the current writer, apply only reviewed SQL aa4968c63087f353b5bf80d64bced67270bc5ad17f715393b40313bb57f7f732, deploy and exercise/revisit/restart the actual host, then demonstrate and collect feedback. Never deploy15-compatible code after confirmed16. No merge, paidRAG or regional-product expansion.
+
+Evidence: evaluations/research-qa/m73-coordinator-checkpoint-review.md, m73-visual-review.md, m73-accounting-independent-candidate3-review.md and frozen M73 snapshots. California reporting remains first; relevant out-of-state corporate operations remain boundary considerations. This is synthetic/incomplete/unreleased with no filing or assurance determination. Earlier sections below are historical, not current orders.
+
+# M73 independent local reviews passed; recovery and browser gates underway
+
+Candidate2 passed independent bounded accounting and security review. Accounting independently derived 447 checks from retained primary evidence; the reviewer's unchanged boundary tests passed 5 tests/46 assertions under root execution after a cross-worktree import restriction. Security independently verified native adversarial controls, authority isolation and both repaired findings. This is a synthetic annual California stationary-natural-gas workpaper, not complete Scope1, corporate reporting, method release or assurance.
+
+Fresh existing-service observations on 2026-09-15 show schema15 ready and live ac359261d53d1800a8a64f3183c15a92c42572aa. Root created an actual encrypted application backup and restored it into new isolated55472 m73_qa_recovery_20260915_1624 with matching67 tables/catalog/roles. First restricted-context DPAPI decryption failed before database creation; same-Windows-identity execution succeeded. Independent restricted-runtime reconstruction is assigned to /root/m73_cpo. /root/m72_ops authors a bounded hosted journey helper for separate review; neither assignment grants access to credentials or hosted writes.
+
+Actual candidate2 browser saved1250.125MMBtu and displayed66399.7643125 exact/66399.7643 kgCO2e, with readable report gas tables and supporting-statement labels. Print was requested but browser controls paused; board was asked to close/confirm any native print preview. Do not claim visual print acceptance. Correction/review/restart/narrow verification, reviewed hosted workflow, publication and demonstration remain pending. No M73 hosted write or publication yet. Retain candidate1 failure/history and uniquely pinned candidate2 outputs.
+
+Next: complete the remaining gates, preserve current data and publish through codex/corporate-mvp / draft PR5 without merge. The staged image/schema transition requires verified maintenance and exact16-compatible recovery. California reporting first; relevant operations elsewhere remain in corporate boundary assessment, separate regional products deferred. Earlier sections below are historical.
+
+# M73 Scope 1 implementation underway
+
+Accounting, product and technical contracts are delivered. Root implements the source-registration and natural-gas interface; /root/m72_ops now owns the bounded backend assignment. /root/m73_cpo independently challenges security implementation after product-criteria authorship only, following two rejected reviewer dispatches. Actual compute settings remain unknown. Independent integrated accounting and QA remain pending. No M73 hosted change or publication has occurred.
+
+The supported increment is synthetic annual 2025 California stationary natural gas with dedicated-meter consumption in MMBtu HHV, immutable source streams, corrections, separate review and exact reports. Three streams and forty total versions are demonstration limits; no aggregation or complete Scope 1 claim. Preserve M42/M71 history. Follow docs/research/m73-technical-contract.md, m73-accounting-contract.md and m73-product-brief.md.
+
+Earlier sections below record history and are superseded as execution instructions.
+
+# M73 Scope1 discovery underway after M72 board acceptance
+
+The board accepted M72 and explicitly chose Scope1 improvement as the next goal. M73 starts a bounded stationary-natural-gas workflow linked to saved corporate source/facility boundary, period, evidence/activity, deterministic calculation, corrections/review and readable reporting. Exact supported profile and source linkage are being agreed internally before implementation. M42 remains an unreleased synthetic candidate; no broad fuel/unit/year/method support is assumed.
+
+Actual assignments: /root/m73_accounting owns accounting contract/fixtures; /root/m73_cpo owns product brief; /root/m72_ops has a new CTO-only architecture contract assignment after fresh /root/m73_cto dispatch hit the runtime thread limit. Root retains sole common-record/integration/rolling PR5 publication ownership. Three specialists are actually dispatched; saved tasks are not persistent workers. Baseline ac359261d53d1800a8a64f3183c15a92c42572aa is M72's verified closure.
+
+Next: agree bounded criteria, implement and independently challenge accounting/security/QA, then publish to the same PR and demonstrate. Any hosted schema change requires fresh backup/recovery/migration gates. Keep mobile combustion, fugitive/refrigerants, process and omitted facility/period coverage explicit; a natural-gas subtotal is not fullScope1 or the corporate MVP. California reporting first; relevant operations elsewhere remain within boundary assessment. No PR merge, paidRAG/newsubscription or regional regulatory product expansion.
+
+Evidence: operations/feedback/2026-09-15-milestone-72.md; current task/run records. Prior M72 reports and snapshots remain immutable. Preserve local backups/fixtures and existing hosted data.
+
+Historical entries below are superseded as current execution instructions.
+
 # M72 hosted rollout verified; board demonstration feedback next
 
 The California-first synthetic corporate coverage register is live on the existing site. Fresh encrypted application recovery, additive migration0015, preservation of all165original rows, hosted save/correction/distinct-review/exact-export and actual restart/readback passed independent review. Implementation54d89f31ac08c7fe6f46fed68daf9f9e362ed6da passed all six required checks; the coordinator verifies closure publication and the final live deployment separately.

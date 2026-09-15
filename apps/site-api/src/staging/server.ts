@@ -1,4 +1,6 @@
 import { createCorporateInventoryRoutes } from "../workspace/m71-routes"
+import { createM73Routes } from "../workspace/m73-routes"
+import { createM73Authority } from "../calculation/m73-authority"
 import { createAnnualEvidenceRoutes } from "../workspace/m68-routes"
 import { createAnnualEvidenceReportRoutes } from "../workspace/m68-report-routes"
 import { createAnnualWorksheetRoutes } from "../workspace/m67-routes"
@@ -92,6 +94,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     }),
   })
   const corporateInventoryRoutes=createCorporateInventoryRoutes({database,validateUser,origin:config.origin})
+  const stationaryGasRoutes=createM73Routes({database,validateUser,origin:config.origin,authority:createM73Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
   const annualWorksheetRoutes=createAnnualWorksheetRoutes({database,validateUser,origin:config.origin})
@@ -103,7 +106,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 15) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 16) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -142,6 +145,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+      if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-evidence/reports")) return annualEvidenceReportRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-evidence")) return annualEvidenceRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-worksheet/reports")) return annualReportRoutes(forwarded)

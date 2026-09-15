@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T14:36:34.175840+00:00",
+  "updated_at": "2026-09-15T16:52:06.925687+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M72",
-    "name": "Existing-host corporate coverage rollout",
-    "status": "complete_bounded_hosted_rollout",
-    "next_gate": "Verify closure publication and collect board feedback on the open hosted demonstration before a dependent milestone.",
+    "id": "M73",
+    "name": "Scope1 stationary natural-gas workflow",
+    "status": "awaiting_print_verification",
+    "next_gate": "Confirm actual native print preview/pagination; then fresh recovery/maintenance gates, same-PR publication, hosted16 rollout and demonstration. No print waiver or milestone completion.",
     "evidence": [
-      "operations/feedback/2026-09-15-milestone-71.md",
-      "docs/research/m71-operating-notes.md",
-      "evaluations/research-qa/m72-visual-qa-review.md",
-      "docs/research/m72-publication.json"
+      "evaluations/research-qa/m73-coordinator-checkpoint-review.md",
+      "evaluations/research-qa/m73-visual-review.md",
+      "evaluations/research-qa/m73-accounting-independent-candidate3-review.md",
+      "operations/agent-improvement/snapshots/M73-INTEGRATED-CANDIDATE3.json"
     ]
   },
   "completed_milestones": [
@@ -501,7 +501,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01Ã¢â‚¬â€œE06 and P01Ã¢â‚¬â€œP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201cE06 and P01\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1331,6 +1331,105 @@
       "scope": "Independent supplemental review of resumed hosted browser evidence",
       "evidence": [
         "operations/agent-improvement/runs/M72-VISUAL.json"
+      ]
+    },
+    {
+      "id": "M73-ACCOUNTING",
+      "owner": "/root/m73_accounting",
+      "status": "complete",
+      "scope": "Bounded M73 accounting-validation contract delivery",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-ACCOUNTING.json"
+      ]
+    },
+    {
+      "id": "M73-CPO",
+      "owner": "/root/m73_cpo",
+      "status": "complete",
+      "scope": "Bounded M73 cpo contract delivery",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-CPO.json"
+      ]
+    },
+    {
+      "id": "M73-CTO",
+      "owner": "/root/m72_ops",
+      "status": "complete",
+      "scope": "Bounded M73 cto contract delivery",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-CTO.json"
+      ]
+    },
+    {
+      "id": "M73-BACKEND",
+      "owner": "/root/m72_ops",
+      "scope": "Bounded data-database artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-BACKEND.json"
+      ]
+    },
+    {
+      "id": "M73-HOSTED-JOURNEY-REVIEW",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-HOSTED-JOURNEY-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M73-HOSTED-JOURNEY",
+      "owner": "/root/m72_ops",
+      "scope": "Bounded software-engineering artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-HOSTED-JOURNEY.json"
+      ]
+    },
+    {
+      "id": "M73-INDEPENDENT-ACCOUNTING",
+      "owner": "/root/m73_independent_accounting",
+      "scope": "Bounded accounting-validation artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-INDEPENDENT-ACCOUNTING.json"
+      ]
+    },
+    {
+      "id": "M73-OPERATORS",
+      "owner": "/root/m73_accounting",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-OPERATORS.json"
+      ]
+    },
+    {
+      "id": "M73-RECOVERY-REVIEW",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-RECOVERY-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M73-SECURITY",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-SECURITY.json"
+      ]
+    },
+    {
+      "id": "M73-VISUAL-REVIEW",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-VISUAL-REVIEW.json"
       ]
     }
   ],
@@ -2354,6 +2453,32 @@
     "workers": "Scoped specialist report deliveries complete; no persistent workers",
     "publication": "Implementation54d89f3 published with six successful required checks; closure commit separately verified by coordinator",
     "evidence": "docs/research/m72-rollout-evidence.md",
-    "board_feedback": "Pending hosted demonstration feedback"
+    "board_feedback": "Accepted: Perfect. Everything looks good."
+  },
+  "current_m73": {
+    "status": "awaiting_print_verification",
+    "scope": "First usable synthetic candidate Scope1 natural-gas increment; not fullScope1",
+    "branch": "codex/corporate-mvp",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "baseline_commit": "ac359261d53d1800a8a64f3183c15a92c42572aa",
+    "hosted_mutations": false,
+    "method_release": false,
+    "paid_requests": 0,
+    "coordination": "Scoped author and independent reviewer deliveries complete. No workers active or persistent. Root preserves local checkpoint; printP09 and hosted publication gates pending.",
+    "routing_exception": "Fresh M73 CTO spawn hit thread-count limit; explicit bounded continuation assigned existing /root/m72_ops; requested critical Astra/high, actual unknown",
+    "local_preview": "http://127.0.0.1:37175/",
+    "hosted_application_mutations": false
+  },
+  "current_m73_verification": {
+    "candidate2_accounting": "pass bounded synthetic profile; 447 independently derived checks and 5 tests/46 assertions",
+    "candidate2_security": "pass; native41, authority6, pure45 assertions; no open material findings",
+    "recovery": "pass; actualDPAPIbackup/new55472restore67tables176rows,49independentassertions and14downloads133998bytes",
+    "browser": "Source/save/separatereview/correction/discrepancy/history/download/restart and390px screen checks passed. V-F01 closed bycandidate3. Nativeprintpreview/pagination pending boardconfirmation; no waiver.",
+    "hosted_change": false,
+    "published": false,
+    "active_assignments": [],
+    "source_release": false,
+    "candidate3_accounting": "pass; exactCSS-onlydiff and62targetedindependentchecks, freshnative3tests85assertions",
+    "hosted_baseline": "pass schema15; applicationPOST0, allcreatedAuthsessionsclosed; journalfile22e92d0bac2d73acd585983872895e95173f2c2a33845d1cf3579ade1cc04bd8"
   }
 }

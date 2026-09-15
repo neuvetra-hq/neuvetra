@@ -26,6 +26,7 @@ COPY apps/site-web/scripts/finalize-staging.ts ./apps/site-web/scripts/
 COPY apps/site-web/src/ ./apps/site-web/src/
 COPY packages/neuvetra-database/src/m64-contract.ts packages/neuvetra-database/src/m65-contract.ts packages/neuvetra-database/src/m65-template.ts packages/neuvetra-database/src/m66-contract.ts packages/neuvetra-database/src/m66-template.ts packages/neuvetra-database/src/m66-fixtures.ts packages/neuvetra-database/src/m67-contract.ts packages/neuvetra-database/src/m67-template.ts packages/neuvetra-database/src/m68-contract.ts packages/neuvetra-database/src/m68-template.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m71-contract.ts packages/neuvetra-database/src/m71-validation.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m73-contract.ts packages/neuvetra-database/src/m73-validation.ts packages/neuvetra-database/src/m73-report.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
@@ -56,6 +57,10 @@ COPY packages/neuvetra-database/src/index.ts packages/neuvetra-database/src/work
 COPY packages/neuvetra-database/src/m68.ts packages/neuvetra-database/src/m68-contract.ts packages/neuvetra-database/src/m68-template.ts packages/neuvetra-database/src/m68-report.ts ./packages/neuvetra-database/src/
 COPY apps/site-api/src/workspace/m68-routes.ts apps/site-api/src/workspace/m68-report-routes.ts ./apps/site-api/src/workspace/
 COPY apps/site-api/src/workspace/m71-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/workspace/m73-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/calculation/m73-authority.ts apps/site-api/src/calculation/m73_stationary_natural_gas.py apps/site-api/src/calculation/stationary_natural_gas.py ./apps/site-api/src/calculation/
+COPY packages/neuvetra-database/src/m73.ts packages/neuvetra-database/src/m73-contract.ts packages/neuvetra-database/src/m73-validation.ts packages/neuvetra-database/src/m73-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql ./packages/neuvetra-database/src/migrations/
 COPY packages/neuvetra-database/src/m71.ts packages/neuvetra-database/src/m71-contract.ts packages/neuvetra-database/src/m71-validation.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql ./packages/neuvetra-database/src/migrations/
 COPY packages/neuvetra-database/src/m67.ts packages/neuvetra-database/src/m67-report.ts ./packages/neuvetra-database/src/

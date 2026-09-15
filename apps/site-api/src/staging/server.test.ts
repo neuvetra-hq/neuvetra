@@ -38,7 +38,7 @@ async function fixture() {
       if (!allowed) return null
       return { workspace: allowed, role: userId === OWNER ? "owner" as const : userId === ADMIN ? "admin" as const : "member" as const, evidenceId }
     },
-    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 15 } },
+    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 16 } },
   }) as StagingDatabase
   const app = await createStagingServer(readStagingConfig(environment), {
     database, validateUser: async (token) => token === "broken-session" ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
@@ -69,12 +69,12 @@ describe("M63 private staging boundary", () => {
 
   test("explicit existing-project reuse still requires verified database containment at startup", async () => {
     let closed = false
-    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 15 }), close: async () => { closed = true } } as unknown as StagingDatabase
+    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 16 }), close: async () => { closed = true } } as unknown as StagingDatabase
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
     await expect(createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {} })).rejects.toThrow("Private staging dependencies are unavailable.")
     expect(closed).toBe(true)
     let contained = true
-    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 15, legacyContainmentVerified: contained })
+    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 16, legacyContainmentVerified: contained })
     const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)

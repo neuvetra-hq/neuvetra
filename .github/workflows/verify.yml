@@ -47,6 +47,12 @@ jobs:
         env:
           M63_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
           M71_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+      - name: Prepare isolated stationary natural-gas native fixture
+        run: bun tools/staging/m73-backend-fixture.ts m73_author_ci --ci-baseline=m63_integration
+      - name: Verify stationary natural-gas storage, calculation, reports and browser decoder
+        run: bun test apps/site-api/src/workspace/m73-postgres.test.ts
+        env:
+          M73_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m73_author_ci
 
   applications:
     name: Typecheck, lint, unit tests and web builds
@@ -69,6 +75,8 @@ jobs:
         run: bun test evaluations/research-qa/m68-independent-frontend.test.ts evaluations/research-qa/m68-independent-print-view.test.ts evaluations/research-qa/m68-independent-ui.test.ts
       - name: Independent corporate coverage validation, decoder and actor-lifetime cases
         run: bun test evaluations/research-qa/m71-qa-validation.test.ts evaluations/research-qa/m71-qa-frontend.test.ts evaluations/research-qa/m71-qa-ui.test.ts evaluations/research-qa/m71-security-frontend.test.ts evaluations/research-qa/m71-security-parser.test.ts
+      - name: Stationary natural-gas operator admission and preservation controls
+        run: bun test tools/staging/m73-operators.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper
@@ -89,10 +97,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==15||manifest[14].name!=="0015_corporate_coverage.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==16||manifest[15].name!=="0016_stationary_natural_gas.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:15}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:16}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {
@@ -107,6 +115,9 @@ jobs:
               const binding={company_id:uuid,evidence_id:uuid,bill_version_id:uuid,activity_version_id:uuid,facility_id:uuid,boundary_id:uuid,bill_version:2,activity_version:1,extraction_id:uuid,parser_version:"m55-fixed-pdf-v1",previous_bill_version_id:uuid,evidence_sha256:"0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",source_quantity_kwh:"12346.000",normalized_quantity_mwh:"12.346000",correction_reason:"Synthetic review exercise",service_period:{start:"2023-01-01",end:"2023-01-31"},facility:{name:"Synthetic California office",country:"United States",state:"California",egrid_subregion:"CAMX"},boundary:{reporting_year:2023,approach:"operational_control",status:"draft",version:1}};
               const calculation=await runEngine({action:"calculate_linked_bill",binding});
               if(calculation.status!=="ok"||calculation.record?.total?.unrounded!=="2407.9674055248")throw new Error("Container Decimal calculation failed");
+              const {createM73Authority}=await import("/app/apps/site-api/src/calculation/m73-authority.ts");
+              const gas=await createM73Authority().calculate({binding:{coverageVersionId:uuid,coverageVersionSha256:"a".repeat(64),entityId:uuid,facilityId:uuid,sourceId:uuid,boundaryDecisionId:uuid},period:{start:"2025-01-01",endExclusive:"2026-01-01"},fuel:"Natural Gas",heatBasis:"HHV",unit:"MMBtu",quantityMmbtu:"0.100",statementSha256:"b".repeat(64)});
+              if(gas.total.unrounded!=="5.31145"||gas.total.display!=="5.3114"||gas.method.releaseEligible!==false)throw new Error("Container stationary gas Decimal calculation failed");
               console.info(JSON.stringify({imageSmoke:"passed",database:"injected_offline",authentication:"refusal_only",calculation:"real_python",assets:"hash_verified"}));
             } finally {await server.stop(true);await app.close();}
           '

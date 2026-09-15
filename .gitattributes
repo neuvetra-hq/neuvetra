@@ -77,3 +77,8 @@ operations/agent-improvement/snapshots/M68-*.json -text whitespace=cr-at-eol
 # M69 accepted candidate/review bundles bind their original bytes, including line endings.
 docs/research/m69-canary-preparation.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json -text whitespace=cr-at-eol
+
+# M73 independent numerical results retain the reviewer's exact recorded bytes.
+evaluations/research-qa/m73-accounting-independent-results.json -text whitespace=cr-at-eol
+evaluations/research-qa/m73-accounting-independent-candidate2-results.json -text whitespace=cr-at-eol
+evaluations/research-qa/m73-accounting-independent-candidate3-results.json -text whitespace=cr-at-eol

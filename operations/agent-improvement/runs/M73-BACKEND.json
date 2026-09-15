@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "M73-BACKEND",
+  "role": "data-database",
+  "execution_context": "/root/m72_ops",
+  "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M73-INTEGRATED-CANDIDATE3.json",
+      "sha256": "828a77d5334a781929c55075d883883364156c49a5c16f3752b4c095ba4f69d8"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M73-BACKEND-BOUNDED-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m73-security-review.md",
+        "evaluations/research-qa/m73-accounting-independent-candidate3-review.md",
+        "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m73_cpo",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m73-security-review.md",
+      "evaluations/research-qa/m73-accounting-independent-candidate3-review.md",
+      "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M73-INTEGRATED-CANDIDATE3.json",
+        "sha256": "828a77d5334a781929c55075d883883364156c49a5c16f3752b4c095ba4f69d8"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Technical contract author implements backend; independent review remains required. Fresh CTO thread limit exception carried forward; reused settings unknown.",
+    "F01 decision binding and F02 headers repaired; exact renderer revisions separately frozen. Generic candidate1 fixture overwrite disclosed. Backend acceptance does not close native print or hosted rollout."
+  ]
+}

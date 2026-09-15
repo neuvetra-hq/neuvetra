@@ -1,3 +1,4 @@
+import {readStationaryGas,saveStationaryGas as storeStationaryGas,reviewStationaryGas as storeStationaryGasReview,createStationaryGasReport as storeStationaryGasReport,type M73Authority,type M73SaveInput,type M73ReviewInput,type M73ReportInput} from './m73'
 import { readCorporateInventory, validateM71Save, validateM71Review, type M71SaveInput, type M71ReviewInput } from "./m71"
 import { readAnnualElectricityEvidence, validateAnnualEvidenceInput, validateAnnualEvidenceReview, type AnnualEvidenceInput, type AnnualEvidenceCorrection, type AnnualEvidenceReviewInput } from "./m68"
 import { readAnnualEvidenceReports, validateAnnualEvidenceReportInput, type AnnualEvidenceReportInput } from "./m68-report"
@@ -292,6 +293,11 @@ export interface WorkspaceConnection extends WorkspaceSql {
 
 export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
+
+  async findStationaryGas(userId:string,companyId:string,authority:M73Authority){return this.asUser(userId,tx=>readStationaryGas(tx,companyId,authority))}
+  async saveStationaryGas(userId:string,companyId:string,worksheetId:string|null,input:M73SaveInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGas(tx,userId,companyId,worksheetId,input,authority))}
+  async reviewStationaryGas(userId:string,companyId:string,worksheetId:string,input:M73ReviewInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGasReview(tx,companyId,worksheetId,input,authority))}
+  async createStationaryGasReport(userId:string,companyId:string,worksheetId:string,input:M73ReportInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGasReport(tx,companyId,worksheetId,input,authority))}
 
   async findCorporateInventory(userId:string,companyId:string){return this.asUser(userId,tx=>readCorporateInventory(tx,companyId))}
   async saveCorporateInventory(userId:string,companyId:string,inventoryId:string|null,input:M71SaveInput){

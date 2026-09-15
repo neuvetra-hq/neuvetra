@@ -2,6 +2,8 @@ import path from "node:path"
 import { realpath } from "node:fs/promises"
 
 export const STAGING_ASSETS = [
+  ["apps/site-api/src/calculation/m73_stationary_natural_gas.py", "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14"],
+  ["apps/site-api/src/calculation/stationary_natural_gas.py", "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603"],
   ["apps/site-api/src/calculation/linked_bill_calculation.py", "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e"],
   ["apps/site-api/src/calculation/location_based_electricity.py", "4ad28f3877d13f238bbbf7e8bfb1fc6241922b9def73712ec1b02fd80b51b82c"],
   ["output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf", "0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135"],
