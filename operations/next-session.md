@@ -1,3 +1,25 @@
+# M70 planning reviewed; publication and board demonstration next
+
+PR4 is merged at fb4dd370c87eafee563f18529655f41b3a720573. M70 delivers a corporate requirements matrix, proposed architecture and functioning synthetic coverage planner. Independent accounting and integrated QA passed the frozen candidate after task-link and form-accessibility repairs. One non-author reviewer covered both scopes because additional dispatches hit a runtime thread limit; no separate second reviewer is claimed.
+
+Actual standalone JSON download matched the visible snapshot exactly; omitted/overseas entities, all 15 Scope 3 categories, missing/conflicting evidence, unsupported methods, keyboard actions, reset and narrow layout were checked. Inline export provides copyable JSON. No corporate accounting engine, customer persistence, released corpus/method or assurance result is delivered.
+
+New rolling branch: codex/corporate-mvp. Root is publishing the reviewed candidate to a new draft PR and will verify its remote head/checks before calling M70 published. Collect board feedback before the next dependent increment: a versioned, tenant-scoped corporate boundary and coverage register. Source/OAL/litigation observations remain dated planning evidence and must be rechecked before real applicability decisions. No paid RAG run is authorized.
+
+Parent coordinator reported board-authorized historical branch cleanup; local branch inventory now contains only main and codex/corporate-mvp. Worktrees/files were preserved. Do not recreate retired historical branches. Existing hosted M68 remains the synthetic accounting service; no M70 deployment was performed.
+
+Evidence: docs/research/m70-product-brief.md; evaluations/research-qa/m70-accounting-review.md; evaluations/research-qa/m70-qa-review.md; evaluations/research-qa/m70-browser-verification.md. Scoped specialist assignments are complete; no persistent workers.
+
+Historical entries below are superseded as current execution instructions.
+
+# PR4 merged; M70 corporate coverage planning underway
+
+Direct board approval was executed: PR4 merged normally at fb4dd370c87eafee563f18529655f41b3a720573. New rolling delivery branch: codex/corporate-mvp. M70 is a bounded requirements, architecture and synthetic planning demonstration milestone under the [corporate reporting direction](../docs/corporate-reporting-direction.md).
+
+CPO, CTO and regulatory research assignments are active; independent accounting/QA review and publication are pending. Root owns integration and shared records. No corporate MVP, production corpus, paid RAG run or assurance result is complete. See [M70 scope](../docs/research/corporate-coverage-milestone-70.md). Next: integrate the specialist artifacts, demonstrate the coverage workflow, obtain independent review, publish to the new rolling PR and collect board feedback before dependent implementation.
+
+Historical entries below are superseded as current execution instructions.
+
 # M69 offline integration approved; no paid run
 
 Future work follows the board’s [corporate Scope 1, 2 and 3 reporting direction](../docs/corporate-reporting-direction.md), across milestones, AI/verifier preparation, UI, database and semantic layer. This strategy does not change existing release or board-feedback gates.

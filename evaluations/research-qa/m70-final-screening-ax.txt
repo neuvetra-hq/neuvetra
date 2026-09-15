@@ -1,0 +1,90 @@
+- generic "Neuvetra corporate coverage planning demonstration":
+  - banner:
+    - strong: Neuvetra / Corporate coverage
+    - generic: Planning demonstration · Fictional data
+  - main:
+    - heading "Juniper Office Supply Group" [level=1]
+    - paragraph: 2025 calendar year · Proposed operational control · Office and distribution group
+    - button "Export planning register"
+    - button "Reset example"
+    - status: Category 14 proposal saved locally. Review is still pending.
+    - navigation "Planning sections":
+      - button "Company boundary"
+      - button "Scope 1 & 2"
+      - button "Scope 3 screening" [pressed]
+      - button "Evidence & tasks"
+    - heading "All 15 Scope 3 categories" [level=2]
+    - paragraph: Corporate screening only. Every decision is proposed and awaits review across the full entity register.
+    - button "1. Purchased goods and services Estimate proposed · Review pending":
+      - strong: 1. Purchased goods and services
+      - text: Estimate proposed · Review pending
+    - button "2. Capital goods Proposed inclusion · Review pending":
+      - strong: 2. Capital goods
+      - text: Proposed inclusion · Review pending
+    - button "3. Fuel- and energy-related activities (not included in Scope 1 or Scope 2) Proposed inclusion · Review pending":
+      - strong: 3. Fuel- and energy-related activities (not included in Scope 1 or Scope 2)
+      - text: Proposed inclusion · Review pending
+    - button "4. Upstream transportation and distribution Proposed inclusion · Review pending":
+      - strong: 4. Upstream transportation and distribution
+      - text: Proposed inclusion · Review pending
+    - button "5. Waste generated in operations Proposed inclusion · Review pending":
+      - strong: 5. Waste generated in operations
+      - text: Proposed inclusion · Review pending
+    - button "6. Business travel Proposed inclusion · Review pending":
+      - strong: 6. Business travel
+      - text: Proposed inclusion · Review pending
+    - button "7. Employee commuting Estimate proposed · Review pending":
+      - strong: 7. Employee commuting
+      - text: Estimate proposed · Review pending
+    - button "8. Upstream leased assets Unknown · Review pending":
+      - strong: 8. Upstream leased assets
+      - text: Unknown · Review pending
+    - button "9. Downstream transportation and distribution Proposed inclusion · Review pending":
+      - strong: 9. Downstream transportation and distribution
+      - text: Proposed inclusion · Review pending
+    - button "10. Processing of sold products Proposed not applicable · Review pending":
+      - strong: 10. Processing of sold products
+      - text: Proposed not applicable · Review pending
+    - button "11. Use of sold products Proposed exclusion · Review pending":
+      - strong: 11. Use of sold products
+      - text: Proposed exclusion · Review pending
+    - button "12. End-of-life treatment of sold products Proposed inclusion · Review pending":
+      - strong: 12. End-of-life treatment of sold products
+      - text: Proposed inclusion · Review pending
+    - button "13. Downstream leased assets Proposed not applicable · Review pending":
+      - strong: 13. Downstream leased assets
+      - text: Proposed not applicable · Review pending
+    - button "14. Franchises Proposed not applicable · Review pending":
+      - strong: 14. Franchises
+      - text: Proposed not applicable · Review pending
+    - button "15. Investments Proposed not applicable · Review pending":
+      - strong: 15. Investments
+      - text: Proposed not applicable · Review pending
+    - heading "14. Franchises" [level=2]
+    - paragraph: Proposed not applicable · Review pending · Emissions unavailable
+    - paragraph: No franchises in the synthetic business-model memo; full-boundary review pending.
+    - paragraph:
+      - strong: Synthetic business-model screening memo
+      - text: 2025-01-01 to 2025-12-31
+      - text: Management states the group sells finished non-energy-consuming office supplies, has no franchises, does not lease assets to customers and has no separate investment portfolio. These statements support proposed screening decisions only and await review across the full entity register.
+    - heading "Propose a decision · Category 14, Franchises" [level=2]
+    - generic: Proposed disposition
+    - combobox "Proposed disposition":
+      - option "Unknown"
+      - option "Not applicable proposed" [selected]
+    - generic: Rationale
+    - textbox "Rationale": No franchises in the synthetic business-model memo; full-boundary review pending.
+    - generic: Synthetic supporting evidence
+    - combobox "Synthetic supporting evidence":
+      - option "Choose supporting evidence"
+      - option "Synthetic 2025 corporate roster"
+      - option "Synthetic California annual electricity worksheet"
+      - option "Synthetic Nevada utility statement — wrong year"
+      - option "Synthetic Nevada district-heat contract"
+      - option "Synthetic procurement screening memo"
+      - option "Synthetic business-model screening memo" [selected]
+      - option "Synthetic commute survey proposal"
+      - 'option "Synthetic challenge: Canadian subsidiary discovered"'
+    - alert
+    - button "Save proposed screening" [active]
+  - contentinfo: Nonproduction synthetic planning register · Local state resets when reloaded · Applicability not determined · No assurance

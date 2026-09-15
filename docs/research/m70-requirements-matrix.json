@@ -1,0 +1,1506 @@
+{
+  "schema_version": 1,
+  "matrix_id": "M70-initial-corporate-requirements",
+  "observed_at": "2026-09-15T05:22:44Z",
+  "local_observation_date": "2026-09-14",
+  "timezone": "America/Los_Angeles",
+  "status": "research_candidate_pending_independent_review",
+  "purpose": "Small initial primary-source map for corporate Scope1/2/3 planning; not exhaustive legal coverage, runtime rules, source release or assurance.",
+  "runtime_boundary": {
+    "catalog_records": 97,
+    "catalog_runtime_approval": "all not_evaluated",
+    "runtime_release": "18 EPA Scope2 passages;24 authored units (local binding inspected; no cloud freshness check)",
+    "new_runtime_coverage": false
+  },
+  "row_defaults_note": "Every product behavior is proposed. Test cases are research recommendations, not executed product tests. Null effective dates mean not established here, never no obligation.",
+  "rows": [
+    {
+      "row_id": "M70-CA-01",
+      "program": "SB253",
+      "authority": "California Legislature",
+      "publication_status": "enacted_statute",
+      "version": "HSC 38532 current codification; AB154 ch609",
+      "citations": [
+        {
+          "source_id": "law",
+          "authority": "California Legislature",
+          "publication_status": "enacted_statute",
+          "version": "HSC 38532 current codification; AB154 ch609",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=38532.",
+          "locator": "(b)(2)",
+          "observed_date": "2026-09-15",
+          "effective_date": "2025-10-11"
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": "2025-10-11",
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Formation jurisdiction",
+        "Revenue period and basis",
+        "California business facts"
+      ],
+      "requirement_or_guidance": "U.S.-formed businesses exceeding $1 billion prior-fiscal-year revenue and doing business in California are the statutory starting point.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Collect formation, entity-specific revenue, California activity and period evidence; return unresolved without sufficient facts.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-01",
+        "proposed_case": "Exactly $1 billion versus above threshold; missing California facts.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Qualified applicability review; final implementation definitions."
+    },
+    {
+      "row_id": "M70-CA-02",
+      "program": "SB253",
+      "authority": "California Legislature",
+      "publication_status": "enacted_statute",
+      "version": "HSC 38532 current codification; AB154 ch609",
+      "citations": [
+        {
+          "source_id": "law",
+          "authority": "California Legislature",
+          "publication_status": "enacted_statute",
+          "version": "HSC 38532 current codification; AB154 ch609",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=38532.",
+          "locator": "(b)(3)-(5)",
+          "observed_date": "2026-09-15",
+          "effective_date": "2025-10-11"
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": "2025-10-11",
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Complete entities and operations",
+        "Ownership/control"
+      ],
+      "requirement_or_guidance": "Scope1/2 include covered emissions regardless of geography; Scope3 concerns the wider value chain.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Retain California, other-state and overseas operations in the boundary assessment.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-02",
+        "proposed_case": "Nevada subsidiary cannot disappear under a California filter.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Boundary reconciliation and domain review."
+    },
+    {
+      "row_id": "M70-CA-03",
+      "program": "SB253",
+      "authority": "California Legislature",
+      "publication_status": "enacted_statute",
+      "version": "HSC 38532 current codification; AB154 ch609",
+      "citations": [
+        {
+          "source_id": "law",
+          "authority": "California Legislature",
+          "publication_status": "enacted_statute",
+          "version": "HSC 38532 current codification; AB154 ch609",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=38532.",
+          "locator": "(c)(2)(A)(i)-(iii)",
+          "observed_date": "2026-09-15",
+          "effective_date": "2025-10-11"
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": "2025-10-11",
+      "data_period": "Prior fiscal year",
+      "reporting_period": "Scope1/2: 2026 onward; Scope3: 2027 onward",
+      "applicability_facts_needed": [
+        "Fiscal-year end",
+        "Covered subsidiaries",
+        "Consolidating parent"
+      ],
+      "requirement_or_guidance": "Annual Scope1/2 disclosures start in 2026; Scope3 in 2027. Prior fiscal years and GHG Protocol apply; parent consolidation is permitted.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Separate inventory year, filing year and group consolidation; do not derive a fixed 180-day Scope3 deadline.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-03",
+        "proposed_case": "Calendar2025 inventory must not become calendar2026 activity.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "CARB schedule and customer-specific consolidation review."
+    },
+    {
+      "row_id": "M70-CA-04",
+      "program": "SB253 implementation",
+      "authority": "CARB",
+      "publication_status": "agency_rulemaking_status",
+      "version": "Initial regulation index; retrieved 2026-09-15; page label 2026-05-20",
+      "citations": [
+        {
+          "source_id": "index",
+          "authority": "CARB",
+          "publication_status": "agency_rulemaking_status",
+          "version": "Initial regulation index; retrieved 2026-09-15; page label 2026-05-20",
+          "url": "https://ww2.arb.ca.gov/rulemaking/2025/california-corporate-greenhouse-gas-reporting-and-climate-related-financial-risk",
+          "locator": "Final Approval / OAL Action; Adopted Regulations and Materials Submitted to OAL",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "notice",
+          "authority": "CARB",
+          "publication_status": "rulemaking_notice",
+          "version": "15-day notice 2026-07-27",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/sb%20253-261/15_day_notice%20253-261.pdf",
+          "locator": "p1; pp4-5 items19-22",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "guide",
+          "authority": "CARB",
+          "publication_status": "agency_guidance_enforcement_discretion",
+          "version": "2026 reporting guidance 2026-09-01",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/2026-09/2026_SB253_Reporting_Guidance.pdf",
+          "locator": "pp1-2 Purpose; Filing Deadline",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "2026",
+      "applicability_facts_needed": [
+        "Latest OAL approval/filing evidence"
+      ],
+      "requirement_or_guidance": "The retrieved index reports OAL approval stage unreached and the May package withdrawn. November10,2026 remains conditional in September guidance.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Label proposed/agency-announced date separately from an established effective deadline; no overdue verdict.",
+      "current_vs_proposed": "Proposed deadline; agency guidance references November10; legal effectiveness unresolved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-04",
+        "proposed_case": "A proposal or document titled Final must not pass effective-rule validation.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Refresh CARB/OAL immediately before deadline advice; no effective date established."
+    },
+    {
+      "row_id": "M70-CA-05",
+      "program": "SB253 first-year transition",
+      "authority": "CARB",
+      "publication_status": "enforcement_discretion",
+      "version": "SB253 notice 2024-12-05",
+      "citations": [
+        {
+          "source_id": "enforce",
+          "authority": "CARB",
+          "publication_status": "enforcement_discretion",
+          "version": "SB253 notice 2024-12-05",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/2024-12/The%20Climate%20Corporate%20Data%20Accountability%20Act%20Enforcement%20Notice%20Dec%202024.pdf",
+          "locator": "pp1-2 Good Faith Compliance",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "guide",
+          "authority": "CARB",
+          "publication_status": "agency_guidance_enforcement_discretion",
+          "version": "2026 reporting guidance 2026-09-01",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/2026-09/2026_SB253_Reporting_Guidance.pdf",
+          "locator": "pp1-4 Content; Assurance; Entities Without Data",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Applicable preceding fiscal year; December5,2024 collection-state test",
+      "reporting_period": "2026 only",
+      "applicability_facts_needed": [
+        "Information possessed/collected/planned as of December5,2024",
+        "Good-faith records"
+      ],
+      "requirement_or_guidance": "First-year discretion addresses existing/being-collected information and accepts unassured 2026 submissions; non-reporting statements are requested in specified circumstances.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Keep transition eligibility, evidence retention, gaps and assurance status explicit; no blanket waiver or extension to 2027.",
+      "current_vs_proposed": "Current agency enforcement guidance, not statutory amendment",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-05",
+        "proposed_case": "No-data claim without historical evidence remains unresolved.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Entity-specific transition determination; legal review."
+    },
+    {
+      "row_id": "M70-CA-06",
+      "program": "SB253 assurance",
+      "authority": "California Legislature",
+      "publication_status": "enacted_statute",
+      "version": "HSC 38532 current codification; AB154 ch609",
+      "citations": [
+        {
+          "source_id": "law",
+          "authority": "California Legislature",
+          "publication_status": "enacted_statute",
+          "version": "HSC 38532 current codification; AB154 ch609",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=38532.",
+          "locator": "(c)(2)(F)(i)-(iv)",
+          "observed_date": "2026-09-15",
+          "effective_date": "2025-10-11"
+        },
+        {
+          "source_id": "guide",
+          "authority": "CARB",
+          "publication_status": "agency_guidance_enforcement_discretion",
+          "version": "2026 reporting guidance 2026-09-01",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/2026-09/2026_SB253_Reporting_Guidance.pdf",
+          "locator": "p4 Assurance Requirements",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": "2025-10-11",
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "2026/2027/2030 framework; refresh per cycle",
+      "applicability_facts_needed": [
+        "Reporting cycle",
+        "Provider independence/competence",
+        "Engagement scope"
+      ],
+      "requirement_or_guidance": "Statute specifies independent assurance: Scope1/2 limited from2026, reasonable from2030; Scope3 limited from2030 with CARB rulemaking conditions. First-year enforcement differs.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Separate legal framework, 2026 discretion, actual engagement and assurance opinion; internal review never grants assurance.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-06",
+        "proposed_case": "Manager-reviewed draft remains unassured.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Qualified independent provider; current CARB implementation."
+    },
+    {
+      "row_id": "M70-CA-07",
+      "program": "SB253 disclosure",
+      "authority": "California Legislature",
+      "publication_status": "enacted_statute",
+      "version": "HSC 38532 current codification; AB154 ch609",
+      "citations": [
+        {
+          "source_id": "law",
+          "authority": "California Legislature",
+          "publication_status": "enacted_statute",
+          "version": "HSC 38532 current codification; AB154 ch609",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=38532.",
+          "locator": "(c)(2)(B)-(E), (G)",
+          "observed_date": "2026-09-15",
+          "effective_date": "2025-10-11"
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": "2025-10-11",
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Trade names",
+        "Acquisitions/divestments",
+        "Other-program coverage"
+      ],
+      "requirement_or_guidance": "Disclosure covers identity, accessibility and structural changes; reused reports must meet this section. Annual fees are separate.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Preserve report identity, changes, source mappings and fee-status metadata; MRR data is supporting input.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-07",
+        "proposed_case": "MRR facility report alone cannot mark corporate report complete.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Full disclosure/fee matrix and qualified review."
+    },
+    {
+      "row_id": "M70-CA-08",
+      "program": "SB219 / AB154",
+      "authority": "California Legislature",
+      "publication_status": "chaptered_amendment",
+      "version": "SB219 ch766 approved 2024-09-27",
+      "citations": [
+        {
+          "source_id": "sb219",
+          "authority": "California Legislature",
+          "publication_status": "chaptered_amendment",
+          "version": "SB219 ch766 approved 2024-09-27",
+          "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240SB219",
+          "locator": "ch766 section1; digest; approved/filed date",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "ab154",
+          "authority": "California Legislature",
+          "publication_status": "chaptered_amendment",
+          "version": "AB154 ch609 approved/filed 2025-10-11",
+          "url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB154",
+          "locator": "ch609 sections1-4; HSC38532(g); immediate-effect clause",
+          "observed_date": "2026-09-15",
+          "effective_date": "2025-10-11"
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Applicable version"
+      ],
+      "requirement_or_guidance": "SB219 amended scheduling/consolidation; AB154 added CEQA exemptions for implementing regulations and took immediate effect October11,2025.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Version authority through both amendments; do not treat the original2023 text as complete current law.",
+      "current_vs_proposed": "Chaptered amendments, read with current codification",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-08",
+        "proposed_case": "Reject obsolete fixed180-day rule.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Refresh subsequent legislation before release."
+    },
+    {
+      "row_id": "M70-CA-09",
+      "program": "SB253 proposed applicability/fiscal rules",
+      "authority": "CARB",
+      "publication_status": "proposed_regulation",
+      "version": "July 2026 15-day modifications released 2026-07-27",
+      "citations": [
+        {
+          "source_id": "text",
+          "authority": "CARB",
+          "publication_status": "proposed_regulation",
+          "version": "July 2026 15-day modifications released 2026-07-27",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/barcu/regact/2026/sb%20253-261/15-Day%20Change%20Reg%20Text%20SB%20253-261.pdf",
+          "locator": "proposed96072(a)(7)-(8),(11),(13);96076(c), pp2-3,8",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "2026 initial proposal",
+      "applicability_facts_needed": [
+        "Two revenue years",
+        "Entity tax basis",
+        "Fiscal-year end",
+        "Availability of recent data"
+      ],
+      "requirement_or_guidance": "Proposal uses the lesser of two revenue years and entity-level definitions; February1 fiscal-year selection includes a most-recent-year option.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Store draft rule profile separately; retain both fiscal years and no automatic tax-nexus inference.",
+      "current_vs_proposed": "Proposed only",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-09",
+        "proposed_case": "Proposed rules cannot decide real eligibility; test January31,February1,February2.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Effective final text, referenced tax provisions and exclusions not fully mapped."
+    },
+    {
+      "row_id": "M70-CA-10",
+      "program": "SB253 submission",
+      "authority": "CARB",
+      "publication_status": "agency_guidance_enforcement_discretion",
+      "version": "2026 reporting guidance 2026-09-01",
+      "citations": [
+        {
+          "source_id": "guide",
+          "authority": "CARB",
+          "publication_status": "agency_guidance_enforcement_discretion",
+          "version": "2026 reporting guidance 2026-09-01",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/2026-09/2026_SB253_Reporting_Guidance.pdf",
+          "locator": "pp1-3 voluntary intake, email alternative, optional template",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "2026 only",
+      "applicability_facts_needed": [
+        "Authorized filer",
+        "Report version",
+        "Chosen channel"
+      ],
+      "requirement_or_guidance": "2026 intake and CARB template are voluntary; guidance permits email submission and several reporting formats.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Preparation only; do not claim platform registration, submission, receipt or approval.",
+      "current_vs_proposed": "Agency guidance; no platform exercised",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-10",
+        "proposed_case": "Export cannot be labelled filed.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Actual filing procedure and authority not validated."
+    },
+    {
+      "row_id": "M70-CA-11",
+      "program": "SB261 separate program",
+      "authority": "CARB",
+      "publication_status": "agency_advisory_reporting_court_injunction",
+      "version": "SB261 advisory 2025-12-01",
+      "citations": [
+        {
+          "source_id": "sb261",
+          "authority": "CARB",
+          "publication_status": "agency_advisory_reporting_court_injunction",
+          "version": "SB261 advisory 2025-12-01",
+          "url": "https://ww2.arb.ca.gov/sites/default/files/2025-12/Dec%201%20SB%20261%20Enforcement%20Advisory.pdf",
+          "locator": "p1 injunction and agency response",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "January1,2026 statutory deadline addressed by advisory",
+      "applicability_facts_needed": [
+        "Program",
+        "Latest official court status"
+      ],
+      "requirement_or_guidance": "CARB's December2025 advisory reports a November18 appellate injunction and non-enforcement of the January1,2026 SB261 deadline.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Keep financial-risk reporting separate; never propagate this notice as an SB253 injunction.",
+      "current_vs_proposed": "Historical agency advisory freshly retrieved; current litigation not conclusively established",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-CA-11",
+        "proposed_case": "SB261 notice cannot suppress SB253 inventory planning.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Complete current Ninth Circuit docket not obtained; later disposition unresolved."
+    },
+    {
+      "row_id": "M70-GHGP-01",
+      "program": "GHG Protocol corporate boundary",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Corporate Standard Revised Edition 2004",
+      "citations": [
+        {
+          "source_id": "corp",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Corporate Standard Revised Edition 2004",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+          "locator": "ch3 pp16-23; ch5 pp34-39",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Economic interest/control",
+        "Leases/joint operations",
+        "Structural changes"
+      ],
+      "requirement_or_guidance": "Choose and consistently apply equity-share or control consolidation; control may be financial or operational. Structural changes can require base-year recalculation.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Record dated policy, parent/entity/facility relationships, ownership evidence and change history.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-01",
+        "proposed_case": "Wholly-owned CA/NV fixture includes both; changed control triggers reassessment.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Operational-control fixture is a chosen assumption, not a universal SB253 rule."
+    },
+    {
+      "row_id": "M70-GHGP-02",
+      "program": "GHG Protocol Scope1",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Corporate Standard Revised Edition 2004",
+      "citations": [
+        {
+          "source_id": "corp",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Corporate Standard Revised Edition 2004",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+          "locator": "ch4 pp24-28, especially p27; ch6 pp40-46",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Fuel/equipment",
+        "Refrigerants/processes",
+        "Ownership/control"
+      ],
+      "requirement_or_guidance": "Direct-source inventory covers stationary combustion, mobile combustion, process and fugitive sources under the selected boundary.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require source register with evidence; classify refrigeration leaks and vehicle fuel explicitly.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-02",
+        "proposed_case": "Missing refrigerant data cannot become zero.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Methods, factors, gases and unit/rounding contracts not released."
+    },
+    {
+      "row_id": "M70-GHGP-03",
+      "program": "GHG Protocol Scope2",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_guidance",
+      "version": "Scope2 Guidance 2015; current linked electronic PDF",
+      "citations": [
+        {
+          "source_id": "s2",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_guidance",
+          "version": "Scope2 Guidance 2015; current linked electronic PDF",
+          "url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf",
+          "locator": "ch5; ch7 section7.1 pp59-60; Table7.1 pp60-61; AppendixA pp94-98",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Energy purchases",
+        "Markets",
+        "Contracts/certificates",
+        "Supplier data"
+      ],
+      "requirement_or_guidance": "Scope2 covers acquired electricity, steam, heat and cooling. Markets with contractual data require separate location/market-based reporting; instruments must meet quality criteria.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Separate energy forms and method results; do not add location-based and market-based totals together.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-03",
+        "proposed_case": "Electricity-only annual worksheet leaves heat/steam/cooling unresolved.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Instrument eligibility, hierarchy, allocation and factor releases need review."
+    },
+    {
+      "row_id": "M70-GHGP-04",
+      "program": "GHG Protocol gases/GWP",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_amendment",
+      "version": "Required Greenhouse Gases in Inventories, February2013",
+      "citations": [
+        {
+          "source_id": "gases",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_amendment",
+          "version": "Required Greenhouse Gases in Inventories, February2013",
+          "url": "https://ghgprotocol.org/sites/default/files/2022-12/Required%20gases%20and%20GWP%20values_0.pdf",
+          "locator": "printed pp1-3, Amendments1-2 and Table1",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Emitted gases",
+        "Program/year",
+        "GWP source"
+      ],
+      "requirement_or_guidance": "2013 amendment includes NF3, prescribes100-year IPCC GWPs and source disclosure, with single-assessment use where possible.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Version gas species, assessment report, time horizon and exceptions; never select factors merely from download recency.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-04",
+        "proposed_case": "Six-gas-only template flags missing NF3 assessment.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "No GWP/factor values approved in M70."
+    },
+    {
+      "row_id": "M70-GHGP-05",
+      "program": "GHG Protocol Scope3 coverage",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 section5.4, Tables5.3-5.4 pp32-38; ch6 section6.2 pp60-61; ch11 p119",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "s3corr",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_corrections",
+          "version": "Scope3 correction sheet; publication page lists May2013",
+          "url": "https://ghgprotocol.org/sites/default/files/2022-12/List%20of%20Corrections%20for%20Scope%203%20Standard.pdf",
+          "locator": "p1 corrections to printed pp43,52",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Value chain",
+        "Category boundaries",
+        "Data/estimation evidence",
+        "Exclusion rationale"
+      ],
+      "requirement_or_guidance": "Account for Scope3 within defined category boundaries and disclose/justify exclusions. Fifteen categories organize screening; applicability is company-specific.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Reconcile all15 category IDs; record included, estimated, missing, excluded-with-reason or not-applicable with evidence. Screening completion is not inventory completion.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-05",
+        "proposed_case": "Omitted category15 and unjustified exclusion both prevent completeness.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Category-specific accounting and all material gaps require review."
+    },
+    {
+      "row_id": "M70-GHGP-06",
+      "program": "GHG Protocol method selection",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_guidance_index",
+      "version": "Scope3 Calculation Guidance publication page; 2013 guidance",
+      "citations": [
+        {
+          "source_id": "calc",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_guidance_index",
+          "version": "Scope3 Calculation Guidance publication page; 2013 guidance",
+          "url": "https://ghgprotocol.org/scope-3-calculation-guidance-2",
+          "locator": "About the Scope3 Guidance; category links; AppendixD",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Available data",
+        "Activity category",
+        "Method fit"
+      ],
+      "requirement_or_guidance": "2013 companion guidance supplies category-specific methods and selection guidance.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Approve each method only with inputs, units, estimation basis, uncertainty and independent expected calculations.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-06",
+        "proposed_case": "Spend estimate stays labelled estimated; absent activity is not zero.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Full method text and numerical validation needed for each implemented method."
+    },
+    {
+      "row_id": "M70-GHGP-07",
+      "program": "GHG Protocol corrections",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_corrections",
+      "version": "Scope2 correction sheet includes February2020, December2022, April2025",
+      "citations": [
+        {
+          "source_id": "s2corr",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_corrections",
+          "version": "Scope2 correction sheet includes February2020, December2022, April2025",
+          "url": "https://ghgprotocol.org/sites/default/files/2023-03/List%20of%20Corrections%20to%20the%20Scope%202%20Guidance.pdf",
+          "locator": "pp1-2 correction rows February2020,December2022,April2025",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "s3corr",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_corrections",
+          "version": "Scope3 correction sheet; publication page lists May2013",
+          "url": "https://ghgprotocol.org/sites/default/files/2022-12/List%20of%20Corrections%20for%20Scope%203%20Standard.pdf",
+          "locator": "p1",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Exact electronic/printed edition"
+      ],
+      "requirement_or_guidance": "Scope2 sheet includes an April2025 IEA-factor note despite the page's December2022 label. Corrections differ from original printed editions.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Pin corrections to affected edition/locator; prevent removed gas-certificate text becoming Scope1 guidance.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-07",
+        "proposed_case": "Reject an interpretation based on removed AppendixA purchased-gas section.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Rights/domain review and corrected extraction release."
+    },
+    {
+      "row_id": "M70-GHGP-08",
+      "program": "GHG Protocol report/evidence",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Corporate Standard Revised Edition 2004",
+      "citations": [
+        {
+          "source_id": "corp",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Corporate Standard Revised Edition 2004",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+          "locator": "ch9 pp62-64; ch10 pp68-73",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Original records",
+        "Calculation lineage",
+        "Reviewer scope"
+      ],
+      "requirement_or_guidance": "Reports identify boundaries, period, methods and scope-separated emissions; verification guidance describes documentary support.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Trace report version to inputs, factors, assumptions, corrections and unresolved findings.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-08",
+        "proposed_case": "Replayed report must retain omitted-source finding.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Independent human handoff validation; deterministic accounting not yet broad enough."
+    },
+    {
+      "row_id": "M70-GHGP-09",
+      "program": "GHG Protocol development",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "standards_development_status",
+      "version": "Corporate Suite update process, current publication page",
+      "citations": [
+        {
+          "source_id": "updates",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "standards_development_status",
+          "version": "Corporate Suite update process, current publication page",
+          "url": "https://ghgprotocol.org/ghg-protocol-corporate-suite-standards-and-guidance-update-process",
+          "locator": "When will updates go into effect?; Where We Are Now",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        },
+        {
+          "source_id": "land",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_future_effective_standard_index",
+          "version": "Land Sector and Removals Standard v1.1 publication page",
+          "url": "https://ghgprotocol.org/land-sector-and-removals-standard",
+          "locator": "effective-date paragraph; v1.1 paragraph; Forest Carbon Accounting",
+          "observed_date": "2026-09-15",
+          "effective_date": "2027-01-01"
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Reporting period",
+        "Land/biogenic/removal activities"
+      ],
+      "requirement_or_guidance": "Existing corporate-suite publications remain the baseline pending communicated changes. LSR v1.1 is published with January1,2027 effectiveness; broader development material is distinct.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Keep drafts, published future-effective standards and active versions separate; flag land/removals specialist needs.",
+      "current_vs_proposed": "Current standards plus separately future-effective LSR publication; proposals not adopted",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-GHGP-09",
+        "proposed_case": "Consultation or RFI cannot supply missing forest method.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "LSR full technical/applicability review and regulator incorporation unresolved."
+    },
+    {
+      "row_id": "M70-S3-01",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category1; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category1 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-01",
+        "proposed_case": "Category1 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 1,
+      "category_name": "Purchased goods and services",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-02",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category2; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category2 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-02",
+        "proposed_case": "Category2 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 2,
+      "category_name": "Capital goods",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-03",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category3; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category3 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-03",
+        "proposed_case": "Category3 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 3,
+      "category_name": "Fuel- and energy-related activities (outside Scope1/2)",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-04",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category4; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category4 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-04",
+        "proposed_case": "Category4 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 4,
+      "category_name": "Upstream transportation and distribution",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-05",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category5; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category5 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-05",
+        "proposed_case": "Category5 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 5,
+      "category_name": "Waste generated in operations",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-06",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category6; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category6 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-06",
+        "proposed_case": "Category6 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 6,
+      "category_name": "Business travel",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-07",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category7; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category7 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-07",
+        "proposed_case": "Category7 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 7,
+      "category_name": "Employee commuting",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-08",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category8; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category8 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-08",
+        "proposed_case": "Category8 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 8,
+      "category_name": "Upstream leased assets",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-09",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category9; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category9 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-09",
+        "proposed_case": "Category9 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 9,
+      "category_name": "Downstream transportation and distribution",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-10",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category10; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category10 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-10",
+        "proposed_case": "Category10 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 10,
+      "category_name": "Processing of sold products",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-11",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category11; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category11 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-11",
+        "proposed_case": "Category11 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 11,
+      "category_name": "Use of sold products",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-12",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category12; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category12 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-12",
+        "proposed_case": "Category12 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 12,
+      "category_name": "End-of-life treatment of sold products",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-13",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category13; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category13 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-13",
+        "proposed_case": "Category13 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 13,
+      "category_name": "Downstream leased assets",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-14",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category14; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category14 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-14",
+        "proposed_case": "Category14 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 14,
+      "category_name": "Franchises",
+      "shared_requirement_row": "M70-GHGP-05"
+    },
+    {
+      "row_id": "M70-S3-15",
+      "program": "GHG Protocol Scope3 category screening",
+      "authority": "WRI/WBCSD GHG Protocol",
+      "publication_status": "published_standard",
+      "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+      "citations": [
+        {
+          "source_id": "s3",
+          "authority": "WRI/WBCSD GHG Protocol",
+          "publication_status": "published_standard",
+          "version": "Scope3 Standard 2011; original-layout electronic PDF, not e-reader edition",
+          "url": "https://ghgprotocol.org/sites/default/files/standards/Corporate-Value-Chain-Accounting-Reporing-Standard_041613_2.pdf",
+          "locator": "ch5 Table5.3 p32; Table5.4 pp34-38; category15; ch6 section6.2",
+          "observed_date": "2026-09-15",
+          "effective_date": null
+        }
+      ],
+      "observed_date": "2026-09-15",
+      "effective_date": null,
+      "data_period": "Company reporting period; not selected for any real customer",
+      "reporting_period": "Inventory planning; no filing determination",
+      "applicability_facts_needed": [
+        "Category-specific company activity and boundary facts"
+      ],
+      "requirement_or_guidance": "Apply M70-GHGP-05.",
+      "inference": "Product behavior below is a proposed Neuvetra design response, not a quotation or independent legal/accounting opinion.",
+      "product_behavior": "Require category15 disposition and evidence reference in the screening register.",
+      "current_vs_proposed": "Published authority; company-specific applicability and runtime release unapproved",
+      "coverage": "research_mapped_only; no demonstrated customer compliance or new runtime support",
+      "needed_source_or_method_release": "Independent domain/rights review and controlled source/method release before runtime use",
+      "test_case": {
+        "id": "TEST-M70-S3-15",
+        "proposed_case": "Category15 missing disposition remains visible.",
+        "status": "proposed_not_executed_by_research"
+      },
+      "unresolved_gate": "Applicability and method release remain unresolved; no automatic exclusion.",
+      "category_number": 15,
+      "category_name": "Investments",
+      "shared_requirement_row": "M70-GHGP-05"
+    }
+  ]
+}

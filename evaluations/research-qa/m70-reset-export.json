@@ -1,0 +1,687 @@
+{
+  "schema_version": 1,
+  "scenario_id": "M70-JUNIPER-2025",
+  "title": "Juniper Office Supply Group — corporate coverage planning",
+  "label": "Nonproduction synthetic planning register — not an emissions inventory or assurance package",
+  "synthetic": true,
+  "production_supported": false,
+  "persistence": "Demonstration-local state only; export downloads a planning snapshot.",
+  "reporting_period": {
+    "start": "2025-01-01",
+    "end": "2025-12-31",
+    "legal_filing_period_determined": false
+  },
+  "profile": {
+    "description": "Fictional wholly owned U.S. office and distribution group selling finished non-energy-consuming office supplies.",
+    "consolidation_approach": "operational_control",
+    "consolidation_status": "proposed_for_synthetic_scenario",
+    "rationale": "Synthetic ownership roster states full ownership and operational control throughout 2025.",
+    "evidence_ids": [
+      "EV-ROSTER-2025"
+    ],
+    "supported_geographies_proposed": [
+      "US"
+    ],
+    "unsupported_profiles": [
+      "foreign_operations",
+      "joint_ventures",
+      "ownership_changes",
+      "financial_control",
+      "equity_share",
+      "non_calendar_year"
+    ],
+    "applicability_status": "not_determined",
+    "assurance_status": "none"
+  },
+  "entities": [
+    {
+      "id": "ENT-PARENT",
+      "name": "Juniper Office Supply Group",
+      "parent_id": null,
+      "country": "US",
+      "state": "CA",
+      "ownership_percent": "100",
+      "operational_control": true,
+      "effective_start": "2025-01-01",
+      "effective_end": "2025-12-31",
+      "expected": true,
+      "included": true,
+      "evidence_ids": [
+        "EV-ROSTER-2025"
+      ]
+    },
+    {
+      "id": "ENT-CA",
+      "name": "Juniper California Distribution",
+      "parent_id": "ENT-PARENT",
+      "country": "US",
+      "state": "CA",
+      "ownership_percent": "100",
+      "operational_control": true,
+      "effective_start": "2025-01-01",
+      "effective_end": "2025-12-31",
+      "expected": true,
+      "included": true,
+      "evidence_ids": [
+        "EV-ROSTER-2025"
+      ]
+    },
+    {
+      "id": "ENT-NV",
+      "name": "Juniper Nevada Distribution",
+      "parent_id": "ENT-PARENT",
+      "country": "US",
+      "state": "NV",
+      "ownership_percent": "100",
+      "operational_control": true,
+      "effective_start": "2025-01-01",
+      "effective_end": "2025-12-31",
+      "expected": true,
+      "included": false,
+      "evidence_ids": [
+        "EV-ROSTER-2025"
+      ]
+    }
+  ],
+  "facilities": [
+    {
+      "id": "FAC-CA-OFFICE",
+      "entity_id": "ENT-PARENT",
+      "name": "California office",
+      "country": "US",
+      "state": "CA",
+      "operational_control": true
+    },
+    {
+      "id": "FAC-CA-WH",
+      "entity_id": "ENT-CA",
+      "name": "California warehouse",
+      "country": "US",
+      "state": "CA",
+      "operational_control": true
+    },
+    {
+      "id": "FAC-NV-WH",
+      "entity_id": "ENT-NV",
+      "name": "Nevada warehouse",
+      "country": "US",
+      "state": "NV",
+      "operational_control": true
+    }
+  ],
+  "evidence": [
+    {
+      "id": "EV-ROSTER-2025",
+      "title": "Synthetic 2025 corporate roster",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, roster paragraph",
+      "excerpt": "Juniper parent controls its wholly owned California and Nevada distribution subsidiaries throughout 2025; all three entities operate one listed facility."
+    },
+    {
+      "id": "EV-ELECTRIC-CA-2025",
+      "title": "Synthetic California annual electricity worksheet",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, electricity note",
+      "excerpt": "Twelve manually entered months are recorded for the California warehouse. Only January has a synthetic bill. Eleven bill months remain missing. No method is released."
+    },
+    {
+      "id": "EV-NV-UTILITY-2024",
+      "title": "Synthetic Nevada utility statement — wrong year",
+      "synthetic": true,
+      "period_start": "2024-01-01",
+      "period_end": "2024-12-31",
+      "locator": "Embedded fixture, service dates",
+      "excerpt": "Utility service dates cover calendar 2024. The preparer's row asserts calendar 2025. This attachment cannot resolve the period conflict."
+    },
+    {
+      "id": "EV-HEAT-2025",
+      "title": "Synthetic Nevada district-heat contract",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, contract note",
+      "excerpt": "Nevada warehouse purchases heat during 2025. Metered quantities, supplier information and a reviewed applicable calculation method remain unavailable."
+    },
+    {
+      "id": "EV-SPEND-2025",
+      "title": "Synthetic procurement screening memo",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, estimate proposal",
+      "excerpt": "Procurement proposes spend-based screening for purchased goods and services, pending supplier/activity refinement, factor review, category allocation and uncertainty assessment. No emission value has been calculated."
+    },
+    {
+      "id": "EV-BUSINESS-2025",
+      "title": "Synthetic business-model screening memo",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, business activities",
+      "excerpt": "Management states the group sells finished non-energy-consuming office supplies, has no franchises, does not lease assets to customers and has no separate investment portfolio. These statements support proposed screening decisions only and await review across the full entity register."
+    },
+    {
+      "id": "EV-COMMUTE-2025",
+      "title": "Synthetic commute survey proposal",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, planned survey",
+      "excerpt": "HR proposes a commute survey with a documented response rate, extrapolation and remote-work assumptions. Collection and method approval remain pending."
+    },
+    {
+      "id": "EV-CA-DISCOVERY",
+      "title": "Synthetic challenge: Canadian subsidiary discovered",
+      "synthetic": true,
+      "period_start": "2025-01-01",
+      "period_end": "2025-12-31",
+      "locator": "Embedded fixture, overseas roster addendum",
+      "excerpt": "A newly found roster addendum identifies a wholly owned and operationally controlled Canadian subsidiary and warehouse operating throughout 2025. It was omitted from the initial supplied roster."
+    }
+  ],
+  "coverage_rows": [
+    {
+      "id": "S1-STATIONARY",
+      "scope": "1",
+      "name": "Stationary combustion",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "review_state": "pending",
+      "rationale": "Warehouse heating and backup equipment must be inventoried.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-S1"
+      ]
+    },
+    {
+      "id": "S1-MOBILE",
+      "scope": "1",
+      "name": "Mobile combustion",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "review_state": "pending",
+      "rationale": "Fleet register and fuel records required.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-S1"
+      ]
+    },
+    {
+      "id": "S1-FUGITIVE",
+      "scope": "1",
+      "name": "Fugitive emissions",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "unknown",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "review_state": "pending",
+      "rationale": "Confirm refrigeration and air-conditioning responsibility and service records.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-S1"
+      ]
+    },
+    {
+      "id": "S1-PROCESS",
+      "scope": "1",
+      "name": "Process emissions screening",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "not_applicable",
+      "data_state": "not_requested_pending_review",
+      "evidence_state": "synthetic_statement",
+      "evidence_ids": [
+        "EV-BUSINESS-2025"
+      ],
+      "review_state": "pending",
+      "rationale": "Finished-goods distribution model proposes no industrial processing; verify across every entity.",
+      "method_status": "not_assessed",
+      "emissions": null,
+      "task_ids": [
+        "TASK-SCREEN-REVIEW"
+      ]
+    },
+    {
+      "id": "S2-ELECTRIC-LB",
+      "scope": "2",
+      "name": "Purchased electricity — location-based view",
+      "energy_type": "electricity",
+      "method_view": "location_based",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "include",
+      "data_state": "partial",
+      "evidence_state": "partial_and_conflicting",
+      "evidence_ids": [
+        "EV-ELECTRIC-CA-2025",
+        "EV-NV-UTILITY-2024"
+      ],
+      "review_state": "pending",
+      "rationale": "California manual entries do not cover the whole company; Nevada attachment is for 2024.",
+      "method_status": "synthetic_unreleased_only",
+      "emissions": null,
+      "task_ids": [
+        "TASK-ELECTRIC",
+        "TASK-PERIOD"
+      ]
+    },
+    {
+      "id": "S2-ELECTRIC-MB",
+      "scope": "2",
+      "name": "Purchased electricity — market-based view assessment",
+      "energy_type": "electricity",
+      "method_view": "market_based",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "unknown",
+      "data_state": "missing",
+      "evidence_state": "contractual_evidence_missing",
+      "review_state": "pending",
+      "rationale": "Assess applicable dual-reporting rules, instruments and quality criteria; no market-based result can be inferred from utility quantities.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-MB"
+      ]
+    },
+    {
+      "id": "S2-HEAT",
+      "scope": "2",
+      "name": "Purchased heat",
+      "energy_type": "heat",
+      "entity_ids": [
+        "ENT-NV"
+      ],
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "synthetic_statement",
+      "evidence_ids": [
+        "EV-HEAT-2025"
+      ],
+      "review_state": "pending",
+      "rationale": "District heat identified; collect quantity and applicable method evidence.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-HEAT"
+      ]
+    },
+    {
+      "id": "S2-STEAM",
+      "scope": "2",
+      "name": "Purchased steam screening",
+      "energy_type": "steam",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "unknown",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "review_state": "pending",
+      "rationale": "Confirm purchases at every facility; no answer is not zero.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-ENERGY-SCREEN"
+      ]
+    },
+    {
+      "id": "S2-COOLING",
+      "scope": "2",
+      "name": "Purchased cooling screening",
+      "energy_type": "cooling",
+      "entity_ids": [
+        "ENT-PARENT",
+        "ENT-CA",
+        "ENT-NV"
+      ],
+      "disposition": "unknown",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "review_state": "pending",
+      "rationale": "Distinguish purchased cooling from electricity used by owned cooling equipment.",
+      "method_status": "unsupported_in_demo",
+      "emissions": null,
+      "task_ids": [
+        "TASK-ENERGY-SCREEN"
+      ]
+    }
+  ],
+  "scope3_categories": [
+    {
+      "id": "S3-01",
+      "category": 1,
+      "name": "Purchased goods and services",
+      "disposition": "estimate",
+      "data_state": "estimate_proposed",
+      "evidence_state": "synthetic_basis_only",
+      "evidence_ids": [
+        "EV-SPEND-2025"
+      ],
+      "rationale": "Procurement proposes initial spend-based screening; activity refinement and category allocation pending.",
+      "estimate_basis": "Proposed spend-based screening; no factor selected or value calculated.",
+      "uncertainty": "Spend intensity may not represent suppliers or products; refinement needed.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-02",
+      "category": 2,
+      "name": "Capital goods",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Reconcile asset additions and procurement to avoid overlap with category 1.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-03",
+      "category": 3,
+      "name": "Fuel- and energy-related activities (not included in Scope 1 or Scope 2)",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Link to reconciled corporate fuel and purchased-energy activity.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-04",
+      "category": 4,
+      "name": "Upstream transportation and distribution",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Reconcile purchased logistics, responsibility and allocation with fleet and category 9.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-05",
+      "category": 5,
+      "name": "Waste generated in operations",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Collect facility waste quantities, treatment and evidence.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-06",
+      "category": 6,
+      "name": "Business travel",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Reconcile travel-provider records and expense claims.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-07",
+      "category": 7,
+      "name": "Employee commuting",
+      "disposition": "estimate",
+      "data_state": "estimate_proposed",
+      "evidence_state": "synthetic_basis_only",
+      "evidence_ids": [
+        "EV-COMMUTE-2025"
+      ],
+      "rationale": "Proposed employee survey and documented extrapolation.",
+      "estimate_basis": "Survey not yet collected; method and response-rate treatment pending.",
+      "uncertainty": "Nonresponse, distances, modes and working patterns remain unknown.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-08",
+      "category": 8,
+      "name": "Upstream leased assets",
+      "disposition": "unknown",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Reconcile lease/control treatment against Scope 1 and 2 before deciding remaining category coverage.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-09",
+      "category": 9,
+      "name": "Downstream transportation and distribution",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Identify downstream logistics outside owned fleet and purchased-logistics boundary.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-10",
+      "category": 10,
+      "name": "Processing of sold products",
+      "disposition": "not_applicable",
+      "data_state": "not_requested_pending_review",
+      "evidence_state": "synthetic_statement",
+      "evidence_ids": [
+        "EV-BUSINESS-2025"
+      ],
+      "rationale": "Finished products proposed to require no downstream processing; validate actual product mix.",
+      "review_state": "pending",
+      "emissions": null,
+      "task_ids": [
+        "TASK-SCREEN-REVIEW"
+      ]
+    },
+    {
+      "id": "S3-11",
+      "category": 11,
+      "name": "Use of sold products",
+      "disposition": "exclude",
+      "data_state": "missing",
+      "evidence_state": "synthetic_statement_insufficient",
+      "evidence_ids": [
+        "EV-BUSINESS-2025"
+      ],
+      "rationale": "Preparer proposes exclusion based on non-energy-consuming products; direct/indirect use-phase boundary and product mix require review. Exclusion is unresolved.",
+      "review_state": "pending",
+      "emissions": null,
+      "task_ids": [
+        "TASK-SCREEN-REVIEW"
+      ]
+    },
+    {
+      "id": "S3-12",
+      "category": 12,
+      "name": "End-of-life treatment of sold products",
+      "disposition": "include",
+      "data_state": "missing",
+      "evidence_state": "missing",
+      "evidence_ids": [],
+      "rationale": "Collect sold product/packaging composition and disposal assumptions.",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-13",
+      "category": 13,
+      "name": "Downstream leased assets",
+      "disposition": "not_applicable",
+      "data_state": "not_requested_pending_review",
+      "evidence_state": "synthetic_statement",
+      "evidence_ids": [
+        "EV-BUSINESS-2025"
+      ],
+      "rationale": "Management states no assets are leased to customers; verify contracts across entities.",
+      "review_state": "pending",
+      "emissions": null,
+      "task_ids": [
+        "TASK-SCREEN-REVIEW"
+      ]
+    },
+    {
+      "id": "S3-14",
+      "category": 14,
+      "name": "Franchises",
+      "disposition": "unknown",
+      "data_state": "missing",
+      "evidence_state": "unlinked",
+      "evidence_ids": [],
+      "rationale": "",
+      "review_state": "pending",
+      "emissions": null
+    },
+    {
+      "id": "S3-15",
+      "category": 15,
+      "name": "Investments",
+      "disposition": "not_applicable",
+      "data_state": "not_requested_pending_review",
+      "evidence_state": "synthetic_statement",
+      "evidence_ids": [
+        "EV-BUSINESS-2025"
+      ],
+      "rationale": "No separate investment portfolio asserted; reconcile holdings and consolidated subsidiaries before accepting this finding.",
+      "review_state": "pending",
+      "emissions": null,
+      "task_ids": [
+        "TASK-SCREEN-REVIEW"
+      ]
+    }
+  ],
+  "scope3_screening_level": "Corporate preliminary screening; underlying entity/activity reconciliation remains required.",
+  "tasks": [
+    {
+      "id": "TASK-OMITTED",
+      "title": "Reconcile omitted Nevada subsidiary",
+      "owner": "Inventory preparer",
+      "status": "open",
+      "entity_ids": [
+        "ENT-NV"
+      ],
+      "resolution_rule": "Adding ENT-NV resolves selection omission only; source/evidence tasks remain."
+    },
+    {
+      "id": "TASK-S1",
+      "title": "Collect combustion, fleet and refrigerant registers",
+      "owner": "Facilities lead",
+      "status": "open"
+    },
+    {
+      "id": "TASK-ELECTRIC",
+      "title": "Reconcile electricity for every facility and all months",
+      "owner": "Energy data owner",
+      "status": "open"
+    },
+    {
+      "id": "TASK-PERIOD",
+      "title": "Replace or explain Nevada 2024 evidence attached to 2025 activity",
+      "owner": "Nevada facilities lead",
+      "status": "open",
+      "activity_period": {
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "evidence_ids": [
+        "EV-NV-UTILITY-2024"
+      ]
+    },
+    {
+      "id": "TASK-MB",
+      "title": "Assess Scope 2 method applicability and contractual evidence",
+      "owner": "Accounting reviewer",
+      "status": "open"
+    },
+    {
+      "id": "TASK-HEAT",
+      "title": "Obtain heat quantities and supported method",
+      "owner": "Energy data owner",
+      "status": "open"
+    },
+    {
+      "id": "TASK-ENERGY-SCREEN",
+      "title": "Screen purchased steam and cooling across facilities",
+      "owner": "Facilities lead",
+      "status": "open"
+    },
+    {
+      "id": "TASK-SCREEN-REVIEW",
+      "title": "Review proposed exclusions and not-applicable findings against full boundary",
+      "owner": "Accounting reviewer",
+      "status": "open"
+    },
+    {
+      "id": "TASK-S3",
+      "title": "Collect Scope 3 data and resolve estimates/category boundaries",
+      "owner": "Procurement and HR data owners",
+      "status": "open"
+    },
+    {
+      "id": "TASK-REQUIREMENTS",
+      "title": "Determine applicable requirements using dated primary evidence",
+      "owner": "Regulatory reviewer",
+      "status": "open"
+    }
+  ],
+  "invariants": [
+    "No emissions totals, completeness percentages, compliance verdicts or assurance conclusions.",
+    "All dispositions are planning proposals; review_state remains pending.",
+    "Unknown, missing and unsupported are not numeric zero.",
+    "All 15 Scope 3 categories remain present in exports regardless of filters.",
+    "Selecting an entity does not resolve its activity, evidence, method or review gaps.",
+    "Location-based and market-based Scope 2 views are separate and are never summed.",
+    "Geographic support limits never erase expected corporate-boundary coverage.",
+    "Synthetic evidence excerpts are fixture content, not regulatory primary sources or customer records."
+  ],
+  "validation_rules": {
+    "not_applicable": "Trimmed rationale and known period-matching evidence required; pending review remains.",
+    "estimate": "Documented basis, uncertainty, known evidence reference and pending review required; no numeric emissions calculated.",
+    "exclude": "Trimmed rationale, known evidence, assigned review task and pending review required; no accepted exclusion is inferred."
+  },
+  "overseas_challenge_state": false,
+  "export_type": "nonproduction_synthetic_planning_register",
+  "regulatory_determination": "not_determined",
+  "assurance_status": "none"
+}

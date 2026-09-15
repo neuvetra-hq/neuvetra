@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "id": "M70-CTO",
+  "role": "cto",
+  "execution_context": "/root/m70_cto",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M70-INTEGRATED.json",
+      "sha256": "9251a44ce0b9fc6544bc3b3f73eb7dfeb9e47fea91660f3d233f7518d244a6c3"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M70-CTO-DELIVERABLES",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m70_accounting",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m70-qa-review.md",
+      "evaluations/research-qa/m70-accounting-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M70-INTEGRATED.json",
+        "sha256": "9251a44ce0b9fc6544bc3b3f73eb7dfeb9e47fea91660f3d233f7518d244a6c3"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "intended_artifacts": [
+    "docs/research/m70-architecture.md",
+    "docs/research/m70-coverage-contract.json"
+  ],
+  "source_artifacts": [
+    {
+      "path": "docs/prototypes/m70-coverage-planner.html",
+      "sha256": "1a98d98dad353ca92fc5719f44125aa32865cb7b90d47a5dad0a3d0b9723a320"
+    },
+    {
+      "path": "docs/prototypes/m70-coverage-planner.template.html",
+      "sha256": "ad79d2dd9f65b5c2620dcb2a26d3fda4ee24d487c8e9eee10a44562fbba3c517"
+    },
+    {
+      "path": "docs/research/corporate-coverage-milestone-70.md",
+      "sha256": "1aa74644b3bc2eb56c55338fe297c1117ae4d18d1d1ab9cef207188953f85af8"
+    },
+    {
+      "path": "docs/research/m70-architecture.md",
+      "sha256": "5f3dfa70333257e72029a1c8e77f5be87380fc159478e6cb50d8c310a69b976a"
+    },
+    {
+      "path": "docs/research/m70-coverage-contract.json",
+      "sha256": "fee934989d29bf1e451bab9318e47e8de12c3ad79587d35b596b0b4c4b209e57"
+    },
+    {
+      "path": "docs/research/m70-demo-scenario.json",
+      "sha256": "91b2c0aad37b4056c275ed26d3b1e5286a8cfc8730824a8189719794ede95690"
+    },
+    {
+      "path": "docs/research/m70-product-brief.md",
+      "sha256": "8eae73a4ac2aad715500e74d644670bc7c13b30c9c2593da60a7c6b061046fbb"
+    },
+    {
+      "path": "docs/research/m70-requirements-matrix.json",
+      "sha256": "20c84258df5083593d32a878037f5a94c4cce417b8ddc3f4c52a124f0172c1fe"
+    },
+    {
+      "path": "docs/research/m70-source-review.md",
+      "sha256": "596f5659c95a42f9e3a5d901056663312a6a6ca83b00023c2c93e923d65fc14c"
+    },
+    {
+      "path": "tools/build_m70_demo.py",
+      "sha256": "b84a48e4f227aeed665bbc7a3d9351b53d5d011deb0dd05a2fe124cbb937ea8b"
+    },
+    {
+      "path": "evaluations/research-qa/m70-browser-observations.json",
+      "sha256": "78d2d131c3f413f34e7a76cf70e21a039d3bc9c1f669fdc6f84e144aa534718e"
+    },
+    {
+      "path": "evaluations/research-qa/m70-downloaded-export.json",
+      "sha256": "5a304b4c418f71c102a44f0b09ecaf7eaf88a99dfd5d1a50c6a2e295190eefb0"
+    },
+    {
+      "path": "evaluations/research-qa/m70-final-screening-ax.txt",
+      "sha256": "7719ff00622480f113c106bd752c221112bb2cb0203f4e5a43632a5c9f42bc14"
+    },
+    {
+      "path": "evaluations/research-qa/m70-method-ax.txt",
+      "sha256": "d4b874c11efea85ef22e2beaf2e449bc449c3eef24cd0daf4c67fe649ff21dea"
+    },
+    {
+      "path": "evaluations/research-qa/m70-reset-export.json",
+      "sha256": "d4972b52c00a6354173b5a225df0dc1aed61c14d3462bfbdef6428356ca6f69e"
+    },
+    {
+      "path": "evaluations/research-qa/m70-visible-export.json",
+      "sha256": "5a304b4c418f71c102a44f0b09ecaf7eaf88a99dfd5d1a50c6a2e295190eefb0"
+    },
+    {
+      "path": "evaluations/research-qa/m70-browser-verification.md",
+      "sha256": "2dc7df2f88fa279fd1c37bb5b3e9e2febd8aa3ce9c0ab607a23cb3792442866d"
+    }
+  ],
+  "notes": [
+    "Scoped planning deliverable accepted; no production or legal/method/source release. One independent non-author covered accounting and integrated QA."
+  ]
+}

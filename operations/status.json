@@ -1,17 +1,16 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T04:53:04.184445+00:00",
+  "updated_at": "2026-09-15T05:41:26.347869+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M68",
-    "name": "Annual electricity with supporting bills",
+    "id": "M70",
+    "name": "Corporate inventory coverage planning",
     "status": "in_progress",
-    "next_gate": "Independent accounting contract review, backend/UI implementation and integrated QA.",
+    "next_gate": "Publish reviewed M70 planning to new rolling draft PR; verify head/checks and collect board feedback before dependent implementation.",
     "evidence": [
-      "docs/research/evidence-annual-electricity-milestone-68.md",
-      "operations/feedback/2026-09-14-milestone-67.md"
+      "docs/research/corporate-coverage-milestone-70.md"
     ]
   },
   "completed_milestones": [
@@ -108,15 +107,15 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M67 hosted and workflow accepted; M68 under implementation, not deployed.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M68 independent accounting design review complete. CTO backend implementation active as sole M68 specialist; root UI/operators in progress."
+    "last_session_work": "M70 scoped specialists complete; root publication/board demonstration active. No persistent agents."
   },
   "session_handoff": {
-    "current": "M67 workflow accepted. M68 authorized on isolated milestone Git branch at exact published M67 head; technical contract drafted, accounting design review active.",
-    "next": "Complete M68 implementation and independent review; push milestone branch and integrate reviewed commits into rolling draft PR4, then verify CI/deploy/demonstrate. RAG readiness progresses independently.",
+    "current": "M70 local planning/demo accepted; publication pending.",
+    "next": "Publish reviewed M70 planning to new rolling draft PR; verify head/checks and collect board feedback before dependent implementation.",
     "evidence": [
-      "operations/feedback/2026-09-14-milestone-67.md",
-      "docs/research/m67-hosted-verification.json",
-      "evaluations/research-qa/m67-hosted-handoff.md"
+      "evaluations/research-qa/m70-qa-review.md",
+      "evaluations/research-qa/m70-accounting-review.md",
+      "evaluations/research-qa/m70-browser-verification.md"
     ]
   },
   "checkpoint": {
@@ -124,7 +123,7 @@
     "commit": "367497e750530c590c7eedd229e48a34e2daf8b8",
     "github_verified": true
   },
-  "working_branch": "codex/m63-private-staging",
+  "working_branch": "codex/corporate-mvp",
   "publication": {
     "repository": "https://github.com/neuvetra-hq/neuvetra",
     "implementation_commit": "84d55b7fcfb4b0f127c5ede80b13e389652a0a80",
@@ -202,7 +201,9 @@
     "m61_commit": "b74803f23edb6b2eecdb4b1eb5af2c57796178a4",
     "m61_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
     "m61_review": "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json",
-    "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5"
+    "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5",
+    "active_rolling_branch": "codex/corporate-mvp",
+    "active_rolling_pr": null
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -493,7 +494,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00e2\u20ac\u201cE06 and P01\u00e2\u20ac\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01â€“E06 and P01â€“P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1224,6 +1225,36 @@
       "evidence": [
         "docs/research/m64-hosted-verification.json",
         "evaluations/research-qa/milestone64-private-worksheet.md"
+      ]
+    },
+    {
+      "id": "M70-CPO",
+      "owner": "/root/m70_cpo",
+      "status": "complete",
+      "scope": "cpo bounded M70 planning; owned deliverables listed in role run",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
+      ]
+    },
+    {
+      "id": "M70-CTO",
+      "owner": "/root/m70_cto",
+      "status": "complete",
+      "scope": "cto bounded M70 planning; owned deliverables listed in role run",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
+      ]
+    },
+    {
+      "id": "M70-RESEARCH",
+      "owner": "/root/m70_research",
+      "status": "complete",
+      "scope": "regulatory-research bounded M70 planning; owned deliverables listed in role run",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
       ]
     }
   ],
@@ -2171,5 +2202,27 @@
     "source_repair_commit": "7cb1bd6a5495841612f3a6452acbe9440e0b36b1",
     "integrated_repair_commit": "9efc31f",
     "validation": "34 tests /225assertions pass; role checker passes"
+  },
+  "pr4_merge": {
+    "approved_head": "3e77d1eab4dbd400d606def7b227eec47d34cef4",
+    "merge_commit": "fb4dd370c87eafee563f18529655f41b3a720573",
+    "verified_main_head": "fb4dd370c87eafee563f18529655f41b3a720573",
+    "merged_at": "2026-09-15T05:15:24.479766+00:00",
+    "normal_merge": true,
+    "branches_deleted": false,
+    "authorization": "Direct board Approved message following exact-head merge question."
+  },
+  "current_m70": {
+    "status": "local_review_passed",
+    "scope": "Bounded planning specification and synthetic interactive demonstration",
+    "base": "fb4dd370c87eafee563f18529655f41b3a720573",
+    "publication": "pending",
+    "production_implementation": false,
+    "paid_requests": 0,
+    "candidate_snapshot": {
+      "path": "operations/agent-improvement/snapshots/M70-INTEGRATED.json",
+      "sha256": "9251a44ce0b9fc6544bc3b3f73eb7dfeb9e47fea91660f3d233f7518d244a6c3"
+    },
+    "review_arrangement": "One independent non-author context covers accounting and QA after runtime dispatch failures."
   }
 }
