@@ -1,3 +1,45 @@
+# M74 local acceptance passed; controlled publication next
+
+Independent accounting, security/recovery and integration reviews passed. S01 recovery-proof validation repaired and independently retested. Actual local save/review/correction/download/restart and390px checks passed; board confirmed native print-window appearance. No physical/PDF/pagination claim. Source/method release and corporate Scope1 completeness remain unresolved.
+
+Fresh encrypted hosted schema16 backup at2026-09-15T22:17:58Z and independent55472 recovery passed. Automatic deployment is paused for controlled rollout. Fresh live observation remains M73 implementation3f92fdac/schema16ready; no M74 migration/deploy/push yet at this record. Recheck backup age/current head before execution. After17, use17-compatible forward recovery only.
+
+All scoped authors/reviewers complete; no worker is persistent. Root continues same rolling PR5 required remote checks, controlled exact16-to17 transition, live exercise/restart/revisit and demonstration under standing approval. No merge. Then continue sequential supported-profile Scope1 milestones; California first, relevant interstate operations included, separate regional expansion deferred.
+
+Earlier sections below are historical.
+
+# M74 independent checks and recovery underway
+
+Standing board approval remains active. Backend and operator authors have frozen candidates; independent accounting passed254 assertions and frontend QA passed46 tests/191 assertions. Actual local browser save/review/correction/download/restart preserved history. Print entry was invoked; native-window observation is pending. Root added scoped CSS for a390px overflow repair; supplemental independent review is pending.
+
+Actual live read-only baseline passed with0applicationPOSTs and verification Auth sessions closed. Fresh encrypted schema16 backup and isolated55472 restore completed,74tables; independent actual-host recovery reconstruction is in progress. No M74 migration/deploy/push yet. Preserve all earlier receipts/fixtures. Live service remains M73/schema16 until fresh verification before controlled publication.
+
+Active specialists: /root/m74_cto independent security/recovery (native6tests/70assertions passed; operator proof validation S01 found); /root/m73_accounting repairs S01 in M74 operators only; /root/m72_ops adapts independent accounting test for CI. Root owns integration, Git/host and records. Others completed, not running. Continue on same rolling PR5 without merge. California corporate reporting first; Scope1 not complete.
+
+Earlier sections below are historical.
+
+# M74 implementation underway; standing Scope1 approval remains active
+
+M74 planning is frozen in M74-PLANNING-CANDIDATE1. Initial supported profile retains all relevant stationary, fleet, fugitive and process-screening gaps. This increment covers separate fuel/mileage evidence for a supported diesel vehicle; no complete Scope1 or method-release claim.
+
+Actual active work: /root/m74_backend authors backend/calculation/storage; root authors UI/decoder/packaging and integration; reused /root/m73_accounting authors new16-to17 recovery/migration operators. Independent /root/m72_ops completed source review and11 independent numeric expectations and is currently idle awaiting a frozen implementation. Fresh-context thread-limit routing exceptions retain unknown inherited model observations. Planning specialists are complete, not running workers.
+
+Root created the vehicle form/navigation and corrected client unit/gas-result checks; web typecheck passes after replacing an unsupported array helper. Integration, independent implementation/security/QA, recovery and publication/hosted verification remain pending. No M74 hosted mutation or publication has occurred. Same rolling PR5; no merge. Continue sequential bounded Scope1 work under standing board approval without routine permission stops; retain evidence/release/human gates.
+
+Earlier sections below are historical.
+
+# M74 Scope1 completion programme underway under standing board approval
+
+The board accepted the delivered natural-gas increment and explicitly authorized sequential bounded milestones until supported-profile Scope1 is done: “let's tackle the next milestone. Let's go until the scope one is done. You have my approval for everything.” This supersedes earlier routine board-feedback waits. Continue demonstrations and concise updates without repetitive permission requests; retain independent accounting/security/QA, applicable primary-source/method rights and release gates, truthful unsupported coverage and qualified-human dependencies. No new provider/subscription, unrelated paidRAG or regional expansion.
+
+Fresh reconciliation2026-09-15T21:20Z: local/remote ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7; sixchecks pass; live implementation3f92fdac/schema16 ready, same reviewed image. Tracked tree clean before M74; preserve .tmp and existing dumps. Same rolling draft PR5, no merge; root remains sole product/Git/host/common-ledger writer.
+
+Actual active assignments: /root/m74_cpo defines initial customer profile/completion matrix and M74 product criteria (registeredSol/medium requested); /root/m74_accounting researches primary evidence/applicability/rights and candidate calculation contract (criticalAstra/high requested); /root/m74_cto defines implementation boundaries and sequencing (criticalAstra/high requested). These are fresh dispatched contexts, observed model settings unknown. Root reconciles current implementation/release mechanisms and records. No M74 code or hosted change yet.
+
+First agree a complete supported-profile matrix including stationary fuels, mobile, refrigerants/fugitives, process screening, inventory/period reconciliation, estimates/uncertainty, evidence, deterministic calculations, duplicate-free gross aggregation, history/review/reporting/recovery and release gates. Select next highest-value source family from CPO/accounting evidence; source expansion alone must not be called completeScope1. Then implement, independently challenge and publish each bounded milestone on the existing PR, continuing under standing approval.
+
+Earlier sections below are historical.
+
 # M73 hosted natural-gas increment verified; live feedback next
 
 The bounded California2025 stationary-natural-gas workflow is live on the existing site. Saved source activity, deterministic calculations, immutable corrections, separate review and exact report downloads passed actual hosted verification. A real service restart and zero-application-POST revisit preserved all saved versions/reviews/downloads and older electricity/corporate records. All created verification Auth sessions closed. Fresh independent recovery reconstructed67tables/176rows and14exactdownloads before migration; exact0016 preserved all old rows/catalog/roles.

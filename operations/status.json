@@ -1,18 +1,16 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T20:47:20.831998+00:00",
+  "updated_at": "2026-09-15T22:26:28.884878+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M73",
-    "name": "Scope1 stationary natural-gas workflow",
-    "status": "awaiting_board_feedback",
-    "next_gate": "Verify final record publication/checks/live head; collect board feedback on hosted natural-gas increment before dependent work.",
+    "id": "M74",
+    "name": "Two-evidence mobile-diesel source workpaper",
+    "status": "implementation_in_progress",
+    "next_gate": "Complete strict M74 backend/frontend, native validation, independent accounting/security/QA, exact publication and hosted rollout. Continue sequential Scope1 milestones under standing approval.",
     "evidence": [
-      "docs/research/m73-publication.json",
-      "evaluations/research-qa/m73-hosted-acceptance.md",
-      "evaluations/research-qa/m73-hosted-coordinator-acceptance.md"
+      "operations/feedback/2026-09-15-scope1-standing-approval.md"
     ]
   },
   "completed_milestones": [
@@ -105,6 +103,11 @@
       "id": "M70",
       "completed_at": "2026-09-15T05:47:14.041329+00:00",
       "feedback": "Pending board feedback; bounded planning acceptance in evaluations/research-qa/m70-qa-review.md"
+    },
+    {
+      "id": "M73",
+      "completed_at": "2026-09-15",
+      "feedback": "operations/feedback/2026-09-15-scope1-standing-approval.md"
     }
   ],
   "runtime": {
@@ -1430,6 +1433,82 @@
       "evidence": [
         "operations/agent-improvement/runs/M73-VISUAL-REVIEW.json"
       ]
+    },
+    {
+      "id": "M74-CPO-COMPLETION-MATRIX",
+      "owner": "/root/m74_cpo",
+      "status": "complete",
+      "scope": "Bounded definition delivery in docs/research/scope1-completion-matrix.md, docs/research/m74-product-brief.md",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-CPO-COMPLETION-MATRIX.json"
+      ]
+    },
+    {
+      "id": "M74-ACCOUNTING-SCOPE1",
+      "owner": "/root/m74_accounting",
+      "status": "complete",
+      "scope": "Bounded definition delivery in docs/research/scope1-accounting-readiness.md, docs/research/m74-accounting-contract.md",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-ACCOUNTING-SCOPE1.json"
+      ]
+    },
+    {
+      "id": "M74-CTO-BOUNDARIES",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "scope": "Bounded definition delivery in docs/research/m74-technical-contract.md",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-CTO-BOUNDARIES.json"
+      ]
+    },
+    {
+      "id": "M74-BACKEND",
+      "owner": "/root/m74_backend",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-BACKEND.json"
+      ]
+    },
+    {
+      "id": "M74-INDEPENDENT-ACCOUNTING-REVIEW",
+      "owner": "/root/m72_ops",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-INDEPENDENT-ACCOUNTING-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M74-OPERATORS",
+      "owner": "/root/m73_accounting",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-OPERATORS.json"
+      ]
+    },
+    {
+      "id": "M74-FRONTEND-QA",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "evaluations/research-qa/m74-frontend-review.md",
+        "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json"
+      ]
+    },
+    {
+      "id": "M74-HOSTED-HELPER-REVIEW",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-HOSTED-HELPER-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M74-SECURITY-RECOVERY",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-SECURITY-RECOVERY.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2482,5 +2561,39 @@
     "remote_checks": "All six success on3f92fdac0bf1e681db634410ad455b61faaed790",
     "hosted": "PASS actual exercise11POSTs; restart; revisit0POSTs; allsessionsclosed; preservedoldrecords/exactdownloads",
     "independent_hosted": "pass evaluations/research-qa/m73-hosted-acceptance.md"
+  },
+  "current_m74": {
+    "status": "local_accepted_publication_pending",
+    "baseline": "ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7",
+    "hosted_schema": 16,
+    "active_assignments": [],
+    "standing_approval": true,
+    "hosted_changes": false,
+    "definition_snapshot": "operations/agent-improvement/snapshots/M74-PLANNING-CANDIDATE1.json",
+    "independent_accounting_checkpoint": "Source and frozen independent expectations complete; implementation review pending candidate freeze; reviewer idle.",
+    "frontend_review": {
+      "status": "bounded_pass",
+      "tests": 46,
+      "assertions": 191,
+      "snapshot": "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json",
+      "native_browser": "pending"
+    },
+    "integrated_candidate": "operations/agent-improvement/snapshots/M74-INTEGRATED-ACCEPTED2.json",
+    "operator_candidate": "operations/agent-improvement/snapshots/M74-OPERATORS-ACCEPTED2.json",
+    "hosted_helper": "operations/agent-improvement/snapshots/M74-HOSTED-HELPER-CANDIDATE1.json",
+    "root_dpapi_rehearsal": ".tmp/m74-ops-1789509920941/author-result.json",
+    "local_browser": "http://127.0.0.1:37176",
+    "local_limitations": [
+      "Full repository check stops on missing unrelated FrontDesk drizzle-orm dependency; targeted web/API/database typechecks, web lint/build and M73native85assertions pass.",
+      "Local browser still needs correction/report downloads/restart/narrow/print. No hosted change or publication."
+    ],
+    "browser_evidence": "evaluations/research-qa/m74-browser-verification.md",
+    "print_observation": "board_confirmed_native_window_appeared",
+    "hosted_baseline": "passed_zero_application_posts",
+    "hosted_upgrade": "not_started",
+    "operator_finding": "S01 repaired independently accepted",
+    "automatic_deployment": false,
+    "security_review": "evaluations\\research-qa\\m74-security-review.md",
+    "integrated_review": "evaluations\\research-qa\\m74-integrated-qa-review.md"
   }
 }

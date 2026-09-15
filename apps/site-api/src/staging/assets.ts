@@ -2,6 +2,7 @@ import path from "node:path"
 import { realpath } from "node:fs/promises"
 
 export const STAGING_ASSETS = [
+  ["apps/site-api/src/calculation/m74_mobile_diesel.py", "1dc0bb7249d91e854004a8cadd34068be3fc03ecdd6e10b4cf297d375d7f52a6"],
   ["apps/site-api/src/calculation/m73_stationary_natural_gas.py", "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14"],
   ["apps/site-api/src/calculation/stationary_natural_gas.py", "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603"],
   ["apps/site-api/src/calculation/linked_bill_calculation.py", "ae03b9146060187c63b6f3b8a253fbd61cd4f97a9aa97905481904eca45b061e"],

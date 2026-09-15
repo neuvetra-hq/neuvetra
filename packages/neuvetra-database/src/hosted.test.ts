@@ -73,8 +73,8 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
   afterAll(async () => { await database?.close(); await another?.close(); await operator?.close() })
 
   test("checks exact migration receipts, restricted role and no ordinary-start migrations", async () => {
-    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 16 })
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: REF, syntheticTargetConfirmed: true })).migrations).toHaveLength(16)
+    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 17 })
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: REF, syntheticTargetConfirmed: true })).migrations).toHaveLength(17)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
     expect((await readMigrationManifest()).every(m => /^[0-9a-f]{64}$/.test(m.sha256))).toBe(true)
@@ -258,7 +258,7 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     const decision = await database.reviewDraftInventoryReport(admin, company, annual.id, report.id, reviewInput)
     await another.close()
     another = construct(createPostgresConnection(runtimeUrl(), { tls:false,maxConnections:2 }))
-    expect(await another.checkReadiness()).toMatchObject({schemaVersion:16})
+    expect(await another.checkReadiness()).toMatchObject({schemaVersion:17})
     expect(await another.findDraftInventoryReportReview(member,company,annual.id,report.id)).toEqual(decision)
     expect((await another.findDraftInventoryReport(member,company,annual.id))?.reportSha256).toBe(report.reportSha256)
     expect((await another.findAnnualEvidencePack(member,company,annual.id))?.archiveSha256).toBe(pack.archiveSha256)

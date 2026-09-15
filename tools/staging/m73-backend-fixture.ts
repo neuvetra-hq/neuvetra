@@ -2,7 +2,7 @@
 import {createPostgresConnection,readMigrationManifest} from '../../packages/neuvetra-database/src/index'
 const name=process.argv[2],option=process.argv[3]
 if(option!==undefined&&option!=='--ci-baseline=m63_integration'||process.argv.length>4)throw Error('Only the explicit CI baseline option is supported.')
-const baseline=option?'m63_integration':'m68_qa',baselineVersion=option?16:14,port='55463'
+const baseline=option?'m63_integration':'m68_qa',baselineVersion=option?(await readMigrationManifest()).length:14,port='55463'
 if(!/^m73_author_[a-z0-9_]+$/.test(name??''))throw Error('New author database name required.')
 const admin=createPostgresConnection(`postgres://m63_test_admin@127.0.0.1:${port}/postgres`,{tls:false,maxConnections:1})
 let db:ReturnType<typeof createPostgresConnection>|undefined

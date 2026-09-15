@@ -1,0 +1,5 @@
+# Board standing approval: complete supported-profile Scope1
+
+Coordinator task relayed explicit board direction: “let's tackle the next milestone. Let's go until the scope one is done. You have my approval for everything.” Treat as M73 live acceptance and authorization to proceed through sequential bounded Scope1 milestones without repeated routine feedback/permission waits.
+
+Continue demonstrations and meaningful progress updates. Preserve independent accounting/security/QA, source applicability/rights and method-release gates, data isolation and recovery. Define initial supported corporate customer profile and expose unsupported sources, periods, methods and uncertainty. The approval does not manufacture universal industry completeness, professional accreditation or external assurance. Escalate actual material scope/cost/access/qualification decisions and unrecoverable blockers. Keep California corporate Scope1/2/3 objective, existing hosting/cost discipline and same rolling draft PR; no new providers/subscriptions, unrelated paidRAG or regional products.

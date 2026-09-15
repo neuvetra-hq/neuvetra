@@ -82,3 +82,7 @@ operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json -text whitespac
 evaluations/research-qa/m73-accounting-independent-results.json -text whitespace=cr-at-eol
 evaluations/research-qa/m73-accounting-independent-candidate2-results.json -text whitespace=cr-at-eol
 evaluations/research-qa/m73-accounting-independent-candidate3-results.json -text whitespace=cr-at-eol
+
+# M74 recovery and review receipts retain independently reviewed bytes.
+evaluations/research-qa/m74-security-reviewed-files.json -text whitespace=cr-at-eol
+tools/staging/m74-seal-backup.ps1 -text whitespace=cr-at-eol

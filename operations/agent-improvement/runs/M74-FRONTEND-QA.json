@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M74-FRONTEND-QA",
+  "role": "qa-lead",
+  "execution_context": "/root/m74_cto",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json",
+      "sha256": "2c500a95c4c0991e6d57f7d58f6f63c7df4a33b9cc39ec556100e1eafbba5483"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M74-UI-DECODER-INDEPENDENT-CHALLENGE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-frontend-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m72_ops",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-frontend-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json",
+        "sha256": "2c500a95c4c0991e6d57f7d58f6f63c7df4a33b9cc39ec556100e1eafbba5483"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused completed technical-contract author; no frontend implementation authorship. Frozen contract self-review excluded; independent UI and decoder review only. Inherited settings unknown; requested defaults are not an observed override.",
+    "Six substantive findings repaired across two review batches; root lint failure also repaired. 46 independent tests/191 assertions. Native/browser/engine asset pin excluded from scoped pass.",
+    "Frontend reviewer substantive pass recorded; separate QA-deliverable acceptance pending. Root UI author will not self-approve implementation. Validator correctly rejected attempted self-review run closure; preserved here.",
+    "Independent /root/m72_ops verified8snapshot/livehashes and reran46tests/191assertions, accepted boundedQA delivery. Numerical/native/browser acceptance separate."
+  ]
+}

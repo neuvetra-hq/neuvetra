@@ -147,3 +147,12 @@ apps/site-web/src/m71-local-preview.tsx
 !apps/site-api/src/calculation/m73-authority.ts
 !apps/site-api/src/calculation/m73_stationary_natural_gas.py
 !apps/site-api/src/calculation/stationary_natural_gas.py
+
+!packages/neuvetra-database/src/m74.ts
+!packages/neuvetra-database/src/m74-contract.ts
+!packages/neuvetra-database/src/m74-validation.ts
+!packages/neuvetra-database/src/m74-report.ts
+!packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql
+!apps/site-api/src/workspace/m74-routes.ts
+!apps/site-api/src/calculation/m74-authority.ts
+!apps/site-api/src/calculation/m74_mobile_diesel.py

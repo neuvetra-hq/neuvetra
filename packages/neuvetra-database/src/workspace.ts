@@ -1,3 +1,4 @@
+import {readMobileDiesel,saveMobileDiesel as storeMobileDiesel,reviewMobileDiesel as storeMobileDieselReview,createMobileDieselReport as storeMobileDieselReport,type M74Authority,type M74SaveInput,type M74ReviewInput,type M74ReportInput} from './m74'
 import {readStationaryGas,saveStationaryGas as storeStationaryGas,reviewStationaryGas as storeStationaryGasReview,createStationaryGasReport as storeStationaryGasReport,type M73Authority,type M73SaveInput,type M73ReviewInput,type M73ReportInput} from './m73'
 import { readCorporateInventory, validateM71Save, validateM71Review, type M71SaveInput, type M71ReviewInput } from "./m71"
 import { readAnnualElectricityEvidence, validateAnnualEvidenceInput, validateAnnualEvidenceReview, type AnnualEvidenceInput, type AnnualEvidenceCorrection, type AnnualEvidenceReviewInput } from "./m68"
@@ -298,6 +299,10 @@ export class WorkspaceDatabase {
   async saveStationaryGas(userId:string,companyId:string,worksheetId:string|null,input:M73SaveInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGas(tx,userId,companyId,worksheetId,input,authority))}
   async reviewStationaryGas(userId:string,companyId:string,worksheetId:string,input:M73ReviewInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGasReview(tx,companyId,worksheetId,input,authority))}
   async createStationaryGasReport(userId:string,companyId:string,worksheetId:string,input:M73ReportInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGasReport(tx,companyId,worksheetId,input,authority))}
+  async findMobileDiesel(userId:string,companyId:string,authority:M74Authority){return this.asUser(userId,tx=>readMobileDiesel(tx,companyId,authority))}
+  async saveMobileDiesel(userId:string,companyId:string,worksheetId:string|null,input:M74SaveInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDiesel(tx,userId,companyId,worksheetId,input,authority))}
+  async reviewMobileDiesel(userId:string,companyId:string,worksheetId:string,input:M74ReviewInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDieselReview(tx,companyId,worksheetId,input,authority))}
+  async createMobileDieselReport(userId:string,companyId:string,worksheetId:string,input:M74ReportInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDieselReport(tx,companyId,worksheetId,input,authority))}
 
   async findCorporateInventory(userId:string,companyId:string){return this.asUser(userId,tx=>readCorporateInventory(tx,companyId))}
   async saveCorporateInventory(userId:string,companyId:string,inventoryId:string|null,input:M71SaveInput){
