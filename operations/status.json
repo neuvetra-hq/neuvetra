@@ -1,17 +1,19 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T14:01:33.866032+00:00",
+  "updated_at": "2026-09-15T14:36:34.175840+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M72",
     "name": "Existing-host corporate coverage rollout",
-    "status": "technical_rollout_verified_visual_pending",
-    "next_gate": "Publish and verify exact rolling PR5 head/checks; finish fresh hosted browser demonstration after Chrome extension panel is closed, then collect board feedback.",
+    "status": "complete_bounded_hosted_rollout",
+    "next_gate": "Verify closure publication and collect board feedback on the open hosted demonstration before a dependent milestone.",
     "evidence": [
       "operations/feedback/2026-09-15-milestone-71.md",
-      "docs/research/m71-operating-notes.md"
+      "docs/research/m71-operating-notes.md",
+      "evaluations/research-qa/m72-visual-qa-review.md",
+      "docs/research/m72-publication.json"
     ]
   },
   "completed_milestones": [
@@ -1321,6 +1323,15 @@
         "operations/agent-improvement/runs/M72-QA.json"
       ],
       "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
+    },
+    {
+      "id": "M72-VISUAL",
+      "owner": "/root/m72_qa",
+      "status": "complete",
+      "scope": "Independent supplemental review of resumed hosted browser evidence",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-VISUAL.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2322,7 +2333,7 @@
     "publication_record": "docs/research/m71-publication.json"
   },
   "current_m72": {
-    "status": "technical_rollout_verified_visual_pending",
+    "status": "complete_bounded_hosted_rollout",
     "scope": "Existing-host synthetic corporate coverage; not actual corporate MVP",
     "branch": "codex/corporate-mvp",
     "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
@@ -2338,11 +2349,11 @@
     "migration": "Committed0015; all165original rows and role metadata preserved",
     "api_exercise": "Passed108stages; two versions, separate review, exact exports and unchanged legacy records",
     "restart": "Actual restart and57stage read-only revisit passed; exact register/reviews/exports and legacyrecords preserved",
-    "browser": "Blocked: Chrome extension panel paused automation; user asked to close it",
+    "browser": "Resumed after board closed Chrome panel: saved history/review, exact earlier download, keyboard and narrow layout verified; independent supplemental review passed",
     "product_direction": "California reporting first; logically necessary operations elsewhere remain within corporate inventory coverage, separate regional reporting products later",
     "workers": "Scoped specialist report deliveries complete; no persistent workers",
-    "publication": "Reviewed records prepared for rolling PR5; coordinator verifies remote head/checks after push",
+    "publication": "Implementation54d89f3 published with six successful required checks; closure commit separately verified by coordinator",
     "evidence": "docs/research/m72-rollout-evidence.md",
-    "board_feedback": "Pending fresh hosted visual demonstration"
+    "board_feedback": "Pending hosted demonstration feedback"
   }
 }

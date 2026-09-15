@@ -1,0 +1,62 @@
+{
+  "observed_at": "2026-09-15T14:09:21.338987+00:00",
+  "publication": {
+    "observed_at": "2026-09-15T14:08:43.894226+00:00",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "sha": "54d89f31ac08c7fe6f46fed68daf9f9e362ed6da",
+    "draft": true,
+    "state": "open",
+    "checks": [
+      {
+        "name": "Dedicated staging image and offline runtime smoke",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Offline research catalog tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Typecheck, lint, unit tests and web builds",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "GHG calculation specifications and engine",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Role routing and evidence records",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Native PostgreSQL worksheet and tenant regression",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "status": "success",
+    "status_count": 1
+  },
+  "deployment": {
+    "id": "6d6c12ff-f635-4293-abce-9d1832d75b4a",
+    "status": "SUCCESS",
+    "commit": "54d89f31ac08c7fe6f46fed68daf9f9e362ed6da",
+    "image_digest": "sha256:7e8d7e0549ba1ed66f7414f1f227c01bba77a51a43e0120fba8a58ea3aa44799"
+  },
+  "final_revisit": {
+    "status": "passed",
+    "stages": 57,
+    "applicationPostRequests": 0,
+    "allCreatedAuthSessionsClosed": true,
+    "receipt_sha256": "b5a43b07f7043d6aa546aaaba60841e7e252941bf9f6bfb74c63a0c97e5fad79"
+  },
+  "visual_gate": "Passed resumed hosted saved-register/history/review/download/keyboard/narrow-layout verification with independent supplemental review",
+  "milestone_complete": true,
+  "visual_review": "evaluations/research-qa/m72-visual-qa-review.md",
+  "closure_checks": "Coordinator verifies closure commit remote checks and actual deployment separately before final report.",
+  "board_feedback": "Pending demonstration feedback before dependent milestone"
+}

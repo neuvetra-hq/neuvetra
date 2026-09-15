@@ -1,0 +1,12 @@
+{
+  "path": "C:\\Users\\nimab\\Downloads\\california-coverage-version-1 (2).json",
+  "actual": {
+    "sha256": "beab72652b26edc756e43df6932a982dad7a7f8fff0c59473a57b9b4abd70845",
+    "byteLength": 25651
+  },
+  "expected": {
+    "sha256": "beab72652b26edc756e43df6932a982dad7a7f8fff0c59473a57b9b4abd70845",
+    "byteLength": 25651
+  },
+  "matches": true
+}

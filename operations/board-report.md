@@ -1,12 +1,12 @@
-# M72 live; final hosted verification and demonstration pending
+# M72 hosted rollout verified; board demonstration feedback next
 
-The existing site is healthy at schema15 on reviewed application commit ecfedcbfb27b18a1ebebfd960314d68299cb4a28. A fresh encrypted application backup was independently restored with exact rows, catalog and role metadata. Migration0015 preserved all165original rows. The hosted synthetic save/correction/distinct-review/export exercise passed108stages and preserved legacy records/downloads. An actual service restart succeeded; the 57-stage exact read-only revisit passed with zero writes and all acquired sessions closed.
+The California-first synthetic corporate coverage register is live on the existing site. Fresh encrypted application recovery, additive migration0015, preservation of all165original rows, hosted save/correction/distinct-review/exact-export and actual restart/readback passed independent review. Implementation54d89f31ac08c7fe6f46fed68daf9f9e362ed6da passed all six required checks; the coordinator verifies closure publication and the final live deployment separately.
 
-Root is publishing reviewed operator/evidence records to the same rolling draft PR5, which remains unmerged. OPS delivery is complete; scoped QA/security report deliveries are complete with the visual acceptance gate withheld. No persistent workers are implied. Fresh hosted browser verification is blocked by an open Chrome extension panel pausing automation; the board was asked to close it. Complete that demonstration before declaring the milestone finished or starting dependent work. No provider/Auth disaster recovery, actual corporate totals, source/method release or full-MVP/assurance claim.
+The board closed the Chrome extension panel. Fresh hosted browser checks now show the saved corrected register, separate review, all15Scope3 categories, unresolved gaps, exact original-version download, keyboard version selection and usable narrow layout. Normal viewport restored; live history view left open for board feedback. Prior blocked reports remain historical. Scoped reviewers are complete; no persistent workers.
 
-California corporate reporting is first. Relevant Nevada, Canadian or other operations stay in the corporate boundary where logically necessary; separate regional reporting products follow later. Preserve all local backup/recovery fixtures, existing data and earlier receipts. Schema14 images cannot serve committed15; use the reviewed schema15 fix-forward plan.
+Collect board feedback before a dependent milestone. California reporting remains first; logically necessary company operations elsewhere remain in inventory boundary assessment. This synthetic coverage increment has no released corporate calculations, completed corporate inventory, filing determination or external assurance. Provider/Auth disaster recovery remains excluded. Rolling draft PR5 stays unmerged; no paid RAG or new provider was used.
 
-Evidence: docs/research/m72-rollout-evidence.md; docs/research/m72-rollout-plan.md; evaluations/research-qa/m72-security-review.md; evaluations/research-qa/m72-qa-review.md.
+Evidence: docs/research/m72-publication.json; evaluations/research-qa/m72-browser-verification.md; evaluations/research-qa/m72-visual-qa-review.md. Preserve local fixtures and sealed backup. Only schema15-compatible fix-forward is valid after committed15.
 
 Historical entries below are superseded as current execution instructions.
 

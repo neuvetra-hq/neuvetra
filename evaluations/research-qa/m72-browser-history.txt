@@ -1,0 +1,3 @@
+Browser tab: 851834825, Title: "Neuvetra — Private staging", URL: "https://www.neuvetra.ai/".
+There has been no change in the accessibility tree.
+The focused UI element is 96 pop up button (collapsed, settable) View version, Value: Version 2 · 2026-09-15, Secondary Actions: Expand
