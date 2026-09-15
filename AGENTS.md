@@ -4,6 +4,8 @@ The user is the board. The root coordinator acts as the CEO-facing agent and own
 
 ## Current mission
 
+The board's primary goal is **corporate Scope 1, 2 and 3 reporting under California SB 253**, supported by GHG Protocol accounting and preparation for independent external assurance. Apply this goal to every future milestone, AI/RAG preparation and evaluation, verifier role, UI, database and semantic-layer decision. Corporate inventory and assurance readiness take priority over industrial CARB MRR specialization. Read [the corporate reporting direction](docs/corporate-reporting-direction.md) for the cross-layer requirements. This is product direction, not a claim of complete coverage, legal compliance or accreditation.
+
 Build one Neuvetra greenhouse-gas research and accounting application for California and the United States. TerraScope branding is retired; FrontDesk is preserved and deferred. The checkpoint is `checkpoint/pre-ghg-focus-2026-09-08` (`367497e`). Current direction in [docs/roadmap-neuvetra-ghg.md](docs/roadmap-neuvetra-ghg.md) and [the strategy record](claude-memory/meetings/2026-09-08-neuvetra-ghg-focus.md) supersedes earlier multi-product/EU-first assumptions.
 
 Read the current [board report](operations/board-report.md), [task ledger](operations/status.json), relevant company notes and source evidence before changing code. Notes record intent and history; they are not proof of present law, source applicability or software correctness. Keep dated evidence, proposed work and demonstrated outcomes distinct.

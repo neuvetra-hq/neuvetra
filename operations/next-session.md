@@ -1,5 +1,7 @@
 # M69 offline integration approved; no paid run
 
+Future work follows the board’s [corporate Scope 1, 2 and 3 reporting direction](../docs/corporate-reporting-direction.md), across milestones, AI/verifier preparation, UI, database and semantic layer. This strategy does not change existing release or board-feedback gates.
+
 The board directly approved publishing and integrating the reviewed offline M69 preparation into existing draft PR4. The candidate is unchanged; byte-preservation and role-record handoff defects were repaired, and all 34 offline integration tests / 225 assertions pass. Independent integration QA passed the exact committed candidate and repaired records. This offline delivery is published to the same PR after final remote checks.
 
 M69 adds research preparation, pinned evidence and tests only. It adds no customer-facing research feature or hosted schema change. The existing credential is unavailable for executable binding; live admission remains blocked and no paid request was made. Dated source/account/endpoint observations must be rechecked before any later live action. This approval does not authorize a paid run.
