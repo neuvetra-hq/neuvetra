@@ -14,6 +14,8 @@ For session continuation, start with the leading current section of [operations/
 
 ## Delegation and delivery
 
+- First actual MVP means reliable corporate Scope 1, 2 and 3 reports for supported California customers, with reconciled inventory coverage, applicable-requirements evidence and a traceable assurance package. Synthetic electricity milestones are interim increments. Follow the [MVP acceptance target](docs/corporate-reporting-direction.md#first-actual-mvp-acceptance-target); expose missing data and unsupported requirements instead of claiming completeness. EU/Canada expansion follows this MVP. External assurance remains an independent judgment, not an automatic stamp.
+
 - The CEO coordinator translates board direction into a bounded milestone, asks only material questions and reports completed work, decisions, bottlenecks and the next demonstration briefly.
 - Use the active rolling product PR as the single progressive delivery line. After a milestone meets its acceptance criteria, passes the relevant checks and independent review, commit and push it to that same PR branch before reporting the milestone complete. Do not create a new milestone branch or PR unless isolation is technically necessary or the board directs it; reconcile any temporary branch back into the rolling PR before starting dependent work. Verify the remote head and required PR checks before calling work published.
 - CPO defines user outcomes and acceptance criteria. CTO owns technical boundaries and implementation sequencing. Route each task through the relevant domain/engineering specialists; do not send every task to every role.

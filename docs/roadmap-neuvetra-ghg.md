@@ -2,6 +2,8 @@
 
 ## Governing product goal
 
+The [first actual MVP acceptance target](corporate-reporting-direction.md#first-actual-mvp-acceptance-target) is reliable corporate Scope 1, 2 and 3 reporting with complete traceability and an independently reviewable assurance package for supported California customers. Map applicable requirements and inventory coverage explicitly; surface unresolved gaps. EU and Canada expansion follows the California MVP. Earlier synthetic milestones are foundations, not completion of this target.
+
 The board confirmed corporate Scope 1, 2 and 3 reporting under California SB 253 as the primary goal on 2026-09-14. The [corporate reporting direction](corporate-reporting-direction.md) governs milestone selection, AI and verifier evaluations, UI, database and semantic-layer design. Deliver bounded increments toward a company-wide inventory and independent assurance readiness; electricity-only demonstrations are partial coverage. Industrial CARB MRR is a secondary specialist track, not the organizing model for the corporate product. Recheck applicable primary sources and reporting-year requirements before implementation or compliance claims.
 
 Neuvetra is the product name. The initial market and evidence scope are California and the United States. The first release should help a company understand a bounded set of reporting questions and produce a reproducible inventory draft with traceable inputs and methods. It should not claim to answer every question, eliminate uncertainty, provide assurance, or complete every regulated filing.

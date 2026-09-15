@@ -6,8 +6,6 @@ Board decision recorded 2026-09-14. Source: the board's explicit instruction in 
 
 Build Neuvetra for corporate Scope 1, 2 and 3 reporting under California SB 253, using applicable GHG Protocol accounting and producing traceable inventories and evidence for independent external assurance. California/U.S. remains the initial market. Corporate reporting is the organizing product model; industrial CARB MRR is a secondary specialist capability when relevant.
 
-## Requirements for future decisions
-
 ## First actual MVP acceptance target
 
 The board further clarified that the first actual MVP must reliably produce corporate Scope 1, 2 and 3 reports for supported companies in California, with source documents, traceable calculations and a complete supporting package for an independent assurance provider. Existing synthetic electricity demonstrations are interim increments, not this MVP. Expansion to other jurisdictions, including the EU and Canada, follows the California MVP.
