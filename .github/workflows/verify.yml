@@ -43,9 +43,10 @@ jobs:
         env:
           M63_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
       - name: Verify staged HTTP and frontend decoding against PostgreSQL
-        run: bun test apps/site-api/src/staging/postgres.test.ts apps/site-api/src/workspace/m66-postgres.test.ts apps/site-api/src/workspace/m67-postgres.test.ts apps/site-api/src/workspace/m68-postgres.test.ts
+        run: bun test apps/site-api/src/staging/postgres.test.ts apps/site-api/src/workspace/m66-postgres.test.ts apps/site-api/src/workspace/m67-postgres.test.ts apps/site-api/src/workspace/m68-postgres.test.ts apps/site-api/src/workspace/m71-postgres.test.ts
         env:
           M63_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+          M71_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
 
   applications:
     name: Typecheck, lint, unit tests and web builds
@@ -66,6 +67,8 @@ jobs:
         run: bun test evaluations/research-qa/m67-independent-frontend.test.ts evaluations/research-qa/m67-independent-renderer.test.ts evaluations/research-qa/m67-independent-print-view.test.ts
       - name: Independent annual evidence decoder, UI, print-action and packaging cases
         run: bun test evaluations/research-qa/m68-independent-frontend.test.ts evaluations/research-qa/m68-independent-print-view.test.ts evaluations/research-qa/m68-independent-ui.test.ts
+      - name: Independent corporate coverage validation, decoder and actor-lifetime cases
+        run: bun test evaluations/research-qa/m71-qa-validation.test.ts evaluations/research-qa/m71-qa-frontend.test.ts evaluations/research-qa/m71-qa-ui.test.ts evaluations/research-qa/m71-security-frontend.test.ts evaluations/research-qa/m71-security-parser.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper
@@ -86,10 +89,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==14||manifest[13].name!=="0014_annual_electricity_evidence.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==15||manifest[14].name!=="0015_corporate_coverage.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:14}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:15}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {
@@ -143,4 +146,3 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install --disable-pip-version-check pint==0.26 pytest==9.1.1 pyyaml==6.0.3
       - run: bun run test:ghg
-

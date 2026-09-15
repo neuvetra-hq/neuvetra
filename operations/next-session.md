@@ -1,3 +1,27 @@
+# M71 reviewed; publication and board demonstration
+
+The saved California-first synthetic coverage register passed independent QA and security review. Actual browser save, correction, separate review, exact earlier download, keyboard/narrow layout and local HTTP restart passed; independent restoration preserved all original records. Source snapshot: operations/agent-improvement/snapshots/M71-INTEGRATED.json. Earlier failed findings and repaired harness cases remain in the review reports.
+
+Root is publishing to the existing codex/corporate-mvp / draft PR5 and will verify its exact remote head and required checks. Local full-repository checking was limited by missing pre-existing FrontDesk dependencies; relevant checks passed and clean remote checks remain required. Scoped specialists are complete; no persistent workers. Local synthetic PostgreSQL and the demonstration at http://127.0.0.1:37171 remain running for the board.
+
+California is the first reporting focus. Relevant company operations elsewhere can be registered with unresolved gaps; separate Nevada/Canada reporting products remain deferred. This is coverage persistence, with no released corporate method, emissions total, legal determination or assurance. No hosted M71 migration/deployment or paid request occurred. Existing-host rollout requires the fresh backup/migration/deployment gate in docs/research/m71-operating-notes.md.
+
+Next: verify publication, show the saved-register demonstration and collect board feedback before any dependent milestone. Keep the active rolling PR; do not recreate historical branches. Preserve all earlier fixtures and the pre-existing untracked M68 dump.
+
+Historical entries below are superseded as current execution instructions.
+
+# M70 accepted; M71 California coverage register underway
+
+The board accepted M70's direction and instructed the team to continue, then explicitly prioritized finishing California before Nevada, Canada and other regional support. M71 implements a saved California-first synthetic corporate boundary and coverage register. Out-of-profile operations, if discovered, remain unresolved coverage gaps; no regional expansion or complete-inventory claim is implied.
+
+Backend implementation is active at /root/m71_backend; root owns frontend/integration/operators/publication. Reused non-author contexts /root/m70_research and /root/m70_cpo provide security and implementation QA after a new security dispatch hit the runtime thread limit. Prior M70 requirements authorship is disclosed. Review verdicts remain pending.
+
+Use codex/corporate-mvp / existing draft PR5. No historical branch recreation. The task-owned local PostgreSQL cluster at port55463 has been restarted; isolated M71 author/security/QA databases are assigned. Existing data is preserved. No hosted M71 migration/deployment, paid request or source/method release has occurred.
+
+Scope: docs/research/corporate-coverage-milestone-71.md; board feedback: operations/feedback/2026-09-15-milestone-70.md. Next: implement and independently validate native/API/browser save, correction, review, exact export, tenant isolation and recovery before publishing and demonstrating the California workflow.
+
+Historical entries below are superseded as current execution instructions.
+
 # M70 planning published to PR5; board feedback next
 
 The corporate coverage planning milestone is reviewed and pushed to [rolling draft PR5](https://github.com/neuvetra-hq/neuvetra/pull/5), branch codex/corporate-mvp. Implementation beb2271ae5978f38a8b23c70eb542ff35d800a80 passed all six remote checks. The coordinator verifies this closure commit's remote head/checks separately before the completion report. PR5 remains unmerged.

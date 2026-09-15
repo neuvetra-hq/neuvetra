@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "M71-BACKEND",
+  "role": "data-database",
+  "execution_context": "/root/m71_backend",
+  "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
+      "sha256": "89dd31db7843be17379fe4ba90fa43f4442f086299faa2baf29e7117f994ed20"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M71-BACKEND-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m71-qa-review.md",
+        "evaluations/research-qa/m71-security-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m70_cpo",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m71-qa-review.md",
+      "evaluations/research-qa/m71-security-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
+        "sha256": "89dd31db7843be17379fe4ba90fa43f4442f086299faa2baf29e7117f994ed20"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Requested critical route; observed compute unknown. Reused reviewer contexts retain actual inherited settings unknown after runtime dispatch limit.",
+    "California-first board steering governs default fixture/support. No M71 implementation author can be sole release reviewer.",
+    "Original implementation findings and repaired review-harness errors remain in the review reports. Root evaluates report artifacts; independent product QA remains separate from root UI authorship. Exact compute, cost and aggregate rework counts remain unknown."
+  ]
+}

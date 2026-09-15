@@ -1,17 +1,19 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T05:47:14.041329+00:00",
+  "updated_at": "2026-09-15T07:03:32.311845+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M70",
-    "name": "Corporate inventory coverage planning",
-    "status": "complete",
-    "next_gate": "Board feedback on M70 planning demonstration before dependent versioned corporate coverage implementation.",
+    "id": "M71",
+    "name": "Saved California corporate coverage register",
+    "status": "reviewed_publication_pending",
+    "next_gate": "Push exact reviewed candidate to rolling PR5; verify remote head and required checks; collect board feedback on the working local demonstration.",
     "evidence": [
-      "docs/research/m70-publication.json",
-      "evaluations/research-qa/m70-qa-review.md"
+      "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
+      "evaluations/research-qa/m71-qa-review.md",
+      "evaluations/research-qa/m71-security-review.md",
+      "evaluations/research-qa/m71-browser-verification.md"
     ]
   },
   "completed_milestones": [
@@ -113,14 +115,14 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M67 hosted and workflow accepted; M68 under implementation, not deployed.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M70 specialists closed; root final publication verification/board demonstration. No persistent agents."
+    "last_session_work": "M71 backend/rootUI active; security/QA scoped reviews active. LocalPG55463running; no persistent agents."
   },
   "session_handoff": {
-    "current": "M70 reviewed planning/demo published on rolling draft PR5; implementation all six checks passed.",
-    "next": "Board feedback on M70 planning demonstration before dependent versioned corporate coverage implementation.",
+    "current": "M70 accepted; M71 California-first saved coverage implementation active.",
+    "next": "Native/API/browser implementation, independent security/QA, preservation and recovery before publication/demonstration.",
     "evidence": [
-      "docs/research/m70-publication.json",
-      "evaluations/research-qa/m70-qa-review.md"
+      "docs/research/corporate-coverage-milestone-71.md",
+      "operations/feedback/2026-09-15-milestone-70.md"
     ]
   },
   "checkpoint": {
@@ -1261,6 +1263,36 @@
         "evaluations/research-qa/m70-qa-review.md",
         "evaluations/research-qa/m70-accounting-review.md"
       ]
+    },
+    {
+      "id": "M71-BACKEND",
+      "owner": "/root/m71_backend",
+      "status": "complete",
+      "scope": "data-database boundedM71implementation/review",
+      "evidence": [
+        "operations/agent-improvement/runs/M71-BACKEND.json"
+      ],
+      "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
+    },
+    {
+      "id": "M71-SECURITY",
+      "owner": "/root/m70_research",
+      "status": "complete",
+      "scope": "security-reliability boundedM71implementation/review",
+      "evidence": [
+        "operations/agent-improvement/runs/M71-SECURITY.json"
+      ],
+      "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
+    },
+    {
+      "id": "M71-QA",
+      "owner": "/root/m70_cpo",
+      "status": "complete",
+      "scope": "qa-lead boundedM71implementation/review",
+      "evidence": [
+        "operations/agent-improvement/runs/M71-QA.json"
+      ],
+      "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
     }
   ],
   "feedback_tasks": [
@@ -1570,6 +1602,12 @@
       "decision": "Accept M66 and start manual full-year2023CAMX electricity coverage, preserving separate M66 bill evidence.",
       "why": "Board approved demonstrated M66 and authorized full-year coverage next. Missing months must stay distinguishable from zero and evidence must not be inferred.",
       "evidence": "docs/research/annual-electricity-milestone-67.md"
+    },
+    {
+      "id": "M71-CALIFORNIA-FIRST",
+      "decision": "Prioritize California reporting while retaining logically necessary operations elsewhere in the corporate boundary. Separate regional reporting products remain deferred.",
+      "why": "Board clarified California first is a practical product priority, not a direction to omit relevant company operations.",
+      "evidence": "operations/feedback/2026-09-15-milestone-70.md"
     }
   ],
   "open_dependencies": [
@@ -2231,6 +2269,24 @@
     "review_arrangement": "One independent non-author context covers accounting and QA after runtime dispatch failures.",
     "implementation_commit": "beb2271ae5978f38a8b23c70eb542ff35d800a80",
     "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
-    "board_feedback": "pending"
+    "board_feedback": "accepted_direction_then_California_first_refinement"
+  },
+  "current_m71": {
+    "status": "reviewed_publication_pending",
+    "supported_profile": "California-first synthetic 2025 office/distribution group; necessary operations elsewhere retained with unsupported gaps",
+    "regional_expansion": "deferred",
+    "paid_requests": 0,
+    "hosted_changes": false,
+    "branch": "codex/corporate-mvp",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "candidate_snapshot": {
+      "path": "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
+      "sha256": "89dd31db7843be17379fe4ba90fa43f4442f086299faa2baf29e7117f994ed20"
+    },
+    "migration_sha256": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19",
+    "local_demo": "http://127.0.0.1:37171",
+    "local_postgres": "running; isolated task-owned synthetic fixtures; files preserved",
+    "workers": "scoped assignments complete; no persistent workers",
+    "board_feedback": "pending working saved-register demonstration feedback"
   }
 }

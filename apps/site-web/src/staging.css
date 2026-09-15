@@ -14,3 +14,6 @@
 
 /* M68 evidence selection follows the existing worksheet form appearance. */
 .worksheet-form select{width:100%;min-width:0;box-sizing:border-box;padding:12px;border:1px solid #77816c;border-radius:8px;background:#0f140e;color:#fff;font:inherit}.worksheet-card h3,.worksheet-check{overflow-wrap:anywhere}
+
+/* Corporate coverage uses the existing private workspace controls. */
+.corporate-register .coverage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}.corporate-register .coverage-grid button{text-align:left;overflow-wrap:anywhere}.corporate-register .coverage-grid button[aria-pressed=true]{border-color:#b8d997;background:#35472d}.corporate-register h2{margin-top:24px}.corporate-register ul{padding-left:22px}.corporate-register li{margin:8px 0}.coverage-version{display:grid;gap:8px}.coverage-version select{padding:12px;background:#0f140e;color:#fff;border:1px solid #77816c;border-radius:8px;font:inherit;max-width:100%}.corporate-register fieldset{min-width:0}.corporate-register{overflow-wrap:anywhere}@media(max-width:600px){.corporate-register .coverage-grid{grid-template-columns:minmax(0,1fr)}}

@@ -130,3 +130,10 @@
 !packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql
 !apps/site-api/src/workspace/m68-routes.ts
 !apps/site-api/src/workspace/m68-report-routes.ts
+
+!packages/neuvetra-database/src/m71.ts
+!packages/neuvetra-database/src/m71-contract.ts
+!packages/neuvetra-database/src/m71-validation.ts
+!packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql
+!apps/site-api/src/workspace/m71-routes.ts
+apps/site-web/src/m71-local-preview.tsx

@@ -1,0 +1,413 @@
+{
+  "status": "pass",
+  "checks": [
+    "fresh_process_native_readback",
+    "production_frontend_decoder",
+    "exact_original_export",
+    "restored_complete_schema_manifest"
+  ],
+  "database": "m71_qa_restore",
+  "sourceDatabase": "m71_qa_final",
+  "schemaVersion": 15,
+  "company": "43e8fa85-be2e-4ab6-a75f-ba9105724f76",
+  "versionCount": 7,
+  "registerSha256": "cf65159f51073adf7d3165220b8a13e208cae8aae132289e65a02c0d3f1d6784",
+  "initialExportSha256": "c032fc3f136cebaa8d4188aef5b3554482af994bc2b130af874a7bf3045f6717",
+  "manifest": {
+    "tables": [
+      {
+        "name": "annual_electricity_evidence_audit",
+        "count": 31,
+        "sha256": "dc32b4fe7b097874e7583cb9d6a231e4dca4bb7199aa399f375decbfa64b25c4"
+      },
+      {
+        "name": "annual_electricity_evidence_requests",
+        "count": 31,
+        "sha256": "39ed9a3211ae40445d84bc94b8359b3a542abbc85113ce340ee7d0e214a3910e"
+      },
+      {
+        "name": "annual_electricity_evidence_reviews",
+        "count": 2,
+        "sha256": "e7b5fa47163a4023bd2c608cb999b670d5faad3f93ff204ca2869dd03b8d2eee"
+      },
+      {
+        "name": "annual_electricity_evidence_versions",
+        "count": 29,
+        "sha256": "1bec81747acb27eb9167996c6b9252bf342a8db9c6a1dbb1ddb6540ce4170df7"
+      },
+      {
+        "name": "annual_electricity_report_audit",
+        "count": 42,
+        "sha256": "9d955db108abc9defe419b4153f5ffd94cd066814a2c85438bcd706dad5da884"
+      },
+      {
+        "name": "annual_electricity_report_requests",
+        "count": 48,
+        "sha256": "5367db48573c66e265d5c3339bb8a39fb63c40f40f8e6eec0c276e10a9697e5d"
+      },
+      {
+        "name": "annual_electricity_reports",
+        "count": 42,
+        "sha256": "ac92a19fb1ea4c8ecf385ba609c9cf32a3750e249f202ccf1e141c976d2d8a48"
+      },
+      {
+        "name": "annual_electricity_worksheet_audit",
+        "count": 87,
+        "sha256": "06425bd8c040d1e4ede146053919022f2cc25f705cf1c66783ed39470ee378ca"
+      },
+      {
+        "name": "annual_electricity_worksheet_requests",
+        "count": 87,
+        "sha256": "82df3d016fef858c1b581c89867d6a33aa308f2bbd939a67b96e891d8c441e03"
+      },
+      {
+        "name": "annual_electricity_worksheet_reviews",
+        "count": 8,
+        "sha256": "12a87b638893c13fd1ed9943259f8c90a3bbcc889a1543099b1ecbfcdd370dfb"
+      },
+      {
+        "name": "annual_electricity_worksheet_versions",
+        "count": 79,
+        "sha256": "3378966f59bd2e9cd041b78e76c631782a618985877b5fc807680095bad471f4"
+      },
+      {
+        "name": "annual_evidence_report_audit",
+        "count": 4,
+        "sha256": "412d1263ffd5dc6ee9b6504b4e956b357226702d6d6cd9534fd0430796fff62e"
+      },
+      {
+        "name": "annual_evidence_report_requests",
+        "count": 4,
+        "sha256": "23751faf316b16dd7d8a2f2e49c66ff7589d373d6190ad62add0a0dad883fb89"
+      },
+      {
+        "name": "annual_evidence_reports",
+        "count": 4,
+        "sha256": "9b106925439eceaf170b6b1aebd185d2be72334c2f21b2739b08c390c53e8fd8"
+      },
+      {
+        "name": "annual_inventory_audit_log",
+        "count": 67,
+        "sha256": "61c1d414641dea4ba8f524a55e749d2d46ff5109d9e80147170d82b50585e742"
+      },
+      {
+        "name": "annual_inventory_review_decisions",
+        "count": 16,
+        "sha256": "a740ef16c7fd613df68b959c687daad847bf3ffa498823120df3dc40197b8ad4"
+      },
+      {
+        "name": "annual_inventory_versions",
+        "count": 17,
+        "sha256": "c9347ceb8f0c3aa5a54428fbbdcfc3874d3f73de1c261469ae690c6a098e879e"
+      },
+      {
+        "name": "annual_source_register_versions",
+        "count": 34,
+        "sha256": "0cdc702e31c2f13c9df9ef3a6b5c0ee149f9093667015ac5666acd1b2a744587"
+      },
+      {
+        "name": "audit_events",
+        "count": 65,
+        "sha256": "e034eeea08a87f795d186a6762415696e847aa02d715376eaa24610497c34bca"
+      },
+      {
+        "name": "bill_evidence",
+        "count": 20,
+        "sha256": "a0897d4b26a83488dc7277e17d59d44e661ad719806c35d641237b1f88318721"
+      },
+      {
+        "name": "bill_summary_cache",
+        "count": 40,
+        "sha256": "c306afa8906cd07ea0b69a293d003ef7b321adb30ed79a002791deaa6a2fa0cd"
+      },
+      {
+        "name": "bill_versions",
+        "count": 40,
+        "sha256": "bb18f6a61535ee3a07811350ab2a98796b670a37d73e361a0cf911668c61811c"
+      },
+      {
+        "name": "boundary_facilities",
+        "count": 65,
+        "sha256": "386f4489b3ae77b95e746926f1efe9a0db3c50c5f6c3c1f785daeb1923b57f33"
+      },
+      {
+        "name": "calculation_audit_log",
+        "count": 17,
+        "sha256": "34e95f046d918a7667755a863dea20d5cd45303eedccb24593021728a686d1ea"
+      },
+      {
+        "name": "companies",
+        "count": 65,
+        "sha256": "1c3939ae8cbc07265418c34e83673eca3341f52335383b9305242a20d446a340"
+      },
+      {
+        "name": "company_members",
+        "count": 148,
+        "sha256": "cbf6d2ec1c75be460f5d3cdb69a74a7692c9137dcbf8f10f55143759e2fd61d6"
+      },
+      {
+        "name": "corporate_inventory_audit",
+        "count": 7,
+        "sha256": "bd1e2915fa50c031f422d429886e7f407fe16996cc94e3dba69a9b8f5c474aa4"
+      },
+      {
+        "name": "corporate_inventory_heads",
+        "count": 1,
+        "sha256": "5e610c21d4bf9095e145c5dedb7d26741612705bc77eca83d8d4bb90901ea8b5"
+      },
+      {
+        "name": "corporate_inventory_requests",
+        "count": 7,
+        "sha256": "84a3f7e32561263336518326ccfdc42c2f06588aa5965cb8ffcd93521784ff0e"
+      },
+      {
+        "name": "corporate_inventory_reviews",
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "name": "corporate_inventory_versions",
+        "count": 7,
+        "sha256": "206162458c0ada46faca728139238990e1b2c0ca49aaa5746f51cfe9ee518b0b"
+      },
+      {
+        "name": "electricity_source_audit",
+        "count": 16,
+        "sha256": "ef552842830c08e256cf77273750333abb3fed55e342d1f7751496429dd86f2d"
+      },
+      {
+        "name": "electricity_source_requests",
+        "count": 21,
+        "sha256": "462c85bd31771e7c77880b76d70451dd92f5c2cccef8392f4fa10b636193abdc"
+      },
+      {
+        "name": "electricity_sources",
+        "count": 16,
+        "sha256": "c2b3f0896d3014fb8b3256d67e4289c6fb4c767c978e142595b7fb57e8ad042f"
+      },
+      {
+        "name": "electricity_worksheet_audit",
+        "count": 22,
+        "sha256": "48dfda2c1e0716ebc1b03d8757817ae275b24741bc5020ad7b0d8a1bc24ecb7a"
+      },
+      {
+        "name": "electricity_worksheet_requests",
+        "count": 26,
+        "sha256": "0ebe736190eceffe45448a3f56b4b01a4baeed2f7d9fd8bdff1c68b0dad3ed1c"
+      },
+      {
+        "name": "electricity_worksheet_reviews",
+        "count": 6,
+        "sha256": "f88530653261cdef5463febca26395c77638e1c21d6f7495921bd07ba5a50b6f"
+      },
+      {
+        "name": "electricity_worksheet_versions",
+        "count": 16,
+        "sha256": "73ce2d50ffe26071ef6721530e62517ce53782caf5e6f6139bd042244f0b93e0"
+      },
+      {
+        "name": "evidence_audit_log",
+        "count": 60,
+        "sha256": "660a787204874c2b3d8b8d8e5fc3de6d3d3e5a832a2f608d5d7c69edc3ad875d"
+      },
+      {
+        "name": "evidence_search_documents",
+        "count": 20,
+        "sha256": "d00833e9634309631c4b8ea093f210855cc7ac4fd3ddd8fb8f164277b743704e"
+      },
+      {
+        "name": "extraction_jobs",
+        "count": 20,
+        "sha256": "7a3cf825ada87cc5782918a866e633546bdc0e35cc9f0d43bd8ae1120d60c316"
+      },
+      {
+        "name": "facilities",
+        "count": 65,
+        "sha256": "26304714f0e8f149d65551bb5fe47430c128a0859856d5a1fec084fea4280fda"
+      },
+      {
+        "name": "inventory_activity_versions",
+        "count": 20,
+        "sha256": "dcea676897775bd80db62d481566d946adc2b06fd31938ebb3f90fea75ca06d3"
+      },
+      {
+        "name": "inventory_calculation_results",
+        "count": 17,
+        "sha256": "ce40efc14d8776e124b8355d627e3e9e4e57ae38d0c15311b30e971c9d6a07b0"
+      },
+      {
+        "name": "inventory_draft_report_audit_log",
+        "count": 16,
+        "sha256": "96349f1aa91fd1cfd70fff20ac2af365886b3833dc4df4a0fed331053c78e9d7"
+      },
+      {
+        "name": "inventory_draft_report_review_audit_log",
+        "count": 16,
+        "sha256": "adbc053be68ad28553c5e1c76defe0cf04315e299f6319bfc6782ef9b6d0c0f5"
+      },
+      {
+        "name": "inventory_draft_report_review_decisions",
+        "count": 16,
+        "sha256": "bd3d09a1dd3b145d53a8b3e5dbaa6daf65c80bd410d2bf8d123475e4d1cb707e"
+      },
+      {
+        "name": "inventory_draft_reports",
+        "count": 16,
+        "sha256": "58336d2c6233a06ee50359af20aefccf1ced8124221422e942ea1699d24d941b"
+      },
+      {
+        "name": "inventory_evidence_pack_audit_log",
+        "count": 16,
+        "sha256": "f74b435d30b36bc567ff7bc0ab1dbfb0f0c83185c147bf5c246d873d555adfd5"
+      },
+      {
+        "name": "inventory_evidence_packs",
+        "count": 16,
+        "sha256": "68d9f32ae67244076ad9b362b7d7e5b9fd60c9e931e2696c11fa2fb50a2709a0"
+      },
+      {
+        "name": "inventory_review_audit_log",
+        "count": 34,
+        "sha256": "a479faa2cedf61d6f1c779094ea4ad535cc5d7c2fc7ed65b0eb78e6118d3c1a7"
+      },
+      {
+        "name": "inventory_review_decisions",
+        "count": 17,
+        "sha256": "e71d22a9df917517775e134760864327a8fc7ac50a2f2eb32cfee5d9d791fc2c"
+      },
+      {
+        "name": "inventory_versions",
+        "count": 17,
+        "sha256": "e7af3928723a879508e079d23977dadd81474653970db1f3691b4f384a24b797"
+      },
+      {
+        "name": "reporting_boundaries",
+        "count": 65,
+        "sha256": "fdac83c0197d4a8275b9f97c5b97730b8bf0dbe6163beb2a5c7cd5a48fd043e5"
+      },
+      {
+        "name": "schema_migrations",
+        "count": 15,
+        "sha256": "d826e2e67bd71986222eeb486707367e781bede51dc61215ac9d3cf4c59d49f7"
+      },
+      {
+        "name": "source_worksheet_audit",
+        "count": 50,
+        "sha256": "fe5f7a7add7bd121852896f5f2cbc0bc79a15fab632eeaf21df1fa64655ddffa"
+      },
+      {
+        "name": "source_worksheet_report_audit",
+        "count": 39,
+        "sha256": "10bcbb3931eb02c4b06884f5e94bb5b8fe7f8c5d0cbb1d25e5db67e7d5b7f833"
+      },
+      {
+        "name": "source_worksheet_report_requests",
+        "count": 42,
+        "sha256": "6bfda0ac8356388c7538cd5aca43547e66c70018ac129cb0e88e16be98f38778"
+      },
+      {
+        "name": "source_worksheet_reports",
+        "count": 39,
+        "sha256": "1808040faa40cd8e79207a44966d44b6ff3d0b6482452f6fcf9fc3d1b2d1d3ef"
+      },
+      {
+        "name": "source_worksheet_requests",
+        "count": 50,
+        "sha256": "327894116830ebfc5d649d64f3445cf0aa2b4f891f99f79f3da0b9f8a9721b54"
+      },
+      {
+        "name": "source_worksheet_reviews",
+        "count": 7,
+        "sha256": "5450466fc6b98640e13ebe2a7b2db6b5ebae0b2ffae0baba2c85fab0e49f0558"
+      },
+      {
+        "name": "source_worksheet_versions",
+        "count": 43,
+        "sha256": "a10227f060901385619600e5b4d96b2af7fdc93d9e93a68986b658723e52228e"
+      },
+      {
+        "name": "staging_access",
+        "count": 139,
+        "sha256": "92b08647f0213cc9668a95e4268ccec6a0bf68954ed447387598f4450e5001a8"
+      },
+      {
+        "name": "staging_target",
+        "count": 1,
+        "sha256": "929e71b4e9d2672edaae0d2fcd71d5978f055f6e7fd613b764d4a8e2fc04c969"
+      },
+      {
+        "name": "worksheet_report_audit",
+        "count": 14,
+        "sha256": "affd231b238da3767f809e5095394de0f977243e3e12b7909f98e2f64c3ed514"
+      },
+      {
+        "name": "worksheet_report_requests",
+        "count": 16,
+        "sha256": "9a90d65978acc06ff9acddf250664ff8a6476fe792758b8cbf937120bbc8740a"
+      },
+      {
+        "name": "worksheet_reports",
+        "count": 14,
+        "sha256": "290a35650731778d7236a01b954e24b3371bae50fec0f46ca9caac527486d555"
+      }
+    ],
+    "metadata": {
+      "tables": {
+        "sha256": "583178608d339662a82e4f120e27dd1d065498eaf8c8418f61d76afb8bfddc14"
+      },
+      "policies": {
+        "sha256": "72b2df30bd53ecb57ead312e4d222f9945adc862ea27e3c416af0b207326edc5"
+      },
+      "functions": {
+        "sha256": "3c708f4b1acfebe080bd840874abf189635b56a8d526df7e5a806aa864660a23"
+      },
+      "schema": {
+        "sha256": "66ea9c16683a0826613059b5f053baebe6705d0781f3a433b1c295daedc98d2f"
+      }
+    },
+    "roles": [
+      {
+        "rolname": "m63_test_admin",
+        "rolsuper": true,
+        "rolbypassrls": true,
+        "rolinherit": true,
+        "rolcanlogin": true,
+        "rolcreatedb": true,
+        "rolcreaterole": true,
+        "rolreplication": true
+      },
+      {
+        "rolname": "neuvetra_runtime",
+        "rolsuper": false,
+        "rolbypassrls": false,
+        "rolinherit": false,
+        "rolcanlogin": true,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolreplication": false
+      },
+      {
+        "rolname": "postgres",
+        "rolsuper": false,
+        "rolbypassrls": true,
+        "rolinherit": false,
+        "rolcanlogin": false,
+        "rolcreatedb": false,
+        "rolcreaterole": false,
+        "rolreplication": false
+      }
+    ],
+    "snapshot": {
+      "read_only": "on",
+      "isolation": "repeatable read",
+      "timezone": "UTC",
+      "operator_superuser": true,
+      "operator_bypass_rls": true,
+      "database": "m71_qa_restore",
+      "database_role": "m63_test_admin",
+      "server_version": "17.11",
+      "snapshot_at": "2026-09-15 06:43:25.740486+00",
+      "transaction_snapshot": "20400:20400:"
+    }
+  }
+}

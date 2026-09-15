@@ -1,0 +1,15 @@
+# M71 local acceptance and publication gate
+
+The coordinator accepts the bounded implementation after independent product QA and security review. This records coordinator acceptance, not new board feedback. M70 board feedback authorized continuing; the latest clarification makes California reporting the first focus while retaining necessary company operations elsewhere.
+
+The integrated source snapshot is `operations/agent-improvement/snapshots/M71-INTEGRATED.json`, SHA-256 `89dd31db7843be17379fe4ba90fa43f4442f086299faa2baf29e7117f994ed20`. It freezes the implemented coverage register and browser evidence. Independent reviews bind current file hashes and disclose earlier findings, repairs, test-harness corrections and prior requirements authorship.
+
+The backend's initial review was not a first-pass success: strict location types, unsupported hierarchy omissions, nullable SQL review input, request replay provenance and SQL/Unicode parity required repairs. UI corrections identify findings, clear hidden numeric fields, keep asynchronous reference updates within the active actor lifetime and validate Unicode review notes. All final scoped defects reported by the reviewers are closed. Exact first-review history remains in their reports; no escaped-defect or compute-cost claim is made.
+
+QA and security reports are accepted as scoped review artifacts. The root authored application UI and therefore does not supply the sole product review. Reused reviewers authored earlier M70 requirements/research, not M71 application code. This arrangement and unknown inherited compute settings remain explicit.
+
+Demonstrated: native save and correction, 25 group screenings plus source details, all 15 Scope 3 categories, separate non-contributor review, actual unchanged original download, service restart, independent full-database restore, legacy row preservation and tenant/revocation controls. Local whole-repository checking was limited by missing pre-existing FrontDesk dependencies; clean remote required checks remain mandatory before publication is reported complete.
+
+Publish the reviewed changes to the existing `codex/corporate-mvp` / draft PR5 delivery line. Verify its exact remote head and required checks. No merge or hosted deployment is implied. Show the working California-first synthetic register and collect board feedback before a dependent method/evidence or hosted-rollout milestone.
+
+Final byte check: all 62 staged files matched working bytes and the accepted snapshots. Git's whitespace check reported only pre-existing trailing blank lines in the frozen security frontend/native test artifacts (lines 67 and 242); those reviewed bytes were retained. The publication recheck started a fresh local HTTP process with the final evidence-pin guard and again matched the two-version register, review and original download (`m71-browser-publication-recheck.json`).

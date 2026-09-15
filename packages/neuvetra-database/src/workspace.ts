@@ -1,3 +1,4 @@
+import { readCorporateInventory, validateM71Save, validateM71Review, type M71SaveInput, type M71ReviewInput } from "./m71"
 import { readAnnualElectricityEvidence, validateAnnualEvidenceInput, validateAnnualEvidenceReview, type AnnualEvidenceInput, type AnnualEvidenceCorrection, type AnnualEvidenceReviewInput } from "./m68"
 import { readAnnualEvidenceReports, validateAnnualEvidenceReportInput, type AnnualEvidenceReportInput } from "./m68-report"
 import { readAnnualElectricityWorksheet, validateAnnualWorksheetInput, validateAnnualWorksheetReview, type AnnualWorksheetInput, type AnnualWorksheetCorrection, type AnnualWorksheetReviewInput } from "./m67"
@@ -291,6 +292,16 @@ export interface WorkspaceConnection extends WorkspaceSql {
 
 export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
+
+  async findCorporateInventory(userId:string,companyId:string){return this.asUser(userId,tx=>readCorporateInventory(tx,companyId))}
+  async saveCorporateInventory(userId:string,companyId:string,inventoryId:string|null,input:M71SaveInput){
+    const normalized=validateM71Save(input)
+    return this.asTrustedUser(userId,async tx=>{const saved=(await tx.query<{id:string}>("select neuvetra.save_corporate_inventory($1,$2,$3::text::jsonb) id",[companyId,inventoryId,JSON.stringify(normalized)])).rows[0]!.id;const result=await readCorporateInventory(tx,companyId);const v=result?.versions.find(v=>v.id===saved);if(!v)throw new Error("Corporate coverage could not be verified.");return {...v,review:null}})
+  }
+  async reviewCorporateInventory(userId:string,companyId:string,inventoryId:string,input:M71ReviewInput){
+    const normalized=validateM71Review(input)
+    return this.asTrustedUser(userId,async tx=>{const saved=(await tx.query<{id:string}>("select neuvetra.review_corporate_inventory($1,$2,$3::text::jsonb) id",[companyId,inventoryId,JSON.stringify(normalized)])).rows[0]!.id;const result=await readCorporateInventory(tx,companyId);const r=result?.versions.map(v=>v.review).find(r=>r?.id===saved);if(!r)throw new Error("Corporate coverage could not be verified.");return r})
+  }
 
   protected async asUser<T>(userId: string, operation: (tx: WorkspaceSql) => Promise<T>): Promise<T> {
     return this.db.transaction(async (tx) => {
@@ -1091,4 +1102,3 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
   }
 
 }
-
