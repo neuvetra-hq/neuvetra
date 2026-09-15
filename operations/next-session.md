@@ -1,3 +1,11 @@
+# M66 accepted; M67 full-year coverage underway
+
+The board accepted M66 and authorized M67. M66 final commit9afde82631e321c0c084454c97a24a2f463a9456 is pushed with six successful checks and live in existing Railway deployment405765fc-a4fe-4fd1-b310-d4a615c0decf, schema12. See operations/feedback/2026-09-14-milestone-66.md. PR4 remains unmerged; worksheet Version3 remains unreviewed and all synthetic/unreleased boundaries persist.
+
+M67 adds twelve manual monthly entries, explicit missing-versus-zero coverage, deterministic annual subtotal, version corrections, different-manager review and immutable report. Existing bill-linked January evidence is preserved separately; it cannot support unprovided months. Scope: docs/research/annual-electricity-milestone-67.md. CTO and accounting are dispatched for bounded contracts; product implementation follows review. Root owns UI, publication and shared records. No new subscription or persistent workers.
+
+Historical entries below are superseded as next-action instructions.
+
 # M66 live — board review next
 
 Supporting bills now stay linked to manually confirmed electricity quantities, saved versions and immutable reports. The live browser saved Version3: 25000.000kWh → 4876.0072kgCO2e, with the fictional bill's printed12345.000kWh and an explicit discrepancy explanation. Version3 is unreviewed; earlier source/review/report history remains unchanged. Exact PDF and HTML downloads, three versions, two bills and three reports passed post-restart readback; M63–M65 are preserved.

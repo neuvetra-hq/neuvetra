@@ -1,18 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T00:16:34.646897+00:00",
+  "updated_at": "2026-09-15T00:31:40.234035+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M66",
-    "name": "Supporting bills linked to worksheet reports",
-    "status": "awaiting_board_feedback",
-    "next_gate": "Board reviews the live bill-linked worksheet/report; full-year coverage follows as M67 after feedback.",
+    "id": "M67",
+    "name": "Full-year electricity coverage",
+    "status": "in_progress",
+    "next_gate": "Review technical and accounting contracts, then implement the annual workflow.",
     "evidence": [
-      "docs/research/source-linked-electricity-milestone-66.md",
-      "docs/research/m66-hosted-verification.json",
-      "evaluations/research-qa/m66-hosted-handoff.md"
+      "docs/research/annual-electricity-milestone-67.md",
+      "operations/feedback/2026-09-14-milestone-66.md"
     ]
   },
   "completed_milestones": [
@@ -90,6 +89,11 @@
       "id": "M65",
       "completed_at": "2026-09-14",
       "feedback": "operations/feedback/2026-09-14-milestone-65.md"
+    },
+    {
+      "id": "M66",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-66.md"
     }
   ],
   "runtime": {
@@ -97,9 +101,9 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M66 live on existing private synthetic staging; schema12; bill-linked versions and exact reports verified after restart. Board feedback pending.",
+    "website_preview_state": "M66 accepted and live; M67 contract preparation underway.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M66 implemented, independently reviewed locally, pushed and deployed. Live browser saved source-linked version3 with25000kWh=>4876.0072kgCO2e, distinct printedquantity/discrepancy and exactdownloadedbytes; post-restart preservedallrecords."
+    "last_session_work": "Board accepted M66; final published commit has six successful checks. Actual CTO and accounting assignments dispatched for M67 contracts."
   },
   "session_handoff": {
     "current": "M66 live and independently reviewed; board feedback pending",
@@ -483,7 +487,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00e2\u20ac\u201cE06 and P01\u00e2\u20ac\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01â€“E06 and P01â€“P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1518,6 +1522,12 @@
       "decision": "Accept M43 as offline pilot-readiness preparation and put only the exact H01-then-H04 paid canary to a board decision",
       "why": "The new14-case EPA-only matrix and two-question fixture pass independent source,semantic,mechanical,latency,cost and leakage review without making a provider request.",
       "evidence": "claude-memory/meetings/2026-09-11-neuvetra-m43-rag-pilot-readiness.md"
+    },
+    {
+      "id": "M67-SCOPE",
+      "decision": "Accept M66 and start manual full-year2023CAMX electricity coverage, preserving separate M66 bill evidence.",
+      "why": "Board approved demonstrated M66 and authorized full-year coverage next. Missing months must stay distinguishable from zero and evidence must not be inferred.",
+      "evidence": "docs/research/annual-electricity-milestone-67.md"
     }
   ],
   "open_dependencies": [
@@ -2057,7 +2067,7 @@
     "evidence": "docs/research/m65-hosted-verification.json"
   },
   "current_m66": {
-    "status": "awaiting_board_feedback",
+    "status": "complete_board_accepted",
     "implementation_started": true,
     "board_scope": "Supporting bills first; full-year coverage follows as M67",
     "backend_owner": "/root/m64_cto",
@@ -2067,15 +2077,26 @@
     "active_workers_excluding_root": 0,
     "persistent_workers": false,
     "compute_observed": null,
-    "local_verification": "Independent local and hosted handoff passed; final evidence publication and board feedback separate",
-    "next_milestone": "M67 full-year electricity after M66 demonstration and feedback",
+    "local_verification": "Independent local and hosted handoff passed; final publication and all18 committed artifact hashes verified; board accepted.",
+    "next_milestone": "M67 full-year electricity authorized and contract preparation underway",
     "implementation_commit": "63791ac4d6628651fc53c3de79f7db4791b48114",
-    "deployment_id": "56c457f9-2c27-4f68-bd62-3eec6d1687f7",
     "ci_checks_passed": 6,
     "schema_version": 12,
     "release_eligible": false,
     "synthetic_only": true,
-    "board_feedback": "pending",
-    "evidence": "docs/research/m66-hosted-verification.json"
+    "board_feedback": "operations/feedback/2026-09-14-milestone-66.md",
+    "evidence": "docs/research/m66-hosted-verification.json",
+    "board_status": "accepted",
+    "final_publication_commit": "9afde82631e321c0c084454c97a24a2f463a9456",
+    "initial_implementation_deployment_id": "56c457f9-2c27-4f68-bd62-3eec6d1687f7",
+    "final_deployment_id": "405765fc-a4fe-4fd1-b310-d4a615c0decf"
+  },
+  "current_m67": {
+    "status": "contract_preparation",
+    "scope": "docs/research/annual-electricity-milestone-67.md",
+    "board_authorized": true,
+    "implementation_started": false,
+    "publication": "not_yet",
+    "prior_m66_accepted": true
   }
 }
