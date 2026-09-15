@@ -15,9 +15,10 @@
       "id": "L02",
       "owner_role": "data-database",
       "trigger": "Persisted bytes, claimed hashes or archive/report metadata are read.",
-      "required_check": "Revalidate content and semantic lineage against authoritative inputs; test coordinated bytes/hash/length corruption, not just one changed field.",
+      "required_check": "Revalidate content and semantic lineage against authoritative inputs; test coordinated bytes/hash/length corruption, not just one changed field. Before publishing byte-pinned review artifacts, hash the exact staged Git blobs, then the committed blobs, and compare both with the accepted hashes. Filesystem-only validation is insufficient because Git may normalize line endings. Preserve approved bytes with explicit attributes where required.",
       "evidence": [
-        "operations/agent-improvement/historical-evidence.json#L02"
+        "operations/agent-improvement/historical-evidence.json#L02",
+        "evaluations/research-qa/m66-publication-supplement.md"
       ],
       "status": "adopted_pending_effectiveness"
     },
