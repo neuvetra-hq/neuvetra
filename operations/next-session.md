@@ -1,3 +1,25 @@
+# M73 hosted natural-gas increment verified; live feedback next
+
+The bounded California2025 stationary-natural-gas workflow is live on the existing site. Saved source activity, deterministic calculations, immutable corrections, separate review and exact report downloads passed actual hosted verification. A real service restart and zero-application-POST revisit preserved all saved versions/reviews/downloads and older electricity/corporate records. All created verification Auth sessions closed. Fresh independent recovery reconstructed67tables/176rows and14exactdownloads before migration; exact0016 preserved all old rows/catalog/roles.
+
+Implementation3f92fdac0bf1e681db634410ad455b61faaed790 passed all six remote checks. Deployment30c5a4af-138f-4127-b2f8-3ea8df1abc6b ran that commit with image sha256:e677c7a93c9ad703bc2f2734c054178e9bc199041701793d8816ef97e53566c6 and readiness16. Automatic deployment was restored. Final same-PR record commit, checks and live head are verified separately by root before the completion report; inspect fresh deployment evidence on continuation. Schema16 is forward-only: never return to schema15 code or delete migration receipts.
+
+Actual hosted browser history/report/download and desktop/390px readability passed. The extra postrestart browser refresh was blocked by an open extension panel; API revisit supplies exact persistence evidence. Earlier actual print invocation plus direct board confirmation satisfies the original print entry-point criterion; no physical/PDF/pagination fidelity is claimed. Live tab851834889 was marked as a deliverable, but its availability must be rechecked.
+
+Scoped specialists are complete; no worker is persistent or active. Collect board feedback before a dependent milestone. California corporate Scope1/2/3 reporting remains the goal; relevant operations elsewhere remain boundary considerations and separate regional products follow the California MVP. This is still synthetic/incomplete/unreleased, not fullScope1, a complete corporate inventory, a filing determination or assurance. No PR merge, paidRAG or new provider.
+
+Evidence: docs/research/m73-publication.json, evaluations/research-qa/m73-hosted-acceptance.md, m73-hosted-browser-verification.md and M73-HOSTED-EXECUTION/ACCEPTANCE snapshots. Preserve encrypted backups, local fixtures, earlier failed checks and journal history. Earlier sections below are historical.
+
+# M73 exact schema16 committed; live verification underway
+
+All six required remote checks passed on3f92fdac0bf1e681db634410ad455b61faaed790. Independent review accepted the test-only15-to16 receipt-count correction; earlier failed run remains recorded. Fresh20:15 recovery passed80 independent assertions,67tables/176rows and14exactdownloads. Native print entry point was confirmed by the board and accepted; no physical/PDF/pagination fidelity claim.
+
+Root paused automatic deployment, removed the actual old deployment and verified readiness404. The exact reviewed0016 committed2026-09-15T20:31:59.748Z, preserving all prior rows/catalog/roles. Never redeploy schema15 after this point. Explicit tested-commit deployment30c5a4af-138f-4127-b2f8-3ea8df1abc6b has been requested; its readiness, hosted exercise/restart/revisit and browser demonstration are pending. /root/m73_cpo is actively auditing the exact live-operation evidence. Root remains sole host/Git writer. No milestone-complete claim yet.
+
+Continue exact schema16-compatible deployment, journaled hosted exercise, actual restart and zero-write revisit, browser demonstration, independent acceptance, final same-PR records and checks. Restore automatic deployment after controlled rollout. Preserve all old data/evidence and the exclusive journal; never blindly retry unresolved writes. California corporate reporting stays first. No merge or dependent milestone.
+
+Earlier sections below are historical.
+
 # M73 demonstration accepted; controlled rollout underway
 
 The board confirmed the native print/save window opened and was closed, then accepted the demonstration. Independent M73-P09 review passes the actual print entry point together with prior open/download, exact-byte restart and desktop/390px evidence. No physical print, saved PDF, pagination or printed-number fidelity is claimed. See evaluations/research-qa/m73-print-acceptance.md. Earlier print-pending sections below are historical.
