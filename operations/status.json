@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T03:47:14.460716+00:00",
+  "updated_at": "2026-09-15T04:53:04.184445+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -2154,5 +2154,22 @@
     "reports": 4,
     "local_postgres": "stopped; files preserved",
     "independent_hosted_handoff": "evaluations/research-qa/m68-hosted-handoff.md"
+  },
+  "current_m69": {
+    "status": "offline_preparation_integrated_live_blocked",
+    "board_publication_approved": true,
+    "approved_commit": "ca1b6b593d10572d9a4d7182dc61ae631806983b",
+    "integrated_commit": "621f1b2",
+    "scope": "Reviewed offline RAG preparation; no customer application or hosted schema change",
+    "paid_run_authorized_by_this_approval": false,
+    "paid_run_performed": false,
+    "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+    "live_gate": "blocked: existing credential unavailable for executable binding; dated source/account evidence must be rechecked before future live action",
+    "integration_record": "docs/research/m69-integration.md",
+    "independent_review": "evaluations/research-qa/m69-integration-review.md",
+    "publication": "Reviewed source milestone branch and integrated rolling PR4 delivery; final exact remote checks verified by coordinator before completion report",
+    "source_repair_commit": "7cb1bd6a5495841612f3a6452acbe9440e0b36b1",
+    "integrated_repair_commit": "9efc31f",
+    "validation": "34 tests /225assertions pass; role checker passes"
   }
 }

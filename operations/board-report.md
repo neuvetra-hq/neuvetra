@@ -1,3 +1,13 @@
+# M69 offline integration approved; no paid run
+
+The board directly approved publishing and integrating the reviewed offline M69 preparation into existing draft PR4. The candidate is unchanged; byte-preservation and role-record handoff defects were repaired, and all 34 offline integration tests / 225 assertions pass. Independent integration QA passed the exact committed candidate and repaired records. This offline delivery is published to the same PR after final remote checks.
+
+M69 adds research preparation, pinned evidence and tests only. It adds no customer-facing research feature or hosted schema change. The existing credential is unavailable for executable binding; live admission remains blocked and no paid request was made. Dated source/account/endpoint observations must be rechecked before any later live action. This approval does not authorize a paid run.
+
+M68 remains live, with its final evidence commit 2a4dd4f verified on all six checks and deployment e0b8f912-a48a-49a2-9041-4820dba2a647. Its version 4 is unreviewed; board workflow feedback remains pending before dependent accounting expansion. See docs/research/m69-integration.md and evaluations/research-qa/m69-integration-review.md.
+
+Historical entries below are superseded as next-action instructions.
+
 # M68 live demonstration passed; board feedback next
 
 Annual electricity and bills is live on the existing private staging service. Browser-saved evidence version 4 links one retained January bill to annual version 4: twelve entered months, one document month, eleven missing-document months, and an unresolved January quantity discrepancy. The subtotal remains 301,000.000 kWh / 58,707.1269 kg CO2e. Version 4 is unreviewed; methods/factors remain synthetic development candidates, unreleased and without assurance.
