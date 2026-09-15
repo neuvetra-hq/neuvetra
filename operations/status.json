@@ -1,19 +1,20 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T16:52:06.925687+00:00",
+  "updated_at": "2026-09-15T20:17:54.664466+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M73",
     "name": "Scope1 stationary natural-gas workflow",
-    "status": "awaiting_print_verification",
-    "next_gate": "Confirm actual native print preview/pagination; then fresh recovery/maintenance gates, same-PR publication, hosted16 rollout and demonstration. No print waiver or milestone completion.",
+    "status": "rollout_in_progress",
+    "next_gate": "Six remote checks, fresh independently reviewed recovery, verified maintenance, exact15-to16 transition and hosted demonstration.",
     "evidence": [
       "evaluations/research-qa/m73-coordinator-checkpoint-review.md",
       "evaluations/research-qa/m73-visual-review.md",
       "evaluations/research-qa/m73-accounting-independent-candidate3-review.md",
-      "operations/agent-improvement/snapshots/M73-INTEGRATED-CANDIDATE3.json"
+      "operations/agent-improvement/snapshots/M73-INTEGRATED-CANDIDATE3.json",
+      "evaluations/research-qa/m73-print-acceptance.md"
     ]
   },
   "completed_milestones": [
@@ -2456,7 +2457,7 @@
     "board_feedback": "Accepted: Perfect. Everything looks good."
   },
   "current_m73": {
-    "status": "awaiting_print_verification",
+    "status": "rollout_in_progress",
     "scope": "First usable synthetic candidate Scope1 natural-gas increment; not fullScope1",
     "branch": "codex/corporate-mvp",
     "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
@@ -2464,7 +2465,7 @@
     "hosted_mutations": false,
     "method_release": false,
     "paid_requests": 0,
-    "coordination": "Scoped author and independent reviewer deliveries complete. No workers active or persistent. Root preserves local checkpoint; printP09 and hosted publication gates pending.",
+    "coordination": "Root sole Git/host writer; /root/m73_cpo actively reviews fresh2015 isolated recovery.",
     "routing_exception": "Fresh M73 CTO spawn hit thread-count limit; explicit bounded continuation assigned existing /root/m72_ops; requested critical Astra/high, actual unknown",
     "local_preview": "http://127.0.0.1:37175/",
     "hosted_application_mutations": false
@@ -2473,10 +2474,12 @@
     "candidate2_accounting": "pass bounded synthetic profile; 447 independently derived checks and 5 tests/46 assertions",
     "candidate2_security": "pass; native41, authority6, pure45 assertions; no open material findings",
     "recovery": "pass; actualDPAPIbackup/new55472restore67tables176rows,49independentassertions and14downloads133998bytes",
-    "browser": "Source/save/separatereview/correction/discrepancy/history/download/restart and390px screen checks passed. V-F01 closed bycandidate3. Nativeprintpreview/pagination pending boardconfirmation; no waiver.",
+    "browser": "M73-P09 passed actual print invocation with direct board confirmation; no print/PDF/pagination fidelity claim. Prior workflow and390px checks pass.",
     "hosted_change": false,
     "published": false,
-    "active_assignments": [],
+    "active_assignments": [
+      "M73-FRESH-RECOVERY-2015"
+    ],
     "source_release": false,
     "candidate3_accounting": "pass; exactCSS-onlydiff and62targetedindependentchecks, freshnative3tests85assertions",
     "hosted_baseline": "pass schema15; applicationPOST0, allcreatedAuthsessionsclosed; journalfile22e92d0bac2d73acd585983872895e95173f2c2a33845d1cf3579ade1cc04bd8"

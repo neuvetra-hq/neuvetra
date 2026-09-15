@@ -1,4 +1,14 @@
+# M73 demonstration accepted; controlled rollout underway
+
+The board confirmed the native print/save window opened and was closed, then accepted the demonstration. Independent M73-P09 review passes the actual print entry point together with prior open/download, exact-byte restart and desktop/390px evidence. No physical print, saved PDF, pagination or printed-number fidelity is claimed. See evaluations/research-qa/m73-print-acceptance.md. Earlier print-pending sections below are historical.
+
+Root remains sole Git/host writer. Automatic deployment was observed enabled and explicitly paused before publication; current schema15 site remains available. Fresh encrypted backup, role parity and new isolated55472 restore completed using the 2015 receipts. Independent restricted-runtime reconstruction is actively assigned to /root/m73_cpo. Remote checks, verified maintenance, exact15-to16 migration, exact-commit deployment and live exercise/restart/revisit remain pending. No M73 hosted application mutation or completion claim yet.
+
+Continue the already-authorized rollout on codex/corporate-mvp, draft PR5. Preserve all old evidence and data; use only schema16-compatible forward recovery after committed16. Restore automatic deployment after the controlled transition. California corporate reporting stays first; relevant operations elsewhere remain boundary considerations. No new dependent milestone, PR merge, paidRAG or broader reporting/assurance claim.
+
 # M73 local checkpoint ready; native print verification outstanding
+
+Latest board feedback relayed2026-09-15: “Perfect. Everything looks fine. So what's next?” Record this as positive general workflow feedback, not native-print confirmation. At20:00:55UTC, local7803fb7 remains unpublished; remote branch and live SUCCESS deployment remain ac35926/schema15 ready. See operations/feedback/2026-09-15-milestone-73-general-feedback.md. The16:24UTC recovery copy is nearing its four-hour limit; refresh before rollout if expired. Finish current print/publication/hosted gates before dependent Scope1 expansion.
 
 Candidate3 implements the bounded California2025 natural-gas source workflow with saved corporate boundary, statement/manual confirmation, deterministic calculation, immutable corrections, separate review and readable exact reports. Independent accounting/security/recovery reviews passed. Actual browser save/review/correction/history/download/restart and390px screen checks passed; V-F01 wrapping and HJ-F01 response-journaling defects are repaired and their failures preserved. Scoped specialists are complete; no worker remains active or persistent.
 
