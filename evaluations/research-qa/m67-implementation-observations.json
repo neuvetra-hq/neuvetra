@@ -1,0 +1,130 @@
+{
+  "status": "local_integrated_pass_hosted_pending",
+  "scope": "Independent M67 source, frontend, renderer, actual PostgreSQL/API/decoder, recovery and bounded operator/image-source review",
+  "independence": "Prior M63 authorship; no M67 product authorship; actual inherited compute unknown",
+  "observations": [
+    {
+      "id": "M67-UI-F01",
+      "finding": "Copied annual UI strings contained literal mojibake in status/separators/apostrophes.",
+      "owner": "root",
+      "status": "repaired; actual saved-VersionCard React render checked across all12 accounting cases",
+      "rootReportedCause": "Python default Windows encoding reading reused UTF-8 source"
+    },
+    {
+      "id": "draft_report_generation",
+      "finding": "In-progress m67-report.ts contained Object.prototype.function hasOwnProperty() native-code interpolation",
+      "owner": "CTO",
+      "status": "Repaired before stable candidate; full report renderer now passes."
+    },
+    {
+      "id": "harness_setup",
+      "finding": "First frontend run could not import pending m67-template; first renderer run needed site-web-local React resolution",
+      "status": "dependency/harness distinction retained; no product failure asserted"
+    },
+    {
+      "id": "M67-IMAGE-F01",
+      "finding": "Runtime Docker COPY omitted reviewed migration0013 although context allowed it. Injected offline readiness smoke did not read real migration manifest.",
+      "owner": "root",
+      "status": "Repaired before publication; independently verified explicit migration0013 runtime COPY, context allowlist and real readMigrationManifest count13/name CI smoke. Actual Linux image CI remains pending."
+    },
+    {
+      "id": "native_wait_harness",
+      "finding": "First added revocation-during-lock test observed cached pg_stat_activity snapshot and did not see the waiter.",
+      "status": "QA refreshed pg_stat_clear_snapshot in each poll; actual wait then observed and post-lock revocation refusal passed. No product change."
+    }
+  ],
+  "executed": [
+    {
+      "suite": "m67-independent-frontend.test.ts",
+      "tests": 7,
+      "assertions": 108,
+      "status": "passed after latest strict-character decoder update"
+    },
+    {
+      "suite": "m67-independent-renderer.test.ts",
+      "tests": 5,
+      "assertions": 764,
+      "status": "passed actual saved-version React JSX, calculator and HTML report"
+    },
+    {
+      "suite": "m67-independent-print-view.test.ts",
+      "tests": 7,
+      "assertions": 44,
+      "status": "passed injected browser/hooks actual annual action closure"
+    },
+    {
+      "suite": "m67-independent-postgres.test.ts",
+      "tests": 14,
+      "assertions": 655,
+      "status": "passed real PostgreSQL17.11 driver/API/decoder; schema13"
+    }
+  ],
+  "baseline": {
+    "path": "evaluations/research-qa/m67-baseline-receipt.json",
+    "rawSha256": "e0ec85026015dfe0fea37bfb29ce666dba41ead86e45dae85e141879d9d96cba",
+    "database": "m67_qa",
+    "schema": 12,
+    "tables": 48,
+    "originalRows": 1488,
+    "mode": "independent UTC read-only native queries, table/metadata and per-row hashes; no raw rows persisted"
+  },
+  "pending": [
+    "Exact staged and committed byte verification by root",
+    "Actual Linux image CI before hosted migration",
+    "Hosted browser/restart and board acceptance evidence"
+  ],
+  "nativeAttemptHistory": [
+    {
+      "testsPassed": 12,
+      "testsFailed": 0,
+      "assertions": 649,
+      "scope": "initial native suite"
+    },
+    {
+      "testsPassed": 13,
+      "testsFailed": 1,
+      "assertions": 652,
+      "scope": "added wait test; activity snapshot harness issue"
+    },
+    {
+      "testsPassed": 14,
+      "testsFailed": 0,
+      "assertions": 655,
+      "scope": "fresh activity snapshot; real blocked revoke and coordinated tamper pass"
+    }
+  ],
+  "migrationCanonicalLfSha256": "6ff7c3d21766d5e07a9f922ea92a0c59e7f34a685104d640d09dccf9872eb763",
+  "restore": {
+    "receipt": "evaluations/research-qa/m67-restore-receipt.json",
+    "tables": 55,
+    "records": 1894,
+    "annualCompanies": 6,
+    "annualVersions": 64,
+    "annualReports": 42,
+    "legacySourceCompanies": 6,
+    "legacySourceVersions": 43,
+    "legacyPdfSources": 12,
+    "legacySourceReports": 39,
+    "exactTableAndMetadataHashes": true
+  },
+  "printReview": {
+    "rootEvidence": "docs/research/m67-print-layout-verification.json",
+    "independentViewedPages": [
+      ".superpowers/m67-print-normal-2.png",
+      ".superpowers/m67-print-long-3.png",
+      ".superpowers/m67-print-long-5.png"
+    ],
+    "result": "readable12rows and escaped maximum text; status margins clear; some label/value page splits as root notes",
+    "nativeDialog": false
+  },
+  "rootAttributedChecks": {
+    "nativeIntegrated": {
+      "tests": 4,
+      "assertions": 2200,
+      "log": ".superpowers/m67-native-integrated-recheck.log"
+    },
+    "repositoryFinal": ".superpowers/m67-repository-final-check.log",
+    "earlierBuildSandboxFailurePreserved": ".superpowers/m67-repository-check.log",
+    "oldNativeGuardRefusal": "Harness routing only; narrowly added m67_author preserving loopback, port, admin, no password/query/hash checks."
+  }
+}

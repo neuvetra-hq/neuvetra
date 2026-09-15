@@ -1,3 +1,5 @@
+import { createAnnualWorksheetRoutes } from "../workspace/m67-routes"
+import { createAnnualWorksheetReportRoutes } from "../workspace/m67-report-routes"
 import { createSourceWorksheetRoutes } from "../workspace/m66-routes"
 import { createSourceWorksheetReportRoutes } from "../workspace/m66-report-routes"
 import { createElectricitySourceRoutes } from "../workspace/m66-source-routes"
@@ -86,6 +88,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       return access.workspace
     }),
   })
+  const annualWorksheetRoutes=createAnnualWorksheetRoutes({database,validateUser,origin:config.origin})
+  const annualReportRoutes=createAnnualWorksheetReportRoutes({database,validateUser,origin:config.origin})
   const sourceWorksheetRoutes=createSourceWorksheetRoutes({database,validateUser,origin:config.origin})
   const sourceReportRoutes=createSourceWorksheetReportRoutes({database,validateUser,origin:config.origin})
   const electricitySourceRoutes=createElectricitySourceRoutes({database,validateUser,origin:config.origin})
@@ -93,7 +97,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 12) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 13) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -131,6 +135,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
+      if (url.pathname.includes("/annual-electricity-worksheet/reports")) return annualReportRoutes(forwarded)
+      if (url.pathname.includes("/annual-electricity-worksheet")) return annualWorksheetRoutes(forwarded)
       if (url.pathname.includes("/source-electricity-worksheet/sources")) return electricitySourceRoutes(forwarded)
       if (url.pathname.includes("/source-electricity-worksheet/reports")) return sourceReportRoutes(forwarded)
       if (url.pathname.includes("/source-electricity-worksheet")) return sourceWorksheetRoutes(forwarded)

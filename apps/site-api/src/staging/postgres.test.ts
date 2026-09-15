@@ -8,7 +8,7 @@ import { readStagingConfig, STAGING_PROFILE } from "./config"
 const target = process.env.M63_API_TEST_DATABASE_URL
 if (target) {
   const parsed = new URL(target)
-  if (parsed.hostname !== "127.0.0.1" || parsed.port !== "55463" || parsed.pathname !== "/m63_integration" || parsed.username !== "m63_test_admin" || parsed.password || parsed.search || parsed.hash) throw new Error("M63 API integration requires the approved disposable loopback fixture.")
+  if (parsed.hostname !== "127.0.0.1" || parsed.port !== "55463" || !["/m63_integration","/m67_author"].includes(parsed.pathname) || parsed.username !== "m63_test_admin" || parsed.password || parsed.search || parsed.hash) throw new Error("M63 API integration requires the approved disposable loopback fixture.")
 }
 
 const integration = target ? test : test.skip

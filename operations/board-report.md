@@ -2,7 +2,7 @@
 
 The board accepted M66 and authorized M67. M66 final commit9afde82631e321c0c084454c97a24a2f463a9456 is pushed with six successful checks and live in existing Railway deployment405765fc-a4fe-4fd1-b310-d4a615c0decf, schema12. See operations/feedback/2026-09-14-milestone-66.md. PR4 remains unmerged; worksheet Version3 remains unreviewed and all synthetic/unreleased boundaries persist.
 
-M67 adds twelve manual monthly entries, explicit missing-versus-zero coverage, deterministic annual subtotal, version corrections, different-manager review and immutable report. Existing bill-linked January evidence is preserved separately; it cannot support unprovided months. Scope: docs/research/annual-electricity-milestone-67.md. CTO and accounting are dispatched for bounded contracts; product implementation follows review. Root owns UI, publication and shared records. No new subscription or persistent workers.
+M67 adds twelve manual monthly entries, explicit missing-versus-zero coverage, deterministic annual subtotal, version corrections, different-manager review and immutable report. Existing bill-linked January evidence is preserved separately; it cannot support unprovided months. Scope: docs/research/annual-electricity-milestone-67.md. Technical/accounting contracts passed independent design review. CTO backend and root UI/operators are in implementation; accounting and QA are dispatched for independent implementation review. Root owns UI, publication and shared records. No new subscription or persistent workers.
 
 Historical entries below are superseded as next-action instructions.
 

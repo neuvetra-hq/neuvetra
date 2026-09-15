@@ -114,3 +114,11 @@
 !output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf
 !apps/site-api/src/workspace/m66-source-routes.ts
 !apps/site-api/src/workspace/m66-report-routes.ts
+
+!packages/neuvetra-database/src/m67.ts
+!packages/neuvetra-database/src/m67-contract.ts
+!packages/neuvetra-database/src/m67-template.ts
+!packages/neuvetra-database/src/m67-report.ts
+!packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql
+!apps/site-api/src/workspace/m67-routes.ts
+!apps/site-api/src/workspace/m67-report-routes.ts

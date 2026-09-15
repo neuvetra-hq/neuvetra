@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T00:31:40.234035+00:00",
+  "updated_at": "2026-09-15T01:03:17.499308+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M67",
     "name": "Full-year electricity coverage",
     "status": "in_progress",
-    "next_gate": "Review technical and accounting contracts, then implement the annual workflow.",
+    "next_gate": "Publish independently reviewed M67 candidate, verify image CI, then upgrade and test the existing live service.",
     "evidence": [
       "docs/research/annual-electricity-milestone-67.md",
       "operations/feedback/2026-09-14-milestone-66.md"
@@ -103,10 +103,10 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M66 accepted and live; M67 contract preparation underway.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Board accepted M66; final published commit has six successful checks. Actual CTO and accounting assignments dispatched for M67 contracts."
+    "last_session_work": "M66 closure pushed. M67 reviewed contracts passed; CTO backend, root annual UI/operators, independent accounting and QA implementation review are dispatched."
   },
   "session_handoff": {
-    "current": "M66 live and independently reviewed; board feedback pending",
+    "current": "M66 board accepted and published; M67 annual electricity contracts underway.",
     "next": "Board reviews version3 and its retained bill/report before M67 full-year coverage",
     "evidence": [
       "docs/research/m66-hosted-verification.json",
@@ -2092,11 +2092,18 @@
     "final_deployment_id": "405765fc-a4fe-4fd1-b310-d4a615c0decf"
   },
   "current_m67": {
-    "status": "contract_preparation",
+    "status": "local_verification_passed",
     "scope": "docs/research/annual-electricity-milestone-67.md",
     "board_authorized": true,
-    "implementation_started": false,
+    "implementation_started": true,
     "publication": "not_yet",
-    "prior_m66_accepted": true
+    "prior_m66_accepted": true,
+    "design_review": "evaluations/research-qa/m67-review-plan.md",
+    "baseline_tables": 48,
+    "baseline_rows": 1488,
+    "active_workers_excluding_root": 1,
+    "local_review": "evaluations/research-qa/m67-local-review.md",
+    "independent_combined_tests": 33,
+    "independent_combined_assertions": 1571
   }
 }

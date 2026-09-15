@@ -1,0 +1,230 @@
+{
+  "observedAt": "2026-09-15T00:43:52.280Z",
+  "scope": "Pure calculator, input validation and frontend decoder only; no persistence, browser or print execution",
+  "accepted": [
+    {
+      "id": "january_25000_partial",
+      "exact": "4876.00722",
+      "display": "4876.0072",
+      "coverage": {
+        "knownMonths": 1,
+        "missingMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "electricityComplete": false
+      }
+    },
+    {
+      "id": "january_25000_remaining_zero",
+      "exact": "4876.00722",
+      "display": "4876.0072",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "twelve_25000",
+      "exact": "58512.08664",
+      "display": "58512.0866",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "all_zero",
+      "exact": "0",
+      "display": "0.0000",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "one_zero_remaining_missing",
+      "exact": "0",
+      "display": "0.0000",
+      "coverage": {
+        "knownMonths": 1,
+        "missingMonths": [
+          "2023-02",
+          "2023-03",
+          "2023-04",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "electricityComplete": false
+      }
+    },
+    {
+      "id": "twelve_one",
+      "exact": "2.3404834656",
+      "display": "2.3405",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "twelve_minimum",
+      "exact": "0.0023404834656",
+      "display": "0.0023",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "aggregate_even_tie",
+      "exact": "12190.01805",
+      "display": "12190.0180",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "aggregate_odd_tie",
+      "exact": "36570.05415",
+      "display": "36570.0542",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "twelve_maximum",
+      "exact": "2340483.4656",
+      "display": "2340483.4656",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "twelve_below_maximum",
+      "exact": "2340483.4632595165344",
+      "display": "2340483.4633",
+      "coverage": {
+        "knownMonths": 12,
+        "missingMonths": [],
+        "electricityComplete": true
+      }
+    },
+    {
+      "id": "mixed_partial",
+      "exact": "2408.1445021070304",
+      "display": "2408.1445",
+      "coverage": {
+        "knownMonths": 3,
+        "missingMonths": [
+          "2023-02",
+          "2023-05",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-09",
+          "2023-10",
+          "2023-11",
+          "2023-12"
+        ],
+        "electricityComplete": false
+      }
+    }
+  ],
+  "rejected": [
+    "all_missing",
+    "empty_string",
+    "space",
+    "newline",
+    "unicode_digit",
+    "negative_zero",
+    "positive_sign",
+    "leading_zero",
+    "exponent",
+    "grouping",
+    "excess_precision",
+    "above_monthly_bound",
+    "above_monthly_integer",
+    "json_number",
+    "boolean",
+    "array",
+    "eleven_rows",
+    "thirteen_rows",
+    "duplicate_month",
+    "out_of_order",
+    "wrong_year",
+    "missing_quantity_field",
+    "unsupported_evidence_inheritance"
+  ],
+  "newlineChallenges": [
+    {
+      "path": "quantityKwh",
+      "refused": true
+    },
+    {
+      "path": "quantityMwh",
+      "refused": true
+    },
+    {
+      "path": "total.unrounded",
+      "refused": true
+    },
+    {
+      "path": "total.display",
+      "refused": true
+    },
+    {
+      "path": "months.0.quantityKwh",
+      "refused": true
+    },
+    {
+      "path": "months.0.quantityMwh",
+      "refused": true
+    },
+    {
+      "path": "months.0.total.unrounded",
+      "refused": true
+    },
+    {
+      "path": "months.0.total.display",
+      "refused": true
+    }
+  ],
+  "sha256": {
+    "docs/research/m67-accounting-contract.md": "299405d311f009aaebd8dffa8e213d74511297236f426c550f87cf3fd484b2f1",
+    "evaluations/research-qa/m67-accounting-cases.json": "06ab494cc6cba1cbfbc5808517f990743ceb33e2531611d50fab5d9b5224956c",
+    "packages/neuvetra-database/src/m67-contract.ts": "359fd19312980632339e0c57e6e0ce42fb283648508804908d3370a00a4de9e3",
+    "packages/neuvetra-database/src/m67.ts": "68c4b4687de3401161b206a016b92d045f3c1240577523b4a962d830f3ddfd71",
+    "apps/site-web/src/components/AnnualElectricityWorksheet.tsx": "5a28ee829258cff878aa611ab664824ab1ff73473c75146e9ebf1bf992326ddc",
+    "apps/site-web/src/components/AnnualWorksheetReports.tsx": "b652d485ee8fa3991aad62090b218667eaef1c56a8c2d3baf50f3627261822eb",
+    "apps/site-web/src/lib/m67-api.ts": "6db37d882173643384b85bf3229945b6c34c60b297231115e718237a32cfb5a8",
+    "apps/site-web/src/lib/m67-report-api.ts": "339c34280707c66257a40e18717bbe27ecf008ace9c527e8a2fb627879043e44",
+    "evaluations/research-qa/m67-accounting-implementation-check.ts": "9d12bab72f9389dd86bab8fb9d5abaee855640e5d449814900a1ddbeefcb2ee3"
+  }
+}

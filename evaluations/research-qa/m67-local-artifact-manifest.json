@@ -1,0 +1,381 @@
+{
+  "status": "local_integrated_review_binding_hosted_pending",
+  "scope": "Exact candidate source and QA evidence. No Git/index/remote verification performed by QA. Mutable execution/status records excluded. Canonical LF only replaces CRLF; raw hash binds actual reviewed bytes.",
+  "artifacts": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "bytes": 9555,
+      "rawSha256": "30b940b345a5ac86d972efb095099ea9c779e8a8191182cd066b2dedc9e767f2",
+      "canonicalLfSha256": "30b940b345a5ac86d972efb095099ea9c779e8a8191182cd066b2dedc9e767f2"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "bytes": 7338,
+      "rawSha256": "f17cfd9dab04aa905660904ca8e88f3f61d00c41d454fce9811054b719452601",
+      "canonicalLfSha256": "f17cfd9dab04aa905660904ca8e88f3f61d00c41d454fce9811054b719452601"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "bytes": 4558,
+      "rawSha256": "c53ff7af4e07edba1b328ca264f3116ac48de91b407803a58ae58a7920df865a",
+      "canonicalLfSha256": "c53ff7af4e07edba1b328ca264f3116ac48de91b407803a58ae58a7920df865a"
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "bytes": 17940,
+      "rawSha256": "dab030513962f6fcffaeb9a7f8caebda736c2ab3c0afa09ff9f7b467804affc1",
+      "canonicalLfSha256": "2f032abdc41b26787415a77faf2c25dcf8203434e5ce670a98217e91c0368416"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "bytes": 12149,
+      "rawSha256": "ccda679c9827e2c3daf446b76567d5cb92ea2d573ab80a3d037cbed3f563bbf4",
+      "canonicalLfSha256": "e7e49bd68107fbdd661c268cef5193063d5c08974020a7eba81eac221f7aa0e3"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "bytes": 12169,
+      "rawSha256": "f599037338fa696bab69f1191a7a0db106126dc20f046d7044e6edc3714f446d",
+      "canonicalLfSha256": "30796f4f4552538d537efdc12ff706627f55671f776eefc6b9b0b4382713a634"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-postgres.test.ts",
+      "bytes": 12574,
+      "rawSha256": "4453bd9e4fe534b965b284e02779a2a2160e444cb805e8aaa3887590caa8bc4c",
+      "canonicalLfSha256": "4453bd9e4fe534b965b284e02779a2a2160e444cb805e8aaa3887590caa8bc4c"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m67-postgres.test.ts",
+      "bytes": 10881,
+      "rawSha256": "2ea737bb0d19e352bd100dd716e07811975a7a22e336a64a04a77edbfbeecd60",
+      "canonicalLfSha256": "2ea737bb0d19e352bd100dd716e07811975a7a22e336a64a04a77edbfbeecd60"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m67-report-routes.ts",
+      "bytes": 3319,
+      "rawSha256": "7c0bc0529ec5aa4a141184f27289998b854ffbdfa0161fc3575b62c2d82a4ffe",
+      "canonicalLfSha256": "2bfa9c3677429513a0a2566c43d8c4efcdbb13194a7d7c80f3bc80b910b41c40"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m67-routes.ts",
+      "bytes": 2909,
+      "rawSha256": "81293e25ee21d98dd9f7ded349a3a043a776f85917a393af21bed1e2d3ec5c98",
+      "canonicalLfSha256": "13b53354ddbb3d2dfa93b1b7c11a19e7c3acf6b3694e14b7d679c27c01d2d6b0"
+    },
+    {
+      "path": "apps/site-web/src/components/AnnualElectricityWorksheet.tsx",
+      "bytes": 13614,
+      "rawSha256": "5a28ee829258cff878aa611ab664824ab1ff73473c75146e9ebf1bf992326ddc",
+      "canonicalLfSha256": "5a28ee829258cff878aa611ab664824ab1ff73473c75146e9ebf1bf992326ddc"
+    },
+    {
+      "path": "apps/site-web/src/components/AnnualWorksheetReports.tsx",
+      "bytes": 7384,
+      "rawSha256": "b652d485ee8fa3991aad62090b218667eaef1c56a8c2d3baf50f3627261822eb",
+      "canonicalLfSha256": "b652d485ee8fa3991aad62090b218667eaef1c56a8c2d3baf50f3627261822eb"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "bytes": 1876,
+      "rawSha256": "1f31999dcc4ce4a5e5168318deb92831d4f115ffa4faa8532a9bbae09a3681c0",
+      "canonicalLfSha256": "1f31999dcc4ce4a5e5168318deb92831d4f115ffa4faa8532a9bbae09a3681c0"
+    },
+    {
+      "path": "apps/site-web/src/lib/m67-api.ts",
+      "bytes": 8889,
+      "rawSha256": "6718402c1013a6ebc2adee34d02a4a671f29f29e81d003c8e685508ed893dde2",
+      "canonicalLfSha256": "6718402c1013a6ebc2adee34d02a4a671f29f29e81d003c8e685508ed893dde2"
+    },
+    {
+      "path": "apps/site-web/src/lib/m67-report-api.ts",
+      "bytes": 7041,
+      "rawSha256": "339c34280707c66257a40e18717bbe27ecf008ace9c527e8a2fb627879043e44",
+      "canonicalLfSha256": "339c34280707c66257a40e18717bbe27ecf008ace9c527e8a2fb627879043e44"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "bytes": 5199,
+      "rawSha256": "ad3f312296fd4eeb407b3d4948fb26a997c2f3fbcb07b076e206863304430272",
+      "canonicalLfSha256": "ad3f312296fd4eeb407b3d4948fb26a997c2f3fbcb07b076e206863304430272"
+    },
+    {
+      "path": "docs/research/annual-electricity-milestone-67.md",
+      "bytes": 3062,
+      "rawSha256": "1c55ee9589ebc814625a63b57c19df505f6f1200e73175282bd0b40407aa696f",
+      "canonicalLfSha256": "1c55ee9589ebc814625a63b57c19df505f6f1200e73175282bd0b40407aa696f"
+    },
+    {
+      "path": "docs/research/m67-accounting-contract.md",
+      "bytes": 17753,
+      "rawSha256": "299405d311f009aaebd8dffa8e213d74511297236f426c550f87cf3fd484b2f1",
+      "canonicalLfSha256": "299405d311f009aaebd8dffa8e213d74511297236f426c550f87cf3fd484b2f1"
+    },
+    {
+      "path": "docs/research/m67-accounting-implementation-review.md",
+      "bytes": 12627,
+      "rawSha256": "f2c4804f89924eb75a1e6fafa5e41272d072bf2406c785862442a85206ccbe11",
+      "canonicalLfSha256": "c3d49460fe2a81b22ed0f6edbf0a6c831a203c4101bc7543592ebc55898d499e"
+    },
+    {
+      "path": "docs/research/m67-print-layout-verification.json",
+      "bytes": 1678,
+      "rawSha256": "db0440b9758e5c2c6def7232bbc3da6eee565840582d3f832e79d98b17d336a0",
+      "canonicalLfSha256": "db0440b9758e5c2c6def7232bbc3da6eee565840582d3f832e79d98b17d336a0"
+    },
+    {
+      "path": "docs/research/m67-technical-contract.md",
+      "bytes": 23514,
+      "rawSha256": "df9c3ab8b1911b0c2ac6bee08bb72d41bba63eb73e47d37e1c466f7e8ed17dd2",
+      "canonicalLfSha256": "df9c3ab8b1911b0c2ac6bee08bb72d41bba63eb73e47d37e1c466f7e8ed17dd2"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-cases.json",
+      "bytes": 61515,
+      "rawSha256": "06ab494cc6cba1cbfbc5808517f990743ceb33e2531611d50fab5d9b5224956c",
+      "canonicalLfSha256": "06ab494cc6cba1cbfbc5808517f990743ceb33e2531611d50fab5d9b5224956c"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-implementation-check.ts",
+      "bytes": 4550,
+      "rawSha256": "9d12bab72f9389dd86bab8fb9d5abaee855640e5d449814900a1ddbeefcb2ee3",
+      "canonicalLfSha256": "9414b38c358a3d9c8ae9a4418667fd2de93c4a867ec10488282f199093d46342"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-implementation-final-receipt.json",
+      "bytes": 5777,
+      "rawSha256": "cdb886e6e542e60dbfd5fa5702867e8b9548d36ac2a82f67403c03ab60ed4907",
+      "canonicalLfSha256": "cdb886e6e542e60dbfd5fa5702867e8b9548d36ac2a82f67403c03ab60ed4907"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-implementation-first-receipt.json",
+      "bytes": 5777,
+      "rawSha256": "df9dae4db66d3ebffd8ff6df036438b5e1dd79d78b6a4db0c90e2619662c028f",
+      "canonicalLfSha256": "df9dae4db66d3ebffd8ff6df036438b5e1dd79d78b6a4db0c90e2619662c028f"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-report-check.ts",
+      "bytes": 7401,
+      "rawSha256": "7b8d01eaaf471d61ea174cdc99dd2ebc53ed6b961086bdd9e3a4ebe9f615ce0a",
+      "canonicalLfSha256": "787eb179a55e68e83dbac7e7a913efadc82f157ac96c08b2bcb3b14f1e51c16f"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-report-final-receipt.json",
+      "bytes": 10283,
+      "rawSha256": "307cf5068b7df1501a1c18c97b0e03553513c92bb57923ffe14623a58cdbf752",
+      "canonicalLfSha256": "307cf5068b7df1501a1c18c97b0e03553513c92bb57923ffe14623a58cdbf752"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-report-january_25000_partial.html",
+      "bytes": 11593,
+      "rawSha256": "181adfa996677317857290f2df0cf66dd915ffec22133c8ff7f5a8552f1f28c7",
+      "canonicalLfSha256": "181adfa996677317857290f2df0cf66dd915ffec22133c8ff7f5a8552f1f28c7"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-report-receipt.json",
+      "bytes": 10283,
+      "rawSha256": "d452ef0abd550f0fd94cb8a62ec27220ffaaeb6719e09bc0abf25cabaa71afe9",
+      "canonicalLfSha256": "d452ef0abd550f0fd94cb8a62ec27220ffaaeb6719e09bc0abf25cabaa71afe9"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-report-twelve_below_maximum.html",
+      "bytes": 11685,
+      "rawSha256": "63a11154892782e8d6b6d66d4b77edbb8d30696825e6f38242ce6880c9d7f236",
+      "canonicalLfSha256": "63a11154892782e8d6b6d66d4b77edbb8d30696825e6f38242ce6880c9d7f236"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-report-twelve_minimum.html",
+      "bytes": 11458,
+      "rawSha256": "8baaaba917eb76687434020fa64ca4890154d1186b18541da1a0ea21946210ca",
+      "canonicalLfSha256": "8baaaba917eb76687434020fa64ca4890154d1186b18541da1a0ea21946210ca"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-sql-check.ts",
+      "bytes": 2035,
+      "rawSha256": "bdf9ed6afa10acca4d599c467ef55cece222937ba381ccbf333c04f2539cfdaf",
+      "canonicalLfSha256": "47658d226013d312e0ced53eaffe192ee11af42a188ba4cfec53b4fde37123fa"
+    },
+    {
+      "path": "evaluations/research-qa/m67-accounting-sql-receipt.json",
+      "bytes": 1799,
+      "rawSha256": "4f7f6ca32a4f0af78dff6d1f1c88333afdff4e121c5bb243796865719fa7d6f7",
+      "canonicalLfSha256": "4f7f6ca32a4f0af78dff6d1f1c88333afdff4e121c5bb243796865719fa7d6f7"
+    },
+    {
+      "path": "evaluations/research-qa/m67-baseline-receipt.json",
+      "bytes": 126727,
+      "rawSha256": "e0ec85026015dfe0fea37bfb29ce666dba41ead86e45dae85e141879d9d96cba",
+      "canonicalLfSha256": "e0ec85026015dfe0fea37bfb29ce666dba41ead86e45dae85e141879d9d96cba"
+    },
+    {
+      "path": "evaluations/research-qa/m67-baseline.ts",
+      "bytes": 1754,
+      "rawSha256": "a6288cd9dfe577d7e41aa3397aee03d5e3dd21559fce17882076c7dd9067b399",
+      "canonicalLfSha256": "a6288cd9dfe577d7e41aa3397aee03d5e3dd21559fce17882076c7dd9067b399"
+    },
+    {
+      "path": "evaluations/research-qa/m67-design-cases-check.py",
+      "bytes": 3276,
+      "rawSha256": "678491544524f96e9076c95d4e91c987a52186592d9df486a1820b772be7eb48",
+      "canonicalLfSha256": "678491544524f96e9076c95d4e91c987a52186592d9df486a1820b772be7eb48"
+    },
+    {
+      "path": "evaluations/research-qa/m67-design-cases-receipt.json",
+      "bytes": 790,
+      "rawSha256": "bed6a971bff0b23d247e8653ba8c6a560b96b24353b71be8c2508f5f05f59e61",
+      "canonicalLfSha256": "bed6a971bff0b23d247e8653ba8c6a560b96b24353b71be8c2508f5f05f59e61"
+    },
+    {
+      "path": "evaluations/research-qa/m67-implementation-observations.json",
+      "bytes": 5175,
+      "rawSha256": "f185b4f3d251cb5583b2a85a4ba2deffd4c5bb71deae634adb141e402aeec589",
+      "canonicalLfSha256": "f185b4f3d251cb5583b2a85a4ba2deffd4c5bb71deae634adb141e402aeec589"
+    },
+    {
+      "path": "evaluations/research-qa/m67-independent-frontend.test.ts",
+      "bytes": 11623,
+      "rawSha256": "5b415f4c39dd4b85e2be0a2e47e852b3660c1b6c1486abda89db0ec21b76abad",
+      "canonicalLfSha256": "5b415f4c39dd4b85e2be0a2e47e852b3660c1b6c1486abda89db0ec21b76abad"
+    },
+    {
+      "path": "evaluations/research-qa/m67-independent-postgres.test.ts",
+      "bytes": 23745,
+      "rawSha256": "eb74acc1a89dffa9707e2293258e0b90af9375fe931f218282bb17c72f394f19",
+      "canonicalLfSha256": "eb74acc1a89dffa9707e2293258e0b90af9375fe931f218282bb17c72f394f19"
+    },
+    {
+      "path": "evaluations/research-qa/m67-independent-print-view.test.ts",
+      "bytes": 5892,
+      "rawSha256": "2cdeefc0a56f30c1c9abce7252d82e971a9bc7d91f1c91b623c4572664a72955",
+      "canonicalLfSha256": "2cdeefc0a56f30c1c9abce7252d82e971a9bc7d91f1c91b623c4572664a72955"
+    },
+    {
+      "path": "evaluations/research-qa/m67-independent-renderer.test.ts",
+      "bytes": 5955,
+      "rawSha256": "3584f1a9cf2abef0f2248980b5a9da497b84fa7956cf633854352bf1bd449d4c",
+      "canonicalLfSha256": "3584f1a9cf2abef0f2248980b5a9da497b84fa7956cf633854352bf1bd449d4c"
+    },
+    {
+      "path": "evaluations/research-qa/m67-restore-check.ts",
+      "bytes": 5294,
+      "rawSha256": "36047493399cca15d4dfa8902363a5e439b50823fdc72387a6ed2e601cd09796",
+      "canonicalLfSha256": "36047493399cca15d4dfa8902363a5e439b50823fdc72387a6ed2e601cd09796"
+    },
+    {
+      "path": "evaluations/research-qa/m67-restore-receipt.json",
+      "bytes": 21230,
+      "rawSha256": "aafd62db1bb9381c00d780e556c5e411472fb5a92130a33548ef517cfbfc9e89",
+      "canonicalLfSha256": "aafd62db1bb9381c00d780e556c5e411472fb5a92130a33548ef517cfbfc9e89"
+    },
+    {
+      "path": "evaluations/research-qa/m67-review-plan.md",
+      "bytes": 16551,
+      "rawSha256": "bce6c0d6e67485d1e47632e7de719a6e2a063a5ce41a57e1fde390ce486436e8",
+      "canonicalLfSha256": "bce6c0d6e67485d1e47632e7de719a6e2a063a5ce41a57e1fde390ce486436e8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "bytes": 25171,
+      "rawSha256": "cd30c7b6c50c36b2bc45694ceb76b5e24b33631e27c9da87d2447d848d3e1b57",
+      "canonicalLfSha256": "5e6cba43e3924a1523712c55c3a4bdd95829b303063e532b3761fa6e7ee84729"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "bytes": 9842,
+      "rawSha256": "8dfc49415a7517af5c71a137d5ea0a903461099e9cedd8f640bb3ca756d03aca",
+      "canonicalLfSha256": "a7e0a19eb6b2a54a4ea4422774c6ffbdd0df0179a0cd526f4e4cd4cb4a69c605"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "bytes": 331,
+      "rawSha256": "ec2cdc5339283548ef686f54f871a0ddd32a83ff1467158ec8866cbe0c35f0f3",
+      "canonicalLfSha256": "ed67b9e02bcebd88317e2c67acadbfb5365aa458f5ee31ec79f15b7ab520e298"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67-contract.ts",
+      "bytes": 4458,
+      "rawSha256": "359fd19312980632339e0c57e6e0ce42fb283648508804908d3370a00a4de9e3",
+      "canonicalLfSha256": "359fd19312980632339e0c57e6e0ce42fb283648508804908d3370a00a4de9e3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67-report.ts",
+      "bytes": 10449,
+      "rawSha256": "d40ae347acbaaf8e65a357a84103e68ef3ca5f5d54a961b4510c45e7af75b087",
+      "canonicalLfSha256": "d40ae347acbaaf8e65a357a84103e68ef3ca5f5d54a961b4510c45e7af75b087"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67-template.ts",
+      "bytes": 11630,
+      "rawSha256": "18a2e1650223d83b9525339137125ff9f614e2574835bb94a4178f9e296ac807",
+      "canonicalLfSha256": "18a2e1650223d83b9525339137125ff9f614e2574835bb94a4178f9e296ac807"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67.test.ts",
+      "bytes": 4603,
+      "rawSha256": "38b127b6cafdc479e3bed18332d6075609b54f4da27200400ca634d0e44ddc64",
+      "canonicalLfSha256": "38b127b6cafdc479e3bed18332d6075609b54f4da27200400ca634d0e44ddc64"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67.ts",
+      "bytes": 11076,
+      "rawSha256": "8779f5654db92b81326cf2f7b5718a365212233290590bfce0193a284af06519",
+      "canonicalLfSha256": "8779f5654db92b81326cf2f7b5718a365212233290590bfce0193a284af06519"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql",
+      "bytes": 46929,
+      "rawSha256": "6ff7c3d21766d5e07a9f922ea92a0c59e7f34a685104d640d09dccf9872eb763",
+      "canonicalLfSha256": "6ff7c3d21766d5e07a9f922ea92a0c59e7f34a685104d640d09dccf9872eb763"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "bytes": 8875,
+      "rawSha256": "25158533581d805119fceab5a401b3e67ebbcd2e93f3fb1bfb441e633ed3a8b7",
+      "canonicalLfSha256": "5ed129ffa016e47fb7cb336ca00434324e6403639f1bf9496320d49df47e77b0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "bytes": 79868,
+      "rawSha256": "2d10a97a02eb58a71d8f4ff4887d31c96e2bcf5c695f7e4e7d562e48bf21ca2f",
+      "canonicalLfSha256": "2d10a97a02eb58a71d8f4ff4887d31c96e2bcf5c695f7e4e7d562e48bf21ca2f"
+    },
+    {
+      "path": "tools/staging/check-m67-hosted.ts",
+      "bytes": 11105,
+      "rawSha256": "67f0f6b9bd995a735bcb285f6150003e87201e3ce064ae4f20dcff381acf4f0c",
+      "canonicalLfSha256": "67f0f6b9bd995a735bcb285f6150003e87201e3ce064ae4f20dcff381acf4f0c"
+    },
+    {
+      "path": "tools/staging/upgrade-m67.ts",
+      "bytes": 3199,
+      "rawSha256": "c8b48a48c7f9db39237962dc63fca52d0760d666f426583d3e02483ca82cd548",
+      "canonicalLfSha256": "c8b48a48c7f9db39237962dc63fca52d0760d666f426583d3e02483ca82cd548"
+    }
+  ],
+  "localEvidence": [
+    {
+      "path": ".superpowers/m67-print-normal-2.png",
+      "bytes": 176349,
+      "rawSha256": "1b4a273c206aca1ad08135db9fcf22a1ca924dffdee4a45d9de1cf8318eff1a3"
+    },
+    {
+      "path": ".superpowers/m67-print-long-3.png",
+      "bytes": 157585,
+      "rawSha256": "21f6537d277cd1324a53314428e32dd0f89e05ba110b9462afe09bf0af72c4bb"
+    },
+    {
+      "path": ".superpowers/m67-print-long-5.png",
+      "bytes": 125264,
+      "rawSha256": "3286cd99d684c2827b3f5aa97a67836b1d17176b0c149f61383d15db759a92da"
+    },
+    {
+      "path": ".superpowers/m67-native-integrated-recheck.log",
+      "bytes": 758,
+      "rawSha256": "b927b37108d91918617c58f99bc6414e5c6bd4717a61e1622d4e3844bfb44ee2"
+    },
+    {
+      "path": ".superpowers/m67-repository-final-check.log",
+      "bytes": 165337,
+      "rawSha256": "7c342866d379648f65fd346508204aeee50f0873b944a15a62060024596f0008"
+    }
+  ]
+}

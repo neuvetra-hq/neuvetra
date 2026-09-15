@@ -9,3 +9,6 @@ export * from "./m65"
 export * from "./m66"
 export * from "./m66-report"
 export * from "./m66-sources"
+
+export * from "./m67"
+export * from "./m67-report"

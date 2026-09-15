@@ -1,3 +1,5 @@
+import { readAnnualElectricityWorksheet, validateAnnualWorksheetInput, validateAnnualWorksheetReview, type AnnualWorksheetInput, type AnnualWorksheetCorrection, type AnnualWorksheetReviewInput } from "./m67"
+import { readAnnualWorksheetReports, validateAnnualWorksheetReportInput, type AnnualWorksheetReportInput } from "./m67-report"
 import { readSourceElectricityWorksheet, validateSourceWorksheetInput, validateSourceWorksheetReview, type SourceWorksheetInput, type SourceWorksheetCorrection, type SourceWorksheetReviewInput } from "./m66"
 import { readSourceWorksheetReports, validateSourceWorksheetReportInput, type SourceWorksheetReportInput } from "./m66-report"
 import { readElectricitySources, validateElectricitySourceUpload } from "./m66-sources"
@@ -943,6 +945,48 @@ export class WorkspaceDatabase {
       return record
     })
   }
+  async findAnnualElectricityWorksheet(userId: string, companyId: string) {
+    return this.asUser(userId, tx => readAnnualElectricityWorksheet(tx, companyId))
+  }
+  async saveAnnualElectricityWorksheet(userId: string, companyId: string, input: AnnualWorksheetInput | AnnualWorksheetCorrection, correction = false) {
+    validateAnnualWorksheetInput(input, correction)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.save_annual_electricity_worksheet($1,$2::text::jsonb,$3)", [companyId, JSON.stringify(input), correction])
+      const result = await readAnnualElectricityWorksheet(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async reviewAnnualElectricityWorksheet(userId: string, companyId: string, input: AnnualWorksheetReviewInput) {
+    validateAnnualWorksheetReview(input)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.review_annual_electricity_worksheet($1,$2::text::jsonb)", [companyId, JSON.stringify(input)])
+      const result = await readAnnualElectricityWorksheet(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async findAnnualWorksheetReports(userId:string,companyId:string) {
+    return this.asUser(userId,async tx=>(await readAnnualWorksheetReports(tx,companyId))?.list??null)
+  }
+  async findAnnualWorksheetReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>(await readAnnualWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===reportId)??null)
+  }
+  async downloadAnnualWorksheetReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>{
+      const records=await readAnnualWorksheetReports(tx,companyId),report=records?.list.reports.find(r=>r.id===reportId)
+      return report?{report,bytes:records!.bytes.get(reportId)!}:null
+    })
+  }
+  async createAnnualWorksheetReport(userId:string,companyId:string,input:AnnualWorksheetReportInput) {
+    validateAnnualWorksheetReportInput(input)
+    return this.asTrustedUser(userId,async tx=>{
+      const created=await tx.query<{id:string}>("select neuvetra.create_annual_electricity_report($1,$2::text::jsonb) id",[companyId,JSON.stringify(input)])
+      const record=(await readAnnualWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===created.rows[0]?.id)
+      if(!record)throw new Error("Worksheet report unavailable.")
+      return record
+    })
+  }
   async findElectricitySources(userId:string,companyId:string){return this.asUser(userId,async tx=>(await readElectricitySources(tx,companyId))?.list??null)}
   async findElectricitySource(userId:string,companyId:string,sourceId:string){return this.asUser(userId,async tx=>(await readElectricitySources(tx,companyId))?.list.sources.find(s=>s.id===sourceId)??null)}
   async downloadElectricitySource(userId:string,companyId:string,sourceId:string){return this.asUser(userId,async tx=>{const found=await readElectricitySources(tx,companyId),source=found?.list.sources.find(s=>s.id===sourceId);return source?{source,bytes:found!.bytes.get(sourceId)!}:null})}
@@ -998,6 +1042,7 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
     await db.exec(await Bun.file(new URL("./migrations/0010_manual_electricity_worksheet.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0011_worksheet_reports.sql", import.meta.url)).text())
     await db.exec(await Bun.file(new URL("./migrations/0012_source_electricity_worksheet.sql", import.meta.url)).text())
+    await db.exec(await Bun.file(new URL("./migrations/0013_annual_electricity_worksheet.sql", import.meta.url)).text())
     return new DevelopmentWorkspaceDatabase(db)
   }
 
