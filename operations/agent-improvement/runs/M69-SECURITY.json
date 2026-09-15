@@ -4,7 +4,12 @@
   "role": "security-reliability",
   "execution_context": "/root/m69_security",
   "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m69-security-final-accepted.md",
+      "sha256": "901453017f7321b9de4985063e91126abf6b16c550ab62c1fe23fd663ae9e083"
+    }
+  ],
   "criteria": [
     {
       "id": "AC-01",
@@ -17,11 +22,12 @@
     },
     {
       "id": "AC-02",
-      "status": "pending",
+      "status": "pass",
       "evidence": [
-        "evaluations/research-qa/m69-security-review.md"
+        "evaluations/research-qa/m69-security-final-accepted.md",
+        "evaluations/research-qa/m69-final-security.test.ts"
       ],
-      "reason": "Final closure validator, compiled runtime/admission tests and final byte-bound review pending"
+      "reason": "Final closure validation, compiled runtime/admission probes and exact byte-bound security review passed for the offline candidate."
     }
   ],
   "review": {
@@ -34,8 +40,8 @@
   "outcome": {
     "status": "in_progress",
     "first_review": "fail",
-    "material_findings_open": 1,
-    "rework_cycles": 1,
+    "material_findings_open": 0,
+    "rework_cycles": 2,
     "escaped_defects": null,
     "repeated_findings": []
   },
@@ -69,6 +75,6 @@
   ],
   "notes": [
     "First independent runtime negative test run:5pass1fail49assertions. Targeted drain repair:6pass0fail50assertions. Original failed result preserved.",
-    "Reviewer authored only independent tests and review; no paid request or secret access. Final record snapshot/review remains pending."
+    "Reviewer authored only independent tests and review; no paid request or secret access. The security assignment's own immutable run snapshot and second-order review remain pending, so this workflow record stays in progress."
   ]
 }

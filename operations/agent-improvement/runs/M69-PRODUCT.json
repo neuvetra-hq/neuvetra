@@ -2,10 +2,10 @@
   "schema_version": 1,
   "id": "M69-PRODUCT",
   "role": "cpo",
-  "execution_context": "/root",
-  "prompt_sha256": null,
+  "execution_context": "/root/m69_product",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
   "artifacts": [
-    {"path": "evaluations/research-qa/m69-product-evaluation.md", "sha256": "d2a83b16c84a5ceb3f030c5a49ea951a5276b39e0ade9080ad7067897dc9c27b"},
+    {"path": "evaluations/research-qa/m69-product-evaluation.md", "sha256": "6aa00ae019ab515189a0c0360bac3b3c2f47943141910beb721454b505516866"},
     {"path": "evaluations/research-qa/m69-product-evaluation.test.ts", "sha256": "70a3849619ea0a82fa400b067d605b503db7b84d47ecfe9f2e863f39172be755"}
   ],
   "criteria": [

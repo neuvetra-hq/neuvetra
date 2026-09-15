@@ -74,3 +74,6 @@ operations/agent-improvement/snapshots/M66-QA.json -text whitespace=cr-at-eol
 evaluations/research-qa/m68-* -text whitespace=cr-at-eol
 docs/research/m68-accounting-* -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M68-*.json -text whitespace=cr-at-eol
+# M69 accepted candidate/review bundles bind their original bytes, including line endings.
+docs/research/m69-canary-preparation.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json -text whitespace=cr-at-eol
