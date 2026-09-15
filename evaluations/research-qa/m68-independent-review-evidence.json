@@ -1,0 +1,308 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M68-QA",
+  "status": "local_pass_after_F01_repair_hosted_delivery_pending",
+  "observedAt": "2026-09-15T03:24:04.513Z",
+  "baseCommit": "ad008741e4d3750af7de6e4791e2adc524c6713d",
+  "branch": "codex/m68-bill-evidence",
+  "requestedCompute": {
+    "model": "gpt-6-astra",
+    "effort": "high"
+  },
+  "observedCompute": {
+    "model": null,
+    "effort": null,
+    "tokens": null,
+    "cost": null
+  },
+  "rolePrompt": {
+    "path": "operations/agents/qa-lead.md",
+    "sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+    "bytes": 3119
+  },
+  "reviewedFiles": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "37c72e041d3f2ae3677bfb8b1ab5f0bd29bf129ad0894d8caafae44ebc0872fa",
+      "bytes": 9880
+    },
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "33320e7b664fce0c4a66dd318f1be88002a90f03dae0bef1e52a82a859b11b33",
+      "bytes": 7948
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "sha256": "979787d7544f47fb437657f278c296f9ef06b01e6dadec67f6995f9af03bfce3",
+      "bytes": 4913
+    },
+    {
+      "path": "apps/site-api/src/staging/postgres.test.ts",
+      "sha256": "ab5bff8291c57c63867afd2f5999fd5784a04baeb9c087968c26253f78259722",
+      "bytes": 17953
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "e16053cc6e2c703001dc190f1f14dc1ec0de23530474b521319f8778f0e6ef13",
+      "bytes": 12148
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "be85ba50893d99b70e2350eaf2a52373012be8117b72c94249d1670f5ee8f0b6",
+      "bytes": 12757
+    },
+    {
+      "path": "apps/site-api/src/workspace/m66-postgres.test.ts",
+      "sha256": "d44306cbfb69352e3c088e8243c0aac99dc7b15338e7f9425fc90e1df980abeb",
+      "bytes": 12588
+    },
+    {
+      "path": "apps/site-api/src/workspace/m67-postgres.test.ts",
+      "sha256": "8a66a9ea711b596a6e46223d6e88b1d1cbec97b7e89a5143f11c51cb0e03da3e",
+      "bytes": 10895
+    },
+    {
+      "path": "apps/site-api/src/workspace/m68-postgres.test.ts",
+      "sha256": "377fc21eccf42b05487730f7a11198f4873ce5360226f6580992a4960cbebfdd",
+      "bytes": 19433
+    },
+    {
+      "path": "apps/site-api/src/workspace/m68-routes.ts",
+      "sha256": "af6757c8074d9e1f6960dc9e784672f5a341e7f84a08714f557371e12dfbda14",
+      "bytes": 2897
+    },
+    {
+      "path": "apps/site-api/src/workspace/m68-report-routes.ts",
+      "sha256": "e906e718667e7aff5ddcb36897544dc9dfc601e2c7c9f9a69448fb244db2b9a7",
+      "bytes": 3308
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "8f7f78c1c1b47bfd29008318494ca81388c92e1eb9f644b692cf008dd83c5994",
+      "bytes": 2279
+    },
+    {
+      "path": "apps/site-web/src/components/AnnualElectricityEvidence.tsx",
+      "sha256": "ffd71cf8e590a0d8666bddb63d7530b034ad2e74a06ae6f5b06848469d619d16",
+      "bytes": 15808
+    },
+    {
+      "path": "apps/site-web/src/components/AnnualEvidenceReports.tsx",
+      "sha256": "1ee9d024727ef5a9fe24a475108d9b19902575e53e03de589935d45d1642c325",
+      "bytes": 7542
+    },
+    {
+      "path": "apps/site-web/src/lib/m68-api.ts",
+      "sha256": "5a4477fa1813b18aac1a92b006e85622778db03e11b34e16a1e9db96541a9697",
+      "bytes": 8363
+    },
+    {
+      "path": "apps/site-web/src/lib/m68-report-api.ts",
+      "sha256": "3a947fe5e0de9dcc364d3c76e5e041667e2b4a2f181755b3266a1b9e81c00dec",
+      "bytes": 7267
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "d80947ab5f77cfa222ce68da3e69eb318e94a2efdcfee83fcb83779887e8a2b9",
+      "bytes": 5504
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "2cde398001ce2c26e42786e1f7ae680f77a0ea85cef337178f65575a0ad69984",
+      "bytes": 25208
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "3eb64bac01420488b83b517bddc255dd734e13c3bac68a43531d4a41abb08627",
+      "bytes": 9841
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "e97a379e92d26f73e76a88407c0c5b2b122c323f68dd209855cfbda766599efc",
+      "bytes": 381
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "06d6696092c681ad841540f3e80512128d9fee6760c7e3c5303f629cd564e572",
+      "bytes": 8945
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "52133972077bf70af905161a6b7fa81de806d019af7a56a2296da53af2244dad",
+      "bytes": 82702
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68.ts",
+      "sha256": "dbfb55a42a2368b8a32a226c3e7c8127c4cfb39470c944110f3094e03401e026",
+      "bytes": 11601
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-contract.ts",
+      "sha256": "871ef2aed3884dfd3dc7cafde07444094aeb7cf5740ead3ea11e6b61afa6748e",
+      "bytes": 4563
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-report.ts",
+      "sha256": "56799a03434fcb546936cfd116d428bb5c9642250653ef433fe9408ddad8c08f",
+      "bytes": 16171
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-template.ts",
+      "sha256": "378e485b0db60aa76f43987451087b069a589882a6fd50cf7b46108f5037e9cf",
+      "bytes": 10290
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "sha256": "81686f3c62f8130a60dbbc096ae758eb6d56ecd80df3d533621a1990ae33d425",
+      "bytes": 56996
+    },
+    {
+      "path": "tools/staging/check-m68-baseline.ts",
+      "sha256": "897dc1153d09947dbf26e1fbaee818c64a4f3ea286ca11a5410c66bf0b85cdd7",
+      "bytes": 7329
+    },
+    {
+      "path": "tools/staging/check-m68-hosted.ts",
+      "sha256": "f0df7ad02a3a069f8182c904c6cffcc50e89c7295bd33e342d879774b41c63d9",
+      "bytes": 13284
+    },
+    {
+      "path": "tools/staging/m68-baseline.ts",
+      "sha256": "499a9be25cd9c6c81dd81d1be38f3d4386a6cf3fac64437b303b4e24968497e8",
+      "bytes": 1760
+    },
+    {
+      "path": "tools/staging/upgrade-m68.ts",
+      "sha256": "04e110cd1ba17ed0d25664632cf2e6482354d77c3bbf3c83a8b992659821fa9f",
+      "bytes": 3191
+    }
+  ],
+  "qaArtifacts": [
+    {
+      "path": "evaluations/research-qa/m68-independent-baseline.ts",
+      "sha256": "f189cf4f1fac7ed42660950ed6b5983363d214f3b68724dcbb76e8d631bbbdb2",
+      "bytes": 1314
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-baseline.json",
+      "sha256": "2ca6bfaaeac9255454f27cc771a4bd447b76942ff374e393c5e3fbd364f934a6",
+      "bytes": 148544
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-postgres.test.ts",
+      "sha256": "bb4ecacaf3dbef21ef6423856a227aeb6f853bc6eebfc56a623cd3b6bb5a496d",
+      "bytes": 19215
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-native-fixture.json",
+      "sha256": "a0809d8b99b401cac88bb2d751b3a28eb8086134c22c927c70b6de9daeb3e04b",
+      "bytes": 175399
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-frontend.test.ts",
+      "sha256": "8f182f7bc4bbdd4542b5c932bc18729dcfd96007cea399581e2a27c78a68465a",
+      "bytes": 6883
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-print-view.test.ts",
+      "sha256": "a63f87a17b35ef4191429ff73c193574c42e7bf1d33205915086070e7cade776",
+      "bytes": 5898
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-ui.test.ts",
+      "sha256": "30dc2f96283d53e7ae9e5fa6d7a441cd0a1225c54ef2174ed50353f2fbab34ba",
+      "bytes": 4561
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-restore-check.ts",
+      "sha256": "59acdbb57b4890c9383afcc56e31eac2e68fb015554b25270e2868dca6eaf99f",
+      "bytes": 7214
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-restore-receipt.json",
+      "sha256": "427dd91adf0bb6d4bcae9d58739085ca2ab003493491d3529e76d77f4b217d48",
+      "bytes": 23884
+    }
+  ],
+  "logSnapshots": [
+    {
+      "path": "evaluations/research-qa/m68-independent-native-first.log",
+      "sha256": "af3ee6907f6a6dfb767bdf7d1f38911d09eb8d64d37a02373ad07a5a31733196",
+      "bytes": 6430,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-postgres.test.ts:\r\n(pass) migration14 retains all1894 independently frozen predecessor rows; sources are pinned originals [125.00ms]\r\n(pass) explicit zero and unknown inputs retain separate evidence gaps and selected annual review is not inherited [94.00ms]\r\n(pass) source-only, explanation-only, annual-only successors pass actual decoder and preserve earlier report [109.00ms]\r\n(pass) missing January cannot link; equal quantity requires no explanation; duplicate IDs and bytes and false periods refuse in HTTP and native SQL [157.00ms]\r\n18 | const hash=(v:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(v).digest('hex')\r\n19 | const baseline=await Bun.file(new URL('./m68-independent-baseline.json',import.meta.url)).json()\r\n20 | let operator:WorkspaceConnection,runtime:WorkspaceConnection,db:HostedWorkspaceDatabase,app:Awaited<ReturnType<typeof createStagingServer>>,annual:any,evidence:any,current:any,report:any,reportBytes:Uint8Array,sources:any[]=[]\r\n21 | const construct=(c:WorkspaceConnection)=>new(HostedWorkspaceDatabase as unknown as new(c:WorkspaceConnection,r:string)=>HostedWorkspaceDatabase)(c,REF)\r\n22 | const request=(actor:keyof typeof ids|null,kind='annual-electricity-evidence',suffix='',payload?:unknown,c=company)=>app.fetch(new Request(`${ORIGIN}/workspace-api/workspace/${c}/${kind}${suffix}`,{method:payload===undefined?'GET':'POST',headers:{origin:ORIGIN,...(actor?{authorization:'Bearer '+actor}:{}),...(payload===undefined||payload instanceof FormData?{}:{'content-type':'application/json'})},body:payload===undefined?undefined:payload instanceof FormData?payload:JSON.stringify(payload)}))\r\n23 | const json=async(actor:keyof typeof ids,kind:string,suffix='',payload?:unknown,status=payload===undefined?200:201,c=company)=>{const r=await request(actor,kind,suffix,payload,c);expect(r.status,await r.clone().text()).toBe(status);return r.json() as Promise<any>}\r\n                                                                                                                                                                                                                               ^\r\nerror: {\"error\":\"Enter twelve ordered 2023 month slots with at least one valid quantity.\"}\r\n\r\nExpected: 201\r\nReceived: 422\r\n\r\n      at <anonymous> (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-postgres.test.ts:23:219)\r\n      at async annualSave (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-postgres.test.ts:25:163)\r\n      at async <anonymous> (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-postgres.test.ts:73:130)\r\n(fail) native driver independently recomputed small, tie and maximal totals are reused through M68 API and decoder [93.00ms]\r\n(pass) cross-tenant, uninvited, member, signed-out, self-review and competing saves reject at real boundaries [219.00ms]\r\n(pass) coordinated stored coverage, annual snapshot and report bytes/hash/length corruption refuse with rollback [47.00ms]\r\n84 |  for(const kind of ['coverage','annual','report','source']){let observed=false;try{await operator.transaction(async tx=>{await tx.query(\"select set_config('request.jwt.claim.sub',$1,true)\",[ids.owner]);if(kind==='report'){await tx.query('alter table neuvetra.annual_evidence_reports disable trigger user');await tx.query(\"update neuvetra.annual_evidence_reports set report_bytes=convert_to('<html>Forged verified total</html>','utf8'),report_sha256=encode(sha256(convert_to('<html>Forged verified total</html>','utf8')),'hex'),report_byte_length=octet_length(convert_to('<html>Forged verified total</html>','utf8')) where id=$1\",[report.id])}else if(kind==='source'){await tx.query('alter table neuvetra.electricity_sources disable trigger user');await tx.query(\"update neuvetra.electricity_sources set original_bytes=convert_to('forged-pdf','utf8'),sha256=encode(sha256(convert_to('forged-pdf','utf8')),'hex'),byte_length=10 where id=$1\",[sources[0].id])}else{const v=structuredClone(current);if(kind==='coverage')v.coverag\r\n85 |  expect((await json('owner','annual-electricity-evidence')).versions.at(-1).id).toBe(current.id)\r\n86 | })\r\n87 | test('queued authorized save is refused after access revocation at lock release and fresh connection retains closure',async()=>{\r\n88 |  await save();const p=input([link(0,'Post-lock revocation challenge')]);let pending:Promise<Response>|undefined\r\n89 |  await operator.transaction(async tx=>{await tx.query('select id from neuvetra.companies where id=$1 for update',[company]);pending=request('admin','annual-electricity-evidence','/corrections',p);let waiting=false;for(let i=0;i<100;i++){await tx.query('select pg_stat_clear_snapshot()');const r=await tx.query<{n:number}>(\"select count(*)::int n from pg_stat_activity where datname=current_database() and usename='neuvetra_runtime' and wait_event_type='Lock'\");if(r.rows[0]!.n){waiting=true;break}await new Promise(r=>setTimeout(r,10))}expect(waiting).toBe(true);await tx.query('update neuvetra.staging_access set active=false where user_id=$1',[ids.admin])});expect((await pending!).status).toBe(403);expect((await json('owner','annual-electricity-evidence')).versions.at(-1).id).toBe(current.id)\r\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^\r\nerror: expect(received).toBe(expected)\r\n\r\nExpected: 403\r\nReceived: 404\r\n\r\n      at <anonymous> (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-postgres.test.ts:89:693)\r\n(fail) queued authorized save is refused after access revocation at lock release and fresh connection retains closure [47.00ms]\r\n\r\n 6 pass\r\n 2 fail\r\n 190 expect() calls\r\nRan 8 tests across 1 file. [1173.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-native-recheck.log",
+      "sha256": "28eb2a58352c7b6b716afd18ce4e4be32eb573d7b89958c6f72653902047857c",
+      "bytes": 1195,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-postgres.test.ts:\r\n(pass) migration14 retains all1894 independently frozen predecessor rows; sources are pinned originals [125.00ms]\r\n(pass) explicit zero and unknown inputs retain separate evidence gaps and selected annual review is not inherited [93.00ms]\r\n(pass) source-only, explanation-only, annual-only successors pass actual decoder and preserve earlier report [110.00ms]\r\n(pass) missing January cannot link; equal quantity requires no explanation; duplicate IDs and bytes and false periods refuse in HTTP and native SQL [156.00ms]\r\n(pass) native driver independently recomputed small, tie and maximal totals are reused through M68 API and decoder [141.00ms]\r\n(pass) cross-tenant, uninvited, member, signed-out, self-review and competing saves reject at real boundaries [234.00ms]\r\n(pass) coordinated stored coverage, annual snapshot and report bytes/hash/length corruption refuse with rollback [62.00ms]\r\n(pass) queued authorized save is refused after access revocation at lock release and fresh connection retains closure [188.00ms]\r\n\r\n 8 pass\r\n 0 fail\r\n 253 expect() calls\r\nRan 8 tests across 1 file. [1408.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-frontend-first.log",
+      "sha256": "b712f92efd1559637cfa148e8dd222909993d9bde87c2985e5cff40c284d8d43",
+      "bytes": 1644,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-frontend.test.ts:\r\n(pass) actual native success history decodes including the full independent lifecycle\r\n(pass) independent malformed values, false coverage, inherited review and duplicate-byte changes refuse [16.00ms]\r\n(pass) actual evidence transport refuses late header/body success and revoked actor callbacks\r\n(pass) real report transport verifies metadata then exact bytes; rejects body abort, corruption and denied access [15.00ms]\r\n(pass) report frozen source, lineage, review and template substitutions refuse\r\n(pass) Docker web/runtime stages and deny-by-default context include every new imported M68 module\r\n\r\napps\\site-web\\src\\lib\\staging-authorization.test.ts:\r\n(pass) actual SIGNED_IN subscription and focus preserve the mounted workspace key, actor and unsaved-form lifetime\r\n(pass) actual TOKEN_REFRESHED subscription updates tokens held by existing request closures without remount\r\n(pass) changed role, workspace, evidence or subject aborts the prior lifetime and stale callbacks cannot close its replacement\r\n(pass) latest authorization wins; stale successful and failed responses cannot replace refreshed credentials\r\n(pass) revocation immediately closes the workspace; late success stays closed, then a fresh verified focus creates a new lifetime\r\n(pass) authorization refusal and actual sign-out close immediately; late events cannot reopen a signed-out view\r\n(pass) effect cleanup aborts both actor and in-flight authorization and removes subscription/focus timers\r\n\r\n 13 pass\r\n 0 fail\r\n 105 expect() calls\r\nRan 13 tests across 2 files. [91.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-print-actions.log",
+      "sha256": "c1d82c71f59821297de7d7ed67fb3daa81be0c54b7006c59d9d6c1528c67317e",
+      "bytes": 8954,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-print-view.test.ts:\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:15:198\r\n(fail) M68 actual annual evidence report action closure lifecycle > sync blank popup is disowned before verification and receives only exact verified HTML\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:15:365\r\n(fail) M68 actual annual evidence report action closure lifecycle > blocked popup does not fetch, clears busy lock and permits a later action\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:15:496\r\n(fail) M68 actual annual evidence report action closure lifecycle > authorization or integrity refusal closes the blank popup with no Blob\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:17:108\r\n(fail) M68 actual annual evidence report action closure lifecycle > user closes popup during verification: no navigation or Blob allocation\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:17:153\r\n(fail) M68 actual annual evidence report action closure lifecycle > actor abort before click does nothing; abort while verifying prevents navigation and closes popup\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:19:7\r\n(fail) M68 actual annual evidence report action closure lifecycle > unmount closes pending popup immediately and late verified resolution cannot navigate\r\n 9 | function harness(){\r\n10 |  const states:unknown[]=[],cleanup:Array<()=>void>=[],events:string[]=[],timers:Array<()=>void>=[],revoked:string[]=[]\r\n11 |  let read:()=>Promise<string>=async()=>'<html>verified & exact</html>',popupBlocked=false\r\n12 |  const popup={opener:{} as unknown,closed:false,document:{title:'',body:{textContent:''}},location:{replace:(url:string)=>{events.push('navigate:'+url)}},close(){this.closed=true;events.push('close')}}\r\n13 |  const blobs:Blob[]=[],controller=new AbortController()\r\n14 |  const factory=new Function('useEffect','useRef','useState','readAnnualEvidenceReportHtml','listAnnualEvidenceReports','createAnnualEvidenceReport','window','URL','Blob','setTimeout',script)\r\n     ^\r\nSyntaxError: Unexpected token '{'. import call expects one or two arguments.\r\n      at <parse> (3:1)\r\n      at Function (unknown:1:1)\r\n      at harness (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:14:20)\r\n      at C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-print-view.test.ts:19:117\r\n(fail) M68 actual annual evidence report action closure lifecycle > navigation failure closes popup and still schedules Blob cleanup\r\n\r\n 0 pass\r\n 7 fail\r\nRan 7 tests across 1 file. [45.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-print-actions-recheck.log",
+      "sha256": "8037e323a36c09a588121c6e7b19c2678d47c914d1c5b9138307eeb40f4ad54d",
+      "bytes": 1206,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-print-view.test.ts:\r\n(pass) M68 actual annual evidence report action closure lifecycle > sync blank popup is disowned before verification and receives only exact verified HTML\r\n(pass) M68 actual annual evidence report action closure lifecycle > blocked popup does not fetch, clears busy lock and permits a later action\r\n(pass) M68 actual annual evidence report action closure lifecycle > authorization or integrity refusal closes the blank popup with no Blob\r\n(pass) M68 actual annual evidence report action closure lifecycle > user closes popup during verification: no navigation or Blob allocation\r\n(pass) M68 actual annual evidence report action closure lifecycle > actor abort before click does nothing; abort while verifying prevents navigation and closes popup\r\n(pass) M68 actual annual evidence report action closure lifecycle > unmount closes pending popup immediately and late verified resolution cannot navigate\r\n(pass) M68 actual annual evidence report action closure lifecycle > navigation failure closes popup and still schedules Blob cleanup\r\n\r\n 7 pass\r\n 0 fail\r\n 44 expect() calls\r\nRan 7 tests across 1 file. [50.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-ui-first.log",
+      "sha256": "d841c2052cd197de6efc156f902a5fd95546a7a742fc78c6283049c399f75bd6",
+      "bytes": 999,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-ui.test.ts:\r\nReferenceError: React is not defined\r\n      at AnnualElectricityEvidence (file:///C:/Users/nimab/.codex/worktrees/4441/Neuvetra/evaluations/research-qa/m68-independent-ui.test.ts:228:68)\r\n      at render (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-ui.test.ts:15:34)\r\n      at flush (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-ui.test.ts:18:70)\r\n      at async <anonymous> (C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m68-independent-ui.test.ts:21:144)\r\n(fail) actual evidence component presents entered-vs-attached boundaries and role-controlled correction UI\r\n(pass) actual evidence component refuses a late successful initial response after actor abort\r\n(pass) actual evidence component ignores late response after unmount\r\n\r\n 2 pass\r\n 1 fail\r\n 3 expect() calls\r\nRan 3 tests across 1 file. [66.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-ui-recheck.log",
+      "sha256": "7302a38be735f6fbcbd39a8706d2f234bc45ef57ef554e4e470a5833bc66f949",
+      "bytes": 444,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-ui.test.ts:\r\n(pass) actual evidence component presents entered-vs-attached boundaries and role-controlled correction UI [16.00ms]\r\n(pass) actual evidence component refuses a late successful initial response after actor abort\r\n(pass) actual evidence component ignores late response after unmount\r\n\r\n 3 pass\r\n 0 fail\r\n 8 expect() calls\r\nRan 3 tests across 1 file. [60.00ms]\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-restore.log",
+      "sha256": "90e5fdfd7ef8dacd6a825d4b846471b80e8450ef47cd37b589169161814a54b5",
+      "bytes": 597,
+      "text": "{\"status\":\"passed\",\"scope\":\"actual local pg_dump/pg_restore plus exact table/metadata hashes and restricted runtime source-to-report reads; not cloud/provider Auth/off-device recovery\",\"sourceDatabase\":\"m68_qa\",\"restoredDatabase\":\"m68_qa_restore\",\"schemaVersion\":14,\"tables\":62,\"records\":2101,\"allTableHashesIdentical\":true,\"allFourMetadataGroupsIdentical\":true,\"evidenceCompanies\":2,\"evidenceVersions\":29,\"evidenceReports\":4,\"annualCompanies\":8,\"annualVersions\":79,\"annualReports\":42,\"sourceWorksheetCompanies\":6,\"sourceWorksheetVersions\":43,\"sourceFilesVerified\":16,\"sourceReportsVerified\":39}\r\n"
+    },
+    {
+      "path": "evaluations/research-qa/m68-independent-offline-final.log",
+      "sha256": "2d8356785110fa9b7998d28c596bb1e205d00b41f6ca75cfc9195205dafeb0df",
+      "bytes": 2211,
+      "text": "bun test v1.3.12 (700fc117)\r\n\r\nevaluations\\research-qa\\m68-independent-frontend.test.ts:\r\n(pass) actual native success history decodes including the full independent lifecycle\r\n(pass) independent malformed values, false coverage, inherited review and duplicate-byte changes refuse [16.00ms]\r\n(pass) actual evidence transport refuses late header/body success and revoked actor callbacks\r\n(pass) real report transport verifies metadata then exact bytes; rejects body abort, corruption and denied access [15.00ms]\r\n(pass) report frozen source, lineage, review and template substitutions refuse\r\n(pass) Docker web/runtime stages and deny-by-default context include every new imported M68 module\r\n\r\nevaluations\\research-qa\\m68-independent-print-view.test.ts:\r\n(pass) M68 actual annual evidence report action closure lifecycle > sync blank popup is disowned before verification and receives only exact verified HTML\r\n(pass) M68 actual annual evidence report action closure lifecycle > blocked popup does not fetch, clears busy lock and permits a later action\r\n(pass) M68 actual annual evidence report action closure lifecycle > authorization or integrity refusal closes the blank popup with no Blob\r\n(pass) M68 actual annual evidence report action closure lifecycle > user closes popup during verification: no navigation or Blob allocation\r\n(pass) M68 actual annual evidence report action closure lifecycle > actor abort before click does nothing; abort while verifying prevents navigation and closes popup\r\n(pass) M68 actual annual evidence report action closure lifecycle > unmount closes pending popup immediately and late verified resolution cannot navigate\r\n(pass) M68 actual annual evidence report action closure lifecycle > navigation failure closes popup and still schedules Blob cleanup\r\n\r\nevaluations\\research-qa\\m68-independent-ui.test.ts:\r\n(pass) actual evidence component presents entered-vs-attached boundaries and role-controlled correction UI\r\n(pass) actual evidence component refuses a late successful initial response after actor abort\r\n(pass) actual evidence component ignores late response after unmount [16.00ms]\r\n\r\n 16 pass\r\n 0 fail\r\n 107 expect() calls\r\nRan 16 tests across 3 files. [92.00ms]\r\n"
+    }
+  ],
+  "findings": [
+    {
+      "id": "M68-QA-F01",
+      "severity": "release_blocker",
+      "firstDisposition": "failed_packaging_review",
+      "finalDisposition": "repaired_composed_regression_pass",
+      "details": "Web build omitted M68 contract/template; deny-by-default Docker context omitted all7 M68 files. Root repaired both. Actual Linux image build remains CI gate."
+    }
+  ],
+  "localRecovery": {
+    "archiveSha256": "0df1073512d74cbf83449459143eaf35e6434c117210cab743895621b25f5771",
+    "archivePublication": false,
+    "source": "m68_qa",
+    "destination": "m68_qa_restore",
+    "tables": 62,
+    "records": 2101,
+    "identicalTableAndMetadataHashes": true
+  },
+  "excludedClaims": [
+    "author regression is not independent",
+    "no hosted M68 browser execution by reviewer",
+    "no native print-dialog verification",
+    "no cloud/provider Auth recovery drill",
+    "no publication/deployment approval or professional assurance"
+  ]
+}

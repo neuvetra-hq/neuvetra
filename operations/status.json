@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T01:44:07.559814+00:00",
+  "updated_at": "2026-09-15T02:51:42.335694+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M67",
-    "name": "Full-year electricity coverage",
-    "status": "awaiting_board_feedback",
-    "next_gate": "Board reviews the live M67 version 4 annual worksheet and report before the next dependent milestone.",
+    "id": "M68",
+    "name": "Annual electricity with supporting bills",
+    "status": "in_progress",
+    "next_gate": "Independent accounting contract review, backend/UI implementation and integrated QA.",
     "evidence": [
-      "docs/research/m67-hosted-verification.json",
-      "evaluations/research-qa/m67-hosted-handoff.md"
+      "docs/research/evidence-annual-electricity-milestone-68.md",
+      "operations/feedback/2026-09-14-milestone-67.md"
     ]
   },
   "completed_milestones": [
@@ -94,6 +94,11 @@
       "id": "M66",
       "completed_at": "2026-09-14",
       "feedback": "operations/feedback/2026-09-14-milestone-66.md"
+    },
+    {
+      "id": "M67",
+      "completed_at": "2026-09-14",
+      "feedback": "operations/feedback/2026-09-14-milestone-67.md"
     }
   ],
   "runtime": {
@@ -101,14 +106,15 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M67 full-year worksheet and version 4 report live and independently reviewed; board feedback pending.",
+    "website_preview_state": "M67 hosted and workflow accepted; M68 under implementation, not deployed.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Scoped engineering, accounting and QA deliveries closed. Local PostgreSQL stopped; no persistent agent workers."
+    "last_session_work": "M68 independent accounting design review complete. CTO backend implementation active as sole M68 specialist; root UI/operators in progress."
   },
   "session_handoff": {
-    "current": "M67 implementation pushed, six checks passed, live schema 13 and post-restart verification passed.",
-    "next": "Board reviews Full-year electricity version 4 and its report. Keep synthetic, incomplete and unreleased status.",
+    "current": "M67 workflow accepted. M68 authorized on isolated milestone Git branch at exact published M67 head; technical contract drafted, accounting design review active.",
+    "next": "Complete M68 implementation and independent review; push milestone branch and integrate reviewed commits into rolling draft PR4, then verify CI/deploy/demonstrate. RAG readiness progresses independently.",
     "evidence": [
+      "operations/feedback/2026-09-14-milestone-67.md",
       "docs/research/m67-hosted-verification.json",
       "evaluations/research-qa/m67-hosted-handoff.md"
     ]
@@ -487,7 +493,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01â€“E06 and P01â€“P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00e2\u20ac\u201cE06 and P01\u00e2\u20ac\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -2092,7 +2098,7 @@
     "final_deployment_id": "405765fc-a4fe-4fd1-b310-d4a615c0decf"
   },
   "current_m67": {
-    "status": "live_verified_board_feedback_pending",
+    "status": "complete_board_accepted",
     "scope": "docs/research/annual-electricity-milestone-67.md",
     "board_authorized": true,
     "implementation_started": true,
@@ -2109,11 +2115,32 @@
     "deployment_id": "3c9bcdb7-1a64-49f2-8b05-1d2e5ab92938",
     "schema_version": 13,
     "hosted_operator_result": "passed_36_stages_8_application_posts_sessions_closed",
-    "remaining_gate": "Board demonstration feedback; no next dependent milestone started.",
+    "remaining_gate": "No open M67 scope blocker. M68 explicitly authorized separately.",
     "hosted_review": "evaluations/research-qa/m67-hosted-handoff.md",
     "hosted_verification": "docs/research/m67-hosted-verification.json",
     "hosted_snapshot": "docs/research/m67-hosted-snapshot.json",
     "annual_versions": 4,
-    "annual_reports": 3
+    "annual_reports": 3,
+    "board_feedback": "operations/feedback/2026-09-14-milestone-67.md",
+    "board_acceptance_scope": "Workflow accepted; board did not independently verify numbers; no application review decision or method release."
+  },
+  "current_m68": {
+    "status": "local_reviews_passed_publication_pending",
+    "board_authorized": true,
+    "scope": "docs/research/evidence-annual-electricity-milestone-68.md",
+    "base_commit": "ad008741e4d3750af7de6e4791e2adc524c6713d",
+    "branch": "codex/m68-bill-evidence",
+    "rolling_branch": "codex/m63-private-staging",
+    "rolling_pr": 4,
+    "publication": "pending",
+    "deployment": "pending",
+    "sole_publisher_and_ledger_writer": "M68 task 01a0a2ea-3548-77e2-9cb5-8615809d9d5f",
+    "parallel_rag_task": "01a0a2ea-42d4-7f22-82be-6ddf6dba1aa9",
+    "specialist_limit": "Accounting and QA ran concurrently after RAG explicitly lent its idle slot; both local review deliveries complete.",
+    "m67_acceptance_reconciliation": "Copied exact four local-only acceptance records from actual original checkout after inspecting differences; historical proposal retained, explicit new authorization separately recorded.",
+    "accounting_design": "docs/research/m68-accounting-contract.md",
+    "hosted_baseline": "Passed 24 stages; zero application POSTs; four temporary Auth sessions closed. Exact M63-M67 source/report preservation.",
+    "accounting_implementation": "docs/research/m68-accounting-implementation-review.md",
+    "independent_qa": "evaluations/research-qa/m68-local-review.md"
   }
 }

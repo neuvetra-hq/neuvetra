@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M68-QA",
+  "role": "qa-lead",
+  "execution_context": "/root/m68_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M68-QA.json",
+      "sha256": "b4dbd1b46e816925ade0c54c44347b24a98c86cdb3606596bcffd237beb5e543"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m68-local-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m68-local-review.md",
+      "docs/research/m68-accounting-implementation-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M68-QA.json",
+        "sha256": "b4dbd1b46e816925ade0c54c44347b24a98c86cdb3606596bcffd237beb5e543"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": true,
+  "parent_outcome": "M68 evidence-backed annual electricity",
+  "notes": [
+    "Scoped local role delivery accepted; hosted milestone delivery remains pending. Root reviews QA artifacts, independent QA reviews integrated product and accounting snapshots.",
+    "M68-QA-F01 Docker COPY and context omission repaired and independently rechecked. Reviewer harness failures and author first failures preserved in evidence. Actual compute/cost unknown."
+  ]
+}

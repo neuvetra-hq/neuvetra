@@ -11,3 +11,6 @@
 @media (max-width: 600px) { .worksheet-reports { padding: .7rem; } .worksheet-report-view iframe { height: 680px; } }
 
 .annual-month-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.annual-month-grid label span{font-size:.85rem;color:#c4ceba}.annual-table-wrap{overflow-x:auto}.annual-month-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.annual-month-table caption{text-align:left;margin:12px 0}.annual-month-table th,.annual-month-table td{padding:10px;text-align:left;border-bottom:1px solid #4c5845}.annual-month-table td{overflow-wrap:anywhere}@media(max-width:700px){.annual-month-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:440px){.annual-month-grid{grid-template-columns:minmax(0,1fr)}.annual-month-table th,.annual-month-table td{padding:8px 4px;font-size:.85rem}}
+
+/* M68 evidence selection follows the existing worksheet form appearance. */
+.worksheet-form select{width:100%;min-width:0;box-sizing:border-box;padding:12px;border:1px solid #77816c;border-radius:8px;background:#0f140e;color:#fff;font:inherit}.worksheet-card h3,.worksheet-check{overflow-wrap:anywhere}

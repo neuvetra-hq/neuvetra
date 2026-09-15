@@ -1,3 +1,29 @@
+# M68 local reviews passed; publication and hosted demonstration pending
+
+Independent accounting and integrated QA passed the reviewed candidate after the Docker packaging finding was repaired. Native persistence, exact arithmetic/source/report checks, frontend actions and a local restore passed. The fresh encrypted pre-upgrade application backup is verified; it excludes Auth and is not a hosted restore drill. Root is publishing to existing rolling PR4, then verifying CI, upgrading the existing database and demonstrating the deployed workflow.
+
+Historical entries below are superseded as next-action instructions.
+
+# M68 authorized — evidence contract and implementation
+
+M67 workflow acceptance has been deliberately reconciled from the original checkout's four local-only records. The board did not personally audit every number; annual version 4 remains unreviewed and methods remain unreleased. The new board instruction authorizes M68 implementation, publication and deployment on existing infrastructure.
+
+M68 connects exact saved annual entries to retained supported fictional January bills. Entered coverage and document coverage remain distinct, with visible gaps, overlapping periods and quantity discrepancies. Scope: docs/research/evidence-annual-electricity-milestone-68.md. CTO contract is delivered; independent accounting design review is active. Backend implementation and integrated QA remain pending.
+
+The board explicitly authorizes milestone Git branches. M68 uses codex/m68-bill-evidence based on ad008741; reviewed committed work must be pushed and integrated into codex/m63-private-staging / existing draft PR4. No PR merge into its base branch is authorized. M68 is the sole publisher/deployer/shared-ledger writer. Independent RAG readiness uses codex/m69-rag-readiness and hands reviewed commits to M68. One specialist slot is allocated to each task until coordinated otherwise. No new subscriptions or persistent agents.
+
+Historical entries below are superseded as next-action instructions.
+
+# M67 workflow accepted — next scope proposed
+
+The board accepts M67 workflow and explicitly has not independently checked every number. Numerical validation remains supported by the independent accounting and QA evidence. M67 is complete within its synthetic annual-electricity scope; version 4 remains unreviewed in the application, and the method/factor remain unreleased. See operations/feedback/2026-09-14-milestone-67.md.
+
+Proposed M68 is evidence-backed annual electricity: connect supported fictional bills to monthly entries, distinguish entered-month coverage from evidence coverage, surface gaps and discrepancies, and retain exact source/version/report history. No M68 implementation or worker is active. Define its acceptance criteria and supported bill-period rules before implementation. Publish this acceptance record with the next delivery.
+
+Bigger picture: a working private synthetic accounting workflow spans substantial workspace functionality and early draft-reporting capabilities. A real customer pilot still needs supported/released methods, appropriate inventory scope, real evidence intake and operational/security readiness. Commercial billing and controlled launch remain later work. The numbered roadmap stages overlap; M67 does not certify every acceptance criterion in stages 1–5.
+
+Historical entries below are superseded as next-action instructions.
+
 # M67 live — board review next
 
 Full-year electricity coverage is implemented, pushed and live on the existing hosting. Version 4 contains eleven months at 25,000 kWh and December at 26,000 kWh: 301,000.000 kWh and 58,707.1269 kg CO2e. Missing months remain distinct from zero. Four annual versions and three reports survived a service restart; M63–M66 records are unchanged. The downloaded report matches stored HTML bytes exactly.

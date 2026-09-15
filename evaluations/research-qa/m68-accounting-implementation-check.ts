@@ -1,0 +1,59 @@
+import assert from 'node:assert/strict'
+import {createPostgresConnection} from '../../packages/neuvetra-database/src/hosted'
+import {annualEvidenceCoverage,validateAnnualEvidenceInput,validateAnnualEvidenceLinks} from '../../packages/neuvetra-database/src/m68'
+import {buildAnnualEvidenceReport} from '../../packages/neuvetra-database/src/m68-report'
+import {M68_TEMPLATE_SHA256} from '../../packages/neuvetra-database/src/m68-template'
+import {decodeAnnualElectricityEvidence} from '../../apps/site-web/src/lib/m68-api'
+import {M67_LIMITATIONS,M67_PROFILE} from '../../packages/neuvetra-database/src/m67-contract'
+import {M68_LIMITATIONS,M68_PROFILE} from '../../packages/neuvetra-database/src/m68-contract'
+
+const receipt:any={scope:'independent accounting; native author database read-only',startedAt:new Date().toISOString(),checks:[],failures:[]}
+const hash=(v:Uint8Array|string)=>new Bun.CryptoHasher('sha256').update(v).digest('hex')
+const months=Array.from({length:12},(_,i)=>`2023-${String(i+1).padStart(2,'0')}`)
+const stable=(x:any):string=>JSON.stringify(x,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.keys(v).sort().map(k=>[k,v[k]])):v)
+function eq(a:any,b:any,label:string){assert.equal(stable(a),stable(b),label)}
+function numeric(q:string){const [i,f='']=q.split('.');return BigInt(i!)*1000n+BigInt(f.padEnd(3,'0'))}
+function result(n:bigint){const numerator=n*1950402888n,denom=10000000000000n;let rounded=numerator/1000000000n;const r=numerator%1000000000n;if(r>500000000n||(r===500000000n&&rounded%2n===1n))rounded++;const fraction=(numerator%denom).toString().padStart(13,'0').replace(/0+$/,'');return {quantityKwh:`${n/1000n}.${(n%1000n).toString().padStart(3,'0')}`,exactKgCo2e:`${numerator/denom}${fraction?'.'+fraction:''}`,displayKgCo2e:`${rounded/10000n}.${(rounded%10000n).toString().padStart(4,'0')}`}}
+function expected(a:any,links:any[]){const quantity=a.months[0].quantityKwh;return {enteredMonths:a.months.filter((m:any)=>m.quantityKwh!==null).length,missingInputMonths:a.months.filter((m:any)=>m.quantityKwh===null).map((m:any)=>m.month),linkedDocumentMonths:links.length?1:0,unambiguousDocumentMonths:links.length===1?1:0,missingDocumentMonths:links.length?months.slice(1):months,overlappingDocumentMonths:links.length>1?[months[0]]:[],quantityDifferenceMonths:links.some(l=>l.source.printedQuantityKwh!==quantity)?[months[0]]:[]}}
+const files=['packages/neuvetra-database/src/m68-contract.ts','packages/neuvetra-database/src/m68.ts','packages/neuvetra-database/src/m68-report.ts','packages/neuvetra-database/src/m68-template.ts','packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql','apps/site-api/src/workspace/m68-routes.ts','apps/site-api/src/workspace/m68-report-routes.ts','apps/site-web/src/lib/m68-api.ts','apps/site-web/src/lib/m68-report-api.ts','apps/site-web/src/components/AnnualElectricityEvidence.tsx','apps/site-web/src/components/AnnualEvidenceReports.tsx','docs/research/m68-accounting-contract.md','evaluations/research-qa/m68-accounting-cases.json']
+receipt.reviewedFiles=await Promise.all(files.map(async path=>({path,sha256:hash(await Bun.file(path).bytes())})))
+const db=createPostgresConnection('postgres://m63_test_admin@127.0.0.1:55463/m68_author',{tls:false,maxConnections:1})
+try{
+ await db.transaction(async tx=>{
+  await tx.query('set transaction read only')
+  receipt.transactionReadOnly=(await tx.query<any>('show transaction_read_only')).rows[0].transaction_read_only
+  const versions=(await tx.query<any>('select payload,company_id from neuvetra.annual_electricity_evidence_versions order by company_id,version')).rows
+  const annual=(await tx.query<any>('select payload,company_id from neuvetra.annual_electricity_worksheet_versions order by company_id,version')).rows
+  const reports=(await tx.query<any>('select * from neuvetra.annual_evidence_reports')).rows
+  const originals=(await tx.query<any>('select id,original_bytes,sha256,printed_quantity_kwh from neuvetra.electricity_sources')).rows
+  const reviews=(await tx.query<any>('select payload,company_id,version_id from neuvetra.annual_electricity_evidence_reviews')).rows
+  assert(versions.length>0);assert(reports.length>0)
+  const allow=new Set(['0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135','83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f'])
+  let monthlyAssertions=0
+  for(const row of versions){const v=row.payload,a=annual.find(x=>x.payload.id===v.annual.id);assert(a);eq(v.annual,{...a.payload,review:null},'exact M67 source reuse');eq(v.coverage,expected(v.annual,v.links),'independent month coverage');eq(annualEvidenceCoverage(v.annual,v.links),v.coverage,'backend coverage')
+   let sum=0n
+   for(const m of v.annual.months){if(m.quantityKwh===null){assert.equal(m.total,null);continue}const n=numeric(m.quantityKwh),r=result(n);sum+=n;eq(m.total.unrounded,r.exactKgCo2e,'monthly exact');eq(m.total.display,r.displayKgCo2e,'monthly rounding');monthlyAssertions++}
+   const r=result(sum);eq(v.annual.quantityKwh,r.quantityKwh,'annual quantity');eq(v.annual.total.unrounded,r.exactKgCo2e,'annual exact');eq(v.annual.total.display,r.displayKgCo2e,'annual rounding');assert.equal(v.annual.method.factorValue,'195.0402888');assert.equal(v.annual.method.classification,'development_candidate')
+   for(const l of v.links){const s=originals.find(x=>x.id===l.source.id);assert(s&&allow.has(s.sha256));assert.equal(hash(s.original_bytes),s.sha256);assert.equal(l.source.sha256,s.sha256);assert.equal(l.source.printedQuantityKwh,'12345.000');assert.equal(l.month,'2023-01');assert.equal(l.periodStart,'2023-01-01');assert.equal(l.periodEnd,'2023-01-31');assert.notEqual(v.annual.months[0].quantityKwh,null);assert.equal(Boolean(l.quantityDifferenceReason),v.annual.months[0].quantityKwh!=='12345.000')}
+  }
+  const samples=await Bun.file('evaluations/research-qa/m68-accounting-cases.json').json();receipt.designCases=[]
+  for(const sample of samples.accepted){const matches=versions.filter(({payload:v})=>stable(v.annual.months.map(({month,quantityKwh}:any)=>({month,quantityKwh})))===stable(sample.months)&&stable(v.links.map((l:any)=>l.source.sha256).sort())===stable(sample.links.map((l:any)=>l.fixture==='A'?'0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135':'83e000a95f9e2f95473dc2cba18be0fc36810b24b9288f59b5aceb3a5ec0430f').sort()));assert(matches.length>0,`native case absent: ${sample.id}`);for(const {payload:v} of matches)eq(v.coverage,sample.coverage,sample.id);receipt.designCases.push({id:sample.id,nativeMatches:matches.length})}
+  for(const company of new Set(versions.map(v=>v.company_id))){const common={companyId:company,synthetic:true,complete:false,releaseEligible:false,assurance:'none'};const a={...common,profile:M67_PROFILE,limitations:[...M67_LIMITATIONS],versions:annual.filter(x=>x.company_id===company).map(x=>({...x.payload,review:null}))};const v={...common,profile:M68_PROFILE,limitations:[...M68_LIMITATIONS],versions:versions.filter(x=>x.company_id===company).map(x=>({...x.payload,review:reviews.find(r=>r.version_id===x.payload.id)?.payload??null}))};decodeAnnualElectricityEvidence(v,company,a as any)}
+  const transitions={sourceOnly:0,explanationOnly:0,annualOnly:0}
+  for(const {payload:v,company_id:c} of versions){const p=versions.find(x=>x.company_id===c&&x.payload.id===v.previousVersionId)?.payload;if(!p)continue;const sourceIds=(x:any)=>x.links.map((l:any)=>l.source.id).sort();const reasons=(x:any)=>x.links.map((l:any)=>[l.source.id,l.quantityDifferenceReason]).sort();if(v.annual.id===p.annual.id&&stable(sourceIds(v))!==stable(sourceIds(p))){transitions.sourceOnly++;eq(v.annual.total,p.annual.total,'source-only result stable')}if(v.annual.id===p.annual.id&&stable(sourceIds(v))===stable(sourceIds(p))&&stable(reasons(v))!==stable(reasons(p))){transitions.explanationOnly++;eq(v.coverage,p.coverage,'explanation never clears discrepancy')}if(v.annual.id!==p.annual.id&&stable(reasons(v))===stable(reasons(p))){transitions.annualOnly++}}
+  for(const [kind,count] of Object.entries(transitions))assert(count>0,kind+' not observed');receipt.persistedTransitions=transitions
+  const reportKinds=new Set<string>()
+  for(const row of reports){const source=row.source_snapshot,built=buildAnnualEvidenceReport({id:row.id,companyId:row.company_id,createdBy:row.created_by,createdAt:new Date(row.created_at).toISOString(),source});assert.equal(hash(built.bytes),hash(row.report_bytes));assert.equal(built.reportSha256,row.report_sha256);assert.equal(row.template_sha256,M68_TEMPLATE_SHA256);const html=new TextDecoder().decode(built.bytes);for(const wording of ['Incomplete company inventory','No assurance','unreleased development candidates','not verified','Bill quantities are never added, substituted, prorated or annualized','explanation or manager decision does not clear a quantity difference'])assert(html.includes(wording),wording);assert(html.includes(`${source.coverage.enteredMonths} / 12 months entered; ${source.coverage.linkedDocumentMonths} / 12 months with attached documents.`));assert(html.includes(source.annual.total.unrounded+' kg CO2e'));assert(!/\{\{[a-zA-Z0-9]+\}\}/.test(html));if(source.coverage.overlappingDocumentMonths.length){assert(html.includes('Overlapping documents (not summed)'));reportKinds.add('overlap')}if(source.coverage.quantityDifferenceMonths.length){assert(html.includes('Explanation recorded; difference remains.'));reportKinds.add('mismatch')}if(!source.links.length)reportKinds.add('no_links');if(source.annual.months[0].quantityKwh==='0.000')reportKinds.add('zero');if(source.annual.months[0].quantityKwh===null)reportKinds.add('january_missing')}
+  receipt.native={versions:versions.length,reports:reports.length,monthlyAssertions,reportKinds:[...reportKinds],originalSources:originals.length}
+  receipt.checks.push('native immutable annual snapshot equality','independent integer monthly/aggregate arithmetic and half-even rounding','all 13 independent accounting vectors persisted','coverage reconstructed separately from product','source bytes/hash/printed quantity/period checks','actual frontend decoder on persisted histories','all stored report bytes equal current renderer and hashes','coverage/discrepancy/qualification wording')
+  // These refusals exercise pure boundary functions, not native writes.
+  const v=versions.find(x=>x.payload.links.length===1&&x.payload.annual.months[0].quantityKwh==='12345.000')!.payload
+  const l=v.links[0],link={month:'2023-01',sourceId:l.source.id,expectedSourceSha256:l.source.sha256,sourcePage:1,manualConfirmation:true,quantityDifferenceReason:null}
+  const input={annualVersionId:v.annual.id,expectedAnnualInputSha256:v.annual.inputSha256,expectedAnnualResultSha256:v.annual.resultSha256,links:[link],idempotencyKey:crypto.randomUUID()}
+  let refusals=0
+  for(const mutate of [(x:any)=>x.links.push({...link}),(x:any)=>x.links.push({...link,sourceId:crypto.randomUUID()}),(x:any)=>x.links[0].month='2023-02',(x:any)=>x.links[0].sourcePage=2,(x:any)=>x.links[0].manualConfirmation=false]){const bad=structuredClone(input);mutate(bad);assert.throws(()=>validateAnnualEvidenceInput(bad,false));refusals++}
+  for(const [quantity,reason] of [[null,null],['0.000',null],['25000.000',null],['12345.000','Spurious difference']]){const a=structuredClone(v.annual);a.months[0].quantityKwh=quantity;assert.throws(()=>validateAnnualEvidenceLinks(a,[{...link,quantityDifferenceReason:reason}] as any,[l.source]));refusals++}
+  receipt.pureBoundaryRefusals=refusals
+ })
+ receipt.disposition='pass_scoped_accounting_implementation'
+}catch(e){receipt.disposition='fail';receipt.failures.push(String(e));process.exitCode=1}finally{await db.close();receipt.finishedAt=new Date().toISOString();await Bun.write('evaluations/research-qa/m68-accounting-implementation-receipt.json',JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt))}

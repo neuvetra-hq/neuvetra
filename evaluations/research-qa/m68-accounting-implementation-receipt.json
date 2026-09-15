@@ -1,0 +1,145 @@
+{
+  "scope": "independent accounting; native author database read-only",
+  "startedAt": "2026-09-15T03:23:52.181Z",
+  "checks": [
+    "native immutable annual snapshot equality",
+    "independent integer monthly/aggregate arithmetic and half-even rounding",
+    "all 13 independent accounting vectors persisted",
+    "coverage reconstructed separately from product",
+    "source bytes/hash/printed quantity/period checks",
+    "actual frontend decoder on persisted histories",
+    "all stored report bytes equal current renderer and hashes",
+    "coverage/discrepancy/qualification wording"
+  ],
+  "failures": [],
+  "reviewedFiles": [
+    {
+      "path": "packages/neuvetra-database/src/m68-contract.ts",
+      "sha256": "871ef2aed3884dfd3dc7cafde07444094aeb7cf5740ead3ea11e6b61afa6748e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68.ts",
+      "sha256": "dbfb55a42a2368b8a32a226c3e7c8127c4cfb39470c944110f3094e03401e026"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-report.ts",
+      "sha256": "56799a03434fcb546936cfd116d428bb5c9642250653ef433fe9408ddad8c08f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-template.ts",
+      "sha256": "378e485b0db60aa76f43987451087b069a589882a6fd50cf7b46108f5037e9cf"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "sha256": "81686f3c62f8130a60dbbc096ae758eb6d56ecd80df3d533621a1990ae33d425"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m68-routes.ts",
+      "sha256": "af6757c8074d9e1f6960dc9e784672f5a341e7f84a08714f557371e12dfbda14"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m68-report-routes.ts",
+      "sha256": "e906e718667e7aff5ddcb36897544dc9dfc601e2c7c9f9a69448fb244db2b9a7"
+    },
+    {
+      "path": "apps/site-web/src/lib/m68-api.ts",
+      "sha256": "5a4477fa1813b18aac1a92b006e85622778db03e11b34e16a1e9db96541a9697"
+    },
+    {
+      "path": "apps/site-web/src/lib/m68-report-api.ts",
+      "sha256": "3a947fe5e0de9dcc364d3c76e5e041667e2b4a2f181755b3266a1b9e81c00dec"
+    },
+    {
+      "path": "apps/site-web/src/components/AnnualElectricityEvidence.tsx",
+      "sha256": "ffd71cf8e590a0d8666bddb63d7530b034ad2e74a06ae6f5b06848469d619d16"
+    },
+    {
+      "path": "apps/site-web/src/components/AnnualEvidenceReports.tsx",
+      "sha256": "1ee9d024727ef5a9fe24a475108d9b19902575e53e03de589935d45d1642c325"
+    },
+    {
+      "path": "docs/research/m68-accounting-contract.md",
+      "sha256": "d7f86ed74aa60a2c62112ccc19c17fc991145e3c2dd460b62589e74ba562843b"
+    },
+    {
+      "path": "evaluations/research-qa/m68-accounting-cases.json",
+      "sha256": "1bd58b8c6552ed7d47ab8480118612d3fbb51e7ab839619a2441ac83af0eb756"
+    }
+  ],
+  "transactionReadOnly": "on",
+  "designCases": [
+    {
+      "id": "january_match_no_link",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_match_one_bill",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_match_replacement_bill",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_match_overlap",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_mismatch_one_bill",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_mismatch_overlap",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_zero_one_bill",
+      "nativeMatches": 4
+    },
+    {
+      "id": "january_zero_no_bill",
+      "nativeMatches": 8
+    },
+    {
+      "id": "january_missing_february_entered_no_links",
+      "nativeMatches": 4
+    },
+    {
+      "id": "twelve_zeros_no_bills",
+      "nativeMatches": 8
+    },
+    {
+      "id": "twelve_25000_one_january_bill",
+      "nativeMatches": 9
+    },
+    {
+      "id": "m67_board_vector_one_january_bill",
+      "nativeMatches": 4
+    },
+    {
+      "id": "twelve_minimum_one_january_bill",
+      "nativeMatches": 4
+    }
+  ],
+  "persistedTransitions": {
+    "sourceOnly": 34,
+    "explanationOnly": 4,
+    "annualOnly": 56
+  },
+  "native": {
+    "versions": 126,
+    "reports": 60,
+    "monthlyAssertions": 992,
+    "reportKinds": [
+      "no_links",
+      "overlap",
+      "mismatch",
+      "zero",
+      "january_missing"
+    ],
+    "originalSources": 26
+  },
+  "pureBoundaryRefusals": 9,
+  "disposition": "pass_scoped_accounting_implementation",
+  "finishedAt": "2026-09-15T03:23:52.294Z"
+}

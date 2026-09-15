@@ -69,3 +69,8 @@ evaluations/research-qa/epa-limitation-candidate11-source-10.json -text whitespa
 operations/agent-improvement/snapshots/M66-CTO.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M66-ACCOUNTING.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M66-QA.json -text whitespace=cr-at-eol
+
+# M68 immutable review evidence preserves reviewed file bytes.
+evaluations/research-qa/m68-* -text whitespace=cr-at-eol
+docs/research/m68-accounting-* -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M68-*.json -text whitespace=cr-at-eol

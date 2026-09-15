@@ -1,3 +1,5 @@
+import { readAnnualElectricityEvidence, validateAnnualEvidenceInput, validateAnnualEvidenceReview, type AnnualEvidenceInput, type AnnualEvidenceCorrection, type AnnualEvidenceReviewInput } from "./m68"
+import { readAnnualEvidenceReports, validateAnnualEvidenceReportInput, type AnnualEvidenceReportInput } from "./m68-report"
 import { readAnnualElectricityWorksheet, validateAnnualWorksheetInput, validateAnnualWorksheetReview, type AnnualWorksheetInput, type AnnualWorksheetCorrection, type AnnualWorksheetReviewInput } from "./m67"
 import { readAnnualWorksheetReports, validateAnnualWorksheetReportInput, type AnnualWorksheetReportInput } from "./m67-report"
 import { readSourceElectricityWorksheet, validateSourceWorksheetInput, validateSourceWorksheetReview, type SourceWorksheetInput, type SourceWorksheetCorrection, type SourceWorksheetReviewInput } from "./m66"
@@ -941,6 +943,48 @@ export class WorkspaceDatabase {
     return this.asTrustedUser(userId,async tx=>{
       const created=await tx.query<{id:string}>("select neuvetra.create_source_worksheet_report($1,$2::text::jsonb) id",[companyId,JSON.stringify(input)])
       const record=(await readSourceWorksheetReports(tx,companyId))?.list.reports.find(r=>r.id===created.rows[0]?.id)
+      if(!record)throw new Error("Worksheet report unavailable.")
+      return record
+    })
+  }
+  async findAnnualElectricityEvidence(userId: string, companyId: string) {
+    return this.asUser(userId, tx => readAnnualElectricityEvidence(tx, companyId))
+  }
+  async saveAnnualElectricityEvidence(userId: string, companyId: string, input: AnnualEvidenceInput | AnnualEvidenceCorrection, correction = false) {
+    validateAnnualEvidenceInput(input, correction)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.save_annual_electricity_evidence($1,$2::text::jsonb,$3)", [companyId, JSON.stringify(input), correction])
+      const result = await readAnnualElectricityEvidence(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async reviewAnnualElectricityEvidence(userId: string, companyId: string, input: AnnualEvidenceReviewInput) {
+    validateAnnualEvidenceReview(input)
+    return this.asTrustedUser(userId, async tx => {
+      await tx.query("select neuvetra.review_annual_electricity_evidence($1,$2::text::jsonb)", [companyId, JSON.stringify(input)])
+      const result = await readAnnualElectricityEvidence(tx, companyId)
+      if (!result) throw new Error("Worksheet unavailable.")
+      return result
+    })
+  }
+  async findAnnualEvidenceReports(userId:string,companyId:string) {
+    return this.asUser(userId,async tx=>(await readAnnualEvidenceReports(tx,companyId))?.list??null)
+  }
+  async findAnnualEvidenceReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>(await readAnnualEvidenceReports(tx,companyId))?.list.reports.find(r=>r.id===reportId)??null)
+  }
+  async downloadAnnualEvidenceReport(userId:string,companyId:string,reportId:string) {
+    return this.asUser(userId,async tx=>{
+      const records=await readAnnualEvidenceReports(tx,companyId),report=records?.list.reports.find(r=>r.id===reportId)
+      return report?{report,bytes:records!.bytes.get(reportId)!}:null
+    })
+  }
+  async createAnnualEvidenceReport(userId:string,companyId:string,input:AnnualEvidenceReportInput) {
+    validateAnnualEvidenceReportInput(input)
+    return this.asTrustedUser(userId,async tx=>{
+      const created=await tx.query<{id:string}>("select neuvetra.create_annual_evidence_report($1,$2::text::jsonb) id",[companyId,JSON.stringify(input)])
+      const record=(await readAnnualEvidenceReports(tx,companyId))?.list.reports.find(r=>r.id===created.rows[0]?.id)
       if(!record)throw new Error("Worksheet report unavailable.")
       return record
     })
