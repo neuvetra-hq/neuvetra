@@ -1,0 +1,30 @@
+{
+  "kind": "m69_synthetic_provider_fixture",
+  "question_sha256": "3d07f2af45ca8e0b538f8b8678747c95f3b38d5ab076d6638f3bf417bbb15cd4",
+  "responses": [
+    {
+      "model": "anthropic/claude-opus-5",
+      "provider": "Anthropic",
+      "stop_reason": "end_turn",
+      "content": [{"type":"text","text":"{\"operation\":\"explain\",\"parts\":[{\"id\":\"q1\",\"start_token\":0,\"kind\":\"request\",\"requirements\":[{\"kind\":\"source_route\",\"subject\":\"activity_records\"},{\"kind\":\"conditional_rule\",\"subject\":\"duplicate_consumption\"}],\"ambiguity_context_ids\":[]}]}"}],
+      "usage": {"input_tokens":100,"output_tokens":10,"cost":0.001,"is_byok":false,"speed":"standard"},
+      "openrouter_metadata": {"requested":"anthropic/claude-opus-5","strategy":"direct","attempt":1,"is_byok":false,"endpoints":{"total":1,"available":[{"provider":"Anthropic","model":"anthropic/claude-opus-5","selected":true}]},"pipeline":[]}
+    },
+    {
+      "model": "anthropic/claude-sonnet-5",
+      "provider": "Anthropic",
+      "stop_reason": "end_turn",
+      "content": [{"type":"text","text":"{\"question_contract\":{\"parts\":[{\"id\":\"q1\",\"resolution\":\"source_available\",\"facet_ids\":[\"f1\",\"f2\"],\"context_ids\":[]}]},\"facets\":[{\"id\":\"f1\",\"unit_ids\":[\"U04\"]},{\"id\":\"f2\",\"unit_ids\":[\"U05\"]}]}"}],
+      "usage": {"input_tokens":100,"output_tokens":10,"cost":0.001,"is_byok":false,"speed":"standard"},
+      "openrouter_metadata": {"requested":"anthropic/claude-sonnet-5","strategy":"direct","attempt":1,"is_byok":false,"endpoints":{"total":1,"available":[{"provider":"Anthropic","model":"anthropic/claude-sonnet-5","selected":true}]},"pipeline":[]}
+    },
+    {
+      "model": "anthropic/claude-opus-5",
+      "provider": "Anthropic",
+      "stop_reason": "end_turn",
+      "content": [{"type":"text","text":"{\"decision\":\"pass\",\"decomposition_complete\":true,\"relevant\":true,\"scope_appropriate\":true,\"context_appropriate\":true,\"premise_handled\":true,\"task_fit\":true,\"proportionate\":true,\"question_parts\":[{\"id\":\"q1\",\"faithful\":true,\"appropriately_resolved\":true,\"requirements\":[{\"id\":\"q1-r1\",\"capability_ids\":[\"U04-C02\"],\"blocking_limit_ids\":[]},{\"id\":\"q1-r2\",\"capability_ids\":[\"U05-C01\"],\"blocking_limit_ids\":[]}],\"additional_requirements\":[]}],\"facets\":[{\"id\":\"f1\",\"covered\":true,\"unit_ids\":[\"U04\"]},{\"id\":\"f2\",\"covered\":true,\"unit_ids\":[\"U05\"]}],\"issues\":[]}"}],
+      "usage": {"input_tokens":100,"output_tokens":10,"cost":0.001,"is_byok":false,"speed":"standard"},
+      "openrouter_metadata": {"requested":"anthropic/claude-opus-5","strategy":"direct","attempt":1,"is_byok":false,"endpoints":{"total":1,"available":[{"provider":"Anthropic","model":"anthropic/claude-opus-5","selected":true}]},"pipeline":[]}
+    }
+  ]
+}

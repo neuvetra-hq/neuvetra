@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M69-SECURITY",
+  "role": "security-reliability",
+  "execution_context": "/root/m69_security",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m69-security-review.md",
+        "evaluations/research-qa/m69-independent-security.test.ts"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-02",
+      "status": "pending",
+      "evidence": [
+        "evaluations/research-qa/m69-security-review.md"
+      ],
+      "reason": "Final closure validator, compiled runtime/admission tests and final byte-bound review pending"
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 1,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M69 narrow RAG live successor readiness",
+  "applicable_lessons": [
+    "L05",
+    "L06"
+  ],
+  "notes": [
+    "First independent runtime negative test run:5pass1fail49assertions. Targeted drain repair:6pass0fail50assertions. Original failed result preserved.",
+    "Reviewer authored only independent tests and review; no paid request or secret access. Final record snapshot/review remains pending."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "m69_fresh_account_evidence",
+  "disposition": "blocked",
+  "recorded_at": "2026-09-15T03:47:16.7334455Z",
+  "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+  "provider": "OpenRouter",
+  "browser_observation": "Fresh signed-in read-only account, balance, privacy, logging and request-override checks completed without settings mutations. Sensitive account values are intentionally omitted from this repository record.",
+  "credential_accessed": false,
+  "credential_sha256": null,
+  "credential_binding_verified": false,
+  "settings_mutations": 0,
+  "available_balance_nano_usd": null,
+  "available_balance_sufficient": true,
+  "pending_or_uncertain_cost": false,
+  "existing_configured_account": true,
+  "privacy_controls_verified": true,
+  "admission_settings_satisfied": true,
+  "blocker": "The existing Neuvetra credential is not available to this task, so its raw value cannot be hash-bound to the reviewed executable without user-supplied local input. This record deliberately remains blocked and cannot pass launcher admission."
+}

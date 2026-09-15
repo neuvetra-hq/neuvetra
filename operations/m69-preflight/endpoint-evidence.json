@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "m69_fresh_endpoint_evidence",
+  "disposition": "pass",
+  "recorded_at": "2026-09-15T03:17:38.518Z",
+  "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+  "provider": "Anthropic",
+  "transport_endpoint": "https://openrouter.ai/api/v1/messages",
+  "fallbacks": false,
+  "speed": "standard",
+  "public_evidence": [
+    "https://openrouter.ai/anthropic/claude-opus-5",
+    "https://openrouter.ai/api/v1/models/anthropic/claude-opus-5/endpoints",
+    "https://openrouter.ai/anthropic/claude-sonnet-5-20260630"
+  ],
+  "stages": {
+    "analyze": {"requested_model":"anthropic/claude-opus-5","canonical_model":"anthropic/claude-opus-5-20260723","provider_tag":"anthropic","prompt_usd_per_million":5,"completion_usd_per_million":25,"maximum_input_cache_usd_per_million":10,"structured_output_supported":true},
+    "plan": {"requested_model":"anthropic/claude-sonnet-5","canonical_model":"anthropic/claude-sonnet-5-20260630","provider_tag":"anthropic","prompt_usd_per_million":2,"completion_usd_per_million":10,"maximum_input_cache_usd_per_million":4,"structured_output_supported":true},
+    "verify": {"requested_model":"anthropic/claude-opus-5","canonical_model":"anthropic/claude-opus-5-20260723","provider_tag":"anthropic","prompt_usd_per_million":5,"completion_usd_per_million":25,"maximum_input_cache_usd_per_million":10,"structured_output_supported":true}
+  },
+  "limitations": "Public model pages and endpoint metadata establish listed models, Anthropic availability, prices and structured-output support. They do not establish this account's balance, privacy controls or successful live compatibility."
+}

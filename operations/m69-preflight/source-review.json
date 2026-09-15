@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "m69_fresh_source_review",
+  "disposition": "pass",
+  "recorded_at": "2026-09-15T03:17:38.518Z",
+  "expires_at": "2026-09-15T23:20:32Z",
+  "candidate_sha256": "97edd66e74705418e759e56a41a091faf363bca50a1de4fd7e2f6206ac419007",
+  "scope": "internal_public_synthetic_epa_only",
+  "official_page": "https://www.epa.gov/climateleadership/scope-1-and-scope-2-inventory-guidance",
+  "official_pdf": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf",
+  "official_page_observation": "EPA still lists the 387.63 KB December 2023 purchased-electricity guidance; page last updated April 2, 2026.",
+  "local_original": {"bytes":396931,"sha256":"14159d202f33dc9953bced7d8acdb53c8affd4b4260e2e0c8482f1b174f28cf3"},
+  "local_extraction": {"bytes":31214,"sha256":"6c0dd2224703fa7bd48f6a18a666d3a29212d2435f6348382cef76950ffb36a4"},
+  "release": {"passages":18,"sha256":"38f91ceac7aab790cb6faf98d39d8e0c5f2eb734f6a5763d51b6bf6ef7afa43f"},
+  "answer_units": {"count":24,"sha256":"97b2c4e0f4121c1d2ea7fa33d569f53344193f12a80e9d1349577c3a86e17e50"},
+  "capabilities_sha256": "a7724c245fed1fd3a9dd08a82886c107b54905693039150f33359b2ed629e2c2",
+  "rights": "Private internal conceptual research/evaluation only; public/commercial reuse remains uncleared.",
+  "catalog_97_runtime_approval": "not_evaluated",
+  "expansion_candidate_30": "excluded"
+}

@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "M69-SOURCE",
+  "role": "regulatory-research",
+  "execution_context": "/root/m69_source",
+  "prompt_sha256": "b8302825b83953d49d2783538b424498348aa20f322b1c2c1c0b5e011145a7f2",
+  "artifacts": [
+    {
+      "path": "docs/research/m69-source-readiness.md",
+      "sha256": "646058f85986fee2ea3bcfb1ac298c394e562b42900f8620c940d9edd66fa01f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m69-source-readiness.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-02",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Independent Astra/high source QA is assigned by the coordinator and has not yet reviewed this artifact."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M69 bounded RAG readiness",
+  "lessons": [],
+  "notes": [
+    "Source recommendation authored from repository evidence and live official EPA pages; no release approval, provider request, secret access, customer data, source expansion, commit, push or deployment.",
+    "Requested Sol/high is recorded separately from unobserved actual settings. Independent Astra/high review remains pending."
+  ]
+}
