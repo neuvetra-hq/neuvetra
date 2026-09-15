@@ -1,3 +1,19 @@
+# M70 planning published to PR5; board feedback next
+
+The corporate coverage planning milestone is reviewed and pushed to [rolling draft PR5](https://github.com/neuvetra-hq/neuvetra/pull/5), branch codex/corporate-mvp. Implementation beb2271ae5978f38a8b23c70eb542ff35d800a80 passed all six remote checks. The coordinator verifies this closure commit's remote head/checks separately before the completion report. PR5 remains unmerged.
+
+The demonstration reconciles omitted Nevada and discovered Canadian entities, keeps all 15 Scope 3 categories visible, rejects unsupported screening evidence, preserves period/method gaps and exports the current planning register. Actual standalone download bytes matched visible state; reset, keyboard actions and narrow layouts passed. Inline export provides copyable JSON. Independent accounting and QA passed after recorded repairs; one non-author reviewer covered both scopes following runtime thread limits.
+
+This is a nonproduction planning milestone, not the complete corporate MVP. No customer persistence, corporate calculation engine, approved corpus/method, regulatory determination, human assurance or M70 hosting deployment is delivered. Source/OAL/litigation observations are dated and require fresh review before real reporting decisions. No paid RAG run is authorized.
+
+Collect board feedback on the coverage workflow before implementing the next dependent increment: a versioned, tenant-scoped corporate boundary and coverage register. Independent source/security/human-handoff preparation may continue within authorized scope. Scoped specialists are complete; no persistent workers.
+
+PR4 merged at fb4dd370c87eafee563f18529655f41b3a720573. Board-authorized historical branch cleanup preserved files/worktrees; active local refs are main and codex/corporate-mvp. Do not recreate retired branches. Existing hosted M68 remains the synthetic accounting workflow.
+
+Evidence: docs/research/m70-publication.json; docs/research/m70-product-brief.md; docs/prototypes/README.md; evaluations/research-qa/m70-qa-review.md; evaluations/research-qa/m70-browser-verification.md.
+
+Historical entries below are superseded as current execution instructions.
+
 # M70 planning reviewed; publication and board demonstration next
 
 PR4 is merged at fb4dd370c87eafee563f18529655f41b3a720573. M70 delivers a corporate requirements matrix, proposed architecture and functioning synthetic coverage planner. Independent accounting and integrated QA passed the frozen candidate after task-link and form-accessibility repairs. One non-author reviewer covered both scopes because additional dispatches hit a runtime thread limit; no separate second reviewer is claimed.
