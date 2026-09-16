@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "M77-HOSTED-JOURNEY",
+  "role": "software-engineering",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-RELEASE-CONTROLS-CANDIDATE2.json",
+      "sha256": "45028e1595e5845092c8c4a1f804031ae35a79561c2f07595bd1eabcabd7c45a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "JOURNALED-HOSTED-DEMONSTRATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m77-release-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_cto",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m77-release-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-RELEASE-CONTROLS-CANDIDATE2.json",
+        "sha256": "45028e1595e5845092c8c4a1f804031ae35a79561c2f07595bd1eabcabd7c45a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Author software/rehearsal complete and independently accepted. Actual hosted execution remains a separate root-owned gate. Requested compute inherited; actual model/effort unobservable."
+  ]
+}

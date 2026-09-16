@@ -94,3 +94,6 @@ operations/agent-improvement/snapshots/M75-HOSTED-ACCEPTED1.json -text whitespac
 
 # M76 recovery script retains the exact independently reviewed bytes.
 tools/staging/m76-seal-backup.ps1 -text whitespace=cr-at-eol
+
+# M77 recovery script retains the exact independently reviewed bytes.
+tools/staging/m77-seal-backup.ps1 -text whitespace=cr-at-eol

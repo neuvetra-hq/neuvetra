@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T22:32:39.525743+00:00",
+  "updated_at": "2026-09-16T22:51:35.806758+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M77",
     "name": "Refrigerants and other fugitive-source coverage",
-    "status": "integration_in_progress",
-    "next_gate": "Complete persistent fugitive workpapers, population reconciliation and UI; obtain independent integrated review before publication/deployment.",
+    "status": "release_verification_in_progress",
+    "next_gate": "Publish reviewed controls and verify exact checks, fresh hosted backup/recovery, then controlled upgrade and full demonstration.",
     "evidence": [
       "operations/feedback/2026-09-16-m76.md",
       "docs/research/m77-product-brief.md"
@@ -2803,14 +2803,11 @@
     "closure_published_head": "2fec9c40dca45bcef3590db82c8647d31459ef3e"
   },
   "current_m77": {
-    "status": "integration_in_progress",
+    "status": "release_verification_in_progress",
     "baseline": "2fec9c40dca45bcef3590db82c8647d31459ef3e",
     "hosted_schema": 19,
     "hosted_changes": false,
-    "active_assignments": [
-      "M77-HOSTED-JOURNEY",
-      "M77-OPERATORS"
-    ],
+    "active_assignments": [],
     "coordinator_work": "Source/population forms, frontend decoder, server mounting, backend review and integration",
     "routing_exception": "Two fresh QA dispatches and historical CPO followup hit agent-thread limit. Followup to independent historical m76_cto succeeded; inherited prior compute, observed settings unavailable. Reviewer is active.",
     "foundation_snapshot": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
@@ -2821,6 +2818,10 @@
     "root_ui": "Local actual-browser source correction with preceding leak saved 3848.0000 kg CO2e from 2kg R410A without double counting; separate review saved. More UI checks pending.",
     "local_review": "evaluations/research-qa/m77-integrated-review.md",
     "application_snapshot": "operations/agent-improvement/snapshots/M77-APPLICATION-CANDIDATE3.json",
-    "migration_sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc"
+    "migration_sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc",
+    "release_snapshot": "operations/agent-improvement/snapshots/M77-RELEASE-CONTROLS-CANDIDATE2.json",
+    "release_review": "evaluations/research-qa/m77-release-review.md",
+    "live_schema_version": 19,
+    "hosted_m77_mutations": false
   }
 }

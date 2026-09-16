@@ -1,0 +1,42 @@
+[
+  {
+    "name": "tools/staging/m77-common.ts",
+    "sha256": "0c3e1d07090a4d5b039ed13bb357049156387f2852e5a9901c90986c035e963b"
+  },
+  {
+    "name": "tools/staging/m77-apply.ts",
+    "sha256": "b30a5f47321b7b55d2b2dcfb3189a11325f62cdedf3f733d197ca81ef5be16d7"
+  },
+  {
+    "name": "tools/staging/m77-backup.ts",
+    "sha256": "860489cd218857c271b678b711d42649c24a23973aa563a2119e3b42138eadcf"
+  },
+  {
+    "name": "tools/staging/m77-seal-backup.ps1",
+    "sha256": "f546f8b70d927278b8d9a0d726d833747841a990894eb27596b6944eea88e455"
+  },
+  {
+    "name": "tools/staging/m77-restore.ts",
+    "sha256": "12d97697e54575f2af5f02941e2a6f5fca6804d57c6cdfcb5880384488bf22e3"
+  },
+  {
+    "name": "tools/staging/m77-replay.ts",
+    "sha256": "c5b8ac80d3cd2835d7952ed82d19590998b167c19767aec1a780876560daa00f"
+  },
+  {
+    "name": "tools/staging/m77-recovery-manifest.ts",
+    "sha256": "f6bbe71d68c7782ba635e91288d7b128b5a0b77471dcf0a5d660a3432623606f"
+  },
+  {
+    "name": "tools/staging/m77-upgrade.ts",
+    "sha256": "721357e774d9ef64adce268a47d6ea072d79629888467518c511da9f6fecaedd"
+  },
+  {
+    "name": "tools/staging/m77-operators.test.ts",
+    "sha256": "dd3a10f7d0953944a158289e43ee7b1f4b1fe5be085bb7042b39309a79eb79cd"
+  },
+  {
+    "name": "tools/staging/m77-operator-native.test.ts",
+    "sha256": "33bd76ec9b6b55610956904b6abbe05ed289219e819327c1700d1a9bcd4b2307"
+  }
+]

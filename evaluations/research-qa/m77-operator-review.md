@@ -1,0 +1,27 @@
+# M77 independent operator review
+
+Prepared 2026-09-16 by `/root/m76_cto` for M77-RELEASE-CONTROLS. **PASS for the pinned operator software and isolated local recovery boundary.** Hosted execution, fresh host recovery review, published-head/check observations and the hosted journey remain separate gates. No host, ENV, Git, old-database writes or global-role changes were performed.
+
+Requested QA-critical Astra/high fresh dispatch was unavailable under the recorded thread limit. Root authorized reuse of this independently dispatched historical-M76 context; inherited requested settings are not evidence of actual model/effort. Actual observed compute is unknown. I authored neither M77 application nor these operators.
+
+## Exact candidate
+
+The ten operator files match `evaluations/research-qa/m77-release-operator-pins.json`, copied without semantic changes from the author's frozen pin set. Original pin artifact SHA-256: `83dd9aa7e8ed8f2ee63b6cb9a8647cec5813855954c7d6934dde2b5298c9dcae`. Migration20 canonical SHA-256: `11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc`; baseline1–19 manifest SHA-256: `5efb9f212f986643f2ac89eac4832422c148d5273646e9654476f060dc64727d`. The exact `.gitattributes` M77 seal-script `-text` rule was inspected; root must verify committed bytes against the same pins.
+
+## Independently demonstrated
+
+- Independently executed the adapted author fixture in an owned QA test: **1 test / 62 assertions / 177.8 seconds**, using DPAPI CurrentUser encryption through approved outside-sandbox execution. No plaintext bundle file was created. Both archive hashes independently match their restore receipts.
+- Read-only original19: `m76_security_hosted19_recovery1`, port55472. New targets only: `m77_qa_release_1789598417086` and `m77_qa_forward20_1789598417086`. Original inventory and all cluster role flags/memberships remained exact.
+- Schema19 recovery restored all105 application tables, original row multiplicities/bytes, effective catalogs/ACLs, default ACLs, sequence state, receipts and scoped auth-helper/UUID dependencies. Actual legacy containment and runtime no-claim denial/read were checked. Provider exclusion is exactly the prior policy: UUID dependency stubs only; credentials, sessions, provider configuration/storage and role passwords are excluded. This is not provider disaster recovery.
+- Read-only19 replay covered6 gas,5 mobile,7 corporate,4 fleet,3 generator and5 equipment versions,14 legacy downloads, prior review/proof/download bytes and Python-authoritative arithmetic. Read-only20 retained those families and covered9 fugitive versions/8 reports,65 route downloads and56 browser downloads. Before/after inventories establish no replay mutation.
+- Actual migration rollback, exact additive commit, repeated upgrade refusal, stale inventory/dump/role/target/ACL refusals and old-trigger alteration refusal were executed. The additive result has113 tables and one new audit sequence, without changes to earlier rows/functions/triggers.
+- Separate independently authored actual controls passed **1 test / 16 assertions**: default-ACL delta detected by complete inventory; unapproved added trigger on an old table rejected; non-MVCC `nextval` state movement rejected by both exact and append row checks; only the owned QA sequence was restored to its exact captured state. The current runtime accepts20 and refuses the read-only19 receipt set; the frozen M76 operator refuses20.
+- Independent pure operator tests passed8/91, including freshness, maintenance, exact remote-head/check pins, source-backup/restore linkage, distinct reviewer/operator identities, populated forward evidence and corruption refusal. The upgrade gate is a reviewer attestation, not an authentication service.
+
+Private evidence: `.tmp/m77-qa-release-1789598417086/independent-result.json` SHA-256 `62ad91ce47b191955b61429f7bd6cd7b49fb93eb20ca644efb70c98681076097`; `restore19.json` SHA-256 `75f995b83ed27e9cb645b073b534b6430f0aed9bdceb8e04fc62a1ece6f16a89`; `restore20.json` SHA-256 `fe687966181b3e83873a0f9d95bfc745d553005d1739fcb18d2aa58bc7617933`. Source/restored20 content manifests match SHA-256 `2392090401f81f36d84af58dee972f70acaa26c1349b78ecd3b5f661382e2808`; original19 content SHA-256 `f3ee01d67b409e01c2645400322d4004e20619d8232e20d88635b941bdd3e55c`.
+
+## Review limits and release conditions
+
+The native QA execution reused and adapted the author's fixture/controls, then added independent legacy/readiness/provider checks and separate catalog/sequence controls. Auth UUIDs are local dependency stubs. Offline browser replay temporarily supplies serial function-scoped transport adapters; the actual hosted journey uses explicit dependencies and never replaces global fetch. Initial QA readiness-control failures were fixture mistakes (omitted existing-project confirmation and incorrect error wording), corrected by the separate actual readiness test; they were not product findings.
+
+No open operator defect was found. Actual deployment still requires root-owned published exact bytes, passing required checks at that head, fresh maintenance/head observations, fresh encrypted host19 backup/restore and independent replay receipts, and exact receipt bindings. Never retry a started/failed/uncertain/committed upgrade without separately reconciling its outcome. Keep failed targets and journals; no automatic reset or overwrite is admitted. These controls do not establish complete inventory coverage, released factors, legal compliance or external assurance.

@@ -1,0 +1,15 @@
+{
+  "status": "independent_f05_first_repair_actual_predecessor_refused",
+  "createdAt": "2026-09-16T22:43:00.2586890Z",
+  "helperSha256": "41f9f0486663a2f08c791959d6b773304a9d41898f2d62b5b1d745da78026c9c",
+  "predecessorSha256": "836aa21776e0ea6dc847463ffb15f44a89175b74b9a896835eef8efe103fdf82",
+  "actualAcceptedPredecessorRefused": true,
+  "originalPostOutcomeFields": [
+    "name",
+    "status",
+    "response",
+    "responseObservation"
+  ],
+  "noHostCalls": true,
+  "noOriginalFileEdits": true
+}
