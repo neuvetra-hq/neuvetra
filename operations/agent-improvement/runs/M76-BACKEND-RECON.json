@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "M76-BACKEND-RECON",
+  "role": "software-engineering",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
+      "sha256": "f602e3cc1f2a4dcfface5271f7d1f5ba58897f4824091efb247c7b4fff3e1a19"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "REUSE-AND-PRESERVATION-RECON",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m76-accounting-contract.md",
+        "docs/research/m76-technical-contract.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m76-planning-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
+        "sha256": "f602e3cc1f2a4dcfface5271f7d1f5ba58897f4824091efb247c7b4fff3e1a19"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Read-only actual M73/M75 backend architecture reconnaissance; report reuse and preservation recommendations, no implementation yet.",
+    "Role prompt hash recorded; bounded task delivered through collaboration tools. Requested compute supplied to fresh dispatch; actual setting not independently observable. Lessons L01-L07 apply as relevant. Root sole Git/host/shared-record writer.",
+    "Read-only reconnaissance delivered through agent message; incorporated in CTO architecture. No production claimed. Bounded output retained in planning contract, coordinator inspected actual M73 reuse and typed-boundary recommendation."
+  ],
+  "source_artifacts": [
+    {
+      "path": "docs/research/m76-technical-contract.md",
+      "sha256": "b9735190d63815a4b4a55c171eea0b1b39d734a9901f2d8ca604c4d218b7d7b9"
+    }
+  ]
+}

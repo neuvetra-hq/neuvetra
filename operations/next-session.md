@@ -1,3 +1,21 @@
+# M76 local final candidate; independent capacity review and publication pending
+
+Final SQL19 ed08001b passed native author68assertions, independent arithmetic/security cases and populated encrypted recovery. Root actual local browser corrected the equipment declaration, obtained a separate review, downloaded exact report HTML/JSON and restarted the service with unchanged history. Independent hosted18 restore and populated19 forward replay passed. Fresh live18 baseline made zero application POSTs and closed all verification sessions. No live database/application mutation occurred.
+
+Automatic deployment is now paused to prevent publishing19code onto18database. Root owns Git/host/shared records; backend and operator authors have finished. Only /root/m76_accounting remains dispatched for final capacity/integrated review. Next exact reviewed snapshot, same rollingPR5 commit/push and six remote checks, then concrete fresh hosted gate/execution and browser demonstration. Preserve backups/journals and failed fixtures. California remains first; synthetic stationary coverage is not complete Scope1/corporate inventory, released methods, compliance or assurance. Earlier sections are history.
+
+# M76 stationary equipment implementation in progress
+
+Board accepted M75 browser demonstration and directed continued California work. Reviewed planning M76-PLANNING-CANDIDATE1 admits separately metered gas boiler/space heater and one fixed fossil No.2 generator using explicit default-HHV evidence. Root independently checked EPA factor/guidance units and selected bounded development scope. No method/customer release, not-applicable shortcut, source deletion or aggregate emissions.
+
+Actual authors: /root/m76_backend new DB/SQL19/authority/routes; /root/m76_cto operator/recovery/helper software; root UI/shared integration. /root/m76_accounting independently challenges implementation. Draft UI/decoders typecheck and lint; independent arithmetic/admission cases and isolated18 backup restore have passed their scoped checks. No19 migration or hosted change yet; current live remains acceptedM75/schema18. Next integrated native lifecycle, security, historical proof and recovery, then demonstration/publication. Earlier sections are history.
+
+# M76 started after accepted M75 browser demonstration
+
+The board inspected the live browser, accepted it and directed continued work. M75 final published head32e1d7b passed all six checks; live implementation7e9abd2/schema18 and restored automatic deployment were verified. Private final receipt .superpowers/m75-final-publication.json. No merge.
+
+M76 now targets stationary equipment and fuel coverage for the California office/distribution profile: complete natural-gas source reconciliation and a fossil-diesel emergency-generator candidate only where primary evidence supports its exact method. Accounting and CTO contracts are actually dispatched to /root/m76_accounting and /root/m76_cto; /root/m76_backend is doing read-only backend reconnaissance. Root owns product integration, Git, host and shared records. No M76 runtime/host changes yet. Missing/unsupported equipment remains visible; no method release or complete Scope1 claim. Earlier sections are history.
+
 # M75 live fleet reconciliation accepted and published
 
 The specifically approved database17-to18 upgrade and fleet deployment are live. Implementation7e9abd2 passed all six required remote checks. Independent hosted acceptance passed with no open blocker:22 expected application POST outcomes, four retained roster versions, three reports, preserved earlier records, actual service restart and zero-write revisit with all verification sessions closed. The signed-in browser demonstrated missing-workpaper blockers, separate review, immutable history and exact HTML/JSON downloads. Evidence: docs/research/m75-publication.json and evaluations/research-qa/m75-hosted-acceptance.md.

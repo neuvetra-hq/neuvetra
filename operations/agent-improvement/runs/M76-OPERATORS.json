@@ -1,0 +1,425 @@
+{
+  "schema_version": 1,
+  "id": "M76-OPERATORS",
+  "role": "software-engineering",
+  "execution_context": "/root/m76_cto",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
+      "sha256": "ff37df932c9c140965010308d05f73bbf2ace65eae0e106be504968cd2cc8cc0"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m76-root-operator-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m76-root-operator-review.md",
+      "evaluations/research-qa/m76-final-byte-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
+        "sha256": "ff37df932c9c140965010308d05f73bbf2ace65eae0e106be504968cd2cc8cc0"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "New tools/staging/m76 operators, recovery and hosted helper; no host/Git changes.",
+    "Existing agent resumed with its unchanged registered route; actual compute remains unobserved. Prompt SHA identifies role prompt. Complete bounded dispatch in collaboration tools. L01-L07 apply. Root alone owns Git/host/shared records.",
+    "Root source/pure review and actual final recovered-runtime replay accepted; earlier native receipts remain explicitly intermediate. Scoped local delivery only; not hosted/publication completion.",
+    "Accepted2 preserves independently reviewed removal of one trailing LF from six files; no semantic change. Original accepted1 retained."
+  ],
+  "source_artifacts": [
+    {
+      "path": ".gitattributes",
+      "sha256": "bcce08308577cbe3af13eb5c9a0df6ea81e36a37c3c452e278e558073d76090f"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "b82bb0fc8da0e16688d1c825796886bc6d0258a7497b912d711986727314efdd"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "edad2c265c2f583dfe3bbaf77d60f1a309af2847acf34ebb84aff075f933d24a"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "sha256": "3d0f5a97a4a8cbf5b06d96a53b88b0c5f3099a6ce7eda7750135e695dc98744d"
+    },
+    {
+      "path": "apps/site-api/src/calculation/m76-authority.ts",
+      "sha256": "36565cfcc0030b3df6098bf9390f31df02c56aad747f1be068f4313e14ec0121"
+    },
+    {
+      "path": "apps/site-api/src/calculation/m76_stationary_diesel.py",
+      "sha256": "60de93b901185527affd1eae73d400582cc9d041ecd13bb5668c9041374f6266"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "c27d7e45ce028eccd43acfb27d4467d383bdf533743930286b6da805202daef7"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "c231e5ce9727ad0f6009eba9f16377f79c2e71f849af05504d0adee84c512251"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m76-postgres.test.ts",
+      "sha256": "f74e381b117da9b63eb39582231b9e9ca33c87d6c4c621e43ce70fda5846a38e"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m76-routes.ts",
+      "sha256": "89aef88b45e09bbebcb722500ca95798d9894b01f18cceb4533afa4a8146cd34"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "431fa1f05749273e3edc0735688eaf72ad4b8da184ebbaf23cc09bc07fe2da4c"
+    },
+    {
+      "path": "apps/site-web/src/components/StationaryEquipment.tsx",
+      "sha256": "07fccd0dfc0ca4383e9178af6237a7e828e2cfda6f4a94602ff7274bf0f35a8a"
+    },
+    {
+      "path": "apps/site-web/src/components/StationaryEquipmentEditor.tsx",
+      "sha256": "f91e357ec804a0f49533d6386fd33fe2607f1121bdba2400de7e912eb4a70a24"
+    },
+    {
+      "path": "apps/site-web/src/components/StationaryGenerator.tsx",
+      "sha256": "16a2e561d08e6c7cc609b4f49503f3477333c31b1223055b99790a0107963fc4"
+    },
+    {
+      "path": "apps/site-web/src/lib/m76-api.ts",
+      "sha256": "5a69210173c4e4ef94ce1ec001a60a4cafde1a8e85bc4a70df081e80b6056cb8"
+    },
+    {
+      "path": "apps/site-web/src/lib/m76-diesel-api.ts",
+      "sha256": "05d825584e842bf0ac46ecd0cf2c5d4448b48756d2bc4a0736e2dcbac5773e32"
+    },
+    {
+      "path": "apps/site-web/src/lib/m76-form.ts",
+      "sha256": "e370187646ae675f1765004a939585e85a7bdc75621e5c27b3a1d8c7fcd0cec9"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "88295dc180cc47bd65644c4490daaf2269c3fd6eed6f93bd3de0f27be7e0ba30"
+    },
+    {
+      "path": "docs/research/m76-accounting-contract.md",
+      "sha256": "56ea5c89dd20157bcfdbf32079eea63a0e00806929c517b35b76a00de5ce07a8"
+    },
+    {
+      "path": "docs/research/m76-cross-family-guard.md",
+      "sha256": "9667ceafb4aad4eb52c0a75ef782ebbd35bf9a1e3d09903598b067a8a6105a5f"
+    },
+    {
+      "path": "docs/research/m76-local-browser-verification.md",
+      "sha256": "876cced16c489a43e2574eebc92e8f1d44555460c5e6220329ea13441418957b"
+    },
+    {
+      "path": "docs/research/m76-operating-notes.md",
+      "sha256": "85fed7a78d2da50ca812bff5c50e674bf48ab49d35fe37d822d50dc5f763bcf9"
+    },
+    {
+      "path": "docs/research/m76-planning-review.md",
+      "sha256": "51dcf235f0695860c34221cb744f6cbba45e12e3e19df8d0845034be76f7ad33"
+    },
+    {
+      "path": "docs/research/m76-product-brief.md",
+      "sha256": "6981cdb313e869bad0b51f7fb5e7879a8700abad812072403f1ae3b6b1945b2d"
+    },
+    {
+      "path": "docs/research/m76-root-operator-review.md",
+      "sha256": "b2e0c64a5a8dda41c50ca43ca04533fd51f01296e2224785c45d0fa34217807f"
+    },
+    {
+      "path": "docs/research/m76-technical-contract.md",
+      "sha256": "b9735190d63815a4b4a55c171eea0b1b39d734a9901f2d8ca604c4d218b7d7b9"
+    },
+    {
+      "path": "evaluations/research-qa/m76-final-byte-review.md",
+      "sha256": "bee932ab1c4bcdd5e56e7dc31fbf0bf1d4f4a986147f157a8ac8867a0aaf33b0"
+    },
+    {
+      "path": "evaluations/research-qa/m76-gas-preservation-baseline.json",
+      "sha256": "0bd2c044135363412e2e67e8b2d4edd2e9cbfc9eb9a8167c2918505bab6525d2"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-admission.test.ts",
+      "sha256": "db7dd7e76634514efeda0dc2cde54fae28eb13e927369c4274179a07a203acfb"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-authority.test.ts",
+      "sha256": "ea66a1343e39be41af7dac079331d7c33c6f9dfbd36e0a31a8ecc63525fb0d4c"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-candidate-pins.json",
+      "sha256": "5e73bdc344b9ac866a684575218589332b0b66fae498948efba3885238d28337"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-evidence-hashes.json",
+      "sha256": "bebad2c791f04d780e5495617b78ccb5dac021733fe8673dda21f4d3c00d71f9"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-expectations.json",
+      "sha256": "a9db215fb1662553cc6f10627abc2d5f241631d2483f5548349a5c8522e0559f"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-forward-recovery-review.ts",
+      "sha256": "42ce96b2b7ff65470674c956f0f6f7709c6046468ee8d581626f15c1c12fd6fe"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-generator-decoder.test.ts",
+      "sha256": "046babb94219b54b0a67b781c2e3c5a71c66659a7fef07e25e8cddb24370909f"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-generator-fixture.ts",
+      "sha256": "f5180c1d00ebea0e22bae7abfd5dddf1507823d7d8065973d4a61c4da85237ad"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-graph.ts",
+      "sha256": "951aeb7cccdb5a095b7813cc058404e7e4f96de75f48a2fcb63ca39d65c63ef2"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-hosted-restore-review.ts",
+      "sha256": "f2d1a440bd143eff89d6e71b13b43b35a4eb61afe8660723838f8c20514acfd1"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-capacity-result.json",
+      "sha256": "8d63d038fa318fae317868de62afe1fb8475c87fa9558afcfdfb06782bfea8c7"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-capacity.test.ts",
+      "sha256": "01810a55f3e3f1ff2c090875a1b69dcca08310b4258457abc1ff31104e7910ce"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-report-capacity-result.json",
+      "sha256": "290c995a0f889a9a42806f5c157b8b9ca6c03c8bc6c3211d7f88617a7b8cf329"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-report-capacity.test.ts",
+      "sha256": "25fa01fc2ad9ae2917c8923fc2ec86f7483d7ee06d636721677b17bdc4936cf6"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-result.json",
+      "sha256": "79a5be2fd4914aa718846761a5a41493a4ebfa6b9209eb7ac47904d7000881a0"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-security-result.json",
+      "sha256": "b3f6365777663e9f40273378f16d8417df9ebc704c9a9b596508f157447b4df2"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-security.test.ts",
+      "sha256": "565ee261f050202c3eedd17b1cf0c6d5dc48e9f0fe314f91cacc685c2c3322ac"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native-ui-fixture.json",
+      "sha256": "e31b8208bd98b89823eded69dde8eb3787a4732ca0b6afd37ac18e53b7cb3512"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-native.test.ts",
+      "sha256": "fe4eece4d6a37f9d424f87db72473d0940b8b7592382d45e4608135c25e67a45"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-oracle.py",
+      "sha256": "80162aaf4e6adbd4f212c26e0fb14e8fa49c4f1d7458311c64831044f2979cb7"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-reconciliation.test.ts",
+      "sha256": "8b9acd7c4784fcc2e767d364812f340dc78e7b25f5a90f64bca180785bb8895f"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-renderer-decoder.test.ts",
+      "sha256": "5fb5a387a861bfb2d51a9d29d6a3236c666ede06c1f128e904b99081bdb412ae"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-report-duplicates.test.ts",
+      "sha256": "c86ba464c64865df9471906b27d3c07b4ae8f069942c7fcbd3e15f1a7e3fa09f"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-review.md",
+      "sha256": "275a90bc6a4d47cb4e9dc879880ba1ac7932b5578bccbd47c0cf4d3d81cd6bb2"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-ui-failure.json",
+      "sha256": "78187ac8f7e67a4617a131898d7dd8345ad13ed529e3c894b79435544f50112b"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-ui-fixture.json",
+      "sha256": "048d66254ad8ed7d57e17f07862be704d9d4a9b2dd8aec7ed777663e141131b9"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-ui-result.json",
+      "sha256": "d7f45542f439b2c56c4ebaef5a7e525b3dea54d640b29353db012d8e0a7cf884"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-ui.mjs",
+      "sha256": "fd08e45254f431a25197abbf67fdfceccf7dff1833372bfd2b547600cb5e9760"
+    },
+    {
+      "path": "evaluations/research-qa/m76-independent-valid-fixture.ts",
+      "sha256": "3ad7e1b97b8dc009d4e0c258b5b8870ddbc49a473477f9f17ad7d062aacbac5b"
+    },
+    {
+      "path": "evaluations/research-qa/m76-ui-server.ts",
+      "sha256": "124733330190ff4e279489579b9962171611ed1f5c2805dc7758c8756566ffa4"
+    },
+    {
+      "path": "evaluations/research-qa/m76-ui.tsx",
+      "sha256": "d95974616e93a98da32d5a5531cf9ceffd0a48da3e90c18a0753dfdf62f0bce0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "0df7dfc64c6fbf779e5e3cdb2aab9ac79e9271ef607d82c346d9909932342675"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "539a68b1b4c5b38d010e014c935a28dcd376ac2bcd722f335b8909614f86cee8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "2d5c543f43d62cbfb73ce7eb65de33d209302205ceb4750d34ce4d3ef9b733ca"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-contract.ts",
+      "sha256": "0d835662bb6f84e8e1080dddcb7a8ae04e4dee0447d489ce1e7e6502be6bd270"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel-contract.ts",
+      "sha256": "0e7f9487fdeeb47260891fc423d22f9a386e4f24045c603043edb7c8ac2a8ef5"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel-report.ts",
+      "sha256": "014f9e012a6acd46cbe9d04248bcc4d9abeb8c95723bf4448310ce2508c433fb"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel-validation.ts",
+      "sha256": "fcd183ebe9dd53121ee517b7f2ded62cdf97dda1c2673e87f8533e8812a16057"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel.ts",
+      "sha256": "98dd220d75a46de954d3de7e1b1fda2622afb5a84f18727ad73a43b1dcd95ea0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-report.ts",
+      "sha256": "96282f6c5d72d623c3c299f3be37f713b0b9d610a7ecab2dc0701cb1c0f50393"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-validation.ts",
+      "sha256": "465e36867626866f7753b2a5d9d6b2f19c155588ba3e65e8acb2db134de880db"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76.ts",
+      "sha256": "5656449d6f09b1a7d701f6c0d3e4f50cdc1c09fb4e58cbc76c3f6f771f5cad65"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0019_stationary_sources.sql",
+      "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "572cf622962be913bb42da478ca3470eae3932fc7bf265cf32849f9f8c57bb6e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "ff095cc6df58119d93aaf50460c9b33e73ac89e3724680a7295ff88bab6b1832"
+    },
+    {
+      "path": "tools/staging/check-m76-hosted.test.ts",
+      "sha256": "dbbc1293a06fbd1d3b5cb95f8632f688aac36bb5842ea5b809b3ce49e6e86f89"
+    },
+    {
+      "path": "tools/staging/check-m76-hosted.ts",
+      "sha256": "202cd816896ca5aa1a9ed10bb167272842b17b031f2a45869aecd9efe232f9c6"
+    },
+    {
+      "path": "tools/staging/m76-apply.ts",
+      "sha256": "112b7f6e41682362b413448e9ce56422a24c614ca2556ddaf2b4315fe5766c36"
+    },
+    {
+      "path": "tools/staging/m76-backend-fixture.ts",
+      "sha256": "17ece741ae18cc096ad0afba35eb266095402c8f841fdbfe6c0840ec64419902"
+    },
+    {
+      "path": "tools/staging/m76-backup.ts",
+      "sha256": "e2564e9cb638788bad88475d04095dc7e57046b61831d0d74220d5dbd3763747"
+    },
+    {
+      "path": "tools/staging/m76-common.ts",
+      "sha256": "d340f086d33ef37f652cb3eb02813c021c93ada12f702d847ea6ecb5cb85928e"
+    },
+    {
+      "path": "tools/staging/m76-hosted-plan.ts",
+      "sha256": "367afa8b750a488fa2c7017c5167f7f7bf852a7e5f7cf0ffb7d9c289c1316329"
+    },
+    {
+      "path": "tools/staging/m76-operator-native.test.ts",
+      "sha256": "2454268f586b77140926980cb8471e407af24774ef8310bbffa448bd25e1c7b8"
+    },
+    {
+      "path": "tools/staging/m76-operators.test.ts",
+      "sha256": "e66e4f29d075949dbde46510c7312ee55a48376f64ab5f477d8d663ba017b06d"
+    },
+    {
+      "path": "tools/staging/m76-recovery-manifest.ts",
+      "sha256": "89b80aa4a2a9a2271e0132d121329c9e0799ef08fc31f49f27506c5764baa801"
+    },
+    {
+      "path": "tools/staging/m76-replay.ts",
+      "sha256": "dfcfb40e5c7e7c81daff170199fb6207ff0a308294054a296575108e77db9d57"
+    },
+    {
+      "path": "tools/staging/m76-restore.ts",
+      "sha256": "a5f9191b78fea20179d0575c684bf8e5f06d67e86787ac60b7a50670087e46b8"
+    },
+    {
+      "path": "tools/staging/m76-seal-backup.ps1",
+      "sha256": "e3c0302eedfa9d471086fac01c13ddf33e56e5ef2409c2d8f4ae639080db381f"
+    },
+    {
+      "path": "tools/staging/m76-upgrade.ts",
+      "sha256": "545110ad0a365afeaa98a3890236515c4a1f6a8cce64073637ff50ba1f05f0ba"
+    }
+  ]
+}

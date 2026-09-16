@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "database": "m76_qa_capacity_1789569900874",
+  "template": "m76_qa_review_1789569395047",
+  "schema": {
+    "name": "0019_stationary_sources.sql",
+    "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+  },
+  "versions": 40,
+  "reports": 18,
+  "capacityCode": "54001",
+  "events": [
+    "Forty actual source versions retained; forty-first refused54000 with oldversions exact",
+    "Further source reports reached count or documented aggregate bytebound with earlierreports exact",
+    "Actual browser generator decoder accepts all retained records at capacity"
+  ],
+  "limitations": [
+    "Report countcap40 requires a separate smaller-history test; this fixture can hit the intentional3.8MB aggregate bytecap first",
+    "Isolated synthetic source family only; declaration-family count/byte caps remain separate",
+    "No production tables injected to simulate count limits; all records created by authenticated production writer methods"
+  ]
+}

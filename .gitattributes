@@ -91,3 +91,6 @@ tools/staging/m74-seal-backup.ps1 -text whitespace=cr-at-eol
 evaluations/research-qa/m75-*-pins.json -text whitespace=cr-at-eol
 tools/staging/m75-seal-backup.ps1 -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M75-HOSTED-ACCEPTED1.json -text whitespace=cr-at-eol
+
+# M76 recovery script retains the exact independently reviewed bytes.
+tools/staging/m76-seal-backup.ps1 -text whitespace=cr-at-eol

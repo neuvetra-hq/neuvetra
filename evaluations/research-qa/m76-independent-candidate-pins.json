@@ -1,0 +1,114 @@
+{
+  "status": "final independent working-candidate review pins; exact publication binding remains coordinator-owned",
+  "schema19Sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
+  "files": {
+    ".github/workflows/verify.yml": {
+      "sha256": "b82bb0fc8da0e16688d1c825796886bc6d0258a7497b912d711986727314efdd",
+      "byteLength": 18199
+    },
+    "apps/site-api/src/calculation/m76-authority.ts": {
+      "sha256": "36565cfcc0030b3df6098bf9390f31df02c56aad747f1be068f4313e14ec0121",
+      "byteLength": 2695
+    },
+    "apps/site-api/src/calculation/m76_stationary_diesel.py": {
+      "sha256": "60de93b901185527affd1eae73d400582cc9d041ecd13bb5668c9041374f6266",
+      "byteLength": 5922
+    },
+    "apps/site-api/src/staging/server.ts": {
+      "sha256": "c231e5ce9727ad0f6009eba9f16377f79c2e71f849af05504d0adee84c512251",
+      "byteLength": 14439
+    },
+    "apps/site-api/src/workspace/m76-routes.ts": {
+      "sha256": "89aef88b45e09bbebcb722500ca95798d9894b01f18cceb4533afa4a8146cd34",
+      "byteLength": 12040
+    },
+    "apps/site-web/src/components/StagingWorkspace.tsx": {
+      "sha256": "431fa1f05749273e3edc0735688eaf72ad4b8da184ebbaf23cc09bc07fe2da4c",
+      "byteLength": 4664
+    },
+    "apps/site-web/src/components/StationaryEquipment.tsx": {
+      "sha256": "07fccd0dfc0ca4383e9178af6237a7e828e2cfda6f4a94602ff7274bf0f35a8a",
+      "byteLength": 20124
+    },
+    "apps/site-web/src/components/StationaryEquipmentEditor.tsx": {
+      "sha256": "f91e357ec804a0f49533d6386fd33fe2607f1121bdba2400de7e912eb4a70a24",
+      "byteLength": 9160
+    },
+    "apps/site-web/src/components/StationaryGenerator.tsx": {
+      "sha256": "16a2e561d08e6c7cc609b4f49503f3477333c31b1223055b99790a0107963fc4",
+      "byteLength": 21461
+    },
+    "apps/site-web/src/lib/m76-api.ts": {
+      "sha256": "5a69210173c4e4ef94ce1ec001a60a4cafde1a8e85bc4a70df081e80b6056cb8",
+      "byteLength": 20865
+    },
+    "apps/site-web/src/lib/m76-diesel-api.ts": {
+      "sha256": "05d825584e842bf0ac46ecd0cf2c5d4448b48756d2bc4a0736e2dcbac5773e32",
+      "byteLength": 16828
+    },
+    "apps/site-web/src/lib/m76-form.ts": {
+      "sha256": "e370187646ae675f1765004a939585e85a7bdc75621e5c27b3a1d8c7fcd0cec9",
+      "byteLength": 876
+    },
+    "Dockerfile.staging": {
+      "sha256": "edad2c265c2f583dfe3bbaf77d60f1a309af2847acf34ebb84aff075f933d24a",
+      "byteLength": 11720
+    },
+    "Dockerfile.staging.dockerignore": {
+      "sha256": "3d0f5a97a4a8cbf5b06d96a53b88b0c5f3099a6ce7eda7750135e695dc98744d",
+      "byteLength": 6975
+    },
+    "packages/neuvetra-database/src/index.ts": {
+      "sha256": "2d5c543f43d62cbfb73ce7eb65de33d209302205ceb4750d34ce4d3ef9b733ca",
+      "byteLength": 520
+    },
+    "packages/neuvetra-database/src/m76-contract.ts": {
+      "sha256": "0d835662bb6f84e8e1080dddcb7a8ae04e4dee0447d489ce1e7e6502be6bd270",
+      "byteLength": 6549
+    },
+    "packages/neuvetra-database/src/m76-diesel-contract.ts": {
+      "sha256": "0e7f9487fdeeb47260891fc423d22f9a386e4f24045c603043edb7c8ac2a8ef5",
+      "byteLength": 7503
+    },
+    "packages/neuvetra-database/src/m76-diesel-report.ts": {
+      "sha256": "014f9e012a6acd46cbe9d04248bcc4d9abeb8c95723bf4448310ce2508c433fb",
+      "byteLength": 5437
+    },
+    "packages/neuvetra-database/src/m76-diesel-validation.ts": {
+      "sha256": "fcd183ebe9dd53121ee517b7f2ded62cdf97dda1c2673e87f8533e8812a16057",
+      "byteLength": 11185
+    },
+    "packages/neuvetra-database/src/m76-diesel.ts": {
+      "sha256": "98dd220d75a46de954d3de7e1b1fda2622afb5a84f18727ad73a43b1dcd95ea0",
+      "byteLength": 17485
+    },
+    "packages/neuvetra-database/src/m76-report.ts": {
+      "sha256": "96282f6c5d72d623c3c299f3be37f713b0b9d610a7ecab2dc0701cb1c0f50393",
+      "byteLength": 3873
+    },
+    "packages/neuvetra-database/src/m76-validation.ts": {
+      "sha256": "465e36867626866f7753b2a5d9d6b2f19c155588ba3e65e8acb2db134de880db",
+      "byteLength": 26905
+    },
+    "packages/neuvetra-database/src/m76.ts": {
+      "sha256": "5656449d6f09b1a7d701f6c0d3e4f50cdc1c09fb4e58cbc76c3f6f771f5cad65",
+      "byteLength": 23719
+    },
+    "packages/neuvetra-database/src/migrations/0019_stationary_sources.sql": {
+      "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
+      "byteLength": 122629
+    },
+    "packages/neuvetra-database/src/staging-migrations.ts": {
+      "sha256": "572cf622962be913bb42da478ca3470eae3932fc7bf265cf32849f9f8c57bb6e",
+      "byteLength": 9199
+    },
+    "packages/neuvetra-database/src/workspace.ts": {
+      "sha256": "ff095cc6df58119d93aaf50460c9b33e73ac89e3724680a7295ff88bab6b1832",
+      "byteLength": 90909
+    },
+    "apps/site-web/src/staging.css": {
+      "sha256": "88295dc180cc47bd65644c4490daaf2269c3fd6eed6f93bd3de0f27be7e0ba30",
+      "byteLength": 11791
+    }
+  }
+}

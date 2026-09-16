@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 1,
+  "task": "M76-INDEPENDENT-QA",
+  "executor": "/root/m76_accounting",
+  "priorAuthorship": "M76 accounting contract only; root separately selected the method. No M76 production or author-test authorship.",
+  "applicationImports": false,
+  "authorTestsImported": false,
+  "derivation": "Source-cell rational gas expansion; integer quotient/remainder half-even; separate Decimal96 coefficient and gas comparison.",
+  "source": {
+    "path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-factors-hub-2025.xlsx",
+    "byteLength": 1014275,
+    "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+    "cells": [
+      {
+        "cell": "F3",
+        "rawXml": "440",
+        "decoded": "Last Modified: January 15, 2025",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "C38",
+        "rawXml": "97",
+        "decoded": "Natural Gas",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "E38",
+        "rawXml": "53.06",
+        "decoded": "53.06",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "F38",
+        "rawXml": "1",
+        "decoded": "1",
+        "numFmtId": "165",
+        "customNumFmtCode": "_(* #,##0.0_);_(* \\(#,##0.0\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "G38",
+        "rawXml": "0.1",
+        "decoded": "0.1",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "D14",
+        "rawXml": "272",
+        "decoded": "Heat Content (HHV)",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "D47",
+        "rawXml": "94",
+        "decoded": "mmBtu per gallon",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "E47",
+        "rawXml": "237",
+        "decoded": "kg CO2 per mmBtu",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "F47",
+        "rawXml": "238",
+        "decoded": "g CH4 per mmBtu",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "G47",
+        "rawXml": "239",
+        "decoded": "g N2O per mmBtu",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "C55",
+        "rawXml": "70",
+        "decoded": "Distillate Fuel Oil No. 2",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "D55",
+        "rawXml": "0.13800000000000001",
+        "decoded": "0.13800000000000001",
+        "numFmtId": "164",
+        "customNumFmtCode": "_(* #,##0.000_);_(* \\(#,##0.000\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "E55",
+        "rawXml": "73.959999999999994",
+        "decoded": "73.959999999999994",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "F55",
+        "rawXml": "3",
+        "decoded": "3",
+        "numFmtId": "165",
+        "customNumFmtCode": "_(* #,##0.0_);_(* \\(#,##0.0\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "G55",
+        "rawXml": "0.6",
+        "decoded": "0.6",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "H55",
+        "rawXml": "10.210000000000001",
+        "decoded": "10.210000000000001",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "I55",
+        "rawXml": "0.41",
+        "decoded": "0.41",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "J55",
+        "rawXml": "0.08",
+        "decoded": "0.08",
+        "numFmtId": "43",
+        "customNumFmtCode": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "C94",
+        "rawXml": "324",
+        "decoded": "Emission factors are per unit of heat content using higher heating values (HHV). If heat content is available from the fuel supplier, it is preferable to use that value. If not, default heat contents are provided.",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "C95",
+        "rawXml": "394",
+        "decoded": "All CO2 emission factors assume that 100 percent of the carbon content of the fuel is oxidized to CO2, as is recommended by the Intergovernmental Panel on Climate Change (IPCC). ",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "C99",
+        "rawXml": "391",
+        "decoded": "The factors represented in the table above represent combustion emissions only and do not represent upstream emissions.",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "E523",
+        "rawXml": "164",
+        "decoded": "100-Year GWP",
+        "numFmtId": "0",
+        "customNumFmtCode": null
+      },
+      {
+        "cell": "E524",
+        "rawXml": "1",
+        "decoded": "1",
+        "numFmtId": "169",
+        "customNumFmtCode": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "E525",
+        "rawXml": "28",
+        "decoded": "28",
+        "numFmtId": "169",
+        "customNumFmtCode": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)"
+      },
+      {
+        "cell": "E526",
+        "rawXml": "265",
+        "decoded": "265",
+        "numFmtId": "169",
+        "customNumFmtCode": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)"
+      }
+    ]
+  },
+  "numericFixtures": [
+    {
+      "id": "natural_gas_zero",
+      "family": "natural_gas",
+      "quantity": "0.000",
+      "expected": {
+        "heatMmbtu": "0",
+        "co2MassKg": "0",
+        "ch4MassKg": "0",
+        "n2oMassKg": "0",
+        "ch4Co2eKg": "0",
+        "n2oCo2eKg": "0",
+        "totalExactKgCo2e": "0",
+        "totalDisplayKgCo2e": "0.0000"
+      }
+    },
+    {
+      "id": "natural_gas_minimum",
+      "family": "natural_gas",
+      "quantity": "0.001",
+      "expected": {
+        "heatMmbtu": "0.001",
+        "co2MassKg": "0.05306",
+        "ch4MassKg": "0.000001",
+        "n2oMassKg": "0.0000001",
+        "ch4Co2eKg": "0.000028",
+        "n2oCo2eKg": "0.0000265",
+        "totalExactKgCo2e": "0.0531145",
+        "totalDisplayKgCo2e": "0.0531"
+      }
+    },
+    {
+      "id": "natural_gas_unit",
+      "family": "natural_gas",
+      "quantity": "1.000",
+      "expected": {
+        "heatMmbtu": "1",
+        "co2MassKg": "53.06",
+        "ch4MassKg": "0.001",
+        "n2oMassKg": "0.0001",
+        "ch4Co2eKg": "0.028",
+        "n2oCo2eKg": "0.0265",
+        "totalExactKgCo2e": "53.1145",
+        "totalDisplayKgCo2e": "53.1145"
+      }
+    },
+    {
+      "id": "natural_gas_irregular",
+      "family": "natural_gas",
+      "quantity": "317.219",
+      "expected": {
+        "heatMmbtu": "317.219",
+        "co2MassKg": "16831.64014",
+        "ch4MassKg": "0.317219",
+        "n2oMassKg": "0.0317219",
+        "ch4Co2eKg": "8.882132",
+        "n2oCo2eKg": "8.4063035",
+        "totalExactKgCo2e": "16848.9285755",
+        "totalDisplayKgCo2e": "16848.9286"
+      }
+    },
+    {
+      "id": "natural_gas_midrange",
+      "family": "natural_gas",
+      "quantity": "123456.789",
+      "expected": {
+        "heatMmbtu": "123456.789",
+        "co2MassKg": "6550617.22434",
+        "ch4MassKg": "123.456789",
+        "n2oMassKg": "12.3456789",
+        "ch4Co2eKg": "3456.790092",
+        "n2oCo2eKg": "3271.6049085",
+        "totalExactKgCo2e": "6557345.6193405",
+        "totalDisplayKgCo2e": "6557345.6193"
+      }
+    },
+    {
+      "id": "natural_gas_maximum",
+      "family": "natural_gas",
+      "quantity": "999999999999.999",
+      "expected": {
+        "heatMmbtu": "999999999999.999",
+        "co2MassKg": "53059999999999.94694",
+        "ch4MassKg": "999999999.999999",
+        "n2oMassKg": "99999999.9999999",
+        "ch4Co2eKg": "27999999999.999972",
+        "n2oCo2eKg": "26499999999.9999735",
+        "totalExactKgCo2e": "53114499999999.9468855",
+        "totalDisplayKgCo2e": "53114499999999.9469"
+      }
+    },
+    {
+      "id": "natural_gas_last_digit_successor",
+      "family": "natural_gas",
+      "quantity": "317.220",
+      "expected": {
+        "heatMmbtu": "317.22",
+        "co2MassKg": "16831.6932",
+        "ch4MassKg": "0.31722",
+        "n2oMassKg": "0.031722",
+        "ch4Co2eKg": "8.88216",
+        "n2oCo2eKg": "8.40633",
+        "totalExactKgCo2e": "16848.98169",
+        "totalDisplayKgCo2e": "16848.9817"
+      }
+    },
+    {
+      "id": "natural_gas_new_tie_even_down",
+      "family": "natural_gas",
+      "quantity": "80.100",
+      "expected": {
+        "heatMmbtu": "80.1",
+        "co2MassKg": "4250.106",
+        "ch4MassKg": "0.0801",
+        "n2oMassKg": "0.00801",
+        "ch4Co2eKg": "2.2428",
+        "n2oCo2eKg": "2.12265",
+        "totalExactKgCo2e": "4254.47145",
+        "totalDisplayKgCo2e": "4254.4714"
+      }
+    },
+    {
+      "id": "natural_gas_new_tie_odd_up",
+      "family": "natural_gas",
+      "quantity": "80.300",
+      "expected": {
+        "heatMmbtu": "80.3",
+        "co2MassKg": "4260.718",
+        "ch4MassKg": "0.0803",
+        "n2oMassKg": "0.00803",
+        "ch4Co2eKg": "2.2484",
+        "n2oCo2eKg": "2.12795",
+        "totalExactKgCo2e": "4265.09435",
+        "totalDisplayKgCo2e": "4265.0944"
+      }
+    },
+    {
+      "id": "stationary_diesel_zero",
+      "family": "stationary_diesel",
+      "quantity": "0.000",
+      "expected": {
+        "heatMmbtu": "0",
+        "co2MassKg": "0",
+        "ch4MassKg": "0",
+        "n2oMassKg": "0",
+        "ch4Co2eKg": "0",
+        "n2oCo2eKg": "0",
+        "totalExactKgCo2e": "0",
+        "totalDisplayKgCo2e": "0.0000"
+      }
+    },
+    {
+      "id": "stationary_diesel_minimum",
+      "family": "stationary_diesel",
+      "quantity": "0.001",
+      "expected": {
+        "heatMmbtu": "0.000138",
+        "co2MassKg": "0.01020648",
+        "ch4MassKg": "0.000000414",
+        "n2oMassKg": "0.0000000828",
+        "ch4Co2eKg": "0.000011592",
+        "n2oCo2eKg": "0.000021942",
+        "totalExactKgCo2e": "0.010240014",
+        "totalDisplayKgCo2e": "0.0102"
+      }
+    },
+    {
+      "id": "stationary_diesel_unit",
+      "family": "stationary_diesel",
+      "quantity": "1.000",
+      "expected": {
+        "heatMmbtu": "0.138",
+        "co2MassKg": "10.20648",
+        "ch4MassKg": "0.000414",
+        "n2oMassKg": "0.0000828",
+        "ch4Co2eKg": "0.011592",
+        "n2oCo2eKg": "0.021942",
+        "totalExactKgCo2e": "10.240014",
+        "totalDisplayKgCo2e": "10.2400"
+      }
+    },
+    {
+      "id": "stationary_diesel_irregular",
+      "family": "stationary_diesel",
+      "quantity": "317.219",
+      "expected": {
+        "heatMmbtu": "43.776222",
+        "co2MassKg": "3237.68937912",
+        "ch4MassKg": "0.131328666",
+        "n2oMassKg": "0.0262657332",
+        "ch4Co2eKg": "3.677202648",
+        "n2oCo2eKg": "6.960419298",
+        "totalExactKgCo2e": "3248.327001066",
+        "totalDisplayKgCo2e": "3248.3270"
+      }
+    },
+    {
+      "id": "stationary_diesel_midrange",
+      "family": "stationary_diesel",
+      "quantity": "123456.789",
+      "expected": {
+        "heatMmbtu": "17037.036882",
+        "co2MassKg": "1260059.24779272",
+        "ch4MassKg": "51.111110646",
+        "n2oMassKg": "10.2222221292",
+        "ch4Co2eKg": "1431.111098088",
+        "n2oCo2eKg": "2708.888864238",
+        "totalExactKgCo2e": "1264199.247755046",
+        "totalDisplayKgCo2e": "1264199.2478"
+      }
+    },
+    {
+      "id": "stationary_diesel_maximum",
+      "family": "stationary_diesel",
+      "quantity": "999999999999.999",
+      "expected": {
+        "heatMmbtu": "137999999999.999862",
+        "co2MassKg": "10206479999999.98979352",
+        "ch4MassKg": "413999999.999999586",
+        "n2oMassKg": "82799999.9999999172",
+        "ch4Co2eKg": "11591999999.999988408",
+        "n2oCo2eKg": "21941999999.999978058",
+        "totalExactKgCo2e": "10240013999999.989759986",
+        "totalDisplayKgCo2e": "10240013999999.9898"
+      }
+    },
+    {
+      "id": "stationary_diesel_last_digit_successor",
+      "family": "stationary_diesel",
+      "quantity": "317.220",
+      "expected": {
+        "heatMmbtu": "43.77636",
+        "co2MassKg": "3237.6995856",
+        "ch4MassKg": "0.13132908",
+        "n2oMassKg": "0.026265816",
+        "ch4Co2eKg": "3.67721424",
+        "n2oCo2eKg": "6.96044124",
+        "totalExactKgCo2e": "3248.33724108",
+        "totalDisplayKgCo2e": "3248.3372"
+      }
+    },
+    {
+      "id": "stationary_diesel_new_tie_even_down",
+      "family": "stationary_diesel",
+      "quantity": "175.000",
+      "expected": {
+        "heatMmbtu": "24.15",
+        "co2MassKg": "1786.134",
+        "ch4MassKg": "0.07245",
+        "n2oMassKg": "0.01449",
+        "ch4Co2eKg": "2.0286",
+        "n2oCo2eKg": "3.83985",
+        "totalExactKgCo2e": "1792.00245",
+        "totalDisplayKgCo2e": "1792.0024"
+      }
+    },
+    {
+      "id": "stationary_diesel_new_tie_odd_up",
+      "family": "stationary_diesel",
+      "quantity": "125.000",
+      "expected": {
+        "heatMmbtu": "17.25",
+        "co2MassKg": "1275.81",
+        "ch4MassKg": "0.05175",
+        "n2oMassKg": "0.01035",
+        "ch4Co2eKg": "1.449",
+        "n2oCo2eKg": "2.74275",
+        "totalExactKgCo2e": "1280.00175",
+        "totalDisplayKgCo2e": "1280.0018"
+      }
+    }
+  ],
+  "methodMixNegativeControl": {
+    "quantityGallons": "1.000",
+    "chosenDefaultHhvTotal": "10.240014",
+    "roundedPerGallonRouteTotal": "10.24268",
+    "mustDiffer": true
+  },
+  "implementationAcceptance": "pending"
+}

@@ -70,6 +70,24 @@ jobs:
         run: bun test apps/site-api/src/workspace/m75-postgres.test.ts
         env:
           M75_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m75_author_ci
+      - name: Prepare isolated stationary equipment native fixture
+        run: bun tools/staging/m76-backend-fixture.ts m76_author_ci --ci-baseline=m63_integration
+      - name: Verify stationary equipment persistence, exact calculation and access boundaries
+        run: bun test apps/site-api/src/workspace/m76-postgres.test.ts
+        env:
+          M76_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m76_author_ci
+      - name: Independently challenge stationary arithmetic and historical proof
+        run: bun test evaluations/research-qa/m76-independent-native.test.ts
+        env:
+          M76_INDEPENDENT_NATIVE: enabled
+          M76_QA_TEMPLATE: m76_author_ci
+      - name: Independently challenge cross-family fuel evidence and retained capacity
+        run: |
+          bun test evaluations/research-qa/m76-independent-native-security.test.ts
+          bun test evaluations/research-qa/m76-independent-native-capacity.test.ts
+          bun test evaluations/research-qa/m76-independent-native-report-capacity.test.ts
+        env:
+          M76_INDEPENDENT_NATIVE: enabled
 
       - name: Independently challenge controlled-fleet native lifecycle and direct SQL admission
         run: |
@@ -112,6 +130,8 @@ jobs:
         run: bun test evaluations/research-qa/m74-frontend-ui.test.ts evaluations/research-qa/m74-frontend-decoder.test.ts evaluations/research-qa/m74-frontend-version.test.ts evaluations/research-qa/m74-frontend-registration.test.ts tools/staging/check-m74-hosted.test.ts evaluations/research-qa/m74-hosted-helper-independent.test.ts tools/staging/m74-operators.test.ts evaluations/research-qa/m74-security-operator-gate.test.ts
       - name: Independent controlled-fleet reconciliation, reports and browser decoding
         run: bun test evaluations/research-qa/m75-independent-classification.test.ts evaluations/research-qa/m75-independent-renderer.test.ts evaluations/research-qa/m75-independent-decoder.test.ts tools/staging/m75-operators.test.ts tools/staging/check-m75-hosted.test.ts
+      - name: Independent stationary equipment, generator arithmetic and historical reports
+        run: bun test evaluations/research-qa/m76-independent-admission.test.ts evaluations/research-qa/m76-independent-authority.test.ts evaluations/research-qa/m76-independent-generator-decoder.test.ts evaluations/research-qa/m76-independent-reconciliation.test.ts evaluations/research-qa/m76-independent-renderer-decoder.test.ts evaluations/research-qa/m76-independent-report-duplicates.test.ts tools/staging/m76-operators.test.ts tools/staging/check-m76-hosted.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper
@@ -132,10 +152,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==18||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==19||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql"||manifest[18].name!=="0019_stationary_sources.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:18}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:19}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {
@@ -156,6 +176,9 @@ jobs:
               const {createM74Authority}=await import("/app/apps/site-api/src/calculation/m74-authority.ts");
               const mobile=await createM74Authority().calculate({binding:{coverageVersionId:uuid,coverageVersionSha256:"a".repeat(64),entityId:uuid,facilityId:uuid,sourceId:uuid,boundaryDecisionId:uuid},period:{start:"2025-01-01",endExclusive:"2026-01-01"},vehicle:{assetId:"SYN-TRUCK-001",vehicleClass:"Medium- and Heavy-Duty Vehicles",classificationBasis:"Synthetic owned heavy-duty on-road truck controlled throughout 2025.",modelYear:2018,fuel:"Fossil Diesel",controlBasis:"owned_operational_control_full_year"},quantityGallons:"1000.125",quantityUnit:"US_gallon",distanceMiles:"12000.500",distanceUnit:"vehicle_mile",fuelStatementSha256:"b".repeat(64),mileageStatementSha256:"c".repeat(64)});
               if(mobile.total.unrounded!=="10351.53209375"||mobile.total.display!=="10351.5321"||mobile.method.releaseEligible!==false)throw new Error("Container mobile diesel Decimal calculation failed");
+              const {createM76DieselAuthority}=await import("/app/apps/site-api/src/calculation/m76-authority.ts");
+              const generator=await createM76DieselAuthority().calculate({binding:{coverageVersionId:uuid,coverageVersionSha256:"a".repeat(64),entityId:uuid,facilityId:uuid,sourceId:uuid,boundaryDecisionId:uuid},period:{start:"2025-01-01",endExclusive:"2026-01-01"},equipment:{assetId:"SYN-GEN-001",identifierBasis:"Fictional generator serial",equipmentType:"stationary_emergency_generator",engineType:"compression_ignition",stationaryInstallation:"fixed",controlBasis:"owned_operational_control_full_year",controlExplanation:"Fictional full year ownership and operational control",fuel:"Fossil Distillate Fuel Oil No. 2",fossilFraction:"1.000",fuelGradeBasis:"Fictional fuel grade and composition evidence"},unit:"US_gallon",quantityGallons:"25.000",statementSha256:"b".repeat(64)});
+              if(generator.total.unrounded!=="256.00035"||generator.total.display!=="256.0004"||generator.method.releaseEligible!==false)throw new Error("Container generator Decimal calculation failed");
               console.info(JSON.stringify({imageSmoke:"passed",database:"injected_offline",authentication:"refusal_only",calculation:"real_python",assets:"hash_verified"}));
             } finally {await server.stop(true);await app.close();}
           '

@@ -1,0 +1,240 @@
+{
+  "task": "M76-INDEPENDENT-QA",
+  "reviewer": "/root/m76_accounting",
+  "requestedModelEffort": "gpt-6-astra/high",
+  "observedModelEffort": "unknown",
+  "files": {
+    "evaluations/research-qa/m76-gas-preservation-baseline.json": {
+      "sha256": "0bd2c044135363412e2e67e8b2d4edd2e9cbfc9eb9a8167c2918505bab6525d2",
+      "byteLength": 1287
+    },
+    "evaluations/research-qa/m76-independent-admission-early1.log": {
+      "sha256": "b82eb58ea7499ee52fd2cac103a3aa3e8db2e35a58b67bb8ba4af5911dfdb980",
+      "byteLength": 1224
+    },
+    "evaluations/research-qa/m76-independent-admission.test.ts": {
+      "sha256": "db7dd7e76634514efeda0dc2cde54fae28eb13e927369c4274179a07a203acfb",
+      "byteLength": 6794
+    },
+    "evaluations/research-qa/m76-independent-authority-early1.log": {
+      "sha256": "5207b2dbd56dade90803dc0c97ac206cc87bef7763c7614caca9a351f84ccb3e",
+      "byteLength": 441
+    },
+    "evaluations/research-qa/m76-independent-authority.test.ts": {
+      "sha256": "ea66a1343e39be41af7dac079331d7c33c6f9dfbd36e0a31a8ecc63525fb0d4c",
+      "byteLength": 4281
+    },
+    "evaluations/research-qa/m76-independent-candidate-pins.json": {
+      "sha256": "5e73bdc344b9ac866a684575218589332b0b66fae498948efba3885238d28337",
+      "byteLength": 4818
+    },
+    "evaluations/research-qa/m76-independent-expectations.json": {
+      "sha256": "a9db215fb1662553cc6f10627abc2d5f241631d2483f5548349a5c8522e0559f",
+      "byteLength": 13858
+    },
+    "evaluations/research-qa/m76-independent-forward-recovery-review.ts": {
+      "sha256": "42ce96b2b7ff65470674c956f0f6f7709c6046468ee8d581626f15c1c12fd6fe",
+      "byteLength": 3353
+    },
+    "evaluations/research-qa/m76-independent-generator-decoder-early1.log": {
+      "sha256": "eb95672a5d3f778c473a31f1f4e06e468b3cdcb1d9cde406c02345b7c97126ba",
+      "byteLength": 1515
+    },
+    "evaluations/research-qa/m76-independent-generator-decoder-repair1.log": {
+      "sha256": "d0a69bd565675a5c1b5652891f7dcd22ab5251ea377527853b1176ef041e69ad",
+      "byteLength": 750
+    },
+    "evaluations/research-qa/m76-independent-generator-decoder.test.ts": {
+      "sha256": "046babb94219b54b0a67b781c2e3c5a71c66659a7fef07e25e8cddb24370909f",
+      "byteLength": 8057
+    },
+    "evaluations/research-qa/m76-independent-generator-fixture.ts": {
+      "sha256": "01e3fb27c6b1012bf9eb7aad5c15c5015f5936f6c8730ec8f9fdc598f469ef2d",
+      "byteLength": 2090
+    },
+    "evaluations/research-qa/m76-independent-graph.ts": {
+      "sha256": "951aeb7cccdb5a095b7813cc058404e7e4f96de75f48a2fcb63ca39d65c63ef2",
+      "byteLength": 8048
+    },
+    "evaluations/research-qa/m76-independent-hosted-restore-review.ts": {
+      "sha256": "f2d1a440bd143eff89d6e71b13b43b35a4eb61afe8660723838f8c20514acfd1",
+      "byteLength": 3885
+    },
+    "evaluations/research-qa/m76-independent-native-capacity-final1.log": {
+      "sha256": "19ba43808a7d8d5bc8b788cf039fc106c3c5966b72fee1b5aa1e74a5b899b033",
+      "byteLength": 1606
+    },
+    "evaluations/research-qa/m76-independent-native-capacity-final2.log": {
+      "sha256": "a2195c9367f7b59271fb566eb018e6d20542002c4e52ba575fc2d060c18d5a9c",
+      "byteLength": 392
+    },
+    "evaluations/research-qa/m76-independent-native-capacity-result.json": {
+      "sha256": "8d63d038fa318fae317868de62afe1fb8475c87fa9558afcfdfb06782bfea8c7",
+      "byteLength": 998
+    },
+    "evaluations/research-qa/m76-independent-native-capacity.test.ts": {
+      "sha256": "01810a55f3e3f1ff2c090875a1b69dcca08310b4258457abc1ff31104e7910ce",
+      "byteLength": 5105
+    },
+    "evaluations/research-qa/m76-independent-native-early1.log": {
+      "sha256": "cc8b9591e07e996e8e52d339616c1883224cc897a4b095806061ebc90d399b24",
+      "byteLength": 2120
+    },
+    "evaluations/research-qa/m76-independent-native-early2.log": {
+      "sha256": "032dd980782d656f08ce0f09c1c0aa50a126c6442c013bafcb0a7badceec4c25",
+      "byteLength": 2570
+    },
+    "evaluations/research-qa/m76-independent-native-final1.log": {
+      "sha256": "87d1d4936aa29ab1c4793790bc5fe93bcad61b8fa66389bdbffebd0c198c3e46",
+      "byteLength": 934
+    },
+    "evaluations/research-qa/m76-independent-native-integrated-final1.log": {
+      "sha256": "ceef772ddc306a989ea1f976e957ce56f6b6ed74f98dba455441b71bc4eb90e5",
+      "byteLength": 2581
+    },
+    "evaluations/research-qa/m76-independent-native-repair1.log": {
+      "sha256": "c72e927a8cf120c91b89068ad836ba285d102fb4ee10d29328eaa2021dcf2243",
+      "byteLength": 934
+    },
+    "evaluations/research-qa/m76-independent-native-report-capacity-final1.log": {
+      "sha256": "8273a348835c2c841c7ebc48e0f40a3487e5f82469d40a423a775d077dbe5a5a",
+      "byteLength": 1448
+    },
+    "evaluations/research-qa/m76-independent-native-report-capacity-final2.log": {
+      "sha256": "d994c1f5d471719b677dea55429ba0b8c785021746fcf4b294224475e4b34e23",
+      "byteLength": 1613
+    },
+    "evaluations/research-qa/m76-independent-native-report-capacity-final3.log": {
+      "sha256": "53ac9896fc54b0dfbb96c1816e35916ffe3a8f8604ee8b2a88029e321b216896",
+      "byteLength": 418
+    },
+    "evaluations/research-qa/m76-independent-native-report-capacity-result.json": {
+      "sha256": "290c995a0f889a9a42806f5c157b8b9ca6c03c8bc6c3211d7f88617a7b8cf329",
+      "byteLength": 1030
+    },
+    "evaluations/research-qa/m76-independent-native-report-capacity.test.ts": {
+      "sha256": "25fa01fc2ad9ae2917c8923fc2ec86f7483d7ee06d636721677b17bdc4936cf6",
+      "byteLength": 5128
+    },
+    "evaluations/research-qa/m76-independent-native-result.json": {
+      "sha256": "79a5be2fd4914aa718846761a5a41493a4ebfa6b9209eb7ac47904d7000881a0",
+      "byteLength": 2777
+    },
+    "evaluations/research-qa/m76-independent-native-security-early1.log": {
+      "sha256": "8e02b7e571dbadc615cb18a616e571979cce41af165dc74b76d710e14ab2cc8c",
+      "byteLength": 2642
+    },
+    "evaluations/research-qa/m76-independent-native-security-final1.log": {
+      "sha256": "6cb7a197f8e31757227a2af57963459ff1b821b61347b002b14132fc0aa5ecb6",
+      "byteLength": 1897
+    },
+    "evaluations/research-qa/m76-independent-native-security-repair1.log": {
+      "sha256": "8209ddfd353982bcf1d44bdd5e844a789d699bcc52f8e4ddd64654b224e7fa25",
+      "byteLength": 1147
+    },
+    "evaluations/research-qa/m76-independent-native-security-result.json": {
+      "sha256": "b3f6365777663e9f40273378f16d8417df9ebc704c9a9b596508f157447b4df2",
+      "byteLength": 1366
+    },
+    "evaluations/research-qa/m76-independent-native-security.test.ts": {
+      "sha256": "565ee261f050202c3eedd17b1cf0c6d5dc48e9f0fe314f91cacc685c2c3322ac",
+      "byteLength": 12133
+    },
+    "evaluations/research-qa/m76-independent-native-ui-fixture.json": {
+      "sha256": "e31b8208bd98b89823eded69dde8eb3787a4732ca0b6afd37ac18e53b7cb3512",
+      "byteLength": 1094400
+    },
+    "evaluations/research-qa/m76-independent-native.test.ts": {
+      "sha256": "2f27952f14397340ef46cda6ecd8b3781c549ecd2560885c20f8ae333eb52f96",
+      "byteLength": 10718
+    },
+    "evaluations/research-qa/m76-independent-oracle.py": {
+      "sha256": "80162aaf4e6adbd4f212c26e0fb14e8fa49c4f1d7458311c64831044f2979cb7",
+      "byteLength": 7573
+    },
+    "evaluations/research-qa/m76-independent-pure-final1.log": {
+      "sha256": "669767c9c6ecd6a825ded129a5793db47b917c8e6e04dfb31306179ec0ffaf75",
+      "byteLength": 7043
+    },
+    "evaluations/research-qa/m76-independent-reconciliation-early1.log": {
+      "sha256": "8b6d722934e57f2159bffdf80f6876e611fa8e7145a883456ca04c8570e7c4e4",
+      "byteLength": 5588
+    },
+    "evaluations/research-qa/m76-independent-reconciliation-early2.log": {
+      "sha256": "d829385e7cf911fb92583dd6edf38366af0ec301449670ad98bf11773b2f7576",
+      "byteLength": 4529
+    },
+    "evaluations/research-qa/m76-independent-reconciliation.test.ts": {
+      "sha256": "8b9acd7c4784fcc2e767d364812f340dc78e7b25f5a90f64bca180785bb8895f",
+      "byteLength": 12291
+    },
+    "evaluations/research-qa/m76-independent-renderer-decoder-early1.log": {
+      "sha256": "ab67566b1d536a5cb3eca749fbad571d43168d6cb335643d4bfc37b4b64c0fb4",
+      "byteLength": 369
+    },
+    "evaluations/research-qa/m76-independent-renderer-decoder.test.ts": {
+      "sha256": "5fb5a387a861bfb2d51a9d29d6a3236c666ede06c1f128e904b99081bdb412ae",
+      "byteLength": 2633
+    },
+    "evaluations/research-qa/m76-independent-report-duplicates-final1.log": {
+      "sha256": "bd3978cd2b1bcbbbbad92b4fc55cd433956f8cf030885a657384b006f6eca3c2",
+      "byteLength": 286
+    },
+    "evaluations/research-qa/m76-independent-report-duplicates.test.ts": {
+      "sha256": "c86ba464c64865df9471906b27d3c07b4ae8f069942c7fcbd3e15f1a7e3fa09f",
+      "byteLength": 1049
+    },
+    "evaluations/research-qa/m76-independent-review.md": {
+      "sha256": "275a90bc6a4d47cb4e9dc879880ba1ac7932b5578bccbd47c0cf4d3d81cd6bb2",
+      "byteLength": 19506
+    },
+    "evaluations/research-qa/m76-independent-ui-early1.log": {
+      "sha256": "db9a96946286ad8d38d5604b6baf8faad83b68bda8566808705d646e4ec7612a",
+      "byteLength": 353
+    },
+    "evaluations/research-qa/m76-independent-ui-early2.log": {
+      "sha256": "3321f01afb5aa85fbe67fb51b8cd7d556d297a30da1ad0b2f27c534cb832de20",
+      "byteLength": 504
+    },
+    "evaluations/research-qa/m76-independent-ui-early3.log": {
+      "sha256": "db9a96946286ad8d38d5604b6baf8faad83b68bda8566808705d646e4ec7612a",
+      "byteLength": 353
+    },
+    "evaluations/research-qa/m76-independent-ui-early4.log": {
+      "sha256": "4b6fc6bb9f909f5202e6de65ea869a35af9779c7ac696c00644a6a20ed0811e8",
+      "byteLength": 42
+    },
+    "evaluations/research-qa/m76-independent-ui-failure.json": {
+      "sha256": "78187ac8f7e67a4617a131898d7dd8345ad13ed529e3c894b79435544f50112b",
+      "byteLength": 3676
+    },
+    "evaluations/research-qa/m76-independent-ui-final1.log": {
+      "sha256": "4b6fc6bb9f909f5202e6de65ea869a35af9779c7ac696c00644a6a20ed0811e8",
+      "byteLength": 42
+    },
+    "evaluations/research-qa/m76-independent-ui-fixture.json": {
+      "sha256": "048d66254ad8ed7d57e17f07862be704d9d4a9b2dd8aec7ed777663e141131b9",
+      "byteLength": 925817
+    },
+    "evaluations/research-qa/m76-independent-ui-result.json": {
+      "sha256": "d7f45542f439b2c56c4ebaef5a7e525b3dea54d640b29353db012d8e0a7cf884",
+      "byteLength": 1010
+    },
+    "evaluations/research-qa/m76-independent-ui.mjs": {
+      "sha256": "fd08e45254f431a25197abbf67fdfceccf7dff1833372bfd2b547600cb5e9760",
+      "byteLength": 7383
+    },
+    "evaluations/research-qa/m76-independent-valid-fixture.ts": {
+      "sha256": "3ad7e1b97b8dc009d4e0c258b5b8870ddbc49a473477f9f17ad7d062aacbac5b",
+      "byteLength": 8562
+    },
+    "evaluations/research-qa/m76-ui-server.ts": {
+      "sha256": "124733330190ff4e279489579b9962171611ed1f5c2805dc7758c8756566ffa4",
+      "byteLength": 1270
+    },
+    "evaluations/research-qa/m76-ui.tsx": {
+      "sha256": "d95974616e93a98da32d5a5531cf9ceffd0a48da3e90c18a0753dfdf62f0bce0",
+      "byteLength": 1288
+    }
+  }
+}

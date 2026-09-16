@@ -1,18 +1,16 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T13:48:09.183776+00:00",
+  "updated_at": "2026-09-16T14:45:54.353160+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M75",
-    "name": "Controlled-vehicle roster and workpaper reconciliation",
-    "status": "live_accepted_implementation_published",
-    "next_gate": "Verify final closure-documentation head checks and unchanged live identity, then collect board demo feedback before M76.",
+    "id": "M76",
+    "name": "Stationary equipment and fuel coverage",
+    "status": "local_accepted_publication_pending",
+    "next_gate": "Final record-limit review, exact publication and remote checks, then reviewed hosted upgrade and demonstration.",
     "evidence": [
-      "docs/research/scope1-completion-matrix.md",
-      "docs/research/m75-publication.json",
-      "evaluations/research-qa/m75-hosted-acceptance.md"
+      "docs/research/scope1-completion-matrix.md"
     ]
   },
   "completed_milestones": [
@@ -2646,7 +2644,7 @@
     "final_publication": "docs/research/m74-final-publication.json"
   },
   "current_m75": {
-    "status": "live_accepted_implementation_published",
+    "status": "complete_board_demo_accepted",
     "baseline": "42b4194ba7211779c415c02b590ff5f6ced88a4e",
     "hosted_schema": 18,
     "hosted_changes": true,
@@ -2679,6 +2677,25 @@
     "hosted_acceptance": "evaluations/research-qa/m75-hosted-acceptance.md",
     "hosted_browser_evidence": "docs/research/m75-hosted-browser-verification.json",
     "restart_revisit": "passed_zero_application_posts_all_auth_sessions_closed",
-    "next": "M76 stationary sources after board demonstration feedback; not started"
+    "next": "M76 stationary sources after board demonstration feedback; not started",
+    "final_published_head": "32e1d7b879e58eabc0789552f61298a608c3f228",
+    "final_checks": "six_pass",
+    "board_feedback": "Browser looks good; keep moving."
+  },
+  "current_m76": {
+    "status": "local_accepted_publication_pending",
+    "baseline": "32e1d7b879e58eabc0789552f61298a608c3f228",
+    "hosted_schema": 18,
+    "hosted_changes": false,
+    "active_assignments": [],
+    "board_feedback_received": true,
+    "next": "Final record-limit review, exact publication and remote checks, then reviewed hosted upgrade and demonstration.",
+    "planning_snapshot": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
+    "root_ui": "Actual local browser correction, separate review, exact HTML/JSON downloads and restart/history passed on final SQL19.",
+    "migration_sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
+    "auto_deploy": "paused_before_publication",
+    "hosted_baseline": "passed_zero_application_posts_all_verification_sessions_closed",
+    "recovery": "Fresh hosted18 encrypted restore and independent18/19 runtime replay passed; private receipts retained.",
+    "accepted_snapshot": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json"
   }
 }

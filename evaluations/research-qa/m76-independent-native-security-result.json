@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "database": "m76_qa_security_1789569949236",
+  "template": "m76_qa_review_1789569395047",
+  "schema": {
+    "name": "0019_stationary_sources.sql",
+    "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+  },
+  "events": [
+    "Source-only same-facility correction keeps exact arithmetic and old versions; gas/generator duplicate source remains readable through actual decoder and blocking",
+    "Unchanged legacy M74 valid non-collision writer still succeeds under schema19",
+    "Actual generator writer rejects retained mobile fuel record, actual legacy mobile writer rejects retained generator fuel record",
+    "Concurrent old mobile/new generator same annual fuel evidence creates exactly one successful successor",
+    "Identical textual meter label/reference produces separate retained kind-qualified reservations and readable workpaper",
+    "Coordinated stored arithmetic/content/version/export/audit rehash reaches actual Python semantic replay and is refused; isolated transaction rollback restores exact original version"
+  ],
+  "limitations": [
+    "Synthetic isolated database; no hosted execution.",
+    "Trigger catalog-definition enforcement reviewed separately by root/CTO.",
+    "Operator privilege used only for rollback-contained hostile storage mutation; runtime DML remains forbidden."
+  ]
+}

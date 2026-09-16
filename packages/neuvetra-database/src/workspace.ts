@@ -1,3 +1,5 @@
+import {readStationaryEquipment,readStationaryEquipmentReport,readStationaryEquipmentReportProof,saveStationaryEquipment as storeStationaryEquipment,reviewStationaryEquipment as storeStationaryEquipmentReview,createStationaryEquipmentReport as storeStationaryEquipmentReport,type M76Authorities,type M76SaveInput,type M76ReviewInput,type M76ReportInput} from './m76'
+import {readStationaryDiesel,saveStationaryDiesel as storeStationaryDiesel,reviewStationaryDiesel as storeStationaryDieselReview,createStationaryDieselReport as storeStationaryDieselReport,type M76DieselAuthority,type M76DieselSaveInput,type M76DieselReviewInput,type M76DieselReportInput} from './m76-diesel'
 import {readControlledFleet,readControlledFleetReport,readControlledFleetReportProof,saveControlledFleet as storeControlledFleet,reviewControlledFleet as storeControlledFleetReview,createControlledFleetReport as storeControlledFleetReport,type M75SaveInput,type M75ReviewInput,type M75ReportInput} from './m75'
 import {readMobileDiesel,saveMobileDiesel as storeMobileDiesel,reviewMobileDiesel as storeMobileDieselReview,createMobileDieselReport as storeMobileDieselReport,type M74Authority,type M74SaveInput,type M74ReviewInput,type M74ReportInput} from './m74'
 import {readStationaryGas,saveStationaryGas as storeStationaryGas,reviewStationaryGas as storeStationaryGasReview,createStationaryGasReport as storeStationaryGasReport,type M73Authority,type M73SaveInput,type M73ReviewInput,type M73ReportInput} from './m73'
@@ -295,6 +297,17 @@ export interface WorkspaceConnection extends WorkspaceSql {
 
 export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
+
+  async findStationaryEquipment(userId:string,companyId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipment(tx,companyId,authority))}
+  async findStationaryEquipmentReport(userId:string,companyId:string,rosterId:string,reportId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipmentReport(tx,companyId,rosterId,reportId,authority))}
+  async findStationaryEquipmentReportProof(userId:string,companyId:string,rosterId:string,reportId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipmentReportProof(tx,companyId,rosterId,reportId,authority))}
+  async saveStationaryEquipment(userId:string,companyId:string,rosterId:string|null,input:M76SaveInput,authority:M76Authorities){return this.asTrustedUser(userId,tx=>storeStationaryEquipment(tx,userId,companyId,rosterId,input,authority))}
+  async reviewStationaryEquipment(userId:string,companyId:string,rosterId:string,input:M76ReviewInput,authority:M76Authorities){return this.asTrustedUser(userId,tx=>storeStationaryEquipmentReview(tx,userId,companyId,rosterId,input,authority))}
+  async createStationaryEquipmentReport(userId:string,companyId:string,rosterId:string,input:M76ReportInput,authority:M76Authorities){return this.asTrustedUser(userId,tx=>storeStationaryEquipmentReport(tx,userId,companyId,rosterId,input,authority))}
+  async findStationaryDiesel(userId:string,companyId:string,authority:M76DieselAuthority){return this.asUser(userId,tx=>readStationaryDiesel(tx,companyId,authority))}
+  async saveStationaryDiesel(userId:string,companyId:string,worksheetId:string|null,input:M76DieselSaveInput,authority:M76DieselAuthority){return this.asTrustedUser(userId,tx=>storeStationaryDiesel(tx,userId,companyId,worksheetId,input,authority))}
+  async reviewStationaryDiesel(userId:string,companyId:string,worksheetId:string,input:M76DieselReviewInput,authority:M76DieselAuthority){return this.asTrustedUser(userId,tx=>storeStationaryDieselReview(tx,companyId,worksheetId,input,authority))}
+  async createStationaryDieselReport(userId:string,companyId:string,worksheetId:string,input:M76DieselReportInput,authority:M76DieselAuthority){return this.asTrustedUser(userId,tx=>storeStationaryDieselReport(tx,companyId,worksheetId,input,authority))}
 
   async findStationaryGas(userId:string,companyId:string,authority:M73Authority){return this.asUser(userId,tx=>readStationaryGas(tx,companyId,authority))}
   async saveStationaryGas(userId:string,companyId:string,worksheetId:string|null,input:M73SaveInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGas(tx,userId,companyId,worksheetId,input,authority))}

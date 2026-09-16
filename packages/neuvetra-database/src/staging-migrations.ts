@@ -9,6 +9,7 @@ export const STAGING_MIGRATIONS = [
   "0016_stationary_natural_gas.sql",
   "0017_mobile_diesel.sql",
   "0018_controlled_fleet.sql",
+  "0019_stationary_sources.sql",
 ] as const
 
 export async function readMigrationManifest() {

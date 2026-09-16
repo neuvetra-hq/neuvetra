@@ -44,3 +44,25 @@
 .fleet-draft,.fleet-reconciliation,.fleet-evidence,.fleet-reports { margin:24px 0; }
 .fleet-reports article { border-top:1px solid #c5d4ce; padding:12px 0; }
 @media(max-width:640px) { .fleet-fields { grid-template-columns:minmax(0,1fr); } .controlled-fleet fieldset { padding:12px; } .controlled-fleet th,.controlled-fleet td { padding:8px; } .controlled-fleet button { max-width:100%; white-space:normal; } }
+
+.controlled-stationary { overflow-wrap:anywhere; }
+.controlled-stationary fieldset { min-width:0; border:1px solid #bbc9c4; border-radius:12px; padding:18px; margin:20px 0; }
+.stationary-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.controlled-stationary label { display:flex; flex-direction:column; gap:6px; margin:10px 0; }
+.controlled-stationary input:not([type=checkbox]), .controlled-stationary select, .controlled-stationary textarea { width:100%; min-width:0; max-width:100%; padding:10px; border:1px solid #8daba2; border-radius:7px; color:#173e35; background:#fff; font:inherit; box-sizing:border-box; }
+.controlled-stationary textarea { min-height:85px; resize:vertical; }
+.controlled-stationary .stationary-check { flex-direction:row; align-items:flex-start; gap:10px; }
+.controlled-stationary .stationary-check input { flex:none; width:18px; height:18px; margin-top:3px; }
+.stationary-actions { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0; }
+.stationary-asset { border:1px solid #c5d4ce; padding:14px; border-radius:10px; margin:16px 0; }
+.stationary-asset summary { font-weight:600; cursor:pointer; }
+.stationary-note { font-size:.9rem; }
+.stationary-table-wrap { overflow-x:auto; max-width:100%; }
+.controlled-stationary table { width:100%; border-collapse:collapse; text-align:left; }
+.controlled-stationary th,.controlled-stationary td { vertical-align:top; padding:12px; border-bottom:1px solid #c5d4ce; }
+.controlled-stationary td ul { padding-left:18px; margin:0; }
+.controlled-stationary code { display:block; white-space:normal; overflow-wrap:anywhere; }
+.controlled-stationary pre { white-space:pre-wrap; overflow-wrap:anywhere; max-width:100%; }
+.stationary-draft,.stationary-reconciliation,.stationary-evidence,.stationary-reports { margin:24px 0; }
+.stationary-reports article { border-top:1px solid #c5d4ce; padding:12px 0; }
+@media(max-width:640px) { .stationary-fields { grid-template-columns:minmax(0,1fr); } .controlled-stationary fieldset { padding:12px; } .controlled-stationary th,.controlled-stationary td { padding:8px; } .controlled-stationary button { max-width:100%; white-space:normal; } }
