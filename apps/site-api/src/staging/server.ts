@@ -1,3 +1,4 @@
+import { createM75Routes } from "../workspace/m75-routes"
 import { createCorporateInventoryRoutes } from "../workspace/m71-routes"
 import { createM73Routes } from "../workspace/m73-routes"
 import { createM73Authority } from "../calculation/m73-authority"
@@ -97,6 +98,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   })
   const corporateInventoryRoutes=createCorporateInventoryRoutes({database,validateUser,origin:config.origin})
   const stationaryGasRoutes=createM73Routes({database,validateUser,origin:config.origin,authority:createM73Authority()})
+  const controlledFleetRoutes=createM75Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -109,7 +111,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 17) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 18) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -149,6 +151,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
       if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)
+      if (url.pathname.includes("/controlled-fleet")) return controlledFleetRoutes(forwarded)
       if (url.pathname.includes("/mobile-diesel")) return mobileDieselRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-evidence/reports")) return annualEvidenceReportRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-evidence")) return annualEvidenceRoutes(forwarded)

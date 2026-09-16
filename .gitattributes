@@ -86,3 +86,7 @@ evaluations/research-qa/m73-accounting-independent-candidate3-results.json -text
 # M74 recovery and review receipts retain independently reviewed bytes.
 evaluations/research-qa/m74-security-reviewed-files.json -text whitespace=cr-at-eol
 tools/staging/m74-seal-backup.ps1 -text whitespace=cr-at-eol
+
+# M75 immutable review pins and reviewed recovery script retain exact bytes.
+evaluations/research-qa/m75-*-pins.json -text whitespace=cr-at-eol
+tools/staging/m75-seal-backup.ps1 -text whitespace=cr-at-eol

@@ -1,18 +1,16 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T23:42:45.732041+00:00",
+  "updated_at": "2026-09-16T06:40:30.227923+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M74",
-    "name": "Two-evidence mobile-diesel source workpaper",
-    "status": "complete",
-    "next_gate": "M75 controlled-vehicle register reconciliation under standing California-first Scope1 approval.",
+    "id": "M75",
+    "name": "Controlled-vehicle roster and workpaper reconciliation",
+    "status": "local_accepted_publication_in_progress",
+    "next_gate": "Final shared-wiring review, remote CI, fresh hosted recovery and controlled17-to18 migration followed by hosted demonstration.",
     "evidence": [
-      "docs/research/m74-final-publication.json",
-      "evaluations/research-qa/m74-hosted-acceptance.md",
-      "evaluations/research-qa/m74-clock-review.md"
+      "docs/research/scope1-completion-matrix.md"
     ]
   },
   "completed_milestones": [
@@ -2634,5 +2632,28 @@
     "clock_repair": "independently_passed_tests_only",
     "research_catalog": "expired_requires_separate_source_review",
     "final_publication": "docs/research/m74-final-publication.json"
+  },
+  "current_m75": {
+    "status": "local_accepted_publication_in_progress",
+    "baseline": "42b4194ba7211779c415c02b590ff5f6ced88a4e",
+    "hosted_schema": 17,
+    "hosted_changes": true,
+    "active_assignments": [],
+    "standing_approval": true,
+    "backend_executor": "/root/m75_product",
+    "dispatch_exception": "Historical m74_backend resume rejected agent-thread-limit; reused product author for implementation, independent QA separate.",
+    "planning_snapshot": "operations/agent-improvement/snapshots/M75-PLANNING-CANDIDATE1.json",
+    "interim_evidence": "evaluations/research-qa/m75-root-integration.md",
+    "hosted_database_changes": false,
+    "automatic_deployment": false,
+    "implementation_snapshot": "operations/agent-improvement/snapshots/M75-INTEGRATED-ACCEPTED2.json",
+    "local_acceptance": "evaluations/research-qa/m75-independent-review.md",
+    "browser_evidence": "docs/research/m75-local-browser-verification.json",
+    "operator_review": "evaluations/research-qa/m75-root-operator-review.md",
+    "hosted_baseline": "passed_zero_application_posts_all_auth_sessions_closed",
+    "hosted_backup": "docs/research/m75-prepublication.json",
+    "hosted_recovery": "independently_passed_83_tables_224_rows",
+    "shared_wiring_review": "evaluations/research-qa/m75-integration-review.md",
+    "final_local_review": "evaluations/research-qa/m75-final-review-addendum.md"
   }
 }

@@ -1,0 +1,59 @@
+{
+  "createdAt": "2026-09-16T06:38:53.477Z",
+  "reviewerId": "/root/m74_accounting",
+  "snapshotSha256": "ca2c9415c8cb7e3377b580871ddc686723ab8e5fb71a1d00bd52e2efa794bf6f",
+  "changes": [
+    {
+      "path": "apps/site-web/src/lib/m75-api.ts",
+      "before": "3b55df8d0c4ead8ecf08086212623f6a8be3eacad293e17409e030d27cea3165",
+      "after": "473c4f2170bcdd8f143ab616c876855eafc6ae8d7df1c82b0315f7de5423feab",
+      "onlyCrLfToLf": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "before": "5757db529a5e5671f6affaf6bf0682cf1ef7aa04ca250ee1ed4266f6c8997900",
+      "after": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+      "onlyCrLfToLf": true
+    },
+    {
+      "path": "tools/staging/m75-backend-fixture.ts",
+      "before": "44c454a0558fa62b5c07dc2ea8f5c2bd952e9ca503800651e929948d6ca40a42",
+      "after": "8f16168d1fd965da52c6e02da35796af6cb815a3512f6fada8145ed6ecfa5b43",
+      "onlyCrLfToLf": true
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "before": "0eced643d3bd5979edf457b1f108fc1b58a12f60f8aad1cf6537faf9b7550097",
+      "after": "df76df29ab30f545b22bf6c01c18311f3943890a409ddd2e2c26a86434ee79a1",
+      "onlyCrLfToLf": null,
+      "review": "Current source independently reinspected; original mixed-ending bytes unavailable, so no cryptographic normalization equality claim."
+    }
+  ],
+  "files": {
+    "apps/site-web/src/lib/m75-api.ts": "473c4f2170bcdd8f143ab616c876855eafc6ae8d7df1c82b0315f7de5423feab",
+    "packages/neuvetra-database/src/m75.ts": "541ce11c6dcdfcf5c753173f7d56f68c70ef08eb71981921b7dae09b9cd261e1",
+    "apps/site-web/src/components/ControlledFleet.tsx": "17c9e8f9ba18bad37caefe651013381a49e4960001dbdcad5094850bc5e68312",
+    "apps/site-api/src/staging/server.ts": "92ccbbd5a819bc6d0beb0602939434e11cebcdc88f85ddbf906704a575c1a0bc",
+    "packages/neuvetra-database/src/m75-contract.ts": "9226821b1d4934c9f1a08c54d7884f6ed0558cfe8d123020cc708494be06cd1e",
+    "packages/neuvetra-database/src/m75-validation.ts": "ebc8873b718ec0ea4f5cc18b70e8f2604aaf7237fccd9c07c1b736f16dd66fc1",
+    "apps/site-web/src/lib/m75-form.ts": "7aa758ceac482d5234a735c80ae44c06e1a61fe0b4dabcb034933c9b3a9d75a2",
+    "packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+    "apps/site-web/src/components/FleetRosterEditor.tsx": "361b6ed97109c715b725056c692ed29de9c622d4ce711adecc0859e90fadb358",
+    "packages/neuvetra-database/src/m75-report.ts": "312b2093341e019f1c43d2bb6a3a4d03b3a6427fc78dddbfdc72a426e147d49e",
+    "tools/staging/m75-backend-fixture.ts": "8f16168d1fd965da52c6e02da35796af6cb815a3512f6fada8145ed6ecfa5b43",
+    "packages/neuvetra-database/src/workspace.ts": "b0ddd300c4546ba142007a359b77ccc0382e43b5c00ccb1dfeead23d3f35b615",
+    "apps/site-api/src/workspace/m75-routes.ts": "69419e5f6ee397afe225c095ffdaecff3a927054fc1a98c2c5e57a620ae0351f",
+    "packages/neuvetra-database/src/hosted.ts": "13474e760ba4a316d831e419eda8283015da9f16a1f4b917700de98791c4877f",
+    ".github/workflows/verify.yml": "df76df29ab30f545b22bf6c01c18311f3943890a409ddd2e2c26a86434ee79a1",
+    "Dockerfile.staging": "fc1ef9fc8c7bdfc3b374a6fd4805c83055cce3f4665dce416270064f96c18255",
+    "apps/site-api/src/staging/server.test.ts": "2a96c8bba058f76346ab31959581e70e7c6ee955fde15df32deb062957524b4d",
+    "packages/neuvetra-database/src/index.ts": "af2c08ae929fd4c01852d868b81ccfa385dc7f701ab4620e8b4efb1d938ddd44",
+    "packages/neuvetra-database/src/hosted.test.ts": "d7bb339583a74299e3f9dc70573fa9858c72267be4e1ea3fa2c7fd7f1ed1ae4e",
+    "packages/neuvetra-database/src/staging-migrations.ts": "b190269b6450ad7dc0da2767264e8271618356b7a5f8e69328c369d505d47693",
+    "apps/site-web/src/components/StagingWorkspace.tsx": "bfffdd9cca04e608a5039e1f7b42e79d33c0ac5059111df76a5912b05bc0b45a",
+    "apps/site-web/src/staging.css": "b25f830d16acb58a775fe0ae24f307e5e661497a46ea1cf888f914d1a6013a07",
+    "tools/staging/m74-operators.test.ts": "3a3fd7126a4ec463da8aa1a3c1af94d3748ef47879bb9a41b930008d2a0f4cf8",
+    "evaluations/research-qa/m75-integration.test.ts": "0666e442b6aa0e21d3793ced5f7a02e8e26f25a2a3be617cb1f1590c98c045b6",
+    ".gitattributes": "4c455c91e76cbbe692ba32c042fb6ced4fd4e58224715e8942c399c2bf6cd0d5"
+  }
+}

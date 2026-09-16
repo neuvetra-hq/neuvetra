@@ -1,0 +1,20 @@
+{
+  "scope": "Pure structural classification and renderer only; no native or UI acceptance",
+  "exitCode": 0,
+  "after": {
+    "packages/neuvetra-database/src/m75-validation.ts": "ebc8873b718ec0ea4f5cc18b70e8f2604aaf7237fccd9c07c1b736f16dd66fc1",
+    "packages/neuvetra-database/src/m75-report.ts": "312b2093341e019f1c43d2bb6a3a4d03b3a6427fc78dddbfdc72a426e147d49e",
+    "evaluations/research-qa/m75-independent-classification.test.ts": "e6bbae143c8ba8ee51639c811dfd9987a54e18cb4ffd331d25f2928f26605166",
+    "evaluations/research-qa/m75-independent-renderer.test.ts": "16c20689e05dd523ba1f2a1619e6c462ebdf80a73212e5e4e12879b26918c942",
+    "evaluations/research-qa/m75-independent-scenarios.ts": "6c422b7f01367b5193d8eecff0fcdf33d5800bbf58bd933d3eaae0f39fbf21d2",
+    "packages/neuvetra-database/src/m75-contract.ts": "e14264d94c140a5385d1663952f3d50f36d20573b734a6b122493ee9f3650213"
+  },
+  "before": {
+    "packages/neuvetra-database/src/m75-validation.ts": "ebc8873b718ec0ea4f5cc18b70e8f2604aaf7237fccd9c07c1b736f16dd66fc1",
+    "packages/neuvetra-database/src/m75-report.ts": "312b2093341e019f1c43d2bb6a3a4d03b3a6427fc78dddbfdc72a426e147d49e",
+    "evaluations/research-qa/m75-independent-classification.test.ts": "e6bbae143c8ba8ee51639c811dfd9987a54e18cb4ffd331d25f2928f26605166",
+    "evaluations/research-qa/m75-independent-renderer.test.ts": "16c20689e05dd523ba1f2a1619e6c462ebdf80a73212e5e4e12879b26918c942",
+    "evaluations/research-qa/m75-independent-scenarios.ts": "6c422b7f01367b5193d8eecff0fcdf33d5800bbf58bd933d3eaae0f39fbf21d2",
+    "packages/neuvetra-database/src/m75-contract.ts": "e14264d94c140a5385d1663952f3d50f36d20573b734a6b122493ee9f3650213"
+  }
+}

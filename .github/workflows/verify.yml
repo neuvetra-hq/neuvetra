@@ -64,6 +64,27 @@ jobs:
         env:
           M74_ACCOUNTING_TEMPLATE_DATABASE: m74_author_ci
 
+      - name: Prepare isolated controlled-fleet native fixture
+        run: bun tools/staging/m75-backend-fixture.ts m75_author_ci --ci-baseline=m63_integration
+      - name: Verify controlled-fleet persistence, reconciliation and access boundaries
+        run: bun test apps/site-api/src/workspace/m75-postgres.test.ts
+        env:
+          M75_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m75_author_ci
+
+      - name: Independently challenge controlled-fleet native lifecycle and direct SQL admission
+        run: |
+          bun test evaluations/research-qa/m75-independent-native.test.ts
+          bun run evaluations/research-qa/m75-independent-direct-sql.ts
+          bun run evaluations/research-qa/m75-independent-sql-parity.ts
+        env:
+          M75_INDEPENDENT_NATIVE: enabled
+          M75_QA_TEMPLATE: m63_integration
+
+      - name: Exercise controlled-fleet publication journey against isolated local routes
+        run: bun test tools/staging/check-m75-hosted.test.ts
+        env:
+          M75_HOSTED_NATIVE_SOURCE: m75_author_ci
+
   applications:
     name: Typecheck, lint, unit tests and web builds
     runs-on: ubuntu-latest
@@ -89,6 +110,8 @@ jobs:
         run: bun test tools/staging/m73-operators.test.ts
       - name: Independent mobile-diesel frontend and hosted journey controls
         run: bun test evaluations/research-qa/m74-frontend-ui.test.ts evaluations/research-qa/m74-frontend-decoder.test.ts evaluations/research-qa/m74-frontend-version.test.ts evaluations/research-qa/m74-frontend-registration.test.ts tools/staging/check-m74-hosted.test.ts evaluations/research-qa/m74-hosted-helper-independent.test.ts tools/staging/m74-operators.test.ts evaluations/research-qa/m74-security-operator-gate.test.ts
+      - name: Independent controlled-fleet reconciliation, reports and browser decoding
+        run: bun test evaluations/research-qa/m75-independent-classification.test.ts evaluations/research-qa/m75-independent-renderer.test.ts evaluations/research-qa/m75-independent-decoder.test.ts tools/staging/m75-operators.test.ts tools/staging/check-m75-hosted.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper
@@ -109,10 +132,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==17||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==18||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:17}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:18}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {

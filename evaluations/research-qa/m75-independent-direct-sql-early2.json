@@ -1,0 +1,199 @@
+{
+  "status": "fail",
+  "database": "m75_qa_sql_1789539022028",
+  "sqlSha256": "f60984e146816b7c66301ddcf9f17f08a3b67f9c4bdc3a0c50816fbc00bc1f74",
+  "rawSqlSha256": "2d053278956d0d3bb9c274ec1261c00236314baeb242a51165a263a924a707e2",
+  "sqlUnchanged": true,
+  "beforeVersionCount": 1,
+  "afterVersionCount": 1,
+  "seed": {
+    "companyId": "2b9c96da-3b13-4d49-a966-22c8b08a7284",
+    "users": {
+      "owner": "5360f2ec-bb93-47ae-b18e-2ef2dd30b38f",
+      "coverageReviewer": "8ce8532b-c26c-4b5c-85a8-b5322a7e4a17",
+      "workpaperReviewer": "3e9a83de-571d-4573-a55e-63a92d687043",
+      "fleetReviewer": "f96e71d0-3eb8-4ef0-80bf-2290c8411c2a"
+    },
+    "coverageVersionId": "d2b4d620-8031-4365-9f3c-f21df1387b46",
+    "mobileWorksheetId": "080502a2-0bae-4a79-91f1-f27d6bf5283c",
+    "mobileVersionId": "cace2135-1995-4af4-b67d-f0b2eef4f71a",
+    "rosterId": "37b6e60a-d35d-4e34-865f-9a31f509a551",
+    "rosterVersionId": "601afb0f-9ae0-4b73-aeb1-9dc93316c9db",
+    "reviewId": "0e15341b-0bf9-443c-81e0-906677d9117d",
+    "reportId": "03b8a02d-08ce-4319-89d2-49af70a9ab60",
+    "reconciliationSha256": "a489046dd5957b273940862639be0e7ae00a70181bf041812d535f955e0972e2",
+    "reportSha256": "d81636664c6d99acc03acca16b1f6fd048109a43e5a05c0ba99ccec4fc498903"
+  },
+  "outcomes": [
+    {
+      "id": "save_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "unsupported_hidden",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "wrong_blocker",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "roster_null_confirmation",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster request",
+      "pass": true
+    },
+    {
+      "id": "flags_null",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "missing_prior_row",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster correction",
+      "pass": true
+    },
+    {
+      "id": "duplicate_alias_hidden",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "capacity_26",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster request",
+      "pass": true
+    },
+    {
+      "id": "string_model_year",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "lowercase_asset",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "numeric_asset",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "unknown_mode_enum",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "empty_discovery",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "extra_roster_key",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "string_all_trips",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "report_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "report_arbitrary_html",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_wrong_rows",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_null_status",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_wrong_asset_same_key",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "report_wrong_findings",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_string_boolean",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "report_wrong_entity_label",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "report_null_rows",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "cannot extract elements from a scalar",
+      "pass": true
+    }
+  ],
+  "createdAt": "2026-09-16T06:10:24.890Z",
+  "scriptSha256": "49d0e79a0dae9c9fd0c1e1dbca3abafbd0fdd1fa549caef5698cbc85871f346f"
+}

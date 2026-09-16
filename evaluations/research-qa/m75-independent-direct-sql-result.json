@@ -1,0 +1,276 @@
+{
+  "status": "pass",
+  "database": "m75_qa_sql_1789539516767",
+  "sqlSha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+  "rawSqlSha256": "5757db529a5e5671f6affaf6bf0682cf1ef7aa04ca250ee1ed4266f6c8997900",
+  "sqlUnchanged": true,
+  "beforeVersionCount": 1,
+  "afterVersionCount": 1,
+  "seed": {
+    "companyId": "d22ae361-e170-46c2-91c5-5a68a07651cb",
+    "users": {
+      "owner": "18f2614a-31ed-4040-8956-3bf703071181",
+      "coverageReviewer": "9e912fa4-c0fd-45c5-88a1-38fa6f4cb75d",
+      "workpaperReviewer": "ffb42295-a012-49df-b33a-cdc71ff836d4",
+      "fleetReviewer": "d81083d1-991d-4059-8b8c-32901b34a0dd"
+    },
+    "coverageVersionId": "74d2723c-c9b6-4040-9ef1-e47c63c6853d",
+    "mobileWorksheetId": "ab82f826-51e3-4a02-b78a-e90530de5736",
+    "mobileVersionId": "9c2e6421-92e7-464d-839e-5d19120fe679",
+    "rosterId": "c3c4514d-cfdf-4b17-b587-4ed8f6dbddb2",
+    "rosterVersionId": "61be7862-f476-4f32-a579-bcc3ca703a36",
+    "reviewId": "4c99331f-b3a7-48eb-9c5a-e16948ec9f7e",
+    "reportId": "a4d9e8e7-efbd-484e-804d-f91907474f4a",
+    "reconciliationSha256": "8663d0b152020dff15d2ce5984e85d158ef1492e3cf9a6c0b7b41959ce838663",
+    "reportSha256": "de4e342809e4950dbbb3e31a15f6d7b14a0ceabaf1ce2ad5cec3bdb0344e2492"
+  },
+  "outcomes": [
+    {
+      "id": "save_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "unsupported_hidden",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "wrong_blocker",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "roster_null_confirmation",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster request",
+      "pass": true
+    },
+    {
+      "id": "flags_null",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "missing_prior_row",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "duplicate_alias_hidden",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "capacity_26",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster request",
+      "pass": true
+    },
+    {
+      "id": "string_model_year",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "lowercase_asset",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "numeric_asset",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "unknown_mode_enum",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "empty_discovery",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "extra_roster_key",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "string_all_trips",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "string_synthetic_flag",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "null_created_by",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster payload",
+      "pass": true
+    },
+    {
+      "id": "null_payload_company",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster payload",
+      "pass": true
+    },
+    {
+      "id": "null_payload_roster",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster payload",
+      "pass": true
+    },
+    {
+      "id": "null_payload_version",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "review_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "review_empty_ack",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid review request",
+      "pass": true
+    },
+    {
+      "id": "review_null_note",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid review request",
+      "pass": true
+    },
+    {
+      "id": "review_null_decision",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid review request",
+      "pass": true
+    },
+    {
+      "id": "review_wrong_dependency",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "review dependencies changed",
+      "pass": true
+    },
+    {
+      "id": "review_contributor",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "contributors cannot review",
+      "pass": true
+    },
+    {
+      "id": "report_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "report_arbitrary_html",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_wrong_rows",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_null_status",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_wrong_asset_same_key",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_wrong_findings",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_string_boolean",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_wrong_entity_label",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    },
+    {
+      "id": "report_null_rows",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid report",
+      "pass": true
+    }
+  ],
+  "createdAt": "2026-09-16T06:18:40.508Z",
+  "scriptSha256": "e8b09c4d1207b2238431d82a4d233734b65e28332e21d33b5b39ceb412de6112"
+}

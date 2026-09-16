@@ -1,0 +1,31 @@
+{
+  "status": "native_lifecycle_pass",
+  "database": "m75_qa_review_1789539719409",
+  "source": "m75_ops_author_1789536693413",
+  "pooledConnectionReuse": true,
+  "poolCapacity": 4,
+  "migrationSha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+  "events": [
+    "native positive register and real browser decoder",
+    "foreign unprovisioned actor denied register/report",
+    "runtime direct DML refused",
+    "Real public route with native database: authentication/origin/tenant/member/JSON/method refusals, exact downloads and historical proof with restrictive headers",
+    "Active other-tenant reads hidden; same-tenant member can read but cannot write/report; revoked access immediately refused",
+    "no-op correction refused",
+    "exact retry reused one record; conflicting retry refused",
+    "contributor review refused, separate reviewer accepted",
+    "M74 successor blocks current reconciliation while report bytes and historical proof remain exact",
+    "Concurrent different corrections create exactly one successor and retain current blockers",
+    "Concurrent exact same-key retries yield one identical immutable successor",
+    "Later coverage review leaves captured null decision and exact historical proof unchanged",
+    "Forty retained versions accepted; forty-first refused without an extra record",
+    "Forty retained reports accepted; forty-first refused and earliest bytes remain exact"
+  ],
+  "reportSha256": "08400704ae9191da576d02561413c37effff3937fd09af6242ec7b7a633edd94",
+  "scriptSha256": "429e964203d7969dfeb6d6584e1f62817489cac498c8120c6312c32fd10bb3ba",
+  "createdAt": "2026-09-16T06:22:35.136Z",
+  "limitations": [
+    "Direct-function forged payload and recovery18 have separate evidence.",
+    "Author fixture is setup only; mutations, expectations and assertions are independent."
+  ]
+}

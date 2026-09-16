@@ -1,0 +1,1114 @@
+{
+  "profile": "m75-independent-readonly-recovery-v1",
+  "createdAt": "2026-09-16T05:38:39.322Z",
+  "sourceName": "m74_ops_restore17_1789509920941",
+  "restoredName": "m75_ops_author_1789536693413",
+  "sourceUnchanged": true,
+  "exactEqual": true,
+  "tableCount": 83,
+  "rowCount": 2220,
+  "before": {
+    "tables": [
+      {
+        "name": "annual_electricity_evidence_audit",
+        "count": 31,
+        "byteLength": 10943,
+        "sha256": "5605e3155113995cdb8be2226855834a9fcca31bc2e9db62ce0d9df801d8c819"
+      },
+      {
+        "name": "annual_electricity_evidence_requests",
+        "count": 31,
+        "byteLength": 8529,
+        "sha256": "eaf945b26c9133d2861891a9df3ae9b93513a4d3d5e45b602f304089a1afefbd"
+      },
+      {
+        "name": "annual_electricity_evidence_reviews",
+        "count": 2,
+        "byteLength": 2562,
+        "sha256": "ebf036b48315e00161e9a61df1b56ee65750cccfc9a9a3adad1fd8184ad7405f"
+      },
+      {
+        "name": "annual_electricity_evidence_versions",
+        "count": 29,
+        "byteLength": 147998,
+        "sha256": "51f7e8c7dd633428e97556a3c18326bd5223055e31bbe6a26b76d8d2e2408305"
+      },
+      {
+        "name": "annual_electricity_report_audit",
+        "count": 42,
+        "byteLength": 41408,
+        "sha256": "5b8fc2f0a06c0f839fd95b148b05306d8f7f48fa228705e066613cb19640b019"
+      },
+      {
+        "name": "annual_electricity_report_requests",
+        "count": 48,
+        "byteLength": 15120,
+        "sha256": "618e531f43b6f64136d8cba1b358c55045f6b76fb53ccd704763c9c8629886ae"
+      },
+      {
+        "name": "annual_electricity_reports",
+        "count": 42,
+        "byteLength": 1154657,
+        "sha256": "f03ae556b3a22a1b3fbeb9779b6878fc16dd92b641aac6a4aa0aafe58f42132f"
+      },
+      {
+        "name": "annual_electricity_worksheet_audit",
+        "count": 87,
+        "byteLength": 30715,
+        "sha256": "13285fe445b2afe2f90e56fbd0bfa661cc2f3b8d4848603d681deb36c10d1ffd"
+      },
+      {
+        "name": "annual_electricity_worksheet_requests",
+        "count": 87,
+        "byteLength": 23941,
+        "sha256": "cee3a284cd82d3c45ef856109cbea804df451ebcf232f9f41b5540b637d0130a"
+      },
+      {
+        "name": "annual_electricity_worksheet_reviews",
+        "count": 8,
+        "byteLength": 9536,
+        "sha256": "71ff8021c79c974a7d875bcf40593c577f0000164bb9d6126e4db431214382a3"
+      },
+      {
+        "name": "annual_electricity_worksheet_versions",
+        "count": 79,
+        "byteLength": 312185,
+        "sha256": "78936af971a671943a984684c9fc983a44a69a4e95999fcaab2964cf369771bd"
+      },
+      {
+        "name": "annual_evidence_report_audit",
+        "count": 4,
+        "byteLength": 3968,
+        "sha256": "a954f31c333d8ec4216070caa6cd699f4745b5771217c77585e7762002915ffc"
+      },
+      {
+        "name": "annual_evidence_report_requests",
+        "count": 4,
+        "byteLength": 1260,
+        "sha256": "4b4711d73c968545fe23cd0450ed96e3be2443cacef89d069b51d425e60ed8b8"
+      },
+      {
+        "name": "annual_evidence_reports",
+        "count": 4,
+        "byteLength": 110784,
+        "sha256": "b1b74522d326dd6f53527e82264f7583ead61982b2c34d2317880d2f4924eac5"
+      },
+      {
+        "name": "annual_inventory_audit_log",
+        "count": 67,
+        "byteLength": 27375,
+        "sha256": "fc179a98aa953ab5c0db700475ecd1d0c6336cf5dd62ead75909c1249910f67f"
+      },
+      {
+        "name": "annual_inventory_review_decisions",
+        "count": 16,
+        "byteLength": 12190,
+        "sha256": "934988ed872281c9f09d9b929e1b8818913ec8188169f7d42cec4cd720315aa1"
+      },
+      {
+        "name": "annual_inventory_versions",
+        "count": 17,
+        "byteLength": 34577,
+        "sha256": "093482c15d2ffeb20aa3cab9f85776fe336d45520bb01b913b7cdcdb565516e4"
+      },
+      {
+        "name": "annual_source_register_versions",
+        "count": 34,
+        "byteLength": 175600,
+        "sha256": "78764e9d62a4f570299de7869485721ec8c6c3641e72693f2c093f0250f120b0"
+      },
+      {
+        "name": "audit_events",
+        "count": 67,
+        "byteLength": 29206,
+        "sha256": "30d859a9989f2b98dc3ef54179e06cda3a003fca8d3f62690944b9e7bcade17e"
+      },
+      {
+        "name": "bill_evidence",
+        "count": 20,
+        "byteLength": 192718,
+        "sha256": "71edc486192f17fd602b4497383bd871fa2f14be28ed15ae5665b407453ab917"
+      },
+      {
+        "name": "bill_summary_cache",
+        "count": 40,
+        "byteLength": 15278,
+        "sha256": "60fb3619bfbd282bdbb997648a87cc933a03882c35f73155705efc175c04adea"
+      },
+      {
+        "name": "bill_versions",
+        "count": 40,
+        "byteLength": 23378,
+        "sha256": "8da524fb0dfc2e11932eb7ef7a49ba0f33eed7f6e706de6ef65f2c37b05f920a"
+      },
+      {
+        "name": "boundary_facilities",
+        "count": 67,
+        "byteLength": 15538,
+        "sha256": "140622201ccb25124c3e69f6f70d8756cc04ed216e6e69f9c84eb1ae9201dd5e"
+      },
+      {
+        "name": "calculation_audit_log",
+        "count": 17,
+        "byteLength": 8686,
+        "sha256": "270d9c5e931308e839cc41fa1a833432ae56261fb66e41491d66e005dae09981"
+      },
+      {
+        "name": "companies",
+        "count": 67,
+        "byteLength": 18346,
+        "sha256": "414b8313be6d64e74a0dbe5dc80d33ff0d0b3ec2db8c1d86a1d974a9cecc7df5"
+      },
+      {
+        "name": "company_members",
+        "count": 151,
+        "byteLength": 25989,
+        "sha256": "8eda715ed17f33c431accffd8daef7c878bf78f5cdf5d15d367939ec1d0def5f"
+      },
+      {
+        "name": "corporate_inventory_audit",
+        "count": 4,
+        "byteLength": 1412,
+        "sha256": "5e077842763b601c17e93c9e2c95215e2b8417a0809279a530682468c23f3515"
+      },
+      {
+        "name": "corporate_inventory_heads",
+        "count": 2,
+        "byteLength": 338,
+        "sha256": "d56030879085ef7aa49e1cdeb8f2183cbd4273f472aeb890314173b366eaf296"
+      },
+      {
+        "name": "corporate_inventory_requests",
+        "count": 4,
+        "byteLength": 1060,
+        "sha256": "60f74f2199b93bfbefc84063ee72851eee07b634b43b3c1eba30f83678255155"
+      },
+      {
+        "name": "corporate_inventory_reviews",
+        "count": 0,
+        "byteLength": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "name": "corporate_inventory_versions",
+        "count": 4,
+        "byteLength": 183083,
+        "sha256": "ec811bab1fb278de7702d610cf84da9c6744ac7ed403ca63e4e4f6e852c7e4c2"
+      },
+      {
+        "name": "electricity_source_audit",
+        "count": 16,
+        "byteLength": 5422,
+        "sha256": "091821476d669754d1ae70463737531524a48b40e240c661161d52d4a85377c5"
+      },
+      {
+        "name": "electricity_source_requests",
+        "count": 21,
+        "byteLength": 5439,
+        "sha256": "6987844b2e6f577932a691b2b077a58d974c06c504e0581da8c55d098fec1e0f"
+      },
+      {
+        "name": "electricity_sources",
+        "count": 16,
+        "byteLength": 122750,
+        "sha256": "27a1807eccb459975c04a991ad13d28a186b6f981fa5a5d64146087c33fb0860"
+      },
+      {
+        "name": "electricity_worksheet_audit",
+        "count": 22,
+        "byteLength": 7829,
+        "sha256": "f4fdc8927065fa9d37aa61ff0b39bc7a6a9978c4f912043ed38b2f22e86091a8"
+      },
+      {
+        "name": "electricity_worksheet_requests",
+        "count": 26,
+        "byteLength": 7162,
+        "sha256": "07f86f72dba146e38249fb62697dc373657365f6fed128c7c48fee2747645f15"
+      },
+      {
+        "name": "electricity_worksheet_reviews",
+        "count": 6,
+        "byteLength": 6240,
+        "sha256": "6347ced55a83cabbab68cfafd61be3b649a503d139ba4ce9d556963118e3ca24"
+      },
+      {
+        "name": "electricity_worksheet_versions",
+        "count": 16,
+        "byteLength": 32109,
+        "sha256": "f94753e07f009ab42b267f922b8e612e5fe876de9ad2fd9cc3e8e08fbc5356de"
+      },
+      {
+        "name": "evidence_audit_log",
+        "count": 60,
+        "byteLength": 23375,
+        "sha256": "ade096c83c0328af1bdf68f047bdc28482e2e441ff70f6b9dd3bdc3e84a54798"
+      },
+      {
+        "name": "evidence_search_documents",
+        "count": 20,
+        "byteLength": 5258,
+        "sha256": "09f4648506070bc7a508c4e16d7f6a57d4612ecae2b2ec0103cfacb78c640f82"
+      },
+      {
+        "name": "extraction_jobs",
+        "count": 20,
+        "byteLength": 14858,
+        "sha256": "64902aa128f7fe38a87f08691a0780a5f0850f1dc3d89fe40c9e794f6647d660"
+      },
+      {
+        "name": "facilities",
+        "count": 67,
+        "byteLength": 17280,
+        "sha256": "0706a5022e88cbb7dab6a4ee8d443bbe631dd4fc5418ef30533c294d662d0254"
+      },
+      {
+        "name": "inventory_activity_versions",
+        "count": 20,
+        "byteLength": 9557,
+        "sha256": "66a0e80f956a8a9a04d01c3a4678f5624e9174ec33d3f8401dffd4bee78630fc"
+      },
+      {
+        "name": "inventory_calculation_results",
+        "count": 17,
+        "byteLength": 230944,
+        "sha256": "f34184e09e7d189dfece2bb88229a825bd0f5630b09d0e80429ddcad4831baa7"
+      },
+      {
+        "name": "inventory_draft_report_audit_log",
+        "count": 16,
+        "byteLength": 8989,
+        "sha256": "cdcfd92d8b19e1d95c1e3006a1afa849a024f5b75f12e768bc7e8c72bd52fc83"
+      },
+      {
+        "name": "inventory_draft_report_review_audit_log",
+        "count": 16,
+        "byteLength": 11103,
+        "sha256": "c0274025a83fdda33a2c7dcf442648b1cd69cf6bc7dfaf362a9bb6bd4d33645c"
+      },
+      {
+        "name": "inventory_draft_report_review_decisions",
+        "count": 16,
+        "byteLength": 25311,
+        "sha256": "c4ada24088e451fc1548ff8113589d1a54392bf2e8f18c00c1ca0d2932f33021"
+      },
+      {
+        "name": "inventory_draft_reports",
+        "count": 16,
+        "byteLength": 272925,
+        "sha256": "637578385cf445ef9fc00b8270ee8ca7dda482bbe6f5be62db9b14677d0724dd"
+      },
+      {
+        "name": "inventory_evidence_pack_audit_log",
+        "count": 16,
+        "byteLength": 10174,
+        "sha256": "23401e7ef111ddc6dcff3ba10bd16cbbb6b53778199e66c75dc5b168ba479c80"
+      },
+      {
+        "name": "inventory_evidence_packs",
+        "count": 16,
+        "byteLength": 1269644,
+        "sha256": "2f4675b14e2c24c9a04b4c367b79fb1237aea572f2fc2005b712ad4d9ab2992d"
+      },
+      {
+        "name": "inventory_review_audit_log",
+        "count": 34,
+        "byteLength": 15840,
+        "sha256": "eb7f4a6827de039231f8eecc430795fe964e088dd324a3e3ea58d7eefc159011"
+      },
+      {
+        "name": "inventory_review_decisions",
+        "count": 17,
+        "byteLength": 13275,
+        "sha256": "66251aec036aa44e60bbf870ebe9d55731dd146f8cbd074e2c6e56c067ee5147"
+      },
+      {
+        "name": "inventory_versions",
+        "count": 17,
+        "byteLength": 21146,
+        "sha256": "5281433cb5cc32f4909d0eb0b6df69d8ed24ca6af7599ddfeed31afa22b51105"
+      },
+      {
+        "name": "mobile_diesel_audit",
+        "count": 4,
+        "byteLength": 1416,
+        "sha256": "d7c3cbcafcdf464b6450025fe6228ecade48e31757daafe0065a002e3324fbac"
+      },
+      {
+        "name": "mobile_diesel_evidence_reservations",
+        "count": 2,
+        "byteLength": 543,
+        "sha256": "0a042b74658d81dd09c09963ce1950ececab330d17070492d824c53d5ace665d"
+      },
+      {
+        "name": "mobile_diesel_fuel_statements",
+        "count": 2,
+        "byteLength": 7200,
+        "sha256": "53c2e8629911ec246a0bd7db1dd08bdf31c2020f44dbd3b8e079134f345c83e1"
+      },
+      {
+        "name": "mobile_diesel_heads",
+        "count": 1,
+        "byteLength": 517,
+        "sha256": "67b7d794831b78f59cacf7398cc3024c8c819c3d196703e0687eb0d73e3389f5"
+      },
+      {
+        "name": "mobile_diesel_mileage_statements",
+        "count": 2,
+        "byteLength": 7312,
+        "sha256": "e51f51640b749f2c50b6e675dd24ae22bd1e3c39139330e0e9583303a2b311c9"
+      },
+      {
+        "name": "mobile_diesel_reports",
+        "count": 2,
+        "byteLength": 204770,
+        "sha256": "ac9af4a56b742029532a16f2c5c4f32d8ee02faab7fe331c732b55042ccfed8c"
+      },
+      {
+        "name": "mobile_diesel_requests",
+        "count": 4,
+        "byteLength": 1272,
+        "sha256": "976064a6953692669d4a150ba616e799be003ae14d6e8e79a81a6a19661a8280"
+      },
+      {
+        "name": "mobile_diesel_reviews",
+        "count": 0,
+        "byteLength": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "name": "mobile_diesel_versions",
+        "count": 2,
+        "byteLength": 157126,
+        "sha256": "6899e653c03b312366422dd83f1a101946f4bfb4088760081b1f5649462f9c3f"
+      },
+      {
+        "name": "reporting_boundaries",
+        "count": 67,
+        "byteLength": 16208,
+        "sha256": "e88b22b2000158fe69324a47b5e6d18a6da4f05fd32293541a505827f22613ee"
+      },
+      {
+        "name": "schema_migrations",
+        "count": 17,
+        "byteLength": 2910,
+        "sha256": "b1c6c3eeeadabe978f641567f33140b2bd77316e1f2374a066b87062440f1136"
+      },
+      {
+        "name": "source_worksheet_audit",
+        "count": 50,
+        "byteLength": 17660,
+        "sha256": "5b453a9f1bcdb02ea82ff2ae9803b3981e607df61117ad0ac88c4e286b65df7a"
+      },
+      {
+        "name": "source_worksheet_report_audit",
+        "count": 39,
+        "byteLength": 39128,
+        "sha256": "0ce4f064e3b64d9428e9cc7a2b505be4fa956bb9cd32fd2049c7181c6f754b5a"
+      },
+      {
+        "name": "source_worksheet_report_requests",
+        "count": 42,
+        "byteLength": 13230,
+        "sha256": "c5429a0f55ab5a4bdfca9b58d8f1fdd223a9b4e3109749c3e8d4ee6a320a316d"
+      },
+      {
+        "name": "source_worksheet_reports",
+        "count": 39,
+        "byteLength": 907891,
+        "sha256": "8fc09cbcfd96aa3082b3f1a38da30c2f29900d48bd11ea2e04a6746466ead02f"
+      },
+      {
+        "name": "source_worksheet_requests",
+        "count": 50,
+        "byteLength": 13764,
+        "sha256": "2bc91953eb545b2f391d1293632fc1ac0aa4c5d3b1ddcdeefd155a1839b31b30"
+      },
+      {
+        "name": "source_worksheet_reviews",
+        "count": 7,
+        "byteLength": 8032,
+        "sha256": "b41a642fb0c06aa0e0b579d5108944d3a4983a228d9b9722e49cfd8169c80c71"
+      },
+      {
+        "name": "source_worksheet_versions",
+        "count": 43,
+        "byteLength": 117103,
+        "sha256": "9fe1cc75971c24b8c376e9ed047476fe33e1379315c69ca4537e98553de13f15"
+      },
+      {
+        "name": "staging_access",
+        "count": 142,
+        "byteLength": 24423,
+        "sha256": "7e30f90b80d0b1b15ee5c684bad997bdc9fc092f4b49e1cec23b5a74da0efe75"
+      },
+      {
+        "name": "staging_target",
+        "count": 1,
+        "byteLength": 110,
+        "sha256": "bf00e3e6e68e540da5280d3e7342ea24796bc44f72d67e9d0a73e2d822417ea9"
+      },
+      {
+        "name": "stationary_gas_audit",
+        "count": 14,
+        "byteLength": 4946,
+        "sha256": "006c497a9e81de95edb77a5d1ec21193bc76f4587927dbcd097e23b128b96841"
+      },
+      {
+        "name": "stationary_gas_heads",
+        "count": 2,
+        "byteLength": 777,
+        "sha256": "a59ab89efab6464bef7391ad3e227238a2b244b4fa43a057a7cc05f11813a760"
+      },
+      {
+        "name": "stationary_gas_reports",
+        "count": 2,
+        "byteLength": 185416,
+        "sha256": "0103a08abc0b70c06832be642fef8556953822c495f419e89a9258d512d5e00a"
+      },
+      {
+        "name": "stationary_gas_requests",
+        "count": 14,
+        "byteLength": 4444,
+        "sha256": "fde7f494ae7057494646a652d06b943b120fcd576b6e9f3cb763454724dea879"
+      },
+      {
+        "name": "stationary_gas_reviews",
+        "count": 1,
+        "byteLength": 1050,
+        "sha256": "7f6fef1b40bfffc655890a206dc12a8ede9623f8eb87dfafac0ce51fc726e6dc"
+      },
+      {
+        "name": "stationary_gas_statements",
+        "count": 10,
+        "byteLength": 31089,
+        "sha256": "71189d9dcbec956f39905505222d2abbcb677cb609e5618b7c172e6d807abdb2"
+      },
+      {
+        "name": "stationary_gas_versions",
+        "count": 11,
+        "byteLength": 788474,
+        "sha256": "b5649e98ab1145f7eb98fc33f74ca277296de63a556669f26503e6dede2038d8"
+      },
+      {
+        "name": "worksheet_report_audit",
+        "count": 14,
+        "byteLength": 13964,
+        "sha256": "9c7441a03a301631d22f377b7cd8b2160a3a9db83aef7d98a4760c62c17b3d4f"
+      },
+      {
+        "name": "worksheet_report_requests",
+        "count": 16,
+        "byteLength": 5040,
+        "sha256": "0a207b887cd77b39d54cb2438cee08a1eb5dd891099241ea0349c6550ccc2081"
+      },
+      {
+        "name": "worksheet_reports",
+        "count": 14,
+        "byteLength": 268878,
+        "sha256": "6e6a527e567c3746eadc363788bd08520fd145660432b50e0d89dcb78e16f327"
+      }
+    ],
+    "catalog": {
+      "columns": {
+        "count": 718,
+        "sha256": "409074e108592609715a319c68398fd7f6519a7361df9d783459abea74185067"
+      },
+      "tables": {
+        "count": 83,
+        "sha256": "3745c35135d6208a4cab4d8b2aa2ee82a62ad51c97795aec69456b7c61a1d660"
+      },
+      "policies": {
+        "count": 144,
+        "sha256": "a3b51c6c92dce6436bd224a1d87990f28e3228b5bd51760e78ed86bc57a36b73"
+      },
+      "functions": {
+        "count": 99,
+        "sha256": "e583e0d4a4d80278b92a6cf9001c8a91ebe315076b48767269154708013068f3"
+      },
+      "triggers": {
+        "count": 62,
+        "sha256": "9aa19be6b973b2de5b92137d81ee6fa04ce7bdb495efda5e1e477516063e0a7d"
+      },
+      "constraints": {
+        "count": 577,
+        "sha256": "9a36b23e1d1c42e525c49f273b0a24189d2dcdbf1584bf5616c077d3a183f0c5"
+      },
+      "indexes": {
+        "count": 203,
+        "sha256": "8b4281d56997aa89423051565b121f2ad19853915793223fc9b5210afa057cad"
+      },
+      "schemaAcl": {
+        "count": 1,
+        "sha256": "fc4a55b4f51dded458f109ac29e517f0bfa6077c2c5a18966ebca6d7eb3ecdbc"
+      },
+      "defaultAcl": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "roles": {
+        "count": 20,
+        "sha256": "a1b39bdf832619fea1b29072abadac822cb4f759533ee4f6308294a5c1c62647"
+      },
+      "memberships": {
+        "count": 3,
+        "sha256": "8d1a102f080b4fe8d50cbf09ab1fb853031cc74dc25388afc4cdc4570fb21550"
+      }
+    },
+    "sha256": "94c54d418325215dbcac2dd663093023d09440ae4be7d4534dfca1ffb984d2c5"
+  },
+  "after": {
+    "tables": [
+      {
+        "name": "annual_electricity_evidence_audit",
+        "count": 31,
+        "byteLength": 10943,
+        "sha256": "5605e3155113995cdb8be2226855834a9fcca31bc2e9db62ce0d9df801d8c819"
+      },
+      {
+        "name": "annual_electricity_evidence_requests",
+        "count": 31,
+        "byteLength": 8529,
+        "sha256": "eaf945b26c9133d2861891a9df3ae9b93513a4d3d5e45b602f304089a1afefbd"
+      },
+      {
+        "name": "annual_electricity_evidence_reviews",
+        "count": 2,
+        "byteLength": 2562,
+        "sha256": "ebf036b48315e00161e9a61df1b56ee65750cccfc9a9a3adad1fd8184ad7405f"
+      },
+      {
+        "name": "annual_electricity_evidence_versions",
+        "count": 29,
+        "byteLength": 147998,
+        "sha256": "51f7e8c7dd633428e97556a3c18326bd5223055e31bbe6a26b76d8d2e2408305"
+      },
+      {
+        "name": "annual_electricity_report_audit",
+        "count": 42,
+        "byteLength": 41408,
+        "sha256": "5b8fc2f0a06c0f839fd95b148b05306d8f7f48fa228705e066613cb19640b019"
+      },
+      {
+        "name": "annual_electricity_report_requests",
+        "count": 48,
+        "byteLength": 15120,
+        "sha256": "618e531f43b6f64136d8cba1b358c55045f6b76fb53ccd704763c9c8629886ae"
+      },
+      {
+        "name": "annual_electricity_reports",
+        "count": 42,
+        "byteLength": 1154657,
+        "sha256": "f03ae556b3a22a1b3fbeb9779b6878fc16dd92b641aac6a4aa0aafe58f42132f"
+      },
+      {
+        "name": "annual_electricity_worksheet_audit",
+        "count": 87,
+        "byteLength": 30715,
+        "sha256": "13285fe445b2afe2f90e56fbd0bfa661cc2f3b8d4848603d681deb36c10d1ffd"
+      },
+      {
+        "name": "annual_electricity_worksheet_requests",
+        "count": 87,
+        "byteLength": 23941,
+        "sha256": "cee3a284cd82d3c45ef856109cbea804df451ebcf232f9f41b5540b637d0130a"
+      },
+      {
+        "name": "annual_electricity_worksheet_reviews",
+        "count": 8,
+        "byteLength": 9536,
+        "sha256": "71ff8021c79c974a7d875bcf40593c577f0000164bb9d6126e4db431214382a3"
+      },
+      {
+        "name": "annual_electricity_worksheet_versions",
+        "count": 79,
+        "byteLength": 312185,
+        "sha256": "78936af971a671943a984684c9fc983a44a69a4e95999fcaab2964cf369771bd"
+      },
+      {
+        "name": "annual_evidence_report_audit",
+        "count": 4,
+        "byteLength": 3968,
+        "sha256": "a954f31c333d8ec4216070caa6cd699f4745b5771217c77585e7762002915ffc"
+      },
+      {
+        "name": "annual_evidence_report_requests",
+        "count": 4,
+        "byteLength": 1260,
+        "sha256": "4b4711d73c968545fe23cd0450ed96e3be2443cacef89d069b51d425e60ed8b8"
+      },
+      {
+        "name": "annual_evidence_reports",
+        "count": 4,
+        "byteLength": 110784,
+        "sha256": "b1b74522d326dd6f53527e82264f7583ead61982b2c34d2317880d2f4924eac5"
+      },
+      {
+        "name": "annual_inventory_audit_log",
+        "count": 67,
+        "byteLength": 27375,
+        "sha256": "fc179a98aa953ab5c0db700475ecd1d0c6336cf5dd62ead75909c1249910f67f"
+      },
+      {
+        "name": "annual_inventory_review_decisions",
+        "count": 16,
+        "byteLength": 12190,
+        "sha256": "934988ed872281c9f09d9b929e1b8818913ec8188169f7d42cec4cd720315aa1"
+      },
+      {
+        "name": "annual_inventory_versions",
+        "count": 17,
+        "byteLength": 34577,
+        "sha256": "093482c15d2ffeb20aa3cab9f85776fe336d45520bb01b913b7cdcdb565516e4"
+      },
+      {
+        "name": "annual_source_register_versions",
+        "count": 34,
+        "byteLength": 175600,
+        "sha256": "78764e9d62a4f570299de7869485721ec8c6c3641e72693f2c093f0250f120b0"
+      },
+      {
+        "name": "audit_events",
+        "count": 67,
+        "byteLength": 29206,
+        "sha256": "30d859a9989f2b98dc3ef54179e06cda3a003fca8d3f62690944b9e7bcade17e"
+      },
+      {
+        "name": "bill_evidence",
+        "count": 20,
+        "byteLength": 192718,
+        "sha256": "71edc486192f17fd602b4497383bd871fa2f14be28ed15ae5665b407453ab917"
+      },
+      {
+        "name": "bill_summary_cache",
+        "count": 40,
+        "byteLength": 15278,
+        "sha256": "60fb3619bfbd282bdbb997648a87cc933a03882c35f73155705efc175c04adea"
+      },
+      {
+        "name": "bill_versions",
+        "count": 40,
+        "byteLength": 23378,
+        "sha256": "8da524fb0dfc2e11932eb7ef7a49ba0f33eed7f6e706de6ef65f2c37b05f920a"
+      },
+      {
+        "name": "boundary_facilities",
+        "count": 67,
+        "byteLength": 15538,
+        "sha256": "140622201ccb25124c3e69f6f70d8756cc04ed216e6e69f9c84eb1ae9201dd5e"
+      },
+      {
+        "name": "calculation_audit_log",
+        "count": 17,
+        "byteLength": 8686,
+        "sha256": "270d9c5e931308e839cc41fa1a833432ae56261fb66e41491d66e005dae09981"
+      },
+      {
+        "name": "companies",
+        "count": 67,
+        "byteLength": 18346,
+        "sha256": "414b8313be6d64e74a0dbe5dc80d33ff0d0b3ec2db8c1d86a1d974a9cecc7df5"
+      },
+      {
+        "name": "company_members",
+        "count": 151,
+        "byteLength": 25989,
+        "sha256": "8eda715ed17f33c431accffd8daef7c878bf78f5cdf5d15d367939ec1d0def5f"
+      },
+      {
+        "name": "corporate_inventory_audit",
+        "count": 4,
+        "byteLength": 1412,
+        "sha256": "5e077842763b601c17e93c9e2c95215e2b8417a0809279a530682468c23f3515"
+      },
+      {
+        "name": "corporate_inventory_heads",
+        "count": 2,
+        "byteLength": 338,
+        "sha256": "d56030879085ef7aa49e1cdeb8f2183cbd4273f472aeb890314173b366eaf296"
+      },
+      {
+        "name": "corporate_inventory_requests",
+        "count": 4,
+        "byteLength": 1060,
+        "sha256": "60f74f2199b93bfbefc84063ee72851eee07b634b43b3c1eba30f83678255155"
+      },
+      {
+        "name": "corporate_inventory_reviews",
+        "count": 0,
+        "byteLength": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "name": "corporate_inventory_versions",
+        "count": 4,
+        "byteLength": 183083,
+        "sha256": "ec811bab1fb278de7702d610cf84da9c6744ac7ed403ca63e4e4f6e852c7e4c2"
+      },
+      {
+        "name": "electricity_source_audit",
+        "count": 16,
+        "byteLength": 5422,
+        "sha256": "091821476d669754d1ae70463737531524a48b40e240c661161d52d4a85377c5"
+      },
+      {
+        "name": "electricity_source_requests",
+        "count": 21,
+        "byteLength": 5439,
+        "sha256": "6987844b2e6f577932a691b2b077a58d974c06c504e0581da8c55d098fec1e0f"
+      },
+      {
+        "name": "electricity_sources",
+        "count": 16,
+        "byteLength": 122750,
+        "sha256": "27a1807eccb459975c04a991ad13d28a186b6f981fa5a5d64146087c33fb0860"
+      },
+      {
+        "name": "electricity_worksheet_audit",
+        "count": 22,
+        "byteLength": 7829,
+        "sha256": "f4fdc8927065fa9d37aa61ff0b39bc7a6a9978c4f912043ed38b2f22e86091a8"
+      },
+      {
+        "name": "electricity_worksheet_requests",
+        "count": 26,
+        "byteLength": 7162,
+        "sha256": "07f86f72dba146e38249fb62697dc373657365f6fed128c7c48fee2747645f15"
+      },
+      {
+        "name": "electricity_worksheet_reviews",
+        "count": 6,
+        "byteLength": 6240,
+        "sha256": "6347ced55a83cabbab68cfafd61be3b649a503d139ba4ce9d556963118e3ca24"
+      },
+      {
+        "name": "electricity_worksheet_versions",
+        "count": 16,
+        "byteLength": 32109,
+        "sha256": "f94753e07f009ab42b267f922b8e612e5fe876de9ad2fd9cc3e8e08fbc5356de"
+      },
+      {
+        "name": "evidence_audit_log",
+        "count": 60,
+        "byteLength": 23375,
+        "sha256": "ade096c83c0328af1bdf68f047bdc28482e2e441ff70f6b9dd3bdc3e84a54798"
+      },
+      {
+        "name": "evidence_search_documents",
+        "count": 20,
+        "byteLength": 5258,
+        "sha256": "09f4648506070bc7a508c4e16d7f6a57d4612ecae2b2ec0103cfacb78c640f82"
+      },
+      {
+        "name": "extraction_jobs",
+        "count": 20,
+        "byteLength": 14858,
+        "sha256": "64902aa128f7fe38a87f08691a0780a5f0850f1dc3d89fe40c9e794f6647d660"
+      },
+      {
+        "name": "facilities",
+        "count": 67,
+        "byteLength": 17280,
+        "sha256": "0706a5022e88cbb7dab6a4ee8d443bbe631dd4fc5418ef30533c294d662d0254"
+      },
+      {
+        "name": "inventory_activity_versions",
+        "count": 20,
+        "byteLength": 9557,
+        "sha256": "66a0e80f956a8a9a04d01c3a4678f5624e9174ec33d3f8401dffd4bee78630fc"
+      },
+      {
+        "name": "inventory_calculation_results",
+        "count": 17,
+        "byteLength": 230944,
+        "sha256": "f34184e09e7d189dfece2bb88229a825bd0f5630b09d0e80429ddcad4831baa7"
+      },
+      {
+        "name": "inventory_draft_report_audit_log",
+        "count": 16,
+        "byteLength": 8989,
+        "sha256": "cdcfd92d8b19e1d95c1e3006a1afa849a024f5b75f12e768bc7e8c72bd52fc83"
+      },
+      {
+        "name": "inventory_draft_report_review_audit_log",
+        "count": 16,
+        "byteLength": 11103,
+        "sha256": "c0274025a83fdda33a2c7dcf442648b1cd69cf6bc7dfaf362a9bb6bd4d33645c"
+      },
+      {
+        "name": "inventory_draft_report_review_decisions",
+        "count": 16,
+        "byteLength": 25311,
+        "sha256": "c4ada24088e451fc1548ff8113589d1a54392bf2e8f18c00c1ca0d2932f33021"
+      },
+      {
+        "name": "inventory_draft_reports",
+        "count": 16,
+        "byteLength": 272925,
+        "sha256": "637578385cf445ef9fc00b8270ee8ca7dda482bbe6f5be62db9b14677d0724dd"
+      },
+      {
+        "name": "inventory_evidence_pack_audit_log",
+        "count": 16,
+        "byteLength": 10174,
+        "sha256": "23401e7ef111ddc6dcff3ba10bd16cbbb6b53778199e66c75dc5b168ba479c80"
+      },
+      {
+        "name": "inventory_evidence_packs",
+        "count": 16,
+        "byteLength": 1269644,
+        "sha256": "2f4675b14e2c24c9a04b4c367b79fb1237aea572f2fc2005b712ad4d9ab2992d"
+      },
+      {
+        "name": "inventory_review_audit_log",
+        "count": 34,
+        "byteLength": 15840,
+        "sha256": "eb7f4a6827de039231f8eecc430795fe964e088dd324a3e3ea58d7eefc159011"
+      },
+      {
+        "name": "inventory_review_decisions",
+        "count": 17,
+        "byteLength": 13275,
+        "sha256": "66251aec036aa44e60bbf870ebe9d55731dd146f8cbd074e2c6e56c067ee5147"
+      },
+      {
+        "name": "inventory_versions",
+        "count": 17,
+        "byteLength": 21146,
+        "sha256": "5281433cb5cc32f4909d0eb0b6df69d8ed24ca6af7599ddfeed31afa22b51105"
+      },
+      {
+        "name": "mobile_diesel_audit",
+        "count": 4,
+        "byteLength": 1416,
+        "sha256": "d7c3cbcafcdf464b6450025fe6228ecade48e31757daafe0065a002e3324fbac"
+      },
+      {
+        "name": "mobile_diesel_evidence_reservations",
+        "count": 2,
+        "byteLength": 543,
+        "sha256": "0a042b74658d81dd09c09963ce1950ececab330d17070492d824c53d5ace665d"
+      },
+      {
+        "name": "mobile_diesel_fuel_statements",
+        "count": 2,
+        "byteLength": 7200,
+        "sha256": "53c2e8629911ec246a0bd7db1dd08bdf31c2020f44dbd3b8e079134f345c83e1"
+      },
+      {
+        "name": "mobile_diesel_heads",
+        "count": 1,
+        "byteLength": 517,
+        "sha256": "67b7d794831b78f59cacf7398cc3024c8c819c3d196703e0687eb0d73e3389f5"
+      },
+      {
+        "name": "mobile_diesel_mileage_statements",
+        "count": 2,
+        "byteLength": 7312,
+        "sha256": "e51f51640b749f2c50b6e675dd24ae22bd1e3c39139330e0e9583303a2b311c9"
+      },
+      {
+        "name": "mobile_diesel_reports",
+        "count": 2,
+        "byteLength": 204770,
+        "sha256": "ac9af4a56b742029532a16f2c5c4f32d8ee02faab7fe331c732b55042ccfed8c"
+      },
+      {
+        "name": "mobile_diesel_requests",
+        "count": 4,
+        "byteLength": 1272,
+        "sha256": "976064a6953692669d4a150ba616e799be003ae14d6e8e79a81a6a19661a8280"
+      },
+      {
+        "name": "mobile_diesel_reviews",
+        "count": 0,
+        "byteLength": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "name": "mobile_diesel_versions",
+        "count": 2,
+        "byteLength": 157126,
+        "sha256": "6899e653c03b312366422dd83f1a101946f4bfb4088760081b1f5649462f9c3f"
+      },
+      {
+        "name": "reporting_boundaries",
+        "count": 67,
+        "byteLength": 16208,
+        "sha256": "e88b22b2000158fe69324a47b5e6d18a6da4f05fd32293541a505827f22613ee"
+      },
+      {
+        "name": "schema_migrations",
+        "count": 17,
+        "byteLength": 2910,
+        "sha256": "b1c6c3eeeadabe978f641567f33140b2bd77316e1f2374a066b87062440f1136"
+      },
+      {
+        "name": "source_worksheet_audit",
+        "count": 50,
+        "byteLength": 17660,
+        "sha256": "5b453a9f1bcdb02ea82ff2ae9803b3981e607df61117ad0ac88c4e286b65df7a"
+      },
+      {
+        "name": "source_worksheet_report_audit",
+        "count": 39,
+        "byteLength": 39128,
+        "sha256": "0ce4f064e3b64d9428e9cc7a2b505be4fa956bb9cd32fd2049c7181c6f754b5a"
+      },
+      {
+        "name": "source_worksheet_report_requests",
+        "count": 42,
+        "byteLength": 13230,
+        "sha256": "c5429a0f55ab5a4bdfca9b58d8f1fdd223a9b4e3109749c3e8d4ee6a320a316d"
+      },
+      {
+        "name": "source_worksheet_reports",
+        "count": 39,
+        "byteLength": 907891,
+        "sha256": "8fc09cbcfd96aa3082b3f1a38da30c2f29900d48bd11ea2e04a6746466ead02f"
+      },
+      {
+        "name": "source_worksheet_requests",
+        "count": 50,
+        "byteLength": 13764,
+        "sha256": "2bc91953eb545b2f391d1293632fc1ac0aa4c5d3b1ddcdeefd155a1839b31b30"
+      },
+      {
+        "name": "source_worksheet_reviews",
+        "count": 7,
+        "byteLength": 8032,
+        "sha256": "b41a642fb0c06aa0e0b579d5108944d3a4983a228d9b9722e49cfd8169c80c71"
+      },
+      {
+        "name": "source_worksheet_versions",
+        "count": 43,
+        "byteLength": 117103,
+        "sha256": "9fe1cc75971c24b8c376e9ed047476fe33e1379315c69ca4537e98553de13f15"
+      },
+      {
+        "name": "staging_access",
+        "count": 142,
+        "byteLength": 24423,
+        "sha256": "7e30f90b80d0b1b15ee5c684bad997bdc9fc092f4b49e1cec23b5a74da0efe75"
+      },
+      {
+        "name": "staging_target",
+        "count": 1,
+        "byteLength": 110,
+        "sha256": "bf00e3e6e68e540da5280d3e7342ea24796bc44f72d67e9d0a73e2d822417ea9"
+      },
+      {
+        "name": "stationary_gas_audit",
+        "count": 14,
+        "byteLength": 4946,
+        "sha256": "006c497a9e81de95edb77a5d1ec21193bc76f4587927dbcd097e23b128b96841"
+      },
+      {
+        "name": "stationary_gas_heads",
+        "count": 2,
+        "byteLength": 777,
+        "sha256": "a59ab89efab6464bef7391ad3e227238a2b244b4fa43a057a7cc05f11813a760"
+      },
+      {
+        "name": "stationary_gas_reports",
+        "count": 2,
+        "byteLength": 185416,
+        "sha256": "0103a08abc0b70c06832be642fef8556953822c495f419e89a9258d512d5e00a"
+      },
+      {
+        "name": "stationary_gas_requests",
+        "count": 14,
+        "byteLength": 4444,
+        "sha256": "fde7f494ae7057494646a652d06b943b120fcd576b6e9f3cb763454724dea879"
+      },
+      {
+        "name": "stationary_gas_reviews",
+        "count": 1,
+        "byteLength": 1050,
+        "sha256": "7f6fef1b40bfffc655890a206dc12a8ede9623f8eb87dfafac0ce51fc726e6dc"
+      },
+      {
+        "name": "stationary_gas_statements",
+        "count": 10,
+        "byteLength": 31089,
+        "sha256": "71189d9dcbec956f39905505222d2abbcb677cb609e5618b7c172e6d807abdb2"
+      },
+      {
+        "name": "stationary_gas_versions",
+        "count": 11,
+        "byteLength": 788474,
+        "sha256": "b5649e98ab1145f7eb98fc33f74ca277296de63a556669f26503e6dede2038d8"
+      },
+      {
+        "name": "worksheet_report_audit",
+        "count": 14,
+        "byteLength": 13964,
+        "sha256": "9c7441a03a301631d22f377b7cd8b2160a3a9db83aef7d98a4760c62c17b3d4f"
+      },
+      {
+        "name": "worksheet_report_requests",
+        "count": 16,
+        "byteLength": 5040,
+        "sha256": "0a207b887cd77b39d54cb2438cee08a1eb5dd891099241ea0349c6550ccc2081"
+      },
+      {
+        "name": "worksheet_reports",
+        "count": 14,
+        "byteLength": 268878,
+        "sha256": "6e6a527e567c3746eadc363788bd08520fd145660432b50e0d89dcb78e16f327"
+      }
+    ],
+    "catalog": {
+      "columns": {
+        "count": 718,
+        "sha256": "409074e108592609715a319c68398fd7f6519a7361df9d783459abea74185067"
+      },
+      "tables": {
+        "count": 83,
+        "sha256": "3745c35135d6208a4cab4d8b2aa2ee82a62ad51c97795aec69456b7c61a1d660"
+      },
+      "policies": {
+        "count": 144,
+        "sha256": "a3b51c6c92dce6436bd224a1d87990f28e3228b5bd51760e78ed86bc57a36b73"
+      },
+      "functions": {
+        "count": 99,
+        "sha256": "e583e0d4a4d80278b92a6cf9001c8a91ebe315076b48767269154708013068f3"
+      },
+      "triggers": {
+        "count": 62,
+        "sha256": "9aa19be6b973b2de5b92137d81ee6fa04ce7bdb495efda5e1e477516063e0a7d"
+      },
+      "constraints": {
+        "count": 577,
+        "sha256": "9a36b23e1d1c42e525c49f273b0a24189d2dcdbf1584bf5616c077d3a183f0c5"
+      },
+      "indexes": {
+        "count": 203,
+        "sha256": "8b4281d56997aa89423051565b121f2ad19853915793223fc9b5210afa057cad"
+      },
+      "schemaAcl": {
+        "count": 1,
+        "sha256": "fc4a55b4f51dded458f109ac29e517f0bfa6077c2c5a18966ebca6d7eb3ecdbc"
+      },
+      "defaultAcl": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "roles": {
+        "count": 20,
+        "sha256": "a1b39bdf832619fea1b29072abadac822cb4f759533ee4f6308294a5c1c62647"
+      },
+      "memberships": {
+        "count": 3,
+        "sha256": "8d1a102f080b4fe8d50cbf09ab1fb853031cc74dc25388afc4cdc4570fb21550"
+      }
+    },
+    "sha256": "94c54d418325215dbcac2dd663093023d09440ae4be7d4534dfca1ffb984d2c5"
+  },
+  "scriptSha256": "6f8f1d7c57fa65729f3815e2b856f9ef7c12e2f4887f89eb7c36f05984e63cc7",
+  "limitations": [
+    "Same-cluster schema17 baseline comparison only unless supplied schema18 fixtures.",
+    "Does not execute restore or certify DPAPI archive integrity; compares independently selected retained rows, text values, definitions and ACLs.",
+    "Global roles are shared by both databases; role hash establishes unchanged observations, not cross-cluster reconstruction."
+  ]
+}

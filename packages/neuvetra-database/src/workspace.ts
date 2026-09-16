@@ -1,3 +1,4 @@
+import {readControlledFleet,readControlledFleetReport,readControlledFleetReportProof,saveControlledFleet as storeControlledFleet,reviewControlledFleet as storeControlledFleetReview,createControlledFleetReport as storeControlledFleetReport,type M75SaveInput,type M75ReviewInput,type M75ReportInput} from './m75'
 import {readMobileDiesel,saveMobileDiesel as storeMobileDiesel,reviewMobileDiesel as storeMobileDieselReview,createMobileDieselReport as storeMobileDieselReport,type M74Authority,type M74SaveInput,type M74ReviewInput,type M74ReportInput} from './m74'
 import {readStationaryGas,saveStationaryGas as storeStationaryGas,reviewStationaryGas as storeStationaryGasReview,createStationaryGasReport as storeStationaryGasReport,type M73Authority,type M73SaveInput,type M73ReviewInput,type M73ReportInput} from './m73'
 import { readCorporateInventory, validateM71Save, validateM71Review, type M71SaveInput, type M71ReviewInput } from "./m71"
@@ -303,6 +304,13 @@ export class WorkspaceDatabase {
   async saveMobileDiesel(userId:string,companyId:string,worksheetId:string|null,input:M74SaveInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDiesel(tx,userId,companyId,worksheetId,input,authority))}
   async reviewMobileDiesel(userId:string,companyId:string,worksheetId:string,input:M74ReviewInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDieselReview(tx,companyId,worksheetId,input,authority))}
   async createMobileDieselReport(userId:string,companyId:string,worksheetId:string,input:M74ReportInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDieselReport(tx,companyId,worksheetId,input,authority))}
+
+  async findControlledFleet(userId:string,companyId:string,authority:M74Authority){return this.asUser(userId,tx=>readControlledFleet(tx,companyId,authority))}
+  async findControlledFleetReport(userId:string,companyId:string,rosterId:string,reportId:string,authority:M74Authority){return this.asUser(userId,tx=>readControlledFleetReport(tx,companyId,rosterId,reportId,authority))}
+  async findControlledFleetReportProof(userId:string,companyId:string,rosterId:string,reportId:string,authority:M74Authority){return this.asUser(userId,tx=>readControlledFleetReportProof(tx,companyId,rosterId,reportId,authority))}
+  async saveControlledFleet(userId:string,companyId:string,rosterId:string|null,input:M75SaveInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeControlledFleet(tx,userId,companyId,rosterId,input,authority))}
+  async reviewControlledFleet(userId:string,companyId:string,rosterId:string,input:M75ReviewInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeControlledFleetReview(tx,userId,companyId,rosterId,input,authority))}
+  async createControlledFleetReport(userId:string,companyId:string,rosterId:string,input:M75ReportInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeControlledFleetReport(tx,userId,companyId,rosterId,input,authority))}
 
   async findCorporateInventory(userId:string,companyId:string){return this.asUser(userId,tx=>readCorporateInventory(tx,companyId))}
   async saveCorporateInventory(userId:string,companyId:string,inventoryId:string|null,input:M71SaveInput){

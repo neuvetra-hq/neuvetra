@@ -31,7 +31,12 @@ describe('M74 explicit operator gates',()=>{
  test('exact16 receipts and manifest baseline; wrong, reordered and duplicate receipt refusal',async()=>{
   const m=await readMigrationManifest();expect(hashManifestValue(m.slice(0,16).map(({name,sha256})=>({name,sha256})))).toBe(BASELINE_MANIFEST_SHA256)
   const receipts=m.slice(0,16).map(({name,sha256})=>({name,sha256})),tx=(rows:unknown[])=>({query:async(sql:string)=>({rows:sql.includes('schema_migrations')?rows:[{project_ref:PROJECT,profile:'neuvetra.private-synthetic-staging.v1'}]})}) as any
-  expect((await canonicalReceipts(tx(receipts),16)).length).toBe(m.length)
+  if(m.length>17){
+   let queries=0;const denied={query:async()=>{queries++;throw Error('No database query is allowed after manifest refusal.')}} as any
+   await expect(canonicalReceipts(denied,16)).rejects.toThrow()
+   await expect(canonicalReceipts(denied,17)).rejects.toThrow()
+   expect(queries).toBe(0)
+  }else expect((await canonicalReceipts(tx(receipts),16)).length).toBe(m.length)
   for(const rows of [receipts.slice(1),[...receipts].reverse(),[...receipts,receipts[15]],receipts.map((r,i)=>i===15?{...r,sha256:'0'.repeat(64)}:r)])await expect(canonicalReceipts(tx(rows),16)).rejects.toThrow()
   if(/^[a-f0-9]{64}$/.test(MIGRATION))expect(m[16]?.sha256).toBe(MIGRATION)
   else await expect(canonicalReceipts(tx(receipts),17)).rejects.toThrow()

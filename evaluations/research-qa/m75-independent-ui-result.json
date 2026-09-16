@@ -1,0 +1,18 @@
+{
+  "status": "pass",
+  "events": [
+    "Actual component ignores delayed initial load after company switch",
+    "Actual component ignores delayed initial load after actor switch",
+    "Actual component ignores delayed save after company switch",
+    "Actual component ignores delayed report after company switch",
+    "Actual component closes existing report on actor switch and hides member writes",
+    "Actual component unmount clears report surface"
+  ],
+  "errors": [],
+  "createdAt": "2026-09-16T06:24:55.935Z",
+  "scriptSha256": "2cd3c4c1957a5df96a8c2e2f0110b51846e8589c96b5602d90f490bf954acd47",
+  "limitations": [
+    "Local actual component with intercepted synthetic HTTP responses; not a hosted Auth or persistence exercise.",
+    "No print appearance or physical/PDF output claim."
+  ]
+}

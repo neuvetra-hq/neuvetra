@@ -7,15 +7,17 @@ import { ElectricityWorksheet } from "./ElectricityWorksheet"
 import { CorporateCoverageRegister } from "./CorporateCoverageRegister"
 import { StationaryNaturalGas } from "./StationaryNaturalGas"
 import { MobileDiesel } from "./MobileDiesel"
+import { ControlledFleet } from "./ControlledFleet"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
 export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
-  const [panel, setPanel] = useState<"corporate" | "gas" | "mobile" | "evidence" | "annual" | "source" | "worksheet" | "example">("corporate")
+  const [panel, setPanel] = useState<"corporate" | "gas" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example">("corporate")
   return <>
     <nav className="worksheet-nav" aria-label="Workspace views">
       <button type="button" aria-pressed={panel === "corporate"} onClick={() => setPanel("corporate")}>Corporate coverage</button>
       <button type="button" aria-pressed={panel === "gas"} onClick={() => setPanel("gas")}>Stationary natural gas</button>
       <button type="button" aria-pressed={panel === "mobile"} onClick={() => setPanel("mobile")}>Mobile diesel vehicles</button>
+      <button type="button" aria-pressed={panel === "fleet"} onClick={() => setPanel("fleet")}>Fleet reconciliation</button>
       <button type="button" aria-pressed={panel === "evidence"} onClick={() => setPanel("evidence")}>Annual electricity and bills</button>
       <button type="button" aria-pressed={panel === "annual"} onClick={() => setPanel("annual")}>Full-year electricity</button>
       <button type="button" aria-pressed={panel === "source"} onClick={() => setPanel("source")}>Bill-linked worksheet</button>
@@ -25,6 +27,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     {panel === "corporate" && <CorporateCoverageRegister key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "gas" && <StationaryNaturalGas key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "mobile" && <MobileDiesel key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
+    {panel === "fleet" && <ControlledFleet key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onNavigate={setPanel} />}
     {panel === "evidence" && <AnnualElectricityEvidence actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onEntries={() => setPanel("annual")} />}
     <div hidden={panel !== "annual"}><AnnualElectricityWorksheet actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} /></div>
     <div hidden={panel !== "source"}><SourceElectricityWorksheet actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} /></div>
