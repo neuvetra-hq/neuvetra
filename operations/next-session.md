@@ -1,3 +1,15 @@
+# M77 offline foundation accepted; integration remains pending
+
+The board accepted the M76 browser demonstration and authorized continued California work. The first M77 increment now has source-pinned candidate rules and an unmounted deterministic calculator for admitted HVAC, refrigeration and fire-suppression gases. Eight author tests and eight independent tests passed. Independent review corrected servicing-loss semantics and release/refill chronology; initial findings are retained in docs/research/m77-accounting-review.md. This is not full M77 or a released method.
+
+Root is publishing the exact foundation on rolling PR5; final head/check receipt belongs at .superpowers/m77-foundation-publication.json. Next implement the persistent corporate-bound workpapers, complete physical-source reconciliation and browser workflow, then independent integrated security/accounting QA, recovery and a hosted demonstration. P01-P10 remain unpassed. No M77 live/schema change was attempted. /root/m77_cpo completed its assignment; no worker remains assigned. Fresh accounting spawn and historical followup failed at the runtime thread limit; root authored the foundation and the active CPO context independently reviewed it with the compute-routing exception disclosed. Earlier sections are historical.
+
+# M77 preparation; M76 board feedback received
+
+The board accepted the M76 browser demonstration and authorized continued California corporate reporting work. M76 final closure 2fec9c4 passed all six remote checks; the retained final publication receipt reconciles the older closure note. M77 addresses HVAC, refrigeration and fire-suppression evidence and calculations. No M77 application, migration or deployment is complete.
+
+/root/m77_cpo is dispatched for product criteria and independent candidate review. Root owns accounting/technical preparation, Git, host and shared records. Both fresh accounting dispatch and historical-agent followup were rejected by the runtime agent-thread limit; neither is running. Candidate source/method validation and independent implementation review remain gates. Existing live M76/schema19 remains unchanged. Earlier sections are historical.
+
 # M76 live and independently accepted
 
 Stationary equipment and fuel coverage is complete for the bounded synthetic California example. The reviewed correction retains all earlier records, separately reviews the three fuel workpapers, and reconciles the boiler, heater and fixed fossil-diesel generator. Five equipment versions/reports and three generator versions/reports preserve blocked, pending and accepted histories. All 21 corrective operations and 87 keyed download observations passed. The original failed exercise and the zero-write failed baseline remain unchanged; their history is not relabeled as success.

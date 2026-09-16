@@ -224,3 +224,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install --disable-pip-version-check pint==0.26 pytest==9.1.1 pyyaml==6.0.3
       - run: bun run test:ghg
+      - name: Verify offline fugitive candidate and independent accounting cases
+        run: |
+          python -m unittest discover -s apps/site-api/src/calculation -p m77_fugitive_test.py -v
+          python evaluations/research-qa/m77-independent-calculation.py

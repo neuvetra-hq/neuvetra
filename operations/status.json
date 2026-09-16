@@ -1,18 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T17:38:11.121455+00:00",
+  "updated_at": "2026-09-16T19:10:09.506061+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M76",
-    "name": "Stationary equipment and fuel coverage",
-    "status": "hosted_accepted_closure_publication",
-    "next_gate": "Verify closure remote head/checks, then collect board feedback on live M76 before a dependent California milestone.",
+    "id": "M77",
+    "name": "Refrigerants and other fugitive-source coverage",
+    "status": "offline_foundation_reviewed_integration_pending",
+    "next_gate": "Publish reviewed offline foundation on rolling PR5 and verify checks; full M77 persistence/reconciliation/UI and independent integrated QA remain pending.",
     "evidence": [
-      "evaluations/research-qa/m76-hosted-acceptance.md",
-      "docs/research/m76-hosted-browser-verification.json",
-      "docs/research/m76-publication.json"
+      "operations/feedback/2026-09-16-m76.md",
+      "docs/research/m77-product-brief.md"
     ]
   },
   "completed_milestones": [
@@ -136,7 +135,7 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M76 live on152fcb0/schema19; corrected stationary reconciliation verified before/after actual restart.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Root completed hosted verification; specialist implementation and review assignments complete. No dependent worker dispatched."
+    "last_session_work": "M77 offline calculation foundation independently reviewed; one delegate completed. Full M77 integration pending; no M77 host/database actions."
   },
   "session_handoff": {
     "current": "M76 hosted correction, restart, revisit and independent acceptance passed; closure publication being verified.",
@@ -1558,7 +1557,7 @@
     {
       "id": "M76-HOSTED-ACCEPTANCE",
       "owner": "/root/m76_accounting",
-      "status": "in_progress",
+      "status": "complete",
       "scope": "Independent actual deployment, failed-journey diagnosis, additive correction review and final hosted acceptance",
       "evidence": [
         "operations/agent-improvement/runs/M76-HOSTED-ACCEPTANCE.json"
@@ -1576,10 +1575,28 @@
     {
       "id": "M76-HOSTED-BASELINE-DIAGNOSIS",
       "owner": "/root/m76_cto",
-      "status": "in_progress",
+      "status": "complete",
       "scope": "Read-only diagnostic addon for hosted baseline failure; no frozen helper/runtime/host/Git changes",
       "evidence": [
         "operations/agent-improvement/runs/M76-HOSTED-BASELINE-DIAGNOSIS.json"
+      ]
+    },
+    {
+      "id": "M77-PRODUCT",
+      "owner": "/root/m77_cpo",
+      "status": "complete",
+      "scope": "Product brief and subsequent independent candidate review; no implementation or host writes",
+      "evidence": [
+        "operations/agent-improvement/runs/M77-PRODUCT.json"
+      ]
+    },
+    {
+      "id": "M77-FOUNDATION",
+      "owner": "/root",
+      "status": "complete",
+      "scope": "Independently reviewed offline source/method calculator only; no full M77 acceptance",
+      "evidence": [
+        "operations/agent-improvement/runs/M77-FOUNDATION.json"
       ]
     }
   ],
@@ -2731,13 +2748,13 @@
     "board_feedback": "Browser looks good; keep moving."
   },
   "current_m76": {
-    "status": "complete_awaiting_board_demo_feedback",
+    "status": "complete_board_feedback_received",
     "baseline": "32e1d7b879e58eabc0789552f61298a608c3f228",
     "hosted_schema": 19,
     "hosted_changes": true,
     "active_assignments": [],
     "board_feedback_received": true,
-    "next": "Final closure head/check verification then board feedback; no dependent milestone started.",
+    "next": "M77 preparation authorized.",
     "planning_snapshot": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
     "root_ui": "Actual local browser correction, separate review, exact HTML/JSON downloads and restart/history passed on final SQL19.",
     "migration_sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
@@ -2773,6 +2790,19 @@
     "post_restart_revisit": "passed_zero_posts_exact_history_all_sessions_closed",
     "hosted_browser": "passed_corrected_state_downloads_and_post_restart_view",
     "publication": "docs/research/m76-publication.json",
-    "hosted_acceptance": "evaluations/research-qa/m76-hosted-acceptance.md"
+    "hosted_acceptance": "evaluations/research-qa/m76-hosted-acceptance.md",
+    "closure_published_head": "2fec9c40dca45bcef3590db82c8647d31459ef3e"
+  },
+  "current_m77": {
+    "status": "offline_foundation_reviewed_publication_pending",
+    "baseline": "2fec9c40dca45bcef3590db82c8647d31459ef3e",
+    "hosted_schema": 19,
+    "hosted_changes": false,
+    "active_assignments": [],
+    "coordinator_work": "Candidate source/accounting contract and technical preparation",
+    "routing_exception": "Accounting fresh spawn and historical accounting followup both rejected: agent thread limit reached. Neither started. Root takes preparation; m77_cpo remains the only dispatched active delegate. Requested compute is not observed compute.",
+    "foundation_snapshot": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
+    "review": "docs/research/m77-accounting-review.md",
+    "next": "Publish reviewed foundation; then implement persistent source workpapers and independent population reconciliation. Full M77 remains open."
   }
 }

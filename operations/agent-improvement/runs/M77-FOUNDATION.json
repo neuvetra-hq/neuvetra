@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "id": "M77-FOUNDATION",
+  "role": "accounting-validation",
+  "execution_context": "/root",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
+      "sha256": "15452c352bb1dc447c23065383417fc1a6457a29ffd4bf715288e542f6d0dc96"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "OFFLINE-SOURCE-METHOD-ARITHMETIC",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m77-accounting-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m77_cpo",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m77-accounting-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
+        "sha256": "15452c352bb1dc447c23065383417fc1a6457a29ffd4bf715288e542f6d0dc96"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_exception": "Fresh accounting spawn and historical accounting followup both rejected agent-thread limit; root authored offline foundation. Active /root/m77_cpo independently reviewed; requested Sol/medium inherited, actual compute unknown. No critical accounting worker ran.",
+  "source_artifacts": [
+    {
+      "path": "docs/research/m77-accounting-contract.md",
+      "sha256": "99c0d6c8aafa7755d3a1c41b92a869ccb6826b223d6300612ac12853c2875922"
+    },
+    {
+      "path": "docs/research/m77-source-evidence.json",
+      "sha256": "01e3987f2fd2e10a90b413542d39108f17d48436988aa6c8beb5e2b1613af0b3"
+    },
+    {
+      "path": "docs/research/m77-technical-contract.md",
+      "sha256": "8021c34834c2734a0d9988e5436900c9eb2d02869b4ce2df280c889a5bbf333f"
+    },
+    {
+      "path": "apps/site-api/src/calculation/m77_fugitive.py",
+      "sha256": "3c81c8d1b4ee6b2435765013d0578021556b70d35f16e4512ebecf1c873f25b4"
+    },
+    {
+      "path": "apps/site-api/src/calculation/m77_fugitive_test.py",
+      "sha256": "5040a0518c51e3845e7496ee000e833173dc71027ddc883c2a4f2d0abf7f57c0"
+    },
+    {
+      "path": "evaluations/research-qa/m77-independent-calculation.py",
+      "sha256": "488b0966002db54f6c4eed7c081e63f60231bf6b11d6d741a60209d94e9a9cc6"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "66882b38b33847b5d83b78b123c8a0bf58a75eb4e5655d76c35cb13e4cc5fdf5"
+    }
+  ]
+}

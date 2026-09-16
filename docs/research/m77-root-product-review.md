@@ -1,0 +1,7 @@
+# M77 product brief review
+
+Root independently reviewed the CPO-authored product brief (SHA256 6f1b1249bad51134b224c8b6d1bdd9b506dfc987103e5c35469572f727fb3440). Accepted as future P01-P10 criteria, not demonstrated product behavior. It includes complete independent physical discovery, controlled mobile refrigerant gaps, missing-versus-zero, source method gates, exact history and separate review, actual browser/tenant/recovery evidence. These align with the corporate reporting direction and preserve full Scope 1 incompleteness.
+
+The offline foundation is a separately accepted first increment only. Both author and independent suites passed eight tests; the independent accounting review preserved two initial findings and their repair. Root read the independent test and verified it uses a separate literal fixture. Its author did not implement the calculator. Registered critical accounting dispatch and historical-worker continuation both failed with agent-thread limit reached. Actual fallback reviewer is /root/m77_cpo; inherited requested Sol/medium and observed compute unknown. This does not claim the critical route ran.
+
+No M77 database, API, browser, source release or hosted acceptance is complete. No worker continues after the review returns. The next workstream is the persistent corporate-bound fugitive workpaper and physical-source reconciliation described in m77-technical-contract.md.

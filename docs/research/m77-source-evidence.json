@@ -1,0 +1,33 @@
+{
+  "status": "candidate_development_evidence_not_released",
+  "checked_on": "2026-09-16",
+  "guidance": {
+    "url": "https://www.epa.gov/sites/default/files/2020-12/documents/fugitiveemissions.pdf",
+    "edition": "December 2023",
+    "sha256": "fb3dd5c9677096094c2acef769c7fe2fb90def6feac403cf9c817f5810928d88",
+    "retrieved_path": ".tmp/m77-accounting/epa-fugitive-dec2023.pdf",
+    "locators": ["printed page 3: method selection", "printed page 8: Equation 6 and footnote 3", "printed page 15: uncertainty"],
+    "retrieval": "Downloaded original public EPA PDF; hashed retained bytes. Current EPA inventory-guidance index links this edition."
+  },
+  "factor_workbook": {
+    "index_url": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub",
+    "edition": "January 2025",
+    "retained_path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-factors-hub-2025.xlsx",
+    "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+    "inspection": "Rehashed prior original; extracted literal cell values from XLSX ZIP/XML. No new remote workbook download claimed.",
+    "worksheet": "Emission Factors Hub",
+    "gwp_basis": "AR5 100-year, published EPA candidate values",
+    "factors": [
+      {"gas": "R-410A", "gwp": "1924", "cells": ["C575", "D575", "E575"], "policy": "Use published blend value; not unrounded constituent comparison1923.5."},
+      {"gas": "HFC-134a", "gwp": "1300", "cells": ["C532", "E532"]},
+      {"gas": "HFC-227ea", "gwp": "3350", "cells": ["C538", "E538"]}
+    ],
+    "corroborating_pdf": "https://www.epa.gov/system/files/documents/2025-01/ghg-emission-factors-hub-2025.pdf",
+    "pdf_locator": "page 5, Tables 11 and 12"
+  },
+  "limitations": [
+    "Source bytes and method interpretation are distinct; retrieval alone is not domain approval.",
+    "No production corpus release, blanket source-rights finding or regulatory GWP mandate.",
+    "Pure calculator does not verify physical evidence, tenant identity or independent reviewer eligibility."
+  ]
+}
