@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T22:51:35.806758+00:00",
+  "updated_at": "2026-09-16T23:19:39.133371+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M77",
     "name": "Refrigerants and other fugitive-source coverage",
     "status": "release_verification_in_progress",
-    "next_gate": "Publish reviewed controls and verify exact checks, fresh hosted backup/recovery, then controlled upgrade and full demonstration.",
+    "next_gate": "Publish actual-facility recipe repair and verify allsix checks before controlled hosted upgrade/exercise/restart.",
     "evidence": [
       "operations/feedback/2026-09-16-m76.md",
       "docs/research/m77-product-brief.md"
@@ -2819,9 +2819,26 @@
     "local_review": "evaluations/research-qa/m77-integrated-review.md",
     "application_snapshot": "operations/agent-improvement/snapshots/M77-APPLICATION-CANDIDATE3.json",
     "migration_sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc",
-    "release_snapshot": "operations/agent-improvement/snapshots/M77-RELEASE-CONTROLS-CANDIDATE2.json",
-    "release_review": "evaluations/research-qa/m77-release-review.md",
+    "release_snapshot": "operations/agent-improvement/snapshots/M77-RELEASE-CONTROLS-ACCEPTED1.json",
+    "release_review": "evaluations/research-qa/m77-hosted-review.md",
     "live_schema_version": 19,
-    "hosted_m77_mutations": false
+    "hosted_m77_mutations": false,
+    "release_software_commit": "859409d446fe0295957555085434a75457a2c10e",
+    "hosted_baseline": {
+      "status": "actual_hosted_baseline_passed",
+      "observedAt": "2026-09-16T23:10:41.707490+00:00",
+      "journal": ".superpowers/m77-hosted-journey.jsonl",
+      "prefixByteLength": 2109491,
+      "prefixSha256": "396f086ee8702e7fbb48dbd0b303ab1a9a993fed62db5569ac1bf184b8fd5462",
+      "events": 4,
+      "terminalSha256": "95620563fd46e5ff05f6cc351e98facbd4dab24513a2c8c3f7717178b9650f06",
+      "finishedAt": "2026-09-16T23:09:39.016Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "liveSchemaVersion": 19,
+      "liveApplication": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+      "facilityRecipeRepairRequired": true
+    },
+    "pending_review_task": "M77-HOSTED-ACCEPTANCE"
   }
 }

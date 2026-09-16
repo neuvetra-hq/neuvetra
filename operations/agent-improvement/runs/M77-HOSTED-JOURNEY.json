@@ -39,7 +39,7 @@
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 2,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {
@@ -66,6 +66,7 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "notes": [
-    "Author software/rehearsal complete and independently accepted. Actual hosted execution remains a separate root-owned gate. Requested compute inherited; actual model/effort unobservable."
+    "Author software/rehearsal complete and independently accepted. Actual hosted execution remains a separate root-owned gate. Requested compute inherited; actual model/effort unobservable.",
+    "One material recipe defect observed after scoped software acceptance/publication, before liveM77upgrade or writes: two-facility localtemplate didnotmatch actualhost three-facility graph. Rework tracked separately by M77-HOSTED-PLAN-ACTUAL-FACILITIES; historic scopedreview preserved."
   ]
 }
