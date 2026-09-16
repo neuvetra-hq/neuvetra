@@ -1,0 +1,50 @@
+{
+  "observedAt": "2026-09-16T07:11:15.604864+00:00",
+  "url": "https://www.neuvetra.ai/",
+  "deployment": "f6794f05-1f09-43c8-a4c0-bb2a5abf45fa",
+  "implementation": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+  "signedInBrowser": "Existing authorized browser session; no new accounts or credentials entered.",
+  "browserActions": "Read-only navigation, refresh, history selection, report open/download; no hosted browser form writes.",
+  "observed": [
+    "New fleet navigation on deployed bundle",
+    "Before declaration: existing calculated vehicle remains visible as orphan_source and roster_missing",
+    "Roster1: two declared vehicles, second missing_workpaper, positive acceptance option disabled",
+    "Roster4: two matched/reviewed rows with bounded acceptance and four retained versions",
+    "Historical roster3 report retains blocked status, null review and exact workpaper/roster-review findings after roster4 acceptance",
+    "Actual service restart followed by page reload preserved four versions and current acceptance",
+    "Current report4 opens after restart with two matched rows and permanent synthetic/incomplete/unreleased/no-assurance limitations",
+    "Current HTML and JSON downloads plus earlier blocked-report HTML match exact retained hashes"
+  ],
+  "downloads": [
+    {
+      "reportId": "a6629be0-7a7c-429e-94c2-b261652568ad",
+      "type": "html",
+      "bytes": 20045,
+      "sha256": "686758f09176b4821bfd22404d8d2a085a6808334dccfbca604b00962b2d7a89",
+      "afterRestart": false
+    },
+    {
+      "reportId": "8c70db1a-e20f-4813-b7bd-dc32eb412da3",
+      "type": "html",
+      "bytes": 22347,
+      "sha256": "86e6134d9113c45a48ea2d869db3e90887bda1c2ceab73ed66fc4c998de9a04b",
+      "afterRestart": true
+    },
+    {
+      "reportId": "8c70db1a-e20f-4813-b7bd-dc32eb412da3",
+      "type": "json",
+      "bytes": 14087,
+      "sha256": "46cb9eea80e70c02881b4c11cc4654b3cf1d3a3a89e8cea8eece4c194804006e",
+      "afterRestart": true
+    }
+  ],
+  "phoneWidth": 390,
+  "phoneDocumentWidth": 375,
+  "phoneLayoutReadable": true,
+  "viewportReset": true,
+  "physicalPrintOrPdfVerified": false,
+  "limitations": [
+    "Actual browser actions by root; independent reviewer inspects receipt and downloaded hashes, not a separately operated browser.",
+    "No print-dialog appearance, physical printing, PDF pagination or customer inventory completeness claim."
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "observedAt": "2026-09-16T13:48:09.183776+00:00",
+  "status": "live_independently_accepted_implementation_published_closure_checks_follow",
+  "draftPr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "implementationCommit": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+  "deploymentId": "f6794f05-1f09-43c8-a4c0-bb2a5abf45fa",
+  "imageDigest": "sha256:26641a6547469323199a975ee49d2090db564e3b0d1fa6c79207f159d39c52e4",
+  "schemaVersion": 18,
+  "specificLiveUpgradeApproved": true,
+  "oldTablesPreserved": 83,
+  "oldRowsPreserved": 224,
+  "newInitiallyEmptyFleetTables": 7,
+  "migrationSha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+  "exercise": {
+    "applicationPostRequests": 22,
+    "successfulWrites": 18,
+    "expectedAuthorizationRefusals": 4,
+    "rosterVersions": 4,
+    "reviews": 3,
+    "reports": 3,
+    "matchedRows": 2,
+    "exactFleetDownloads": 14,
+    "allCreatedAuthSessionsClosed": true
+  },
+  "actualRestart": {
+    "status": "m75_actual_service_restart_observed",
+    "observedAt": "2026-09-16T07:06:51.584712+00:00",
+    "deploymentId": "f6794f05-1f09-43c8-a4c0-bb2a5abf45fa",
+    "deploymentStatus": "SUCCESS",
+    "commit": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "image": "sha256:26641a6547469323199a975ee49d2090db564e3b0d1fa6c79207f159d39c52e4",
+    "restartMutationAcknowledged": true,
+    "ready": {
+      "status": "ready",
+      "profile": "neuvetra.private-synthetic-staging.v1",
+      "schemaVersion": 18,
+      "legacyContainmentVerified": true
+    }
+  },
+  "postRestartRevisit": {
+    "applicationPostRequests": 0,
+    "allCreatedAuthSessionsClosed": true,
+    "journalHeadSha256": "8765dc35003d8c5e2df6fc4303d04b31294ea2f14a3fa061c1865d4b50f4ea65",
+    "exerciseSha256": "7283f3a663783cec6559bf4ceaf2697fd204572b244cc63b305fc6aeb9de0cfe"
+  },
+  "browserEvidence": "docs/research/m75-hosted-browser-verification.json",
+  "independentReview": "evaluations/research-qa/m75-hosted-acceptance.md",
+  "automaticDeploymentRestored": true,
+  "mergePerformed": false,
+  "limitations": [
+    "Synthetic declared fleet only;25roster-row/3workpaper demo limits retain unsupported vehicles as gaps.",
+    "No aggregate emissions, complete Scope1/corporate inventory, factor/method release, regulatory determination or external assurance.",
+    "ProviderAuth/storage recovery excluded; after18only18-compatible forward recovery.",
+    "Physical printing/PDF pagination not verified."
+  ],
+  "next": "M76 stationary-source coverage for the admitted California profile, after board demonstration feedback.",
+  "implementationRequiredChecks": "All six passed on 7e9abd2 at 2026-09-16T06:45:55Z; final documentation head checked separately after push.",
+  "independentReviewSha256": "231b6c14242d93a86b1c28bae01ede24682c159988addb7d032d132cf7930542",
+  "automaticDeploymentEvidence": ".superpowers/m75-auto-restored.json"
+}

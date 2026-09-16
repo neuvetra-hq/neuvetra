@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "M75-HOSTED-ACCEPTANCE",
+  "role": "qa-lead",
+  "execution_context": "/root/m74_accounting",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M75-HOSTED-ACCEPTED1.json",
+      "sha256": "245945fca9368f87e2f086c1a902fbe389597db4b286525d03b59bee458dd687"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M75-ACTUAL-HOSTED-MIGRATION-JOURNEY-RESTART",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m75-hosted-acceptance.md",
+        "docs/research/m75-hosted-browser-verification.json"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m75-hosted-acceptance.md",
+      "docs/research/m75-hosted-browser-verification.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M75-HOSTED-ACCEPTED1.json",
+        "sha256": "245945fca9368f87e2f086c1a902fbe389597db4b286525d03b59bee458dd687"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused independent M75 reviewer; no production/operator authorship. Inherited actual compute unknown. Root sole host/Git writer. Review actual committed migration, checked deployment and realAuth/journaled exercise/restart/revisit/browser evidence; no milestone pass before evidence.",
+    "Coordinator inspected independent QA delivery and exact browser/journal bindings; this reviews QA delivery, not sole acceptance of coordinator production. Final documentation-head checks remain root-owned. Independent reviewer has finished; no persistent worker."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m75-hosted-acceptance.md",
+      "sha256": "231b6c14242d93a86b1c28bae01ede24682c159988addb7d032d132cf7930542"
+    },
+    {
+      "path": "docs/research/m75-hosted-browser-verification.json",
+      "sha256": "caaf27b84df7c262e748f130e5e884e099fa43605f09fa7f655179729e02b1ba"
+    }
+  ]
+}

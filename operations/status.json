@@ -1,16 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T06:40:30.227923+00:00",
+  "updated_at": "2026-09-16T13:48:09.183776+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M75",
     "name": "Controlled-vehicle roster and workpaper reconciliation",
-    "status": "local_accepted_publication_in_progress",
-    "next_gate": "Final shared-wiring review, remote CI, fresh hosted recovery and controlled17-to18 migration followed by hosted demonstration.",
+    "status": "live_accepted_implementation_published",
+    "next_gate": "Verify final closure-documentation head checks and unchanged live identity, then collect board demo feedback before M76.",
     "evidence": [
-      "docs/research/scope1-completion-matrix.md"
+      "docs/research/scope1-completion-matrix.md",
+      "docs/research/m75-publication.json",
+      "evaluations/research-qa/m75-hosted-acceptance.md"
     ]
   },
   "completed_milestones": [
@@ -217,7 +219,8 @@
     "m61_review": "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json",
     "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5",
     "active_rolling_branch": "codex/corporate-mvp",
-    "active_rolling_pr": "https://github.com/neuvetra-hq/neuvetra/pull/5"
+    "active_rolling_pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "m75_state": "live_independently_accepted_implementation_7e9abd2_six_checks_pass_closure_head_verified_separately"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -1523,6 +1526,15 @@
         "evaluations/research-qa/m74-hosted-acceptance.md",
         "operations/agent-improvement/snapshots/M74-HOSTED-ACCEPTED1.json"
       ]
+    },
+    {
+      "id": "M75-HOSTED-ACCEPTANCE",
+      "owner": "/root/m74_accounting",
+      "status": "complete",
+      "scope": "Independent hosted migration, retained records, restart and browser-evidence acceptance",
+      "evidence": [
+        "operations/agent-improvement/runs/M75-HOSTED-ACCEPTANCE.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2634,9 +2646,9 @@
     "final_publication": "docs/research/m74-final-publication.json"
   },
   "current_m75": {
-    "status": "local_accepted_publication_in_progress",
+    "status": "live_accepted_implementation_published",
     "baseline": "42b4194ba7211779c415c02b590ff5f6ced88a4e",
-    "hosted_schema": 17,
+    "hosted_schema": 18,
     "hosted_changes": true,
     "active_assignments": [],
     "standing_approval": true,
@@ -2644,8 +2656,8 @@
     "dispatch_exception": "Historical m74_backend resume rejected agent-thread-limit; reused product author for implementation, independent QA separate.",
     "planning_snapshot": "operations/agent-improvement/snapshots/M75-PLANNING-CANDIDATE1.json",
     "interim_evidence": "evaluations/research-qa/m75-root-integration.md",
-    "hosted_database_changes": false,
-    "automatic_deployment": false,
+    "hosted_database_changes": true,
+    "automatic_deployment": true,
     "implementation_snapshot": "operations/agent-improvement/snapshots/M75-INTEGRATED-ACCEPTED2.json",
     "local_acceptance": "evaluations/research-qa/m75-independent-review.md",
     "browser_evidence": "docs/research/m75-local-browser-verification.json",
@@ -2654,6 +2666,19 @@
     "hosted_backup": "docs/research/m75-prepublication.json",
     "hosted_recovery": "independently_passed_83_tables_224_rows",
     "shared_wiring_review": "evaluations/research-qa/m75-integration-review.md",
-    "final_local_review": "evaluations/research-qa/m75-final-review-addendum.md"
+    "final_local_review": "evaluations/research-qa/m75-final-review-addendum.md",
+    "remote_candidate": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "required_checks": "six_pass_7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "specific_live_migration_approval": "approved",
+    "site_stopped": false,
+    "migration_attempted": true,
+    "publication": "docs/research/m75-publication.json",
+    "migration_receipt": ".superpowers/m75-hosted-migration-candidate1.json",
+    "deployment": "f6794f05-1f09-43c8-a4c0-bb2a5abf45fa",
+    "deployment_candidate": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "hosted_acceptance": "evaluations/research-qa/m75-hosted-acceptance.md",
+    "hosted_browser_evidence": "docs/research/m75-hosted-browser-verification.json",
+    "restart_revisit": "passed_zero_application_posts_all_auth_sessions_closed",
+    "next": "M76 stationary sources after board demonstration feedback; not started"
   }
 }
