@@ -16,7 +16,7 @@ const outcomes:{id:string;expectedAccepted:boolean;accepted:boolean;error:string
 try{
  await admin.exec(`create database ${name} template ${template}`);op=connect(name)
  const manifest=await readMigrationManifest(),receipts=(await op.query<{name:string;sha256:string}>('select name,sha256 from neuvetra.schema_migrations order by name')).rows
- if(!receipts.every((r,i)=>r.name===manifest[i]?.name&&r.sha256===manifest[i]?.sha256)||manifest.at(-1)?.sha256!==sqlSha256)throw Error('Exact migration receipt/candidate mismatch')
+ if(!receipts.every((r,i)=>r.name===manifest[i]?.name&&r.sha256===manifest[i]?.sha256)||manifest.find(m=>m.name==='0018_controlled_fleet.sql')?.sha256!==sqlSha256)throw Error('Exact migration receipt/candidate mismatch')
  await op.transaction(async tx=>{for(const m of manifest.slice(receipts.length)){await tx.exec(m.sql);await tx.query('insert into neuvetra.schema_migrations(name,sha256) values($1,$2)',[m.name,m.sha256])}})
  const seed=await populateM75RecoveryFixture(op,name,55463),read=connect(name,'neuvetra_runtime'),ref=(await op.query<{project_ref:string}>('select project_ref from neuvetra.staging_target')).rows[0]!.project_ref,db=new(HostedWorkspaceDatabase as any)(read,ref) as HostedWorkspaceDatabase,authority=createM74Authority()
  const register=(await db.findControlledFleet(seed.users.owner,seed.companyId,authority))!,report=(await db.findControlledFleetReport(seed.users.owner,seed.companyId,seed.rosterId,seed.reportId,authority))!;await read.close()
