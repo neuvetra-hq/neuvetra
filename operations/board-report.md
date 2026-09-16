@@ -1,8 +1,26 @@
-# M76 additive correction independently reviewed; live execution pending
+# M76 explicit continuation accepted; full live baseline running
+
+The diagnostic and separate-journal wrapper passed independent review and targeted guard/integration tests. Snapshot M76-HOSTED-CONTINUATION-CANDIDATE1 binds five exact files; review is evaluations/research-qa/m76-hosted-continuation-review.md. Root started the fresh full actual-transport baseline at2026-09-16T16:21:03Z in .superpowers/m76-hosted-continuation.jsonl. Both failed attempts remain unchanged and failed; prior baseline cause remains unknown. No21 corrective writes have occurred.
+
+Root owns publication and host. The author assignment is complete; /root/m76_accounting remains active for hosted acceptance. Publish the exact wrapper on rolling PR5 and verify six checks. Only after fresh baseline and checks pass, execute the21 reviewed operations, actual service restart, zero-write revisit, final browser and independent acceptance. Live152fcb0/schema19 remains unchanged and automatic deployment paused. No dependent milestone. Earlier sections are historical.
+
+# M76 read-only diagnosis passed; fresh verification being prepared
+
+The separately reviewed diagnostic completed at 2026-09-16T16:14:23Z: six actual register decoders,18 preconditions and54 original download comparisons passed, with zero application writes and all created Auth sessions closed. Both failed journals remain byte-identical. The original live baseline failure was not reproduced; its cause remains unknown. This diagnostic used a cached legacy adapter and does not constitute an accepted official baseline.
+
+Root owns host/Git. /root/m76_cto is preparing a minimal separately journaled continuation wrapper around the unchanged reviewed helper; /root/m76_accounting independently reviews it. A fresh full baseline must use actual legacy transport, pin both failed journals and the diagnostic, and refuse automatic retry after any failure. The21 corrective operations, actual service restart, zero-write revisit, final browser and independent acceptance are still pending. Live152fcb0/schema19 is unchanged; automatic deployment remains paused. No dependent milestone. Earlier sections are historical.
+
+# M76 live baseline stopped without writes; diagnosis in progress
+
+The reviewed recovery helper b96a249 passed all six remote checks and independent exact-data local rehearsal. Its actual live baseline stopped at authoritative_failed_state with zero application POSTs and all verification sessions closed. The second failed journal .superpowers/m76-hosted-recovery.jsonl has two events, terminal b9db5630321e6dc5fa50ede903996c29ad17b9ab4e777f982f60bd1a10c8b6b4; the original44-event failed exercise remains untouched. No21-operation live correction or restart has occurred. Do not retry either failed journal or infer the failing endpoint from the generic stage.
+
+Root owns host/Git. /root/m76_cto is dispatched for M76-HOSTED-BASELINE-DIAGNOSIS, a separately reviewed diagnostic that must refuse every application write and retain only sanitized route/status/duration observations; /root/m76_accounting independently reviews it and actual results. No frozen helper/application/schema edits. Runtime remains healthy152fcb0/schema19, auto deployment paused. Identify the exact failure before any new baseline or correction. Earlier sections are historical.
+
+# M76 reviewed correction published; live read-only verification running
 
 The fixed synthetic correction helper passed author and independent rehearsals on separate exact copies of the failed live state:21 additive API operations, zero-write repeat/revisit, preserved earlier records and captured absent reviews. The original failed live exercise remains unchanged. Independent review and exact nine-file binding are in evaluations/research-qa/m76-hosted-recovery-review.md and operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json. The application/schema/approval guards are unchanged; the helper corrects inherited missing boiler screening through ordinary evidence-backed versions and separate reviews.
 
-Root owns publication and host. Next publish the accepted helper on rolling draft PR5, verify all six checks, obtain its actual read-only failed-state baseline, perform the21 reviewed operations, restart the actual service, verify zero-write revisit and exact history, inspect the final live browser and obtain independent hosted acceptance. Automatic deployment remains paused; current live is152fcb0/schema19. /root/m76_accounting is the active hosted reviewer; the operator author has completed. No dependent milestone, rollback or original-journal replay. Earlier sections are historical.
+Root published the accepted helper as b96a249a7c9120e855be7d67188f786c59536399 on rolling draft PR5; all six checks passed at15:58:15Z. Actual read-only failed-state baseline is running in the new .superpowers/m76-hosted-recovery.jsonl, started15:53:59Z. No correction writes have occurred yet. Next complete that baseline, perform the21 reviewed operations, restart the actual service, verify zero-write revisit and exact history, inspect the final live browser and obtain independent hosted acceptance. Automatic deployment remains paused; current live is152fcb0/schema19. /root/m76_accounting is the active hosted reviewer; the operator author has completed. No dependent milestone, rollback or original-journal replay. Earlier sections are historical.
 
 # M76 live verification requires a corrected synthetic journey
 

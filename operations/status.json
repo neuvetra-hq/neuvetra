@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T15:52:45.904768+00:00",
+  "updated_at": "2026-09-16T16:22:09.460012+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M76",
     "name": "Stationary equipment and fuel coverage",
-    "status": "reviewed_live_correction_pending",
-    "next_gate": "Publish exact accepted correction helper and verify remote checks, then actual read-only baseline and21 additive synthetic API operations; restart/revisit and independent hosted acceptance.",
+    "status": "live_read_only_diagnosis",
+    "next_gate": "Identify exact live baseline read/validation failure using a separately reviewed zero-application-write diagnostic; preserve both failed journals.",
     "evidence": [
       "docs/research/scope1-completion-matrix.md"
     ]
@@ -1551,6 +1551,15 @@
       "evidence": [
         "operations/agent-improvement/runs/M76-HOSTED-RECOVERY-PLAN.json"
       ]
+    },
+    {
+      "id": "M76-HOSTED-BASELINE-DIAGNOSIS",
+      "owner": "/root/m76_cto",
+      "status": "in_progress",
+      "scope": "Read-only diagnostic addon for hosted baseline failure; no frozen helper/runtime/host/Git changes",
+      "evidence": [
+        "operations/agent-improvement/runs/M76-HOSTED-BASELINE-DIAGNOSIS.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2701,7 +2710,7 @@
     "board_feedback": "Browser looks good; keep moving."
   },
   "current_m76": {
-    "status": "reviewed_live_correction_pending",
+    "status": "fresh_full_baseline_running",
     "baseline": "32e1d7b879e58eabc0789552f61298a608c3f228",
     "hosted_schema": 19,
     "hosted_changes": true,
@@ -2709,7 +2718,7 @@
       "M76-HOSTED-ACCEPTANCE"
     ],
     "board_feedback_received": true,
-    "next": "Exact helper publication/checks, actual failed-state baseline,21 reviewed additive operations, service restart and zero-write revisit, final browser and hosted acceptance. Runtime remains152fcb0/schema19.",
+    "next": "Independently review explicit new-journal continuation, fresh full live baseline,21 reviewed additive operations, actual restart and zero-write revisit, final browser/acceptance/closure.",
     "planning_snapshot": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
     "root_ui": "Actual local browser correction, separate review, exact HTML/JSON downloads and restart/history passed on final SQL19.",
     "migration_sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
@@ -2722,6 +2731,14 @@
     "remote_checks": "six_pass",
     "deployed_image": "sha256:b5f85ab871bd19f4cbf5953cfa1a93f1d7060bf5aef6cbf5d662cf7c82b7fe6f",
     "hosted_exercise": "Failed expected approval: m76_review_2 returned422,18applicationPOSTs,allCreatedAuthSessionsClosed=true. Failed journal preserved; no retry.",
-    "recovery_helper_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json"
+    "recovery_helper_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json",
+    "helper_published_head": "b96a249a7c9120e855be7d67188f786c59536399",
+    "helper_remote_checks": "all_six_passed",
+    "hosted_recovery_baseline": "failed_zero_application_posts_all_created_auth_sessions_closed",
+    "hosted_diagnostic": "passed_current_reads_zero_writes_cached_legacy_not_official_baseline",
+    "prior_baseline_failure_cause": "unreproduced_unknown",
+    "continuation_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-CONTINUATION-CANDIDATE1.json",
+    "continuation_review": "evaluations/research-qa/m76-hosted-continuation-review.md",
+    "hosted_continuation_baseline": "running_started_2026-09-16T16:21:03Z"
   }
 }
