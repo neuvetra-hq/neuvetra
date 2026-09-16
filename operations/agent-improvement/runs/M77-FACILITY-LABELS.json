@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "id": "M77-FACILITY-LABELS",
+  "role": "software-engineering",
+  "execution_context": "/root",
+  "prompt_sha256": "0973cc6b7eeafd7a928c2078ce86b0d4fb6541931e42605f4c5125f4cc52edac",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-FACILITY-LABELS-CANDIDATE1.json",
+      "sha256": "e5f23ed2738a24ee722505710acf59d5b6f5cdfe545d567044547be79c076089"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "DISTINCT-ACTUAL-FACILITY-LABELS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m77-facility-label-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_cto",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m77-facility-label-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-FACILITY-LABELS-CANDIDATE1.json",
+        "sha256": "e5f23ed2738a24ee722505710acf59d5b6f5cdfe545d567044547be79c076089"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Root author; independent reviewer context reused with observed compute unknown. One JSX text change; application build passed. Live exercise continues on preceding accepted application, no redeploy until its complete session closure."
+  ],
+  "source_artifacts": [
+    {
+      "path": "apps/site-web/src/components/FugitivePopulationEditor.tsx",
+      "sha256": "cda3edc46a8d05b73d4241a40bc118bf444d2f165f21650432dccec5ebdbd6d2"
+    }
+  ]
+}
