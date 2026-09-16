@@ -74,7 +74,7 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
 
   test("checks exact migration receipts, restricted role and no ordinary-start migrations", async () => {
     expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 20 })
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: REF, syntheticTargetConfirmed: true })).migrations).toHaveLength(19)
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: REF, syntheticTargetConfirmed: true })).migrations).toHaveLength(20)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
     expect((await readMigrationManifest()).every(m => /^[0-9a-f]{64}$/.test(m.sha256))).toBe(true)
