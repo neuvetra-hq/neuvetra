@@ -4,25 +4,43 @@
   "role": "qa-lead",
   "execution_context": "/root/m76_accounting",
   "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-HOSTED-ACCEPTED1.json",
+      "sha256": "eea388705d783db9a15049651e0b2fcad5a83d28a98e83794d21de8151bfa050"
+    }
+  ],
   "criteria": [
     {
       "id": "HOSTED-STATIONARY-ACCEPTANCE",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m76-hosted-acceptance.md",
+        "docs/research/m76-hosted-browser-verification.json",
+        "docs/research/m76-publication.json"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m76-hosted-acceptance.md",
+      "docs/research/m76-hosted-browser-verification.json",
+      "docs/research/m76-publication.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-HOSTED-ACCEPTED1.json",
+        "sha256": "eea388705d783db9a15049651e0b2fcad5a83d28a98e83794d21de8151bfa050"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": null,
     "escaped_defects": null,
@@ -52,7 +70,21 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "notes": [
-    "Read-only independent hosted acceptance after exact local review and published candidate. Root alone owns host/Git. Existing QA context resumed with unchanged requested route; actual compute remains unobserved. Requires actual maintenance/migration/deployment/journal/restart/revisit/browser receipts, not author confidence."
+    "Read-only independent hosted acceptance after exact local review and published candidate. Root alone owns host/Git. Existing QA context resumed with unchanged requested route; actual compute remains unobserved. Requires actual maintenance/migration/deployment/journal/restart/revisit/browser receipts, not author confidence.",
+    "Root independently reconciled the QA evidence with actual host/browser observations. Initial hosted exercise and first recovery baseline failed and remain preserved; final explicit continuation accepted. This coordinator review of the QA output is distinct from the independent release review performed by /root/m76_accounting. Closure publication checks follow the commit."
   ],
-  "source_artifacts": []
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m76-hosted-acceptance.md",
+      "sha256": "a66800ba5fab80d7021d77f99ac392c249f0cfcc37a3eedb20f86a90f59b8c1a"
+    },
+    {
+      "path": "docs/research/m76-hosted-browser-verification.json",
+      "sha256": "625710314e8028eba05816dce3863a54370f371ee8dcabf303d4e7b7cbb57356"
+    },
+    {
+      "path": "docs/research/m76-publication.json",
+      "sha256": "d7c7555b97217646dd4f693c8933eaeb917303d9117158e7a5b13e3e98894569"
+    }
+  ]
 }

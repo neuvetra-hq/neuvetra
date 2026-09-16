@@ -1,16 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T16:22:09.460012+00:00",
+  "updated_at": "2026-09-16T17:38:11.121455+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M76",
     "name": "Stationary equipment and fuel coverage",
-    "status": "live_read_only_diagnosis",
-    "next_gate": "Identify exact live baseline read/validation failure using a separately reviewed zero-application-write diagnostic; preserve both failed journals.",
+    "status": "hosted_accepted_closure_publication",
+    "next_gate": "Verify closure remote head/checks, then collect board feedback on live M76 before a dependent California milestone.",
     "evidence": [
-      "docs/research/scope1-completion-matrix.md"
+      "evaluations/research-qa/m76-hosted-acceptance.md",
+      "docs/research/m76-hosted-browser-verification.json",
+      "docs/research/m76-publication.json"
     ]
   },
   "completed_milestones": [
@@ -113,6 +115,18 @@
       "id": "M74",
       "completed_at": "2026-09-15",
       "feedback": "operations/feedback/2026-09-15-m74-live-migration-approval.md"
+    },
+    {
+      "id": "M75",
+      "completed_at": "2026-09-16T17:38:11.121455+00:00",
+      "evidence": "docs/research/m75-publication.json",
+      "board_feedback": "accepted_keep_moving"
+    },
+    {
+      "id": "M76",
+      "completed_at": "2026-09-16T17:38:11.121455+00:00",
+      "evidence": "docs/research/m76-publication.json",
+      "board_feedback": "awaiting_current_demonstration_feedback"
     }
   ],
   "runtime": {
@@ -120,16 +134,16 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M67 hosted and workflow accepted; M68 under implementation, not deployed.",
+    "website_preview_state": "M76 live on152fcb0/schema19; corrected stationary reconciliation verified before/after actual restart.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M71 backend/rootUI active; security/QA scoped reviews active. LocalPG55463running; no persistent agents."
+    "last_session_work": "Root completed hosted verification; specialist implementation and review assignments complete. No dependent worker dispatched."
   },
   "session_handoff": {
-    "current": "M70 accepted; M71 California-first saved coverage implementation active.",
-    "next": "Native/API/browser implementation, independent security/QA, preservation and recovery before publication/demonstration.",
+    "current": "M76 hosted correction, restart, revisit and independent acceptance passed; closure publication being verified.",
+    "next": "Verify final publication receipt/head/checks; collect board demonstration feedback before dependent work.",
     "evidence": [
-      "docs/research/corporate-coverage-milestone-71.md",
-      "operations/feedback/2026-09-15-milestone-70.md"
+      "docs/research/m76-publication.json",
+      "operations/next-session.md"
     ]
   },
   "checkpoint": {
@@ -218,7 +232,14 @@
     "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5",
     "active_rolling_branch": "codex/corporate-mvp",
     "active_rolling_pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
-    "m75_state": "live_independently_accepted_implementation_7e9abd2_six_checks_pass_closure_head_verified_separately"
+    "m75_state": "live_independently_accepted_implementation_7e9abd2_six_checks_pass_closure_head_verified_separately",
+    "current_m76": {
+      "implementation": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+      "verification": "33ad2c7378e5e474917e6bba99d7f9940e2da704",
+      "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+      "status": "hosted_accepted_closure_checks_follow",
+      "evidence": "docs/research/m76-publication.json"
+    }
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -2710,19 +2731,17 @@
     "board_feedback": "Browser looks good; keep moving."
   },
   "current_m76": {
-    "status": "fresh_full_baseline_running",
+    "status": "complete_awaiting_board_demo_feedback",
     "baseline": "32e1d7b879e58eabc0789552f61298a608c3f228",
     "hosted_schema": 19,
     "hosted_changes": true,
-    "active_assignments": [
-      "M76-HOSTED-ACCEPTANCE"
-    ],
+    "active_assignments": [],
     "board_feedback_received": true,
-    "next": "Independently review explicit new-journal continuation, fresh full live baseline,21 reviewed additive operations, actual restart and zero-write revisit, final browser/acceptance/closure.",
+    "next": "Final closure head/check verification then board feedback; no dependent milestone started.",
     "planning_snapshot": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
     "root_ui": "Actual local browser correction, separate review, exact HTML/JSON downloads and restart/history passed on final SQL19.",
     "migration_sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
-    "auto_deploy": "paused_before_publication",
+    "auto_deploy": "restored_and_verified",
     "hosted_baseline": "passed_zero_application_posts_all_verification_sessions_closed",
     "recovery": "Fresh hosted18 encrypted restore and independent18/19 runtime replay passed; private receipts retained.",
     "accepted_snapshot": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
@@ -2739,6 +2758,21 @@
     "prior_baseline_failure_cause": "unreproduced_unknown",
     "continuation_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-CONTINUATION-CANDIDATE1.json",
     "continuation_review": "evaluations/research-qa/m76-hosted-continuation-review.md",
-    "hosted_continuation_baseline": "running_started_2026-09-16T16:21:03Z"
+    "hosted_continuation_baseline": "passed_actual_transport_zero_posts_all_sessions_closed",
+    "continuation_published_head": "33ad2c7378e5e474917e6bba99d7f9940e2da704",
+    "continuation_checks": "all_six_passed",
+    "hosted_continuation_exercise": "passed_21_verified_posts_all_downloads_all_sessions_closed",
+    "performance_observation": {
+      "evidence": ".superpowers/m76-baseline-diagnostic-1789574873811.jsonl",
+      "observed_routes": 80,
+      "median_ms": 3986,
+      "maximum_ms": 13162,
+      "scope": "One actual read-only diagnostic, not a benchmark. Saved report download validation incurs multiple reads. Investigate latency as a future refinement; no change to accepted verification or runtime during this correction."
+    },
+    "actual_restart": "passed_new_startup_exact_image_ready19",
+    "post_restart_revisit": "passed_zero_posts_exact_history_all_sessions_closed",
+    "hosted_browser": "passed_corrected_state_downloads_and_post_restart_view",
+    "publication": "docs/research/m76-publication.json",
+    "hosted_acceptance": "evaluations/research-qa/m76-hosted-acceptance.md"
   }
 }

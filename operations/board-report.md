@@ -1,3 +1,23 @@
+# M76 live and independently accepted
+
+Stationary equipment and fuel coverage is complete for the bounded synthetic California example. The reviewed correction retains all earlier records, separately reviews the three fuel workpapers, and reconciles the boiler, heater and fixed fossil-diesel generator. Five equipment versions/reports and three generator versions/reports preserve blocked, pending and accepted histories. All 21 corrective operations and 87 keyed download observations passed. The original failed exercise and the zero-write failed baseline remain unchanged; their history is not relabeled as success.
+
+The actual service restart and full zero-write revisit passed, with all verification sessions closed. The signed-in browser verified final reconciliation before and after restart, historical pending reviews, and six exact downloaded files. Independent acceptance: evaluations/research-qa/m76-hosted-acceptance.md. Publication: docs/research/m76-publication.json. Live application 152fcb0 / schema 19 is unchanged; the reviewed verification commit 33ad2c7 passed all six checks. Automatic deployment is restored. Root must verify the closure commit remote head and six required checks before reporting publication complete; the final receipt is .superpowers/m76-final-publication.json.
+
+No worker is assigned to a dependent milestone. Board feedback on the open stationary-equipment demonstration is next. California corporate reporting remains first; complete Scope 1, 2 and 3, released methods, requirements and assurance remain unfinished. Report-loading latency is a refinement item. Physical print/PDF pagination remains unverified. Earlier sections are historical.
+
+# M76 correction and restart passed; read-only revisit running
+
+All21 reviewed corrective POSTs and the full retained-download sweep passed at2026-09-16T17:00:34Z, with all created Auth sessions closed. The continuation journal has a70-event completed-exercise prefix, terminal4c1b93ee2bebea58ededf058ba8ab39b7f6fc9bf6ead0a6432d016029203facd. Independent review verified all21steps, original versions/downloads, corrected calculation and captured absent reviews. Actual browser showed final three-device reconciliation and historical pending-review report; six actual downloaded files matched retained bytes.
+
+Root restarted the exact live deployment: new startup17:01:45Z, SUCCESS on152fcb0 and the same image, ready200/schema19/legacy containment at17:02:06Z. Evidence .superpowers/m76-hosted-restart.json. The same reviewed wrapper's zero-write revisit is running; do not start another invocation or reset any journal. Root owns host/Git/browser, /root/m76_accounting independently reviews completion. Remaining: revisit closure, post-restart browser, final hosted acceptance, restore automatic deployment, publish closure and allsix finalchecks. Automatic deployment remains paused. No dependent milestone before board demonstration feedback. Earlier sections are historical.
+
+# M76 full live baseline passed; reviewed correction running
+
+The fresh actual-transport baseline passed at2026-09-16T16:29:36Z with zero application POSTs and all created Auth sessions closed. It is recorded in the first four events of .superpowers/m76-hosted-continuation.jsonl, terminal fbbce8ded322365465459160162612b631753eb63c1aa059aebf91254cebeae0. Both earlier failed attempts remain unchanged. The published wrapper commit33ad2c7378e5e474917e6bba99d7f9940e2da704 passed all six required checks.
+
+Root started the reviewed21-operation exercise in the same new journal. Do not start another writer or retry any failed/uncertain attempt. /root/m76_accounting independently reviews actual evidence. After correction completion: actual service restart, zero-write revisit, final browser, independent hosted acceptance, restore automatic deployment and publish closure. Live152fcb0/schema19 remains unchanged; automatic deployment paused. No dependent milestone. Earlier sections are historical.
+
 # M76 explicit continuation accepted; full live baseline running
 
 The diagnostic and separate-journal wrapper passed independent review and targeted guard/integration tests. Snapshot M76-HOSTED-CONTINUATION-CANDIDATE1 binds five exact files; review is evaluations/research-qa/m76-hosted-continuation-review.md. Root started the fresh full actual-transport baseline at2026-09-16T16:21:03Z in .superpowers/m76-hosted-continuation.jsonl. Both failed attempts remain unchanged and failed; prior baseline cause remains unknown. No21 corrective writes have occurred.

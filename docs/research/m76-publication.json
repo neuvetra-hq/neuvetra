@@ -1,0 +1,108 @@
+{
+  "observedAt": "2026-09-16T17:38:11.121455+00:00",
+  "status": "live_independently_accepted_closure_publication_checks_follow",
+  "draftPr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "implementationCommit": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+  "verificationCommit": "33ad2c7378e5e474917e6bba99d7f9940e2da704",
+  "deploymentId": "d9e200ed-7f08-4547-921e-64d7b77f24fa",
+  "imageDigest": "sha256:b5f85ab871bd19f4cbf5953cfa1a93f1d7060bf5aef6cbf5d662cf7c82b7fe6f",
+  "schemaVersion": 19,
+  "migrationSha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
+  "oldTablesPreservedAtMigration": 90,
+  "oldRowsPreservedAtMigration": 292,
+  "newInitiallyEmptyTables": 15,
+  "oldTableChange": "Exact reviewed mobile fuel-reference BEFORE INSERT guard; prior rows/functions/application ACLs preserved",
+  "failedAttemptsPreserved": [
+    {
+      "attempt": "original_exercise",
+      "applicationPostRequests": 18,
+      "unexpectedOutcome": "equipment review returned422 for inherited unresolved boiler screening",
+      "status": "failed_preserved"
+    },
+    {
+      "attempt": "first_recovery_baseline",
+      "applicationPostRequests": 0,
+      "cause": "unreproduced_unknown",
+      "status": "failed_preserved"
+    }
+  ],
+  "additiveCorrection": {
+    "applicationPostRequests": 21,
+    "verifiedWrites": 21,
+    "equipmentVersions": 5,
+    "equipmentReports": 5,
+    "generatorVersions": 3,
+    "generatorReports": 3,
+    "matchedReviewedRows": 3,
+    "downloadObservationsByFamily": {
+      "corporate": 7,
+      "gas": 14,
+      "mobile": 17,
+      "fleet": 14,
+      "diesel": 12,
+      "equipment": 23
+    },
+    "allCreatedAuthSessionsClosed": true,
+    "originalExerciseRemainsFailed": true
+  },
+  "actualRestart": {
+    "status": "m76_actual_service_restart_observed",
+    "observedAt": "2026-09-16T17:02:13.070902+00:00",
+    "requestedAt": "2026-09-16T17:01:21.437271+00:00",
+    "deploymentId": "d9e200ed-7f08-4547-921e-64d7b77f24fa",
+    "deploymentStatus": "SUCCESS",
+    "commit": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+    "image": "sha256:b5f85ab871bd19f4cbf5953cfa1a93f1d7060bf5aef6cbf5d662cf7c82b7fe6f",
+    "restartMutationAcknowledged": true,
+    "actualStartupEvent": {
+      "profile": "neuvetra.private-synthetic-staging.v1",
+      "level": "info",
+      "event": "staging_started",
+      "message": "",
+      "timestamp": "2026-09-16T17:01:45.155119189Z"
+    },
+    "ready": {
+      "observedAt": "2026-09-16T17:02:06.092207+00:00",
+      "httpStatus": 200,
+      "body": {
+        "status": "ready",
+        "profile": "neuvetra.private-synthetic-staging.v1",
+        "schemaVersion": 19,
+        "legacyContainmentVerified": true
+      }
+    }
+  },
+  "postRestartRevisit": {
+    "status": "actual_post_restart_revisit_passed",
+    "observedAt": "2026-09-16T17:30:52.178011+00:00",
+    "completedAt": "2026-09-16T17:29:32.791Z",
+    "journal": ".superpowers/m76-hosted-continuation.jsonl",
+    "eventCount": 73,
+    "journalSha256": "836aa21776e0ea6dc847463ffb15f44a89175b74b9a896835eef8efe103fdf82",
+    "terminalSha256": "60fe0f9dd5d9db08c468de3f2afa227879d031b4318591b8e81bdf5cae924da7",
+    "applicationPostRequests": 0,
+    "allCreatedAuthSessionsClosed": true,
+    "actualRestartReceipt": ".superpowers/m76-hosted-restart.json",
+    "bothFailedAttemptsPreserved": true
+  },
+  "browserEvidence": "docs/research/m76-hosted-browser-verification.json",
+  "independentReview": "evaluations/research-qa/m76-hosted-acceptance.md",
+  "requiredVerificationChecks": "all_six_passed",
+  "automaticDeployment": "restored_and_verified",
+  "limits": [
+    "Synthetic California corporate office/distribution example only",
+    "Complete Scope1 and corporate inventory remain incomplete; no aggregate emissions",
+    "Factors and methods remain development candidates",
+    "No filing/compliance determination or external assurance",
+    "Physical print and PDF pagination unverified",
+    "Observed live report latency remains a refinement item",
+    "Application-only recovery does not establish provider Auth/configuration/storage recovery"
+  ],
+  "independentReviewSha256": "a66800ba5fab80d7021d77f99ac392c249f0cfcc37a3eedb20f86a90f59b8c1a",
+  "acceptedSnapshots": [
+    "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
+    "operations/agent-improvement/snapshots/M76-CI-COMPATIBILITY1.json",
+    "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json",
+    "operations/agent-improvement/snapshots/M76-HOSTED-CONTINUATION-CANDIDATE1.json"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "observedAt": "2026-09-16T15:34:12.895019+00:00",
-  "status": "partial_before_additive_correction",
+  "status": "corrected_state_and_post_restart_browser_verified",
   "url": "https://www.neuvetra.ai/",
   "browser": "Existing authorized Chrome session; no credentials entered or new account created",
   "deployedCommit": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
@@ -11,7 +11,12 @@
     "After source workpapers and declaration2, heater and generator showed matched reviewed while the boiler retained its unresolved corporate screening finding.",
     "Generator version1 showed1000.000USgallons and10240.0140kgCO2e, separate accepted bounded internal review and retained report.",
     "Actual generator HTML download matched the saved response bytes.",
-    "Generator page visually inspected at390x844; documentWidth375, viewport390, no horizontal document overflow; viewport reset."
+    "Generator page visually inspected at390x844; documentWidth375, viewport390, no horizontal document overflow; viewport reset.",
+    "Actual refreshed roster version5 showed3declared rows,3registered stationary sources,3saved workpapers,3matched reviewed rows and no row findings.",
+    "Actual version5 report dialog and iframe showed accepted_bounded_reconciliation and no reconciliation blockers, with synthetic/incomplete/method/assurance limitations visible.",
+    "Actual historical version4 report remained unreviewed after later source acceptance, with generator workpaper_incomplete and workpaper_review_required/roster_review_required captured findings.",
+    "Actual generator version3 showed1001.000USgallons,138.138MMBtuHHV and10250.2540kgCO2e with separate accepted bounded internal review.",
+    "After the actual service startup17:01:45Z, ordinary browser reload restored the existing authorized session. Corporate version7 loaded; stationary view showed version5 with3matched reviewed rows/no findings, all5history choices, accepted bounded review and the retained final report. No browser application writes."
   ],
   "downloads": [
     {
@@ -34,14 +39,37 @@
       "byteLength": 35516,
       "sha256": "7f847d025100ab4e26cdb90ef0d1fc33d879dc1ae9ce2914ad8a892d237d5fd4",
       "matchesRetainedReport": true
+    },
+    {
+      "kind": "report_final_equipment_html",
+      "reportId": "675bc841-e1ff-4293-95b5-e8bf97ad8ec9",
+      "byteLength": 32253,
+      "sha256": "781e4b783be96ef244b4f3ffdff3c31a7927e4ba42e43a2d7efd4b3b36dd7071",
+      "matchesRetainedReport": true
+    },
+    {
+      "kind": "report_final_equipment_json",
+      "reportId": "675bc841-e1ff-4293-95b5-e8bf97ad8ec9",
+      "byteLength": 21188,
+      "sha256": "9bd81e455521f740615850f89479f2cbfc5ce67343dcada6020529fd88b979c5",
+      "matchesRetainedReport": true
+    },
+    {
+      "kind": "report_corrected_generator_html",
+      "reportId": "2bc25376-c277-47f4-a090-c5e524a9fbeb",
+      "byteLength": 72511,
+      "sha256": "fca3c3755a8353dc50b7cb91f8fc73a71ac290266c78ef8df552619a87c7f8fe",
+      "matchesRetainedReport": true
     }
   ],
   "browserApplicationWrites": 0,
   "printPreview": "Print report invoked the report dialog, but browser automation could not inspect the native preview and CDP timed out. Escape did not establish dismissal; ordinary reload restored the page. No physical print or PDF pagination verified.",
-  "postRestart": "pending",
-  "finalReconciliation": "pending",
+  "postRestart": "passed_reload_session_restored_version5_three_matched_reviewed_final_report_retained",
+  "finalReconciliation": "verified_actual_browser_version5_three_matched_reviewed",
   "limitations": [
     "Synthetic profile only; no complete Scope1, corporate inventory, method release, legal compliance or external assurance.",
-    "This is a partial browser observation; final recovery/restart acceptance remains pending."
-  ]
+    "Actual corrected-state browser and exact downloads passed; final reconciliation also passed after restart. Full automated post-restart read-only sweep passed with all verification sessions closed."
+  ],
+  "correctedStateObservedAt": "2026-09-16T16:55:25.925031+00:00",
+  "postRestartObservedAt": "2026-09-16T17:04:00.684883+00:00"
 }
