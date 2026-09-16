@@ -1,0 +1,30 @@
+import type { M77PopulationDeclaration, M77PhysicalAsset, M77Register } from '../../../../packages/neuvetra-database/src/m77-contract'
+import { equipmentChoices } from '@/lib/m77-form'
+
+export function FugitivePopulationEditor({value,register,onChange,disabled}:{value:M77PopulationDeclaration;register:M77Register;onChange:(v:M77PopulationDeclaration)=>void;disabled:boolean}) {
+  const patch=(v:Partial<M77PopulationDeclaration>)=>onChange({...value,...v})
+  const asset=(i:number,v:Partial<M77PhysicalAsset>)=>patch({assets:value.assets.map((a,n)=>i===n?{...a,...v}:a)})
+  const coverage=register.coverageVersion?.snapshot
+  const retainedAssetIds=new Set(register.population.versions.flatMap(v=>v.activity.declaration?.assets.map(a=>a.assetId)??[]))
+  return <fieldset disabled={disabled} className="stationary-editor"><legend>Physical fugitive-equipment declaration</legend>
+    <p>Discover equipment independently of completed workpapers. Include HVAC, refrigeration, fixed and portable fire protection, vehicle air conditioning, and refrigerated transport. Unsupported devices stay visible.</p>
+    <div className="stationary-fields">{(['issuer','reference','description','discoveryBasis'] as const).map(key=><label key={key}>{{issuer:'Statement issuer',reference:'Statement reference',description:'Statement description',discoveryBasis:'How all equipment was identified'}[key]}<textarea value={value[key]} onChange={e=>patch({[key]:e.target.value})}/></label>)}<label>Population completeness<select value={value.completeness} onChange={e=>patch({completeness:e.target.value as M77PopulationDeclaration['completeness']})}><option value="unknown">Unknown</option><option value="partial">Partial list</option><option value="declared_complete">Declared complete equipment list</option></select></label></div>
+    <fieldset><legend>Entities inspected</legend>{coverage?.entities.map(v=><label className="stationary-check" key={v.id}><input type="checkbox" checked={value.coveredEntityIds.includes(v.id)} onChange={e=>patch({coveredEntityIds:e.target.checked?[...value.coveredEntityIds,v.id]:value.coveredEntityIds.filter(id=>id!==v.id)})}/>{v.legalName}</label>)}</fieldset>
+    <fieldset><legend>Facilities inspected</legend>{coverage?.facilities.map(v=><label className="stationary-check" key={v.id}><input type="checkbox" checked={value.coveredFacilityIds.includes(v.id)} onChange={e=>patch({coveredFacilityIds:e.target.checked?[...value.coveredFacilityIds,v.id]:value.coveredFacilityIds.filter(id=>id!==v.id)})}/>{v.name}</label>)}</fieldset>
+    <label className="stationary-check"><input type="checkbox" checked={value.controlledFleetChecked} onChange={e=>patch({controlledFleetChecked:e.target.checked})}/>The controlled fleet was checked for air conditioning and refrigerated transport.</label>
+    <label className="stationary-check"><input type="checkbox" checked={value.allControlledLocationsIncluded} onChange={e=>patch({allControlledLocationsIncluded:e.target.checked})}/>All controlled locations are included, including any unsupported locations.</label>
+    {value.assets.map((a,i)=><details className="stationary-asset" key={i} open><summary>Equipment {i+1}: {a.assetId||'Identity missing'}</summary><div className="stationary-fields">
+      <label>Equipment identifier<input disabled={retainedAssetIds.has(a.assetId)} value={a.assetId} onChange={e=>asset(i,{assetId:e.target.value})}/></label>
+      <label>Entity<select value={a.entityId} onChange={e=>asset(i,{entityId:e.target.value,facilityId:null,sourceId:null})}><option value="">Select entity</option>{coverage?.entities.map(v=><option key={v.id} value={v.id}>{v.legalName}</option>)}</select></label>
+      <label>Facility<select value={a.facilityId??''} onChange={e=>asset(i,{facilityId:e.target.value||null,sourceId:null})}><option value="">Unknown or mobile</option>{coverage?.facilities.filter(f=>f.entityId===a.entityId).map(v=><option key={v.id} value={v.id}>{v.name}</option>)}</select></label>
+      <label>Equipment type<select value={a.equipment} onChange={e=>asset(i,{equipment:e.target.value as M77PhysicalAsset['equipment']})}>{equipmentChoices.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label>
+      <label>Gas identity<input value={a.gas??''} onChange={e=>asset(i,{gas:e.target.value||null})}/></label>
+      <label>Proper charge (kg)<input inputMode="decimal" value={a.capacityKg??''} onChange={e=>asset(i,{capacityKg:e.target.value||null})}/></label>
+      <label>Control status<select value={a.controlBasis} onChange={e=>asset(i,{controlBasis:e.target.value as M77PhysicalAsset['controlBasis']})}><option value="unknown">Unknown</option><option value="owned_operational_control_full_year">Owned and operationally controlled throughout the year</option><option value="partial_year">Partial year — unsupported</option><option value="other">Other — unsupported</option></select></label>
+      <label>Corporate source match<select value={a.sourceId??''} onChange={e=>asset(i,{sourceId:e.target.value||null})}><option value="">No match identified</option>{coverage?.sources.filter(v=>v.domain==='fugitive').map(v=><option key={v.id} value={v.id}>{v.name}</option>)}</select></label>
+      <label>Identity, control and evidence explanation<textarea value={a.explanation} onChange={e=>asset(i,{explanation:e.target.value})}/></label>
+    </div>{retainedAssetIds.has(a.assetId)?<p>This saved equipment identity remains in the declaration. Correct its facts and explanation here; removal or retirement requires a supported method.</p>:<button type="button" onClick={()=>patch({assets:value.assets.filter((_,n)=>i!==n)})}>Remove unsaved equipment row {i+1}</button>}</details>)}
+    <p>{value.assets.length} equipment rows. This bounded demonstration supports up to 25; a larger population must not be truncated to obtain acceptance.</p>
+    <button type="button" disabled={value.assets.length>=25} onClick={()=>patch({assets:[...value.assets,{assetId:'',entityId:'',facilityId:null,equipment:'unknown',gas:null,capacityKg:null,controlBasis:'unknown',explanation:'',sourceId:null}]})}>Add equipment</button>
+  </fieldset>
+}

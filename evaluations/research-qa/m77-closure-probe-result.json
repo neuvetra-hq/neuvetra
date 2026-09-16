@@ -1,0 +1,15 @@
+{
+  "task": "M77-INDEPENDENT-QA",
+  "database": "m77_author_qa_closure_1789596888008",
+  "createdAt": "2026-09-16T22:14:59.464Z",
+  "observations": {
+    "sourceContributorReviewStatus": 403,
+    "populationSourceContributorReviewStatus": 403,
+    "clientCapturedContributorOmissionAccepted": true,
+    "clientCapturedDependencySwapAccepted": true,
+    "supersededEventReuseStatus": 409,
+    "supersededContractorReferenceReuseStatus": 409
+  },
+  "hostedEvidence": false,
+  "status": "client_closure_finding_reproduced"
+}

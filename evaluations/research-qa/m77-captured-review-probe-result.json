@@ -1,0 +1,12 @@
+{
+  "status": "captured_review_finding_reproduced",
+  "database": "m77_author_qa_review_1789597658846",
+  "createdAt": "2026-09-16T22:27:44.727Z",
+  "browserApiSha256": "6eebd38ce654efec2b4c45cf672c130f0ea0a6982ef6e5486c13433189c07b65",
+  "currentApiUnchanged": true,
+  "sameRetainedVersionCore": true,
+  "differentCapturedReviewDecisionSha256": true,
+  "registerAccepted": true,
+  "scope": "client_register_object_only; native_backend_and_download_transport_unmodified",
+  "hostedEvidence": false
+}

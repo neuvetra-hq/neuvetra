@@ -176,3 +176,14 @@ apps/site-web/src/m71-local-preview.tsx
 !apps/site-api/src/workspace/m76-routes.ts
 !apps/site-api/src/calculation/m76-authority.ts
 !apps/site-api/src/calculation/m76_stationary_diesel.py
+
+!packages/neuvetra-database/src/m77.ts
+!packages/neuvetra-database/src/m77-contract.ts
+!packages/neuvetra-database/src/m77-validation.ts
+!packages/neuvetra-database/src/m77-report.ts
+!packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql
+!apps/site-api/src/workspace/m77-routes.ts
+!apps/site-api/src/calculation/m77-authority.ts
+!apps/site-api/src/calculation/m77_fugitive.py
+!tools/staging/
+!tools/staging/m77-image-smoke.ts

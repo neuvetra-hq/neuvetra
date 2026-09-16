@@ -1,3 +1,4 @@
+import {readFugitive,saveFugitiveSource,saveFugitivePopulation,reviewFugitive,createFugitiveReport,type M77Authority,type M77SourceSaveInput,type M77PopulationSaveInput,type M77ReviewInput,type M77ReportInput,type M77Family} from './m77'
 import {readStationaryEquipment,readStationaryEquipmentReport,readStationaryEquipmentReportProof,saveStationaryEquipment as storeStationaryEquipment,reviewStationaryEquipment as storeStationaryEquipmentReview,createStationaryEquipmentReport as storeStationaryEquipmentReport,type M76Authorities,type M76SaveInput,type M76ReviewInput,type M76ReportInput} from './m76'
 import {readStationaryDiesel,saveStationaryDiesel as storeStationaryDiesel,reviewStationaryDiesel as storeStationaryDieselReview,createStationaryDieselReport as storeStationaryDieselReport,type M76DieselAuthority,type M76DieselSaveInput,type M76DieselReviewInput,type M76DieselReportInput} from './m76-diesel'
 import {readControlledFleet,readControlledFleetReport,readControlledFleetReportProof,saveControlledFleet as storeControlledFleet,reviewControlledFleet as storeControlledFleetReview,createControlledFleetReport as storeControlledFleetReport,type M75SaveInput,type M75ReviewInput,type M75ReportInput} from './m75'
@@ -297,6 +298,12 @@ export interface WorkspaceConnection extends WorkspaceSql {
 
 export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
+
+  async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}
+  async saveFugitiveSource(userId:string,companyId:string,streamId:string|null,input:M77SourceSaveInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>saveFugitiveSource(tx,userId,companyId,streamId,input,authority))}
+  async saveFugitivePopulation(userId:string,companyId:string,streamId:string|null,input:M77PopulationSaveInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>saveFugitivePopulation(tx,userId,companyId,streamId,input,authority))}
+  async reviewFugitive(userId:string,companyId:string,streamId:string,family:M77Family,input:M77ReviewInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>reviewFugitive(tx,userId,companyId,streamId,family,input,authority))}
+  async createFugitiveReport(userId:string,companyId:string,streamId:string,family:M77Family,input:M77ReportInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>createFugitiveReport(tx,userId,companyId,streamId,family,input,authority))}
 
   async findStationaryEquipment(userId:string,companyId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipment(tx,companyId,authority))}
   async findStationaryEquipmentReport(userId:string,companyId:string,rosterId:string,reportId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipmentReport(tx,companyId,rosterId,reportId,authority))}

@@ -1,5 +1,6 @@
 import { StationaryEquipment } from "./StationaryEquipment"
 import { StationaryGenerator } from "./StationaryGenerator"
+import { FugitiveWorkpapers } from "./FugitiveWorkpapers"
 import { useState, type RefObject } from "react"
 import { CompanyWorkspaceDemo } from "./CompanyWorkspaceDemo"
 import { AnnualElectricityWorksheet } from "./AnnualElectricityWorksheet"
@@ -13,7 +14,7 @@ import { ControlledFleet } from "./ControlledFleet"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
 export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
-  const [panel, setPanel] = useState<"corporate" | "gas" | "generator" | "stationary" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example">("corporate")
+  const [panel, setPanel] = useState<"corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example">("corporate")
   return <>
     <nav className="worksheet-nav" aria-label="Workspace views">
       <button type="button" aria-pressed={panel === "corporate"} onClick={() => setPanel("corporate")}>Corporate coverage</button>
@@ -22,6 +23,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
       <button type="button" aria-pressed={panel === "stationary"} onClick={() => setPanel("stationary")}>Stationary equipment coverage</button>
       <button type="button" aria-pressed={panel === "mobile"} onClick={() => setPanel("mobile")}>Mobile diesel vehicles</button>
       <button type="button" aria-pressed={panel === "fleet"} onClick={() => setPanel("fleet")}>Fleet reconciliation</button>
+      <button type="button" aria-pressed={panel === "fugitive"} onClick={() => setPanel("fugitive")}>Refrigerants and fire suppression</button>
       <button type="button" aria-pressed={panel === "evidence"} onClick={() => setPanel("evidence")}>Annual electricity and bills</button>
       <button type="button" aria-pressed={panel === "annual"} onClick={() => setPanel("annual")}>Full-year electricity</button>
       <button type="button" aria-pressed={panel === "source"} onClick={() => setPanel("source")}>Bill-linked worksheet</button>
@@ -34,6 +36,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     {panel === "stationary" && <StationaryEquipment key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onNavigate={setPanel} />}
     {panel === "mobile" && <MobileDiesel key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "fleet" && <ControlledFleet key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onNavigate={setPanel} />}
+    {panel === "fugitive" && <FugitiveWorkpapers actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "evidence" && <AnnualElectricityEvidence actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onEntries={() => setPanel("annual")} />}
     <div hidden={panel !== "annual"}><AnnualElectricityWorksheet actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} /></div>
     <div hidden={panel !== "source"}><SourceElectricityWorksheet actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} /></div>

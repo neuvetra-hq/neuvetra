@@ -1,3 +1,17 @@
+# M77 application accepted; release controls in progress
+
+Independent application review passed candidate3 (28 exact LF files) after F01–F04 repairs: 404 native assertions and8 independent calculator tests. Review evaluations/research-qa/m77-integrated-review.md; snapshot operations/agent-improvement/snapshots/M77-APPLICATION-CANDIDATE3.json. Canonical SQL20 hash11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc. /root/m76_cto completed application review and is available, not currently assigned. /root/m76_backend actively prepares M77-OPERATORS (encrypted recovery); /root/m77_backend actively prepares M77-HOSTED-JOURNEY (fixed synthetic recipe/guarded journal), no live actions. Root finishes browser: fresh m77_author_root_ui3, narrow390px fits, unsupported officefire gas stays visible, blocked report HTML/JSON actual downloads exactly match retained bytes. Final access/restart/correction checks continue. Root may publish this reviewed application increment onrollingPR5, without calling fullM77 complete. Live remains M76/schema19; no upgrade attempted. Earlier sections historical.
+
+# M77 integration under independent review
+
+/root/m76_cto accepted actual M77-INDEPENDENT-QA dispatch after fresh QA and historical CPO routes hit the runtime thread limit. It did not author M77. Inherited compute routing exception is disclosed; observed settings unknown. /root/m77_backend has passed 89 author native assertions and schema19-to20 old-row preservation, with final evidence handoff pending. Root actual browser saved a 2kg R410A correction with linked 1kg prior leak: 3848.0000 kg CO2e, separate source review and stale population findings verified. Local fixture m77_author_root_ui1 only. Root continues browser/packaging; reviewer is challenging physical-discovery retention and proof integrity. No M77 live changes. Full milestone and Scope1 remain unfinished. Earlier sections are historical.
+
+# M77 integrated workpapers and population in progress
+
+The board accepted the offline foundation and explicitly requested planning and execution of the next increment toward complete Scope1. Foundation b0504e0 passed all six remote checks; .superpowers/m77-foundation-publication.json records publication. /root/m77_backend is dispatched for persistent source workpapers, physical population reconciliation, authority, additive SQL20 candidate and native tests. Root owns frontend forms/decoding, server mounting, integration, shared records, Git and host.
+
+Fresh QA spawn and historical CPO followup were both rejected by the runtime agent-thread limit; no QA worker started. Independent integrated release review remains a gate. No M77 live migration or deployment has been attempted. Complete M77 and full Scope1 remain unfinished. Earlier sections are historical.
+
 # M77 offline foundation accepted; integration remains pending
 
 The board accepted the M76 browser demonstration and authorized continued California work. The first M77 increment now has source-pinned candidate rules and an unmounted deterministic calculator for admitted HVAC, refrigeration and fire-suppression gases. Eight author tests and eight independent tests passed. Independent review corrected servicing-loss semantics and release/refill chronology; initial findings are retained in docs/research/m77-accounting-review.md. This is not full M77 or a released method.

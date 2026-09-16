@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T19:10:09.506061+00:00",
+  "updated_at": "2026-09-16T22:32:39.525743+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M77",
     "name": "Refrigerants and other fugitive-source coverage",
-    "status": "offline_foundation_reviewed_integration_pending",
-    "next_gate": "Publish reviewed offline foundation on rolling PR5 and verify checks; full M77 persistence/reconciliation/UI and independent integrated QA remain pending.",
+    "status": "integration_in_progress",
+    "next_gate": "Complete persistent fugitive workpapers, population reconciliation and UI; obtain independent integrated review before publication/deployment.",
     "evidence": [
       "operations/feedback/2026-09-16-m76.md",
       "docs/research/m77-product-brief.md"
@@ -135,7 +135,7 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "M76 live on152fcb0/schema19; corrected stationary reconciliation verified before/after actual restart.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M77 offline calculation foundation independently reviewed; one delegate completed. Full M77 integration pending; no M77 host/database actions."
+    "last_session_work": "M77 backend dispatched; root UI/integration active. Additional independent reviewer dispatch rejected by runtime; release gate pending."
   },
   "session_handoff": {
     "current": "M76 hosted correction, restart, revisit and independent acceptance passed; closure publication being verified.",
@@ -1598,6 +1598,15 @@
       "evidence": [
         "operations/agent-improvement/runs/M77-FOUNDATION.json"
       ]
+    },
+    {
+      "id": "M77-BACKEND",
+      "owner": "/root/m77_backend",
+      "status": "in_progress",
+      "scope": "Persistent source and population lifecycle, SQL20 candidate, authority and native tests; no live/Git actions",
+      "evidence": [
+        "operations/agent-improvement/runs/M77-BACKEND.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2794,15 +2803,24 @@
     "closure_published_head": "2fec9c40dca45bcef3590db82c8647d31459ef3e"
   },
   "current_m77": {
-    "status": "offline_foundation_reviewed_publication_pending",
+    "status": "integration_in_progress",
     "baseline": "2fec9c40dca45bcef3590db82c8647d31459ef3e",
     "hosted_schema": 19,
     "hosted_changes": false,
-    "active_assignments": [],
-    "coordinator_work": "Candidate source/accounting contract and technical preparation",
-    "routing_exception": "Accounting fresh spawn and historical accounting followup both rejected: agent thread limit reached. Neither started. Root takes preparation; m77_cpo remains the only dispatched active delegate. Requested compute is not observed compute.",
+    "active_assignments": [
+      "M77-HOSTED-JOURNEY",
+      "M77-OPERATORS"
+    ],
+    "coordinator_work": "Source/population forms, frontend decoder, server mounting, backend review and integration",
+    "routing_exception": "Two fresh QA dispatches and historical CPO followup hit agent-thread limit. Followup to independent historical m76_cto succeeded; inherited prior compute, observed settings unavailable. Reviewer is active.",
     "foundation_snapshot": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
     "review": "docs/research/m77-accounting-review.md",
-    "next": "Publish reviewed foundation; then implement persistent source workpapers and independent population reconciliation. Full M77 remains open."
+    "next": "Publish independently reviewed application increment; finish physical browser verification, independent operator/journey review, recovery, actual hosted rollout/restart and demonstration. FullM77 incomplete.",
+    "foundation_published_head": "b0504e0de27813553b7f6a63e4ed47a513740147",
+    "foundation_checks": "six_pass",
+    "root_ui": "Local actual-browser source correction with preceding leak saved 3848.0000 kg CO2e from 2kg R410A without double counting; separate review saved. More UI checks pending.",
+    "local_review": "evaluations/research-qa/m77-integrated-review.md",
+    "application_snapshot": "operations/agent-improvement/snapshots/M77-APPLICATION-CANDIDATE3.json",
+    "migration_sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc"
   }
 }

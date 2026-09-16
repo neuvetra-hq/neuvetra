@@ -27,7 +27,9 @@ test('canonical eighteen receipts; malformed, old, reordered and foreign target 
  const m=await readMigrationManifest(),receipts=m.slice(0,18).map(({name,sha256})=>({name,sha256}))
  expect(hashManifestValue(receipts)).toBe(BASELINE_MANIFEST_SHA256)
  const tx=(rows:unknown[],project=PROJECT)=>({query:async(sql:string)=>({rows:sql.includes('schema_migrations')?rows:[{project_ref:project,profile:'neuvetra.private-synthetic-staging.v1'}]})}) as any
- expect((await canonicalReceipts(tx(receipts),18)).length).toBe(m.length)
+ // Frozen M76 operators must refuse a checkout with later migrations.
+ if(m.length>19)await expect(canonicalReceipts(tx(receipts),18)).rejects.toThrow()
+ else expect((await canonicalReceipts(tx(receipts),18)).length).toBe(m.length)
  for(const rows of [receipts.slice(0,16),[...receipts].reverse(),[...receipts,receipts[16]],receipts.map((r,i)=>i===16?{...r,sha256:'0'.repeat(64)}:r)])await expect(canonicalReceipts(tx(rows),18)).rejects.toThrow()
  await expect(canonicalReceipts(tx(receipts,'foreignproject'),18)).rejects.toThrow()
 })

@@ -1,0 +1,31 @@
+{
+  "task": "M77-INDEPENDENT-QA",
+  "status": "findings_reproduced",
+  "database": "m77_author_qa_first_1789596696710",
+  "createdAt": "2026-09-16T22:11:45.617Z",
+  "hashes": {
+    "packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql": "f3147d73a77de2193aa8999799065efff6dfc7ef4f1563e1b5cb843e217b375b",
+    "packages/neuvetra-database/src/m77.ts": "21b6e37086bdf88f461ce5a20c082b9a602a27983a7c3d309bb70ea872312740",
+    "packages/neuvetra-database/src/m77-validation.ts": "5bd46e2b37c163637fef0dd5c59a9fb7e6fa6d216be64f163ba58522a4a19f57",
+    "apps/site-web/src/lib/m77-api.ts": "559c393f2b7e5f03ae26a88d2a308f4ebca4364fecba236c2adae0ca138888a8"
+  },
+  "findings": {
+    "savedUnsupportedAssetRemoval": {
+      "addStatus": 201,
+      "dropStatus": 201,
+      "reviewStatus": 201,
+      "currentStatus": "reconciled_bounded_synthetic",
+      "blockedHistoryPreserved": true
+    },
+    "coordinatedReportVersionForgery": {
+      "sameRetainedVersionId": true,
+      "differentCapturedVersionSha256": true,
+      "decodeAccepted": true,
+      "downloadAccepted": true,
+      "downloadRequests": 1,
+      "authorizedExactVersionFetched": false
+    }
+  },
+  "transport": "actual_local_runtime_routes_and_authority; synthetic_local_auth_adapter; forged_download_transport_stub_only",
+  "hostedEvidence": false
+}
