@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M76-HOSTED-RECOVERY-PLAN",
+  "role": "software-engineering",
+  "execution_context": "/root/m76_cto",
+  "prompt_sha256": "278903f7707afb6a948776547e4549ccdb8f227a3873e8d4007bbc2c0074a46f",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json",
+      "sha256": "b5e148bbb8175460ee4d334a935a58bbca367fb8ba496a77a2af5ed09f5c6405"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-FAILED-JOURNEY-CONTINUATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m76-hosted-recovery-review.md",
+        "docs/research/m76-hosted-recovery-root-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_accounting",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m76-hosted-recovery-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json",
+        "sha256": "b5e148bbb8175460ee4d334a935a58bbca367fb8ba496a77a2af5ed09f5c6405"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Existing operator author resumed with unchanged requested route; observed compute unknown. New recovery helper and exact local rehearsal only; root owns host/Git. Independent QA must accept before live continuation.",
+    "Final helper and independent rehearsal accepted. Original live exercise remains failed and unchanged; actual additive hosted completion is a separate pending acceptance gate."
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m76-hosted-recovery.ts",
+      "sha256": "d7592d1d1f72a83e45014ce1d5d215831ff20da418ec3189f948ec3677cae59e"
+    },
+    {
+      "path": "tools/staging/m76-hosted-recovery-recipe.ts",
+      "sha256": "adac50e2d89b8c0b30df143426ddcccc694e1a2d339c6ec1547ee5e81b03ba15"
+    },
+    {
+      "path": "tools/staging/m76-hosted-recovery-rehearsal.ts",
+      "sha256": "f75d0e42dd86118b06bfdb5d1602b1d02b1d2bc55728948ccd115cede9d53746"
+    },
+    {
+      "path": "tools/staging/m76-hosted-recovery.test.ts",
+      "sha256": "5061652d54edbdd29e631e4f6c16a40d0be2a75bf23e1c2187be2325383f2f7e"
+    },
+    {
+      "path": "tools/staging/m76-hosted-recovery-native.test.ts",
+      "sha256": "e36fb0d37585d5c5e211218ffcdfe473abb0b4820e4761c638ce2b98c65fc1b7"
+    },
+    {
+      "path": "docs/research/m76-hosted-recovery-plan.md",
+      "sha256": "5aad20bafffc728dc1dc724c46c25ddef61273928b0ff772ba71cf2dfb0a27f9"
+    },
+    {
+      "path": "evaluations/research-qa/m76-hosted-recovery-review.md",
+      "sha256": "23c2c05502d7ca5000ddf2c773cb6df90a44fd7a84429849a167a9cc9a2c7581"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "c1e083faffee66c614851bb14bde8a57aae2bb79b2027430076d4cd4f63ce114"
+    },
+    {
+      "path": "docs/research/m76-hosted-recovery-root-review.md",
+      "sha256": "f36d540284c7513648e612bb74d57849d91d42845fb26373d5aa29f471836231"
+    }
+  ]
+}

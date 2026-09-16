@@ -1,0 +1,38 @@
+{
+  "observedAt": "2026-09-16T15:34:12.895019+00:00",
+  "status": "original_failure_preserved_additive_helper_independently_accepted_live_pending",
+  "originalJournalByteSha256": "8b1c1ddbcfefbe398bb6b79390029be34aa2782a5a4c2fa4546e783e7b0b5fb3",
+  "originalJournalHead": "b454b9bffca96d58ce7a0ba065f5c72ca603232541503a956d82d9eed760c844",
+  "applicationPostRequests": 18,
+  "allCreatedAuthSessionsClosed": true,
+  "unexpectedOutcome": {
+    "operation": "m76_review_2",
+    "expected": 201,
+    "observed": 422
+  },
+  "diagnosis": "Inherited boiler corporate screening remained missing. Corrected gas workpaper cannot satisfy this independent corporate-source requirement. Application correctly refused approval.",
+  "runtimeChangeRequired": false,
+  "reviewedPlan": "docs/research/m76-hosted-recovery-plan.md",
+  "baselinePreserved": "m76_security_hosted19_failed1",
+  "independentAcceptance": "pending",
+  "sourceReceipts": [
+    {
+      "path": ".superpowers/m76-hosted19-failed-exercise-backup.json",
+      "sha256": "7c512123019092fd6949894dcba6d6bb28770365b59edb5d681331f229382ca4"
+    },
+    {
+      "path": ".superpowers/m76-hosted19-failed-restore.json",
+      "sha256": "92018fc85ad4f19fa8a088509f06ebb4da9654a0821a7a08fffad56140b053e7"
+    },
+    {
+      "path": ".superpowers/m76-hosted19-author-recovery-restore.json",
+      "sha256": "9821d553163d3c85fe6eff44dcc68916704c334171b7ed1d67ea5ce859d980d4"
+    },
+    {
+      "path": ".superpowers/m76-hosted19-qa-recovery-restore.json",
+      "sha256": "48943b552adf9eb2184d7f01a015ea18178d04512b66b0a63acd279b87286338"
+    }
+  ],
+  "independentHelperReview": "evaluations/research-qa/m76-hosted-recovery-review.md",
+  "acceptedHelperSnapshot": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json"
+}

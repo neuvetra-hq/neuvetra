@@ -1,0 +1,47 @@
+{
+  "observedAt": "2026-09-16T15:34:12.895019+00:00",
+  "status": "partial_before_additive_correction",
+  "url": "https://www.neuvetra.ai/",
+  "browser": "Existing authorized Chrome session; no credentials entered or new account created",
+  "deployedCommit": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+  "observations": [
+    "Initial empty declaration visibly retained the existing orphan stationary source.",
+    "Version1 showed missing generator source mapping, unsupported shared heater meter and missing boiler source screening.",
+    "Retained version1 report opened in actual iframe with changes_requested review, missing_source and orphan_source findings.",
+    "After source workpapers and declaration2, heater and generator showed matched reviewed while the boiler retained its unresolved corporate screening finding.",
+    "Generator version1 showed1000.000USgallons and10240.0140kgCO2e, separate accepted bounded internal review and retained report.",
+    "Actual generator HTML download matched the saved response bytes.",
+    "Generator page visually inspected at390x844; documentWidth375, viewport390, no horizontal document overflow; viewport reset."
+  ],
+  "downloads": [
+    {
+      "kind": "actual_chrome_generator_download",
+      "reportId": "7a1ee738-fab0-47b6-84bd-e241e3dab4d9",
+      "byteLength": 70639,
+      "sha256": "06948ea4d98befa1ea1cfb1f42455e3358a494e9d4739bc1f8e706f1192798c1",
+      "matchesRetainedReport": true
+    },
+    {
+      "kind": "actual_chrome_historical_equipment_json_download",
+      "reportId": "6f8d1ed5-9815-4cc5-949d-27c64e709445",
+      "byteLength": 22278,
+      "sha256": "359d0aad747ff12e42d68590c4484805c45fa587fbe2b4beee41b4c84fbc7761",
+      "matchesRetainedReport": true
+    },
+    {
+      "kind": "actual_chrome_historical_equipment_html_download",
+      "reportId": "6f8d1ed5-9815-4cc5-949d-27c64e709445",
+      "byteLength": 35516,
+      "sha256": "7f847d025100ab4e26cdb90ef0d1fc33d879dc1ae9ce2914ad8a892d237d5fd4",
+      "matchesRetainedReport": true
+    }
+  ],
+  "browserApplicationWrites": 0,
+  "printPreview": "Print report invoked the report dialog, but browser automation could not inspect the native preview and CDP timed out. Escape did not establish dismissal; ordinary reload restored the page. No physical print or PDF pagination verified.",
+  "postRestart": "pending",
+  "finalReconciliation": "pending",
+  "limitations": [
+    "Synthetic profile only; no complete Scope1, corporate inventory, method release, legal compliance or external assurance.",
+    "This is a partial browser observation; final recovery/restart acceptance remains pending."
+  ]
+}

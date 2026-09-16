@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T14:45:54.353160+00:00",
+  "updated_at": "2026-09-16T15:52:45.904768+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M76",
     "name": "Stationary equipment and fuel coverage",
-    "status": "local_accepted_publication_pending",
-    "next_gate": "Final record-limit review, exact publication and remote checks, then reviewed hosted upgrade and demonstration.",
+    "status": "reviewed_live_correction_pending",
+    "next_gate": "Publish exact accepted correction helper and verify remote checks, then actual read-only baseline and21 additive synthetic API operations; restart/revisit and independent hosted acceptance.",
     "evidence": [
       "docs/research/scope1-completion-matrix.md"
     ]
@@ -1533,6 +1533,24 @@
       "evidence": [
         "operations/agent-improvement/runs/M75-HOSTED-ACCEPTANCE.json"
       ]
+    },
+    {
+      "id": "M76-HOSTED-ACCEPTANCE",
+      "owner": "/root/m76_accounting",
+      "status": "in_progress",
+      "scope": "Independent actual deployment, failed-journey diagnosis, additive correction review and final hosted acceptance",
+      "evidence": [
+        "operations/agent-improvement/runs/M76-HOSTED-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "id": "M76-HOSTED-RECOVERY-PLAN",
+      "owner": "/root/m76_cto",
+      "status": "complete",
+      "scope": "New additive correction helper and actual failed-state local rehearsal; no live or Git actions",
+      "evidence": [
+        "operations/agent-improvement/runs/M76-HOSTED-RECOVERY-PLAN.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -2683,19 +2701,27 @@
     "board_feedback": "Browser looks good; keep moving."
   },
   "current_m76": {
-    "status": "local_accepted_publication_pending",
+    "status": "reviewed_live_correction_pending",
     "baseline": "32e1d7b879e58eabc0789552f61298a608c3f228",
-    "hosted_schema": 18,
-    "hosted_changes": false,
-    "active_assignments": [],
+    "hosted_schema": 19,
+    "hosted_changes": true,
+    "active_assignments": [
+      "M76-HOSTED-ACCEPTANCE"
+    ],
     "board_feedback_received": true,
-    "next": "Final record-limit review, exact publication and remote checks, then reviewed hosted upgrade and demonstration.",
+    "next": "Exact helper publication/checks, actual failed-state baseline,21 reviewed additive operations, service restart and zero-write revisit, final browser and hosted acceptance. Runtime remains152fcb0/schema19.",
     "planning_snapshot": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
     "root_ui": "Actual local browser correction, separate review, exact HTML/JSON downloads and restart/history passed on final SQL19.",
     "migration_sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
     "auto_deploy": "paused_before_publication",
     "hosted_baseline": "passed_zero_application_posts_all_verification_sessions_closed",
     "recovery": "Fresh hosted18 encrypted restore and independent18/19 runtime replay passed; private receipts retained.",
-    "accepted_snapshot": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json"
+    "accepted_snapshot": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
+    "deployment_id": "d9e200ed-7f08-4547-921e-64d7b77f24fa",
+    "published_head": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+    "remote_checks": "six_pass",
+    "deployed_image": "sha256:b5f85ab871bd19f4cbf5953cfa1a93f1d7060bf5aef6cbf5d662cf7c82b7fe6f",
+    "hosted_exercise": "Failed expected approval: m76_review_2 returned422,18applicationPOSTs,allCreatedAuthSessionsClosed=true. Failed journal preserved; no retry.",
+    "recovery_helper_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json"
   }
 }

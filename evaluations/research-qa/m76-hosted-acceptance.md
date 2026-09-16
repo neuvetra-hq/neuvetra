@@ -1,0 +1,55 @@
+# M76 hosted acceptance review
+
+Status: **PENDING recovery from a failed hosted exercise**. Migration/deployment preparation is verified; no hosted acceptance pass is granted.
+
+Reviewer `/root/m76_accounting`, qa-lead; requested `gpt-6-astra/high`, observed unknown. Root owns all host/Git mutations. This reviewer authored no production code or operators, but authored the accounting contract and independent QA artifacts; root separately reviewed those items. This is read-only inspection of actual receipts and exact artifact bindings, not professional assurance.
+
+Expected published commit: `152fcb070a4a81aa48ef6beccff629480fa9ffa2`. All 87 accepted2 files and all four compatibility-snapshot files match their embedded accepted bytes. The schema19 candidate hash remains `ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8`.
+
+The baseline journal hash chain was independently recomputed. Its four baseline records show actual schema18, zero application POST requests and all created Auth sessions closed. Its legacy records and historical download fingerprints equal the prior M75 accepted journal. Existing private schema18 and populated schema19 recovery receipts are hash-bound in the preparation evidence; their independent replay scope and provider-recovery exclusions remain unchanged.
+
+At this observation, the exact-commit CI receipt shows all six checks passed. Exact-commit deployment/readiness19, 27 expected exercise POSTs, closed Auth sessions, restart, zero-POST revisit, historical downloads and actual hosted browser evidence remain required. These are pending events, not inferred from local tests or prepared scripts.
+
+Private preparation evidence: `.superpowers/m76-independent-hosted-preparation.json`. No host connection, mutation or Git operation was performed by this review action. No complete corporate inventory, factor/method release, legal compliance or assurance claim is made.
+
+## Actual migration preservation
+
+The committed migration receipt is bound to commit `152fcb070a4a81aa48ef6beccff629480fa9ffa2`, exact schema19 bytes and the reviewed gate. Maintenance removal/readiness404 timing and all four fresh recovery receipt hashes were rechecked. The reviewer independently compared every recorded old table row hash and duplicate multiplicity: ninety old tables remain exact, except the single allowed migration receipt append. Fifteen expected new tables are empty immediately after migration; total tables are 105. All 81 prior content entries and their hash remain exact. Roles, memberships and default ACL arrays are unchanged; every old catalog row hash is preserved.
+
+The complete trigger-hash difference equals fourteen exact reviewed additions. For this comparison, the reviewer read the actual trigger definitions from the previously independently replayed local schema19 restore: thirteen new-table immutable-history triggers and the sole new mobile-fuel guard on an old table. The hosted receipt contains exactly those hashes in addition to the old trigger multiset. This is independent recomputation from recorded host evidence plus a read-only local catalog reference, not a second hosted database connection.
+
+Private evidence: `.superpowers/m76-independent-hosted-migration.json`, SHA-256 `0c92df8a7a81953c8068fd1524f9cc76aca9611e273ce0315dc06c823d33d04e`. Final hosted acceptance remains pending actual deployed readiness, completed exercise, restart/revisit and browser receipts.
+
+## Actual deployment and readiness
+
+The platform receipt lists one successful active deployment, `d9e200ed-7f08-4547-921e-64d7b77f24fa`, for exact commit `152fcb070a4a81aa48ef6beccff629480fa9ffa2`, image `sha256:b5f85ab871bd19f4cbf5953cfa1a93f1d7060bf5aef6cbf5d662cf7c82b7fe6f`. All six exact-commit CI checks are completed successfully. The actual readiness receipt reports HTTP200, schema19 and legacy containment verified after the migration. These are independently matched root-collected platform/readiness receipts, not another deployment or hosted network request by this reviewer.
+
+Private evidence: `.superpowers/m76-independent-hosted-deployment.json`, SHA-256 `83c986d613cfd9c3c500030defb13583cd458b18a5194552ffc332507bdade7f`. The exercise journal has begun; no incomplete attempt is treated as accepted. Final acceptance still requires its complete expected POST outcomes/session closure, restart/revisit, historical downloads and actual browser evidence.
+
+## Reviewer execution artifact correction
+
+During the earlier compatibility review, the reviewer’s output redirect covered three legacy result JSON files but missed a fourth generated UI fixture written by the old native test. The changed `m75-independent-ui-fixture.json` was traced by its exact report hash to that fresh compatibility run. This was an unintended reviewer artifact write, not a production-code or hosted-data change. Any implication that every historical generated artifact stayed untouched was incorrect.
+
+Root preserved the generated bytes privately (SHA-256 `cb7e7e3f10efb80443259167780e9dc83d616afd9c8534ac926ac7223fbed928`) and restored the historical committed fixture (SHA-256 `78873d2cf9d8c7a66f472b2ac32a66bf5db9b426524ae3c34812a3f1e21513c4`). The reviewer independently rehashed both. Private provenance/restoration receipts retain the failure and repair; the frozen compatibility review was not rewritten. This execution-scope error is resolved and does not expand the hosted acceptance claim.
+
+## Hosted exercise failure: acceptance withheld
+
+The actual exercise stopped at `m76_review_2`: expected HTTP201, observed HTTP422. Its complete failed attempt records eighteen application POST requests and all created Auth sessions closed. The original journal remains preserved at chain head `b454b9bffca96d58ce7a0ba065f5c72ca603232541503a956d82d9eed760c844`; it must not be rerun or rewritten as a successful attempt.
+
+The reviewer independently reconstructed declaration2's exact saved dependency object from the actual successful journal responses. All three workpapers and their separate reviews are present. Corporate coverage version6 still carries the inherited office-boiler screening as `missing`, with missing activity/evidence, null reason and no evidence references; the recipe only changed the two newly added source screenings. The resulting reconstruction has exactly two blocking findings: `source_screening_unresolved` for the boiler and `roster_review_required`. Both TypeScript reconciliation and native SQL explicitly require an included-activity source screening. The refusal therefore preserves intended validation; the hosted recipe omitted a necessary inherited-source correction that the positive local fixture did not expose.
+
+Private diagnostic evidence: `.superpowers/m76-independent-hosted-exercise-failure.json`. Recovery requires a separately reviewed additive continuation: retain all saved versions/reports and the failed journal; justify and separately review a corporate screening successor; rebind/review all three stationary workpapers to that new coverage; then capture and review fresh exact declaration dependencies. This is a proposed boundary, not authorization to bypass validation or a claim that recovery is complete. Fresh restored failed-state evidence and the author's concrete recovery plan remain under review. The original twenty-seven-POST acceptance target was **not** achieved.
+
+## Independent replay of the actual failed-state restore
+
+The reviewer independently read the immutable local restore of the actual failed hosted19 archive. All 108 retained content entries match the backup manifest. The actual restricted-runtime register and frontend decoder reproduce exactly the failed declaration reconciliation reconstructed from the original journal. The read-only replay covers one generator version, two equipment versions, four gas versions, five mobile versions, six corporate versions and four fleet versions, including historical source/equipment proofs and fourteen legacy downloads. Application inventory is unchanged after replay; no-claim runtime reads remain denied.
+
+Archive/dump hashes, application rows/catalog/roles/memberships and application default ACLs match the restore receipt. Provider-schema default ACL entries are excluded from this application-only restore; the relevant default `*`/`neuvetra` subsets are both empty. This does not establish full provider recovery. The preserved original failed journal still matches its exact byte hash.
+
+Private evidence: `.superpowers/m76-independent-hosted-failed-recovery.json`, SHA-256 `6516f62a1d59850236dc74b4941caa3fb1c86ee81cf876e6fb1d02cf9dc8ff5c`. The additive 21-operation design is conditionally acceptable for the retained synthetic evidence, subject to exact helper review and separate-clone rehearsal. Actual hosted correction, restart/revisit and final browser evidence remain pending.
+
+## Exact additive helper independently accepted; hosted execution pending
+
+The separate frozen review `m76-hosted-recovery-review.md` accepts the exact helper candidate and independently executed local rehearsal only (review SHA-256 `23c2c05502d7ca5000ddf2c773cb6df90a44fd7a84429849a167a9cc9a2c7581`). On the distinct actual failed-state QA restore, baseline/correction/repeat/revisit passed with application POST counts0/21/0/0. The reviewer additionally verified the exact three screening changes, unchanged gas quantities/evidence, separate reviews, retained independent population, captured absent reviews and exact1001-gallon result10250.254014 kg CO2e. All105 tables were compared: unrelated tables/catalog/roles/ACLs remain exact and prior non-head rows are preserved.
+
+These are actual local restricted-runtime/decoder checks with offline Auth and legacy adapters. They establish neither hosted session closure nor a hosted process restart. The original hosted exercise remains failed; root must publish and execute the reviewed additive helper and supply actual completion/restart/revisit evidence before this hosted review can pass. Root partial browser receipts show historical generator HTML and equipment JSON downloads; final recovered-state browser inspection remains pending. Physical print/PDF pagination remains unverified.
