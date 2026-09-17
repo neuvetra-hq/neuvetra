@@ -1,0 +1,44 @@
+{
+  "status": "actual_exercise_failed_preserved",
+  "observedAt": "2026-09-17T00:08:16.652949+00:00",
+  "journalSha256": "84107d09d979d0a5086a575642ddd1f3d596f75213886588f909b047933860ba",
+  "events": 74,
+  "terminalSha256": "b43bfb5b5dc1688324a8734bcc99342a5c273a0c89d4245123ee09b113cb26ad",
+  "failure": {
+    "attemptSequence": 5,
+    "status": "failed",
+    "stage": "authorized_read:/mobile-diesel",
+    "applicationPostRequests": 33,
+    "allCreatedAuthSessionsClosed": true
+  },
+  "postIntents": 33,
+  "outcomes": 33,
+  "successfulWrites": 27,
+  "expectedRefusals": 6,
+  "cause": "Unknown; no read exception details retained. Recent provider observations include prior mobile200s, no matching final mobile response; not proof of cause.",
+  "plannedRemainingWrites": [
+    "m77_population_final",
+    "m77_population_final_review",
+    "m77_population_final_report"
+  ],
+  "retryAttempted": false,
+  "encryptedCurrentStateBackup": {
+    "status": "m77_encrypted_application_backup",
+    "createdAt": "2026-09-17T00:03:15.850Z",
+    "schemaVersion": 20,
+    "archiveSha256": "d038eadbafc0e2558ebf285b97db2e8302bc473d15160020a81abaa143aa7afe",
+    "dumpSha256": "0e12d9e86d08612d8a7e7f426854b99c2ce0eeb491134f933f3c8a7fde064cbd"
+  },
+  "recoveryArtifacts": [
+    {
+      "path": ".superpowers/m77-failed-state20-backup.json",
+      "sha256": "99f7311e74d08894deb950e6eb4dc1b00502483973ae687636f4d42d17ec21c6"
+    },
+    {
+      "path": ".superpowers/m77-failed-state20-restore.json",
+      "sha256": "2dc3057c9032e433b7a355a7474991d9a5f7d4c132c4d1b94a8d4dcce9d6d7ae"
+    }
+  ],
+  "subsequentBrowserRead": "Actual browser successfully loaded the mobile register after the failure; original cause remains unknown.",
+  "continuation": "Pending independent exact-state review and rehearsal; no further hosted application POSTs attempted."
+}

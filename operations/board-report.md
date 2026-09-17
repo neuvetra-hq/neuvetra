@@ -1,3 +1,55 @@
+# M77 continuation reviewed; publication and actual verification next
+
+The refrigerant and fire-suppression presentation is live on schema20 at application7d465485, deploymenta0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f. Automatic deployment remains paused. The original failed 74-event exercise is frozen at SHA84107d09; all33 attempted writes have outcomes and all sessions closed. Its interrupted read cause remains unknown.
+
+Independent review accepted continuation candidate2 (SHA80b11982). The actual failed-state restore rehearsal passed0/3/0 application writes, and final CI passed23tests/254assertions with4explicit native skips. Root separately reviewed the QA-authored guard tests. Specialists completed their scoped work; no worker is currently running.
+
+Root must publish this package on rolling PR5 and verify all six checks. Then run one fresh authoritative zero-write baseline using the reviewed private wrapper; do not duplicate it with an identical diagnostic sweep. Only after baseline closure send the three unattempted final population operations. Preserve both journals, never retry an uncertain write. Finish with a real same-image restart, zero-write revisit, final browser/download demonstration and independent acceptance, then restore automatic deployment. M77 and Scope1 remain incomplete. No M78 before board feedback. Earlier sections are historical.
+
+# M77 presentation live; reviewed failed-state recovery
+
+Final presentation commit7d465485e439566e9937b48c437bc59a6cc9591f is live in deploymenta0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f, imageeaa86c852fb9bba09421508b915a66a02cfcc2c935991528c9849148ec618597. Allsixchecks passed; exact runtime diff from1e2 is onlytwo independently reviewed frontendfiles. Reviewed observer588d55 passed uniqueSUCCESS/ready20/legacycontainment at00:17:13Z. Original0e03 deployment REMOVED. Automaticdeployment stillpaused.
+
+Original M77 exercise remains FAILED and frozen at74events/33POSTs, SHA84107d09d979d0a5086a575642ddd1f3d596f75213886588f909b047933860ba. Allsessionsclosed. Independent exactfailed-state20 recovery/replay PASS:113tables, all33outcomes/oldhistory/catalog/4actualbrowserdownloads exact. Onlypopulationv3 isstale/blocked aftercorrectedHVACreview; threefinalpopulation operations unattempted. CauseofinterruptedmobileGET remainsunknown; lateractualbrowserreadpassed.
+
+/root/m77_backend actively finishes new diagnostic/0-3-0 provenancecontinuation against aNEWclone of readonly actualrestore m77_ops_failed_state20(55472). Independentm76_cto has deliveredfailedstate/observer/UIreviews and isavailable for finalcontinuationreview. Root privatewrapper .superpowers/m77-private-continuation.ps1 isprepared butnotexecuted/reviewedfinalyet. ItpinsexactacceptedM76 andfailedM77 histories andonlyrunscheck-m77-continuation.ts. Originalrunner/recipe/journals stayunchanged. Root addednewpurecontinuationtest path toCI, pendingreview/publication.
+
+Next freeze/review finalcontinuation+CI/wrapper, publishsamePR/passchecks, runfreshactualreadonlydiagnostic/baseline andonly3writes afterreview. Thenreal same-image restart, zero-writerevisit, exactlivebrowserreports/downloads, independentfinalacceptance, restoreautodeploy andfinalpublication. M77/Scope1 incomplete; noM78 withoutboarddemo feedback. Earliersections historical.
+
+# M77 interrupted read; original exercise frozen
+
+Actual exercise exited failed after33POSTs (27successful additive writes and6expected refusals), at authorized_read:/mobile-diesel. All created sessions closed. Original .superpowers/m77-hosted-journey.jsonl remains frozen:74events, SHA84107d09d979d0a5086a575642ddd1f3d596f75213886588f909b047933860ba, terminalb43bfb5b5dc1688324a8734bcc99342a5c273a0c89d4245123ee09b113cb26ad. Cause is unknown; logs show earlier mobile200 responses and no matching final response, which does not prove a timeout or transport cause. Do not rerun/reset the original.
+
+Live remains schema20/application1e2c44f, automatic deployment paused. Only final population successor/review/report are unattempted. Root started reviewed read-only encrypted schema20 backup in session13413, outputs .superpowers/m77-failed-state20.dpapi and -backup.json. /root/m77_backend is actively preparing a new provenance-bound diagnostic/0-3-0 continuation and local exact-shape rehearsal; independent review is required before live writes. Root owns all host/Git operations. /root/m76_cto has delivered scoped label/three-class UI reviews and is available, not currently running.
+
+Label refinement da90417 is published/all6checks pass but not deployed. Three-class UI styling candidate f46fc304 is independently accepted and local browser verification in progress. Finish and publish that bounded refinement, repin reviewed final-runtime observer to its successor commit with review. Do not deploy until failed-state diagnosis/continuation plan justifies it. No restart/revisit or completeM77 claim yet; Scope1 remains incomplete. Earlier sections are historical.
+
+# M77 live exercise; label refinement ready
+
+The refrigerant and fire-suppression workflow is live on schema20, application1e2c44f. The sole fixed exercise session19234 is running against .superpowers/m77-hosted-journey.jsonl. Successful writes and expected authorization refusals are recorded; final exercise closure is pending. Do not restart, redeploy, launch another writer, reset or blindly retry while it runs. Automatic deployment remains paused.
+
+The one-line facility checklist refinement adds the owning entity to distinguish duplicate names. It passed independent review and all six required checks on publishedda90417ba302575cc6c02380adfcaeba37e7b9b6. Deploy it only after exercise completion and session closure. The read-only final runtime observer .superpowers/m77-observe-final-runtime.py is independently reviewed at SHA18e9812e8209f298d1f7a066efad9737877331b9bb8e9015ed4672fb40b5dcf1; it requires exact deployment/image-scoped startup collection provenance for restart.
+
+Root browser has already verified initial unresolved discovery, blocked unknown-gas source and population reports, and exact source HTML/JSON downloads. Browser tab m77LiveTab is on the live reconciliation report; viewport reset. Continue actual report/history checks, then final deployment/restart/zero-write revisit, independent acceptance, restore automatic deployment and publish final evidence. M77 and Scope1 remain incomplete. Scoped specialist reviews are delivered; no specialist is currently running. Earlier sections are historical.
+
+# M77 live schema20; actual synthetic exercise running
+
+Deployment0e03a761-adbb-4c0c-9a75-adc918fbf3fc isSUCCESS on exact1e2c44feb31a689363dbcde1c51dc38363d23bc1, imageb4e683f961bd612af39e79462e0dcc1a1d56bf5e68ed49811ac8d6ec6cff02ab. /ready20 andlegacycontainment verified23:34:21Z. Rootstarted fixed36POSTexercise inexisting .superpowers/m77-hosted-journey.jsonl; execution session19234. Do notstartanotherwriter/reset/retry. Initialphase performs the fulloldreadonlysweep before anynewworkpaperwrites; onlycompleted journal/outcome evidence establisheswrites/closure.
+
+Rootcontinueobserveactualexercise, signed-inbrowserinitialunresolved andretainedblocked/pending/acceptedreports, thenactualsameimage restart and0POSTrevisit, exactdownloads andindependentacceptance. /root/m76_cto auditsdeployment/execution evidence. Automaticdeployment remainspaused untilcontrolledverificationends. Allolddata/archives/journals preserved. FullM77 andScope1 stillincomplete. Earliersections historical.
+
+# M77 schema20 committed; matching application deploying
+
+Exact reviewed migration committed successfully; .superpowers/m77-hosted-migration-candidate1.json confirms20 and preservation of all earlier rows/content. Independentactualgate accepted beforeexecution. Neverdeploy19runtime now. Rootrequested exact1e2c44feb31a689363dbcde1c51dc38363d23bc1 application deployment0e03a761-adbb-4c0c-9a75-adc918fbf3fc; build/readinessnotyetverified. Automaticdeployment remains paused; oldruntime removed.
+
+Next verify exactdeploymentSUCCESS/schema20ready/legacycontainment, then rununchangedprivatewrapper correctedfixed36writeexercise onexisting4eventbaseline journal. No reset/retryuncertainwrites. Actualrestart/0writerevisit/browserdemo/independentacceptance andrestoreautomaticdeployment remain. Rootsolehost/Gitwriter; /root/m76_cto activelyauditsactualmigration/deployment evidence. Earliersections historical.
+
+# M77 maintenance active; exact20 upgrade next
+
+Root paused automatic deployment and removed the exact old152fcb0 runtime d9e200ed; provider confirms REMOVED/noactive deployment and /ready404. Database remains19; no migrationattempt yet. Allsix exact1e2c44f checks passed23:28:06Z, head observed23:26. Freshbackup/restore/replay and completed0POST baseline accepted. Reviewedbuilder220bbf passed actualgate validation and exclusivelywrote .superpowers/m77-hosted-gate-candidate1.json (ACCEPTED1 fullsnapshot). /root/m76_cto isactivelyreviewing actualmaintenance/gatebefore rootupgrade.
+
+Next executeonly reviewedm77-upgrade withprivatewrapper andexclusive .superpowers/m77-hosted-migration-candidate1.json; onknowncommitted20 deployexact1e2c44feb31a689363dbcde1c51dc38363d23bc1 usingpreparedm77-deploy.graphql. Neverstart19runtime after20commit; neverblindretryuncertainDDL. Thenready20/actualexercise/restart/revisit/browser/independentacceptance andrestoreautomaticdeployment. Rootsolehost/Gitwriter. Earliersections historical.
+
 # M77 actual-facility repair accepted; publish and deploy next
 
 Independent QA accepted the corrected source-bound three-facility recipe and exact17-file release bundle M77-RELEASE-CONTROLS-ACCEPTED1. Fresh actualrestore-derived rehearsal passed7tests/1005assertions with0/36/0 writes, all sessionsclosed, every originalfacility/source retained, explicitdiscovery atallthree locations, and intendedfive devices. Independent sixorderpermutations/eight provenance refusals and fullactualjournal/content review passed. Prior2facility localtemplate evidence remains historical; F06 is recorded as a post-software-acceptance recipe defect caughtbeforeliveM77upgrade.
