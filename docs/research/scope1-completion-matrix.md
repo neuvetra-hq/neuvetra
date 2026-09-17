@@ -50,6 +50,12 @@ M73 demonstrated only one synthetic California office boiler using annual 2025 n
 
 Sequence numbers are planning boundaries, not promises that a method will pass review. If M74–M77 reveals an unsupported but applicable source, M78 must return `Scope 1 incomplete`; the team must add a bounded reviewed method milestone rather than redefine the customer profile after seeing the data.
 
+## M77 implementation checkpoint — 2026-09-17 UTC
+
+S1-06 now has implemented source workpapers and physical-equipment discovery/reconciliation for the bounded synthetic profile: five HVAC, refrigeration and fire-suppression devices across the retained three-facility corporate example. Unknown gas and missing reviews block acceptance; corrections retain earlier reports. The final version4 equipment reconciliation has a separate internal acceptance, with exact browser HTML/JSON downloads and successful same-image restart. The full post-restart zero-write revisit and independent bounded milestone acceptance passed; closure publication checks remain a delivery step. See [M77 hosted delivery](m77-hosted-delivery.md).
+
+This advances workflow evidence, not the released-method completion requirement in S1-06. Candidate methods/factors and fictional inspection evidence remain unreleased/unverified. Other gases, installation/retirement, recovery/reuse, ownership changes and unsupported profiles remain outside the admitted calculation contract. S1-07 process screening, current cross-family bindings, gross company aggregation and the release/human gates remain unfinished; overall Scope1 is incomplete.
+
 ## Completion decision
 
 For the declared profile and reporting year, the product may label Scope 1 `supported and complete for the declared profile` only when:

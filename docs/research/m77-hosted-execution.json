@@ -1,0 +1,185 @@
+{
+  "milestone": "M77",
+  "status": "completed_execution_pending_final_independent_acceptance",
+  "observedAt": "2026-09-17T01:56:24.560333+00:00",
+  "applicationCommit": "7d465485e439566e9937b48c437bc59a6cc9591f",
+  "deploymentId": "a0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f",
+  "imageDigest": "sha256:eaa86c852fb9bba09421508b915a66a02cfcc2c935991528c9849148ec618597",
+  "schemaVersion": 20,
+  "originalAttempt": {
+    "path": ".superpowers/m77-hosted-journey.jsonl",
+    "sha256": "84107d09d979d0a5086a575642ddd1f3d596f75213886588f909b047933860ba",
+    "status": "failed_preserved",
+    "events": 74,
+    "applicationPostRequests": 33,
+    "successfulWrites": 27,
+    "expectedRefusals": 6,
+    "allCreatedAuthSessionsClosed": true,
+    "readFailureCause": "unknown"
+  },
+  "continuation": {
+    "path": ".superpowers/m77-hosted-continuation.jsonl",
+    "sha256": "223a91a711026bf4be6c299ed9b83876a9bdc72440889fc607969dcbb338bc0c",
+    "events": 16,
+    "terminalSha256": "19343893f2efa0b35c787c6516b6110c951378470fb8d547087bd7931778709e",
+    "phases": [
+      {
+        "mode": "baseline",
+        "finishedAt": "2026-09-17T00:56:41.772Z",
+        "attemptSequence": 2,
+        "status": "passed",
+        "stage": "authorized_read:/fugitive-population/71acc42d-d966-43ea-b92d-ac9c26d5067d/reports/cd537912-810c-4c65-ab82-22e7c5d86be3/snapshot",
+        "applicationPostRequests": 0,
+        "allCreatedAuthSessionsClosed": true,
+        "requestCount": 261,
+        "lastStatus": 204,
+        "errorCategory": null
+      },
+      {
+        "mode": "exercise",
+        "finishedAt": "2026-09-17T01:34:38.760Z",
+        "attemptSequence": 5,
+        "status": "passed",
+        "stage": "authorized_read:/fugitive-population/71acc42d-d966-43ea-b92d-ac9c26d5067d/reports/87d9fe08-33d7-4859-9dff-be0a3d9c80e0/snapshot",
+        "applicationPostRequests": 3,
+        "allCreatedAuthSessionsClosed": true,
+        "requestCount": 493,
+        "lastStatus": 204,
+        "errorCategory": null
+      },
+      {
+        "mode": "revisit",
+        "finishedAt": "2026-09-17T01:55:32.139Z",
+        "attemptSequence": 14,
+        "status": "passed",
+        "stage": "authorized_read:/fugitive-population/71acc42d-d966-43ea-b92d-ac9c26d5067d/reports/87d9fe08-33d7-4859-9dff-be0a3d9c80e0/snapshot",
+        "applicationPostRequests": 0,
+        "allCreatedAuthSessionsClosed": true,
+        "requestCount": 272,
+        "lastStatus": 204,
+        "errorCategory": null
+      }
+    ]
+  },
+  "finalCounts": {
+    "sourceStreams": 5,
+    "sourceVersions": 7,
+    "populationVersions": 4,
+    "reports": 9
+  },
+  "reconciliationStatus": "reconciled_bounded_synthetic",
+  "browserApplicationPosts": 0,
+  "browserDownloads": [
+    {
+      "reportId": "b78605e9-72b9-48bd-9718-7e8ba67867bf",
+      "format": "html",
+      "byteLength": 85555,
+      "sha256": "d92af911a7811adac85d9ab5bf0819dd0dbdc74bcd35edb7acec495269729347",
+      "matchesRetainedReport": true,
+      "journalEventSha256": "46c2b87b4d7595ee444892f38a6d64cc9401165b15d9c593d538fd598b5a2d59"
+    },
+    {
+      "reportId": "b78605e9-72b9-48bd-9718-7e8ba67867bf",
+      "format": "json",
+      "byteLength": 53468,
+      "sha256": "dcc7ec2bc4653d0b3b88b0d2ef0a9fc454f838beb9838b4f2193479131606680",
+      "matchesRetainedReport": true,
+      "journalEventSha256": "46c2b87b4d7595ee444892f38a6d64cc9401165b15d9c593d538fd598b5a2d59"
+    },
+    {
+      "reportId": "161f3ee6-bfae-4d6f-8300-8194b9efc814",
+      "format": "html",
+      "byteLength": 553135,
+      "sha256": "a926154d1e327a788c08a59fed05a15d9fb1d43965955e1950e11af06b206292",
+      "matchesRetainedReport": true,
+      "journalEventSha256": "ca767077fb9f1afb58b48865df51a467503e1fd2fac920f394c8eb2377cddc5c"
+    },
+    {
+      "reportId": "161f3ee6-bfae-4d6f-8300-8194b9efc814",
+      "format": "json",
+      "byteLength": 380437,
+      "sha256": "b5561fb9323c80d5ba28dc5e350e289c835dbb83acb99fea7fafb78e35fb9860",
+      "matchesRetainedReport": true,
+      "journalEventSha256": "ca767077fb9f1afb58b48865df51a467503e1fd2fac920f394c8eb2377cddc5c"
+    },
+    {
+      "reportId": "87d9fe08-33d7-4859-9dff-be0a3d9c80e0",
+      "format": "html",
+      "byteLength": 567784,
+      "sha256": "59f2c41de32c298bc20402845159b371c3504596d8a05c8544b4accd1cea6799",
+      "matchesRetainedReport": true,
+      "journalEventSha256": "2b3905b09f5d88273abe3fa7250cdbc1130704173dffdbc7260dc690911870a9",
+      "journal": ".superpowers/m77-hosted-continuation.jsonl"
+    },
+    {
+      "reportId": "87d9fe08-33d7-4859-9dff-be0a3d9c80e0",
+      "format": "json",
+      "byteLength": 392108,
+      "sha256": "26db95bcd73a5b86d66d90eb5147d70aa160aa408567087c8bda5e11fde14150",
+      "matchesRetainedReport": true,
+      "journalEventSha256": "2b3905b09f5d88273abe3fa7250cdbc1130704173dffdbc7260dc690911870a9",
+      "journal": ".superpowers/m77-hosted-continuation.jsonl"
+    }
+  ],
+  "postRestartBrowserVerified": true,
+  "evidence": [
+    {
+      "path": ".superpowers/m77-hosted-migration-candidate1.json",
+      "sha256": "4b92da02a790a5fd2c8475804c959d6ada81b30c9a1e6333927c0df60c6b1a77"
+    },
+    {
+      "path": ".superpowers/m77-failed-state20-backup.json",
+      "sha256": "99f7311e74d08894deb950e6eb4dc1b00502483973ae687636f4d42d17ec21c6"
+    },
+    {
+      "path": ".superpowers/m77-failed-state20-restore.json",
+      "sha256": "2dc3057c9032e433b7a355a7474991d9a5f7d4c132c4d1b94a8d4dcce9d6d7ae"
+    },
+    {
+      "path": ".superpowers/m77-continuation-publication.json",
+      "sha256": "0803bc32cf224e5d029a5c8c3968fa0ce2e5976004b1fba872f1c3bb5b3dcaec"
+    },
+    {
+      "path": ".superpowers/m77-final-deployment-verified.json",
+      "sha256": "9d723e294b73cb7d00d8d964491d8d94178632ab85814ea0c260b77768efbe4b"
+    },
+    {
+      "path": ".superpowers/m77-final-restart-verified.json",
+      "sha256": "d5e4482edec02c839c07f1328275d47044dbd143db5c02f691c596da5d882717"
+    },
+    {
+      "path": ".superpowers/m77-independent-hosted-restart1.json",
+      "sha256": "8e56f5de4f6805c10c36fe84ab12c97854b765668683021da1bfa0d9a2593488"
+    },
+    {
+      "path": ".superpowers/m77-independent-actual-continuation-baseline1.json",
+      "sha256": "0071896f0e4383b0a492789110e75980fe042e31787768f8ede54750091a85e0"
+    },
+    {
+      "path": ".superpowers/m77-independent-actual-continuation-exercise1.json",
+      "sha256": "34353bf7ddf96cf99fb2f93a1aacc64c0aca6d8d9772f5bdad2db65eb8b8e5d6"
+    },
+    {
+      "path": ".superpowers/m77-independent-actual-continuation-revisit1.json",
+      "sha256": "b5cda72947354764009d613d4a28e3cf70958ac2609096ae8a76fa2a6b5d78eb"
+    },
+    {
+      "path": ".superpowers/m77-independent-hosted-browser-working-bytes2.json",
+      "sha256": "a9553482e72208caaf6443fe4d329a5d57848df371991febdde922230596dd7d"
+    },
+    {
+      "path": ".superpowers/m77-hosted-browser-working.json",
+      "sha256": "0891aec363d4d713974069b08ef62043e02bb9b39f7cbc6c90a36be9d4dac5dc"
+    }
+  ],
+  "scope1Completeness": "incomplete",
+  "candidateMethodsReleased": false,
+  "externalAssurance": false,
+  "emissionsAggregation": false,
+  "remaining": [
+    "Independent final acceptance",
+    "Final rolling PR evidence publication and required checks",
+    "Restore and verify automatic deployment",
+    "Board feedback before M78"
+  ]
+}

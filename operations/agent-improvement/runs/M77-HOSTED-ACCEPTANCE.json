@@ -4,27 +4,42 @@
   "role": "qa-lead",
   "execution_context": "/root/m76_cto",
   "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
-  "artifacts": [],
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-HOSTED-ACCEPTANCE1.json",
+      "sha256": "34e63ef3536d69d05cbd5e7c88ac17dde226bb57dbd690a464bf3c53ef890727"
+    }
+  ],
   "criteria": [
     {
       "id": "ACTUAL-HOSTED-RECOVERY-AND-DEMONSTRATION",
-      "status": "pending",
-      "evidence": [],
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m77-hosted-acceptance.md",
+        "docs/research/m77-hosted-execution.json"
+      ],
       "reason": null
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m77-hosted-review-delivery-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-HOSTED-ACCEPTANCE1.json",
+        "sha256": "34e63ef3536d69d05cbd5e7c88ac17dde226bb57dbd690a464bf3c53ef890727"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
-    "first_review": "pending",
+    "status": "complete",
+    "first_review": "pass",
     "material_findings_open": 0,
-    "rework_cycles": null,
+    "rework_cycles": 0,
     "escaped_defects": null,
     "repeated_findings": []
   },
@@ -52,6 +67,7 @@
   "metrics_evidence": [],
   "pilot_eligible": false,
   "notes": [
-    "Explicit followup dispatched and accepted after M77 release-controls final review. Actual model/effort unknown; historical independent context reused. Root owns live actions; reviewer owns independent fresh recovery and hosted evidence review."
+    "Explicit followup dispatched and accepted after M77 release-controls final review. Actual model/effort unknown; historical independent context reused. Root owns live actions; reviewer owns independent fresh recovery and hosted evidence review.",
+    "Scoped final review accepted; original failed33POST attempt/causeunknown remains preserved. Actual continuation0/3/0 and allsessionsclosed; realrestart and6browserdownloads verified. Root separate acceptance of QA deliverable, not sole application review. Earlier QA harness overconstraints remain preserved; no application defect inferred from them."
   ]
 }

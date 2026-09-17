@@ -1,3 +1,11 @@
+# M77 delivered — refrigerants and fire suppression
+
+The live synthetic California example now reconciles five devices, five corporate sources and five workpapers, with separately accepted version4 and retained earlier reports. Independent review accepted the live execution, recovery, real same-image restart, zero-write revisit and six exact browser downloads. Overall Scope1 remains incomplete; methods and factors are still candidates.
+
+The original failed33-POST attempt remains frozen with all outcomes and sessions accounted for. A separate reviewed0/3/0 continuation completed only the three missing operations. All live verification sessions are closed. Automatic deployment is restored; live application7d465485/schema20 remains verified. No specialist worker is running.
+
+Root must verify the final closure commit and all six required checks in `.superpowers/m77-final-publication.json` before reporting completion. Read `docs/research/m77-publication.json` and `evaluations/research-qa/m77-hosted-acceptance.md` for the accepted boundary. The browser demonstration is preserved. Collect board feedback before M78: process screening, current cross-family bindings and gross Scope1 reconciliation. Do not rerun either completed continuation or the frozen failed original. Earlier sections are historical.
+
 # M77 continuation reviewed; publication and actual verification next
 
 The refrigerant and fire-suppression presentation is live on schema20 at application7d465485, deploymenta0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f. Automatic deployment remains paused. The original failed 74-event exercise is frozen at SHA84107d09; all33 attempted writes have outcomes and all sessions closed. Its interrupted read cause remains unknown.

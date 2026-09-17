@@ -1,3 +1,23 @@
+# M77 delivered — refrigerants and fire suppression
+
+The live synthetic California example now reconciles five devices, five corporate sources and five workpapers, with separately accepted version4 and retained earlier reports. Independent review accepted the live execution, recovery, real same-image restart, zero-write revisit and six exact browser downloads. Overall Scope1 remains incomplete; methods and factors are still candidates.
+
+The original failed33-POST attempt remains frozen with all outcomes and sessions accounted for. A separate reviewed0/3/0 continuation completed only the three missing operations. All live verification sessions are closed. Automatic deployment is restored; live application7d465485/schema20 remains verified. No specialist worker is running.
+
+Root must verify the final closure commit and all six required checks in `.superpowers/m77-final-publication.json` before reporting completion. Read `docs/research/m77-publication.json` and `evaluations/research-qa/m77-hosted-acceptance.md` for the accepted boundary. The browser demonstration is preserved. Collect board feedback before M78: process screening, current cross-family bindings and gross Scope1 reconciliation. Do not rerun either completed continuation or the frozen failed original. Earlier sections are historical.
+
+# M77 restart passed; final zero-write revisit running
+
+Root sole revisit session85197 after actualsame-image restart passed01:36:38Z, startup01:35:59Z afterintent01:35:29Z. Live7d/schema20/imageeaa86c unchanged; auto deployment paused. Exercise closed13events exact3POST/493requests/allAuthclosed terminal598fafab, independently accepted. Baseline3dde and originalfailed84107 preserved. Do not duplicate/reset/redeploy/restart while revisit active. Root finalbrowser6downloads independentlypass; postrestartUIcheck inprogress. Waitforrevisitclosed0POST, independentactualreview, finalbrowser/evidencerelease, restoreauto andboarddemo. Earliersections historical.
+
+# M77 actual three-operation continuation running
+
+Root sole execution session99664 runs reviewed exercise after actualbaseline and independent admission passed. Baseline4events SHA3dde1611, terminalaf2af8b2,261requests/0POST/allAuthclosed. Original84107 remains frozen. Do not duplicate/reset/retry/restart/redeploy while exercise active. Wait for terminal3POST success/session closure, independent actual review, then same-image restart and0POSTrevisit/browser. Live7d/schema20, auto deployment paused. Earlier sections historical.
+
+# M77 actual continuation baseline running
+
+Root started the sole reviewed baseline in execution session18394 at2026-09-17T00:38:55Z. It is zero application writes; no completed result yet. Do not duplicate invocation, reset journals, restart or redeploy. Published71686967 passed all six checks; candidate2 source pins verified, live7d/schema20 unchanged. Original74-event failed journal84107 remains frozen. Wait for completed baseline/session closure, then independent actual review before exact3writes. Same-image restart/revisit/browser/final acceptance remain. Earlier sections are historical.
+
 # M77 continuation reviewed; publication and actual verification next
 
 The refrigerant and fire-suppression presentation is live on schema20 at application7d465485, deploymenta0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f. Automatic deployment remains paused. The original failed 74-event exercise is frozen at SHA84107d09; all33 attempted writes have outcomes and all sessions closed. Its interrupted read cause remains unknown.

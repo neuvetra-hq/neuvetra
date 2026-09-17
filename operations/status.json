@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-17T00:31:41.409815+00:00",
+  "updated_at": "2026-09-17T02:03:40.080575+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M77",
     "name": "Refrigerants and other fugitive-source coverage",
-    "status": "reviewed_continuation_publication",
-    "next_gate": "Publish reviewed continuation and pass exact remote checks, then fresh zero-write baseline before three final population operations.",
+    "status": "complete",
+    "next_gate": "Board feedback on M77 before dependent M78; root verifies closure publication/checks before final report.",
     "evidence": [
       "operations/feedback/2026-09-16-m76.md",
       "docs/research/m77-product-brief.md"
@@ -126,6 +126,12 @@
       "completed_at": "2026-09-16T17:38:11.121455+00:00",
       "evidence": "docs/research/m76-publication.json",
       "board_feedback": "awaiting_current_demonstration_feedback"
+    },
+    {
+      "id": "M77",
+      "completed_at": "2026-09-16",
+      "evidence": "docs/research/m77-publication.json",
+      "board_feedback": "pending"
     }
   ],
   "runtime": {
@@ -1602,7 +1608,7 @@
     {
       "id": "M77-BACKEND",
       "owner": "/root/m77_backend",
-      "status": "in_progress",
+      "status": "complete",
       "scope": "Persistent source and population lifecycle, SQL20 candidate, authority and native tests; no live/Git actions",
       "evidence": [
         "operations/agent-improvement/runs/M77-BACKEND.json"
@@ -2803,16 +2809,16 @@
     "closure_published_head": "2fec9c40dca45bcef3590db82c8647d31459ef3e"
   },
   "current_m77": {
-    "status": "reviewed_continuation_publication",
+    "status": "complete",
     "baseline": "2fec9c40dca45bcef3590db82c8647d31459ef3e",
     "hosted_schema": 20,
     "hosted_changes": true,
     "active_assignments": [],
-    "coordinator_work": "Publish candidate2 and verify six required checks before actual baseline; no live continuation invoked.",
-    "routing_exception": "Author and independent reviewer completed scoped continuation work. Existing contexts reused; inherited compute unknown.",
+    "coordinator_work": "Accepted live milestone; final closure publication/checks then board demonstration.",
+    "routing_exception": "Specialists completed; requested registry settings recorded, inherited model/effort unknown.",
     "foundation_snapshot": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
     "review": "docs/research/m77-accounting-review.md",
-    "next": "Fresh actual baseline, then exact three writes, same-image restart, zero-write revisit and final browser/independent acceptance.",
+    "next": "Board feedback before M78 process screening/current bindings/gross Scope1 reconciliation.",
     "foundation_published_head": "b0504e0de27813553b7f6a63e4ed47a513740147",
     "foundation_checks": "six_pass",
     "root_ui": "Actual local final browser correction, access transitions, exact retained HTML/JSON and restart passed. Actual hosted initial unresolved page and390px fit observed. Hosted completed-state browser pending.",
@@ -2841,7 +2847,7 @@
     },
     "pending_review_task": null,
     "maintenance_active": false,
-    "automatic_deployment_paused": true,
+    "automatic_deployment_paused": false,
     "migration_attempted": true,
     "migration_committed": true,
     "requested_deployment_id": "a0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f",
@@ -2855,6 +2861,32 @@
     "continuation_candidate": "operations/agent-improvement/snapshots/M77-CONTINUATION-CANDIDATE2.json",
     "continuation_candidate_sha256": "80b1198275f5ba25e58d54a3a3b37ccad99a158d8f2573faa696d56bd8653dd4",
     "continuation_author_evidence": "Full actual-restored-clone rehearsal4tests842assertions 0/0/3/0 with allsessionsclosed; separate finalguard2tests41assertions; independently accepted candidate2.",
-    "continuation_review": "evaluations/research-qa/m77-hosted-continuation-review.md"
+    "continuation_review": "evaluations/research-qa/m77-hosted-continuation-review.md",
+    "continuation_published_head": "71686967ebd64a33af034523afdc17664fc96297",
+    "continuation_checks": "all_six_passed",
+    "continuation_execution_session": null,
+    "observed_read_latency": {
+      "observedAt": "2026-09-17T00:49:54Z",
+      "evidence": ".superpowers/m77-baseline-progress-http.jsonl",
+      "observation": "Recent authenticated fugitive evidence GETs returned200 at roughly4-5seconds each; baseline remains running. Small observed sample, no original-failure cause established.",
+      "next": "Future latency refinement; preserve current accepted verification."
+    },
+    "continuation_baseline": {
+      "status": "passed",
+      "posts": 0,
+      "requests": 261,
+      "allSessionsClosed": true,
+      "journalSha256": "3dde161113d259a7e5931599210b3513aa6251b04130ea869ed2a773f0f7cbd1",
+      "terminalSha256": "af2af8b24ce2ddde6008e00da9be691d077abc34bd35e86e02677297fc2f09ed"
+    },
+    "continuation_baseline_review": "evaluations/research-qa/m77-hosted-continuation-baseline-review.md",
+    "continuation_exercise": "passed_exact3POST_493requests_all_sessions_closed",
+    "continuation_exercise_review": "evaluations/research-qa/m77-hosted-continuation-exercise-review.md",
+    "actual_restart": "passed_same_image_new_startup_ready20_2026-09-17T01:36:38Z",
+    "hosted_acceptance": "evaluations/research-qa/m77-hosted-acceptance.md",
+    "publication": "docs/research/m77-publication.json",
+    "continuation_revisit": "passed_0POST_272requests_all_sessions_closed",
+    "hosted_browser": "passed_final_and_historical_reports_6exact_downloads_narrow_view_and_postrestart",
+    "closure_publication_receipt": ".superpowers/m77-final-publication.json"
   }
 }
