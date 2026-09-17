@@ -300,6 +300,13 @@ export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
 
   async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}
+  async findScope1(userId:string,companyId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1(tx,companyId,authorities,policy))}
+  async findScope1Version(userId:string,companyId:string,streamId:string,versionId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Version(tx,companyId,streamId,versionId,authorities,policy))}
+  async findScope1Report(userId:string,companyId:string,streamId:string,reportId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Report(tx,companyId,streamId,reportId,authorities,policy))}
+  async saveProcessScreen(userId:string,companyId:string,streamId:string|null,input:M78ProcessSaveInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>saveProcessScreen(tx,userId,companyId,streamId,input,authorities,policy))}
+  async saveScope1Inventory(userId:string,companyId:string,streamId:string|null,input:M78InventorySaveInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>saveScope1Inventory(tx,userId,companyId,streamId,input,authorities,policy))}
+  async reviewScope1Version(userId:string,companyId:string,streamId:string,family:M78Family,input:M78ReviewInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>reviewScope1Version(tx,userId,companyId,streamId,family,input,authorities,policy))}
+  async createScope1Report(userId:string,companyId:string,streamId:string,family:M78Family,input:M78ReportInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>createScope1Report(tx,userId,companyId,streamId,family,input,authorities,policy))}
   async saveFugitiveSource(userId:string,companyId:string,streamId:string|null,input:M77SourceSaveInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>saveFugitiveSource(tx,userId,companyId,streamId,input,authority))}
   async saveFugitivePopulation(userId:string,companyId:string,streamId:string|null,input:M77PopulationSaveInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>saveFugitivePopulation(tx,userId,companyId,streamId,input,authority))}
   async reviewFugitive(userId:string,companyId:string,streamId:string,family:M77Family,input:M77ReviewInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>reviewFugitive(tx,userId,companyId,streamId,family,input,authority))}
@@ -1141,3 +1148,4 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
   }
 
 }
+import {readScope1,readScope1Version,readScope1Report,saveProcessScreen,saveScope1Inventory,reviewScope1Version,createScope1Report,type M78Authorities,type M78Policy,type M78Family,type M78ProcessSaveInput,type M78InventorySaveInput,type M78ReviewInput,type M78ReportInput} from './m78'

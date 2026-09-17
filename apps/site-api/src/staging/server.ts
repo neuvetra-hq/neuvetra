@@ -105,6 +105,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const controlledFleetRoutes=createM75Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const stationaryEquipmentRoutes=createM76Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),diesel:createM76DieselAuthority()}})
   const fugitiveRoutes=createM77Routes({database,validateUser,origin:config.origin,authority:createM77Authority()})
+  const scope1Routes=createM78Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),mobile:createM74Authority(),diesel:createM76DieselAuthority(),fugitive:createM77Authority()},policy:M78_REVIEWED_POLICY})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -117,7 +118,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 20) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 21) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -156,6 +157,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+      if (url.pathname.includes('/process-screen') || url.pathname.includes('/scope1-inventory')) return scope1Routes(forwarded)
       if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)
       if (url.pathname.includes("/controlled-fleet")) return controlledFleetRoutes(forwarded)
       if (url.pathname.includes("/stationary-equipment") || url.pathname.includes("/stationary-diesel")) return stationaryEquipmentRoutes(forwarded)
@@ -211,3 +213,5 @@ if (import.meta.main) {
     process.exitCode = 1
   }
 }
+import {createM78Routes} from '../workspace/m78-routes'
+import {M78_REVIEWED_POLICY} from '../../../../packages/neuvetra-database/src/m78-policy'

@@ -187,3 +187,12 @@ apps/site-web/src/m71-local-preview.tsx
 !apps/site-api/src/calculation/m77_fugitive.py
 !tools/staging/
 !tools/staging/m77-image-smoke.ts
+
+!packages/neuvetra-database/src/m78.ts
+!packages/neuvetra-database/src/m78-contract.ts
+!packages/neuvetra-database/src/m78-validation.ts
+!packages/neuvetra-database/src/m78-reconciliation.ts
+!packages/neuvetra-database/src/m78-policy.ts
+!packages/neuvetra-database/src/m78-report.ts
+!packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql
+!apps/site-api/src/workspace/m78-routes.ts

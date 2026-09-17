@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "id": "M78-HOSTED-DATABASE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "tools/staging/m78-hosted-database.ts",
+      "sha256": "41c067aa376985210d3175d9e651562c2380e0e88cddfcd54a3725e30626cf61"
+    },
+    {
+      "path": "tools/staging/m78-hosted-database.test.ts",
+      "sha256": "d1fbba6db22f9e0db8abcbdf7d186e21e1b68569849b6142f4ebaf1516a57bd0"
+    },
+    {
+      "path": "docs/research/m78-hosted-database.md",
+      "sha256": "a7d178d4cde163a8274c2d1c9593da8bcce8f84c3f02ec058f1a2f7e33ea37db"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M78-HDB-CONTRACT",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-hosted-database.ts",
+        "tools/staging/m78-hosted-database.test.ts",
+        "docs/research/m78-hosted-database.md"
+      ],
+      "reason": "Prepared fixed project/TLS/stdin backup20, explicit hosted archive provenance and guarded fresh local restore adapter, exact locked additive upgrade21 and new ACL checks. No network/database/credential/host execution."
+    },
+    {
+      "id": "M78-HDB-GATE",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-hosted-database.ts",
+        "tools/staging/m78-hosted-database.test.ts",
+        "docs/research/m78-hosted-database.md"
+      ],
+      "reason": "Complete transitive102file source map plus exact review/commit/all required checks, maintenance chronology, actual encrypted20 restore/recovery and local occupied21 forward recovery; separate identities and bounded semantic replay counters with prior accepted closure."
+    },
+    {
+      "id": "M78-HDB-UNCERTAINTY",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-hosted-database.ts",
+        "tools/staging/m78-hosted-database.test.ts",
+        "docs/research/m78-hosted-database.md"
+      ],
+      "reason": "Exclusive append-only started/outcome journal, unknown COMMIT and committed receipt failure stop, no automatic retries;8puretests90assertions and targeted tool/test typecheck pass."
+    },
+    {
+      "id": "M78-HDB-INDEPENDENT",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Independent final tool review and every actual hosted archive/restore/upgrade execution remain pending root; author does not provide release approval."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-hosted-database.ts",
+      "sha256": "41c067aa376985210d3175d9e651562c2380e0e88cddfcd54a3725e30626cf61"
+    },
+    {
+      "path": "tools/staging/m78-hosted-database.test.ts",
+      "sha256": "d1fbba6db22f9e0db8abcbdf7d186e21e1b68569849b6142f4ebaf1516a57bd0"
+    },
+    {
+      "path": "docs/research/m78-hosted-database.md",
+      "sha256": "a7d178d4cde163a8274c2d1c9593da8bcce8f84c3f02ec058f1a2f7e33ea37db"
+    }
+  ],
+  "routing_exception": {
+    "reason": "Root assigned existing backend fallback after runtime dispatch limit; inherited compute is unobservable. Dispatch helper cannot currently validate sibling M78-OPERATORS-01 artifact digest; this is not an applied model override.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L02",
+    "L07"
+  ],
+  "notes": [
+    "Requested critical Sol/high; actual model/effort unknown. No frozen backend, SQL, local operator or historical source changes; no Git, host, ENV export, network/database execution or credential reads. Only synthetic in-memory transport/transaction failures and new private journal file tests executed.",
+    "Root first-draft review identified invalid nonempty process-discovery assumption, overly broad semantic replay claims and incomplete transitive source pins. These were repaired before final independent handoff; first review failure remains recorded. Complete ten-source author native receipt has zero indicated process/gas IDs; existing authoritative state reader reconstructs exact empty reservation membership.",
+    "First pure parser tests exposed using browser10MB parser with larger operator capacities. Separate duplicate-key/depth-bounded operator parser repaired the issue; backend parser unchanged. Final8puretests90assertions pass; targeted tool/test typecheck pass.",
+    "Actual encrypted archive20 backup/restore and populated local21 forward recovery are separate evidence profiles. Compatibility transfer bundle hash is not the encrypted archive or hosted snapshot hash. Complete bytes/catalog preserved, bounded semantic replay only, provider Auth/config/storage recovery excluded.",
+    "Current source artifacts ready for independent freeze/review; immutable reviewed bundle and final run closure belong to root following review. Root new RUI-F01 issue will be diagnosed separately without treating this hosted preparation as runtime approval."
+  ]
+}

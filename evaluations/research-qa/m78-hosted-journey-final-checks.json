@@ -1,0 +1,57 @@
+{
+  "profile": "m78-independent-hosted-journey-review.v1",
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-OPERATORS-01-HOSTED-CANDIDATE4.json",
+    "sha256": "1f7e00c39c9fd08dd977c99e7fe45530600bb4af396e138392ff3bfa0b78b043"
+  },
+  "sourcePins": [
+    {
+      "path": "tools/staging/check-m78-hosted.ts",
+      "sha256": "f853630d19db560e90ec1488473c3bb949621c4b0615b31b21f31d828e6af941"
+    },
+    {
+      "path": "tools/staging/check-m78-hosted.test.ts",
+      "sha256": "e395e62cc154b35783efa4aa043e4c39da66750bbc1837aa82d55fb1f36e8f4c"
+    },
+    {
+      "path": "docs/research/m78-operator-plan.md",
+      "sha256": "c3b31321d037b3797b5cf29d7fd503264a7f1fc2592c9de4045904004aae99a8"
+    },
+    {
+      "path": "tools/staging/m78-hosted-plan.ts",
+      "sha256": "c91990277ab49821cb8bd8d0fa62b71bf3de09e627768278775335828a1409cd"
+    },
+    {
+      "path": "tools/staging/m78-journey-source-pins.ts",
+      "sha256": "f1978cf8da61af87f4d25845e974ee94365e429c413d6a7ef027763b5345a224"
+    },
+    {
+      "path": ".superpowers/m78-private-journey.ps1",
+      "sha256": "41158e4212ac4cf14f0b09cfe29aedc2fd4c0c7b478860d5a215e309254cbc6c"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-journey-independent.test.ts",
+      "sha256": "cd2998d38b01816914cda833172271a4d25fdd9b0c7bed711b71608d05ac9484"
+    }
+  ],
+  "checks": {
+    "authorPure": {
+      "testsPassed": 9,
+      "assertions": 74
+    },
+    "independentFocused": {
+      "testsPassed": 4,
+      "assertions": 193
+    },
+    "targetedStrictTypecheck": "pass",
+    "snapshotExactRawAndLFAndTextMatch": true,
+    "combined": {
+      "testsPassed": 13,
+      "assertions": 267
+    }
+  },
+  "liveRequests": 0,
+  "privateConfigReads": 0,
+  "importedBackendReapproved": false,
+  "rootSourceGateClosure": "enforced exact independently reviewed127path closure before credentialunseal; wrapper source read only"
+}

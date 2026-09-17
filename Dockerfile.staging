@@ -31,6 +31,7 @@ COPY packages/neuvetra-database/src/m74-contract.ts packages/neuvetra-database/s
 COPY packages/neuvetra-database/src/m75-contract.ts packages/neuvetra-database/src/m75-validation.ts packages/neuvetra-database/src/m75-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m76-contract.ts packages/neuvetra-database/src/m76-validation.ts packages/neuvetra-database/src/m76-report.ts packages/neuvetra-database/src/m76-diesel-contract.ts packages/neuvetra-database/src/m76-diesel-validation.ts packages/neuvetra-database/src/m76-diesel-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m77-contract.ts packages/neuvetra-database/src/m77-validation.ts packages/neuvetra-database/src/m77-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
@@ -92,6 +93,9 @@ COPY apps/site-api/src/workspace/m77-routes.ts ./apps/site-api/src/workspace/
 COPY apps/site-api/src/calculation/m77-authority.ts apps/site-api/src/calculation/m77_fugitive.py ./apps/site-api/src/calculation/
 COPY packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql ./packages/neuvetra-database/src/migrations/
 COPY tools/staging/m77-image-smoke.ts ./tools/staging/
+COPY packages/neuvetra-database/src/m78.ts packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/m78-routes.ts ./apps/site-api/src/workspace/
+COPY packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql ./packages/neuvetra-database/src/migrations/
 # Import and hash verification happen without credentials or network calls.
 RUN bun --version && python --version && bun -e 'await import("./apps/site-api/src/staging/server.ts"); const {verifyStagingAssets}=await import("./apps/site-api/src/staging/assets.ts"); await verifyStagingAssets("/app/apps/site-web/dist-staging");'
 USER 10001:10001

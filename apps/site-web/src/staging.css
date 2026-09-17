@@ -66,3 +66,21 @@
 .stationary-draft,.stationary-reconciliation,.stationary-evidence,.stationary-reports { margin:24px 0; }
 .stationary-reports article { border-top:1px solid #c5d4ce; padding:12px 0; }
 @media(max-width:640px) { .stationary-fields { grid-template-columns:minmax(0,1fr); } .controlled-stationary fieldset { padding:12px; } .controlled-stationary th,.controlled-stationary td { padding:8px; } .controlled-stationary button { max-width:100%; white-space:normal; } }
+/* Scope 1 keeps exact evidence and unknown coverage visible on narrow screens. */
+.scope1-workspace { min-width: 0; }
+.scope1-workspace textarea { display: block; width: 100%; min-height: 5rem; }
+.scope1-workspace fieldset { min-width: 0; }
+.scope1-workspace button { white-space: normal; overflow-wrap: anywhere; }
+.scope1-workspace li, .scope1-workspace p { overflow-wrap: anywhere; }
+.scope1-totals, .scope1-retained { margin: 1.5rem 0; padding: 1rem; border: 1px solid #b9c8c0; border-radius: .6rem; }
+.scope1-number { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.scope1-table-wrap { max-width: 100%; overflow-x: auto; }
+.scope1-table-wrap table { width: 100%; border-collapse: collapse; }
+.scope1-table-wrap th, .scope1-table-wrap td { padding: .65rem; text-align: left; border-bottom: 1px solid #c9d3cd; vertical-align: top; }
+.scope1-table-wrap td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scope1-totals > .scope1-table-wrap table { min-width: 25rem; }
+.scope1-totals > .scope1-table-wrap tbody th { white-space: nowrap; }
+.scope1-rollup thead th:last-child { min-width: 9rem; }
+.scope1-history { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+.scope1-report-preview { display: block; width: 100%; min-height: 36rem; border: 1px solid #c9d3cd; margin-top: 1rem; background: white; }
+@media (max-width: 600px) { .scope1-totals, .scope1-retained { padding: .75rem; } .scope1-process-editor .stationary-fields { grid-template-columns: 1fr; } }

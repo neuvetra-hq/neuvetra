@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "id": "M78-OPERATORS-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m78_security",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-OPERATORS-01-FINAL-CANDIDATE1.json",
+      "sha256": "acf3416cccae1a152f251e6cc3e8a572414ae8eb1d87f4518aa8155e1f0d4a2f"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-OPERATORS-01-NATIVE-RESULT.json",
+      "sha256": "b4598882cbc90a3e6bfcad51ad0059e6d360f0d799756369c331d64655ec90b8"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-plan-reuse",
+      "reason": null,
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-OPERATORS-01-FINAL-CANDIDATE1.json"
+      ],
+      "status": "pass"
+    },
+    {
+      "id": "AC-02-local-operators",
+      "status": "pass",
+      "reason": null,
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-OPERATORS-01-NATIVE-RESULT.json"
+      ]
+    },
+    {
+      "id": "AC-03-independent-review",
+      "status": "pass",
+      "reason": null,
+      "evidence": [
+        "evaluations/research-qa/m78-recovery-review.md",
+        "evaluations/research-qa/m78-hosted-journey-preparation.json"
+      ]
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-recovery-review.md",
+      "evaluations/research-qa/m78-hosted-journey-preparation.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-OPERATORS-01-FINAL-CANDIDATE1.json",
+        "sha256": "acf3416cccae1a152f251e6cc3e8a572414ae8eb1d87f4518aa8155e1f0d4a2f"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-OPERATORS-01-NATIVE-RESULT.json",
+        "sha256": "b4598882cbc90a3e6bfcad51ad0059e6d360f0d799756369c331d64655ec90b8"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": 3,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "No database connections or hosted/private actions performed. First author pure test failed letters-only scope1 identifier validation; repaired own M78 reader while leaving all M77 bytes untouched. Current8tests/51assertions and strict targeted TypeScript pass. Explicit null reviewed migration pin disables upgrade21/recovery21 until author freeze. Immutable final candidate/native proof/independent review remain pending. UI source task separately closed with root wrapper.",
+    "Independent6file candidate1 local-only review accepted contingent finalpin; snapshotd29ed. Addednativeharness and exactsource allowlist require targeted rereview. Rootheld5928 before any DB connection due independent backend defect. No source/globalrole mutation; no operatornativeexecution. Current source bindings refreshed.",
+    "Candidate3 preserves first actual native failure at .superpowers/m78-operators-1789619198470/failure.json. Read-only cast repair validation passed113tables/2210objects. Combined pure13tests96assertions pass. Hosted tests use mocked fetch only, no host/credentials.",
+    "Candidate4 preserves native refusal2, canonicalizes inet address presentation via host() without broadening loopback limits. Read-only20/21 bundle creation passed; no source/globalrole writes.",
+    "Hosted candidate2 closes self-identified per-POST legacy Auth audit gap. Every helper Auth intent/outcome is redacted and all8operations/closure required. Outcome-journal append failure still returns known login response for helper cleanup and fails final admission. Mocked pure5tests49assertions and strict TS pass; no hosted requests or credentials.",
+    "Native attempt3 created only m78_ops_upgrade_1789619903954, preserved after verify_exact_application refusal; no21 applied. Candidate5 preserves complete column type metadata except explicit current-database marker.",
+    "Candidate6 new546673 migration/new populated source after root capacity repair. Hosted candidate3 hermetic8tests69assertions and strictTS; no host calls. Full independent local recovery remains pending.",
+    "Hosted reviewer HJ-F01 demonstrated fully rehashed foreign route/empty identity admitted by candidate3 despite runtime guards. Candidate4 repeats route authorization during journal admission, requires matched201 and UUID/hash allowlisted verified identity, and initial provenance.9tests74assertions+strictTS pass. Intermediate author string replacement produced syntax error; restored exact candidate3 bytes and applied callback replacement, preserving reviewed predecessor snapshot.",
+    "Actual local native resultb4598882 passed all backups/upgrade/recovery/replay controls with66GETs; allsource/globalroles unchanged andownedconnectionsclosed. No encryption/provider/hosted/browser/fulllegacysemanticreplay claim. Final1 ten-source snapshot ready independent closure.",
+    "Portable immutable native result copy under snapshots has identical b4598882 bytes, so completed criterion does not depend on ignored .superpowers paths in CI. Original local result and receipt directory preserved.",
+    "Final independent local recovery acceptance: /root/m76_backend review17c2d4e2316a4300e3468afeee910ae3eea10c9378bafc24fc14ebaae3650265 binds exact finalsourceacf3416 and portableb459 result. Own26runtimeGETs/15downloads/3nullreviews and8no-claim tables passed; complete live clone/source catalogs and rows exact. Hosted source preparation independently reviewed by /root/m77_backend, machinee1be639d0a5c9bcc1832346dc59334a3e93acf2aa774952d01f825bdd214b8a3; no hosted run claimed.",
+    "First_review pass refers to initial bounded local source admission; later three native preparation defects after admitted candidates are recorded as escaped_defects3, not production incidents. Hosted extension initially exposed HJ-F01, repaired and independently closed before execution. Rework_cycles/resource usage remain unknown; all historical failures/candidates remain intact.",
+    "Task complete means local operator authorship, independently accepted fictional recovery and hosted checker preparation only. Root owns hosted database operations, actual journey, wrappers, provider/cryptographic recovery, deployment and publication."
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-inventory.ts",
+      "sha256": "ea93686812910082438bf8ecfd9ef8756dddd6048897d369a494e0fdd700f40a"
+    },
+    {
+      "path": "tools/staging/m78-backup.ts",
+      "sha256": "70f2de4e25aa04f35e84440e2915aaddad5437272519752579bff5bb785dc4fa"
+    },
+    {
+      "path": "tools/staging/m78-upgrade.ts",
+      "sha256": "3c0b02fdf88f8cb4cbc0a4e0ccfa15f23b975c3efcb93867fa1cf563cb529dab"
+    },
+    {
+      "path": "tools/staging/m78-restore.ts",
+      "sha256": "7e7b17f8cf7e0210117ed76c335aa180ab27e236b180bc5bc05c33e0ccc2fe7f"
+    },
+    {
+      "path": "tools/staging/m78-replay.ts",
+      "sha256": "9b93265dcd5fe1044a5d841d67a478cdbc0db47c87b6e489ed078cd51674458d"
+    },
+    {
+      "path": "tools/staging/m78-operators.test.ts",
+      "sha256": "c9627edf5ac9247e24860388279d15e13d54ee8c7fd206044302c3cf85f6ee80"
+    },
+    {
+      "path": "tools/staging/m78-operators-native.ts",
+      "sha256": "0e8917fa190920c9f1f35bb99715754881405cc84064d3089140f10471768306"
+    },
+    {
+      "path": "tools/staging/check-m78-hosted.ts",
+      "sha256": "f853630d19db560e90ec1488473c3bb949621c4b0615b31b21f31d828e6af941"
+    },
+    {
+      "path": "tools/staging/check-m78-hosted.test.ts",
+      "sha256": "e395e62cc154b35783efa4aa043e4c39da66750bbc1837aa82d55fb1f36e8f4c"
+    },
+    {
+      "path": "docs/research/m78-operator-plan.md",
+      "sha256": "9f145e5d4ab0b6ae3d65bcc746ce1032b67ea9709e44f1036c6ff62b8df4e388"
+    }
+  ]
+}

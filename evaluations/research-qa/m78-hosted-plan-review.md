@@ -1,0 +1,31 @@
+# M78 independent fictional hosted-plan and integration review
+
+Task M78-HOSTED-PLAN-REVIEW-01. Reviewer /root/m76_backend, security-reliability critical requested Astra/high; actual inherited compute unknown after fresh specialist dispatch limits. Read-only author code review and reviewer-owned pure fixture, no host/database/Git actions for this task. Reviewer historically authored M76 backend and M77 operators; this acceptance covers new M78 recipe/integration delta, not historical safeguards.
+
+## Bounded verdict
+
+**Accept the reviewed fictional recipe and repaired CI integration as preparation for a separately gated local rehearsal.** This is not hosted execution permission, deployment acceptance, or proof the38POST scenario ran. Transport must enforce exact host/project/reviewed source/image, fresh backup and independent occupied forward restore/replay, maintenance, durable intent/outcome, explicit authority and uncertain-write refusal. Root's newly reported RUI-F01 positive process correction/current inventory capture remains an open release gate outside this pure recipe verdict.
+
+## Accounting and state sequencing
+
+The recipe deliberately retains initial blocked inventory/null-review report before correcting the factual corporate graph. Mandatory factual corporate successor and distinct review then precede source rebinding, physical register successors and process discovery. Source/facility/entity/coverage IDs are copied intact; control explanation and included entity boundaries rely only on retained fictional artifact900 full2025 operational-control facts. Artifact900 does not support process negatives. New10fictional statements separately cover3facilities and2offsite entity rows with explicit fictional annual activities/equipment/inspection descriptions. Seven process categories and7gas rows use structured scope/source/evidence/rationale; PFC/SF6/NF3 absence remains proposed and requires distinct review. R410A stays an opaque whole blend; HFC source IDs are not invented constituents.
+
+Static count38POST: initial inventory/report2; corporate successor/review2;10source successor/reviews20;3physical successor/reviews6; process/save/nullreport/review/acceptedreport4; inventory successor/nullreport/review/acceptedreport4. This is source inspection, not38executed requests.
+
+Each family uses its real path and stream identity; source successors copy all quantities, events, evidence and physical facts except exact corporate binding. Exact unrounded result is compared before/after. Fugitive source review uses required expectedDependencySha256:null; other source review field sets follow their family validators. Fleet/stationary/fugitive population successors use current reconciliation dependency pin and review exact successor dependencies. M78 saves use family-specific dependency derivation, exact predecessor binding and report captured decision/reconciliation IDs. Separate reviewer selection excludes every cumulative contributor; if neither manager is eligible the recipe stops. Server/data layer must independently enforce this; string selection is not authorization.
+
+History is additive: original blocked inventory remains predecessor of current inventory; pending reports are created before each distinct review and accepted reports afterward. Recipe rejects existing M78 versions instead of restarting. It does not itself audit every previous row/catalog byte or implement idempotent continuation; caller/recovery evidence must provide those controls. No scenario may substitute these fictional declarations for customer evidence.
+
+## Actual independent pure evidence
+
+Reviewer suite m78-hosted-plan-independent.test.ts: **5pass/34assertions/157ms**. Uses a retained fictional local receipt and mock callbacks; no database connections or POST execution. It proves corporate graph copy preservation, complete facility/offsite structured coverage and exact opaque HFC source links, initial blocked save's exact dependencies/null predecessor through actual validator, and refusal of existing process/inventory, changed source count and changed ownership. Fixture receipt is local evidence, not a portable CI corpus; this suite is not added to GitHub CI.
+
+## HP-F01 and CI repair
+
+Initial actual compatibility run of old m77-operators.test.ts in current21 checkout yielded7pass/1fail84assertions141ms. Historical canonicalReceipts intentionally admits19/20; its unconditional20positive control correctly refuses21. **HP-F01 repaired without weakening frozen guard**: workflow now checks out exact5b7a31910e1f2f51b68d823fdf7bf008a14a6a2f into .legacy-m77, installs that lockfile, runs its M77 operator suite in its own working directory, and excludes that suite from current21 command. Targeted source inspection accepts this fix. No independent remote CI result or local frozen-checkout execution claimed. Other M77 hosted/journal suites remain current21 for integration. Independent broader compatibility run41pass/4explicit native skips415assertions196ms shows no other unconditional manifest mismatch in exercised M73–76 pure suites/current M77 journal helpers; root separately reported23pass239assertions for remaining current tests.
+
+Root CI now runs the independent portable M78 native blocked test with exact55463 CI baseline; root bootstrap must already apply21. It includes browser decoder/operator pure suites and portable offline accounting fixtures. Local-receipt-dependent integrated rational script is not in CI. Dockerfile.staging and its dedicated dockerignore explicitly include all M78 backend/semantic modules, routes and migration21; standalone policy imports require no missing corpus file. Inline image smoke expects21/readiness21 and refuses unauthenticated M78 route. Reviewer did not run Docker build/image smoke or all CI steps; these remain actual root/CI gates. Normal Dockerfile not part of this staging change.
+
+## Evidence boundary
+
+No author source edits, host credentials/config, customer rows, deployment, production factor release, complete Scope1/2/3 or external assurance approval. Author corrections and root final source/UI pins require their own targeted review. Current recipe preparation does not clear RUI-F01 or replace independent full recovery/actual hosted journal transport review.

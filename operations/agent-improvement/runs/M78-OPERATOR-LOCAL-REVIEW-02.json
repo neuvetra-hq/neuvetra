@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "M78-OPERATOR-LOCAL-REVIEW-02",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-02-CANDIDATE4.json",
+      "sha256": "27f933e2403b273347dba3045ef8f128437682b3afde390f06a4746d8cd510ba"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CATALOG-NORMALIZATION-AND-FINAL-READMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-operator-final-admission-review.md",
+        "evaluations/research-qa/m78-operator-local-admission-candidate6.json",
+        "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-02-CANDIDATE4.json"
+      ],
+      "reason": "Candidate6 exact546 SQL/source/receipt rebind reviewed;946-column current/nullforeign controls retained. Fresh local first-rehearsal admission issued, explicit root acceptance pending; actual recovery not accepted. Final-pin pure author+reviewer14pass87assertions108ms; initial reviewer stale pin expectation updated, prior accepted snapshot unchanged."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-operator-local-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-02-CANDIDATE4.json",
+        "sha256": "27f933e2403b273347dba3045ef8f128437682b3afde390f06a4746d8cd510ba"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": 2,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-operator-candidate3-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-operator-final-admission-review.md",
+      "sha256": "eb5900114f89d4c328698891880096fd3cb2ac37e8db57135b0b4e358ef6bead"
+    },
+    {
+      "path": "evaluations/research-qa/m78-operator-local-admission-candidate6.json",
+      "sha256": "7dc88daff90fbf166d8930f4b4bc8ab5b00e85af4383f2ada01363ebbd1e22b9"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-02-CANDIDATE4.json",
+      "sha256": "27f933e2403b273347dba3045ef8f128437682b3afde390f06a4746d8cd510ba"
+    },
+    {
+      "path": "evaluations/research-qa/m78-operator-rehearsal-independent.test.ts",
+      "sha256": "4225cffbc05285b41f20fff4af6797c8229bef93af7f008fbf5138b4ed6099f0"
+    }
+  ]
+}

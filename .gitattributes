@@ -97,3 +97,11 @@ tools/staging/m76-seal-backup.ps1 -text whitespace=cr-at-eol
 
 # M77 recovery script retains the exact independently reviewed bytes.
 tools/staging/m77-seal-backup.ps1 -text whitespace=cr-at-eol
+
+# M78 already reviewed evidence retains its original Windows bytes and hashes.
+evaluations/research-qa/m78-hosted-journey-first-probe.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-hosted-journey-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-ui-accounting-review.md -text whitespace=-blank-at-eol,cr-at-eol
+operations/agent-improvement/runs/M78-UI-ACCOUNTING-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-OPERATORS-01-LOCAL-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-UI-ACCOUNTING-01-SOURCE-REVIEW.json -text whitespace=cr-at-eol

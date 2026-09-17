@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "M78-UI-ACCOUNTING-01",
+  "role": "accounting-validation",
+  "execution_context": "/root/m78_security",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "sha256": "9c3943ac6750b87bb7c354b2d6e714a7c30c196bda6a3b17e2ebfe87904dd47c",
+      "path": "operations/agent-improvement/snapshots/M78-UI-ACCOUNTING-01-SOURCE-REVIEW.json"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-totals-semantics",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-ui-accounting-review.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-02-seven-gas-editor",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-ui-accounting-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-ui-accounting-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "sha256": "9c3943ac6750b87bb7c354b2d6e714a7c30c196bda6a3b17e2ebfe87904dd47c",
+        "path": "operations/agent-improvement/snapshots/M78-UI-ACCOUNTING-01-SOURCE-REVIEW.json"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Provisional source review completed; all material UI findings resolved at source level. Frozen report supplied to root for closure acknowledgment. No runtime/host/release acceptance. Historical physical-label proof and keyboard interactions remain integrated runtime checks."
+  ],
+  "source_artifacts": [
+    {
+      "sha256": "356533b8d741ff66b0e3aa1b57cde82f6d68d46b481de0debaa1fd98da94ff09",
+      "path": "evaluations/research-qa/m78-ui-accounting-review.md"
+    }
+  ]
+}

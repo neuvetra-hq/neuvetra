@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "task": "M78-ACCOUNTING-01",
+  "sourcePath": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-factors-hub-2025.xlsx",
+  "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+  "sourceBytes": 1014275,
+  "sheet": "Emission Factors Hub",
+  "editionCell": "F3",
+  "editionText": "Last Modified: January 15, 2025",
+  "factorCells": [
+    {
+      "cell": "E38",
+      "rawXml": "53.06",
+      "styleIndex": "36",
+      "numberFormatId": 43,
+      "customNumberFormat": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "53.06"
+    },
+    {
+      "cell": "F38",
+      "rawXml": "1",
+      "styleIndex": "37",
+      "numberFormatId": 165,
+      "customNumberFormat": "_(* #,##0.0_);_(* \\(#,##0.0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "1.0"
+    },
+    {
+      "cell": "G38",
+      "rawXml": "0.1",
+      "styleIndex": "36",
+      "numberFormatId": 43,
+      "customNumberFormat": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "0.10"
+    },
+    {
+      "cell": "D55",
+      "rawXml": "0.13800000000000001",
+      "styleIndex": "63",
+      "numberFormatId": 164,
+      "customNumberFormat": "_(* #,##0.000_);_(* \\(#,##0.000\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "0.138"
+    },
+    {
+      "cell": "E55",
+      "rawXml": "73.959999999999994",
+      "styleIndex": "36",
+      "numberFormatId": 43,
+      "customNumberFormat": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "73.96"
+    },
+    {
+      "cell": "F55",
+      "rawXml": "3",
+      "styleIndex": "37",
+      "numberFormatId": 165,
+      "customNumberFormat": "_(* #,##0.0_);_(* \\(#,##0.0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "3.0"
+    },
+    {
+      "cell": "G55",
+      "rawXml": "0.6",
+      "styleIndex": "36",
+      "numberFormatId": 43,
+      "customNumberFormat": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "0.60"
+    },
+    {
+      "cell": "D107",
+      "rawXml": "10.210000000000001",
+      "styleIndex": "68",
+      "numberFormatId": 43,
+      "customNumberFormat": "_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "10.21"
+    },
+    {
+      "cell": "F256",
+      "rawXml": "9.4999999999999998E-3",
+      "styleIndex": "103",
+      "numberFormatId": 166,
+      "customNumberFormat": "_(* #,##0.0000_);_(* \\(#,##0.0000\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "0.0095"
+    },
+    {
+      "cell": "G256",
+      "rawXml": "4.3099999999999999E-2",
+      "styleIndex": "217",
+      "numberFormatId": 166,
+      "customNumberFormat": "_(* #,##0.0000_);_(* \\(#,##0.0000\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "0.0431"
+    },
+    {
+      "cell": "E524",
+      "rawXml": "1",
+      "styleIndex": "229",
+      "numberFormatId": 169,
+      "customNumberFormat": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "1"
+    },
+    {
+      "cell": "E525",
+      "rawXml": "28",
+      "styleIndex": "275",
+      "numberFormatId": 169,
+      "customNumberFormat": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "28"
+    },
+    {
+      "cell": "E526",
+      "rawXml": "265",
+      "styleIndex": "275",
+      "numberFormatId": 169,
+      "customNumberFormat": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "265"
+    },
+    {
+      "cell": "E532",
+      "rawXml": "1300",
+      "styleIndex": "275",
+      "numberFormatId": 169,
+      "customNumberFormat": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "1300"
+    },
+    {
+      "cell": "E538",
+      "rawXml": "3350",
+      "styleIndex": "275",
+      "numberFormatId": 169,
+      "customNumberFormat": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"??_);_(@_)",
+      "publishedDecimal": "3350"
+    },
+    {
+      "cell": "D575",
+      "rawXml": "1924",
+      "styleIndex": "230",
+      "numberFormatId": 170,
+      "customNumberFormat": "_(* #,##0_);_(* \\(#,##0\\);_(@_)",
+      "publishedDecimal": "1924"
+    }
+  ],
+  "r410aCompositionCell": "E575",
+  "r410aComposition": "50% HFC-32 , 50% HFC-125",
+  "normalization": "Pinned published decimals; source raw binary-storage tails are not additional precision",
+  "pdfs": [
+    {
+      "path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-fugitive-emissions-2023.pdf",
+      "sha256": "fb3dd5c9677096094c2acef769c7fe2fb90def6feac403cf9c817f5810928d88",
+      "locatorsRead": [
+        "printed p8 Equation6",
+        "printed p15 uncertainty"
+      ]
+    },
+    {
+      "path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-required-gases-gwp-2013.pdf",
+      "sha256": "2bc8b42d4cb94d1f74ae477f3bfaf3eb7ab55f216f575050ebdd67c9447a3a7f",
+      "locatorsRead": [
+        "printed pp1-2 single assessment100year/gas coverage"
+      ]
+    },
+    {
+      "path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\ghg-corporate-standard.pdf",
+      "sha256": "cfcda4dd20a0b0936b30e5e5c7c635c26efdfa770d29c1004f549bf082c0fe3c",
+      "locatorsRead": [
+        "printed pp17-18 operational-control consolidation",
+        "printed p62 gross separate from trades"
+      ]
+    },
+    {
+      "path": "C:\\Users\\nimab\\Neuvetra\\research-sources\\2026-09-08\\epa-factors-hub-2025.pdf",
+      "sha256": "5d07c678fae6783623acb1e23faa4a7c46268ee6c5a0654c9e49c50de7caf924",
+      "locatorsRead": [
+        "PDF p1 Table1 naturalgas/distillate",
+        "PDF p2 Table2 diesel",
+        "PDF p3 Table4 2007-2022 heavy/medium diesel",
+        "PDF p5 Tables11-12 GWP/mixtures"
+      ]
+    }
+  ],
+  "fictionalBoundaryArtifact": {
+    "artifactId": "71000000-0000-4000-8000-000000000900",
+    "sha256": "4fe7dc12d8f253f8d3cb1fd7fba2eade05f3d605ad7cb95376cca9d957afe5c7",
+    "text": "SYNTHETIC Juniper 2025 corporate register. Entities: California parent and California distribution subsidiary. Wholly owned; operational control. No activity measurements or legal conclusions. Screening assertions are fictional and require review.",
+    "locator": "synthetic-register:entities-and-screening",
+    "period": {
+      "start": "2025-01-01",
+      "endExclusive": "2026-01-01"
+    }
+  }
+}

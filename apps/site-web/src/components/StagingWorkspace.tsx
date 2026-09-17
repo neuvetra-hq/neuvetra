@@ -1,3 +1,4 @@
+import { Scope1Inventory } from "./Scope1Inventory"
 import { StationaryEquipment } from "./StationaryEquipment"
 import { StationaryGenerator } from "./StationaryGenerator"
 import { FugitiveWorkpapers } from "./FugitiveWorkpapers"
@@ -14,10 +15,11 @@ import { ControlledFleet } from "./ControlledFleet"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
 export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
-  const [panel, setPanel] = useState<"corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example">("corporate")
+  const [panel, setPanel] = useState<"scope1" | "corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example">("corporate")
   return <>
     <nav className="worksheet-nav" aria-label="Workspace views">
       <button type="button" aria-pressed={panel === "corporate"} onClick={() => setPanel("corporate")}>Corporate coverage</button>
+      <button type="button" aria-pressed={panel === "scope1"} onClick={() => setPanel("scope1")}>Scope 1 inventory</button>
       <button type="button" aria-pressed={panel === "gas"} onClick={() => setPanel("gas")}>Stationary natural gas</button>
       <button type="button" aria-pressed={panel === "generator"} onClick={() => setPanel("generator")}>Stationary diesel generator</button>
       <button type="button" aria-pressed={panel === "stationary"} onClick={() => setPanel("stationary")}>Stationary equipment coverage</button>
@@ -31,6 +33,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
       <button type="button" aria-pressed={panel === "example"} onClick={() => setPanel("example")}>Saved example report</button>
     </nav>
     {panel === "corporate" && <CorporateCoverageRegister key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
+    {panel === "scope1" && <Scope1Inventory actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "gas" && <StationaryNaturalGas key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "generator" && <StationaryGenerator key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "stationary" && <StationaryEquipment key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onNavigate={setPanel} />}

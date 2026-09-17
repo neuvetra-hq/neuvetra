@@ -1,0 +1,363 @@
+{
+  "blendConstraint": "R410A emitted blend mass uses 1924 exactly once; no constituent mass lines or 1923.5 alternate total.",
+  "company": {
+    "displayKgCo2e": "134997.1540",
+    "emittedMassKg": {
+      "CH4": "2.4000576875",
+      "CO2": "130652.03081",
+      "HFC134a": "0.125",
+      "HFC227ea": "0.000004",
+      "N2O": "1.0090872875",
+      "R410A": "2"
+    },
+    "roundingDeltaKgCo2e": "0.0001",
+    "sourceIds": [
+      "generator",
+      "hfc134a",
+      "hfc227ea-distribution",
+      "hfc227ea-office",
+      "ng-distribution",
+      "ng-office",
+      "r410a-distribution",
+      "r410a-office",
+      "vehicle-one",
+      "vehicle-two"
+    ],
+    "sumSourceDisplaysKgCo2e": "134997.1539",
+    "unroundedKgCo2e": "134997.1539564375"
+  },
+  "entities": {
+    "parent": {
+      "displayKgCo2e": "81880.0833",
+      "emittedMassKg": {
+        "CH4": "1.4676815",
+        "CO2": "79095.80456",
+        "HFC134a": "0.125",
+        "HFC227ea": "0.000001",
+        "N2O": "0.6629444",
+        "R410A": "1.25"
+      },
+      "roundingDeltaKgCo2e": "0",
+      "sourceIds": [
+        "generator",
+        "hfc134a",
+        "hfc227ea-office",
+        "ng-office",
+        "r410a-office",
+        "vehicle-one"
+      ],
+      "sumSourceDisplaysKgCo2e": "81880.0833",
+      "unroundedKgCo2e": "81880.083258"
+    },
+    "subsidiary": {
+      "displayKgCo2e": "53117.0707",
+      "emittedMassKg": {
+        "CH4": "0.9323761875",
+        "CO2": "51556.22625",
+        "HFC227ea": "0.000003",
+        "N2O": "0.3461428875",
+        "R410A": "0.75"
+      },
+      "roundingDeltaKgCo2e": "0.0001",
+      "sourceIds": [
+        "hfc227ea-distribution",
+        "ng-distribution",
+        "r410a-distribution",
+        "vehicle-two"
+      ],
+      "sumSourceDisplaysKgCo2e": "53117.0706",
+      "unroundedKgCo2e": "53117.0706984375"
+    }
+  },
+  "facilities": {
+    "distribution-parent": {
+      "displayKgCo2e": "2561.2835",
+      "emittedMassKg": {
+        "CH4": "0.10355175",
+        "CO2": "2552.89581",
+        "N2O": "0.02071035"
+      },
+      "roundingDeltaKgCo2e": "0",
+      "sourceIds": [
+        "generator"
+      ],
+      "sumSourceDisplaysKgCo2e": "2561.2835",
+      "unroundedKgCo2e": "2561.28350175"
+    },
+    "distribution-subsidiary": {
+      "displayKgCo2e": "53117.0707",
+      "emittedMassKg": {
+        "CH4": "0.9323761875",
+        "CO2": "51556.22625",
+        "HFC227ea": "0.000003",
+        "N2O": "0.3461428875",
+        "R410A": "0.75"
+      },
+      "roundingDeltaKgCo2e": "0.0001",
+      "sourceIds": [
+        "hfc227ea-distribution",
+        "ng-distribution",
+        "r410a-distribution",
+        "vehicle-two"
+      ],
+      "sumSourceDisplaysKgCo2e": "53117.0706",
+      "unroundedKgCo2e": "53117.0706984375"
+    },
+    "office": {
+      "displayKgCo2e": "79318.7998",
+      "emittedMassKg": {
+        "CH4": "1.36412975",
+        "CO2": "76542.90875",
+        "HFC134a": "0.125",
+        "HFC227ea": "0.000001",
+        "N2O": "0.64223405",
+        "R410A": "1.25"
+      },
+      "roundingDeltaKgCo2e": "0",
+      "sourceIds": [
+        "hfc134a",
+        "hfc227ea-office",
+        "ng-office",
+        "r410a-office",
+        "vehicle-one"
+      ],
+      "sumSourceDisplaysKgCo2e": "79318.7998",
+      "unroundedKgCo2e": "79318.79975625"
+    }
+  },
+  "gwp": {
+    "CH4": "28",
+    "CO2": "1",
+    "HFC134a": "1300",
+    "HFC227ea": "3350",
+    "N2O": "265",
+    "R410A": "1924"
+  },
+  "halfEvenTies": [
+    {
+      "display": "5.3114",
+      "family": "M73",
+      "quantity": "0.100",
+      "unrounded": "5.31145"
+    },
+    {
+      "display": "15.9344",
+      "family": "M73",
+      "quantity": "0.300",
+      "unrounded": "15.93435"
+    },
+    {
+      "display": "256.0004",
+      "family": "M76",
+      "quantity": "25.000",
+      "unrounded": "256.00035"
+    },
+    {
+      "display": "768.0010",
+      "family": "M76",
+      "quantity": "75.000",
+      "unrounded": "768.00105"
+    },
+    {
+      "display": "10.2380",
+      "family": "M74",
+      "quantity": "gallons=1.000,miles=2.400",
+      "unrounded": "10.23805"
+    },
+    {
+      "display": "10.2194",
+      "family": "M74",
+      "quantity": "gallons=1.000,miles=0.800",
+      "unrounded": "10.21935"
+    },
+    {
+      "display": "0.0034",
+      "family": "M77",
+      "quantity": "HFC227ea=0.000001kg",
+      "unrounded": "0.00335"
+    },
+    {
+      "display": "0.0100",
+      "family": "M77",
+      "quantity": "HFC227ea=0.000003kg",
+      "unrounded": "0.01005"
+    }
+  ],
+  "maximumGenerator": {
+    "displayKgCo2e": "10240013999999.9898",
+    "emittedMassKg": {
+      "CH4": "413999999.999999586",
+      "CO2": "10206479999999.98979352",
+      "N2O": "82799999.9999999172"
+    },
+    "entity": "parent",
+    "facility": "office",
+    "family": "M76",
+    "id": "maximum",
+    "unroundedKgCo2e": "10240013999999.989759986"
+  },
+  "profile": "m78-reviewer-rational-expectations-v1",
+  "quantityDeclaration": "Independently chosen ten-source fixture; vehicle-two is not a hosted-baseline quantity.",
+  "roundOnceCounterexamples": [
+    {
+      "case": "two NG sources at 0.100 MMBtu",
+      "exactSum": "10.6229",
+      "sumDisplays": "10.6228"
+    },
+    {
+      "case": "two HFC227ea sources at 0.000001 kg",
+      "exactSum": "0.0067",
+      "sumDisplays": "0.0068"
+    }
+  ],
+  "sourceCells": {
+    "GWP": [
+      "E524",
+      "E525",
+      "E526",
+      "E532",
+      "E538",
+      "D575"
+    ],
+    "M73": [
+      "E38",
+      "F38",
+      "G38"
+    ],
+    "M74": [
+      "D107",
+      "F256",
+      "G256"
+    ],
+    "M76": [
+      "D55",
+      "E55",
+      "F55",
+      "G55"
+    ]
+  },
+  "sources": [
+    {
+      "displayKgCo2e": "66399.7643",
+      "emittedMassKg": {
+        "CH4": "1.250125",
+        "CO2": "66331.6325",
+        "N2O": "0.1250125"
+      },
+      "entity": "parent",
+      "facility": "office",
+      "family": "M73",
+      "id": "ng-office",
+      "unroundedKgCo2e": "66399.7643125"
+    },
+    {
+      "displayKgCo2e": "46495.1054",
+      "emittedMassKg": {
+        "CH4": "0.875375",
+        "CO2": "46447.3975",
+        "N2O": "0.0875375"
+      },
+      "entity": "subsidiary",
+      "facility": "distribution-subsidiary",
+      "family": "M73",
+      "id": "ng-distribution",
+      "unroundedKgCo2e": "46495.1054375"
+    },
+    {
+      "displayKgCo2e": "2561.2835",
+      "emittedMassKg": {
+        "CH4": "0.10355175",
+        "CO2": "2552.89581",
+        "N2O": "0.02071035"
+      },
+      "entity": "parent",
+      "facility": "distribution-parent",
+      "family": "M76",
+      "id": "generator",
+      "unroundedKgCo2e": "2561.28350175"
+    },
+    {
+      "displayKgCo2e": "10351.5321",
+      "emittedMassKg": {
+        "CH4": "0.11400475",
+        "CO2": "10211.27625",
+        "N2O": "0.51722155"
+      },
+      "entity": "parent",
+      "facility": "office",
+      "family": "M74",
+      "id": "vehicle-one",
+      "unroundedKgCo2e": "10351.53209375"
+    },
+    {
+      "displayKgCo2e": "5178.9552",
+      "emittedMassKg": {
+        "CH4": "0.0570011875",
+        "CO2": "5108.82875",
+        "N2O": "0.2586053875"
+      },
+      "entity": "subsidiary",
+      "facility": "distribution-subsidiary",
+      "family": "M74",
+      "id": "vehicle-two",
+      "unroundedKgCo2e": "5178.9552109375"
+    },
+    {
+      "displayKgCo2e": "2405.0000",
+      "emittedMassKg": {
+        "R410A": "1.25"
+      },
+      "entity": "parent",
+      "facility": "office",
+      "family": "M77",
+      "id": "r410a-office",
+      "unroundedKgCo2e": "2405"
+    },
+    {
+      "displayKgCo2e": "1443.0000",
+      "emittedMassKg": {
+        "R410A": "0.75"
+      },
+      "entity": "subsidiary",
+      "facility": "distribution-subsidiary",
+      "family": "M77",
+      "id": "r410a-distribution",
+      "unroundedKgCo2e": "1443"
+    },
+    {
+      "displayKgCo2e": "162.5000",
+      "emittedMassKg": {
+        "HFC134a": "0.125"
+      },
+      "entity": "parent",
+      "facility": "office",
+      "family": "M77",
+      "id": "hfc134a",
+      "unroundedKgCo2e": "162.5"
+    },
+    {
+      "displayKgCo2e": "0.0034",
+      "emittedMassKg": {
+        "HFC227ea": "0.000001"
+      },
+      "entity": "parent",
+      "facility": "office",
+      "family": "M77",
+      "id": "hfc227ea-office",
+      "unroundedKgCo2e": "0.00335"
+    },
+    {
+      "displayKgCo2e": "0.0100",
+      "emittedMassKg": {
+        "HFC227ea": "0.000003"
+      },
+      "entity": "subsidiary",
+      "facility": "distribution-subsidiary",
+      "family": "M77",
+      "id": "hfc227ea-distribution",
+      "unroundedKgCo2e": "0.01005"
+    }
+  ],
+  "status": "fictional_candidate_not_released",
+  "workbookSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+}

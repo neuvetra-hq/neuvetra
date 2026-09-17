@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "M78-OPERATOR-LOCAL-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-01-ACCEPTED.json",
+      "sha256": "84d3c2b4da8e11257a1a3e2db9e2e1574a56f495f695d6142d01de5c67937158"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "LOCAL-DELTA-REHEARSAL-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-operator-rehearsal-review.md",
+        "evaluations/research-qa/m78-operator-rehearsal-independent.test.ts",
+        "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-01-CANDIDATE2.json",
+        "evaluations/research-qa/m78-operator-local-admission.json"
+      ],
+      "reason": "Exact frozen seven-source candidate and14puretests87assertions admit first fresh fictional rehearsal only; no native/full recovery/hosted acceptance."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-operator-local-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-OPERATOR-LOCAL-REVIEW-01-ACCEPTED.json",
+        "sha256": "84d3c2b4da8e11257a1a3e2db9e2e1574a56f495f695d6142d01de5c67937158"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": 3,
+    "repeated_findings": [],
+    "escaped_defect_evidence": [
+      "evaluations/research-qa/m78-operator-catalog-review.md",
+      "evaluations/research-qa/m78-operator-candidate4-review.md",
+      "evaluations/research-qa/m78-operator-candidate3-review.md"
+    ]
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-operator-rehearsal-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-operator-rehearsal-review.md",
+      "sha256": "d4d9ce0575760f9db261dbf2c071935cc513eced2a5d706926c18994d9ee9122"
+    },
+    {
+      "path": "evaluations/research-qa/m78-operator-rehearsal-independent.test.ts",
+      "sha256": "983e1069ab35c7fb4e87619aeecc0c28cd572d56fd2686fb1cf33221e30743bb"
+    },
+    {
+      "path": "evaluations/research-qa/m78-operator-local-admission.json",
+      "sha256": "e1441382cb746d44f78c61b423d9c3f8bc174effaf3c6bc17c4140be59ff259f"
+    }
+  ]
+}

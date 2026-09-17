@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "M78-ACCOUNTING-REVIEW-01",
+  "role": "accounting-validation",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-ACCOUNTING-REVIEW-01-ACCEPTED.json",
+      "sha256": "3ce5eb7c8fc932197b08da76712e3bdb87b548522df2af7e47954cbd9ce9488a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-ACCOUNTING-CONTRACT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-accounting-review.md"
+      ],
+      "reason": "Accepted exact frozen candidate2 accounting contract/policy. Mandatory factual successor and structured seven-gas coverage; no software or production release acceptance. Initial snapshot refusal withdrawn as reviewer CP1252 false positive and preserved."
+    },
+    {
+      "id": "INDEPENDENT-EXACT-ARITHMETIC",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-independent-rational-expectations.json",
+        "evaluations/research-qa/m78-author-expectations-challenge.py"
+      ],
+      "reason": "38 final author numerical records independently rationally recomputed and21 original source observations verified. Admission/implementation not tested."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-accounting-review-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-ACCOUNTING-REVIEW-01-ACCEPTED.json",
+        "sha256": "3ce5eb7c8fc932197b08da76712e3bdb87b548522df2af7e47954cbd9ce9488a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-accounting-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-ACCOUNTING-01-CANDIDATE2.json",
+      "sha256": "7fecc9a13c0d03ae64dcc64980e7dbea0218ae9a2decf7ea3c97a565cf9b8dd6"
+    },
+    {
+      "path": "docs/research/m78-execution-decisions.md",
+      "sha256": "309f3840c2959a957d669ba3240093d72d618b8b0deb98f53e9dcf5fa1d3cbcf"
+    },
+    {
+      "path": "evaluations/research-qa/m78-accounting-review.md",
+      "sha256": "5d5b04d73266e4954ccd9cdc29595a2ed9c6446e255de9fd987a2e2a262dc69c"
+    },
+    {
+      "path": "evaluations/research-qa/m78-independent-rational-oracle.py",
+      "sha256": "35a40663d454edb2008ca2f53c6ab6a137b871bed73566b5a24f38fb40671598"
+    },
+    {
+      "path": "evaluations/research-qa/m78-independent-rational-expectations.json",
+      "sha256": "ad5e868f0b5cc5d00302976a10b8ac58c9904bc9dff96184246de975f094657a"
+    },
+    {
+      "path": "evaluations/research-qa/m78-author-expectations-challenge.py",
+      "sha256": "a7eb0b0f9664e4a4f75ed613181a8a624350d66af6f2c2b6e14efa2eb81a6fb9"
+    }
+  ]
+}

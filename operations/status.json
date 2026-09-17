@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-17T03:16:47.283919+00:00",
+  "updated_at": "2026-09-16T21:59:48.8384768-07:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Freeze backend contracts; independent accounting acceptance; integrate UI and persistence",
+    "next_gate": "Publish reviewed implementation and pass required checks; encrypted actual20 restore and exact38-write fresh-clone rehearsal before host upgrade",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -102,7 +102,7 @@
     },
     {
       "id": "M70",
-      "completed_at": "2026-09-15T05:47:14.041329+00:00",
+      "completed_at": "2026-09-14T22:47:14.041329-07:00",
       "feedback": "Pending board feedback; bounded planning acceptance in evaluations/research-qa/m70-qa-review.md"
     },
     {
@@ -117,13 +117,13 @@
     },
     {
       "id": "M75",
-      "completed_at": "2026-09-16T17:38:11.121455+00:00",
+      "completed_at": "2026-09-16T10:38:11.121455-07:00",
       "evidence": "docs/research/m75-publication.json",
       "board_feedback": "accepted_keep_moving"
     },
     {
       "id": "M76",
-      "completed_at": "2026-09-16T17:38:11.121455+00:00",
+      "completed_at": "2026-09-16T10:38:11.121455-07:00",
       "evidence": "docs/research/m76-publication.json",
       "board_feedback": "awaiting_current_demonstration_feedback"
     },
@@ -535,7 +535,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201cE06 and P01\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“E06 and P01ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -2570,7 +2570,7 @@
     "approved_head": "3e77d1eab4dbd400d606def7b227eec47d34cef4",
     "merge_commit": "fb4dd370c87eafee563f18529655f41b3a720573",
     "verified_main_head": "fb4dd370c87eafee563f18529655f41b3a720573",
-    "merged_at": "2026-09-15T05:15:24.479766+00:00",
+    "merged_at": "2026-09-14T22:15:24.479766-07:00",
     "normal_merge": true,
     "branches_deleted": false,
     "authorization": "Direct board Approved message following exact-head merge question."
@@ -2832,7 +2832,7 @@
     "release_software_commit": "1e2c44feb31a689363dbcde1c51dc38363d23bc1",
     "hosted_baseline": {
       "status": "actual_hosted_baseline_passed",
-      "observedAt": "2026-09-16T23:10:41.707490+00:00",
+      "observedAt": "2026-09-16T16:10:41.70749-07:00",
       "journal": ".superpowers/m77-hosted-journey.jsonl",
       "prefixByteLength": 2109491,
       "prefixSha256": "396f086ee8702e7fbb48dbd0b303ab1a9a993fed62db5569ac1bf184b8fd5462",
@@ -2891,22 +2891,22 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "backend_implementation_accounting_review",
+    "status": "local_acceptance_complete_hosted_preparation",
     "active_assignments": [
       {
-        "id": "M78-BACKEND-01",
+        "id": "M78-RECIPE-REHEARSAL-01",
         "executor": "/root/m77_backend",
-        "scope": "New process/inventory backend; numerical policy acceptance pending"
+        "scope": "Prepare exact38-write recipe on fresh clone of actual encrypted20 restore; local only"
       },
       {
-        "id": "M78-ACCOUNTING-01",
-        "executor": "/root/m78_security",
-        "scope": "Independent candidate accounting policy and fixtures"
+        "id": "M78-FRONTEND-INTEGRATION",
+        "executor": "/root",
+        "scope": "Actual native local UI, hosted journey preparation, shared21manifest integration"
       },
       {
-        "id": "M78-ACCOUNTING-REVIEW-01",
+        "id": "M78-INTEGRATED-QA-01",
         "executor": "/root/m76_backend",
-        "scope": "Separate accounting contract review"
+        "scope": "Close independently accepted preparation records; actual hosted recovery not started"
       }
     ],
     "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
@@ -2922,6 +2922,48 @@
       "docs/research/m78-technical-plan.md"
     ],
     "hosted_change_scope": "Terrascope permission containment only; Neuvetra unchanged",
-    "planning_review": "evaluations/research-qa/m78-planning-root-review.md"
+    "planning_review": "evaluations/research-qa/m78-planning-root-review.md",
+    "accounting": {
+      "status": "accepted_bounded_candidate",
+      "policy_raw_sha256": "0fe8cb9bfb48e7a8dd0b5b40d491918f57f33288da12daa9de1d9406080da6c4",
+      "review": "evaluations/research-qa/m78-accounting-review.md",
+      "root_acceptance": "evaluations/research-qa/m78-accounting-review-root-acceptance.md",
+      "production_release": false
+    },
+    "frontend": {
+      "status": "local_native_preliminary_only_no_hosted_demonstration",
+      "evidence": "apps/site-web/src/components/Scope1Inventory.tsx",
+      "runtime_demonstrated": true
+    },
+    "native_author": {
+      "prior_candidates": "5928 and b62 failures preserved",
+      "assertions": 600,
+      "receipt": ".superpowers/m78_author_native_1789620106488-result.json",
+      "independent_assertions": 175,
+      "candidate_migration_sha256": "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736",
+      "independent_tests": 5,
+      "status": "accepted_bounded_native",
+      "tests": 6,
+      "database_read_only": "m78_author_native_1789620106488"
+    },
+    "local_ui": {
+      "url": "http://localhost:4188",
+      "database": "m78_author_ui_20260917_3",
+      "source_candidate": "54667347",
+      "gross_candidate_kg_co2e": "126850.1763",
+      "status": "actual_member_history_downloads_and_actor_clear_passed_local_only"
+    },
+    "capacity_decision": {
+      "evidence": "docs/research/m78-implementation-decisions.md",
+      "response_bytes": 10000000,
+      "history_bytes": 30000000,
+      "status": "actual correction and both independent capacity controls passed",
+      "proof_bytes": 4000000
+    },
+    "recovery": {
+      "evidence": "evaluations/research-qa/m78-recovery-root-acceptance.md",
+      "status": "accepted_local_only",
+      "actual_encrypted_hosted_backup_verified": false
+    }
   }
 }
