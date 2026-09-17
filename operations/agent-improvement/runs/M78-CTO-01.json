@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "id": "M78-CTO-01",
+  "role": "cto",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CTO-01-ACCEPTED.json",
+      "sha256": "dfec2ba3980c28978b88c230973d838a08f409a88e8f37f6c7f7858154554045"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M78-CTO-AC01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-technical-plan.md"
+      ],
+      "reason": "Defines schema21, exact public data/API/hash/proof/frontend contracts, reuse constraints and phased single-writer integration."
+    },
+    {
+      "id": "M78-CTO-AC02",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-technical-plan.md"
+      ],
+      "reason": "Inspects actual retained v8 journal, matches all106 findings to scoped IDs, checks exact pinned M71 evidence and requires factual corporate successor then all-family rebinding."
+    },
+    {
+      "id": "M78-CTO-AC03",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-technical-plan.md"
+      ],
+      "reason": "Coordinates exact six-function security path proposal; states candidate policy independent accounting gate, contributor closure, capacity/performance and native/browser/recovery acceptance."
+    },
+    {
+      "id": "M78-CTO-AC04",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-planning-root-review.md",
+        "operations/agent-improvement/snapshots/M78-CTO-01-ACCEPTED.json"
+      ],
+      "reason": "Root independently accepted the exact frozen design deliverable; accounting, numerical implementation, security and integrated QA gates remain open for later execution."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-planning-root-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CTO-01-ACCEPTED.json",
+        "sha256": "dfec2ba3980c28978b88c230973d838a08f409a88e8f37f6c7f7858154554045"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/m78-technical-plan.md",
+      "sha256": "74383f9635c5b58fbc4ea0b2a83da14804c3fdeaeca54c275d3dc5157c62ae16"
+    }
+  ],
+  "routing_exception": {
+    "reason": "Root reported fresh critical Astra/high dispatch unavailable because runtime thread limit. Read-only manifest printing was temporarily refused while sibling run artifacts were being updated.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L02",
+    "L03"
+  ],
+  "notes": [
+    "Design only; no code, migration, host, Git, ledger or sibling run writes.",
+    "Security coordination supplied exact six invoker signatures and fixed-search-path proposal; actual catalog and accounting review remain dependencies.",
+    "Closed as independently accepted planning deliverable only. Root review does not accept implemented M78 functionality or accounting policy. Frozen source plans remain unchanged."
+  ]
+}

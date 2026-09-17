@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-17T02:03:40.080575+00:00",
+  "updated_at": "2026-09-17T03:16:47.283919+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M77",
-    "name": "Refrigerants and other fugitive-source coverage",
-    "status": "complete",
-    "next_gate": "Board feedback on M77 before dependent M78; root verifies closure publication/checks before final report.",
+    "id": "M78",
+    "name": "Process screening and corporate Scope 1 reconciliation",
+    "status": "in_progress",
+    "next_gate": "Freeze backend contracts; independent accounting acceptance; integrate UI and persistence",
     "evidence": [
-      "operations/feedback/2026-09-16-m76.md",
-      "docs/research/m77-product-brief.md"
+      "operations/feedback/2026-09-16-m77.md",
+      "docs/research/scope1-completion-matrix.md"
     ]
   },
   "completed_milestones": [
@@ -2818,7 +2818,7 @@
     "routing_exception": "Specialists completed; requested registry settings recorded, inherited model/effort unknown.",
     "foundation_snapshot": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
     "review": "docs/research/m77-accounting-review.md",
-    "next": "Board feedback before M78 process screening/current bindings/gross Scope1 reconciliation.",
+    "next": "M78 authorized",
     "foundation_published_head": "b0504e0de27813553b7f6a63e4ed47a513740147",
     "foundation_checks": "six_pass",
     "root_ui": "Actual local final browser correction, access transitions, exact retained HTML/JSON and restart passed. Actual hosted initial unresolved page and390px fit observed. Hosted completed-state browser pending.",
@@ -2887,6 +2887,41 @@
     "publication": "docs/research/m77-publication.json",
     "continuation_revisit": "passed_0POST_272requests_all_sessions_closed",
     "hosted_browser": "passed_final_and_historical_reports_6exact_downloads_narrow_view_and_postrestart",
-    "closure_publication_receipt": ".superpowers/m77-final-publication.json"
+    "closure_publication_receipt": ".superpowers/m77-final-publication.json",
+    "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
+  },
+  "current_m78": {
+    "status": "backend_implementation_accounting_review",
+    "active_assignments": [
+      {
+        "id": "M78-BACKEND-01",
+        "executor": "/root/m77_backend",
+        "scope": "New process/inventory backend; numerical policy acceptance pending"
+      },
+      {
+        "id": "M78-ACCOUNTING-01",
+        "executor": "/root/m78_security",
+        "scope": "Independent candidate accounting policy and fixtures"
+      },
+      {
+        "id": "M78-ACCOUNTING-REVIEW-01",
+        "executor": "/root/m76_backend",
+        "scope": "Separate accounting contract review"
+      }
+    ],
+    "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
+    "hosted_changes": true,
+    "scope1_complete": false,
+    "security": {
+      "terrascope": "Five exact tables contained after explicit board approval; RLS enabled, anon/authenticated grants removed; refreshed0errors0warnings5intendedinfo",
+      "neuvetra": "Refreshed0errors8warnings; seveninvokerfunctionwarnings/authpasswordprotection assessed; no schema20changes",
+      "evidence": "docs/research/m78-security-observations.md"
+    },
+    "planning": [
+      "docs/research/m78-product-brief.md",
+      "docs/research/m78-technical-plan.md"
+    ],
+    "hosted_change_scope": "Terrascope permission containment only; Neuvetra unchanged",
+    "planning_review": "evaluations/research-qa/m78-planning-root-review.md"
   }
 }

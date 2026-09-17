@@ -1,3 +1,11 @@
+# M78 security contained — Scope 1 implementation next
+
+The board explicitly approved the five-table Terrascope fix after automatic approval review initially refused execution. Root applied independently tested candidate3 once; fresh20-row catalog proof confirms endpoint privileges removed/RLS enabled/admin-service retained. Refreshed Terrascope advisor: zero errors, zero warnings, five intentional no-policy informational notices. Neuvetra remains schema20/application7d465485, zero advisor errors/eight warnings; no Neuvetra changes. See docs/research/m78-security-observations.md. Security author/reviewer finalize evidence; M78 product and technical plans delivered, independent accounting/design acceptance pending. Factual corporate successor must resolve retained subsidiary control/boundary gaps before all source/discovery families rebind. Scope1 remains incomplete. Continue authorized implementation, preserve M77 history; earlier sections historical.
+
+# M78 authorized — security assessment and Scope 1 reconciliation
+
+The board accepted M77 and asked to review a Supabase security email, then finish Scope 1. M77 closure receipt verifies 0e95d70 and all six checks. Existing live schema20/application7d465485 remains the accepted baseline; no new hosted changes. Root observed refreshed Neuvetra advisor zero errors/eight warnings and Terrascope five public RLS errors. These are current dashboard observations, not a complete access audit. Security specialist /root/m78_security and CPO fallback /root/m77_backend are actually dispatched. Root owns provider/Git/shared state. Preserve all M77 journals and evidence. Next: metadata-only security assessment, independently reviewed M78 criteria, then implementation and demonstration. Overall Scope 1 remains incomplete. Earlier sections are historical.
+
 # M77 delivered — refrigerants and fire suppression
 
 The live synthetic California example now reconciles five devices, five corporate sources and five workpapers, with separately accepted version4 and retained earlier reports. Independent review accepted the live execution, recovery, real same-image restart, zero-write revisit and six exact browser downloads. Overall Scope1 remains incomplete; methods and factors are still candidates.
