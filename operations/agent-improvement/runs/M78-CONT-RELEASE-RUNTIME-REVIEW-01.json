@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT-RELEASE-RUNTIME-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "55fbde465900e706f20f6610c074610f9a21f86e9eca700e3c5298f09bcc7ffd",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT-RELEASE-RUNTIME-REVIEW-01-CANDIDATE1.json",
+      "sha256": "05e187dc7ad132eac49106a5f944251acc154831a1397c21b0770123616468a2"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-RELEASE-OBSERVER",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-release-runtime-observer-review.md",
+        "operations/agent-improvement/snapshots/M78-CONT-RELEASE-RUNTIME-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "Exact sole commit substitution;26 mocked cases passed;155pinsunchanged."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-release-runtime-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT-RELEASE-RUNTIME-REVIEW-01-CANDIDATE1.json",
+        "sha256": "05e187dc7ad132eac49106a5f944251acc154831a1397c21b0770123616468a2"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation-release-runtime-observer-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

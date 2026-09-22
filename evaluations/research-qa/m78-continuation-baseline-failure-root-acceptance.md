@@ -1,0 +1,5 @@
+# Root acceptance of failed baseline reconciliation
+
+Root accepts the independent failure reconciliation e791b1b7 and exact snapshots c3fec3f0/7c7c57d1 after reading the report, rehashing the actual24event journal and checking terminal0writes/all4sessionsclosed/unknown0. This accepts the diagnosis boundary, not the baseline. Provider200/4251ms is not proof of client delivery; original failure remains unexplained. Both failed journals remain immutable.
+
+Root then used the existing signed-in browser to open historical generator version1 and download exact statement023261c1-8adc-4dd7-a11e-bd2e40b3aa54. Actual downloaded file at18:20:32UTC is2279bytes/SHA6d48e9797ad2bd6b6bfd4dbdd8d5e082e54aa991935b069691939a1ac5bdfb9b, equal to original retained expectation. No application writes or new browser session. This supports current document integrity, not the failed member transport cause or a complete baseline. A new separately reviewed verification journal with safe request diagnostics is authorized preparation; originaljournal/runtime/sourcechecks/37operationplan remain preserved.

@@ -1,3 +1,35 @@
+# September 22: continuation2 source gates accepted; publish verification tooling
+
+New adapter source gate4a1ee046 covers160files/fourevidencepins; independent snapshotf92bf6a2 andCI supplementada51bc0 accepted byroot. Wrapper01e731 andfreshobserverdd52 accepted; author/independent11tests1078assertions, portableCI subset2tests848assertions and28mockedrefreshcases passed. No newbaseline2journal/diagnostics hasbeencreated.
+
+Root publishes acceptedverificationtools/evidence tosamePR5 andverifiesrequiredchecks. Runtime stays59cda7/schema21/deployment0f2e99/imagefe46 becauseall155applicationdependenciesremainbyte-identical; no newapplicationdeployment isneeded forthis tooling-onlychange. Thenfreshsame-runtimebaselineobservation andnewexplicitgate beforesinglecontinuation2baseline. Failed8525/24events andd330/72events remainimmutable, no applicationwrites sinceoriginalinventory1. Autodeploypaused. M79rightsindependentreview/numericalpreparation continueindependently. Scope1customerreleaseincomplete. Earliersectionshistorical.
+
+# September 22: document intact; separate continuation2 source review
+
+Original newbaseline24eventfailure remains frozen8525a841/e766f74b with0applicationPOSTs/4sessionsclosed/unknown0; no journal may be reset. Root actualbrowserdownload of exactfailedhistoricalstatement succeeded18:20:32UTC:2279bytes/SHA6d48e9797ad2bd6b6bfd4dbdd8d5e082e54aa991935b069691939a1ac5bdfb9b matchesoriginal. Originalfailurecause remainsunexplained.
+
+Authorcandidate M78-CONT-BASELINE2-PREP-01-CANDIDATE1 SHA39ada02d adds separateexclusive .superpowers/m78-hosted-continuation2.jsonl and safe header/transportdiagnostics, preserving original0/37/0runner/155runtimepins; newunion160.23tests349assertions/strictTS passed. Rootdraftwrapper01e731 andfreshobserverdd52 (baseline/exercise/revisit outputs) also pendingindependent review byresume_release. No continuation2execution yet. Rootonlyhost/Git/sharedledger. Rightsreview andnumericalpreparation are separatelyactive M79work; no runtimeintegration/releaseapproval.
+
+Runtime remainsverified59cda7/schema21/deployment0f2e99/imagefe46; sixchecks passed; noappwritesafteroriginalinventory1. Autodeploypaused. SQL21upgrade/originalsave/Terrascopefix neverrepeat. Next: independentnewadapter/wrapper/observeradmission, targetedpublication/checks, freshsame-runtimeobservation andnewbaseline, onlythen37writes/actualrestart/revisit/browser/independentclosure. Scope1customerrelease incomplete. Earliersectionshistorical.
+
+# September 22: separate baseline failed read-only; preserve and diagnose
+
+New .superpowers/m78-hosted-continuation.jsonl FAILED before baseline capture:24events/SHA8525a8416b3e55f07d508c9a9ec17fc8ac0a4902e798534dc05e9f4df72d1a46/heade766f74b730bebf69849945407598c011f918b9a77b7ff9c3a5913cd6964f744. Session9748 exited1.67requests,0applicationPOSTs,all4createdsessionsclosed/unknown0. Failure stage stationary-diesel statement download; cleanup overwriteslastStatus204 so terminaldoesnotestablish failedreadstatus. Provider logs report200/4251ms for matchingread; no timeout evidence. Preserve this failedjournal, neverreset/retry it.
+
+Live59cda7/schema21/deployment0f2e99/imagefe46 remains deployed and sixchecks passed; automaticdeploymentpaused. No application writes after originalconfirmedinventory1. Originald33072eventfailure, SQL21upgrade, Terrascopefix remaincompleted/immutable. Root investigates read-only, resume_recipe independently reconciles failure and proposes boundeddiagnostic; m79_rights and m79_numerical perform independent source/numericalpreparation. Hosted37/restart/revisit/browserclosure notdone; Scope1customerreleaseincomplete. Earliersectionshistorical.
+
+# September 22: final repair live; separate read-only continuation baseline running
+
+Application59cda7a62d8dcc6b554c92372e3b032577e410c9 passed six checks and is live on deployment0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78/imagefe46a0e354252026f2bcbf6672e10ec550e52a56f064ab3e75a8af17625749c9. Admitted observer verified ready/schema21 at18:09:44UTC. Exact baseline gatebcfe8f8b and wrapperb2fbe launched separate .superpowers/m78-hosted-continuation.jsonl once: root session9748, currently baseline (zero application writes). Do not rerun/reset it.
+
+Root owns host/journal; resume_release reviews new runtime-refresh observer1b7da62f source only; m79_rights prepares primary intended-use rights matrix. Original72-event failed journal d3301eb2, original first save, SQL21 upgrade and Terrascope fix remain immutable/completed, never repeat. Automatic deployment remains paused. After successful baseline: independent acceptance, fresh runtime/exercise gate, remaining37writes once, actualrestart/read-onlyrevisit/browser and independent closure. Scope1customer release remains incomplete. Earlier sections historical.
+
+# September 22: six checks passed; final code deployment requested once
+
+Rolling PR5 commit59cda7a62d8dcc6b554c92372e3b032577e410c9 passes all six required checks (18:07:52 UTC). Both CI reference/test failures from d139628 are corrected and independently accepted; all155runtime source hashes unchanged. Exactcode deployment requested once:0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78, last observed BUILDING. Never repeat the deployment request blindly; inspect its actual provider state.
+
+Root owns hosted continuation/runtime and shared records. m79_rights is actually dispatched for independent primary intended-use rights evidence only. Prior accepted local37 journal/backup/source and all failed originals remain immutable. No hosted continuation yet; lastlive2002fea/schema21 remains until newdeployment observed. Automatic deployment paused. SQL21 upgrade, original inventory save and Terrascope security fix must never repeat. Next: newexactcode/runtime admission then exclusive0/37/0continuation, actual restart/revisit/browser and independent acceptance. Scope1customer release incomplete. Earlier sections historical.
+
 # September 22: performance repair published; CI reference repairs accepted
 
 Accepted performance repair and continuation preparation are published on rolling PR5 at d139628cb53f591bfd516a4aac41dd62e1138a53; remote branch and PR head verified. CI caught a local-only inspection evidence locator plus Windows path in the native run record, and an old resolver test expectation missing the independently accepted DB performance delta. Root independently accepted the portable record correction; resume_release independently accepted the exact test repair. Root is the only active executor for publication and hosted work. All155 final source hashes remain unchanged.

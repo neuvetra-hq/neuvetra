@@ -2891,12 +2891,22 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "ci_repairs_independently_accepted_publication_next",
+    "status": "continuation2_source_accepted_publication_next",
     "active_assignments": [
       {
-        "id": "M78-ROOT-CI-REPAIR",
+        "id": "M78-ROOT-CONT2",
         "executor": "/root",
-        "scope": "Publish accepted CI record/test repairs; six checks and exact deployment"
+        "scope": "Publish acceptedverificationtools, verifyCI, refreshsame59runtime and runnewbaseline"
+      },
+      {
+        "id": "M79-RIGHTS-INDEPENDENT-REVIEW-01",
+        "executor": "/root/m79_rights_review",
+        "scope": "Finish independent rights evidence correction findings"
+      },
+      {
+        "id": "M79-NUMERICAL-COMPATIBILITY-01",
+        "executor": "/root/m79_numerical",
+        "scope": "Finish independent arithmetic candidate"
       }
     ],
     "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
@@ -3107,10 +3117,34 @@
         "Historical source-delta test omitted admitted DB performance repair"
       ],
       "source_pins_155_unchanged": true,
-      "hosted_continuation_executed": false,
-      "live_commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+      "hosted_continuation_executed": true,
+      "live_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
       "schema": 21,
-      "auto_deploy_enabled": false
+      "auto_deploy_enabled": false,
+      "final_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
+      "all_six_checks_passed": true,
+      "observed_at": "2026-09-22T18:07:52.987808+00:00",
+      "deployment_requested_once": "0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78",
+      "deployment_observed_status": "SUCCESS",
+      "image": "sha256:fe46a0e354252026f2bcbf6672e10ec550e52a56f064ab3e75a8af17625749c9",
+      "runtime_observed_at": "2026-09-22T18:09:44.049840+00:00",
+      "continuation_phase": "baseline_failed",
+      "continuation_session": null,
+      "baseline_events": 24,
+      "baseline_journal_sha256": "8525a8416b3e55f07d508c9a9ec17fc8ac0a4902e798534dc05e9f4df72d1a46",
+      "baseline_head_sha256": "e766f74b730bebf69849945407598c011f918b9a77b7ff9c3a5913cd6964f744",
+      "baseline_application_posts": 0,
+      "baseline_sessions_closed": true,
+      "baseline_unknown_sessions": 0
+    },
+    "baseline_target_browser": {
+      "observed_at": "2026-09-22T18:20:32.985745+00:00",
+      "statement_id": "023261c1-8adc-4dd7-a11e-bd2e40b3aa54",
+      "bytes": 2279,
+      "sha256": "6d48e9797ad2bd6b6bfd4dbdd8d5e082e54aa991935b069691939a1ac5bdfb9b",
+      "matches_original": true,
+      "application_writes": 0,
+      "original_failure_explained": false
     }
   },
   "current_m79_preparation": {
