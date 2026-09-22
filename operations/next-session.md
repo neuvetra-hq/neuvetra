@@ -1,3 +1,33 @@
+# September 22: local continuation and final source gates accepted; publication next
+
+All37 remaining local operations independently passed, preserving572oldrows/121tables and five exact reports. Final source receipt77aec covers155files including all122runtime dependencies; CONT-R01 and CONT-R02 are repaired, with failed reviews/candidates preserved. Root's private continuation wrapper b2fbe has independent final155-source admission. The native journal113events/159630/e7788d is complete and immutable. No hosted continuation has run.
+
+Root now publishes the accepted two-file performance repair, tests and continuation preparation to the existing PR5, verifies all six required checks, then admits exact runtime deployment and the separate0/37/0 hosted lifecycle. The existing live2002fea/schema21 is unchanged since the confirmed firstsave; auto deployment remains paused. No active delegate is implied by prior notes. Completed SQL21 upgrade and Terrascope fix must never repeat. Scope1customerrelease remains incomplete. Earlier sections are historical.
+
+# September 22: remaining 37 operations passed locally; final release gates
+
+The timed-out live save was confirmed exactly once; its original failed journal remains frozen. The performance repair passed independent code/native review. The new encrypted schema21 backup and fresh local restore preserved121tables/387content entries, and the complete remaining37-operation local rehearsal passed with572oldrows and five reports. Independent read-only acceptance of the actual rehearsal is pending; never rerun it.
+
+Final hosted source admission now explicitly adds the application runtime routes to the continuation's frontend/tool closure (CONT-R02). The earlier restart-pin parser defect CONT-R01 is fixed and independently retested. Original candidates and failures remain preserved. Root owns release/CI/Git/provider actions; /root/resume_recovery authors the bounded closure correction; /root/resume_recipe independently reviews it and the actual native result. No new hosted application write occurred after the confirmed initial save.
+
+Live remains the last verified2002fea/schema21; automatic deployment stays paused. Completed SQL21 upgrade and Terrascope fix must never repeat. Next: corrected source admission, publication on PR5/sixchecks, exactcode deployment, freshbaseline/37remainingwrites/actualrestart/read-onlyrevisit/browser demonstration. Scope1customerrelease remains incomplete. Earlier sections are historical.
+
+# September 22: original save confirmed; performance repair underway
+
+The independently admitted read-only database observer confirmed the timed-out first inventory save committed exactly once, with matching request, version, head and audit. All prior content remained unchanged. The observation made zero application writes; independent review accepted its exact captured receipt.  The original 72-event failed journal remains frozen and must never be retried or reset.
+
+The reviewed two-file performance repair is assigned to /root/resume_recipe. It must retain the company lock, one validated upstream capture, fresh full post-write verification and native concurrency/rollback checks. /root/resume_recovery prepares the separate bounded continuation; /root/resume_release reviews the independent M79 source inventory preparation. Root owns shared status, Git and hosted actions. Source inventory work is not domain or production approval.
+
+Live application 2002fea/schema21 remains the last verified deployment. Automatic deployment stays paused during this repair. The schema upgrade and Terrascope fix are complete and must never be repeated. Next: independent repair QA, exact publication and deployment, then a separately reviewed continuation of the remaining 37 successful operations, followed by restart/read-only revisit and browser demonstration. Scope 1 remains incomplete. Earlier sections are historical.
+
+# September22 M78 exercise timed out — preserve original save
+
+Originalbaseline passed42events/282requests/0writes/all8sessionsclosed. Subsequentexercise failedafter4POSTs:3expecteddenials andoneinitialinventorysavewithnoresponse. Event63 intent16:53:14.403;30s clienttimeout/provider499; all4exerciseauthsessionsclosed at16:53:44.777. Frozen72eventjournal .superpowers/m78-hosted-journey.jsonl SHAd3301eb226c0cae4428c1e20cde4e2afdcf572b622e96d690cc8c262d6e44058 head8cac20e87d8d5c4dd1f5f0f4eb6eae9721b56aeb83ef2bda270855da6aea24fd. No session running. NEVER retry/reset thisjournal orsave.
+
+FreshbrowserGETshowsinventoryversion1 retained. Rootmust reconcileexactrequest/version/audit with independently admittedreadonly .superpowers/m78-timeout-observe.ts + privatewrapper beforeanycontinuation. Currentlive2002fea/schema21/imagee728 remainshealthy; completeddatabaseupgradeneverreapplied. Auto deploymentpaused. No productsourcechangesyet. PERF-F01proposes twofile performancefix preservingnativeSQL andlockedpre/postverification; sourceadmission/nativeconcurrencyQA required. Then newboundedcontinuation excludesexactconfirmedsave. Originalharnesscannotresume failedjournal.
+
+Chrome851836533 signedin/combinedinventoryv1 visible; no browserwrites. M79sourceinventorypreparation independentonly. Scope1customerrelease incomplete. Terrascopefixcomplete; neverrerun. Earliersections historical.
+
 # September22 full local recipe passed — final release review next
 
 Fresh currentbackup recipe clone m78_ops_recipe_20260922b completed all38POSTs,116events, five reports, exactgross126850.17632025 and retention568oldrows/121tables. Finaljournal SHA8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0 is immutable. Independent finalnative review pending; no rerun. Original3-writefailedclone andjournal remainpreserved. RCP-F01flat/nestedversion anddiscovery-review handling fixes independentlyaccepted in bothrunners.

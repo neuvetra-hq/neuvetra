@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-22T16:11:14.898704+00:00",
+  "updated_at": "2026-09-22T17:41:07.552417+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Independent ACT-R01 recovery admission, fresh original-archive restore, exact38-write local rehearsal, then repaired CI and hosted upgrade",
+    "next_gate": "Publish accepted same-PR candidate and sixchecks, then exactcode deployment and hosted0/37/0 lifecycle",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -535,7 +535,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“E06 and P01ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153E06 and P01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -2891,12 +2891,12 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "full_local_recipe_passed_final_release_checks",
+    "status": "local_continuation_and_complete_source_gate_accepted_publication_next",
     "active_assignments": [
       {
-        "id": "M78-ROOT-RELEASE",
+        "id": "M78-ROOT-PUBLISH",
         "executor": "/root",
-        "scope": "Final publication and six checks; same-reviewer code gate, authorized staging upgrade and lifecycle"
+        "scope": "Publish accepted performance repair and continuation preparation; verify remote sixchecks then exact runtime deployment"
       }
     ],
     "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
@@ -2911,7 +2911,7 @@
       "docs/research/m78-product-brief.md",
       "docs/research/m78-technical-plan.md"
     ],
-    "hosted_change_scope": "Terrascope permission containment only; Neuvetra unchanged",
+    "hosted_change_scope": "Completed Terrascope containment; Neuvetra schema21 upgrade committed once and application2002fea deployed; first inventory save confirmed committed",
     "planning_review": "evaluations/research-qa/m78-planning-root-review.md",
     "accounting": {
       "status": "accepted_bounded_candidate",
@@ -2966,11 +2966,11 @@
       "fresh_recovery_receipt_sha256": "b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180"
     },
     "publication": {
-      "commit": "970a9b70cf971ec0773253cec9a8676eb300aeba",
-      "required_checks_passed": 5,
+      "commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+      "required_checks_passed": 6,
       "required_checks_total": 6,
-      "remaining": "Publish RCP-F01 source fix and final historical fixture portability fix; six checks pending",
-      "observed_at": "2026-09-22T15:42:28.434616+00:00"
+      "observed_at": "2026-09-22T16:21:38.189410+00:00",
+      "remaining": "Performance repair unpublished; independent QA and new continuation required"
     },
     "exact_recipe_rehearsal": {
       "status": "historical_failed_run_preserved",
@@ -2995,6 +2995,120 @@
       "gross_kg_co2e_exact": "126850.17632025",
       "reports": 5,
       "independent_receipt_sha256": "2a8b4ee54065dae00e158274b28855c86361cda0958e3ed9c16023a74b7d7011"
+    },
+    "hosted_upgrade_20260922": {
+      "status": "committed_once",
+      "schemaVersion": 21,
+      "journal": ".superpowers/m78-hosted-upgrade-20260922.jsonl",
+      "sha256": "9a5e84356ad18cce59a9f3c751f6e1c1dc432398c632af21065e58fbbfb6a1bb",
+      "createdAt": "2026-09-22T16:23:58.948Z",
+      "oldRowsAndContentPreserved": true
+    },
+    "release_commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+    "required_checks": "six_passed",
+    "deployment_requested": "b1f30f80-b536-4eb0-a376-6db76c0d1115",
+    "automatic_deployment": "paused_for_release",
+    "live_runtime": {
+      "commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+      "schemaVersion": 21,
+      "deploymentId": "b1f30f80-b536-4eb0-a376-6db76c0d1115",
+      "imageDigest": "sha256:e728799699e97b45d5afc5dcb3ced8912841cb6684185243e867e798ca1c47cc",
+      "observedAt": "2026-09-22T16:28:28.137043+00:00",
+      "ready": true
+    },
+    "hosted_journey": {
+      "status": "exercise_failed_original_save_confirmed_committed",
+      "journal": ".superpowers/m78-hosted-journey.jsonl",
+      "baseline": {
+        "status": "passed",
+        "events": 42,
+        "applicationPosts": 0,
+        "requests": 282,
+        "allCreatedSessionsClosed": true,
+        "prefixSha256": "98fe9f45ed62a497681bc9d5590ef34f4604f00c5dd8d8e6602636dc5fd709f1",
+        "headSha256": "7663b3931435c85c2cb433ba152b44b6082031c25ee6a3d45dab980e1ee48319"
+      },
+      "activeSession": null,
+      "do_not_retry": true,
+      "eventCount": 72,
+      "journalSha256": "d3301eb226c0cae4428c1e20cde4e2afdcf572b622e96d690cc8c262d6e44058",
+      "headSha256": "8cac20e87d8d5c4dd1f5f0f4eb6eae9721b56aeb83ef2bda270855da6aea24fd",
+      "applicationPosts": 4,
+      "observedDeniedPosts": 3,
+      "unknownSaveOutcomes": 0,
+      "allCreatedSessionsClosed": true,
+      "browserObservation": "Fresh read shows retained inventory version1; exactrequest/audit reconciliation pending",
+      "confirmedCommittedSaves": 1,
+      "outcome_reconciliation": {
+        "receipt": ".superpowers/m78-timeout-observation.json",
+        "sha256": "995f91359f1b5ce38ad5b2f1324194c24c222a73ef2f2108944b6a4bf1797d67",
+        "observedAt": "2026-09-22T17:07:20.867Z",
+        "versionId": "3e45de5d-d312-4a22-8418-35cb740a3a12",
+        "versionSha256": "977fdd9d6a5cffb07bea34ff3bee2afaadfe3cf120440cc148a2ed45501bee6e",
+        "applicationWrites": 0,
+        "priorContentPreserved": true,
+        "independent_actual_review": "accepted"
+      }
+    },
+    "performance_repair": {
+      "status": "candidate2_author_verified",
+      "candidate_snapshot_sha256": "94c6eb044d8a5b32d5ccded5127cf155acd3bcaaf575511543626a3b6e61e92b",
+      "local_first_save_ms": {
+        "before": 3563,
+        "after": 1333
+      },
+      "local_late_save_ms": {
+        "before": 6793,
+        "after": 3610
+      },
+      "sql_queries": {
+        "before": 132,
+        "after": 50
+      },
+      "hosted_performance_verified": false,
+      "independent_review": "accepted"
+    },
+    "continuation_preparation": {
+      "status": "candidate3_complete155source_and_privatewrapper_accepted",
+      "author": "/root/resume_recovery",
+      "author_currently_running": false,
+      "native_application_posts": 37,
+      "hosted_application_posts": 0
+    },
+    "continuation_backup": {
+      "status": "encrypted_backup_and_fresh_restore_verified",
+      "database": "m78_ops_continuation_20260922",
+      "archiveSha256": "b6c90c6768a5f2dfd356391b1c509e989ea4e756d6b40802f68f5650366dd636",
+      "snapshotSha256": "1d41feefb01532d85628dc633cca50804c0bf172c45bb96ac3dfabdedaaf984b",
+      "table_count": 121,
+      "content_entries": 387,
+      "root_fresh_readonly_receipt": ".superpowers/m78-continuation21-root-restore-review.json"
+    },
+    "continuation_native": {
+      "status": "independently_accepted",
+      "journal": ".superpowers/m78-continuation-native-20260922-run.jsonl",
+      "journalSha256": "159630ef6c2033651e25da8fb4afdaa439f24a2bcb4fcc3186b8768816218dfb",
+      "headSha256": "e7788dd5dca926ee66552f9f6e8c6d3442886ce923fcca09583511a969ba0a75",
+      "events": 113,
+      "posts": 37,
+      "verified": 37,
+      "retained_old_rows": 572,
+      "tables": 121,
+      "reports": 5,
+      "hosted_posts": 0,
+      "do_not_retry": true,
+      "independent_receipt_sha256": "1c81637967eb512615243dec0f64458645b694bafc71bc2153f2cdf48be7a984"
     }
+  },
+  "current_m79_preparation": {
+    "status": "source_inventory_independently_accepted",
+    "profiles": 4,
+    "factor_rows": 12,
+    "retained_originals": 7,
+    "source_inventory": "docs/research/m79-method-source-inventory.json",
+    "root_acceptance": "evaluations/research-qa/m79-inventory-root-acceptance.md",
+    "production_release": false,
+    "runtime_integration": false,
+    "remaining": "Independent numerical compatibility and applicable domain/rights/customer/current-requirements decisions; M78 dependency"
   }
 }

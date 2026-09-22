@@ -1,0 +1,3 @@
+# M78 hosted release preparation — root acceptance
+
+Root accepts exact-code receipt59786187 and independently reviewed runtime observer95d71b1c. Published commit2002feacd26c48c1beb0a4412b5524b935528084 has all six required check runs successful; all115 published Git blobs independently match admitted source hashes. Full gatee2a19b99 validated original fresh backup/restore journals, actual recovery and forward review, current maintenance and exact code identity. Observer source passed26 offline cases. These are preparation admissions; hosted migration, deployment, actual restart and0/41/0 lifecycle remain pending.

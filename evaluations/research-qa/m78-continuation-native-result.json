@@ -1,0 +1,14 @@
+{
+  "status": "m78_exact_continuation_native_passed",
+  "database": "m78_ops_continuation_20260922",
+  "applicationPostRequests": 37,
+  "retention": {
+    "retainedOldRows": 572,
+    "tableCount": 121,
+    "headException": "only target-company version_id/revision; all other old head fields retained",
+    "requestException": "none: every old request row retained; new fixed-recipe rows allowed"
+  },
+  "receiptSha256": "e7788dd5dca926ee66552f9f6e8c6d3442886ce923fcca09583511a969ba0a75",
+  "providerAuthSessionsCreated": 0,
+  "scope1ReleaseReadiness": "incomplete"
+}

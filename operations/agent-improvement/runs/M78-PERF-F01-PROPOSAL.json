@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "M78-PERF-F01-PROPOSAL",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recipe",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PERF-F01-PROPOSAL-CANDIDATE1.json",
+      "sha256": "c7012bf57531305a0e894147d7d51bcf7e12c156c474caf353c25a4f2071bcc9"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BOUNDED_PROPOSAL",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-timeout-repair-proposal.md"
+      ],
+      "reason": "Two-file proposal preserves native writers and full verification with explicit lock and latency proof gates; no execution or implementation."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-timeout-repair-proposal.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

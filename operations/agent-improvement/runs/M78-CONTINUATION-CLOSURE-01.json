@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION-CLOSURE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recovery",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE3.json",
+      "sha256": "86162b175694bbbb630f801d7c832275b186585febae5dbd9a732e5c54f7613f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-continuation-source-pins.test.ts",
+        "docs/research/m78-continuation-preparation.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assignment": {
+    "parent_outcome": "CONT-R02 hosted/runtime source closure union",
+    "allowed": "collector/test/doc only",
+    "excluded": "runtimecode,DB,host,Git,oldsourceartifacts",
+    "lessons": [
+      "L02",
+      "L04"
+    ],
+    "remaining": "Independent /root/resume_recipe review and new final source attestation"
+  }
+}

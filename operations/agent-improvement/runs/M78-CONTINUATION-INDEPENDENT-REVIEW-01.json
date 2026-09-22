@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION-INDEPENDENT-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_recipe",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "145fda3cd022c8298566e558b6a31a0f7aacc4066c555a1548d1931ac56b539c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+      "sha256": "f08a75721ccffde30a7cd11313eb149a0f051d34567f8a051230dba6252e6b93"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-PREPARATION-RECEIPT.json",
+      "sha256": "753541db5d34aea09116726ecb55f8df3477dc6adb98ed13100594e2f910d53c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-FINAL.json",
+      "sha256": "bb0a94c4b0bd91a6b425eebafef03edbde8e15a4ed973b399e1ee66a9cd9018f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "NATIVE_SOURCE_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-final-independent-review.md"
+      ],
+      "reason": "Candidate3 runtime union and actual local evidence independently accepted; hosted execution separate."
+    },
+    {
+      "id": "HOSTED_SOURCE_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-final-independent-review.md"
+      ],
+      "reason": "Candidate3 runtime union and actual local evidence independently accepted; hosted execution separate."
+    },
+    {
+      "id": "ACTUAL_NATIVE37",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-actual-independent-acceptance.json"
+      ],
+      "reason": "Read-only actual state/journal verified572oldrows121tables37operations5reports."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-root-acceptance.md",
+      "evaluations/research-qa/m78-continuation-final-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "145fda3cd022c8298566e558b6a31a0f7aacc4066c555a1548d1931ac56b539c"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+        "sha256": "f08a75721ccffde30a7cd11313eb149a0f051d34567f8a051230dba6252e6b93"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-PREPARATION-RECEIPT.json",
+        "sha256": "753541db5d34aea09116726ecb55f8df3477dc6adb98ed13100594e2f910d53c"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-INDEPENDENT-REVIEW-01-FINAL.json",
+        "sha256": "bb0a94c4b0bd91a6b425eebafef03edbde8e15a4ed973b399e1ee66a9cd9018f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation-independent-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Registry security-reliability default Astra/high; reused execution context actual compute unknown, no new model application claimed.",
+    "CONT-R02 root found omitted runtime route after initial source admission; old143-map receipt preserved, candidate3 repaired and independently challenged. Actual local37 independently accepted; hosted execution remains pending."
+  ]
+}

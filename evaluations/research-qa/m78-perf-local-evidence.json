@@ -1,0 +1,318 @@
+{
+  "profile": "m78-perf-local-author-evidence-v1",
+  "source_pins": [
+    {
+      "path": "apps/site-api/src/workspace/m78-routes.ts",
+      "sha256": "ab5018c64668dfe197755849aee1a2b3c5947f6c3da21e8d18869e998f3f9e01"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78.ts",
+      "sha256": "d492c23983b174662acb8728db88cb590a7446b6e5ec5e1a0a9a99e27ac0bf52"
+    }
+  ],
+  "measurements": [
+    {
+      "original_path": ".superpowers/m78-perf-before-initial3-result.json",
+      "sha256": "9fb02333d53d218cbe743322532ac0fc51d79c2f17229fa2c429465899b68d8c",
+      "result": {
+        "status": "m78_perf_native_passed",
+        "mode": "before",
+        "history": "initial",
+        "database": "m78_author_perf_before_initial_1790097236240",
+        "template": "m78_ops_actual20_20260922",
+        "metrics": [
+          {
+            "operation": "scope1-inventory",
+            "sqlQueries": 132,
+            "stateReads": 3,
+            "corporateReads": 30,
+            "sqlMs": 997.3367999999953,
+            "nativeWriterMs": 310.02350000000024,
+            "responseMs": 3562.5071,
+            "responseBytes": 797130,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/443d3287-9c1b-46bc-b0b2-0492ee195cee/reports",
+            "sqlQueries": 132,
+            "stateReads": 3,
+            "corporateReads": 30,
+            "sqlMs": 888.2342000000126,
+            "nativeWriterMs": 185.96670000000086,
+            "responseMs": 3705.8518000000004,
+            "responseBytes": 2229121,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/443d3287-9c1b-46bc-b0b2-0492ee195cee/reviews",
+            "sqlQueries": 132,
+            "stateReads": 3,
+            "corporateReads": 30,
+            "sqlMs": 832.3577999999961,
+            "nativeWriterMs": 100.22530000000006,
+            "responseMs": 3726.4493,
+            "responseBytes": 6720,
+            "status": 201
+          }
+        ],
+        "unchangedNonM78Tables": 112,
+        "hostCalls": 0
+      }
+    },
+    {
+      "original_path": ".superpowers/m78-perf-after-initial3-result.json",
+      "sha256": "86b0269e8ae14856800ffb4d8a0047a2a95e6fb3c8e5f182b47339613bd88eff",
+      "result": {
+        "status": "m78_perf_native_passed",
+        "mode": "after",
+        "history": "initial",
+        "database": "m78_author_perf_after_initial_1790097251197",
+        "template": "m78_ops_actual20_20260922",
+        "metrics": [
+          {
+            "operation": "scope1-inventory",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 474.09169999999835,
+            "nativeWriterMs": 243.81089999999995,
+            "responseMs": 1333.0839,
+            "responseBytes": 797130,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/98fde545-d577-49d4-8358-7796cea91227/reports",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 497.7591999999995,
+            "nativeWriterMs": 224.30369999999948,
+            "responseMs": 1540.3397000000004,
+            "responseBytes": 2229121,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/98fde545-d577-49d4-8358-7796cea91227/reviews",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 394.84759999999915,
+            "nativeWriterMs": 99.36669999999958,
+            "responseMs": 1440.5230999999994,
+            "responseBytes": 6720,
+            "status": 201
+          }
+        ],
+        "unchangedNonM78Tables": 112,
+        "hostCalls": 0
+      }
+    },
+    {
+      "original_path": ".superpowers/m78-perf-before-late3-result.json",
+      "sha256": "37bf51022aa89779a768b9dd60f301f7706c8be3023872d7f98a477d0c4c32ae",
+      "result": {
+        "status": "m78_perf_native_passed",
+        "mode": "before",
+        "history": "late",
+        "database": "m78_author_perf_before_late_1790097259493",
+        "template": "m78_ops_recipe_20260922b",
+        "metrics": [
+          {
+            "operation": "scope1-inventory/4b5199b3-1338-4dc1-bf96-fe507014c18c/versions",
+            "sqlQueries": 132,
+            "stateReads": 3,
+            "corporateReads": 30,
+            "sqlMs": 2085.3305000000073,
+            "nativeWriterMs": 750.0001000000002,
+            "responseMs": 6792.5357,
+            "responseBytes": 1750314,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/4b5199b3-1338-4dc1-bf96-fe507014c18c/reports",
+            "sqlQueries": 132,
+            "stateReads": 3,
+            "corporateReads": 30,
+            "sqlMs": 2073.1886000000086,
+            "nativeWriterMs": 670.7606999999989,
+            "responseMs": 7265.060000000001,
+            "responseBytes": 4686823,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/4b5199b3-1338-4dc1-bf96-fe507014c18c/reviews",
+            "sqlQueries": 132,
+            "stateReads": 3,
+            "corporateReads": 30,
+            "sqlMs": 1573.7519999999931,
+            "nativeWriterMs": 187.14969999999812,
+            "responseMs": 6870.030200000001,
+            "responseBytes": 7188,
+            "status": 201
+          }
+        ],
+        "unchangedNonM78Tables": 112,
+        "hostCalls": 0
+      }
+    },
+    {
+      "original_path": ".superpowers/m78-perf-after-late3-result.json",
+      "sha256": "ab5ca84faf286ca998ba59889796029a86f185a54ff5ae42bfa15f5dc81694d9",
+      "result": {
+        "status": "m78_perf_native_passed",
+        "mode": "after",
+        "history": "late",
+        "database": "m78_author_perf_after_late_1790097288920",
+        "template": "m78_ops_recipe_20260922b",
+        "metrics": [
+          {
+            "operation": "scope1-inventory/4b5199b3-1338-4dc1-bf96-fe507014c18c/versions",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 1406.7424999999994,
+            "nativeWriterMs": 773.223,
+            "responseMs": 3609.9519999999998,
+            "responseBytes": 1750314,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/4b5199b3-1338-4dc1-bf96-fe507014c18c/reports",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 1340.4564000000073,
+            "nativeWriterMs": 669.9308999999994,
+            "responseMs": 3793.4428,
+            "responseBytes": 4686823,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/4b5199b3-1338-4dc1-bf96-fe507014c18c/reviews",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 898.9164999999975,
+            "nativeWriterMs": 193.08779999999933,
+            "responseMs": 3428.017899999999,
+            "responseBytes": 7188,
+            "status": 201
+          }
+        ],
+        "unchangedNonM78Tables": 112,
+        "hostCalls": 0
+      }
+    },
+    {
+      "original_path": ".superpowers/m78-perf-after-guards-result.json",
+      "sha256": "e8f0c6bc469a56a33573217dd9b2c952d1f3e98b7a51cb9128a2b6dfd1c93e33",
+      "result": {
+        "status": "m78_perf_native_passed",
+        "mode": "after",
+        "history": "guards",
+        "database": "m78_author_perf_after_guards_1790097108012",
+        "template": "m78_ops_actual20_20260922",
+        "metrics": [
+          {
+            "operation": "scope1-inventory",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 482.00360000000023,
+            "nativeWriterMs": 238.66570000000002,
+            "responseMs": 1326.5291000000002,
+            "responseBytes": 50,
+            "status": 503
+          },
+          {
+            "operation": "scope1-inventory",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 516.1315999999961,
+            "nativeWriterMs": 257.96219999999994,
+            "responseMs": 2053.7967000000003,
+            "responseBytes": 797130,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/71088b0f-ddc8-4503-81cc-f7fc67716745/versions",
+            "sqlQueries": 50,
+            "stateReads": 2,
+            "corporateReads": 10,
+            "sqlMs": 560.3339999999998,
+            "nativeWriterMs": 300.53750000000036,
+            "responseMs": 1595.1288999999997,
+            "responseBytes": 887592,
+            "status": 201
+          },
+          {
+            "operation": "scope1-inventory/71088b0f-ddc8-4503-81cc-f7fc67716745/versions",
+            "sqlQueries": 48,
+            "stateReads": 1,
+            "corporateReads": 10,
+            "sqlMs": 232.4341999999906,
+            "nativeWriterMs": 0,
+            "responseMs": 1163.9429,
+            "responseBytes": 887592,
+            "status": 201
+          },
+          {
+            "operation": "process-screen/71088b0f-ddc8-4503-81cc-f7fc67716745/versions",
+            "sqlQueries": 5,
+            "stateReads": 0,
+            "corporateReads": 0,
+            "sqlMs": 1.1886000000013155,
+            "nativeWriterMs": 0,
+            "responseMs": 2.346000000001368,
+            "responseBytes": 45,
+            "status": 422
+          },
+          {
+            "guards": "passed",
+            "postWriteRollback": true,
+            "competingLocks": [
+              {
+                "call": "m73_lock",
+                "code": "55P03"
+              },
+              {
+                "call": "m75_lock",
+                "code": "55P03"
+              },
+              {
+                "call": "m76_lock",
+                "code": "55P03"
+              },
+              {
+                "call": "m77_lock",
+                "code": "55P03"
+              }
+            ],
+            "corporateCode": "55P03",
+            "secondInitialConflict": true,
+            "idempotency": {
+              "requests": 1,
+              "audits": 1,
+              "versions": 1
+            },
+            "wrongStream": true
+          }
+        ],
+        "unchangedNonM78Tables": 112,
+        "hostCalls": 0
+      }
+    }
+  ],
+  "harness_setup_failures_preserved": {
+    "first_batch": "Four fresh retained clones stopped on bundled migration path before application POST.",
+    "second_batch": "Four fresh retained clones stopped on bundled source-relative authority lookup before application POST.",
+    "repair": "Build wrapper preserves original module import.meta.dir/url for both before/after bundles; no production source change."
+  },
+  "limitations": [
+    "Single local sample per case per variant; no hosted deadline proof.",
+    "Before/after clones share exact source template; new IDs/timestamps differ.",
+    "Driver statistics count caller SQL round trips, not statements executed inside native procedures.",
+    "Native writer entry race controls use malformed payloads deliberately, establishing lock acquisition before validation, not successful concurrent source corrections."
+  ]
+}

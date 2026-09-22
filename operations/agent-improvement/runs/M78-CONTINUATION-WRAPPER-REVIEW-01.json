@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION-WRAPPER-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "b7b1b1b1f38a0cb4b20ee269f05633ee8d6e3a96aa02c657904adae1864dc0a6",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-WRAPPER-REVIEW-01-CANDIDATE1.json",
+      "sha256": "a62d2069e1fac7bd091437a902c50e6ef3192a9eda605cd6128ae459d8e14de4"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-WRAPPER-REVIEW-01-CANDIDATE2.json",
+      "sha256": "5a0ac00b1103a5007b8ab0a679ca314cacf44589f457f218ed598f8e9b2f96eb"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "WRAPPER-SOURCE-CLOSURE-CI",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-wrapper-independent-review.md",
+        "operations/agent-improvement/snapshots/M78-CONTINUATION-WRAPPER-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "15 tests/295 assertions;143 exact pins and3 original evidence pins; source only."
+    },
+    {
+      "id": "CONT-R02-FINAL155",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-wrapper-final-review.md",
+        "operations/agent-improvement/snapshots/M78-CONTINUATION-WRAPPER-REVIEW-01-CANDIDATE2.json"
+      ],
+      "reason": "All122 runtime pins in155 union;6 tests339 assertions; original143 omission preserved."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-root-acceptance.md",
+      "evaluations/research-qa/m78-continuation-wrapper-final-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-WRAPPER-REVIEW-01-CANDIDATE1.json",
+        "sha256": "a62d2069e1fac7bd091437a902c50e6ef3192a9eda605cd6128ae459d8e14de4"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-WRAPPER-REVIEW-01-CANDIDATE2.json",
+        "sha256": "5a0ac00b1103a5007b8ab0a679ca314cacf44589f457f218ed598f8e9b2f96eb"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation-wrapper-independent-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

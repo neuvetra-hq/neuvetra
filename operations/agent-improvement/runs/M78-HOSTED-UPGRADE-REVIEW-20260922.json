@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "M78-HOSTED-UPGRADE-REVIEW-20260922",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-UPGRADE-REVIEW-20260922-CANDIDATE1.json",
+      "sha256": "bb5f873a495a9beb3430f0597be07a5814173c2abbb62d27ee1dbc59255fd9f5"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CLOSED-UPGRADE-RECEIPT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-hosted-upgrade-20260922-review.md",
+        "evaluations/research-qa/m78-hosted-upgrade-20260922-review.json"
+      ],
+      "reason": "Exact two-event gate binding, all pinned artifacts/freshness,115sources,113to121 tables and377content preservation; receipt-only review."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-hosted-upgrade-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-HOSTED-UPGRADE-REVIEW-20260922-CANDIDATE1.json",
+        "sha256": "bb5f873a495a9beb3430f0597be07a5814173c2abbb62d27ee1dbc59255fd9f5"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-hosted-upgrade-20260922-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-hosted-upgrade-20260922-review.json",
+      "sha256": "9ecdff47b1b3443998f66d7758948d21e50e99c5128d963786bb6fe002aa28ec"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-upgrade-20260922-review.md",
+      "sha256": "4da84457e2e0b81f9c4a068f1e528dc85eb5385eb16b5ea060cb4c1b9fabc2c6"
+    }
+  ]
+}

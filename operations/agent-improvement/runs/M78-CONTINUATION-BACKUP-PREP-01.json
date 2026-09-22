@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION-BACKUP-PREP-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "8e53b310254e0c9ddf36aacd272c2883f90d9f944f293f6e7cf0d62c29659af1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-BACKUP-PREP-01-CANDIDATE1.json",
+      "sha256": "2df59ce15218059f0a0b4c7396360281fd694f20038d080a034ea4d5abd3c8dc"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "OFFLINE-SOURCE-PREPARATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-backup-preparation.md",
+        "operations/agent-improvement/snapshots/M78-CONTINUATION-BACKUP-PREP-01-CANDIDATE1.json"
+      ],
+      "reason": "5 tests / 167 assertions and strict targeted TypeScript; actual operation not executed by author."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-backup-root-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-BACKUP-PREP-01-CANDIDATE1.json",
+        "sha256": "2df59ce15218059f0a0b4c7396360281fd694f20038d080a034ea4d5abd3c8dc"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation-backup-preparation.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

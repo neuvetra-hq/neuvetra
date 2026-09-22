@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "M78-PERF-F01-IMPLEMENTATION",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recipe",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PERF-F01-IMPLEMENTATION-CANDIDATE1.json",
+      "sha256": "3dc1d22c12f343140a4d0811e66ee1694b1b1a95b135fa7cc2f994b79a131902"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PERF-F01-IMPLEMENTATION-CANDIDATE2.json",
+      "sha256": "94c6eb044d8a5b32d5ccded5127cf155acd3bcaaf575511543626a3b6e61e92b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "IMPLEMENTATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-perf-implementation.md"
+      ],
+      "reason": "Two runtime files plus focused evidence; local timings and new native guards pass."
+    },
+    {
+      "id": "EXISTING_INTEGRITY_REGRESSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-perf-implementation.md"
+      ],
+      "reason": "Existing native3tests76assertions: both actualcapacityrefusals and coordinatedhistoricalforgery/readback."
+    },
+    {
+      "id": "INDEPENDENT_REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-perf-independent-review.md",
+        "evaluations/research-qa/m78-performance-root-acceptance.md"
+      ],
+      "reason": "Independent source and native lock/race/rollback review accepted exact two-file candidate; hosted deadline and lifecycle remain separate release gates."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-performance-root-acceptance.md",
+      "evaluations/research-qa/m78-perf-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-PERF-F01-IMPLEMENTATION-CANDIDATE1.json",
+        "sha256": "3dc1d22c12f343140a4d0811e66ee1694b1b1a95b135fa7cc2f994b79a131902"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-PERF-F01-IMPLEMENTATION-CANDIDATE2.json",
+        "sha256": "94c6eb044d8a5b32d5ccded5127cf155acd3bcaaf575511543626a3b6e61e92b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-perf-implementation.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

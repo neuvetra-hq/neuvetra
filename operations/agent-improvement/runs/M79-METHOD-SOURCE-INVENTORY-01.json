@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "id": "M79-METHOD-SOURCE-INVENTORY-01",
+  "role": "accounting-validation",
+  "execution_context": "/root/m79_inventory",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-METHOD-SOURCE-INVENTORY-01-CANDIDATE1.json",
+      "sha256": "f3347001aa92793c35b08eca723163fe7c609e6764ceee464c56d5fd8af3b3d1"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-complete-four-profile-binding-inventory",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-method-source-inventory.json",
+        "docs/research/m79-method-source-inventory.md"
+      ],
+      "reason": "Four unique existing profiles and twelve unique gas/factor rows map exact activity, units, heat basis, source edition/cells, gas/GWP/blend policy, rounding, estimate/zero rules, period and method identities."
+    },
+    {
+      "id": "AC-02-retained-originals-or-explicit-unresolved",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-method-source-inventory.json",
+        "evaluations/calculation-specs/m78-source-observations.json"
+      ],
+      "reason": "Seven retained originals were freshly reopened read-only; byte/hash and selected XLSX/PDF locators matched. Remote-byte identity was not claimed and all domain/rights/release states remain unresolved or blocked."
+    },
+    {
+      "id": "AC-03-truthful-gates-and-review-handoff",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-method-source-inventory.md"
+      ],
+      "reason": "Production, domain, intended-use rights, customer, legal, runtime and assurance gates are individually named with owners/actions; the handoff includes a non-mutating structural and provenance review sequence."
+    },
+    {
+      "id": "AC-04-independent-review-of-frozen-candidate",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-inventory-independent-review.md",
+        "evaluations/research-qa/m79-inventory-root-acceptance.md"
+      ],
+      "reason": "Independent source-evidence reviewer accepted exact candidate1, all4profiles12rows7originals and unreleased boundaries; no professional domain or production approval."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m79-inventory-root-acceptance.md",
+      "evaluations/research-qa/m79-inventory-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M79-METHOD-SOURCE-INVENTORY-01-CANDIDATE1.json",
+        "sha256": "f3347001aa92793c35b08eca723163fe7c609e6764ceee464c56d5fd8af3b3d1"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M79 Scope 1 method/source release candidate preparation",
+  "applicable_lessons": [],
+  "source_artifacts": [
+    {
+      "path": "docs/research/m79-method-source-inventory.json",
+      "sha256": "d5f50b6e2d49b1ce027affe08ccfe422174b59df60c408b544212f232b9a8022"
+    },
+    {
+      "path": "docs/research/m79-method-source-inventory.md",
+      "sha256": "848883159be48c88a0dab8589ad371dcdbbf8dd07966a3d5fbcfd0799f7a530b"
+    }
+  ],
+  "notes": [
+    "Requested Sol/high and observed settings remain distinct; observed model/effort are unavailable.",
+    "Fresh local source checks were read-only. Historical M78 observations are cited separately from 2026-09-22 local verification; no remote bytes were downloaded or rehashed.",
+    "No product integration, calculation/output rewrite, source-corpus release, provider/database call, live journal, Git action or shared-ledger edit occurred.",
+    "All rows remain candidate-only and release-ineligible. No license, domain approval, legal compliance, customer completeness or assurance is claimed."
+  ]
+}

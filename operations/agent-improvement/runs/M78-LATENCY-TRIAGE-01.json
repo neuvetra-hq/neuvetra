@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "M78-LATENCY-TRIAGE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recipe",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-LATENCY-TRIAGE-01-CANDIDATE1.json",
+      "sha256": "da80a6113fda4cd46b8df1451561e6b2b9389f30717004d2cdc24acded1e99b9"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-LATENCY-TRIAGE-01-CANDIDATE2.json",
+      "sha256": "8cb7d89114b33a1c3d975bcf23fbf9cd33a92e45ed52b730bb633993a9dc50b2"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BOUNDED_TRIAGE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-latency-triage.md"
+      ],
+      "reason": "Read-only source inspection distinguishes measured handoff, code evidence, inference and proposed performance acceptance."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/resume_release",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-closure-planning-root-acceptance.md",
+      "evaluations/research-qa/m78-closure-plan-independent-final-review.md",
+      "evaluations/research-qa/m78-closure-plan-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-LATENCY-TRIAGE-01-CANDIDATE1.json",
+        "sha256": "da80a6113fda4cd46b8df1451561e6b2b9389f30717004d2cdc24acded1e99b9"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-LATENCY-TRIAGE-01-CANDIDATE2.json",
+        "sha256": "8cb7d89114b33a1c3d975bcf23fbf9cd33a92e45ed52b730bb633993a9dc50b2"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-latency-triage.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Candidate1 source-precision findings retained: deployed asUser override differs from base implementation; rejected requests do not reconstruct state. Candidate2 repair awaits review."
+  ]
+}
