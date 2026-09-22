@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "OPS-BUILD-TOOLS-INTEGRATION-01",
+  "role": "cto",
+  "execution_context": "/root/ops_integration",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE3.json",
+      "sha256": "d96a4beef69f17fb80c7e1d3e51cbab8d45dbe56e93c40ecb1d3f3094b521412"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-MANIFEST",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/OPS-BUILD-TOOLS-INTEGRATION-01.md"
+      ],
+      "reason": "All 28 accepted source files were absent at destination and source/destination SHA256s match the explicit manifest."
+    },
+    {
+      "id": "AC-OFFLINE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/OPS-BUILD-TOOLS-INTEGRATION-01.md"
+      ],
+      "reason": "Focused 20+10 tests passed and credential-free default preflight used no network or ledger."
+    },
+    {
+      "id": "AC-POLICY-CI",
+      "status": "pass",
+      "evidence": [
+        "AGENTS.md",
+        ".github/workflows/agent-ops.yml"
+      ],
+      "reason": "Prospective policy reference preserves defaults and focused CI invokes both offline suites."
+    },
+    {
+      "id": "AC-M78",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/OPS-BUILD-TOOLS-INTEGRATION-01.md",
+        "evaluations/research-qa/m78-continuation2-journey-preparation.json"
+      ],
+      "reason": "All 160 M78 source pins matched before and after candidate assembly."
+    },
+    {
+      "id": "AC-INDEPENDENT-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/ops-build-tools-integration-root-review.md"
+      ],
+      "reason": "Root independently accepted exactcandidate3 andfocusedvalidation; publication notimplied."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/ops-build-tools-integration-root-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE3.json",
+        "sha256": "d96a4beef69f17fb80c7e1d3e51cbab8d45dbe56e93c40ecb1d3f3094b521412"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/OPS-BUILD-TOOLS-INTEGRATION-01.md",
+      "sha256": "ac742f430a2c275a6283ec66c2496a899c27ac5295767e81d22eb2c4003e67a6"
+    }
+  ]
+}

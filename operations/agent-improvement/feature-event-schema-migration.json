@@ -1,0 +1,8 @@
+{
+  "reason": "Initial implementation now requires explicit QA independence; original unvalidated draft preserved byte-for-byte. No event, finding, timestamp or disposition was removed or changed.",
+  "original": "operations\\agent-improvement\\build-feature-events.jsonl",
+  "original_sha256": "4e17b8e93b6d9a7ce54324ff196aafb679a5d6e07fd9fdb21a030b6eb07862d4",
+  "preserved_copy": "operations\\agent-improvement\\snapshots\\OPS-METRICS-EVENTS-PRE-INDEPENDENCE.jsonl",
+  "active_stream": "operations\\agent-improvement\\build-feature-events-v1.jsonl",
+  "added_field": "independent:true on dispositions by actual independent reviewer /root/metrics_qa"
+}

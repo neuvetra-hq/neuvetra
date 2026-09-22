@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "BUILD-MODEL-PILOT-2026-09-22",
+  "status": "approved_not_executed",
+  "approval_source": "Board instruction in coordinator conversation, 2026-09-22: Yes, you can allocate $5 for that.",
+  "purpose": "Initial bounded comparison of low-cost OpenRouter build workers, including measured reviewer effort and feature-level delivery metrics",
+  "currency": "USD",
+  "aggregate_spend_cap": 5,
+  "cap_includes": [
+    "all model candidates",
+    "retries",
+    "paid evaluation calls",
+    "uncertain charges reserved until reconciled"
+  ],
+  "not_authorized": [
+    "new subscriptions",
+    "automatic top-ups",
+    "spending the remaining approximate $98 pool",
+    "production writes by experimental workers",
+    "changing required release tests",
+    "waiving independent review"
+  ],
+  "openrouter_balance_verified": false,
+  "calls_made_by_this_pilot": 0,
+  "pilot_spend_observed_usd": 0,
+  "pilot_spend_observation_basis": "No live requests have been issued under this pilot authorization",
+  "execution_prerequisites": [
+    "Secure existing account credential binding without exposing keys in prompts or logs",
+    "Reviewed external-worker adapter with allowed files/tools and no production authority",
+    "Fresh eligible model/provider prices and data handling",
+    "Aggregate reservation ledger that prevents concurrent requests exceeding remaining pilot budget",
+    "Independent expected outcomes and isolated task fixtures"
+  ],
+  "owner": "coordinator",
+  "changes_to_active_product_milestone": "none",
+  "execution_readiness": {
+    "adapter": "implemented_independently_reviewed_offline",
+    "review": "operations/agent-improvement/OPS-METRICS-QA-01.md",
+    "credential": "not_available_in_executing_process; no approved existing binding known",
+    "paid_requests_sent": 0,
+    "model_results": "not_measured"
+  }
+}

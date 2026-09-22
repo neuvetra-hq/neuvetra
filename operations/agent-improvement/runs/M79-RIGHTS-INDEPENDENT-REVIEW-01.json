@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "M79-RIGHTS-INDEPENDENT-REVIEW-01",
+  "role": "regulatory-research",
+  "execution_context": "/root/m79_rights_review",
+  "prompt_sha256": "b8302825b83953d49d2783538b424498348aa20f322b1c2c1c0b5e011145a7f2",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "51ee53b9f22707a621b08c5c93f6683b4cb2b7a7dacf5f2f97afe374d99a3ae7"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+      "sha256": "5801daaf7beeddc93affbbf19d396d613f14b4a7cfd86f9afc01988dda03a805"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-frozen-candidate",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-independent-review.md",
+        "operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "Candidate JSON/Markdown live and embedded hashes match the exact author candidate1 snapshot; the review bundle freezes the reviewed bytes and the independent first-fail disposition."
+    },
+    {
+      "id": "AC-02-seven-originals-three-uses-and-notices",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-independent-review.md"
+      ],
+      "reason": "Exactly seven unique originals and all three use classes are present; all seven retained hashes and source-specific notice/no-notice observations were independently checked."
+    },
+    {
+      "id": "AC-03-current-primary-policy-evidence",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-root-targeted-review.md",
+        "evaluations/research-qa/m79-rights-independent-review.md"
+      ],
+      "reason": "Prior independent candidate2 review plus separate root candidate3 primary-source locator check closes bounded preparation/review; all release holds remain."
+    },
+    {
+      "id": "AC-04-source-specific-legal-and-product-gate-distinction",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-root-targeted-review.md",
+        "evaluations/research-qa/m79-rights-independent-review.md"
+      ],
+      "reason": "Prior independent candidate2 review plus separate root candidate3 primary-source locator check closes bounded preparation/review; all release holds remain."
+    },
+    {
+      "id": "AC-05-no-unauthorized-release-or-assurance",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-independent-review.md"
+      ],
+      "reason": "Candidate and review keep rights approval, source/corpus release, production release and Scope 1 completion false and make no professional legal approval claim."
+    },
+    {
+      "id": "AC-06-root-admission-of-review-delivery",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-root-targeted-review.md",
+        "evaluations/research-qa/m79-rights-independent-review.md"
+      ],
+      "reason": "Prior independent candidate2 review plus separate root candidate3 primary-source locator check closes bounded preparation/review; all release holds remain."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m79-rights-root-targeted-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "51ee53b9f22707a621b08c5c93f6683b4cb2b7a7dacf5f2f97afe374d99a3ae7"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+        "sha256": "5801daaf7beeddc93affbbf19d396d613f14b4a7cfd86f9afc01988dda03a805"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M79 California-first Scope 1 intended-use rights evidence preparation",
+  "source_artifacts": [
+    {
+      "path": "docs/research/m79-primary-rights-evidence.json",
+      "sha256": "c240ac44007d7e15dfde9753e4850184d06ecb9f24ea0f1bf59f362d91d162d6"
+    },
+    {
+      "path": "docs/research/m79-primary-rights-evidence.md",
+      "sha256": "accf29230a60d8d71147bf68777752b5039a8b39d9142f03bb298b15e36c0215"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M79-PRIMARY-RIGHTS-EVIDENCE-01-CANDIDATE1.json",
+      "sha256": "0e985ae418cadb22cb5b9d2149bbae2046cfe843b2e37f2178f22911f2361314"
+    }
+  ],
+  "notes": [
+    "Requested Sol/high and observed settings remain distinct; observed model/effort are unavailable.",
+    "The reviewer authored none of the candidate rights evidence, retained originals, source inventory or calculation methods.",
+    "No candidate file, provider/auth/credential, shared ledger, runtime, product, Git state, publisher contact or permission request was changed.",
+    "Candidate1 remains preserved; root should route F01-F03 to the author for a new candidate2 and targeted independent re-review."
+  ]
+}

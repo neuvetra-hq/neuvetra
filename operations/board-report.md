@@ -1,3 +1,19 @@
+# September 22: cleanup diagnosis and reviewed tooling publication
+
+Board resumed after the platform update. Interrupted continuation2 remains frozen (15events/3ce68c3f;30diagnostics/8ae88cd3). Four logins lack logout evidence; no application writes were recorded. Observer4570ae62 found one matching session per test user. Reviewed cleanupv2 failed; preserve exclusiveintent30aa7e00 and neverretry. Read-only post-observerbab3732a confirms allfour sessions/refreshcounts unchanged. Causeunknown; separate privilege/trigger/inventory diagnostic under /root/resume_release review. No cleanup success or JWTexpiry claim.
+
+/root/m78_cont3_review reviews new continuation3 with explicit gracefulpause and unchanged160sources. No newjourney execution. Actualcleanup acceptance, freshruntime/sourcegate, successfulbaseline,37remainingwrites,restart/revisit/browser andindependentclosure remain. Live59cda7/schema21/deployment0f2e99/imagefe46 was healthy afterupdate; autodeploynotrestored. Neverrepeat SQL21/originalinventorysave/Terrascopefix.
+
+Rootaccepted toolingcandidate3d96a4bee with20+10tests/offlinepreflight; M79numerical18cases andrights candidate3e9028738 preparation accepted. All21 rightsproductholds/non-releaseflags remain. Publishing bounded tooling/research next; rootsoleGitwriter. No paidcalls/model-defaultchanges. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: resumed after platform update; reconcile interrupted baseline first
+
+Board resumed authorized product work. Tooling e7f56bde passed all six published checks at18:48UTC. Live59cda7/schema21/deployment0f2e99/imagefe46 remains SUCCESS andready at fresh19:59UTC observation; automaticdeployment was previouslypaused and hasnotbeenrestored.
+
+Continuation2 was interrupted duringread-onlybaseline:15main events/SHA3ce68c3fc87e37623326badb88d412f2db36daceacf43060c5849f287a358507;30diagnosticevents/SHA8ae88cd344ab1a6376b91a63581c57c9c61c381eb57141e1b6a11ca7647eae08. No matching Bunprocess observed19:57:27UTC. No applicationPOST observed, but logout/terminalclosure unconfirmed. Root had set diagnosticsreadonly to trigger failclosed cleanup on pause; platform interruption prevented evidence of completion. Preserve fileattribute, journals andlock; neverreset/retry. Independent /root/resume_release is assigned exact interruption/session-recovery review before newhostedexecution. SQL21upgrade, originalinventorysave andTerrascopefix neverrepeat.
+
+/root/ops_integration independentlyauthors bounded import of previouslyreviewed featuremetrics/pilottooling with focusedCI andprospectivepolicy reference; root soleGitwriter. No paidcalls/credentialaccess, no productdependency. M79numerical independentreview passed butrootadmission pending; rights candidate2 saved, targetedreview pending. Scope1customerrelease incomplete. Earliersections historical.
+
 # September 22: continuation2 source gates accepted; publish verification tooling
 
 New adapter source gate4a1ee046 covers160files/fourevidencepins; independent snapshotf92bf6a2 andCI supplementada51bc0 accepted byroot. Wrapper01e731 andfreshobserverdd52 accepted; author/independent11tests1078assertions, portableCI subset2tests848assertions and28mockedrefreshcases passed. No newbaseline2journal/diagnostics hasbeencreated.

@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "M79-NUMERICAL-INDEPENDENT-REVIEW-01",
+  "role": "accounting-validation",
+  "execution_context": "/root/m79_numerical_review",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "62a6681aaeb0b603f44b8e0ad49390fca6142aac0323721c9c34c8a53df2a001"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-frozen-candidate",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-numerical-independent-review.md",
+        "operations/agent-improvement/snapshots/M79-NUMERICAL-INDEPENDENT-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "The dossier, four author support files and author candidate1 snapshot match the exact assigned hashes and embedded bytes."
+    },
+    {
+      "id": "AC-02-primary-source-factor-unit-and-engine-binding",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-numerical-independent-review.md"
+      ],
+      "reason": "The retained workbook hash, edition, displayed source values, units, HHV conversion, GWP cells and all exact engine/dependency hashes were independently rechecked against the accepted inventory."
+    },
+    {
+      "id": "AC-03-independent-arithmetic-rounding-aggregation-and-blend",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-numerical-independent-review.md"
+      ],
+      "reason": "All 18 cases independently recalculated with no mismatch; both half-even tie directions, round-once aggregation and opaque whole-blend R-410A GWP 1924 behavior were confirmed without inferred constituent mass."
+    },
+    {
+      "id": "AC-04-meaningful-admission-boundaries",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-numerical-independent-review.md",
+        "evaluations/calculation-specs/m79-numerical-result.json",
+        "evaluations/calculation-specs/m79-numerical-boundaries.test.ts"
+      ],
+      "reason": "Seven frozen engine cases and five application tests with 24 assertions cover meaningful missing, zero, unsupported, estimate, linked-release and aggregation behavior; reviewer-side negative inputs separately confirmed all three combustion engines refuse negative activity."
+    },
+    {
+      "id": "AC-05-qualified-gates-and-root-admission",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-numerical-root-acceptance.md"
+      ],
+      "reason": "Root accepts bounded preparation/review only; qualified release and customer gates remain outside this assignment and open."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m79-numerical-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "62a6681aaeb0b603f44b8e0ad49390fca6142aac0323721c9c34c8a53df2a001"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M79 independent numerical compatibility review for Head of QA",
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-COMPATIBILITY-01-CANDIDATE1.json",
+      "sha256": "2ca05e1fe65f3376035343ee5fc09350f80fe747b58c001524b104e87f74f090"
+    },
+    {
+      "path": "docs/research/m79-method-source-inventory.json",
+      "sha256": "d5f50b6e2d49b1ce027affe08ccfe422174b59df60c408b544212f232b9a8022"
+    }
+  ],
+  "notes": [
+    "Requested Sol/high and observed settings remain distinct; observed model and effort are unavailable.",
+    "The reviewer authored none of the candidate numerical evidence, accepted source inventory, source workbook or M73-M78 calculation engines.",
+    "The author script was not rerun and no frozen author result, expectation, snapshot, source, engine, database, product, Git or shared-ledger file was changed.",
+    "Candidate1 is accepted only as bounded numerical preparation; root owns final admission."
+  ]
+}

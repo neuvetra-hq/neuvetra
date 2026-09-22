@@ -1,0 +1,262 @@
+{
+  "schema_version": 1,
+  "features": [
+    {
+      "feature_id": "OPS-METRICS-01",
+      "milestone_id": "AGENT-IMPROVEMENT",
+      "title": "Feature delivery scorecards",
+      "problem": "Agent run records do not provide a joined feature-level QA and cost history.",
+      "delivered_behavior": "Local deterministic feature scorecards join QA history and native run records, preserve failures and unknown costs, and reject stale acceptance or overwritten inputs.",
+      "state": "accepted",
+      "owner": "/root/feature_metrics",
+      "risk_class": "critical",
+      "complexity_class": "bounded_tooling",
+      "run_ids": [
+        "OPS-METRICS-01",
+        "OPS-METRICS-QA-01"
+      ],
+      "lifecycle": {
+        "accepted_at": "2026-09-22T19:45:18.256696+00:00",
+        "lead_time_seconds": null
+      },
+      "acceptance_coverage": {
+        "passed": 3,
+        "applicable_denominator": 3,
+        "failed": 0,
+        "pending": 0
+      },
+      "qa": {
+        "unique_findings": 4,
+        "findings_by_severity": {
+          "critical": 0,
+          "high": 3,
+          "low": 0,
+          "medium": 1
+        },
+        "open_or_reopened_findings": 0,
+        "review_rounds": 3,
+        "completed_rounds": 3,
+        "rework_cycles": 2,
+        "post_acceptance_findings": 0,
+        "first_review": {
+          "result": "fail",
+          "pass_numerator": 0,
+          "completed_denominator": 1
+        }
+      },
+      "cost": {
+        "actual_usd_lower_bound": null,
+        "actual_usd_known_calls": 0,
+        "total_calls": 0,
+        "unknown_actual_usd_calls": 0,
+        "unsettled_reserved_usd": null,
+        "unsettled_calls_with_known_reserve": 0,
+        "unsettled_calls_with_unknown_reserve": 0,
+        "actual_by_phase_usd": {
+          "implementation": null,
+          "orchestration": null,
+          "retry": null,
+          "review": null
+        }
+      },
+      "model_settings": {
+        "routes": [],
+        "total_calls": 0,
+        "requested_model_known_calls": 0,
+        "requested_effort_known_calls": 0,
+        "actual_model_known_calls": 0,
+        "actual_effort_known_calls": 0
+      },
+      "native_runs": {
+        "runs": [
+          {
+            "run_id": "OPS-METRICS-01",
+            "record_joined": true,
+            "role": "software-engineering",
+            "execution_context": "/root/feature_metrics",
+            "requested": {
+              "model": "gpt-5.6-sol",
+              "effort": "high"
+            },
+            "observed": {
+              "model": null,
+              "effort": null
+            },
+            "cost_usd": null,
+            "first_review": "fail",
+            "review": {
+              "reviewer_execution_context": "/root/metrics_qa",
+              "independent": true,
+              "verdict": "pass"
+            }
+          },
+          {
+            "run_id": "OPS-METRICS-QA-01",
+            "record_joined": true,
+            "role": "qa-lead",
+            "execution_context": "/root/metrics_qa",
+            "requested": {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "observed": {
+              "model": null,
+              "effort": null
+            },
+            "cost_usd": null,
+            "first_review": "pass",
+            "review": {
+              "reviewer_execution_context": "/root",
+              "independent": true,
+              "verdict": "pass"
+            }
+          }
+        ],
+        "registered_runs": 2,
+        "joined_records": 2,
+        "requested_model_known_runs": 2,
+        "observed_model_known_runs": 0,
+        "cost_known_runs": 0
+      }
+    },
+    {
+      "feature_id": "OPS-PILOT-01",
+      "milestone_id": "AGENT-IMPROVEMENT",
+      "title": "Capped model comparison",
+      "problem": "Cheaper build models have not been evaluated against Neuvetra-specific work.",
+      "delivered_behavior": "Offline adapter independently accepted after one repair cycle; live comparison waits for secure OpenRouter credential.",
+      "state": "blocked",
+      "owner": "/root/pilot_runner",
+      "risk_class": "critical",
+      "complexity_class": "bounded_tooling",
+      "run_ids": [
+        "OPS-PILOT-01",
+        "OPS-METRICS-QA-01"
+      ],
+      "lifecycle": {
+        "lead_time_seconds": null
+      },
+      "acceptance_coverage": {
+        "passed": 1,
+        "applicable_denominator": 3,
+        "failed": 0,
+        "pending": 2
+      },
+      "qa": {
+        "unique_findings": 2,
+        "findings_by_severity": {
+          "critical": 0,
+          "high": 0,
+          "low": 0,
+          "medium": 2
+        },
+        "open_or_reopened_findings": 0,
+        "review_rounds": 2,
+        "completed_rounds": 2,
+        "rework_cycles": 1,
+        "post_acceptance_findings": 0,
+        "first_review": {
+          "result": "fail",
+          "pass_numerator": 0,
+          "completed_denominator": 1
+        }
+      },
+      "cost": {
+        "actual_usd_lower_bound": null,
+        "actual_usd_known_calls": 0,
+        "total_calls": 0,
+        "unknown_actual_usd_calls": 0,
+        "unsettled_reserved_usd": null,
+        "unsettled_calls_with_known_reserve": 0,
+        "unsettled_calls_with_unknown_reserve": 0,
+        "actual_by_phase_usd": {
+          "implementation": null,
+          "orchestration": null,
+          "retry": null,
+          "review": null
+        }
+      },
+      "model_settings": {
+        "routes": [],
+        "total_calls": 0,
+        "requested_model_known_calls": 0,
+        "requested_effort_known_calls": 0,
+        "actual_model_known_calls": 0,
+        "actual_effort_known_calls": 0
+      },
+      "native_runs": {
+        "runs": [
+          {
+            "run_id": "OPS-PILOT-01",
+            "record_joined": true,
+            "role": "software-engineering",
+            "execution_context": "/root/pilot_runner",
+            "requested": {
+              "model": "gpt-5.6-sol",
+              "effort": "high"
+            },
+            "observed": {
+              "model": null,
+              "effort": null
+            },
+            "cost_usd": null,
+            "first_review": "fail",
+            "review": {
+              "reviewer_execution_context": "/root/metrics_qa",
+              "independent": true,
+              "verdict": "pass"
+            }
+          },
+          {
+            "run_id": "OPS-METRICS-QA-01",
+            "record_joined": true,
+            "role": "qa-lead",
+            "execution_context": "/root/metrics_qa",
+            "requested": {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            },
+            "observed": {
+              "model": null,
+              "effort": null
+            },
+            "cost_usd": null,
+            "first_review": "pass",
+            "review": {
+              "reviewer_execution_context": "/root",
+              "independent": true,
+              "verdict": "pass"
+            }
+          }
+        ],
+        "registered_runs": 2,
+        "joined_records": 2,
+        "requested_model_known_runs": 2,
+        "observed_model_known_runs": 0,
+        "cost_known_runs": 0
+      }
+    }
+  ],
+  "portfolio": {
+    "features": 2,
+    "accepted_or_later_features": 1,
+    "first_review_passes": 0,
+    "first_review_completed_denominator": 2,
+    "actual_usd_lower_bound": null,
+    "actual_usd_known_calls": 0,
+    "total_calls": 0,
+    "unknown_actual_usd_calls": 0,
+    "actual_model_known_calls": 0,
+    "actual_model_total_calls": 0,
+    "native_run_records_joined": 4,
+    "native_runs_registered": 4,
+    "native_run_cost_known": 0,
+    "native_run_observed_model_known": 0
+  },
+  "model_performance_review": {
+    "groups": [],
+    "unknown_actual_setting_calls": 0,
+    "limitation": "Descriptive comparable-task slices; features touched do not establish model causality."
+  },
+  "limitation": "Derived from supplied records only; unknown measurements remain unknown and actual spend is a measured lower bound."
+}

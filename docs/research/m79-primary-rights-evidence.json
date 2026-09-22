@@ -1,0 +1,488 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M79-PRIMARY-RIGHTS-EVIDENCE-01",
+  "status": "candidate3_traceability_repair_pending_targeted_independent_review_not_released",
+  "preparedAt": "2026-09-22T11:10:50.7456061-07:00",
+  "revisedAt": "2026-09-22T13:03:14.8862183-07:00",
+  "observedDate": "2026-09-22",
+  "role": "regulatory-research",
+  "functionalSponsor": "CPO",
+  "executionContext": "/root/m79_rights",
+  "promptSha256": "b8302825b83953d49d2783538b424498348aa20f322b1c2c1c0b5e011145a7f2",
+  "compute": {
+    "requestedModel": "gpt-5.6-sol",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null
+  },
+  "scope": {
+    "question": "What current primary-source rights evidence applies to three intended commercial uses of each of the seven retained EPA/GHG Protocol artifacts used by the four current M79 calculation profiles?",
+    "intendedUses": [
+      "numerical_calculation_and_derived_values_in_a_commercial_product",
+      "source_excerpts_or_source_content_in_customer_reports",
+      "retained_fulltext_in_a_hosted_search_or_RAG_corpus"
+    ],
+    "artifactCount": 7,
+    "artifactAuthority": "docs/research/m79-method-source-inventory.json",
+    "calculationProfiles": [
+      "stationary_natural_gas_hhv_mmbtu",
+      "controlled_on_road_fossil_diesel_medium_heavy_2007_2022",
+      "stationary_fossil_distillate_no2_emergency_generator_default_hhv",
+      "stable_serviced_fugitive_equipment"
+    ],
+    "excluded": [
+      "professional_legal_opinion",
+      "permission_request_or_external_contact",
+      "source_or_corpus_release",
+      "production_or_runtime_change",
+      "method_or_factor_change",
+      "customer_specific_facts",
+      "SB_253_applicability_or_filing_decision"
+    ]
+  },
+  "interpretiveBoundary": {
+    "statement": "This is dated rights evidence and conservative product gating, not legal advice, a license, permission, production approval, or a conclusion that any copyright exception applies.",
+    "rules": [
+      "Public availability, an official government URL, a download, or a retained hash does not establish rights for an intended commercial use.",
+      "Publisher purpose language is evidence of intended subject-matter use, not a commercial reproduction, redistribution, or corpus license.",
+      "The copyright status of individual facts or numbers does not decide contract, compilation, attribution, trademark, foreign-law, third-party-content, or database-right questions.",
+      "A report based on a standard is distinct from reproducing source expression in that report.",
+      "Every intended use remains under a Neuvetra product-release hold until the named owner records a source-specific decision. A release hold is not a conclusion that the use is legally prohibited or that a license is required."
+    ]
+  },
+  "officialEvidence": [
+    {
+      "evidenceId": "E01_epa_disclaimers",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "EPA Disclaimers",
+      "url": "https://www.epa.gov/web-policies-and-procedures/epa-disclaimers",
+      "observedDate": "2026-09-22",
+      "pageLastUpdated": "2026-09-21",
+      "locators": [
+        "opening applicability paragraph",
+        "Copyright Status",
+        "Disclaimer of Liability"
+      ],
+      "shortQuotes": [
+        "Commercial use of the documents available from the EPA websites may be protected under the U.S. and Foreign Copyright Laws.",
+        "Individual documents on the EPA website may have different copyright conditions, and that will be noted in those documents."
+      ],
+      "applicability": "Current official EPA policy context. Its opening paragraph says the catalogue does not necessarily apply to a particular work unless EPA expressly incorporates it by reference or hyperlink. No such incorporation or source-specific rights term was found for the five retained EPA artifacts. The page therefore establishes neither source-specific protection/restriction nor permission."
+    },
+    {
+      "evidenceId": "E02_epa_hub_page",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "GHG Emission Factors Hub",
+      "url": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub",
+      "observedDate": "2026-09-22",
+      "pageLastUpdated": "2026-01-12",
+      "locators": [
+        "introductory purpose paragraph",
+        "2025 download row"
+      ],
+      "shortQuotes": [
+        "designed to provide organizations with a regularly updated and easy-to-use set of default emission factors for organizational greenhouse gas reporting"
+      ],
+      "applicability": "Directly supports that EPA intended the Hub factors for organizational reporting and confirms the 2025 XLSX/PDF publication links. It does not state a commercial, redistribution, or hosted-corpus license."
+    },
+    {
+      "evidenceId": "E03_17usc105",
+      "publisher": "United States Government Publishing Office",
+      "title": "17 U.S.C. section 105, 2024 edition",
+      "url": "https://www.govinfo.gov/content/pkg/USCODE-2024-title17/pdf/USCODE-2024-title17-chap1-sec105.pdf",
+      "observedDate": "2026-09-22",
+      "locators": [
+        "section 105(a)",
+        "historical and revision notes, scope of prohibition"
+      ],
+      "shortQuotes": [
+        "Copyright protection under this title is not available for any work of the United States Government"
+      ],
+      "applicability": "Primary statutory text defines the domestic U.S.-government-work rule. The legislative notes distinguish official-duty employee works from contractor or grantee works. The retained EPA artifacts do not establish authorship provenance sufficient for this research record to classify every component as a section 105 work."
+    },
+    {
+      "evidenceId": "E04_copyright_office_numbers",
+      "publisher": "U.S. Copyright Office",
+      "title": "Compendium of U.S. Copyright Office Practices, Third Edition, 2021 update",
+      "url": "https://www.copyright.gov/comp3/",
+      "chapterUrl": "https://www.copyright.gov/comp3/chap700/ch700-literary-works.pdf",
+      "observedDate": "2026-09-22",
+      "effectiveDate": "2021-01-28",
+      "locators": [
+        "Compendium landing page: governing administrative manual statement",
+        "Chapter 700 section 707 and 707.1, PDF pages 7-9"
+      ],
+      "shortQuotes": [
+        "Individual numbers are not copyrightable and cannot be registered with the U.S. Copyright Office.",
+        "A compilation of numbers may be registered if there is a sufficient amount of creativity"
+      ],
+      "applicability": "The Copyright Office identifies the January 28, 2021 update as its governing administrative manual. Chapter 700 distinguishes ideas, procedures, processes, methods, facts and individual numbers from copyrightable expression and sufficiently creative compilation selection, coordination or arrangement. It does not itself decide contract, attribution, trademark, foreign-law, third-party-source or database-right questions."
+    },
+    {
+      "evidenceId": "E05_ghg_terms",
+      "publisher": "GHG Protocol",
+      "title": "Greenhouse Gas Protocol Terms of Use",
+      "url": "https://ghgprotocol.org/terms-use",
+      "observedDate": "2026-09-22",
+      "termsLastUpdated": "February 2023",
+      "locators": [
+        "section 1 Usage, No Unauthorized Access",
+        "section 1 Usage, No Commercial Use",
+        "section 3 Our Intellectual Property Rights and Limited License to You",
+        "section 4 Third-Party Content"
+      ],
+      "shortQuotes": [
+        "otherwise use the Services or the GHG Protocol Content for any public or commercial purpose",
+        "You must comply with the licenses of all data and datasets on the Website."
+      ],
+      "applicability": "Current official web-access and online-services terms restrict specified acts involving the Services and GHG Protocol Content. Whether and how those terms apply to the exact retained 2004/2013 PDF bytes, the amendment's pre-existing printed license, individual facts/numbers or independently implemented principles remains unresolved. This evidence is kept separate from the publications' exact notices and is neither a source-specific prohibition finding nor permission."
+    },
+    {
+      "evidenceId": "E06_ghg_permission_route",
+      "publisher": "GHG Protocol",
+      "title": "Contact Us",
+      "url": "https://ghgprotocol.org/contact-us",
+      "observedDate": "2026-09-22",
+      "locators": [
+        "To request permission to use GHG Protocol content"
+      ],
+      "shortQuotes": [
+        "To request permission to use GHG Protocol content"
+      ],
+      "applicability": "Identifies the publisher's current permission-request channel. No request was submitted by this task."
+    },
+    {
+      "evidenceId": "E07_cc_by_nc_nd_3",
+      "publisher": "Creative Commons",
+      "title": "Attribution-NonCommercial-NoDerivs 3.0 Unported",
+      "url": "https://creativecommons.org/licenses/by-nc-nd/3.0/",
+      "legalCodeUrl": "https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode",
+      "observedDate": "2026-09-22",
+      "locators": [
+        "Deed: You are free to Share",
+        "Deed: NonCommercial",
+        "Deed: NoDerivatives",
+        "Deed: Notices, public-domain elements and applicable exception or limitation",
+        "Legal Code section 2, Fair Dealing Rights",
+        "Legal Code sections 3-4"
+      ],
+      "shortQuotes": [
+        "You may not use the material for commercial purposes.",
+        "If you remix, transform, or build upon the material, you may not distribute the modified material.",
+        "elements of the material in the public domain",
+        "where your use is permitted by an applicable exception or limitation",
+        "Nothing in this License is intended to reduce, limit, or restrict any uses free from copyright"
+      ],
+      "applicability": "Explains the exact license printed on the February 2013 required-gases amendment. The license limits commercial exercise of the licensed reproduction/distribution rights in the copyrightable work and bars distribution of adaptations, while preserving public-domain elements and uses allowed by legal exceptions or limitations. It does not establish that an individual fact, number or independently expressed process requires a copyright license."
+    }
+  ],
+  "artifacts": [
+    {
+      "artifactId": "epa_hub_2025_xlsx",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "GHG Emission Factors Hub 2025",
+      "edition": "Last Modified: January 15, 2025",
+      "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+      "canonicalUrl": "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+      "publicationPageUrl": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub",
+      "exactSourceNotice": {
+        "finding": "No explicit copyright, license, Creative Commons, permission, noncommercial, or rights-reserved notice was found in a read-only search of all textual OOXML package entries in the exact retained workbook.",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E01_epa_disclaimers", "E02_epa_hub_page", "E03_17usc105", "E04_copyright_office_numbers"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "none_found_in_exact_retained_artifact",
+        "termApplicabilityToIntendedActs": "not_established",
+        "legalEffect": "No source-specific restriction or permission was established. The generic EPA disclaimer was not shown to be incorporated. Individual facts, numbers, procedures, processes and methods are distinct from protectable expression or sufficiently creative compilation arrangement.",
+        "productPolicy": "Neuvetra release hold pending provenance, exact-copying, third-party and non-copyright review."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "EPA affirmatively contemplates organizational calculations. No source-specific restriction or permission was established. Current Copyright Office guidance distinguishes individual numbers, facts and independently expressed processes from copyrightable expression or creative compilation arrangement. Neuvetra withholds release pending provenance, exact-copying, third-party and non-copyright review.",
+          "requiredDecision": "Rights owner with qualified counsel must define the independently used factor/formula boundary, attribution/provenance, third-party inputs and non-U.S. or non-copyright issues. Decide whether any contemplated act actually requires permission; do not presume that individual facts or numbers require a license."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The contemplated copying has not been scoped or approved. No express term was found in the exact workbook, and the generic EPA disclaimer does not establish source-specific protection or a legal prohibition.",
+          "requiredDecision": "Rights owner/counsel must distinguish stating independently used values with citations from copying table selection/arrangement, notes, screenshots or other expression, then decide whether permission or another legal basis is needed."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned copying, extraction and downstream display have not been scoped or approved. No source-specific term was found; the generic EPA disclaimer establishes neither protection nor permission.",
+          "requiredDecision": "Rights owner/counsel must assess the exact storage, extraction, embeddings, retrieval and output-display acts and decide whether permission or another legal basis is needed. Until a written decision, exclude workbook bytes and extracted corpus text."
+        }
+      }
+    },
+    {
+      "artifactId": "epa_hub_2025_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Emission Factors for Greenhouse Gas Inventories",
+      "edition": "Last Modified: January 15, 2025",
+      "sha256": "5d07c678fae6783623acb1e23faa4a7c46268ee6c5a0654c9e49c50de7caf924",
+      "canonicalUrl": "https://www.epa.gov/system/files/documents/2025-01/ghg-emission-factors-hub-2025.pdf",
+      "publicationPageUrl": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub",
+      "exactSourceNotice": {
+        "finding": "No explicit copyright or license notice was found in extracted text or metadata across all five pages of the exact retained PDF.",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E01_epa_disclaimers", "E02_epa_hub_page", "E03_17usc105", "E04_copyright_office_numbers"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "none_found_in_exact_retained_artifact",
+        "termApplicabilityToIntendedActs": "not_established",
+        "legalEffect": "No source-specific restriction or permission was established. The generic EPA disclaimer was not shown to be incorporated. Individual facts and numbers are distinct from protectable expression or sufficiently creative compilation arrangement.",
+        "productPolicy": "Neuvetra release hold pending provenance, exact-copying, third-party and non-copyright review."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "EPA contemplates organizational use and no source-specific restriction was established. Individual factor values are distinct from the PDF tables' selection, arrangement, notes and third-party-derived content. Neuvetra withholds release pending source/provenance and exact-copying review.",
+          "requiredDecision": "Rights owner/counsel must define which individual values and independently expressed calculations are used, document attribution and third-party-source handling, and decide whether any contemplated act requires permission."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "Report copying has not been scoped or approved. No express term was found in the exact PDF, and the generic EPA disclaimer does not establish source-specific protection or prohibition.",
+          "requiredDecision": "Rights owner/counsel must distinguish citation and independent value use from copying table arrangement, notes or images, then decide whether permission or another legal basis is needed."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned copying, extraction and output display have not been scoped or approved. No source-specific term was found; the generic EPA disclaimer establishes neither protection nor permission.",
+          "requiredDecision": "Rights owner/counsel must assess the complete hosted workflow and decide whether permission or another legal basis is needed. Until a written decision, retain only provenance metadata and separately approved independently expressed facts."
+        }
+      }
+    },
+    {
+      "artifactId": "epa_stationary_guidance_2023_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Direct Emissions from Stationary Combustion Sources",
+      "edition": "December 2023",
+      "sha256": "9e9899f728932125543d85f97f71f11d4928580e7ca17ae9858f4c34d0a9c124",
+      "canonicalUrl": "https://www.epa.gov/sites/default/files/2020-12/documents/stationaryemissions.pdf",
+      "exactSourceNotice": {
+        "finding": "No explicit copyright or license notice was found in extracted text or metadata across all 19 pages of the exact retained PDF.",
+        "sourceSpecificContext": "The document states that EPA guidance extends the GHG Protocol with EPA-specific methodologies and factors.",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E01_epa_disclaimers", "E03_17usc105", "E04_copyright_office_numbers"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "none_found_in_exact_retained_artifact",
+        "termApplicabilityToIntendedActs": "not_established",
+        "legalEffect": "No source-specific restriction or permission was established. Facts, procedures, processes and methods are distinct from protectable source expression; complete authorship and incorporated-content provenance remains unresolved.",
+        "productPolicy": "Neuvetra release hold pending independent-expression, provenance, exact-copying, third-party and non-copyright review."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "No source-specific restriction was established. Facts, procedures, processes and methods are outside copyright protection as such, while copied explanation or creative arrangement may differ. Neuvetra withholds release pending independent-expression, authorship, incorporated-content and non-copyright review.",
+          "requiredDecision": "Rights owner/counsel must define the independently expressed implementation and provenance boundary, identify any copied or third-party material, and decide whether any contemplated act requires permission."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "Copying equations, explanation, figures or tables has not been scoped or approved. No express source term was found; the generic EPA disclaimer does not establish source-specific protection or prohibition.",
+          "requiredDecision": "Rights owner/counsel must define citation, independent restatement and copied-expression boundaries and decide whether permission or another legal basis is needed."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned fulltext copying, extraction and output display have not been scoped or approved. No express source term was found; the generic EPA disclaimer establishes neither protection nor permission.",
+          "requiredDecision": "Rights owner/counsel must assess the exact hosted workflow and decide whether permission or another legal basis is needed. Until a written decision, exclude full text."
+        }
+      }
+    },
+    {
+      "artifactId": "epa_mobile_guidance_2023_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Direct Emissions from Mobile Combustion Source",
+      "edition": "December 2023",
+      "sha256": "f80e3400d2485d4e253211cfb69a923e16920d393da21f6991cbaed493804402",
+      "canonicalUrl": "https://www.epa.gov/sites/default/files/2020-12/documents/mobileemissions.pdf",
+      "exactSourceNotice": {
+        "finding": "No explicit copyright or license notice was found in extracted text or metadata across all 16 pages of the exact retained PDF.",
+        "sourceSpecificContext": "The document states that EPA guidance extends the GHG Protocol with EPA-specific methodologies and factors.",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E01_epa_disclaimers", "E03_17usc105", "E04_copyright_office_numbers"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "none_found_in_exact_retained_artifact",
+        "termApplicabilityToIntendedActs": "not_established",
+        "legalEffect": "No source-specific restriction or permission was established. Facts, procedures, processes and methods are distinct from protectable source expression; complete authorship and incorporated-content provenance remains unresolved.",
+        "productPolicy": "Neuvetra release hold pending independent-expression, provenance, exact-copying, third-party and non-copyright review."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "No source-specific restriction was established. Facts, procedures, processes and methods are outside copyright protection as such, while copied explanation or creative arrangement may differ. Neuvetra withholds release pending independent-expression, authorship, incorporated-content and non-copyright review.",
+          "requiredDecision": "Rights owner/counsel must define the independently expressed implementation and provenance boundary, identify any copied or third-party material, and decide whether any contemplated act requires permission."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "Copying equations, explanation, figures or tables has not been scoped or approved. No express source term was found; the generic EPA disclaimer does not establish source-specific protection or prohibition.",
+          "requiredDecision": "Rights owner/counsel must define citation, independent restatement and copied-expression boundaries and decide whether permission or another legal basis is needed."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned fulltext copying, extraction and output display have not been scoped or approved. No express source term was found; the generic EPA disclaimer establishes neither protection nor permission.",
+          "requiredDecision": "Rights owner/counsel must assess the exact hosted workflow and decide whether permission or another legal basis is needed. Until a written decision, exclude full text."
+        }
+      }
+    },
+    {
+      "artifactId": "epa_fugitive_guidance_2023_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Direct Fugitive Emissions from Refrigeration, Air Conditioning, Fire Suppression, and Industrial Gases",
+      "edition": "December 2023",
+      "sha256": "fb3dd5c9677096094c2acef769c7fe2fb90def6feac403cf9c817f5810928d88",
+      "canonicalUrl": "https://www.epa.gov/sites/default/files/2020-12/documents/fugitiveemissions.pdf",
+      "exactSourceNotice": {
+        "finding": "No explicit copyright or license notice was found in extracted text or metadata across all 20 pages of the exact retained PDF.",
+        "sourceSpecificContext": "The document states that EPA guidance extends the GHG Protocol with EPA-specific methodologies and factors.",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E01_epa_disclaimers", "E03_17usc105", "E04_copyright_office_numbers"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "none_found_in_exact_retained_artifact",
+        "termApplicabilityToIntendedActs": "not_established",
+        "legalEffect": "No source-specific restriction or permission was established. Facts, procedures, processes and methods are distinct from protectable source expression; complete authorship and incorporated-content provenance remains unresolved.",
+        "productPolicy": "Neuvetra release hold pending independent-expression, provenance, exact-copying, third-party and non-copyright review."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "No source-specific restriction was established. The fugitive method and facts are distinct from copying Equation 6 or its wording. Neuvetra withholds release pending independent-expression, authorship, incorporated-content and non-copyright review.",
+          "requiredDecision": "Rights owner/counsel must define the independently expressed calculation and provenance boundary, identify any copied or third-party material, and decide whether any contemplated act requires permission."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "Copying Equation 6, explanation, figures or tables has not been scoped or approved. No express source term was found; the generic EPA disclaimer does not establish source-specific protection or prohibition.",
+          "requiredDecision": "Rights owner/counsel must define citation, independent restatement and copied-expression boundaries and decide whether permission or another legal basis is needed."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned fulltext copying, extraction and output display have not been scoped or approved. No express source term was found; the generic EPA disclaimer establishes neither protection nor permission.",
+          "requiredDecision": "Rights owner/counsel must assess the exact hosted workflow and decide whether permission or another legal basis is needed. Until a written decision, exclude full text."
+        }
+      }
+    },
+    {
+      "artifactId": "ghg_protocol_required_gases_gwp_2013_pdf",
+      "publisher": "World Resources Institute and World Business Council for Sustainable Development",
+      "title": "Accounting and Reporting Standard Amendment: Required Greenhouse Gases in Inventories",
+      "edition": "February 2013",
+      "sha256": "2bc8b42d4cb94d1f74ae477f3bfaf3eb7ab55f216f575050ebdd67c9447a3a7f",
+      "canonicalUrl": "https://ghgprotocol.org/sites/default/files/2022-12/Required%20gases%20and%20GWP%20values_0.pdf",
+      "publicationPageUrl": "https://ghgprotocol.org/corporate-standard",
+      "exactSourceNotice": {
+        "locator": "physical PDF page 9",
+        "copyright": "Copyright World Resources Institute and World Business Council for Sustainable Development, March 2013.",
+        "license": "Creative Commons Attribution-NonCommercial-NoDerivative Works 3.0",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E04_copyright_office_numbers", "E05_ghg_terms", "E06_ghg_permission_route", "E07_cc_by_nc_nd_3"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "exact retained PDF is marked CC BY-NC-ND 3.0",
+        "termApplicabilityToIntendedActs": "The printed license governs licensed reproduction/distribution of the copyrightable work and distribution of adaptations; its deed and legal code preserve public-domain elements and legal exceptions/limitations.",
+        "legalEffect": "Commercial exercise of the license's granted rights is restricted. Whether a particular individual fact, number or independently expressed process exercises a licensed right is unresolved and is not answered by the notice alone.",
+        "currentWebsiteTerms": "February 2023 web-access/service evidence; application to the exact retained 2013 PDF bytes, pre-existing license, individual facts/numbers and independently implemented principles remains unresolved.",
+        "productPolicy": "Neuvetra release hold pending exact-act and element-level decision."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The exact work is BY-NC-ND 3.0, which restricts commercial exercise of licensed rights in the copyrightable work. The license does not prove that individual GWP values, facts or independently expressed processes require a license. Current website-term application to the retained PDF and these elements is unresolved.",
+          "requiredDecision": "Rights owner/counsel must identify the exact elements and acts, distinguish independent fact/process use from reproduction or adaptation of the work, and decide whether permission is needed. Record attribution/no-endorsement requirements for any licensed use."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The exact license does not grant commercial reproduction/distribution rights in the copyrightable work and bars distribution of adaptations under the license. Public-domain elements and legal exceptions remain outside that conclusion; the exact report act has not been decided.",
+          "requiredDecision": "Rights owner/counsel must classify each proposed excerpt/report act and decide whether it uses licensed copyrightable expression, a public-domain element or an exception/limitation. Seek permission only if the selected basis requires it."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned workflow likely involves reproduction of the copyrightable work, for which the exact BY-NC-ND license grants no commercial permission. Application of current website terms to the retained 2013 bytes remains unresolved and is not the source-specific basis for the hold.",
+          "requiredDecision": "Rights owner/counsel must classify storage, extraction, embeddings, retrieval and output acts under the printed license and applicable law and decide whether permission is needed. Until a written decision, exclude the bytes and extracted text."
+        }
+      }
+    },
+    {
+      "artifactId": "ghg_protocol_corporate_standard_pdf",
+      "publisher": "World Resources Institute and World Business Council for Sustainable Development",
+      "title": "The Greenhouse Gas Protocol: A Corporate Accounting and Reporting Standard, Revised Edition",
+      "edition": "Revised Edition, March 2004",
+      "sha256": "cfcda4dd20a0b0936b30e5e5c7c635c26efdfa770d29c1004f549bf082c0fe3c",
+      "canonicalUrl": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+      "publicationPageUrl": "https://ghgprotocol.org/corporate-standard",
+      "exactSourceNotice": {
+        "locator": "physical PDF page 114, printed page 112",
+        "copyright": "Copyright World Resources Institute and World Business Council for Sustainable Development, March 2004.",
+        "useContext": "The same page encourages corporate and organizational use and contemplates reports based fully or partly on the Standard, while placing responsibility on report producers; it states no reproduction or commercial-product license.",
+        "observedDate": "2026-09-22"
+      },
+      "applicableOfficialEvidence": ["E04_copyright_office_numbers", "E05_ghg_terms", "E06_ghg_permission_route"],
+      "rightsEvidenceCharacterization": {
+        "expressSourceTerm": "March 2004 WRI/WBCSD copyright notice; purpose/disclaimer encourages organizational use and reports based on the Standard; no reproduction license stated",
+        "termApplicabilityToIntendedActs": "The exact publication distinguishes reports based on the Standard from source reproduction only by context; it does not resolve the intended software, excerpt or corpus acts.",
+        "legalEffect": "Copyrightable expression and independently implemented principles/facts must be distinguished. The publication itself supplies no finding that individual principles, facts or independently expressed processes require a license.",
+        "currentWebsiteTerms": "February 2023 web-access/service evidence; application to the exact retained 2004 PDF bytes, individual facts and independently implemented principles remains unresolved.",
+        "productPolicy": "Neuvetra release hold pending exact-act and element-level decision."
+      },
+      "uses": {
+        "numericalCalculationAndDerivedValues": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The publication encourages organizational use and reports based on the Standard. Independently implemented principles, facts and processes are distinct from copied expression. The copyright notice states no reproduction license, and application of current website terms to the retained PDF or uncopyrightable elements remains unresolved.",
+          "requiredDecision": "Rights owner/counsel must define independently implemented principles/processes, copied expression and branding, attribution and non-copyright issues, then decide whether any contemplated act requires permission."
+        },
+        "excerptOrReportRedistribution": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The Standard contemplates reports based on it, but the proposed source excerpts have not been classified. The printed copyright notice and purpose language are distinct from current website terms, whose application to the retained PDF remains unresolved.",
+          "requiredDecision": "Rights owner/counsel must distinguish citation and independent reporting from reproduction of text, tables, figures or branding and decide whether permission or another legal basis is needed."
+        },
+        "hostedFulltextCorpusOrRag": {
+          "state": "neuvetra_release_hold_pending_source_specific_rights_decision",
+          "reason": "The planned fulltext copying, extraction and output display have not been classified or approved. The exact publication states copyright but no corpus term; current website-term application to the retained 2004 bytes remains unresolved.",
+          "requiredDecision": "Rights owner/counsel must assess the exact hosted workflow and decide whether permission or another legal basis is needed. Until a written decision, exclude the bytes and extracted text."
+        }
+      }
+    }
+  ],
+  "unresolvedDecisions": [
+    {
+      "decisionId": "R01_epa_numeric_commercial_boundary",
+      "owner": "Neuvetra rights owner with qualified intellectual-property counsel",
+      "scope": "Five EPA artifacts; exact factor values, equations/methods, independently computed values, third-party sources, attribution, U.S./foreign rights and contractual conditions.",
+      "defaultUntilDecided": "Neuvetra product release hold. This does not establish that individual facts, numbers or independently expressed methods are prohibited or require a license."
+    },
+    {
+      "decisionId": "R02_epa_report_and_corpus_boundary",
+      "owner": "Neuvetra rights owner with qualified intellectual-property counsel",
+      "scope": "Five EPA artifacts; source excerpts, tables, screenshots, notes, full files, extracted text, embeddings, retrieval and downstream display.",
+      "defaultUntilDecided": "Neuvetra product release hold because the exact copying/extraction acts have not been classified or approved; no source-specific EPA legal prohibition is established by this record."
+    },
+    {
+      "decisionId": "R03_ghg_protocol_exact_element_and_act_boundary",
+      "owner": "Neuvetra rights owner with qualified intellectual-property counsel; GHG Protocol permission channel if permission is chosen",
+      "scope": "Both GHG Protocol artifacts; commercial implementation of accounting principles/facts, excerpts, attribution, branding, historical-download/current-terms relationship, and the amendment's BY-NC-ND 3.0 restrictions.",
+      "defaultUntilDecided": "Neuvetra product release hold. The amendment's exact license restricts commercial exercise of licensed rights in the copyrightable work; fact/process and exception boundaries remain unresolved. Current website-term application to historical bytes remains unresolved."
+    },
+    {
+      "decisionId": "R04_hosted_corpus_controls",
+      "owner": "Rights owner and counsel before CTO/security design",
+      "scope": "If any hosted use is approved on permission or another qualified legal basis, bind exact source/version, allowed extraction, storage location, access, tenant isolation, embeddings/model provider, retrieval/output limits, attribution, audit, retention/deletion and revocation response.",
+      "defaultUntilDecided": "Neuvetra product release hold: no retained artifact enters a hosted fulltext or RAG corpus. This operational hold is not itself a legal-prohibition finding."
+    }
+  ],
+  "verdict": {
+    "allSevenOriginalsAccountedFor": true,
+    "threeUseClassesSeparatedForEveryOriginal": true,
+    "currentOfficialPolicyEvidenceObserved": true,
+    "sourceSpecificNoticesInspected": true,
+    "neuvetraProductReleaseHoldForAllThreeUseClasses": true,
+    "sourceSpecificLegalProhibitionEstablishedForEveryUse": false,
+    "licenseRequiredForIndividualFactsNumbersOrIndependentlyExpressedMethodsEstablished": false,
+    "commercialNumericalUseApproved": false,
+    "excerptOrReportRedistributionApproved": false,
+    "hostedFulltextCorpusOrRagApproved": false,
+    "rightsApproved": false,
+    "productionReleased": false,
+    "scope1Complete": false,
+    "nextAction": "Targeted independent review of candidate3, then source/use-specific written decisions by the rights owner with qualified counsel. Seek publisher permission only where the selected legal basis requires it."
+  }
+}

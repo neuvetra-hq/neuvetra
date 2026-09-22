@@ -11,6 +11,10 @@ on:
       - 'operations/agent-improvement/**'
       - 'tools/agent_ops.py'
       - 'tools/test_agent_ops.py'
+      - 'tools/feature_metrics.py'
+      - 'tools/test_feature_metrics.py'
+      - 'tools/build_model_pilot.py'
+      - 'tools/test_build_model_pilot.py'
       - '.github/workflows/agent-ops.yml'
   push:
     branches: [main]
@@ -23,6 +27,10 @@ on:
       - 'operations/agent-improvement/**'
       - 'tools/agent_ops.py'
       - 'tools/test_agent_ops.py'
+      - 'tools/feature_metrics.py'
+      - 'tools/test_feature_metrics.py'
+      - 'tools/build_model_pilot.py'
+      - 'tools/test_build_model_pilot.py'
       - '.github/workflows/agent-ops.yml'
   workflow_dispatch:
 
@@ -41,5 +49,9 @@ jobs:
           python-version: '3.12'
       - name: Challenge evidence and routing validation
         run: python -B -m unittest discover -s tools -p test_agent_ops.py -v
+      - name: Validate feature metrics and capped model pilot tooling
+        run: |
+          python -B -m unittest discover -s tools -p test_feature_metrics.py -v
+          python -B -m unittest discover -s tools -p test_build_model_pilot.py -v
       - name: Validate current role records
         run: python -B tools/agent_ops.py validate
