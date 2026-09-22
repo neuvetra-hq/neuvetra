@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M78-CONT4-RESTART-HELPER-REVIEW-01",
+  "status": "fail",
+  "reviewerId": "/root/m78_transport_continuation",
+  "independentOfAuthor": true,
+  "tests": {
+    "passed": 3,
+    "failed": 0,
+    "networkCalls": 0
+  },
+  "materialFindings": [
+    {
+      "id": "RH-01",
+      "title": "Restart request lacks exact actual-exercise and independent-QA admission",
+      "severity": "material"
+    },
+    {
+      "id": "RH-02",
+      "title": "Startup collection does not revalidate the exercise-acceptance link",
+      "severity": "material"
+    },
+    {
+      "id": "RH-03",
+      "title": "Multiple provider startup events have ambiguous attribution",
+      "severity": "material"
+    }
+  ],
+  "hostedAcceptance": false
+}

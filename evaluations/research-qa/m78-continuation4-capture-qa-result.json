@@ -1,0 +1,64 @@
+{
+  "status": "m78_continuation4_capture_preparation_independently_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "candidate": 3,
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-PREP-01-CANDIDATE3.json",
+    "sha256": "b823c0b53c9d46046a09c66d798a72882e269f57148571f82bcee663ddbce83c"
+  },
+  "files": [
+    {
+      "path": "tools/staging/m78-continuation4-revisit-capture.ts",
+      "sha256": "4e5d8b2f3afd82a14472eb26c13bbee6f89b95fb86bab32e02985db086e710f4"
+    },
+    {
+      "path": "tools/staging/m78-continuation4-revisit-capture.test.ts",
+      "sha256": "57e61cdcb72fa8a849240fda943f67dbf1e926499835f5da6095c67fcdc55416"
+    },
+    {
+      "path": "tools/staging/check-m78-continuation4-revisit.ts",
+      "sha256": "31f9fa39e721e527beddd05ea4f042778a9aa6e5cff3bef5e649c586c17161bd"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-capture-preparation-real-decoder.test.ts",
+      "sha256": "b257d4f1d25cee32ff79f5f8465b3d8962f1a4c2aec48d45126bd4b990f71e98"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-capture-preparation.md",
+      "sha256": "71586f13aa09d9e628f5ec3b9e60c4a4f67f939df241b1e172f609cd8a9fb2f2"
+    },
+    {
+      "path": ".superpowers/m78-private-continuation4-revisit.ps1",
+      "sha256": "f596f0e7aba9597ddffb0acb64e7520322689b388842e6ce7cc82fd12c7e5c75"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-revisit-entry.ts",
+      "sha256": "842d7cc4899a18b2d6cfc3675d327d0e0fad3d2b648f06e6ca3a2f0b416c5bcc"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-finalize-revisit-gate.py",
+      "sha256": "3b518c3852936f02853b2b4dbc16fcef32da22ad0a6325bfe49ed9486893e2c5"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-evaluate-full.ts",
+      "sha256": "2a8b8593f7bab42e3e2a601b0908ac9754342ef7266f5ac1d730e0c1d49909c8"
+    }
+  ],
+  "tests": {
+    "combinedTests": 9,
+    "combinedExpectations": 53,
+    "strictTargetedTypeScript": "passed",
+    "privateWrapperPowerShellSyntax": "passed",
+    "portableCiSelector": "bun test tools/staging/m78-continuation4-revisit-capture.test.ts",
+    "localOnlyFixturesExcludedFromPortableCi": true
+  },
+  "historicalFindings": [
+    "Candidate 1 enforced aggregate bytes after whole-body buffering and did not drain clones after core failure.",
+    "Candidate 2 did not await six asynchronous production register decoders; the actual-baseline-shaped QA fixture reproduced the failure."
+  ],
+  "actualHostedRevisitExecuted": false,
+  "credentialsRead": false,
+  "networkUsed": false,
+  "databaseUsed": false
+}

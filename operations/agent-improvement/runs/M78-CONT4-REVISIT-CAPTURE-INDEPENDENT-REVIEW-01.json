@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "19f9c717af53e7504ec9d234cde3d2a327a788800115ea41a266a9c5cec6a29f"
+    }
+  ],
+  "source_artifacts": [
+    "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-PREP-01-CANDIDATE1.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-PREP-01-CANDIDATE2.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-PREP-01-CANDIDATE3.json",
+    ".superpowers/m78-private-continuation4-revisit.ps1",
+    ".superpowers/m78-continuation4-revisit-entry.ts"
+  ],
+  "criteria": [
+    {
+      "id": "BOUNDED-PASSIVE-CAPTURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-capture-qa-result.json",
+        "tools/staging/m78-continuation4-revisit-capture.test.ts"
+      ],
+      "reason": "One underlying call preserves the original Response and init; auth bodies are excluded; response/request/shared aggregate limits cancel failing clones; every clone drains before a final capture verdict."
+    },
+    {
+      "id": "REAL-DECODER-RECONSTRUCTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-capture-preparation-real-decoder.test.ts",
+        "evaluations/research-qa/m78-continuation4-capture-qa.test.ts"
+      ],
+      "reason": "Default asynchronous production decoders accept actual-shaped responses and reconstruct all register families plus nonempty dynamic download/M78 maps; the rejected candidate2 failure remains documented."
+    },
+    {
+      "id": "PRIVATE-REVISIT-ROUTING",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "evaluations/research-qa/m78-continuation4-capture-qa-review.md"
+      ],
+      "reason": "The wrapper validates gate artifacts,173 sources, runtime/restart evidence and preflight before unseal; the entry rehashes the closure, takes an exclusive lock, refuses an existing observation and uses the reviewed capture path."
+    },
+    {
+      "id": "BOUNDED-OFFLINE-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-capture-qa-review.md"
+      ],
+      "reason": "Nine local tests with53 expectations, strict targeted TypeScript and wrapper syntax parsing pass. QA made no hosted request and read no credentials or database."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-revisit-root-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "19f9c717af53e7504ec9d234cde3d2a327a788800115ea41a266a9c5cec6a29f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation4-capture-qa-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

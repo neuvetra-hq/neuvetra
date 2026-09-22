@@ -292,3 +292,10 @@ operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-
 
 evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair.test.ts -text whitespace=cr-at-eol
 evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-supplement.test.ts -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-capture-preparation-real-decoder.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-repair-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-review.test.py -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol

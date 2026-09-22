@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-RESTART-HELPER-REVIEW-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "d03ac361c1af865f9747c159cb33f28bd36b7d8fc36a244ad8f641d97a3e249d",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE1.json",
+      "sha256": "c9c022c1c51551bd77eb917eb93b58854e6ff769828f441d0846fe3d4970f4d1"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE2.json",
+      "sha256": "4c9be8c18145a03755d0ef6ca5e182bdc160ffc7ba636c328a8bc19ac62f41c1"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_EXERCISE_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE2.json",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair-review.md",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair-result.json"
+      ],
+      "reason": "The assigned actual-QA receipt, candidate4 review, root evaluation, gate/artifact/source pins, closed main/diagnostic journals, and direct frozen lifecycle evaluation are required before mutation."
+    },
+    {
+      "id": "EXACT_ONCE_DEPLOYMENT",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE2.json",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair-review.md",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair-result.json"
+      ],
+      "reason": "Exact deployment, exclusive intent/ack, one mutation, persistent reconciliation intent, and second-attempt refusal are enforced."
+    },
+    {
+      "id": "STARTUP_LINK_AND_ATTRIBUTION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE2.json",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair-review.md",
+        "evaluations/research-qa/m78-continuation4-restart-helper-repair-result.json"
+      ],
+      "reason": "Collection reruns exact exercise validation, carries its pins, persists sanitized data, and requires one unique post-intent startup for the exact deployment."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-restart-root-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE1.json",
+        "sha256": "c9c022c1c51551bd77eb917eb93b58854e6ff769828f441d0846fe3d4970f4d1"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-RESTART-HELPER-REVIEW-01-CANDIDATE2.json",
+        "sha256": "4c9be8c18145a03755d0ef6ca5e182bdc160ffc7ba636c328a8bc19ac62f41c1"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 0,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Candidate1 preserved three material findings: incomplete exercise admission, lost acceptance linkage at collection, and ambiguous provider-order startup selection.",
+    "Candidate2 repairs all three and adds the exact assigned-reviewer and candidate4 lifecycle-review identity contracts. Five mocked offline tests pass; strict targeted TypeScript passes.",
+    "Reviewer identifiers and receipt fields are contract checks rather than cryptographic proof. Root must confirm the actual assigned-agent delivery/hash as an operator step before execution. No live/provider/network/credential action occurred."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-22T22:56:44.944080+00:00",
+  "updated_at": "2026-09-22T23:25:37.996558+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Publish accepted exercise preparation on PR5, six checks, fresh runtime, one37-operation exercise.",
+    "next_gate": "Await exercise57177 preservation/closure, independently accept actual evidence; publish/check accepted restart/revisit preparation in parallel.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -144,12 +144,12 @@
     "last_session_work": "M77 backend dispatched; root UI/integration active. Additional independent reviewer dispatch rejected by runtime; release gate pending."
   },
   "session_handoff": {
-    "current": "Baseline, candidate4 lifecycle evaluator and exercise helpers accepted; no exercise yet.",
-    "next": "Exact publication/checks/fresh runtime, one37-operation exercise; independent actual review before restart/revisit/demo.",
+    "current": "All37exerciseoperationsverified; read-onlytailactive. Restart/capture preparation independentlyaccepted; publicationpending.",
+    "next": "ActualclosedexerciseQA beforeone restart, freshrevisit andbrowserdemo.",
     "evidence": [
       "operations/next-session.md",
-      "evaluations/research-qa/m78-continuation4-exercise-root-admission.md",
-      "evaluations/research-qa/m78-continuation4-exercise-helper-review.json"
+      "evaluations/research-qa/m78-continuation4-revisit-root-admission.md",
+      "evaluations/research-qa/m78-continuation4-restart-root-admission.md"
     ]
   },
   "checkpoint": {
@@ -2892,7 +2892,7 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "continuation4_exercise_preparation_accepted_publication_pending",
+    "status": "continuation4_exercise_running_once",
     "active_assignments": [
       {
         "id": "M78-ROOT-CONT2",
@@ -3204,9 +3204,9 @@
       "expiry_verified": false
     },
     "continuation4_runtime": {
-      "session": null,
+      "session": 57177,
       "gate_sha256": "34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5",
-      "tooling_commit": "a74cffa59b18305e5eaf4dd4c65382c08bc8a151",
+      "tooling_commit": "635f6ba1b38186851e0038f63399b0a814f4e1ae",
       "all_six_checks_passed_at": "2026-09-22T22:01:32.141329+00:00",
       "runtime_observed_at": "2026-09-22T22:01:54.630066+00:00",
       "live_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
@@ -3218,7 +3218,10 @@
       "application_posts": 0,
       "sessions_closed": 8,
       "unknown_sessions": 0,
-      "baseline_qa_sha256": "6937df29bb08b4bd253ceade366c1e19d512e0e256a0090b0d00f688fc1f6ae3"
+      "baseline_qa_sha256": "6937df29bb08b4bd253ceade366c1e19d512e0e256a0090b0d00f688fc1f6ae3",
+      "exercise_gate_sha256": "9fe233c964b8c40f6c7a9871eecf75a318e7a800f2ec14570c6803288ff9dce7",
+      "exercise_status": "running",
+      "verified_application_operations": 37
     }
   },
   "current_m79_preparation": {

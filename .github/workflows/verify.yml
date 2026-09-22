@@ -185,6 +185,8 @@ jobs:
           bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
       - name: Continuation4 closed baseline evidence guards
         run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
+      - name: Continuation4 lifecycle and passive revisit guards
+        run: bun test evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts tools/staging/m78-continuation4-revisit-capture.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M78-CONT4-RESTART-HELPER-REVIEW-01",
+  "candidate": 2,
+  "status": "pass",
+  "reviewerId": "/root/m78_transport_continuation",
+  "independentOfAuthor": true,
+  "reviewedFiles": [
+    {
+      "path": ".superpowers/m78-continuation4-request-restart.py",
+      "sha256": "264a17f1ae9d2cfa39322439a809e703baa4fabb48c264f80219bbed25ab8bd2"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-collect-restart-startup.py",
+      "sha256": "06509625f75e1a71d7f046174631b3b1dfd4fe15b18eca09e03ae6436d2dac29"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-validate-exercise-for-restart.ts",
+      "sha256": "299b28274a15cfff474a12e14ecb5f2b16a3bf3d15e7d3864d24c639353ff2a3"
+    },
+    {
+      "path": ".superpowers/m78-continuation-release-observe-runtime.py",
+      "sha256": "bae6465571ccf1b034df4f7ddb60742eeaeb91fa27b35583396f72931a2d63d9"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py",
+      "sha256": "6edd967c3d444db0a0da8cbfeab93b7225887fae96691c8d57dd9b830580f930"
+    }
+  ],
+  "tests": {
+    "passed": 5,
+    "failed": 0,
+    "networkCalls": 0
+  },
+  "materialFindingsOpen": 0,
+  "resolvedFindings": [
+    "RH-01",
+    "RH-02",
+    "RH-03"
+  ],
+  "hostedAcceptance": false,
+  "limitation": "Reviewer identifiers and receipt fields are contract checks; root must confirm the actual assigned-reviewer delivery and exact hash before execution."
+}

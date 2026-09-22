@@ -1,0 +1,9 @@
+# Continuation4 restart preparation acceptance
+
+Root accepts independent restart-helper repair receipt `339c6f62ee96a81675601783f72600b77e256b422284f5ebdef9441b00fd22ed` from `/root/m78_transport_continuation`, candidate2 snapshot `4c9be8c18145a03755d0ef6ca5e182bdc160ffc7ba636c328a8bc19ac62f41c1`. This reviewer did not author the root restart helpers. Five mocked tests and strict targeted TypeScript passed; the initial three findings and subsequent identity-contract correction remain recorded. This accepts helper preparation only, not a live exercise or restart.
+
+Before mutation, root must obtain the assigned independent reviewer's actual exercise receipt and confirm its delivered hash. The request helper then revalidates the exact receipt, root result, gate, candidate4 evaluator,173 sources and closed main/diagnostic journals through the frozen offline evaluator. It refuses an active lock, writes one exclusive intent, calls the exact existing deployment once, and preserves the intent for reconciliation on any uncertain result. No repeated restart is authorized by a failed command.
+
+The read-only startup collector revalidates the same exercise link, keeps only the startup event and provider timestamp, and requires one unique post-request startup. The unchanged observer checks deployment/image identity, readiness and chronology. Receipt fields identify the expected contract; they do not cryptographically prove authorship. Root's confirmation of actual reviewer delivery remains required.
+
+The exercise was still performing its read-only preservation checks when this preparation was accepted. Actual closed-exercise acceptance, publication/checks for the capture preparation, an actual restart, read-only revisit and browser demonstration remain separate requirements. Scope1 customer release remains incomplete.
