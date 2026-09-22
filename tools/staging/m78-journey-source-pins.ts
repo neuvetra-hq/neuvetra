@@ -1,7 +1,8 @@
 /** Read-only source closure for the explicitly invoked M78 journey. No credentials or network. */
 import {readFile} from 'node:fs/promises'
 import {resolve,relative,dirname} from 'node:path'
-const roots=['tools/staging/check-m78-hosted.ts','tools/staging/check-m78-hosted.test.ts','tools/staging/m78-hosted-plan.ts','tools/staging/m78-journey-source-pins.ts','bun.lock']
+export const JOURNEY_RESOLVER_ROOTS=['package.json','tsconfig.base.json','packages/neuvetra-database/package.json','packages/neuvetra-database/tsconfig.json','apps/site-api/package.json','apps/site-api/tsconfig.json','config/typescript/api.json','apps/site-web/package.json','apps/site-web/tsconfig.json','apps/site-web/tsconfig.app.json','apps/site-web/tsconfig.node.json','config/typescript/web.json','config/typescript/vite.json']as const
+const roots=['tools/staging/check-m78-hosted.ts','tools/staging/check-m78-hosted.test.ts','tools/staging/m78-hosted-plan.ts','tools/staging/m78-journey-source-pins.ts','bun.lock',...JOURNEY_RESOLVER_ROOTS]
 export async function m78JourneySourcePins(){
  const workspace=resolve('.'),files=new Set(roots),pending=roots.filter(p=>p.endsWith('.ts'))
  while(pending.length){

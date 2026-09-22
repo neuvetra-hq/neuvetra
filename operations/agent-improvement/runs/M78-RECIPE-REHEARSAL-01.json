@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "id": "M78-RECIPE-REHEARSAL-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RECIPE-REHEARSAL-01-CANDIDATE2.json",
+      "sha256": "fbb5303bc058701da672597d23965e5d6bf9fbefa27c8f7bd5beeb4e5432feea"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "PREPARE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-RECIPE-REHEARSAL-01-CANDIDATE2.json"
+      ],
+      "reason": "Actual native route/authority/decoder single-use38POST runner prepared;19source-only guards and strictTS passed; no databasecalls."
+    },
+    {
+      "id": "INDEPENDENT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recipe-rehearsal-final-review.md"
+      ],
+      "reason": "Distinct independent source preparation accepted; actualnative/freshrestore/hostedexecution are separate later gates, not claimed by this preparation task."
+    },
+    {
+      "id": "NATIVE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recipe-rehearsal-final-review.md"
+      ],
+      "reason": "Distinct independent source preparation accepted; actualnative/freshrestore/hostedexecution are separate later gates, not claimed by this preparation task."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-recipe-rehearsal-final-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-RECIPE-REHEARSAL-01-CANDIDATE2.json",
+        "sha256": "fbb5303bc058701da672597d23965e5d6bf9fbefa27c8f7bd5beeb4e5432feea"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-recipe-rehearsal.ts",
+      "sha256": "140e7cdeee07c614d680673f3de3a77f8dda86305709d18c30ca196eeda17aec"
+    },
+    {
+      "path": "docs/research/m78-recipe-rehearsal.md",
+      "sha256": "1ab5bd20ead8b772ac77ba85eb06496c56df2658012288cc89f8ebf8246a08c5"
+    }
+  ],
+  "routing_exception": {
+    "reason": "Root requested criticalAstrahigh through existing thread-limit fallback; no supported override applied.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L02",
+    "L08"
+  ],
+  "notes": [
+    "Root recipe untouched. No host, credentials/privateconfig, ENVexports, Git, globalroles, sourceDBwrites or databasecreation. New runner/doc/run/snapshot only.",
+    "Actual accepted M77continuation is required (corp8/pop4/9reports), rather than previous failed-template backendfixture. Runner read-onlyinspect returns rowdigest and108sourcepins; root owns target/review/actualexecution.",
+    "Native execution and independent acceptance pending; no completeScope1/hostperformance/methodrelease/assurance claim.",
+    "RECIPE-R01 independently demonstrated missing package/config resolver admission inputs. Candidate1 retained; candidate2 fixed13metadata pins produces121map;32authorassertions strictTS,zeroDBconnections/POSTs; exactnativefreshactualclone pending.",
+    "Root confirms independent source-preparation acceptance; completed authorpreparation only, actualfreshrestore/native38POST remain separate pending execution evidence."
+  ],
+  "supporting_artifacts": [
+    {
+      "path": ".tmp/m78-recipe-author-guards.ts",
+      "sha256": "1be493bf1154a28e8c8e74d3bd1d1be488853956c41087a70a9e50c52a325547"
+    },
+    {
+      "path": ".tmp/m78-recipe-author-guards-result.json",
+      "sha256": "0bf8cd7bde63bd6e632fdbe94c48e924c4255684796d6615c24b13f189254c9c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RECIPE-REHEARSAL-01-CANDIDATE1.json",
+      "sha256": "c7fca7a674122c5e5287caf7ea3bf0176b790e0d4a8efe5fd04faf2a3ddf8d50"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recipe-rehearsal-final-review.md",
+      "sha256": "78faef63d35db32c1a745336b6f25d0b002350b3418145d71b7550705298171f"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "M78-RECIPE-REHEARSAL-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-recipe-rehearsal-review.md",
+      "sha256": "1b518f2b1568471213b9d593aa94a2e34326149c6e748371c8d4448cbb5e8f48"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recipe-rehearsal-final-review.md",
+      "sha256": "78faef63d35db32c1a745336b6f25d0b002350b3418145d71b7550705298171f"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recipe-rehearsal-source-pins.json",
+      "sha256": "5e1253598e213f1177fb305f8122008c5fcdf4a35ef6424fc55a2558d1a8451c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RECIPE-REHEARSAL-REVIEW-01-CANDIDATE3.json",
+      "sha256": "bffb4736eb513013c5319a4bac3be364c1b72ef13744a33d20c057e26729c14f"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json",
+      "sha256": "62ba8e5a33bb5a40472d7e7bdfa27f5b45478c20fc00c402e51c69aff4feb5f6"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "RUNNER-PREPARATION-SOURCE-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recipe-rehearsal-final-review.md",
+        "evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts"
+      ],
+      "reason": "RECIPE-R01 fixed by13resolver pins,121map; independent7/192 source only. Actual fresh encrypted20\u00e2\u2020\u201921 target and38writes pending."
+    },
+    {
+      "id": "PORTABILITY-FOLLOWUP",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-release-review.md",
+        "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json"
+      ],
+      "reason": "Independent resumed context verified OS tempdir and embedded-only private fixture checks; 7 recipe tests190 assertions. Historical first failure and original snapshots preserved."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-recipe-rehearsal-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts",
+      "sha256": "9c0c983de947cd58bae39da7868ceea9760959b5b884d121ba592123a73a8ce1"
+    }
+  ]
+}

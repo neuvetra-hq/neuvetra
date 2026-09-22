@@ -42,7 +42,7 @@
     "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": 0,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {
@@ -87,5 +87,15 @@
       "path": "operations/agent-improvement/snapshots/M78-HOSTED-DATABASE-REVIEW-01-CANDIDATE2.json",
       "sha256": "d06b0e88893cf958be2ac8aad30463e145798c4f928adef656ab76f0d550e6b3"
     }
-  ]
+  ],
+  "escaped_defect_evidence": {
+    "finding": "ACT-R01",
+    "classification": "cross-environment preparation defect, not production incident",
+    "evidence": [
+      "evaluations/research-qa/m78-actual20-restore-review.md",
+      "evaluations/research-qa/m78-actual20-restore-diagnosis.ts",
+      "evaluations/research-qa/m78-actual20-restore-diagnosis.json"
+    ],
+    "acceptedSourceSnapshotsUnchanged": true
+  }
 }

@@ -6,16 +6,8 @@
   "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
   "artifacts": [
     {
-      "path": "tools/staging/m78-hosted-database.ts",
-      "sha256": "41c067aa376985210d3175d9e651562c2380e0e88cddfcd54a3725e30626cf61"
-    },
-    {
-      "path": "tools/staging/m78-hosted-database.test.ts",
-      "sha256": "d1fbba6db22f9e0db8abcbdf7d186e21e1b68569849b6142f4ebaf1516a57bd0"
-    },
-    {
-      "path": "docs/research/m78-hosted-database.md",
-      "sha256": "a7d178d4cde163a8274c2d1c9593da8bcce8f84c3f02ec058f1a2f7e33ea37db"
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-DATABASE-REVIEW-01-CANDIDATE2.json",
+      "sha256": "d06b0e88893cf958be2ac8aad30463e145798c4f928adef656ab76f0d550e6b3"
     }
   ],
   "criteria": [
@@ -123,6 +115,7 @@
     "Root first-draft review identified invalid nonempty process-discovery assumption, overly broad semantic replay claims and incomplete transitive source pins. These were repaired before final independent handoff; first review failure remains recorded. Complete ten-source author native receipt has zero indicated process/gas IDs; existing authoritative state reader reconstructs exact empty reservation membership.",
     "First pure parser tests exposed using browser10MB parser with larger operator capacities. Separate duplicate-key/depth-bounded operator parser repaired the issue; backend parser unchanged. Final8puretests90assertions pass; targeted tool/test typecheck pass.",
     "Actual encrypted archive20 backup/restore and populated local21 forward recovery are separate evidence profiles. Compatibility transfer bundle hash is not the encrypted archive or hosted snapshot hash. Complete bytes/catalog preserved, bounded semantic replay only, provider Auth/config/storage recovery excluded.",
-    "Current source artifacts ready for independent freeze/review; immutable reviewed bundle and final run closure belong to root following review. Root new RUI-F01 issue will be diagnosed separately without treating this hosted preparation as runtime approval."
+    "Current source artifacts ready for independent freeze/review; immutable reviewed bundle and final run closure belong to root following review. Root new RUI-F01 issue will be diagnosed separately without treating this hosted preparation as runtime approval.",
+    "Superseded sources after ACT-R01 actualrestore defaultACL failure are preserved in exact prior independentreview bundle; this run is historical preparation only. Active repair is M78-HOSTED-RESTORE-02, not approval of current sources."
   ]
 }

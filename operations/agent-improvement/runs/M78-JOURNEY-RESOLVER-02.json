@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "id": "M78-JOURNEY-RESOLVER-02",
+  "role": "security-reliability",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "c9dc7c70fd86e3c119dccaa86355409646357d2e4a26e4da50df71f76efdff7f",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-JOURNEY-RESOLVER-02-CANDIDATE1.json",
+      "sha256": "6b48f68a1b905c0a82d1eb0307c0bb10a164c045870e6a956efd879d0bce3534"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "JR02-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-JOURNEY-RESOLVER-02-CANDIDATE1.json",
+        "evaluations/research-qa/m78-journey-resolver-review.md"
+      ],
+      "reason": "Exact140bytes match original127 plus13fixed package/config roots, onlyhelper changed; actualexports index graph alreadypinned; snapshot preserved."
+    },
+    {
+      "id": "JR02-NEGATIVE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-JOURNEY-RESOLVER-02-CANDIDATE1.json",
+        "evaluations/research-qa/m78-journey-resolver-review.md"
+      ],
+      "reason": "Own3pure197checks combined7/405 strictTS, realBun exports-only redirect unchanged bodies, mapped package pin rejects changed metadata; wrapper41158 unchanged and checks beforeunseal."
+    },
+    {
+      "id": "JR02-COORDINATOR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-release-root-acceptance.md"
+      ],
+      "reason": "Root accepted bounded reviewed preparation after separate September22 review; native execution remains outside scope."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-resume-release-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-JOURNEY-RESOLVER-02-CANDIDATE1.json",
+        "sha256": "6b48f68a1b905c0a82d1eb0307c0bb10a164c045870e6a956efd879d0bce3534"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_exception": {
+    "reason": "Root reused existing bounded independent reviewer because fresh dispatch capacity was unavailable; model override was not applied.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L02",
+    "L06"
+  ],
+  "notes": [
+    "Independent roothelper/wrapper delta reviewer; imported M78backend+hostDB authored by me and not independently reapproved.",
+    "Accepted original127 prep untouched; new compatible140 machine attestation separate.13specificresolverinputs pinned, arbitraryresolverdiscovery not claimed.",
+    "No DB/network/POST/host/config/credential/decrypt/Git; source-only privatewrapper readSHA41158, tests publicsnapshot repeatable.",
+    "Distinct root acceptance required to close ownreviewrun."
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-journey-source-pins.ts",
+      "sha256": "e096e38cdb9e99012c8abdec2448529f29300e0ac7bd0fbc896790d993c35493"
+    },
+    {
+      "path": "evaluations/research-qa/m78-journey-resolver-independent.test.ts",
+      "sha256": "0d7aa3a9d8c22fcf81c825568e9232199b90871ee8fa016ffe993d6e4f79289c"
+    },
+    {
+      "path": "evaluations/research-qa/m78-journey-resolver-review.md",
+      "sha256": "68ebcb7e2ba453e9da0dbe7033fb6d6e34bc8cb6115123ac03a7d978fd65aa54"
+    },
+    {
+      "path": "evaluations/research-qa/m78-journey-resolver-preparation.json",
+      "sha256": "25242c9aa8bad9d0adda00d8ebd6514a3589cef9d9abaca0b29e949fde958450"
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-hosted-journey-preparation.json",
+      "sha256": "e1be639d0a5c9bcc1832346dc59334a3e93acf2aa774952d01f825bdd214b8a3"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-JOURNEY-REVIEW-01-CANDIDATE4-ACCEPTED.json",
+      "sha256": "c2a10050af278fa2748d07ebd5a26a1581f8e1e787ec3ce2560bc5c38b233ba3"
+    }
+  ]
+}

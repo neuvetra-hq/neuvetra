@@ -1,3 +1,21 @@
+# September22 exact local recipe stopped — preserve completed writes
+
+Fresh separate recipe clone m78_ops_recipe_20260922 restored and upgraded to21. Its exact recipe stopped after3successful201 outcomes, only2verified, during factual corporate successor verification. Frozen10event journal SHA1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943 must never be reset or retried. Independent diagnosis points to a local runner unwrapping a flattened numeric version as an envelope. Root publishes independently accepted recovery/test/source preparation with this native failure explicitly open; no M78hostdeployment orcompletion claim. resume_recipe authors bounded repair; resume_recovery independently reviews. Earlier status below is historical.
+
+# September22 resume — release repairs under verification
+
+Fresh live checks confirm Neuvetra still uses application7d465485/schema20, deploymenta0b1b8ff/imageeaa86c. PR5 remains b37b899a with5of6checks; repaired local suite passed89tests1516assertions. No M78 hosted mutation or recipe execution occurred during the usage-limit pause. All prior failures and encrypted archives remain preserved; September17 backups are historical and must be refreshed before hosted migration.
+
+Root restarted the existing loopback55472 test cluster after verifying its configuration. It completed automatic recovery and clonec returned20receipts. New actual workers: resume_recovery owns read-only eight-family recovery proof; resume_release delivered separately accepted wrapper/source/portability preparation and is now complete. Root owns shared ops/Git/host and will publish repairs, finish a separate original-archive20→21 exact38-write recipe rehearsal, then refresh hosted gates before deployment. The Terrascope fix is complete and must never rerun. Scope1 customer release remains incomplete. Earlier sections are historical.
+
+# M78 published; actual recovery and CI repairs in progress
+
+The Terrascope security fix is complete; never rerun it. Rolling PR5 head b37b899a294ce8f1d088adf76c5070d3f3a4af50 has five passing checks and one applications-test failure from local-only fixtures as observed September17 05:16UTC. Neuvetra remains app7d465485/schema20; no M78 hosted writes or deployment.
+
+The actual encrypted schema20 backup succeeded at05:06UTC (archive7460b387, snapshotbd11fa7d). First restore m78_ops_actual20_20260917 is retained after comparison refused27 default privilege settings for excluded provider/deferred schemas. Independent read-only comparison found all113 application tables and377 content entries exact. ACT-R01 repair explicitly records that recovery boundary while preserving full live-upgrade permission checks; independent source admission passed. Fresh restore c passed; independent actual semantic recovery is pending. An intermediate sandbox unprotect refusal b occurred before clone creation and is preserved. Never reset/retry the first clone or journals.
+
+Active: m77_backend restore/recipe author; m76_backend independent recovery/source reviewer; m78_security portable fixture checks; root shared integration and execution. Next: admitted fresh restore of original archive, separate exact38-write recipe rehearsal on a fresh upgraded clone, publish repairs and pass all six checks, then hosted migration/deployment/restart/revisit and demonstration. Full Scope1 customer release remains incomplete. Earlier sections are historical.
+
 # M78 local acceptance complete; publication and actual-data rehearsal next
 
 The approved Terrascope security fix is complete and must never be rerun. Fresh provider/readiness observations on September17 confirm Neuvetra remains application7d465485/schema20, deploymenta0b1b8ff, automatic deployment enabled. No M78 host writes have occurred. Scope1 release remains incomplete.

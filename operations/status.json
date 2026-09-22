@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-16T21:59:48.8384768-07:00",
+  "updated_at": "2026-09-22T15:45:47.226644+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Publish reviewed implementation and pass required checks; encrypted actual20 restore and exact38-write fresh-clone rehearsal before host upgrade",
+    "next_gate": "Independent ACT-R01 recovery admission, fresh original-archive restore, exact38-write local rehearsal, then repaired CI and hosted upgrade",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -2891,22 +2891,22 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "local_acceptance_complete_hosted_preparation",
+    "status": "resumed_local_recovery_and_repair_publication",
     "active_assignments": [
       {
-        "id": "M78-RECIPE-REHEARSAL-01",
-        "executor": "/root/m77_backend",
-        "scope": "Prepare exact38-write recipe on fresh clone of actual encrypted20 restore; local only"
+        "id": "M78-RESUME-RECOVERY-01",
+        "executor": "/root/resume_recovery",
+        "scope": "Read-only recovered clonec eight-family semantic verification"
       },
       {
-        "id": "M78-FRONTEND-INTEGRATION",
+        "id": "M78-ROOT-INTEGRATION",
         "executor": "/root",
-        "scope": "Actual native local UI, hosted journey preparation, shared21manifest integration"
+        "scope": "Repair publication, separate exact recipe rehearsal, fresh hosted gates"
       },
       {
-        "id": "M78-INTEGRATED-QA-01",
-        "executor": "/root/m76_backend",
-        "scope": "Close independently accepted preparation records; actual hosted recovery not started"
+        "id": "M78-RESUME-RECIPE-FIX-01",
+        "executor": "/root/resume_recipe",
+        "scope": "Read-only diagnosis and bounded runner repair; oldclone/journal frozen"
       }
     ],
     "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
@@ -2931,7 +2931,7 @@
       "production_release": false
     },
     "frontend": {
-      "status": "local_native_preliminary_only_no_hosted_demonstration",
+      "status": "final_local_native_ui_verified_no_hosted_demonstration",
       "evidence": "apps/site-web/src/components/Scope1Inventory.tsx",
       "runtime_demonstrated": true
     },
@@ -2962,8 +2962,34 @@
     },
     "recovery": {
       "evidence": "evaluations/research-qa/m78-recovery-root-acceptance.md",
-      "status": "accepted_local_only",
-      "actual_encrypted_hosted_backup_verified": false
+      "status": "actual_fresh_encrypted_restore_passed_independent_semantic_review_pending",
+      "actual_encrypted_hosted_backup_verified": true,
+      "archive_sha256": "7460b387b521644c16d4553fc1db1f176335766a05fcd4ac947443d77a65f145",
+      "failed_clone_retained": "m78_ops_actual20_20260917",
+      "actual_tables_exact": 113,
+      "actual_content_entries_exact": 377,
+      "open_finding": "ACT-R01 source repair independently accepted; new restore explicitly excludes27 unrelated defaults while preserving fullsource inventory; actual semantic review pending",
+      "actual_successful_restore_database": "m78_ops_actual20_20260917c",
+      "actual_restore_receipt_sha256": "ab8c7cae9ad5d5b767f88d5893fe0d4c8fa30be7d5c702309416b33df3f07c8a",
+      "historical_archive_not_fresh_hosted_gate": true
+    },
+    "publication": {
+      "commit": "b37b899a294ce8f1d088adf76c5070d3f3a4af50",
+      "required_checks_passed": 5,
+      "required_checks_total": 6,
+      "remaining": "Publish locally accepted repair package; rerun all six checks",
+      "observed_at": "2026-09-22T15:42:28.434616+00:00"
+    },
+    "exact_recipe_rehearsal": {
+      "status": "failed_after_three_successful_local_posts",
+      "database": "m78_ops_recipe_20260922",
+      "journal_sha256": "1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943",
+      "attempted_posts": 3,
+      "successful_outcomes": 3,
+      "verified_outcomes": 2,
+      "no_retry": true,
+      "suspected_cause": "Runner unwraps flattened numeric version as envelope; independent readonly diagnosis inprogress",
+      "hosted_posts": 0
     }
   }
 }

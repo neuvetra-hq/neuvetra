@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "id": "M78-HOSTED-RESTORE-02",
+  "role": "software-engineering",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "27881caaec10e4285b8695bda4b1ee936a8adcc698ac77685475c2ef12137c72",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-RESTORE-02-CANDIDATE1.json",
+      "sha256": "4ce3ecfdf84bf633ae9ce7dde9df1e3d75e0fa6f545371f616e562d84cc5981a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ACT-R01-PROJECTION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-HOSTED-RESTORE-02-CANDIDATE1.json"
+      ],
+      "reason": "Fixed declared nonapplication default projection with exact fullsource retention, separate hashes/profile, malformed/global/Neuvetra/duplicate refusals; generic/local/fullhost upgrade unchanged."
+    },
+    {
+      "id": "ACT-R01-VALIDATION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-HOSTED-RESTORE-02-CANDIDATE1.json",
+        "evaluations/research-qa/m78-actual20-restore-inventory.json"
+      ],
+      "reason": "11pure/152assertions strictTS; repeatable-read readonly exactactualfailedclone113tables/377content and27excluded defaults; fullcomparison still rejects; zero writes/decryption and all connections closed."
+    },
+    {
+      "id": "ACT-R01-INDEPENDENT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-application-transfer-review.md"
+      ],
+      "reason": "Distinct independent source preparation accepted; actualnative/freshrestore/hostedexecution are separate later gates, not claimed by this preparation task."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-application-transfer-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-HOSTED-RESTORE-02-CANDIDATE1.json",
+        "sha256": "4ce3ecfdf84bf633ae9ce7dde9df1e3d75e0fa6f545371f616e562d84cc5981a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-hosted-database.ts",
+      "sha256": "bca734bcc68c65ef196c9d61457e0ae92b04095338b9a5ff33c93b53798bb7fc"
+    },
+    {
+      "path": "tools/staging/m78-hosted-database.test.ts",
+      "sha256": "427aa54ccd8b625272800853683b5f66237247be55a05177c24fd6c06262cf23"
+    },
+    {
+      "path": "docs/research/m78-hosted-database.md",
+      "sha256": "6af08ef539b25cc2ef445c12323ae7951982c93e0b68e6299ade8ab2e97f1dac"
+    }
+  ],
+  "routing_exception": {
+    "reason": "Parent critical assignment reused inherited worker after thread limit; requested Astra/high cannot be applied and actual settings remain unknown.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L02",
+    "L07"
+  ],
+  "notes": [
+    "ACT-R01 escaped old hosted preparation: first actual20 restore only fulldefaultACL mismatch. Original archive/journal/failedclone remain unchanged and failed; new repair task records this defect separately.",
+    "Root authorized fixed explicit unrelated schema defaults projection and concrete resolver metadata roots;13package/config roots pin identified bare-import resolution without config edits.",
+    "CI portability mkdtemp/tmpdir cleanup contributed by /root/m78_security, applied by solewriter; shared currenttest pinned separately.",
+    "No backend/SQL/localoperator edits; no network/credentials/decryption/Git/provider/externalassurance claims. New actualfreshrestore is not yet exercised.",
+    "Root confirms independent source-preparation acceptance; completed authorpreparation only, actualfreshrestore/native38POST remain separate pending execution evidence."
+  ],
+  "supporting_artifacts": [
+    {
+      "path": ".tmp/m78-author-application-restore-readonly.ts",
+      "sha256": "5ba60963b70914cb35cb2405af8f61c881227b61983fff28609c45ca18078906"
+    },
+    {
+      "path": ".tmp/m78-author-application-restore-readonly-result.json",
+      "sha256": "f1e3eaa5d7a3a578d6c62cd9375af6d599a8cf7bcc03a55d28c00e71813ea423"
+    },
+    {
+      "path": "evaluations/research-qa/m78-actual20-restore-diagnosis.json",
+      "sha256": "d33bf4900392859fcff2e786a80526e657bf21fdaa78e44809a5d3a90b35f057"
+    },
+    {
+      "path": "evaluations/research-qa/m78-actual20-restore-inventory.json",
+      "sha256": "84a49f81e3603dfa0c174267ae7047ce4564275105d084f40c3cabb3969958dc"
+    },
+    {
+      "path": "evaluations/research-qa/m78-application-transfer-review.md",
+      "sha256": "b91ae854baa8a126aa1c3363fe07b0e790db2dc74b31f67e1e2283a8b62b5936"
+    }
+  ]
+}
