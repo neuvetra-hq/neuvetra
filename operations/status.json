@@ -2891,12 +2891,12 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "local_continuation_and_complete_source_gate_accepted_publication_next",
+    "status": "ci_repairs_independently_accepted_publication_next",
     "active_assignments": [
       {
-        "id": "M78-ROOT-PUBLISH",
+        "id": "M78-ROOT-CI-REPAIR",
         "executor": "/root",
-        "scope": "Publish accepted performance repair and continuation preparation; verify remote sixchecks then exact runtime deployment"
+        "scope": "Publish accepted CI record/test repairs; six checks and exact deployment"
       }
     ],
     "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
@@ -3098,6 +3098,19 @@
       "hosted_posts": 0,
       "do_not_retry": true,
       "independent_receipt_sha256": "1c81637967eb512615243dec0f64458645b694bafc71bc2153f2cdf48be7a984"
+    },
+    "continuation_ci": {
+      "published_commit": "d139628cb53f591bfd516a4aac41dd62e1138a53",
+      "remote_head_verified": true,
+      "failures": [
+        "Role record refers to local-only inspect evidence and Windows result path",
+        "Historical source-delta test omitted admitted DB performance repair"
+      ],
+      "source_pins_155_unchanged": true,
+      "hosted_continuation_executed": false,
+      "live_commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+      "schema": 21,
+      "auto_deploy_enabled": false
     }
   },
   "current_m79_preparation": {

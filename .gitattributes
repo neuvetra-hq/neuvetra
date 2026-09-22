@@ -196,3 +196,15 @@ tools/staging/m78-continuation-source-pins.ts -text whitespace=cr-at-eol
 
 operations/agent-improvement/runs/M78-CONTINUATION-WRAPPER-REVIEW-01.json -text whitespace=cr-at-eol
 tools/staging/m78-continuation-plan.ts -text whitespace=cr-at-eol,-blank-at-eof
+evaluations/research-qa/m78-continuation-ci-independent-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-portability-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-portability-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-portability.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-observer-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-observer-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-observer-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-root-acceptance.md -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-CI-PORTABILITY-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-CI-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-RUNTIME-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol

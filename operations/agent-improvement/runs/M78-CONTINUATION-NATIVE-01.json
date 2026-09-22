@@ -15,7 +15,7 @@
       "id": "AC-01",
       "status": "pass",
       "evidence": [
-        ".superpowers/m78-continuation-native-20260922-inspect.json"
+        "operations/agent-improvement/snapshots/M78-CONTINUATION-NATIVE-01-INSPECT.json"
       ],
       "reason": null
     },
@@ -24,7 +24,7 @@
       "status": "pass",
       "evidence": [
         "evaluations/research-qa/m78-continuation-native-author.md",
-        "evaluations\\research-qa\\m78-continuation-native-result.json"
+        "evaluations/research-qa/m78-continuation-native-result.json"
       ],
       "reason": null
     }

@@ -1,0 +1,5 @@
+# M78 continuation CI repair acceptance
+
+Root accepts independent resolver-test review ce60702e and snapshot e28c64e5 after reading exact source comparison and separately running3tests198assertions. Published d139628 failed its historical delta expectation after the accepted DB performance change; test now names that one change and requires exact accepted SHA d492c239. Final155 source pins remain unchanged and the test is outside that gate. Original failed hosted journal remains immutable; no hosted continuation has executed.
+
+Root also accepts the author locator repair snapshot c001b96d and report d3b28e6f. Root independently inspected the exact two-line diff and ran the tracked-only POSIX gate: both historical failures reproduced, corrected record accepted, six evidence/artifact paths tracked, original inspection c3fc47ae and result beeeb787 preserved. This is a record reference repair; no native or hosted replay. Remote d139628 native, image, research and calculation jobs passed; the record and historical-delta failures remain preserved.

@@ -1,0 +1,19 @@
+{
+  "status": "tracked_only_record_validation_passed",
+  "historicalCommit": "d139628",
+  "historicalFailuresReproduced": [
+    "Not in tracked checkout: .superpowers/m78-continuation-native-20260922-inspect.json",
+    "Non-POSIX evidence locator: evaluations\\research-qa\\m78-continuation-native-result.json"
+  ],
+  "checkedTrackedLocators": [
+    "evaluations/research-qa/m78-continuation-final-independent-review.md",
+    "evaluations/research-qa/m78-continuation-native-author.md",
+    "evaluations/research-qa/m78-continuation-native-result.json",
+    "evaluations/research-qa/m78-continuation-root-acceptance.md",
+    "operations/agent-improvement/snapshots/M78-CONTINUATION-NATIVE-01-CANDIDATE1.json",
+    "operations/agent-improvement/snapshots/M78-CONTINUATION-NATIVE-01-INSPECT.json"
+  ],
+  "onlyTwoEvidenceLocatorsChanged": true,
+  "inspectEmbeddedSha256": "c3fc47aef0a671a5dd4eb462f90af3ec892c51274d36973018e53f66717077b9",
+  "nativeExecutions": 0
+}

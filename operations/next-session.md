@@ -1,3 +1,9 @@
+# September 22: performance repair published; CI reference repairs accepted
+
+Accepted performance repair and continuation preparation are published on rolling PR5 at d139628cb53f591bfd516a4aac41dd62e1138a53; remote branch and PR head verified. CI caught a local-only inspection evidence locator plus Windows path in the native run record, and an old resolver test expectation missing the independently accepted DB performance delta. Root independently accepted the portable record correction; resume_release independently accepted the exact test repair. Root is the only active executor for publication and hosted work. All155 final source hashes remain unchanged.
+
+No hosted continuation has executed. Live remains the last verified2002fea/schema21 with automatic deployment paused. SQL21 upgrade, original inventory save and Terrascope security fix must never repeat. Next: accepted CI repairs, all six checks on exact published commit, fresh code deployment/runtime admission, new0/37/0 hosted lifecycle, actual restart/revisit/browser and independent closure. Scope1customer release remains incomplete. Earlier sections are historical.
+
 # September 22: local continuation and final source gates accepted; publication next
 
 All37 remaining local operations independently passed, preserving572oldrows/121tables and five exact reports. Final source receipt77aec covers155files including all122runtime dependencies; CONT-R01 and CONT-R02 are repaired, with failed reviews/candidates preserved. Root's private continuation wrapper b2fbe has independent final155-source admission. The native journal113events/159630/e7788d is complete and immutable. No hosted continuation has run.
