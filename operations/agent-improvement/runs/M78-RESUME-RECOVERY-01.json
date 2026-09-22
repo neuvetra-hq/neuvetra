@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "id": "M78-RESUME-RECOVERY-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_recovery",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE2.json",
+      "sha256": "d91448ab0e3c929262c236c56dd17a44a1d013d88722c877813d1ee1e337bf17"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-actual20-recovery-review.md",
+        "evaluations/research-qa/m78-resume-actual20-recovery.json"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-resume-actual20-recovery-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE2.json",
+        "sha256": "d91448ab0e3c929262c236c56dd17a44a1d013d88722c877813d1ee1e337bf17"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assignment": {
+    "parent_outcome": "M78 independent historical actual20 recovery after pause",
+    "allowed": "new own QA artifacts; read-only local PostgreSQL55472",
+    "excluded": "host, credentials, decryption, mutations, shared ledger, Git",
+    "lessons": [
+      "L02",
+      "L04"
+    ],
+    "started_at": "2026-09-22T15:41:44.054966+00:00",
+    "compute_note": "Inherited settings unknown; requested registry only",
+    "resume_note": "Runtime dependency resolved;42GET18exact downloads across8families pass,113tables377entries exactly unchanged. Preserved runtime-read-only25006 and nonexistent prior acceptance path corrections. Root review pending."
+  },
+  "historical_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-PENDING1.json",
+      "sha256": "7da737344d1e54858091acb4f94284b056acc9c56bcad69dae7be9165c764dba"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE1.json",
+      "sha256": "254a5851289bda58dd1e6a76b9e21dae34aabccdc2aa608198f9963f8719a9e9"
+    }
+  ]
+}

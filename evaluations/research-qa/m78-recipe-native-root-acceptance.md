@@ -1,0 +1,7 @@
+# M78 exact current-data recipe — root acceptance
+
+Root accepts independent native result2a8b4ee54065dae00e158274b28855c86361cda0958e3ed9c16023a74b7d7011 and snapshotd5235ffad661d02b20c8c45c9124a14d34b9343e8f08eb3ad5b29e07772e88bf. The fresh separately restored/upgraded current-data clone completed38 successful writes and38 exact verifications in116 hash-linked events. Journal8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0 is retained. Independent member reads and ten report downloads pass; all568 old rows remain, five reports capture three absent and two accepted reviews, current bindings are exact, and independently derived gross total is126850.17632025kgCO2e.
+
+The original three-write failed clone and journal remain unchanged. This is the first completed actual38-write recipe acceptance; older preparation-source acceptance did not demonstrate native execution. The old preparation record's NATIVE criterion now points to this actual evidence rather than an out-of-scope source-preparation explanation. Earlier source review and failures remain historical; the response-shape escaped defect is recorded.
+
+Root reran the complete current14-file CI selection:100tests1704assertions passed. This accepts final local milestone execution and preparation publication. Hosted migration/deployment, actual provider sessions, live0/41/0 lifecycle, restart and browser demonstration remain mandatory. Synthetic methods/factors remain unreleased; complete customer Scope1 reporting is not claimed.

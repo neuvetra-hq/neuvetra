@@ -1,9 +1,25 @@
 import {test,expect} from 'bun:test'
+import {m78VerifiedIdentity,m78VerifiedReview} from './check-m78-hosted'
 import {m78JournalEventLimit,readM78Legacy,acceptedM77,parseM78JourneyInput,readM78Journal,cleanM78Journal,validateM78Route,runM78Journey,M78_ACCEPTED_M77,M78_EXPECTED_POSTS,type M78Event} from './check-m78-hosted'
 import {m78CanonicalJson as canonical} from '../../packages/neuvetra-database/src/m78-validation'
 const HOST='https://www.neuvetra.ai',AUTH='https://icockcoguyadhryzydvl.supabase.co',company='8b90c706-1710-494d-b12d-02eef88eacb7',digest='a'.repeat(64)
 const input=()=>({mode:'baseline',acceptedM77:M78_ACCEPTED_M77,gate:{status:'m78_hosted_candidate_reviewed',migrationSha256:digest,recipeSha256:digest,harnessSha256:digest,independentReviewSha256:digest,operatorRecoveryReceiptSha256:digest,reviewedApplicationCommit:'b'.repeat(40),expectedApplicationPosts:41},env:{SUPABASE_URL:AUTH,SUPABASE_ANON_KEY:'sb_publishable_'+'a'.repeat(30)},roster:{workspaceId:company},accounts:['manager1','manager2','member','outsider'].map((role,i)=>({role,id:`78000000-0000-4000-8000-00000000000${i}`,email:role+'@synthetic.invalid',password:'synthetic-private-marker'}))})
 const sha=(s:string)=>new Bun.CryptoHasher('sha256').update(s).digest('hex')
+test('verified identity preserves flat versions, envelope versions and review/report records',()=>{
+ for(const stream of ['inventoryId','worksheetId','rosterId','streamId']){
+  const flat={id:company,companyId:company,version:9,[stream]:company,versionSha256:digest};
+  expect(m78VerifiedIdentity(flat)).toEqual({id:company,companyId:company,[stream]:company,versionSha256:digest});
+  expect(m78VerifiedIdentity({version:flat,proof:{}})).toEqual(m78VerifiedIdentity(flat));
+ }
+ for(const hash of ['decisionSha256','reportSha256'])expect(m78VerifiedIdentity({id:company,versionId:company,[hash]:digest})).toEqual({id:company,versionId:company,[hash]:digest});
+ for(const bad of [null,[],{},9,{version:9},{version:{}},{version:{id:'undefined'}},{id:'bad',version:1}])expect(()=>m78VerifiedIdentity(bad)).toThrow();
+});
+test('hosted exact review verification handles embedded and separately retained discovery reviews',()=>{
+ const review={id:company,versionId:company,decisionSha256:digest},flat={id:company,version:9,review};
+ for(const record of [flat,{version:flat,proof:{}},{reviews:[review]}])expect(()=>m78VerifiedReview(record,review)).not.toThrow();
+ for(const record of [{...flat,review:null},{...flat,id:'78000000-0000-4000-8000-000000000003'},{reviews:[]},{reviews:[review,review]},{reviews:[{...review,decisionSha256:'b'.repeat(64)}]}])expect(()=>m78VerifiedReview(record,review)).toThrow();
+ expect(()=>m78VerifiedReview(flat,{...review,versionId:'undefined'})).toThrow();
+});
 function add(es:M78Event[],mode:M78Event['mode'],kind:string,data:any){const body={sequence:es.length+1,previousSha256:es.at(-1)?.sha256??null,profile:'m78-hosted-journey-v1',workspaceId:company,mode,kind,data,createdAt:'2026-09-17T00:00:00.000Z'};es.push({...body,sha256:sha(canonical(body))})}
 function closedJournal(){const es:M78Event[]=[];add(es,'baseline','provenance',{acceptedM77:M78_ACCEPTED_M77});for(const mode of ['baseline','exercise','revisit']as const){add(es,mode,'attempt_started',{mode,gate:input().gate});const sequence=es.at(-1)!.sequence;for(const role of ['manager1','manager2','member','outsider']){add(es,mode,'auth_intent',{role});add(es,mode,'auth_outcome',{role,status:200,tokenObserved:true,subjectMatched:true})}
  if(mode==='exercise')for(let i=0;i<38;i++){const name='step_'+i,route='/workspace-api/workspace/'+company+'/scope1-inventory',role='manager1';add(es,mode,'post_intent',{name,route,role,expected:201,request:{synthetic:true}});add(es,mode,'post_outcome',{name,route,role,status:201,responseSha256:digest,byteLength:4});add(es,mode,'post_verified',{name,responseSha256:digest,verifiedIdentity:{id:company}})}

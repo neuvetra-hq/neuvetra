@@ -1,0 +1,77 @@
+{
+  "status": "m78_independent_exact_recipe_native_passed",
+  "createdAt": "2026-09-22T16:08:54.201Z",
+  "reviewerId": "/root/resume_recovery",
+  "database": "m78_ops_recipe_20260922b",
+  "journalSha256": "8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0",
+  "terminalSha256": "dab854f7b2604a4e7400698eb60e2b64730fbff9ecb1eedb93e2f440dcb5b721",
+  "events": 116,
+  "successfulApplicationPosts": 38,
+  "verifiedApplicationPosts": 38,
+  "retainedOldRows": 568,
+  "tableCount": 121,
+  "currentRowsSha256": "b5d4300237f8763dbe47ace1e1caf423b1aa104dbfec61ca9dc58c34a2264d91",
+  "independentMemberGets": 16,
+  "exactDownloads": 10,
+  "gross": {
+    "kgCo2eExact": "126850.17632025",
+    "kgCo2eDisplay": "126850.1763",
+    "rounding": "half_even_4dp"
+  },
+  "gasLines": 6,
+  "sources": 10,
+  "facilities": 2,
+  "entities": 1,
+  "processVersions": 1,
+  "inventoryVersions": 2,
+  "reports": [
+    {
+      "id": "ad23ea09-88cc-4fea-8922-8b23582c1000",
+      "family": "process_screen",
+      "versionId": "4489f8c6-d41c-4ce1-a7df-e515b5f3aacf",
+      "reviewId": null,
+      "htmlSha256": "bb14b33f67561418dcb8ededc7b3f8aeb1f2208758c4d361483686159b18042f",
+      "snapshotSha256": "4c69b8b82bc69a82603e48315b9b1fba8df30c30ae3fad1a281fdfb64cf7e0b6"
+    },
+    {
+      "id": "1cd22206-c198-4236-9d3b-6e5cef5b4243",
+      "family": "process_screen",
+      "versionId": "4489f8c6-d41c-4ce1-a7df-e515b5f3aacf",
+      "reviewId": "fbfbd12a-4f6b-4515-ab84-bd3bc4cdf874",
+      "htmlSha256": "576451da271edfca934ad9e3b3ec6ff7173b43d250fb91868bbc841b10dbfff9",
+      "snapshotSha256": "600cb61b259c0c9d02cce37da7c4d8e47db4abd9ddd35faca00b7da19ec09555"
+    },
+    {
+      "id": "04e692bb-43fb-4d19-aa74-8725051aada5",
+      "family": "inventory",
+      "versionId": "5986b1f7-deff-45ee-867c-fa229c4b4ba0",
+      "reviewId": null,
+      "htmlSha256": "75204474a4839e3169b901623bd9e8804f95f8b397908691e48e96b5cf9e5f92",
+      "snapshotSha256": "e5a0640200eb37187cf6ed9eaed8e6c6b775a1bb35d52302df2a0210d1b17c40"
+    },
+    {
+      "id": "4c767ec5-d0d6-4930-b629-d402f57cd57f",
+      "family": "inventory",
+      "versionId": "c09653f9-d3c8-4e99-841d-6fdfe43eb54c",
+      "reviewId": null,
+      "htmlSha256": "7cab6005d1e6be116ac477321fb7a9f11408ec32de75f6a0968fe119ca007629",
+      "snapshotSha256": "3ce652dcc75c0b9009350c61fb5bf1c08ddc620b441480b1920f541d5d5f9aba"
+    },
+    {
+      "id": "d12fef92-1071-45b3-a3b6-26b93e252974",
+      "family": "inventory",
+      "versionId": "c09653f9-d3c8-4e99-841d-6fdfe43eb54c",
+      "reviewId": "ec67aa23-dd3e-462a-8b0c-282a985025dd",
+      "htmlSha256": "293a1a8153018bbf07377e4a830f29dee6c3cfc1ecb333bf0b6090170f4617ad",
+      "snapshotSha256": "77c1e3b7da29c5383d1ea4ee4c0d8af6d8b5db4398fc48668f732d36c92fecbd"
+    }
+  ],
+  "capturedNullReviews": 3,
+  "currentBindingsAndReviewsVerified": true,
+  "noReviewMutationVerified": true,
+  "sourcePinsVerified": 121,
+  "oldFailedJournalPreserved": true,
+  "hostedCalls": false,
+  "providerSessions": false,
+  "scope1ReleaseReadiness": "incomplete"
+}

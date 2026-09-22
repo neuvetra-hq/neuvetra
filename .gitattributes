@@ -105,3 +105,27 @@ evaluations/research-qa/m78-ui-accounting-review.md -text whitespace=-blank-at-e
 operations/agent-improvement/runs/M78-UI-ACCOUNTING-01.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-OPERATORS-01-LOCAL-CANDIDATE2.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-UI-ACCOUNTING-01-SOURCE-REVIEW.json -text whitespace=cr-at-eol
+
+# Preserve the exact reviewed September22 independent test bytes.
+evaluations/research-qa/m78-journey-resolver-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts -text whitespace=cr-at-eol
+
+# Immutable resumed review evidence keeps its reviewed raw bytes.
+evaluations/research-qa/m78-resume-actual20-recovery-probe.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-actual20-recovery-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-journey-attestation.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-journey-preparation.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-actual-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-actual-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-diagnosis.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-source-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-response-shape-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-response-shape-review.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-RESUME-RECOVERY-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECIPE-NATIVE-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECIPE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECIPE-REVIEW-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-PENDING1.json -text whitespace=cr-at-eol

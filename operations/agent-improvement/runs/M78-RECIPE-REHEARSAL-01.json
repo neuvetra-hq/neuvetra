@@ -31,9 +31,10 @@
       "id": "NATIVE",
       "status": "pass",
       "evidence": [
-        "evaluations/research-qa/m78-recipe-rehearsal-final-review.md"
+        "evaluations/research-qa/m78-recipe-native-root-acceptance.md",
+        "evaluations/research-qa/m78-resume-recipe-actual-review.md"
       ],
-      "reason": "Distinct independent source preparation accepted; actualnative/freshrestore/hostedexecution are separate later gates, not claimed by this preparation task."
+      "reason": "First actual complete38-write native rehearsal accepted September22 on repaired candidate; prior source-preparation explanation was not native execution evidence."
     }
   ],
   "review": {
@@ -55,7 +56,7 @@
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 1,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {

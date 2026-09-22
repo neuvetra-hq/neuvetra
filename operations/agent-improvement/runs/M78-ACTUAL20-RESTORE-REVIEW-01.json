@@ -26,28 +26,27 @@
       "sha256": "b91ae854baa8a126aa1c3363fe07b0e790db2dc74b31f67e1e2283a8b62b5936"
     },
     {
-      "path": "evaluations/research-qa/m78-application-transfer-independent.test.ts",
-      "sha256": "2ddcbb8b1ce495fe23def0c09638bea066c66d463b5e925b5325c1016304e297"
-    },
-    {
       "path": "evaluations/research-qa/m78-application-transfer-source-pins.json",
       "sha256": "6f1897f36e773e4d612a1b128bce32e56069cf3b966eb968b9ee490a86e064c9"
     },
     {
       "path": "operations/agent-improvement/snapshots/M78-ACTUAL20-RESTORE-REVIEW-01-REPAIR-CANDIDATE1.json",
       "sha256": "34ac9f057a78c4f8f87a144e671e5a73427e9c9c178d23f2176b1f2e632c385b"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-FORWARD-REVALIDATION-20260922-CANDIDATE1.json",
+      "sha256": "851ad7902a45d4c08451c6e36b8fe0132a9c1b18c17f005fe7d935df34c1be5d"
     }
   ],
   "criteria": [
     {
       "id": "ACTUAL20-APPLICATION-RECOVERY",
-      "status": "fail",
+      "status": "pass",
       "evidence": [
-        "evaluations/research-qa/m78-actual20-restore-review.md",
-        "evaluations/research-qa/m78-actual20-restore-diagnosis.ts",
-        "evaluations/research-qa/m78-actual20-restore-diagnosis.json"
+        "evaluations/research-qa/m78-resume-recovery-root-acceptance.md",
+        "evaluations/research-qa/m78-fresh-recovery-root-acceptance.md"
       ],
-      "reason": "ACT-R01 concrete sole27provider/unrelated default ACL mismatch;113rows/catalog and377content otherwise exact. New reviewed comparator/exclusion receipt and fresh restore/native review pending."
+      "reason": "Original failure preserved; new repaired historical and current fresh application restores independently accepted."
     },
     {
       "id": "ACT-R01-REPAIR-SOURCE-READINESS",
@@ -62,14 +61,49 @@
     }
   ],
   "review": {
-    "reviewer_execution_context": null,
-    "independent": false,
-    "verdict": "pending",
-    "evidence": [],
-    "reviewed_artifacts": []
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-resume-source-forward-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "evaluations/research-qa/m78-actual20-restore-review.md",
+        "sha256": "907fc3e6c064a43953e009cf8ee6249e76450746034624c1f994bd3187652d5f"
+      },
+      {
+        "path": "evaluations/research-qa/m78-actual20-restore-diagnosis.ts",
+        "sha256": "e7b2ebc04cbe4ca78dad35753ae9ed418506bceb01211af2535fca96fd46d205"
+      },
+      {
+        "path": "evaluations/research-qa/m78-actual20-restore-diagnosis.json",
+        "sha256": "d33bf4900392859fcff2e786a80526e657bf21fdaa78e44809a5d3a90b35f057"
+      },
+      {
+        "path": "evaluations/research-qa/m78-actual20-restore-inventory.json",
+        "sha256": "84a49f81e3603dfa0c174267ae7047ce4564275105d084f40c3cabb3969958dc"
+      },
+      {
+        "path": "evaluations/research-qa/m78-application-transfer-review.md",
+        "sha256": "b91ae854baa8a126aa1c3363fe07b0e790db2dc74b31f67e1e2283a8b62b5936"
+      },
+      {
+        "path": "evaluations/research-qa/m78-application-transfer-source-pins.json",
+        "sha256": "6f1897f36e773e4d612a1b128bce32e56069cf3b966eb968b9ee490a86e064c9"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-ACTUAL20-RESTORE-REVIEW-01-REPAIR-CANDIDATE1.json",
+        "sha256": "34ac9f057a78c4f8f87a144e671e5a73427e9c9c178d23f2176b1f2e632c385b"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-FORWARD-REVALIDATION-20260922-CANDIDATE1.json",
+        "sha256": "851ad7902a45d4c08451c6e36b8fe0132a9c1b18c17f005fe7d935df34c1be5d"
+      }
+    ]
   },
   "outcome": {
-    "status": "in_progress",
+    "status": "complete",
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 1,
@@ -100,5 +134,11 @@
     "cost_usd": null
   },
   "metrics_evidence": [],
-  "pilot_eligible": false
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-application-transfer-independent.test.ts",
+      "sha256": "2ddcbb8b1ce495fe23def0c09638bea066c66d463b5e925b5325c1016304e297"
+    }
+  ]
 }

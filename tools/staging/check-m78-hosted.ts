@@ -35,6 +35,23 @@ export interface M78Event {sequence:number;previousSha256:string|null;profile:st
 export interface M78Dependencies {fetch?:typeof fetch;load?:()=>Promise<string|null>;append?:(line:string,exclusive:boolean)=>Promise<void>;readPrior?:(company:string)=>Promise<{previous:{registers:any;downloads:any};old:{legacy:any}}>;legacy?:typeof runM72Journey;exercise?:typeof exerciseM78;verifyGate?:(g:Gate)=>Promise<void>}
 const hash=(v:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(v).digest('hex'),same=(a:unknown,b:unknown)=>canonical(a)===canonical(b),core=(v:any)=>({...v,review:null})
 function check(v:unknown):asserts v{if(!v)throw Error('Bounded M78 hosted harness refused')}
+/** Preserve flat legacy versions, reviews and reports; only M78 version responses are envelopes. */
+export function m78VerifiedIdentity(decoded:unknown):Record<string,string>{
+ const outer=decoded as Record<string,unknown>|null;
+ check(outer&&typeof outer==='object'&&!Array.isArray(outer));
+ const value=(outer.version&&typeof outer.version==='object'?outer.version:outer) as Record<string,unknown>;
+ check(!Array.isArray(value)&&typeof value.id==='string'&&new RegExp('^'+uuid+'$').test(value.id));
+ return Object.fromEntries(['id','companyId','streamId','inventoryId','worksheetId','rosterId','versionId','versionSha256','decisionSha256','reportSha256'].filter(k=>typeof value[k]==='string').map(k=>[k,value[k] as string]));
+}
+export function m78VerifiedReview(decoded:any,raw:any):void{
+ const identity=m78VerifiedIdentity(raw);check(typeof identity.versionId==='string'&&new RegExp('^'+uuid+'$').test(identity.versionId));
+ if(Array.isArray(decoded?.reviews)){
+  const matches=decoded.reviews.filter((r:any)=>r?.versionId===raw.versionId&&r?.id===raw.id);check(matches.length===1&&same(matches[0],raw));
+ }else{
+  const version=decoded?.version&&typeof decoded.version==='object'?decoded.version:decoded;
+  check(m78VerifiedIdentity(version).id===raw.versionId&&same(version.review,raw));
+ }
+}
 export function m78JournalEventLimit(kind:string){return ['baseline','exercise_complete'].includes(kind)?50_000_000:kind==='post_intent'?220_000:kind==='post_verified'?4_000:64_000}
 const digest=(s:unknown)=>typeof s==='string'&&/^[a-f0-9]{64}$/.test(s),uuid='[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'
 export function parseM78JourneyInput(raw:unknown):M78JourneyInput{const v=raw as any,g=v?.gate;check(['baseline','exercise','revisit'].includes(v?.mode)&&same(v.acceptedM77,M78_ACCEPTED_M77)&&g?.status==='m78_hosted_candidate_reviewed'&&g.expectedApplicationPosts===M78_EXPECTED_POSTS&&[g.migrationSha256,g.recipeSha256,g.harnessSha256,g.independentReviewSha256,g.operatorRecoveryReceiptSha256].every(digest)&&/^[a-f0-9]{40}$/.test(g.reviewedApplicationCommit));return {...parseJourneyInput(raw),mode:v.mode,acceptedM77:M78_ACCEPTED_M77,gate:g}}
@@ -100,13 +117,13 @@ export async function runM78Journey(input:M78JourneyInput,deps:M78Dependencies={
  const scope1=async()=>decodeScope1Register(await get(root+'/scope1-inventory'),company)
  const read=async()=>{const result:any={};for(const[family,base,decode]of [['corporate','corporate-inventories',decodeCorporateRegister],['gas','stationary-natural-gas',decodeGasRegister],['mobile','mobile-diesel',decodeMobileRegister],['fleet','controlled-fleet',decodeFleetRegister],['diesel','stationary-diesel',decodeGeneratorRegister],['equipment','stationary-equipment',decodeStationaryRegister],['fugitive','fugitive-sources',decodeFugitiveRegister]]as const)result[family]=await decode(await get(root+'/'+base),company);return result}
  const version=async(route:string,raw:any)=>{const family=route.slice(root.length+1).split('/')[0];if(['process-screen','scope1-inventory'].includes(family!))return decodeScope1Version(raw,company);const decode=({'corporate-inventories':decodeCorporateVersion,'stationary-natural-gas':decodeGasVersion,'mobile-diesel':decodeMobileVersion,'stationary-diesel':decodeGeneratorVersion,'controlled-fleet':decodeFleetVersion,'stationary-equipment':decodeStationaryVersion,'fugitive-sources':decodeFugitiveVersion,'fugitive-population':decodeFugitiveVersion}as Record<string,(v:any,c:string)=>any>)[family!];check(decode);return decode(raw,company)}
- const decodeOutcome=async(route:string,raw:any)=>{if(route.endsWith('/reports')){check(route.includes('/process-screen/')||route.includes('/scope1-inventory/'));return decodeScope1Report(raw,company)}if(route.endsWith('/reviews')){const v=await version(route,await get(route.replace(/\/reviews$/,'/versions/'+raw.versionId)));check(same((v.version??v).review,raw));return raw}return version(route,raw)}
+ const decodeOutcome=async(route:string,raw:any)=>{if(route.endsWith('/reports')){check(route.includes('/process-screen/')||route.includes('/scope1-inventory/'));return decodeScope1Report(raw,company)}if(route.endsWith('/reviews')){let retained:unknown;if(route.includes('/controlled-fleet/')||route.includes('/stationary-equipment/')){const family=route.includes('/controlled-fleet/')?'controlled-fleet':'stationary-equipment';const register=await (family==='controlled-fleet'?decodeFleetRegister:decodeStationaryRegister)(await get(root+'/'+family),company);check(route===root+'/'+family+'/'+register.rosterId+'/reviews');retained=register}else retained=await version(route,await get(route.replace(/\/reviews$/,'/versions/'+raw.versionId)));m78VerifiedReview(retained,raw);return raw}return version(route,raw)}
  const post=async(name:string,route:string,role:string,request:unknown,expected=201)=>{stage=name;check(input.mode==='exercise'&&writes<M78_EXPECTED_POSTS&&!events.some(e=>e.kind==='post_intent'&&e.data.name===name)&&['manager1','manager2','member','outsider','signed_out'].includes(role));validateM78Route(HOST+route,'POST',company,input.mode)
   await append('post_intent',{name,route,role,expected,request});writes++
   const response=await network(HOST+route,{method:'POST',headers:{origin:HOST,'content-type':'application/json',...(tokens.has(role as Role)?{authorization:'Bearer '+tokens.get(role as Role)}:{})},body:JSON.stringify(request)}),rawBytes=await responseBytes(response)
   await append('post_outcome',{name,route,role,expected,status:response.status,responseSha256:hash(rawBytes),byteLength:rawBytes.length});check(response.status===expected)
   if(expected!==201)return undefined
-  const decoded=await decodeOutcome(route,parseM78Json(new TextDecoder('utf8',{fatal:true}).decode(rawBytes),10_000_000));const value=decoded.version??decoded,identity=Object.fromEntries(['id','companyId','streamId','inventoryId','worksheetId','rosterId','versionId','versionSha256','decisionSha256','reportSha256'].filter(k=>typeof value[k]==='string').map(k=>[k,value[k]]));await append('post_verified',{name,responseSha256:hash(rawBytes),verifiedIdentity:identity});return decoded
+  const decoded=await decodeOutcome(route,parseM78Json(new TextDecoder('utf8',{fatal:true}).decode(rawBytes),10_000_000));const identity=m78VerifiedIdentity(decoded);await append('post_verified',{name,responseSha256:hash(rawBytes),verifiedIdentity:identity});return decoded
  }
  const preserveBytes=(before:any,after:any)=>{for(const family of Object.keys(before))for(const[key,value]of Object.entries(before[family]))check(same(after[family]?.[key],value))}
  const verifyFugitiveReport=async(raw:any)=>{const r=await decodeFugitiveReport(raw,company),base=root+'/'+(r.family==='source'?'fugitive-sources':'fugitive-population')+'/'+r.streamId;check(same(r,await decodeFugitiveReport(await get(base+'/reports/'+r.id),company)));const s=parseM78Json(r.snapshotJson,10_000_000)as any;for(const v of [s.version,...(s.proof?.workpaperVersions??[])]){const exact=await decodeFugitiveVersion(await get(root+'/'+(v.family==='source'?'fugitive-sources':'fugitive-population')+'/'+v.streamId+'/versions/'+v.id),company);check(same(core(exact),core(v))&&(!v.review||same(exact.review,v.review)))}return r}

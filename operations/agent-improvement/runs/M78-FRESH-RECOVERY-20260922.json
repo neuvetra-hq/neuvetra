@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "M78-FRESH-RECOVERY-20260922",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-FRESH-RECOVERY-20260922-CANDIDATE1.json",
+      "sha256": "9d7fbd4c8bef13d35c65c7299b301770e493335d24f95cae97372bcf385f77b0"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ACTUAL-FRESH20-RECOVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-fresh-20260922-recovery-review.md",
+        "evaluations/research-qa/m78-fresh-20260922-recovery.json"
+      ],
+      "reason": "113 tables377 entries exact and42GET18downloads across8families; explicit27 defaults exclusion, zero application mutations."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-fresh-recovery-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-FRESH-RECOVERY-20260922-CANDIDATE1.json",
+        "sha256": "9d7fbd4c8bef13d35c65c7299b301770e493335d24f95cae97372bcf385f77b0"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-fresh-20260922-recovery-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-fresh-20260922-recovery-probe.ts",
+      "sha256": "8afeb3a12d4495f67a39c142cda3dba2546761e98bc33521e8387e9b0858103c"
+    },
+    {
+      "path": "evaluations/research-qa/m78-fresh-20260922-recovery-review.md",
+      "sha256": "a7da3fe0bd0c2b10f24e45eeaae8d66f39f6eb66438ce0fe188b6c7c394efb47"
+    },
+    {
+      "path": "evaluations/research-qa/m78-fresh-20260922-recovery.json",
+      "sha256": "b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180"
+    }
+  ],
+  "assignment": {
+    "parent_outcome": "Current actual backup recovery before M78 hosted gate",
+    "allowed": "Fresh local read-only probe and own artifacts",
+    "excluded": "host/decrypt/Git/writes/schema21",
+    "lessons": [
+      "L02",
+      "L04"
+    ]
+  }
+}

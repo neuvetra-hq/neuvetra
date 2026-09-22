@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "M78-FORWARD-REVALIDATION-20260922",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-FORWARD-REVALIDATION-20260922-CANDIDATE1.json",
+      "sha256": "851ad7902a45d4c08451c6e36b8fe0132a9c1b18c17f005fe7d935df34c1be5d"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CURRENT-FORWARD",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-forward-20260922-review.md",
+        "evaluations/research-qa/m78-forward-20260922-revalidation.json"
+      ],
+      "reason": "121 tables649 entries;26GET15 exactdownloads; historical operation dates preserved, no writes."
+    },
+    {
+      "id": "PREPARATION-PORTABILITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-forward-20260922-review.md",
+        "operations/agent-improvement/snapshots/M78-FORWARD-REVALIDATION-20260922-CANDIDATE1.json"
+      ],
+      "reason": "Current115 pins unchanged; exact historical fixture allowlist repair4tests269 assertions."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-resume-source-forward-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-FORWARD-REVALIDATION-20260922-CANDIDATE1.json",
+        "sha256": "851ad7902a45d4c08451c6e36b8fe0132a9c1b18c17f005fe7d935df34c1be5d"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-forward-20260922-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-forward-20260922-revalidation.ts",
+      "sha256": "8bba1588919c58c23342202db745eee898106b355a7c330b319fe4ba57138dd8"
+    },
+    {
+      "path": "evaluations/research-qa/m78-forward-20260922-revalidation.json",
+      "sha256": "faab1a02f73fd3ec1d69f84b8f315d2b159578584216560b01a5352ab8ead377"
+    },
+    {
+      "path": "evaluations/research-qa/m78-forward-20260922-review.md",
+      "sha256": "6e89482909664b456a3536b5aa544ff3eed171cc635c77b757c5fec776d423f4"
+    },
+    {
+      "path": "evaluations/research-qa/m78-application-transfer-independent.test.ts",
+      "sha256": "35e9b0da84501d0f78157b38b40cde8f3dce9cd4f990ace76ecc64fc3283a151"
+    }
+  ]
+}

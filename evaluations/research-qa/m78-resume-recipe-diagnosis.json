@@ -1,0 +1,72 @@
+{
+  "status": "m78_independent_partial_recipe_diagnosed",
+  "createdAt": "2026-09-22T15:51:38.471Z",
+  "reviewerId": "/root/resume_recovery",
+  "database": "m78_ops_recipe_20260922",
+  "journalSha256": "1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943",
+  "events": 10,
+  "postIntents": 3,
+  "successfulOutcomes": 3,
+  "verifiedOutcomes": 2,
+  "terminalFailed": true,
+  "retryAllowed": false,
+  "corporateVersion": 9,
+  "correctGetStatus": 200,
+  "incorrectGetStatus": 404,
+  "finding": "RCP-F01 runner treats flattened version number as wrapped version object, constructs versions/undefined after committed corporate9",
+  "allOldRowsRetained": true,
+  "allowedOldHeadFields": [
+    "version_id",
+    "revision"
+  ],
+  "reviewNoMutationVerified": true,
+  "currentRowsSha256": "577fc4171da3d8a25515506d26b69d8345c3e48ba8c4b3e6d166e64dbc7319ec",
+  "changes": [
+    {
+      "table": "corporate_inventory_audit",
+      "before": 13,
+      "after": 14
+    },
+    {
+      "table": "corporate_inventory_heads",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "table": "corporate_inventory_requests",
+      "before": 13,
+      "after": 14
+    },
+    {
+      "table": "corporate_inventory_versions",
+      "before": 8,
+      "after": 9
+    },
+    {
+      "table": "scope1_audit",
+      "before": 0,
+      "after": 2
+    },
+    {
+      "table": "scope1_heads",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "table": "scope1_reports",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "table": "scope1_requests",
+      "before": 0,
+      "after": 2
+    },
+    {
+      "table": "scope1_versions",
+      "before": 0,
+      "after": 1
+    }
+  ],
+  "hostedCalls": false
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-22T15:45:47.226644+00:00",
+  "updated_at": "2026-09-22T16:11:14.898704+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -2891,22 +2891,12 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "resumed_local_recovery_and_repair_publication",
+    "status": "full_local_recipe_passed_final_release_checks",
     "active_assignments": [
       {
-        "id": "M78-RESUME-RECOVERY-01",
-        "executor": "/root/resume_recovery",
-        "scope": "Read-only recovered clonec eight-family semantic verification"
-      },
-      {
-        "id": "M78-ROOT-INTEGRATION",
+        "id": "M78-ROOT-RELEASE",
         "executor": "/root",
-        "scope": "Repair publication, separate exact recipe rehearsal, fresh hosted gates"
-      },
-      {
-        "id": "M78-RESUME-RECIPE-FIX-01",
-        "executor": "/root/resume_recipe",
-        "scope": "Read-only diagnosis and bounded runner repair; oldclone/journal frozen"
+        "scope": "Final publication and six checks; same-reviewer code gate, authorized staging upgrade and lifecycle"
       }
     ],
     "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
@@ -2962,7 +2952,7 @@
     },
     "recovery": {
       "evidence": "evaluations/research-qa/m78-recovery-root-acceptance.md",
-      "status": "actual_fresh_encrypted_restore_passed_independent_semantic_review_pending",
+      "status": "fresh_backup_recovery_and_preserved_forward_revalidation_accepted",
       "actual_encrypted_hosted_backup_verified": true,
       "archive_sha256": "7460b387b521644c16d4553fc1db1f176335766a05fcd4ac947443d77a65f145",
       "failed_clone_retained": "m78_ops_actual20_20260917",
@@ -2971,17 +2961,19 @@
       "open_finding": "ACT-R01 source repair independently accepted; new restore explicitly excludes27 unrelated defaults while preserving fullsource inventory; actual semantic review pending",
       "actual_successful_restore_database": "m78_ops_actual20_20260917c",
       "actual_restore_receipt_sha256": "ab8c7cae9ad5d5b767f88d5893fe0d4c8fa30be7d5c702309416b33df3f07c8a",
-      "historical_archive_not_fresh_hosted_gate": true
+      "historical_archive_not_fresh_hosted_gate": true,
+      "fresh_backup_archive_sha256": "d92decbd58838bb77c211399a90c2516a3e54f199508cb70ce05b4014c918ebe",
+      "fresh_recovery_receipt_sha256": "b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180"
     },
     "publication": {
-      "commit": "b37b899a294ce8f1d088adf76c5070d3f3a4af50",
+      "commit": "970a9b70cf971ec0773253cec9a8676eb300aeba",
       "required_checks_passed": 5,
       "required_checks_total": 6,
-      "remaining": "Publish locally accepted repair package; rerun all six checks",
+      "remaining": "Publish RCP-F01 source fix and final historical fixture portability fix; six checks pending",
       "observed_at": "2026-09-22T15:42:28.434616+00:00"
     },
     "exact_recipe_rehearsal": {
-      "status": "failed_after_three_successful_local_posts",
+      "status": "historical_failed_run_preserved",
       "database": "m78_ops_recipe_20260922",
       "journal_sha256": "1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943",
       "attempted_posts": 3,
@@ -2989,7 +2981,20 @@
       "verified_outcomes": 2,
       "no_retry": true,
       "suspected_cause": "Runner unwraps flattened numeric version as envelope; independent readonly diagnosis inprogress",
-      "hosted_posts": 0
+      "hosted_posts": 0,
+      "preserved_failed_run": true
+    },
+    "successful_recipe_rehearsal": {
+      "status": "independently_accepted",
+      "database": "m78_ops_recipe_20260922b",
+      "journal_sha256": "8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0",
+      "events": 116,
+      "application_posts": 38,
+      "retained_old_rows": 568,
+      "table_count": 121,
+      "gross_kg_co2e_exact": "126850.17632025",
+      "reports": 5,
+      "independent_receipt_sha256": "2a8b4ee54065dae00e158274b28855c86361cda0958e3ed9c16023a74b7d7011"
     }
   }
 }

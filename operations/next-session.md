@@ -1,3 +1,9 @@
+# September22 full local recipe passed — final release review next
+
+Fresh currentbackup recipe clone m78_ops_recipe_20260922b completed all38POSTs,116events, five reports, exactgross126850.17632025 and retention568oldrows/121tables. Finaljournal SHA8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0 is immutable. Independent finalnative review pending; no rerun. Original3-writefailedclone andjournal remainpreserved. RCP-F01flat/nestedversion anddiscovery-review handling fixes independentlyaccepted in bothrunners.
+
+Fresh15:55UTC backupd92decbd and8family recoveryb940698 passed; forward revalidationfaab1a passed preserving originalSeptember17operationdates. Currentlive remains7d465485/schema20. PR5repair970a9b published; oneCIhistorical.tmp fixturecheck needed another exactallowlistfix, independentlyaccepted. Root publishes finalsource+evidence, verifies sixchecks, then freshsame-reviewer hostedcodeadmission/maintenance/upgrade/deploy/0-41-0lifecycle/browser. Scope1customerrelease remainsincomplete. Earliersections historical.
+
 # September22 exact local recipe stopped — preserve completed writes
 
 Fresh separate recipe clone m78_ops_recipe_20260922 restored and upgraded to21. Its exact recipe stopped after3successful201 outcomes, only2verified, during factual corporate successor verification. Frozen10event journal SHA1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943 must never be reset or retried. Independent diagnosis points to a local runner unwrapping a flattened numeric version as an envelope. Root publishes independently accepted recovery/test/source preparation with this native failure explicitly open; no M78hostdeployment orcompletion claim. resume_recipe authors bounded repair; resume_recovery independently reviews. Earlier status below is historical.
