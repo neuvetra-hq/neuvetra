@@ -1,0 +1,13 @@
+# Continuation3 recovery and private preparation admission
+
+September 22, 2026. Root resumed on the board's explicit instruction after the platform-update pause.
+
+Root accepts the bounded independent private preparation delivery by `/root/m78_cont3_review`: receipt `ef5de8f8ef567542a17c470802709b9abf505d2042414c02e7b356e9a732fda0`, snapshot `5fe83b8053140590d2f17f039324774f8b6eefd797461ad54cb90154df8c889a`. This covers the exact wrapper, disposition preflight, runtime observer and narrow CI additions. The independently executed 2 tests / 74 assertions, 28 mocked runtime cases and portable 2 tests / 108 assertions support source admission; they are not hosted execution evidence. Root authored the private implementation; the named reviewer performed independent review. This root delivery acceptance is not a second independent implementation review.
+
+Root accepts `/root/resume_release` actual cleanup disposition delivery: snapshot `7f12eb25e1cd33767e1228e788e2b502b271d1adfe85aa5b033d790e40a89157`, actual result `e7a3918caea6355510cc27c7d96c60d0472e93928d0f3df3c7287b3c8eedc55f`, canonical disposition `9ce4d682156c32771f8bb6fe8dfa249cf0060b39a8ce90c6ea3daf83c209342f`. The committed V3 operation and read-only postcheck resolve exactly four selected session rows and linked refresh rows. Application inventory and nonselected-session preservation are supported by reviewed transaction assertions and actual result evidence. Lost access-token usability and expiry remain unverified. V3 must never be repeated.
+
+The earlier V2 source acceptance missed the installed driver's timestamp serialization boundary. Preserve its failed hosted attempt, first review finding and subsequent native regression evidence. V3's independent native review reproduces the old zero-row result and corrected exact four-row result; it does not recover the suppressed original exception. No retrospective success is assigned to V2.
+
+The actual-disposition run's criterion now cites its existing public frozen snapshot instead of requiring a private receipt in CI. That snapshot already embeds the exact canonical receipt. This changes only an evidence locator; no receipt, snapshot, journal or source verdict is rewritten.
+
+Source gate `4ca66dd3d6bc645d69882ed9e94165f71e96eed29e866b83e4f8a8c94522b517` remains separately admitted by the existing root source acceptance. Publication, exact required checks, fresh runtime, successful read-only baseline, 37 remaining operations, actual restart, revisit, browser demonstration and independent integrated closure remain separate gates. Scope 1 customer release remains incomplete.

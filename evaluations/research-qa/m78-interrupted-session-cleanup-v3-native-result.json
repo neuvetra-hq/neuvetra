@@ -1,0 +1,12 @@
+{
+  "status": "m78_independent_v3_driver_regression_passed",
+  "oldDeleted": 0,
+  "fixedDeleted": 4,
+  "wrongSubjectDeleted": 0,
+  "nonselectedPreserved": true,
+  "savepointRollbackRestoredAll": true,
+  "fixtures": 4,
+  "temporaryOnly": true,
+  "hostedCalls": 0,
+  "authenticationWrites": 0
+}

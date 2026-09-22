@@ -1,0 +1,92 @@
+{
+  "status": "m78_platform_interruption_independently_reconciled_cleanup_unresolved",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T19:59:14.972Z",
+  "observationPath": ".superpowers/m78-platform-resume-observation.json",
+  "observationSha256": "54a63322bc1349f594f6399c430801245459c73df2c0466c53d8a481f6099e94",
+  "mainSha256": "3ce68c3fc87e37623326badb88d412f2db36daceacf43060c5849f287a358507",
+  "diagnosticsSha256": "8ae88cd344ab1a6376b91a63581c57c9c61c381eb57141e1b6a11ca7647eae08",
+  "mainEvents": 15,
+  "diagnosticEvents": 30,
+  "requestIntents": 15,
+  "headerOutcomes": 14,
+  "applicationPostIntents": 0,
+  "knownAuthSessions": 4,
+  "unresolvedKnownSessionClosures": 4,
+  "unmatchedAuthIntents": 0,
+  "legacySessionsObserved": 0,
+  "sessions": [
+    {
+      "role": "manager1",
+      "subjectMatchedExpectedRoster": true,
+      "subjectUuid": null,
+      "providerSessionId": null,
+      "subjectIdentitySource": "root must resolve admitted private roster; UUID not stored in these events",
+      "loginIntentAt": "2026-09-22T18:49:12.648Z",
+      "loginOutcomeAt": "2026-09-22T18:49:13.155Z",
+      "diagnosticOrdinal": 3,
+      "logoutConfirmed": false,
+      "currentProviderSessionState": "unobserved"
+    },
+    {
+      "role": "manager2",
+      "subjectMatchedExpectedRoster": true,
+      "subjectUuid": null,
+      "providerSessionId": null,
+      "subjectIdentitySource": "root must resolve admitted private roster; UUID not stored in these events",
+      "loginIntentAt": "2026-09-22T18:49:13.158Z",
+      "loginOutcomeAt": "2026-09-22T18:49:13.339Z",
+      "diagnosticOrdinal": 4,
+      "logoutConfirmed": false,
+      "currentProviderSessionState": "unobserved"
+    },
+    {
+      "role": "member",
+      "subjectMatchedExpectedRoster": true,
+      "subjectUuid": null,
+      "providerSessionId": null,
+      "subjectIdentitySource": "root must resolve admitted private roster; UUID not stored in these events",
+      "loginIntentAt": "2026-09-22T18:49:13.340Z",
+      "loginOutcomeAt": "2026-09-22T18:49:13.516Z",
+      "diagnosticOrdinal": 5,
+      "logoutConfirmed": false,
+      "currentProviderSessionState": "unobserved"
+    },
+    {
+      "role": "outsider",
+      "subjectMatchedExpectedRoster": true,
+      "subjectUuid": null,
+      "providerSessionId": null,
+      "subjectIdentitySource": "root must resolve admitted private roster; UUID not stored in these events",
+      "loginIntentAt": "2026-09-22T18:49:13.517Z",
+      "loginOutcomeAt": "2026-09-22T18:49:13.653Z",
+      "diagnosticOrdinal": 6,
+      "logoutConfirmed": false,
+      "currentProviderSessionState": "unobserved"
+    }
+  ],
+  "lastReadIntent": {
+    "sequence": 30,
+    "previousSha256": "714110ab0421c396a334c0d051fd66a6577b3a6f269764170ec6fd37c5affa8a",
+    "profile": "m78-continuation2-diagnostic-v1",
+    "mode": "baseline",
+    "kind": "request_intent",
+    "data": {
+      "ordinal": 15,
+      "method": "GET",
+      "route": "application:/workspace-api/workspace/:id/scope1-inventory"
+    },
+    "createdAt": "2026-09-22T18:49:57.528Z",
+    "sha256": "a7af0d5e04a71cc883b75aaf6921c6bb2de94049f00e3c21427a8736df2dd04e"
+  },
+  "cleanContinuationRefused": true,
+  "baselineCompleted": false,
+  "actualCleanupVerified": false,
+  "original72And24Preserved": true,
+  "causalClassification": "interrupted without terminal evidence; pause mechanism and platform interruption timing not independently resolved",
+  "rootReportedProcessAbsentAt": "2026-09-22T19:57:27Z",
+  "processAbsenceIndependentlyVerified": false,
+  "hostCalls": 0,
+  "authCalls": 0,
+  "databaseCalls": 0
+}

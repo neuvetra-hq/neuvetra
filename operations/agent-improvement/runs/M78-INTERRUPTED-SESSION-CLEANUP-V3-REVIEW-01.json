@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "M78-INTERRUPTED-SESSION-CLEANUP-V3-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "132aa49678d589a01d5cab206c68115fcf8cf7ce4f4086a84c8b6f8bfdaec22f",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-CLEANUP-V3-REVIEW-01-CANDIDATE1.json",
+      "sha256": "0ee778325a6ea6eeda8250f556e9d2612ddfaec6cb8cd134fc364b3cf7b47e6b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "REAL-DRIVER-V3-GATE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-interrupted-session-cleanup-v3-source-review.md",
+        "evaluations/research-qa/m78-interrupted-session-cleanup-v3-source-result.json",
+        "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-CLEANUP-V3-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "Actualdriver native4fixtures old0/fixed4/wrongsubject0/nonselectedexact/rollbackall; exactV3source reviewed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-interrupted-session-cleanup-v3-source-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "M78-SESSION-CLEANUP-DIAGNOSTIC-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "b65e6480bea344b6fb861af5aafa537e9e51c76d7879cceb364c1a49b728b89d",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-SESSION-CLEANUP-DIAGNOSTIC-REVIEW-01-CANDIDATE1.json",
+      "sha256": "6d9cfbee877c24730521384bdc1985967cb7b87b9eff0008983db488e0d2051d"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "READONLY-SAFE-DIAGNOSTIC",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-interrupted-session-cleanup-diagnostic-review.md",
+        "evaluations/research-qa/m78-interrupted-session-cleanup-diagnostic-source-result.json",
+        "operations/agent-improvement/snapshots/M78-SESSION-CLEANUP-DIAGNOSTIC-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "Exactsource8SELECT/staticboundarychecks; noactualdiagnostic/cleanupclaim."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-interrupted-session-cleanup-diagnostic-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

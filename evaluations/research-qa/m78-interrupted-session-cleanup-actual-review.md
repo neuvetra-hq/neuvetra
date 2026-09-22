@@ -1,0 +1,21 @@
+# Actual interrupted-session cleanup disposition
+
+M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01. Independent reviewer /root/resume_release; root authored and executed cleanup/observers. September22,2026. Verdict: four selected session rows and their linked refresh rows resolved by exact-session cleanup; bounded synthetic continuation may be admitted separately. Lost access-token usability/expiry remains unverified.
+
+## Exact observed evidence
+
+Verified original4570 metadata and V3 resultf787a7db83183e0782199dd6b7a1edce6297ceda6384c9c3731c37c46810bb35. Selected role/id/user/created/updated projection exactly matches original four candidates, and returned deleted IDs match those four. Result declares serializable identity, commitReturned:true, four removals, selected linked rows absent, nonselected session metadata/linked counts preserved,0 applicationwrites and application inventory preserved. Its full application inventory digest090deb402ccc4a0f1ed8a46add160a509cd9691a1a7f38892e799152e6988915 also equals earlier read-only diagnosticd983.
+
+Independently accepted post-success observer517215ad and wrapperfa2fdce by exact hash and filename/path/hash-only diff from accepted original readonly observer. Root executed once. Actual postreceipt86a7eab8e87a443c7efa60af449f2eba2e14d057d1937a84868ac52fdeb4f1cd is later than cleanup, read-only and has exactly the same four role/user mappings, now each sessions:[] and refreshCounts:[]. No reviewer host/auth/database calls were used.
+
+Fresh observation directly confirms absence of sessions for these four users. Its refresh query joins remaining sessions; independent acceptance of linked-row absence also relies on the reviewed V3 explicit global linked-count postchecks, actual commit receipt and actual enforced cascade constraints. Nonselected and application preservation are established by those source-reviewed in-transaction assertions and committed result, not an invented independent full global after-snapshot. Session resolution does not imply JWT revocation/expiry.
+
+Original15/30 interruption prefixes and earlier24/72journals remain byte-exact. No logout or terminal events were fabricated. The failed V2 attempt and its precision/driver findings remain preserved. V3 must never be repeated.
+
+## Disposition scope
+
+knownSessions4/resolvedSessions4/unresolvedSessions0 applies ONLY to session_rows_and_linked_refresh_rows. actualCleanupCommitted, refreshDispositionVerified and nonselectedSessionsPreserved are supported as above. tokenUsability:not_verified and expiryVerified:false remain mandatory. No access/refresh strings or exp claims were retained; no proof of old JWT invalidity is claimed. Strong but inferential original session attribution was previously documented; no token session_id proof is invented now.
+
+The canonical private receipt .superpowers/m78-continuation3-cleanup-disposition.json binds actual cleanup result, post-success receipt, accepted V3 source gate and this independent review plus original observation/diagnostic evidence. syntheticContinuationApproved:true permits the separately source-reviewed fresh synthetic baseline admission; it does not certify the baseline,37writes,restart/revisit,customer release or complete Scope1. Root owns fresh runtime/CI/source checks and next execution.
+
+Own review/result/disposition/run/snapshot only. Requested inherited gpt-6-astra/high; actual settings unavailable.

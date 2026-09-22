@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "M78-INTERRUPTED-SESSION-POSTOBSERVER-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "68bd9339faeeea69ebaa0774a5649515b16a4914600eff6a1355764d5b4c0ec7",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-POSTOBSERVER-01-CANDIDATE1.json",
+      "sha256": "d49da3336f24ecf5fa583397e38cc452d33548a98fa45a4b8a9ff1f50ab44aed"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "READONLY-DIFF-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-interrupted-session-cleanup-postobserver-review.md",
+        "evaluations/research-qa/m78-interrupted-session-cleanup-postobserver-result.json",
+        "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-POSTOBSERVER-01-CANDIDATE1.json"
+      ],
+      "reason": "Exact hashes and filename/path/hash-only diff; read-onlydiagnosticplan without failurecauseclaim."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-interrupted-session-cleanup-postobserver-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

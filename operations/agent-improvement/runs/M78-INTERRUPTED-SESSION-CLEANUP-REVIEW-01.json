@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "M78-INTERRUPTED-SESSION-CLEANUP-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "5cc4d63da1211c63b944855b7f73dab1f7c461bdf7314351e682870d06bb9b43",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-CLEANUP-REVIEW-01-CANDIDATE1.json",
+      "sha256": "033c7bd01a2baddb78db7b1c1cc54aaec09af382ad52fd84db801eda03b04e73"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "METADATA-DISPOSITION-STRATEGY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-interrupted-session-cleanup-review.md",
+        "evaluations/research-qa/m78-interrupted-session-cleanup-metadata-result.json",
+        "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-CLEANUP-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "4570snapshot verified4uniquealignedsessions; guardedstrategy andexplicitunverifiedJWTlimitation; noactualcleanupclaim."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-interrupted-session-cleanup-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

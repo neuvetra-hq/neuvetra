@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "id": "M78-PLATFORM-INTERRUPTION-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "cb6c60553f0dbd38bac7bd65b921f984aab11d41716954175abdb6e5c5e54775",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PLATFORM-INTERRUPTION-REVIEW-01-CANDIDATE1.json",
+      "sha256": "ec4fa75eed1db9210a68b219bb815675a1f7952dd783fa65bb17b0b9b3feefd5"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "INTERRUPTION-AND-BOUNDED-DESIGN",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-platform-interruption-review.md",
+        "operations/agent-improvement/snapshots/M78-PLATFORM-INTERRUPTION-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "Exact15/30chains,4knownunclosed sessions,original72/24preserved; read-only metadataSQL and separatecleanup gates, no actualcleanupclaim."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-platform-interruption-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

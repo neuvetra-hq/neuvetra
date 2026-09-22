@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "M78-INTERRUPTED-SESSION-CLEANUP-SOURCE-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "0dc0c5d0e778c43947918c7bedc4051024ca9b17d315fdd655a3bf069f1870c1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-CLEANUP-SOURCE-01-CANDIDATE2.json",
+      "sha256": "3f5db9253cd5504403935107ca729e2a65b17b6d2ade1349e313e6d70dcac205"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "V2-EXACT-SOURCE-TRANSACTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-interrupted-session-cleanup-source-review.md",
+        "evaluations/research-qa/m78-interrupted-session-cleanup-source-result.json",
+        "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-CLEANUP-SOURCE-01-CANDIDATE2.json"
+      ],
+      "reason": "CLEAN-TIME-01 repaired;5mocktests90assertions; noactualcleanup."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-interrupted-session-cleanup-source-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Preserved escaped review defect: mocked V2 timestamp test missed postgres3.4.9 inferred timestamptz parameter serialization. Actual V2 failed without confirmed removal; V3 independent native regression and actual disposition are separate evidence."
+  ]
+}

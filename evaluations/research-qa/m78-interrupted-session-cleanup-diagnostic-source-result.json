@@ -1,0 +1,17 @@
+{
+  "status": "m78_session_cleanup_diagnostic_source_passed",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T20:22:47.926Z",
+  "sourceSha256": "3d5516cf574b93a3989b3e78f41f77ab0ad21f969443237f4bd81578182152b4",
+  "wrapperSha256": "f10507a4497dc10051af8c35a699e9b5c9d20c88ff3ba91c010272622057f868",
+  "explicitSelectSites": 8,
+  "admission": "read_only_diagnosis",
+  "hostCalls": 0,
+  "authCalls": 0,
+  "databaseCalls": 0,
+  "cleanupClaimed": false,
+  "report": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-diagnostic-review.md",
+    "sha256": "f8cef35438cba7bb7bdda9186aa86e38e632e714166a6ff62653bd681852fa62"
+  }
+}

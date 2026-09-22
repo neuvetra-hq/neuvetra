@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "235a497b73234ca79ce5d075389cbfc7b42d3dc76ee574c8d793ab5e43feb68d",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01-CANDIDATE1.json",
+      "sha256": "7f12eb25e1cd33767e1228e788e2b502b271d1adfe85aa5b033d790e40a89157"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ACTUAL-SCOPED-DISPOSITION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-interrupted-session-cleanup-actual-review.md",
+        "evaluations/research-qa/m78-interrupted-session-cleanup-actual-result.json",
+        "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01-CANDIDATE1.json"
+      ],
+      "reason": "Exact4committedremovals andpostsessionsabsent; app/nonselectedguardsevidence; JWTnotverified."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation3-root-recovery-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01-CANDIDATE1.json",
+        "sha256": "7f12eb25e1cd33767e1228e788e2b502b271d1adfe85aa5b033d790e40a89157"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-interrupted-session-cleanup-actual-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Root accepted the bounded independent review delivery after board resume; hosted continuation is not accepted by this record."
+  ]
+}

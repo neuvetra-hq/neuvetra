@@ -273,6 +273,10 @@ operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDAT
 operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE2.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE3.json -text whitespace=cr-at-eol
-operations/board-report.md -text whitespace=cr-at-eol
-operations/next-session.md -text whitespace=cr-at-eol
-operations/status.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation3-independent-runtime-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-root-source-acceptance.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION3-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION3-PRIVATE-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-PLATFORM-CONTINUATION-PREP-01.json -text whitespace=cr-at-eol
