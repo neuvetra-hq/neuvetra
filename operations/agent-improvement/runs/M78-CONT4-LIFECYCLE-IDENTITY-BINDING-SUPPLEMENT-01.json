@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-LIFECYCLE-IDENTITY-BINDING-SUPPLEMENT-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-IDENTITY-BINDING-SUPPLEMENT-01-CANDIDATE1.json",
+      "sha256": "7fa04c8f1261e522f58c101a538e286604c656679ec41941b7e707c534aaa8ef"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-IDENTITY-BINDING-SUPPLEMENT-01-CANDIDATE2.json",
+      "sha256": "11483e76bbcfcb94c6e52d3b7997670f5431b9d92ee768460f4751ed220ba6c8"
+    }
+  ],
+  "source_artifacts": [
+    "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE3.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+    "evaluations/research-qa/m78-continuation4-lifecycle-independent-review.ts",
+    "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE4.json"
+  ],
+  "criteria": [
+    {
+      "id": "SWAPPED-IDENTITY-CHALLENGE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-result.json",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-supplement.test.ts",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json"
+      ],
+      "reason": "Candidate3 accepts a fully rehashed journal after two valid natural-gas rebind identities are exchanged between different named operations while uniqueness and final-graph membership remain intact. Resolved in candidate4: the same mutation is rejected at operation result binding4; original failed reproduction and first-review failure are retained."
+    },
+    {
+      "id": "CANDIDATE4-EXACT-BINDING-REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair.test.ts"
+      ],
+      "reason": "Candidate4 binds all37 names and routes to identities derived from the typed accepted baseline/current records and rejects the unchanged swapped-version mutation at operation result binding4. Combined15 tests and869 assertions plus strict TypeScript pass."
+    },
+    {
+      "id": "BOUNDED-REPRODUCTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-supplement.md"
+      ],
+      "reason": "The complete evaluator was invoked offline against one local fixture; one test with six assertions and strict targeted TypeScript passed without network, credentials, database, hosted calls or author-file changes."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-exercise-root-admission.md",
+      "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-IDENTITY-BINDING-SUPPLEMENT-01-CANDIDATE1.json",
+        "sha256": "7fa04c8f1261e522f58c101a538e286604c656679ec41941b7e707c534aaa8ef"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-IDENTITY-BINDING-SUPPLEMENT-01-CANDIDATE2.json",
+        "sha256": "11483e76bbcfcb94c6e52d3b7997670f5431b9d92ee768460f4751ed220ba6c8"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-supplement.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

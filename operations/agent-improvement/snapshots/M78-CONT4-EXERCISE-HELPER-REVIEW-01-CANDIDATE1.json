@@ -1,0 +1,35 @@
+{
+  "task_id": "M78-CONT4-EXERCISE-HELPER-REVIEW-01",
+  "status": "candidate1_complete_pending_root_acceptance",
+  "sourcePins": [
+    {
+      "path": ".superpowers/m78-continuation4-finalize-exercise-gate.py",
+      "sha256": "cd496234137851eea7e32c6dbef62d23f4e3281181e7b739f5d17badbc491b09"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-evaluate-exercise.ts",
+      "sha256": "59ddb7aa6a076eeb58158e08c5b439bc4b73c1c66cd439510f6c12eab9c3f3cc"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json",
+      "sha256": "206130bed4adcad7fc6608d9d98fbb3f4c94d92a960abdfb8a995d816e50a7f3"
+    }
+  ],
+  "files": [
+    {
+      "path": "evaluations/research-qa/m78-continuation4-exercise-helper-review.json",
+      "sha256": "10f37fe53338a50144ea47c3ab724e970b3c9b1b61b06fbad976ceac6bc7236e",
+      "text": "{\n  \"status\": \"m78_continuation4_exercise_helpers_review_passed\",\n  \"reviewerId\": \"/root/m78_transport_probe\",\n  \"scope\": \"source-only review of the unexecuted exercise gate finalizer and offline exercise evaluator entry\",\n  \"files\": [\n    {\n      \"path\": \".superpowers/m78-continuation4-finalize-exercise-gate.py\",\n      \"sha256\": \"cd496234137851eea7e32c6dbef62d23f4e3281181e7b739f5d17badbc491b09\"\n    },\n    {\n      \"path\": \".superpowers/m78-continuation4-evaluate-exercise.ts\",\n      \"sha256\": \"59ddb7aa6a076eeb58158e08c5b439bc4b73c1c66cd439510f6c12eab9c3f3cc\"\n    }\n  ],\n  \"bindings\": {\n    \"candidate4SnapshotSha256\": \"440fa15695a713a41999619624e9f2c76879c74fed56758255a93d441f77f89a\",\n    \"candidate4ReviewSha256\": \"206130bed4adcad7fc6608d9d98fbb3f4c94d92a960abdfb8a995d816e50a7f3\",\n    \"baselineGateSha256\": \"34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5\",\n    \"baselineJournalSha256\": \"ef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5\",\n    \"baselineDiagnosticsSha256\": \"b98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40\",\n    \"sourcePinCount\": 173,\n    \"requiredCiChecks\": 6\n  },\n  \"checks\": {\n    \"optimizedPythonForbidden\": true,\n    \"freshRuntimeMaximumSeconds\": 900,\n    \"remoteAndLocalCommitEqualityRequired\": true,\n    \"candidate4AndOpenFindingClosureRequired\": true,\n    \"helperSelfPinsRequiredBeforeGateWrite\": true,\n    \"exerciseGateExclusiveCreation\": true,\n    \"exactExerciseGateRequiredByEvaluator\": true,\n    \"rawSourcePinsRehashedByEvaluator\": true,\n    \"exactExerciseOnlyResultRequired\": true,\n    \"exerciseResultExclusiveCreation\": true,\n    \"strictTypeScript\": \"passed\",\n    \"pythonSyntax\": \"passed\"\n  },\n  \"limitations\": {\n    \"helpersExecutedByQa\": false,\n    \"networkUsedByQa\": false,\n    \"credentialsUsedByQa\": false,\n    \"databaseUsedByQa\": false,\n    \"actualExerciseAccepted\": false,\n    \"fullLifecycleAccepted\": false\n  },\n  \"verdict\": \"The helpers preserve the immutable baseline and candidate4 bindings, require fresh publication/runtime evidence before the single exercise, and produce an exclusive exercise-only evaluation result. No material source-review finding remains open.\"\n}\n"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-exercise-helper-review.md",
+      "sha256": "d53766f33b17d8eb8eaa5177b26135897c41bd360ab012c3d881214e8a5ffc14",
+      "text": "# M78 continuation 4 exercise helper review\n\nThe unexecuted exercise gate finalizer and exercise evaluator entry pass source-only review at the exact hashes recorded in `m78-continuation4-exercise-helper-review.json`.\n\nThe finalizer starts from the immutable baseline gate and baseline journal/diagnostics, requires the exact candidate 4 lifecycle review with zero open findings, pins this helper review plus both helper files, rehashes all 173 sources at the published commit, requires six successful checks, a matching remote/local head and a runtime observation less than 15 minutes old, then creates the exercise gate exclusively. Optimized Python execution is refused.\n\nThe evaluator refuses without that exact exercise gate. It rehashes itself, the candidate 4 lifecycle evaluator and review, this helper review and all 173 raw source files. It evaluates the closed journal and diagnostics through the candidate 4 evaluator, requires the exact exercise-only status, 37 application writes and no restart, then writes the root exercise result exclusively with the gate pin.\n\nThe first evaluator draft did not bind the exercise gate and the next draft could write a full-lifecycle result at the exercise-result path. Both findings were repaired before this receipt. QA parsed/type-checked the final sources but did not execute either helper, access credentials, call a network or database, or accept an actual exercise/full lifecycle.\n"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-exercise-helper-review-freeze.ts",
+      "sha256": "7397f26fff55e3256ff041dd630d1505d7ada6f6ffc4cd771dba4e35e9a32036",
+      "text": "import { readFile } from \"node:fs/promises\";\n\nconst sha = (value: string | Uint8Array) =>\n  new Bun.CryptoHasher(\"sha256\").update(value).digest(\"hex\");\nconst read = (path: string) => readFile(path, \"utf8\");\n\nconst sourcePins = [\n  {\n    path: \".superpowers/m78-continuation4-finalize-exercise-gate.py\",\n    sha256: \"cd496234137851eea7e32c6dbef62d23f4e3281181e7b739f5d17badbc491b09\",\n  },\n  {\n    path: \".superpowers/m78-continuation4-evaluate-exercise.ts\",\n    sha256: \"59ddb7aa6a076eeb58158e08c5b439bc4b73c1c66cd439510f6c12eab9c3f3cc\",\n  },\n  {\n    path: \"evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json\",\n    sha256: \"206130bed4adcad7fc6608d9d98fbb3f4c94d92a960abdfb8a995d816e50a7f3\",\n  },\n];\nfor (const pin of sourcePins) {\n  if (sha(await readFile(pin.path)) !== pin.sha256) throw new Error(`changed source: ${pin.path}`);\n}\n\nconst reviewedPaths = [\n  \"evaluations/research-qa/m78-continuation4-exercise-helper-review.json\",\n  \"evaluations/research-qa/m78-continuation4-exercise-helper-review.md\",\n  \"evaluations/research-qa/m78-continuation4-exercise-helper-review-freeze.ts\",\n];\nconst files = await Promise.all(reviewedPaths.map(async (path) => {\n  const text = await read(path);\n  return { path, sha256: sha(text), text };\n}));\nconst snapshot = {\n  task_id: \"M78-CONT4-EXERCISE-HELPER-REVIEW-01\",\n  status: \"candidate1_complete_pending_root_acceptance\",\n  sourcePins,\n  files,\n};\nconst snapshotPath =\n  \"operations/agent-improvement/snapshots/M78-CONT4-EXERCISE-HELPER-REVIEW-01-CANDIDATE1.json\";\nawait Bun.write(snapshotPath, `${JSON.stringify(snapshot, null, 2)}\\n`);\nconsole.log(JSON.stringify({\n  review: { path: reviewedPaths[0], sha256: sha(await readFile(reviewedPaths[0]!)) },\n  snapshot: { path: snapshotPath, sha256: sha(await readFile(snapshotPath)) },\n}));\n"
+    }
+  ]
+}

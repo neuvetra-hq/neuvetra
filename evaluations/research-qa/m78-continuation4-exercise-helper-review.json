@@ -1,0 +1,47 @@
+{
+  "status": "m78_continuation4_exercise_helpers_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "scope": "source-only review of the unexecuted exercise gate finalizer and offline exercise evaluator entry",
+  "files": [
+    {
+      "path": ".superpowers/m78-continuation4-finalize-exercise-gate.py",
+      "sha256": "cd496234137851eea7e32c6dbef62d23f4e3281181e7b739f5d17badbc491b09"
+    },
+    {
+      "path": ".superpowers/m78-continuation4-evaluate-exercise.ts",
+      "sha256": "59ddb7aa6a076eeb58158e08c5b439bc4b73c1c66cd439510f6c12eab9c3f3cc"
+    }
+  ],
+  "bindings": {
+    "candidate4SnapshotSha256": "440fa15695a713a41999619624e9f2c76879c74fed56758255a93d441f77f89a",
+    "candidate4ReviewSha256": "206130bed4adcad7fc6608d9d98fbb3f4c94d92a960abdfb8a995d816e50a7f3",
+    "baselineGateSha256": "34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5",
+    "baselineJournalSha256": "ef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5",
+    "baselineDiagnosticsSha256": "b98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40",
+    "sourcePinCount": 173,
+    "requiredCiChecks": 6
+  },
+  "checks": {
+    "optimizedPythonForbidden": true,
+    "freshRuntimeMaximumSeconds": 900,
+    "remoteAndLocalCommitEqualityRequired": true,
+    "candidate4AndOpenFindingClosureRequired": true,
+    "helperSelfPinsRequiredBeforeGateWrite": true,
+    "exerciseGateExclusiveCreation": true,
+    "exactExerciseGateRequiredByEvaluator": true,
+    "rawSourcePinsRehashedByEvaluator": true,
+    "exactExerciseOnlyResultRequired": true,
+    "exerciseResultExclusiveCreation": true,
+    "strictTypeScript": "passed",
+    "pythonSyntax": "passed"
+  },
+  "limitations": {
+    "helpersExecutedByQa": false,
+    "networkUsedByQa": false,
+    "credentialsUsedByQa": false,
+    "databaseUsedByQa": false,
+    "actualExerciseAccepted": false,
+    "fullLifecycleAccepted": false
+  },
+  "verdict": "The helpers preserve the immutable baseline and candidate4 bindings, require fresh publication/runtime evidence before the single exercise, and produce an exclusive exercise-only evaluation result. No material source-review finding remains open."
+}

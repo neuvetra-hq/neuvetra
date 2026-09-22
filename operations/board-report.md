@@ -1,3 +1,41 @@
+# September 22: exercise preparation accepted; publish and check
+
+Root accepted exact candidate4 lifecycle snapshot440fa156 and independent repairreceipt206130be (15tests/869assertions, strictTS), closing the identity-swap finding. Historical candidate3 acceptance and later defect remain preserved. Root also accepted independent source-only exercisehelper review10f37fe5, finalizercd496234 and evaluatorentry59ddb7aa. These helpers have not executed. Capture candidate1 is separately frozen pending independentQA; it is not needed to run the exercise.
+
+The exact continuation4 baseline remains accepted: officialresult57fc10f6 plusactualQA6937df29;285requests, zeroerrors/writes, eightclosedtest sessions, unknown0. Preserve main42/ef4d8eba anddiagnostics572/b98846b6 plusimmutablebaselinegate34a1b7a8. Originalwrapper3cef/173sources/innergate unchanged. No37-operationexercise, restart or revisit has run. Publishedhead currentlya74cffa5; samePR5 publication andall sixchecks are next, thenfreshruntime andoneexercise. Autodeploypaused;live59c/schema21/deployment0f2e99/imagefe46.
+
+Root owns publication/provider/privatehelpers. /root/m78_transport_probe independentlyreviews capture and lateractualevidence. /root/m78_transport_continuation independentlyreviews root restart-onlyhelpers (not its owncapture). BrowserIAB2/tab1 showsNeuvetra sign-in; user was asked tosignin whilecheckscontinue. No UI applicationwrite. Never repeatbaseline/SQL21/originalsave/Terrascopefix/cleanupV3 orfailedjournals. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: baseline accepted; operation binding repair before exercise
+
+The exact continuation4 baseline is accepted by root and separate actual QA (6937df29), with official result57fc10f6. It completed285requests, zeroerrors/applicationwrites, eighttest sessionsclosed andunknown0. Main42events/9186947bytes SHAef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5; diagnostics572events/243558bytes SHAb98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40. Preserve both prefixes and frozen baselinegate34a1b7a8. Never rerun baseline, originalsave, SQL21, Terrascopefix or cleanupV3.
+
+Lifecycle candidate3 received independent preparation receipt8abbabe9, but root challenged operation-to-result attribution. Separate QA confirmed swapping two valid natural-gas version identities still passes the evaluator. Aggregate state is unchanged; provenance checking is incomplete. Candidate3/QA receipt remain historical evidence; liveexercise admission is held for narrow candidate4 repair and independent supplemental review. Author /root/m78_transport_continuation owns repair; /root/m78_transport_probe owns independent challenge. Capture source is additional unfinished work and no capture/liveexercise has run.
+
+Publishedhead remainsa74cffa5 withsixchecks passed22:01:32UTC. Liveapp59c/schema21/deployment0f2e99/imagefe46 lastfresh22:01:54UTC, autodeploypaused. All173 sources andinnergate remain frozen. New root exercisegate finalizer/evaluation/restarthelpers are drafts, unexecuted, pendingreview. Next: accept candidate4, publish bounded evidence on samePR5, sixchecks, freshruntime, one37-operationexercise. Separate actualQA precedes one actualrestart, fresh read-onlyrevisit withreviewed passivecapture, browserdemo andclosure. Scope1customerrelease remains incomplete. Earliersections historical.
+
+# September 22: continuation 4 baseline closed successfully
+
+Root session32670 exited0. Baseline ended22:23:10UTC with285requests, all285headers, zeroerrors/applicationPOSTs, eighttest sessionsclosed andunknown0. Main42events/9186947bytes SHAef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5, head6190671c0758e414886c1c80b3aecfa748020a58f68890072c81335e84ef7a90. Diagnostics572events/243558bytes SHAb98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40, heada41a45097e0b13b315a03fc6c5287504a3f6e4b4880d31bf5edee2edc682e660. Preserve this exact baseline prefix; never rerun/reset it.
+
+Reviewed evaluator passed with result57fc10f6ee4dce55ced4060aa1d41cbd5a125eac3bd58d99bbad7c37ef1daddf. It verifies173source/ninehistoricalpins,328prior-download comparisons, retainedinitialinventory andallclosures. Additive closed-admission guard2f2e238e passed actual auth methods. QA reproduced an escaped offline evaluator gap (synthetic GETtoken accepted); original frozen evaluator remains unchanged, guard supplements it, and one escaped defect is recorded. Separate actual-baseline QA admission is pending.
+
+Publisheda74cffa59b18305e5eaf4dd4c65382c08bc8a151 hadall sixchecks passed22:01:32UTC. Baseline gate34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5 and its pinned CI/runtime/evaluator/rootadmission files are immutable. Live app59c/schema21/deployment0f2e99/imagefe46 wasfresh22:01:54UTC; refresh before exercise. Automaticdeployment remainspaused. All173core/sourcefiles remain frozen across phases; exerciseinnergate must equalbaselineinnergate.
+
+Lifecycle evaluator candidate1 was rejected. Candidate2 fixes diagnostics,history,recipe/identity checks andrequires an additional decoded revisit observation; full restartfreshness must be measured againstrevisit admission, notexerciseend (candidate3repair underway). Exercise-only has no remaining substantive finding reported, but exact finalreceipt ispending. Author /root/m78_transport_continuation now owns additional new revisitcapture source/tests that observe existing GETresponses without extrarequests or173corechanges; root will own anynewprivate revisitwrapper, and /root/m78_transport_probe independentlyreviews. No captureexecution exists.
+
+Next: final actualbaselineQA and lifecycle/exercise sourceadmission, bounded samePRpublication/sixchecks, freshruntime and originalwrapper3cef oneexercise37operations. Actualrestart, read-onlyrevisit withreviewed additivecapture, browserdemonstration andindependentclosure remain. Never repeat SQL21/originalsave/Terrascopefix/cleanupV3 or anyfailedjournal. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: continuation 4 baseline running once
+
+Published tooling commit a74cffa59b18305e5eaf4dd4c65382c08bc8a151 has all six checks passed at 2026-09-22T22:01:32.141329+00:00. The57 published files and173 source pins match reviewed bytes. Independent source/private resultd4131bf5 and baseline-evaluator review66fee7ea are accepted.
+
+Fresh runtime 2026-09-22T22:01:54.630066+00:00 confirms application59cda7/schema21/deployment0f2e99/imagefe46 unchanged and ready. Immutable gate .superpowers/m78-continuation4-baseline-gate.json SHA 34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5; current journey gate has identical bytes. Root launched the reviewed wrapper ONCE in exec session 32670. New4 journals are active. Do not reset/retry, change permissions, kill the process or overwrite pinned CI/runtime/gate files. For an explicit board pause, create .superpowers/m78-hosted-continuation4.stop and allow normal logout completion.
+
+Earlier failed3main24/0204a7e9 anddiag62/8b45e72d remain immutable; allfour sessionsclosed andzero applicationPOSTs. Never repeat cleanupV3, SQL21, the original inventory save or Terrascope security fix. Accepted cleanup9ce4d682 resolves selected session/refresh rows only; lost JWT usability/expiry remains unverified.
+
+Independent baseline acceptance is required after closure, before37 remaining operations. The separate lifecycle evaluator is under independent review; actual restart, revisit, browser demonstration and integrated closure remain. Automatic deployment remains paused. Scope1 customer release is incomplete. Earlier sections are historical.
+
 # September 22: continuation 4 preparation accepted; publication next
 
 Root accepted author candidate 3 (14dd03be) and independent source/private review d4131bf5, snapshot825e3772. All173 source pins and nine historical evidence pins match. The new transport disables pooling without retry or timeout changes. The composed independent test stopped after three logins and closed all three sessions, with zero application writes. Runtime helper28cases and private gates passed. The cause of the hosted timeout remains unproven.

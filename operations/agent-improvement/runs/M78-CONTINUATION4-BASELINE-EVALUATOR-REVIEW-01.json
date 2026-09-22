@@ -56,7 +56,8 @@
     "independent": true,
     "verdict": "pass",
     "evidence": [
-      "evaluations/research-qa/m78-continuation4-root-admission.md"
+      "evaluations/research-qa/m78-continuation4-root-admission.md",
+      "evaluations/research-qa/m78-continuation4-baseline-admission-supplement.md"
     ],
     "reviewed_artifacts": [
       {
@@ -70,7 +71,7 @@
     "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": null,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {

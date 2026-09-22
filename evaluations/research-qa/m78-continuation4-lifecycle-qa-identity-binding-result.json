@@ -1,0 +1,41 @@
+{
+  "status": "m78_continuation4_lifecycle_identity_binding_gap_confirmed",
+  "reviewerId": "/root/m78_transport_probe",
+  "reviewedCandidate": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE3.json",
+    "sha256": "51edfe895ed02eecdee165debe7fe0d242b0c07ff014b0e29c23bf4a9c3d18ae"
+  },
+  "preservedPriorQaReceipt": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+    "sha256": "24ffda388ca5a14eca996896ad09ce45c1c65b0043eeb3fade611defb2d52943"
+  },
+  "evaluator": {
+    "path": "evaluations/research-qa/m78-continuation4-lifecycle-independent-review.ts",
+    "sha256": "a90c14b4793c77ca5544d0cac7149da5fb36eb0c1d09779164b4c1bf6bbc128f"
+  },
+  "challenge": {
+    "firstOperation": "m78_rebind_natural_gas_625a3fd6-4218-426c-97fa-69c1fee862b4",
+    "secondOperation": "m78_rebind_natural_gas_76e4e7e0-f4c9-40bd-b133-21e534401cae",
+    "mutation": "swap complete verifiedIdentity objects while preserving names, routes, outcomes, response hashes, final state and diagnostics; rehash and rebind journal",
+    "distinctVerifiedIdentities": 37,
+    "bothSwappedIdentitiesPresentInCurrentGraph": true,
+    "actualEvaluatorResult": "m78_independent_continuation4_exercise_passed",
+    "gapConfirmed": true
+  },
+  "checks": {
+    "tests": 1,
+    "assertions": 6,
+    "failures": 0,
+    "strictTypeScript": "passed"
+  },
+  "impact": "operation-to-result provenance can be misattributed even when the final decoded state and complete identity set are valid",
+  "exerciseAdmissionHeld": true,
+  "requiredRepair": "bind exact operation name, intent route, family and parent identifier to the verified identity and correct typed current record; bind review identity to its corresponding rebind version",
+  "portableCiSelector": null,
+  "networkUsed": false,
+  "databaseUsed": false,
+  "credentialsUsed": false,
+  "hostedCalls": 0,
+  "authorFilesModified": false,
+  "officialJournalsModified": false
+}

@@ -289,3 +289,6 @@ evaluations/research-qa/m78-continuation3-baseline-review.test.ts -text whitespa
 evaluations/research-qa/m78-continuation4-independent-runtime-result.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-FAILURE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-supplement.test.ts -text whitespace=cr-at-eol

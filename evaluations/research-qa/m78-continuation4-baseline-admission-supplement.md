@@ -1,0 +1,7 @@
+# Continuation 4 baseline admission supplement
+
+The original baseline evaluator and its accepted snapshot remain unchanged. Later independent lifecycle testing found an escaped evidence-checking gap: its diagnostic validator accepts a synthetically rehashed token request whose method is GET. This is a gap in the offline checker, not evidence that the live authentication request used GET or that authentication was bypassed.
+
+Root added a separate guard to `.superpowers/m78-continuation4-closed-baseline-admission.py`, SHA-256 `2f2e238e63c780503335582cf5bd25729efb66590c323cc04dd7b7114aaa3fdc`. Before creating the exclusive closed admission, it requires every request intent to be either POST at the exact authentication token/logout routes, or GET at an application route. It also requires successful terminal records, zero application writes, no unknown sessions, closed sessions, and the fixed baseline gate. The pinned evaluator separately verifies hashes, pairing, statuses, counts, source/evidence bindings, runtime and body/history evidence.
+
+`/root/m78_transport_probe` reproduced the synthetic gap and reviewed this additive guard. The guard changes no active journal, frozen evaluator, wrapper, source pin, runtime, CI record or gate. Actual baseline acceptance remains pending its completed run and both checks. Preserve the original successful preparation review and record one subsequently discovered defect; do not erase the first result or silently edit the accepted evaluator.

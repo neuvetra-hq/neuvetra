@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-LIFECYCLE-INDEPENDENT-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "24ffda388ca5a14eca996896ad09ce45c1c65b0043eeb3fade611defb2d52943"
+    }
+  ],
+  "source_artifacts": [
+    "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE1.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE2.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE3.json",
+    ".superpowers/m78-hosted-continuation4.jsonl",
+    ".superpowers/m78-hosted-continuation4-diagnostics.jsonl",
+    ".superpowers/m78-continuation4-closed-baseline-admission.json",
+    ".superpowers/m78-continuation4-baseline-gate.json",
+    "evaluations/research-qa/m78-continuation4-baseline-independent-result.json"
+  ],
+  "criteria": [
+    {
+      "id": "EXERCISE-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-result.json",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.test.ts"
+      ],
+      "reason": "The complete evaluator requires exact baseline prefixes, decoded history and totals, all five reports, exact ordered37 recipe identities, retained artifacts, 16 session closures, continuous diagnostics and 0/37 application writes."
+    },
+    {
+      "id": "FULL-LIFECYCLE-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.md",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.test.ts"
+      ],
+      "reason": "Full evaluation additionally requires 24 session closures, strict restart chronology, restart freshness measured at revisit and a separately pinned independently decoded revisit observation."
+    },
+    {
+      "id": "MUTATION-CHALLENGE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.test.ts"
+      ],
+      "reason": "Rehashed journal/diagnostic prefix, status, auth method, recipe identity, retained-artifact, restart timing and revisit-state mutations are rejected. Combined14 tests and863 assertions pass."
+    },
+    {
+      "id": "ACTUAL-BASELINE-STRICT-AUTH",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-baseline-actual-result.json",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-baseline-auth.ts"
+      ],
+      "reason": "Exact immutable baseline diagnostics contain eight token and eight logout requests, all POST. The official result was not rerun; no exercise/full admission is inferred."
+    },
+    {
+      "id": "BOUNDED-OFFLINE-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.md"
+      ],
+      "reason": "QA used local fixtures only and no network, authentication, database, credentials, Git or official journal writes. The local QA test has no portable CI selector; the public author test is suitable for targeted CI."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-exercise-root-admission.md",
+      "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "24ffda388ca5a14eca996896ad09ce45c1c65b0043eeb3fade611defb2d52943"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}
