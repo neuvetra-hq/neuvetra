@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "M78-TRANSPORT-PROBE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-TRANSPORT-PROBE-01-CANDIDATE1.json",
+      "sha256": "57bbbb46c970e6324efbdd91098ddd9a805cd783e7109bb3a42955b7220a4853"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ACTUAL-DEFAULT-REUSE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-transport-probe-result.json",
+        "evaluations/research-qa/m78-transport-probe-report.md"
+      ],
+      "reason": "Three of three real loopback trials recorded request ordinals 1,2 on TCP connection ID 1 and a bounded second-request TimeoutError without response bytes."
+    },
+    {
+      "id": "ACTUAL-POOLING-OPTOUTS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-transport-probe-result.json",
+        "evaluations/research-qa/m78-transport-probe.test.ts"
+      ],
+      "reason": "keepalive:false and explicit Connection:close each recorded TCP IDs 1,2 and two HTTP 200 responses in all three actual-fetch trials; the direct boundary test passed 16 assertions."
+    },
+    {
+      "id": "BOUNDED-CLEANUP",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-transport-probe.ts",
+        "evaluations/research-qa/m78-transport-probe-result.json"
+      ],
+      "reason": "Every request used a 1,200 ms abort, response bodies were consumed, all nine listeners stopped, and no tracked sockets remained."
+    },
+    {
+      "id": "CAUSAL-DISCIPLINE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-transport-probe-report.md"
+      ],
+      "reason": "Report separates the induced local mechanism from the unresolved hosted timeout and recommends only separately reviewed no-retry preparation."
+    },
+    {
+      "id": "INDEPENDENT-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-transport-root-independent-review.md",
+        "evaluations/research-qa/m78-transport-independent-sockets-result.json"
+      ],
+      "reason": "Root independently reviewed exact source and tested a noncooperating peer plus healthy control; hosted cause remains unknown."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-transport-root-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-TRANSPORT-PROBE-01-CANDIDATE1.json",
+        "sha256": "57bbbb46c970e6324efbdd91098ddd9a805cd783e7109bb3a42955b7220a4853"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-transport-probe-report.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

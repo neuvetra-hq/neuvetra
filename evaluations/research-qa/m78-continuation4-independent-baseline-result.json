@@ -1,0 +1,70 @@
+{
+  "status": "m78_independent_continuation4_baseline_evaluator_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "reviewedAt": "2026-09-22",
+  "admission": "evaluator_source_only",
+  "evaluator": {
+    "path": "evaluations/research-qa/m78-continuation4-baseline-independent-review.ts",
+    "sha256": "c71d714244c5608ab0cb20112f4290de5bab018b67524c2fb039742bba0598a7"
+  },
+  "authorTests": {
+    "path": "evaluations/research-qa/m78-continuation4-baseline-review.test.ts",
+    "sha256": "886ed6a807ddcc9e18ee9fbd8665460a4d255c3b782376bf988c5338ce38c181"
+  },
+  "independentTests": {
+    "path": "evaluations/research-qa/m78-continuation4-independent-baseline.test.ts",
+    "sha256": "f33ddaf99d19e7891419c48f7280446d6b92dcff25901ad6e183329d9292dbdd"
+  },
+  "workflow": {
+    "path": ".github/workflows/verify.yml",
+    "sha256": "6154249fe6905e2dd68fa8a3b6cf587d5f1e5f005f2ac52a1daeb1b56427dbb5"
+  },
+  "checks": {
+    "combined": {
+      "tests": 8,
+      "assertions": 30,
+      "failures": 0
+    },
+    "author": {
+      "tests": 7,
+      "assertions": 28,
+      "failures": 0
+    },
+    "independent": {
+      "tests": 1,
+      "assertions": 2,
+      "failures": 0
+    },
+    "rootReportedTargetedTypeScript": "passed"
+  },
+  "rejects": {
+    "exactPriorFailedJournal": true,
+    "exactInterruptedJournal": true,
+    "changedTransportKeepalive": true,
+    "changedTransportRetries": true,
+    "rehashedTimeoutWithoutHeaders": true,
+    "rehashedMissingLogout": true,
+    "changedSourceOrEvidenceClosure": true,
+    "staleOrWrongRuntime": true
+  },
+  "requires": {
+    "sourcePins": 173,
+    "historicalEvidencePins": 9,
+    "applicationPostRequests": 0,
+    "unknownAuthSessions": 0,
+    "allCreatedAuthSessionsClosed": true,
+    "transport": {
+      "runtime": "bun-fetch",
+      "pooling": "disabled",
+      "keepalive": false,
+      "retries": 0
+    }
+  },
+  "hostedBaselineAccepted": false,
+  "hostedExerciseAccepted": false,
+  "fullLifecycleVerified": false,
+  "networkUsed": false,
+  "databaseUsed": false,
+  "credentialsOpened": false,
+  "officialJournalsWritten": false
+}

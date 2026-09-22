@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION4-BASELINE-EVALUATOR-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION4-BASELINE-EVALUATOR-REVIEW-01-CANDIDATE1.json",
+      "sha256": "3259748730394b32fe81f9fef965b8489e11cfbe6d3a6bfb5d55fc7bbe6204cb"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-continuation4-baseline-independent-review.ts",
+    "evaluations/research-qa/m78-continuation4-baseline-review.test.ts",
+    ".github/workflows/verify.yml"
+  ],
+  "criteria": [
+    {
+      "id": "OFFLINE-EXACT-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent-baseline-review.md",
+        "evaluations/research-qa/m78-continuation4-independent-baseline-result.json"
+      ],
+      "reason": "The evaluator requires exact closed journals, gate artifacts, runtime freshness/identity, 173 source pins, nine evidence pins, cleanup disposition, CI and prior-failure semantics without authenticating or calling a host/database."
+    },
+    {
+      "id": "TRANSPORT-AND-AUTH-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-baseline-independent-review.ts",
+        "evaluations/research-qa/m78-continuation4-baseline-review.test.ts"
+      ],
+      "reason": "The evaluator requires keepalive:false, zero retries, zero application POSTs, exact main and legacy session closure, no request errors, and zero unknown sessions."
+    },
+    {
+      "id": "INDEPENDENT-NEGATIVE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent-baseline.test.ts"
+      ],
+      "reason": "A new rehashed success-looking diagnostic is rejected when it contains the observed no-header timeout or hides one missing logout as a GET."
+    },
+    {
+      "id": "BOUNDED-RESULT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent-baseline-review.md"
+      ],
+      "reason": "The source verdict accepts only the evaluator; it emits no hosted result and expressly leaves baseline, hosted exercise and full lifecycle unaccepted."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-root-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION4-BASELINE-EVALUATOR-REVIEW-01-CANDIDATE1.json",
+        "sha256": "3259748730394b32fe81f9fef965b8489e11cfbe6d3a6bfb5d55fc7bbe6204cb"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation4-independent-baseline-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

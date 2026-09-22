@@ -1,0 +1,52 @@
+{
+  "status": "m78_independent_continuation3_baseline_failure_reconciled",
+  "reviewerId": "/root/resume_release",
+  "reviewedAt": "2026-09-22T21:03:19.292Z",
+  "journal": {
+    "path": ".superpowers/m78-hosted-continuation3.jsonl",
+    "sha256": "0204a7e93849b305bafc45b79232b3af588619fcb851752d2ef541869d584012",
+    "head": "7dc4b514e0dbcf0d29c857d146f6db709d9317fdfd0dc69a6be50c19acb1cbfa",
+    "events": 24
+  },
+  "diagnostics": {
+    "path": ".superpowers/m78-hosted-continuation3-diagnostics.jsonl",
+    "sha256": "8b45e72d193d9f3c2b6a03c63c75e61a8055223862f13b297c9b4d26725972c1",
+    "head": "0dc8e2b0b40fd10b183579a19748e117d6ec5d68c98a69d2fdfb6f4b25bb6f65",
+    "events": 62
+  },
+  "gate": {
+    "path": ".superpowers/m78-continuation3-journey-gate.json",
+    "sha256": "60250cc38cb8a7ec8a2bb1188ba5c41e6f3dd89a1d298f0a6874eeead05ce40f"
+  },
+  "toolingCommit": "c37aa357fd0984be726ee0719226b58e4bfc5d61",
+  "applicationCommit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
+  "schemaVersion": 21,
+  "sourcePinCount": 166,
+  "historicalEvidencePinCount": 6,
+  "interruptionDisposition": {
+    "path": ".superpowers/m78-continuation3-cleanup-disposition.json",
+    "sha256": "9ce4d682156c32771f8bb6fe8dfa249cf0060b39a8ce90c6ea3daf83c209342f"
+  },
+  "requests": 30,
+  "applicationPostRequests": 0,
+  "knownSessions": 4,
+  "logout204": 4,
+  "unknownAuthSessions": 0,
+  "allCreatedAuthSessionsClosed": true,
+  "legacySessionsCreated": 0,
+  "timeout": {
+    "ordinal": 26,
+    "method": "GET",
+    "route": "application:/workspace-api/workspace/:id/corporate-inventories/:id/versions/:id/coverage-export",
+    "elapsedMs": 30007,
+    "responseHeadersObserved": false
+  },
+  "completedAt": "2026-09-22T21:00:06.656Z",
+  "baselineAccepted": false,
+  "completeRetainedBodyVerification": false,
+  "successReviewerRejected": true,
+  "providerCause": "not_established",
+  "networkUsed": false,
+  "databaseUsed": false,
+  "originalsModified": false
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT3-ACTUAL-BASELINE-FAILURE-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "b2a4e6a6e0fe841ccafaec310a0884d05d354019158001d0671f13d36d805c2d",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-FAILURE-REVIEW-01-CANDIDATE1.json",
+      "sha256": "8ddf868c767466748d05881e3c7523dab9975bb4a2f022eb87140d28d528fcc3"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-FAILURE-RECONCILIATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation3-baseline-failure-result.json",
+        "evaluations/research-qa/m78-continuation3-baseline-failure-report.md"
+      ],
+      "reason": "Exact actual chain/gate/source/CI/disposition verification and strict TypeScript passed; baseline remains failed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation3-baseline-root-failure-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-FAILURE-REVIEW-01-CANDIDATE1.json",
+        "sha256": "8ddf868c767466748d05881e3c7523dab9975bb4a2f022eb87140d28d528fcc3"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation3-baseline-failure-report.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Requested fields record the registry critical security-review route. Existing reviewer context was reused without a fresh model override; actually inherited settings remain unknown. No observed model or cost inferred."
+  ]
+}

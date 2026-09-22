@@ -179,6 +179,12 @@ jobs:
         run: bun test evaluations/research-qa/m78-continuation2-independent.test.ts --test-name-pattern "union covers|failed diagnostic intent"
       - name: Independent continuation3 admission and graceful pause guards
         run: bun test evaluations/research-qa/m78-continuation3-independent.test.ts --test-name-pattern "admission challenges|diagnostic failure after login"
+      - name: Independent continuation4 transport and source guards
+        run: |
+          bun test evaluations/research-qa/m78-continuation4-independent.test.ts --test-name-pattern "^portable"
+          bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
+      - name: Continuation4 closed baseline evidence guards
+        run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper

@@ -1,0 +1,185 @@
+{
+  "status": "m78_independent_continuation4_runtime_source_passed",
+  "createdAt": "2026-09-22T21:20:07.387398+00:00",
+  "reviewerId": "/root/m78_transport_probe",
+  "helperSha256": "47f9cadd43320d333a37e5995be6dc72d9385c2b149a38c1529311f57bf5554f",
+  "predecessorSha256": "702fe3343ba67d3a43373ad0c106e66d770659430fef616d5697c212841a37da",
+  "nameOnlyDelta": true,
+  "renamedPathOccurrences": 3,
+  "caseCount": 28,
+  "positiveCases": 4,
+  "cases": [
+    {
+      "case": "valid_baseline",
+      "accepted": true,
+      "expectedAccepted": true,
+      "errorCategory": null
+    },
+    {
+      "case": "valid_exercise",
+      "accepted": true,
+      "expectedAccepted": true,
+      "errorCategory": null
+    },
+    {
+      "case": "valid_revisit_is_preflight_only",
+      "accepted": true,
+      "expectedAccepted": true,
+      "errorCategory": null
+    },
+    {
+      "case": "stale_collection",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "future_collection",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_raw_hash",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_deployment",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "StopIteration"
+    },
+    {
+      "case": "coordinated_wrong_deployment",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_status",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_commit",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "coordinated_wrong_commit",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_image",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "coordinated_wrong_image",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "other_live_SUCCESS",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "other_live_BUILDING",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "other_live_DEPLOYING",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "other_live_WAITING",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "old_terminal_deployments_allowed",
+      "accepted": true,
+      "expectedAccepted": true,
+      "errorCategory": null
+    },
+    {
+      "case": "http_503",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_readiness_status",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_readiness_profile",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_readiness_schemaVersion",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "wrong_readiness_legacyContainmentVerified",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "coordinated_wrong_readiness",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "extra_readiness_field",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "exclusive_output",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "FileExistsError"
+    },
+    {
+      "case": "invalid_phase",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "AssertionError"
+    },
+    {
+      "case": "optimized_python_refused",
+      "accepted": false,
+      "expectedAccepted": false,
+      "errorCategory": "RuntimeError"
+    }
+  ],
+  "networkMocked": true,
+  "hostedCalls": 0,
+  "officialOutputWrites": 0,
+  "actualDeploymentOrRestartVerified": false
+}

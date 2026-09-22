@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "b74b65f901415b935e1254f39aaaba0f5c1319a44c0d66d45cf1d5c516fb8a97",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-CANDIDATE1.json",
+      "sha256": "dddcc7991a5c86ca00167cc34c630ca7154e40749b895d9a68d6c97ca4639eda"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "OFFLINE-PREPARATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation3-baseline-preparation.md",
+        "operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-CANDIDATE1.json"
+      ],
+      "reason": "6 tests / 24 assertions, strict TypeScript, source collector166/evidence6; actual acceptance not claimed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation3-baseline-root-preparation-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-CANDIDATE1.json",
+        "sha256": "dddcc7991a5c86ca00167cc34c630ca7154e40749b895d9a68d6c97ca4639eda"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation3-baseline-preparation.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Requested fields record the registry critical security-review route. Existing reviewer context was reused without a fresh model override; actually inherited settings remain unknown. No observed model or cost inferred."
+  ]
+}

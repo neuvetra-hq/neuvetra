@@ -1,0 +1,550 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M78-TRANSPORT-PROBE-01",
+  "profile": "m78-bun-loopback-fetch-pooling-v1",
+  "startedAt": "2026-09-22T21:11:39.560Z",
+  "finishedAt": "2026-09-22T21:11:45.038Z",
+  "environment": {
+    "bunVersion": "1.3.12",
+    "platform": "win32",
+    "osRelease": "10.0.26200",
+    "architecture": "x64"
+  },
+  "bounds": {
+    "network": "127.0.0.1 loopback only",
+    "abortMs": 1200,
+    "idleBeforeSecondRequestMs": 100,
+    "trialsPerVariant": 3,
+    "responseBodiesConsumed": true,
+    "externalNetworkUsedByProbe": false
+  },
+  "source": {
+    "path": "evaluations/research-qa/m78-transport-probe.ts",
+    "sha256": "a2fac92db1a3b85c26ac48722f497291b39b14fe74272487de48460581c19321",
+    "byteLength": 11548
+  },
+  "variants": {
+    "default": [
+      {
+        "trial": 1,
+        "port": 58522,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 6.64,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "error",
+          "elapsedMs": 1199.39,
+          "status": null,
+          "body": null,
+          "errorName": "TimeoutError",
+          "errorMessage": "The operation timed out."
+        },
+        "connectionsOpened": 1,
+        "connectionIds": [
+          1
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58523,
+            "requestLine": "GET /trial-1 HTTP/1.1",
+            "requestConnectionHeader": "keep-alive",
+            "action": "responded"
+          },
+          {
+            "connectionId": 1,
+            "requestOnConnection": 2,
+            "remotePort": 58523,
+            "requestLine": "GET /trial-1 HTTP/1.1",
+            "requestConnectionHeader": "keep-alive",
+            "action": "silent"
+          }
+        ],
+        "reusedConnectionObserved": true,
+        "newConnectionForSecondRequestObserved": false,
+        "socketsClosedBeforeCleanup": [
+          1
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      },
+      {
+        "trial": 2,
+        "port": 58524,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.47,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "error",
+          "elapsedMs": 1189.55,
+          "status": null,
+          "body": null,
+          "errorName": "TimeoutError",
+          "errorMessage": "The operation timed out."
+        },
+        "connectionsOpened": 1,
+        "connectionIds": [
+          1
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58525,
+            "requestLine": "GET /trial-2 HTTP/1.1",
+            "requestConnectionHeader": "keep-alive",
+            "action": "responded"
+          },
+          {
+            "connectionId": 1,
+            "requestOnConnection": 2,
+            "remotePort": 58525,
+            "requestLine": "GET /trial-2 HTTP/1.1",
+            "requestConnectionHeader": "keep-alive",
+            "action": "silent"
+          }
+        ],
+        "reusedConnectionObserved": true,
+        "newConnectionForSecondRequestObserved": false,
+        "socketsClosedBeforeCleanup": [
+          1
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      },
+      {
+        "trial": 3,
+        "port": 58527,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.68,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "error",
+          "elapsedMs": 1200.12,
+          "status": null,
+          "body": null,
+          "errorName": "TimeoutError",
+          "errorMessage": "The operation timed out."
+        },
+        "connectionsOpened": 1,
+        "connectionIds": [
+          1
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58528,
+            "requestLine": "GET /trial-3 HTTP/1.1",
+            "requestConnectionHeader": "keep-alive",
+            "action": "responded"
+          },
+          {
+            "connectionId": 1,
+            "requestOnConnection": 2,
+            "remotePort": 58528,
+            "requestLine": "GET /trial-3 HTTP/1.1",
+            "requestConnectionHeader": "keep-alive",
+            "action": "silent"
+          }
+        ],
+        "reusedConnectionObserved": true,
+        "newConnectionForSecondRequestObserved": false,
+        "socketsClosedBeforeCleanup": [
+          1
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      }
+    ],
+    "keepalive_false": [
+      {
+        "trial": 1,
+        "port": 58530,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.58,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "response",
+          "elapsedMs": 0.95,
+          "status": 200,
+          "body": "ok:2:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "connectionsOpened": 2,
+        "connectionIds": [
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58531,
+            "requestLine": "GET /trial-1 HTTP/1.1",
+            "requestConnectionHeader": null,
+            "action": "responded"
+          },
+          {
+            "connectionId": 2,
+            "requestOnConnection": 1,
+            "remotePort": 58533,
+            "requestLine": "GET /trial-1 HTTP/1.1",
+            "requestConnectionHeader": null,
+            "action": "responded"
+          }
+        ],
+        "reusedConnectionObserved": false,
+        "newConnectionForSecondRequestObserved": true,
+        "socketsClosedBeforeCleanup": [
+          1,
+          2
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      },
+      {
+        "trial": 2,
+        "port": 58534,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.75,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "response",
+          "elapsedMs": 1.4,
+          "status": 200,
+          "body": "ok:2:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "connectionsOpened": 2,
+        "connectionIds": [
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58535,
+            "requestLine": "GET /trial-2 HTTP/1.1",
+            "requestConnectionHeader": null,
+            "action": "responded"
+          },
+          {
+            "connectionId": 2,
+            "requestOnConnection": 1,
+            "remotePort": 58536,
+            "requestLine": "GET /trial-2 HTTP/1.1",
+            "requestConnectionHeader": null,
+            "action": "responded"
+          }
+        ],
+        "reusedConnectionObserved": false,
+        "newConnectionForSecondRequestObserved": true,
+        "socketsClosedBeforeCleanup": [
+          1,
+          2
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      },
+      {
+        "trial": 3,
+        "port": 58537,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.68,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "response",
+          "elapsedMs": 2.03,
+          "status": 200,
+          "body": "ok:2:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "connectionsOpened": 2,
+        "connectionIds": [
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58538,
+            "requestLine": "GET /trial-3 HTTP/1.1",
+            "requestConnectionHeader": null,
+            "action": "responded"
+          },
+          {
+            "connectionId": 2,
+            "requestOnConnection": 1,
+            "remotePort": 58539,
+            "requestLine": "GET /trial-3 HTTP/1.1",
+            "requestConnectionHeader": null,
+            "action": "responded"
+          }
+        ],
+        "reusedConnectionObserved": false,
+        "newConnectionForSecondRequestObserved": true,
+        "socketsClosedBeforeCleanup": [
+          1,
+          2
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      }
+    ],
+    "connection_close": [
+      {
+        "trial": 1,
+        "port": 58540,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.86,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "response",
+          "elapsedMs": 1.29,
+          "status": 200,
+          "body": "ok:2:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "connectionsOpened": 2,
+        "connectionIds": [
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58541,
+            "requestLine": "GET /trial-1 HTTP/1.1",
+            "requestConnectionHeader": "close",
+            "action": "responded"
+          },
+          {
+            "connectionId": 2,
+            "requestOnConnection": 1,
+            "remotePort": 58542,
+            "requestLine": "GET /trial-1 HTTP/1.1",
+            "requestConnectionHeader": "close",
+            "action": "responded"
+          }
+        ],
+        "reusedConnectionObserved": false,
+        "newConnectionForSecondRequestObserved": true,
+        "socketsClosedBeforeCleanup": [
+          1,
+          2
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      },
+      {
+        "trial": 2,
+        "port": 58543,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.59,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "response",
+          "elapsedMs": 0.67,
+          "status": 200,
+          "body": "ok:2:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "connectionsOpened": 2,
+        "connectionIds": [
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58544,
+            "requestLine": "GET /trial-2 HTTP/1.1",
+            "requestConnectionHeader": "close",
+            "action": "responded"
+          },
+          {
+            "connectionId": 2,
+            "requestOnConnection": 1,
+            "remotePort": 58545,
+            "requestLine": "GET /trial-2 HTTP/1.1",
+            "requestConnectionHeader": "close",
+            "action": "responded"
+          }
+        ],
+        "reusedConnectionObserved": false,
+        "newConnectionForSecondRequestObserved": true,
+        "socketsClosedBeforeCleanup": [
+          1,
+          2
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      },
+      {
+        "trial": 3,
+        "port": 58546,
+        "first": {
+          "outcome": "response",
+          "elapsedMs": 0.67,
+          "status": 200,
+          "body": "ok:1:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "second": {
+          "outcome": "response",
+          "elapsedMs": 0.69,
+          "status": 200,
+          "body": "ok:2:1",
+          "errorName": null,
+          "errorMessage": null
+        },
+        "connectionsOpened": 2,
+        "connectionIds": [
+          1,
+          2
+        ],
+        "requests": [
+          {
+            "connectionId": 1,
+            "requestOnConnection": 1,
+            "remotePort": 58547,
+            "requestLine": "GET /trial-3 HTTP/1.1",
+            "requestConnectionHeader": "close",
+            "action": "responded"
+          },
+          {
+            "connectionId": 2,
+            "requestOnConnection": 1,
+            "remotePort": 58548,
+            "requestLine": "GET /trial-3 HTTP/1.1",
+            "requestConnectionHeader": "close",
+            "action": "responded"
+          }
+        ],
+        "reusedConnectionObserved": false,
+        "newConnectionForSecondRequestObserved": true,
+        "socketsClosedBeforeCleanup": [
+          1,
+          2
+        ],
+        "cleanup": {
+          "listenerStopped": true,
+          "remainingTrackedSockets": 0
+        }
+      }
+    ]
+  },
+  "summary": {
+    "default": {
+      "name": "default",
+      "trialCount": 3,
+      "firstResponses": 3,
+      "secondResponses": 0,
+      "secondTimeouts": 3,
+      "reusedConnections": 3,
+      "freshSecondConnections": 0,
+      "cleanups": 3,
+      "allFirstBodiesConsumed": true,
+      "allSecondResponseBodiesConsumed": true
+    },
+    "keepalive_false": {
+      "name": "keepalive_false",
+      "trialCount": 3,
+      "firstResponses": 3,
+      "secondResponses": 3,
+      "secondTimeouts": 0,
+      "reusedConnections": 0,
+      "freshSecondConnections": 3,
+      "cleanups": 3,
+      "allFirstBodiesConsumed": true,
+      "allSecondResponseBodiesConsumed": true
+    },
+    "connection_close": {
+      "name": "connection_close",
+      "trialCount": 3,
+      "firstResponses": 3,
+      "secondResponses": 3,
+      "secondTimeouts": 0,
+      "reusedConnections": 0,
+      "freshSecondConnections": 3,
+      "cleanups": 3,
+      "allFirstBodiesConsumed": true,
+      "allSecondResponseBodiesConsumed": true
+    }
+  },
+  "findings": {
+    "mechanismReproduced": true,
+    "keepaliveFalsePreventedReuse": true,
+    "connectionClosePreventedReuse": true,
+    "cleanupComplete": true,
+    "conclusion": "Bun reused a real loopback TCP connection and the second request remained without response headers until the bounded abort."
+  }
+}

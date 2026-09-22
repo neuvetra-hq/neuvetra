@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-22T20:47:59.768347+00:00",
+  "updated_at": "2026-09-22T21:50:10.006206+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Publish admitted continuation3 on rolling PR5, verify six checks and fresh runtime, then exclusive read-only baseline before 37 remaining operations.",
+    "next_gate": "Publish accepted continuation4 source/private preparation on rolling PR5, verify six checks and fresh runtime, then run one new read-only baseline before37 remaining operations/restart/revisit/browser.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -144,11 +144,12 @@
     "last_session_work": "M77 backend dispatched; root UI/integration active. Additional independent reviewer dispatch rejected by runtime; release gate pending."
   },
   "session_handoff": {
-    "current": "M76 hosted correction, restart, revisit and independent acceptance passed; closure publication being verified.",
-    "next": "Verify final publication receipt/head/checks; collect board demonstration feedback before dependent work.",
+    "current": "M78 continuation4 source/private preparation independently accepted; root owns publication. No continuation4 hosted execution.",
+    "next": "Publish exact reviewed continuation4 preparation, verify six checks, refresh runtime, then execute one new read-only baseline. Independent baseline acceptance precedes37 remaining operations, restart, revisit and browser demonstration.",
     "evidence": [
-      "docs/research/m76-publication.json",
-      "operations/next-session.md"
+      "operations/next-session.md",
+      "evaluations/research-qa/m78-continuation3-baseline-failure-result.json",
+      "evaluations/research-qa/m78-continuation4-preparation.md"
     ]
   },
   "checkpoint": {
@@ -535,7 +536,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153E06 and P01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œE06 and P01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -2891,7 +2892,7 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "continuation2_source_accepted_publication_next",
+    "status": "continuation4_source_private_accepted_publication_next",
     "active_assignments": [
       {
         "id": "M78-ROOT-CONT2",
@@ -3168,6 +3169,39 @@
       "cleanup_intent_sha256": "30aa7e0076dd3e37fce77c74df632e81fed41624b2e000278bc37a68e0d24f28",
       "post_metadata_sha256": "bab3732a77b1457b9e8a480e255abcd13519e4fc49fd2e9606c8ea3ee94c5a3b",
       "selected_session_removal_persisted": false
+    },
+    "continuation3_closed_failure": {
+      "journal_sha256": "0204a7e93849b305bafc45b79232b3af588619fcb851752d2ef541869d584012",
+      "diagnostics_sha256": "8b45e72d193d9f3c2b6a03c63c75e61a8055223862f13b297c9b4d26725972c1",
+      "independent_review_sha256": "261e4fccf8f85fc7cb99205357baf30346852eb3930d5760984bb471bb3aafe3",
+      "events": 24,
+      "diagnostic_events": 62,
+      "application_posts": 0,
+      "known_sessions": 4,
+      "logout_204": 4,
+      "unknown_sessions": 0,
+      "retry_permitted": false,
+      "cause": "not_established"
+    },
+    "continuation4_preparation": {
+      "status": "source_private_independently_accepted",
+      "source_pins": 173,
+      "historical_evidence_pins": 9,
+      "author_snapshot_sha256": "14dd03be623702e0c08308e789533f9679b3afa141d46dd915dfb18fa3f8dd2d",
+      "hosted_executed": false,
+      "application_posts": 0,
+      "pooling_disabled": true,
+      "automatic_retries": 0,
+      "scope1_customer_release": "incomplete",
+      "independent_review_sha256": "d4131bf557459bf6db564340e1c16f48ff3524e141353c28abdbcf1edbe5b0b9"
+    },
+    "completed_session_recovery": {
+      "status": "independently_accepted",
+      "disposition_sha256": "9ce4d682156c32771f8bb6fe8dfa249cf0060b39a8ce90c6ea3daf83c209342f",
+      "selected_session_and_linked_refresh_rows_resolved": 4,
+      "repeat_permitted": false,
+      "lost_access_token_usability": "not_verified",
+      "expiry_verified": false
     }
   },
   "current_m79_preparation": {

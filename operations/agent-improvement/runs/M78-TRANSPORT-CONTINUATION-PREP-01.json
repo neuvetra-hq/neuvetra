@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "M78-TRANSPORT-CONTINUATION-PREP-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-TRANSPORT-CONTINUATION-PREP-01-CANDIDATE3.json",
+      "sha256": "14dd03be623702e0c08308e789533f9679b3afa141d46dd915dfb18fa3f8dd2d"
+    }
+  ],
+  "source_artifacts": [
+    "tools/staging/check-m78-continuation4.ts",
+    "tools/staging/check-m78-continuation4.test.ts",
+    "tools/staging/m78-continuation4-source-pins.ts",
+    "tools/staging/m78-continuation4-failed-continuation3-main.jsonl",
+    "tools/staging/m78-continuation4-failed-continuation3-diagnostics.jsonl",
+    "evaluations/research-qa/m78-continuation4-preparation-source-pins.json",
+    "evaluations/research-qa/m78-continuation4-preparation.md"
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4.test.ts",
+        "evaluations/research-qa/m78-continuation4-preparation.md"
+      ],
+      "reason": "Exact actual/public continuation3 failure, diagnostics, closure, interruption disposition and independent failure result are required before transport."
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4.ts",
+        "tools/staging/check-m78-continuation4.test.ts"
+      ],
+      "reason": "Public adapter makes one underlying call with keepalive:false while forwarding request semantics and preserving Response identity; rejection is not retried."
+    },
+    {
+      "id": "AC-03",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4.test.ts"
+      ],
+      "reason": "New4 append targets, truthful diagnostics, graceful stop, diagnostic fail-closed behavior and logout access are exercised offline."
+    },
+    {
+      "id": "AC-04",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-preparation-source-pins.json",
+        "tools/staging/m78-continuation4-source-pins.ts"
+      ],
+      "reason": "Exact166 parent pins plus seven explicit dependencies produce a173-entry source closure; nine historical pins remain fixed."
+    },
+    {
+      "id": "AC-05",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4.test.ts",
+        "evaluations/research-qa/m78-continuation4-preparation.md"
+      ],
+      "reason": "Focused tests passed9/9 with250 assertions and strict targeted TypeScript passed; no live execution occurred."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m78_transport_probe",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-independent-review.md",
+      "evaluations/research-qa/m78-continuation4-independent-result.json",
+      "evaluations/research-qa/m78-continuation4-root-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-TRANSPORT-CONTINUATION-PREP-01-CANDIDATE3.json",
+        "sha256": "14dd03be623702e0c08308e789533f9679b3afa141d46dd915dfb18fa3f8dd2d"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 4,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

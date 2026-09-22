@@ -280,3 +280,12 @@ operations/agent-improvement/runs/M78-CONTINUATION3-INDEPENDENT-REVIEW-01.json -
 operations/agent-improvement/runs/M78-CONTINUATION3-PRIVATE-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
 operations/agent-improvement/runs/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01.json -text whitespace=cr-at-eol
 operations/agent-improvement/runs/M78-PLATFORM-CONTINUATION-PREP-01.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation3-baseline-failure-report.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-failure-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-independent-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-preparation.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-review.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-independent-runtime-result.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-FAILURE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
