@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-READONLY-RECOVERY-DESIGN-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "2e2c241df5084c84ac0b29b68afece02c72209cd6192a773e9231313bd82d7e8",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-DESIGN-01-CANDIDATE3.json",
+      "sha256": "225607d820d7357d23d66adae923853837177d4090e648f71c0c765b0d0f5f51"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "FAILED_EVIDENCE_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-design.md"
+      ],
+      "reason": "The design pins the accepted baseline and exact failed main/diagnostic journals, requires37 paired successful operations and closed main sessions, and refuses to infer a success terminal."
+    },
+    {
+      "id": "ZERO_WRITE_STATE_PROOF",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-design.md"
+      ],
+      "reason": "A new exclusive graph-first reader enforces application GET only and compares fresh typed state, exact37 identities/inputs, baseline history, artifacts, legacy state and session closure."
+    },
+    {
+      "id": "RESTART_REVISIT_SEQUENCE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-design.md"
+      ],
+      "reason": "Only a distinct independently reviewed recovery status may authorize one restart and one recovery-aware zero-write revisit; existing success gates remain invalid."
+    },
+    {
+      "id": "PERFORMANCE_BOUNDARY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-design.md"
+      ],
+      "reason": "Observed server slowness and repeated verified-state construction are separated from causal claims; the design favors graph-first reads, a call-count/local timing probe, no timeout increase/retry, and a new gate if source changes."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-recovery-design-root-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-DESIGN-01-CANDIDATE3.json",
+        "sha256": "225607d820d7357d23d66adae923853837177d4090e648f71c0c765b0d0f5f51"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Design only. No application source, frozen173 file, gate, journal, provider, credential, database, Git, restart, revisit or shared-ledger mutation occurred.",
+    "The authenticated browser observation is explicitly treated as unaccepted triage evidence, not successful recovery.",
+    "Candidate1 is preserved and superseded by candidate2 after later provider/browser evidence established a 90.4-second successful snapshot and root source review required a concrete query-count/timing probe before recovery.",
+    "Root design review corrected candidate2 inventory review state, distinguished retained HTML bytes from snapshot bytes, separated historical173 pin validation from a future repaired-source gate, and required preservesM77History-style immutable history with the exact37 allowed delta. Candidate1 and candidate2 remain preserved."
+  ]
+}

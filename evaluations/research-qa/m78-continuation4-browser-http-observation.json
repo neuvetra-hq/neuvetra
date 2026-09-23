@@ -1,0 +1,99 @@
+{
+  "observedAt": "2026-09-22T23:59:00.356422+00:00",
+  "deploymentId": "0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78",
+  "window": [
+    "2026-09-22T23:55:00Z",
+    "2026-09-22T23:59:00Z"
+  ],
+  "http": [
+    {
+      "timestamp": "2026-09-22T23:55:42.230173698Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 4346,
+      "upstreamRqDuration": 4346,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:55:50.334715181Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 20689,
+      "upstreamRqDuration": 20689,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id"
+    },
+    {
+      "timestamp": "2026-09-22T23:55:52.555556315Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 3341,
+      "upstreamRqDuration": 3341,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:56:41.129850982Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 3223,
+      "upstreamRqDuration": 3223,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:56:55.530340177Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 6319,
+      "upstreamRqDuration": 6319,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:57:01.321677098Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 20106,
+      "upstreamRqDuration": 20106,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id"
+    },
+    {
+      "timestamp": "2026-09-22T23:57:40.703031359Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 2826,
+      "upstreamRqDuration": 2826,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:57:52.173007669Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 2968,
+      "upstreamRqDuration": 2968,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:58:32.170031700Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 90427,
+      "upstreamRqDuration": 90425,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/snapshot"
+    },
+    {
+      "timestamp": "2026-09-22T23:58:42.434907552Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 4554,
+      "upstreamRqDuration": 4553,
+      "route": "/workspace-api/session"
+    },
+    {
+      "timestamp": "2026-09-22T23:58:53.100434797Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 3895,
+      "upstreamRqDuration": 3895,
+      "route": "/workspace-api/session"
+    }
+  ],
+  "limitation": "Provider completion records alone do not establish the cause of a client timeout."
+}

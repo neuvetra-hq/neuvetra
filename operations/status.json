@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-22T23:25:37.996558+00:00",
+  "updated_at": "2026-09-23T00:10:51.621419+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Await exercise57177 preservation/closure, independently accept actual evidence; publish/check accepted restart/revisit preparation in parallel.",
+    "next_gate": "Read-only local GET performance probe; independently reviewed source repair if justified, then new zero-write preservation recovery. Never replay37 writes.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -144,12 +144,10 @@
     "last_session_work": "M77 backend dispatched; root UI/integration active. Additional independent reviewer dispatch rejected by runtime; release gate pending."
   },
   "session_handoff": {
-    "current": "All37exerciseoperationsverified; read-onlytailactive. Restart/capture preparation independentlyaccepted; publicationpending.",
-    "next": "ActualclosedexerciseQA beforeone restart, freshrevisit andbrowserdemo.",
+    "current": "Exercise closed failed on final report snapshot timeout; all37 writes verified and four test sessions closed. Published7e441629 has six checks passed.",
+    "next": "Accept independent failure review; measure GET latency locally before a separately reviewed optimization and zero-write recovery. No completed operation may be replayed.",
     "evidence": [
-      "operations/next-session.md",
-      "evaluations/research-qa/m78-continuation4-revisit-root-admission.md",
-      "evaluations/research-qa/m78-continuation4-restart-root-admission.md"
+      "operations/next-session.md"
     ]
   },
   "checkpoint": {
@@ -3221,7 +3219,32 @@
       "baseline_qa_sha256": "6937df29bb08b4bd253ceade366c1e19d512e0e256a0090b0d00f688fc1f6ae3",
       "exercise_gate_sha256": "9fe233c964b8c40f6c7a9871eecf75a318e7a800f2ec14570c6803288ff9dce7",
       "exercise_status": "running",
-      "verified_application_operations": 37
+      "verified_application_operations": 37,
+      "status": "exercise_failed_after_37_verified_operations",
+      "exercise_requests": 388,
+      "request_errors": 1,
+      "all_created_auth_sessions_closed": true,
+      "unknown_auth_sessions": 0,
+      "restart_executed": false,
+      "revisit_executed": false,
+      "browser_partial": {
+        "access_verified": true,
+        "source_count": 10,
+        "display_kg_co2e": "126850.1763",
+        "process_versions": 1,
+        "inventory_versions": 2,
+        "reports": 5,
+        "reviewed_inventory_report_downloads": "both200_exact_retained_body_equality",
+        "snapshot_provider_ms": 90427,
+        "full_lifecycle_accepted": false,
+        "evidence": "evaluations/research-qa/m78-continuation4-browser-partial-observation.md"
+      },
+      "failure_review": {
+        "status": "accepted_failure_reconciliation",
+        "result_sha256": "a97a84ca66ed696a348c8c8a5ecaf65e36ca4eb311803b6f2ecccebf9d16c573",
+        "exercise_accepted": false,
+        "open_product_findings": 1
+      }
     }
   },
   "current_m79_preparation": {

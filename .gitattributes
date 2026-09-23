@@ -299,3 +299,6 @@ evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py -text wh
 evaluations/research-qa/m78-continuation4-restart-helper-review.md -text whitespace=cr-at-eol
 evaluations/research-qa/m78-continuation4-restart-helper-review.test.py -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-readonly-recovery-design.md -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-EXERCISE-FAILURE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol

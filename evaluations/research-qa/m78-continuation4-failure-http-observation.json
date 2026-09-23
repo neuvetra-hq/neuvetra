@@ -1,0 +1,107 @@
+{
+  "observedAt": "2026-09-22T23:53:03.837288+00:00",
+  "deploymentId": "0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78",
+  "window": [
+    "2026-09-22T23:47:00Z",
+    "2026-09-22T23:50:00Z"
+  ],
+  "http": [
+    {
+      "timestamp": "2026-09-22T23:47:09.705718053Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 19448,
+      "upstreamRqDuration": 19448,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id"
+    },
+    {
+      "timestamp": "2026-09-22T23:47:29.696818836Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 19507,
+      "upstreamRqDuration": 19506,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/download"
+    },
+    {
+      "timestamp": "2026-09-22T23:47:49.435458572Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 19570,
+      "upstreamRqDuration": 19570,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/snapshot"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:17.108142646Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 27469,
+      "upstreamRqDuration": 27469,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/proof"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:24.036034392Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 2,
+      "upstreamRqDuration": 2,
+      "route": "/"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:24.124075600Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 4,
+      "upstreamRqDuration": 4,
+      "route": "/assets/staging-BU8WXbs5.css"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:24.139806517Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 21,
+      "upstreamRqDuration": 21,
+      "route": "/assets/staging-m5fvj4SE.js"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:24.386344007Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 2,
+      "upstreamRqDuration": 2,
+      "route": "/assets/jost-latin-wght-normal-ObQm3Zd1.woff2"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:27.077323275Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 2683,
+      "upstreamRqDuration": 2683,
+      "route": "/workspace-api/config"
+    },
+    {
+      "timestamp": "2026-09-22T23:48:45.669052204Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 28307,
+      "upstreamRqDuration": 28307,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id"
+    },
+    {
+      "timestamp": "2026-09-22T23:49:15.498639472Z",
+      "method": "GET",
+      "httpStatus": 200,
+      "totalDuration": 29372,
+      "upstreamRqDuration": 29371,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/download"
+    },
+    {
+      "timestamp": "2026-09-22T23:49:45.628876552Z",
+      "method": "GET",
+      "httpStatus": 499,
+      "totalDuration": 29965,
+      "upstreamRqDuration": 29964,
+      "route": "/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/snapshot"
+    }
+  ],
+  "limitation": "Provider completion records alone do not establish the cause of a client timeout."
+}
