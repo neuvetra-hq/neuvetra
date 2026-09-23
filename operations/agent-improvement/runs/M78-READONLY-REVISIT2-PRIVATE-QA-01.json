@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-REVISIT2-PRIVATE-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PRIVATE-QA-01-CANDIDATE1.json",
+      "sha256": "133511b52cdcc98c757d45382dbc79abb1ace9a4a0672f8f1b93cc3a3242da46"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-revisit2-private-independent.test.py",
+    "evaluations/research-qa/m78-readonly-revisit2-private-independent-review.md",
+    "evaluations/research-qa/m78-readonly-revisit2-private-independent-result.json",
+    "evaluations/research-qa/m78-readonly-revisit2-private-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "PRIVATE_WRAPPER_AND_ENTRY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-private-independent-review.md"
+      ],
+      "reason": "Admission/source/runtime pins and absent outputs are checked before approved DPAPI unsealing; the hidden child receives secrets by stdin and uses local-only logout."
+    },
+    {
+      "id": "SOURCE_CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-private-independent-result.json"
+      ],
+      "reason": "The read-only closure produced 188 unique pins and every pin rehashed to current bytes."
+    },
+    {
+      "id": "FINALIZER_FAIL_CLOSED",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-private-independent.test.py"
+      ],
+      "reason": "Mocked finalizer composition passes exact evidence and refuses coordinated actual-receipt substitution, source drift and preexisting outputs before new writes."
+    },
+    {
+      "id": "ACTUAL_RESTART_OR_REVISIT",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "No actual restart receipt exists and no finalizer, wrapper, entry or hosted path was executed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-revisit2-private-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PRIVATE-QA-01-CANDIDATE1.json",
+        "sha256": "133511b52cdcc98c757d45382dbc79abb1ace9a4a0672f8f1b93cc3a3242da46"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Requested Astra/high could not be freshly dispatched at the runtime thread limit; the existing independent non-author context continued with inherited settings unknown.",
+    "The first spot check found a caller-supplied actual recovery2 receipt SHA. Root fixed the exact accepted SHA in the finalizer; candidate bytes and finding history are preserved in the report.",
+    "No credentials were read and no finalizer, wrapper, entry, provider, network, database, restart, revisit or Git action was executed.",
+    "Root authored private helpers; probe independently inspected and mocked actual admission. Root reproduced tests and closes QA record, not an independent self-review."
+  ]
+}

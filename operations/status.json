@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T03:29:16.435794+00:00",
+  "updated_at": "2026-09-23T04:27:16.092267+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Publish accepted recovery2 verifier and evidence on PR5, pass six checks, then fresh same-runtime admission and one GET-only recovery2. Restart/revisit follow only actual independent acceptance.",
+    "next_gate": "All final persistence source/private reviews passed (50f8b3ed/f974ea9c/508f862a). Publish reviewed batch on PR5, pass six exact-head checks, then one same-image restart and actualQA followed by GET-only revisit2 within15min. No restart/revisit yet.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"

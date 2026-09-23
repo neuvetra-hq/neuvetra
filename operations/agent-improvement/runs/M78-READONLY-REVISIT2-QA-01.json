@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-REVISIT2-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-QA-01-CANDIDATE1.json",
+      "sha256": "657f268066824763483cbdc1bc0b574b11ba17e4d1db074f78d60f7021c1f269"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-revisit2-independent.test.ts",
+    "evaluations/research-qa/m78-readonly-revisit2-independent-review.md",
+    "evaluations/research-qa/m78-readonly-revisit2-independent-result.json",
+    "evaluations/research-qa/m78-readonly-revisit2-independent-freeze.py",
+    "evaluations/research-qa/m78-readonly-revisit2-independent-result-candidate1.json",
+    "evaluations/research-qa/m78-readonly-revisit2-independent-candidate1.test.ts"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_CANDIDATE_BINDING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-independent.test.ts"
+      ],
+      "reason": "Candidate2 snapshot and all four embedded/live source files are byte-bound."
+    },
+    {
+      "id": "RECOVERY_AND_RESTART_PREREQUISITES",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-independent-review.md"
+      ],
+      "reason": "The accepted actual recovery2 receipt, corrected evaluator/source pin and complete restart chain are required before the runner."
+    },
+    {
+      "id": "LOCK_AND_FRESHNESS_REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-independent.test.ts"
+      ],
+      "reason": "Fixed lock markers reject coordinated substitution; stale/future preflight and attempt-start timestamps are refused."
+    },
+    {
+      "id": "READ_ONLY_RETENTION_AND_CLEANUP",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-independent.test.ts"
+      ],
+      "reason": "The actual adapter boundary remaps only four evidence paths, preserves predecessors, propagates failure and compares every retained state family."
+    },
+    {
+      "id": "ACTUAL_RESTART_OR_REVISIT",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This source-only review executed neither restart nor revisit and grants no authorization."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-revisit2-root-source-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-QA-01-CANDIDATE1.json",
+        "sha256": "657f268066824763483cbdc1bc0b574b11ba17e4d1db074f78d60f7021c1f269"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "A fresh requested Astra/high dispatch was unavailable at the runtime thread limit; this independent non-author context continued with inherited compute unknown.",
+    "Candidate1 failed with two material findings. Candidate2 repairs were challenged at the actual adapter boundary and the original failure artifacts remain preserved.",
+    "The candidate1 reproduction test imports the live adapter path and is historical-only; candidate2 acceptance uses the separately frozen candidate2 suite.",
+    "No credentials, provider API, network, database, restart, hosted request, revisit or Git mutation occurred."
+  ]
+}

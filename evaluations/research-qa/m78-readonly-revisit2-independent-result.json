@@ -1,0 +1,39 @@
+{
+  "status": "m78_readonly_revisit2_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PREP-01-CANDIDATE2.json",
+    "sha256": "46700a55e97906e7d27f60a019fa3c2ede6316d1c318072db94e29c4fef844ac"
+  },
+  "candidateFiles": [
+    {"path": "tools/staging/m78-readonly-revisit2.ts", "sha256": "0e78f2a798a3cb36ccd83fe406c631195119bd176a989baa480a79407d6a3c53"},
+    {"path": "tools/staging/m78-readonly-revisit2.test.ts", "sha256": "7a268e075b4ad2bf3626286285aca3ee763da0755667f92f88bb3b2f6ed638f5"},
+    {"path": "evaluations/research-qa/m78-readonly-revisit2-preparation-report.md", "sha256": "6a9e64de148fa573ee6f0d976cbb93e0e64716a0413c412005e9a3d81bfca353"},
+    {"path": "evaluations/research-qa/m78-readonly-revisit2-preparation-result.json", "sha256": "ee18ac02ec4008a2eac84d7a3a494b768f4d56d6d3f9fd18fdc84ea1c5d8d344"}
+  ],
+  "historicalCandidate1": {
+    "status": "failed",
+    "snapshotSha256": "a576d67245ef05b525f8f7f87fb0c36c4248ae0b85d8f8c5fa68532d78957256",
+    "materialFindings": ["LOCK_IDENTITY_SELF_PINNED", "RESTART_FRESHNESS_NOT_BOUND_TO_REVISIT"],
+    "reproductionScope": "historical-only; its test imports the live adapter path and is not a current-positive test"
+  },
+  "reworkCycles": 1,
+  "checks": {
+    "authorTestsPassed": 7,
+    "authorAssertions": 125,
+    "independentTestsPassed": 6,
+    "independentAssertions": 125,
+    "strictTargetedTypeScriptPassed": true,
+    "hostedCalls": 0,
+    "credentialReads": 0,
+    "providerCalls": 0,
+    "databaseCalls": 0
+  },
+  "acceptedRecovery2ResultSha256": "eaa2f3e35e3e7b939a15aa9122fdddfea19625eefc484d305ecce656d4491bd1",
+  "correctedRecovery2EvaluatorSha256": "c45f948482a53b9e2f2ba87c1b754bb70a6f2ced079dbf8b4d85657d7b77fa78",
+  "actualRestartAccepted": false,
+  "actualRevisit2Executed": false,
+  "restartAuthorizedByThisResult": false,
+  "revisitAuthorizedByThisResult": false
+}

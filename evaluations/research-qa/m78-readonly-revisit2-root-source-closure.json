@@ -1,0 +1,17 @@
+{
+  "status": "m78_readonly_revisit2_independent_source_review_root_closed",
+  "observedAt": "2026-09-23T04:20:26.774632+00:00",
+  "independentReviewer": "/root/m78_transport_probe",
+  "result": {
+    "path": "evaluations/research-qa/m78-readonly-revisit2-independent-result.json",
+    "sha256": "f974ea9c64a0f6621084bee007b1d2477bb1dd548f2289f82e5fba366b7beb43"
+  },
+  "rootReproduction": {
+    "authorTests": 7,
+    "authorAssertions": 125,
+    "independentTests": 6,
+    "independentAssertions": 125
+  },
+  "actualRestartExecuted": false,
+  "actualRevisitExecuted": false
+}

@@ -1,0 +1,36 @@
+{
+  "status": "m78_readonly_revisit2_independent_review_failed",
+  "reviewerId": "/root/m78_transport_probe",
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PREP-01-CANDIDATE1.json",
+    "sha256": "a576d67245ef05b525f8f7f87fb0c36c4248ae0b85d8f8c5fa68532d78957256"
+  },
+  "reviewedFiles": [
+    {"path": "tools/staging/m78-readonly-revisit2.ts", "sha256": "80e77a3830b634d651d5f5508d89af4d0308ffe78155cde727550fbc90dd3d90"},
+    {"path": "tools/staging/m78-readonly-revisit2.test.ts", "sha256": "c4d6454321c895ed53ffba6930f1a0b6bb4fc9ff6e5e21eee07e891a494d7b08"}
+  ],
+  "materialFindingsOpen": 2,
+  "findings": [
+    {
+      "id": "LOCK_IDENTITY_SELF_PINNED",
+      "impact": "Coordinated replacement of each durable lock and its adjacent caller-supplied hash is accepted, so the adapter proves path presence but not the claimed fixed lock identity or provenance."
+    },
+    {
+      "id": "RESTART_FRESHNESS_NOT_BOUND_TO_REVISIT",
+      "impact": "The chronology stops at restart observation; an arbitrarily old restart receipt can be reused because no revisit-start timestamp is constrained to the accepted 15-minute window."
+    }
+  ],
+  "checks": {
+    "authorTestsPassed": 6,
+    "authorAssertions": 105,
+    "combinedTestsPassed": 8,
+    "combinedAssertions": 112,
+    "hostedCalls": 0,
+    "credentialReads": 0,
+    "providerCalls": 0,
+    "databaseCalls": 0
+  },
+  "actualRecovery2Accepted": false,
+  "actualRestartAccepted": false,
+  "actualRevisit2Executed": false
+}

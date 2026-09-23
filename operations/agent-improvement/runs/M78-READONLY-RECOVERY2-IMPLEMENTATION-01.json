@@ -103,12 +103,13 @@
     ]
   },
   "outcome": {
-    "status": "complete",
+    "status": "blocked",
     "first_review": "fail",
-    "material_findings_open": 0,
+    "material_findings_open": 1,
     "rework_cycles": 1,
-    "escaped_defects": null,
-    "repeated_findings": []
+    "escaped_defects": 1,
+    "repeated_findings": [],
+    "blocker": "Frozen evaluator dispatch rejects actual population-discovery payload. Corrected offline evaluator and actual evidence require independent review; original source remains preserved."
   },
   "compute": {
     "requested": {
@@ -138,6 +139,7 @@
     "The real archived baseline supplies all eight nonempty fleet/equipment report bodies and exact retained artifact equality. No complete fresh post-37 capture exists, so no synthetic fixture is presented as a full evaluator positive.",
     "Board authorization for read-only preservation remains in force; technical execution gates and independent candidate acceptance remain missing. Restart and revisit remain unauthorized.",
     "No credential, authentication, hosted request, database, provider, Git, official recovery journal, restart or revisit action occurred.",
-    "Root accepted source preparation after exact nonempty baseline reconstruction, added independent capture/session tests and BOM artifact review. This is not actual recovery acceptance."
+    "Root accepted source preparation after exact nonempty baseline reconstruction, added independent capture/session tests and BOM artifact review. This is not actual recovery acceptance.",
+    "Post-source-acceptance escaped offline evaluator defect: population-discovery operation matched generic individual-fugitive prefix. Live capture passed; frozen evaluator4324 did not. Historical snapshot/source acceptance preserved. Root new corrected evaluatorc45f9484 passes retained actualcapture; independent correction/actual review pending. Evidence: evaluations/research-qa/m78-readonly-recovery2-offline-dispatch-correction.json. Original source remains immutable and must not be treated as actual acceptance."
   ]
 }

@@ -1,3 +1,29 @@
+# September22: final persistence tools independently accepted, ready for publication
+
+Actual recovery2 accepted under eaa2f3e3; root replayed no application writes. Corrected evaluatorc45f9484, restart source review50f8b3ed, revisit2 source reviewf974ea9c and private-entry/admission review508f862a all passed. Root reproduced4/85actualQA,2/10TS+6Python restart cases,7/125author+6/125independent revisit cases and3private mocked cases; exact188new source pins match privateQA. All required source reviews are closed; agent_ops validates222runs.
+
+Publish this reviewed tools/evidence batch on the same PR5 and pass six exact-head checks. No new app deployment is needed; current application remains9dd/f6d77b/image3e4c/schema21 with autodeploy disabled. THEN run one admitted same-image restart, collect one startup, obtain prompt independent actualstartup receipt, and admit/start GET-only revisit2 within15minutes of startup observation. No actual restart or revisit yet. Prepare all helpers before restart; preserve both predecessor locks/journals and all37completed application changes. Browser tab3 remains signedin on Scope1 inventory. CustomerScope1 remains incomplete.
+
+# September22: actual read-only reconciliation independently accepted
+
+Recovery2 actualQA eaa2f3e35e3e7b939a15aa9122fdddfea19625eefc484d305ecce656d4491bd1 independently accepts the immutable97request/zero-write capture using corrected offline evaluatorc45f9484. Root reproduced4tests/85assertions and closed the review. Exact37 added typed records, five reports, ten sources and126850.17632025kg all reconcile; every created test session closed. Keep the original failed evaluator4324 and both earlier attempts unchanged. No live replay is needed.
+
+The signed-in browser profile remains active. A stale tab handle was replaced in the same profile by tab3; it loaded existing sign-in and shows the same10sources/0workflowfindings/11releasefindings/126850.1763display. No records were saved or changed. This is pre-restart evidence only.
+
+Restart helpers are source-prepared under continuation; root inspected them and reproduced2TS/10assertions+6Python tests and the actual offline validator. Revisit2 candidate2 snapshot46700a55 is under probe source review; root reproduced7/125. Root's four new private revisit helpers compile and await probe independent QA. No actual restart, startup or revisit exists. Complete source reviews, publish reviewed correction/tools on PR5 and pass six checks BEFORE the single same-image restart. Prepare every revisit technical gate first to stay within the15minute startup-to-revisit window. CustomerScope1 remains incomplete.
+
+# September22: read-only reconciliation passed; offline correction under review
+
+Recovery2 session87622 closed exit0:97requests, zero applicationPOSTs, all created test sessions closed, unknown0. Its durable19event journal/195event diagnostics/81raw captures/observation/lock are preserved; no network replay is needed or authorized by this result. Frozen offline evaluator4324 initially rejected the population-discovery payload because a generic fugitive-source prefix preceded its exact population branch. Root preserved4324 and created corrected evaluatorc45f9484; its pure offline run passes all37typed added records, five reports, exact10sources and126850.17632025kg. Strict TypeScript passed. Independent actual/correction review is active under /root/m78_transport_probe; no actual independent acceptance, restart or revisit yet.
+
+Root corrected output is .superpowers/m78-readonly-recovery2-corrected-evaluation.json; original evaluation output remains absent. Existing runner/gates/37application changes stay immutable. /root/m78_transport_continuation prepares corrected revisit2/restart sources with exact corrected-evaluator pins and source-drift checks. Signed-in user browser is preserved. Customer Scope1 remains incomplete.
+
+# September 22: corrected read-only reconciliation running once
+
+Reviewed verifier commit c93130ee79844827816c5b162fc7375152e49f61 is published on PR5; exact remote head and all six checks passed at03:43:31UTC. The89 published artifacts preserve exact reviewed bytes. Runtime observation03:43:49UTC confirms the unchanged9dd/f6d77b/image3e4c/schema21 deployment, readiness and legacy containment, autodeploy disabled.
+
+Root admitted182source files/189execution pins under cb972ee7b2cde281e221366173ea166a438a17f525994582544b2dd7d03a7d65 and launched the reviewed private wrapper once, execsession87622. The durable lock must remain. No actual acceptance yet; no37write replay, migration, restart or revisit. Preserve the signed-in browser session. Next: closed capture, offline evaluation, independent actual review, then reviewed same-image persistence checks. Revisit2 source QA found lock-provenance and freshness issues; author is repairing those before any execution. Customer Scope1 remains incomplete.
+
 # September 22: corrected read-only verifier accepted and ready to publish
 
 Recovery2 source candidate47044480/evaluator4324a965 passed independent root review1c2325e5 after 11 tests/116 assertions, exact reconstruction of the eight archived roster reports, and strict TypeScript. The repair preserves complete proof envelopes and mobile fuel/mileage keys, captures exact response bytes before decoding, and closes test sessions even on capture/logging failures. The first recovery remains failed and immutable; its three escaped defects and the later BOM correction are recorded.

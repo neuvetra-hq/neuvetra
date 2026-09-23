@@ -1,0 +1,51 @@
+{
+  "status": "m78_recovery2_restart_source_prepared",
+  "createdAt": "2026-09-22T21:12:03.8593056-07:00",
+  "sourcePreparationOnly": true,
+  "actualRecovery2Accepted": true,
+  "restartExecuted": false,
+  "providerCalls": 0,
+  "hostedCalls": 0,
+  "credentialAccesses": 0,
+  "restartAuthorizedByThisResult": false,
+  "runtime": {
+    "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+    "autodeploy": false,
+    "schemaVersion": 21
+  },
+  "actualRecovery2Result": {
+    "path": "evaluations/research-qa/m78-readonly-recovery2-actual-independent-result.json",
+    "sha256": "eaa2f3e35e3e7b939a15aa9122fdddfea19625eefc484d305ecce656d4491bd1"
+  },
+  "validation": {
+    "typescriptTestsPassed": 2,
+    "typescriptAssertions": 10,
+    "pythonTestsPassed": 6,
+    "strictTargetedTypeScript": "passed",
+    "pythonSyntax": "passed",
+    "offlineActualReceiptValidation": "passed",
+    "independentCandidateReview": "pending"
+  },
+  "files": [
+    {"path": ".superpowers/m78-recovery2-validate-for-restart.ts", "sha256": "78a21f7f8db113734e14ee2eb8bbbc0cac06cfe4c12743a8b2bc7567e92da3fb"},
+    {"path": ".superpowers/m78-recovery2-restart-admit.py", "sha256": "35481c139aace400135e00e0b16eefcf94292592f442011c8ef390b0415b9105"},
+    {"path": ".superpowers/m78-recovery2-request-restart.py", "sha256": "d0c1b19e51c02f9d016cd5e95e1c3b15c70b73f3ffa8a3d80f2b42894c45d8e7"},
+    {"path": ".superpowers/m78-recovery2-collect-startup.py", "sha256": "45b0776cca680bf7657bbca6e1b493fa835d15d733129b3b82134b9c9bc796ef"},
+    {"path": "evaluations/research-qa/m78-recovery2-restart-preparation.test.ts", "sha256": "ae88aaf12a9eec09ea973912eafffb31b5e1bcbb2ac090eeb16492306e8a5ffa"},
+    {"path": "evaluations/research-qa/m78-recovery2-restart-preparation.test.py", "sha256": "750470629acf1a1b4c92b5094a167f4909222fc36384e4dadc8c853f1e87930f"}
+  ],
+  "reviewHistory": {
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "closedFindings": [
+      "transitive 182-pin source closure was not rehashed",
+      "four helper bytes were not frozen through admission and action",
+      "startup observedAt preceded final provider and readiness reads"
+    ]
+  },
+  "materialFindingsOpen": 0,
+  "requestedCompute": {"model": "gpt-5.6-terra", "effort": "medium"},
+  "observedCompute": {"model": null, "effort": null}
+}

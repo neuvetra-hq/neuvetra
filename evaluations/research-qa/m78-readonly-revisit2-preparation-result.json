@@ -1,0 +1,56 @@
+{
+  "status": "m78_readonly_revisit2_source_prepared",
+  "createdAt": "2026-09-22T21:08:27.8390292-07:00",
+  "sourcePreparationOnly": true,
+  "boardAuthorizationPersists": true,
+  "technicalGatesAvailable": false,
+  "actualRecovery2Accepted": true,
+  "actualRestartAccepted": false,
+  "actualRevisit2Executed": false,
+  "hostedCalls": 0,
+  "databaseCalls": 0,
+  "credentialAccesses": 0,
+  "providerCalls": 0,
+  "applicationPostRequests": 0,
+  "restartAuthorizedByThisResult": false,
+  "revisitAuthorizedByThisResult": false,
+  "runtime": {
+    "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+    "autodeploy": false
+  },
+  "paths": {
+    "journal": ".superpowers/m78-continuation4-readonly-revisit2.jsonl",
+    "diagnostics": ".superpowers/m78-continuation4-readonly-revisit2-diagnostics.jsonl",
+    "rawCapture": ".superpowers/m78-continuation4-readonly-revisit2-raw-capture.jsonl",
+    "observation": ".superpowers/m78-continuation4-readonly-revisit2-observation.json",
+    "lock": ".superpowers/m78-continuation4-readonly-revisit2.jsonl.lock"
+  },
+  "missingTechnicalGates": [
+    "independently verified same-image restart chain",
+    "fresh root-owned revisit2 source closure and execution admission"
+  ],
+  "validation": {
+    "testsPassed": 7,
+    "testsFailed": 0,
+    "assertions": 125,
+    "strictTargetedTypeScript": "passed",
+    "positiveFixture": "injected_source_contract_only",
+    "independentCandidateReview": "candidate2_pending"
+  },
+  "materialFindingsOpen": 0,
+  "correctedEvaluator": {"path": "evaluations/research-qa/m78-readonly-recovery2-corrected-review.ts", "sha256": "c45f948482a53b9e2f2ba87c1b754bb70a6f2ced079dbf8b4d85657d7b77fa78"},
+  "files": [
+    {"path": "tools/staging/m78-readonly-revisit2.ts", "sha256": "0e78f2a798a3cb36ccd83fe406c631195119bd176a989baa480a79407d6a3c53"},
+    {"path": "tools/staging/m78-readonly-revisit2.test.ts", "sha256": "7a268e075b4ad2bf3626286285aca3ee763da0755667f92f88bb3b2f6ed638f5"}
+  ],
+  "reviewHistory": {
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "candidate1SnapshotSha256": "a576d67245ef05b525f8f7f87fb0c36c4248ae0b85d8f8c5fa68532d78957256",
+    "closedFindings": ["caller-self-pinned durable lock substitution", "missing restart-to-revisit 15-minute freshness bound"]
+  },
+  "requestedCompute": {"model": "gpt-5.6-terra", "effort": "medium"},
+  "observedCompute": {"model": null, "effort": null}
+}
