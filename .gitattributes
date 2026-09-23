@@ -302,3 +302,10 @@ operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REV
 
 evaluations/research-qa/m78-continuation4-readonly-recovery-design.md -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-CONT4-EXERCISE-FAILURE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-get-route-result.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERF-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE3.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE4.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE5.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json -text whitespace=cr-at-eol

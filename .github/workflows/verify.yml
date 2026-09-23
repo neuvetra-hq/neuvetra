@@ -183,6 +183,8 @@ jobs:
         run: |
           bun test evaluations/research-qa/m78-continuation4-independent.test.ts --test-name-pattern "^portable"
           bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
+      - name: Scope 1 GET preservation and finite diagnostic guards
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts
       - name: Continuation4 closed baseline evidence guards
         run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
       - name: Continuation4 lifecycle and passive revisit guards

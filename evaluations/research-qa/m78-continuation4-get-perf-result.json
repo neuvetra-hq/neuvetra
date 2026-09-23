@@ -1,0 +1,152 @@
+{
+  "status": "m78_continuation4_get_performance_probe_passed",
+  "createdAt": "2026-09-23T00:17:07.731Z",
+  "database": "m78_ops_continuation_20260922",
+  "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+  "productionGetTransactionsUseSharedReadLocks": true,
+  "sqlAdapterAllowlist": "SELECT/SET only; writer statements/functions refused; native locks require writing=false",
+  "digestTransactionsReadOnly": true,
+  "sampleCountPerOperation": 1,
+  "noSlaClaim": true,
+  "hostCalls": 0,
+  "providerSessions": 0,
+  "httpPostRequests": 0,
+  "applicationWrites": 0,
+  "tableCount": 121,
+  "rowsBeforeSha256": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64",
+  "rowsAfterSha256": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64",
+  "dataPreserved": true,
+  "exactReport": {
+    "family": "inventory",
+    "streamId": "e1169e1c-5fe8-4d5e-b61d-502b78e50e67",
+    "id": "de6bc76f-9fbf-461a-8e2d-b5f8d6097a86",
+    "versionId": "146977ae-a4ac-4985-8158-aa6c581d71d2",
+    "htmlBytes": 2573401,
+    "htmlSha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+    "snapshotBytes": 1715593,
+    "snapshotSha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546"
+  },
+  "metrics": [
+    {
+      "operation": "direct_findScope1",
+      "sampleCount": 1,
+      "transactions": 1,
+      "sqlQueries": 42,
+      "stateReads": 1,
+      "corporateReads": 10,
+      "sqlMs": 443.1227000000006,
+      "totalMs": 2093.0658000000003,
+      "responseBytes": 4804258,
+      "responseSha256": "ed373e1cc06a51748f09f4bb99dbbbaee9e77257b98fea02328035b67adc256c",
+      "status": null
+    },
+    {
+      "operation": "direct_findScope1Report",
+      "sampleCount": 1,
+      "transactions": 1,
+      "sqlQueries": 42,
+      "stateReads": 1,
+      "corporateReads": 10,
+      "sqlMs": 435.6386000000016,
+      "totalMs": 1936.3572999999997,
+      "responseBytes": 4449183,
+      "responseSha256": "c776006724d1503e7f30cf8e4b0101ec1fd465cebac51ab4906c100695478446",
+      "status": null
+    },
+    {
+      "operation": "route_report_metadata",
+      "sampleCount": 1,
+      "transactions": 3,
+      "sqlQueries": 86,
+      "stateReads": 2,
+      "corporateReads": 20,
+      "sqlMs": 919.1699999999955,
+      "totalMs": 3847.2340999999997,
+      "responseBytes": 4449183,
+      "responseSha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+      "status": 200
+    },
+    {
+      "operation": "route_report_download",
+      "sampleCount": 1,
+      "transactions": 3,
+      "sqlQueries": 86,
+      "stateReads": 2,
+      "corporateReads": 20,
+      "sqlMs": 845.7073999999866,
+      "totalMs": 3794.6580999999987,
+      "responseBytes": 2573401,
+      "responseSha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+      "status": 200
+    },
+    {
+      "operation": "route_report_snapshot",
+      "sampleCount": 1,
+      "transactions": 3,
+      "sqlQueries": 86,
+      "stateReads": 2,
+      "corporateReads": 20,
+      "sqlMs": 847.0364999999947,
+      "totalMs": 3647.8140000000003,
+      "responseBytes": 1715593,
+      "responseSha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+      "status": 200
+    }
+  ],
+  "routeCallCounts": [
+    {
+      "operation": "metadata",
+      "status": 200,
+      "bytes": 4449183,
+      "sha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+      "calls": {
+        "findScope1": 1,
+        "findScope1Version": 0,
+        "findScope1Report": 1
+      }
+    },
+    {
+      "operation": "download",
+      "status": 200,
+      "bytes": 2573401,
+      "sha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+      "calls": {
+        "findScope1": 1,
+        "findScope1Version": 0,
+        "findScope1Report": 1
+      }
+    },
+    {
+      "operation": "snapshot",
+      "status": 200,
+      "bytes": 1715593,
+      "sha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+      "calls": {
+        "findScope1": 1,
+        "findScope1Version": 0,
+        "findScope1Report": 1
+      }
+    }
+  ],
+  "sourcePins": [
+    {
+      "path": "apps/site-api/src/workspace/m78-routes.ts",
+      "sha256": "ab5018c64668dfe197755849aee1a2b3c5947f6c3da21e8d18869e998f3f9e01"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78.ts",
+      "sha256": "d492c23983b174662acb8728db88cb590a7446b6e5ec5e1a0a9a99e27ac0bf52"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "fbba5693a8ad1447c470309db4c46dcababa2f51c169d0535dc4a83417bcac7e"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-get-perf-probe.ts",
+      "sha256": "88cbb7dccce6b8cb69a617ce7e910e5a1cc1fe044ec8bfe7b029c7e5c7d91a5b"
+    }
+  ],
+  "interpretation": "The current report metadata, download, and snapshot routes each perform one root findScope1 plus one specific findScope1Report. This structural duplication is demonstrated locally; timings do not establish the complete hosted cause.",
+  "candidateImplemented": false,
+  "source173Changed": false
+}

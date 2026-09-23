@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T00:10:51.621419+00:00",
+  "updated_at": "2026-09-23T01:26:58.315817+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Read-only local GET performance probe; independently reviewed source repair if justified, then new zero-write preservation recovery. Never replay37 writes.",
+    "next_gate": "Publish the exact independently accepted GET repair on rolling PR5, pass all six checks and verify the new staging runtime; then separately reviewed read-only recovery. No replay of completed operations.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -139,13 +139,13 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M76 live on152fcb0/schema19; corrected stationary reconciliation verified before/after actual restart.",
+    "website_preview_state": "User browser signed in. Live app59c/schema21; synthetic inventory shows10 sources and126850.1763 kgCO2e. Download-performance repair is integrated locally, not deployed.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M77 backend dispatched; root UI/integration active. Additional independent reviewer dispatch rejected by runtime; release gate pending."
+    "last_session_work": "Read-only local GET comparison passed and independently accepted. Exact route integrated; preparing same-PR publication. New recovery source remains in preparation."
   },
   "session_handoff": {
-    "current": "Exercise closed failed on final report snapshot timeout; all37 writes verified and four test sessions closed. Published7e441629 has six checks passed.",
-    "next": "Accept independent failure review; measure GET latency locally before a separately reviewed optimization and zero-write recovery. No completed operation may be replayed.",
+    "current": "Failed exercise preserved after37 verified operations; no replay. User signed in. GET repair independently accepted locally:19cases, exactresponses,121tables preserved,86->44specific-route queries, bothlocalconnectionsclosed.",
+    "next": "Publish the exact independently accepted GET repair on rolling PR5, pass all six checks and verify the new staging runtime; then separately reviewed read-only recovery. No replay of completed operations.",
     "evidence": [
       "operations/next-session.md"
     ]
@@ -534,7 +534,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œE06 and P01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153E06 and P01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -2890,25 +2890,25 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "continuation4_exercise_running_once",
+    "status": "continuation4_failed_get_repair_in_progress",
     "active_assignments": [
       {
-        "id": "M78-ROOT-CONT2",
+        "id": "M78-GET-REPAIR-ROOT",
         "executor": "/root",
-        "scope": "Publish acceptedverificationtools, verifyCI, refreshsame59runtime and runnewbaseline"
+        "scope": "Native comparison completed once; owns exact integration, rolling PR publication and staging admission."
       },
       {
-        "id": "M79-RIGHTS-INDEPENDENT-REVIEW-01",
-        "executor": "/root/m79_rights_review",
-        "scope": "Finish independent rights evidence correction findings"
+        "id": "M78-GET-LOCAL-COMPARISON-REVIEW-01",
+        "executor": "/root/m78_transport_probe",
+        "scope": "Independent offline review of actual comparative result and adversarial evidence checks."
       },
       {
-        "id": "M79-NUMERICAL-COMPATIBILITY-01",
-        "executor": "/root/m79_numerical",
-        "scope": "Finish independent arithmetic candidate"
+        "id": "M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01",
+        "executor": "/root/m78_transport_continuation",
+        "scope": "New source-only GET recovery runner and evaluator; no hosted or credential execution."
       }
     ],
-    "routing_exception": "Fresh CPO Sol/medium spawn rejected agent thread limit; existing executor reused, observed compute unknown.",
+    "routing_exception": "Fresh independent reviewer dispatch requested Astra/high but failed at agent-thread limit; existing non-author reviewer received refreshed bounded brief. Actual inherited settings unknown.",
     "hosted_changes": true,
     "scope1_complete": false,
     "security": {
@@ -3218,7 +3218,7 @@
       "unknown_sessions": 0,
       "baseline_qa_sha256": "6937df29bb08b4bd253ceade366c1e19d512e0e256a0090b0d00f688fc1f6ae3",
       "exercise_gate_sha256": "9fe233c964b8c40f6c7a9871eecf75a318e7a800f2ec14570c6803288ff9dce7",
-      "exercise_status": "running",
+      "exercise_status": "failed",
       "verified_application_operations": 37,
       "status": "exercise_failed_after_37_verified_operations",
       "exercise_requests": 388,
@@ -3244,7 +3244,39 @@
         "result_sha256": "a97a84ca66ed696a348c8c8a5ecaf65e36ca4eb311803b6f2ecccebf9d16c573",
         "exercise_accepted": false,
         "open_product_findings": 1
+      },
+      "failure_evidence_publication": {
+        "commit": "1042348f2d4849246771fee4be77fe590c34ab8a",
+        "all_six_checks_passed_at": "2026-09-23T00:18:13.683624+00:00"
       }
+    },
+    "get_repair": {
+      "status": "independent_local_comparison_accepted_preparing_publication",
+      "route_sha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+      "result": "evaluations/research-qa/m78-get-local-comparison-result.json",
+      "result_sha256": "caae59a5d5704c53b6d61f901d30dee55be01b7f890c62e7d6e5c1b1b7931417",
+      "cases": 19,
+      "warmups_per_case": 1,
+      "measured_samples_per_case": 3,
+      "before_report_queries": 86,
+      "after_report_queries": 44,
+      "table_count": 121,
+      "table_digest_sha256": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64",
+      "application_writes": 0,
+      "hosted_requests": 0,
+      "local_connections_closed": true,
+      "live_fix_deployed": false,
+      "hosted_performance_verified": false,
+      "historical_sources_verified_before_integration": 173,
+      "historical_sources_unchanged_after_integration": 172,
+      "integration": "evaluations/research-qa/m78-get-route-integration.json",
+      "integrated_tests_passed": 9,
+      "integrated_assertions": 141,
+      "site_api_typecheck": "passed",
+      "independent_actual_review": "evaluations/research-qa/m78-get-local-comparison-independent-result.json",
+      "independent_actual_review_sha256": "7aeabac30562a0f44d44b6a760b12a199bd42f6dbc360df591fb52f91a9e3b96",
+      "independent_actual_tests_passed": 9,
+      "independent_actual_assertions": 230
     }
   },
   "current_m79_preparation": {

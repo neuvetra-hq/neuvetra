@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "id": "M78-GET-ROOT-COMPARATIVE-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-ROOT-COMPARATIVE-REVIEW-01-CANDIDATE1.json",
+      "sha256": "62b90ae6095516687a628f77c127a6547c61c74166fdafe7fe0435bc8ae9ac86"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-ROOT-COMPARATIVE-REVIEW-01-CANDIDATE2.json",
+      "sha256": "bd00bf8a6c35ccc145b0da6959f0174e9dad417f40effa3b562307bd575ebc15"
+    }
+  ],
+  "source_artifacts": [
+    ".superpowers/m78-get-route-comparative-candidate1.ts",
+    ".superpowers/m78-get-route-comparative-candidate2.ts",
+    ".superpowers/m78-get-route-comparative.ts",
+    "evaluations/research-qa/m78-continuation4-preparation-source-pins.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE2.json"
+  ],
+  "criteria": [
+    {
+      "id": "FAILURE-CLEANUP-COVERAGE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1.test.ts",
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1-result.json"
+      ],
+      "reason": "Candidate1 failed because construction was outside cleanup. Candidate3 constructs both handles inside failure coverage, attempts both closes with allSettled, emits failure if either close rejects and writes pass only after confirmed closure."
+    },
+    {
+      "id": "INDEPENDENT-SOURCE-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1.test.ts",
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1-result.json"
+      ],
+      "reason": "Candidate1 omitted independent acceptance binding. Candidate3 requires exact hashed route and guard receipts and validates their statuses, reviewer, zero findings and candidate hashes before lock creation."
+    },
+    {
+      "id": "COMPARATIVE-MEASUREMENT-DESIGN",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1.md"
+      ],
+      "reason": "The source pins original/candidate closure, uses GET route calls and guarded runtime SQL, compares 121 base-table digests, exact bodies/status/headers and query reduction over 19 cases with one warm-up and three measured samples, while disclaiming hosted timing and SLA claims."
+    },
+    {
+      "id": "SOURCE-ONLY-NONEXECUTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1-result.json",
+        "evaluations/research-qa/m78-get-root-comparative-review-candidate1.md"
+      ],
+      "reason": "QA read and hashed source only. It did not import or execute the helper, access a database, network, credential or provider, or create an admission."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-source-root-acceptance.json",
+      "evaluations/research-qa/m78-get-root-comparative-review-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-ROOT-COMPARATIVE-REVIEW-01-CANDIDATE1.json",
+        "sha256": "62b90ae6095516687a628f77c127a6547c61c74166fdafe7fe0435bc8ae9ac86"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-ROOT-COMPARATIVE-REVIEW-01-CANDIDATE2.json",
+        "sha256": "bd00bf8a6c35ccc145b0da6959f0174e9dad417f40effa3b562307bd575ebc15"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Critical QA routing requested gpt-6-astra/high. This assignment reused an existing reviewer context; actual model and effort were unavailable and remain null.",
+    "Candidate1 is preserved with its two findings. Candidate2 is preserved with the later pass-before-close finding. Candidate3 repairs all three findings; no private helper execution is part of this assignment.",
+    "Root accepted the exact bounded source/review snapshot; see evaluations/research-qa/m78-get-source-root-acceptance.json. This closure does not accept native or hosted execution.",
+    "Review binding includes the preserved failed candidates as historical dispositions; only the final candidate is accepted for future use."
+  ]
+}

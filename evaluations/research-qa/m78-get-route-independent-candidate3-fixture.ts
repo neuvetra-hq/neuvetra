@@ -1,7 +1,8 @@
-import {m71Uuid} from '../../../../packages/neuvetra-database/src/m71-validation'
-import {M78ValidationError,parseM78Json,validateM78ProcessSave,validateM78InventorySave,validateM78Review,validateM78Report,m78CanonicalJson} from '../../../../packages/neuvetra-database/src/m78-validation'
-import type {M78Authorities,M78Family,M78Policy,M78Register,M78VersionEnvelope,M78Report,M78ProcessSaveInput,M78InventorySaveInput,M78ReviewInput,M78Review,M78ReportInput} from '../../../../packages/neuvetra-database/src/m78-contract'
-import {extractBearerToken,type AuthenticatedUser} from '../lib/auth'
+/** QA import-path adaptation of frozen candidate route fd9b1115; source equality is verified by test. */
+import {m71Uuid} from '../../packages/neuvetra-database/src/m71-validation'
+import {M78ValidationError,parseM78Json,validateM78ProcessSave,validateM78InventorySave,validateM78Review,validateM78Report,m78CanonicalJson} from '../../packages/neuvetra-database/src/m78-validation'
+import type {M78Authorities,M78Family,M78Policy,M78Register,M78VersionEnvelope,M78Report,M78ProcessSaveInput,M78InventorySaveInput,M78ReviewInput,M78Review,M78ReportInput} from '../../packages/neuvetra-database/src/m78-contract'
+import {extractBearerToken,type AuthenticatedUser} from '../../apps/site-api/src/lib/auth'
 export interface M78RouteDatabase {
  hasStagingAccess?:(userId:string)=>Promise<boolean>
  canManageWorkspace:(userId:string,companyId:string)=>Promise<boolean>

@@ -1,0 +1,64 @@
+{
+  "status": "m78_get_source_root_acceptance",
+  "observedAt": "2026-09-23T01:13:35.920558+00:00",
+  "accepted": [
+    {
+      "taskId": "M78-CONT4-GET-ROUTE-OPTIMIZATION-01",
+      "snapshot": {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json",
+        "sha256": "3667135c931f64e33fcb80f6548a46664c5b76cfa650e64d66b83ec7964c286d"
+      },
+      "receipt": {
+        "path": "evaluations/research-qa/m78-get-route-independent-result.json",
+        "sha256": "00a054d0dee57117a0b689ccfb6c62550286870ad6819d1f0308686061796e6a"
+      }
+    },
+    {
+      "taskId": "M78-GET-ROUTE-INDEPENDENT-REVIEW-01",
+      "snapshot": {
+        "path": "operations/agent-improvement/snapshots/M78-GET-ROUTE-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+        "sha256": "f80e7337f923e033b59cd3b69c9c2c707cf38e799e5704bfb5ed08ed876aba33"
+      },
+      "receipt": {
+        "path": "evaluations/research-qa/m78-get-route-independent-result.json",
+        "sha256": "00a054d0dee57117a0b689ccfb6c62550286870ad6819d1f0308686061796e6a"
+      }
+    },
+    {
+      "taskId": "M78-GET-GUARD-INDEPENDENT-REVIEW-01",
+      "snapshot": {
+        "path": "operations/agent-improvement/snapshots/M78-GET-GUARD-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+        "sha256": "04f4b6f160192d81cbbb6bff269025d1fc4adc2cc95862d353c6e082d81af6d7"
+      },
+      "receipt": {
+        "path": "evaluations/research-qa/m78-get-guard-independent-result.json",
+        "sha256": "c61f9fded47337615d33941cacb05d20a0d096ae93e2a73fc1e996ca5d2765b8"
+      }
+    },
+    {
+      "taskId": "M78-GET-ROOT-COMPARATIVE-REVIEW-01",
+      "snapshot": {
+        "path": "operations/agent-improvement/snapshots/M78-GET-ROOT-COMPARATIVE-REVIEW-01-CANDIDATE2.json",
+        "sha256": "bd00bf8a6c35ccc145b0da6959f0174e9dad417f40effa3b562307bd575ebc15"
+      },
+      "receipt": {
+        "path": "evaluations/research-qa/m78-get-root-comparative-review-result.json",
+        "sha256": "cad16a6ae5f87a0c2fbafd9f5670bb3ad6e79eea2e71fc9e0bcffc2299e06d16"
+      }
+    }
+  ],
+  "rootChecks": {
+    "isolatedRouteTestsPassed": 9,
+    "isolatedRouteAssertions": 141,
+    "helperReviewTestsPassed": 5,
+    "helperReviewAssertions": 36,
+    "guardSourceTemplatesAccepted": 20,
+    "guardNegativeCasesRefused": 56
+  },
+  "limits": [
+    "Source and mocked-boundary acceptance only. Native comparison is running separately; no native acceptance is asserted here.",
+    "The author route run is preparation-only. No hosted speed, deployment, preservation recovery, restart, revisit or Scope 1 completion is accepted.",
+    "Historical failed candidates and the incomplete historical probe source provenance remain preserved.",
+    "Reviewer fresh dispatch failed at the agent-thread limit; existing independent context used with inherited compute unknown."
+  ]
+}

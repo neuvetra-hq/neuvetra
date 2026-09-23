@@ -1,0 +1,59 @@
+{
+  "status": "m78_continuation4_get_perf_candidate2_independent_review_failed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 2,
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE2.json",
+    "sha256": "1fc0abc6f0e7fac4c365f4598cc6295ffc1527e3a2120bbd708df009f4048191"
+  },
+  "historicalExecutedCandidate": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE1.json",
+    "sha256": "4b78bbe0589fe2262399f6b837686bef34d5120cc834da06cd12f3a615913601"
+  },
+  "historicalResult": {
+    "path": "evaluations/research-qa/m78-continuation4-get-perf-result.json",
+    "sha256": "c0e7b9d455087318043e749a777ce8274493a22a736b48e0a94d8d6518b9a112",
+    "generatedByProbeSha256": "88cbb7dccce6b8cb69a617ce7e910e5a1cc1fe044ec8bfe7b029c7e5c7d91a5b",
+    "generatedByCandidate2": false
+  },
+  "findings": [
+    {
+      "id": "GET-GUARD-NESTED-CALL-BYPASS",
+      "severity": "material",
+      "status": "open",
+      "summary": "Candidate2's regular-expression call scanner sees innermost calls but can omit an unlisted outer call and the native lock call that owns a nested writing expression.",
+      "reproductions": [
+        "select neuvetra.some_mutator(coalesce(1, 2))",
+        "select neuvetra.m78_lock($1, coalesce($2, false)) allowed with $2=true",
+        "select neuvetra.m78_lock($1, (($2))) allowed with $2=true",
+        "select $1::neuvetra.side_effect_type"
+      ]
+    },
+    {
+      "id": "GET-HISTORICAL-SOURCE-PROVENANCE",
+      "severity": "material",
+      "status": "open",
+      "summary": "The executed candidate1 result pins the route, M78, workspace and probe files, but not the M71-M77 readers used by the measured full state builds. Candidate2's expanded ten-file list was not used to generate the result.",
+      "impact": "The historical 42/86 query counts and timings are measured observations, but they cannot be attributed to the complete candidate2/current getter source set."
+    }
+  ],
+  "supportedClaims": {
+    "candidate1ResultBytesPreserved": true,
+    "candidate1BeforeAfterBaseTableDigestEqual": true,
+    "baseTablesCounted": 121,
+    "digestScope": "neuvetra base-table rows only; sequences, settings and external effects were not digested",
+    "currentRouteCallsFindScope1AndFindScope1ReportOnceEach": true,
+    "currentStructuralDuplicateStateBuildSupported": true,
+    "singleSampleTimingsEstablishHostedCause": false,
+    "narrowGetDispatchOptimizationWorthPreparing": true,
+    "liveReleaseSupported": false
+  },
+  "tests": {
+    "passed": 1,
+    "failed": 3,
+    "expectations": 10,
+    "nativeProbeRerun": false,
+    "networkUsed": false,
+    "databaseUsed": false
+  }
+}

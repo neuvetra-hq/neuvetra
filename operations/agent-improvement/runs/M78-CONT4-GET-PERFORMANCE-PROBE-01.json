@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-GET-PERFORMANCE-PROBE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "9c795b3696d1749e6a5684f7919e98815e4909c6210fd389d938ffa17ce97427",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE1.json",
+      "sha256": "4b78bbe0589fe2262399f6b837686bef34d5120cc834da06cd12f3a615913601"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE2.json",
+      "sha256": "1fc0abc6f0e7fac4c365f4598cc6295ffc1527e3a2120bbd708df009f4048191"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE3.json",
+      "sha256": "c8c731fecb52231b7546379c4ba6ca3bf744bf10b95cfececc472961a3c5ae26"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE4.json",
+      "sha256": "112b13cba11a4cbecdcf4e82004cc5a05784db631ef71426d06246c2a3f40cea"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE5.json",
+      "sha256": "3b83b99031d1ae008a16498642daef152fb302d5a2fff71dbcbf1f2c6a9357e8"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "PRESERVED_DATABASE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE1.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-result.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-report.md"
+      ],
+      "reason": "The executed candidate1 measured the preserved local database with zero HTTP POSTs/application writes/host calls and exact equality of all121 table digests before and after; its weaker diagnostic guard is not presented as a general zero-write barrier."
+    },
+    {
+      "id": "STRUCTURAL_GET_MEASUREMENT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-perf-probe.ts",
+        "evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts",
+        "evaluations/research-qa/m78-continuation4-get-perf-result.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-report.md"
+      ],
+      "reason": "One labeled local sample per required operation pins current source and demonstrates direct42-query/one-state reads versus current route86-query/two-state reads, exact response bytes, and no SLA or complete hosted-cause claim."
+    },
+    {
+      "id": "STRICT_FUTURE_PROBE_GUARD",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE5.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-probe.ts",
+        "evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts",
+        "evaluations/research-qa/m78-continuation4-get-perf-report.md"
+      ],
+      "reason": "Candidate3 preserves candidates1-2 and admits only 20 exact normalized query templates across the pinned hosted subclass and M71-M78 readers, with exact arity, nonempty actor and writing=false checks. The three executable candidate2 parser escapes and other unlisted forms are rejected. It is not claimed retroactively for the recorded result."
+    },
+    {
+      "id": "BOUNDED_FIX_DECISION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-perf-report.md"
+      ],
+      "reason": "The next proposed source task is confined to removing the redundant root GET before exact version/report getters, with identity/refusal/byte equivalence and a new source/runtime gate required before recovery."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m78_transport_probe",
+    "independent": true,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 4,
+    "escaped_defects": null,
+    "repeated_findings": [],
+    "blocker": "Historical candidate1 measurement lacks complete exact reader-source attribution and cannot be retroactively admitted. Its diagnostic role is complete; source guard repair is separately accepted under M78-GET-GUARD-INDEPENDENT-REVIEW-01. The new full-closure comparison replaces this result for release."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Two pre-result attempts are preserved in the report: an invalid local role-enum assumption, then PostgreSQL25006 when a genuine read-only transaction refused the production shared read lock. Neither produced a result or changed stored data.",
+    "Candidate1 produced the preserved measurement and exact data digests. Root first review found its SQL denylist was not a general zero-write barrier; candidate1 remains rejected and embedded exactly.",
+    "Candidate2 attempted a parser-style allowlist; independent QA proved nested-mutator, nested-lock-flag and schema-qualified-cast escapes. Candidate2 remains rejected and embedded exactly.",
+    "Candidate3 uses 20 finite normalized SQL-template hashes plus ten exact caller source pins, including HostedWorkspaceDatabase actor/staging preflight. Four tests/53 assertions and strict targeted TypeScript pass; no native rerun occurred. Independent QA remains required.",
+    "No product/173 source, clone, database row, migration, hosted service, provider, credential, Git, official journal, or shared ledger was changed.",
+    "Candidate3 exported a frozen Map whose entries remained mutable; independent QA reproduced in-memory allowlist extension. Candidate4 keeps enforcement tables module-private and exports only numeric diagnostics and verifier functions. Four tests/53 assertions and strict targeted TypeScript pass; no native rerun.",
+    "Candidate5 is test-only: every historical route behavior test imports the frozen baseline fixture, so optimized route integration cannot invalidate the historical double-read and root-failure expectations. Guard source remains byte-identical to candidate4; 4/53 and strict TypeScript pass.",
+    "No worker is active on this historical measurement/rejection. Root preserves it without asserting a new native pass for the repaired guard."
+  ]
+}

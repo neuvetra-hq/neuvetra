@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "id": "M78-GET-ROUTE-INDEPENDENT-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-ROUTE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "6a5a219a4109585c9a77d070a798731e6642030a78a18fdfb71ee4f9de4edf8d"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-ROUTE-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+      "sha256": "f80e7337f923e033b59cd3b69c9c2c707cf38e799e5704bfb5ed08ed876aba33"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-get-route-independent-candidate3-fixture.ts",
+    "evaluations/research-qa/m78-get-route-independent.test.ts"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-BASELINE-AND-CHANGE-SCOPE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-route-independent.test.ts",
+        "evaluations/research-qa/m78-get-route-independent-result.json"
+      ],
+      "reason": "The portable fixture reconstructs historical route ab5018c exactly, candidate3 is pinned to fd9b1115, the pre-dispatch prefix and POST/catch tail remain byte-identical, and the executable QA import adaptation reverses exactly to the candidate bytes."
+    },
+    {
+      "id": "DIRECT-GET-IDENTITY-AND-REDUCTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-route-independent.test.ts",
+        "evaluations/research-qa/m78-get-route-independent-review.md"
+      ],
+      "reason": "Both families use one version/report getter and zero root getters on valid direct reads; all returned ID, company, stream and family mutations fall back without releasing bytes."
+    },
+    {
+      "id": "FALLBACK-AND-REFUSAL-SEMANTICS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-route-independent.test.ts",
+        "evaluations/research-qa/m78-get-route-independent-result.json"
+      ],
+      "reason": "Actual cross-family requests retain generic404, valid-stream missing records retain specific404, and asynchronously rejected fallbacks map permission, capacity, input and corruption errors inside the route catch. Authentication and staging precede getters."
+    },
+    {
+      "id": "ZERO-WRITE-SOURCE-BOUNDARY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-route-independent-result.json",
+        "evaluations/research-qa/m78-get-route-independent-review.md"
+      ],
+      "reason": "No GET test invokes a writer; POST logic is byte-identical. Review used mocked public boundaries only and performed no native database, network, provider or hosted action."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-source-root-acceptance.json",
+      "evaluations/research-qa/m78-get-route-independent-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-ROUTE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "6a5a219a4109585c9a77d070a798731e6642030a78a18fdfb71ee4f9de4edf8d"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-ROUTE-INDEPENDENT-REVIEW-01-CANDIDATE2.json",
+        "sha256": "f80e7337f923e033b59cd3b69c9c2c707cf38e799e5704bfb5ed08ed876aba33"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Critical QA routing requested gpt-6-astra/high. This assignment reused an existing reviewer context; actual model and effort were unavailable and remain null.",
+    "Candidate1 and candidate2 source failures are preserved in the author snapshots; candidate3 repairs awaited fallback, cross-family fallback and requested-ID binding.",
+    "This source verdict does not admit native comparison, recovery, deployment or release.",
+    "Root accepted the exact bounded source/review snapshot; see evaluations/research-qa/m78-get-source-root-acceptance.json. This closure does not accept native or hosted execution.",
+    "Review binding includes the preserved failed candidates as historical dispositions; only the final candidate is accepted for future use."
+  ]
+}
