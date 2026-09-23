@@ -33,7 +33,7 @@
       "id": "OBSERVED-LOG-SHAPE",
       "status": "pass",
       "evidence": [
-        ".superpowers/m78-recovery2-collect-startup2.py",
+        "operations/agent-improvement/snapshots/M78-RESTART-LOG-COLLECTOR-REPAIR-01-CANDIDATE1.json",
         "evaluations/research-qa/m78-restart-log-collector-repair.test.py"
       ],
       "reason": "Accepts the exact top-level Railway event shape and preserved nested shape without a message filter."
@@ -42,7 +42,7 @@
       "id": "ONE-SANITIZED-STARTUP",
       "status": "pass",
       "evidence": [
-        ".superpowers/m78-recovery2-collect-startup2.py",
+        "operations/agent-improvement/snapshots/M78-RESTART-LOG-COLLECTOR-REPAIR-01-CANDIDATE1.json",
         "evaluations/research-qa/m78-restart-log-collector-repair.test.py"
       ],
       "reason": "Retains only event and timestamp, deduplicates exact repeats, and refuses distinct or malformed startup rows."
@@ -51,7 +51,7 @@
       "id": "PRESERVED-RESTART-CONTRACT",
       "status": "pass",
       "evidence": [
-        ".superpowers/m78-recovery2-collect-startup2.py",
+        "operations/agent-improvement/snapshots/M78-RESTART-LOG-COLLECTOR-REPAIR-01-CANDIDATE1.json",
         "evaluations/research-qa/m78-restart-log-collector-repair-report.md"
       ],
       "reason": "Preserves the old four helper pins and fixed receipts/runtime/chronology/readiness checks, adds collector provenance, and contains no restart call."
@@ -122,6 +122,7 @@
     "The frozen original collector and original four helper pins remain unchanged.",
     "The observed flat row timestamp is 2026-09-23T04:34:08.743321887Z and its message is an empty string.",
     "Root independently reproduced and accepted the frozen collector source at review SHA 4dec40b9d3cb4f8df95b543c5754e43fb380ad674cc251bbc48f32f5db5e8456.",
-    "The original collector failure and two output-free collection failures remain preserved as historical operational evidence; this run does not overwrite them."
+    "The original collector failure and two output-free collection failures remain preserved as historical operational evidence; this run does not overwrite them.",
+    "Publication f0dff848 exposed a portability error: a criterion linked the private local collector path. Its source bytes already exist in the reviewed public snapshot; criterion links now use that snapshot. Original source_artifacts hashes and all actual receipts remain unchanged."
   ]
 }
