@@ -105,7 +105,7 @@
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 1,
-    "escaped_defects": 0,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {
@@ -135,6 +135,7 @@
     "Source-only. No provider, hosted, credential, database, Git, restart or shared-record action occurred.",
     "Root review found and the candidate repairs transitive source-pin, helper-drift and final observation-time gaps.",
     "Actual restart and later revisit remain separately gated.",
-    "Public criterion evidence points to the immutable source snapshot because private .superpowers helper paths are intentionally not tracked; source_artifacts retain original paths and raw hashes."
+    "Public criterion evidence points to the immutable source snapshot because private .superpowers helper paths are intentionally not tracked; source_artifacts retain original paths and raw hashes.",
+    "Post-acceptance defect observed 2026-09-23: original collector assumed JSON in message and filtered message text; actual Railway structured startup is top-level event with empty message. Two read-only attempts refused before output. Original four helpers remain frozen; independently reviewed collector2 bbc03eba subsequently observed the single already-requested restart. No restart replay. Historical source review remains evidence of its tested scope, not a successful execution of the original collector."
   ]
 }

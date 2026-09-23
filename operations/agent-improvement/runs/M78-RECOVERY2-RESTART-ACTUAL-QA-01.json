@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "M78-RECOVERY2-RESTART-ACTUAL-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-ACTUAL-QA-01-CANDIDATE1.json",
+      "sha256": "97dde82fa4ac23e1bce6fe86d2823750f96456a7f98372374367513d3873b3bc"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-recovery2-restart-actual-independent-review.ts",
+    "evaluations/research-qa/m78-recovery2-restart-actual-independent.test.ts",
+    "evaluations/research-qa/m78-recovery2-restart-collector2-independent.test.py",
+    "evaluations/research-qa/m78-recovery2-restart-actual-independent-review.md",
+    "evaluations/research-qa/m78-recovery2-restart-actual-independent-result.json",
+    "evaluations/research-qa/m78-recovery2-restart-actual-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_RECOVERY_AND_SOURCE_PREREQUISITES",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recovery2-restart-actual-independent-review.ts"
+      ],
+      "reason": "Fixed actual recovery2 evidence and all four admitted helper bytes rehash exactly."
+    },
+    {
+      "id": "SINGLE_DURABLE_RESTART_CHAIN",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recovery2-restart-actual-independent-result.json"
+      ],
+      "reason": "One-restart/zero-POST admission, UUID request, exact acknowledgment and one same-image startup are continuously hash-bound."
+    },
+    {
+      "id": "COLLECTOR_REPAIR_PROVENANCE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recovery2-restart-collector2-independent.test.py"
+      ],
+      "reason": "The repaired collector supports the observed flat provider row and nested rows, dedupes exact duplicates, rejects ambiguity, and is pinned in the startup receipt."
+    },
+    {
+      "id": "REVISIT_EXECUTION",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This review accepts the restart only; the revisit is separately reviewed after closure."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-recovery2-restart-actual-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-ACTUAL-QA-01-CANDIDATE1.json",
+        "sha256": "97dde82fa4ac23e1bce6fe86d2823750f96456a7f98372374367513d3873b3bc"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh Astra/high dispatch remained unavailable at the runtime thread limit; this independent non-author context continued with inherited settings unknown.",
+    "The original collector made two read-only collection attempts that failed before outputs because it did not parse the provider's flat event field. The restart was never repeated.",
+    "Collector2 was separately frozen and source-reviewed; actual evidence pins it while preserving the original admission helper pins.",
+    "No credentials, provider API, network, database, restart, hosted application request or Git action was performed by this reviewer.",
+    "Root closes the independently authored QA record after reproducing2tests/17assertions; actual execution independence remains probe versus root operator."
+  ]
+}

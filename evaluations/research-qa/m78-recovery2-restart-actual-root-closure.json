@@ -1,0 +1,20 @@
+{
+  "status": "m78_restart_actual_review_root_closed",
+  "observedAt": "2026-09-23T04:45:23.209883+00:00",
+  "reviewResult": {
+    "path": "evaluations/research-qa/m78-recovery2-restart-actual-independent-result.json",
+    "sha256": "70211489b2413cd5d324574e225256893470c293160763e28f16f6b5216d7d00"
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-ACTUAL-QA-01-CANDIDATE1.json",
+    "sha256": "97dde82fa4ac23e1bce6fe86d2823750f96456a7f98372374367513d3873b3bc"
+  },
+  "rootReproduction": {
+    "testsPassed": 2,
+    "assertions": 17
+  },
+  "independentReviewer": "/root/m78_transport_probe",
+  "reviewArrangement": "Probe independently reviewed actual restart; root reproduced its focused tests and closes the review. Root executed the provider actions, not their independent acceptance.",
+  "restartRequests": 1,
+  "revisitAcceptancePending": true
+}

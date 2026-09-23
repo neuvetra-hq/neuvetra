@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T04:27:16.092267+00:00",
+  "updated_at": "2026-09-23T04:53:47.178678+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "All final persistence source/private reviews passed (50f8b3ed/f974ea9c/508f862a). Publish reviewed batch on PR5, pass six exact-head checks, then one same-image restart and actualQA followed by GET-only revisit2 within15min. No restart/revisit yet.",
+    "next_gate": "Synthetic functional journey independently accepted (recovery eaa2f3e3/restart70211489/revisit76b481e6). Final evidence publication and six exact-head checks remain; board demonstration feedback requested. M79 method/source release next; customerScope1 incomplete.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -2890,22 +2890,12 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "continuation4_failed_get_repair_in_progress",
+    "status": "synthetic_functional_accepted_final_publication_pending",
     "active_assignments": [
       {
-        "id": "M78-GET-REPAIR-ROOT",
+        "id": "M78-PERSISTENCE-CLOSURE-ROOT",
         "executor": "/root",
-        "scope": "Root authored CI historical-context repair;19historical tests/1590assertions and currentgate1/7pass. Owns next publication and deployment after freshsixchecks."
-      },
-      {
-        "id": "M78-GET-CI-HISTORY-REVIEW-01",
-        "executor": "/root/m78_transport_probe",
-        "scope": "Independent review of frozen104 historical CI context and current old-gate refusal regression."
-      },
-      {
-        "id": "M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01",
-        "executor": "/root/m78_transport_continuation",
-        "scope": "New source-only GET recovery runner and evaluator; no hosted or credential execution."
+        "scope": "Publish accepted actual evidence on PR5 and verify exact remote head/six checks; collect board demonstration feedback."
       }
     ],
     "routing_exception": "Fresh independent reviewer dispatch requested Astra/high but failed at agent-thread limit; existing non-author reviewer received refreshed bounded brief. Actual inherited settings unknown.",
@@ -2920,7 +2910,7 @@
       "docs/research/m78-product-brief.md",
       "docs/research/m78-technical-plan.md"
     ],
-    "hosted_change_scope": "Completed Terrascope containment; Neuvetra schema21 upgrade committed once and application2002fea deployed; first inventory save confirmed committed",
+    "hosted_change_scope": "Previously approved Terrascope containment, once-only schema21 upgrade, deployed application9dd and one verified same-image restart. All original saved records and37later verified writes retained; no replay.",
     "planning_review": "evaluations/research-qa/m78-planning-root-review.md",
     "accounting": {
       "status": "accepted_bounded_candidate",
@@ -2930,8 +2920,8 @@
       "production_release": false
     },
     "frontend": {
-      "status": "final_local_native_ui_verified_no_hosted_demonstration",
-      "evidence": "apps/site-web/src/components/Scope1Inventory.tsx",
+      "status": "hosted_signed_in_post_restart_refresh_verified",
+      "evidence": "evaluations/research-qa/m78-restart-browser-observation.md",
       "runtime_demonstrated": true
     },
     "native_author": {
@@ -2975,11 +2965,11 @@
       "fresh_recovery_receipt_sha256": "b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180"
     },
     "publication": {
-      "commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+      "commit": "62e6e3dc0fff2846c1d056bea5922c8849a01119",
       "required_checks_passed": 6,
       "required_checks_total": 6,
-      "observed_at": "2026-09-22T16:21:38.189410+00:00",
-      "remaining": "Performance repair unpublished; independent QA and new continuation required"
+      "observed_at": "2026-09-23T04:33:03.893340+00:00",
+      "remaining": "Final actual persistence evidence publication"
     },
     "exact_recipe_rehearsal": {
       "status": "historical_failed_run_preserved",
@@ -3013,17 +3003,18 @@
       "createdAt": "2026-09-22T16:23:58.948Z",
       "oldRowsAndContentPreserved": true
     },
-    "release_commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+    "release_commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
     "required_checks": "six_passed",
-    "deployment_requested": "b1f30f80-b536-4eb0-a376-6db76c0d1115",
-    "automatic_deployment": "paused_for_release",
+    "deployment_requested": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "automatic_deployment": "disabled",
     "live_runtime": {
-      "commit": "2002feacd26c48c1beb0a4412b5524b935528084",
+      "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
       "schemaVersion": 21,
-      "deploymentId": "b1f30f80-b536-4eb0-a376-6db76c0d1115",
-      "imageDigest": "sha256:e728799699e97b45d5afc5dcb3ced8912841cb6684185243e867e798ca1c47cc",
-      "observedAt": "2026-09-22T16:28:28.137043+00:00",
-      "ready": true
+      "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+      "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+      "observedAt": "2026-09-23T04:41:36.740707+00:00",
+      "ready": true,
+      "autodeploy": false
     },
     "hosted_journey": {
       "status": "exercise_failed_original_save_confirmed_committed",
@@ -3251,7 +3242,7 @@
       }
     },
     "get_repair": {
-      "status": "publication_ci_failed_historical_context_repair_under_review",
+      "status": "deployed_and_actual_read_reconciliation_passed",
       "route_sha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
       "result": "evaluations/research-qa/m78-get-local-comparison-result.json",
       "result_sha256": "caae59a5d5704c53b6d61f901d30dee55be01b7f890c62e7d6e5c1b1b7931417",
@@ -3265,7 +3256,7 @@
       "application_writes": 0,
       "hosted_requests": 0,
       "local_connections_closed": true,
-      "live_fix_deployed": false,
+      "live_fix_deployed": true,
       "hosted_performance_verified": false,
       "historical_sources_verified_before_integration": 173,
       "historical_sources_unchanged_after_integration": 172,
@@ -3285,7 +3276,7 @@
       "deployment_helper_source_review": "evaluations/research-qa/m78-get-deployment-helper-result.json",
       "deployment_helper_source_accepted": true,
       "ci_history_repair": {
-        "status": "candidate2_under_independent_review",
+        "status": "independently_accepted_and_published",
         "workflow_sha256": "4a7810550658b732741992a79152527348f1b6fdd8c0340c5e0dc0015e7f9a14",
         "historical_ref": "1042348f2d4849246771fee4be77fe590c34ab8a",
         "historical_tests_passed": 19,
@@ -3295,8 +3286,43 @@
         "first_independent_finding": "Guard baseline test compared historical route with new current route; corrected to exact original pin in immutable historical result.",
         "guard_test_sha256": "5426aadcdeb299fc15ccc63cc88bda7e0534bfaf43b352b45edb215279a88872",
         "production_route_unchanged": true
-      }
-    }
+      },
+      "closure_note": "Original performance repair checkpoint and CI failure records remain historical. Deployed9dd passed six checks; actual GET recovery and post-restart revisit pass. No representative customer performance claim."
+    },
+    "persistence_restart": {
+      "status": "independently_verified",
+      "requestId": "ef1238a7-516b-43be-865c-a5e9806cd46f",
+      "requests": 1,
+      "startupEvents": 1,
+      "qa": "evaluations/research-qa/m78-recovery2-restart-actual-independent-result.json",
+      "qa_sha256": "70211489b2413cd5d324574e225256893470c293160763e28f16f6b5216d7d00",
+      "replay_permitted": false
+    },
+    "final_revisit": {
+      "status": "independently_accepted",
+      "session": 52409,
+      "admission_sha256": "4cf6a5b38f2d6f0576fcfc7e84948ed5a84a5a09dac3752d5d101c82645bb2dd",
+      "replay_permitted": false,
+      "completed_at": "2026-09-23T04:50:28.366Z",
+      "application_posts": 0,
+      "all_created_sessions_closed": true,
+      "unknown_sessions": 0,
+      "retained_state_exact": true,
+      "journal_sha256": "ba5349e1cf54e209318e5f9ece05eef2ac8a039f378e5bbb4310d40a9067d1b7",
+      "qa": "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+      "qa_sha256": "76b481e6b740fa1cee629d90964c13cedd8aef7e46b4a00e9b168fafcec12922",
+      "requests": 97
+    },
+    "synthetic_functional_accepted": true,
+    "board_demonstration_feedback": "requested_pending",
+    "remaining_customer_gates": [
+      "Explicit compatible method/factor/GWP/source release and rights disposition",
+      "Real customer boundary/source/activity evidence",
+      "Current applicable requirements evidence",
+      "Qualified independent human accounting/assurance review",
+      "Representative customer operational readiness"
+    ],
+    "next_milestone": "M79 method/source release candidate, within California-first corporate Scope1"
   },
   "current_m79_preparation": {
     "status": "source_inventory_independently_accepted",

@@ -1,0 +1,17 @@
+{
+  "status": "m78_readonly_revisit2_actual_review_root_closed",
+  "observedAt": "2026-09-23T04:54:59.767520+00:00",
+  "reviewResult": {
+    "path": "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+    "sha256": "76b481e6b740fa1cee629d90964c13cedd8aef7e46b4a00e9b168fafcec12922"
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-ACTUAL-QA-01-CANDIDATE1.json",
+    "sha256": "31f36adc5eb89b05fcd40e2c6f2b58c5d55015474f2783866119b2bab9ef5e8a"
+  },
+  "reviewArrangement": "Probe independently reran the full offline evaluator and exact before/after comparisons. Root inspected that checker and reconciled its result with the closed actual execution hashes; root operated staging and is not its independent reviewer.",
+  "materialFindingsOpen": 0,
+  "syntheticFunctionalAccepted": true,
+  "customerScope1Complete": false,
+  "furtherExecutionAuthorized": false
+}
