@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "M78-GET-CI-HISTORY-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-CI-HISTORY-REVIEW-01-CANDIDATE2.json",
+      "sha256": "7ee97bfb525817e878e7bdabd22eb3b28493ed82a935d67619a13106d71281ba"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-get-ci-history-independent-source.json",
+    "evaluations/research-qa/m78-get-ci-history-independent-failure.json",
+    "evaluations/research-qa/m78-get-ci-history-independent-review.ts",
+    "evaluations/research-qa/m78-get-ci-history-independent.test.ts",
+    "evaluations/research-qa/m78-get-ci-history-independent-tree.py",
+    "evaluations/research-qa/m78-get-ci-history-independent-review.md",
+    "evaluations/research-qa/m78-get-ci-history-independent-result.json",
+    "evaluations/research-qa/m78-get-ci-history-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "HISTORICAL-TEST-AND-FILTER-RETENTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-ci-history-independent.test.ts",
+        "evaluations/research-qa/m78-get-ci-history-independent-result.json"
+      ],
+      "reason": "Candidate2 retains all 119 prior test-path occurrences and all four exact filters, moving only historical gate execution to four exact frozen working-directory steps and adding one current regression."
+    },
+    {
+      "id": "FROZEN-REF-AND-173-SOURCE-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-ci-history-independent-tree.py",
+        "evaluations/research-qa/m78-get-ci-history-independent.test.ts"
+      ],
+      "reason": "All 3,022 tracked blobs at ref104 match the frozen worktree, including 14 expected CRLF materializations; all 173 source pins and historical route ab5018 remain exact."
+    },
+    {
+      "id": "CURRENT-ROUTE-AND-HISTORICAL-REFUSAL",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-historical-gates.test.ts",
+        "evaluations/research-qa/m78-get-ci-history-independent-review.md"
+      ],
+      "reason": "The accepted current route fd9b is rejected by all three historical source admissions, while current portable transport and GET guard/comparison suites remain on current source."
+    },
+    {
+      "id": "PRESERVED-FIRST-FAILURE-AND-NARROW-REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-ci-history-independent-failure.json",
+        "evaluations/research-qa/m78-get-ci-history-independent.test.ts"
+      ],
+      "reason": "Candidate1's stale live-route equality failure is preserved. Candidate2 changes only that assertion to bind reconstructed baseline bytes to the immutable historical result's ab5018 route pin."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-ci-history-root-acceptance.json",
+      "evaluations/research-qa/m78-get-ci-history-independent-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-CI-HISTORY-REVIEW-01-CANDIDATE2.json",
+        "sha256": "7ee97bfb525817e878e7bdabd22eb3b28493ed82a935d67619a13106d71281ba"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "The requested fresh Astra/high dispatch was unavailable at the runtime agent-thread limit; this existing independent non-author reviewer continued with observed settings unknown.",
+    "The frozen historical suites pass 19 tests/1590 assertions, current portable subset 2/14, repaired current GET command 18/435, and independent checks 6/217 with strict TypeScript.",
+    "No database, native service, network, provider, credential, deployment or Git mutation occurred.",
+    "This review accepts candidate2 for publication only; deployment requires a new published head and six fresh successful remote checks."
+  ]
+}

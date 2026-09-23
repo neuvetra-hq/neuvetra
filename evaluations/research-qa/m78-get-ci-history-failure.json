@@ -1,0 +1,44 @@
+{
+  "status": "m78_get_repair_historical_ci_context_failure_preserved",
+  "observedAt": "2026-09-23T01:41:37.590919+00:00",
+  "commit": "7f7a30634d655f2763d5ababf8e9df00a8841df0",
+  "jobUrl": "https://github.com/neuvetra-hq/neuvetra/actions/runs/35806537092/job/107008554432",
+  "jobConclusion": "failure",
+  "fullApplicationCheck": "bun run check passed",
+  "failedStep": "Independent Scope 1 browser decoding and recovery admission",
+  "failures": [
+    {
+      "path": "tools/staging/m78-continuation2-source-pins.ts",
+      "line": 9,
+      "title": "error: Admitted155 graph changed",
+      "message": "\n      at m78Continuation2SourcePins (/home/runner/work/neuvetra/neuvetra/tools/staging/m78-continuation2-source-pins.ts:9:166)\n      at async <anonymous> (/home/runner/work/neuvetra/neuvetra/tools/staging/check-m78-continuation2.test.ts:14:118)"
+    },
+    {
+      "path": "tools/staging/m78-continuation2-source-pins.ts",
+      "line": 9,
+      "title": "error: Admitted155 graph changed",
+      "message": "\n      at m78Continuation2SourcePins (/home/runner/work/neuvetra/neuvetra/tools/staging/m78-continuation2-source-pins.ts:9:166)\n      at async m78Continuation3SourcePins (/home/runner/work/neuvetra/neuvetra/tools/staging/m78-continuation3-source-pins.ts:6:312)\n      at async <anonymous> (/home/runner/work/neuvetra/neuvetra/tools/staging/check-m78-continuation3.test.ts:11:97)"
+    }
+  ],
+  "localReproduction": {
+    "historicalSourceUnionTestsOnCurrentRoute": {
+      "passed": 0,
+      "failed": 3,
+      "reason": "The admitted155 graph contains the original route, so continuation2/3/4 all refuse the integrated repair."
+    },
+    "frozen104Context": {
+      "testsPassed": 19,
+      "assertions": 1590,
+      "failed": 0
+    },
+    "currentOldGateRefusalRegression": {
+      "testsPassed": 1,
+      "assertions": 7,
+      "failed": 0
+    },
+    "initialHistoryDependencyAttempt": "Missing postgres dependency before tests; resolved with read-only dependency junctions, no source change."
+  },
+  "proposedDisposition": "Run unchanged historical admission positives under pinned commit1042348; keep current repair validation and explicitly test historical admission refusal on the new route. No source gate or immutable snapshot is relaxed.",
+  "hostedChanges": false,
+  "fullJobLog": "GitHub redirect returned401; only exact job metadata and annotations retrieved."
+}

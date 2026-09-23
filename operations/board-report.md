@@ -1,4 +1,20 @@
+# September 22: independently reviewed release-check correction ready to publish
+
+The historical-context correction passed independent review (35924e7c), preserving the initial finding and historical source pins. Root verified the frozen artifact bytes and reproduced five independent tests / 210 assertions. The current GET group passed 18 tests / 435 assertions; frozen historical checks passed 19 / 1590. The correction is ready for the same PR5. All six checks on the new published head must pass before deployment.
+
+The report-read repair remains un-deployed. Live remains last-observed59c/schema21 with automatic deployment paused. The new read-only recovery implementation is still under review: root rejected its first candidate for cleanup behavior after diagnostic failure and insufficient logout-scope restriction; the author is repairing it. No recovery, restart or revisit has run. Preserve the signed-in user browser and all 37 completed operations. Scope1 customer release remains incomplete. Earlier sections are historical.
+
+# September 22: release CI history-context mismatch; no deployment
+
+Repair7f7a3063 is pushed, but the application check failed because unchanged continuation2/3 historical admission positives were run against the newly optimized route. Full bun run check passed. Root reproduced allthree old source-union positives rejecting the changed route with Admitted155 graph changed. Preserve that rejection: never rewrite the173 historical pins or reuse an old gate for the new application. Evidence: evaluations/research-qa/m78-get-ci-history-failure.json.
+
+Root's bounded workflow correction uses a checkout pinned to1042348 for the unchanged historical continuation2/3/4 positives; keeps current transport and new GET coverage; adds m78-get-historical-gates.test.ts to require allthree old admissions to reject the new route. Exact frozen104 local archive runs19tests/1590assertions successfully; newcurrent regression1test/7assertions passes. Source independent review is active under /root/m78_transport_probe before another same-PR push. No historical source file was relaxed. /root/m78_transport_continuation still owns source-only new GET recovery implementation. Root owns integration/Git/provider/private admissions.
+
+Deployment helper7ae9267f and read-only observer99cf83b8 are source-accepted after independent review72363306 and root7test reproduction. Both remain unexecuted, with no deployment admission. Current7f application CI failure bars deployment. Live remains59c/schema21/deployment0f2e99/imagefe46 with autodeploypaused; user browser is signed in and must remain available. New source/private gates must precede any read-only recovery, actualrestart and revisit. Never replay37 completed operations or earlier migrations/saves/security fixes. Scope1 customer release remains incomplete. Earlier sections below are historical.
+
 # September 22: report-read repair passed local comparison; staging verification remains
+Repair commit7f7a30634d655f2763d5ababf8e9df00a8841df0 is pushed to the same PR5. Remotehead verified2026-09-23T01:33:37UTC; four of six checks passed, application/native checks pending. Deployment helpers are new, unexecuted private drafts under separate QA; no deployment admission exists. No live repair, recovery, restart or revisit has run.
+
 
 The user is signed in through their own browser tab. Preserve that session. Root's read-only comparison closed successfully (session93087, exit0): 19 cases, one warm-up and three measured samples each; every before/after response body, status and header matched. Report routes fell from86 to44 queries and local medians from3.61–3.77s to1.83–1.90s. All121 base-table digests remained exact (cec9b5e4), all173 original source files remained unchanged during comparison, and both local connections closed. Result caae59a5 is copied to evaluations/research-qa/m78-get-local-comparison-result.json. These are local measurements, not hosted latency or an SLA.
 

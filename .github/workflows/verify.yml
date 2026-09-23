@@ -174,17 +174,30 @@ jobs:
           bun install --frozen-lockfile
           bun test tools/staging/m77-operators.test.ts
       - name: Independent Scope 1 browser decoding and recovery admission
-        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/check-m78-continuation2.test.ts tools/staging/check-m78-continuation3.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-backup.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-backup.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+      - name: Check out frozen continuation recovery context
+        uses: actions/checkout@v4
+        with:
+          ref: 1042348f2d4849246771fee4be77fe590c34ab8a
+          path: .legacy-m78
+      - name: Verify historical continuation2 and continuation3 safeguards
+        working-directory: .legacy-m78
+        run: |
+          bun install --frozen-lockfile
+          bun test tools/staging/check-m78-continuation2.test.ts tools/staging/check-m78-continuation3.test.ts
       - name: Independent continuation2 source closure and cleanup guards
+        working-directory: .legacy-m78
         run: bun test evaluations/research-qa/m78-continuation2-independent.test.ts --test-name-pattern "union covers|failed diagnostic intent"
       - name: Independent continuation3 admission and graceful pause guards
+        working-directory: .legacy-m78
         run: bun test evaluations/research-qa/m78-continuation3-independent.test.ts --test-name-pattern "admission challenges|diagnostic failure after login"
-      - name: Independent continuation4 transport and source guards
-        run: |
-          bun test evaluations/research-qa/m78-continuation4-independent.test.ts --test-name-pattern "^portable"
-          bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
+      - name: Independent current continuation4 transport guards
+        run: bun test evaluations/research-qa/m78-continuation4-independent.test.ts --test-name-pattern "^portable"
+      - name: Preserve historical continuation4 source closure
+        working-directory: .legacy-m78
+        run: bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
       - name: Scope 1 GET preservation and finite diagnostic guards
-        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
       - name: Continuation4 closed baseline evidence guards
         run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
       - name: Continuation4 lifecycle and passive revisit guards

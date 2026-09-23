@@ -110,8 +110,9 @@ test('historical result and baseline route remain exact without retroactive prov
   expect(result.rowsBeforeSha256).toBe(result.rowsAfterSha256);
   const baseline = await readFile('apps/site-api/src/workspace/m78-get-route-baseline-fixture.ts', 'utf8');
   expect(sha(baseline)).toBe('8ebe51aec86d8e5990a6f8391bb8e823c7cd661d2d7369e3b35909ef74722de3');
-  const original = await readFile('apps/site-api/src/workspace/m78-routes.ts', 'utf8');
-  expect(baseline.replace(/^\/\*\* Frozen baseline route fixture[^\n]*\n/, '').replace('createM78RoutesBaseline', 'createM78Routes')).toBe(original);
+  const originalPin = result.sourcePins.find((pin: {path: string; sha256: string}) => pin.path === 'apps/site-api/src/workspace/m78-routes.ts');
+  expect(originalPin?.sha256).toBe('ab5018c64668dfe197755849aee1a2b3c5947f6c3da21e8d18869e998f3f9e01');
+  expect(sha(baseline.replace(/^\/\*\* Frozen baseline route fixture[^\n]*\n/, '').replace('createM78RoutesBaseline', 'createM78Routes'))).toBe(originalPin.sha256);
   const guardSource = await readFile('evaluations/research-qa/m78-continuation4-get-perf-probe.ts', 'utf8');
   expect(guardSource).toContain('createM78RoutesBaseline');
   expect(guardSource).toContain('await verifyM78GetSqlSourcePins()');

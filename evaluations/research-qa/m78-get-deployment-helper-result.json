@@ -1,0 +1,83 @@
+{
+  "status": "m78_get_deployment_helper_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "files": [
+    {
+      "path": ".superpowers/m78-get-route-deploy-once.py",
+      "sha256": "7ae9267f3d317b7e15c3a95c65defc4c4276713fcbf26f5203c24c37bd7c4b80"
+    },
+    {
+      "path": ".superpowers/m78-get-route-observe-deployment.py",
+      "sha256": "99cf83b8db88ad68a5734bd9cadf39220bf26f0d0540b7985ca58d6c41c95003"
+    }
+  ],
+  "sourceArchive": {
+    "path": "evaluations/research-qa/m78-get-deployment-helper-source.json",
+    "sha256": "831a94cf47a6ce3c94b794980f1db90416062e97e61a8897bef3100f8f79755e"
+  },
+  "history": {
+    "deployCandidate1Sha256": "36a952b787182effe7047f467aa81f21e7b384f5bf5024e8b4506068051af2f3",
+    "observerCandidate1Sha256": "44c8aea72015e34a3da0fe2a0c79225ceebe6d3d9de0b7705b75ed1da2ac1a6c",
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "repairedFindings": [
+      "deployment helper now requires the exact observer among admission pins",
+      "observer now retains the raw deployment collection exclusively and binds its hash/path into runtime evidence"
+    ]
+  },
+  "verified": {
+    "optimizedPythonRefused": true,
+    "allAdmissionPinsRehashed": true,
+    "deployAndObserverAdmissionPinsRequired": true,
+    "exactRouteAndLocalHeadRequired": true,
+    "openPrHeadEqualsCommitRequired": true,
+    "sixExactSuccessfulChecksRequired": true,
+    "publicationFreshnessSeconds": 180,
+    "freshnessRepeatedImmediatelyBeforeMutation": true,
+    "exactNativeResultAndIndependentQaRequired": true,
+    "fixedPriorDeploymentCommitAndImageRequired": true,
+    "noOtherActiveDeploymentRequired": true,
+    "autodeployFalseRequired": true,
+    "exactSchema21ReadinessRequired": true,
+    "singleFixedServiceMutation": true,
+    "exclusiveQueryIntentAndResponseBeforeMutation": true,
+    "uncertainResponseFailsClosedWithoutBlindRetry": true,
+    "observerProviderMutations": 0,
+    "observerNonSuccessCreatesNoRuntimePass": true,
+    "observerCollectionAndRuntimePassExclusive": true,
+    "observerCollectionHashAndPathBound": true,
+    "databaseMigrationOrWrite": false,
+    "authenticationOrSessionChange": false
+  },
+  "checks": {
+    "offlineTestsPassed": 7,
+    "offlineTestsFailed": 0,
+    "pythonSyntaxParsed": true,
+    "realHelpersImportedOrExecuted": false,
+    "networkUsed": false,
+    "providerCalls": 0,
+    "credentialsRead": false,
+    "databaseUsed": false,
+    "admissionCreated": false,
+    "deploymentRequested": false
+  },
+  "executionConditions": [
+    "Create a separately reviewed exact admission that pins both current helper hashes, final commit/route, native result/QA, and fresh publication checks.",
+    "At execution, require local HEAD and open PR head to equal the admitted commit and all six checks to be successful within the helper's three-minute freshness window.",
+    "Any uncertain request must be reconciled from retained intent/query/response and current provider state; never replay blindly."
+  ],
+  "limitations": [
+    "This is source-only preparation and does not authorize or establish a deployment, runtime success, recovery, or release.",
+    "The deployment response retains stdout; a timeout or CLI-only stderr may leave it empty and must remain classified as uncertain.",
+    "Observer progress is replaceable polling state; only the exclusive raw collection and verified result are final evidence."
+  ],
+  "routing": {
+    "requestedModel": "gpt-6-astra",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null,
+    "freshDispatchUnavailable": true,
+    "fallbackReviewer": "/root/m78_transport_probe"
+  }
+}

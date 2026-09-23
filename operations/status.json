@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T01:26:58.315817+00:00",
+  "updated_at": "2026-09-23T01:59:20.505757+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
     "status": "in_progress",
-    "next_gate": "Publish the exact independently accepted GET repair on rolling PR5, pass all six checks and verify the new staging runtime; then separately reviewed read-only recovery. No replay of completed operations.",
+    "next_gate": "Publish independently accepted CI context correction on PR5 and pass all six checks; then exact staging deployment admission and read-only recovery. No hosted repair, recovery, restart or revisit yet.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -145,7 +145,7 @@
   },
   "session_handoff": {
     "current": "Failed exercise preserved after37 verified operations; no replay. User signed in. GET repair independently accepted locally:19cases, exactresponses,121tables preserved,86->44specific-route queries, bothlocalconnectionsclosed.",
-    "next": "Publish the exact independently accepted GET repair on rolling PR5, pass all six checks and verify the new staging runtime; then separately reviewed read-only recovery. No replay of completed operations.",
+    "next": "Independent CI historical-context repair review, same-PR correction and all six passing checks; exact live deployment admission follows. No hosted repair/recovery/restart/revisit yet.",
     "evidence": [
       "operations/next-session.md"
     ]
@@ -2895,12 +2895,12 @@
       {
         "id": "M78-GET-REPAIR-ROOT",
         "executor": "/root",
-        "scope": "Native comparison completed once; owns exact integration, rolling PR publication and staging admission."
+        "scope": "Root authored CI historical-context repair;19historical tests/1590assertions and currentgate1/7pass. Owns next publication and deployment after freshsixchecks."
       },
       {
-        "id": "M78-GET-LOCAL-COMPARISON-REVIEW-01",
+        "id": "M78-GET-CI-HISTORY-REVIEW-01",
         "executor": "/root/m78_transport_probe",
-        "scope": "Independent offline review of actual comparative result and adversarial evidence checks."
+        "scope": "Independent review of frozen104 historical CI context and current old-gate refusal regression."
       },
       {
         "id": "M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01",
@@ -3251,7 +3251,7 @@
       }
     },
     "get_repair": {
-      "status": "independent_local_comparison_accepted_preparing_publication",
+      "status": "publication_ci_failed_historical_context_repair_under_review",
       "route_sha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
       "result": "evaluations/research-qa/m78-get-local-comparison-result.json",
       "result_sha256": "caae59a5d5704c53b6d61f901d30dee55be01b7f890c62e7d6e5c1b1b7931417",
@@ -3276,7 +3276,26 @@
       "independent_actual_review": "evaluations/research-qa/m78-get-local-comparison-independent-result.json",
       "independent_actual_review_sha256": "7aeabac30562a0f44d44b6a760b12a199bd42f6dbc360df591fb52f91a9e3b96",
       "independent_actual_tests_passed": 9,
-      "independent_actual_assertions": 230
+      "independent_actual_assertions": 230,
+      "publication_commit": "7f7a30634d655f2763d5ababf8e9df00a8841df0",
+      "remote_head_verified_at": "2026-09-23T01:33:37.068367+00:00",
+      "required_checks_passed": 4,
+      "required_checks_total": 6,
+      "failed_ci_evidence": "evaluations/research-qa/m78-get-ci-history-failure.json",
+      "deployment_helper_source_review": "evaluations/research-qa/m78-get-deployment-helper-result.json",
+      "deployment_helper_source_accepted": true,
+      "ci_history_repair": {
+        "status": "candidate2_under_independent_review",
+        "workflow_sha256": "4a7810550658b732741992a79152527348f1b6fdd8c0340c5e0dc0015e7f9a14",
+        "historical_ref": "1042348f2d4849246771fee4be77fe590c34ab8a",
+        "historical_tests_passed": 19,
+        "historical_assertions": 1590,
+        "current_tests_passed": 18,
+        "current_assertions": 435,
+        "first_independent_finding": "Guard baseline test compared historical route with new current route; corrected to exact original pin in immutable historical result.",
+        "guard_test_sha256": "5426aadcdeb299fc15ccc63cc88bda7e0534bfaf43b352b45edb215279a88872",
+        "production_route_unchanged": true
+      }
     }
   },
   "current_m79_preparation": {

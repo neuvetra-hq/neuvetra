@@ -1,0 +1,85 @@
+{
+  "status": "m78_get_ci_history_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "candidate": 2,
+  "files": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "4a7810550658b732741992a79152527348f1b6fdd8c0340c5e0dc0015e7f9a14"
+    },
+    {
+      "path": "evaluations/research-qa/m78-get-historical-gates.test.ts",
+      "sha256": "69c819b80bb94caeeaf0c6fe5bd241cd94691fecbf05c39985136b60bb037d85"
+    },
+    {
+      "path": "evaluations/research-qa/m78-get-guard-independent.test.ts",
+      "sha256": "5426aadcdeb299fc15ccc63cc88bda7e0534bfaf43b352b45edb215279a88872"
+    }
+  ],
+  "sourceArchive": {
+    "path": "evaluations/research-qa/m78-get-ci-history-independent-source.json",
+    "sha256": "b7f7a908e599096bc8a0a8bcf830cc727979667cabbc283187fd0e769c2bb415"
+  },
+  "history": {
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "firstFailure": {
+      "path": "evaluations/research-qa/m78-get-ci-history-independent-failure.json",
+      "sha256": "13405779accf7c9e856a7cadb89941382a719892471c3ccb2001eb50c51aa40b"
+    },
+    "finding": "The current guard suite still required the reconstructed historical route to equal the optimized current route.",
+    "repair": "The historical assertion now binds the reconstructed baseline to the immutable historical result's exact ab5018 route pin; current fd9b refusal remains a separate regression."
+  },
+  "verified": {
+    "frozenRef": "1042348f2d4849246771fee4be77fe590c34ab8a",
+    "frozenTrackedBlobs": 3022,
+    "frozenMissingTrackedBlobs": 0,
+    "frozenChangedTrackedBlobs": 0,
+    "gitattributesCrlfMaterializedPowerShellFiles": 14,
+    "historicalInventorySha256": "e1d0cd97046e21b308894d5f8757f8fc1fa580550e3ec700aa7ab0e1519bbb92",
+    "historicalSourcePins": 173,
+    "historicalRouteSha256": "ab5018c64668dfe197755849aee1a2b3c5947f6c3da21e8d18869e998f3f9e01",
+    "currentRouteSha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+    "historicalTestPathOccurrencesRetained": 119,
+    "historicalTestNameFiltersRetained": 4,
+    "frozenWorkingDirectorySteps": 4,
+    "newCurrentRejectionRegressions": 1,
+    "historicalResultSha256": "c0e7b9d455087318043e749a777ce8274493a22a736b48e0a94d8d6518b9a112",
+    "guardSourceSha256": "8ffb4f7470e9b139201001b80b7a14f629f7d56a5f67187044e54dfb7492eb17"
+  },
+  "checks": {
+    "frozenHistoricalTestsPassed": 19,
+    "frozenHistoricalTestsFailed": 0,
+    "frozenHistoricalAssertions": 1590,
+    "currentPortableTestsPassed": 2,
+    "currentPortableTestsFailed": 0,
+    "currentPortableAssertions": 14,
+    "currentGetTestsPassed": 18,
+    "currentGetTestsFailed": 0,
+    "currentGetAssertions": 435,
+    "independentTestsPassed": 6,
+    "independentTestsFailed": 0,
+    "independentAssertions": 217,
+    "strictTargetedTypeScript": true,
+    "databaseUsed": false,
+    "networkUsed": false,
+    "providerCalls": 0,
+    "credentialsRead": false,
+    "gitMutated": false,
+    "deploymentRequested": false
+  },
+  "conditions": [
+    "This accepts the exact candidate-2 source repair for publication only; it does not establish remote CI success or authorize deployment.",
+    "Deployment remains blocked until the new published commit is the open PR head and all six required checks pass within the execution helper's freshness window.",
+    "The frozen checkout's dependency junctions are local test infrastructure and are not source evidence."
+  ],
+  "routing": {
+    "requestedModel": "gpt-6-astra",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null,
+    "freshDispatchUnavailable": true,
+    "fallbackReviewer": "/root/m78_transport_probe"
+  }
+}
