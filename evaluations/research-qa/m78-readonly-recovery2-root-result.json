@@ -1,0 +1,60 @@
+{
+  "status": "m78_readonly_recovery2_independent_source_review_passed",
+  "reviewerId": "/root",
+  "authorId": "/root/m78_transport_continuation",
+  "observedAt": "2026-09-23T03:23:25.563830+00:00",
+  "materialFindingsOpen": 0,
+  "sourcePins": [
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery2.ts",
+      "sha256": "47044480d2019e4e162a0156adf81a31d557560190747102144f0006de9fbe7d"
+    },
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery2.test.ts",
+      "sha256": "da0ba9f072d72549f544b5c80070d306a28ab993d02bec10d47f54017a6b19f1"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.ts",
+      "sha256": "4324a96546228070f4d16b0ed6a25cbe02d56d6412d48829d1b60e176db708c1"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.test.ts",
+      "sha256": "27cf9e458d7316991c3ebcbff1b6ee4e7c1902693c7b07d7f326b663ddc0d2a6"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-preparation-result.json",
+      "sha256": "90d76c155e1261a6c88551dad33df0973e3c9058fb17d6898acdf0c77440b058"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-preparation-report.md",
+      "sha256": "0b05b4d004f2340b3fc185e8b37ed720699b9c3c8c90fbe696b408ac7d347f11"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-root-security.test.ts",
+      "sha256": "46eb2fbca15b333d056c72b876a33c213f9fd7f41b992abada61bbee0dff76bf"
+    }
+  ],
+  "candidateSnapshots": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-IMPLEMENTATION-01-CANDIDATE1.json",
+      "sha256": "fe4674ef79bc022b232772315ba148548eff4813f2124609bb5331a279e29e80"
+    }
+  ],
+  "rootReproducedTests": 11,
+  "rootReproducedAssertions": 116,
+  "strictTargetedTypeScript": "passed",
+  "actualRecoveryAccepted": false,
+  "restartExecuted": false,
+  "revisitExecuted": false,
+  "findingsClosed": [
+    "Metadata-only fleet/equipment reports use verified separate HTML, snapshot and complete proof envelopes.",
+    "Mobile retained keys are fuel_ and mileage_.",
+    "Raw capture preserves exact bytes before decoding, excludes auth data and remains captured_unreviewed.",
+    "UTF8 BOM handling cannot silently change artifact bytes before hash comparison.",
+    "Known sessions close under logging/capture failures; only local-scope logout dispatches."
+  ],
+  "limits": [
+    "Complete fresh post37 evaluator positive remains pending actual admitted recovery2 evidence.",
+    "No new hosted call, credential use, application write, restart or revisit is established by this source review."
+  ]
+}

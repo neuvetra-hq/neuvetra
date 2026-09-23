@@ -1,0 +1,41 @@
+{
+  "status": "m78_continuation4_readonly_recovery_implementation_prepared",
+  "createdAt": "2026-09-22T19:03:11.6334890-07:00",
+  "actualRecoveryExecuted": false,
+  "actualRecoveryAccepted": false,
+  "hostedCalls": 0,
+  "nativeDatabaseCalls": 0,
+  "credentialAccesses": 0,
+  "applicationPostRequests": 0,
+  "restartAuthorized": false,
+  "revisitAuthorized": false,
+  "transport": {
+    "applicationMethods": ["GET"],
+    "authMethods": ["POST"],
+    "pooling": "disabled",
+    "keepalive": false,
+    "retries": 0,
+    "timeoutMs": 30000,
+    "perResponseByteLimit": 10000000,
+    "retainedResponseByteLimit": 128000000,
+    "journalByteLimit": 16000000
+  },
+  "validation": {
+    "testsPassed": 17,
+    "testsFailed": 0,
+    "assertions": 103,
+    "strictTargetedTypeScript": "passed",
+    "productionDecoderBaselineFixture": "passed",
+    "mockTransportPositive": "passed",
+    "fullFreshRecoveryFixture": "not_available_until_actual_admitted_recovery"
+  },
+  "independentReview": "candidate1_failed_candidate2_superseded_candidate3_pending",
+  "requestedCompute": {
+    "model": "gpt-5.6-sol",
+    "effort": "high"
+  },
+  "observedCompute": {
+    "model": null,
+    "effort": null
+  }
+}

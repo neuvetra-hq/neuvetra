@@ -1,0 +1,42 @@
+{
+  "status": "m78_readonly_recovery_failed_after_graph_reads",
+  "observedAt": "2026-09-23T02:35:58.151825+00:00",
+  "session": 34213,
+  "exitCode": 1,
+  "main": {
+    "sha256": "0c2062c12db60f0e65c21f0fcc17122a95a11ba689d04f18c51c0652f887aca8",
+    "bytes": 7445,
+    "events": 18,
+    "head": "ed2b807afebed57ad31cf580bb8212933a6527ff820d01a8c9484d6dcd417dfb"
+  },
+  "diagnostics": {
+    "sha256": "e2e56cc5b3220b1d138023e945e38c9d2dfeca26a15bcd4a35b2cd71d33ff57c",
+    "bytes": 18109,
+    "events": 49,
+    "head": "a72b4fe58a4e65f61b7f80ffd14ffc5a5a59b3e8ee960f6b7b41ea9b17c3ba9e"
+  },
+  "requests": 24,
+  "applicationGets": 16,
+  "applicationPostRequests": 0,
+  "requestErrors": 0,
+  "mainLocalLogout204": 4,
+  "mainUnknownAuthSessions": 0,
+  "legacyAttempted": false,
+  "observationCreated": false,
+  "restartExecuted": false,
+  "revisitExecuted": false,
+  "runtimeCommit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+  "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+  "localReproduction": {
+    "input": "exact retained continuation4 baseline",
+    "error": "expected blob, string or buffer",
+    "location": "tools/staging/check-m78-continuation4-readonly-recovery.ts:66",
+    "cause": "Fleet/equipment register report entries contain metadata, not html/snapshotJson. The reconstructor hashes undefined.",
+    "otherSourceFindings": [
+      "Mobile retained artifact keys must remain fuel_ and mileage_, not statement_.",
+      "Fleet/equipment proof is a separate endpoint envelope, not snapshot.proof."
+    ],
+    "actualErrorRecorded": false
+  },
+  "disposition": "Preserve failed journals and durable lock. No repeat, no restart and no actual pass. Prepare new source/evidence paths with real-baseline artifact tests and a durable raw-capture checkpoint before local verification."
+}

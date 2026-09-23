@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-ADMISSION-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-ADMISSION-REVIEW-01-CANDIDATE2.json",
+      "sha256": "7434ef8ece267a4800f13167c5f0481a9d9c2906a37694b6c8fb31bd33fb7985"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-admission-independent-source.json",
+    "evaluations/research-qa/m78-readonly-admission-independent-review.py",
+    "evaluations/research-qa/m78-readonly-admission-independent.test.py",
+    "evaluations/research-qa/m78-readonly-admission-independent-review.md",
+    "evaluations/research-qa/m78-readonly-admission-independent-result.json",
+    "evaluations/research-qa/m78-readonly-admission-independent-freeze.py",
+    "evaluations/research-qa/m78-readonly-admission-independent-snapshot.py"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_RUNTIME_AND_REVIEWS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-admission-independent-result.json"
+      ],
+      "reason": "The finalizer binds exact deployed commit, deployment, image, readiness and fresh runtime evidence plus exact root candidate-3 and private-helper reviews."
+    },
+    {
+      "id": "COMPLETE_SOURCE_CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-admission-independent.test.py"
+      ],
+      "reason": "The read-only Bun collector produced 179 unique raw-byte pins containing all 173 historical pins; Python and production Bun canonical digests matched."
+    },
+    {
+      "id": "EXCLUSIVE_PREEXECUTION_GATES",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-admission-independent-review.md"
+      ],
+      "reason": "Both admissions use exclusive creation and all six journal, observation, lock and gate outputs were absent at the preexecution review point."
+    },
+    {
+      "id": "CANDIDATE2_REFRESH_DELTA",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-admission-independent-source.json"
+      ],
+      "reason": "Candidate2 changes only the runtime receipt path; the refresh collector changes only three output filenames from the accepted observer."
+    },
+    {
+      "id": "ACTUAL_RECOVERY",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This was source-only review. The reviewer did not run either helper, authenticate, use credentials, call a provider or database, or execute recovery."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-admission-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-ADMISSION-REVIEW-01-CANDIDATE2.json",
+        "sha256": "7434ef8ece267a4800f13167c5f0481a9d9c2906a37694b6c8fb31bd33fb7985"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "The requested fresh Astra/high dispatch was unavailable at the runtime agent-thread limit; this existing independent non-author reviewer continued with observed settings unknown.",
+    "Candidate1 and its expired runtime evidence are preserved. Candidate2 was accepted only after exact path-only diff review and uses a fresh recovery-specific runtime receipt without weakening either freshness bound.",
+    "The runtime mutation test establishes fixture difference only; root separately exercised the finalizer with mocked filesystem/subprocess refusal cases.",
+    "No finalizer, observer, provider, credential, database, Git or recovery action was executed by this reviewer.",
+    "Root historical-helper review closed using evaluations/research-qa/m78-readonly-admission-root-closure.json. This does not alter the subsequent failed recovery or admit another execution."
+  ]
+}

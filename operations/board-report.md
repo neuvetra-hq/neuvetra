@@ -1,3 +1,33 @@
+# September 22: corrected read-only verifier accepted and ready to publish
+
+Recovery2 source candidate47044480/evaluator4324a965 passed independent root review1c2325e5 after 11 tests/116 assertions, exact reconstruction of the eight archived roster reports, and strict TypeScript. The repair preserves complete proof envelopes and mobile fuel/mileage keys, captures exact response bytes before decoding, and closes test sessions even on capture/logging failures. The first recovery remains failed and immutable; its three escaped defects and the later BOM correction are recorded.
+
+Private helper reviewab15 and admission review0112 passed; root reproduced2 private tests and6 admission tests. The fresh execution will pin182 source files/189 total artifacts. All helpers remain unexecuted. Publish the reviewed tools on PR5, pass all six remote checks, then collect fresh runtime evidence and admit exactly one GET-only recovery2. Do not replay37 writes, migrations, or either failed attempt.
+
+Root owns Git/provider/private execution. /root/m78_transport_continuation is preparing NEW revisit2 source only while recovery2 proceeds; no accepted actual recovery2, restart or revisit exists. The signed-in user browser is preserved and verified. Live app remains last observed9dd/f6d77b/image3e4c/schema21 with autodeploy disabled; this tooling-only publication requires no application redeployment. Customer Scope1 remains incomplete.
+
+# September 22: recovery checker repair and independent failure review active
+
+The user confirms they are signed in. Preserve their browser session; no further sign-in or Gmail action is needed. Existing board authorization remains in force. The remaining prerequisites are technical validation, not another board approval.
+
+Root dispatched M78-READONLY-RECOVERY2-IMPLEMENTATION-01 to /root/m78_transport_continuation: new source and evidence paths, correct older report contracts, bounded raw response capture before local validation, and nonempty report tests. Root dispatched M78-READONLY-FAILURE-REVIEW-02 to /root/m78_transport_probe: reconcile the failed attempt and independently identify trustworthy retained artifact fixtures. Both use existing contexts after the previously observed thread limit; actual inherited compute remains unknown. Revisit source preparation is frozen and dependent; it has not run.
+
+The first recovery and its journals remain failed and immutable. Three escaped reconstruction defects are recorded against the original implementation and root review without changing their historical snapshots. The app remains last verified at 9dd/f6d77b/schema21. No new deployment, data write, restart or revisit has been performed. Scope 1 customer release remains incomplete.
+
+# September22: first GET-only recovery closed failed; records preserved
+
+Execsession34213 exited1 at02:32:02UTC. It completed16applicationGETs (including five full Scope1 reports), with zero network errors and zero applicationPOSTs. All four main test sessions closed via local logout204, unknown0. Legacy verification never began; no observation or actual acceptance was produced. Preserve main18events/SHA0c2062c1/headed2b807a and diagnostics49events/SHAe2e56cc5/heada72b4fe5 plus durablelock and gate841b884c. Never replay this attempt.
+
+Root reproduced a local reconstruction bug on the exact real baseline: fleet/equipment report entries are metadata-only, but the verifier attempted to hash missing HTML. Mobile artifact-key and separate-proof-envelope mismatches also require repair. See evaluations/research-qa/m78-readonly-recovery-failure.json. The direct hosted error was not persisted, so diagnosis distinguishes the deterministic local reproduction from retained hosted evidence. New recovery2 must use fresh paths, real baseline artifact-positive tests and durable raw capture before local verification. No restart/revisit may proceed from this failure. Revisit preparation is dependent and not actual acceptance.
+
+The report-read app fix remains deployed9dd/f6d77b/image3e4c, schema21, with six checks passed and autodeploypaused. User browser remains signedin and refreshed the same10source total126850.1763. Scope1 customer release remains incomplete. Earlier sections below are historical.
+
+# September 22: report-read repair deployed and staging ready
+
+Commit9dd9c85f passed all six remote checks at02:12:28UTC and was deployed once as f6d77b2e-6886-429b-a4d2-4873c9199ce8. Read-only provider verification at02:15:43UTC confirmed SUCCESS, image3e4c2c91, HTTP200 readiness, schema21, legacy containment and autodeploy disabled. Evidence: evaluations/research-qa/m78-get-route-deployed-runtime.json. No migration or application data write was requested. Preserve the immutable deployment admission and request; never repeat the deployment helper.
+
+The new graph-first read-only recovery candidate3 passed root independent source review f346310c after two repairs: cleanup under diagnostic failure/local-only logout, then final diagnostic failure veto. Root reproduced17tests/103assertions and added a two-test/27assertion token/local/global-scope challenge. Actual recovery remains unexecuted. Root-owned private helpers and final admission are under independent review. User browser remains signed in. No restart or revisit has run; no37-operation replay is permitted. Scope1 customer release remains incomplete. Earlier sections below are historical.
+
 # September 22: independently reviewed release-check correction ready to publish
 
 The historical-context correction passed independent review (35924e7c), preserving the initial finding and historical source pins. Root verified the frozen artifact bytes and reproduced five independent tests / 210 assertions. The current GET group passed 18 tests / 435 assertions; frozen historical checks passed 19 / 1590. The correction is ready for the same PR5. All six checks on the new published head must pass before deployment.

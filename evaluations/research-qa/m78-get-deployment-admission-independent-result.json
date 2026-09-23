@@ -1,0 +1,74 @@
+{
+  "status": "m78_get_deployment_admission_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "files": [
+    {
+      "path": ".superpowers/m78-get-route-admit-deployment.py",
+      "sha256": "00d52457189a064c6c197baa6533a511251a953f63726a3b3ecc2b171b6dcba5"
+    },
+    {
+      "path": ".superpowers/m78-get-route-deploy-once.py",
+      "sha256": "7ae9267f3d317b7e15c3a95c65defc4c4276713fcbf26f5203c24c37bd7c4b80"
+    },
+    {
+      "path": ".superpowers/m78-get-route-observe-deployment.py",
+      "sha256": "99cf83b8db88ad68a5734bd9cadf39220bf26f0d0540b7985ca58d6c41c95003"
+    }
+  ],
+  "sourceArchive": {
+    "path": "evaluations/research-qa/m78-get-deployment-admission-independent-source.json",
+    "sha256": "f5c651e1186fb92ff745a3aa4770026874a69dedb1a17c48aced327ae86bd1a2"
+  },
+  "verified": {
+    "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "routeSha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+    "historicalInventorySha256": "e1d0cd97046e21b308894d5f8757f8fc1fa580550e3ec700aa7ab0e1519bbb92",
+    "sourcePins": 173,
+    "sourcePinsUnique": true,
+    "currentAndCommitSourceBlobsVerified": 173,
+    "fixedPrivatePins": 2,
+    "fixedPublicCurrentAndCommitPins": 5,
+    "dynamicPins": 3,
+    "admissionPins": 183,
+    "exactSixChecksRequired": true,
+    "publicationFreshnessSeconds": 120,
+    "exclusiveAdmissionWrite": true,
+    "applicationWritesAuthorized": 0,
+    "databaseMigrationsAuthorized": 0,
+    "deploymentRequestsAuthorized": 1,
+    "deployHelperConsumesExactStatusCommitPinsRouteAndNativeReview": true,
+    "observerBindsIntentToExactAdmissionAndCommit": true,
+    "finalizerNetworkCalls": 0,
+    "finalizerProviderMutations": 0,
+    "finalizerCredentialReads": 0,
+    "finalizerDatabaseActions": 0
+  },
+  "checks": {
+    "offlineTestsPassed": 6,
+    "offlineTestsFailed": 0,
+    "pythonSyntaxParsed": true,
+    "realFinalizerImportedOrExecuted": false,
+    "admissionCreated": false,
+    "networkUsed": false,
+    "providerCalls": 0,
+    "credentialsRead": false,
+    "databaseUsed": false,
+    "gitMutated": false,
+    "deploymentRequested": false
+  },
+  "executionConditions": [
+    "Refresh publication evidence after all six required checks pass; the supplied review-time artifact was pending and is not admissible.",
+    "Execute only with local HEAD, open PR head, current files, commit blobs, both helper hashes and every fixed receipt still exact.",
+    "Run the downstream helper while the same pinned CI observation remains under its independent 180-second freshness bound."
+  ],
+  "scope": "Source-only admission preparation; no deployment or runtime success claim.",
+  "routing": {
+    "requestedModel": "gpt-6-astra",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null,
+    "freshDispatchUnavailable": true,
+    "fallbackReviewer": "/root/m78_transport_probe"
+  }
+}

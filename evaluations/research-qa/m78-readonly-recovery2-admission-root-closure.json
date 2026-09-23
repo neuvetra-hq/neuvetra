@@ -1,0 +1,12 @@
+{
+  "status": "m78_recovery2_admission_qa_root_closed",
+  "reviewerId": "/root",
+  "sourceReviewer": "/root/m78_transport_probe",
+  "sourceAuthor": "/root",
+  "receiptSha256": "0112e269bf18a43f71ebc95327b6f2e69076a19fa50edd3c8d6cb09c30b1944f",
+  "rootReproducedTests": 6,
+  "sourcePins": 182,
+  "executionPins": 189,
+  "actualAdmissionExecuted": false,
+  "actualRecoveryAccepted": false
+}

@@ -1,0 +1,46 @@
+{
+  "status": "m78_readonly_recovery2_private_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "files": [
+    {"path": ".superpowers/m78-readonly-recovery2-entry.ts", "sha256": "95e92f16bcac657aba0ced67ec6691e4a360b973692d9c873e38cdc6acacbaaa"},
+    {"path": ".superpowers/m78-private-readonly-recovery2.ps1", "sha256": "44c8a275f109faa7b89d58cfb36e46f088d87b8b843653c6d8232cb562cd9412"}
+  ],
+  "verified": {
+    "exactExecutionAdmission": true,
+    "runtimeAndSourceGateRehashed": true,
+    "allExecutionAndSourcePinsRehashed": true,
+    "preservedExerciseAndFailedRecoveryBoundBeforeAuth": true,
+    "approvedEncryptedConfigSha256": "39a9a9ce6820ad75956ffadb1f23f80359d41c72b18f52674271c44e542d0f8a",
+    "dpapiOccursAfterAllPublicGates": true,
+    "decryptedBytesCleared": true,
+    "secretsTransferredOnlyByRedirectedStdin": true,
+    "stderrWithheld": true,
+    "fixedHiddenBunEntry": true,
+    "evidencePaths": 4,
+    "rawCapturePathWhitelisted": true,
+    "durableExclusiveLock": true,
+    "existingEvidenceOrLockRefused": true,
+    "applicationPostRequestsExpected": 0,
+    "logoutScope": "local",
+    "globalLogoutPaths": 0,
+    "legacyMode": "baseline",
+    "legacySave": "in_memory_only"
+  },
+  "checks": {
+    "testsPassed": 2,
+    "testsFailed": 0,
+    "assertions": 16,
+    "strictTargetedTypeScript": "passed",
+    "powerShellAstParse": "passed",
+    "helperExecuted": false,
+    "dpapiUsed": false,
+    "credentialReads": 0,
+    "networkCalls": 0,
+    "providerCalls": 0,
+    "databaseCalls": 0,
+    "gitMutations": 0
+  },
+  "scope": "Exact two-helper source review and runner-path interoperability only; no runner, finalizer or actual recovery acceptance.",
+  "routing": {"requestedModel": "gpt-6-astra", "requestedEffort": "high", "observedModel": null, "observedEffort": null, "freshDispatchUnavailable": true, "fallbackReviewer": "/root/m78_transport_probe"}
+}

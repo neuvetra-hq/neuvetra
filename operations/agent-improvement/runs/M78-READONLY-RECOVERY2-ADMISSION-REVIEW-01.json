@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-RECOVERY2-ADMISSION-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-ADMISSION-REVIEW-01-CANDIDATE1.json",
+      "sha256": "2f15f46960f1e17aaf74ba8f8ce20388342a2c8a20125f88d4c35a6149a5da69"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-recovery2-admission-independent.test.py",
+    "evaluations/research-qa/m78-readonly-recovery2-admission-independent-review.md",
+    "evaluations/research-qa/m78-readonly-recovery2-admission-independent-result.json",
+    "evaluations/research-qa/m78-readonly-recovery2-admission-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_REVIEWS_RUNTIME_AND_SOURCE_BINDING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-admission-independent.test.py"
+      ],
+      "reason": "The finalizer binds and rehashes the final root, private-helper and failure reviews, failed journals, deployed runtime identity and the complete current source closure."
+    },
+    {
+      "id": "HISTORICAL_AND_CURRENT_SOURCE_CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-admission-independent-result.json"
+      ],
+      "reason": "The 182-file closure contains every historical 173 pin with only the accepted route replacement plus the current recovery-2 runner, evaluators, entry, wrapper, observer and closure."
+    },
+    {
+      "id": "EXCLUSIVE_OUTPUTS_NO_REPLAY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-admission-independent.test.py"
+      ],
+      "reason": "All four recovery evidence paths, durable lock and both gates are refused if present; the two gate writes are exclusive."
+    },
+    {
+      "id": "READ_ONLY_OBSERVER_AND_EVALUATOR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-admission-independent-review.md"
+      ],
+      "reason": "The observer is the accepted read-only implementation with only recovery-2 output-name changes; the offline evaluator reads local evidence and writes one exclusive result."
+    },
+    {
+      "id": "ACTUAL_ADMISSION_OR_RECOVERY",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This assignment is source and mocked-filesystem review only. It creates no real gate, runtime receipt or recovery result."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-recovery2-admission-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-ADMISSION-REVIEW-01-CANDIDATE1.json",
+        "sha256": "2f15f46960f1e17aaf74ba8f8ce20388342a2c8a20125f88d4c35a6149a5da69"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh Astra/high dispatch was unavailable at the runtime thread limit; this existing independent non-author reviewer continued with inherited settings unknown.",
+    "First review found that the runtime observer was not explicitly included in the closure. Root added it and the local evaluator, raised the minimum closure to 182 and pinned the observer hash before the frozen verdict.",
+    "No actual finalizer or observer execution, credential access, authentication, network, provider, database or Git action occurred.",
+    "Root reproduced six fixed-clock/mocked tests and verified all exact source/dependency hashes. Independent source acceptance remains probe; no real runtime receipt, admission or recovery was executed."
+  ]
+}

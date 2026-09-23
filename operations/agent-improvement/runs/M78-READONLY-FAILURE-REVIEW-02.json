@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-FAILURE-REVIEW-02",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-FAILURE-REVIEW-02-CANDIDATE1.json",
+      "sha256": "2308d00c2e7c96b0414bbb7fc4929ea16977eadc7b3dcfc696ca10a0df9e219a"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-FAILURE-REVIEW-02-CANDIDATE2.json",
+      "sha256": "03fcc2d7f2c7c72bdb991091151c441aff9ed3ea95694d02dc6612ea23663ee8"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-failure-review2-fixture.ts",
+    "evaluations/research-qa/m78-readonly-failure-review2.test.ts",
+    "evaluations/research-qa/m78-readonly-failure-review2.md",
+    "evaluations/research-qa/m78-readonly-failure-review2-result.json",
+    "evaluations/research-qa/m78-readonly-failure-review2-result-candidate1.json",
+    "evaluations/research-qa/m78-readonly-failure-review2-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "IMMUTABLE_FAILURE_RECONCILIATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-failure-review2.test.ts"
+      ],
+      "reason": "Both journal chains, heads, request pairs, GET-only application traffic and four local logout outcomes match immutable evidence; no legacy phase or observation exists."
+    },
+    {
+      "id": "LOCAL_RECONSTRUCTION_CAUSE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-failure-review2.md"
+      ],
+      "reason": "The frozen reconstructor fails offline on metadata-only fleet/equipment reports. The actual hosted exception was not retained, so the report keeps this as deterministic local reproduction."
+    },
+    {
+      "id": "VERIFIED_FULL_REPORT_FIXTURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-failure-review2-fixture.ts",
+        "evaluations/research-qa/m78-readonly-failure-review2.test.ts"
+      ],
+      "reason": "Eight archived full reports are selected by exact ID/raw hashes, are canonical and rerender byte-exactly; mobile/fleet/equipment download maps reconstruct exactly."
+    },
+    {
+      "id": "PROOF_AND_KEY_CONTRACT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-failure-review2-result.json"
+      ],
+      "reason": "Mobile fuel/mileage keys are retained. Historical proof digests remain opaque because proof bodies were not archived; fresh proof requires separate endpoint capture."
+    },
+    {
+      "id": "ACTUAL_RECOVERY_RESTART_REVISIT",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "The failed recovery remains failed. This offline review did not execute recovery, restart, revisit, authentication, network or provider actions."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-failure-review2-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-FAILURE-REVIEW-02-CANDIDATE1.json",
+        "sha256": "2308d00c2e7c96b0414bbb7fc4929ea16977eadc7b3dcfc696ca10a0df9e219a"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-FAILURE-REVIEW-02-CANDIDATE2.json",
+        "sha256": "03fcc2d7f2c7c72bdb991091151c441aff9ed3ea95694d02dc6612ea23663ee8"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh Astra/high dispatch was unavailable at the runtime thread limit; the existing independent non-author reviewer continued with inherited settings unknown.",
+    "First test review failed because it incorrectly expected both deliberate authorization refusals to be 200; repaired expectation preserves exact 403,401,14x200 evidence.",
+    "Candidate1 receipt incorrectly described a fresh proof digest as canonical envelope.proof. Candidate2 correctly requires hashing the complete canonical {reportId,proof} envelope; candidate1 bytes and snapshot remain preserved.",
+    "No existing runner, evaluator, journal, application source, shared record or Git state was modified.",
+    "Root verified candidate2 exact pins, reproduced four tests/281 assertions, and closed this failure-review assignment only. Actual recovery remains failed; no new execution gate is created."
+  ]
+}

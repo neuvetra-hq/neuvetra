@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-REVISIT-PREP-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT-PREP-01-CANDIDATE1.json",
+      "sha256": "c029fd8ef149f16c0a9d7698c0fe1a1749826d0f5b0e2d459f8602a77395fc23"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-readonly-revisit.ts",
+      "sha256": "63e99a8e967316ca434ee3195d1e06ac3275f61a87dd8ba855e885468f635689"
+    },
+    {
+      "path": "tools/staging/m78-readonly-revisit.test.ts",
+      "sha256": "e7883437d7b4ab4c54932e5cd265e3d826385b97631268e2120c38d245c7a911"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-revisit-preparation-report.md",
+      "sha256": "a245a3fc0c921f967300354ccb4f1ff96efb1b4d14368ff29df29eb47a66f953"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-revisit-preparation-result.json",
+      "sha256": "002464a9cc8dda3191dd2ca7b76ba8d11c2aa32a7ecfdd3019d74fe974627151"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXCLUSIVE-REVISIT-EVIDENCE",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-readonly-revisit.ts",
+        "tools/staging/m78-readonly-revisit.test.ts"
+      ],
+      "reason": "The unchanged runner receives only the three remapped revisit paths, requires a separate held lock, and the accepted recovery evidence and lock are byte-checked before and after the attempt."
+    },
+    {
+      "id": "RECOVERY-RESTART-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-readonly-revisit.ts",
+        "evaluations/research-qa/m78-readonly-revisit-preparation-report.md"
+      ],
+      "reason": "The adapter requires an independently accepted actual recovery and exact runtime-bound restart admission/request/startup/review chain with strict chronology before calling the runner."
+    },
+    {
+      "id": "FULL-RETAINED-ARTIFACT-CONTRACT",
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit-preparation-report.md",
+        "evaluations/research-qa/m78-readonly-revisit-preparation-result.json"
+      ],
+      "reason": "No accepted real recovery observation exists. Root's real baseline reproduction showed that the inherited recovery runner assumes complete fleet/equipment report bodies where the registers expose metadata-only records."
+    },
+    {
+      "id": "SOURCE-ONLY-BOUNDARY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit-preparation-result.json"
+      ],
+      "reason": "This task performed only focused offline fixtures, parsing and TypeScript checks; it did not access credentials, authentication, hosts, databases, providers, Git or official evidence paths."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "insufficient_evidence",
+    "material_findings_open": 1,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": [],
+    "blocker": "The inherited accepted recovery runner cannot reconstruct the real fleet/equipment retained artifacts, so an accepted recovery observation and actual restart evidence do not exist. Repair and independently accept that recovery contract before revisiting this adapter."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Requested default software-engineering route was gpt-5.6-terra/medium. This existing runtime did not expose actual model or effort, so observed compute remains null.",
+    "The five-test positive is deliberately labeled baseline-shaped and empty-full-report. It validates remapping, admission and production decoding of the represented fields, not the complete retained-report artifact contract.",
+    "Actual recovery failed outside this task and produced no accepted observation. No restart or revisit was attempted or authorized."
+  ]
+}

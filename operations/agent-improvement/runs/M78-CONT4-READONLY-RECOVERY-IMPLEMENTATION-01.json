@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "6fdda92613e8bc43114bafaf908be13a4e6af6db000f39f6a7a5a159cfbf0deb",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01-CANDIDATE3.json",
+      "sha256": "bbd7486fa0300e1ee79831f0ae414c62700c24907ab67bf03687f3b1692d3720"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery.ts",
+      "sha256": "d96929b9ae69459bce616d4ddfb64cbc75ca99d086f792bb1a0c8915be667c8f"
+    },
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery.test.ts",
+      "sha256": "5522678b5eff2fcd2643d64e452770236619304f053e49469d97a5d18648fea5"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-independent-review.ts",
+      "sha256": "8e21dd1d4c7d7f30a66c7debfeb5776fb3f86edfe4f30028b06e9258e0a936de"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-independent.test.ts",
+      "sha256": "8664e1561d7e82fa6a2da8ce74ba6ae59e912803d187c848bc4f97aead68f4a3"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-implementation-report.md",
+      "sha256": "55f8b813584a74f9c7f950b3fd0deadb026df955249dcb95bb38dce961cfba19"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-implementation-result.json",
+      "sha256": "b2ce5a5fee1388298a63894df64b90456f5feb1a6f6876786b95a92b2db1a87e"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_FAILED_EVIDENCE_PREAUTH",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4-readonly-recovery.ts",
+        "tools/staging/check-m78-continuation4-readonly-recovery.test.ts"
+      ],
+      "reason": "The runner refuses before authentication unless exact failed exercise evidence, baseline prefixes, independent failure reconciliation, historical 173-file closure and a separate fresh source/runtime gate all verify."
+    },
+    {
+      "id": "GET_ONLY_GRAPH_RECOVERY",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4-readonly-recovery.ts",
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-implementation-report.md"
+      ],
+      "reason": "The source implements graph-first application GETs, fixed-host authentication POSTs, no retries, disabled pooling, bounded streaming, exact actor checks and fail-closed session cleanup without replaying the 37 operations."
+    },
+    {
+      "id": "INDEPENDENT_TYPED_STATE_EVALUATOR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-independent-review.ts",
+        "evaluations/research-qa/m78-continuation4-readonly-recovery-independent.test.ts"
+      ],
+      "reason": "The offline evaluator binds per-request evidence, decodes the full graph with production decoders, reconstructs artifacts and verifies exact typed operation bindings, immutable history, totals, reports and legacy state."
+    },
+    {
+      "id": "ACTUAL_RECOVERY_ACCEPTANCE",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "Actual recovery acceptance is outside this explicitly source-only assignment and remains pending in the milestone. No hosted observation exists; this closure claims preparation only."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-recovery-root-candidate3-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01-CANDIDATE3.json",
+        "sha256": "bbd7486fa0300e1ee79831f0ae414c62700c24907ab67bf03687f3b1692d3720"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "fail",
+    "material_findings_open": 3,
+    "rework_cycles": 2,
+    "escaped_defects": 3,
+    "repeated_findings": [],
+    "blocker": "Real retained report reconstruction failed. Recovery2 must correct metadata-only fleet/equipment reports, mobile artifact keys and separate proof envelopes; first attempt stays failed."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Source preparation only. No hosted recovery, native database call, authentication, credential access, provider action, Git action, restart, revisit or official evidence write occurred.",
+    "The positive transport test uses an injected local transport. Production decoder coverage uses accepted baseline-shaped data; a full fresh post-37 positive evaluator fixture does not exist and was not fabricated.",
+    "Candidate1 is preserved. Independent root review found that a diagnostic write failure could suppress logout transport or discard an already received token response. Candidate2 keeps local-scope cleanup operable under repeated diagnostic failure and makes diagnostic health a success gate; the unchanged root security reproduction passes.",
+    "Candidate2 is preserved. Finalization review found that its terminal diagnostic write happened after the observation and could leave a false passing observation. Candidate3 commits a healthy terminal diagnostic before the final main events and writes the observation last; terminal diagnostic failure is now an explicit refusal case.",
+    "Passing this preparation does not create exercise_complete and does not authorize restart or revisit. Independent QA of the exact frozen candidate remains pending.",
+    "Post-acceptance observation: evaluations/research-qa/m78-readonly-recovery-failure.json. Historical source verdict and immutable snapshots are preserved. Source preparation acceptance did not exercise nonempty retained artifact reconstruction. Recovery2 is a separate assignment; this consumed candidate cannot be reused."
+  ]
+}

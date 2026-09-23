@@ -309,3 +309,5 @@ operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDID
 operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE4.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE5.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-IMPLEMENTATION-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-READONLY-REVISIT-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol

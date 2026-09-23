@@ -1,0 +1,49 @@
+{
+  "status": "m78_readonly_revisit_preparation_blocked",
+  "createdAt": "2026-09-22T19:35:43.1589260-07:00",
+  "sourcePreparationOnly": true,
+  "actualRecoveryExecutedByThisTask": false,
+  "actualRecoveryAccepted": false,
+  "actualRestartAccepted": false,
+  "actualRevisitExecuted": false,
+  "hostedCalls": 0,
+  "nativeDatabaseCalls": 0,
+  "credentialAccesses": 0,
+  "applicationPostRequests": 0,
+  "restartAuthorized": false,
+  "revisitAuthorized": false,
+  "runtime": {
+    "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b"
+  },
+  "validation": {
+    "testsPassed": 5,
+    "testsFailed": 0,
+    "assertions": 28,
+    "strictTargetedTypeScript": "passed",
+    "productionDecoderBaselineShapedFixture": "passed_without_full_reports",
+    "completeArtifactPositive": "blocked_by_recovery_artifact_contract",
+    "independentReview": "not_started"
+  },
+  "materialFindingsOpen": 1,
+  "blocker": "The accepted recovery runner cannot reconstruct the real fleet/equipment retained-report artifact shapes, so no accepted recovery observation or restart evidence exists for a truthful revisit admission.",
+  "files": [
+    {
+      "path": "tools/staging/m78-readonly-revisit.ts",
+      "sha256": "63e99a8e967316ca434ee3195d1e06ac3275f61a87dd8ba855e885468f635689"
+    },
+    {
+      "path": "tools/staging/m78-readonly-revisit.test.ts",
+      "sha256": "e7883437d7b4ab4c54932e5cd265e3d826385b97631268e2120c38d245c7a911"
+    }
+  ],
+  "requestedCompute": {
+    "model": "gpt-5.6-terra",
+    "effort": "medium"
+  },
+  "observedCompute": {
+    "model": null,
+    "effort": null
+  }
+}
