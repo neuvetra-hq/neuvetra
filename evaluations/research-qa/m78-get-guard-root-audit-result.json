@@ -1,0 +1,176 @@
+{
+  "status": "m78_get_guard_root_whole_contract_audit_passed",
+  "observedAt": "2026-09-23T01:04:49.582Z",
+  "guardSha256": "8ffb4f7470e9b139201001b80b7a14f629f7d56a5f67187044e54dfb7492eb17",
+  "auditSourceSha256": "fcd49a8cfd9d57fc5f9ba97ba162c6ffc8f754bd9b649eeb221e72b66491ff12",
+  "pinnedSqlSources": 10,
+  "exactTemplatesExercised": 20,
+  "rejectionCases": 56,
+  "enforcementMapAndSourcePinsPrivate": true,
+  "sites": [
+    {
+      "site": "workspace role setter",
+      "sha256": "8375349348909e01b88d8b528eb5b155c14c7c37ca6ef4bd37492ad22500a79c",
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "line": 355,
+      "arity": 0,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "workspace actor setter",
+      "sha256": "e88e2adeda02c40dee3bd109eb0f8049dc99f01a1978e1283f5d4f66607a6be6",
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "line": 354,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "hosted actor setter",
+      "sha256": "2de480b59b0a5dc6a9ed9ef1d6893a9e4057721650c7f465ca0c9d5fdefadf72",
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "line": 106,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "hosted staging access read",
+      "sha256": "722366b2cc2af0dfa2025bf62efa8beec527c43f7119b2abd10418069a29e304",
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "line": 107,
+      "arity": 0,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m71 read lock",
+      "sha256": "dc85a820b0a0ef2bd1ad78596c8098545d827fbeede0b11023308763b6ef3a77",
+      "path": "packages/neuvetra-database/src/m71.ts",
+      "line": 10,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m71 register read",
+      "sha256": "e5c410e9401c6936b3ae54507aa1304d9eb037835238fde7c6935191ad0ba2fb",
+      "path": "packages/neuvetra-database/src/m71.ts",
+      "line": 17,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m73 read lock",
+      "sha256": "cbd06eee6f1981cd86a3e0b8172c89c189b6c3cfa48e07a6e71bd52d4d391fac",
+      "path": "packages/neuvetra-database/src/m73.ts",
+      "line": 21,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m73 register read",
+      "sha256": "a9a415ee7b39847adc6190f60694fd07535271c92ebab4397d0361a2d99eb8f6",
+      "path": "packages/neuvetra-database/src/m73.ts",
+      "line": 23,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m74 read lock",
+      "sha256": "d7ff18b86256edea2ae752b8df2ca31fafd4b362698ea6279e4cad1d75df8a7a",
+      "path": "packages/neuvetra-database/src/m74.ts",
+      "line": 22,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m74 register read",
+      "sha256": "3692a31fd171105fc80a1ec0bf1dabceb011507dbd9ae7324c9d33cd31fc1830",
+      "path": "packages/neuvetra-database/src/m74.ts",
+      "line": 24,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m75 read lock",
+      "sha256": "2a1d2831436701008bc731424970b2ed722a0ad5f148f33039699c905eaaac82",
+      "path": "packages/neuvetra-database/src/m75.ts",
+      "line": 23,
+      "arity": 2,
+      "writingParameterIndex": 1
+    },
+    {
+      "site": "m75 register read",
+      "sha256": "6091fea6a06dcb38596ffa9ded112cb3da43c0ba73ff1b64f40ad1950961dcf2",
+      "path": "packages/neuvetra-database/src/m75.ts",
+      "line": 27,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m76 read lock",
+      "sha256": "154aa333fe28cf00350f66714ee8aa79646f6ed62b3e8d57a60c6c13919791a6",
+      "path": "packages/neuvetra-database/src/m76.ts",
+      "line": 31,
+      "arity": 2,
+      "writingParameterIndex": 1
+    },
+    {
+      "site": "m76 register read",
+      "sha256": "ffe34f2943a5462eb451fe14fe95e83067bd7d42617a6dc1b8bae8594ac84eb0",
+      "path": "packages/neuvetra-database/src/m76.ts",
+      "line": 35,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m76 diesel read lock",
+      "sha256": "5e554d346a207e463c7e5b0c4ccb09cbd2592fef9f6bcb6efdd4d816e9bb88a3",
+      "path": "packages/neuvetra-database/src/m76-diesel.ts",
+      "line": 21,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m76 diesel register read",
+      "sha256": "fe6303d16199742c485b738f21c65afe97dbd8def7827b3d8cbeb524f2676eb8",
+      "path": "packages/neuvetra-database/src/m76-diesel.ts",
+      "line": 23,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m77 read lock",
+      "sha256": "61c8c059d842be53dd1c7b350cb238bbe72d08cd9ebb059ddff7c895224834df",
+      "path": "packages/neuvetra-database/src/m77.ts",
+      "line": 19,
+      "arity": 2,
+      "writingParameterIndex": 1
+    },
+    {
+      "site": "m77 register read",
+      "sha256": "08d4fdc4925db618d5e3824fe89c197ea0ffdbac76ec9a3a30bbd119406555e9",
+      "path": "packages/neuvetra-database/src/m77.ts",
+      "line": 24,
+      "arity": 1,
+      "writingParameterIndex": null
+    },
+    {
+      "site": "m78 read lock",
+      "sha256": "cdee9da1741641e2f44d5123a8e0d04f0cbc31a64f7d6d47fa7eed944ea30b75",
+      "path": "packages/neuvetra-database/src/m78.ts",
+      "line": 26,
+      "arity": 2,
+      "writingParameterIndex": 1
+    },
+    {
+      "site": "m78 state read",
+      "sha256": "5ef258151eefe7be1c29bacf687a23055001e86f4f7648954dccb6fa0e693665",
+      "path": "packages/neuvetra-database/src/m78.ts",
+      "line": 37,
+      "arity": 1,
+      "writingParameterIndex": null
+    }
+  ],
+  "dbConnections": 0,
+  "networkCalls": 0,
+  "applicationWrites": 0,
+  "scope": "Restriction for the pinned trusted GET callers; no arbitrary in-process JavaScript or modified database-function isolation claim."
+}

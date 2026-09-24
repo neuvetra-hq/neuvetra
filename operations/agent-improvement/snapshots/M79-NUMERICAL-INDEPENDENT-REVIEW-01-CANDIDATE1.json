@@ -1,0 +1,44 @@
+{
+  "profile": "neuvetra.agent-review-candidate.v1",
+  "taskId": "M79-NUMERICAL-INDEPENDENT-REVIEW-01",
+  "candidate": 1,
+  "createdAt": "2026-09-22",
+  "verdict": "accept_bounded_numerical_preparation_only",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m79-numerical-independent-review.md",
+      "sha256": "b80afc4c7e4b787b33f4bfc439d6a738b22a5e69cf6637f1d1e20b3645d4c142"
+    }
+  ],
+  "reviewedArtifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-COMPATIBILITY-01-CANDIDATE1.json",
+      "sha256": "2ca05e1fe65f3376035343ee5fc09350f80fe747b58c001524b104e87f74f090"
+    },
+    {
+      "path": "docs/research/m79-numerical-compatibility.md",
+      "sha256": "84e189333b1c36d3dbfec041e8cb74a5182955877a27c94736df29fd7c3daafc"
+    },
+    {
+      "path": "evaluations/calculation-specs/m79-numerical-expected.json",
+      "sha256": "4631c72e76e9a65972eaa7a82a306514ed1d2ad70e9c42e2b8d35d7882780c46"
+    },
+    {
+      "path": "evaluations/calculation-specs/m79-numerical-result.json",
+      "sha256": "2544773778df3592f5699995616fce1a187a0d56c3d0f6c2a1c3ab9762b675fd"
+    },
+    {
+      "path": "evaluations/calculation-specs/m79-numerical-boundaries.test.ts",
+      "sha256": "f0dc9cfce03b6d4d20ded211c558909ee6e60ccb484b9e2554eaa04cb0a63c32"
+    },
+    {
+      "path": "evaluations/calculation-specs/m79-numerical-compatibility.py",
+      "sha256": "0e7dfc697abcc0e849a3e1d50f6092136ef5ed8184b0abada3a357003157535f"
+    }
+  ],
+  "limitations": [
+    "No source, method, rights, domain, customer, production, legal, compliance or assurance approval follows.",
+    "The snapshot records exact hashes; the frozen author snapshot retains the reviewed file texts.",
+    "Root remains the final admission owner."
+  ]
+}

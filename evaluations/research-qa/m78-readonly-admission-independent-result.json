@@ -1,0 +1,58 @@
+{
+  "status": "m78_readonly_recovery_admission_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "files": [
+    {"path": ".superpowers/m78-readonly-recovery-admit.py", "sha256": "10ea9111ae8ffa90e01682768f849d51b34c18313bdd0db0c1394105d13b2526"},
+    {"path": ".superpowers/m78-readonly-recovery-source-closure.ts", "sha256": "f48f35b1e8b40a46351fc14c89a923146c4c6e719205bff95e9212eb36686e20"},
+    {"path": ".superpowers/m78-get-route-refresh-for-recovery.py", "sha256": "aecaeb88ef0f4bafb2243986a1a633e63c78b7577acdb4ef5767ebe6da380db0"}
+  ],
+  "sourceArchive": {"path": "evaluations/research-qa/m78-readonly-admission-independent-source.json", "sha256": "1bb205a90ba7b31cd1ab12677df47b345fdf55a992292242fc68bc3cbb6c56a9"},
+  "runtime": {
+    "path": ".superpowers/m78-get-route-recovery-runtime-verified.json",
+    "sha256": "9ccc9ae83c2e67d3d861b1afa07ef74d86569d66a57d3063544c794c8cf89598",
+    "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+    "freshnessLimitSeconds": 600,
+    "ageSecondsAtFinalSubstantiveCheck": 463.151
+  },
+  "verified": {
+    "candidate1AdmissionPreservedSha256": "6d90d0a1d37d3f2601c4af77457c1b639df781d6e8ecc105bbf667345ac465ba",
+    "candidate2OnlyChangesRuntimeEvidencePath": true,
+    "refreshCollectorOnlyChangesThreeOutputNamesFromAcceptedObserver": true,
+    "sourceFiles": 179,
+    "sourceFilesUnique": true,
+    "historicalSourceFiles": 173,
+    "onlyHistoricalChangeIsAcceptedRoute": true,
+    "sourcePinsSha256": "6ea8cbdcc23040b0ed241816f202cafb78b8a2668616f79782652b4f68adf34c",
+    "pythonAndBunCanonicalDigestsEqual": true,
+    "rootCandidate3ReviewSha256": "f346310cc79cdd8192525ee4c008d228ca356645647c1c5c26f8c8ef6021f379",
+    "rootCandidate3SnapshotSha256": "8a9b779377ece198a1f1d2900f89da19fcdd92827f8e13e96aeab72a58eb8924",
+    "privateHelperReviewSha256": "732eaaad1e415a2601523c6efd2b17874dfb35da75292fa382a938ced6c1bcff",
+    "exclusiveSourceAdmission": true,
+    "exclusiveExecutionAdmission": true,
+    "preexistingRecoveryArtifacts": 0,
+    "finalizerNetworkCalls": 0,
+    "finalizerCredentialReads": 0,
+    "finalizerProviderCalls": 0,
+    "finalizerDatabaseCalls": 0,
+    "finalizerGitMutations": 0
+  },
+  "checks": {
+    "offlineTestsPassed": 5,
+    "offlineTestsFailed": 0,
+    "assertions": 19,
+    "closureExecutedReadOnly": true,
+    "actualFinalizerImportedOrExecuted": false,
+    "admissionCreated": false,
+    "recoveryExecuted": false
+  },
+  "executionConditions": [
+    "The reviewed runtime observation's 600-second admission window expired after review; refresh the exact runtime receipt without relaxing the bound before execution.",
+    "Keep all 179 source pins, both independent reviews, runtime collection and deployment admission byte-exact.",
+    "If either exclusive output already exists or any recovery journal, observation or lock exists, refuse and preserve it; do not retry automatically."
+  ],
+  "scope": "Source-only admission review; no recovery, restart, revisit or hosted success claim.",
+  "routing": {"requestedModel": "gpt-6-astra", "requestedEffort": "high", "observedModel": null, "observedEffort": null, "freshDispatchUnavailable": true, "fallbackReviewer": "/root/m78_transport_probe"}
+}

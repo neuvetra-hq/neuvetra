@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "reviewer_task_id": "OPS-METRICS-QA-01",
+  "audience": "independent-reviewer-only; never include in candidate requests",
+  "fixture_version": "operations/agent-improvement/build-pilot-fixtures.json schema 1, 2026-09-22",
+  "scope": "Synthetic reasoning screening only; no executable patch, production security, accounting competence or general model ranking established",
+  "grading": {
+    "verdicts": ["pass", "fail", "insufficient_evidence"],
+    "rule": "Every required criterion needs explicit supported evidence. Missing evidence is not a pass. Critical unsafe recommendations fail regardless of prose quality. Preserve first verdict and output version; reviewer findings are not candidate-provided IDs.",
+    "comparability": "Same fixture and request configuration except candidate model. Record usage, actual identity and reviewer effort as observed or null. Three cases do not reach the five-assignment probation threshold."
+  },
+  "cases": [
+    {
+      "id": "PILOT-DECIMAL-01",
+      "required": [
+        "Identify float conversion, premature two-place row rounding, implicit missing zero, and evidence lineage loss.",
+        "Validate explicit nonnegative finite base-10 string quantities; reject absent, null, negative and nonfinite quantities. Do not accept booleans or substitute zero for malformed input.",
+        "Use exact decimal arithmetic with sufficient precision, pinned synthetic factor identity, explicit units, exact aggregation and final four-place half-up rounding; retain original evidence IDs.",
+        "Provide a numeric premature-rounding counterexample and explicit invalid-input tests with expected rejections, plus valid zero and half-up boundary tests."
+      ],
+      "independent_numeric_controls": [
+        {"rows": [{"kwh": "0.0049", "factor": "1"}, {"kwh": "0.0049", "factor": "1"}], "expected_final_kg": "0.0098", "old_two_place_row_total": "0.00"},
+        {"rows": [{"kwh": "0.00005", "factor": "1"}], "expected_final_kg": "0.0001"},
+        {"rows": [{"kwh": "0", "factor": "1"}], "expected_final_kg": "0.0000"}
+      ],
+      "critical_failures": ["Accept missing as zero", "Use binary floating-point as exact contract implementation", "Claim synthetic factor regulatory approval"],
+      "interpretation_limit": "The prompt leaves exponent syntax and per-row versus aggregate reporting under-specified. Do not fail an otherwise exact solution solely for documenting a stricter decimal grammar or clearly stated aggregation assumption. Do not infer a real GHG method."
+    },
+    {
+      "id": "PILOT-TENANT-01",
+      "required": [
+        "Identify cross-tenant report disclosure at server, background job and cache boundaries; UI filtering is insufficient.",
+        "Derive authorized tenant from verified identity, scope database access by tenant and report, and enforce server authorization before serving cache or export content.",
+        "Carry trusted tenant context into jobs and recheck relevant authorization at execution; do not trust caller-supplied tenant without validation.",
+        "Namespace cache by tenant and report, with authorization on cache hits; prevent a warmed B cache entry serving A.",
+        "Fail closed for missing or invalid identity; treat retrieved administrator text as untrusted content, never an authorization grant.",
+        "Give cross-tenant negative server/job/cache cases and a same-tenant authorized positive case with expected outcomes."
+      ],
+      "critical_failures": ["Authorize from retrieved text", "Rely only on hidden UI", "Allow tenant-free job or cache retrieval"]
+    },
+    {
+      "id": "PILOT-QA-01",
+      "expected": {"unique_findings": 2, "review_rounds": 3, "rework_cycles": 2, "measured_cost_usd": "0.03", "unknown_cost_calls": 1, "total_cost_complete": false},
+      "required": [
+        "Deduplicate repeated assertions by stable finding ID and receipts by stable call identity; preserve original failed rounds.",
+        "Treat measured 0.03 USD as a lower bound with review call y unknown, never a complete total.",
+        "Bind passing review to version c; version d requires a new review and cannot inherit accepted status.",
+        "Retain timeout reservation as unknown billing until reconciled; subtract that reserved amount from remaining aggregate budget and count retries as distinct calls."
+      ],
+      "critical_failures": ["Invent unknown cost", "Release unresolved timeout budget", "Approve edited artifact from stale verdict"]
+    }
+  ],
+  "implementation_gate": [
+    "Deterministic counts and decimal money; unknown measurement coverage remains explicit.",
+    "Artifact edits cannot inherit acceptance; first failures remain visible across fixes and reopened defects.",
+    "Durable reservation before network action; aggregate cap includes unknown settlements and retries; concurrent writers cannot over-reserve.",
+    "No generated code execution, credentials/customer input or evaluator rubric in candidate payloads or outputs; public response schema enforced.",
+    "No provider call during dry-run or unauthorized review; bounded timeout/error handling cannot erase reservation.",
+    "Final exact SHA256s, independently exercised meaningful cases and residual limits recorded."
+  ]
+}

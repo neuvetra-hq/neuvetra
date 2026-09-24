@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "source_root": "C:\\Users\\nimab\\OneDrive\\Documents\\ChatGPT\\Neuvetra",
+  "purpose": "Precise integration allowlist for accepted offline tools and completed paid pilot records; integration reviewer must inspect policy wiring and final evidence. No product ledgers or credentials included.",
+  "review_evidence": [
+    "operations/agent-improvement/OPS-METRICS-QA-01.md",
+    "operations/agent-improvement/OPS-PILOT-01-A-review.md"
+  ],
+  "files": [
+    {
+      "path": "tools/feature_metrics.py",
+      "sha256": "594bd35f185949b5083eb693feafa28c64895a191001824f5be0147b788a7ad3"
+    },
+    {
+      "path": "tools/test_feature_metrics.py",
+      "sha256": "a72a29e98326b7e6c7c63cf5759f90aae414b08c836cfba6ae9e8ee28267ada7"
+    },
+    {
+      "path": "tools/build_model_pilot.py",
+      "sha256": "8f28f99db4e369b8973b3bece0b699c042a0de68a8abf43bab064178e02724f3"
+    },
+    {
+      "path": "tools/test_build_model_pilot.py",
+      "sha256": "9a27e086057adfd2164d73f258db1228e84f7d9836c572c8f721ed35153eadbf"
+    },
+    {
+      "path": "operations/agent-improvement/feature-metrics-usage.md",
+      "sha256": "d4df7ddea79b1fc2c4e1084a4b566fa26b1f95dadb46fa4980478a195646c2bf"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-usage.md",
+      "sha256": "0d8b50c3d12cbd2e30613aaf35570e80086ef444817d063463861fe9ef85741d"
+    },
+    {
+      "path": "operations/agent-improvement/model-performance-policy.md",
+      "sha256": "0a40c8f998cf8d12397ba0d95323a95aa27c81f8f0e93223e172cf9745541bc5"
+    },
+    {
+      "path": "operations/agent-improvement/model-performance-reviews.json",
+      "sha256": "aa0490883a429af3d95c76c20b58121aed1d39320919a0fcd813acef72083964"
+    },
+    {
+      "path": "operations/agent-improvement/openrouter-build-pilot-authorization.json",
+      "sha256": "47b531e3107d3b9b10c86882dbd0d88fd75187aeabbc781200cb1ceafa9a9929"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-candidates.json",
+      "sha256": "50dbe25be0b168f16fdfc588f433317696699a48fbd87cebe62a62111e042ba1"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-fixtures.json",
+      "sha256": "4cbf395a45c8f9b8bcaed2fcc446f4930a63121feffa83541b962fa766d7f94d"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-review-rubric.json",
+      "sha256": "7a636a2039858e2885cd47bd431f1af49d9f2865406feb786946281ec722d3aa"
+    },
+    {
+      "path": "operations/agent-improvement/OPS-METRICS-QA-01.md",
+      "sha256": "1a230a4a8da03286aadb5a62367f6e647f199437549325d6bad0a45009171225"
+    },
+    {
+      "path": "operations/agent-improvement/OPS-PILOT-01-A-review.md",
+      "sha256": "b222995e159b1dc6aa88e70d8ca5898d7fbeb253c5bb3f4a49551eb2582678f6"
+    },
+    {
+      "path": "operations/agent-improvement/build-feature-registry.json",
+      "sha256": "f734a2f9d3c70175ecf6c9af416006a875ccf0522bb65f3309b66442580198ab"
+    },
+    {
+      "path": "operations/agent-improvement/build-feature-events.jsonl",
+      "sha256": "4e17b8e93b6d9a7ce54324ff196aafb679a5d6e07fd9fdb21a030b6eb07862d4"
+    },
+    {
+      "path": "operations/agent-improvement/build-feature-events-v1.jsonl",
+      "sha256": "d222e6bdd418b9311bd5c60a665ca626ab0d45ff2fdb3200715741c1ad5bfd81"
+    },
+    {
+      "path": "operations/agent-improvement/build-usage-events.jsonl",
+      "sha256": "38106fcaed904adaaf1afb6277dd4591a2f4af6d03271621ad983381f8f8c300"
+    },
+    {
+      "path": "operations/agent-improvement/feature-event-schema-migration.json",
+      "sha256": "737c98a61161c01712737104fcbca4f4e75ae35779535e0f670d85b5165f5afc"
+    },
+    {
+      "path": "operations/agent-improvement/build-scorecard.json",
+      "sha256": "12be4b8d5b985892534fce05397fb7ebe73590ef88e43d357508a3e6f9b748df"
+    },
+    {
+      "path": "operations/agent-improvement/build-scorecard.md",
+      "sha256": "87a863efb88a1138963a769a677cdce3d8e924cd47e811d1e90ff3d4d5923365"
+    },
+    {
+      "path": "operations/agent-improvement/build-operations-continuation.md",
+      "sha256": "80f9ef21d5b1a2d3bb666bb734161eb0479d1e0e72093662fa2e6119b198c9f5"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-ledger.jsonl",
+      "sha256": "1a253d4e68b8cb186e405aa899b1fd2a40d608bce51567aebcbf795aa3d38378"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A.json",
+      "sha256": "1f2981738361ec98c03cd5c651b4387bcf311e626800fb1dc80f5b2426732c62"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A-summary.json",
+      "sha256": "0896dc176d9d87aa79fbe321a1a386f9670121b47ab099f36c9828c58fc03c4f"
+    },
+    {
+      "path": "operations/agent-improvement/runs/OPS-METRICS-01.json",
+      "sha256": "176292a505476e5e0e27e0cab3e2c97944b46a5aa3492a2257c25d4af2db3e29"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-METRICS-01.json",
+      "sha256": "6e8f5e1eebc16f68bf3e537946153027718788c6dee5ad68c670e02ea3134f78"
+    },
+    {
+      "path": "operations/agent-improvement/runs/OPS-PILOT-01.json",
+      "sha256": "b09914e0daccde84fb500b2d17380bc5afd5f1fcf39c2523216056f6a9734241"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-PILOT-01.json",
+      "sha256": "e13afa8f685b3ef490053a358c2fdf8722ed515e8a1d1972415da17f7d4e3ffa"
+    },
+    {
+      "path": "operations/agent-improvement/runs/OPS-METRICS-QA-01.json",
+      "sha256": "8e1f6e2c46300639d625387c9f5417d0554446abe022267ab5da7799d80e38fe"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-METRICS-QA-01.json",
+      "sha256": "146436a2f3ff3f9c5029a473d3548ccaa72b6525f6ed7cdf136c3fb305166465"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-METRICS-EVENTS-PRE-INDEPENDENCE.jsonl",
+      "sha256": "4e17b8e93b6d9a7ce54324ff196aafb679a5d6e07fd9fdb21a030b6eb07862d4"
+    }
+  ],
+  "do_not_copy": [
+    "env.json.txt",
+    "operations/status.json",
+    "operations/board-report.md",
+    "operations/next-session.md",
+    ".superpowers",
+    "unrelated untracked files"
+  ],
+  "private_source_note": "The continuation mentions a board-provided credential path only, never its contents.",
+  "historical_documents": "Original draft event stream and pre-independence snapshot retained as migration evidence; active stream is build-feature-events-v1.jsonl."
+}

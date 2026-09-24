@@ -1,0 +1,64 @@
+{
+  "status": "m78_independent_continuation3_private_preparation_passed",
+  "reviewerId": "/root/m78_cont3_review",
+  "createdAt": "2026-09-22T20:37:27.912Z",
+  "privateSources": [
+    {
+      "path": ".superpowers/m78-private-continuation3-journey.ps1",
+      "sha256": "b36cbf0e1a0041daffe54e76ce2d44625270c0e4cacfa3e0a587dbebd17b8719"
+    },
+    {
+      "path": ".superpowers/m78-continuation3-disposition-preflight.ts",
+      "sha256": "265bcc4812f8c1c2a454d3297c4171893cdd656bc2bd023419b1216196d87c3a"
+    },
+    {
+      "path": ".superpowers/m78-continuation3-refresh-runtime.py",
+      "sha256": "702fe3343ba67d3a43373ad0c106e66d770659430fef616d5697c212841a37da"
+    }
+  ],
+  "workflow": {
+    "path": ".github/workflows/verify.yml",
+    "sha256": "cc2da4eb2cea80dbe3e88f326a788df60e54efac0ee51d0d8f352ae8a093dd17"
+  },
+  "workflowDeltaAccepted": true,
+  "adapterSourceGate": {
+    "path": "evaluations/research-qa/m78-continuation3-independent-source-gate.json",
+    "sha256": "4ca66dd3d6bc645d69882ed9e94165f71e96eed29e866b83e4f8a8c94522b517"
+  },
+  "review": {
+    "path": "evaluations/research-qa/m78-continuation3-independent-private-review.md",
+    "sha256": "dc2e7c2d157a06e5f1fa9a3ea84cdfbf290c0f1ebc9b436394446f140431278b"
+  },
+  "test": {
+    "path": "evaluations/research-qa/m78-continuation3-independent-private.test.ts",
+    "sha256": "aa5ce79012f9c3896c898bf840f2dd8074096d55d80c1b061fd293f9e593da8c"
+  },
+  "runtimeEvaluator": {
+    "path": "evaluations/research-qa/m78-continuation3-independent-runtime.py",
+    "sha256": "3ed258073d3db29ef459dd61fd5d3d1f353b078dc3699702c163e24aa631c00e"
+  },
+  "runtimeResult": {
+    "path": "evaluations/research-qa/m78-continuation3-independent-runtime-result.json",
+    "sha256": "0c4978e67793102989d24016bf1d6919d68516a4715771c7ccb6c628a443892b"
+  },
+  "privateSourceChecks": {
+    "tests": 2,
+    "assertions": 74,
+    "preflightCases": 9,
+    "powershellParse": "passed",
+    "wrapperExecuted": false,
+    "dpapiInvoked": false
+  },
+  "runtimeCases": 28,
+  "portableSubset": {
+    "tests": 2,
+    "assertions": 108,
+    "filtered": 2
+  },
+  "admission": "source_preparation_only",
+  "actualCleanupAccepted": false,
+  "actualDispositionAccepted": false,
+  "actualBaselineAccepted": false,
+  "hostedExecutionAccepted": false,
+  "actualDeploymentOrRestartVerified": false
+}

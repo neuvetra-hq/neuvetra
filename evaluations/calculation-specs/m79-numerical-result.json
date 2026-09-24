@@ -1,0 +1,282 @@
+{
+  "engineBoundaryCases": [
+    {
+      "exitCode": 2,
+      "family": "natural_gas",
+      "id": "natural_missing_quantity",
+      "message": null,
+      "pass": true,
+      "status": "error"
+    },
+    {
+      "exitCode": 2,
+      "family": "natural_gas",
+      "id": "natural_unsupported_scf",
+      "message": null,
+      "pass": true,
+      "status": "error"
+    },
+    {
+      "exitCode": 2,
+      "family": "mobile_diesel",
+      "id": "mobile_unsupported_class",
+      "message": null,
+      "pass": true,
+      "status": "error"
+    },
+    {
+      "exitCode": 2,
+      "family": "stationary_diesel",
+      "id": "stationary_supplier_hhv_unit",
+      "message": null,
+      "pass": true,
+      "status": "error"
+    },
+    {
+      "exitCode": 2,
+      "family": "fugitive",
+      "id": "fugitive_unsupported_gas",
+      "message": "Unsupported gas; retain an unresolved source",
+      "pass": true,
+      "status": "unsupported"
+    },
+    {
+      "exitCode": 2,
+      "family": "fugitive",
+      "id": "fugitive_wrong_equipment",
+      "message": "Unsupported gas/equipment combination",
+      "pass": true,
+      "status": "unsupported"
+    },
+    {
+      "estimatedEmittedKg": "2",
+      "exitCode": 0,
+      "family": "fugitive",
+      "id": "fugitive_linked_release_not_added",
+      "kgCo2eExact": "6700",
+      "knownReleaseCount": 1,
+      "pass": true
+    }
+  ],
+  "engineCases": [
+    {
+      "actualDisplay": "66399.7643",
+      "actualExact": "66399.7643125",
+      "exitCode": 0,
+      "expectedDisplay": "66399.7643",
+      "expectedExact": "66399.7643125",
+      "family": "natural_gas",
+      "gasRowsMatch": true,
+      "id": "ng_representative",
+      "pass": true
+    },
+    {
+      "actualDisplay": "0.0000",
+      "actualExact": "0",
+      "exitCode": 0,
+      "expectedDisplay": "0.0000",
+      "expectedExact": "0",
+      "family": "natural_gas",
+      "gasRowsMatch": true,
+      "id": "ng_zero",
+      "pass": true
+    },
+    {
+      "actualDisplay": "5.3114",
+      "actualExact": "5.31145",
+      "exitCode": 0,
+      "expectedDisplay": "5.3114",
+      "expectedExact": "5.31145",
+      "family": "natural_gas",
+      "gasRowsMatch": true,
+      "id": "ng_tie_even_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "15.9344",
+      "actualExact": "15.93435",
+      "exitCode": 0,
+      "expectedDisplay": "15.9344",
+      "expectedExact": "15.93435",
+      "family": "natural_gas",
+      "gasRowsMatch": true,
+      "id": "ng_tie_odd_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "10351.5321",
+      "actualExact": "10351.53209375",
+      "exitCode": 0,
+      "expectedDisplay": "10351.5321",
+      "expectedExact": "10351.53209375",
+      "family": "mobile_diesel",
+      "gasRowsMatch": true,
+      "id": "mobile_representative",
+      "pass": true
+    },
+    {
+      "actualDisplay": "0.0000",
+      "actualExact": "0",
+      "exitCode": 0,
+      "expectedDisplay": "0.0000",
+      "expectedExact": "0",
+      "family": "mobile_diesel",
+      "gasRowsMatch": true,
+      "id": "mobile_zero",
+      "pass": true
+    },
+    {
+      "actualDisplay": "10.2380",
+      "actualExact": "10.23805",
+      "exitCode": 0,
+      "expectedDisplay": "10.2380",
+      "expectedExact": "10.23805",
+      "family": "mobile_diesel",
+      "gasRowsMatch": true,
+      "id": "mobile_tie_even_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "10.2194",
+      "actualExact": "10.21935",
+      "exitCode": 0,
+      "expectedDisplay": "10.2194",
+      "expectedExact": "10.21935",
+      "family": "mobile_diesel",
+      "gasRowsMatch": true,
+      "id": "mobile_tie_odd_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "2561.2835",
+      "actualExact": "2561.28350175",
+      "exitCode": 0,
+      "expectedDisplay": "2561.2835",
+      "expectedExact": "2561.28350175",
+      "family": "stationary_diesel",
+      "gasRowsMatch": true,
+      "id": "stationary_representative",
+      "pass": true
+    },
+    {
+      "actualDisplay": "0.0000",
+      "actualExact": "0",
+      "exitCode": 0,
+      "expectedDisplay": "0.0000",
+      "expectedExact": "0",
+      "family": "stationary_diesel",
+      "gasRowsMatch": true,
+      "id": "stationary_zero",
+      "pass": true
+    },
+    {
+      "actualDisplay": "256.0004",
+      "actualExact": "256.00035",
+      "exitCode": 0,
+      "expectedDisplay": "256.0004",
+      "expectedExact": "256.00035",
+      "family": "stationary_diesel",
+      "gasRowsMatch": true,
+      "id": "stationary_tie_odd_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "768.0010",
+      "actualExact": "768.00105",
+      "exitCode": 0,
+      "expectedDisplay": "768.0010",
+      "expectedExact": "768.00105",
+      "family": "stationary_diesel",
+      "gasRowsMatch": true,
+      "id": "stationary_tie_even_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "162.5000",
+      "actualExact": "162.5",
+      "exitCode": 0,
+      "expectedDisplay": "162.5000",
+      "expectedExact": "162.5",
+      "family": "fugitive",
+      "gasRowsMatch": true,
+      "id": "fugitive_hfc134a",
+      "pass": true
+    },
+    {
+      "actualDisplay": "8375.0100",
+      "actualExact": "8375.01005",
+      "exitCode": 0,
+      "expectedDisplay": "8375.0100",
+      "expectedExact": "8375.01005",
+      "family": "fugitive",
+      "gasRowsMatch": true,
+      "id": "fugitive_hfc227ea",
+      "pass": true
+    },
+    {
+      "actualDisplay": "4810.0000",
+      "actualExact": "4810",
+      "exitCode": 0,
+      "expectedDisplay": "4810.0000",
+      "expectedExact": "4810",
+      "family": "fugitive",
+      "gasRowsMatch": true,
+      "id": "fugitive_r410a",
+      "pass": true
+    },
+    {
+      "actualDisplay": "0.0000",
+      "actualExact": "0",
+      "exitCode": 0,
+      "expectedDisplay": "0.0000",
+      "expectedExact": "0",
+      "family": "fugitive",
+      "gasRowsMatch": true,
+      "id": "fugitive_zero",
+      "pass": true
+    },
+    {
+      "actualDisplay": "0.0034",
+      "actualExact": "0.00335",
+      "exitCode": 0,
+      "expectedDisplay": "0.0034",
+      "expectedExact": "0.00335",
+      "family": "fugitive",
+      "gasRowsMatch": true,
+      "id": "fugitive_tie_odd_lower",
+      "pass": true
+    },
+    {
+      "actualDisplay": "0.0100",
+      "actualExact": "0.01005",
+      "exitCode": 0,
+      "expectedDisplay": "0.0100",
+      "expectedExact": "0.01005",
+      "family": "fugitive",
+      "gasRowsMatch": true,
+      "id": "fugitive_tie_even_lower",
+      "pass": true
+    }
+  ],
+  "enginePins": {
+    "fugitive": "3c81c8d1b4ee6b2435765013d0578021556b70d35f16e4512ebecf1c873f25b4",
+    "mobile_diesel": "1dc0bb7249d91e854004a8cadd34068be3fc03ecdd6e10b4cf297d375d7f52a6",
+    "natural_gas": "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14",
+    "stationary_diesel": "60de93b901185527affd1eae73d400582cc9d041ecd13bb5668c9041374f6266"
+  },
+  "expectedSha256": "4631c72e76e9a65972eaa7a82a306514ed1d2ad70e9c42e2b8d35d7882780c46",
+  "productionReleased": false,
+  "releaseEligible": false,
+  "schemaVersion": 1,
+  "scope1Complete": false,
+  "sourceInventorySha256": "d5f50b6e2d49b1ce027affe08ccfe422174b59df60c408b544212f232b9a8022",
+  "status": "pass_candidate_numerical_compatibility",
+  "summary": {
+    "boundaryCases": 7,
+    "engineCases": 18,
+    "failures": [],
+    "profiles": 4,
+    "rows": 12
+  },
+  "taskId": "M79-NUMERICAL-COMPATIBILITY-01"
+}

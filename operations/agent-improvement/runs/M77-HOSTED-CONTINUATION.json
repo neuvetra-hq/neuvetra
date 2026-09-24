@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "M77-HOSTED-CONTINUATION",
+  "role": "software-engineering",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-CONTINUATION-CANDIDATE2.json",
+      "sha256": "80b1198275f5ba25e58d54a3a3b37ccad99a158d8f2573faa696d56bd8653dd4"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-FAILED-STATE-THREE-WRITE-CONTINUATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m77-hosted-continuation-review.md",
+        "docs/research/m77-hosted-continuation.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_cto",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m77-hosted-continuation-review.md",
+      "evaluations/research-qa/m77-continuation-ci-root-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-CONTINUATION-CANDIDATE2.json",
+        "sha256": "80b1198275f5ba25e58d54a3a3b37ccad99a158d8f2573faa696d56bd8653dd4"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Actual explicit followup accepted. Requested registry settings are not applied observations; inherited model/effort unknown. Prompt hash identifies registered role source, with bounded assignment described here.",
+    "Author owns new continuation/diagnostic/test files and dedicated doc only; root owns host, Git, wrapper and shared records. Original74-event33POST journal is frozen.",
+    "Fresh actual schema20 restore m77_ops_failed_state20 on55472 is read-only source; clone before any local write. Rehearse only final population successor/review/report, all0/3/0 session closures, exact every retained history/download. Independent m76_cto review before root execution.",
+    "Scoped software acceptance only. Full native rehearsal4tests842assertions and separate finalguard2tests41assertions; finalCI23tests254assertions with4native skips. Candidate2 independent review plus root review of QA-authored pure tests. Actual hosted baseline/exercise/restart/revisit pending."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "status": "m78_recovery2_live_passed_offline_dispatch_corrected_pending_independent_review",
+  "observedAt": "2026-09-23T03:54:18.471915+00:00",
+  "sessionId": 87622,
+  "exitCode": 0,
+  "requests": 97,
+  "applicationPostRequests": 0,
+  "allCreatedAuthSessionsClosed": true,
+  "unknownAuthSessions": 0,
+  "frozenEvaluatorFailure": {
+    "path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.ts",
+    "sha256": "4324a96546228070f4d16b0ed6a25cbe02d56d6412d48829d1b60e176db708c1",
+    "message": "Exact fields required.",
+    "cause": "Generic m78_rebind_fugitive_ prefix dispatched m78_rebind_fugitive_discovery to validateM77SourceSave before its exact validateM77PopulationSave branch."
+  },
+  "correctedEvaluator": {
+    "path": "evaluations/research-qa/m78-readonly-recovery2-corrected-review.ts",
+    "sha256": "c45f948482a53b9e2f2ba87c1b754bb70a6f2ced079dbf8b4d85657d7b77fa78"
+  },
+  "offlineResult": {
+    "path": ".superpowers/m78-readonly-recovery2-corrected-evaluation.json",
+    "sha256": "140f184e00f0babbe1d4d1dcb12cffc7bd496118f2d2b5097264a13271c9a122"
+  },
+  "applicationReplay": false,
+  "restartExecuted": false,
+  "revisitExecuted": false,
+  "independentActualAcceptance": false
+}

@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "id": "M75-INDEPENDENT-QA",
+  "role": "qa-lead",
+  "execution_context": "/root/m74_accounting",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M75-QA-DELIVERY-ACCEPTED1.json",
+      "sha256": "2e40fe2f5bfad43ed543fb8a6108f3b91828cb4fd0a5829117c8e25cc17f6466"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M75-NATIVE-PRESERVATION-AND-INDEPENDENT-BOUNDARIES",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m75-independent-review.md",
+        "evaluations/research-qa/m75-final-review-addendum.md",
+        "evaluations/research-qa/m75-root-operator-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m75-independent-review.md",
+      "evaluations/research-qa/m75-final-review-addendum.md",
+      "evaluations/research-qa/m75-root-operator-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M75-QA-DELIVERY-ACCEPTED1.json",
+        "sha256": "2e40fe2f5bfad43ed543fb8a6108f3b91828cb4fd0a5829117c8e25cc17f6466"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused availablecontext after currentruntimefresh/historicaldispatchlimit; actualinheritedcomputeunknown. RootownsGit/host/sharedrecords. IndependentQAauthorsnoimplementation; operatorauthorisnotsoleoperatorreviewer. LessonsL01-L04.",
+    "Local independent QA assignment delivered and coordinator inspected exact result/source pins and preserved failed findings. Root authored production portions but none of these reviewer tests/reports; this is review of QA delivery, not sole acceptance of root implementation. Hosted upgrade/restart acceptance remains separate and not dispatched."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m75-final-review-addendum.md",
+      "sha256": "aaebfdc34b20c222daf225697f9b95fe27421ba88dedfef186437a56e01ea759"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-candidate2-pins.json",
+      "sha256": "69640f6c5a455f1720d0b2ac5a291fdf6dcd091b20e0b05ca2049d429c7d77c0"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-classification.test.ts",
+      "sha256": "e6bbae143c8ba8ee51639c811dfd9987a54e18cb4ffd331d25f2928f26605166"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-decoder.test.ts",
+      "sha256": "5a32802872660d4ba9a2ce74b546b343773ca0d39e8f1907245b7de22c51c8e7"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-direct-sql-early1.json",
+      "sha256": "80edfeddb809ad96f798ce0b8aeb09f1007b5db0da20022d4bd99bebfbc72678"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-direct-sql-early2.json",
+      "sha256": "3d4f6a3819fc4e16808ede113c98371777b3e604a331d4a8f307ba88cb8c191c"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-direct-sql-early3.json",
+      "sha256": "c32a89fde9bca7b75d4a14f4e3b63dcc1dc58b2e0ce8935fadcb8d10f86aa8eb"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-direct-sql-result.json",
+      "sha256": "6228dc2652cf80565a6e41c7d363f908c7a1990bd873749ad2172dc6e858397a"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-direct-sql.ts",
+      "sha256": "e8b09c4d1207b2238431d82a4d233734b65e28332e21d33b5b39ceb412de6112"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-native-proof.json",
+      "sha256": "088e98bb83a35bc0e88ca72effdac9866dedf08db73f1f53644fa771f3aa562f"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-native-result.json",
+      "sha256": "3c4e965afea231937b2c3a309b560637c5af5d189a2e15af20faf07073b52dc7"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-native.test.ts",
+      "sha256": "429e964203d7969dfeb6d6584e1f62817489cac498c8120c6312c32fd10bb3ba"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-proof-fixture.ts",
+      "sha256": "83594e27204632be53c462b2a8bfec5f48bf244d94a2f9ec160bfc7da916b3c7"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-pure-candidate1-pins.json",
+      "sha256": "04dae2afae1205a9d3044c6369411ff4b7fbc1ae38294df9b6c54805af34f1e6"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-recovery.ts",
+      "sha256": "8f1061b2653569e628763a342e070566c7263a6e0a4c854ea68b56ce8ee6f3a7"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-recovery17.json",
+      "sha256": "bd48e18493246247d37bb97878623ab151524ccc0decb759dd4c59f93e38df8f"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-recovery18-final.json",
+      "sha256": "31d79275ebdbc553a53141dc56d8c7ccec3bbacda7ec54653675232fe76e8dd5"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-recovery18-provisional.json",
+      "sha256": "be92ad83fba3e4fafc6a33d267b4abacb6a2d9ea817a923eaad9a196d8486ac6"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-renderer.test.ts",
+      "sha256": "16c20689e05dd523ba1f2a1619e6c462ebdf80a73212e5e4e12879b26918c942"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-review.md",
+      "sha256": "3e73f5d48aa67e676ac39565e594d0a9107b85b8e27efa9c1c4df7dc089acb6c"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-running.md",
+      "sha256": "da007ce8ce74a2cab4a427448769e28e7f3ba6deb3e2a71a38510cdc3760aabe"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-scenarios.ts",
+      "sha256": "6c422b7f01367b5193d8eecff0fcdf33d5800bbf58bd933d3eaae0f39fbf21d2"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-sql-parity-result.json",
+      "sha256": "95f32717b0ebe0ac09b4b6701767011a6bcee611db75ee635c08a21c055ca4f2"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-sql-parity.ts",
+      "sha256": "2bd860eb27b6307d014ae076baa58e9c19e740926825056506dbde063a9521b5"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-ui-fixture.json",
+      "sha256": "78873d2cf9d8c7a66f472b2ac32a66bf5db9b426524ae3c34812a3f1e21513c4"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-ui-result.json",
+      "sha256": "6edc5bae156d1988aa056453ae1142b789f9d7be6b3033895e0bdaaf751d05fc"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-ui.ts",
+      "sha256": "2cd3c4c1957a5df96a8c2e2f0110b51846e8589c96b5602d90f490bf954acd47"
+    },
+    {
+      "path": "evaluations/research-qa/m75-integration-pins.json",
+      "sha256": "20a3a32a346981a0141f70188f7d6d0b2328f6a022a763aaa3d689f1b54c0277"
+    },
+    {
+      "path": "evaluations/research-qa/m75-integration-review.md",
+      "sha256": "6ba6023ad166bdb861e72bd495d23b1958b3dd443e854d8de7ed675aa5f49cdf"
+    },
+    {
+      "path": "evaluations/research-qa/m75-integration.test.ts",
+      "sha256": "0666e442b6aa0e21d3793ced5f7a02e8e26f25a2a3be617cb1f1590c98c045b6"
+    },
+    {
+      "path": "evaluations/research-qa/m75-normalization-check.ts",
+      "sha256": "82fb3b77240a40cae9782eb389e4582b2c52e18a081ed7d345192097d6b7f2af"
+    },
+    {
+      "path": "evaluations/research-qa/m75-normalized-final-pins.json",
+      "sha256": "ab8d74cc06259267e63afdb85032581c860daac47aad896a77f6fba4f4860558"
+    },
+    {
+      "path": "evaluations/research-qa/m75-security-recovery.ts",
+      "sha256": "5d3b2f330d08514514ca0bc537d1dcab56da4b34da266fc41386a21d97b47f31"
+    },
+    {
+      "path": "evaluations/research-qa/m75-ui-server.ts",
+      "sha256": "cf4376634712674fad99d478f91449c334ce51de722215e71f3ebe4ef8365352"
+    },
+    {
+      "path": "evaluations/research-qa/m75-ui.html",
+      "sha256": "322adf0cf48ae58d47b9d8a2ce5be394e80ae93bea321022acd89c95cc44b5a7"
+    },
+    {
+      "path": "evaluations/research-qa/m75-ui.tsx",
+      "sha256": "fbc5a7224a69a620cef2480d20ff9b19ff10647fd3e125a8813febe9c0e6f438"
+    }
+  ]
+}

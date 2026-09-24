@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT-CI-PORTABILITY-01",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recovery",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT-CI-PORTABILITY-01-CANDIDATE1.json",
+      "sha256": "c001b96da138077fd8c1ec976883f35990710dc01f03874d246f9c7fa999db9b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-ci-portability-review.md",
+        "evaluations/research-qa/m78-continuation-ci-portability-result.json"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-ci-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT-CI-PORTABILITY-01-CANDIDATE1.json",
+        "sha256": "c001b96da138077fd8c1ec976883f35990710dc01f03874d246f9c7fa999db9b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assignment": {
+    "parent_outcome": "Repair native run evidence portability following remote d139628 validation failure",
+    "allowed": "Exactly two native-run evidence locator replacements and own repair artifacts",
+    "excluded": "Product source, private artifacts, Git, host, databases, shared ledger",
+    "lessons": [
+      "L02",
+      "L04"
+    ],
+    "remaining": "Root independent review and publication; root confirmed evaluator passes in message"
+  }
+}

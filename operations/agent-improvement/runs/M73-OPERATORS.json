@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "M73-OPERATORS",
+  "role": "security-reliability",
+  "execution_context": "/root/m73_accounting",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M73-OPERATORS-CANDIDATE3.json",
+      "sha256": "6d9cc8f34b0299a6dfaca64aaafe8d33864057b35614f0bd41ff90ca5914d006"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M73-OPERATORS-BOUNDED-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m73-recovery-review.md",
+        "evaluations/research-qa/m73-hosted-journey-review.md",
+        "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m73_cpo",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m73-recovery-review.md",
+      "evaluations/research-qa/m73-hosted-journey-review.md",
+      "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M73-OPERATORS-CANDIDATE3.json",
+        "sha256": "6d9cc8f34b0299a6dfaca64aaafe8d33864057b35614f0bd41ff90ca5914d006"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "New bounded operator-author assignment after accounting contract delivered. Actual reused compute unknown; no independent approval implied. Own new M73 helper files only; no secrets/hosted/Git/common records. Root executes private actions after independent review.",
+    "Candidate3 pin and actual application recovery gate accepted; source ACL-representation failures retained. Root executed private recovery, no hosted migration."
+  ]
+}

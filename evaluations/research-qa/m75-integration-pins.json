@@ -1,0 +1,15 @@
+{
+  ".github/workflows/verify.yml": "0eced643d3bd5979edf457b1f108fc1b58a12f60f8aad1cf6537faf9b7550097",
+  "Dockerfile.staging": "fc1ef9fc8c7bdfc3b374a6fd4805c83055cce3f4665dce416270064f96c18255",
+  "apps/site-api/src/staging/server.ts": "92ccbbd5a819bc6d0beb0602939434e11cebcdc88f85ddbf906704a575c1a0bc",
+  "apps/site-api/src/staging/server.test.ts": "2a96c8bba058f76346ab31959581e70e7c6ee955fde15df32deb062957524b4d",
+  "packages/neuvetra-database/src/workspace.ts": "b0ddd300c4546ba142007a359b77ccc0382e43b5c00ccb1dfeead23d3f35b615",
+  "packages/neuvetra-database/src/index.ts": "af2c08ae929fd4c01852d868b81ccfa385dc7f701ab4620e8b4efb1d938ddd44",
+  "packages/neuvetra-database/src/hosted.ts": "13474e760ba4a316d831e419eda8283015da9f16a1f4b917700de98791c4877f",
+  "packages/neuvetra-database/src/hosted.test.ts": "d7bb339583a74299e3f9dc70573fa9858c72267be4e1ea3fa2c7fd7f1ed1ae4e",
+  "packages/neuvetra-database/src/staging-migrations.ts": "b190269b6450ad7dc0da2767264e8271618356b7a5f8e69328c369d505d47693",
+  "apps/site-web/src/components/StagingWorkspace.tsx": "bfffdd9cca04e608a5039e1f7b42e79d33c0ac5059111df76a5912b05bc0b45a",
+  "apps/site-web/src/staging.css": "b25f830d16acb58a775fe0ae24f307e5e661497a46ea1cf888f914d1a6013a07",
+  "tools/staging/m74-operators.test.ts": "3a3fd7126a4ec463da8aa1a3c1af94d3748ef47879bb9a41b930008d2a0f4cf8",
+  "evaluations/research-qa/m75-integration.test.ts": "0666e442b6aa0e21d3793ced5f7a02e8e26f25a2a3be617cb1f1590c98c045b6"
+}

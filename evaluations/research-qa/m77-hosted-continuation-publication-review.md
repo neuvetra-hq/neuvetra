@@ -1,0 +1,11 @@
+# M77 continuation publication review
+
+**PASS for publication of the reviewed continuation software. Actual baseline and exercise acceptance remain pending.** Independently reviewed 2026-09-17 UTC by `/root/m76_cto`; requested QA Astra/high, observed inherited compute unknown. Supplemental pure-test authorship and root's separate review remain disclosed in the accepted software review.
+
+Exact published commit is `71686967ebd64a33af034523afdc17664fc96297`. Root's publication receipt and check observation agree on that head. All six required uniquely named checks are completed/success at **00:38:36.177809Z**: native PostgreSQL, staging image/runtime smoke, application build/typecheck/lint/tests, GHG calculations, research catalog, and role/evidence records. The legacy combined-status field is pending with zero classic contexts; it is not used as the check-run verdict. QA checked supplied remote observations offline and used local Git only for read-only head/blob inspection.
+
+Candidate2 snapshot `80b1198275f5ba25e58d54a3a3b37ccad99a158d8f2573faa696d56bd8653dd4` matches the committed snapshot exactly. Every captured text/current source hash matches. All six nonprivate candidate files match their exact Git blobs on that commit. The seventh file, `.superpowers/m77-private-continuation.ps1`, is deliberately private/untracked; its reviewed local bytes match, and it is **not claimed published to Git**. The commit changes no application, database/method package or Docker runtime source. Root's publication receipt records no runtime change and no invocation at its 00:38:41 observation; the later baseline session is separate evidence.
+
+Independent receipt `.superpowers/m77-independent-continuation-publication1.json` SHA-256 is `554ddae7732e0f0ed491a9507ab40bc4436652a3f6626482919f3445971b656d`. No running continuation journal was read, no terminal verifier was invoked, and no network, host, Git mutation, original journal or shared-record write occurred.
+
+One fresh actual full zero-write baseline with session closure must finish and pass independent admission before the three missing operations. No duplicate standalone diagnostic sweep is required. The original failed 33-POST journal remains failed/preserved; actual three-write closure, same-image restart, zero-write revisit, browser/download completion and full M77 acceptance remain pending.

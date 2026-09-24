@@ -1,0 +1,42 @@
+- main:
+  - link "Neuvetra":
+    - /url: /
+  - generic: Local verification · Fictional accounts · Real local database
+  - text: Test actor
+  - combobox "Test actor":
+    - option "owner" [selected]
+    - option "admin"
+    - option "reviewer"
+    - option "member"
+    - option "outsider"
+  - paragraph: California reporting · Private synthetic workspace
+  - heading "Corporate coverage register" [level=1]
+  - paragraph: Record the company, its operations and the emissions categories to investigate. Save corrections and review each version while keeping unresolved gaps visible.
+  - generic: 2025 calendar year
+  - generic: California example
+  - generic: Inventory incomplete · No assurance
+  - status: Saved coverage loaded. Review unresolved findings before making a correction.
+  - button "Refresh saved register"
+  - button "Make a correction"
+  - navigation "Corporate register sections":
+    - button "Company and operations"
+    - button "Scope 1, 2 and 3"
+    - button "History and review" [active] [pressed]
+  - generic "86 recorded findings in saved version 2"
+  - heading "Saved versions" [level=2]
+  - text: View version
+  - combobox "View version":
+    - option "Version 1 · 2026-09-15"
+    - option "Version 2 · 2026-09-15" [selected]
+  - article:
+    - heading "Version 2 · Synthetic Juniper California group" [level=2]
+    - paragraph: 2 entities · 2 facilities · 15 Scope 3 categories
+    - paragraph: "Review: accepted bounded internal. Internal fictional review only. Company boundaries, evidence, methods and completeness remain unresolved."
+    - paragraph: "Correction: Clarify the California-first group label; all coverage gaps remain open."
+    - button "Download version 2 coverage"
+    - paragraph: The export is frozen at save and excludes subsequent review decisions. Current review is shown separately above.
+    - generic "Saved boundary and screenings"
+    - generic "Version fingerprint"
+  - paragraph: A manager who has not contributed to this version or its predecessors must perform the internal review.
+  - generic "Supplied fictional reference"
+  - paragraph: California reporting is the first product focus. Company operations elsewhere remain part of boundary assessment when relevant. This synthetic register has no released calculation methods, filing determination or external assurance.

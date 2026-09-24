@@ -1,0 +1,25 @@
+{
+  "status": "m78_exact_interrupted_session_cleanup_v3_source_passed",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T20:30:50.400Z",
+  "cleanupSha256": "20b6a58f409925b8a9c29982a85585cbfc4361e48c75301ebffe8a00c1b602a3",
+  "wrapperSha256": "e807cfac23d5b0834db3896e7c7ec046333e413dc8cd137f5a9ff99738166cfa",
+  "nativeRegression": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-v3-native-result.json",
+    "sha256": "e9e174dcca61ba5ed05ba7e714956afede9ddd1c2736f33bca39db963c16f6dd"
+  },
+  "nativeOldDeleted": 0,
+  "nativeFixedDeleted": 4,
+  "wrongSubjectDeleted": 0,
+  "nativeRollbackVerified": true,
+  "localTemporaryOnly": true,
+  "actualCleanupExecuted": false,
+  "hostCalls": 0,
+  "authWrites": 0,
+  "tokenUsability": "not_verified",
+  "expiryVerified": false,
+  "report": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-v3-source-review.md",
+    "sha256": "f7d13c7c9ddf914baf1dfbd90db3f8f2f52bdd36a27671fb437860d1510c19ca"
+  }
+}

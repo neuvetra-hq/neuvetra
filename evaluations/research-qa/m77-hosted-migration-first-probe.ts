@@ -1,0 +1,2 @@
+import {exclusiveJson,sha} from '../../tools/staging/m77-common'
+const text=await Bun.file('.superpowers/m77-hosted-migration-candidate1.json').text(),r=JSON.parse(text);await exclusiveJson('.superpowers/m77-independent-hosted-migration-first-probe.json',{status:'independent_probe_refused_due_new_sequence_equality_overreach',createdAt:new Date().toISOString(),migrationReceiptSha256:sha(text),oldSequences:r.before.sequences,newSequences:r.after.sequences,expectedPublishedMigrationDefinesAuditBigserial:true,sourceWrites:0,authorOrOperatorChanges:0});

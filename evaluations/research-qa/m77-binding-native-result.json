@@ -1,0 +1,31 @@
+{
+  "status": "independent_local_binding_catalog_preservation_pass",
+  "database": "m77_author_qa_binding_1789597746856",
+  "baseline": "m76_author_root_ui3",
+  "baselineSchema": 19,
+  "assertions": 292,
+  "oldFunctionCount": 159,
+  "newTableCount": 8,
+  "pins": {
+    "packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc",
+    "packages/neuvetra-database/src/m77.ts": "ff26595de2d9535810c4ebcf11cb9dc8782bd648e42dc4d79ef965ab2f518ed6",
+    "packages/neuvetra-database/src/m77-validation.ts": "a2fa3b78aaa1bbd39c87fbbcc1af2d702895bc68760b9375e815cfbe04557eb1",
+    "packages/neuvetra-database/src/m77-report.ts": "835fcad5f02dbf7a8182c67dd86ed3067b19b08ce08ab9e396fdc9595fe5a8b8",
+    "apps/site-web/src/lib/m77-api.ts": "588b00aa982b4f9bf77807605777147fd83d667d1b06f3b16708529dd01f3cb6"
+  },
+  "createdAt": "2026-09-16T22:29:27.862Z",
+  "hostedEvidence": false,
+  "auth": "fictional_local_adapter",
+  "rowPreservationReceipt": ".superpowers/m77_author_qa_binding_1789597746856-preservation.json",
+  "criteria": [
+    "exact_existing_functions_ACLs_security_flags_preserved",
+    "new_FORCED_RLS_and_no_runtime_DML",
+    "restricted_helper_execute_and_fixed_search_path",
+    "unresolved_current_corporate_screening_blocks_numerical_admission",
+    "distinct_corporate_contributor_excluded_from_source_and_population_reviews",
+    "source_identity_correction_retains_device_and_results",
+    "all_source_versions_and_reviews_rebind",
+    "independent_population_source_relationship_rebind",
+    "exact_old_captured_reports_preserved"
+  ]
+}

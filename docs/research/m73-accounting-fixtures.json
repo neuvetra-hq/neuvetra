@@ -1,0 +1,476 @@
+{
+  "schemaVersion": 1,
+  "contract": "m73-accounting-contract-v1",
+  "task": "M73-ACCOUNTING",
+  "asOf": "2026-09-15",
+  "authorship": "Independent arithmetic expectations derived before M73 implementation, by contract author; not independent integrated release approval.",
+  "requestedCompute": {
+    "model": "gpt-6-astra",
+    "effort": "high"
+  },
+  "observedCompute": null,
+  "derivation": {
+    "primary": "Python standard-library Fraction exact rational arithmetic with explicit integer round-half-even.",
+    "crossCheck": "Standalone Decimal96 using direct pinned source gas coefficients; all8 fixtures and48 exact intermediate/total values plus8 displays passed.",
+    "applicationImported": false,
+    "applicationTestsPerformed": false
+  },
+  "profile": {
+    "fuel": "Natural Gas",
+    "fuelBasis": "fossil",
+    "unit": "MMBtu",
+    "heatBasis": "HHV",
+    "countryCode": "US",
+    "regionCode": "CA",
+    "consolidation": "operational_control",
+    "period": {
+      "start": "2025-01-01",
+      "endExclusive": "2026-01-01"
+    },
+    "quantityRegex": "^(?:0|[1-9][0-9]{0,11})(?:\\.[0-9]{1,3})?$",
+    "quantityCanonicalDecimals": 3,
+    "maximum": "999999999999.999",
+    "rounding": "Final kg CO2e display only;4 decimal places;ROUND_HALF_EVEN",
+    "synthetic": true,
+    "incompleteScope1": true,
+    "corporateCompleteness": "incomplete",
+    "releaseEligible": false,
+    "assurance": "none"
+  },
+  "source": {
+    "publisher": "US EPA",
+    "title": "GHG Emission Factors Hub2025",
+    "url": "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+    "retainedPath": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-factors-hub-2025.xlsx",
+    "bytes": 1014275,
+    "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+    "retainedBytesRehashedOn": "2026-09-15",
+    "remoteBytesRehashed": false,
+    "remoteByteCheckLimitation": "XLSX unsupported by web parser; separate local network request denied by sandbox.",
+    "sheet": "Emission Factors Hub",
+    "factorCells": {
+      "co2": "E38",
+      "ch4": "F38",
+      "n2o": "G38"
+    },
+    "factorUnitsCells": [
+      "E36",
+      "F36",
+      "G36"
+    ],
+    "gwpCells": {
+      "co2": "E524",
+      "ch4": "E525",
+      "n2o": "E526"
+    },
+    "basisCells": [
+      "D14",
+      "C94",
+      "C95",
+      "C99",
+      "E523",
+      "C10",
+      "C556"
+    ],
+    "factorStatus": "development_candidate_not_released",
+    "rightsStatus": "unresolved_for_factor_release"
+  },
+  "numericFixtures": [
+    {
+      "id": "zero",
+      "quantity": "0.000",
+      "arithmeticPrecondition": "Supported retained annual positive statement and profile; zero additionally needs zero-supporting evidence and rationale.",
+      "expected": {
+        "co2MassKg": "0",
+        "ch4MassKg": "0",
+        "n2oMassKg": "0",
+        "ch4Co2eKg": "0",
+        "n2oCo2eKg": "0",
+        "totalExactKgCo2e": "0",
+        "totalDisplayKgCo2e": "0.0000"
+      }
+    },
+    {
+      "id": "unit",
+      "quantity": "1.000",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "53.06",
+        "ch4MassKg": "0.001",
+        "n2oMassKg": "0.0001",
+        "ch4Co2eKg": "0.028",
+        "n2oCo2eKg": "0.0265",
+        "totalExactKgCo2e": "53.1145",
+        "totalDisplayKgCo2e": "53.1145"
+      }
+    },
+    {
+      "id": "minimum_positive",
+      "quantity": "0.001",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "0.05306",
+        "ch4MassKg": "0.000001",
+        "n2oMassKg": "0.0000001",
+        "ch4Co2eKg": "0.000028",
+        "n2oCo2eKg": "0.0000265",
+        "totalExactKgCo2e": "0.0531145",
+        "totalDisplayKgCo2e": "0.0531"
+      }
+    },
+    {
+      "id": "tie_down_even",
+      "quantity": "0.100",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "5.306",
+        "ch4MassKg": "0.0001",
+        "n2oMassKg": "0.00001",
+        "ch4Co2eKg": "0.0028",
+        "n2oCo2eKg": "0.00265",
+        "totalExactKgCo2e": "5.31145",
+        "totalDisplayKgCo2e": "5.3114"
+      }
+    },
+    {
+      "id": "tie_up_even",
+      "quantity": "0.300",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "15.918",
+        "ch4MassKg": "0.0003",
+        "n2oMassKg": "0.00003",
+        "ch4Co2eKg": "0.0084",
+        "n2oCo2eKg": "0.00795",
+        "totalExactKgCo2e": "15.93435",
+        "totalDisplayKgCo2e": "15.9344"
+      }
+    },
+    {
+      "id": "annual",
+      "quantity": "1250.125",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "66331.6325",
+        "ch4MassKg": "1.250125",
+        "n2oMassKg": "0.1250125",
+        "ch4Co2eKg": "35.0035",
+        "n2oCo2eKg": "33.1283125",
+        "totalExactKgCo2e": "66399.7643125",
+        "totalDisplayKgCo2e": "66399.7643"
+      }
+    },
+    {
+      "id": "correction",
+      "quantity": "1500.125",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "79596.6325",
+        "ch4MassKg": "1.500125",
+        "n2oMassKg": "0.1500125",
+        "ch4Co2eKg": "42.0035",
+        "n2oCo2eKg": "39.7533125",
+        "totalExactKgCo2e": "79678.3893125",
+        "totalDisplayKgCo2e": "79678.3893"
+      }
+    },
+    {
+      "id": "maximum",
+      "quantity": "999999999999.999",
+      "arithmeticPrecondition": "Supported retained annual statement and profile; discrepancy rationale required when entered quantity differs from stated quantity.",
+      "expected": {
+        "co2MassKg": "53059999999999.94694",
+        "ch4MassKg": "999999999.999999",
+        "n2oMassKg": "99999999.9999999",
+        "ch4Co2eKg": "27999999999.999972",
+        "n2oCo2eKg": "26499999999.9999735",
+        "totalExactKgCo2e": "53114499999999.9468855",
+        "totalDisplayKgCo2e": "53114499999999.9469"
+      }
+    }
+  ],
+  "inputCases": [
+    {
+      "id": "missing_quantity",
+      "quantity": null,
+      "expectedDisposition": "save_missing_without_calculation",
+      "expectedDetail": "result null; activity missing; never zero"
+    },
+    {
+      "id": "empty_quantity",
+      "quantity": "",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "numeric_json",
+      "quantity": 1,
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "numeric values forbidden"
+    },
+    {
+      "id": "negative",
+      "quantity": "-1",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "negative_zero",
+      "quantity": "-0",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "exponent",
+      "quantity": "1e3",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "comma",
+      "quantity": "1,000",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "whitespace",
+      "quantity": " 1 ",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no silent trim"
+    },
+    {
+      "id": "leading_zero",
+      "quantity": "01",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "nonfinite",
+      "quantity": "NaN",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    },
+    {
+      "id": "too_precise",
+      "quantity": "1.0001",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no rounding into profile"
+    },
+    {
+      "id": "too_large",
+      "quantity": "1000000000000",
+      "expectedDisposition": "reject_quantity",
+      "expectedDetail": "no result"
+    }
+  ],
+  "semanticCases": [
+    {
+      "id": "therm",
+      "mutation": "unit=therm",
+      "expected": "refuse calculation; no implicit conversion"
+    },
+    {
+      "id": "scf",
+      "mutation": "unit=scf",
+      "expected": "refuse calculation; no implicit heat content"
+    },
+    {
+      "id": "lhv",
+      "mutation": "heatBasis=LHV",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "missing_heat_basis",
+      "mutation": "heatBasis absent",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "wrong_fuel",
+      "mutation": "fuel=Propane",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "renewable_blend",
+      "mutation": "fuel=biomethane or mixed renewable gas",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "wrong_year",
+      "mutation": "2026-01-01..2027-01-01",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "partial_year",
+      "mutation": "2025-02-01..2026-01-01",
+      "expected": "refuse calculation; no annualization"
+    },
+    {
+      "id": "wrong_geography",
+      "mutation": "selected facility US/NV or CA/BC",
+      "expected": "preserve register gap; refuse M73 calculation"
+    },
+    {
+      "id": "wrong_domain",
+      "mutation": "selected source domain=mobile_combustion or electricity",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "wrong_consolidation",
+      "mutation": "equity_share or financial_control",
+      "expected": "refuse this profile; no implicit allocation"
+    },
+    {
+      "id": "unresolved_control",
+      "mutation": "no full-year supported inclusion/control basis",
+      "expected": "refuse calculation"
+    },
+    {
+      "id": "missing_statement",
+      "mutation": "quantity present; no supported retained evidence",
+      "expected": "refuse numeric admission"
+    },
+    {
+      "id": "screening_only",
+      "mutation": "M71_ARTIFACT used as consumption evidence",
+      "expected": "refuse numeric admission; artifact has no measurements"
+    },
+    {
+      "id": "wrong_statement",
+      "mutation": "statement period/source/facility/fuel/unit/HHV mismatch",
+      "expected": "refuse numeric admission"
+    },
+    {
+      "id": "corrupt_statement",
+      "mutation": "bytes/hash/length coordinated replacement",
+      "expected": "refuse on semantic/authentic source pin check"
+    },
+    {
+      "id": "zero_no_reason",
+      "mutation": "0.000 with zero statement but blank rationale",
+      "expected": "refuse supported zero"
+    },
+    {
+      "id": "zero_positive_statement",
+      "mutation": "0.000 against positive statement even with explanation",
+      "expected": "refuse supported zero"
+    },
+    {
+      "id": "discrepancy_no_reason",
+      "mutation": "1500.125 entered;1250.125 stated;blank reason",
+      "expected": "refuse numeric admission"
+    },
+    {
+      "id": "factor_override",
+      "mutation": "caller supplies GWP, factor or latest override",
+      "expected": "refuse undeclared input/override"
+    },
+    {
+      "id": "duplicate_stream",
+      "mutation": "second stream same stable source/fuel/year or new boundary version",
+      "expected": "refuse second effective counted stream"
+    },
+    {
+      "id": "duplicate_evidence",
+      "mutation": "same full statement/meter/year allocated to second source",
+      "expected": "block numeric claim or retain explicitly uncalculated"
+    },
+    {
+      "id": "contributor_review",
+      "mutation": "author or prior stream contributor reviews successor",
+      "expected": "refuse review"
+    },
+    {
+      "id": "stale_head",
+      "mutation": "correction expected head/hash differs from current",
+      "expected": "conflict; preserve all prior bytes"
+    },
+    {
+      "id": "cross_tenant",
+      "mutation": "foreign company evidence/source/version ID",
+      "expected": "inaccessible/refuse; no data leakage"
+    },
+    {
+      "id": "unreconciled_fuel",
+      "mutation": "shared meter, delivery-only quantity, stock change, feedstock or loss requiring adjustment",
+      "expected": "refuse simple consumed-energy profile until separately supported reconciliation; do not silently equate purchases and combustion"
+    }
+  ],
+  "workflowCases": [
+    {
+      "id": "annual_workflow",
+      "steps": [
+        "Save M71 successor with stationary source and missing coverage row.",
+        "Save1250.125 against matching synthetic annual statement.",
+        "Review exact workpaper by noncontributor manager.",
+        "Export original report bytes.",
+        "Append1500.125 correction referencing original1250.125 statement with discrepancy explanation.",
+        "Read prior version and exact original report."
+      ],
+      "expected": [
+        "First source subtotal66399.7643 kgCO2e.",
+        "Corrected source subtotal79678.3893 kgCO2e; exact79678.3893125.",
+        "Corrected quantity discrepancy remains open; corrected version unreviewed.",
+        "Old report bytes/hash and old review unchanged.",
+        "Only successor is effective; never sum versions.",
+        "incompleteScope1=true and corporate incomplete throughout."
+      ]
+    },
+    {
+      "id": "explicit_zero",
+      "steps": [
+        "Use retained zero-supporting statement and nonempty no-consumption rationale.",
+        "Save0.000."
+      ],
+      "expected": [
+        "All exact gas values0; display0.0000.",
+        "Explicit zero distinguished from missing; coverage remains incomplete."
+      ]
+    },
+    {
+      "id": "missing",
+      "steps": [
+        "Save supported missing activity state quantity=null."
+      ],
+      "expected": [
+        "result=null; no displayed stale total; gap retained."
+      ]
+    },
+    {
+      "id": "idempotency",
+      "steps": [
+        "Retry identical save key after head advancement.",
+        "Retry same key with different quantity."
+      ],
+      "expected": [
+        "First retry returns exact original outcome without new consumption/version.",
+        "Second retry conflicts without mutation."
+      ]
+    },
+    {
+      "id": "rebind",
+      "steps": [
+        "Save newer M71 register version.",
+        "Read old workpaper/report.",
+        "Create deliberate M73 correction bound to new validated register version."
+      ],
+      "expected": [
+        "Old workpaper remains tied to original saved boundary; no implicit recalculation.",
+        "New workpaper separately records binding and starts unreviewed."
+      ]
+    },
+    {
+      "id": "actual_boundaries",
+      "steps": [
+        "Persist tie_down_even, tie_up_even and maximum through native PostgreSQL/API/frontend decoder.",
+        "Invoke actual report download and replay."
+      ],
+      "expected": [
+        "All fixture strings unchanged across driver/API/browser.",
+        "Downloaded bytes equal original stored bytes.",
+        "Forged gas/total/factor/lineage values rejected even with recomputed caller hash.",
+        "Print presentation is a separate required observation."
+      ]
+    }
+  ],
+  "reviewRequired": "Independent integrated accounting review must challenge actual adapter, source/evidence pins, native-driver results and user report/export; author checks do not constitute release approval."
+}

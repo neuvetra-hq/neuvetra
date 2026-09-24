@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION4-INDEPENDENT-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION4-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "825e3772f9ffe2fdebe6786f6a457fcc799b2f2ade6ec236583184685a329741"
+    }
+  ],
+  "source_artifacts": [
+    "operations/agent-improvement/snapshots/M78-TRANSPORT-CONTINUATION-PREP-01-CANDIDATE3.json",
+    "evaluations/research-qa/m78-continuation4-preparation-source-pins.json",
+    ".superpowers/m78-private-continuation4-journey.ps1",
+    ".superpowers/m78-continuation4-preflight.ts",
+    ".superpowers/m78-continuation4-refresh-runtime.py",
+    ".github/workflows/verify.yml"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-SOURCE-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent-result.json",
+        "evaluations/research-qa/m78-continuation4-independent-review.md"
+      ],
+      "reason": "Candidate3 and all seven embedded files are exact; the 173 unique source pins and nine historical evidence pins rehash successfully. Candidate1 and candidate2 packaging failures remain preserved."
+    },
+    {
+      "id": "NO-POOL-NO-RETRY-IDENTITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent.test.ts",
+        "evaluations/research-qa/m78-continuation4-independent-result.json"
+      ],
+      "reason": "The public adapter makes one underlying call with keepalive:false, preserves request fields, original 30-second signal and Response identity, and does not retry rejection."
+    },
+    {
+      "id": "GRACEFUL-STOP-AUTH-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent.test.ts",
+        "evaluations/research-qa/m78-continuation4-independent-private.test.ts"
+      ],
+      "reason": "An independent composed case stops after three fake logins, closes all three sessions, performs zero application POSTs, leaves zero unknown sessions, and preserves all prior bytes."
+    },
+    {
+      "id": "PRIVATE-PREFLIGHT-AND-RUNTIME",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent-private.test.ts",
+        "evaluations/research-qa/m78-continuation4-independent-runtime-result.json"
+      ],
+      "reason": "Private gates precede the sole credential unseal; temporary-input mutation cases refuse, and all 28 offline runtime-observer cases match without hosted calls or official outputs."
+    },
+    {
+      "id": "BOUNDED-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-independent-review.md",
+        ".github/workflows/verify.yml"
+      ],
+      "reason": "The verdict is source-preparation-only. CI runs portable public subsets while private/composed/runtime checks remain local. No live execution, credentials, network, database, or hosted cause claim is admitted."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-root-admission.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION4-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+        "sha256": "825e3772f9ffe2fdebe6786f6a457fcc799b2f2ade6ec236583184685a329741"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation4-independent-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

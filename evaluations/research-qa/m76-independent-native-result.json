@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "database": "m76_qa_review_1789569953784",
+  "template": "m76_author_native12",
+  "schema": {
+    "name": "0019_stationary_sources.sql",
+    "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+  },
+  "company": "0d5d76c9-a607-4d6c-bf15-baa64feb1132",
+  "seed": {
+    "companyId": "0d5d76c9-a607-4d6c-bf15-baa64feb1132",
+    "users": {
+      "owner": "13583c9d-1817-49f5-a219-8d36c9a0bda1",
+      "coverageReviewer": "d459479b-7e4d-458c-8ae4-9d4f20b2c8a2",
+      "workpaperReviewer": "233daafb-1b0d-4971-ad39-7494ffc142e8",
+      "equipmentReviewer": "b8017fcb-680a-4b4e-b7f2-4df4603386e2",
+      "member": "2739d460-8380-48d2-9ea2-fd8e20e75ab8"
+    },
+    "coverageVersionId": "78d14495-913c-462f-ae65-00d17912ccf3",
+    "sourceIds": [
+      "7b9fe8d0-edf7-4166-b30d-a01d4ea507ed",
+      "82b93898-ad26-4550-8adb-51f5d514988e",
+      "6be6c9fa-5c42-4a4c-b24c-7ff0a4d7f282"
+    ],
+    "gasWorksheetIds": [
+      "05a86749-4004-400b-a757-d9532657a6d5",
+      "a46fcc1e-134d-4c21-9f18-7dcc64b7577a"
+    ],
+    "gasVersionIds": [
+      "18fa10c4-cdef-4b2f-ba04-40813adba59d",
+      "fcadd9f4-4b1d-4853-a2c0-952609d48b02"
+    ],
+    "dieselWorksheetId": "65b5d51c-889d-45cb-bed8-950d9d374da8",
+    "dieselVersionIds": [
+      "4f0b80a6-5e30-40f8-8907-46b55adfaf61",
+      "b4fd5d8a-f461-4554-a500-2c5dbd214f74"
+    ],
+    "rosterId": "d9a45f21-e7ce-4870-bb15-db4fbd505a36",
+    "rosterVersionIds": [
+      "ac66aa5f-ea8a-4924-814a-b4086ebc487d",
+      "51b74086-4dc3-4fbe-b6ee-5de29450db51",
+      "37da74ea-65dc-4405-9f0b-887e3cf08531"
+    ],
+    "reportIds": [
+      "cf027690-87e4-4375-aafa-41d6bacff225",
+      "194dfdb1-7282-4bbf-8bd4-3eb2fe8e8c3e",
+      "f12965e1-21f7-4763-97e5-fe1b373759a8"
+    ],
+    "reconciliationSha256": "85baadd4772ad24bf73f27eda5446cef97519ae924f291fed177224dcec315e3"
+  },
+  "events": [
+    "Native positive fixture read by actual stationary and generator decoders",
+    "Both real routes enforce authentication, tenant, origin, member read-only and duplicate JSON; runtime DML denied",
+    "All nine independent generator vectors matched direct native SQL and persisted Python/server/HTTP/actual decoder: zero, minimum, irregular, maximum and both new half-even ties",
+    "No-op refused, statement-only and equipment label-only successors retained exact prior versions; null-review report stays exact after independent later review; self-review refused",
+    "Concurrent corrections retain exactly one successor"
+  ],
+  "limitations": [
+    "Synthetic isolated clone only; production author fixture used solely for setup. Native tests and assertions independently authored.",
+    "Cross-family evidence and coordinated stored-byte forgery run separately. No hosted or release acceptance."
+  ]
+}

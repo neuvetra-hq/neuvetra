@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "M76-HOSTED-BASELINE-DIAGNOSIS",
+  "role": "software-engineering",
+  "execution_context": "/root/m76_cto",
+  "prompt_sha256": "6506c7eaf776c016c7dec9773606d2816103e7d7487216512867d5cf5d77e1cf",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-HOSTED-CONTINUATION-CANDIDATE1.json",
+      "sha256": "4ba42d4390b6180bb5b57a855d24307884e777491994893fd33e37945f74f43e"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ZERO-WRITE-DIAGNOSIS-AND-EXPLICIT-CONTINUATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m76-hosted-continuation-review.md",
+        "docs/research/m76-hosted-continuation-root-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_accounting",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m76-hosted-continuation-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-HOSTED-CONTINUATION-CANDIDATE1.json",
+        "sha256": "4ba42d4390b6180bb5b57a855d24307884e777491994893fd33e37945f74f43e"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Existing operator context resumed; final local helper review remains valid within its stated scope. Current hosted baseline failed without application writes; reason not yet known. Diagnostic must refuse all application POSTs and preserve both failed journals.",
+    "Actual diagnostic completed2026-09-16T16:14:23Z: unchanged current-state checks pass,0writes/allAuthclosed,bothfailedjournalsunchanged; causeunreproduced. Scope extended to minimal explicitly reconciled new-journal wrapper and offline tests; independent review required before any officialbaseline or writes.",
+    "Exact diagnostic and journal wrapper independently accepted; root freshfullbaseline started2026-09-16T16:21:03Z. This assignment closure does not establish actual hosted correction or milestone acceptance."
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m76-hosted-baseline-diagnostic.ts",
+      "sha256": "f5c224d7af44d9e4b61b564cbbdd468467ac62a26fbd0440ccbb1b9c2cee98f6"
+    },
+    {
+      "path": "tools/staging/m76-hosted-continuation.ts",
+      "sha256": "cde551919932ee0e1f8b58c2456fb9b798a595347e31681f03fe6579e7a6454c"
+    },
+    {
+      "path": "tools/staging/m76-hosted-continuation.test.ts",
+      "sha256": "92a8cc8a0ba8a9448f708ea89ed76e419809c27969db60271edf03b21e88c640"
+    },
+    {
+      "path": "docs/research/m76-hosted-baseline-diagnosis.md",
+      "sha256": "bd1c7c748519fcd8a597ee3f16d28484c46b6036cac2e34fae23c6afe66a03e6"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "240f2632a5a4879bfff51fb7b75383495ce3a8e3764dee7452eb6bf3190fab30"
+    }
+  ]
+}

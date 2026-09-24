@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M74-OPERATORS",
+  "role": "security-reliability",
+  "execution_context": "/root/m73_accounting",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-OPERATORS-ACCEPTED2.json",
+      "sha256": "3d1f6b80e436c0d98b8bc6d447e00e984a8dc139100a61e07ae526d25993877f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M74-OPS-RECOVERY-AND-PRESERVATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-security-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m74_cto",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-security-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-OPERATORS-ACCEPTED2.json",
+        "sha256": "3d1f6b80e436c0d98b8bc6d447e00e984a8dc139100a61e07ae526d25993877f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh contexts unavailable after observed thread limit. Reused M73 operator author for new M74 operator authorship; not independent review. Requested registry settings cannot be overridden via followup; inherited observed settings unknown. Root owns integration and all host/Git actions.",
+    "S01 recovery-proof inconsistency repaired by original operator author and independently retested; fresh actual hosted archive restored and independently reconstructed."
+  ]
+}

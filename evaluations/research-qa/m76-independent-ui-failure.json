@@ -1,0 +1,18 @@
+{
+  "status": "failed",
+  "stage": "generator delayed save company change",
+  "events": [
+    "equipment delayed initial company",
+    "equipment delayed initial actor",
+    "equipment delayed save company change",
+    "equipment delayed report company change",
+    "Actual stationary DOM names equipment/stationary and separate gas/generator capacities",
+    "equipment report and role cleanup",
+    "equipment unmount cleanup",
+    "generator delayed initial company",
+    "generator delayed initial actor"
+  ],
+  "errors": [],
+  "bodyText": "Independent local synthetic component harness\n\nCalifornia reporting · Private synthetic workspace\n\nStationary diesel generator\n\nRetain measured annual fuel consumption for one fixed emergency generator. Include testing and maintenance runs. Other equipment and unsupported fuel evidence remain gaps in the equipment declaration.\n\n2025 calendar yearFossil No. 2 fuel · U.S. gallonsDefault heat content · Candidate method\n\nUnsaved generator draft. Unsupported equipment belongs in the equipment declaration as a gap.\n\nRefresh generatorCreate generator draftCancel draft\nCorrect generator workpaper\nCorporate source\nSelect a stationary source\nSynthetic California office · Independent office boiler\nSynthetic California distribution center · Independent distribution heater\nSynthetic California distribution center · Independent generator\nEquipment IDSerial number or other identity evidenceFull-year operational control evidenceEvidence of 100% fossil Distillate Fuel Oil No. 2\nThe evidence identifies a fixed compression-ignition emergency generator, owned and operationally controlled for all of 2025, using only the documented fossil No. 2 fuel.Entered consumed fuel (U.S. gallons)\n\nLeave blank for missing activity. Up to 12 whole digits and 3 decimal places; missing is never zero.\n\nRetain a manually entered fictional consumption statement\nConsumption evidence\n\nThis creates synthetic text from the fields below. It does not authenticate an original fuel record.\n\nEvidence issuerStatement referenceDedicated fuel meter IDStated consumed fuel (U.S. gallons)Statement descriptionHow the meter measures this generator’s consumed fuelHow availability of supplier heat and carbon data was checked\nThis meter measures consumed fuel for this one generator directly.The annual amount includes all testing and maintenance runs.Consumption is not derived from stock changes or a shared fuel allocation.Supplier-specific heat content and carbon data are unavailable.I manually checked the statement against this generator, facility, fuel and reporting year.Explanation of entered/stated quantity difference\n\nAn explained discrepancy remains unresolved and prevents positive equipment reconciliation.\n\nNo-consumption reason, including testing and maintenanceCorrection reasonSave generator version\nLimits of this demonstration\nsynthetic only\nscope1 incomplete\ncorporate inventory incomplete\nfactor and method not released\nstationary generator subtotal only\ndefault hhv estimate\ncombustion only upstream excluded\nrequirements not determined\nno external assurance\n\nThis supports one generator workpaper. Other equipment remains visible in stationary equipment coverage. No complete Scope 1 or corporate inventory is established.\n\nThis generator subtotal does not cover all stationary, mobile, fugitive or process emissions.\n\nFactors and method are development candidates; no reporting or assurance determination.",
+  "error": "TimeoutError: locator.fill: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Statement reference', { exact: true })\u001b[22m\n"
+}

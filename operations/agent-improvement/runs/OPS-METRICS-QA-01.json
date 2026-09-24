@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "OPS-METRICS-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/metrics_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-METRICS-QA-01.json",
+      "sha256": "146436a2f3ff3f9c5029a473d3548ccaa72b6525f6ed7cdf136c3fb305166465"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/OPS-METRICS-QA-01.md",
+        "operations/agent-improvement/build-pilot-review-rubric.json"
+      ],
+      "reason": "Root inspected independent findings, exact author hashes and reran 20 feature/10 pilot tests. Live model evaluation remains unrun."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "operations/agent-improvement/OPS-METRICS-QA-01.md",
+      "operations/agent-improvement/build-pilot-review-rubric.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/OPS-METRICS-QA-01.json",
+        "sha256": "146436a2f3ff3f9c5029a473d3548ccaa72b6525f6ed7cdf136c3fb305166465"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/OPS-METRICS-QA-01.md",
+      "sha256": "1a230a4a8da03286aadb5a62367f6e647f199437549325d6bad0a45009171225"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-review-rubric.json",
+      "sha256": "7a636a2039858e2885cd47bd431f1af49d9f2865406feb786946281ec722d3aa"
+    }
+  ]
+}

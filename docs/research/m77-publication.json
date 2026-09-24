@@ -1,0 +1,54 @@
+{
+  "observedAt": "2026-09-17T02:03:40.080575+00:00",
+  "status": "live_independently_accepted_closure_publication_checks_follow",
+  "draftPr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "implementationCommit": "7d465485e439566e9937b48c437bc59a6cc9591f",
+  "verificationCommit": "71686967ebd64a33af034523afdc17664fc96297",
+  "schemaVersion": 20,
+  "deploymentId": "a0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f",
+  "imageDigest": "sha256:eaa86c852fb9bba09421508b915a66a02cfcc2c935991528c9849148ec618597",
+  "execution": {
+    "path": "docs/research/m77-hosted-execution.json",
+    "sha256": "69a7ab0e585980bf3a3d796d1b3e7ff4f81860a90bf49a51289e49a7bc85b056"
+  },
+  "independentAcceptance": {
+    "path": "evaluations/research-qa/m77-hosted-acceptance.md",
+    "sha256": "084bc5d26a0afdacf09ccc43deefbf19e8032bf37be942b0ac04a37a763a21e5"
+  },
+  "acceptanceSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M77-HOSTED-ACCEPTANCE1.json",
+    "sha256": "34e63ef3536d69d05cbd5e7c88ac17dde226bb57dbd690a464bf3c53ef890727"
+  },
+  "automaticDeployment": {
+    "observedAt": "2026-09-17T02:01:33.662497+00:00",
+    "enabled": true,
+    "applicationCommit": "7d465485e439566e9937b48c437bc59a6cc9591f",
+    "deploymentId": "a0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f",
+    "imageDigest": "sha256:eaa86c852fb9bba09421508b915a66a02cfcc2c935991528c9849148ec618597",
+    "schemaVersion": 20,
+    "ready": {
+      "status": "ready",
+      "profile": "neuvetra.private-synthetic-staging.v1",
+      "schemaVersion": 20,
+      "legacyContainmentVerified": true
+    },
+    "sourceBranchInDeploymentMetadata": "main",
+    "evidence": [
+      {
+        "path": ".superpowers/m77-auto-restored.json",
+        "sha256": "fafb1e85d2ec57763aa260ed086fc4505a4bd1c1af523e03d901912a735fc7f0"
+      },
+      {
+        "path": ".superpowers/m77-auto-status.json",
+        "sha256": "41a685f1dc119db91f52c0572688b58c1cb43017669fb3757a5c1d48cf562e82"
+      },
+      {
+        "path": ".superpowers/m77-auto-deployments.json",
+        "sha256": "be0714b40c2eb0a30e9fd55322e9a1f3836702d2a53a7d5798e39c5d47845a50"
+      }
+    ]
+  },
+  "scope1Completeness": "incomplete",
+  "closureCheckReceipt": ".superpowers/m77-final-publication.json",
+  "closureChecks": "Verify the exact subsequent closure commit and all six required checks before reporting the milestone complete."
+}

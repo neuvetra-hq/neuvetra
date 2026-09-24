@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "M78-BROWSER-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-BROWSER-REVIEW-01-ACCEPTED.json",
+      "sha256": "80259d032be0c5f96220c181373968549cd1519a8001f4518ccab34b0494515d"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SEMANTIC-PROOF-AND-IDENTITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-browser-review.md",
+        "evaluations/research-qa/m78-browser-independent.test.ts"
+      ],
+      "reason": "Actual30 local tests pass/37assertions after BR-F01 through BR-F08 repairs; valid controls plus coordinated semantic, identity, lineage and chronology mutations exercised."
+    },
+    {
+      "id": "ACTOR-DOWNLOAD-HISTORICAL-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-browser-review.md"
+      ],
+      "reason": "Bounded source and mocked-request review completed: captured null review, exact reread/download bytes, Bearer/no-store, abort and401 tests pass. Actual React race and native endpoint authorization remain explicitly untested separate release gates."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-browser-review-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-BROWSER-REVIEW-01-ACCEPTED.json",
+        "sha256": "80259d032be0c5f96220c181373968549cd1519a8001f4518ccab34b0494515d"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 4,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-browser-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-browser-review.md",
+      "sha256": "cf416619470abc99db54b04824e17fc283d21a6b9f6f52aefb427043cb1eea99"
+    },
+    {
+      "path": "evaluations/research-qa/m78-browser-independent.test.ts",
+      "sha256": "eba9ea604e1d110a4cb3500bbfc7923b9e312f7d046253562ff2243d465c5cfb"
+    }
+  ]
+}

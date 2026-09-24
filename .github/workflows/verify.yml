@@ -17,7 +17,7 @@ jobs:
   native-postgres:
     name: Native PostgreSQL worksheet and tenant regression
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     services:
       postgres:
         image: postgres:17
@@ -43,9 +43,87 @@ jobs:
         env:
           M63_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
       - name: Verify staged HTTP and frontend decoding against PostgreSQL
-        run: bun test apps/site-api/src/staging/postgres.test.ts apps/site-api/src/workspace/m66-postgres.test.ts apps/site-api/src/workspace/m67-postgres.test.ts apps/site-api/src/workspace/m68-postgres.test.ts
+        run: bun test apps/site-api/src/staging/postgres.test.ts apps/site-api/src/workspace/m66-postgres.test.ts apps/site-api/src/workspace/m67-postgres.test.ts apps/site-api/src/workspace/m68-postgres.test.ts apps/site-api/src/workspace/m71-postgres.test.ts
         env:
           M63_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+          M71_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+      - name: Prepare isolated stationary natural-gas native fixture
+        run: bun tools/staging/m73-backend-fixture.ts m73_author_ci --ci-baseline=m63_integration
+      - name: Verify stationary natural-gas storage, calculation, reports and browser decoder
+        run: bun test apps/site-api/src/workspace/m73-postgres.test.ts
+        env:
+          M73_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m73_author_ci
+      - name: Prepare isolated mobile-diesel native fixture
+        run: bun tools/staging/m74-backend-fixture.ts m74_author_ci --ci-baseline=m63_integration
+      - name: Verify mobile-diesel storage, two-evidence calculation, reports and browser decoder
+        run: bun test apps/site-api/src/workspace/m74-postgres.test.ts apps/site-api/src/calculation/m74-authority.test.ts
+        env:
+          M74_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m74_author_ci
+      - name: Independently verify mobile-diesel accounting against frozen source oracle
+        run: bun test evaluations/research-qa/m74-independent-accounting-native.test.ts
+        env:
+          M74_ACCOUNTING_TEMPLATE_DATABASE: m74_author_ci
+
+      - name: Prepare isolated controlled-fleet native fixture
+        run: bun tools/staging/m75-backend-fixture.ts m75_author_ci --ci-baseline=m63_integration
+      - name: Verify controlled-fleet persistence, reconciliation and access boundaries
+        run: bun test apps/site-api/src/workspace/m75-postgres.test.ts
+        env:
+          M75_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m75_author_ci
+      - name: Prepare isolated stationary equipment native fixture
+        run: bun tools/staging/m76-backend-fixture.ts m76_author_ci --ci-baseline=m63_integration
+      - name: Verify stationary equipment persistence, exact calculation and access boundaries
+        run: bun test apps/site-api/src/workspace/m76-postgres.test.ts
+        env:
+          M76_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m76_author_ci
+      - name: Independently challenge stationary arithmetic and historical proof
+        run: bun test evaluations/research-qa/m76-independent-native.test.ts
+        env:
+          M76_INDEPENDENT_NATIVE: enabled
+          M76_QA_TEMPLATE: m76_author_ci
+      - name: Independently challenge cross-family fuel evidence and retained capacity
+        run: |
+          bun test evaluations/research-qa/m76-independent-native-security.test.ts
+          bun test evaluations/research-qa/m76-independent-native-capacity.test.ts
+          bun test evaluations/research-qa/m76-independent-native-report-capacity.test.ts
+        env:
+          M76_INDEPENDENT_NATIVE: enabled
+
+      - name: Verify fugitive workpaper lifecycle, physical population and retained evidence
+        run: bun test apps/site-api/src/workspace/m77-postgres.test.ts
+        env:
+          NEUVETRA_M77_NATIVE: "1"
+          NEUVETRA_M77_CI_BASELINE: "1"
+
+      - name: Independently challenge fugitive evidence, contributors and preserved corporate bindings
+        run: bun test evaluations/research-qa/m77-integrated-native.test.ts evaluations/research-qa/m77-binding-native.test.ts
+        env:
+          NEUVETRA_M77_QA_NATIVE: "1"
+          NEUVETRA_M77_CI_BASELINE: "1"
+
+      - name: Independently verify Scope 1 blocked lifecycle and retained downloads
+        run: bun test evaluations/research-qa/m78-ci-native.test.ts
+        env:
+          M78_QA_CI_BASELINE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+
+      - name: Challenge Scope 1 concurrent writes and post-write rollback
+        run: bun test evaluations/research-qa/m78-perf-concurrency.test.ts evaluations/research-qa/m78-perf-independent.test.ts
+        env:
+          M78_PERF_NATIVE_BASELINE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+
+      - name: Independently challenge controlled-fleet native lifecycle and direct SQL admission
+        run: |
+          bun test evaluations/research-qa/m75-independent-native.test.ts
+          bun run evaluations/research-qa/m75-independent-direct-sql.ts
+          bun run evaluations/research-qa/m75-independent-sql-parity.ts
+        env:
+          M75_INDEPENDENT_NATIVE: enabled
+          M75_QA_TEMPLATE: m63_integration
+
+      - name: Exercise controlled-fleet publication journey against isolated local routes
+        run: bun test tools/staging/check-m75-hosted.test.ts
+        env:
+          M75_HOSTED_NATIVE_SOURCE: m75_author_ci
 
   applications:
     name: Typecheck, lint, unit tests and web builds
@@ -66,6 +144,64 @@ jobs:
         run: bun test evaluations/research-qa/m67-independent-frontend.test.ts evaluations/research-qa/m67-independent-renderer.test.ts evaluations/research-qa/m67-independent-print-view.test.ts
       - name: Independent annual evidence decoder, UI, print-action and packaging cases
         run: bun test evaluations/research-qa/m68-independent-frontend.test.ts evaluations/research-qa/m68-independent-print-view.test.ts evaluations/research-qa/m68-independent-ui.test.ts
+      - name: Independent corporate coverage validation, decoder and actor-lifetime cases
+        run: bun test evaluations/research-qa/m71-qa-validation.test.ts evaluations/research-qa/m71-qa-frontend.test.ts evaluations/research-qa/m71-qa-ui.test.ts evaluations/research-qa/m71-security-frontend.test.ts evaluations/research-qa/m71-security-parser.test.ts
+      - name: Stationary natural-gas operator admission and preservation controls
+        run: bun test tools/staging/m73-operators.test.ts
+      - name: Independent mobile-diesel frontend and hosted journey controls
+        run: bun test evaluations/research-qa/m74-frontend-ui.test.ts evaluations/research-qa/m74-frontend-decoder.test.ts evaluations/research-qa/m74-frontend-version.test.ts evaluations/research-qa/m74-frontend-registration.test.ts tools/staging/check-m74-hosted.test.ts evaluations/research-qa/m74-hosted-helper-independent.test.ts tools/staging/m74-operators.test.ts evaluations/research-qa/m74-security-operator-gate.test.ts
+      - name: Independent controlled-fleet reconciliation, reports and browser decoding
+        run: bun test evaluations/research-qa/m75-independent-classification.test.ts evaluations/research-qa/m75-independent-renderer.test.ts evaluations/research-qa/m75-independent-decoder.test.ts tools/staging/m75-operators.test.ts tools/staging/check-m75-hosted.test.ts
+      - name: Independent stationary equipment, generator arithmetic and historical reports
+        run: bun test evaluations/research-qa/m76-independent-admission.test.ts evaluations/research-qa/m76-independent-authority.test.ts evaluations/research-qa/m76-independent-generator-decoder.test.ts evaluations/research-qa/m76-independent-reconciliation.test.ts evaluations/research-qa/m76-independent-renderer-decoder.test.ts evaluations/research-qa/m76-independent-report-duplicates.test.ts tools/staging/m76-operators.test.ts tools/staging/check-m76-hosted.test.ts
+      - name: Additive stationary journey safety guards
+        # The exact failed-state rehearsal is local and uses a private encrypted backup.
+        # This guard suite runs without that journal, credentials or hosted access.
+        run: bun test tools/staging/m76-hosted-recovery.test.ts
+      - name: Explicit continuation journal guards
+        run: bun test tools/staging/m76-hosted-continuation.test.ts
+      - name: Fugitive recovery and hosted journal guards
+        # Encrypted native recovery remains a separate Windows rehearsal.
+        run: bun test tools/staging/check-m77-hosted.test.ts tools/staging/check-m77-continuation.test.ts evaluations/research-qa/m77-release-journal.test.ts evaluations/research-qa/m77-continuation-journal.test.ts
+      - name: Check out frozen schema 20 operator context
+        uses: actions/checkout@v4
+        with:
+          ref: 5b7a31910e1f2f51b68d823fdf7bf008a14a6a2f
+          path: .legacy-m77
+      - name: Verify historical schema 20 recovery safeguards unchanged
+        working-directory: .legacy-m77
+        run: |
+          bun install --frozen-lockfile
+          bun test tools/staging/m77-operators.test.ts
+      - name: Independent Scope 1 browser decoding and recovery admission
+        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-backup.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+      - name: Check out frozen continuation recovery context
+        uses: actions/checkout@v4
+        with:
+          ref: 1042348f2d4849246771fee4be77fe590c34ab8a
+          path: .legacy-m78
+      - name: Verify historical continuation2 and continuation3 safeguards
+        working-directory: .legacy-m78
+        run: |
+          bun install --frozen-lockfile
+          bun test tools/staging/check-m78-continuation2.test.ts tools/staging/check-m78-continuation3.test.ts
+      - name: Independent continuation2 source closure and cleanup guards
+        working-directory: .legacy-m78
+        run: bun test evaluations/research-qa/m78-continuation2-independent.test.ts --test-name-pattern "union covers|failed diagnostic intent"
+      - name: Independent continuation3 admission and graceful pause guards
+        working-directory: .legacy-m78
+        run: bun test evaluations/research-qa/m78-continuation3-independent.test.ts --test-name-pattern "admission challenges|diagnostic failure after login"
+      - name: Independent current continuation4 transport guards
+        run: bun test evaluations/research-qa/m78-continuation4-independent.test.ts --test-name-pattern "^portable"
+      - name: Preserve historical continuation4 source closure
+        working-directory: .legacy-m78
+        run: bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
+      - name: Scope 1 GET preservation and finite diagnostic guards
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
+      - name: Continuation4 closed baseline evidence guards
+        run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
+      - name: Continuation4 lifecycle and passive revisit guards
+        run: bun test evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts tools/staging/m78-continuation4-revisit-capture.test.ts
       - name: Offline cloud database boundary tests
         run: bun test tools/cloud/database-inventory.test.ts tools/cloud/apply-development.test.ts tools/cloud/data-api-exposure.test.ts tools/cloud/activate-synthetic.test.ts tools/cloud/website-publication.test.ts tools/cloud/check-website-reader.test.ts tools/research/evaluate-website-cloud.test.ts tools/research/evaluate-website-composed.test.ts tools/research/cloud-read-diagnostics.test.ts tools/research/cloud-fetch-injection.test.ts
       - name: Typecheck cloud database helper
@@ -86,10 +222,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==14||manifest[13].name!=="0014_annual_electricity_evidence.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==21||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql"||manifest[18].name!=="0019_stationary_sources.sql"||manifest[19].name!=="0020_fugitive_sources.sql"||manifest[20].name!=="0021_scope1_inventory.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:14}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:21}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {
@@ -101,12 +237,24 @@ jobs:
               for(const route of ["/.env","/apps/site-api/src/staging/server.ts","/tools/research/m43-heldout-first-batch-v1.json"])if((await fetch(`http://127.0.0.1:8080${route}`)).status!==404)throw new Error("Non-public path exposed");
               if((await fetch("http://127.0.0.1:8080/workspace-api/session")).status!==401)throw new Error("Authentication boundary failed");
               const uuid="11111111-1111-4111-8111-111111111111";
+              if((await fetch(`http://127.0.0.1:8080/workspace-api/workspace/${uuid}/scope1-inventory`)).status!==401)throw new Error("Scope 1 image authentication boundary failed");
               const binding={company_id:uuid,evidence_id:uuid,bill_version_id:uuid,activity_version_id:uuid,facility_id:uuid,boundary_id:uuid,bill_version:2,activity_version:1,extraction_id:uuid,parser_version:"m55-fixed-pdf-v1",previous_bill_version_id:uuid,evidence_sha256:"0a97cd0976c03af0776214fc19bdc3d4f0c00e9c835f3e116574a6f375c8e135",source_quantity_kwh:"12346.000",normalized_quantity_mwh:"12.346000",correction_reason:"Synthetic review exercise",service_period:{start:"2023-01-01",end:"2023-01-31"},facility:{name:"Synthetic California office",country:"United States",state:"California",egrid_subregion:"CAMX"},boundary:{reporting_year:2023,approach:"operational_control",status:"draft",version:1}};
               const calculation=await runEngine({action:"calculate_linked_bill",binding});
               if(calculation.status!=="ok"||calculation.record?.total?.unrounded!=="2407.9674055248")throw new Error("Container Decimal calculation failed");
+              const {createM73Authority}=await import("/app/apps/site-api/src/calculation/m73-authority.ts");
+              const gas=await createM73Authority().calculate({binding:{coverageVersionId:uuid,coverageVersionSha256:"a".repeat(64),entityId:uuid,facilityId:uuid,sourceId:uuid,boundaryDecisionId:uuid},period:{start:"2025-01-01",endExclusive:"2026-01-01"},fuel:"Natural Gas",heatBasis:"HHV",unit:"MMBtu",quantityMmbtu:"0.100",statementSha256:"b".repeat(64)});
+              if(gas.total.unrounded!=="5.31145"||gas.total.display!=="5.3114"||gas.method.releaseEligible!==false)throw new Error("Container stationary gas Decimal calculation failed");
+              const {createM74Authority}=await import("/app/apps/site-api/src/calculation/m74-authority.ts");
+              const mobile=await createM74Authority().calculate({binding:{coverageVersionId:uuid,coverageVersionSha256:"a".repeat(64),entityId:uuid,facilityId:uuid,sourceId:uuid,boundaryDecisionId:uuid},period:{start:"2025-01-01",endExclusive:"2026-01-01"},vehicle:{assetId:"SYN-TRUCK-001",vehicleClass:"Medium- and Heavy-Duty Vehicles",classificationBasis:"Synthetic owned heavy-duty on-road truck controlled throughout 2025.",modelYear:2018,fuel:"Fossil Diesel",controlBasis:"owned_operational_control_full_year"},quantityGallons:"1000.125",quantityUnit:"US_gallon",distanceMiles:"12000.500",distanceUnit:"vehicle_mile",fuelStatementSha256:"b".repeat(64),mileageStatementSha256:"c".repeat(64)});
+              if(mobile.total.unrounded!=="10351.53209375"||mobile.total.display!=="10351.5321"||mobile.method.releaseEligible!==false)throw new Error("Container mobile diesel Decimal calculation failed");
+              const {createM76DieselAuthority}=await import("/app/apps/site-api/src/calculation/m76-authority.ts");
+              const generator=await createM76DieselAuthority().calculate({binding:{coverageVersionId:uuid,coverageVersionSha256:"a".repeat(64),entityId:uuid,facilityId:uuid,sourceId:uuid,boundaryDecisionId:uuid},period:{start:"2025-01-01",endExclusive:"2026-01-01"},equipment:{assetId:"SYN-GEN-001",identifierBasis:"Fictional generator serial",equipmentType:"stationary_emergency_generator",engineType:"compression_ignition",stationaryInstallation:"fixed",controlBasis:"owned_operational_control_full_year",controlExplanation:"Fictional full year ownership and operational control",fuel:"Fossil Distillate Fuel Oil No. 2",fossilFraction:"1.000",fuelGradeBasis:"Fictional fuel grade and composition evidence"},unit:"US_gallon",quantityGallons:"25.000",statementSha256:"b".repeat(64)});
+              if(generator.total.unrounded!=="256.00035"||generator.total.display!=="256.0004"||generator.method.releaseEligible!==false)throw new Error("Container generator Decimal calculation failed");
               console.info(JSON.stringify({imageSmoke:"passed",database:"injected_offline",authentication:"refusal_only",calculation:"real_python",assets:"hash_verified"}));
             } finally {await server.stop(true);await app.close();}
           '
+      - name: Verify pinned fugitive authority inside the offline image
+        run: docker run --rm --network none --entrypoint bun neuvetra-m63:${{ github.sha }} tools/staging/m77-image-smoke.ts
       - name: Refuse ordinary container startup without explicit staging configuration
         run: |
           if docker run --rm --network none neuvetra-m63:${{ github.sha }}; then
@@ -143,4 +291,11 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install --disable-pip-version-check pint==0.26 pytest==9.1.1 pyyaml==6.0.3
       - run: bun run test:ghg
-
+      - name: Verify offline fugitive candidate and independent accounting cases
+        run: |
+          python -m unittest discover -s apps/site-api/src/calculation -p m77_fugitive_test.py -v
+          python evaluations/research-qa/m77-independent-calculation.py
+      - name: Independently verify Scope 1 candidate accounting
+        run: |
+          python evaluations/research-qa/m78-independent-rational-oracle.py
+          python evaluations/research-qa/m78-author-expectations-challenge.py

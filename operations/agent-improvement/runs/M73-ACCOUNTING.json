@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "id": "M73-ACCOUNTING",
+  "role": "accounting-validation",
+  "execution_context": "/root/m73_accounting",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M73-PLANNING-FINAL.json",
+      "sha256": "8d63e77f08e3c0c93d42804d984cc4a0dd5990d3184f0854e1ce1b079f0a17ff"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M73-ACCOUNTING-BOUNDED-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m73-accounting-contract.md",
+        "docs/research/m73-product-brief.md",
+        "docs/research/m73-technical-contract.md",
+        "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m73-accounting-contract.md",
+      "docs/research/m73-product-brief.md",
+      "docs/research/m73-technical-contract.md",
+      "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M73-PLANNING-FINAL.json",
+        "sha256": "8d63e77f08e3c0c93d42804d984cc4a0dd5990d3184f0854e1ce1b079f0a17ff"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded M73 discovery/contract authoring; root owns integration and common records. Independent integrated review separate. Actual compute/resource measurements unknown.",
+    "Planning delivery accepted. Independent integrated review and withheld native-print gate remain distinct."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "status": "m78_restart_log_collector2_root_source_review_passed",
+  "reviewerId": "/root",
+  "authorId": "/root/m78_transport_continuation",
+  "observedAt": "2026-09-23T04:40:59.099064+00:00",
+  "materialFindingsOpen": 0,
+  "collector": {
+    "path": ".superpowers/m78-recovery2-collect-startup2.py",
+    "sha256": "bbc03eba8ed216dbfca55b083a9de648790bb530eb98d1e55ad10918f6b0dddb"
+  },
+  "testsPassed": 4,
+  "scope": "Independent inspection and reproduction of flat/nested log parsing, duplicate/ambiguous/malformed refusal, bounded provider calls, sanitized exact-one startup output and unchanged original helper pins. Root has not authored this correction.",
+  "actualExecutionAccepted": false,
+  "restartReplayAuthorized": false
+}

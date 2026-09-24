@@ -1,0 +1,62 @@
+{
+  "status": "m78_readonly_recovery2_source_prepared",
+  "createdAt": "2026-09-22T20:13:41.1763036-07:00",
+  "sourcePreparationOnly": true,
+  "actualRecovery2Executed": false,
+  "actualRecovery2Accepted": false,
+  "hostedCalls": 0,
+  "databaseCalls": 0,
+  "credentialAccesses": 0,
+  "providerCalls": 0,
+  "applicationPostRequests": 0,
+  "restartAuthorized": false,
+  "revisitAuthorized": false,
+  "paths": {
+    "journal": ".superpowers/m78-continuation4-readonly-recovery2.jsonl",
+    "diagnostics": ".superpowers/m78-continuation4-readonly-recovery2-diagnostics.jsonl",
+    "rawCapture": ".superpowers/m78-continuation4-readonly-recovery2-raw-capture.jsonl",
+    "observation": ".superpowers/m78-continuation4-readonly-recovery2-observation.json",
+    "lock": ".superpowers/m78-continuation4-readonly-recovery2.jsonl.lock"
+  },
+  "limits": {
+    "perResponseBytes": 10000000,
+    "retainedResponseBytes": 128000000,
+    "rawCaptureBytes": 192000000,
+    "journalBytes": 16000000,
+    "timeoutMs": 30000,
+    "retries": 0,
+    "keepalive": false
+  },
+  "artifactContract": {
+    "fleetReports": 3,
+    "equipmentReports": 5,
+    "rosterArtifactReads": 24,
+    "proofHashScope": "complete_canonical_reportId_proof_envelope",
+    "mobileStatementPrefixes": ["fuel_", "mileage_"],
+    "realArchivedBaselineMapsExact": true
+  },
+  "validation": {
+    "testsPassed": 11,
+    "testsFailed": 0,
+    "assertions": 116,
+    "strictTargetedTypeScript": "passed",
+    "realNonemptyBaselineArtifactFixture": "passed",
+    "completeFreshPost37EvaluatorPositive": "not_available_until_actual_admitted_recovery2",
+    "independentCandidateReview": "pending"
+  },
+  "materialFindingsOpen": 0,
+  "files": [
+    {"path": "tools/staging/check-m78-continuation4-readonly-recovery2.ts", "sha256": "47044480d2019e4e162a0156adf81a31d557560190747102144f0006de9fbe7d"},
+    {"path": "tools/staging/check-m78-continuation4-readonly-recovery2.test.ts", "sha256": "da0ba9f072d72549f544b5c80070d306a28ab993d02bec10d47f54017a6b19f1"},
+    {"path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.ts", "sha256": "4324a96546228070f4d16b0ed6a25cbe02d56d6412d48829d1b60e176db708c1"},
+    {"path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.test.ts", "sha256": "27cf9e458d7316991c3ebcbff1b6ee4e7c1902693c7b07d7f326b663ddc0d2a6"}
+  ],
+  "reviewHistory": {
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "preFixRunnerSha256": "776e7ca6ad2c4ef12baa3a98c3efa1a5844c00a3d57146cef6a895ac369ba5e0",
+    "finding": "Text artifact decoding could strip a UTF-8 BOM before metadata comparison; final runner preserves it."
+  },
+  "requestedCompute": {"model": "gpt-5.6-terra", "effort": "medium"},
+  "observedCompute": {"model": null, "effort": null}
+}

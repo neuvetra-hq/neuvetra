@@ -1,0 +1,5 @@
+# M78 current backup recovery — coordinator acceptance
+
+Root reviewed independent current receipt b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180 and exact dated source/restore provenance. September22 15:55UTC backup archive d92decbd58838bb77c211399a90c2516a3e54f199508cb70ce05b4014c918ebe restored into a new local database, then passed113-table377-entry complete comparison and bounded eight-family42GET18-download semantic review without mutation. Full observed inventory/content also equals the historical accepted backup. All27 excluded default ACL rows remain explicitly recorded; provider-wide recovery is excluded.
+
+Accept this fresh application recovery evidence. Root observed the first backup wrapper invocation stop before any journal/archive because it used Windows PowerShell5 rather than the wrapper's supported current PowerShell runtime. The unchanged reviewed wrapper then completed once in the supported runtime. No plaintext backup or live data mutation occurred. Final current-head checks, exact recipe completion, forward recovery revalidation, maintenance and deployment remain separate gates.

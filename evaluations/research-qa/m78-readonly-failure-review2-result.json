@@ -1,0 +1,68 @@
+{
+  "status": "m78_readonly_recovery_failure2_independently_reconciled",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "failedRecoveryAccepted": false,
+  "actualRecoveryAccepted": false,
+  "restartAuthorized": false,
+  "revisitAuthorized": false,
+  "failure": {
+    "path": "evaluations/research-qa/m78-readonly-recovery-failure.json",
+    "sha256": "50e346cbcc315812d8216335220b015de844c41dc001db4aba36eccf955734ea",
+    "main": {"path": ".superpowers/m78-continuation4-readonly-recovery.jsonl", "sha256": "0c2062c12db60f0e65c21f0fcc17122a95a11ba689d04f18c51c0652f887aca8", "bytes": 7445, "events": 18, "head": "ed2b807afebed57ad31cf580bb8212933a6527ff820d01a8c9484d6dcd417dfb"},
+    "diagnostics": {"path": ".superpowers/m78-continuation4-readonly-recovery-diagnostics.jsonl", "sha256": "e2e56cc5b3220b1d138023e945e38c9d2dfeca26a15bcd4a35b2cd71d33ff57c", "bytes": 18109, "events": 49, "head": "a72b4fe58a4e65f61b7f80ffd14ffc5a5a59b3e8ee960f6b7b41ea9b17c3ba9e"},
+    "requests": 24,
+    "applicationGets": 16,
+    "applicationStatuses": [403,401,200,200,200,200,200,200,200,200,200,200,200,200,200,200],
+    "applicationPostRequests": 0,
+    "requestErrors": 0,
+    "localLogout204": 4,
+    "unknownAuthSessions": 0,
+    "legacyAttempted": false,
+    "observationCreated": false
+  },
+  "reconstructionFindings": {
+    "hostedErrorRecorded": false,
+    "offlineFrozenReproduction": "The frozen reconstructor throws when it hashes undefined html/snapshotJson on metadata-only fleet/equipment register reports.",
+    "fleetArchivedFullReportsVerified": 3,
+    "equipmentArchivedFullReportsVerified": 5,
+    "archivedStringsRequireNormalization": false,
+    "archivedHtmlSnapshotHashesAndLengthsMatchBaseline": true,
+    "archivedSnapshotsCanonical": true,
+    "currentRenderersReproduceArchivedHtml": true,
+    "mobileArtifactKeys": ["fuel_<statementId>","mileage_<statementId>"],
+    "proofPayloadLocation": "separate /reports/:reportId/proof endpoint envelope",
+    "proofInsideSnapshot": false,
+    "historicalProofBodiesArchived": false,
+    "unchangedHistoricalProofTreatment": "Preserve exact baseline proof_<reportId> digest as an opaque pin after identity and report-metadata equality.",
+    "freshProofTreatment": "Capture the separate proof endpoint durably, verify reportId, then hash the canonical complete envelope including reportId and proof."
+  },
+  "fixture": {
+    "path": "evaluations/research-qa/m78-readonly-failure-review2-fixture.ts",
+    "sha256": "71dd5beda9ed05e32ac5911e6cd045b531588715de362643b8ffc3e86e33f3a8",
+    "testPath": "evaluations/research-qa/m78-readonly-failure-review2.test.ts",
+    "testSha256": "13527541cb5069946996d7c311333f9865e2e930008e381c6d4bcf63a553e20b",
+    "archives": [
+      {"path": ".superpowers/m75-hosted-journey.jsonl", "sha256": "a230f18e1b6f596a3ba4aaee5cf16e2d27fdbb26786326a62f98a35636816347"},
+      {"path": ".superpowers/m76-hosted-journey.jsonl", "sha256": "8b1c1ddbcfefbe398bb6b79390029be34aa2782a5a4c2fa4546e783e7b0b5fb3"},
+      {"path": ".superpowers/m76-hosted-continuation.jsonl", "sha256": "836aa21776e0ea6dc847463ffb15f44a89175b74b9a896835eef8efe103fdf82"},
+      {"path": ".superpowers/m78-hosted-continuation4.jsonl", "sha256": "44e7bec2d2e6a4a554de6ba23775150bfdf29582fd69ff12bc6cfbc73770ba8b"}
+    ],
+    "mobileFleetEquipmentMapsExact": true
+  },
+  "checks": {
+    "testsPassed": 4,
+    "testsFailed": 0,
+    "expectations": 281,
+    "strictTargetedTypeScript": "passed",
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "networkCalls": 0,
+    "credentialReads": 0,
+    "providerCalls": 0,
+    "databaseCalls": 0,
+    "gitMutations": 0
+  },
+  "scope": "Offline failure reconciliation and exact historical fixture contract only; no recovery success claim.",
+  "routing": {"requestedModel": "gpt-6-astra", "requestedEffort": "high", "observedModel": null, "observedEffort": null, "freshDispatchUnavailable": true, "fallbackReviewer": "/root/m78_transport_probe"}
+}

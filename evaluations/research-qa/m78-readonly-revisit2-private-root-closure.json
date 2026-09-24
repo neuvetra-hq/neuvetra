@@ -1,0 +1,20 @@
+{
+  "status": "m78_readonly_revisit2_private_review_root_closed",
+  "observedAt": "2026-09-23T04:26:32.028440+00:00",
+  "independentReviewer": "/root/m78_transport_probe",
+  "result": {
+    "path": "evaluations/research-qa/m78-readonly-revisit2-private-independent-result.json",
+    "sha256": "508f862af86d1b9e281b07390e1533a459ca6b79ef6ad07030423de96bc084e6"
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PRIVATE-QA-01-CANDIDATE1.json",
+    "sha256": "133511b52cdcc98c757d45382dbc79abb1ace9a4a0672f8f1b93cc3a3242da46"
+  },
+  "rootReproduction": {
+    "mockedTests": 3,
+    "exactSourceFiles": 188
+  },
+  "reviewArrangement": "Root authored private helpers; probe independently inspected and mocked actual admission. Root reproduced tests and closes QA record, not an independent self-review.",
+  "restartExecuted": false,
+  "revisitExecuted": false
+}

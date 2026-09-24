@@ -1,0 +1,15 @@
+# Root acceptance of first local operator rehearsal admission
+
+Root accepts the independent candidate2 source review for its stated first local rehearsal boundary only. Reviewer `/root/m76_backend` did not author the new M78 operator delta; historical M77 operator authorship remains disclosed. Operator `/root/m78_security` is distinct. Root read the admission, reviewed the native harness and its transaction/target/failure boundaries, and authorized execution on fresh local clones.
+
+The admission SHA256 is `e1441382cb746d44f78c61b423d9c3f8bc174effaf3c6bc17c4140be59ff259f`; independent source snapshot is `ab3dd729e315c40023e2f82570962cefae082e9ec12cd6019afbff033764b33d`. Seven exact source pins bind reviewed SQL21 `b62c9645448848c57b358a9741168c0556bbcd6d205f9236b51ca47c147bca6a`, preserved schema20 source and populated source `m78_author_native_1789618445805`. The harness rechecks these bytes before native connections. Sources/global roles remain read-only; only fresh `m78_ops_*` databases on loopback55472 may be created and changed.
+
+This accepts permission to perform the reviewed rehearsal, not its result. Actual backup/restore/upgrade/replay evidence, independent recovery acceptance, encryption, hosted backup, publication and deployment are still pending. The separate browser inventory-successor failure is under diagnosis; any resulting source change requires appropriate review and new execution pins. Preserve this candidate's evidence if superseded.
+
+## Candidate6 final capacity-source admission
+
+Root read and accepts the independent candidate6 review `eb5900114f89d4c328698891880096fd3cb2ac37e8db57135b0b4e358ef6bead`, admission `7dc88daff90fbf166d8930f4b4bc8ab5b00e85af4383f2ada01363ebbd1e22b9`, and reviewer snapshot `27f933e2403b273347dba3045ef8f128437682b3afde390f06a4746d8cd510ba` for a fresh local rehearsal. It binds final SQL `546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736` and clone-only populated source `m78_author_native_1789620106488`. Candidate4 loopback presentation and candidate5 current-database-only catalog normalization have independent read-only native controls. Earlier failures and the failed restored clone remain preserved. This admission permits the new local execution only; it does not accept recovery outcomes, hosted execution or release.
+
+## Candidate3 targeted repair admission
+
+Candidate2's first native attempt failed before database creation at the catalog read, PostgreSQL42725. Root read the independent candidate3 review (`b5607abe67ceb616faee96a212daaac7a393e8e9557f22e36ea37d2544db35db`) and accepts its exact one-line `t.tgenabled::text` repair for a new fresh-target rehearsal. Independent actual metadata regression preserves all96 trigger enable-state suffixes; author/reviewer pure14 tests/87 assertions pass. Root explicitly authorized this new attempt under `m78-operator-local-admission-candidate3.json`; prior admission and failure remain unchanged. This remains permission only, with full recovery acceptance pending.

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "features": [
+    {
+      "feature_id": "OPS-METRICS-01",
+      "milestone_id": "AGENT-IMPROVEMENT",
+      "title": "Feature delivery scorecards",
+      "problem": "Agent run records do not provide a joined feature-level QA and cost history.",
+      "delivered_behavior": "Local deterministic feature scorecards join QA history and native run records, preserve failures and unknown costs, and reject stale acceptance or overwritten inputs.",
+      "state": "accepted",
+      "owner": "/root/feature_metrics",
+      "risk_class": "critical",
+      "complexity_class": "bounded_tooling",
+      "run_ids": [
+        "OPS-METRICS-01",
+        "OPS-METRICS-QA-01"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "criterion_id": "AC-COUNTS",
+          "description": "Stable findings and review rounds preserve rework history.",
+          "applicable": true
+        },
+        {
+          "criterion_id": "AC-COST",
+          "description": "Unknown usage and duplicate settlements cannot inflate confidence or totals.",
+          "applicable": true
+        },
+        {
+          "criterion_id": "AC-REVIEW",
+          "description": "Independent review of exact implementation and meaningful tests.",
+          "applicable": true
+        }
+      ]
+    },
+    {
+      "feature_id": "OPS-PILOT-01",
+      "milestone_id": "AGENT-IMPROVEMENT",
+      "title": "Capped model comparison",
+      "problem": "Cheaper build models have not been evaluated against Neuvetra-specific work.",
+      "delivered_behavior": "Completed six-request comparison and independent grading for $0.0631382848. Neither candidate qualified for numerical work; existing role defaults retained. Experiment completion is not model qualification.",
+      "state": "accepted",
+      "owner": "/root/pilot_runner",
+      "risk_class": "critical",
+      "complexity_class": "bounded_tooling",
+      "run_ids": [
+        "OPS-PILOT-01",
+        "OPS-METRICS-QA-01"
+      ],
+      "dependencies": [],
+      "acceptance_criteria": [
+        {
+          "criterion_id": "AC-CAP",
+          "description": "Pilot adapter preserves aggregate $5 budget including uncertain calls.",
+          "applicable": true
+        },
+        {
+          "criterion_id": "AC-QUALITY",
+          "description": "Two candidates receive equal synthetic screening and independent grading.",
+          "applicable": true
+        },
+        {
+          "criterion_id": "AC-REPORT",
+          "description": "Results include actual provider usage, defects and limits.",
+          "applicable": true
+        }
+      ]
+    }
+  ]
+}

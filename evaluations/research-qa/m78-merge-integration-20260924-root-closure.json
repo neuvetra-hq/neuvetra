@@ -1,0 +1,19 @@
+{
+  "status": "independent_review_accepted",
+  "observedAt": "2026-09-24T16:50:50.768500+00:00",
+  "reviewResult": {
+    "path": "evaluations/research-qa/m78-merge-integration-20260924-result.json",
+    "sha256": "18351ac7e43fd5162c8a53960dd1534d0b9b5f4a9234e4d3bde904a057a2ff07"
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-MERGE-INTEGRATION-QA-20260924-CANDIDATE1.json",
+    "sha256": "6f936bd163ebd3a4786691df02642151014b3370d5e7cae1da22125999851c1e"
+  },
+  "arrangement": "Root integrated records; separate merge_integration_qa independently checked exact files,48offline tests,receipt andhistory reconciliation. Root inspected review and reconciled hashes.",
+  "remaining": [
+    "Verify exact staged and committed bytes",
+    "Six checks on final publishedhead",
+    "Authorized PR5 merge with expected-head guard"
+  ],
+  "customerScope1Complete": false
+}

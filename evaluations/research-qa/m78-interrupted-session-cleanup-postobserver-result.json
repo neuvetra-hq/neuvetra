@@ -1,0 +1,17 @@
+{
+  "status": "m78_interrupted_session_postobserver_source_passed",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T20:19:24.631Z",
+  "observerSha256": "446365e4f9eed95347fcf67cefdf55e24bec343ae234ac95fde239cfb3ca69a2",
+  "wrapperSha256": "28805aadc790ee2b8a22c674f9f77dfdb13422bcbc4c4f5c0d80868fa05f2eed",
+  "admission": "read_only_reconciliation_only",
+  "actualCleanupOutcome": "unknown",
+  "actualCause": "not_recorded",
+  "hostCalls": 0,
+  "authCalls": 0,
+  "databaseCalls": 0,
+  "report": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-postobserver-review.md",
+    "sha256": "4427809efcd13c70ab354f94e431365bae5cc8dcbcc66f4ea36c7b4e80b2372f"
+  }
+}

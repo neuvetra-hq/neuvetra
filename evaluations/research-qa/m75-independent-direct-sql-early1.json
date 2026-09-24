@@ -1,0 +1,114 @@
+{
+  "status": "fail",
+  "database": "m75_qa_sql_1789538501896",
+  "sqlSha256": "dd1fbe03a5ec0cd2c6aea88faa2071b513687c08e7cb9a42a6a73c096709da39",
+  "sqlUnchanged": true,
+  "beforeVersionCount": 1,
+  "afterVersionCount": 1,
+  "seed": {
+    "companyId": "fec4d155-7603-4f63-a11d-96fa8cb1e5df",
+    "users": {
+      "owner": "01e091d8-672b-4fa4-9285-154468a5eddb",
+      "coverageReviewer": "9083d4ad-d7a6-48bf-af53-0535f361a505",
+      "workpaperReviewer": "f5953108-fd7d-49a6-b95f-04d1b96a8336",
+      "fleetReviewer": "f71c6f85-3612-458f-9c5a-26eaf8f27d76"
+    },
+    "coverageVersionId": "7231ff1a-c70c-43b2-a830-c7ce48de0ab8",
+    "mobileWorksheetId": "e140805f-ee99-4f94-8737-78dc78087685",
+    "mobileVersionId": "e76371ca-17b1-464d-a6da-b9a65be5b9b0",
+    "rosterId": "116905e1-cbaa-4c1f-ab43-ee2431da5410",
+    "rosterVersionId": "dfd7179e-2b19-45f6-a4c0-f3843c630572",
+    "reviewId": "7a57ee95-d0be-4dfd-943c-082d3b5ccf0b",
+    "reportId": "a6840cbf-dfc7-48d0-a2a6-28ee78d5f5c1",
+    "reconciliationSha256": "6eb8cc8f28adf82ca2b2897840c67a085ddacc0522112d9dfccc2e56af84a644",
+    "reportSha256": "c35b61d1caa6d85645246684a039d5cd0a36f7752faa3a0cf8b9076643958cb3"
+  },
+  "outcomes": [
+    {
+      "id": "save_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "unsupported_hidden",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "wrong_blocker",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "roster_null_confirmation",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "flags_null",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "missing_prior_row",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster correction",
+      "pass": true
+    },
+    {
+      "id": "duplicate_alias_hidden",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster derivation",
+      "pass": true
+    },
+    {
+      "id": "capacity_26",
+      "expectedAccepted": false,
+      "accepted": false,
+      "error": "invalid roster request",
+      "pass": true
+    },
+    {
+      "id": "report_valid_control",
+      "expectedAccepted": true,
+      "accepted": true,
+      "error": null,
+      "pass": true
+    },
+    {
+      "id": "report_arbitrary_html",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "report_wrong_rows",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    },
+    {
+      "id": "report_null_status",
+      "expectedAccepted": false,
+      "accepted": true,
+      "error": null,
+      "pass": false
+    }
+  ],
+  "createdAt": "2026-09-16T06:01:44.376Z",
+  "scriptSha256": "053c5eec9e13c5a2e361ea0b338fd15945d1df65cb0af4ff578d20c5474f54c4"
+}

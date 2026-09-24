@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "createdAt": "2026-09-16T14:45:37.463Z",
+  "events": [
+    "equipment delayed initial company",
+    "equipment delayed initial actor",
+    "equipment delayed save company change",
+    "equipment delayed report company change",
+    "Actual stationary DOM names equipment/stationary and separate gas/generator capacities",
+    "equipment report and role cleanup",
+    "equipment unmount cleanup",
+    "generator delayed initial company",
+    "generator delayed initial actor",
+    "generator delayed save company change",
+    "generator delayed report company change",
+    "generator report and role cleanup",
+    "generator unmount cleanup"
+  ],
+  "errors": [],
+  "scriptSha256": "fd08e45254f431a25197abbf67fdfceccf7dff1833372bfd2b547600cb5e9760",
+  "limitations": [
+    "Actual React components and browser decoders with intercepted reviewer-built synthetic HTTP; no hosted Auth or database persistence claim.",
+    "No visual-layout, print-preview, PDF or physical-print claim."
+  ]
+}

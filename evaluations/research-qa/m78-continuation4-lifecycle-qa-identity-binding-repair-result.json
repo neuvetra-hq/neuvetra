@@ -1,0 +1,58 @@
+{
+  "status": "m78_continuation4_lifecycle_evaluator_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "admission": "offline_lifecycle_evaluator_preparation",
+  "reviewedCandidate": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE4.json",
+    "sha256": "440fa15695a713a41999619624e9f2c76879c74fed56758255a93d441f77f89a"
+  },
+  "candidateFiles": [
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-independent-review.ts",
+      "sha256": "8b93064892ff12647f2cb08055a6840172358d23a5c0a028ca0ce1bfb793ad18"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts",
+      "sha256": "b7f3cc4d8f83e3a82eb0f17252fa00b2d14bf5d9802a88be57e6dc06672247dd"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-preparation.md",
+      "sha256": "b352a5808f972fc073598ad279114c936b652635599a5f09827148b56d32521f"
+    }
+  ],
+  "historicalGap": {
+    "result": {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-result.json",
+      "sha256": "12947a1b3365b4a339ed4133ee7b15577a14d4a5a12d960143c7d84d4f247a49"
+    },
+    "candidate3AcceptedSwappedIdentities": true,
+    "candidate4RejectsSameMutation": true,
+    "rejection": "operation result binding 4"
+  },
+  "preservedPriorQaReceipt": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-INDEPENDENT-REVIEW-01-CANDIDATE1.json",
+    "sha256": "24ffda388ca5a14eca996896ad09ce45c1c65b0043eeb3fade611defb2d52943"
+  },
+  "checks": {
+    "candidateSnapshotJson": "passed",
+    "candidateEmbeddedText": "passed",
+    "combinedTests": {
+      "tests": 15,
+      "assertions": 869,
+      "failures": 0
+    },
+    "strictTypeScript": "passed",
+    "exactOperationBindings": 37
+  },
+  "materialFindingsOpen": 0,
+  "portableCiSelector": null,
+  "recommendedAuthorTest": "evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts",
+  "actualExerciseAccepted": false,
+  "fullLifecycleAccepted": false,
+  "networkUsed": false,
+  "databaseUsed": false,
+  "credentialsUsed": false,
+  "hostedCalls": 0,
+  "authorFilesModified": false,
+  "officialJournalsModified": false
+}

@@ -1,0 +1,17 @@
+# M73 hosted browser verification
+
+Root coordinator, 2026-09-15. Actual Chrome tab851834889 at https://www.neuvetra.ai/ loads the schema16 application deployed from3f92fdac0bf1e681db634410ad455b61faaed790. Browser authentication recovered through its existing session; no new credential, OTP or account operation was needed. The earlier demonstration tabs had been closed, so a new task tab was opened.
+
+Observed the deployed Stationary natural gas navigation and refreshed actual saved data after the journaled exercise created it. Version2 shows1500.125MMBtu HHV, exact79678.3893125/display79678.3893kgCO2e, correction reason, unresolved statement discrepancy and unreviewed state. Mobile, fugitive, process and remaining corporate coverage gaps stay visible. Screenshot: m73-hosted-correction.png.
+
+The label-based automation lookup for the history selector found no match; no state change resulted. Actual keyboard selection through the visible native selector succeeded. Version1 shows1250.125MMBtu HHV, exact66399.7643125/display66399.7643kgCO2e and the separate bounded internal review. Both original unreviewed and reviewed report snapshots remain visible.
+
+Opened the actual reviewed report. Company, source, period, entered/stated quantities, exact/display totals, reviewer note/time, CO2/CH4/N2O trace, synthetic statement locator/hash and incomplete-coverage limitations are readable. Desktop screenshot: m73-hosted-reviewed-report.png. Actual390x844 report checks show wrapped headings and a readable gas table with no horizontal scrolling inside the report: m73-hosted-report-narrow.png and m73-hosted-report-gases-narrow.png. Temporary viewport override was reset. Escape closed the actual report dialog and returned to the worksheet.
+
+The actual Download HTML button produced C:/Users/nimab/Downloads/stationary-gas-report-38373d83-d443-4d1e-83ee-2615d8fb415b.html,55929bytes,SHA2565f5200296b16178d943af8ada51ca13ad024c4eb925679a1ca40ee4434028a37, exactly matching the retained reviewed snapshot. Receipt: .superpowers/m73-browser-download.json. No browser write beyond this local download was performed during this hosted visual review. Save/correction/review operations are separately evidenced by the hosted journal.
+
+Print entry-point acceptance remains the earlier actual browser invocation plus direct board confirmation in m73-print-acceptance.md. This hosted check did not invoke another native print dialog or claim physical/PDF/pagination fidelity. Restart verification and final independent hosted acceptance are separate pending evidence at the time of this record.
+
+After the actual service restart, an additional browser reload was blocked by Chrome because another extension UI was open. No workaround or repeated interaction was attempted. This is not evidence of a post-restart browser readback. The already-completed hosted visual/download checks remain valid; exact post-restart persistence is tested separately by the zero-application-POST hosted revisit. Native print/PDF output remains outside the claim.
+
+The post-restart hosted revisit subsequently passed with zero application POSTs and all newly created Auth sessions closed. It compared the retained corporate and natural-gas versions, reviews and exact downloads against the completed exercise. Terminal journal event SHA256 e4ec8162a96bb5d807d728f4b258d7f109c9d45ff64136976b2c1792c9671bea; frozen evidence is operations/agent-improvement/snapshots/M73-HOSTED-EXECUTION.json. The blocked extra browser refresh remains an explicit limit.

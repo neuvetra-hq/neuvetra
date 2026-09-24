@@ -1,0 +1,53 @@
+{
+  "status": "m78_readonly_recovery_candidate3_independent_source_review_passed",
+  "reviewerId": "/root",
+  "authorId": "/root/m78_transport_continuation",
+  "observedAt": "2026-09-23T02:08:17.987933+00:00",
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-IMPLEMENTATION-01-CANDIDATE3.json",
+    "sha256": "bbd7486fa0300e1ee79831f0ae414c62700c24907ab67bf03687f3b1692d3720"
+  },
+  "materialFindingsOpen": 0,
+  "firstReview": "fail",
+  "reworkCycles": 2,
+  "rootReproducedCombinedTests": 17,
+  "rootReproducedCombinedAssertions": 103,
+  "additionalRootSecurityTests": 2,
+  "additionalRootSecurityAssertions": 27,
+  "findingsClosed": [
+    "Diagnostic failure no longer suppresses cleanup or discards a known token response.",
+    "Only local-scope logout is dispatched; global/default/duplicate scope rejected.",
+    "Terminal diagnostic commit can veto success before observation persistence."
+  ],
+  "limits": [
+    "Source-only acceptance. No hosted recovery, restart or revisit performed.",
+    "Production decoders verified on the real retained baseline; complete post-operation payload fixture is unavailable. Actual final-state acceptance requires fresh GET evidence and full offline evaluator.",
+    "Private entry, wrapper and exact execution admission require independent review before use."
+  ],
+  "sourcePins": [
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery.ts",
+      "sha256": "d96929b9ae69459bce616d4ddfb64cbc75ca99d086f792bb1a0c8915be667c8f"
+    },
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery.test.ts",
+      "sha256": "5522678b5eff2fcd2643d64e452770236619304f053e49469d97a5d18648fea5"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-independent-review.ts",
+      "sha256": "8e21dd1d4c7d7f30a66c7debfeb5776fb3f86edfe4f30028b06e9258e0a936de"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-independent.test.ts",
+      "sha256": "8664e1561d7e82fa6a2da8ce74ba6ae59e912803d187c848bc4f97aead68f4a3"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-implementation-report.md",
+      "sha256": "55f8b813584a74f9c7f950b3fd0deadb026df955249dcb95bb38dce961cfba19"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-readonly-recovery-implementation-result.json",
+      "sha256": "b2ce5a5fee1388298a63894df64b90456f5feb1a6f6876786b95a92b2db1a87e"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+/** Fresh bounded verification after a proven zero-write failure. Never resets a prior journal. */
+import {open,readFile,unlink} from 'node:fs/promises';
+import {runM78Continuation,parseM78ContinuationInput,readM78ContinuationJournal,cleanM78ContinuationJournal,type M78JourneyInput,type M78Dependencies} from './check-m78-continuation';
+import {m78CanonicalJson as canonical} from '../../packages/neuvetra-database/src/m78-validation';
+export const M78_CONTINUATION2_PATHS={journal:'.superpowers/m78-hosted-continuation2.jsonl',diagnostics:'.superpowers/m78-hosted-continuation2-diagnostics.jsonl',failed:'.superpowers/m78-hosted-continuation.jsonl'}as const;
+export const M78_CONTINUATION2_FAILURE={sha256:'8525a8416b3e55f07d508c9a9ec17fc8ac0a4902e798534dc05e9f4df72d1a46',head:'e766f74b730bebf69849945407598c011f918b9a77b7ff9c3a5913cd6964f744'}as const;
+const sha=(v:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(v).digest('hex');
+function check(v:unknown):asserts v{if(!v)throw Error('Bounded continuation2 refused')}
+export function verifyM78Continuation2Failure(text:string,company:string){
+ check(sha(text)===M78_CONTINUATION2_FAILURE.sha256);const events=readM78ContinuationJournal(text,company),last=events.at(-1)!;
+ check(events.length===24&&last.sha256===M78_CONTINUATION2_FAILURE.head&&last.kind==='attempt_finished'&&last.data.status==='failed'&&last.data.applicationPostRequests===0&&last.data.unknownAuthSessions===0&&last.data.allCreatedAuthSessionsClosed===true);
+ check(events.filter(e=>e.kind==='attempt_started').length===1&&events.every(e=>e.mode==='baseline'&&!e.kind.startsWith('post_')&&!['baseline','exercise_complete','revisit_verified','legacy_auth_intent'].includes(e.kind)));
+ for(const role of ['manager1','manager2','member','outsider']){check(events.filter(e=>e.kind==='auth_outcome'&&e.data.role===role&&e.data.status===200&&e.data.tokenObserved===true&&e.data.subjectMatched===true).length===1);check(events.filter(e=>e.kind==='logout_outcome'&&e.data.role===role&&e.data.status===204).length===1)}
+ return events;
+}
+type Mode=M78JourneyInput['mode'];
+type Diagnostic={sequence:number;previousSha256:string|null;profile:'m78-continuation2-diagnostic-v1';mode:Mode;kind:string;data:any;createdAt:string;sha256:string};
+export function readM78Continuation2Diagnostics(text:string|null){
+ if(text===null)return [] as Diagnostic[];check(Buffer.byteLength(text)<=8_000_000&&text.endsWith('\n'));let previous:string|null=null;const es=text.trimEnd().split('\n').map((line,i)=>{check(Buffer.byteLength(line)<=4096);const e=JSON.parse(line)as Diagnostic,{sha256,...body}=e;check(e.sequence===i+1&&e.previousSha256===previous&&e.profile==='m78-continuation2-diagnostic-v1'&&sha(canonical(body))===sha256);previous=sha256;return e});check(es.length<=16384);return es;
+}
+export interface M78Continuation2IO {read:(path:string)=>Promise<string|null>;append:(path:string,line:string,exclusive:boolean)=>Promise<void>}
+export function m78Continuation2JournalDependencies(storage:M78Continuation2IO,text:string|null):Pick<M78Dependencies,'load'|'append'>{return {load:async()=>text,append:async(line,exclusive)=>storage.append(M78_CONTINUATION2_PATHS.journal,line,exclusive)}}
+const io:M78Continuation2IO={read:async path=>{try{return await readFile(path,'utf8')}catch(e){if((e as NodeJS.ErrnoException).code==='ENOENT')return null;throw e}},append:async(path,line,exclusive)=>{const f=await open(path,exclusive?'wx':'a',0o600);try{await f.writeFile(line);await f.sync()}finally{await f.close()}}};
+export function m78Continuation2SafeRoute(raw:string){const u=new URL(raw);const allowed=new Set(['ready','workspace-api','config','session','workspace','corporate-inventories','stationary-natural-gas','mobile-diesel','stationary-diesel','controlled-fleet','stationary-equipment','fugitive-sources','fugitive-population','process-screen','scope1-inventory','versions','reviews','reports','statements','download','snapshot','proof','inventory-export','calculation-export','coverage-export','roster-export','auth','v1','token','logout']);return (u.hostname==='icockcoguyadhryzydvl.supabase.co'?'auth:':u.hostname==='www.neuvetra.ai'?'application:':'other:')+u.pathname.split('/').map(p=>p===''?'':/^[a-f0-9-]{36}$/i.test(p)?':id':allowed.has(p)?p:':other').join('/')}
+export function m78Continuation2DiagnosticFetch(transport:typeof fetch,emit:(kind:string,data:any)=>Promise<void>){
+ let ordinal=0,healthy=true;const record=async(kind:string,data:any)=>{try{await emit(kind,data)}catch{healthy=false}};
+ const wrapped=(async(raw:RequestInfo|URL,init?:RequestInit)=>{const url=typeof raw==='string'?raw:raw instanceof URL?raw.href:raw.url,route=m78Continuation2SafeRoute(url),method=(init?.method??(raw instanceof Request?raw.method:'GET')).toUpperCase(),n=++ordinal,start=performance.now(),logout=new URL(url).pathname==='/auth/v1/logout';
+  // Keep cleanup available after evidence failure; no further application request is admitted.
+  check(healthy||logout);await record('request_intent',{ordinal:n,method:['GET','POST'].includes(method)?method:'OTHER',route});check(healthy||logout);
+  let response:Response;try{response=await transport(raw,init)}catch(error){const name=(error as {name?:unknown})?.name;await record('request_error',{ordinal:n,category:name==='TimeoutError'?'timeout':name==='AbortError'?'abort':name==='TypeError'?'network':'other',elapsedMs:Math.round(performance.now()-start)});throw error}
+  const contentType=response.headers.get('content-type')?.split(';')[0]?.trim().toLowerCase(),length=response.headers.get('content-length');await record('response_headers',{ordinal:n,status:response.status,noStore:response.headers.get('cache-control')?.includes('no-store')===true,contentType:['application/json','text/plain','text/html','application/octet-stream'].includes(contentType??'')?contentType:'other',contentLength:length&&/^\d{1,10}$/.test(length)?Number(length):null,elapsedMs:Math.round(performance.now()-start)});
+  return response; // Identity and original unread stream preserved; no clone/tee/body interception.
+ })as typeof fetch;return {fetch:wrapped,healthy:()=>healthy};
+}
+/** IO/transport are explicit testing seams; the recipe, gate, auth and restart checks always remain in the original runner. */
+export async function runM78Continuation2(input:M78JourneyInput,options:{io?:M78Continuation2IO;fetch?:typeof fetch}={}){
+ const storage=options.io??io;verifyM78Continuation2Failure((await storage.read(M78_CONTINUATION2_PATHS.failed))??'',input.roster.workspaceId);
+ const text=await storage.read(M78_CONTINUATION2_PATHS.journal),events=readM78ContinuationJournal(text,input.roster.workspaceId);cleanM78ContinuationJournal(events);
+ const oldDiagnostics=await storage.read(M78_CONTINUATION2_PATHS.diagnostics),diagnostics=readM78Continuation2Diagnostics(oldDiagnostics);check(input.mode==='baseline'?text===null&&oldDiagnostics===null:events.length>0&&diagnostics.at(-1)?.kind==='phase_finished'&&diagnostics.at(-1)?.data.status==='passed');
+ let diagnosticBytes=Buffer.byteLength(oldDiagnostics??'');const emit=async(kind:string,data:any)=>{const body={sequence:diagnostics.length+1,previousSha256:diagnostics.at(-1)?.sha256??null,profile:'m78-continuation2-diagnostic-v1' as const,mode:input.mode,kind,data,createdAt:new Date().toISOString()},event={...body,sha256:sha(canonical(body))},line=JSON.stringify(event)+'\n';check(Buffer.byteLength(line)<=4096&&diagnostics.length<16384&&diagnosticBytes+Buffer.byteLength(line)<=8_000_000);await storage.append(M78_CONTINUATION2_PATHS.diagnostics,line,diagnostics.length===0);diagnostics.push(event);diagnosticBytes+=Buffer.byteLength(line)};
+ await emit('phase_started',{failedBaselineSha256:M78_CONTINUATION2_FAILURE.sha256,failedBaselineHead:M78_CONTINUATION2_FAILURE.head,journal:M78_CONTINUATION2_PATHS.journal});
+ const observed=m78Continuation2DiagnosticFetch(options.fetch??globalThis.fetch,emit),deps:M78Dependencies={fetch:observed.fetch,...m78Continuation2JournalDependencies(storage,text)};
+ const result=await runM78Continuation(input,deps);const status=result.status==='passed'&&observed.healthy()?'passed':'failed';await emit('phase_finished',{status,diagnosticsHealthy:observed.healthy(),applicationPostRequests:result.applicationPostRequests,allCreatedAuthSessionsClosed:result.allCreatedAuthSessionsClosed});return {...result,status,diagnosticsHealthy:observed.healthy()};
+}
+if(import.meta.main){let lock:Awaited<ReturnType<typeof open>>|undefined;try{const text=await Bun.stdin.text();check(text.length<=128000);const input=parseM78ContinuationInput(JSON.parse(text));lock=await open(M78_CONTINUATION2_PATHS.journal+'.lock','wx',0o600);await lock.writeFile('{"profile":"m78-exclusive-continuation2-v1"}\n');await lock.sync();const result=await runM78Continuation2(input);console.log(JSON.stringify(result));if(result.status!=='passed')process.exitCode=1}catch{console.log(JSON.stringify({status:'failed',stage:'continuation2_entry',applicationWritesNotInferred:true}));process.exitCode=1}finally{if(lock){await lock.close();await unlink(M78_CONTINUATION2_PATHS.journal+'.lock')}}}

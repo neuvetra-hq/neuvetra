@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M78-SECURITY-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m78_security",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-SECURITY-01-ACCEPTED.json",
+      "sha256": "59285e5ed91e93474aa7ce503e93a9f433ab355beefe30014e233e8b9692f372"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-assessment",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-security-assessment.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-02-current-read-plan",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-terrascope-metadata.sql",
+        "docs/research/m78-neuvetra-function-metadata.sql"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-03-precise-containment",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-terrascope-containment.sql",
+        "evaluations/research-qa/m78-security-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-security-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-SECURITY-01-ACCEPTED.json",
+        "sha256": "59285e5ed91e93474aa7ce503e93a9f433ab355beefe30014e233e8b9692f372"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Assessment and subsequently root-authorized exact Terrascope containment proposal only. Root owns hosted actions/Git/shared records. Requested compute per role registry; observed unknown.",
+    "Applied L02 and L05. Initial current access unavailable; root later obtained signed-in metadata. Dated alert and refreshed findings distinguished.",
+    "Candidate1 database-name guard removed in candidate2 for exact-byte safe isolated rehearsal; database name is not project identity. Independent review pending. Source artifacts will be frozen after final candidate.",
+    "Independent candidate2 native review found SQLSTATE55000 record r alias shadow before mutation; candidate3 renames alias and adds reviewed event-hook guard. Candidate1 database-name rehearsal blocker and substantive first-review failure preserved; final re-review pending.",
+    "Final four-file snapshot independently accepted. Root received explicit exact-fix permission after auto-review rejection, applied unchanged candidate3, and supplied verified20row catalog plus completedadvisor0errors/0warnings/5intentionalnoPolicyinfo. No author hosted actions; no live customerrows/CRUD. First failed native review preserved; final scoped assessment/control task complete."
+  ],
+  "source_artifacts": [
+    {
+      "path": "docs/research/m78-security-assessment.md",
+      "sha256": "4c268903a9d78eb551f9b4809e33ea1181c8c48972c0a44f11992800e2a2407f"
+    },
+    {
+      "path": "docs/research/m78-terrascope-metadata.sql",
+      "sha256": "6031adc3cced313e0cccf751218533412fe60d72107bd987d8a6246c7b6eeaf5"
+    },
+    {
+      "path": "docs/research/m78-neuvetra-function-metadata.sql",
+      "sha256": "efd8693a8561e0daef4ea7167db3ffd0f2d577681314f6fe410d9bb5afbe7f4c"
+    },
+    {
+      "path": "docs/research/m78-terrascope-containment.sql",
+      "sha256": "793a83110db1cf1abe419eab86623e5c032964a94403d1b74cc4535dda2e490d"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "status": "independent_actual_occupied21_restore_refused",
+  "createdAt": "2026-09-17T04:57:21.718Z",
+  "target": "m78_ops_recovery_1789620512810",
+  "schemaVersion": 21,
+  "validSourceBundleVerified": true,
+  "clusterRolePrerequisitesPositiveControl": true,
+  "exactOccupiedTargetExists": true,
+  "bundleSha256": "e77046a0b14cd4dd17aa5aad79cd8a75b72bbb276843da6ead3a1834094d35ab",
+  "targetInventoryUnchanged": true,
+  "noDatabaseMutation": true,
+  "noGlobalRoleMutation": true,
+  "journalSha256": "87b5adc75cb35f934d37bc4d12249b4753cf8559dc38e90b355e48eae18f6e31",
+  "journalEvents": [
+    {
+      "status": "m78_restore_started",
+      "createdAt": "2026-09-17T04:57:20.455Z",
+      "database": "m78_ops_recovery_1789620512810",
+      "bundleSha256": "e77046a0b14cd4dd17aa5aad79cd8a75b72bbb276843da6ead3a1834094d35ab"
+    },
+    {
+      "status": "m78_restore_failed_clone_retained",
+      "stage": "prerequisites",
+      "database": "m78_ops_recovery_1789620512810",
+      "cloneCreated": false
+    }
+  ],
+  "message": "M78 local restore failed at prerequisites",
+  "hosted": false
+}

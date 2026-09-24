@@ -1,0 +1,52 @@
+{
+  "observedAt": "2026-09-16T06:46:53.619793+00:00",
+  "implementationCommit": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+  "draftPr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "checks": [
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "implementationPublished": true,
+  "milestoneComplete": false,
+  "liveSchema": 17,
+  "liveDeployment": "b849d413-6a8a-406c-bf3e-73dd71137117",
+  "liveImplementation": "f5d7383e9624027d5169578012e261a789a268e8",
+  "automaticDeploymentPaused": true,
+  "siteStopped": false,
+  "migrationAttempted": false,
+  "migrationExecuted": false,
+  "approval": "specific17-to18_upgrade_and_deployment_approved",
+  "priorApprovalBoundary": "Earlier specific live approval was16-to17 after automatic review rejection; no M75 action has been rejected or attempted.",
+  "review": "evaluations/research-qa/m75-final-review-addendum.md",
+  "recovery": "docs/research/m75-prepublication.json",
+  "browser": "docs/research/m75-local-browser-verification.json",
+  "approvedAt": "2026-09-16T06:47:20.861098+00:00"
+}

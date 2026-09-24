@@ -1,0 +1,36 @@
+{
+  "finding": "HJ-F01",
+  "status": "candidate3_semantic_negative_reproduced",
+  "sourcePins": [
+    {
+      "path": "tools/staging/check-m78-hosted.ts",
+      "sha256": "a298e28b5dae0ac1934f7a87788a116654bc47c18b7ee0208a360e6840e54207"
+    },
+    {
+      "path": "tools/staging/check-m78-hosted.test.ts",
+      "sha256": "0f2bf2a4bc74e305de29a7acff6565f27245c948234b734265e767c0cd09aa8e"
+    }
+  ],
+  "networkRequests": 0,
+  "results": [
+    {
+      "case": "synthetic_ordered_closed_control",
+      "admitted": true
+    },
+    {
+      "case": "foreign_tenant_201_route",
+      "admitted": true,
+      "fullyRehashed": true
+    },
+    {
+      "case": "empty_verified_identity",
+      "admitted": true,
+      "fullyRehashed": true
+    },
+    {
+      "case": "missing_provenance",
+      "admitted": false,
+      "fullyRehashed": true
+    }
+  ]
+}

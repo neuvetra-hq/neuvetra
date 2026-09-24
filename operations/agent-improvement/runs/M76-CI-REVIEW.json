@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "M76-CI-REVIEW",
+  "role": "qa-lead",
+  "execution_context": "/root/m76_accounting",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-CI-COMPATIBILITY1.json",
+      "sha256": "616683279cd071e26af58dbd8b55a7c3298422bc5ea75eff30c68e1a73639c88"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "LEGACY-M75-COMPATIBILITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m76-ci-compatibility-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m76-ci-compatibility-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-CI-COMPATIBILITY1.json",
+        "sha256": "616683279cd071e26af58dbd8b55a7c3298422bc5ea75eff30c68e1a73639c88"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent review of three root-authored M75 test compatibility corrections after remote manifest19 regression. No production/operator SQL change. Existing QA execution context resumed; requested route unchanged, actual compute unobserved. Original CI failure retained."
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m75-operators.test.ts",
+      "sha256": "2df6eb9c231fb233cb8ec16dd26644e133e9a0b1cf13dd352d24c177247fa217"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-native.test.ts",
+      "sha256": "d40e2ca7e39e01b208df3b3c7c36b7163e07c580192252d8d39afec8324b28cd"
+    },
+    {
+      "path": "evaluations/research-qa/m75-independent-direct-sql.ts",
+      "sha256": "d1c4fd76159b35540e8ab81ba322c0daab33cc343cf39eeb8f8b0dc10363bf3e"
+    },
+    {
+      "path": "evaluations/research-qa/m76-ci-compatibility-review.md",
+      "sha256": "8084ea94c5c42a9af30637b1f313bbf33ddf979fb17514df7b6380615053912b"
+    }
+  ]
+}

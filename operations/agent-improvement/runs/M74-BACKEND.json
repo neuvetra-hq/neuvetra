@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "M74-BACKEND",
+  "role": "software-engineering",
+  "execution_context": "/root/m74_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-INTEGRATED-ACCEPTED2.json",
+      "sha256": "d7afd16e6d6206c6b5a3703536f6b4776fbed38e9b29973c0a384ad272f542f6"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M74-BACKEND-BOUNDED-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-independent-accounting-review.md",
+        "evaluations/research-qa/m74-security-review.md",
+        "evaluations/research-qa/m74-integrated-qa-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m72_ops",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-independent-accounting-review.md",
+      "evaluations/research-qa/m74-security-review.md",
+      "evaluations/research-qa/m74-integrated-qa-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-INTEGRATED-ACCEPTED2.json",
+        "sha256": "d7afd16e6d6206c6b5a3703536f6b4776fbed38e9b29973c0a384ad272f542f6"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh critical engineering dispatch; owns newM74 backend/calculator/SQL and approved coupled server integration. Root frontend/manifest/assets/Docker/CI/operators and shared records.",
+    "Bounded implementation accepted by separate accounting/security/integration reviewers; author failures retained. No hosted publication claim."
+  ]
+}

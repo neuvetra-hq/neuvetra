@@ -78,6 +78,18 @@
         ".github/workflows/verify.yml"
       ],
       "status": "adopted_pending_effectiveness"
+    },
+    {
+      "id": "L08",
+      "owner_role": "qa-lead",
+      "trigger": "A hosted milestone recipe is rehearsed against a local synthetic template.",
+      "required_check": "Compare the complete facility/source/control graph against the freshly accepted hosted baseline before release. Rehearse a new isolated clone of that exact application snapshot without pruning or renaming old records. Resolve locations by retained physical/source binding identity, and independently challenge reordered, missing, ambiguous and stale links. Label local-template evidence separately from actual-host-derived evidence.",
+      "evidence": [
+        "docs/research/m77-hosted-plan.md",
+        "evaluations/research-qa/m77-hosted-facilities-challenge.ts",
+        "tools/staging/check-m77-hosted.test.ts"
+      ],
+      "status": "adopted_pending_effectiveness"
     }
   ]
 }

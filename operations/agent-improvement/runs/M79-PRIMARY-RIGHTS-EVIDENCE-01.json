@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "id": "M79-PRIMARY-RIGHTS-EVIDENCE-01",
+  "role": "regulatory-research",
+  "execution_context": "/root/m79_rights",
+  "prompt_sha256": "b8302825b83953d49d2783538b424498348aa20f322b1c2c1c0b5e011145a7f2",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-PRIMARY-RIGHTS-EVIDENCE-01-CANDIDATE3.json",
+      "sha256": "e9028738cba18c51feb100c57b232b88367b3f261df66ea1477e078d6e68be28"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-seven-originals-accounted",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-primary-rights-evidence.json",
+        "docs/research/m79-primary-rights-evidence.md"
+      ],
+      "reason": "Exactly seven retained originals from the accepted M79 inventory each have a canonical URL, retained hash, exact-source notice observation, applicable current official evidence and source-specific reasoning."
+    },
+    {
+      "id": "AC-02-three-use-rights-matrix",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-primary-rights-evidence.json",
+        "docs/research/m79-primary-rights-evidence.md"
+      ],
+      "reason": "Every artifact separately addresses numerical calculation/derived values, excerpt or report redistribution, and hosted fulltext/RAG use. All 21 uses remain on Neuvetra product-release hold while source-supported restrictions, noncopyrightable elements, exact licenses and unresolved legal questions are characterized separately."
+    },
+    {
+      "id": "AC-03-current-primary-policy-and-source-notices",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-primary-rights-evidence.json",
+        "docs/research/m79-primary-rights-evidence.md"
+      ],
+      "reason": "Official EPA, GovInfo, the current 2021 Copyright Office Compendium, GHG Protocol and Creative Commons pages were inspected on 2026-09-22. Creative Commons evidence now pinpoints Deed Notices and Legal Code section 2 for the public-domain and exception carve-outs; exact retained source notices/no-notice observations are not treated as blanket permission, prohibition or a license requirement."
+    },
+    {
+      "id": "AC-04-no-release-or-legal-assurance",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-primary-rights-evidence.json",
+        "docs/research/m79-primary-rights-evidence.md"
+      ],
+      "reason": "The verdict keeps rights approval, production release and Scope 1 completion false and distinguishes this evidence from legal advice, permission or a source release."
+    },
+    {
+      "id": "AC-05-independent-review-of-frozen-candidate",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-rights-root-targeted-review.md",
+        "evaluations/research-qa/m79-rights-independent-review.md"
+      ],
+      "reason": "Prior independent candidate2 review plus separate root candidate3 primary-source locator check closes bounded preparation/review; all release holds remain."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m79-rights-root-targeted-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M79-PRIMARY-RIGHTS-EVIDENCE-01-CANDIDATE3.json",
+        "sha256": "e9028738cba18c51feb100c57b232b88367b3f261df66ea1477e078d6e68be28"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M79 California-first Scope 1 method/source rights preparation",
+  "applicable_lessons": [],
+  "source_artifacts": [
+    {
+      "path": "docs/research/m79-primary-rights-evidence.json",
+      "sha256": "dcae2c639d7189a820c049ff74febd4284bbe1d4cfe09a96f0099b5182cbdfe5"
+    },
+    {
+      "path": "docs/research/m79-primary-rights-evidence.md",
+      "sha256": "a686c9ba1098e9891cae763c3989558dbbd7ef5b87266c9a9f0f274554281b75"
+    }
+  ],
+  "notes": [
+    "Requested Sol/high and observed settings remain distinct; observed model/effort are unavailable.",
+    "No external permission request, publisher contact, provider action, customer-data access, product/runtime/method/source-catalog change, shared-ledger edit or Git action occurred.",
+    "Candidate1 remains frozen at operations/agent-improvement/snapshots/M79-PRIMARY-RIGHTS-EVIDENCE-01-CANDIDATE1.json (SHA-256 0e985ae418cadb22cb5b9d2149bbae2046cfe843b2e37f2178f22911f2361314). Independent review evaluations/research-qa/m79-rights-independent-review.md (SHA-256 5b003aeeb30fcdd8b3f90e78e44a00d7e2306e4a470e7eb81300bc826db410a9) failed candidate1 with three material findings.",
+    "Candidate2 remains frozen at operations/agent-improvement/snapshots/M79-PRIMARY-RIGHTS-EVIDENCE-01-CANDIDATE2.json (SHA-256 b25086ff944a95c3a45dffbd5d16da3a1b257051135ede7ac7d230415bece91a). The updated independent review record (SHA-256 6d416c892dc3fcd475512fd8693a2cb103ca66932e26f3b97fe9f9f3db20a271) found its F01-F03 substantive repairs sufficient but required exact E07 Deed Notices and Legal Code section 2 locators.",
+    "Candidate3 is rework cycle 2 and is frozen with embedded UTF-8 text and SHA-256 values. It adds only the missing Creative Commons pinpoint locators and supporting short quotes; one residual finding remains open until targeted independent review.",
+    "All 21 intended uses remain under Neuvetra product-release hold. The hold is not a finding that every use is legally prohibited or that individual facts, numbers or independently expressed methods require a license. This research grants no legal assurance, license, rights approval, source release, production release or Scope 1 completion."
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "status": "m78_continuation4_exercise_failure_independently_reconciled",
+  "materialFindingsOpen": 1,
+  "journal": {
+    "events": 176,
+    "bytes": 9378221,
+    "sha256": "44e7bec2d2e6a4a554de6ba23775150bfdf29582fd69ff12bc6cfbc73770ba8b",
+    "head": "44817c9e96c62576fe65198ab4ea357ef4a4b212b755f64419e8516496498ab9"
+  },
+  "diagnostics": {
+    "events": 1350,
+    "bytes": 576941,
+    "sha256": "d77a8f58ec92a0642a5b0b4a91113920ccd4013b9bcfee9a9c7e5de90d93e651",
+    "head": "c95e235e08844012639f4a12d969231e3ae7131bb0d419d9ed0de9130b61d48f"
+  },
+  "baselinePrefixPreserved": true,
+  "diagnosticBaselinePrefixPreserved": true,
+  "operationTriplesVerified": 37,
+  "distinctVerifiedIdentities": 37,
+  "distinctIdempotencyKeys": 37,
+  "repeatedApplicationPostRequests": 0,
+  "applicationPostRequests": 37,
+  "reportsVerifiedFromPostResponses": 5,
+  "timeout": {
+    "ordinal": 384,
+    "route": "application:/workspace-api/workspace/:id/scope1-inventory/:id/reports/:id/snapshot",
+    "category": "timeout",
+    "clientElapsedMs": 30011,
+    "providerStatus": 499,
+    "providerTotalDurationMs": 29965,
+    "laterBrowserSuccessDurationMs": 90427,
+    "preciseCauseEstablished": false
+  },
+  "exerciseRequests": 388,
+  "mainLogins": 4,
+  "mainLogouts": 4,
+  "unknownAuthSessions": 0,
+  "allCreatedAuthSessionsClosed": true,
+  "legacyStageReached": false,
+  "successEvaluatorExecuted": false,
+  "restartExecuted": false,
+  "revisitExecuted": false,
+  "reviewerId": "/root/m78_transport_probe",
+  "exerciseAccepted": false,
+  "fullLifecycleAccepted": false,
+  "actualExercisePassReceiptWritten": false,
+  "evidence": [
+    {
+      "kind": "main",
+      "path": ".superpowers/m78-hosted-continuation4.jsonl",
+      "sha256": "44e7bec2d2e6a4a554de6ba23775150bfdf29582fd69ff12bc6cfbc73770ba8b"
+    },
+    {
+      "kind": "diagnostics",
+      "path": ".superpowers/m78-hosted-continuation4-diagnostics.jsonl",
+      "sha256": "d77a8f58ec92a0642a5b0b4a91113920ccd4013b9bcfee9a9c7e5de90d93e651"
+    },
+    {
+      "kind": "baseline",
+      "path": "evaluations/research-qa/m78-continuation4-baseline-independent-result.json",
+      "sha256": "57fc10f6ee4dce55ced4060aa1d41cbd5a125eac3bd58d99bbad7c37ef1daddf"
+    },
+    {
+      "kind": "gate",
+      "path": ".superpowers/m78-continuation4-exercise-gate.json",
+      "sha256": "9fe233c964b8c40f6c7a9871eecf75a318e7a800f2ec14570c6803288ff9dce7"
+    },
+    {
+      "kind": "provider",
+      "path": "evaluations/research-qa/m78-continuation4-failure-http-observation.json",
+      "sha256": "bb98e5a3125f87a9aa5a4de01ec9105ef1b46b1a7f5687e80b7f1c01822db090"
+    },
+    {
+      "kind": "browser",
+      "path": "evaluations/research-qa/m78-continuation4-browser-http-observation.json",
+      "sha256": "27e7420cdf5f3788e3894b466a78b24e889d48a732c13220a50f29f2ef7ff3d5"
+    }
+  ],
+  "materialFindings": [
+    {
+      "id": "EXERCISE-PRESERVATION-TIMEOUT",
+      "severity": "material",
+      "status": "open",
+      "summary": "The closed exercise failed during a read-only final report snapshot request after all 37 writes were verified.",
+      "limitation": "The matching provider 499 and a later 90.427-second browser success establish latency observations, not the precise internal cause."
+    }
+  ],
+  "safeNextAdmission": {
+    "applicationPostRequestsAllowed": 0,
+    "rerunExerciseWriter": false,
+    "restartAllowed": false,
+    "revisitAllowed": false,
+    "recommendation": "Diagnose or explicitly accept the snapshot-route latency, then independently review a zero-write preservation-only recovery that resumes from the closed failed journal and revalidates current state before any restart or revisit."
+  },
+  "rootProviderAndBrowserObservationsIndependentlyReproduced": false,
+  "qaNetworkUsed": false,
+  "qaCredentialsRead": false,
+  "qaDatabaseUsed": false,
+  "qaJournalWrites": false
+}

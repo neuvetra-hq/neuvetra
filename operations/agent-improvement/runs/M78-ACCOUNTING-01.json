@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "id": "M78-ACCOUNTING-01",
+  "role": "accounting-validation",
+  "execution_context": "/root/m78_security",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-ACCOUNTING-01-CANDIDATE2.json",
+      "sha256": "7fecc9a13c0d03ae64dcc64980e7dbea0218ae9a2decf7ea3c97a565cf9b8dd6"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-originalsources-compatibility",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-accounting-contract.md",
+        "evaluations/calculation-specs/m78-candidate-policy.json",
+        "evaluations/calculation-specs/m78-source-observations.json"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-02-independent-decimal-oracle",
+      "status": "pass",
+      "evidence": [
+        "evaluations/calculation-specs/m78-decimal-oracle.py",
+        "evaluations/calculation-specs/m78-expectations.json"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-03-boundary-process-release-gates",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-accounting-contract.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-accounting-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-ACCOUNTING-01-CANDIDATE2.json",
+        "sha256": "7fecc9a13c0d03ae64dcc64980e7dbea0218ae9a2decf7ea3c97a565cf9b8dd6"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/m78-accounting-contract.md",
+      "sha256": "dd743f8eadffe3e03f155a8898da4f28c7090c4af72138c79f5a47c3a75c9f83"
+    },
+    {
+      "path": "evaluations/calculation-specs/m78-candidate-policy.json",
+      "sha256": "0fe8cb9bfb48e7a8dd0b5b40d491918f57f33288da12daa9de1d9406080da6c4"
+    },
+    {
+      "path": "evaluations/calculation-specs/m78-source-observations.json",
+      "sha256": "4e3dcd2188a951a73a480a2d12b4f8b97a6e27fd32d1838c470f1a7252065eb0"
+    },
+    {
+      "path": "evaluations/calculation-specs/m78-decimal-oracle.py",
+      "sha256": "4870be7adf0992b1740bcf3fe14c83d4d31a0f6e9034958c5e44f2067fa46ae9"
+    },
+    {
+      "path": "evaluations/calculation-specs/m78-expectations.json",
+      "sha256": "ba2d163b8733c8e77a9a7a17c5dfba68cb798cbe73c12d0d0a20193a3338f7ec"
+    }
+  ],
+  "notes": [
+    "Fresh critical accounting dispatch unavailable due to parent-reported threadlimit; existing context used requestedAstra/high observedunknown. Prior securityassessment separate; no prior familyarithmetic authored.",
+    "Original workbookZIP/XML/formats andPDFsources independentlyread; no application calculator imports inoracle. Decimal cross-check Fraction; all outputs illustrative nothosted.",
+    "Preliminary reviewer independently confirmed source/policy and38numeric records. Fixed repeated illustrative tieid to distinctA/B; clarified structuredsevengascoverage after reviewergap. Finalreviewpending. L02/L07 applied.",
+    "Independent M78-ACC-F02 rejected candidate1 snapshot: rawCRLF SHA differed from normalizedLF embeddedtext. Preserved candidate1, normalized onlyownedaccountingfiles LF, froze NEWcandidate2 using exactbytes.decode. Allentrytext/bytes/SHA agreement selfchecked; factorpolicy/numericalvalues unchanged; re-reviewpending.",
+    "FINAL independentlyaccepted candidate2 with unchanged five sourcehashes. Reviewer directly verified both candidate1/candidate2 exactUTF8bytes; initial F02 snapshot mismatch was reviewerCP1252 decoding falsepositive, withdrawn as author defect. Prior reported refusal remains first_review fail for observable history; material authorrework0, numerical/sourcebyte defects0 observed. Earlier CRLF diagnosis in notes was provisional and disproved, not a source alteration. Reviewer numerical38/source21 checks pass; ownoracle --check passes; runtime/productionrelease not claimed."
+  ]
+}

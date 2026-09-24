@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-RECOVERY2-PRIVATE-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-PRIVATE-REVIEW-01-CANDIDATE1.json",
+      "sha256": "5953f6937532eb67776bcb7e064e1fe77430ecf2d432f69d117ee852416849a7"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-recovery2-private-independent-review.ts",
+    "evaluations/research-qa/m78-readonly-recovery2-private-independent.test.ts",
+    "evaluations/research-qa/m78-readonly-recovery2-private-independent-review.md",
+    "evaluations/research-qa/m78-readonly-recovery2-private-independent-result.json",
+    "evaluations/research-qa/m78-readonly-recovery2-private-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "PREAUTH_FAILURE_RUNTIME_SOURCE_BINDING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-private-independent-review.ts"
+      ],
+      "reason": "The entry binds immutable failed evidence, exact gate/runtime/source pins and the approved encrypted config before lock, auth or network work."
+    },
+    {
+      "id": "EXCLUSIVE_RAW_CAPTURE_AND_NO_REPLAY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-private-independent.test.ts"
+      ],
+      "reason": "IO is restricted to the runner's four exported paths; wrapper refuses all four plus the durable wx lock before DPAPI."
+    },
+    {
+      "id": "SECRET_BOUNDARY_AND_DPAPI",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-private-independent-review.md"
+      ],
+      "reason": "DPAPI follows all public gates, decrypted bytes are cleared, secrets travel only by redirected stdin, stderr is withheld and the fixed child is hidden."
+    },
+    {
+      "id": "GET_ONLY_LOCAL_LOGOUT_AND_LEGACY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-private-independent-result.json"
+      ],
+      "reason": "The entry uses production fetch, fixed token auth, local-only logout and baseline-only in-memory legacy verification with zero application writes."
+    },
+    {
+      "id": "ACTUAL_RUNNER_OR_RECOVERY",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This assignment accepts only two root-authored private helper files. The public runner, finalizer and actual execution are separate reviews."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-recovery2-private-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-PRIVATE-REVIEW-01-CANDIDATE1.json",
+        "sha256": "5953f6937532eb67776bcb7e064e1fe77430ecf2d432f69d117ee852416849a7"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh Astra/high dispatch was unavailable at the runtime thread limit; this existing independent non-author reviewer continued with inherited settings unknown.",
+    "The runner was read only for exported-path interoperability. This is not runner authorship review or runner acceptance.",
+    "Neither helper was imported or executed. No DPAPI, credentials, authentication, network, provider, database or Git action occurred.",
+    "Root reproduced the independent reviewer tests and verified exact helper/snapshot hashes. Root authored helpers; independent source acceptance comes from probe, while root closes the reviewer assignment. No actual execution accepted."
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M78-RESUME-RELEASE-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json",
+      "sha256": "62ba8e5a33bb5a40472d7e7bdfa27f5b45478c20fc00c402e51c69aff4feb5f6"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "WRAPPER-PREFLIGHT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-release-review.md",
+        "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json"
+      ],
+      "reason": "Exact source, external admission boundary and injected refusals accepted; no native execution."
+    },
+    {
+      "id": "PORTABILITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-release-review.md",
+        "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json"
+      ],
+      "reason": "Historical mismatch repaired with immutable follow-up, original failures retained."
+    },
+    {
+      "id": "JOURNEY140",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-release-review.md",
+        "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json"
+      ],
+      "reason": "Current140 bytes match attestation; three independent tests pass."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-resume-release-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-RESUME-RELEASE-01-CANDIDATE1.json",
+        "sha256": "62ba8e5a33bb5a40472d7e7bdfa27f5b45478c20fc00c402e51c69aff4feb5f6"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-resume-release-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-resume-release-review.md",
+      "sha256": "425c865d10a98d739aec3973bdd730ef52d1bbdb5567c7038c916e7a551ebc20"
+    },
+    {
+      "path": "evaluations/research-qa/m78-resume-local-upgrade-source.json",
+      "sha256": "402d4c5acc8ec20b7ba54f5cc598b334586e27ccfc4200a74c8be1b73070b48a"
+    },
+    {
+      "path": "evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts",
+      "sha256": "b51478e958d9c7f9179302ecbeeae8dbbc33d6c5615fb4c2c94c61eb7e360d78"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts",
+      "sha256": "8ff882de08cc12e04b1610d442e3786c6d6b741172e89a3e085458c4c470ad2c"
+    },
+    {
+      "path": "evaluations/research-qa/m78-journey-resolver-preparation.json",
+      "sha256": "25242c9aa8bad9d0adda00d8ebd6514a3589cef9d9abaca0b29e949fde958450"
+    }
+  ]
+}

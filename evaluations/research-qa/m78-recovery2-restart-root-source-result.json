@@ -1,0 +1,53 @@
+{
+  "status": "m78_recovery2_restart_independent_source_review_passed",
+  "observedAt": "2026-09-23T04:15:26.570922+00:00",
+  "reviewerId": "/root",
+  "authorId": "/root/m78_transport_continuation",
+  "materialFindingsOpen": 0,
+  "firstReview": "fail",
+  "reworkCycles": 1,
+  "sourcePins": [
+    {
+      "path": ".superpowers/m78-recovery2-validate-for-restart.ts",
+      "sha256": "78a21f7f8db113734e14ee2eb8bbbc0cac06cfe4c12743a8b2bc7567e92da3fb"
+    },
+    {
+      "path": ".superpowers/m78-recovery2-restart-admit.py",
+      "sha256": "35481c139aace400135e00e0b16eefcf94292592f442011c8ef390b0415b9105"
+    },
+    {
+      "path": ".superpowers/m78-recovery2-request-restart.py",
+      "sha256": "d0c1b19e51c02f9d016cd5e95e1c3b15c70b73f3ffa8a3d80f2b42894c45d8e7"
+    },
+    {
+      "path": ".superpowers/m78-recovery2-collect-startup.py",
+      "sha256": "45b0776cca680bf7657bbca6e1b493fa835d15d733129b3b82134b9c9bc796ef"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-preparation.test.ts",
+      "sha256": "ae88aaf12a9eec09ea973912eafffb31b5e1bcbb2ac090eeb16492306e8a5ffa"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-preparation.test.py",
+      "sha256": "750470629acf1a1b4c92b5094a167f4909222fc36384e4dadc8c853f1e87930f"
+    }
+  ],
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-PREP-01-CANDIDATE1.json",
+    "sha256": "2863eb990c145c53c0febd19e536f793d014174441ed543a2f2874ae94ba25a2"
+  },
+  "rootReproduction": {
+    "bunTests": 2,
+    "assertions": 10,
+    "pythonTests": 6,
+    "actualOfflineValidatorPassed": true
+  },
+  "findingsClosed": [
+    "transitive 182-pin source closure was not rehashed",
+    "four helper bytes were not frozen through admission and action",
+    "startup observedAt preceded final provider and readiness reads"
+  ],
+  "providerCalls": 0,
+  "restartExecuted": false,
+  "actualStartupAccepted": false
+}

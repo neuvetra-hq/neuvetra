@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "M78-RESUME-RECIPE-FIX-01",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recipe",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RECIPE-FIX-01-CANDIDATE2.json",
+      "sha256": "074728a5026e6970a3b97ca832a8f824cd327c674de6a4e88be3274f2005cc1a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "DIAGNOSE_REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-recipe-fix.md"
+      ],
+      "reason": "Readonly native diagnosis;14 tests134 assertions and strict TS; no application POST."
+    },
+    {
+      "id": "INDEPENDENT_REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-resume-response-shape-review.md"
+      ],
+      "reason": "Independent candidate2 source acceptance; full native recipe separately pending."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-resume-source-forward-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-RESUME-RECIPE-FIX-01-CANDIDATE2.json",
+        "sha256": "074728a5026e6970a3b97ca832a8f824cd327c674de6a4e88be3274f2005cc1a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-resume-recipe-fix.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Inherited execution settings unknown; requested registry route recorded without claiming applied settings.",
+    "Candidate1 retained; candidate2 repairs embedded source-map newline bytes only."
+  ],
+  "historical_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RESUME-RECIPE-FIX-01-CANDIDATE1.json",
+      "sha256": "d87bbd168cd3e1fa0b00272b03016b8fc3b7bc574a84203b61144367e67a0f11"
+    }
+  ]
+}

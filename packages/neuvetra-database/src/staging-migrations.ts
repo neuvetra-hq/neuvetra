@@ -5,6 +5,13 @@ export const STAGING_MIGRATIONS = [
   "0001_company_workspace.sql", "0002_synthetic_bill_intake.sql", "0003_synthetic_bill_calculation.sql",
   "0004_inventory_review.sql", "0005_annual_electricity_register.sql", "0006_inventory_evidence_pack.sql",
   "0007_inventory_draft_report.sql", "0008_inventory_draft_report_review.sql", "0009_private_staging.sql", "0010_manual_electricity_worksheet.sql", "0011_worksheet_reports.sql", "0012_source_electricity_worksheet.sql", "0013_annual_electricity_worksheet.sql", "0014_annual_electricity_evidence.sql",
+  "0015_corporate_coverage.sql",
+  "0016_stationary_natural_gas.sql",
+  "0017_mobile_diesel.sql",
+  "0018_controlled_fleet.sql",
+  "0019_stationary_sources.sql",
+  "0020_fugitive_sources.sql",
+  "0021_scope1_inventory.sql",
 ] as const
 
 export async function readMigrationManifest() {
@@ -32,7 +39,7 @@ export async function migratePrivateStaging(db: WorkspaceConnection, approval: {
     const existing = await tx.query<{ present: boolean }>("select exists(select 1 from pg_namespace where nspname='neuvetra') present")
     if (existing.rows[0]?.present) {
       const receipts = await tx.query<{ name: string; sha256: string }>("select name,sha256 from neuvetra.schema_migrations order by name")
-      if (receipts.rows.length !== 9 && receipts.rows.length !== 10 && receipts.rows.length !== 11 && receipts.rows.length !== 12 && receipts.rows.length !== 13 && receipts.rows.length !== manifest.length) throw new Error("Unknown staging migration baseline.")
+      if (receipts.rows.length !== 9 && receipts.rows.length !== 10 && receipts.rows.length !== 11 && receipts.rows.length !== 12 && receipts.rows.length !== 13 && receipts.rows.length !== 14 && receipts.rows.length !== 15 && receipts.rows.length !== 16 && receipts.rows.length !== 17 && receipts.rows.length !== 18 && receipts.rows.length !== 19 && receipts.rows.length !== 20 && receipts.rows.length !== manifest.length) throw new Error("Unknown staging migration baseline.")
       await validateExisting(tx, approval.expectedProjectRef, manifest.slice(0,receipts.rows.length))
       for (const migration of manifest.slice(receipts.rows.length)) {
         await tx.exec(migration.sql)
@@ -101,4 +108,3 @@ export async function provisionStagingRoster(db: WorkspaceConnection, roster: Ap
 export async function revokeStagingAccess(db: WorkspaceConnection, userId: string): Promise<void> {
   await db.query("update neuvetra.staging_access set active=false where user_id=$1", [userId])
 }
-

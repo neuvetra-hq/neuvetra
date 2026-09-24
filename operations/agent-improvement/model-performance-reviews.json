@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-22",
+  "owner": "coordinator",
+  "policy": "operations/agent-improvement/model-performance-policy.md",
+  "scope": "Initial staffing baseline, not a performance ranking",
+  "roles": [
+    {
+      "role": "ceo",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "cpo",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "cto",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "qa-lead",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "regulatory-research",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "accounting-validation",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "carb-verifier",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "data-database",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "software-engineering",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-terra",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "security-reliability",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "critical": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    },
+    {
+      "role": "commercial-operations",
+      "decision": "retain_existing_pending_comparison",
+      "default": {
+        "model": "gpt-5.6-terra",
+        "effort": "medium"
+      },
+      "critical": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "observed_performance": null,
+      "reason": "No comparable external-model evaluation completed; preserve current assignment policy."
+    }
+  ],
+  "candidates": [
+    {
+      "model": "minimax/minimax-m3",
+      "decision": "restricted",
+      "observed_performance": {
+        "cases": 3,
+        "substantive_pass": 0,
+        "substantive_fail": 2,
+        "insufficient_evidence": 1,
+        "evidence": "operations/agent-improvement/OPS-PILOT-01-A-review.md"
+      },
+      "supported_responsibility": "bounded synthetic build reasoning screening",
+      "restriction": "No numerical, financial-metrics or autonomous critical role assignment from this batch.",
+      "next_step": "Do not route new numerical work; improve output contract and evaluate stronger candidate before further placement."
+    },
+    {
+      "model": "moonshotai/kimi-k2.7-code",
+      "decision": "restricted",
+      "observed_performance": {
+        "cases": 3,
+        "substantive_pass": 1,
+        "substantive_fail": 2,
+        "insufficient_evidence": 0,
+        "evidence": "operations/agent-improvement/OPS-PILOT-01-A-review.md"
+      },
+      "supported_responsibility": "bounded synthetic build reasoning screening",
+      "restriction": "No numerical, financial-metrics or autonomous critical role assignment from this batch.",
+      "next_step": "Consider fresh bounded nonnumerical trial only; no promotion."
+    }
+  ],
+  "next_review_trigger": "Independent completion of approved pilot; then feature and milestone closure",
+  "continuous_monitor_running": false,
+  "latest_comparison": "operations/agent-improvement/OPS-PILOT-01-A-review.md"
+}

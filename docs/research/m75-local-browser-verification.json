@@ -1,0 +1,72 @@
+{
+  "observedAt": "2026-09-16T06:32:08.076343+00:00",
+  "scope": "Local native database, real UI with injected fictional actors; no hosted Auth or print/PDF claim.",
+  "database": "m75_root_ui_final2",
+  "canonicalMigration": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+  "correctionSaved": true,
+  "reviewResetObserved": true,
+  "separateReviewSaved": true,
+  "htmlAndJsonDownloadUiConfirmed": true,
+  "downloadedHtmlSha256": "519e04d1e85ea3cd09ee871e1bfa521c2be72436f6b06cb325d40b79dd31d9a0",
+  "downloadedHtmlBytes": 16556,
+  "actualServiceRestart": true,
+  "before": {
+    "observedAt": "2026-09-16T06:25:54.101Z",
+    "status": "reconciled_bounded_synthetic",
+    "versions": [
+      {
+        "id": "61be7862-f476-4f32-a579-bcc3ca703a36",
+        "version": 1,
+        "hash": "c55934063580ad94a5b7795087dfffc8c9a6d3c6ef49ea12be51e5776b730b30"
+      },
+      {
+        "id": "6bcbe824-e389-4629-8e50-ea42f9f71dfa",
+        "version": 2,
+        "hash": "feef608ab52c26f5695254b3e192939a5b2e24b428ea409d8716584f9c2b292e"
+      }
+    ],
+    "reviews": 2,
+    "reports": [
+      {
+        "id": "a4d9e8e7-efbd-484e-804d-f91907474f4a",
+        "sha256": "1cf6ad378942436eda53ccbe98dfcc2d78ea70de422263871b45c32a3ada7251",
+        "bytes": 16228
+      },
+      {
+        "id": "24a92728-8a26-493a-b0ff-9b7d18099f55",
+        "sha256": "519e04d1e85ea3cd09ee871e1bfa521c2be72436f6b06cb325d40b79dd31d9a0",
+        "bytes": 16556
+      }
+    ]
+  },
+  "after": {
+    "observedAt": "2026-09-16T06:30:00.389Z",
+    "status": "reconciled_bounded_synthetic",
+    "versions": [
+      {
+        "id": "61be7862-f476-4f32-a579-bcc3ca703a36",
+        "version": 1,
+        "hash": "c55934063580ad94a5b7795087dfffc8c9a6d3c6ef49ea12be51e5776b730b30"
+      },
+      {
+        "id": "6bcbe824-e389-4629-8e50-ea42f9f71dfa",
+        "version": 2,
+        "hash": "feef608ab52c26f5695254b3e192939a5b2e24b428ea409d8716584f9c2b292e"
+      }
+    ],
+    "reviews": 2,
+    "reports": [
+      {
+        "id": "a4d9e8e7-efbd-484e-804d-f91907474f4a",
+        "sha256": "1cf6ad378942436eda53ccbe98dfcc2d78ea70de422263871b45c32a3ada7251",
+        "bytes": 16228
+      },
+      {
+        "id": "24a92728-8a26-493a-b0ff-9b7d18099f55",
+        "sha256": "519e04d1e85ea3cd09ee871e1bfa521c2be72436f6b06cb325d40b79dd31d9a0",
+        "bytes": 16556
+      }
+    ]
+  },
+  "historicalReportOpenedAfterRestart": true
+}

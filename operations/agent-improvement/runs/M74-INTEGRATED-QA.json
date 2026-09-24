@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "M74-INTEGRATED-QA",
+  "role": "qa-lead",
+  "execution_context": "/root/m72_ops",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-INTEGRATED-QA-ACCEPTED1.json",
+      "sha256": "48f127c223ba4a98cb527c33d7353a80e3ebb3e7a6234987acc853e38eddbdeb"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M74-PACKAGING-BROWSER-INTEGRATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-integrated-qa-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-integrated-qa-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-INTEGRATED-QA-ACCEPTED1.json",
+        "sha256": "48f127c223ba4a98cb527c33d7353a80e3ebb3e7a6234987acc853e38eddbdeb"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused independent accounting reviewer, no implementation/UI/packaging authorship; inherited compute unknown. Own new integrated QA review only. Native print observed by board; no physical/PDF fidelity claim. Freeze script first attempt stopped only at missing qa.md role path after completing preceding snapshots/closures; preserved those artifacts, corrected to actual qa-lead.md.",
+    "Root accepts independent integration QA deliverable; actual remote image/checks remain publication gates.",
+    "Post-acceptance CI exposed one missed legacy operator test expectation under manifest17. Classified as test/integration coverage defect, not a product admission defect. Repaired in61d4376 with independent15/16/17 review. Root-generated Windows record paths separately failed records CI and were repaired in3e35698. Original first-pass local verdict and remote failures remain preserved."
+  ]
+}

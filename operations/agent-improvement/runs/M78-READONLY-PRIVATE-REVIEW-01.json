@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-PRIVATE-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "ef4bb19e6bf0a98683dc96d42a7f3cd61db7e29da97db9cd1638273a563da6d8",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-PRIVATE-REVIEW-01-CANDIDATE2.json",
+      "sha256": "f511e7b41a8667faececb294653dad6653081db55e60011a5c79e7b4d022efb4"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": ".superpowers/m78-readonly-recovery-entry.ts",
+      "sha256": "d4a517b1afbf48f135e8caaa2287a7c3b5dd5cc9bb75917e8c935fe9fa53af32"
+    },
+    {
+      "path": ".superpowers/m78-private-readonly-recovery.ps1",
+      "sha256": "dba7f41da91c5b26872b8b12cb77c95ed31041bd129a6dfbc6896db62e41f130"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-private-independent-review.ts",
+      "sha256": "b67cf7c0d47e7f9902f3536168240c4a078abe53d4d68c7a9dbb9e96e9eaff2d"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-private-independent.test.ts",
+      "sha256": "e81751ce750ed27bdbb5f97c8ea0b2c6d4ad715d42503ee51b5871fedae0dc90"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-private-independent-review.md",
+      "sha256": "5c95657f11b82f9bc75ca5f9b381d53547dc87ee60a38d8034d6b5e4256a7310"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-private-independent-result.json",
+      "sha256": "732eaaad1e415a2601523c6efd2b17874dfb35da75292fa382a938ced6c1bcff"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "PRE_DECRYPTION_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-private-independent-review.md",
+        "evaluations/research-qa/m78-readonly-private-independent.test.ts"
+      ],
+      "reason": "The launcher verifies exact workspace, pins, runtime, source closure, unused evidence paths and the approved encrypted-config hash before DPAPI."
+    },
+    {
+      "id": "PRIVATE_STDIN_OUTPUT_AND_ACTORS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-private-independent-review.ts",
+        "evaluations/research-qa/m78-readonly-private-independent-result.json"
+      ],
+      "reason": "Decrypted input is bounded and redirected only to the fixed entry; bytes are cleared, stderr is withheld, output is allowlisted, and expected subjects are derived from the approved four-role config then matched to tokens."
+    },
+    {
+      "id": "EXCLUSIVE_GET_ONLY_INTEROPERABILITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-private-independent-review.md"
+      ],
+      "reason": "The entry binds the reviewed source/runtime before a durable exclusive lock, uses default production decoders, fixed fetch boundaries, application GETs and local-scope logout."
+    },
+    {
+      "id": "LEGACY_BASELINE_PRESERVATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-private-independent-review.ts",
+        "evaluations/research-qa/m78-readonly-private-independent.test.ts"
+      ],
+      "reason": "M72 is constrained to baseline with null load/in-memory save; actual schema21 readiness is verified before schema14 adaptation, and exact legacy equality, zero writes and closure are required."
+    },
+    {
+      "id": "ACTUAL_EXECUTION",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This assignment is an offline source-only helper review; it did not authorize or perform DPAPI, authentication, network, database, provider or recovery execution."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-private-independent-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-PRIVATE-REVIEW-01-CANDIDATE2.json",
+        "sha256": "f511e7b41a8667faececb294653dad6653081db55e60011a5c79e7b4d022efb4"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Review mode was security/reliability. The reviewed private helpers were authored by root; this reviewer authored the underlying public runner and discloses that the review is independent only for the two root-owned private helpers and their interoperability.",
+    "Candidate1 is preserved and failed because its plaintext expected-subject gate crossed the encrypted-config trust boundary. Candidate2 pins the approved ciphertext before DPAPI and derives the four subjects only from the parsed approved config.",
+    "No helper, DPAPI, credential, authentication, network, database, provider, Git, recovery, restart or revisit action occurred.",
+    "Root verified the frozen independent review artifact and reproduced three offline tests / 15 assertions. Root authored helpers; substantive helper review was by the separate continuation reviewer, which disclosed underlying runner authorship. Source-only; exact execution admission still pending."
+  ]
+}

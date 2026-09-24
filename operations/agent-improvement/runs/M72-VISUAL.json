@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "M72-VISUAL",
+  "role": "qa-lead",
+  "execution_context": "/root/m72_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M72-VISUAL.json",
+      "sha256": "fb4ce68b6043f0404ea59c107398e1cec5e0307eb64b2083a480780aaac9f4c2"
+    },
+    {
+      "path": "evaluations/research-qa/m72-browser-history.png",
+      "sha256": "55d4bf7abfc3c8cd74a5d84ed7b6c93831ee62d2858a23d853353f0276bb73a6"
+    },
+    {
+      "path": "evaluations/research-qa/m72-browser-narrow.png",
+      "sha256": "29a78321ba31721b76e89f2ac2ffabcf1d67910f9013cf605ecc6cb501474737"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M72-VISUAL-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m72-visual-qa-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m72-visual-qa-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M72-VISUAL.json",
+        "sha256": "fb4ce68b6043f0404ea59c107398e1cec5e0307eb64b2083a480780aaac9f4c2"
+      },
+      {
+        "path": "evaluations/research-qa/m72-browser-history.png",
+        "sha256": "55d4bf7abfc3c8cd74a5d84ed7b6c93831ee62d2858a23d853353f0276bb73a6"
+      },
+      {
+        "path": "evaluations/research-qa/m72-browser-narrow.png",
+        "sha256": "29a78321ba31721b76e89f2ac2ffabcf1d67910f9013cf605ecc6cb501474737"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Continuation of existing QA worker after board closed blocking extension panel. Root authored browser observations; QA independently inspected screenshots/download evidence. Prior immutable reports remain historical. Existing requested compute carried forward; actual settings and resource counts remain unknown."
+  ]
+}

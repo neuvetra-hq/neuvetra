@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "id": "M78-HOSTED-BASELINE-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-BASELINE-REVIEW-01-CANDIDATE1.json",
+      "sha256": "fd6253ee055ae83f1c88ccc645f10bc5de9dbdae7326660c0df877d17af51cac"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BASELINE-PREFIX",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-hosted-baseline-review.md",
+        "evaluations/research-qa/m78-hosted-baseline-review.json"
+      ],
+      "reason": "42event fixed prefix,0writes,282requests,140sourcepins,164downloads,all8sessionsclosed."
+    },
+    {
+      "id": "FAILED-EXERCISE-CLASSIFICATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-hosted-baseline-review.md"
+      ],
+      "reason": "72event chain valid; failedcontinuation refused; three denials and one unknown save outcome preserved."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-timeout-preparation-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-HOSTED-BASELINE-REVIEW-01-CANDIDATE1.json",
+        "sha256": "fd6253ee055ae83f1c88ccc645f10bc5de9dbdae7326660c0df877d17af51cac"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-hosted-baseline-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-GET-PERF-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERF-REVIEW-01-CANDIDATE1.json",
+      "sha256": "788b0961a49b7ded2d4d9d9bd1ce61294a805605fd38a7125dc0c5370b3333b0"
+    }
+  ],
+  "source_artifacts": [
+    "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE1.json",
+    "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE2.json",
+    "evaluations/research-qa/m78-continuation4-get-perf-result.json",
+    "evaluations/research-qa/m78-continuation4-get-perf-probe.ts",
+    "evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts"
+  ],
+  "criteria": [
+    {
+      "id": "CANDIDATE2-EXACT-SQL-GUARD",
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-perf-qa.test.ts",
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-result.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-review.md"
+      ],
+      "reason": "The regular-expression scanner accepts unlisted outer functions, nested writing expressions and arbitrary cast-only SELECTs; three adversarial tests reproduce the bypasses."
+    },
+    {
+      "id": "HISTORICAL-RESULT-PROVENANCE",
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-result.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-review.md"
+      ],
+      "reason": "The executed candidate1 result does not pin all M71-M77 readers used by its full-state reconstruction. Candidate2 was not executed and cannot retroactively supply those pins."
+    },
+    {
+      "id": "SCOPED-STRUCTURAL-DIAGNOSIS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-result.json",
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-review.md"
+      ],
+      "reason": "Current source inspection and the counting route fixture support one root getter plus one report getter per report GET and justify preparing a narrow dispatch optimization; the single local sample does not establish hosted cause or release readiness."
+    },
+    {
+      "id": "BOUNDED-OFFLINE-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-perf-qa-candidate2-review.md"
+      ],
+      "reason": "Review was source/mocked offline only; no native probe rerun, database, provider, credentials, hosted calls, Git or existing-evidence mutation occurred."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "fail",
+    "material_findings_open": 2,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": [],
+    "blocker": "Historical candidate2 was rejected. Its two findings remain in the immutable receipt; the source guard was replaced and reviewed under M78-GET-GUARD-INDEPENDENT-REVIEW-01. Historical candidate1 exact reader-source provenance cannot be supplied retroactively; use the new separately reviewed comparison for release."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Critical QA routing requested gpt-6-astra/high. This assignment reused an existing reviewer context; actual model and effort were unavailable and remain null.",
+    "Candidate2 rejection is immutable evidence. Any finite-template repair requires a new author candidate and a new QA snapshot; no native measurement is attributed to that repair without a new run.",
+    "The equal digest covers 121 neuvetra base-table row sets only and is not evidence of unchanged sequences, settings, temporary state or external effects.",
+    "No worker is active on this historical measurement/rejection. Root preserves it without asserting a new native pass for the repaired guard."
+  ]
+}

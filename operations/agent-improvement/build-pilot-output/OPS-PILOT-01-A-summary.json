@@ -1,0 +1,27 @@
+{
+  "run_id": "OPS-PILOT-01-A",
+  "output_sha256": "1f2981738361ec98c03cd5c651b4387bcf311e626800fb1dc80f5b2426732c62",
+  "models": {
+    "minimax/minimax-m3": {
+      "completed_requests": 3,
+      "provider_reported_cost_usd": "0.01485583",
+      "input_tokens": 1097,
+      "output_tokens": 15212,
+      "raw_json_reviewable": 0
+    },
+    "moonshotai/kimi-k2.7-code": {
+      "completed_requests": 3,
+      "provider_reported_cost_usd": "0.0482824548",
+      "input_tokens": 618,
+      "output_tokens": 14509,
+      "raw_json_reviewable": 1
+    }
+  },
+  "total_api_usd": "0.0631382848",
+  "remaining_approved_budget_usd": "4.9368617152",
+  "batch_elapsed_seconds": 610.178586,
+  "timing_basis": "Batch reservation to final settlement; includes sequential network/processing/accounting overhead, not independent provider latency.",
+  "native_reviewer_cost_usd": null,
+  "review_evidence": "operations/agent-improvement/OPS-PILOT-01-A-review.md",
+  "qualification": "Independent review required; raw JSON parseability is not substantive correctness."
+}

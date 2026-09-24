@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONTINUATION-PREP-01",
+  "role": "software-engineering",
+  "execution_context": "/root/resume_recovery",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE2.json",
+      "sha256": "ea2858ae7521cecdec811121683cd2e37e092c45c44058a5552d8b046938089c"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-continuation-preparation.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-final-independent-review.md",
+        "evaluations/research-qa/m78-continuation-actual-independent-acceptance.json"
+      ],
+      "reason": "Exact actual native37run and candidate3 full runtime closure independently accepted; hosted execution remains separate."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-root-acceptance.md",
+      "evaluations/research-qa/m78-continuation-final-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE2.json",
+        "sha256": "ea2858ae7521cecdec811121683cd2e37e092c45c44058a5552d8b046938089c"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assignment": {
+    "parent_outcome": "Separate exact37write continuation from confirmed hostedinventory1",
+    "allowed": "newcontinuationfiles/tests/localnewcloneonly",
+    "excluded": "originalharness/plan/journals,host,credentials,Git",
+    "lessons": [
+      "L02",
+      "L04"
+    ],
+    "remaining": "Independent source review, actualnewclone native37run"
+  },
+  "historical_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE1.json",
+      "sha256": "f01dc1c5b4b4d8931474a53b27eae80d61b13c82090c4702a4168a637869cdf4"
+    }
+  ]
+}

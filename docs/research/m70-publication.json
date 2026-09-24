@@ -1,0 +1,57 @@
+{
+  "scope": "Reviewed nonproduction M70 planning milestone",
+  "implementation_commit": "beb2271ae5978f38a8b23c70eb542ff35d800a80",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "branch": "codex/corporate-mvp",
+  "observed_at": "2026-09-15T05:47:04.543626+00:00",
+  "checks": [
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "staged_committed_files_verified": 34,
+  "snapshot": "operations/agent-improvement/snapshots/M70-INTEGRATED.json",
+  "snapshot_sha256": "9251a44ce0b9fc6544bc3b3f73eb7dfeb9e47fea91660f3d233f7518d244a6c3",
+  "review": [
+    "evaluations/research-qa/m70-accounting-review.md",
+    "evaluations/research-qa/m70-qa-review.md"
+  ],
+  "production_deployed": false,
+  "paid_requests": 0,
+  "board_workflow_feedback": "pending",
+  "closure_commit_verification": "Coordinator verifies closure head/checks after publication; this receipt pins implementation checks only.",
+  "limits": [
+    "No real customer persistence, corporate calculation or released methods/corpus.",
+    "No operative legal applicability or assurance determination.",
+    "One independent non-author reviewer covered accounting and QA; browser actions were coordinator-executed.",
+    "git diff --cached --check reported one pre-existing candidate blank EOF line in the source review; exact independently reviewed bytes preserved.",
+    "Git commit emitted shared stale-worktree maintenance permission warning, but exact committed bytes and remote head were verified."
+  ]
+}

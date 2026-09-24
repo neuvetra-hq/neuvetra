@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "id": "M78-CI-PORTABILITY-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_security",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CI-PORTABILITY-01-CANDIDATE1.json",
+      "sha256": "067d8e648603aefe5e8190622b9237aafb1f2eb234f2efa9328aae6b450c3da7"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CI-PORTABILITY-01-CLEAN-FINAL3.json",
+      "sha256": "af194c1ce979ff0d99aa7826028de82ed075afd9cfa295f2a41c9adf7090518f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-hermetic-fixtures",
+      "status": "pass",
+      "reason": null,
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CI-PORTABILITY-01-CANDIDATE1.json"
+      ]
+    },
+    {
+      "id": "AC-02-clean-export-proof",
+      "status": "pass",
+      "reason": null,
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CI-PORTABILITY-01-CLEAN-FINAL3.json"
+      ]
+    },
+    {
+      "id": "AC-03-independent-review",
+      "status": "pass",
+      "reason": null,
+      "evidence": [
+        "evaluations/research-qa/m78-ci-portability-root-acceptance.md"
+      ]
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-ci-portability-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CI-PORTABILITY-01-CANDIDATE1.json",
+        "sha256": "067d8e648603aefe5e8190622b9237aafb1f2eb234f2efa9328aae6b450c3da7"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CI-PORTABILITY-01-CLEAN-FINAL3.json",
+        "sha256": "af194c1ce979ff0d99aa7826028de82ed075afd9cfa295f2a41c9adf7090518f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Author fixes; not an independent reapproval of own earlier M78 harness. Requested critical QA Astra/high; inherited observed settings unknown under concurrency fallback. Applicable L01 actual boundary and L02 exact immutable provenance. No Git, network, host, DB or private config access.",
+    "Initial clean-directory run excludes all private folders;5recipe tests pass, journey import fails missing standardpostgres dependency. Preserved as setup failure; final copied locked dependency run pending.",
+    "Final clean copy20tests399assertions passed without private directories; normal lockedpostgres and in-copyworkspacealias provided. StrictTS passed after existing key-list typing correction. Initial dependency setup failures and concurrent map-drift refusal retained; no runtime/test assertions weakened. Candidate1 frozen for root independent final review.",
+    "Root independent acceptance verified exact fixture==original final, source diff and clean-copy evidence, then reran20tests399assertions. Original7 CI failures and two clean dependency setup failures preserved; remote CI rerun remains root-owned separate observation."
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/m78-hosted-database.test.ts",
+      "sha256": "427aa54ccd8b625272800853683b5f66237247be55a05177c24fd6c06262cf23"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-journey-independent.test.ts",
+      "sha256": "032da5da1c7832ce32320a2d92906600260c8e9cb1edebca7b14b25b5bdadd97"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-plan-independent.test.ts",
+      "sha256": "02e1f21fd352169a97f6b50eae604be69f9179cae2a0088a9312761e2d38112f"
+    },
+    {
+      "path": "evaluations/research-qa/fixtures/m78-hosted-plan-fictional.json",
+      "sha256": "ee115a94cddaca62b0e13c459b1c32fd120e6de929ff8fca37c74957334c7028"
+    },
+    {
+      "path": "docs/research/m78-ci-portability.md",
+      "sha256": "a6a21f77f819fb29580159c1ee10e1cf11dc19de6dfd2e4c49ae8fabc7b7d3ce"
+    }
+  ]
+}

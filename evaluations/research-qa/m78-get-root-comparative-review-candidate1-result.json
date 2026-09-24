@@ -1,0 +1,53 @@
+{
+  "status": "m78_get_root_comparative_source_review_failed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 2,
+  "helper": {
+    "path": ".superpowers/m78-get-route-comparative-candidate1.ts",
+    "sha256": "07aed9f62893ab21c37537d568d375108c8f90a2a63ae46ab7c63c98124cd748",
+    "executed": false
+  },
+  "findings": [
+    {
+      "id": "COMPARATIVE-CONSTRUCTION-OUTSIDE-CLEANUP",
+      "severity": "material",
+      "status": "open",
+      "summary": "The exclusive lock is written before both database handles are constructed, while construction occurs before the try/finally. A construction-time failure can leave a lock without a sanitized failure result and can leave an already-created handle outside cleanup."
+    },
+    {
+      "id": "COMPARATIVE-INDEPENDENT-ADMISSION-UNBOUND",
+      "severity": "material",
+      "status": "open",
+      "summary": "The helper checks an admission status and source pins but does not require exact accepted independent route and finite-guard QA receipt pins or their verdict fields before creating the lock."
+    }
+  ],
+  "verifiedDesignProperties": {
+    "originalAndCandidateHistoricalPinsRecheckedBeforeAndAfter": true,
+    "onlyCandidateRouteMayDifferWithinHistorical173": true,
+    "loopbackDatabaseNameFixed": true,
+    "applicationRouteMethodsGetOnly": true,
+    "runtimeSqlPassesGuard": true,
+    "adminSessionDefaultReadOnlyBeforeQueries": true,
+    "baseTableDigestCount": 121,
+    "directCases": 3,
+    "routeCasesPerVersion": 8,
+    "totalCases": 19,
+    "warmupsPerCase": 1,
+    "measuredSamplesPerCase": 3,
+    "bodyStatusAndHeaderEqualityRequired": true,
+    "queryReductionRequired": true,
+    "digestScopeExplicitlyLimited": true,
+    "hostedTimingOrSlaClaim": false,
+    "nativeExecutionAuthorized": false
+  },
+  "checks": {
+    "testsPassed": 2,
+    "testsFailed": 0,
+    "assertions": 10,
+    "strictTypeScript": true,
+    "databaseUsed": false,
+    "networkUsed": false,
+    "helperExecuted": false
+  },
+  "disposition": "Preserve candidate1 as rejected. Review a repaired helper only after it covers construction failures and binds exact independently accepted route and finite-guard receipts before lock creation."
+}

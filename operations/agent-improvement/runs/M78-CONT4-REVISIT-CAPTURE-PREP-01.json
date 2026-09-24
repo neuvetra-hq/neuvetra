@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-REVISIT-CAPTURE-PREP-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-PREP-01-CANDIDATE3.json",
+      "sha256": "b823c0b53c9d46046a09c66d798a72882e269f57148571f82bcee663ddbce83c"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "PASSIVE_CAPTURE",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-continuation4-revisit-capture.ts",
+        "tools/staging/m78-continuation4-revisit-capture.test.ts"
+      ],
+      "reason": "One underlying call, original Response/RequestInit preserved, application GET clones only, and auth bodies never captured."
+    },
+    {
+      "id": "FRESH_OBSERVATION",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/m78-continuation4-revisit-capture.ts",
+        "tools/staging/m78-continuation4-revisit-capture.test.ts"
+      ],
+      "reason": "Fresh captured responses independently reconstruct Scope1, seven registers, downloads, M78 exports and legacy state with exact173 source pins."
+    },
+    {
+      "id": "FAILURE_AND_EXCLUSIVITY",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4-revisit.ts",
+        "tools/staging/m78-continuation4-revisit-capture.test.ts"
+      ],
+      "reason": "Capture failure waits until core cleanup, refuses success/observation, and successful observations use exclusive new-path creation."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m78_transport_probe",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-capture-qa-result.json",
+      "evaluations/research-qa/m78-continuation4-capture-qa-review.md",
+      "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-PREP-01-CANDIDATE3.json",
+        "sha256": "b823c0b53c9d46046a09c66d798a72882e269f57148571f82bcee663ddbce83c"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": 0,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Candidate1 failed independent review because aggregate bytes were accounted only after full clone buffering and pending clones were not drained on core failure.",
+    "Candidate2 fixed bounds/drain but failed a real-decoder QA case because asynchronous register decoders were not awaited. Candidate3 awaits every default decoder and preserves both rejected snapshots.",
+    "Independent candidate3 review passed with 9 tests and 53 expectations plus strict targeted TypeScript. Actual hosted revisit remains unexecuted and unaccepted.",
+    "Preparation only. No credential, database, provider, hosted revisit, official hosted journal, Git, core, inner-gate, or173 pinned-source change occurred."
+  ]
+}

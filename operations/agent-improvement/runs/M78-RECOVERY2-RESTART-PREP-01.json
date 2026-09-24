@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "id": "M78-RECOVERY2-RESTART-PREP-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-PREP-01-CANDIDATE1.json",
+      "sha256": "2863eb990c145c53c0febd19e536f793d014174441ed543a2f2874ae94ba25a2"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": ".superpowers/m78-recovery2-validate-for-restart.ts",
+      "sha256": "78a21f7f8db113734e14ee2eb8bbbc0cac06cfe4c12743a8b2bc7567e92da3fb"
+    },
+    {
+      "path": ".superpowers/m78-recovery2-restart-admit.py",
+      "sha256": "35481c139aace400135e00e0b16eefcf94292592f442011c8ef390b0415b9105"
+    },
+    {
+      "path": ".superpowers/m78-recovery2-request-restart.py",
+      "sha256": "d0c1b19e51c02f9d016cd5e95e1c3b15c70b73f3ffa8a3d80f2b42894c45d8e7"
+    },
+    {
+      "path": ".superpowers/m78-recovery2-collect-startup.py",
+      "sha256": "45b0776cca680bf7657bbca6e1b493fa835d15d733129b3b82134b9c9bc796ef"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-preparation.test.ts",
+      "sha256": "ae88aaf12a9eec09ea973912eafffb31b5e1bcbb2ac090eeb16492306e8a5ffa"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-preparation.test.py",
+      "sha256": "750470629acf1a1b4c92b5094a167f4909222fc36384e4dadc8c853f1e87930f"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-preparation-report.md",
+      "sha256": "6fdd9aa6d72a75bfe83d0dd0b494ce0e2fa7874e5becc63fae45c26c4e8aa621"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-preparation-result.json",
+      "sha256": "b00f6b86d0da10fd8a49f6e9fd35daf550c7a3d0c4b8e15046a3300a097df160"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-RECOVERY-VALIDATION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-PREP-01-CANDIDATE1.json",
+        "evaluations/research-qa/m78-recovery2-restart-preparation.test.ts"
+      ],
+      "reason": "Pins the exact actual QA receipt, corrected and historical evaluators, locks, runtime, exact ten evidence entries and all 182 transitive source pins, then reruns the corrected evaluator read only."
+    },
+    {
+      "id": "EXACT-ONCE-RESTART",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-PREP-01-CANDIDATE1.json"
+      ],
+      "reason": "Freezes all four helper hashes, writes one durable intent before one explicit deploymentRestart call, and never retries an uncertain outcome."
+    },
+    {
+      "id": "STARTUP-ATTRIBUTION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-PREP-01-CANDIDATE1.json",
+        "evaluations/research-qa/m78-recovery2-restart-preparation.test.py"
+      ],
+      "reason": "Requires the fixed provider state, disabled autodeploy, one unique post-request staging_started event, final readiness and a final observedAt."
+    },
+    {
+      "id": "FOCUSED-OFFLINE-VALIDATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-recovery2-restart-preparation-result.json"
+      ],
+      "reason": "Two TypeScript tests with 10 assertions, six Python tests, strict TypeScript, Python syntax, and the exact actual-receipt offline validator passed."
+    },
+    {
+      "id": "ACTUAL-RESTART",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "Source-only assignment complete; actual restart is a separate root-owned gate and has not run."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-recovery2-restart-root-source-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-RECOVERY2-RESTART-PREP-01-CANDIDATE1.json",
+        "sha256": "2863eb990c145c53c0febd19e536f793d014174441ed543a2f2874ae94ba25a2"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Source-only. No provider, hosted, credential, database, Git, restart or shared-record action occurred.",
+    "Root review found and the candidate repairs transitive source-pin, helper-drift and final observation-time gaps.",
+    "Actual restart and later revisit remain separately gated.",
+    "Public criterion evidence points to the immutable source snapshot because private .superpowers helper paths are intentionally not tracked; source_artifacts retain original paths and raw hashes.",
+    "Post-acceptance defect observed 2026-09-23: original collector assumed JSON in message and filtered message text; actual Railway structured startup is top-level event with empty message. Two read-only attempts refused before output. Original four helpers remain frozen; independently reviewed collector2 bbc03eba subsequently observed the single already-requested restart. No restart replay. Historical source review remains evidence of its tested scope, not a successful execution of the original collector."
+  ]
+}

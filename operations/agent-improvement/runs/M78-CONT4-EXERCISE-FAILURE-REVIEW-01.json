@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-EXERCISE-FAILURE-REVIEW-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-EXERCISE-FAILURE-REVIEW-01-CANDIDATE1.json",
+      "sha256": "638866f4a3628fa3e7e359871e6d8bf4f92b665cd47b1fc457c42e29953f53c0"
+    }
+  ],
+  "source_artifacts": [
+    ".superpowers/m78-hosted-continuation4.jsonl",
+    ".superpowers/m78-hosted-continuation4-diagnostics.jsonl",
+    ".superpowers/m78-continuation4-exercise-gate.json",
+    "evaluations/research-qa/m78-continuation4-baseline-independent-result.json",
+    "evaluations/research-qa/m78-continuation4-failure-http-observation.json",
+    "evaluations/research-qa/m78-continuation4-browser-http-observation.json"
+  ],
+  "criteria": [
+    {
+      "id": "IMMUTABLE-FAILURE-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-result.json",
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa.test.ts"
+      ],
+      "reason": "Exact closed main and diagnostic bytes, heads and hash chains are verified; accepted 42-event and572-event baseline prefixes remain byte-identical."
+    },
+    {
+      "id": "EXACT-WRITE-RECONCILIATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-check.ts",
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-result.json"
+      ],
+      "reason": "All37 ordered operation triples have exact recipe routes,201 outcomes, matching verified response hashes, unique identities and idempotency keys, and exact diagnostic POST order with no repeated application POST."
+    },
+    {
+      "id": "TIMEOUT-AND-AUTH-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-result.json",
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-review.md"
+      ],
+      "reason": "The only request error is ordinal384, a30,011ms final-report snapshot timeout; four exact POST logins and four POST logouts close with unknown0. Provider/browser latency evidence is bounded and cause remains unproven."
+    },
+    {
+      "id": "FAILURE-ONLY-DISPOSITION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-result.json",
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-review.md"
+      ],
+      "reason": "No success evaluator/receipt, restart or revisit exists. The recommendation forbids rerunning37 writes and requires separately reviewed zero-write preservation recovery."
+    },
+    {
+      "id": "BOUNDED-OFFLINE-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa.test.ts",
+        "evaluations/research-qa/m78-continuation4-exercise-failure-qa-review.md"
+      ],
+      "reason": "Three local tests and strict targeted TypeScript pass. QA used only closed local evidence and made no hosted, credential, database or official-journal action."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-failure-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-EXERCISE-FAILURE-REVIEW-01-CANDIDATE1.json",
+        "sha256": "638866f4a3628fa3e7e359871e6d8bf4f92b665cd47b1fc457c42e29953f53c0"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Critical software-engineering routing requested gpt-5.6-sol/high. This reused the already-running reviewer context; actual model/effort were not observable and remain null.",
+    "The open material finding is the failed preservation phase, not an unresolved QA test failure. No success or full-lifecycle admission is issued.",
+    "Root accepted the completed failure-reconciliation assignment. Its receipt retains the open product timeout finding; outcome material_findings_open=0 concerns the bounded QA artifact, not exercise or release acceptance."
+  ]
+}

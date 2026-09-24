@@ -1,0 +1,166 @@
+{
+  "reviewer": "M71-QA",
+  "scope": "Exact local implementation, independent tests and inspected attributed evidence; no remote publication claim",
+  "files": [
+    {
+      "path": "docs/research/m71-acceptance.md",
+      "sha256": "fbd4763c0d56944cedf39b0f597011c2c9e46029c91bf1c7c103d63003b567b5"
+    },
+    {
+      "path": "docs/research/m71-implementation-contract.md",
+      "sha256": "0d1fa53e1df7ca1b7787857932fc45989d048ce1eb43023f8c06b82938aa335e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71-contract.ts",
+      "sha256": "9ab26510a66e93ae00e35e87e79e1289b275961ab02b6021b023c16ecbfa265c"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71-validation.ts",
+      "sha256": "44add799b85939bc0825a0e1fe095e41104faea13796d5ee1b58227660b0b7ec"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71.ts",
+      "sha256": "e0a1aa8cd01809af115057e46e9911d47ff801c93902ec59aa5bb21852f42385"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql",
+      "sha256": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "f8838d11f29cff4d4fa672a2bcef04ca925b0c01f69c5792ab16e346d3774c62"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "9b5b06f5c4e64eb07dc3b989e48cbc85e6939504845a696bae2ce698ba8f0ad1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "2a6b4d0c2c9aac3a0921aee653ac5aa14251dee40b3988627a93d5751c699aef"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "c335ecc694b00e4cda05b7155b254054accf2096b6c03cc1b50f09a54aba0209"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "1739cc97996be84595811563ed83c9dde836aaceddf924a6d0100bba6b005ca8"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m71-routes.ts",
+      "sha256": "8cbd9fbf874030042b6f8abd69286bc2b7f5b65aa8e0c429b1b772a3e8a3e7bd"
+    },
+    {
+      "path": "apps/site-web/src/lib/m71-api.ts",
+      "sha256": "8ea72360915c1f00f9bb4e8c431cdbc618af39ea049eb485ed49c44e29520460"
+    },
+    {
+      "path": "apps/site-web/src/components/CorporateCoverageRegister.tsx",
+      "sha256": "52a0c474386aacf7be2b15e91204a2bd9e9b473cd3bce5da910ee508b10f2fd3"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "439a3752506ede32a32567c6c32958cfca3b91f63f18ab329c6772e8affbbae6"
+    },
+    {
+      "path": "apps/site-web/src/components/PrivateStaging.tsx",
+      "sha256": "f396519817fcac2fb94c003fb46ab06a4fa02130add170e4cac73dc8df4a9080"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "12ad620c7bfc37190ba0974b834494f7be3fef610a1161189802a8743efaa0da"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "194ff030bbdcaba6158d9f5424290096eedbd14f8c2bdc817ac5c6670b999295"
+    },
+    {
+      "path": "Dockerfile.staging.dockerignore",
+      "sha256": "795398b18c00d3c76414708c9a887e0ab629ae969a696d5c6a92bed4abddbdfa"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "56a5dcdcd6bb30e90b5178fef20505a91d21acc02eb2d70e1c435a50bddb6717"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-validation.test.ts",
+      "sha256": "a2dfa08104762d43c87f4a68170e21072d0748e54f74158350dda456b7557aae"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-native.test.ts",
+      "sha256": "ed813d926df348abbb54836e9ffaf5a2a6fc59933f93cdadc6de233503b12a71"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-frontend.test.ts",
+      "sha256": "78d64b479054249c9c8a2146fb626216163c5a613722fa873eafb3fb9f430e47"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-ui.test.ts",
+      "sha256": "63f286e36859d263d06fc49b61bb88a2a56c33bcddfc62447f9e760a4da91424"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-native-fixture.json",
+      "sha256": "9eeab43f839ab29e078e19d12ba88755bd7ea73e62761e5bf4f52ef2113043be"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-schema14-baseline.json",
+      "sha256": "73c3d6faf4a939c4d92a90b1b23390cd3361db10e424123945ad463cb4004043"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-recovery.ts",
+      "sha256": "4c9d0f54fe9e6d111c474db3c045e076c1ebdcac0ff219c8de658eed2dda3864"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-before-restore.json",
+      "sha256": "a937f4c53c09ebc768f8056fda8985a33ffd367f60ae12988a82c5f700f4234d"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-recovery-result.json",
+      "sha256": "77e82c552876421cfaf441262c5bb8d18d6a5a5c1ada0e8ce0ebd2a681d8c707"
+    },
+    {
+      "path": "evaluations/research-qa/m71-security-review.md",
+      "sha256": "7cba77a8ff7067810ef59631bb2d8fe076ceb500bfdc2a8ee2d2082b37e0859b"
+    },
+    {
+      "path": "evaluations/research-qa/m71-browser-before-restart.json",
+      "sha256": "259bcb8d66807acdaa7a572375d8b402bbbf1b0a3968894cb4c5a20571c1f0a2"
+    },
+    {
+      "path": "evaluations/research-qa/m71-browser-after-restart.json",
+      "sha256": "ae35fa21a5875374d9342d175601eab9df66fe54400bee6b5f955d68f60dadde"
+    },
+    {
+      "path": "evaluations/research-qa/m71-browser-390.png",
+      "sha256": "e19ce50e4e07f1ca9e765dea55204ae790d867bb50ef92b8cb1fe72682433e30"
+    },
+    {
+      "path": "evaluations/research-qa/m71-browser-history.png",
+      "sha256": "cc5e7def50e3b2bc96b329feb6b7ebde7be511c1cb8c1d1ef370904f95a68628"
+    },
+    {
+      "path": "evaluations/research-qa/m71-browser-history.txt",
+      "sha256": "bfe0447c2af69e29050fff3c9e25efc3d14fa1cb4cc31563a71b3f1303d5b11b"
+    },
+    {
+      "path": "docs/research/m71-operating-notes.md",
+      "sha256": "e18c85fc2c3fb55c0569ba2b370ad89d0cca85d19316bb139aea2a4d812e8d6a"
+    },
+    {
+      "path": "docs/research/corporate-coverage-milestone-71.md",
+      "sha256": "0b1cdb4a7ae3893057bf464e4649d2e81aee81f287d1b3ef9e8f4da0fc4eb3bb"
+    },
+    {
+      "path": "evaluations/research-qa/m71-browser-verification.md",
+      "sha256": "add34d452a877cb4de51861d109b39bf0f19d34740a47744d7c52a23e664ab02"
+    },
+    {
+      "path": "evaluations/research-qa/m71-qa-source-pin.test.ts",
+      "sha256": "b4ab0a532e4fff6d0911fbc12a826cf19f851c931ddb39bfebe094721c7f1dc5"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
+      "sha256": "89dd31db7843be17379fe4ba90fa43f4442f086299faa2baf29e7117f994ed20"
+    }
+  ]
+}

@@ -1,0 +1,2368 @@
+{
+  "coverageVersion": {
+    "id": "2c628150-0d30-49c0-acaa-61932abb6f28",
+    "review": null,
+    "version": 1,
+    "findings": [
+      {
+        "code": "methods_not_released",
+        "message": "No corporate calculation method is released; emissions remain unknown.",
+        "recordId": null
+      },
+      {
+        "code": "requirements_not_determined",
+        "message": "Corporate applicability and reporting requirements remain undetermined.",
+        "recordId": null
+      },
+      {
+        "code": "control_evidence_missing",
+        "message": "Control facts and supporting evidence are incomplete.",
+        "recordId": "71000000-0000-4000-8000-000000000010"
+      },
+      {
+        "code": "boundary_unreconciled",
+        "message": "Expected entity remains unreconciled.",
+        "recordId": "71000000-0000-4000-8000-000000000041"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000100"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000100"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000100"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000101"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000101"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000101"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000102"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000102"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000102"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000103"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000103"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000103"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000104"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000104"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000104"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000105"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000105"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000105"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000106"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000106"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000106"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000107"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000107"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000107"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000108"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000108"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000108"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000109"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000109"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000109"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000110"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000110"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000110"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000111"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000111"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000111"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000112"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000112"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000112"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000113"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000113"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000113"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000114"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000114"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000114"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000115"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000115"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000115"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000116"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000116"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000116"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000117"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000117"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000117"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000118"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000118"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000118"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000119"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000119"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000119"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000120"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000120"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000120"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000121"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000121"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000121"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000122"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000122"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000122"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000123"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000123"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000123"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000124"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000124"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000124"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000200"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000200"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000200"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "71000000-0000-4000-8000-000000000201"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "71000000-0000-4000-8000-000000000201"
+      },
+      {
+        "code": "method_unsupported",
+        "message": "This screening has no released calculation method.",
+        "recordId": "71000000-0000-4000-8000-000000000201"
+      },
+      {
+        "code": "requirement_unknown",
+        "message": "Missing facts/source review prevent a legal determination.",
+        "recordId": "71000000-0000-4000-8000-000000000300"
+      },
+      {
+        "code": "activity_unknown",
+        "message": "No activity quantity is recorded; unknown is not zero.",
+        "recordId": "fe2af621-fd09-4109-8e37-eeb24415fa2c"
+      },
+      {
+        "code": "evidence_incomplete",
+        "message": "Supporting evidence is missing, incomplete or conflicting.",
+        "recordId": "fe2af621-fd09-4109-8e37-eeb24415fa2c"
+      }
+    ],
+    "snapshot": {
+      "period": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "profile": "synthetic-corporate-coverage-v1",
+      "sources": [
+        {
+          "id": "02602c31-77eb-4528-9e0e-a066bc990251",
+          "name": "Recovery diesel vehicle",
+          "start": "2025-01-01",
+          "domain": "mobile_combustion",
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "facilityId": "71000000-0000-4000-8000-000000000020",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000030",
+          "name": "Purchased electricity",
+          "start": "2025-01-01",
+          "domain": "electricity",
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "facilityId": "71000000-0000-4000-8000-000000000020",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000031",
+          "name": "Purchased electricity",
+          "start": "2025-01-01",
+          "domain": "electricity",
+          "entityId": "71000000-0000-4000-8000-000000000002",
+          "facilityId": "71000000-0000-4000-8000-000000000021",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        }
+      ],
+      "entities": [
+        {
+          "id": "71000000-0000-4000-8000-000000000001",
+          "start": "2025-01-01",
+          "legalName": "Synthetic Juniper California parent",
+          "regionCode": "CA",
+          "countryCode": "US",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000002",
+          "start": "2025-01-01",
+          "legalName": "Synthetic Juniper California distribution",
+          "regionCode": "CA",
+          "countryCode": "US",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        }
+      ],
+      "facilities": [
+        {
+          "id": "71000000-0000-4000-8000-000000000020",
+          "name": "Synthetic California office",
+          "start": "2025-01-01",
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "regionCode": "CA",
+          "countryCode": "US",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000021",
+          "name": "Synthetic California distribution center",
+          "start": "2025-01-01",
+          "entityId": "71000000-0000-4000-8000-000000000002",
+          "regionCode": "CA",
+          "countryCode": "US",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        }
+      ],
+      "companyLabel": "M74 synthetic recovery fixture",
+      "requirements": [
+        {
+          "id": "71000000-0000-4000-8000-000000000300",
+          "reason": "Synthetic planning placeholder. No SB 253 applicability determination.",
+          "character": "statute",
+          "missingFacts": [
+            "jurisdiction_and_business_facts",
+            "qualified_source_review",
+            "revenue_basis"
+          ],
+          "applicability": "unknown",
+          "lastCheckedOn": null,
+          "sourceEdition": null,
+          "sourceLocator": null
+        }
+      ],
+      "coverageItems": [
+        {
+          "id": "71000000-0000-4000-8000-000000000100",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "stationary_combustion",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000101",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "mobile_combustion",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000102",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "process",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000103",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "fugitive",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000104",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "electricity",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000105",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "steam",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000106",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "heat",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000107",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "cooling",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000108",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "location_based",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000109",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "market_based",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000110",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_1",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000111",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_2",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000112",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_3",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000113",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_4",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000114",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_5",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000115",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_6",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000116",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_7",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000117",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_8",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000118",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_9",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000119",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_10",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000120",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_11",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000121",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_12",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000122",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_13",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000123",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_14",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000124",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "scope3_15",
+          "reason": null,
+          "entityId": null,
+          "quantity": null,
+          "sourceId": null,
+          "disposition": "unassessed",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "not_assessed"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000200",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "electricity",
+          "reason": null,
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "quantity": null,
+          "sourceId": "71000000-0000-4000-8000-000000000030",
+          "disposition": "missing",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "missing"
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000201",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "electricity",
+          "reason": null,
+          "entityId": "71000000-0000-4000-8000-000000000002",
+          "quantity": null,
+          "sourceId": "71000000-0000-4000-8000-000000000031",
+          "disposition": "missing",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "unsupported",
+          "activityDataState": "missing"
+        },
+        {
+          "id": "fe2af621-fd09-4109-8e37-eeb24415fa2c",
+          "unit": null,
+          "start": "2025-01-01",
+          "domain": "mobile_combustion",
+          "reason": null,
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "quantity": null,
+          "sourceId": "02602c31-77eb-4528-9e0e-a066bc990251",
+          "disposition": "missing",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "estimateBasis": null,
+          "evidenceState": "missing",
+          "methodReadiness": "candidate",
+          "activityDataState": "missing"
+        }
+      ],
+      "policyVersion": "synthetic-boundary-policy-v1",
+      "relationships": [
+        {
+          "id": "71000000-0000-4000-8000-000000000010",
+          "start": "2025-01-01",
+          "controlFacts": null,
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [],
+          "childEntityId": "71000000-0000-4000-8000-000000000002",
+          "parentEntityId": "71000000-0000-4000-8000-000000000001",
+          "ownershipPercent": "100"
+        }
+      ],
+      "boundaryDecisions": [
+        {
+          "id": "71000000-0000-4000-8000-000000000040",
+          "start": "2025-01-01",
+          "reason": "Synthetic full-year operational control",
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "disposition": "included_activity",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": [
+            {
+              "locator": "synthetic-register:entities-and-screening",
+              "purpose": "Synthetic recovery control evidence",
+              "artifactId": "71000000-0000-4000-8000-000000000900",
+              "expectedSha256": "4fe7dc12d8f253f8d3cb1fd7fba2eade05f3d605ad7cb95376cca9d957afe5c7"
+            }
+          ]
+        },
+        {
+          "id": "71000000-0000-4000-8000-000000000041",
+          "start": "2025-01-01",
+          "reason": null,
+          "entityId": "71000000-0000-4000-8000-000000000002",
+          "disposition": "missing",
+          "endExclusive": "2026-01-01",
+          "evidenceRefs": []
+        }
+      ],
+      "consolidationApproach": "operational_control"
+    },
+    "assurance": "none",
+    "companyId": "623b2b2b-7cf6-48ec-927e-87336d97e42a",
+    "createdAt": "2026-09-15T22:05:32.298Z",
+    "createdBy": "618eff7e-a93d-4228-9b9a-36b9f8386f7b",
+    "synthetic": true,
+    "inventoryId": "558b5d2a-abfb-487c-a1ed-f0f27e39b1b9",
+    "contentSha256": "fc1b957d735af11a0327d4f39ee6df18182cfa42022c55a7c3320dba2210d6bf",
+    "versionSha256": "598ed5b9c0545a10415b2ae32a5a38184f55b13ec7c406dc6eb268e5d6f3cbc5",
+    "contributorIds": [
+      "618eff7e-a93d-4228-9b9a-36b9f8386f7b"
+    ],
+    "emissionsTotals": null,
+    "releaseEligible": false,
+    "correctionReason": null,
+    "previousVersionId": null,
+    "corporateCompleteness": "incomplete",
+    "previousVersionSha256": null
+  },
+  "workpaperVersions": [
+    {
+      "id": "9b646c28-9d93-4a20-9e2a-eaab773162a3",
+      "review": null,
+      "version": 2,
+      "activity": {
+        "period": {
+          "start": "2025-01-01",
+          "endExclusive": "2026-01-01"
+        },
+        "binding": {
+          "entityId": "71000000-0000-4000-8000-000000000001",
+          "sourceId": "02602c31-77eb-4528-9e0e-a066bc990251",
+          "facilityId": "71000000-0000-4000-8000-000000000020",
+          "coverageVersionId": "2c628150-0d30-49c0-acaa-61932abb6f28",
+          "boundaryDecisionId": "71000000-0000-4000-8000-000000000040",
+          "coverageVersionSha256": "598ed5b9c0545a10415b2ae32a5a38184f55b13ec7c406dc6eb268e5d6f3cbc5"
+        },
+        "profile": "synthetic-mobile-diesel-v1",
+        "vehicle": {
+          "fuel": "Fossil Diesel",
+          "assetId": "OPS-TRUCK-001",
+          "modelYear": 2015,
+          "controlBasis": "owned_operational_control_full_year",
+          "vehicleClass": "Medium- and Heavy-Duty Vehicles",
+          "classificationBasis": "Synthetic registration of 2015 medium/heavy-duty vehicle."
+        },
+        "zeroReason": null,
+        "distanceMiles": "13000.500",
+        "fuelStatement": {
+          "issuer": "Synthetic recovery fuel system",
+          "reference": "OPS-FUEL-2025",
+          "description": "Synthetic consumed fuel for this dedicated vehicle.",
+          "consumptionBasis": "dedicated_vehicle_consumed_no_adjustments",
+          "statedQuantityGallons": "1000.125"
+        },
+        "quantityGallons": "1000.125",
+        "mileageStatement": {
+          "issuer": "Synthetic recovery mileage system",
+          "reference": "OPS-MILES-2025",
+          "description": "Synthetic full-year distance including interstate travel.",
+          "distanceBasis": "dedicated_vehicle_annual_distance",
+          "statedDistanceMiles": "13000.500"
+        },
+        "fuelDiscrepancyReason": null,
+        "fuelManualConfirmation": true,
+        "mileageDiscrepancyReason": null,
+        "mileageManualConfirmation": true
+      },
+      "findings": [
+        {
+          "code": "scope1_incomplete",
+          "message": "This vehicle mobile-combustion subtotal does not complete stationary, mobile, fugitive or process emissions."
+        },
+        {
+          "code": "method_not_released",
+          "message": "Factors and method are development candidates; no reporting or assurance determination."
+        }
+      ],
+      "assurance": "none",
+      "companyId": "623b2b2b-7cf6-48ec-927e-87336d97e42a",
+      "createdAt": "2026-09-15T22:05:32.757Z",
+      "createdBy": "618eff7e-a93d-4228-9b9a-36b9f8386f7b",
+      "synthetic": true,
+      "calculation": {
+        "input": {
+          "period": {
+            "start": "2025-01-01",
+            "endExclusive": "2026-01-01"
+          },
+          "binding": {
+            "entityId": "71000000-0000-4000-8000-000000000001",
+            "sourceId": "02602c31-77eb-4528-9e0e-a066bc990251",
+            "facilityId": "71000000-0000-4000-8000-000000000020",
+            "coverageVersionId": "2c628150-0d30-49c0-acaa-61932abb6f28",
+            "boundaryDecisionId": "71000000-0000-4000-8000-000000000040",
+            "coverageVersionSha256": "598ed5b9c0545a10415b2ae32a5a38184f55b13ec7c406dc6eb268e5d6f3cbc5"
+          },
+          "vehicle": {
+            "fuel": "Fossil Diesel",
+            "assetId": "OPS-TRUCK-001",
+            "modelYear": 2015,
+            "controlBasis": "owned_operational_control_full_year",
+            "vehicleClass": "Medium- and Heavy-Duty Vehicles",
+            "classificationBasis": "Synthetic registration of 2015 medium/heavy-duty vehicle."
+          },
+          "distanceUnit": "vehicle_mile",
+          "quantityUnit": "US_gallon",
+          "distanceMiles": "13000.500",
+          "quantityGallons": "1000.125",
+          "fuelStatementSha256": "e6c678edec31888e4eb967195ad5b1d7e77ec27191e0b9475c69e7f5a8bdcde3",
+          "mileageStatementSha256": "b3e735eea8d4775d66bc1b6cc994bac94f225de8b9e28cd0c7647ce44d5e178b"
+        },
+        "total": {
+          "unit": "kg CO2e",
+          "display": "10363.2196",
+          "rounding": "half_even_4dp",
+          "unrounded": "10363.21959375"
+        },
+        "method": {
+          "id": "mobile-diesel-combustion",
+          "ch4Gwp": "28",
+          "n2oGwp": "265",
+          "rights": "unresolved_for_factor_release",
+          "status": "development_candidate_not_released",
+          "version": "m74-development-v1",
+          "gwpCells": [
+            "E523:E526"
+          ],
+          "gwpSha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7",
+          "noteCells": [
+            "F3",
+            "F248:G248",
+            "C255:D256"
+          ],
+          "factorCells": [
+            "C103:E103",
+            "C107:E107",
+            "C255:G256"
+          ],
+          "sourceSheet": "Emission Factors Hub",
+          "sourceTitle": "EPA GHG Emission Factors Hub 2025",
+          "engineSha256": "1dc0bb7249d91e854004a8cadd34068be3fc03ecdd6e10b4cf297d375d7f52a6",
+          "factorSha256": "416931c40b347f1e22e9d4019ca1c28bd27ce40d7c16a3beeac3dadbbb783187",
+          "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+          "gwpAssessment": "IPCC AR5 100-year",
+          "co2KgPerGallon": "10.21",
+          "ch4GramsPerMile": "0.0095",
+          "n2oGramsPerMile": "0.0431",
+          "releaseEligible": false
+        },
+        "profile": "m74-decimal-result-v1",
+        "gasResults": {
+          "ch4": {
+            "co2e": "3.458133",
+            "mass": "0.12350475",
+            "co2eUnit": "kg CO2e",
+            "massUnit": "kg CH4"
+          },
+          "co2": {
+            "co2e": "10211.27625",
+            "mass": "10211.27625",
+            "co2eUnit": "kg CO2e",
+            "massUnit": "kg CO2"
+          },
+          "n2o": {
+            "co2e": "148.48521075",
+            "mass": "0.56032155",
+            "co2eUnit": "kg CO2e",
+            "massUnit": "kg N2O"
+          }
+        },
+        "inputSha256": "2c6e55946e932c44543e43908ceafe216a3184403aaac0427c1b69dbd5d2385a",
+        "resultSha256": "8458b8804e62986153ad671f56c73b5b2f8027131cb6e68e518d543ee5629225"
+      },
+      "inputSha256": "10ca8cca1df85f699a48b50e3e0ec90b02f5343a6ebdeac710b605c7ec7746d4",
+      "worksheetId": "bc53d942-34b5-484f-b130-c1d0225d1d9b",
+      "contentSha256": "79c299300aebb55e260fbf4660e9764992dc72dedb3bf4f85406f7aec164c3ec",
+      "fuelStatement": {
+        "id": "fbf40869-3d52-4457-855b-cb52f7781b04",
+        "text": "SYNTHETIC — NOT A FUEL RECEIPT OR INDEPENDENT MEASUREMENT\n{\"binding\":{\"boundaryDecisionId\":\"71000000-0000-4000-8000-000000000040\",\"coverageVersionId\":\"2c628150-0d30-49c0-acaa-61932abb6f28\",\"coverageVersionSha256\":\"598ed5b9c0545a10415b2ae32a5a38184f55b13ec7c406dc6eb268e5d6f3cbc5\",\"entityId\":\"71000000-0000-4000-8000-000000000001\",\"facilityId\":\"71000000-0000-4000-8000-000000000020\",\"sourceId\":\"02602c31-77eb-4528-9e0e-a066bc990251\"},\"companyLabel\":\"M74 synthetic recovery fixture\",\"entityLabel\":\"Synthetic Juniper California parent\",\"facilityLabel\":\"Synthetic California office\",\"fuelComposition\":\"fossil_diesel_only\",\"period\":{\"endExclusive\":\"2026-01-01\",\"start\":\"2025-01-01\"},\"profile\":\"m74-synthetic-fuel-statement-v1\",\"quantityUnit\":\"US_gallon\",\"sourceLabel\":\"Recovery diesel vehicle\",\"statement\":{\"consumptionBasis\":\"dedicated_vehicle_consumed_no_adjustments\",\"description\":\"Synthetic consumed fuel for this dedicated vehicle.\",\"issuer\":\"Synthetic recovery fuel system\",\"reference\":\"OPS-FUEL-2025\",\"statedQuantityGallons\":\"1000.125\"},\"vehicle\":{\"assetId\":\"OPS-TRUCK-001\",\"classificationBasis\":\"Synthetic registration of 2015 medium/heavy-duty vehicle.\",\"controlBasis\":\"owned_operational_control_full_year\",\"fuel\":\"Fossil Diesel\",\"modelYear\":2015,\"vehicleClass\":\"Medium- and Heavy-Duty Vehicles\"}}\n",
+        "input": {
+          "issuer": "Synthetic recovery fuel system",
+          "reference": "OPS-FUEL-2025",
+          "description": "Synthetic consumed fuel for this dedicated vehicle.",
+          "consumptionBasis": "dedicated_vehicle_consumed_no_adjustments",
+          "statedQuantityGallons": "1000.125"
+        },
+        "sha256": "e6c678edec31888e4eb967195ad5b1d7e77ec27191e0b9475c69e7f5a8bdcde3",
+        "locator": "m74-fuel-statement:fbf40869-3d52-4457-855b-cb52f7781b04:annual-activity",
+        "profile": "m74-synthetic-fuel-statement-v1",
+        "byteLength": 1304
+      },
+      "versionSha256": "68b1b2826d50fb003321601e14424f11c70f81319a544f467c86f7500d102df8",
+      "activityStatus": {
+        "fuel": "entered",
+        "mileage": "entered"
+      },
+      "contributorIds": [
+        "618eff7e-a93d-4228-9b9a-36b9f8386f7b"
+      ],
+      "coverageVersion": {
+        "id": "2c628150-0d30-49c0-acaa-61932abb6f28",
+        "review": null,
+        "version": 1,
+        "findings": [
+          {
+            "code": "methods_not_released",
+            "message": "No corporate calculation method is released; emissions remain unknown.",
+            "recordId": null
+          },
+          {
+            "code": "requirements_not_determined",
+            "message": "Corporate applicability and reporting requirements remain undetermined.",
+            "recordId": null
+          },
+          {
+            "code": "control_evidence_missing",
+            "message": "Control facts and supporting evidence are incomplete.",
+            "recordId": "71000000-0000-4000-8000-000000000010"
+          },
+          {
+            "code": "boundary_unreconciled",
+            "message": "Expected entity remains unreconciled.",
+            "recordId": "71000000-0000-4000-8000-000000000041"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000100"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000100"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000100"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000101"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000101"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000101"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000102"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000102"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000102"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000103"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000103"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000103"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000104"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000104"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000104"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000105"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000105"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000105"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000106"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000106"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000106"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000107"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000107"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000107"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000108"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000108"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000108"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000109"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000109"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000109"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000110"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000110"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000110"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000111"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000111"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000111"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000112"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000112"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000112"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000113"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000113"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000113"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000114"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000114"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000114"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000115"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000115"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000115"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000116"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000116"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000116"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000117"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000117"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000117"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000118"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000118"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000118"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000119"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000119"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000119"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000120"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000120"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000120"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000121"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000121"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000121"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000122"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000122"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000122"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000123"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000123"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000123"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000124"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000124"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000124"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000200"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000200"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000200"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "71000000-0000-4000-8000-000000000201"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "71000000-0000-4000-8000-000000000201"
+          },
+          {
+            "code": "method_unsupported",
+            "message": "This screening has no released calculation method.",
+            "recordId": "71000000-0000-4000-8000-000000000201"
+          },
+          {
+            "code": "requirement_unknown",
+            "message": "Missing facts/source review prevent a legal determination.",
+            "recordId": "71000000-0000-4000-8000-000000000300"
+          },
+          {
+            "code": "activity_unknown",
+            "message": "No activity quantity is recorded; unknown is not zero.",
+            "recordId": "fe2af621-fd09-4109-8e37-eeb24415fa2c"
+          },
+          {
+            "code": "evidence_incomplete",
+            "message": "Supporting evidence is missing, incomplete or conflicting.",
+            "recordId": "fe2af621-fd09-4109-8e37-eeb24415fa2c"
+          }
+        ],
+        "snapshot": {
+          "period": {
+            "start": "2025-01-01",
+            "endExclusive": "2026-01-01"
+          },
+          "profile": "synthetic-corporate-coverage-v1",
+          "sources": [
+            {
+              "id": "02602c31-77eb-4528-9e0e-a066bc990251",
+              "name": "Recovery diesel vehicle",
+              "start": "2025-01-01",
+              "domain": "mobile_combustion",
+              "entityId": "71000000-0000-4000-8000-000000000001",
+              "facilityId": "71000000-0000-4000-8000-000000000020",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000030",
+              "name": "Purchased electricity",
+              "start": "2025-01-01",
+              "domain": "electricity",
+              "entityId": "71000000-0000-4000-8000-000000000001",
+              "facilityId": "71000000-0000-4000-8000-000000000020",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000031",
+              "name": "Purchased electricity",
+              "start": "2025-01-01",
+              "domain": "electricity",
+              "entityId": "71000000-0000-4000-8000-000000000002",
+              "facilityId": "71000000-0000-4000-8000-000000000021",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            }
+          ],
+          "entities": [
+            {
+              "id": "71000000-0000-4000-8000-000000000001",
+              "start": "2025-01-01",
+              "legalName": "Synthetic Juniper California parent",
+              "regionCode": "CA",
+              "countryCode": "US",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000002",
+              "start": "2025-01-01",
+              "legalName": "Synthetic Juniper California distribution",
+              "regionCode": "CA",
+              "countryCode": "US",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            }
+          ],
+          "facilities": [
+            {
+              "id": "71000000-0000-4000-8000-000000000020",
+              "name": "Synthetic California office",
+              "start": "2025-01-01",
+              "entityId": "71000000-0000-4000-8000-000000000001",
+              "regionCode": "CA",
+              "countryCode": "US",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000021",
+              "name": "Synthetic California distribution center",
+              "start": "2025-01-01",
+              "entityId": "71000000-0000-4000-8000-000000000002",
+              "regionCode": "CA",
+              "countryCode": "US",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            }
+          ],
+          "companyLabel": "M74 synthetic recovery fixture",
+          "requirements": [
+            {
+              "id": "71000000-0000-4000-8000-000000000300",
+              "reason": "Synthetic planning placeholder. No SB 253 applicability determination.",
+              "character": "statute",
+              "missingFacts": [
+                "jurisdiction_and_business_facts",
+                "qualified_source_review",
+                "revenue_basis"
+              ],
+              "applicability": "unknown",
+              "lastCheckedOn": null,
+              "sourceEdition": null,
+              "sourceLocator": null
+            }
+          ],
+          "coverageItems": [
+            {
+              "id": "71000000-0000-4000-8000-000000000100",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "stationary_combustion",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000101",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "mobile_combustion",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000102",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "process",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000103",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "fugitive",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000104",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "electricity",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000105",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "steam",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000106",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "heat",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000107",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "cooling",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000108",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "location_based",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000109",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "market_based",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000110",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_1",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000111",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_2",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000112",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_3",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000113",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_4",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000114",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_5",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000115",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_6",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000116",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_7",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000117",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_8",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000118",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_9",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000119",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_10",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000120",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_11",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000121",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_12",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000122",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_13",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000123",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_14",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000124",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "scope3_15",
+              "reason": null,
+              "entityId": null,
+              "quantity": null,
+              "sourceId": null,
+              "disposition": "unassessed",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "not_assessed"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000200",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "electricity",
+              "reason": null,
+              "entityId": "71000000-0000-4000-8000-000000000001",
+              "quantity": null,
+              "sourceId": "71000000-0000-4000-8000-000000000030",
+              "disposition": "missing",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "missing"
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000201",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "electricity",
+              "reason": null,
+              "entityId": "71000000-0000-4000-8000-000000000002",
+              "quantity": null,
+              "sourceId": "71000000-0000-4000-8000-000000000031",
+              "disposition": "missing",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "unsupported",
+              "activityDataState": "missing"
+            },
+            {
+              "id": "fe2af621-fd09-4109-8e37-eeb24415fa2c",
+              "unit": null,
+              "start": "2025-01-01",
+              "domain": "mobile_combustion",
+              "reason": null,
+              "entityId": "71000000-0000-4000-8000-000000000001",
+              "quantity": null,
+              "sourceId": "02602c31-77eb-4528-9e0e-a066bc990251",
+              "disposition": "missing",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "estimateBasis": null,
+              "evidenceState": "missing",
+              "methodReadiness": "candidate",
+              "activityDataState": "missing"
+            }
+          ],
+          "policyVersion": "synthetic-boundary-policy-v1",
+          "relationships": [
+            {
+              "id": "71000000-0000-4000-8000-000000000010",
+              "start": "2025-01-01",
+              "controlFacts": null,
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [],
+              "childEntityId": "71000000-0000-4000-8000-000000000002",
+              "parentEntityId": "71000000-0000-4000-8000-000000000001",
+              "ownershipPercent": "100"
+            }
+          ],
+          "boundaryDecisions": [
+            {
+              "id": "71000000-0000-4000-8000-000000000040",
+              "start": "2025-01-01",
+              "reason": "Synthetic full-year operational control",
+              "entityId": "71000000-0000-4000-8000-000000000001",
+              "disposition": "included_activity",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": [
+                {
+                  "locator": "synthetic-register:entities-and-screening",
+                  "purpose": "Synthetic recovery control evidence",
+                  "artifactId": "71000000-0000-4000-8000-000000000900",
+                  "expectedSha256": "4fe7dc12d8f253f8d3cb1fd7fba2eade05f3d605ad7cb95376cca9d957afe5c7"
+                }
+              ]
+            },
+            {
+              "id": "71000000-0000-4000-8000-000000000041",
+              "start": "2025-01-01",
+              "reason": null,
+              "entityId": "71000000-0000-4000-8000-000000000002",
+              "disposition": "missing",
+              "endExclusive": "2026-01-01",
+              "evidenceRefs": []
+            }
+          ],
+          "consolidationApproach": "operational_control"
+        },
+        "assurance": "none",
+        "companyId": "623b2b2b-7cf6-48ec-927e-87336d97e42a",
+        "createdAt": "2026-09-15T22:05:32.298Z",
+        "createdBy": "618eff7e-a93d-4228-9b9a-36b9f8386f7b",
+        "synthetic": true,
+        "inventoryId": "558b5d2a-abfb-487c-a1ed-f0f27e39b1b9",
+        "contentSha256": "fc1b957d735af11a0327d4f39ee6df18182cfa42022c55a7c3320dba2210d6bf",
+        "versionSha256": "598ed5b9c0545a10415b2ae32a5a38184f55b13ec7c406dc6eb268e5d6f3cbc5",
+        "contributorIds": [
+          "618eff7e-a93d-4228-9b9a-36b9f8386f7b"
+        ],
+        "emissionsTotals": null,
+        "releaseEligible": false,
+        "correctionReason": null,
+        "previousVersionId": null,
+        "corporateCompleteness": "incomplete",
+        "previousVersionSha256": null
+      },
+      "releaseEligible": false,
+      "correctionReason": "Synthetic recovered mileage correction",
+      "mileageStatement": {
+        "id": "1952f074-213d-44c5-83a7-46f6fd214e96",
+        "text": "SYNTHETIC — NOT AN ODOMETER RECORD OR INDEPENDENT MEASUREMENT\n{\"binding\":{\"boundaryDecisionId\":\"71000000-0000-4000-8000-000000000040\",\"coverageVersionId\":\"2c628150-0d30-49c0-acaa-61932abb6f28\",\"coverageVersionSha256\":\"598ed5b9c0545a10415b2ae32a5a38184f55b13ec7c406dc6eb268e5d6f3cbc5\",\"entityId\":\"71000000-0000-4000-8000-000000000001\",\"facilityId\":\"71000000-0000-4000-8000-000000000020\",\"sourceId\":\"02602c31-77eb-4528-9e0e-a066bc990251\"},\"companyLabel\":\"M74 synthetic recovery fixture\",\"distanceUnit\":\"vehicle_mile\",\"entityLabel\":\"Synthetic Juniper California parent\",\"facilityLabel\":\"Synthetic California office\",\"period\":{\"endExclusive\":\"2026-01-01\",\"start\":\"2025-01-01\"},\"profile\":\"m74-synthetic-mileage-statement-v1\",\"sourceLabel\":\"Recovery diesel vehicle\",\"statement\":{\"description\":\"Synthetic full-year distance including interstate travel.\",\"distanceBasis\":\"dedicated_vehicle_annual_distance\",\"issuer\":\"Synthetic recovery mileage system\",\"reference\":\"OPS-MILES-2025\",\"statedDistanceMiles\":\"13000.500\"},\"tripCoverage\":\"all_trip_locations_including_interstate\",\"vehicle\":{\"assetId\":\"OPS-TRUCK-001\",\"classificationBasis\":\"Synthetic registration of 2015 medium/heavy-duty vehicle.\",\"controlBasis\":\"owned_operational_control_full_year\",\"fuel\":\"Fossil Diesel\",\"modelYear\":2015,\"vehicleClass\":\"Medium- and Heavy-Duty Vehicles\"}}\n",
+        "input": {
+          "issuer": "Synthetic recovery mileage system",
+          "reference": "OPS-MILES-2025",
+          "description": "Synthetic full-year distance including interstate travel.",
+          "distanceBasis": "dedicated_vehicle_annual_distance",
+          "statedDistanceMiles": "13000.500"
+        },
+        "sha256": "b3e735eea8d4775d66bc1b6cc994bac94f225de8b9e28cd0c7647ce44d5e178b",
+        "locator": "m74-mileage-statement:1952f074-213d-44c5-83a7-46f6fd214e96:annual-activity",
+        "profile": "m74-synthetic-mileage-statement-v1",
+        "byteLength": 1330
+      },
+      "previousVersionId": "46117a45-b31a-43e2-b02d-3e5faec62f60",
+      "scope1Completeness": "incomplete",
+      "corporateCompleteness": "incomplete",
+      "previousVersionSha256": "6d4e42dffe160c62ff31abbf5cb4a828468a93fe6f19973c1770873531786064"
+    }
+  ]
+}

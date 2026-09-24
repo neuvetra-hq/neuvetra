@@ -1,0 +1,81 @@
+{
+  "base": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+  "files": [
+    {
+      "path": "operations/agent-improvement/model-performance-reviews.json",
+      "sha256": "aa0490883a429af3d95c76c20b58121aed1d39320919a0fcd813acef72083964"
+    },
+    {
+      "path": "operations/agent-improvement/openrouter-build-pilot-authorization.json",
+      "sha256": "47b531e3107d3b9b10c86882dbd0d88fd75187aeabbc781200cb1ceafa9a9929"
+    },
+    {
+      "path": "operations/agent-improvement/OPS-PILOT-01-A-review.md",
+      "sha256": "b222995e159b1dc6aa88e70d8ca5898d7fbeb253c5bb3f4a49551eb2582678f6"
+    },
+    {
+      "path": "operations/agent-improvement/build-feature-registry.json",
+      "sha256": "f734a2f9d3c70175ecf6c9af416006a875ccf0522bb65f3309b66442580198ab"
+    },
+    {
+      "path": "operations/agent-improvement/build-feature-events-v1.jsonl",
+      "sha256": "d222e6bdd418b9311bd5c60a665ca626ab0d45ff2fdb3200715741c1ad5bfd81"
+    },
+    {
+      "path": "operations/agent-improvement/build-usage-events.jsonl",
+      "sha256": "38106fcaed904adaaf1afb6277dd4591a2f4af6d03271621ad983381f8f8c300"
+    },
+    {
+      "path": "operations/agent-improvement/build-scorecard.json",
+      "sha256": "12be4b8d5b985892534fce05397fb7ebe73590ef88e43d357508a3e6f9b748df"
+    },
+    {
+      "path": "operations/agent-improvement/build-scorecard.md",
+      "sha256": "87a863efb88a1138963a769a677cdce3d8e924cd47e811d1e90ff3d4d5923365"
+    },
+    {
+      "path": "operations/agent-improvement/build-operations-continuation.md",
+      "sha256": "80f9ef21d5b1a2d3bb666bb734161eb0479d1e0e72093662fa2e6119b198c9f5"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-ledger.jsonl",
+      "sha256": "1a253d4e68b8cb186e405aa899b1fd2a40d608bce51567aebcbf795aa3d38378"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A.json",
+      "sha256": "1f2981738361ec98c03cd5c651b4387bcf311e626800fb1dc80f5b2426732c62"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A-summary.json",
+      "sha256": "0896dc176d9d87aa79fbe321a1a386f9670121b47ab099f36c9828c58fc03c4f"
+    },
+    {
+      "path": "operations/agent-improvement/integration-manifest-2026-09-24.json",
+      "sha256": "d321cae0fb54d0bf18145e41199b7c31d7b81e43a3a022400f1b0c818aeb8de5"
+    },
+    {
+      "path": ".github/workflows/agent-ops.yml",
+      "sha256": "de9a02d9d06a556fd4a5fb9af0ea61eec21e2616d5a558685b2e4b27cbd67a4e"
+    },
+    {
+      "path": "operations/next-session.md",
+      "sha256": "ee0b4c07b0442f0148a6cb711d1e278e8ee69184dc904545dc0f2b49d8f1997e"
+    },
+    {
+      "path": "operations/board-report.md",
+      "sha256": "913968926a9624b1248cfe8c02273137a74a8e755e7fd12162dcba02f1f280e7"
+    },
+    {
+      "path": "operations/status.json",
+      "sha256": "02eef5c37dc5d65b8bf29634edcae80a6dd4d5b7f72d03a6299012690f0cf2e7"
+    },
+    {
+      "path": "evaluations/research-qa/m78-sept24-published-closure.json",
+      "sha256": "ab8e78195c3a57de2977dbb2e34e584d1c1a5e8e8db2cea7484a2eac355e9c66"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "031d60af294985bb241a0560d8324ff9d2cf8a01d5bf9aa553a662f90b94b8e0"
+    }
+  ]
+}

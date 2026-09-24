@@ -1,0 +1,2155 @@
+{
+  "status": "m78_get_route_local_comparison_passed",
+  "createdAt": "2026-09-23T01:13:42.860Z",
+  "admissionSha256": "517718573822d0010056361844960c124f2fd6f2cf51537cf504e4da61d237c0",
+  "historicalSourceInventorySha256": "e1d0cd97046e21b308894d5f8757f8fc1fa580550e3ec700aa7ab0e1519bbb92",
+  "sourcesVerifiedBeforeAndAfter": true,
+  "historicalSources": 173,
+  "extraPins": [
+    {
+      "path": ".superpowers/m78-get-route-comparative.ts",
+      "sha256": "7da53e0014fc6f499b8341c03246388244b608e76f2da10742f56808d34b0fbc"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-get-perf-probe.ts",
+      "sha256": "8ffb4f7470e9b139201001b80b7a14f629f7d56a5f67187044e54dfb7492eb17"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m78-get-route-baseline-fixture.ts",
+      "sha256": "8ebe51aec86d8e5990a6f8391bb8e823c7cd661d2d7369e3b35909ef74722de3"
+    },
+    {
+      "path": "evaluations/research-qa/m78-get-route-independent-result.json",
+      "sha256": "00a054d0dee57117a0b689ccfb6c62550286870ad6819d1f0308686061796e6a"
+    },
+    {
+      "path": "evaluations/research-qa/m78-get-guard-independent-result.json",
+      "sha256": "c61f9fded47337615d33941cacb05d20a0d096ae93e2a73fc1e996ca5d2765b8"
+    },
+    {
+      "path": "evaluations/research-qa/m78-get-root-comparative-review-result.json",
+      "sha256": "cad16a6ae5f87a0c2fbafd9f5670bb3ad6e79eea2e71fc9e0bcffc2299e06d16"
+    },
+    {
+      "path": "evaluations/research-qa/m78-get-guard-root-audit-result.json",
+      "sha256": "b4dad23ad8f4b46f67fa77d2c0c8b245bd00d80c99e74efdcc32b45175521807"
+    }
+  ],
+  "beforeRouteSha256": "ab5018c64668dfe197755849aee1a2b3c5947f6c3da21e8d18869e998f3f9e01",
+  "afterRouteSha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+  "database": "m78_ops_continuation_20260922",
+  "companyId": "8b90c706-1710-494d-b12d-02eef88eacb7",
+  "reportId": "de6bc76f-9fbf-461a-8e2d-b5f8d6097a86",
+  "versionId": "146977ae-a4ac-4985-8158-aa6c581d71d2",
+  "hostCalls": 0,
+  "applicationWrites": 0,
+  "httpPostRequests": 0,
+  "tableDigestsBefore": {
+    "tableCount": 121,
+    "sha256": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64"
+  },
+  "tableDigestsAfter": {
+    "tableCount": 121,
+    "sha256": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64"
+  },
+  "digestScope": "121 neuvetra base-table row sets; no sequence/settings/external-effect claim",
+  "warmupsPerCase": 1,
+  "measuredSamplesPerCase": 3,
+  "cases": [
+    {
+      "operation": "direct_register",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 405.8863999999985,
+          "totalMs": 1924.2069999999999,
+          "bytes": 4804258,
+          "bodySha256": "ed373e1cc06a51748f09f4bb99dbbbaee9e77257b98fea02328035b67adc256c",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 427.8188,
+          "totalMs": 1961.4252999999999,
+          "bytes": 4804258,
+          "bodySha256": "ed373e1cc06a51748f09f4bb99dbbbaee9e77257b98fea02328035b67adc256c",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 445.1694000000043,
+          "totalMs": 1979.5265999999992,
+          "bytes": 4804258,
+          "bodySha256": "ed373e1cc06a51748f09f4bb99dbbbaee9e77257b98fea02328035b67adc256c",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 424.95270000000346,
+          "totalMs": 1948.2839999999997,
+          "bytes": 4804258,
+          "bodySha256": "ed373e1cc06a51748f09f4bb99dbbbaee9e77257b98fea02328035b67adc256c",
+          "status": null,
+          "headers": []
+        }
+      ],
+      "medianMs": 1961.4252999999999,
+      "maxMs": 1979.5265999999992
+    },
+    {
+      "operation": "direct_version",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 443.72879999999714,
+          "totalMs": 2024.8907,
+          "bytes": 1659910,
+          "bodySha256": "1f57ada9e7cadf8cef523db15afd05ff06fb504058ad5795a79f4581b135ddac",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 424.62479999998504,
+          "totalMs": 1983.4442,
+          "bytes": 1659910,
+          "bodySha256": "1f57ada9e7cadf8cef523db15afd05ff06fb504058ad5795a79f4581b135ddac",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 460.7473999999911,
+          "totalMs": 1884.3480999999992,
+          "bytes": 1659910,
+          "bodySha256": "1f57ada9e7cadf8cef523db15afd05ff06fb504058ad5795a79f4581b135ddac",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 420.7170000000151,
+          "totalMs": 1887.4455000000016,
+          "bytes": 1659910,
+          "bodySha256": "1f57ada9e7cadf8cef523db15afd05ff06fb504058ad5795a79f4581b135ddac",
+          "status": null,
+          "headers": []
+        }
+      ],
+      "medianMs": 1887.4455000000016,
+      "maxMs": 1983.4442
+    },
+    {
+      "operation": "direct_report",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 408.33449999998993,
+          "totalMs": 1982.9380999999994,
+          "bytes": 4449183,
+          "bodySha256": "c776006724d1503e7f30cf8e4b0101ec1fd465cebac51ab4906c100695478446",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 498.597899999997,
+          "totalMs": 2035.5828000000001,
+          "bytes": 4449183,
+          "bodySha256": "c776006724d1503e7f30cf8e4b0101ec1fd465cebac51ab4906c100695478446",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 420.8961999999992,
+          "totalMs": 1889.8575999999994,
+          "bytes": 4449183,
+          "bodySha256": "c776006724d1503e7f30cf8e4b0101ec1fd465cebac51ab4906c100695478446",
+          "status": null,
+          "headers": []
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 1,
+          "sqlQueries": 42,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 435.2506000000103,
+          "totalMs": 1869.8729000000021,
+          "bytes": 4449183,
+          "bodySha256": "c776006724d1503e7f30cf8e4b0101ec1fd465cebac51ab4906c100695478446",
+          "status": null,
+          "headers": []
+        }
+      ],
+      "medianMs": 1889.8575999999994,
+      "maxMs": 2035.5828000000001
+    },
+    {
+      "operation": "before_register",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 402.14980000000287,
+          "totalMs": 1827.6201,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 402.633499999989,
+          "totalMs": 1918.2589000000007,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 422.8440000000119,
+          "totalMs": 1866.8634999999995,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 415.758499999989,
+          "totalMs": 1855.3657999999996,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1866.8634999999995,
+      "maxMs": 1918.2589000000007
+    },
+    {
+      "operation": "before_version",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 886.7527999999729,
+          "totalMs": 3713.9567000000025,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 859.1848999999784,
+          "totalMs": 3734.136400000003,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 891.3828000000358,
+          "totalMs": 3804.9925000000003,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 852.6216000000422,
+          "totalMs": 3827.971700000002,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3804.9925000000003,
+      "maxMs": 3827.971700000002
+    },
+    {
+      "operation": "before_version_export",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 837.3668000000253,
+          "totalMs": 3777.9986999999965,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 819.5801999999894,
+          "totalMs": 3645.2249999999985,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 859.068699999938,
+          "totalMs": 3703.5988999999972,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 851.0181999999841,
+          "totalMs": 3709.2333999999973,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3703.5988999999972,
+      "maxMs": 3709.2333999999973
+    },
+    {
+      "operation": "before_version_proof",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 819.866399999999,
+          "totalMs": 3683.140599999999,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 835.8969000000361,
+          "totalMs": 3688.5985999999975,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 870.4608999999764,
+          "totalMs": 3776.8062999999966,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 847.012799999924,
+          "totalMs": 3700.5041000000056,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3700.5041000000056,
+      "maxMs": 3776.8062999999966
+    },
+    {
+      "operation": "before_report",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 848.0294000000722,
+          "totalMs": 3666.700100000002,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 880.4823000000033,
+          "totalMs": 3809.2139000000025,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 816.1102999999566,
+          "totalMs": 3609.8768999999884,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 791.4740000001038,
+          "totalMs": 3601.50940000001,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3609.8768999999884,
+      "maxMs": 3809.2139000000025
+    },
+    {
+      "operation": "before_report_download",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 807.1520000000019,
+          "totalMs": 3644.892000000007,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 871.982600000003,
+          "totalMs": 3820.858300000007,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 817.9467999999761,
+          "totalMs": 3677.6682,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 821.7059000000008,
+          "totalMs": 3773.1565999999875,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3773.1565999999875,
+      "maxMs": 3820.858300000007
+    },
+    {
+      "operation": "before_report_snapshot",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 823.4423999999854,
+          "totalMs": 3613.0316999999923,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 825.0673000000534,
+          "totalMs": 3642.9976999999926,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 808.1339999999473,
+          "totalMs": 3662.91810000001,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 850.013100000011,
+          "totalMs": 3658.5715999999957,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3658.5715999999957,
+      "maxMs": 3662.91810000001
+    },
+    {
+      "operation": "before_report_proof",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 807.1003999999084,
+          "totalMs": 3731.0715999999957,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 826.1122000000032,
+          "totalMs": 3730.285300000003,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 825.0376000000833,
+          "totalMs": 3748.2918999999965,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 3,
+          "sqlQueries": 86,
+          "stateReads": 2,
+          "corporateReads": 20,
+          "sqlMs": 812.9132999998401,
+          "totalMs": 3762.6693999999843,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 3748.2918999999965,
+      "maxMs": 3762.6693999999843
+    },
+    {
+      "operation": "after_register",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 446.84050000002026,
+          "totalMs": 1882.8439000000071,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 413.5983000000706,
+          "totalMs": 1882.2168999999994,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 398.8951999999699,
+          "totalMs": 1847.3001999999979,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 393.2383999999147,
+          "totalMs": 1909.626499999984,
+          "bytes": 4804258,
+          "bodySha256": "a36432ab33f6afe9d1dd452bc9023ed33befda7641f410e9d2f55c28f371584e",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1882.2168999999994,
+      "maxMs": 1909.626499999984
+    },
+    {
+      "operation": "after_version",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 409.54410000002827,
+          "totalMs": 1841.0982000000076,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 431.10510000004433,
+          "totalMs": 1870.4060999999929,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 406.4832000002207,
+          "totalMs": 1868.3738999999769,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 411.01089999990654,
+          "totalMs": 1896.8870999999926,
+          "bytes": 1659910,
+          "bodySha256": "651f86a94504c82612b52a39d13f8c80b3d7888ea2fa47910cb4d189d26d6c4b",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1870.4060999999929,
+      "maxMs": 1896.8870999999926
+    },
+    {
+      "operation": "after_version_export",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 415.00970000002417,
+          "totalMs": 1770.453999999998,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 403.0867000000435,
+          "totalMs": 1835.6752999999735,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 425.02330000002985,
+          "totalMs": 1859.3536000000022,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 461.65850000004866,
+          "totalMs": 1876.1800999999978,
+          "bytes": 98072,
+          "bodySha256": "1a73d43327ad61d73831d042fe54008fefa3094274d889d2f320d94f8f4775b8",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-version.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1859.3536000000022,
+      "maxMs": 1876.1800999999978
+    },
+    {
+      "operation": "after_version_proof",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 408.04049999976996,
+          "totalMs": 1843.4355000000214,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 432.7479999999923,
+          "totalMs": 1878.0204000000085,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 418.1347999999416,
+          "totalMs": 1834.2098000000115,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 412.6695999999356,
+          "totalMs": 1825.5625999999756,
+          "bytes": 1554393,
+          "bodySha256": "adc686fc6cedfba33593263cb88eb6fa91b28111307d00e15e89629f12c65b2d",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1834.2098000000115,
+      "maxMs": 1878.0204000000085
+    },
+    {
+      "operation": "after_report",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 401.6544999999751,
+          "totalMs": 1802.5206999999937,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 421.88710000005085,
+          "totalMs": 1861.032200000016,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 428.4846999999136,
+          "totalMs": 1854.1899000000267,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 413.52290000003995,
+          "totalMs": 1821.964399999997,
+          "bytes": 4449183,
+          "bodySha256": "528b64f95007bfccaa95b9201690dfb70d4e406a68b488de20f17df0a0b81dc9",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1854.1899000000267,
+      "maxMs": 1861.032200000016
+    },
+    {
+      "operation": "after_report_download",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 417.2084999999788,
+          "totalMs": 1921.6761000000115,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 437.97849999999744,
+          "totalMs": 1804.9716999999946,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 436.9604999998701,
+          "totalMs": 1891.899000000005,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 416.3383000000322,
+          "totalMs": 1895.0708999999915,
+          "bytes": 2573401,
+          "bodySha256": "261feea43419c96bd9c1da15507e83a7a282425f1b2adeab0b21b42a894a248a",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report.html\""
+            ],
+            [
+              "content-security-policy",
+              "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-modals"
+            ],
+            [
+              "content-type",
+              "text/html; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1891.899000000005,
+      "maxMs": 1895.0708999999915
+    },
+    {
+      "operation": "after_report_snapshot",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 420.0877999999211,
+          "totalMs": 1871.2341000000015,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 441.00110000016866,
+          "totalMs": 1836.493599999987,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 422.8533999999345,
+          "totalMs": 1834.8875999999873,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 421.39280000005965,
+          "totalMs": 1834.9328000000096,
+          "bytes": 1715593,
+          "bodySha256": "091c6985423c7f936d4524d404b030cc712c315e8ea4f3445a942808f5b7a546",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-disposition",
+              "attachment; filename=\"synthetic-scope1-report-snapshot.json\""
+            ],
+            [
+              "content-type",
+              "application/json; charset=utf-8"
+            ],
+            [
+              "referrer-policy",
+              "no-referrer"
+            ],
+            [
+              "x-content-type-options",
+              "nosniff"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1834.9328000000096,
+      "maxMs": 1836.493599999987
+    },
+    {
+      "operation": "after_report_proof",
+      "samples": [
+        {
+          "phase": "warmup",
+          "sample": 0,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 420.174100000062,
+          "totalMs": 1894.8460999999952,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 1,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 433.3938999999955,
+          "totalMs": 1963.8295999999973,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 2,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 408.12649999995483,
+          "totalMs": 1899.388100000011,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        },
+        {
+          "phase": "measured",
+          "sample": 3,
+          "transactions": 2,
+          "sqlQueries": 44,
+          "stateReads": 1,
+          "corporateReads": 10,
+          "sqlMs": 424.2500000001164,
+          "totalMs": 1900.3726000000024,
+          "bytes": 1554393,
+          "bodySha256": "815ee5aad5d3936e2a731ad4019127379aa26233b03d1da9057f4496653973be",
+          "status": 200,
+          "headers": [
+            [
+              "cache-control",
+              "no-store"
+            ],
+            [
+              "content-type",
+              "application/json;charset=utf-8"
+            ]
+          ]
+        }
+      ],
+      "medianMs": 1900.3726000000024,
+      "maxMs": 1963.8295999999973
+    }
+  ],
+  "noHostedTimingOrSlaClaim": true,
+  "localConnectionsClosed": true
+}

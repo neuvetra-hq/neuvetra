@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-LIFECYCLE-REVIEW-PREP-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE4.json",
+      "sha256": "440fa15695a713a41999619624e9f2c76879c74fed56758255a93d441f77f89a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXERCISE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-independent-review.ts",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.test.ts"
+      ],
+      "reason": "Exact accepted baseline prefix and diagnostics, ordered37 recipe identities, decoded totals/history/reports and retained artifacts are required."
+    },
+    {
+      "id": "FULL",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-independent-review.ts",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.test.ts"
+      ],
+      "reason": "Full admission additionally requires a restart observed within15minutes and a separately pinned independently decoded revisit observation."
+    },
+    {
+      "id": "DIAGNOSTICS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts",
+        "evaluations/research-qa/m78-continuation4-lifecycle-qa-review.test.ts"
+      ],
+      "reason": "Positive exercise/full fixtures and rehashed mutations exercise phase binding, methods, routes, statuses, auth counts, parent metadata and main-request counts."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m78_transport_probe",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair-result.json",
+      "evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE4.json",
+        "sha256": "440fa15695a713a41999619624e9f2c76879c74fed56758255a93d441f77f89a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 3,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Candidates1 and2 failed initial review; candidate3 passed exact review before a later supplemental identity-swap mutation exposed an operation-to-result binding gap. All prior snapshots and receipts remain preserved.",
+    "Candidate4 binds every named operation to its exact route and typed decoded current record identity and passed the narrow independent repair review. Actual continuation4 exercise and full lifecycle remain unaccepted."
+  ]
+}

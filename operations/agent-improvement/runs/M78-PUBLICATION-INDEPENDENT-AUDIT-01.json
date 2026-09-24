@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "M78-PUBLICATION-INDEPENDENT-AUDIT-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_cont3_review",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PUBLICATION-INDEPENDENT-AUDIT-01.json",
+      "sha256": "a56511c8cacb635a2d631ead78fa90eec8777884d9eb8cda58eb52dd78cab479"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_BYTE_REPRESENTATION_REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-publication-independent-audit.md",
+        "evaluations/research-qa/m78-publication-independent-byte-review.py",
+        "operations/agent-improvement/snapshots/M78-PUBLICATION-BYTE-REPRESENTATION-SUPPLEMENT-01.json"
+      ],
+      "reason": "Ten exact original byte/hash matches, six immutable historical snapshot pins, only CRLF representation repaired; PUB-BYTES-01 preserved."
+    },
+    {
+      "id": "PORTABLE_LOCATORS_AND_PRIVACY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-publication-independent-audit.md",
+        "operations/agent-improvement/snapshots/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01-CANDIDATE1.json"
+      ],
+      "reason": "Known private criterion locator repaired; no additional gap or secret/customer data finding in bounded audit."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-publication-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-PUBLICATION-INDEPENDENT-AUDIT-01.json",
+        "sha256": "a56511c8cacb635a2d631ead78fa90eec8777884d9eb8cda58eb52dd78cab479"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-publication-independent-audit.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-publication-independent-audit.md",
+      "sha256": "2c34c9b880b958e5f34160a653b1fd43dfc8987b72acc0c7ce0522f2cf53f454"
+    },
+    {
+      "path": "evaluations/research-qa/m78-publication-independent-byte-review.py",
+      "sha256": "0fa5185051805d4450cb6bcde4a4b3194b4797af3df13385511e279271a77677"
+    }
+  ],
+  "notes": [
+    "Reused reviewer context; prior requested QA Astra/high, observed inherited model/effort unknown. Root acceptance of these new reviewer artifacts pending. Initial failure PUB-BYTES-01 and one repair cycle preserved. Representation-only source acceptance; no hosted/publication outcome inferred."
+  ]
+}

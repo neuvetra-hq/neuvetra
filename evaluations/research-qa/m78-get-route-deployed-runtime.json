@@ -1,0 +1,23 @@
+{
+  "status": "m78_get_route_deployed_runtime_verified",
+  "observedAt": "2026-09-23T02:15:43.923786+00:00",
+  "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+  "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+  "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+  "deploymentStatus": "SUCCESS",
+  "httpStatus": 200,
+  "ready": {
+    "status": "ready",
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 21,
+    "legacyContainmentVerified": true
+  },
+  "autodeploy": false,
+  "admissionSha256": "b03e410d65008e50c3c7d075a9ca5b652c971368f0b90e32289ad5a6e285f720",
+  "requestIntentSha256": "3adbfdef613abe8575a6f8ee44ac27f5aac7a1df3e8664afb251205218b503ac",
+  "deploymentCollectionSha256": "615e799293830dbac853af065fea9e7d6134128b800f97609ea156cbf9670180",
+  "deploymentCollectionPath": ".superpowers/m78-get-route-deployment-collection.json",
+  "recoveryExecuted": false,
+  "restartExecuted": false,
+  "revisitExecuted": false
+}

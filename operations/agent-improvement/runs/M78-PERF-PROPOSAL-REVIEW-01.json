@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "M78-PERF-PROPOSAL-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PERF-PROPOSAL-REVIEW-01-CANDIDATE1.json",
+      "sha256": "5ec062b3896a3099fca777b264b700a2636062a855ecd841009c38e41b14c611"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SUPPORTED-WRITER-LOCK-PATHS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-timeout-repair-proposal-review.md",
+        "operations/agent-improvement/snapshots/M78-PERF-PROPOSAL-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "All20 upstream native mutators share company serialization; bounded implementation admitted, actual concurrent QA mandatory."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-timeout-preparation-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-PERF-PROPOSAL-REVIEW-01-CANDIDATE1.json",
+        "sha256": "5ec062b3896a3099fca777b264b700a2636062a855ecd841009c38e41b14c611"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-timeout-repair-proposal-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false
+}

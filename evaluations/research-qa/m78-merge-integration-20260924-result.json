@@ -1,0 +1,52 @@
+{
+  "status": "pass",
+  "manifest_files": 19,
+  "native_snapshot_entries": 8,
+  "preserved_original_events": 16,
+  "active_events": 37,
+  "settled_unique_calls": 6,
+  "provider_reported_usd": "0.0631382848",
+  "scorecard_reproduced": true,
+  "m78_public_receipt_chain": "pass",
+  "scope": "Exact local integration and dated public receipts only; no provider actions or fresh remote checks.",
+  "task_id": "M78-MERGE-INTEGRATION-QA-20260924",
+  "reviewer": "/root/merge_integration_qa",
+  "independent": true,
+  "authored_candidate": false,
+  "observed_at": "2026-09-24T16:49:37.283184+00:00",
+  "candidate_manifest_sha256": "10b800f6463f5077ae5a192b69be06c5c4164e2709705723a54fbc161f995ca7",
+  "material_findings_open": 0,
+  "tests": {
+    "feature_metrics": 20,
+    "build_model_pilot": 10,
+    "agent_ops": 18
+  },
+  "agent_records_validated": 225,
+  "incoming_source_allowlist_count": 32,
+  "prior_remote_checks": {
+    "head": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+    "observed_at": "2026-09-24T16:42:58.931434+00:00",
+    "passed": 6,
+    "fresh_integrated_head_checks": "pending_root"
+  },
+  "qualification": "Neither candidate qualified for numerical, financial metrics or autonomous critical responsibilities; no default change.",
+  "customer_scope1_complete": false,
+  "publication_gate": "Root must verify staged/committed bytes and all six required checks on exact new head before merge.",
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    }
+  },
+  "actions": {
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "credential_reads": 0,
+    "git_actions": 0,
+    "application_writes": 0
+  }
+}

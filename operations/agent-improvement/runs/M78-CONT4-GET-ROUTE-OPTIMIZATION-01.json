@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-GET-ROUTE-OPTIMIZATION-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "c012509b7711ed1c04bd01d05a4336188426d08446288aecc3bd04c785c4d049",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE1.json",
+      "sha256": "fe6287854647a1443cff58bc5873d266f7851900245fe34697134b7cd6048289"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE2.json",
+      "sha256": "300552a782137dd68141c8c9532e0bc45f1daf0380e8644e8a1ac89da74ebb59"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE3.json",
+      "sha256": "a785ad07bad789ffcbc8c81ff2ce884cf0da409490c57a7d9610554585e2f2e4"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json",
+      "sha256": "3667135c931f64e33fcb80f6548a46664c5b76cfa650e64d66b83ec7964c286d"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ONE_VALIDATED_SPECIFIC_GET",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json",
+        "apps/site-api/src/workspace/m78-routes.ts",
+        "apps/site-api/src/workspace/m78-get-route-optimization.test.ts",
+        "evaluations/research-qa/m78-continuation4-get-route-result.json"
+      ],
+      "reason": "Valid process and inventory version/report paths use exactly one fully verified specific getter and zero root reads; root register and statement paths remain unchanged."
+    },
+    {
+      "id": "EXACT_RESPONSE_EQUIVALENCE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json",
+        "apps/site-api/src/workspace/m78-get-route-baseline-fixture.ts",
+        "apps/site-api/src/workspace/m78-get-route-optimization.test.ts",
+        "evaluations/research-qa/m78-continuation4-get-route-result.json"
+      ],
+      "reason": "A portable fixture pins historical route bytes, and differential tests prove exact status, all headers and body bytes for version metadata/export/proof and report metadata/HTML/snapshot/proof in both families."
+    },
+    {
+      "id": "REFUSAL_AND_WRITE_PRESERVATION",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json",
+        "apps/site-api/src/workspace/m78-routes.ts",
+        "apps/site-api/src/workspace/m78-get-route-optimization.test.ts",
+        "evaluations/research-qa/m78-continuation4-get-route-report.md"
+      ],
+      "reason": "Awaited fallback preserves generic wrong-stream/cross-family versus specific missing errors and 403/503 mapping; exact requested id/company/stream/family, auth/staging/malformed/method and unchanged POST cases pass."
+    },
+    {
+      "id": "PREPARATION_ONLY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation4-get-route-result.json",
+        "evaluations/research-qa/m78-continuation4-get-route-report.md"
+      ],
+      "reason": "No native or hosted execution, timeout/retry, direct-row bypass, release admission or original173 mutation occurred. Comparative warmup plus three-sample native evidence and independent QA remain mandatory."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m78_transport_probe",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-source-root-acceptance.json",
+      "evaluations/research-qa/m78-get-route-independent-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE1.json",
+        "sha256": "fe6287854647a1443cff58bc5873d266f7851900245fe34697134b7cd6048289"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE2.json",
+        "sha256": "300552a782137dd68141c8c9532e0bc45f1daf0380e8644e8a1ac89da74ebb59"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE3.json",
+        "sha256": "a785ad07bad789ffcbc8c81ff2ce884cf0da409490c57a7d9610554585e2f2e4"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json",
+        "sha256": "3667135c931f64e33fcb80f6548a46664c5b76cfa650e64d66b83ec7964c286d"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 3,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Candidate1 preserved root review findings: unawaited fallback escaped response mapping, and wrong-family direct refusal changed generic cross-family semantics.",
+    "Candidate2 repaired those findings but omitted exact requested record-id equality; independent review found the gap before freeze. Candidate2 is preserved.",
+    "Candidate3 requires exact requested id/company/stream/family, awaits fallback inside try, and adds portable baseline differential and adversarial refusal tests. Combined portable tests:12 pass,3 existing native skips,157 assertions; targeted strict TypeScript passes.",
+    "No native database, hosted service, provider, credentials, application writes, Git mutation, official journal or shared ledger action occurred. The candidate is not admitted for release or recovery.",
+    "Candidate4 changes metadata only: it replaces the invented rounded result timestamp with the observed local clock at correction. Candidate3 source, baseline fixture and tests are byte-identical and were not rerun.",
+    "Root accepted the exact bounded source/review snapshot; see evaluations/research-qa/m78-get-source-root-acceptance.json. This closure does not accept native or hosted execution.",
+    "Review binding includes the preserved failed candidates as historical dispositions; only the final candidate is accepted for future use."
+  ]
+}

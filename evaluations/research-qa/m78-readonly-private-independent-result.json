@@ -1,0 +1,38 @@
+{
+  "status": "m78_readonly_private_independent_review_passed",
+  "reviewerId": "/root/m78_transport_continuation",
+  "createdAt": "2026-09-22T19:15:33.4113179-07:00",
+  "scope": "source_only_private_helper_interoperability",
+  "materialFindingsOpen": 0,
+  "files": [
+    {
+      "path": ".superpowers/m78-readonly-recovery-entry.ts",
+      "sha256": "d4a517b1afbf48f135e8caaa2287a7c3b5dd5cc9bb75917e8c935fe9fa53af32"
+    },
+    {
+      "path": ".superpowers/m78-private-readonly-recovery.ps1",
+      "sha256": "dba7f41da91c5b26872b8b12cb77c95ed31041bd129a6dfbc6896db62e41f130"
+    }
+  ],
+  "privateConfigSha256": "39a9a9ce6820ad75956ffadb1f23f80359d41c72b18f52674271c44e542d0f8a",
+  "firstReview": "fail",
+  "reworkCycles": 1,
+  "tests": {
+    "passed": 3,
+    "failed": 0,
+    "assertions": 15,
+    "strictTargetedTypeScript": "passed",
+    "powerShellAstParse": "passed"
+  },
+  "underlyingRunnerAuthorshipDisclosed": true,
+  "underlyingRunnerIndependentlyReviewedByRoot": true,
+  "helperExecuted": false,
+  "dpapiUsed": false,
+  "credentialAccesses": 0,
+  "networkCalls": 0,
+  "databaseCalls": 0,
+  "providerActions": 0,
+  "actualRecoveryAccepted": false,
+  "restartAuthorized": false,
+  "revisitAuthorized": false
+}

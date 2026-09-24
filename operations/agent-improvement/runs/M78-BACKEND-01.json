@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "id": "M78-BACKEND-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+      "sha256": "f871a5d932de71f51ec37b7a00de5b70e03448b2ba01e022f59606d12113029f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M78-BE-PROCESS",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-integrated-root-acceptance.md",
+        "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json"
+      ],
+      "reason": "Immutable process discovery with seven-gas scope, every retained entity/site/offsite evidence, permanent indicated IDs, current all-family dependencies, cumulative contributors and exact captured predecessor/proof reconstruction."
+    },
+    {
+      "id": "M78-BE-INVENTORY",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-integrated-root-acceptance.md",
+        "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json"
+      ],
+      "reason": "Gross compatible candidate gas/source/facility/entity/company exact decimal reconciliation, eligible-only known subtotal, unknown never zero, no reweight or offsets, physical/evidence duplicate blockers and retained incomplete/release flags."
+    },
+    {
+      "id": "M78-BE-TENANT-PROOF",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-integrated-root-acceptance.md",
+        "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json"
+      ],
+      "reason": "Actual authenticated API denials, forced RLS/runtime narrow helper and DML denial, self-review denial, direct SQL false-blocker-clear refusal, retained own null-review audit order and all dependency chronology."
+    },
+    {
+      "id": "M78-BE-NATIVE",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-integrated-root-acceptance.md",
+        "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json"
+      ],
+      "reason": "Native6pass600assertions157.39s: fresh-company blocked lifecycle, actual-shape ten-source processv3 correction through inventoryv2 independent acceptance/report, and separate valid unknown successor response-capacity54000/422 rollback preserving all121table rows and old register/report reads. Database/API/web typechecks passed. Independent revised546 final5native/175assertions cover corrected process3/inventory2/five-report replay and valid30Mhistory/10Mresponse typed422 atomic retention; scope remains fictional local native."
+    },
+    {
+      "id": "M78-BE-INDEPENDENT",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-integrated-root-acceptance.md",
+        "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json"
+      ],
+      "reason": "Independent /root/m76_backend final integrateda290 review and direct10file bundle UTF8/currenthash verification accepted bounded local native/security/semantic/capacity candidate546. Root ae271 acceptance separately coordinates that evidence. Hosted/providerAuth, React races/fullrecovery, production methods, customercomplete inventory and professional assurance excluded."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-integrated-review.md",
+      "evaluations/research-qa/m78-integrated-root-acceptance.md",
+      "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-BACKEND-01-FINAL546.json",
+        "sha256": "f871a5d932de71f51ec37b7a00de5b70e03448b2ba01e022f59606d12113029f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_exception": {
+    "reason": "Fresh registered model override unavailable due runtime thread limit; root authorized existing fallback.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L02",
+    "L07"
+  ],
+  "notes": [
+    "Requested critical Sol/high; inherited actual compute remains unknown after thread-limit fallback. No host, credentials, Git, shared ledger, old source/migration/M77 edits or subagents.",
+    "Accounting candidate2 independently accepted; runtime policy pins external exact review report5d5b04d7 and canonical policy83588037, releaseEligiblefalse.",
+    "Earlier author compile/lifecycle failures preserved in separate m78_author_* databases; prior passing draft receipt is not finalcandidate acceptance. Independent browser findings BR-F05/F06/F08 led to bounded nested captured processproof, dependency chronology and exact own ancestor lineage.",
+    "Final SQL21 SHA592821990b0016671a33d7ebc900799245993f59a970c8c06c577d1639d36016. Actual-clone localgross126850.17632025/display126850.1763 is restored fictional data, not an actual hosted M78 execution.",
+    "Targeted database/API/web typechecks passed. Later isolated pure empty-subtotal regression2pass1native-skip9assertions; the native lifecycle body and SQL remain unchanged from538-assertion finalreceipt. An accidental broad root typecheck observed existing deferred FrontDesk missing drizzle dependencies; targeted active-app checks passed.",
+    "Own source artifacts are frozen for independent review; final immutable reviewed snapshot and independent criterion/run closure remain pending root handoff. Upstream equal-ms null reviews use >= timestamp with exact immutable SQL capture; own review/report presence is additionally resolved by durable same-family audit order, with no nonportable xmin.",
+    "Independent INT-F01 first candidate failure preserved at .superpowers/m78_qa_ci_1789617770314-parity.json: five generic finding origins differed TS m78 versus SQL inventory, rejecting valid blocked inventory22023. Repaired only SQL m78_finding default family to m78 and added actual fresh-company negative lifecycle. Prior5928 receipt/source database remain unchanged. Independent confirmation pending; finding remains open in this record until reviewer verifies repair.",
+    "Repair freeze SQL21 raw/canonical LF b62c9645448848c57b358a9741168c0556bbcd6d205f9236b51ca47c147bca6a; new clone-only populated source m78_author_native_1789618445805 at55472. Native4pass565assertions87.21s; database/API/web typechecks passed. No host, Git or old fixture writes.",
+    "Independent INT-F01 repair confirmed with QA minimal99checks and positive23checks on b62; retained previous failed and accepted receipts. New RUI-F01 diagnosed exact postwrite6M register guard503/no retained-row writes at5,704,133 currentbytes versus7,451,720 candidatebytes. Prior UI source and all failedauthor clones/traces preserved.",
+    "Root explicitly authorized response10M/proof4M/history30M after20M blocked normal correction report. New SQL21 raw/canonical546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736, only m78_capacity20M to30M compared b62. Currentaccepted source m78_author_native_1789620106488 register7,465,988bytes; retainedversion/proof5,745,849 plusreport16,922,928 =22,668,777bytes. This bounded synthetic capacity is not general customer completeness.",
+    "Response-capacity valid successor refuses422/history_limit with54000/register_response and exact121table row/content hashes and old report/register preserved. PostgreSQL nextval is nontransactional; no sequence-state rollback claim, monotonic audit gaps are permitted and never backfilled. Independent RUI/capacity/operator revalidation remains pending.",
+    "Independent revised546 final reviewa290df accepted5native175assertions including actual30Mstorage growth22,668,777→27,190,779 then422/history_limit SQL54000; valid10Mresponse successors then54000/register_response with exactoldrows/downloads/readability and nullunknown totals. Reviewer directly verified all10 FINAL546 bundle embedded/current text SHA and approved that exact bundle within local native/security/semantic/capacity scope. INT-F01 and RUI-F01 narrowly closed; firstfail/rework2 preserved.",
+    "Accepted run artifact is exact final546 source snapshot; prior private author receipts/digests and independent report/rootacceptance/QA snapshot hashes remain under supporting_artifacts. Public criteria bind independently accepted reports and snapshots; preserved historical .superpowers receipts are not newly relabeled or required as publicCI files. No host/Git action."
+  ],
+  "source_artifacts": [
+    {
+      "path": "packages/neuvetra-database/src/m78-contract.ts",
+      "sha256": "f2e942511f1cfc91f65f32152c7efac566f4131c330d51e13b220a80482265ee"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-policy.ts",
+      "sha256": "f7448be6d753ad65b6724696973aec95b3e23623077706727f2227c1b1be2011"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-reconciliation.ts",
+      "sha256": "62647d67fc9587ff703f30fd8fefa4be3b7451eb27ba256d48376d0b8ffdca09"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-report.ts",
+      "sha256": "51c024f9ca5278b1069538e53dee4c02ea40b30bb29a0bade3a31ec1a2b433d3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-validation.ts",
+      "sha256": "264519ed13ceeccc81a08f771932ed3db5c9a4363db96e28b6571f30eaf39bd1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78.ts",
+      "sha256": "ff8fd60d6e108bd69eba5415b7db767b0817fe4a76a5a3673ff630a0f4ba9502"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql",
+      "sha256": "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m78-routes.ts",
+      "sha256": "60b7b47e8038e03ae567998b478e21470320147a0745cde4f430e21eb001ff81"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m78-postgres.test.ts",
+      "sha256": "1cc13b98b07d48f34a70ee3f4e63b1891b37d3125f5e6534c20206eefcb02387"
+    },
+    {
+      "path": "tools/staging/m78-backend-fixture.ts",
+      "sha256": "29e80cc5dafaff46682cb717496b856de0c4be59b1df4b35f508851abbc2a514"
+    }
+  ],
+  "supporting_artifacts": [
+    {
+      "path": ".superpowers/m78_author_native_1789617520395-result.json",
+      "sha256": "1b40bd77bdb795efbb3b10fca658211bb23e3033191dc27e59dd3f95dc259572"
+    },
+    {
+      "path": ".superpowers/m78_author_minimal_1789618440503-result.json",
+      "sha256": "e8a84aa8c15a69f55949fe00f1f16d40bf213c54440dac87cfb32f2bfa08324f"
+    },
+    {
+      "path": ".superpowers/m78_author_native_1789618445805-result.json",
+      "sha256": "3c8ba44a387fabf4a6294b04aa204359251ce836a3bac3f95d9673231db6f915"
+    },
+    {
+      "path": ".superpowers/m78_author_minimal_1789620083774-result.json",
+      "sha256": "4922eeaf25abe344517cac496d2c93aa437ea84b00cf61454c6517923d3f86d7"
+    },
+    {
+      "path": ".superpowers/m78_author_capacity_1789620088901-result.json",
+      "sha256": "b52f2286b06b49722ea097e84c49291a720e33d281659f006c176bea4b68da49"
+    },
+    {
+      "path": ".superpowers/m78_author_native_1789620106488-result.json",
+      "sha256": "e2cb73a1a3c80f4b2adb62d564ff8ab9eb02809444a5734794c3f64cb11732ae"
+    },
+    {
+      "path": ".superpowers/m78_author_native_1789620106488-capacity-measurements.json",
+      "sha256": "4f36beada73b250305de9c5cea9bb4e45c6c6eefb1d5bd3fb5fadef8cc20b6e8"
+    },
+    {
+      "path": "evaluations/research-qa/m78-integrated-review.md",
+      "sha256": "a290df79438d497d449e367c76ea831ca0930be7fe8020b62d8437d81f9e9b2d"
+    },
+    {
+      "path": "evaluations/research-qa/m78-integrated-root-acceptance.md",
+      "sha256": "ae271c953d297a57cbc3a330cd82fee38ffcadff0a0e0d589f4dd2b40af0f7a2"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json",
+      "sha256": "a264de31b06f684c4d2b8c80ba83963932cb4e929eab6388e834fc3390f5f5d9"
+    }
+  ]
+}

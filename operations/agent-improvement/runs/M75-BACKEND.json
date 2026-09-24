@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "id": "M75-BACKEND",
+  "role": "data-database",
+  "execution_context": "/root/m75_product",
+  "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M75-INTEGRATED-ACCEPTED2.json",
+      "sha256": "a595f053b072578058849b25a9fd4d111507e7d2175d30f185c722432ad0a690"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M75-PERSISTED-ROSTER-AND-NATIVE-RECONCILIATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m75-independent-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m74_accounting",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m75-independent-review.md",
+      "evaluations/research-qa/m75-integration-review.md",
+      "evaluations/research-qa/m75-final-review-addendum.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M75-INTEGRATED-ACCEPTED2.json",
+        "sha256": "a595f053b072578058849b25a9fd4d111507e7d2175d30f185c722432ad0a690"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh runtime limit already hit; historical m74_backend followup rejected agent-thread-limit. Reused completed m75_product author context; inherited actual compute unknown, requested critical registry route not enforced. Product/implementation author cannot serve as independent QA. One writer owns newM75package/SQL/API/fixture files; rootownsUIdecoder/sharedintegration/Git/host. L01-L04.",
+    "Scoped local artifact delivery accepted; historical failed QA findings preserved. This does not approve hosted migration or establish published milestone completion."
+  ],
+  "source_artifacts": [
+    {
+      "path": ".gitattributes",
+      "sha256": "4c455c91e76cbbe692ba32c042fb6ced4fd4e58224715e8942c399c2bf6cd0d5"
+    },
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "df76df29ab30f545b22bf6c01c18311f3943890a409ddd2e2c26a86434ee79a1"
+    },
+    {
+      "path": "Dockerfile.staging",
+      "sha256": "fc1ef9fc8c7bdfc3b374a6fd4805c83055cce3f4665dce416270064f96c18255"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "2a96c8bba058f76346ab31959581e70e7c6ee955fde15df32deb062957524b4d"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "92ccbbd5a819bc6d0beb0602939434e11cebcdc88f85ddbf906704a575c1a0bc"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m75-routes.ts",
+      "sha256": "69419e5f6ee397afe225c095ffdaecff3a927054fc1a98c2c5e57a620ae0351f"
+    },
+    {
+      "path": "apps/site-web/src/components/ControlledFleet.tsx",
+      "sha256": "17c9e8f9ba18bad37caefe651013381a49e4960001dbdcad5094850bc5e68312"
+    },
+    {
+      "path": "apps/site-web/src/components/FleetRosterEditor.tsx",
+      "sha256": "361b6ed97109c715b725056c692ed29de9c622d4ce711adecc0859e90fadb358"
+    },
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "bfffdd9cca04e608a5039e1f7b42e79d33c0ac5059111df76a5912b05bc0b45a"
+    },
+    {
+      "path": "apps/site-web/src/lib/m75-api.ts",
+      "sha256": "473c4f2170bcdd8f143ab616c876855eafc6ae8d7df1c82b0315f7de5423feab"
+    },
+    {
+      "path": "apps/site-web/src/lib/m75-form.ts",
+      "sha256": "7aa758ceac482d5234a735c80ae44c06e1a61fe0b4dabcb034933c9b3a9d75a2"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "b25f830d16acb58a775fe0ae24f307e5e661497a46ea1cf888f914d1a6013a07"
+    },
+    {
+      "path": "evaluations/research-qa/m75-integration.test.ts",
+      "sha256": "0666e442b6aa0e21d3793ced5f7a02e8e26f25a2a3be617cb1f1590c98c045b6"
+    },
+    {
+      "path": "evaluations/research-qa/m75-operators-author.md",
+      "sha256": "3ed5de0d730e1474a9893921a69e7ed7ee0b988b8856e0f68b7d900aa3ac4ee5"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "d7bb339583a74299e3f9dc70573fa9858c72267be4e1ea3fa2c7fd7f1ed1ae4e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "13474e760ba4a316d831e419eda8283015da9f16a1f4b917700de98791c4877f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "af2c08ae929fd4c01852d868b81ccfa385dc7f701ab4620e8b4efb1d938ddd44"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75-contract.ts",
+      "sha256": "9226821b1d4934c9f1a08c54d7884f6ed0558cfe8d123020cc708494be06cd1e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75-report.ts",
+      "sha256": "312b2093341e019f1c43d2bb6a3a4d03b3a6427fc78dddbfdc72a426e147d49e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75-validation.ts",
+      "sha256": "ebc8873b718ec0ea4f5cc18b70e8f2604aaf7237fccd9c07c1b736f16dd66fc1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75.ts",
+      "sha256": "541ce11c6dcdfcf5c753173f7d56f68c70ef08eb71981921b7dae09b9cd261e1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "sha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "b190269b6450ad7dc0da2767264e8271618356b7a5f8e69328c369d505d47693"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "b0ddd300c4546ba142007a359b77ccc0382e43b5c00ccb1dfeead23d3f35b615"
+    },
+    {
+      "path": "tools/staging/check-m75-hosted.test.ts",
+      "sha256": "32f949bd892ddf76f7a231a395a96259b08f2fcef45113f2ba7abd06d3c20f2f"
+    },
+    {
+      "path": "tools/staging/check-m75-hosted.ts",
+      "sha256": "ca5c54125e277973c969031ed435b7bb27eb11df16d46971fd8774f415427540"
+    },
+    {
+      "path": "tools/staging/m74-operators.test.ts",
+      "sha256": "3a3fd7126a4ec463da8aa1a3c1af94d3748ef47879bb9a41b930008d2a0f4cf8"
+    },
+    {
+      "path": "tools/staging/m75-apply.ts",
+      "sha256": "d531d1b4b85519c59e3588deb27aaac3a6d0e981b650f6704c4f80b5124b9525"
+    },
+    {
+      "path": "tools/staging/m75-backend-fixture.ts",
+      "sha256": "8f16168d1fd965da52c6e02da35796af6cb815a3512f6fada8145ed6ecfa5b43"
+    },
+    {
+      "path": "tools/staging/m75-backup.ts",
+      "sha256": "edc7e5e7fe24d8371a2c57fff7f6e87a974d48776f767faffa256025fcd7a5e6"
+    },
+    {
+      "path": "tools/staging/m75-common.ts",
+      "sha256": "0be630bb9c0c18e0e22175b629b6742fc03372147acf984065bc3026c8bbfe49"
+    },
+    {
+      "path": "tools/staging/m75-operator-native.test.ts",
+      "sha256": "c5595723beeda282f17078a46efbe476263715f1940c4b6105c51ecd7ccb82e3"
+    },
+    {
+      "path": "tools/staging/m75-operators.test.ts",
+      "sha256": "ff7c6c1c58c0bbed76660c6e1477365675d61197d6a121c31c245d04ff967a7b"
+    },
+    {
+      "path": "tools/staging/m75-recovery-manifest.ts",
+      "sha256": "09b7a87a0d25a12df933a3143fa52dba92930b736af5fb7a60abc35b5abbbec6"
+    },
+    {
+      "path": "tools/staging/m75-replay.ts",
+      "sha256": "81c87540cf5f8081e01eacb945c945cc8667a414c2cbe4f8ff9365fbf4fad64c"
+    },
+    {
+      "path": "tools/staging/m75-restore.ts",
+      "sha256": "50349b573cc8a6b1122cba7de70d3a94ba9f76ef5a5c2064d0066873448fb690"
+    },
+    {
+      "path": "tools/staging/m75-seal-backup.ps1",
+      "sha256": "fc038e9a547bfbadac1162fde0f5726d0ec17eb4b0c85927080e146792742f54"
+    },
+    {
+      "path": "tools/staging/m75-upgrade.ts",
+      "sha256": "f96650623314f9282573f3d6b8bb24ef9e948d43e8ab6cbaefe0b1e2902e32f8"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+import {test,expect} from 'bun:test'
+import {readFile} from 'node:fs/promises'
+import {m78ContinuationSourcePins,M78_CONTINUATION_EVIDENCE_PINS} from '../../tools/staging/m78-continuation-source-pins'
+const sha=(s:string|Uint8Array)=>new Bun.CryptoHasher('sha256').update(s).digest('hex')
+test('frozen root wrapper gates precede credential unseal and forwards actual restart pin',async()=>{
+ const s=await readFile('.superpowers/m78-private-continuation-journey.ps1','utf8');expect(sha(s)).toBe('b2fbeceb45ed127b1540ed95ff7c06ef729761e5a68fb4ec8ad9391b4b42a9c2');const unseal=s.indexOf('[Security.Cryptography.ProtectedData]::Unprotect');expect(unseal).toBeGreaterThan(0);
+ for(const guard of ['wrong admission','wrong recipe','wrong evidence','wrong runtime','stale runtime','duplicate source','missing source','reviewed closure mismatch','complete source closure changed','source gate mismatch','prior closure changed','missing original outcome evidence','actual restart required'])expect(s.indexOf(guard)).toBeGreaterThan(0),expect(s.indexOf(guard)).toBeLessThan(unseal);
+ expect(s).toContain("$age.TotalSeconds -lt 0 -or $age.TotalMinutes -gt 15");expect(s).toContain('-NotePropertyName restartAttestation -NotePropertyValue $admission.artifacts.restart');expect(s).toContain("'tools/staging/check-m78-continuation.ts'");expect(s).toContain('$start.RedirectStandardInput=$true');expect(s).toContain('$start.CreateNoWindow=$true');
+})
+test('reviewed 155-file closure and original outcome pins equal actual bytes',async()=>{
+ const raw=await readFile('evaluations/research-qa/m78-continuation-journey-preparation-final.json');expect(sha(raw)).toBe('77aec359e20091baf4b2ca530d7a73d1383a191147a7eca926de0f50226b861b');const review=JSON.parse(raw.toString());const current=await m78ContinuationSourcePins();expect(current).toHaveLength(155);expect(current).toEqual(review.sourcePins);expect(review.evidencePins).toEqual([...M78_CONTINUATION_EVIDENCE_PINS]);for(const pin of [...current,...review.evidencePins])expect(sha(await readFile(pin.path))).toBe(pin.sha256);
+})
+test('CI invokes both native challenge files with the exact supported baseline',async()=>{const s=await readFile('.github/workflows/verify.yml','utf8');expect(s).toContain('run: bun test evaluations/research-qa/m78-perf-concurrency.test.ts evaluations/research-qa/m78-perf-independent.test.ts');expect(s).toContain('M78_PERF_NATIVE_BASELINE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration')})
+
+test('omitted or replaced API, database and hosted pins differ from admitted collector before unseal',async()=>{const current=await m78ContinuationSourcePins(),exact=JSON.stringify(current);for(const path of ['apps/site-api/src/workspace/m78-routes.ts','packages/neuvetra-database/src/m78.ts','packages/neuvetra-database/src/hosted.ts']){expect(current.some(p=>p.path===path)).toBe(true);expect(JSON.stringify(current.filter(p=>p.path!==path))).not.toBe(exact);expect(JSON.stringify(current.map(p=>p.path===path?{...p,sha256:'0'.repeat(64)}:p))).not.toBe(exact)}})

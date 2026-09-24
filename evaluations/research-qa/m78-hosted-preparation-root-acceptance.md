@@ -1,0 +1,9 @@
+# Root acceptance of hosted preparation
+
+Root accepts the independent final hosted database review SHA717c273eba24d4ca739caebd17534aabd85303347fc84a8207068e7f11cd552f and102-file source map SHA4da9dbe29827c4a801251f4c0ba47dc4cb94f046eda376881034b46e654209fd, bound in candidate2 SHA d06b0e88893cf958be2ac8aad30463e145798c4f928adef656ab76f0d550e6b3. The new adapter remains unchanged; its four changed dependencies are covered by independent final native and metadata checks. Twelve pure tests/338 assertions pass. Root rechecked the separately reviewed private database wrapper SHA3743a8e56cb808a4d452251b21afa017cafc41e090984545c07c861729c95604 without executing it or opening credentials at acceptance.
+
+With the independently accepted local recovery, this admits the fixed-project read-only actual encrypted schema20 backup and fresh local restore. Root will verify current102 source bytes and wrapper hash immediately before execution. This does not accept a future archive as already recovered or permit an ungated hosted migration.
+
+Root also accepts the earlier independent recipe preparation report `m78-hosted-plan-review.md`, SHA60188fce2a8ed2e96437dc614183408c13eb439cd542c0cf349f8a0fecc9d6a4, for its five pure tests/34 assertions and static38-write scope only. Root authored that recipe and relies on the separate reviewer for its preparation challenge. No actual complete38-write lifecycle was established there. A fresh rehearsal on today's restored completed-M77 dataset is required before hosted migration, with independent review of its result.
+
+All source approvals are bounded preparation. Exact published head and required checks, current maintenance, real archive recovery, actual recipe rehearsal, runtime identity, sessions and final hosted verification remain separate gates. Methods and factors remain unreleased, Scope1 is incomplete for release, and external assurance remains independent professional work.

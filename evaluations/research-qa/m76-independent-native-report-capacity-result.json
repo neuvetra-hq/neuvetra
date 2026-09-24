@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "database": "m76_qa_reportcap_1789569923246",
+  "schema": {
+    "name": "0019_stationary_sources.sql",
+    "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+  },
+  "company": "abf939a0-3539-48e7-ad41-e22d1ca9f66a",
+  "versions": 15,
+  "reports": 28,
+  "capacityCode": "54001",
+  "events": [
+    "Successive actual reports stored with captured null and later separately reviewed states until count or aggregate byte boundary",
+    "Bounded refusal preserves every successful source/report and fails no hidden integrity check",
+    "Actual generator browser decoder accepts the complete retained report register"
+  ],
+  "limitations": [
+    "Exact forty-report count guard inspected in SQL, not necessarily dynamically reached because3.8MB bytebound can refuse earlier",
+    "New isolated synthetic company; author fixture used only for two-source-version setup; capacity assertions independently authored",
+    "Declaration-family history limit remains separately scoped"
+  ]
+}

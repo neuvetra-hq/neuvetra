@@ -1,0 +1,644 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M79-METHOD-SOURCE-INVENTORY-01",
+  "status": "preparation_candidate_not_independently_reviewed_not_released",
+  "preparedAt": "2026-09-22T09:50:34.8488619-07:00",
+  "role": "accounting-validation",
+  "executionContext": "/root/m79_inventory",
+  "promptSha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "compute": {
+    "requestedModel": "gpt-5.6-sol",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null
+  },
+  "scope": {
+    "reportingPeriod": {
+      "start": "2025-01-01",
+      "endExclusive": "2026-01-01"
+    },
+    "boundary": "US_CA_full_year_operational_control_synthetic_candidate",
+    "profileCount": 4,
+    "matrixRowCount": 12,
+    "includedProfiles": [
+      "stationary_natural_gas_hhv_mmbtu",
+      "controlled_on_road_fossil_diesel_medium_heavy_2007_2022",
+      "stationary_fossil_distillate_no2_emergency_generator_default_hhv",
+      "stable_serviced_fugitive_equipment"
+    ],
+    "excluded": [
+      "biomass_or_renewable_fuels",
+      "gasoline",
+      "propane_or_lpg",
+      "shared_meter_or_tank_allocation",
+      "non_road_mobile_equipment",
+      "unsupported_vehicle_classes_or_model_years",
+      "refrigerant_stock_retrofit_acquisition_installation_or_disposal_workflows",
+      "process_emissions_calculations",
+      "real_customer_or_legal_applicability_determination"
+    ],
+    "claimBoundary": "Inventory preparation only. It does not approve a source, method, rights position, production release, customer inventory, SB 253 compliance, filing readiness, or assurance."
+  },
+  "m78Dependency": {
+    "policyPath": "evaluations/calculation-specs/m78-candidate-policy.json",
+    "policyRawSha256": "0fe8cb9bfb48e7a8dd0b5b40d491918f57f33288da12daa9de1d9406080da6c4",
+    "policyCanonicalSha256": "22ce42a64147cca75c4fe8028a51a416d8232c72d167518f23dc31e28c989f0e",
+    "policyStatus": "proposed_accounting_candidate",
+    "releaseEligible": false,
+    "accountingFoundation": "internally_accepted_bounded_candidate",
+    "productionRelease": false,
+    "integrationDependency": "Bind only the exact independently accepted M78 release artifact after root closes the live lifecycle; no M79 product integration is authorized by this inventory."
+  },
+  "verificationBoundary": {
+    "historicalObservations": {
+      "path": "evaluations/calculation-specs/m78-source-observations.json",
+      "sha256": "4e3dcd2188a951a73a480a2d12b4f8b97a6e27fd32d1838c470f1a7252065eb0",
+      "status": "accepted_M78_candidate_evidence_not_production_release"
+    },
+    "freshLocalVerification": {
+      "observedAt": "2026-09-22T09:50:34.8488619-07:00",
+      "mode": "read_only_local_bytes_hash_xlsx_zip_xml_and_pdf_parse",
+      "remoteBytesReverified": false,
+      "finding": "All seven retained source files below were present and their fresh SHA-256 and byte lengths matched the inherited manifests. Selected workbook cells were freshly read from XLSX ZIP/XML; selected PDF pages were reopened with pypdf. This verifies retained-byte identity and locators only."
+    }
+  },
+  "retainedArtifacts": [
+    {
+      "artifactId": "epa_hub_2025_xlsx",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "GHG Emission Factors Hub 2025",
+      "edition": "Last Modified: January 15, 2025",
+      "editionLocator": "Emission Factors Hub!F3",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-factors-hub-2025.xlsx",
+      "bytes": 1014275,
+      "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+      "freshLocalStatus": "verified",
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    },
+    {
+      "artifactId": "epa_hub_2025_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Emission Factors for Greenhouse Gas Inventories",
+      "edition": "Last Modified: January 15, 2025",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-factors-hub-2025.pdf",
+      "bytes": 478277,
+      "sha256": "5d07c678fae6783623acb1e23faa4a7c46268ee6c5a0654c9e49c50de7caf924",
+      "freshLocalStatus": "verified_and_selected_pages_reopened",
+      "locators": [
+        "PDF page 1 Table 1 stationary combustion",
+        "PDF page 2 Table 2 mobile CO2",
+        "PDF page 3 Table 4 on-road diesel CH4/N2O",
+        "PDF page 5 Tables 11-12 GWP and mixtures"
+      ],
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    },
+    {
+      "artifactId": "epa_stationary_guidance_2023_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Direct Emissions from Stationary Combustion Sources",
+      "edition": "December 2023",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-stationary-emissions-2023.pdf",
+      "bytes": 632187,
+      "sha256": "9e9899f728932125543d85f97f71f11d4928580e7ca17ae9858f4c34d0a9c124",
+      "freshLocalStatus": "verified_and_selected_pages_reopened",
+      "locators": [
+        "printed pages 4-5 equations",
+        "printed pages 8-11 activity and heat basis",
+        "printed pages 12-16 completeness uncertainty documentation and QA"
+      ],
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    },
+    {
+      "artifactId": "epa_mobile_guidance_2023_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Direct Emissions from Mobile Combustion Sources",
+      "edition": "December 2023",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-mobile-emissions-2023.pdf",
+      "bytes": 600190,
+      "sha256": "f80e3400d2485d4e253211cfb69a923e16920d393da21f6991cbaed493804402",
+      "freshLocalStatus": "verified_and_selected_pages_reopened",
+      "locators": [
+        "printed pages 1-5 calculation approaches",
+        "printed pages 7-13 activity data factors uncertainty and QA"
+      ],
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    },
+    {
+      "artifactId": "epa_fugitive_guidance_2023_pdf",
+      "publisher": "U.S. Environmental Protection Agency",
+      "title": "Direct Fugitive Emissions from Refrigeration, Air Conditioning, Fire Suppression, and Industrial Gases",
+      "edition": "December 2023",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/epa-fugitive-emissions-2023.pdf",
+      "bytes": 525314,
+      "sha256": "fb3dd5c9677096094c2acef769c7fe2fb90def6feac403cf9c817f5810928d88",
+      "freshLocalStatus": "verified_and_selected_pages_reopened",
+      "locators": [
+        "printed page 3 method selection",
+        "printed page 8 Equation 6 and footnote 3",
+        "printed page 15 uncertainty"
+      ],
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    },
+    {
+      "artifactId": "ghg_protocol_required_gases_gwp_2013_pdf",
+      "publisher": "GHG Protocol",
+      "title": "Accounting and Reporting Standard Amendment: Required Greenhouse Gases in Inventories",
+      "edition": "February 2013 per inherited accounting contracts",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/ghg-required-gases-gwp-2013.pdf",
+      "bytes": 258571,
+      "sha256": "2bc8b42d4cb94d1f74ae477f3bfaf3eb7ab55f216f575050ebdd67c9447a3a7f",
+      "freshLocalStatus": "verified_and_printed_pages_1_2_reopened",
+      "locators": [
+        "printed pages 1-2: seven gas classes, IPCC 100-year GWP, single-assessment consistency and disclosure"
+      ],
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    },
+    {
+      "artifactId": "ghg_protocol_corporate_standard_pdf",
+      "publisher": "GHG Protocol",
+      "title": "The Greenhouse Gas Protocol: A Corporate Accounting and Reporting Standard, Revised Edition",
+      "edition": "Revised Edition retained bytes; catalog version/date unresolved",
+      "path": "C:/Users/nimab/Neuvetra/research-sources/2026-09-08/ghg-corporate-standard.pdf",
+      "bytes": 3680902,
+      "sha256": "cfcda4dd20a0b0936b30e5e5c7c635c26efdfa770d29c1004f549bf082c0fe3c",
+      "freshLocalStatus": "verified_and_selected_pages_reopened",
+      "locators": [
+        "printed pages 17-18 organizational boundary context",
+        "printed page 62 gross inventory separate from GHG trades"
+      ],
+      "catalogRuntimeEligible": false,
+      "catalogRuntimeApproval": "not_evaluated",
+      "catalogRightsReview": null
+    }
+  ],
+  "commonPolicy": {
+    "gwpAssessment": "IPCC AR5",
+    "gwpHorizonYears": 100,
+    "gwpSourceArtifactId": "epa_hub_2025_xlsx",
+    "gwpLocators": {
+      "basis": [
+        "Emission Factors Hub!C10",
+        "Emission Factors Hub!E523",
+        "Emission Factors Hub!C556"
+      ],
+      "CO2": "Emission Factors Hub!E524",
+      "CH4": "Emission Factors Hub!E525",
+      "N2O": "Emission Factors Hub!E526"
+    },
+    "gwpValues": {
+      "CO2": "1",
+      "CH4": "28",
+      "N2O": "265",
+      "HFC-134a": "1300",
+      "HFC-227ea": "3350",
+      "R-410A": "1924"
+    },
+    "massUnit": "kg_of_named_gas_or_blend",
+    "co2eUnit": "kg CO2e",
+    "rounding": "Preserve exact decimal intermediates; sum unrounded current source gas contributions; round each displayed source or rollup once to four decimal kg CO2e using round-half-to-even.",
+    "aggregation": "Gross only. No offsets, credits, removals, avoided emissions, negative activity, old versions, report rows, or linked fugitive release rows are added as emissions.",
+    "incompatiblePolicy": "No common CO2e total or subtotal; retain separately labeled gas or family values.",
+    "missingOrUnsupportedPolicy": "No complete total; show only compatible eligible known-source subtotal with named blockers.",
+    "supersession": "No effective-dated production release or supersession record exists. Any later release must be versioned, non-retroactive and preserve candidate calculations, decisions, reports and proof bytes."
+  },
+  "profiles": [
+    {
+      "profileId": "stationary_natural_gas_hhv_mmbtu",
+      "family": "natural_gas",
+      "methodIdentity": {
+        "id": "stationary-natural-gas-combustion",
+        "version": "m73-development-v1",
+        "methodSha256": "a596ea0d377f33ac34e1333852c313c855c2a18ac08006525a78bbfb7cce9898",
+        "engineSha256": "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14",
+        "dependencySha256": "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603",
+        "factorSha256": "80da7b01f57c852a1bca9a6f80a23636baef02091cd26880a7395c8331f5a20f",
+        "gwpSha256": "d87fb6c54a170e1dff70327bf475774febb3681a754cb8abec9c4c31efa3b908"
+      },
+      "activity": "Fossil Natural Gas consumed by one admitted stationary source, supplied as annual HHV MMBtu; no therm, scf, mass, volume or LHV conversion.",
+      "activityUnit": "MMBtu_HHV",
+      "heatBasis": {
+        "value": "HHV",
+        "locators": [
+          "Emission Factors Hub!D14",
+          "Emission Factors Hub!C94"
+        ]
+      },
+      "sourceArtifacts": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_stationary_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ],
+      "formula": "CO2=Q*53.06; CH4=Q*1.0/1000; N2O=Q*0.10/1000; total kg CO2e=Q*53.1145",
+      "estimateRule": "Default organizational combustion factors applied to customer-supplied consumed HHV energy. No conversion or automatic estimate of activity is admitted.",
+      "zeroRule": "Q=0 requires a nonempty no-consumption rationale and compatible zero-supporting evidence; missing, excluded and not-applicable remain distinct and blocking.",
+      "rows": [
+        {
+          "rowId": "natural_gas.co2",
+          "gas": "CO2",
+          "gasKind": "single_gas",
+          "factor": "53.06",
+          "factorUnit": "kg CO2/MMBtu HHV",
+          "factorLocator": "Emission Factors Hub!E38",
+          "fuelLocator": "Emission Factors Hub!C38",
+          "unitLocators": [
+            "Emission Factors Hub!E14",
+            "Emission Factors Hub!E36"
+          ],
+          "publishedPrecision": "2 decimal places",
+          "massConversion": "none",
+          "gwp": "1",
+          "gwpLocator": "Emission Factors Hub!E524"
+        },
+        {
+          "rowId": "natural_gas.ch4",
+          "gas": "CH4",
+          "gasKind": "single_gas",
+          "factor": "1.0",
+          "factorUnit": "g CH4/MMBtu HHV",
+          "factorLocator": "Emission Factors Hub!F38",
+          "fuelLocator": "Emission Factors Hub!C38",
+          "unitLocators": [
+            "Emission Factors Hub!F14",
+            "Emission Factors Hub!F36"
+          ],
+          "publishedPrecision": "1 decimal place; raw XML 1",
+          "massConversion": "divide grams by 1000 to kg CH4",
+          "gwp": "28",
+          "gwpLocator": "Emission Factors Hub!E525"
+        },
+        {
+          "rowId": "natural_gas.n2o",
+          "gas": "N2O",
+          "gasKind": "single_gas",
+          "factor": "0.10",
+          "factorUnit": "g N2O/MMBtu HHV",
+          "factorLocator": "Emission Factors Hub!G38",
+          "fuelLocator": "Emission Factors Hub!C38",
+          "unitLocators": [
+            "Emission Factors Hub!G14",
+            "Emission Factors Hub!G36"
+          ],
+          "publishedPrecision": "2 decimal places; raw XML 0.1",
+          "massConversion": "divide grams by 1000 to kg N2O",
+          "gwp": "265",
+          "gwpLocator": "Emission Factors Hub!E526"
+        }
+      ],
+      "disposition": {
+        "retainedSourceBytes": "freshly_verified",
+        "historicalInternalAccounting": "accepted_bounded_candidate",
+        "productionDomainApplicability": "unresolved_requires_qualified_review",
+        "intendedUseRights": "unresolved_requires_qualified_rights_review",
+        "productionRelease": "blocked_no_explicit_release_record",
+        "customerGate": "blocked_no_real_source_meter_fuel_period_boundary_or_activity_evidence"
+      }
+    },
+    {
+      "profileId": "controlled_on_road_fossil_diesel_medium_heavy_2007_2022",
+      "family": "mobile_diesel",
+      "methodIdentity": {
+        "id": "mobile-diesel-combustion",
+        "version": "m74-development-v1",
+        "methodSha256": "7598384902729e8a6708beb359e7564f500ad85c0d3ad38f094ee580a05c0497",
+        "engineSha256": "1dc0bb7249d91e854004a8cadd34068be3fc03ecdd6e10b4cf297d375d7f52a6",
+        "factorSha256": "416931c40b347f1e22e9d4019ca1c28bd27ce40d7c16a3beeac3dadbbb783187",
+        "gwpSha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7"
+      },
+      "activity": "100% fossil diesel consumed in one controlled on-road Medium- and Heavy-Duty Vehicle, model year 2007-2022, plus actual vehicle-miles for the same vehicle and year.",
+      "activityUnits": [
+        "US_gallon",
+        "vehicle_mile"
+      ],
+      "heatBasis": {
+        "value": "not_applicable_direct_volume_and_distance_factors",
+        "locators": []
+      },
+      "sourceArtifacts": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_mobile_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ],
+      "formula": "CO2=G*10.21; CH4=D*0.0095/1000; N2O=D*0.0431/1000; total kg CO2e=G*10.21+D*0.0116875",
+      "estimateRule": "No spend, fuel-economy, annualization or activity estimate is admitted; both consumed gallons and actual vehicle-miles are required.",
+      "zeroRule": "Both quantities zero require compatible evidence and an explicit no-operation/no-consumption reason; either mixed-zero case is refused by this profile.",
+      "rows": [
+        {
+          "rowId": "mobile_diesel.co2",
+          "gas": "CO2",
+          "gasKind": "single_gas",
+          "factor": "10.21",
+          "factorUnit": "kg CO2/US gallon",
+          "factorLocator": "Emission Factors Hub!D107",
+          "classificationLocators": [
+            "Emission Factors Hub!C103:E103",
+            "Emission Factors Hub!C107:E107"
+          ],
+          "publishedPrecision": "2 decimal places; raw XML 10.210000000000001",
+          "massConversion": "none",
+          "gwp": "1",
+          "gwpLocator": "Emission Factors Hub!E524"
+        },
+        {
+          "rowId": "mobile_diesel.ch4",
+          "gas": "CH4",
+          "gasKind": "single_gas",
+          "factor": "0.0095",
+          "factorUnit": "g CH4/vehicle-mile",
+          "factorLocator": "Emission Factors Hub!F256",
+          "classificationLocators": [
+            "Emission Factors Hub!C255:D256",
+            "Emission Factors Hub!E256",
+            "Emission Factors Hub!F248"
+          ],
+          "publishedPrecision": "4 decimal places; raw XML 9.4999999999999998E-3",
+          "massConversion": "divide grams by 1000 to kg CH4",
+          "gwp": "28",
+          "gwpLocator": "Emission Factors Hub!E525"
+        },
+        {
+          "rowId": "mobile_diesel.n2o",
+          "gas": "N2O",
+          "gasKind": "single_gas",
+          "factor": "0.0431",
+          "factorUnit": "g N2O/vehicle-mile",
+          "factorLocator": "Emission Factors Hub!G256",
+          "classificationLocators": [
+            "Emission Factors Hub!C255:D256",
+            "Emission Factors Hub!E256",
+            "Emission Factors Hub!G248"
+          ],
+          "publishedPrecision": "4 decimal places; raw XML 4.3099999999999999E-2",
+          "massConversion": "divide grams by 1000 to kg N2O",
+          "gwp": "265",
+          "gwpLocator": "Emission Factors Hub!E526"
+        }
+      ],
+      "disposition": {
+        "retainedSourceBytes": "freshly_verified",
+        "historicalInternalAccounting": "accepted_bounded_candidate",
+        "productionDomainApplicability": "unresolved_for_exact_class_model_year_fuel_geography_period_and_grouping",
+        "intendedUseRights": "unresolved_requires_qualified_rights_review",
+        "productionRelease": "blocked_no_explicit_release_record",
+        "customerGate": "blocked_no_real_vehicle_register_control_classification_fuel_odometer_telematics_or_consumption_evidence"
+      }
+    },
+    {
+      "profileId": "stationary_fossil_distillate_no2_emergency_generator_default_hhv",
+      "family": "stationary_diesel",
+      "methodIdentity": {
+        "id": "m76.stationary-distillate-no2.ca2025.ar5.default-hhv.v1",
+        "version": "m76-development-v1",
+        "methodSha256": "8924b6c99a7b2b1525f2f2ef641978bbdfc5c7116c40a9fc828e418e56a4a722",
+        "engineSha256": "60de93b901185527affd1eae73d400582cc9d041ecd13bb5668c9041374f6266",
+        "factorSha256": "7f2a655ff2fc3a214f8f076aeaf7acebc25a50f89801985f255157a3ab3a85d0",
+        "gwpSha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7"
+      },
+      "activity": "100% fossil Distillate Fuel Oil No. 2 consumed by one fixed stationary compression-ignition emergency generator, directly metered in U.S. gallons, when supplier-specific HHV and carbon data are unavailable.",
+      "activityUnit": "US_gallon",
+      "heatBasis": {
+        "value": "HHV_default",
+        "conversion": "0.138 MMBtu HHV/US gallon",
+        "conversionLocator": "Emission Factors Hub!D55",
+        "unitLocators": [
+          "Emission Factors Hub!D14",
+          "Emission Factors Hub!D47",
+          "Emission Factors Hub!C94"
+        ],
+        "publishedPrecision": "3 decimal places; raw XML 0.13800000000000001"
+      },
+      "sourceArtifacts": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_stationary_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ],
+      "formula": "H=G*0.138; CO2=H*73.96; CH4=H*3.0/1000; N2O=H*0.60/1000; total kg CO2e=G*10.240014",
+      "estimateRule": "The default HHV is an estimate and is admitted only when the retained fuel statement explicitly establishes that supplier-specific HHV and carbon content are unavailable. Do not mix this route with rounded per-gallon cells H55:J55.",
+      "zeroRule": "Zero requires an aligned zero statement and a no-consumption rationale covering test and maintenance runs; positive statement plus entered zero is refused.",
+      "rows": [
+        {
+          "rowId": "stationary_diesel.co2",
+          "gas": "CO2",
+          "gasKind": "single_gas",
+          "factor": "73.96",
+          "factorUnit": "kg CO2/MMBtu HHV",
+          "factorLocator": "Emission Factors Hub!E55",
+          "fuelLocator": "Emission Factors Hub!C55",
+          "unitLocator": "Emission Factors Hub!E47",
+          "publishedPrecision": "2 decimal places; raw XML 73.959999999999994",
+          "massConversion": "none after gallon-to-HHV conversion",
+          "gwp": "1",
+          "gwpLocator": "Emission Factors Hub!E524"
+        },
+        {
+          "rowId": "stationary_diesel.ch4",
+          "gas": "CH4",
+          "gasKind": "single_gas",
+          "factor": "3.0",
+          "factorUnit": "g CH4/MMBtu HHV",
+          "factorLocator": "Emission Factors Hub!F55",
+          "fuelLocator": "Emission Factors Hub!C55",
+          "unitLocator": "Emission Factors Hub!F47",
+          "publishedPrecision": "1 decimal place; raw XML 3",
+          "massConversion": "divide grams by 1000 to kg CH4 after gallon-to-HHV conversion",
+          "gwp": "28",
+          "gwpLocator": "Emission Factors Hub!E525"
+        },
+        {
+          "rowId": "stationary_diesel.n2o",
+          "gas": "N2O",
+          "gasKind": "single_gas",
+          "factor": "0.60",
+          "factorUnit": "g N2O/MMBtu HHV",
+          "factorLocator": "Emission Factors Hub!G55",
+          "fuelLocator": "Emission Factors Hub!C55",
+          "unitLocator": "Emission Factors Hub!G47",
+          "publishedPrecision": "2 decimal places; raw XML 0.6",
+          "massConversion": "divide grams by 1000 to kg N2O after gallon-to-HHV conversion",
+          "gwp": "265",
+          "gwpLocator": "Emission Factors Hub!E526"
+        }
+      ],
+      "disposition": {
+        "retainedSourceBytes": "freshly_verified",
+        "historicalInternalAccounting": "accepted_bounded_candidate",
+        "productionDomainApplicability": "unresolved_for_exact_generator_fuel_direct_meter_and_default_factor_eligibility",
+        "intendedUseRights": "unresolved_requires_qualified_rights_review",
+        "productionRelease": "blocked_no_explicit_release_record",
+        "customerGate": "blocked_no_real_equipment_fuel_grade_direct_meter_consumption_period_hhv_or_carbon_availability_evidence"
+      }
+    },
+    {
+      "profileId": "stable_serviced_fugitive_equipment",
+      "family": "fugitive",
+      "methodIdentity": {
+        "id": "m77-stable-serviced-equipment-2025-candidate-v1",
+        "version": null,
+        "methodSha256": "acbfed90deaf7c164fe889b87732a998396ace265c92973ba3f79c6a71c038af",
+        "engineSha256": "3c81c8d1b4ee6b2435765013d0578021556b70d35f16e4512ebecf1c873f25b4",
+        "factorGwpDescriptorSha256": "80a514d4596fc214ea3086941b37377f9e939f7541e40590fa4ee243deb1e24d",
+        "factorSourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+        "guidanceSha256": "fb3dd5c9677096094c2acef769c7fe2fb90def6feac403cf9c817f5810928d88"
+      },
+      "activity": "For one stable, full-year, full-charge asset with complete all-provider service records and no installation, retirement, retrofit, stocks, recovery, reuse or transfer: estimated emitted kg equals the sum of total gas consumed in servicing refills.",
+      "activityUnit": "kg_of_exact_named_gas_or_blend",
+      "heatBasis": {
+        "value": "not_applicable",
+        "locators": []
+      },
+      "sourceArtifacts": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_fugitive_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ],
+      "formula": "estimated emitted kg=sum(servicing-consumed refill kg); kg CO2e=estimated emitted kg*published gas or whole-blend GWP; linked known releases reconcile to refills and are not added again",
+      "estimateRule": "Candidate servicing-based method estimate, not measured annual leakage. Boundary full-charge, unchanged capacity/gas, complete annual records, event chronology and no-stock/no-retrofit restrictions are mandatory.",
+      "zeroRule": "Zero requires explicit zero-activity attestation, complete annual records, opening and closing full-charge evidence, and no refill or release entries. It remains a candidate method estimate, not observed absence of leakage.",
+      "rows": [
+        {
+          "rowId": "fugitive.hfc134a",
+          "gas": "HFC-134a",
+          "gasKind": "single_gas",
+          "admittedEquipment": [
+            "fixed_refrigeration"
+          ],
+          "factor": null,
+          "factorUnit": null,
+          "massBasis": "kg HFC-134a servicing consumption",
+          "gasLocator": "Emission Factors Hub!C532",
+          "gwp": "1300",
+          "gwpLocator": "Emission Factors Hub!E532",
+          "publishedPrecision": "integer GWP",
+          "blendPolicy": null
+        },
+        {
+          "rowId": "fugitive.hfc227ea",
+          "gas": "HFC-227ea",
+          "gasKind": "single_gas",
+          "admittedEquipment": [
+            "fixed_fire_suppression",
+            "portable_fire_suppression"
+          ],
+          "factor": null,
+          "factorUnit": null,
+          "massBasis": "kg HFC-227ea servicing consumption",
+          "gasLocator": "Emission Factors Hub!C538",
+          "gwp": "3350",
+          "gwpLocator": "Emission Factors Hub!E538",
+          "publishedPrecision": "integer GWP",
+          "blendPolicy": null
+        },
+        {
+          "rowId": "fugitive.r410a",
+          "gas": "R-410A",
+          "gasKind": "blend",
+          "admittedEquipment": [
+            "fixed_hvac"
+          ],
+          "factor": null,
+          "factorUnit": null,
+          "massBasis": "kg whole R-410A blend servicing consumption",
+          "gasLocator": "Emission Factors Hub!C575",
+          "gwp": "1924",
+          "gwpLocator": "Emission Factors Hub!D575",
+          "publishedPrecision": "integer published whole-blend GWP",
+          "blendPolicy": {
+            "compositionLocator": "Emission Factors Hub!E575",
+            "compositionText": "50% HFC-32 , 50% HFC-125",
+            "treatment": "Use published whole-blend GWP 1924 once. Do not substitute the constituent comparison 1923.5, infer constituent masses, or add constituent CO2e."
+          }
+        }
+      ],
+      "disposition": {
+        "retainedSourceBytes": "freshly_verified",
+        "historicalInternalAccounting": "accepted_bounded_candidate",
+        "productionDomainApplicability": "unresolved_for_material_balance_method_gas_equipment_and_blend_disclosure",
+        "intendedUseRights": "unresolved_requires_qualified_rights_review",
+        "productionRelease": "blocked_no_explicit_release_record",
+        "customerGate": "blocked_no_real_equipment_population_opening_closing_charge_all_provider_service_discharge_recovery_retrofit_stock_or_disposal_evidence"
+      }
+    }
+  ],
+  "gates": [
+    {
+      "gateId": "G01_exact_source_bytes_and_locators",
+      "state": "prepared_not_independently_reviewed",
+      "owner": "independent_source_reviewer",
+      "requiredAction": "Rehash retained originals and independently confirm every edition, locator, unit, displayed precision and normalization in all 12 rows."
+    },
+    {
+      "gateId": "G02_domain_applicability",
+      "state": "unresolved",
+      "owner": "qualified_accounting_domain_reviewer",
+      "requiredAction": "Approve or block each exact profile, factor route, GWP basis, estimate rule, zero rule, reporting period and supersession policy. Internal historical acceptance is candidate evidence only."
+    },
+    {
+      "gateId": "G03_intended_use_rights",
+      "state": "unresolved_requires_qualified_review_or_counsel",
+      "owner": "rights_owner_or_counsel",
+      "requiredAction": "Decide intended commercial numeric calculation, excerpt/report redistribution and hosted corpus/RAG use separately for every retained artifact and derivative value. Public availability and government hosting are insufficient."
+    },
+    {
+      "gateId": "G04_independent_numerical_compatibility",
+      "state": "pending_for_M79_candidate",
+      "owner": "independent_accounting_reviewer",
+      "requiredAction": "Independently rederive representative, boundary and tie cases across all four profiles; confirm cross-family AR5 mapping, units, HHV, gram-to-kg conversion, R-410A treatment, estimate/zero rules and round-once behavior without rewriting retained M73-M78 outputs."
+    },
+    {
+      "gateId": "G05_production_release_record",
+      "state": "blocked",
+      "owner": "separately_authorized_release_owner",
+      "requiredAction": "After G01-G04, create explicit immutable effective-dated release or blocked decisions. No candidate Boolean, hash, internal review or this inventory grants release authority."
+    },
+    {
+      "gateId": "G06_customer_boundary_and_activity",
+      "state": "blocked_absent_real_customer_evidence",
+      "owner": "authorized_customer_preparer_and_qualified_accounting_reviewer",
+      "requiredAction": "Provide and reconcile the real entity, facility, source, asset, control, period, fuel, meter, mileage, servicing and process-screen evidence. Missing or unsupported sources remain named blockers."
+    },
+    {
+      "gateId": "G07_current_requirements_and_claim",
+      "state": "separate_pending_work",
+      "owner": "regulatory_research_CPO_and_qualified_legal_reviewer",
+      "requiredAction": "Bind a dated current-law matrix and exact customer/reporting-year claim. This inventory does not decide SB 253 applicability or filing policy."
+    },
+    {
+      "gateId": "G08_runtime_integration_and_assurance",
+      "state": "out_of_scope_not_started_by_this_task",
+      "owner": "CTO_backend_security_QA_then_independent_assurance_provider",
+      "requiredAction": "After evidence decisions, implement fail-closed release records, tenant-safe runtime checks, lifecycle/recovery/browser proof and qualified human handoff on the exact accepted M78 dependency."
+    }
+  ],
+  "inventoryVerdict": {
+    "allFourExistingProfilesAccountedFor": true,
+    "allCurrentNumericalBindingsAccountedFor": true,
+    "sourceBytesAndLocatorsPrepared": true,
+    "independentlyReviewed": false,
+    "rightsApproved": false,
+    "domainApprovedForProduction": false,
+    "customerReady": false,
+    "productionReleased": false,
+    "releaseEligible": false,
+    "scope1Complete": false,
+    "nextAction": "Independent source/accounting review of this frozen inventory; qualified rights/domain dispositions may approve or block each row."
+  }
+}

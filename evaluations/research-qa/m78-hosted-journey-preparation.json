@@ -1,0 +1,554 @@
+{
+  "profile": "m78-independent-hosted-journey-preparation.v1",
+  "status": "m78_independent_hosted_journey_preparation_passed",
+  "reviewerId": "/root/m77_backend",
+  "reviewedAt": "2026-09-17T04:51:34.175Z",
+  "sourcePins": [
+    {
+      "path": "apps/site-api/src/calculation/m77-authority.ts",
+      "sha256": "a2b96aa21313fd6201d24ea0136d351ee41675c24bc1aef9d9c8ae8031782f09"
+    },
+    {
+      "path": "apps/site-api/src/lib/auth.ts",
+      "sha256": "aae10b5dc43ddd0fe0e184c2af19382d1e23a57ed31c0c55da7c640c9e3ebaaa"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m77-routes.ts",
+      "sha256": "e03e55575a8a6a6abc7c62f5f4cd43ace3bf6e34bd59887c76cf7ca57805a65e"
+    },
+    {
+      "path": "apps/site-web/src/lib/m64-api.ts",
+      "sha256": "715b14901ef209af877d252ad3a64ce02fd3754b42acc0da52f01b421f73d8df"
+    },
+    {
+      "path": "apps/site-web/src/lib/m65-api.ts",
+      "sha256": "bfdbf394cae49759f1117374730002f2bb36bd384227d59ce6599c4d99cfedd0"
+    },
+    {
+      "path": "apps/site-web/src/lib/m66-api.ts",
+      "sha256": "474c533c10289f980a75311d1ad743b607a3000f29327ccba195775e3b43a5c4"
+    },
+    {
+      "path": "apps/site-web/src/lib/m66-report-api.ts",
+      "sha256": "9478f05f4a25b920da3a1c4cfb91bdd67ba73fa168d4ff3596fa51e430dc6ad4"
+    },
+    {
+      "path": "apps/site-web/src/lib/m67-api.ts",
+      "sha256": "6718402c1013a6ebc2adee34d02a4a671f29f29e81d003c8e685508ed893dde2"
+    },
+    {
+      "path": "apps/site-web/src/lib/m67-report-api.ts",
+      "sha256": "339c34280707c66257a40e18717bbe27ecf008ace9c527e8a2fb627879043e44"
+    },
+    {
+      "path": "apps/site-web/src/lib/m68-api.ts",
+      "sha256": "5a4477fa1813b18aac1a92b006e85622778db03e11b34e16a1e9db96541a9697"
+    },
+    {
+      "path": "apps/site-web/src/lib/m68-report-api.ts",
+      "sha256": "3a947fe5e0de9dcc364d3c76e5e041667e2b4a2f181755b3266a1b9e81c00dec"
+    },
+    {
+      "path": "apps/site-web/src/lib/m71-api.ts",
+      "sha256": "8ea72360915c1f00f9bb4e8c431cdbc618af39ea049eb485ed49c44e29520460"
+    },
+    {
+      "path": "apps/site-web/src/lib/m73-api.ts",
+      "sha256": "871d177d5b0ba193a3ef7557f1825b8d8d8ca10792bde740b9d8ab5be3ee3636"
+    },
+    {
+      "path": "apps/site-web/src/lib/m74-api.ts",
+      "sha256": "cbd3656b63576062dc552aeb79e00248f906059e0781ab84f28de691264c62f3"
+    },
+    {
+      "path": "apps/site-web/src/lib/m75-api.ts",
+      "sha256": "473c4f2170bcdd8f143ab616c876855eafc6ae8d7df1c82b0315f7de5423feab"
+    },
+    {
+      "path": "apps/site-web/src/lib/m76-api.ts",
+      "sha256": "5a69210173c4e4ef94ce1ec001a60a4cafde1a8e85bc4a70df081e80b6056cb8"
+    },
+    {
+      "path": "apps/site-web/src/lib/m76-diesel-api.ts",
+      "sha256": "05d825584e842bf0ac46ecd0cf2c5d4448b48756d2bc4a0736e2dcbac5773e32"
+    },
+    {
+      "path": "apps/site-web/src/lib/m77-api.ts",
+      "sha256": "588b00aa982b4f9bf77807605777147fd83d667d1b06f3b16708529dd01f3cb6"
+    },
+    {
+      "path": "apps/site-web/src/lib/m78-api.ts",
+      "sha256": "fde761b823bed9646889d6e43bb2e017955661d263fb02e588a841faa8352926"
+    },
+    {
+      "path": "apps/site-web/src/lib/workspace-api.ts",
+      "sha256": "783879fb5692eb0910e4642423f752c40385c52ac750ab8ec68741cd89136069"
+    },
+    {
+      "path": "bun.lock",
+      "sha256": "baad26994363c56f91d913fd2b3c87d75833521c10884a6caa94fd6dd9f0084f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "c0b2a7060991985f9618c606157c3dff0ef000da5e173c21cf95c3d1768b5c01"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "2fd1aff8769dc55459ce561d3990476a8bfef817cd4aee0b3be0182e2e1516b8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m58.ts",
+      "sha256": "26a2b542ca35d5368a166123b4b63bfbe60b5da04d058eaf3152d97ec311c009"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m59.ts",
+      "sha256": "da6a6729c8afccc4cd76ddde34d336a376d998b628a4231821c1ce1915cf54c5"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m60.ts",
+      "sha256": "b906f599d648f56a01f20fed0de7ecef2313d0ac1f28c1b4fdfa884c3a75f21a"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m61.ts",
+      "sha256": "c2176b1b08ed6df88eb32ca5e546269b51fce8e169451a8f326c3b242ecf4f5f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64-contract.ts",
+      "sha256": "73bcc47ff03122d2f254d244c0792b9e62745618cc4fe9f21854df115f5c5c1d"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m64.ts",
+      "sha256": "d358bb4741b788173baeeb671abb4222e0d11c795953ba85f0fed292da5f6156"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-contract.ts",
+      "sha256": "9ffb93e091aec3e5a2b8cafb7f7bacd8bc2a04280632663e802a8cf201bcff31"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65-template.ts",
+      "sha256": "a20f98d6f563367bacf77e6d70567ef20305f7450a2989b7a595e08c22f557d8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m65.ts",
+      "sha256": "409a150611664efb3b45213714dc561b4a6a289fa6304c3cb56c15d2d6cf230e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-contract.ts",
+      "sha256": "ffbb76b1c144130369d93a88f586bc431cdb8a8eba2d6a285ef5d849c5662049"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-fixtures.ts",
+      "sha256": "2c78d1fc9a8e5a288303e495094fe3ea8b4b076692e1e2a2ed17bb859eaaeeae"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-report.ts",
+      "sha256": "0efacc1b94280cbf960e8c755b208499416dc114fd0405fdb4d956e36a8903d0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-sources.ts",
+      "sha256": "85068701fca36379fd4fe7f3e6b4afed63ff96acfc75f4cd14a9338f2001ca20"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66-template.ts",
+      "sha256": "226ac0b125f1cf8cd4d390fdd715bf7c647b440f5ab571c77c4524e1b0f5bac9"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m66.ts",
+      "sha256": "5805119822a1500cd7e6b05703bd6262ff7471d2ac7c8567a7fffb1fab8e3912"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67-contract.ts",
+      "sha256": "359fd19312980632339e0c57e6e0ce42fb283648508804908d3370a00a4de9e3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67-report.ts",
+      "sha256": "d40ae347acbaaf8e65a357a84103e68ef3ca5f5d54a961b4510c45e7af75b087"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67-template.ts",
+      "sha256": "18a2e1650223d83b9525339137125ff9f614e2574835bb94a4178f9e296ac807"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m67.ts",
+      "sha256": "8779f5654db92b81326cf2f7b5718a365212233290590bfce0193a284af06519"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-contract.ts",
+      "sha256": "871ef2aed3884dfd3dc7cafde07444094aeb7cf5740ead3ea11e6b61afa6748e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-report.ts",
+      "sha256": "56799a03434fcb546936cfd116d428bb5c9642250653ef433fe9408ddad8c08f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68-template.ts",
+      "sha256": "378e485b0db60aa76f43987451087b069a589882a6fd50cf7b46108f5037e9cf"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m68.ts",
+      "sha256": "dbfb55a42a2368b8a32a226c3e7c8127c4cfb39470c944110f3094e03401e026"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71-contract.ts",
+      "sha256": "9ab26510a66e93ae00e35e87e79e1289b275961ab02b6021b023c16ecbfa265c"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71-validation.ts",
+      "sha256": "44add799b85939bc0825a0e1fe095e41104faea13796d5ee1b58227660b0b7ec"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71.ts",
+      "sha256": "e0a1aa8cd01809af115057e46e9911d47ff801c93902ec59aa5bb21852f42385"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m73-contract.ts",
+      "sha256": "311a78248aab025bb410bdb8d9b09236c9843de70e1322e5b281cd01e7876fe6"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m73-report.ts",
+      "sha256": "85bb39f20ccdfe1c8f44783bb7432d1a400e79a4a64d92577076ac0c6542ee09"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m73-validation.ts",
+      "sha256": "b5fab6836fc164151ac1628ecc2b35a9f959680a440fc0e84202917e496c4eb3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m73.ts",
+      "sha256": "207482cc8bfb59b524c8d725b3c14e7592aaa2965fa450e16d88dbb630e1b8fe"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m74-contract.ts",
+      "sha256": "96d2469c1b79d0f26e1908e5971fdf602c3b9881828d53e2752d7220a3d19207"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m74-report.ts",
+      "sha256": "e0035c892ddc11367662c6d06cbdbac6b5cfaeffa4d8fc5bb393aefd33426579"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m74-validation.ts",
+      "sha256": "53ee389bb6b554f5be8b6dc6487300377a589c293063c3d8a2fbfca9a6871412"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m74.ts",
+      "sha256": "494eb69227a8d18ac5068fcc5225daab1edbc88979fa3694f3f89981898bced9"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75-contract.ts",
+      "sha256": "9226821b1d4934c9f1a08c54d7884f6ed0558cfe8d123020cc708494be06cd1e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75-report.ts",
+      "sha256": "312b2093341e019f1c43d2bb6a3a4d03b3a6427fc78dddbfdc72a426e147d49e"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75-validation.ts",
+      "sha256": "ebc8873b718ec0ea4f5cc18b70e8f2604aaf7237fccd9c07c1b736f16dd66fc1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m75.ts",
+      "sha256": "541ce11c6dcdfcf5c753173f7d56f68c70ef08eb71981921b7dae09b9cd261e1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-contract.ts",
+      "sha256": "0d835662bb6f84e8e1080dddcb7a8ae04e4dee0447d489ce1e7e6502be6bd270"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel-contract.ts",
+      "sha256": "0e7f9487fdeeb47260891fc423d22f9a386e4f24045c603043edb7c8ac2a8ef5"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel-report.ts",
+      "sha256": "014f9e012a6acd46cbe9d04248bcc4d9abeb8c95723bf4448310ce2508c433fb"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel-validation.ts",
+      "sha256": "fcd183ebe9dd53121ee517b7f2ded62cdf97dda1c2673e87f8533e8812a16057"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-diesel.ts",
+      "sha256": "98dd220d75a46de954d3de7e1b1fda2622afb5a84f18727ad73a43b1dcd95ea0"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-report.ts",
+      "sha256": "96282f6c5d72d623c3c299f3be37f713b0b9d610a7ecab2dc0701cb1c0f50393"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76-validation.ts",
+      "sha256": "465e36867626866f7753b2a5d9d6b2f19c155588ba3e65e8acb2db134de880db"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m76.ts",
+      "sha256": "5656449d6f09b1a7d701f6c0d3e4f50cdc1c09fb4e58cbc76c3f6f771f5cad65"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m77-contract.ts",
+      "sha256": "7225cc90a1510be527fcfb88b8f43a6ac6ae5c19401b4556dff53056d6da9b39"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m77-report.ts",
+      "sha256": "835fcad5f02dbf7a8182c67dd86ed3067b19b08ce08ab9e396fdc9595fe5a8b8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m77-validation.ts",
+      "sha256": "a2fa3b78aaa1bbd39c87fbbcc1af2d702895bc68760b9375e815cfbe04557eb1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m77.ts",
+      "sha256": "ff26595de2d9535810c4ebcf11cb9dc8782bd648e42dc4d79ef965ab2f518ed6"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-contract.ts",
+      "sha256": "f2e942511f1cfc91f65f32152c7efac566f4131c330d51e13b220a80482265ee"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-policy.ts",
+      "sha256": "f7448be6d753ad65b6724696973aec95b3e23623077706727f2227c1b1be2011"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-reconciliation.ts",
+      "sha256": "62647d67fc9587ff703f30fd8fefa4be3b7451eb27ba256d48376d0b8ffdca09"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-report.ts",
+      "sha256": "51c024f9ca5278b1069538e53dee4c02ea40b30bb29a0bade3a31ec1a2b433d3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78-validation.ts",
+      "sha256": "264519ed13ceeccc81a08f771932ed3db5c9a4363db96e28b6571f30eaf39bd1"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m78.ts",
+      "sha256": "ff8fd60d6e108bd69eba5415b7db767b0817fe4a76a5a3673ff630a0f4ba9502"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+      "sha256": "cc596137d3011d400d3b253ebb52994bafe47f716c22601c4a316de259d7d739"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql",
+      "sha256": "8c6b46209410d5611b1462ba694047dd4eb06dccf9de55fe65cee1d5bb9c6321"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql",
+      "sha256": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+      "sha256": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+      "sha256": "3f288d293c93132c422505f8daf7fc6e52eac8e33128a248cd4e9ba5cb946b35"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+      "sha256": "2b786ee7c90b6cd65e398b0c8422d9e76f851a789a5318a7715039e123249dfd"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+      "sha256": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+      "sha256": "c5e81967a5dcb08055d452816a1e687b204c59c6396014190897f965abc4a1cc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "sha256": "10a0be42649a86fbf2f0e2ab826e6d856dfbe591a1090dc39b3d4872dc191e3f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "sha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "sha256": "1e1cc0742cdb3f6f48301202923a1405b2aa21a02010cf8d5233cfef8a5d1a26"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql",
+      "sha256": "6ff7c3d21766d5e07a9f922ea92a0c59e7f34a685104d640d09dccf9872eb763"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "sha256": "81686f3c62f8130a60dbbc096ae758eb6d56ecd80df3d533621a1990ae33d425"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql",
+      "sha256": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql",
+      "sha256": "aa4968c63087f353b5bf80d64bced67270bc5ad17f715393b40313bb57f7f732"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql",
+      "sha256": "4486f83e2f2f6e5cb8db5991575a74f540b891eefd1ff65317801545c5b6c071"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "sha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0019_stationary_sources.sql",
+      "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql",
+      "sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql",
+      "sha256": "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-audit.ts",
+      "sha256": "8db132c49d0e9793986dab439fb56794887c6d7a7ea703728883907479b3765b"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "d06962b43145d6390fd9ea09999806f69653a054037a7299e1464712e05547d9"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-tls.ts",
+      "sha256": "ebd9dc053b9301d2d91a08e38f98785ad518155583df7e1799f8db7f6b6f809d"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "fbba5693a8ad1447c470309db4c46dcababa2f51c169d0535dc4a83417bcac7e"
+    },
+    {
+      "path": "tools/cloud/database-inventory.ts",
+      "sha256": "c357e2b248570137b523ffb24d763c74842abfb2d6966fcc9fbf335080004c57"
+    },
+    {
+      "path": "tools/staging/check-hosted-journey.ts",
+      "sha256": "b3d449ad01603890f82d44f8f190721e89045eee78e9fdeec7681b0b38a094f9"
+    },
+    {
+      "path": "tools/staging/check-m72-hosted.ts",
+      "sha256": "43c0f854025acda23453f4f6e28953ebfa2d8673ef5ae0cf4c59e7f941c054c5"
+    },
+    {
+      "path": "tools/staging/check-m77-continuation.ts",
+      "sha256": "eca3d93c75703dd6824ebb942eca4f6fc90764a32f0cf4d07512b3eced9e4efd"
+    },
+    {
+      "path": "tools/staging/check-m77-hosted.ts",
+      "sha256": "3d9c84c6275d38f7b1e86d3fc3109a3d6872f662b92c42d547da27e41dac5796"
+    },
+    {
+      "path": "tools/staging/check-m78-hosted.test.ts",
+      "sha256": "e395e62cc154b35783efa4aa043e4c39da66750bbc1837aa82d55fb1f36e8f4c"
+    },
+    {
+      "path": "tools/staging/check-m78-hosted.ts",
+      "sha256": "f853630d19db560e90ec1488473c3bb949621c4b0615b31b21f31d828e6af941"
+    },
+    {
+      "path": "tools/staging/create-source-manifest.ts",
+      "sha256": "cceac0deef1c56b72797d5434baab55f5a79bad68d8134fa947ddeaefa04a75c"
+    },
+    {
+      "path": "tools/staging/m73-common.ts",
+      "sha256": "a47f8904fab503272173e3db8f39144f52d3b3d4eb14da03784349ac88466ab7"
+    },
+    {
+      "path": "tools/staging/m74-common.ts",
+      "sha256": "66fd28391abdeb57feb7f078e27b89be299c4bc69a784cc9395b7f69958c3879"
+    },
+    {
+      "path": "tools/staging/m74-recovery-manifest.ts",
+      "sha256": "63284aa1ac544bcadee3b6f56c4b0014e9efc01ddaf9526fbb87d0b3134c4758"
+    },
+    {
+      "path": "tools/staging/m75-common.ts",
+      "sha256": "0be630bb9c0c18e0e22175b629b6742fc03372147acf984065bc3026c8bbfe49"
+    },
+    {
+      "path": "tools/staging/m75-recovery-manifest.ts",
+      "sha256": "09b7a87a0d25a12df933a3143fa52dba92930b736af5fb7a60abc35b5abbbec6"
+    },
+    {
+      "path": "tools/staging/m76-common.ts",
+      "sha256": "d340f086d33ef37f652cb3eb02813c021c93ada12f702d847ea6ecb5cb85928e"
+    },
+    {
+      "path": "tools/staging/m76-recovery-manifest.ts",
+      "sha256": "89b80aa4a2a9a2271e0132d121329c9e0799ef08fc31f49f27506c5764baa801"
+    },
+    {
+      "path": "tools/staging/m77-backend-fixture.ts",
+      "sha256": "19b2ecdffafe261ceb4af14ec99f4e952243786b7a6e6e55e24e4c4032df0cb5"
+    },
+    {
+      "path": "tools/staging/m77-common.ts",
+      "sha256": "0c3e1d07090a4d5b039ed13bb357049156387f2852e5a9901c90986c035e963b"
+    },
+    {
+      "path": "tools/staging/m77-continuation-contract.ts",
+      "sha256": "8a11db85da32780c099dc7f4b78f7366faa7e21fb49258951918c4a1b7d9c255"
+    },
+    {
+      "path": "tools/staging/m77-hosted-plan.ts",
+      "sha256": "aef62afa7bb56ef719e695c8ae43c6fb12742c8baefc9ac339ce163dbb4ec4e6"
+    },
+    {
+      "path": "tools/staging/m77-recovery-manifest.ts",
+      "sha256": "f6bbe71d68c7782ba635e91288d7b128b5a0b77471dcf0a5d660a3432623606f"
+    },
+    {
+      "path": "tools/staging/m78-hosted-plan.ts",
+      "sha256": "c91990277ab49821cb8bd8d0fa62b71bf3de09e627768278775335828a1409cd"
+    },
+    {
+      "path": "tools/staging/m78-inventory.ts",
+      "sha256": "ea93686812910082438bf8ecfd9ef8756dddd6048897d369a494e0fdd700f40a"
+    },
+    {
+      "path": "tools/staging/m78-journey-source-pins.ts",
+      "sha256": "f1978cf8da61af87f4d25845e974ee94365e429c413d6a7ef027763b5345a224"
+    }
+  ],
+  "sourcePinCount": 127,
+  "rootWrapper": {
+    "path": ".superpowers/m78-private-journey.ps1",
+    "sha256": "41158e4212ac4cf14f0b09cfe29aedc2fd4c0c7b478860d5a215e309254cbc6c"
+  },
+  "report": {
+    "path": "evaluations/research-qa/m78-hosted-journey-review.md",
+    "sha256": "c7d53079e735f9040b8f4f50e575e689aaa58999d00b9737103d637bd1760d15"
+  },
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-OPERATORS-01-HOSTED-CANDIDATE4.json",
+    "sha256": "1f7e00c39c9fd08dd977c99e7fe45530600bb4af396e138392ff3bfa0b78b043"
+  },
+  "checks": {
+    "authorPureTests": 9,
+    "authorAssertions": 74,
+    "independentTests": 4,
+    "independentAssertions": 193,
+    "combinedTests": 13,
+    "combinedAssertions": 267,
+    "strictTargetedTypecheck": "pass"
+  },
+  "HJ_F01": "closed_after_independent_rehashed_challenges",
+  "scope": {
+    "networkRequests": 0,
+    "privateConfigReads": 0,
+    "hostedExecutionApproved": false,
+    "importedBackendIndependentlyReapproved": false,
+    "actualRecoveryIndependentlyReapproved": false,
+    "recipeIndependentReview": "separate reviewer"
+  },
+  "compute": {
+    "requestedModel": "gpt-6-astra",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null,
+    "routingException": "Existing reviewer fallback; no override applied"
+  }
+}

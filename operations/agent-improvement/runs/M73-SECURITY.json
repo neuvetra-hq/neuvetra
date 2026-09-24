@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M73-SECURITY",
+  "role": "security-reliability",
+  "execution_context": "/root/m73_cpo",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M73-REVIEWS-LOCAL-CHECKPOINT.json",
+      "sha256": "4c1759b3ddd085c2134bac16f6cb8dfc3f707ce5503a896772766ebcc6786325"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M73-SECURITY-BOUNDED-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m73-coordinator-checkpoint-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M73-REVIEWS-LOCAL-CHECKPOINT.json",
+        "sha256": "4c1759b3ddd085c2134bac16f6cb8dfc3f707ce5503a896772766ebcc6786325"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh m73_security and historical m68_qa dispatch rejected: agent thread limit reached. Reused CPO authored product criteria only, no implementation; disclose overlap and independently review actual code. Requested critical Astra/high not applied as an override; observed unknown.",
+    "Scoped report delivery accepted, not a substitute for its substantive verdict. Native print remains pending; no complete M73/hosted16 acceptance. Requested critical Astra/high; observed settings/resources unknown."
+  ]
+}

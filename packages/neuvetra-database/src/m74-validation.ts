@@ -1,0 +1,76 @@
+/** Pure shared M74 contract: no database, process, filesystem, Bun or emissions arithmetic. */
+import {m71CanonicalJson,m71HashString,m71Keys,m71Uuid,M71_EVIDENCE_SHA256} from './m71-validation'
+import {M71_ARTIFACT,type M71Version} from './m71-contract'
+import {M74_LIMITATIONS,M74_PERIOD,M74_PROFILE,type M74Activity,type M74ActivityStatus,type M74BindingInput,type M74Calculation,type M74Finding,type M74Report,type M74ReportInput,type M74Review,type M74ReviewInput,type M74SaveInput,type M74SourceChoice,type M74Version} from './m74-contract'
+
+export const m74CanonicalJson=m71CanonicalJson
+export class M74ValidationError extends Error {}
+export const m74Require=(value:unknown,message='Invalid synthetic mobile-diesel request.'):void=>{if(!value)throw new M74ValidationError(message)}
+export const m74Keys=(value:unknown,keys:string[])=>{try{m71Keys(value,keys)}catch{throw new M74ValidationError('Unexpected or missing mobile-diesel fields.')}}
+export function m74Text(value:unknown,max=500):string{m74Require(typeof value==='string'&&value.length>0);const text=(value as string).trim().normalize('NFC');m74Require(text.length>0&&Array.from(text).length<=max&&!/[\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(text));return text}
+export const m74NullableText=(value:unknown,max=500)=>value===null?null:m74Text(value,max)
+export function m74Quantity(value:unknown):string{m74Require(typeof value==='string'&&/^(?:0|[1-9][0-9]{0,11})(?:\.[0-9]{1,3})?$/.test(value));const [whole,fraction='']=(value as string).split('.');return whole+'.'+fraction.padEnd(3,'0')}
+export function m74AssetId(value:unknown):string{m74Require(typeof value==='string');const normalized=(value as string).trim().toUpperCase();m74Require(/^[A-Z0-9][A-Z0-9._-]{0,63}$/.test(normalized),'Vehicle asset ID must use 1–64 ASCII letters, numbers, period, underscore or hyphen.');return normalized}
+
+export function validateM74Save(value:unknown):M74SaveInput{
+ m74Keys(value,['profile','binding','period','vehicle','quantityGallons','distanceMiles','fuelStatement','mileageStatement','fuelManualConfirmation','mileageManualConfirmation','fuelDiscrepancyReason','mileageDiscrepancyReason','zeroReason','expectedVersionId','expectedVersionSha256','correctionReason','idempotencyKey'])
+ const v=structuredClone(value) as M74SaveInput
+ m74Keys(v.binding,['coverageVersionId','coverageVersionSha256','entityId','facilityId','sourceId','boundaryDecisionId']);for(const [key,item] of Object.entries(v.binding))m74Require(key.endsWith('Sha256')?m71HashString(item):m71Uuid(item))
+ m74Keys(v.period,['start','endExclusive'])
+ m74Keys(v.vehicle,['assetId','vehicleClass','classificationBasis','modelYear','fuel','controlBasis'])
+ m74Require(v.profile===M74_PROFILE&&m74CanonicalJson(v.period)===m74CanonicalJson(M74_PERIOD)&&v.vehicle.vehicleClass==='Medium- and Heavy-Duty Vehicles'&&Number.isInteger(v.vehicle.modelYear)&&v.vehicle.modelYear>=2007&&v.vehicle.modelYear<=2022&&v.vehicle.fuel==='Fossil Diesel'&&v.vehicle.controlBasis==='owned_operational_control_full_year'&&typeof v.fuelManualConfirmation==='boolean'&&typeof v.mileageManualConfirmation==='boolean'&&m71Uuid(v.idempotencyKey))
+ v.vehicle={...v.vehicle,assetId:m74AssetId(v.vehicle.assetId),classificationBasis:m74Text(v.vehicle.classificationBasis,500)}
+ v.quantityGallons=v.quantityGallons===null?null:m74Quantity(v.quantityGallons)
+ v.distanceMiles=v.distanceMiles===null?null:m74Quantity(v.distanceMiles)
+ if(v.fuelStatement!==null){m74Keys(v.fuelStatement,['issuer','reference','statedQuantityGallons','description','consumptionBasis']);m74Require(v.fuelStatement.consumptionBasis==='dedicated_vehicle_consumed_no_adjustments');v.fuelStatement={...v.fuelStatement,issuer:m74Text(v.fuelStatement.issuer,120),reference:m74Text(v.fuelStatement.reference,120),statedQuantityGallons:m74Quantity(v.fuelStatement.statedQuantityGallons),description:m74Text(v.fuelStatement.description,2000)}}
+ if(v.mileageStatement!==null){m74Keys(v.mileageStatement,['issuer','reference','statedDistanceMiles','description','distanceBasis']);m74Require(v.mileageStatement.distanceBasis==='dedicated_vehicle_annual_distance');v.mileageStatement={...v.mileageStatement,issuer:m74Text(v.mileageStatement.issuer,120),reference:m74Text(v.mileageStatement.reference,120),statedDistanceMiles:m74Quantity(v.mileageStatement.statedDistanceMiles),description:m74Text(v.mileageStatement.description,2000)}}
+ v.fuelDiscrepancyReason=m74NullableText(v.fuelDiscrepancyReason);v.mileageDiscrepancyReason=m74NullableText(v.mileageDiscrepancyReason);v.zeroReason=m74NullableText(v.zeroReason);v.correctionReason=m74NullableText(v.correctionReason)
+ if(v.expectedVersionId===null)m74Require(v.expectedVersionSha256===null&&v.correctionReason===null);else m74Require(m71Uuid(v.expectedVersionId)&&m71HashString(v.expectedVersionSha256)&&v.correctionReason!==null)
+ return v
+}
+
+export function validateM74Review(value:unknown):M74ReviewInput{m74Keys(value,['versionId','expectedVersionSha256','decision','note','acknowledgedLimitations','idempotencyKey']);const v=structuredClone(value) as M74ReviewInput;m74Require(m71Uuid(v.versionId)&&m71HashString(v.expectedVersionSha256)&&m71Uuid(v.idempotencyKey)&&['accepted_bounded_internal','changes_requested'].includes(v.decision)&&m74CanonicalJson(v.acknowledgedLimitations)===m74CanonicalJson(M74_LIMITATIONS));v.note=m74Text(v.note);return v}
+export function validateM74Report(value:unknown):M74ReportInput{m74Keys(value,['versionId','expectedVersionSha256','expectedDecisionId','expectedDecisionSha256','idempotencyKey']);const v=value as M74ReportInput;m74Require(m71Uuid(v.versionId)&&m71HashString(v.expectedVersionSha256)&&m71Uuid(v.idempotencyKey)&&(v.expectedDecisionId===null?v.expectedDecisionSha256===null:m71Uuid(v.expectedDecisionId)&&m71HashString(v.expectedDecisionSha256)));return structuredClone(v)}
+export function m74Activity(value:M74SaveInput):M74Activity{const {expectedVersionId:_,expectedVersionSha256:__,correctionReason:___,idempotencyKey:____,...activity}=value;return activity}
+
+export function deriveM74ActivityStatus(activity:M74Activity):M74ActivityStatus{
+ const dimension=(quantity:string|null,statement:object|null,confirmed:boolean,stated:string|null):M74ActivityStatus['fuel']=>quantity===null?'missing':statement===null?'evidence_missing':!confirmed?'unconfirmed':quantity!==stated?'discrepancy':quantity==='0.000'?'explicit_zero':'entered'
+ return {fuel:dimension(activity.quantityGallons,activity.fuelStatement,activity.fuelManualConfirmation,activity.fuelStatement?.statedQuantityGallons??null),mileage:dimension(activity.distanceMiles,activity.mileageStatement,activity.mileageManualConfirmation,activity.mileageStatement?.statedDistanceMiles??null)}
+}
+export function m74CanCalculate(activity:M74Activity):boolean{
+ const gallons=activity.quantityGallons,miles=activity.distanceMiles,fuel=activity.fuelStatement,mileage=activity.mileageStatement
+ if(gallons===null||miles===null||fuel===null||mileage===null||!activity.fuelManualConfirmation||!activity.mileageManualConfirmation)return false
+ if(gallons!==fuel.statedQuantityGallons&&!activity.fuelDiscrepancyReason)return false
+ if(miles!==mileage.statedDistanceMiles&&!activity.mileageDiscrepancyReason)return false
+ const gallonsZero=gallons==='0.000',milesZero=miles==='0.000'
+ if(gallonsZero!==milesZero)return false
+ if(gallonsZero)return fuel.statedQuantityGallons==='0.000'&&mileage.statedDistanceMiles==='0.000'&&Boolean(activity.zeroReason)
+ return true
+}
+export function deriveM74Findings(activity:M74Activity):M74Finding[]{
+ const findings:M74Finding[]=[{code:'scope1_incomplete',message:'This vehicle mobile-combustion subtotal does not complete stationary, mobile, fugitive or process emissions.'},{code:'method_not_released',message:'Factors and method are development candidates; no reporting or assurance determination.'}]
+ const status=deriveM74ActivityStatus(activity)
+ if(activity.quantityGallons===null)findings.push({code:'fuel_activity_missing',message:'Consumed gallons are missing; no emissions were calculated.'})
+ if(activity.distanceMiles===null)findings.push({code:'mileage_activity_missing',message:'Vehicle-miles are missing; no emissions were calculated.'})
+ if(activity.fuelStatement===null)findings.push({code:'fuel_statement_missing',message:'No synthetic annual fuel statement is retained.'})
+ if(activity.mileageStatement===null)findings.push({code:'mileage_statement_missing',message:'No synthetic annual mileage statement is retained.'})
+ if(status.fuel==='unconfirmed')findings.push({code:'fuel_statement_unconfirmed',message:'The synthetic fuel assumptions have not been manually confirmed.'})
+ if(status.mileage==='unconfirmed')findings.push({code:'mileage_statement_unconfirmed',message:'The synthetic mileage assumptions have not been manually confirmed.'})
+ if(status.fuel==='discrepancy')findings.push({code:'fuel_activity_statement_discrepancy',message:'Entered and stated consumed gallons differ; the discrepancy remains unresolved.'})
+ if(status.mileage==='discrepancy')findings.push({code:'mileage_activity_statement_discrepancy',message:'Entered and stated vehicle-miles differ; the discrepancy remains unresolved.'})
+ if(activity.quantityGallons!==null&&activity.distanceMiles!==null&&(activity.quantityGallons==='0.000')!==(activity.distanceMiles==='0.000'))findings.push({code:'mixed_zero_contradiction',message:'Zero in only one activity dimension is outside this bounded method; no emissions were calculated.'})
+ if(activity.quantityGallons==='0.000'&&activity.distanceMiles==='0.000'&&!m74CanCalculate(activity))findings.push({code:'unsupported_zero',message:'Zero activity needs matching zero statements, both confirmations and a no-operation/no-consumption reason.'})
+ return findings
+}
+
+export function m74SourceChoices(version:M71Version):M74SourceChoice[]{const snapshot=version.snapshot,within=(item:{start:string;endExclusive:string})=>item.start===M74_PERIOD.start&&item.endExclusive===M74_PERIOD.endExclusive;return snapshot.sources.filter(item=>item.domain==='mobile_combustion').map(source=>{const entity=snapshot.entities.find(item=>item.id===source.entityId),facility=snapshot.facilities.find(item=>item.id===source.facilityId),boundary=snapshot.boundaryDecisions.find(item=>item.entityId===source.entityId&&within(item));const findings:M74Finding[]=[];const add=(message:string)=>findings.push({code:'source_ineligible',message});if(snapshot.consolidationApproach!=='operational_control'||!within(snapshot.period)||!entity||!facility||facility.entityId!==entity.id||entity.countryCode!=='US'||entity.regionCode!=='CA'||facility.countryCode!=='US'||facility.regionCode!=='CA'||!within(entity)||!within(facility)||!within(source))add('Selected source needs a full-year 2025 California operational-control entity and base facility.');const supportedRefs=(refs:{artifactId:string;expectedSha256:string;locator:string}[])=>refs.some(ref=>ref.artifactId===M71_ARTIFACT.id&&ref.expectedSha256===M71_EVIDENCE_SHA256&&ref.locator===M71_ARTIFACT.locator);if(!boundary||boundary.disposition!=='included_activity'||!boundary.reason?.trim()||!supportedRefs(boundary.evidenceRefs))add('Save the entity inclusion rationale and pinned fictional boundary reference first.');let id=entity?.id;const seen=new Set<string>();while(id){if(seen.has(id)){add('Boundary relationship cycle.');break}seen.add(id);const relationship=snapshot.relationships.find(item=>item.childEntityId===id);if(!relationship)break;if(!within(relationship)||relationship.ownershipPercent!=='100'||!relationship.controlFacts?.trim()||!supportedRefs(relationship.evidenceRefs))add('Every selected relationship requires full-year operational-control facts and fictional support.');id=relationship.parentEntityId}return {binding:{coverageVersionId:version.id,coverageVersionSha256:version.versionSha256,entityId:source.entityId,facilityId:source.facilityId??'',sourceId:source.id,boundaryDecisionId:boundary?.id??''},companyLabel:snapshot.companyLabel,entityLabel:entity?.legalName??'',facilityLabel:facility?.name??'',sourceLabel:source.name,eligible:findings.length===0,findings}})}
+export function m74ResolveBinding(binding:M74BindingInput,coverage:M71Version){const choice=m74SourceChoices(coverage).find(item=>item.binding.sourceId===binding.sourceId);m74Require(choice?.eligible&&m74CanonicalJson(choice.binding)===m74CanonicalJson(binding),'The selected saved mobile source or boundary is not eligible.');return choice!}
+export function m74FuelStatementText(activity:M74Activity,coverage:M71Version):string{m74Require(activity.fuelStatement!==null);const choice=m74ResolveBinding(activity.binding,coverage);return 'SYNTHETIC — NOT A FUEL RECEIPT OR INDEPENDENT MEASUREMENT\n'+m74CanonicalJson({profile:'m74-synthetic-fuel-statement-v1',companyLabel:choice.companyLabel,entityLabel:choice.entityLabel,facilityLabel:choice.facilityLabel,sourceLabel:choice.sourceLabel,binding:activity.binding,period:activity.period,vehicle:activity.vehicle,quantityUnit:'US_gallon',fuelComposition:'fossil_diesel_only',statement:activity.fuelStatement})+'\n'}
+export function m74MileageStatementText(activity:M74Activity,coverage:M71Version):string{m74Require(activity.mileageStatement!==null);const choice=m74ResolveBinding(activity.binding,coverage);return 'SYNTHETIC — NOT AN ODOMETER RECORD OR INDEPENDENT MEASUREMENT\n'+m74CanonicalJson({profile:'m74-synthetic-mileage-statement-v1',companyLabel:choice.companyLabel,entityLabel:choice.entityLabel,facilityLabel:choice.facilityLabel,sourceLabel:choice.sourceLabel,binding:activity.binding,period:activity.period,vehicle:activity.vehicle,distanceUnit:'vehicle_mile',tripCoverage:'all_trip_locations_including_interstate',statement:activity.mileageStatement})+'\n'}
+export const m74InputHashPayload=(version:Pick<M74Version,'activity'>)=>version.activity
+export const m74ContentPayload=(version:Pick<M74Version,'activity'|'activityStatus'|'coverageVersion'|'fuelStatement'|'mileageStatement'|'calculation'|'findings'>)=>({activity:version.activity,activityStatus:version.activityStatus,coverageVersion:version.coverageVersion,fuelStatement:version.fuelStatement,mileageStatement:version.mileageStatement,calculation:version.calculation,findings:version.findings})
+export const m74VersionHashPayload=(version:M74Version)=>({profile:M74_PROFILE,id:version.id,companyId:version.companyId,worksheetId:version.worksheetId,version:version.version,previousVersionId:version.previousVersionId,previousVersionSha256:version.previousVersionSha256,createdBy:version.createdBy,createdAt:version.createdAt,contributorIds:version.contributorIds,correctionReason:version.correctionReason,inputSha256:version.inputSha256,contentSha256:version.contentSha256})
+export function m74ReviewHashPayload(companyId:string,review:M74Review){const {decisionSha256:_,...body}=review;return {profile:M74_PROFILE,companyId,...body}}
+export function m74ReportHashPayload(report:M74Report){const {reportSha256:_,html:__,snapshotJson:___,...body}=report;return {profile:M74_PROFILE,...body}}
+export function m74CalculationHashPayload(calculation:M74Calculation){const {resultSha256:_,...body}=calculation;return body}
+export const m74Export=(version:M74Version)=>m74CanonicalJson({...version,review:null})

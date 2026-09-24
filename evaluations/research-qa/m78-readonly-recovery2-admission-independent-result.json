@@ -1,0 +1,52 @@
+{
+  "status": "m78_readonly_recovery2_admission_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "files": [
+    {"path": ".superpowers/m78-readonly-recovery2-admit.py", "sha256": "ec083be0a3d73917621610cb8f0b350095f313fef7f4bb8e73b52fed3962ee06"},
+    {"path": ".superpowers/m78-readonly-recovery2-source-closure.ts", "sha256": "6b2865643e8927604f428d817454e84d148c67eeac093ec03de2b8ac1a2cf3cd"},
+    {"path": ".superpowers/m78-get-route-refresh-for-recovery2.py", "sha256": "498a1cfbd5f757886d7e28d5eb2d5037cf210c35b1ca35161e2862eed6dde062"}
+  ],
+  "dependencies": {
+    "rootSourceReview": {"path": "evaluations/research-qa/m78-readonly-recovery2-root-result.json", "sha256": "1c2325e535d36c942684a3a7f7f598af29c24a7a774af55f244124f63a5aebd2"},
+    "privateHelperReview": {"path": "evaluations/research-qa/m78-readonly-recovery2-private-independent-result.json", "sha256": "ab15a49e85eae10e1183f6a01c8a52c649ea2fccfc5580e8567cf4bf427a3e2b"},
+    "failureReview": {"path": "evaluations/research-qa/m78-readonly-failure-review2-result.json", "sha256": "7e46ba485e77c132113ac78d8dd4d0ef3ffb440f3a790afcdaa7874532923cac"},
+    "offlineEvaluator": {"path": ".superpowers/m78-readonly-recovery2-evaluate.ts", "sha256": "652a2d931766cb6883bc4b959072544d999857b02ee7b36ffb19a93734a0bcd5"},
+    "runner": {"path": "tools/staging/check-m78-continuation4-readonly-recovery2.ts", "sha256": "47044480d2019e4e162a0156adf81a31d557560190747102144f0006de9fbe7d"},
+    "publicEvaluator": {"path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.ts", "sha256": "4324a96546228070f4d16b0ed6a25cbe02d56d6412d48829d1b60e176db708c1"}
+  },
+  "verified": {
+    "historicalSourcePins": 173,
+    "currentSourceClosurePins": 182,
+    "executionAdmissionPins": 189,
+    "onlyAcceptedHistoricalRouteChanged": true,
+    "exactRuntimeCommitDeploymentImageAndReadyContract": true,
+    "runtimeFreshnessSecondsExclusiveMaximum": 600,
+    "allSourcePinsRehashed": true,
+    "existingRecoveryOutputsLockAndGatesRefused": true,
+    "sourceAndExecutionGatesExclusive": true,
+    "observerExactReadOnlyDerivative": true,
+    "offlineEvaluatorLocalAndExclusive": true,
+    "noReplay": true
+  },
+  "checks": {
+    "testsPassed": 6,
+    "testsFailed": 0,
+    "adversarialRefusalCases": 21,
+    "realFinalizerSourceExecutedWithMockedFilesystem": true,
+    "realFinalizerExecuted": false,
+    "runtimeObserverExecuted": false,
+    "credentialReads": 0,
+    "networkCalls": 0,
+    "providerCalls": 0,
+    "databaseCalls": 0,
+    "gitMutations": 0
+  },
+  "reviewHistory": {
+    "firstReview": "fail",
+    "reworkCycles": 1,
+    "finding": "The first draft source closure did not explicitly require the recovery-2 runtime observer; the repaired closure and finalizer bind it exactly."
+  },
+  "scope": "Exact admission preparation source only; no runtime observation, gate creation, recovery execution, restart or revisit acceptance.",
+  "routing": {"requestedModel": "gpt-6-astra", "requestedEffort": "high", "observedModel": null, "observedEffort": null, "freshDispatchUnavailable": true, "fallbackReviewer": "/root/m78_transport_probe"}
+}

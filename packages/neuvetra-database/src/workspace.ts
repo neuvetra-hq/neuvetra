@@ -1,3 +1,10 @@
+import {readFugitive,saveFugitiveSource,saveFugitivePopulation,reviewFugitive,createFugitiveReport,type M77Authority,type M77SourceSaveInput,type M77PopulationSaveInput,type M77ReviewInput,type M77ReportInput,type M77Family} from './m77'
+import {readStationaryEquipment,readStationaryEquipmentReport,readStationaryEquipmentReportProof,saveStationaryEquipment as storeStationaryEquipment,reviewStationaryEquipment as storeStationaryEquipmentReview,createStationaryEquipmentReport as storeStationaryEquipmentReport,type M76Authorities,type M76SaveInput,type M76ReviewInput,type M76ReportInput} from './m76'
+import {readStationaryDiesel,saveStationaryDiesel as storeStationaryDiesel,reviewStationaryDiesel as storeStationaryDieselReview,createStationaryDieselReport as storeStationaryDieselReport,type M76DieselAuthority,type M76DieselSaveInput,type M76DieselReviewInput,type M76DieselReportInput} from './m76-diesel'
+import {readControlledFleet,readControlledFleetReport,readControlledFleetReportProof,saveControlledFleet as storeControlledFleet,reviewControlledFleet as storeControlledFleetReview,createControlledFleetReport as storeControlledFleetReport,type M75SaveInput,type M75ReviewInput,type M75ReportInput} from './m75'
+import {readMobileDiesel,saveMobileDiesel as storeMobileDiesel,reviewMobileDiesel as storeMobileDieselReview,createMobileDieselReport as storeMobileDieselReport,type M74Authority,type M74SaveInput,type M74ReviewInput,type M74ReportInput} from './m74'
+import {readStationaryGas,saveStationaryGas as storeStationaryGas,reviewStationaryGas as storeStationaryGasReview,createStationaryGasReport as storeStationaryGasReport,type M73Authority,type M73SaveInput,type M73ReviewInput,type M73ReportInput} from './m73'
+import { readCorporateInventory, validateM71Save, validateM71Review, type M71SaveInput, type M71ReviewInput } from "./m71"
 import { readAnnualElectricityEvidence, validateAnnualEvidenceInput, validateAnnualEvidenceReview, type AnnualEvidenceInput, type AnnualEvidenceCorrection, type AnnualEvidenceReviewInput } from "./m68"
 import { readAnnualEvidenceReports, validateAnnualEvidenceReportInput, type AnnualEvidenceReportInput } from "./m68-report"
 import { readAnnualElectricityWorksheet, validateAnnualWorksheetInput, validateAnnualWorksheetReview, type AnnualWorksheetInput, type AnnualWorksheetCorrection, type AnnualWorksheetReviewInput } from "./m67"
@@ -291,6 +298,56 @@ export interface WorkspaceConnection extends WorkspaceSql {
 
 export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
+
+  async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}
+  async findScope1(userId:string,companyId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1(tx,companyId,authorities,policy))}
+  async findScope1Version(userId:string,companyId:string,streamId:string,versionId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Version(tx,companyId,streamId,versionId,authorities,policy))}
+  async findScope1Report(userId:string,companyId:string,streamId:string,reportId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Report(tx,companyId,streamId,reportId,authorities,policy))}
+  async saveProcessScreen(userId:string,companyId:string,streamId:string|null,input:M78ProcessSaveInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>saveProcessScreen(tx,userId,companyId,streamId,input,authorities,policy))}
+  async saveScope1Inventory(userId:string,companyId:string,streamId:string|null,input:M78InventorySaveInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>saveScope1Inventory(tx,userId,companyId,streamId,input,authorities,policy))}
+  async reviewScope1Version(userId:string,companyId:string,streamId:string,family:M78Family,input:M78ReviewInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>reviewScope1Version(tx,userId,companyId,streamId,family,input,authorities,policy))}
+  async createScope1Report(userId:string,companyId:string,streamId:string,family:M78Family,input:M78ReportInput,authorities:M78Authorities,policy:M78Policy|null){return this.asTrustedUser(userId,tx=>createScope1Report(tx,userId,companyId,streamId,family,input,authorities,policy))}
+  async saveFugitiveSource(userId:string,companyId:string,streamId:string|null,input:M77SourceSaveInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>saveFugitiveSource(tx,userId,companyId,streamId,input,authority))}
+  async saveFugitivePopulation(userId:string,companyId:string,streamId:string|null,input:M77PopulationSaveInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>saveFugitivePopulation(tx,userId,companyId,streamId,input,authority))}
+  async reviewFugitive(userId:string,companyId:string,streamId:string,family:M77Family,input:M77ReviewInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>reviewFugitive(tx,userId,companyId,streamId,family,input,authority))}
+  async createFugitiveReport(userId:string,companyId:string,streamId:string,family:M77Family,input:M77ReportInput,authority:M77Authority){return this.asTrustedUser(userId,tx=>createFugitiveReport(tx,userId,companyId,streamId,family,input,authority))}
+
+  async findStationaryEquipment(userId:string,companyId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipment(tx,companyId,authority))}
+  async findStationaryEquipmentReport(userId:string,companyId:string,rosterId:string,reportId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipmentReport(tx,companyId,rosterId,reportId,authority))}
+  async findStationaryEquipmentReportProof(userId:string,companyId:string,rosterId:string,reportId:string,authority:M76Authorities){return this.asUser(userId,tx=>readStationaryEquipmentReportProof(tx,companyId,rosterId,reportId,authority))}
+  async saveStationaryEquipment(userId:string,companyId:string,rosterId:string|null,input:M76SaveInput,authority:M76Authorities){return this.asTrustedUser(userId,tx=>storeStationaryEquipment(tx,userId,companyId,rosterId,input,authority))}
+  async reviewStationaryEquipment(userId:string,companyId:string,rosterId:string,input:M76ReviewInput,authority:M76Authorities){return this.asTrustedUser(userId,tx=>storeStationaryEquipmentReview(tx,userId,companyId,rosterId,input,authority))}
+  async createStationaryEquipmentReport(userId:string,companyId:string,rosterId:string,input:M76ReportInput,authority:M76Authorities){return this.asTrustedUser(userId,tx=>storeStationaryEquipmentReport(tx,userId,companyId,rosterId,input,authority))}
+  async findStationaryDiesel(userId:string,companyId:string,authority:M76DieselAuthority){return this.asUser(userId,tx=>readStationaryDiesel(tx,companyId,authority))}
+  async saveStationaryDiesel(userId:string,companyId:string,worksheetId:string|null,input:M76DieselSaveInput,authority:M76DieselAuthority){return this.asTrustedUser(userId,tx=>storeStationaryDiesel(tx,userId,companyId,worksheetId,input,authority))}
+  async reviewStationaryDiesel(userId:string,companyId:string,worksheetId:string,input:M76DieselReviewInput,authority:M76DieselAuthority){return this.asTrustedUser(userId,tx=>storeStationaryDieselReview(tx,companyId,worksheetId,input,authority))}
+  async createStationaryDieselReport(userId:string,companyId:string,worksheetId:string,input:M76DieselReportInput,authority:M76DieselAuthority){return this.asTrustedUser(userId,tx=>storeStationaryDieselReport(tx,companyId,worksheetId,input,authority))}
+
+  async findStationaryGas(userId:string,companyId:string,authority:M73Authority){return this.asUser(userId,tx=>readStationaryGas(tx,companyId,authority))}
+  async saveStationaryGas(userId:string,companyId:string,worksheetId:string|null,input:M73SaveInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGas(tx,userId,companyId,worksheetId,input,authority))}
+  async reviewStationaryGas(userId:string,companyId:string,worksheetId:string,input:M73ReviewInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGasReview(tx,companyId,worksheetId,input,authority))}
+  async createStationaryGasReport(userId:string,companyId:string,worksheetId:string,input:M73ReportInput,authority:M73Authority){return this.asTrustedUser(userId,tx=>storeStationaryGasReport(tx,companyId,worksheetId,input,authority))}
+  async findMobileDiesel(userId:string,companyId:string,authority:M74Authority){return this.asUser(userId,tx=>readMobileDiesel(tx,companyId,authority))}
+  async saveMobileDiesel(userId:string,companyId:string,worksheetId:string|null,input:M74SaveInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDiesel(tx,userId,companyId,worksheetId,input,authority))}
+  async reviewMobileDiesel(userId:string,companyId:string,worksheetId:string,input:M74ReviewInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDieselReview(tx,companyId,worksheetId,input,authority))}
+  async createMobileDieselReport(userId:string,companyId:string,worksheetId:string,input:M74ReportInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeMobileDieselReport(tx,companyId,worksheetId,input,authority))}
+
+  async findControlledFleet(userId:string,companyId:string,authority:M74Authority){return this.asUser(userId,tx=>readControlledFleet(tx,companyId,authority))}
+  async findControlledFleetReport(userId:string,companyId:string,rosterId:string,reportId:string,authority:M74Authority){return this.asUser(userId,tx=>readControlledFleetReport(tx,companyId,rosterId,reportId,authority))}
+  async findControlledFleetReportProof(userId:string,companyId:string,rosterId:string,reportId:string,authority:M74Authority){return this.asUser(userId,tx=>readControlledFleetReportProof(tx,companyId,rosterId,reportId,authority))}
+  async saveControlledFleet(userId:string,companyId:string,rosterId:string|null,input:M75SaveInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeControlledFleet(tx,userId,companyId,rosterId,input,authority))}
+  async reviewControlledFleet(userId:string,companyId:string,rosterId:string,input:M75ReviewInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeControlledFleetReview(tx,userId,companyId,rosterId,input,authority))}
+  async createControlledFleetReport(userId:string,companyId:string,rosterId:string,input:M75ReportInput,authority:M74Authority){return this.asTrustedUser(userId,tx=>storeControlledFleetReport(tx,userId,companyId,rosterId,input,authority))}
+
+  async findCorporateInventory(userId:string,companyId:string){return this.asUser(userId,tx=>readCorporateInventory(tx,companyId))}
+  async saveCorporateInventory(userId:string,companyId:string,inventoryId:string|null,input:M71SaveInput){
+    const normalized=validateM71Save(input)
+    return this.asTrustedUser(userId,async tx=>{const saved=(await tx.query<{id:string}>("select neuvetra.save_corporate_inventory($1,$2,$3::text::jsonb) id",[companyId,inventoryId,JSON.stringify(normalized)])).rows[0]!.id;const result=await readCorporateInventory(tx,companyId);const v=result?.versions.find(v=>v.id===saved);if(!v)throw new Error("Corporate coverage could not be verified.");return {...v,review:null}})
+  }
+  async reviewCorporateInventory(userId:string,companyId:string,inventoryId:string,input:M71ReviewInput){
+    const normalized=validateM71Review(input)
+    return this.asTrustedUser(userId,async tx=>{const saved=(await tx.query<{id:string}>("select neuvetra.review_corporate_inventory($1,$2,$3::text::jsonb) id",[companyId,inventoryId,JSON.stringify(normalized)])).rows[0]!.id;const result=await readCorporateInventory(tx,companyId);const r=result?.versions.map(v=>v.review).find(r=>r?.id===saved);if(!r)throw new Error("Corporate coverage could not be verified.");return r})
+  }
 
   protected async asUser<T>(userId: string, operation: (tx: WorkspaceSql) => Promise<T>): Promise<T> {
     return this.db.transaction(async (tx) => {
@@ -1091,4 +1148,4 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
   }
 
 }
-
+import {readScope1,readScope1Version,readScope1Report,saveProcessScreen,saveScope1Inventory,reviewScope1Version,createScope1Report,type M78Authorities,type M78Policy,type M78Family,type M78ProcessSaveInput,type M78InventorySaveInput,type M78ReviewInput,type M78ReportInput} from './m78'

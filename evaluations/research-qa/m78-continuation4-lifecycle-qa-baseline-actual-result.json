@@ -1,0 +1,62 @@
+{
+  "status": "m78_continuation4_actual_baseline_qa_admitted",
+  "createdAt": "2026-09-22T22:29:16.4521309Z",
+  "reviewerId": "/root/m78_transport_probe",
+  "scope": "additive read-only strict-auth admission of the immutable closed continuation4 baseline",
+  "journal": {
+    "path": ".superpowers/m78-hosted-continuation4.jsonl",
+    "sha256": "ef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5",
+    "bytes": 9186947,
+    "events": 42,
+    "headSha256": "6190671c0758e414886c1c80b3aecfa748020a58f68890072c81335e84ef7a90",
+    "completedAt": "2026-09-22T22:23:10.489Z"
+  },
+  "diagnostics": {
+    "path": ".superpowers/m78-hosted-continuation4-diagnostics.jsonl",
+    "sha256": "b98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40",
+    "bytes": 243558,
+    "events": 572,
+    "headSha256": "a41a45097e0b13b315a03fc6c5287504a3f6e4b4880d31bf5edee2edc682e660",
+    "requests": 285,
+    "requestErrors": 0,
+    "applicationPostRequests": 0,
+    "loginRequests": 8,
+    "logoutRequests": 8,
+    "allAuthMethodsPost": true
+  },
+  "closure": {
+    "allCreatedAuthSessionsClosed": true,
+    "totalAuthSessionsClosed": 8,
+    "unknownAuthSessions": 0
+  },
+  "admission": {
+    "path": ".superpowers/m78-continuation4-closed-baseline-admission.json",
+    "sha256": "97ae4bc8aa3fa7fa567eb7fef1faae698901f6dd91cd0704d2838d7724b1f95b",
+    "builderPath": ".superpowers/m78-continuation4-closed-baseline-admission.py",
+    "builderSha256": "2f2e238e63c780503335582cf5bd25729efb66590c323cc04dd7b7114aaa3fdc",
+    "gatePath": ".superpowers/m78-continuation4-baseline-gate.json",
+    "gateSha256": "34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5",
+    "toolingCommit": "a74cffa59b18305e5eaf4dd4c65382c08bc8a151"
+  },
+  "officialBaselineResult": {
+    "path": "evaluations/research-qa/m78-continuation4-baseline-independent-result.json",
+    "sha256": "57fc10f6ee4dce55ced4060aa1d41cbd5a125eac3bd58d99bbad7c37ef1daddf",
+    "status": "m78_independent_continuation4_hosted_baseline_passed",
+    "rerunByQa": false
+  },
+  "strictAuthVerifier": {
+    "path": "evaluations/research-qa/m78-continuation4-lifecycle-qa-baseline-auth.ts",
+    "sha256": "08fa0062a520a4d1a2590cd88fefd7257ea88a7e3dbf2860b8b74d76c8bc5692",
+    "result": {
+      "tokens": 8,
+      "logouts": 8,
+      "allAuthMethodsPost": true
+    }
+  },
+  "qaNetworkUsed": false,
+  "qaDatabaseUsed": false,
+  "qaCredentialsUsed": false,
+  "hostedExerciseAccepted": false,
+  "fullLifecycleVerified": false,
+  "limitation": "This supplement closes the escaped baseline-evaluator auth-method check for the exact immutable baseline. It does not accept the exercise or full lifecycle and did not rerun or rewrite the official result."
+}

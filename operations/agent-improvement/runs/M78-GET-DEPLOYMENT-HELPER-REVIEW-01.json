@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "M78-GET-DEPLOYMENT-HELPER-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-DEPLOYMENT-HELPER-REVIEW-01-CANDIDATE1.json",
+      "sha256": "2ab08b3310a01d9c26690ef56fe9ae15a7ba125d57269de11b9340da794aeb57"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-get-deployment-helper-source.json",
+    "evaluations/research-qa/m78-get-deployment-helper-review.py",
+    "evaluations/research-qa/m78-get-deployment-helper-independent.test.py",
+    "evaluations/research-qa/m78-get-deployment-helper-review.md",
+    "evaluations/research-qa/m78-get-deployment-helper-result.json",
+    "evaluations/research-qa/m78-get-deployment-helper-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-ADMISSION-PUBLICATION-AND-NATIVE-QA",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-helper-review.py",
+        "evaluations/research-qa/m78-get-deployment-helper-result.json"
+      ],
+      "reason": "The current helper requires all admission pins, both executable helper pins, exact route and local HEAD, open PR head, six successful fresh checks, exact native result, and exact independent QA semantics."
+    },
+    {
+      "id": "FIXED-RUNTIME-AND-SINGLE-MUTATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-helper-independent.test.py",
+        "evaluations/research-qa/m78-get-deployment-helper-review.md"
+      ],
+      "reason": "The helper binds the fixed prior deployment/commit/image, no other active deployment, disabled auto-deploy and exact readiness, then contains one fixed-service mutation for only the admitted commit."
+    },
+    {
+      "id": "FAIL-CLOSED-REPLAY-AND-UNCERTAINTY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-helper-independent.test.py",
+        "evaluations/research-qa/m78-get-deployment-helper-result.json"
+      ],
+      "reason": "Exclusive query, intent and response artifacts are ordered before the single bounded mutation. Nonzero, timeout, malformed or GraphQL-error responses cannot pass and the retained exclusive artifacts prevent blind replay."
+    },
+    {
+      "id": "READ-ONLY-OBSERVER-AND-EVIDENCE-RETENTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-helper-source.json",
+        "evaluations/research-qa/m78-get-deployment-helper-independent.test.py"
+      ],
+      "reason": "The observer has zero provider mutation calls, emits progress only before success, and requires exact commit/image/service exclusivity, auto-deploy and readiness before exclusive raw-collection and runtime-pass writes."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-deployment-helper-root-acceptance.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-DEPLOYMENT-HELPER-REVIEW-01-CANDIDATE1.json",
+        "sha256": "2ab08b3310a01d9c26690ef56fe9ae15a7ba125d57269de11b9340da794aeb57"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Candidate 1 omitted the observer admission pin and raw deployment-collection retention. Root preserved both candidate-1 files and repaired the current helpers before final review.",
+    "The requested fresh Astra/high dispatch was unavailable at the runtime agent-thread limit; this existing independent non-author reviewer continued with observed settings unknown.",
+    "The real helpers were never imported or executed. No network, provider, credential, database, admission, deployment or runtime action occurred.",
+    "The review is source-only. Exact admission, current commit/head, fresh CI, source safety and provider state remain execution-time requirements."
+  ]
+}

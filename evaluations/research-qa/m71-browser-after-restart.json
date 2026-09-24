@@ -1,0 +1,14 @@
+{
+  "observedAt": "2026-09-15T06:54:18.126Z",
+  "migrationSha256": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19",
+  "companyId": "33f0aedf-cc6b-468e-9f05-780522bf28a5",
+  "versions": 2,
+  "currentVersionSha256": "50ffd615549e07a00eca5d549901c0a1b4afd81d457efa757eb8eeafa541699f",
+  "currentReview": "accepted_bounded_internal",
+  "exactDownload": true,
+  "downloadBytes": 25651,
+  "downloadSha256": "39ad96d0bdf6d96cb64624bb3da28d3010661b7f80e1622dabd51d17a360f6b2",
+  "registerSha256": "eb33968ac71aa0e0a98ee74bd4ddc2400a19d612098d6ce99116f719e078eadb",
+  "nativeDatabase": "m71_author_release",
+  "authentication": "injected local fictional actors"
+}

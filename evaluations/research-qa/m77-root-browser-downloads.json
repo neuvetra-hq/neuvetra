@@ -1,0 +1,30 @@
+{
+  "status": "actual_browser_download_bytes_pass",
+  "database": "m77_author_root_ui3",
+  "entries": [
+    {
+      "id": "8e772f4b-7396-46c9-b279-f60202a13ccf",
+      "format": "html",
+      "bytes": 455840,
+      "sha256": "c758fff6e9c06f350f0c627cd6b3b7e64538a3841cd096e471aa5ff0843dc06c"
+    },
+    {
+      "id": "8e772f4b-7396-46c9-b279-f60202a13ccf",
+      "format": "json",
+      "bytes": 309001,
+      "sha256": "41b97fc7d7e0377c1b40bb5458f6d33eafc901694971c22f4fe1ceb946df4054"
+    },
+    {
+      "id": "95c3db0f-d101-4354-b1b8-b7c44aa5017c",
+      "format": "html",
+      "bytes": 459919,
+      "sha256": "ce484fb84bf40545a0b036bc9e88585ee64392673a9bc9a92882cae099dc4418"
+    },
+    {
+      "id": "95c3db0f-d101-4354-b1b8-b7c44aa5017c",
+      "format": "json",
+      "bytes": 312118,
+      "sha256": "b95856d36619c554794709d1bda75168cbbe30bef11f0cbf9f961ad83c336d17"
+    }
+  ]
+}

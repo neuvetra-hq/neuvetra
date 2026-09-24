@@ -1,0 +1,35 @@
+{
+  "status": "m78_get_probe_guard_candidate3_independent_review_failed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 1,
+  "candidateGuardSha256": "b067b047735cc570fca9a6682c9499deed0662df68899bebb3c3ee71dc390d22",
+  "candidateSnapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE3.json",
+    "sha256": "c8c731fecb52231b7546379c4ba6ca3bf744bf10b95cfececc472961a3c5ae26"
+  },
+  "finding": {
+    "id": "FINITE-GUARD-EXPORTED-MUTABLE-MAP",
+    "severity": "material",
+    "status": "open",
+    "summary": "Object.freeze does not freeze Map entries. The exported enforcement Map accepts set/delete, so an importer can add an arbitrary SQL digest and make assertProbeSqlAllowed accept it without changing any pinned source bytes."
+  },
+  "verifiedCandidateProperties": {
+    "finiteNormalizedTemplateCount": 20,
+    "sourcePins": 10,
+    "hostedAsUserActorAndAccessFormsIncluded": true,
+    "parameterArityChecked": true,
+    "dynamicWritingFlagsRequireBooleanFalse": true,
+    "candidate2NestedCastAndArbitraryQueriesRejectedBeforeMutation": true,
+    "historicalCandidate1ResultUnchanged": true,
+    "nativeRerun": false
+  },
+  "checks": {
+    "testsPassed": 1,
+    "testsFailed": 0,
+    "assertions": 5,
+    "strictTypeScriptWithSkipLibCheck": true,
+    "databaseUsed": false,
+    "networkUsed": false
+  },
+  "repair": "Keep the enforcement Map private and expose only immutable copied diagnostics needed by tests. Deep-copy or deep-freeze exported source-pin metadata. Preserve this candidate and recheck the exact finite templates and source callers in a new candidate."
+}

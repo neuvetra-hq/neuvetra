@@ -1,0 +1,15 @@
+{
+  "task": "M76-INDEPENDENT-QA",
+  "purpose": "Historical natural-gas preservation baseline observed before new M76 implementation acceptance",
+  "files": {
+    "apps/site-api/src/calculation/stationary_natural_gas.py": "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603",
+    "apps/site-api/src/calculation/m73_stationary_natural_gas.py": "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14",
+    "apps/site-api/src/calculation/m73-authority.ts": "4c87f519658464822751850557b61324bf922caa306ee3b8ad6f4c7daa52aefc",
+    "packages/neuvetra-database/src/m73-contract.ts": "311a78248aab025bb410bdb8d9b09236c9843de70e1322e5b281cd01e7876fe6",
+    "packages/neuvetra-database/src/m73-validation.ts": "b5fab6836fc164151ac1628ecc2b35a9f959680a440fc0e84202917e496c4eb3",
+    "packages/neuvetra-database/src/m73-report.ts": "85bb39f20ccdfe1c8f44783bb7432d1a400e79a4a64d92577076ac0c6542ee09",
+    "packages/neuvetra-database/src/m73.ts": "207482cc8bfb59b524c8d725b3c14e7592aaa2965fa450e16d88dbb630e1b8fe",
+    "packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql": "aa4968c63087f353b5bf80d64bced67270bc5ad17f715393b40313bb57f7f732",
+    "apps/site-web/src/lib/m73-api.ts": "871d177d5b0ba193a3ef7557f1825b8d8d8ca10792bde740b9d8ab5be3ee3636"
+  }
+}

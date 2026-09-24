@@ -1,0 +1,88 @@
+{
+  "milestone": "M73",
+  "observed_at": "2026-09-15T20:44:58.588993+00:00",
+  "implementation_commit": "3f92fdac0bf1e681db634410ad455b61faaed790",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "draft": true,
+  "merged": false,
+  "required_checks": [
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "deployment": {
+    "observedAt": "2026-09-15T20:41:44.8455412Z",
+    "status": "SUCCESS",
+    "imageDigest": "sha256:e677c7a93c9ad703bc2f2734c054178e9bc199041701793d8816ef97e53566c6",
+    "restartMutationReturned": true,
+    "deploymentId": "30c5a4af-138f-4127-b2f8-3ea8df1abc6b",
+    "commit": "3f92fdac0bf1e681db634410ad455b61faaed790",
+    "ready": {
+      "status": "ready",
+      "profile": "neuvetra.private-synthetic-staging.v1",
+      "schemaVersion": 16,
+      "legacyContainmentVerified": true
+    }
+  },
+  "migration": {
+    "status": "m73_migration_committed",
+    "sha256": "aa4968c63087f353b5bf80d64bced67270bc5ad17f715393b40313bb57f7f732",
+    "schemaVersion": 16,
+    "oldRowsPreserved": true,
+    "rolesAndMembershipsPreserved": true
+  },
+  "recovery": {
+    "application_tables": 67,
+    "application_rows": 176,
+    "independent_assertions": 80,
+    "exact_downloads": 14,
+    "exact_download_bytes": 133998,
+    "provider_auth_recovery": false
+  },
+  "journey": {
+    "application_post_requests": 11,
+    "exercise_event_sha256": "e194a332a2770ceecb10eff179cf3cd73cb2b6e34050deed45be247810f6db43",
+    "revisit_application_post_requests": 0,
+    "all_created_auth_sessions_closed": true,
+    "revisit_terminal_event_sha256": "e4ec8162a96bb5d807d728f4b258d7f109c9d45ff64136976b2c1792c9671bea",
+    "journal_file_sha256": "575728bdb7dc50f5e9562e1363f1bf605a4cc4465122715c2508e377f54060c5"
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M73-HOSTED-EXECUTION.json",
+    "sha256": "c50674aa40ef354b02d2cd1849962040847b41c6f6b2d1513d091eae81ebfa7f"
+  },
+  "limitations": [
+    "Synthetic annual2025 California stationary natural gas HHV MMBtu dedicated-meter profile only.",
+    "Corporate inventory and Scope1 remain incomplete; factors/method unreleased; no legal or external assurance determination.",
+    "Native print entry-point confirmed; no physical/PDF/pagination fidelity claim.",
+    "Extra postrestart browser reload blocked by an open extension UI; pre-restart actual hosted visuals/download passed; postrestart exact bytes verified by API revisit."
+  ],
+  "closure_publication": "Coordinator verifies final record commit remote checks and live deployment separately."
+}

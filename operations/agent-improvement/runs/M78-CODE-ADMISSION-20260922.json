@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "M78-CODE-ADMISSION-20260922",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_release",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CODE-ADMISSION-20260922-CANDIDATE1.json",
+      "sha256": "9a8ccbc325a4624df6054a6064d0e1d6ff0c1ba1bc0b0ad55a58ec7b97e2e774"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-CODE-GATE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-code-admission-20260922-review.md",
+        "evaluations/research-qa/m78-code-admission-20260922.json"
+      ],
+      "reason": "115current source pins exact; six required exact-commit checkruns all completed success; final receipt same-reviewer gate-compatible."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-hosted-release-preparation-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CODE-ADMISSION-20260922-CANDIDATE1.json",
+        "sha256": "9a8ccbc325a4624df6054a6064d0e1d6ff0c1ba1bc0b0ad55a58ec7b97e2e774"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-code-admission-20260922-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-code-admission-20260922.json",
+      "sha256": "59786187e0d86d4a3b04af4850c7ebf918f9089841be0149c0933895ae935d38"
+    },
+    {
+      "path": "evaluations/research-qa/m78-code-admission-20260922-review.md",
+      "sha256": "cd4858a531836cfc0ca7a0556b1d86baf073001d4a5dbed2f6fb731533f879e2"
+    }
+  ]
+}

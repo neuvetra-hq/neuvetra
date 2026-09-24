@@ -1,0 +1,15 @@
+{
+  "phase": "initial_two_tests",
+  "directory": "C:\\Users\\nimab\\AppData\\Local\\Temp\\neuvetra-m78-ci-initial-yROw9d",
+  "copiedFiles": 139,
+  "excluded": [
+    ".superpowers",
+    ".tmp",
+    ".git",
+    "node_modules"
+  ],
+  "noNetworkOrDatabase": true,
+  "exitCode": 1,
+  "stdout": "bun test v1.3.12 (700fc117)\n",
+  "stderr": "\nevaluations\\research-qa\\m78-hosted-journey-independent.test.ts:\n\n# Unhandled error between tests\n-------------------------------\nerror: Cannot find package 'postgres' from 'C:\\Users\\nimab\\AppData\\Local\\Temp\\neuvetra-m78-ci-initial-yROw9d\\packages\\neuvetra-database\\src\\hosted.ts'\n-------------------------------\n\n\nevaluations\\research-qa\\m78-hosted-plan-independent.test.ts:\n(pass) factual successor preserves all graph identities and changes only controlled inclusion facts [16.00ms]\n(pass) new process evidence covers every location/offsite and keeps opaque HFC sources exact [31.00ms]\n(pass) fixed recipe refuses prior saved process/inventory before any intent callback [15.00ms]\n(pass) first blocked inventory input validates exact current coverage/dependencies with null predecessor [16.00ms]\n(pass) changed source shape or previously retained process cannot be replaced by negative evidence [16.00ms]\n\n 5 pass\n 1 fail\n 1 error\n 39 expect() calls\nRan 6 tests across 2 files. [158.00ms]\n"
+}

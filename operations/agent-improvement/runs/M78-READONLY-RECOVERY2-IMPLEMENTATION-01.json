@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-RECOVERY2-IMPLEMENTATION-01",
+  "role": "software-engineering",
+  "execution_context": "/root/m78_transport_continuation",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-IMPLEMENTATION-01-CANDIDATE1.json",
+      "sha256": "fe4674ef79bc022b232772315ba148548eff4813f2124609bb5331a279e29e80"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery2.ts",
+      "sha256": "47044480d2019e4e162a0156adf81a31d557560190747102144f0006de9fbe7d"
+    },
+    {
+      "path": "tools/staging/check-m78-continuation4-readonly-recovery2.test.ts",
+      "sha256": "da0ba9f072d72549f544b5c80070d306a28ab993d02bec10d47f54017a6b19f1"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.ts",
+      "sha256": "4324a96546228070f4d16b0ed6a25cbe02d56d6412d48829d1b60e176db708c1"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-independent-review.test.ts",
+      "sha256": "27cf9e458d7316991c3ebcbff1b6ee4e7c1902693c7b07d7f326b663ddc0d2a6"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-preparation-report.md",
+      "sha256": "0b05b4d004f2340b3fc185e8b37ed720699b9c3c8c90fbe696b408ac7d347f11"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-preparation-result.json",
+      "sha256": "90d76c155e1261a6c88551dad33df0973e3c9058fb17d6898acdf0c77440b058"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_FAILED_EVIDENCE_AND_SOURCE_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4-readonly-recovery2.ts",
+        "tools/staging/check-m78-continuation4-readonly-recovery2.test.ts"
+      ],
+      "reason": "Pre-authentication binds the exact failed exercise, failed first recovery, corrected independent failure review, historical source closure and separate fresh source/runtime gate; duplicate execution is refused."
+    },
+    {
+      "id": "DURABLE_RAW_CAPTURE_AND_CLEANUP",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4-readonly-recovery2.ts",
+        "evaluations/research-qa/m78-readonly-recovery2-root-security.test.ts"
+      ],
+      "reason": "Exact base64 application bytes are durably captured before parsing, bounded, auth-secret-free and non-accepting; diagnostic, capture and token-response failures preserve local cleanup and veto success."
+    },
+    {
+      "id": "EXACT_RETAINED_ARTIFACT_RECONSTRUCTION",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/check-m78-continuation4-readonly-recovery2.test.ts",
+        "evaluations/research-qa/m78-readonly-failure-review2-fixture.ts"
+      ],
+      "reason": "The real nonempty archived baseline fixture reconstructs all mobile, fleet and equipment artifacts, including 24 explicit roster reads and complete proof-envelope hashes. BOM-preserving artifact decoding rejects changed endpoint bytes."
+    },
+    {
+      "id": "OFFLINE_EVALUATOR_AND_TRANSPORT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-independent-review.ts",
+        "evaluations/research-qa/m78-readonly-recovery2-independent-review.test.ts"
+      ],
+      "reason": "The evaluator binds every captured app response to diagnostics and observation ordinals, production-decodes fresh state, reconstructs retained artifacts, and checks the exact 37-operation typed delta and preserved histories. Focused validation passed 11 tests, 116 assertions and strict targeted TypeScript."
+    },
+    {
+      "id": "INDEPENDENT_CANDIDATE_REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery2-root-result.json"
+      ],
+      "reason": "Root independently reviewed the frozen candidate, reproduced eleven tests/116 assertions and strict TypeScript, and verified exact source and snapshot pins. Actual execution remains a separate gate."
+    },
+    {
+      "id": "ACTUAL_RECOVERY2_EXECUTION",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "This assignment authorized source and offline fixture work only. It performed no credential, authentication, hosted, provider, database, restart or revisit action and does not claim an actual pass."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-recovery2-root-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-IMPLEMENTATION-01-CANDIDATE1.json",
+        "sha256": "fe4674ef79bc022b232772315ba148548eff4813f2124609bb5331a279e29e80"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "fail",
+    "material_findings_open": 1,
+    "rework_cycles": 1,
+    "escaped_defects": 1,
+    "repeated_findings": [],
+    "blocker": "Frozen evaluator dispatch rejects actual population-discovery payload. Corrected offline evaluator and actual evidence require independent review; original source remains preserved."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "The initial reviewed runner hash 776e7ca6ad2c4ef12baa3a98c3efa1a5844c00a3d57146cef6a895ac369ba5e0 could strip a UTF-8 BOM from HTML or snapshot text before metadata comparison. The final frozen runner preserves BOM bytes; the same 11-test/116-assertion group and strict targeted TypeScript passed after correction.",
+    "The real archived baseline supplies all eight nonempty fleet/equipment report bodies and exact retained artifact equality. No complete fresh post-37 capture exists, so no synthetic fixture is presented as a full evaluator positive.",
+    "Board authorization for read-only preservation remains in force; technical execution gates and independent candidate acceptance remain missing. Restart and revisit remain unauthorized.",
+    "No credential, authentication, hosted request, database, provider, Git, official recovery journal, restart or revisit action occurred.",
+    "Root accepted source preparation after exact nonempty baseline reconstruction, added independent capture/session tests and BOM artifact review. This is not actual recovery acceptance.",
+    "Post-source-acceptance escaped offline evaluator defect: population-discovery operation matched generic individual-fugitive prefix. Live capture passed; frozen evaluator4324 did not. Historical snapshot/source acceptance preserved. Root new corrected evaluatorc45f9484 passes retained actualcapture; independent correction/actual review pending. Evidence: evaluations/research-qa/m78-readonly-recovery2-offline-dispatch-correction.json. Original source remains immutable and must not be treated as actual acceptance."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M72-OPS",
+  "role": "data-database",
+  "execution_context": "/root/m72_ops",
+  "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M72-OPERATORS.json",
+      "sha256": "979c6da0da1e0fa54f8883fb0667ac157e346193dce2ab5dc3da7859f479d3dd"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M72-OPS-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m72-security-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m72_security",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m72-security-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M72-OPERATORS.json",
+        "sha256": "979c6da0da1e0fa54f8883fb0667ac157e346193dce2ab5dc3da7859f479d3dd"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Fresh limited-context specialist dispatched using registered critical Astra/high request; actual observed compute unknown. No credentials in prompt. Root owns hosted actions and publication; independent reviewers cannot author application controls.",
+    "Operator delivery and independent review complete; hosted rollout acceptance and board demonstration remain separate. Initial compatibility and recovery limitations retained. Final LF snapshot was independently reread."
+  ]
+}

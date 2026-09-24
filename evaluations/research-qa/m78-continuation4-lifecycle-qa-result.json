@@ -1,0 +1,98 @@
+{
+  "status": "m78_continuation4_lifecycle_evaluator_independent_review_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "reviewedAt": "2026-09-22T22:33:37.811Z",
+  "admission": "offline_evaluator_preparation_plus_exact_closed_baseline",
+  "reviewedCandidate": {
+    "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE3.json",
+    "sha256": "51edfe895ed02eecdee165debe7fe0d242b0c07ff014b0e29c23bf4a9c3d18ae"
+  },
+  "rejectedCandidates": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE1.json",
+      "sha256": "9e9dbbdf84df0d05f445565c85658f486edc8b3d12f026ef3a6d066d270dabae",
+      "reason": "missing diagnostic, recipe, retained-state and restart-freshness bindings"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-LIFECYCLE-REVIEW-PREP-01-CANDIDATE2.json",
+      "sha256": "ce1f2fc4048a47a26f329b71e4f4c0b9f307851debdafcec56b7f2685f362970",
+      "reason": "restart freshness measured from exercise closure instead of revisit admission"
+    }
+  ],
+  "candidateFiles": [
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-independent-review.ts",
+      "sha256": "a90c14b4793c77ca5544d0cac7149da5fb36eb0c1d09779164b4c1bf6bbc128f"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts",
+      "sha256": "b7f3cc4d8f83e3a82eb0f17252fa00b2d14bf5d9802a88be57e6dc06672247dd"
+    },
+    {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-preparation.md",
+      "sha256": "87fdd3943c2bdceb5b93e60d5192da3a9e60d5e50e091458502d5633b36a7716"
+    }
+  ],
+  "checks": {
+    "combinedTests": {
+      "tests": 14,
+      "assertions": 863,
+      "failures": 0
+    },
+    "strictTypeScript": "passed",
+    "candidateSnapshotJson": "passed",
+    "candidateEmbeddedText": "passed",
+    "actualBaselineStrictAuth": {
+      "tokens": 8,
+      "logouts": 8,
+      "allAuthMethodsPost": true
+    }
+  },
+  "lifecycleEvidence": {
+    "exactRecipeOperations": 37,
+    "exactReportIdentities": 5,
+    "exerciseOnlySessionClosures": 16,
+    "fullLifecycleSessionClosures": 24,
+    "applicationPostRequestsByPhase": [
+      0,
+      37,
+      0
+    ],
+    "grossKgCo2eExact": "126850.17632025",
+    "continuousJournalAndDiagnosticHashChains": true,
+    "diagnosticOrdinalResetPerPhase": true,
+    "restartFreshnessMeasuredAtRevisit": true,
+    "independentDecodedRevisitObservationRequired": true
+  },
+  "escapedBaselineEvaluatorFinding": {
+    "reproduced": true,
+    "description": "accepted baseline evaluator admits a rehashed GET token fixture",
+    "actualBaselineAffected": false,
+    "exactBaselineStrictVerifierPassed": true
+  },
+  "actualBaseline": {
+    "accepted": true,
+    "supplement": {
+      "path": "evaluations/research-qa/m78-continuation4-lifecycle-qa-baseline-actual-result.json",
+      "sha256": "6937df29bb08b4bd253ceade366c1e19d512e0e256a0090b0d00f688fc1f6ae3"
+    },
+    "officialResultRerunByQa": false,
+    "requests": 285,
+    "requestErrors": 0,
+    "applicationPostRequests": 0,
+    "authSessionsClosed": 8,
+    "unknownAuthSessions": 0
+  },
+  "portableCi": {
+    "qaSelector": null,
+    "reason": "independent QA fixture reads preserved local .superpowers evidence",
+    "recommendedAuthorTest": "evaluations/research-qa/m78-continuation4-lifecycle-independent.test.ts"
+  },
+  "actualExerciseAccepted": false,
+  "fullLifecycleAccepted": false,
+  "qaNetworkUsed": false,
+  "qaDatabaseUsed": false,
+  "qaCredentialsUsed": false,
+  "officialJournalsModified": false,
+  "authorFilesModified": false
+}

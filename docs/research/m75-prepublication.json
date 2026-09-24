@@ -1,0 +1,39 @@
+{
+  "observedAt": "2026-09-16T06:38:26.473152+00:00",
+  "stage": "ready_for_remote_checks_and_specific_controlled_upgrade",
+  "currentHostedSchema": 17,
+  "hostedApplicationWrites": 0,
+  "allVerificationAuthSessionsClosed": true,
+  "baselineJournalHead": "f2604e23133813d92faec8f15231beec8cd24073ae0bf3f01accee60d53cdff9",
+  "automaticDeploymentPaused": true,
+  "liveServiceStopped": false,
+  "migrationExecuted": false,
+  "newCodeDeployed": false,
+  "hosted17BackupRestoreAndIndependentReplay": "passed",
+  "hosted17ApplicationTables": 83,
+  "hosted17ApplicationRows": 224,
+  "populated18ForwardRecoveryIndependentReplay": "passed",
+  "receipts": [
+    {
+      "path": ".superpowers/m75-hosted-backup-candidate1.json",
+      "sha256": "b24498f4e2e784e39a8734ec064eede4870034145216078a46f93b1f9e12801c"
+    },
+    {
+      "path": ".superpowers/m75-hosted-restore-candidate1.json",
+      "sha256": "9bdb887bbdfe28a1bf1fd6c8c09ade72673ad8c2329a3bfc6ca9a7e3194f9d31"
+    },
+    {
+      "path": ".superpowers/m75-security-hosted-recovery-candidate1.json",
+      "sha256": "6fa020eeb26d0160a33aaec137394d30c797c70fa1531ab72f35533cb6c1d544"
+    },
+    {
+      "path": ".superpowers/m75-security-forward-review-candidate1.json",
+      "sha256": "c9f92b29eb60e7a479aeb4ca5befe418d570607f53a4104d701b769482ae85fa"
+    }
+  ],
+  "limitations": [
+    "Synthetic application data only; provider Auth/storage disaster recovery excluded.",
+    "Backup/review age and live baseline must be rechecked before execution.",
+    "After schema18 use18-compatible forward recovery; never deploy schema17 code."
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "status": "m78_get_ci_history_root_accepted",
+  "observedAt": "2026-09-23T01:59:20.502497+00:00",
+  "independentReceiptSha256": "35924e7cb2cbea450846c1c06722b1e20d02570e2271c26376a26084079f1851",
+  "rootReproducedTests": 5,
+  "rootAssertions": 210,
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-CI-HISTORY-REVIEW-01-CANDIDATE2.json",
+      "sha256": "7ee97bfb525817e878e7bdabd22eb3b28493ed82a935d67619a13106d71281ba"
+    }
+  ],
+  "scope": "Exact candidate2 source correction; remote checks and deployment remain pending."
+}

@@ -1,0 +1,42 @@
+{
+  "status": "m78_interrupted_session_metadata_reviewed_cleanup_strategy_bounded",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T20:12:22.231Z",
+  "observationPath": ".superpowers/m78-interrupted-sessions-observed.json",
+  "observationSha256": "4570ae628e05c71d8feab14acc6e5c04fe985f842ab2cdf8d111b19031d1f273",
+  "selectedCount": 4,
+  "targetMetadataSha256": "581f9c0c8eb46605351cd4adaf3e6a132ddbb651541e9b044f56d80a7947d670",
+  "offsets": [
+    {
+      "role": "manager1",
+      "createdAfterClientResponseMs": 249
+    },
+    {
+      "role": "manager2",
+      "createdAfterClientResponseMs": 336
+    },
+    {
+      "role": "member",
+      "createdAfterClientResponseMs": 338
+    },
+    {
+      "role": "outsider",
+      "createdAfterClientResponseMs": 347
+    }
+  ],
+  "attribution": "strong_inference_four_unique_subject_sessions_aligned_with_logins",
+  "exactClientWindowMatch": false,
+  "recoveredJwtSessionIdProof": false,
+  "cleanupExecuted": false,
+  "cleanupSourceAccepted": false,
+  "accessTokenUsability": "not_verified",
+  "accessTokenExpiryVerified": false,
+  "nextGate": "independent exact cleanup source review, guarded execution and postcondition review",
+  "hostCalls": 0,
+  "authCalls": 0,
+  "databaseCalls": 0,
+  "report": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-review.md",
+    "sha256": "0387ca6fd93d8d22b2015664add40d2f53a5939a26a5ae10eeaa3bb4e95bf6e5"
+  }
+}

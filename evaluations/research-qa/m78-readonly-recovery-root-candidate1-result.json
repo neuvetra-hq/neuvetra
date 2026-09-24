@@ -1,0 +1,36 @@
+{
+  "status": "m78_readonly_recovery_candidate1_independent_review_failed",
+  "reviewerId": "/root",
+  "reviewedAuthor": "/root/m78_transport_continuation",
+  "candidateRunnerSha256": "d4a5e95f13ea2c0379c5ac18ad245622b81765a77c0fa1728118a87d30c89898",
+  "candidateSnapshotSha256": "f35c772708fd3997e1b974392eb56f311bd943e77159382414c5a0faeb089b24",
+  "observedAt": "2026-09-23T01:52:16.681570+00:00",
+  "test": {
+    "path": "evaluations/research-qa/m78-readonly-recovery-root-security.test.ts",
+    "sha256": "267b924b4e7ab915563c97743274eec3eb81ea3cad9b1d729d4c4bdd806fe2b9",
+    "passed": 0,
+    "failed": 1,
+    "expectedCleanupRequests": 4,
+    "observedCleanupRequests": 0
+  },
+  "findings": [
+    {
+      "id": "RECOVERY-DIAGNOSTIC-CLEANUP",
+      "status": "open",
+      "evidence": "A failing diagnostic request-intent append suppresses every known-session logout before transport. Header-diagnostic failure can also discard an already-returned token response. Cleanup transport must remain available while diagnostic health prevents all success and further ordinary activity."
+    },
+    {
+      "id": "RECOVERY-LOCAL-LOGOUT-SCOPE",
+      "status": "open",
+      "evidence": "The fixed auth boundary checks logout pathname but permits missing/global scope. Require scope=local so test cleanup cannot sign out other sessions."
+    }
+  ],
+  "hostedRequests": 0,
+  "realAuthentication": false,
+  "databaseUsed": false,
+  "applicationWrites": 0,
+  "limitations": [
+    "Source/mock review only; full fresh post-37 evaluator positive remains unavailable until separately admitted read-only observation.",
+    "The local test loads retained synthetic failure evidence; it is not a portable CI test."
+  ]
+}

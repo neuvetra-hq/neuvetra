@@ -1,0 +1,38 @@
+{
+  "profile": "neuvetra.m78.local-rehearsal-admission.v1",
+  "createdAt": "2026-09-17T04:38:12.243Z",
+  "reviewerId": "/root/m76_backend",
+  "reviewSnapshotSha256": "4b75b0948a7d0dea0333574a480d97a8250bce487b8b40f3bac6403e037a1959",
+  "migrationSha256": "b62c9645448848c57b358a9741168c0556bbcd6d205f9236b51ca47c147bca6a",
+  "reviewedArtifacts": [
+    {
+      "path": "tools/staging/m78-inventory.ts",
+      "sha256": "835811b0b890dd9dd7a032b786b0f4b4004f49fb581309957b1c33c0d9652294"
+    },
+    {
+      "path": "tools/staging/m78-backup.ts",
+      "sha256": "b7b06dac520e05dcf77267e532d27ea0aa3176eca3e9ff0c0deaa8f468a5d945"
+    },
+    {
+      "path": "tools/staging/m78-upgrade.ts",
+      "sha256": "3c0b02fdf88f8cb4cbc0a4e0ccfa15f23b975c3efcb93867fa1cf563cb529dab"
+    },
+    {
+      "path": "tools/staging/m78-restore.ts",
+      "sha256": "7e7b17f8cf7e0210117ed76c335aa180ab27e236b180bc5bc05c33e0ccc2fe7f"
+    },
+    {
+      "path": "tools/staging/m78-replay.ts",
+      "sha256": "9b93265dcd5fe1044a5d841d67a478cdbc0db47c87b6e489ed078cd51674458d"
+    },
+    {
+      "path": "tools/staging/m78-operators.test.ts",
+      "sha256": "c9627edf5ac9247e24860388279d15e13d54ee8c7fd206044302c3cf85f6ee80"
+    },
+    {
+      "path": "tools/staging/m78-operators-native.ts",
+      "sha256": "81d08971ee8891f1a13d0dc287335c3c7c3974237d1cd4b8ab7c3df0bc576e5a"
+    }
+  ],
+  "localOnly": true
+}

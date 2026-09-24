@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT4-READONLY-RECOVERY-ROOT-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-ROOT-REVIEW-01-CANDIDATE1.json",
+      "sha256": "6e2e922395863bc584185df20f29f25d9c25c69a023448415f31f9e0c9071b6b"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT4-READONLY-RECOVERY-ROOT-REVIEW-01-CANDIDATE3.json",
+      "sha256": "8a9b779377ece198a1f1d2900f89da19fcdd92827f8e13e96aeab72a58eb8924"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "FAILURE-CLEANUP-AND-LOCAL-SCOPE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-recovery-root-candidate3-result.json",
+        "evaluations/research-qa/m78-readonly-recovery-root-security.test.ts"
+      ],
+      "reason": "Candidate3 fixes both cleanup/scope findings and the later final-diagnostic veto; root reproduced author checks and added independent token/local/global-scope challenge."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "fail",
+    "material_findings_open": 3,
+    "rework_cycles": 2,
+    "escaped_defects": 3,
+    "repeated_findings": [],
+    "blocker": "Real retained report reconstruction failed. Recovery2 must correct metadata-only fleet/equipment reports, mobile artifact keys and separate proof envelopes; first attempt stays failed."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Root is independent of recovery implementation author. Requested role compute is policy metadata; inherited actual settings unknown.",
+    "The single failing test used injected transport and retained synthetic evidence only; no real authentication, network, database or provider action.",
+    "The full post-37 production-decoder evaluator positive remains unrun pending separately admitted observation.",
+    "Post-acceptance observation: evaluations/research-qa/m78-readonly-recovery-failure.json. Historical source verdict and immutable snapshots are preserved. Source preparation acceptance did not exercise nonempty retained artifact reconstruction. Recovery2 is a separate assignment; this consumed candidate cannot be reused."
+  ]
+}

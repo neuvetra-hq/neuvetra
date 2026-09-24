@@ -1,0 +1,12 @@
+{
+  "status": "m78_readonly_failure2_review_root_accepted",
+  "reviewerId": "/root",
+  "reviewSha256": "7e46ba485e77c132113ac78d8dd4d0ef3ffb440f3a790afcdaa7874532923cac",
+  "rootReproducedTests": 4,
+  "rootReproducedAssertions": 281,
+  "independentByteCrosscheck": "Bun string, UTF8 byte and WebCrypto SHA256 agreed on retained fleet report 4fdfaf1d-a1b6-4a37-9754-be3f89c09767. No normalization or changes to archived artifacts.",
+  "reviewRepair": "Candidate1 proof-hash wording was corrected to hash the complete canonical envelope; prior result and snapshot preserved. Tests and fixture unchanged.",
+  "actualRecoveryAccepted": false,
+  "restartExecuted": false,
+  "revisitExecuted": false
+}

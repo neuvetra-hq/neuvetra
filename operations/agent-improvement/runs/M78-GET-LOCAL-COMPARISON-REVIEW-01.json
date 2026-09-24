@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "id": "M78-GET-LOCAL-COMPARISON-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-LOCAL-COMPARISON-REVIEW-01-CANDIDATE1.json",
+      "sha256": "e3943d0a31c5de70c4d9fd166e6f12e7f655ee89dd942bc134e9064782bcac3c"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-get-local-comparison-result.json",
+    "evaluations/research-qa/m78-get-local-comparison-source.json",
+    "evaluations/research-qa/m78-get-local-comparison-independent-review.ts",
+    "evaluations/research-qa/m78-get-local-comparison-independent.test.ts",
+    "evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts",
+    "evaluations/research-qa/m78-get-local-comparison-independent-review.md",
+    "evaluations/research-qa/m78-get-local-comparison-independent-result.json",
+    "evaluations/research-qa/m78-get-local-comparison-independent-freeze.ts"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT-RESULT-AND-PROVENANCE-BINDING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts",
+        "evaluations/research-qa/m78-get-local-comparison-independent-result.json"
+      ],
+      "reason": "The actual result, operator-source archive, admission, helper, route, guard, and three independent source-review receipts are rehashed and their required semantics match."
+    },
+    {
+      "id": "RESPONSE-EQUIVALENCE-AND-STRUCTURAL-REDUCTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-local-comparison-independent-review.ts",
+        "evaluations/research-qa/m78-get-local-comparison-independent-review.md"
+      ],
+      "reason": "All eight before/after pairs preserve exact body hash, byte count, status and full sorted headers. Seven specific paths change from 2/86 state reads/queries to 1/44; root remains 1/44 and direct getters are independently reconciled at 1/42."
+    },
+    {
+      "id": "PRESERVATION-CLOSURE-AND-CLEANUP",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts",
+        "evaluations/research-qa/m78-get-local-comparison-independent-result.json"
+      ],
+      "reason": "Both 121-table row-set digests equal cec9b5e4; the exact helper verified 173 source pins before and after, recorded zero hosted calls/writes/POSTs, and wrote pass only after both connections closed. Current closure is 172 historical pins plus the accepted post-run route integration."
+    },
+    {
+      "id": "ADVERSARIAL-ACTUAL-EVIDENCE-CHALLENGE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-local-comparison-independent.test.ts",
+        "evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts"
+      ],
+      "reason": "Nine portable tests with 230 assertions reject altered case counts, hashes, headers, sample ordinals, digests, cleanup, closure, writes and structural counts; strict targeted TypeScript passes."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-local-comparison-root-acceptance.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-LOCAL-COMPARISON-REVIEW-01-CANDIDATE1.json",
+        "sha256": "e3943d0a31c5de70c4d9fd166e6f12e7f655ee89dd942bc134e9064782bcac3c"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "The requested fresh Astra/high dispatch was unavailable due to the observed runtime agent-thread limit; this existing independent non-author reviewer continued with observed settings unknown.",
+    "No native comparison was rerun. The reviewer used only the frozen public result, exact archived operator source, public receipts, and current local source bytes.",
+    "The result is one serial synthetic local run. It does not predict hosted latency or establish an SLA.",
+    "The row-set digest does not cover sequences, settings, temporary state or external effects; the zero-write conclusion depends on the accepted finite trusted-source guard and pinned reader closure.",
+    "This acceptance does not authorize publication, deployment, recovery, or release.",
+    "Root reproduced the independent portable actual-evidence review and verified the frozen snapshot; accepted for bounded publication, not deployment or hosted recovery."
+  ]
+}

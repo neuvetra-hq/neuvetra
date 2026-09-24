@@ -1,0 +1,24 @@
+{
+  "status": "m78_historical_readonly_admission_review_closed",
+  "observedAt": "2026-09-23T02:48:54.251482+00:00",
+  "reviewSha256": "1d9fc661bfb8e8d379810b900d8f68af83d56a51f0c924bb8ba8808e21181abf",
+  "rootReviewer": "/root",
+  "scope": "Review of original admission helper only, not recovery implementation acceptance. The admitted attempt subsequently failed; no actual recovery pass is inferred.",
+  "validation": {
+    "historicalClockOfflineTestsPassed": 4,
+    "historicalClock": "2026-09-23T02:27:00Z",
+    "fixtureFilesystemAndSubprocessMocked": true,
+    "actualNetworkOrCredentials": false,
+    "firstRerun": "The original positive test refused with the current clock because the runtime evidence expired; negative tests passed. The separate clocked wrapper replays the historical fixture time without changing source or runtime evidence."
+  },
+  "testSources": [
+    {
+      "path": ".superpowers/m78-readonly-admission-root-test.py",
+      "sha256": "7f031371258ba068b82543b851eab60e5359cddbf418bbc376c8df35a334d3f5"
+    },
+    {
+      "path": ".superpowers/m78-readonly-admission-clocked-test.py",
+      "sha256": "22a475d7f399b94c268c543e6ea7b5c41e62f6b5db0eafe253e1cd29795703ac"
+    }
+  ]
+}

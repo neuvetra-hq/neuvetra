@@ -77,3 +77,242 @@ operations/agent-improvement/snapshots/M68-*.json -text whitespace=cr-at-eol
 # M69 accepted candidate/review bundles bind their original bytes, including line endings.
 docs/research/m69-canary-preparation.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M69-FINAL-PRODUCT-V3.json -text whitespace=cr-at-eol
+
+# M73 independent numerical results retain the reviewer's exact recorded bytes.
+evaluations/research-qa/m73-accounting-independent-results.json -text whitespace=cr-at-eol
+evaluations/research-qa/m73-accounting-independent-candidate2-results.json -text whitespace=cr-at-eol
+evaluations/research-qa/m73-accounting-independent-candidate3-results.json -text whitespace=cr-at-eol
+
+# M74 recovery and review receipts retain independently reviewed bytes.
+evaluations/research-qa/m74-security-reviewed-files.json -text whitespace=cr-at-eol
+tools/staging/m74-seal-backup.ps1 -text whitespace=cr-at-eol
+
+# M75 immutable review pins and reviewed recovery script retain exact bytes.
+evaluations/research-qa/m75-*-pins.json -text whitespace=cr-at-eol
+tools/staging/m75-seal-backup.ps1 -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M75-HOSTED-ACCEPTED1.json -text whitespace=cr-at-eol
+
+# M76 recovery script retains the exact independently reviewed bytes.
+tools/staging/m76-seal-backup.ps1 -text whitespace=cr-at-eol
+
+# M77 recovery script retains the exact independently reviewed bytes.
+tools/staging/m77-seal-backup.ps1 -text whitespace=cr-at-eol
+
+# M78 already reviewed evidence retains its original Windows bytes and hashes.
+evaluations/research-qa/m78-hosted-journey-first-probe.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-hosted-journey-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-ui-accounting-review.md -text whitespace=-blank-at-eol,cr-at-eol
+operations/agent-improvement/runs/M78-UI-ACCOUNTING-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-OPERATORS-01-LOCAL-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-UI-ACCOUNTING-01-SOURCE-REVIEW.json -text whitespace=cr-at-eol
+
+# Preserve the exact reviewed September22 independent test bytes.
+evaluations/research-qa/m78-journey-resolver-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts -text whitespace=cr-at-eol
+
+# Immutable resumed review evidence keeps its reviewed raw bytes.
+evaluations/research-qa/m78-resume-actual20-recovery-probe.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-actual20-recovery-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-journey-attestation.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-journey-preparation.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-actual-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-actual-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-diagnosis.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-recipe-source-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-response-shape-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-resume-response-shape-review.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-RESUME-RECOVERY-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECIPE-NATIVE-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECIPE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECIPE-REVIEW-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RESUME-RECOVERY-01-PENDING1.json -text whitespace=cr-at-eol
+
+# Preserve exact reviewed continuation and performance evidence bytes.
+docs/research/m78-continuation-preparation.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-closure-planning-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-backup-root-admission.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-backup-source-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-native-author.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-hosted-release-preparation-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-hosted-upgrade-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-performance-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-observer-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-observer-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-observer-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-refresh-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-refresh-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-refresh-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-runtime-refresh-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-actual-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-actual-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-actual-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-actual-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-observer-independent.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-observer-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-timeout-preparation-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m79-inventory-root-acceptance.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CLOSURE-PLAN-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CODE-ADMISSION-20260922.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION-BACKUP-PREP-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION-CLOSURE-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION-NATIVE-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION-PREP-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-HOSTED-BASELINE-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-HOSTED-UPGRADE-REVIEW-20260922.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-LATENCY-TRIAGE-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-PERF-F01-IMPLEMENTATION.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-PERF-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-PERF-PROPOSAL-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-RUNTIME-OBS-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-RUNTIME-REFRESH-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-SCOPE1-CLOSURE-PLAN-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-TIMEOUT-ACTUAL-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-TIMEOUT-READONLY-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M79-INVENTORY-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M79-METHOD-SOURCE-INVENTORY-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CODE-ADMISSION-20260922-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONTINUATION-NATIVE-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONTINUATION-NATIVE-01-INSPECT.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONTINUATION-PREP-01-CANDIDATE3.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-HOSTED-UPGRADE-REVIEW-20260922-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RUNTIME-OBS-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-RUNTIME-REFRESH-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-TIMEOUT-ACTUAL-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-TIMEOUT-READONLY-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+tools/staging/check-m78-continuation.test.ts -text whitespace=cr-at-eol
+tools/staging/check-m78-continuation.ts -text whitespace=cr-at-eol
+tools/staging/m78-continuation-native.ts -text whitespace=cr-at-eol
+tools/staging/m78-continuation-plan.test.ts -text whitespace=cr-at-eol
+tools/staging/m78-continuation-plan.ts -text whitespace=cr-at-eol
+tools/staging/m78-continuation-source-pins.test.ts -text whitespace=cr-at-eol
+tools/staging/m78-continuation-source-pins.ts -text whitespace=cr-at-eol
+
+operations/agent-improvement/runs/M78-CONTINUATION-WRAPPER-REVIEW-01.json -text whitespace=cr-at-eol
+tools/staging/m78-continuation-plan.ts -text whitespace=cr-at-eol,-blank-at-eof
+evaluations/research-qa/m78-continuation-ci-independent-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-portability-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-portability-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-portability.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-ci-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-observer-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-observer-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-observer-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-root-acceptance.md -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-CI-PORTABILITY-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-CI-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-RUNTIME-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-diagnostic-preparation.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-diagnostic-proposal.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-failure-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-failure-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-failure-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-failure-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-baseline-independent-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-release-runtime-observer-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-release-runtime-observer-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-release-runtime-observer-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-release-runtime-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-refresh-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-refresh-independent.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-refresh-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation-runtime-refresh-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-author-source-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-ci-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-independent-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-independent.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-journey-preparation.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-preparation.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-runtime-refresh-independent-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation2-runtime-refresh-independent.py -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-BASELINE-REVIEW-01-SUPPLEMENT.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-BASELINE-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-BASELINE2-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-REFRESH-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT-RELEASE-RUNTIME-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT2-INDEPENDENT-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT2-INDEPENDENT-REVIEW-01-CI-SUPPLEMENT.json -text whitespace=cr-at-eol
+tools/staging/check-m78-continuation2.test.ts -text whitespace=cr-at-eol
+tools/staging/check-m78-continuation2.ts -text whitespace=cr-at-eol
+tools/staging/m78-continuation2-failed-baseline.jsonl -text whitespace=cr-at-eol
+tools/staging/m78-continuation2-source-pins.ts -text whitespace=cr-at-eol
+
+# Preserve exact independently accepted build-operations evidence bytes.
+operations/agent-improvement/build-feature-events-v1.jsonl -text whitespace=cr-at-eol
+operations/agent-improvement/build-feature-events.jsonl -text whitespace=cr-at-eol
+operations/agent-improvement/build-feature-registry.json -text whitespace=cr-at-eol
+operations/agent-improvement/build-scorecard.json -text whitespace=cr-at-eol
+operations/agent-improvement/build-scorecard.md -text whitespace=cr-at-eol
+operations/agent-improvement/feature-event-schema-migration.json -text whitespace=cr-at-eol
+operations/agent-improvement/model-performance-reviews.json -text whitespace=cr-at-eol
+operations/agent-improvement/openrouter-build-pilot-authorization.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/OPS-METRICS-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/OPS-METRICS-QA-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/OPS-PILOT-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-METRICS-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-METRICS-EVENTS-PRE-INDEPENDENCE.jsonl -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-METRICS-QA-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-PILOT-01.json -text whitespace=cr-at-eol
+evaluations/research-qa/m79-numerical-root-acceptance.md -text whitespace=cr-at-eol
+evaluations/research-qa/m79-rights-root-targeted-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/ops-build-tools-integration-root-review.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M79-NUMERICAL-COMPATIBILITY-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M79-NUMERICAL-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M79-PRIMARY-RIGHTS-EVIDENCE-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M79-RIGHTS-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/OPS-BUILD-TOOLS-INTEGRATION-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M79-RIGHTS-INDEPENDENT-REVIEW-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/OPS-BUILD-TOOLS-INTEGRATION-01-CANDIDATE3.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation3-independent-runtime-result.json -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-root-source-acceptance.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION3-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-CONTINUATION3-PRIVATE-INDEPENDENT-REVIEW-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-INTERRUPTED-SESSION-ACTUAL-DISPOSITION-01.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M78-PLATFORM-CONTINUATION-PREP-01.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation3-baseline-failure-report.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-failure-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-independent-review.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-preparation.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation3-baseline-review.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-independent-runtime-result.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-FAILURE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT3-ACTUAL-BASELINE-REVIEW-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-repair.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-lifecycle-qa-identity-binding-supplement.test.ts -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-capture-preparation-real-decoder.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-repair-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-repair.test.py -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-review.md -text whitespace=cr-at-eol
+evaluations/research-qa/m78-continuation4-restart-helper-review.test.py -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-REVISIT-CAPTURE-INDEPENDENT-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-readonly-recovery-design.md -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-EXERCISE-FAILURE-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+
+evaluations/research-qa/m78-continuation4-get-route-result.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERF-REVIEW-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE3.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE4.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE5.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDIDATE4.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-IMPLEMENTATION-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-READONLY-REVISIT-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/build-usage-events.jsonl -text whitespace=cr-at-eol
+operations/agent-improvement/build-operations-continuation.md -text whitespace=cr-at-eol
+operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A-summary.json -text whitespace=cr-at-eol
+operations/agent-improvement/integration-manifest-2026-09-24.json -text whitespace=cr-at-eol

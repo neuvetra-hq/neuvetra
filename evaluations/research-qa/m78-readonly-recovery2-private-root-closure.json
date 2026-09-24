@@ -1,0 +1,12 @@
+{
+  "status": "m78_recovery2_private_qa_review_root_closed",
+  "rootReviewer": "/root",
+  "sourceReviewer": "/root/m78_transport_probe",
+  "sourceAuthor": "/root",
+  "receiptSha256": "ab15a49e85eae10e1183f6a01c8a52c649ea2fccfc5580e8567cf4bf427a3e2b",
+  "rootReproducedTests": 2,
+  "rootReproducedAssertions": 16,
+  "independentSourceReviewRetained": true,
+  "actualRecoveryAccepted": false,
+  "helperExecuted": false
+}

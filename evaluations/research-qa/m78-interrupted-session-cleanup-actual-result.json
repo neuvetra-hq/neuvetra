@@ -1,0 +1,22 @@
+{
+  "status": "m78_exact_session_cleanup_independently_verified",
+  "reviewerId": "/root/resume_release",
+  "reviewedAt": "2026-09-22T20:34:48.995Z",
+  "actualCleanupCommitted": true,
+  "selectedSessionRowsRemoved": 4,
+  "postObservedSessions": 0,
+  "postObservedLinkedRefreshRows": 0,
+  "nonselectedSessionsPreserved": true,
+  "applicationInventoryPreserved": true,
+  "tokenUsability": "not_verified",
+  "expiryVerified": false,
+  "syntheticContinuationApproved": true,
+  "hostCallsByReviewer": 0,
+  "databaseCallsByReviewer": 0,
+  "actualCleanupSha256": "f787a7db83183e0782199dd6b7a1edce6297ceda6384c9c3731c37c46810bb35",
+  "postObservationSha256": "86a7eab8e87a443c7efa60af449f2eba2e14d057d1937a84868ac52fdeb4f1cd",
+  "review": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-actual-review.md",
+    "sha256": "8de45fc15e3087d0eda17cfde6609d6110d644b914021fcc471fae856fbf8742"
+  }
+}

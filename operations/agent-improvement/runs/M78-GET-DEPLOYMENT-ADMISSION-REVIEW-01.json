@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M78-GET-DEPLOYMENT-ADMISSION-REVIEW-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-GET-DEPLOYMENT-ADMISSION-REVIEW-01-CANDIDATE1.json",
+      "sha256": "fe9587c6708cbd6254e21c9ff1b8a5c28e0841d45e8c8dfc1d1e03d35676341f"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-get-deployment-admission-independent-source.json",
+    "evaluations/research-qa/m78-get-deployment-admission-independent-review.py",
+    "evaluations/research-qa/m78-get-deployment-admission-independent.test.py",
+    "evaluations/research-qa/m78-get-deployment-admission-independent-review.md",
+    "evaluations/research-qa/m78-get-deployment-admission-independent-result.json",
+    "evaluations/research-qa/m78-get-deployment-admission-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "CURRENT-AND-COMMIT-SOURCE-CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-admission-independent.test.py",
+        "evaluations/research-qa/m78-get-deployment-admission-independent-result.json"
+      ],
+      "reason": "All 173 current files and exact commit blobs match the historical closure with only the accepted route SHA substituted."
+    },
+    {
+      "id": "FIXED-EVIDENCE-AND-HELPER-PINS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-admission-independent-source.json",
+        "evaluations/research-qa/m78-get-deployment-admission-independent.test.py"
+      ],
+      "reason": "Both reviewed private helper hashes and all five public comparison/QA/workflow files are exact; public files also match commit blobs."
+    },
+    {
+      "id": "FRESH-SIX-CI-AND-EXCLUSIVE-ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-admission-independent-review.py",
+        "evaluations/research-qa/m78-get-deployment-admission-independent-review.md"
+      ],
+      "reason": "The finalizer admits only an open exact PR head with six exact successful checks observed under 120 seconds, then writes one exclusive 183-pin admission."
+    },
+    {
+      "id": "DOWNSTREAM-INTEROPERABILITY-AND-NO-EXTERNAL-ACTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-get-deployment-admission-independent.test.py",
+        "evaluations/research-qa/m78-get-deployment-admission-independent-result.json"
+      ],
+      "reason": "The output fields satisfy the deploy helper and observer contracts. Static AST review permits only local Git reads and one local admission write; no network, credentials, provider, database or deployment call exists."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-get-deployment-admission-independent-result.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-GET-DEPLOYMENT-ADMISSION-REVIEW-01-CANDIDATE1.json",
+        "sha256": "fe9587c6708cbd6254e21c9ff1b8a5c28e0841d45e8c8dfc1d1e03d35676341f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "The requested fresh Astra/high dispatch was unavailable at the runtime agent-thread limit; this existing independent non-author reviewer continued with observed settings unknown.",
+    "The review-time CI artifact was pending and would be refused. Root reported all six checks later passed; execution still requires a newly refreshed under-120-second pinned artifact.",
+    "The real finalizer was never imported or executed. No admission, network, provider, credential, database, deployment or Git mutation occurred.",
+    "This verdict is source-only; downstream live gates and the one deployment request remain separate.",
+    "Root verified snapshot bytes and reproduced all six offline tests; finalizer then admitted exact9dd with fresh six successful checks and the one-shot helper requested deployment f6d77b2e. No repeat authorized."
+  ]
+}

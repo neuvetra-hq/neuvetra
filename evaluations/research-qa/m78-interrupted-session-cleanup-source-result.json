@@ -1,0 +1,23 @@
+{
+  "status": "m78_exact_interrupted_session_cleanup_v2_source_passed",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T20:16:22.336Z",
+  "cleanupSha256": "08d4934f1fc9679f8eb00e0fd8733b37e29ab3b564b5b3db372d76edf1594b1a",
+  "wrapperSha256": "a041ec8ba115c732358076edc3f17cb8560f10ab701322ffd8fa42654223ce86",
+  "observationSha256": "4570ae628e05c71d8feab14acc6e5c04fe985f842ab2cdf8d111b19031d1f273",
+  "resolvedFinding": "CLEAN-TIME-01",
+  "firstReview": "fail",
+  "reworkCycles": 1,
+  "testsPassed": 5,
+  "assertions": 90,
+  "actualCleanupExecuted": false,
+  "hostCalls": 0,
+  "authCalls": 0,
+  "databaseCalls": 0,
+  "tokenUsability": "not_verified",
+  "expiryVerified": false,
+  "report": {
+    "path": "evaluations/research-qa/m78-interrupted-session-cleanup-source-review.md",
+    "sha256": "af673b84df6b1fa2e9a6d54deb3a8b39681e4be00bbf265d54e962d5d022cc5f"
+  }
+}

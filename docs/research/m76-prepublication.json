@@ -1,0 +1,54 @@
+{
+  "status": "prepared_not_deployed",
+  "createdAt": "2026-09-16T15:02:26.336839+00:00",
+  "commit": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+  "migrationSha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
+  "fromSchema": 18,
+  "toSchema": 19,
+  "newTables": 15,
+  "oldTableChange": "One reviewed BEFORE INSERT mobile fuel-reference guard; old rows/functions/ACLs preserved",
+  "acceptedSnapshot": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
+  "compatibilityReview": "evaluations/research-qa/m76-ci-compatibility-review.md",
+  "applicationSnapshotAndCompatibilityFilesCommittedExact": 91,
+  "recoveryReceipts": [
+    {
+      "path": ".superpowers/m76-hosted-backup-candidate1.json",
+      "sha256": "47d786388c8d9377d4cad088e1538d4ec2d68b2839c616e59e06d1df794131bd",
+      "status": "m76_encrypted_application_backup"
+    },
+    {
+      "path": ".superpowers/m76-hosted-restore-candidate1.json",
+      "sha256": "5b18ea1f909dc5b8e986a32a9217bfff41631be8e0ea54c4efdae83c3c7a1dfd",
+      "status": "m76_exact_application_archive_restored"
+    },
+    {
+      "path": ".superpowers/m76-security-hosted-recovery-candidate1.json",
+      "sha256": "c7397c9c0c03d139ba162f5f89078bb0476b1e5f1cfea27cebdc8882dc368cb3",
+      "status": "m76_independent_recovery_passed"
+    },
+    {
+      "path": ".superpowers/m76-security-forward-recovery-candidate1.json",
+      "sha256": "81464547c8e386a785a913c7a4ad6206a33d4d732b1b7aad22d68ce26836842c",
+      "status": "m76_schema19_forward_recovery_review_passed"
+    },
+    {
+      "path": ".superpowers/m76-root-recovery-review.json",
+      "sha256": "2b8e1ec3d2b26329cf23a28be4d449a9c14cd3290dbc9d5ff6cb82fb4680fa4f",
+      "status": "passed"
+    }
+  ],
+  "baseline": {
+    "journal": ".superpowers/m76-hosted-journey.jsonl",
+    "receiptSha256": "97be46cdd081ccb85630d71b31376cff509c40be22e9a89656cf6309ecec146b",
+    "zeroApplicationPosts": true,
+    "allCreatedAuthSessionsClosed": true
+  },
+  "autoDeployment": "paused_before_publication",
+  "remoteChecks": "pending_on_current_head",
+  "limits": [
+    "Synthetic stationary equipment reconciliation only",
+    "No aggregate emissions or complete corporate inventory",
+    "Methods remain development candidates",
+    "Provider Auth/configuration/storage outside application recovery scope"
+  ]
+}

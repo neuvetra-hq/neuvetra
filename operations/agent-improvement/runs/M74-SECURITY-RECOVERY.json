@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M74-SECURITY-RECOVERY",
+  "role": "security-reliability",
+  "execution_context": "/root/m74_cto",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M74-SECURITY-ACCEPTED1.json",
+      "sha256": "c49530766b7c01a9de30b6661f5a56457cc4e383e761d7797f8c8972389b1cc2"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M74-NATIVE-SECURITY-AND-INDEPENDENT-RECOVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m74-security-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m74-security-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M74-SECURITY-ACCEPTED1.json",
+        "sha256": "c49530766b7c01a9de30b6661f5a56457cc4e383e761d7797f8c8972389b1cc2"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused technical-contract/frontend/helper reviewer; no backend or operator implementation authorship. Fresh-context runtime limit retained; inherited compute unknown. Root sole host/Git writer. Actual native independent reconstruction required.",
+    "Root accepts independent review deliverable, native120 assertions and actual recovered-content receipts; reviewer has no implementation authorship. This is not root self-approval of product security."
+  ]
+}

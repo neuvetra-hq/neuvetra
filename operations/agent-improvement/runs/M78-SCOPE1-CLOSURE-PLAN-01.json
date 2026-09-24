@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M78-SCOPE1-CLOSURE-PLAN-01",
+  "role": "cpo",
+  "execution_context": "/root/scope1_closure",
+  "prompt_sha256": "fe5237292aafa6fe307801d3d9d07414110d11dc6ecd7812ee52ed77feacb2e6",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-SCOPE1-CLOSURE-PLAN-01-CANDIDATE2.json",
+      "sha256": "30ed45c929abda3588f214122ef63fad9522cf622d85ccd783f7a37b7aae9adf"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "S1-CLOSURE-AC01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-closure-plan-20260922.md"
+      ],
+      "reason": "Reconciles S1-01 through S1-15 against observed M78 artifacts and separates functional candidate coverage from method/source release, customer evidence, legal applicability, operations and assurance gates."
+    },
+    {
+      "id": "S1-CLOSURE-AC02",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-closure-plan-20260922.md"
+      ],
+      "reason": "Defines M79 as the smallest next executable milestone with bounded profiles, accountable handoffs, eight observable acceptance criteria and fail-closed outcomes. Candidate2 removes routine board-feedback waits from sequencing while retaining demonstrations and meaningful updates."
+    },
+    {
+      "id": "S1-CLOSURE-AC03",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-closure-plan-20260922.md"
+      ],
+      "reason": "Defines the remaining path through a real customer inventory and qualified human handoff, preserves the initial profile, and separates the few board/customer-dependent decisions from autonomous work."
+    },
+    {
+      "id": "S1-CLOSURE-AC04",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-closure-plan-20260922.md"
+      ],
+      "reason": "Records the bounded live application/schema observation and small latency sample without turning it into a performance or release claim; representative operational acceptance remains explicit."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/resume_release",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-closure-planning-root-acceptance.md",
+      "evaluations/research-qa/m78-closure-plan-independent-final-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-SCOPE1-CLOSURE-PLAN-01-CANDIDATE2.json",
+        "sha256": "30ed45c929abda3588f214122ef63fad9522cf622d85ccd783f7a37b7aae9adf"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/scope1-closure-plan-20260922.md",
+      "sha256": "106ed3b1601374f74e249c2823fdb710e424171ef4a80fd78317d8d73e7acef2"
+    }
+  ],
+  "lessons_applied": [
+    "L02",
+    "L08"
+  ],
+  "notes": [
+    "CPO planning only. No code, host, database, Git, provider, shared ledger or external request changes.",
+    "No subagents spawned. Root remains sole writer for product release, Git, provider and shared operations.",
+    "Candidate1 is preserved unchanged. Independent first review failed on a material sequencing conflict: routine board feedback was incorrectly made a blocking dependency despite standing authorization for sequential bounded Scope1 work.",
+    "Candidate2 removes routine feedback waits, retains demonstrations and meaningful progress updates, and corrects the live-state wording.",
+    "Independent targeted re-review accepted exact Candidate2 and resolved PLAN-R01/R02. The first-review failure and one rework cycle remain preserved. This planning acceptance does not approve methods, rights, legal applicability, customer evidence or assurance.",
+    "Requested Sol/medium; observed model and effort unavailable and retained as unknown."
+  ]
+}

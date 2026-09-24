@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "M73-FRESH-RECOVERY-2015",
+  "role": "security-reliability",
+  "execution_context": "/root/m73_cpo",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M73-ROLLOUT-RECOVERY-2015.json",
+      "sha256": "66976e4048a8e7820077518dfe223fdd9ba765e1426a72ccc3bc00b737cd5550"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M73-FRESH-RECOVERY-2015-BOUNDED-DELIVERY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m73-rollout-recovery-coordinator.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m73-rollout-recovery-coordinator.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M73-ROLLOUT-RECOVERY-2015.json",
+        "sha256": "66976e4048a8e7820077518dfe223fdd9ba765e1426a72ccc3bc00b737cd5550"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independently reconstruct fresh isolated2015 recovery and review controlled rollout sequence.",
+    "Existing independent reviewer reused after prior fresh-context runtime-limit rejection. No implementation/operator authorship; prior planning authorship disclosed. Requested critical settings; observed inherited settings unknown. Root owns common records and hosted operations."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m73-print-acceptance.md",
+      "sha256": "37cfd6fdff9d2b09e4043be2d7a2a13687156265f25dbc45cc51c06b00184b03"
+    },
+    {
+      "path": "evaluations/research-qa/m73-recovery-2015-runtime.test.ts",
+      "sha256": "1b2591fa2059ab2f508aa84c66e2f80083422f9f287f7cdaa3363c13757c11b2"
+    },
+    {
+      "path": "evaluations/research-qa/m73-recovery-2015-result.json",
+      "sha256": "83b0a84176855d5488f64d07c20990e122e9fbc5dc9b736d0f626435c9e2aa1f"
+    },
+    {
+      "path": "evaluations/research-qa/m73-recovery-2015-review.md",
+      "sha256": "359da3c4bbe531896377d87a8480b9098cfcdb7d3b363381a5744dc10f8c8df1"
+    }
+  ]
+}

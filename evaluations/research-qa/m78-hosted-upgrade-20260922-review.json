@@ -1,0 +1,46 @@
+{
+  "status": "m78_independent_actual_hosted_upgrade_receipt_passed",
+  "createdAt": "2026-09-22T16:25:37.000Z",
+  "reviewerId": "/root/resume_release",
+  "project": "icockcoguyadhryzydvl",
+  "reviewedCommit": "2002feacd26c48c1beb0a4412b5524b935528084",
+  "migrationSha256": "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736",
+  "gate": {
+    "path": ".superpowers/m78-hosted-database-gate.json",
+    "sha256": "e2a19b9965b1a747f7e3341fc1fc57a4dea5e41b71601b408c3b79bd9437228f",
+    "canonicalSha256": "50564f60975ef4eae747ff68db60402629a0c3db2312d4dd8fde1d509df2348f"
+  },
+  "journal": {
+    "path": ".superpowers/m78-hosted-upgrade-20260922.jsonl",
+    "sha256": "9a5e84356ad18cce59a9f3c751f6e1c1dc432398c632af21065e58fbbfb6a1bb",
+    "eventCount": 2,
+    "startedAt": "2026-09-22T16:23:45.675Z",
+    "completedAt": "2026-09-22T16:23:58.948Z"
+  },
+  "sourcePinCount": 115,
+  "allGateArtifactsValidatedAtActualStart": true,
+  "beforeTables": 113,
+  "afterTables": 121,
+  "beforeContentEntries": 377,
+  "afterContentEntries": 377,
+  "originalRowsCatalogRolesAndContentExact": true,
+  "defaultAclCount": 27,
+  "defaultAclsPreserved": true,
+  "sixSearchPathChanges": 6,
+  "newEmptyTables": [
+    "scope1_audit",
+    "scope1_heads",
+    "scope1_process_discoveries",
+    "scope1_reports",
+    "scope1_requests",
+    "scope1_reviews",
+    "scope1_statements",
+    "scope1_versions"
+  ],
+  "schemaVersion": 21,
+  "hostedCallsByReviewer": false,
+  "receiptOnlyReview": true,
+  "deploymentVerified": false,
+  "fullLifecycleVerified": false,
+  "providerRecoveryExcluded": true
+}

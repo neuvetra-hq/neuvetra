@@ -1,0 +1,42 @@
+{
+  "status": "m78_recovery2_restart_log_collector2_source_prepared",
+  "createdAt": "2026-09-22T21:39:29.5685556-07:00",
+  "sourcePreparationOnly": true,
+  "restartAlreadyAcknowledged": true,
+  "restartRequestId": "ef1238a7-516b-43be-865c-a5e9806cd46f",
+  "restartRequestedAt": "2026-09-23T04:33:48.625489+00:00",
+  "restartCallsByThisTask": 0,
+  "collectorCallsByThisTask": 0,
+  "providerCalls": 0,
+  "hostedCalls": 0,
+  "credentialAccesses": 0,
+  "oldCollectorChanged": false,
+  "oldFourHelperPinsChanged": false,
+  "actualStartupAccepted": false,
+  "observedRowContract": {
+    "event": "staging_started",
+    "timestamp": "2026-09-23T04:34:08.743321887Z",
+    "messageType": "str",
+    "messageEmpty": true
+  },
+  "providerEvidenceAddition": {
+    "key": "collector",
+    "path": ".superpowers/m78-recovery2-collect-startup2.py",
+    "sha256Source": "runtime_exact_bytes"
+  },
+  "validation": {
+    "testsPassed": 4,
+    "testsFailed": 0,
+    "assertions": 10,
+    "pythonSyntax": "passed",
+    "boundaries": "mocked",
+    "independentReview": "pending"
+  },
+  "files": [
+    {"path": ".superpowers/m78-recovery2-collect-startup2.py", "sha256": "bbc03eba8ed216dbfca55b083a9de648790bb530eb98d1e55ad10918f6b0dddb"},
+    {"path": "evaluations/research-qa/m78-restart-log-collector-repair.test.py", "sha256": "4f363635cae4c1ecb078378b28933f30e12d4530b7e5182450dd555da50cdc65"}
+  ],
+  "materialFindingsOpen": 0,
+  "requestedCompute": {"model": "gpt-5.6-terra", "effort": "medium"},
+  "observedCompute": {"model": null, "effort": null}
+}

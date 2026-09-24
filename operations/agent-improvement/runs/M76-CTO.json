@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "M76-CTO",
+  "role": "cto",
+  "execution_context": "/root/m76_cto",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
+      "sha256": "f602e3cc1f2a4dcfface5271f7d1f5ba58897f4824091efb247c7b4fff3e1a19"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BOUNDED-STATIONARY-CONTRACT",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m76-accounting-contract.md",
+        "docs/research/m76-technical-contract.md",
+        "docs/research/m76-planning-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m76-planning-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
+        "sha256": "f602e3cc1f2a4dcfface5271f7d1f5ba58897f4824091efb247c7b4fff3e1a19"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Technical contract for bounded stationary equipment/workpaper reconciliation; docs/research/m76-technical-contract.md only.",
+    "Role prompt hash recorded; bounded task delivered through collaboration tools. Requested compute supplied to fresh dispatch; actual setting not independently observable. Lessons L01-L07 apply as relevant. Root sole Git/host/shared-record writer."
+  ],
+  "source_artifacts": [
+    {
+      "path": "docs/research/m76-accounting-contract.md",
+      "sha256": "56ea5c89dd20157bcfdbf32079eea63a0e00806929c517b35b76a00de5ce07a8"
+    },
+    {
+      "path": "docs/research/m76-technical-contract.md",
+      "sha256": "b9735190d63815a4b4a55c171eea0b1b39d734a9901f2d8ca604c4d218b7d7b9"
+    }
+  ]
+}

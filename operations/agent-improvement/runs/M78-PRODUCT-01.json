@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "M78-PRODUCT-01",
+  "role": "cpo",
+  "execution_context": "/root/m77_backend",
+  "prompt_sha256": "fe5237292aafa6fe307801d3d9d07414110d11dc6ecd7812ee52ed77feacb2e6",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-PRODUCT-01-ACCEPTED.json",
+      "sha256": "7771a31044f8f46521254c2ece06a78f2804c844b8cb6383e5d4795dedb914b8"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M78-PRODUCT-AC01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-product-brief.md"
+      ],
+      "reason": "Authored supported scope and reuse map from current family contracts; distinguishes candidate functional completion from production/release/assurance gates."
+    },
+    {
+      "id": "M78-PRODUCT-AC02",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-product-brief.md"
+      ],
+      "reason": "Authored process discovery, current binding, gross gas/source/facility/entity/company reconciliation and correction/duplicate acceptance cases P01-P14 with public-boundary evidence requirements."
+    },
+    {
+      "id": "M78-PRODUCT-AC03",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m78-product-brief.md"
+      ],
+      "reason": "Preserves all corporate v8 objects and three facilities; unknown never zero; full Scope1 closure path names accounting/source release, customer evidence and human dependencies."
+    },
+    {
+      "id": "M78-PRODUCT-AC04",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-planning-root-review.md",
+        "operations/agent-improvement/snapshots/M78-PRODUCT-01-ACCEPTED.json"
+      ],
+      "reason": "Root independently accepted the exact frozen design deliverable; accounting, numerical implementation, security and integrated QA gates remain open for later execution."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-planning-root-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-PRODUCT-01-ACCEPTED.json",
+        "sha256": "7771a31044f8f46521254c2ece06a78f2804c844b8cb6383e5d4795dedb914b8"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/m78-product-brief.md",
+      "sha256": "af61256984b0027975703a95e1345587b04c9d09c01d2e0e6df40c6a99455311"
+    }
+  ],
+  "routing_exception": {
+    "reason": "Root reported fresh CPO Sol/medium dispatch rejected by runtime thread limit.",
+    "fallback_executor": "/root/m77_backend",
+    "observed_settings": "unknown; inherited settings not observable",
+    "dispatch_applied": false
+  },
+  "lessons_applied": [
+    "L08",
+    "L02"
+  ],
+  "notes": [
+    "Product brief delivered for independent review; no M78 behavior implemented.",
+    "Only own brief and run record written; no code, host, Git, shared ledger or frozen M77 artifact changes.",
+    "No additional agents spawned. Resource measurements remain unknown.",
+    "Closed as independently accepted planning deliverable only. Root review does not accept implemented M78 functionality or accounting policy. Frozen source plans remain unchanged."
+  ]
+}

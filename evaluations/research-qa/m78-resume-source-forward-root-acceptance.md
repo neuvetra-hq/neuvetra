@@ -1,0 +1,7 @@
+# M78 resumed source and forward recovery — root acceptance
+
+Root reviewed the RCP-F01 response-shape delta and independent candidate2 admission (074728a5026e6970a3b97ca832a8f824cd327c674de6a4e88be3274f2005cc1a). Both runners now discriminate flattened version numbers from nested records and verify fleet/equipment reviews from their decoded registers. Independent28tests588assertions and strict TypeScript passed. This accepts preparation for the new full local recipe, not completion of that execution. The prior3-write failed local run remains immutable.
+
+Root accepts current forward recovery revalidation faab1a02f73fd3ec1d69f84b8f315d2b159578584216560b01a5352ab8ead377:121tables649entries and26GET15downloads remained exact with3captured-null reports. The original restore/occupied-target refusal occurred September17; today revalidated the preserved results without pretending to repeat those operations.
+
+The independently reviewed CI portability delta retains every embedded snapshot hash and exact five-path membership, plus current disk comparisons for all three released source/doc files. Only the two specifically named historical .tmp author proof artifacts use their frozen embedded bytes in CI. One remote test failure on970a9b70 is preserved; local4tests269assertions passed after correction. Old raw test hashes remain historical source evidence, with updated acceptance bound to forward snapshot851ad7902a45d4c08451c6e36b8fe0132a9c1b18c17f005fe7d935df34c1be5d. Current115 hosted operator inputs are unchanged.

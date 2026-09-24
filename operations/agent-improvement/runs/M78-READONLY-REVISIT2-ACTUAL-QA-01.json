@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "id": "M78-READONLY-REVISIT2-ACTUAL-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/m78_transport_probe",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-ACTUAL-QA-01-CANDIDATE1.json",
+      "sha256": "31f36adc5eb89b05fcd40e2c6f2b58c5d55015474f2783866119b2bab9ef5e8a"
+    }
+  ],
+  "source_artifacts": [
+    "evaluations/research-qa/m78-readonly-revisit2-actual-independent-review.ts",
+    "evaluations/research-qa/m78-readonly-revisit2-actual-independent-review.md",
+    "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+    "evaluations/research-qa/m78-readonly-revisit2-actual-independent-freeze.py"
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_EXECUTION_AND_SOURCE_CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json"
+      ],
+      "reason": "All 205 execution pins and 188 source pins rehash exactly, including accepted recovery and restart receipts."
+    },
+    {
+      "id": "CLOSED_GET_ONLY_EVIDENCE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-actual-independent-review.ts"
+      ],
+      "reason": "Journal, diagnostics and raw-capture chains close; 97 requests used zero application POSTs, all sessions closed and unknown sessions are zero."
+    },
+    {
+      "id": "FULL_OFFLINE_REEVALUATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-actual-independent-review.ts"
+      ],
+      "reason": "The corrected evaluator independently accepts 37 typed records, five reports, 24 roster reads, ten sources and the exact gross total."
+    },
+    {
+      "id": "EXACT_RETAINED_STATE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-readonly-revisit2-actual-independent-review.md"
+      ],
+      "reason": "Scope1, registers, downloads, M78 bytes, full reports and legacy state exactly equal the accepted recovery2 observation."
+    },
+    {
+      "id": "FURTHER_RESTART_OR_REVISIT",
+      "status": "not_applicable",
+      "evidence": [],
+      "reason": "The accepted receipt authorizes no further restart or revisit."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-readonly-revisit2-actual-root-closure.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-ACTUAL-QA-01-CANDIDATE1.json",
+        "sha256": "31f36adc5eb89b05fcd40e2c6f2b58c5d55015474f2783866119b2bab9ef5e8a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "A fresh Astra/high dispatch remained unavailable at the runtime thread limit; this independent non-author context continued with inherited settings unknown.",
+    "The review used only closed immutable local evidence and the corrected evaluator; no credentials, provider API, network, database, hosted request, restart, revisit or Git action was performed.",
+    "The accepted staging evidence does not establish legal compliance, external assurance or production readiness.",
+    "Root closes the independently authored QA record after code/evidence inspection; probe independently evaluated actual root-operated staging."
+  ]
+}

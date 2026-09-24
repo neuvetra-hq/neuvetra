@@ -1,0 +1,50 @@
+{
+  "status": "m78_get_ci_history_independent_first_review_failed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 1,
+  "workflowCandidateSha256": "4a7810550658b732741992a79152527348f1b6fdd8c0340c5e0dc0015e7f9a14",
+  "historicalGateCandidateSha256": "69c819b80bb94caeeaf0c6fe5bd241cd94691fecbf05c39985136b60bb037d85",
+  "finding": {
+    "id": "CURRENT-GUARD-SUITE-RETAINS-STALE-LIVE-ROUTE-EQUALITY",
+    "severity": "material_ci_blocker",
+    "file": "evaluations/research-qa/m78-get-guard-independent.test.ts",
+    "test": "historical result and baseline route remain exact without retroactive provenance claims",
+    "observed": "The workflow still runs the whole guard suite against current source. Its historical case reconstructs route ab5018 and requires equality with the current route, now accepted fd9b, so the proposed current GET step fails.",
+    "requiredRepair": "Keep the historical result and baseline byte assertion, but bind it to frozen historical bytes or the baseline reconstruction hash; independently require the current route to equal fd9b. Preserve the three current finite-guard cases and the new rejection regression."
+  },
+  "checks": {
+    "frozenContinuation2And3Full": {
+      "passed": 14,
+      "failed": 0,
+      "assertions": 455
+    },
+    "frozenContinuation2Filtered": {
+      "passed": 2,
+      "failed": 0,
+      "assertions": 848
+    },
+    "frozenContinuation3Filtered": {
+      "passed": 2,
+      "failed": 0,
+      "assertions": 108
+    },
+    "frozenContinuation4Exact173": {
+      "passed": 1,
+      "failed": 0,
+      "assertions": 179
+    },
+    "currentContinuation4Portable": {
+      "passed": 2,
+      "failed": 0,
+      "assertions": 14
+    },
+    "proposedCurrentGetStep": {
+      "passed": 17,
+      "failed": 1,
+      "assertionsBeforeFailure": 432
+    }
+  },
+  "networkUsed": false,
+  "databaseUsed": false,
+  "gitMutated": false
+}

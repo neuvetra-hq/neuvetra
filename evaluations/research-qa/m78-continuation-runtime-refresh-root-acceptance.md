@@ -1,0 +1,3 @@
+# Continuation runtime refresh source admission
+
+Root accepts independent review96c9c83f/result52050005 and snapshot7ce9cfb5 for exact helper1b7da62f. Root read the reviewed source and report and verified exact source bytes; changes are bounded to continuation paths and actual0f2e99/59cda7/fe46 identity. The27 mocked cases preserve fresh120-second scoped collection, exactidentity/readiness and exclusive output protections. Actual provider collection/refresh remains separate; revisit also requires actualrestart attestation. No hosted write or lifecycle replay is authorized by this source review alone.

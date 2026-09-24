@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "M75-CONTRACT",
+  "role": "cto",
+  "execution_context": "/root/m75_cto",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M75-PLANNING-CANDIDATE1.json",
+      "sha256": "54eda1164cbc41fabf8b3b713a71d7a3b5caf4ba044745383ba97db7e5cafc71"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M75-BOUNDED-FLEET-RECONCILIATION",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m75-product-brief.md",
+        "docs/research/m75-technical-contract.md",
+        "docs/research/m75-accounting-acceptance.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m75-product-brief.md",
+      "docs/research/m75-technical-contract.md",
+      "docs/research/m75-accounting-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M75-PLANNING-CANDIDATE1.json",
+        "sha256": "54eda1164cbc41fabf8b3b713a71d7a3b5caf4ba044745383ba97db7e5cafc71"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Board explicitly requested next fleet-reconciliation milestone. Root owns sharedledger/Git/host. Source/method release and completeScope1 remain separate. LessonsL01 actorstate,L02 exactbytes,L04 actualboundary. Requested settings not proof of observed execution.",
+    "Root reviewed planning deliverables against boarddirection and cross-role findings. Implementation remains pending; freeze is not implementation/source release."
+  ]
+}

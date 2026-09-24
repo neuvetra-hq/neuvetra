@@ -1,0 +1,50 @@
+{
+  "status": "m78_recovery2_published_six_checks_passed",
+  "commit": "c93130ee79844827816c5b162fc7375152e49f61",
+  "remoteHead": "c93130ee79844827816c5b162fc7375152e49f61",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "observedAt": "2026-09-23T03:40:53.985578+00:00",
+  "exactPublishedFiles": 89,
+  "applicationDeploymentRequired": false,
+  "actualRecovery2Executed": false,
+  "independentPublicationSupplement": {
+    "reviewerId": "/root/m78_transport_probe",
+    "verdict": "passed",
+    "materialFindingsOpen": 0,
+    "scope": "Two byte-preserving attributes and all 89 raw staged hashes",
+    "historicalWhitespaceException": "One trailing blank line in immutable reviewed revisit preparation report retained"
+  },
+  "checks": [
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "checksObservedAt": "2026-09-23T03:43:31.397821+00:00"
+}

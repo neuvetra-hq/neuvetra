@@ -1,0 +1,125 @@
+{
+  "status": "m78_independent_timeout_observer_source_passed",
+  "createdAt": "2026-09-22T17:02:01.440Z",
+  "reviewerId": "/root/resume_recovery",
+  "cases": [
+    {
+      "name": "exact committed original save",
+      "accepted": true,
+      "expectedAccepted": true
+    },
+    {
+      "name": "request actor_id",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "request kind",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "request family",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "request stream_id",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "request fingerprint",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "missing request",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "duplicate request",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "not readonly",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "version2",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "wrong creator",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "corrupt input",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "corrupt version digest",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "wrong export",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "wrong head",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "extra head",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "wrong audit",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "extra audit",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "old row changed",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "old content changed",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "unexpected new report",
+      "accepted": false,
+      "expectedAccepted": false
+    },
+    {
+      "name": "exclusive output",
+      "accepted": false,
+      "expectedAccepted": false
+    }
+  ],
+  "caseCount": 22,
+  "sourceSha256": "c972343f7ce1eb3f541012bdc1a5b553add9dd136b60c09cdfe2492e20282486",
+  "wrapperSha256": "c114ee99b48df4926a9dc13b400f2e685536637b49ab76ba79a4b0610b161a27",
+  "hostedCalls": 0,
+  "credentialsRead": false,
+  "actualDatabaseRead": false,
+  "officialOutputsWritten": false,
+  "limits": "Injected exact transaction/control flow; real SQL inventories/TLS and wrapper source inspected, not executed"
+}

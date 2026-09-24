@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "OPS-PILOT-01",
+  "role": "software-engineering",
+  "execution_context": "/root/pilot_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-PILOT-01.json",
+      "sha256": "e13afa8f685b3ef490053a358c2fdf8722ed515e8a1d1972415da17f7d4e3ffa"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/OPS-METRICS-QA-01.md"
+      ],
+      "reason": "Offline bounded adapter implemented and independently reviewed; live pilot remains credential-blocked."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/metrics_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "operations/agent-improvement/OPS-METRICS-QA-01.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/OPS-PILOT-01.json",
+        "sha256": "e13afa8f685b3ef490053a358c2fdf8722ed515e8a1d1972415da17f7d4e3ffa"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "tools/build_model_pilot.py",
+      "sha256": "8f28f99db4e369b8973b3bece0b699c042a0de68a8abf43bab064178e02724f3"
+    },
+    {
+      "path": "tools/test_build_model_pilot.py",
+      "sha256": "9a27e086057adfd2164d73f258db1228e84f7d9836c572c8f721ed35153eadbf"
+    },
+    {
+      "path": "operations/agent-improvement/build-pilot-usage.md",
+      "sha256": "0d8b50c3d12cbd2e30613aaf35570e80086ef444817d063463861fe9ef85741d"
+    }
+  ]
+}

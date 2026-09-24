@@ -1,0 +1,5 @@
+# M78 historical recovery — root acceptance
+
+Root accepts independent result4f6ab02406eebccab9f025f041bef910d3bf7de0f1a6334527298ac2532b06d0 after reviewing the GET-only probe, original journal pins, complete inventory/content comparisons and bounded eight-family evidence. Actual result timestamp is September22 15:45UTC; the initial review prose saying September23 is a date typo and is superseded by that machine receipt. All113 tables377 entries and20receipts remained exact;42GETs18downloads passed without mutation. Provider-wide recovery and complete historical semantic recalculation are excluded.
+
+This admits one fresh separate local recipe clone from the same original archive, followed by already reviewed local20→21 upgrade and separately admitted exact recipe rehearsal. Clonec and old failed attempts remain unchanged. The old archive is historical: fresh hosted backup/recovery and all runtime/check gates remain required before live mutation. Root verified current115 source pins immediately before the separate restore. No fresh hosted release is claimed.

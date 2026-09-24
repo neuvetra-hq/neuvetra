@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "id": "M78-INTEGRATED-QA-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json",
+      "sha256": "a264de31b06f684c4d2b8c80ba83963932cb4e929eab6388e834fc3390f5f5d9"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "NATIVE-AUTH-AND-HISTORY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-ci-native.test.ts"
+      ],
+      "reason": "Independent actual local blocked2pass99assertions; positive1pass23assertions;46rational checks. React/provider/recovery separately excluded. INT-F01 repaired and independently closed."
+    },
+    {
+      "id": "POSITIVE-SEMANTIC-REPLAY-AND-RUNTIME",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-integrated-native.test.ts"
+      ],
+      "reason": "Independent actual local blocked2pass99assertions; positive1pass23assertions;46rational checks. React/provider/recovery separately excluded. INT-F01 repaired and independently closed."
+    },
+    {
+      "id": "CURRENT-PROCESS-CORRECTION-CAPTURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-integrated-review.md",
+        "evaluations/research-qa/m78-root-browser-verification.md"
+      ],
+      "reason": "Revised546 corrected process3/inventory2/five reports independently replayed; independent actual30Mhistory and10Mresponse typed422 capacity refusals preserve every neuvetra row and old readability; sequence rollback excluded."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-integrated-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-INTEGRATED-QA-01-CANDIDATE1.json",
+        "sha256": "a264de31b06f684c4d2b8c80ba83963932cb4e929eab6388e834fc3390f5f5d9"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 3,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-integrated-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-integrated-review.md",
+      "sha256": "a290df79438d497d449e367c76ea831ca0930be7fe8020b62d8437d81f9e9b2d"
+    },
+    {
+      "path": "evaluations/research-qa/m78-ci-native.test.ts",
+      "sha256": "f4a7ee6e199b33e645fb883bdda788b55a93018dfc57677dc33e608b190420c7"
+    },
+    {
+      "path": "evaluations/research-qa/m78-integrated-fixture.ts",
+      "sha256": "8edfbec8d0fea13e8ef610ba1bb095b480efaa15f45516267876043f9cbbbd29"
+    },
+    {
+      "path": "evaluations/research-qa/m78-native-parity-probe.ts",
+      "sha256": "51474ba05225f85c4b01e31f90f0e9b55b0c920237c7d7f3c486dad01aa91d89"
+    },
+    {
+      "path": "evaluations/research-qa/m78-integrated-native.test.ts",
+      "sha256": "2c60fada40fef41cd5a96eb25906b19693738cc6980cbe42b2dcce84997e1489"
+    },
+    {
+      "path": "evaluations/research-qa/m78-integrated-rational-check.py",
+      "sha256": "c26c689c0f35f2e32921a67e0bdbde6da30d14aac1e8ffdd3545803b55c95add"
+    },
+    {
+      "path": "evaluations/research-qa/m78-native-read-probe.ts",
+      "sha256": "863f98239d990795e57e2d2cc48c52efdc9d1b593987d8b8029f818068d26d38"
+    },
+    {
+      "path": "evaluations/research-qa/m78-history-capacity-native.test.ts",
+      "sha256": "2310d0005eeea54fc7a90e67a8c756bd9d33890ddd7ff7a7ce5a95f2a285949b"
+    },
+    {
+      "path": "evaluations/research-qa/m78-capacity-browser.test.ts",
+      "sha256": "cf4a1972642ed379253e881000b5600cb7464e9683d33d7038070e18d87583aa"
+    }
+  ]
+}

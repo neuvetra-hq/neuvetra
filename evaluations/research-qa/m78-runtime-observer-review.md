@@ -1,0 +1,13 @@
+# M78 runtime observer — independent source admission
+
+**Accept exact observer SHA95d71b1c10f6f8fb6249b467988595e64af2dd25210c1f636f70a390eba3fc6d for root's actual deployment/restart observations.** This is source admission, not evidence that deployment or restart occurred.
+
+Independent reviewer `/root/resume_recovery` did not author the observer. Requested critical security/reliability Astra/high; inherited compute unknown. The prior M77 final-runtime review provides historical boundary context; the exact current M78 bytes were executed independently offline.
+
+Twenty-six isolated cases pass: two valid deployment/restart cases and24 refusals. Challenges cover wrong commit or malformed/substituted image, another live deployment, status/profile/schema/containment/readiness HTTP mismatch, missing restart acknowledgement, incorrect preceding commit/chronology, wrong scoped log deployment/commit/image/hash, old/exact-request/future startup times, absent startup event, stale/future collection, exclusive output and optimized Python execution. Test fixtures, network responses and output paths were isolated in newly created temporary directories. No hosted request or official output write occurred.
+
+Deployment requires the exact requested SUCCESS deployment at commit2002feacd26c48c1beb0a4412b5524b935528084 with a valid image digest and no other nonterminal deployment in the supplied list. Actual readiness must return the private synthetic profile, schema21 and verified legacy containment. Restart requires the same deployment/image/commit/readiness as the preceding observation, provider acknowledgement, and a `staging_started` event strictly after the restart request and no later than the scoped log collection. Collection bytes are hashed, deployment/commit/image-bound, ordered after the request and less than15minutes old.
+
+Root must collect the real provider deployment list and deployment-scoped raw startup logs, preserve the collection receipt, and run the exact reviewed observer once for each intended observation. The observer trusts those supplied collection records; offline acceptance does not authenticate provider provenance or establish a real restart. The deployment list's completeness and freshness also depend on root's actual collection. Existing output files refuse overwrite. Repeated or uncertain operations must not be silently retried.
+
+Actual hosted lifecycle0/41/0, authentication cleanup, recovery, browser demonstration, final publication and release readiness remain separate gates. No blanket security, customer readiness or assurance claim follows from this bounded review.

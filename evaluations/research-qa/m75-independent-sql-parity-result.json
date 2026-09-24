@@ -1,0 +1,377 @@
+{
+  "status": "pass",
+  "database": "m75_qa_sql_1789539516767",
+  "canonicalSqlSha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3",
+  "count": 53,
+  "cases": [
+    {
+      "id": "positive",
+      "expectedStatus": "reconciled_bounded_synthetic",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_assetId",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_entityId",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_facilityId",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_period",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_vehicleClass",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_modelYear",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_fuel",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_classificationBasis",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_controlExplanation",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_mode",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unknown_controlBasis",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unsupported_mode",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unsupported_vehicleClass",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unsupported_modelYear",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unsupported_fuel",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unsupported_controlBasis",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unsupported_period",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "alias_primary_collision",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "alias_alias_collision",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "same_asset_different_rows",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "same_source_different_assets",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "same_labels_distinct_assets",
+      "expectedStatus": "reconciled_bounded_synthetic",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "missing_second_workpaper",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unrostered_mobile_source",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "roster_omits_workpaper_and_source",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "no_roster_statement",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "empty_roster",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "omitted_entity",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "unconfirmed_roster",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "partial_declaration",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "interstate_activity_omitted",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "accepted_discrepancy",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "current_head_unreviewed",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "current_head_changes_requested",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "roster_unreviewed",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "boundary_unreviewed",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "stale_workpaper_coverage_hash",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "stale_workpaper_coverage_id",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "stale_roster_coverage_hash",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "source_screening_unassessed",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "source_screening_missing",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "source_screening_excluded",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "source_screening_not_applicable",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "source_screening_included_estimate",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "new_review_invalidates_captured_dependencies",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "fuel_missing",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "mileage_evidence_missing",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "mixed_zero",
+      "expectedStatus": "blocked",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "literal_49",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "literal_50",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "null_coverage_and_roster",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    },
+    {
+      "id": "null_roster_retains_orphans",
+      "rosterEqual": true,
+      "reconciliationEqual": true,
+      "htmlEqual": true
+    }
+  ],
+  "scriptSha256": "2bd860eb27b6307d014ae076baa58e9c19e740926825056506dbde063a9521b5",
+  "createdAt": "2026-09-16T06:19:04.768Z"
+}

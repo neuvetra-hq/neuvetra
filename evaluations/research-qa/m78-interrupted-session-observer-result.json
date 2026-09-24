@@ -1,0 +1,18 @@
+{
+  "status": "m78_interrupted_session_observer_source_passed",
+  "reviewerId": "/root/resume_release",
+  "createdAt": "2026-09-22T20:09:24.963Z",
+  "observerSha256": "628a36b97462a8b3c048993b1157cd033eec9a586d3628cf839cd20baa99614c",
+  "wrapperSha256": "5e71f69357d05ca6ea1d22d4f3b619057699e4f6681d570ec74d70936fd111e0",
+  "testsPassed": 5,
+  "assertions": 124,
+  "databaseMocked": true,
+  "hostCalls": 0,
+  "authenticationCalls": 0,
+  "actualSessionObservation": false,
+  "cleanupApproved": false,
+  "report": {
+    "path": "evaluations/research-qa/m78-interrupted-session-observer-review.md",
+    "sha256": "2733f460ff7a3c9a23a0007ff44b7dc5cf32c12aa36d5bcdb904da1d42c36e12"
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "id": "m78-scope1-compatible-candidate-v1",
+  "status": "proposed_accounting_candidate",
+  "releaseEligible": false,
+  "reviewRequired": true,
+  "period": {
+    "start": "2025-01-01",
+    "endExclusive": "2026-01-01"
+  },
+  "boundary": "US_CA_full_year_operational_control",
+  "assessment": "IPCC AR5",
+  "horizonYears": "100",
+  "methods": [
+    {
+      "family": "natural_gas",
+      "methodSha256": "a596ea0d377f33ac34e1333852c313c855c2a18ac08006525a78bbfb7cce9898",
+      "descriptor": {
+        "id": "stationary-natural-gas-combustion",
+        "version": "m73-development-v1",
+        "engineSha256": "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14",
+        "dependencySha256": "eebade88f291cec281f38efe09597a107ce24904f28782d51405e739c4d37603",
+        "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+        "factorSha256": "80da7b01f57c852a1bca9a6f80a23636baef02091cd26880a7395c8331f5a20f",
+        "gwpSha256": "d87fb6c54a170e1dff70327bf475774febb3681a754cb8abec9c4c31efa3b908",
+        "sourceTitle": "EPA GHG Emission Factors Hub 2025",
+        "sourceSheet": "Emission Factors Hub",
+        "factorCells": [
+          "C38",
+          "E38",
+          "F38",
+          "G38"
+        ],
+        "gwpCells": [
+          "E524",
+          "E525",
+          "E526"
+        ],
+        "noteCells": [
+          "C94",
+          "C95",
+          "C99",
+          "E523",
+          "C10",
+          "C556"
+        ],
+        "co2KgPerMmbtu": "53.06",
+        "ch4GramsPerMmbtu": "1.0",
+        "n2oGramsPerMmbtu": "0.10",
+        "ch4Gwp": "28",
+        "n2oGwp": "265",
+        "gwpAssessment": "IPCC AR5 100-year",
+        "status": "development_candidate_not_released",
+        "releaseEligible": false,
+        "rights": "unresolved_for_factor_release"
+      }
+    },
+    {
+      "family": "mobile_diesel",
+      "methodSha256": "7598384902729e8a6708beb359e7564f500ad85c0d3ad38f094ee580a05c0497",
+      "descriptor": {
+        "id": "mobile-diesel-combustion",
+        "version": "m74-development-v1",
+        "engineSha256": "1dc0bb7249d91e854004a8cadd34068be3fc03ecdd6e10b4cf297d375d7f52a6",
+        "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+        "factorSha256": "416931c40b347f1e22e9d4019ca1c28bd27ce40d7c16a3beeac3dadbbb783187",
+        "gwpSha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7",
+        "sourceTitle": "EPA GHG Emission Factors Hub 2025",
+        "sourceSheet": "Emission Factors Hub",
+        "factorCells": [
+          "C103:E103",
+          "C107:E107",
+          "C255:G256"
+        ],
+        "gwpCells": [
+          "E523:E526"
+        ],
+        "noteCells": [
+          "F3",
+          "F248:G248",
+          "C255:D256"
+        ],
+        "co2KgPerGallon": "10.21",
+        "ch4GramsPerMile": "0.0095",
+        "n2oGramsPerMile": "0.0431",
+        "ch4Gwp": "28",
+        "n2oGwp": "265",
+        "gwpAssessment": "IPCC AR5 100-year",
+        "status": "development_candidate_not_released",
+        "releaseEligible": false,
+        "rights": "unresolved_for_factor_release"
+      }
+    },
+    {
+      "family": "stationary_diesel",
+      "methodSha256": "8924b6c99a7b2b1525f2f2ef641978bbdfc5c7116c40a9fc828e418e56a4a722",
+      "descriptor": {
+        "id": "m76.stationary-distillate-no2.ca2025.ar5.default-hhv.v1",
+        "version": "m76-development-v1",
+        "engineSha256": "60de93b901185527affd1eae73d400582cc9d041ecd13bb5668c9041374f6266",
+        "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+        "factorSha256": "7f2a655ff2fc3a214f8f076aeaf7acebc25a50f89801985f255157a3ab3a85d0",
+        "gwpSha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7",
+        "sourceTitle": "EPA GHG Emission Factors Hub 2025",
+        "sourceSheet": "Emission Factors Hub",
+        "factorCells": [
+          "C55",
+          "D55",
+          "E55",
+          "F55",
+          "G55"
+        ],
+        "gwpCells": [
+          "E524",
+          "E525",
+          "E526"
+        ],
+        "noteCells": [
+          "D14",
+          "D47:G47",
+          "C94",
+          "C95",
+          "C99",
+          "E523",
+          "C10",
+          "C556"
+        ],
+        "hhvMmbtuPerGallon": "0.138",
+        "co2KgPerMmbtu": "73.96",
+        "ch4GramsPerMmbtu": "3.0",
+        "n2oGramsPerMmbtu": "0.60",
+        "ch4Gwp": "28",
+        "n2oGwp": "265",
+        "gwpAssessment": "IPCC AR5 100-year",
+        "status": "development_candidate_not_released",
+        "releaseEligible": false,
+        "rights": "unresolved_for_factor_release"
+      }
+    },
+    {
+      "family": "fugitive",
+      "methodSha256": "acbfed90deaf7c164fe889b87732a998396ace265c92973ba3f79c6a71c038af",
+      "descriptor": {
+        "id": "m77-stable-serviced-equipment-2025-candidate-v1",
+        "engineSha256": "3c81c8d1b4ee6b2435765013d0578021556b70d35f16e4512ebecf1c873f25b4",
+        "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+        "guidanceSha256": "fb3dd5c9677096094c2acef769c7fe2fb90def6feac403cf9c817f5810928d88",
+        "gwpBasis": "EPA January 2025 Hub; AR5 100-year published value",
+        "gases": [
+          {
+            "gas": "HFC-134a",
+            "gwp": "1300",
+            "gasKind": "single_gas",
+            "locator": "Emission Factors Hub!E532"
+          },
+          {
+            "gas": "HFC-227ea",
+            "gwp": "3350",
+            "gasKind": "single_gas",
+            "locator": "Emission Factors Hub!E538"
+          },
+          {
+            "gas": "R-410A",
+            "gwp": "1924",
+            "gasKind": "blend",
+            "locator": "Emission Factors Hub!D575"
+          }
+        ],
+        "status": "development_candidate_not_released",
+        "releaseEligible": false,
+        "factorGwpDescriptor": {
+          "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+          "assessment": "IPCC AR5",
+          "horizonYears": "100",
+          "gases": [
+            {
+              "gas": "HFC-134a",
+              "gwp": "1300",
+              "gasKind": "single_gas",
+              "locator": "Emission Factors Hub!E532"
+            },
+            {
+              "gas": "HFC-227ea",
+              "gwp": "3350",
+              "gasKind": "single_gas",
+              "locator": "Emission Factors Hub!E538"
+            },
+            {
+              "gas": "R-410A",
+              "gwp": "1924",
+              "gasKind": "blend",
+              "locator": "Emission Factors Hub!D575"
+            }
+          ]
+        },
+        "factorGwpDescriptorSha256": "80a514d4596fc214ea3086941b37377f9e939f7541e40590fa4ee243deb1e24d"
+      }
+    }
+  ],
+  "gasGwps": [
+    {
+      "gas": "CO2",
+      "gwp": "1",
+      "gasKind": "single_gas"
+    },
+    {
+      "gas": "CH4",
+      "gwp": "28",
+      "gasKind": "single_gas"
+    },
+    {
+      "gas": "N2O",
+      "gwp": "265",
+      "gasKind": "single_gas"
+    },
+    {
+      "gas": "HFC-134a",
+      "gwp": "1300",
+      "gasKind": "single_gas"
+    },
+    {
+      "gas": "HFC-227ea",
+      "gwp": "3350",
+      "gasKind": "single_gas"
+    },
+    {
+      "gas": "R-410A",
+      "gwp": "1924",
+      "gasKind": "blend"
+    }
+  ],
+  "massUnit": "kg_of_named_gas_or_blend",
+  "co2eUnit": "kg CO2e",
+  "blendDisclosure": "opaque_blend_no_constituent_guess",
+  "rounding": "half_even_4dp",
+  "aggregation": "unrounded_current_source_gas_contributions_only",
+  "grossNoNetting": true,
+  "estimatedFugitiveMass": "sum_servicing_consumed_mass_only_linked_release_not_added",
+  "sourceMassMapping": {
+    "natural_gas": "gasResults.*.mass already kg",
+    "mobile_diesel": "gasResults.*.mass already kg",
+    "stationary_diesel": "gasResults.*.mass already kg",
+    "fugitive": "estimated_emitted_kg already kg of exact gas or blend"
+  },
+  "incompatiblePolicy": "No common CO2e total or subtotal; retain separately labeled gas/family values",
+  "missingOrUnsupported": "No complete total; compatible eligible known-source subtotal only",
+  "gasCoverage": [
+    "CO2",
+    "CH4",
+    "N2O",
+    "HFCs",
+    "PFCs",
+    "SF6",
+    "NF3"
+  ],
+  "additionalGasPolicy": "Unsupported inputs remain blocked; no factor defaults",
+  "displayRoundingDelta": "rounded_parent_exact_total minus sum_displayed_current_sources; not emissions adjustment"
+}

@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "id": "M78-HOSTED-DATABASE-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-DATABASE-REVIEW-01-CANDIDATE2.json",
+      "sha256": "d06b0e88893cf958be2ac8aad30463e145798c4f928adef656ab76f0d550e6b3"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "HOSTED-ADAPTER-PREPARATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-hosted-database-final-review.md",
+        "evaluations/research-qa/m78-hosted-database-final-source-pins.json",
+        "evaluations/research-qa/m78-hosted-database-independent.test.ts",
+        "operations/agent-improvement/snapshots/M78-HOSTED-DATABASE-REVIEW-01-CANDIDATE2.json"
+      ],
+      "reason": "Exact current public102 dependency closure rebound4reviewed deltas;12pure338checks; actual local recovery prerequisite passes. Root readonly encrypted20 backup prospective admission only; actual host/restore/38POST/migration gates remain."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-hosted-preparation-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-HOSTED-DATABASE-REVIEW-01-CANDIDATE2.json",
+        "sha256": "d06b0e88893cf958be2ac8aad30463e145798c4f928adef656ab76f0d550e6b3"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-hosted-database-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-hosted-database-final-review.md",
+      "sha256": "717c273eba24d4ca739caebd17534aabd85303347fc84a8207068e7f11cd552f"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-database-final-source-pins.json",
+      "sha256": "4da9dbe29827c4a801251f4c0ba47dc4cb94f046eda376881034b46e654209fd"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-database-independent.test.ts",
+      "sha256": "6028d1860cefe9760f410e23f9e26bc1ee8cc4641d6e6578a21cdfc3a1f970ea"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-DATABASE-REVIEW-01-CANDIDATE2.json",
+      "sha256": "d06b0e88893cf958be2ac8aad30463e145798c4f928adef656ab76f0d550e6b3"
+    }
+  ],
+  "escaped_defect_evidence": {
+    "finding": "ACT-R01",
+    "classification": "cross-environment preparation defect, not production incident",
+    "evidence": [
+      "evaluations/research-qa/m78-actual20-restore-review.md",
+      "evaluations/research-qa/m78-actual20-restore-diagnosis.ts",
+      "evaluations/research-qa/m78-actual20-restore-diagnosis.json"
+    ],
+    "acceptedSourceSnapshotsUnchanged": true
+  }
+}

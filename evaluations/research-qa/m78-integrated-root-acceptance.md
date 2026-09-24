@@ -1,0 +1,7 @@
+# Root acceptance of independent M78 native evidence
+
+Root accepts the narrowly scoped integrated QA report SHA a290df79438d497d449e367c76ea831ca0930be7fe8020b62d8437d81f9e9b2d and its nine-file candidate snapshot SHA a264de31b06f684c4d2b8c80ba83963932cb4e929eab6388e834fc3390f5f5d9. The separate reviewer challenged final SQL54667347 on fresh local clones; root authored the UI/integration but did not author these independent native tests. This is coordinator acceptance of QA evidence, not a new independent review of root's UI.
+
+Actual five native tests/175 assertions cover the blocked lifecycle and authorization, corrected process3/inventory2 and five retained reports, coordinated rehashed historical-review forgery refusal, and valid30MB history/10MB response capacity refusals. Row sets and old report/download bytes remain exact after refusal. Audit sequence rollback is explicitly not claimed. Earlier failures remain retained; independent arithmetic and browser-source checks keep their stated boundaries. Root also ran43 pure browser/capacity/recipe/hosted-database tests with330 assertions and the final staging build.
+
+Root's attempted whole-monorepo check stopped in unchanged FrontDesk because the local installation lacks drizzle-orm declarations; it did not complete. Relevant Neuvetra database/API/web typechecks, staging build and focused suites passed. A clean-install remote check remains required at the published head. Recovery, real provider authentication, hosted deployment, full Scope1 release and external assurance are not accepted here.

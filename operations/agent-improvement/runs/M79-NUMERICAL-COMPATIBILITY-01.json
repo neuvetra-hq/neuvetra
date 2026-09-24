@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "M79-NUMERICAL-COMPATIBILITY-01",
+  "role": "accounting-validation",
+  "execution_context": "/root/m79_numerical",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-COMPATIBILITY-01-CANDIDATE1.json",
+      "sha256": "2ca05e1fe65f3376035343ee5fc09350f80fe747b58c001524b104e87f74f090"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-all-four-profiles-twelve-rows-pinned-engines",
+      "status": "pass",
+      "evidence": [
+        "evaluations/calculation-specs/m79-numerical-expected.json",
+        "evaluations/calculation-specs/m79-numerical-result.json",
+        "docs/research/m79-numerical-compatibility.md"
+      ],
+      "reason": "All four exact candidate profiles and twelve current rows were independently derived from retained primary-source cells and compared with the four exact pinned engine hashes; all 18 numerical cases matched."
+    },
+    {
+      "id": "AC-02-units-hhv-rounding-aggregation-and-blend",
+      "status": "pass",
+      "evidence": [
+        "evaluations/calculation-specs/m79-numerical-expected.json",
+        "evaluations/calculation-specs/m79-numerical-boundaries.test.ts",
+        "docs/research/m79-numerical-compatibility.md"
+      ],
+      "reason": "Gram-to-kg and default-HHV conversions, even/odd half-even ties, unrounded round-once rollups and opaque whole-blend R-410A 1924 behavior were checked; constituent comparison 1923.5 remains explicitly unused and no constituent mass was inferred."
+    },
+    {
+      "id": "AC-03-zero-missing-unsupported-estimate-boundaries",
+      "status": "pass",
+      "evidence": [
+        "evaluations/calculation-specs/m79-numerical-result.json",
+        "evaluations/calculation-specs/m79-numerical-boundaries.test.ts",
+        "docs/research/m79-numerical-compatibility.md"
+      ],
+      "reason": "Seven direct engine boundary cases and five application-boundary tests with 24 assertions retained missing, explicit-zero, mixed-zero, unsupported gas/unit/class/equipment, default-HHV estimate and linked-release behavior without converting unknowns to zero."
+    },
+    {
+      "id": "AC-04-independent-review-of-frozen-candidate",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-numerical-independent-review.md",
+        "evaluations/research-qa/m79-numerical-root-acceptance.md"
+      ],
+      "reason": "Root accepts bounded preparation/review only; qualified release and customer gates remain outside this assignment and open."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m79_numerical_review",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m79-numerical-independent-review.md",
+      "evaluations/research-qa/m79-numerical-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-COMPATIBILITY-01-CANDIDATE1.json",
+        "sha256": "2ca05e1fe65f3376035343ee5fc09350f80fe747b58c001524b104e87f74f090"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M79 Scope 1 method/source release candidate preparation",
+  "applicable_lessons": [],
+  "source_artifacts": [
+    {
+      "path": "docs/research/m79-method-source-inventory.json",
+      "sha256": "d5f50b6e2d49b1ce027affe08ccfe422174b59df60c408b544212f232b9a8022"
+    },
+    {
+      "path": "evaluations/calculation-specs/m78-candidate-policy.json",
+      "sha256": "0fe8cb9bfb48e7a8dd0b5b40d491918f57f33288da12daa9de1d9406080da6c4"
+    }
+  ],
+  "notes": [
+    "Requested Sol/high and observed settings remain distinct; observed model/effort are unavailable.",
+    "Independent expectations use Fraction arithmetic and freshly read retained workbook cells; they import no Neuvetra calculation engine or formula.",
+    "The task found no numerical discrepancy. Expected refusals and an empty failure list remain in the black-box receipt; current half-even policy was tested on both even- and odd-lower ties.",
+    "No source/method/rights/domain/customer approval, production release, legal conclusion, assurance, hosted/auth/database/provider call, product modification, original journal/rehearsal rerun, Git action or shared-ledger edit occurred."
+  ]
+}

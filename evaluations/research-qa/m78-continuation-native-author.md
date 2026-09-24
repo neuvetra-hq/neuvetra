@@ -1,0 +1,11 @@
+# M78 continuation — actual local native rehearsal
+
+**Author execution passed once** at2026-09-22T17:31:40.055Z on the new restored `m78_ops_continuation_20260922` clone. Independent actual result review is pending. This context authored the continuation and executed this local run; it cannot supply independent acceptance.
+
+Root explicitly admitted input SHAe76f74d0a1bb61b08b87fc9959ecd5244be27f4c4d8314e7ddd1d5d7d40e17fc after verifying122 source pins, eight provenance pins, the three retained actors, actual restored inventory1 and baseline row SHA92ee57be059e16f41d35226cdc77b47e7f4d85321050b3d831ff725bd55fc36d. Read-only inspection preceded the sole write run. No application writes happened before that admission.
+
+The113-event journal SHA159630ef6c2033651e25da8fb4afdaa439f24a2bcb4fcc3186b8768816218dfb contains37 successful201 outcomes and37 verifications, with terminal head e7788dd5dca926ee66552f9f6e8c6d3442886ce923fcca09583511a969ba0a75. The first operation reports the already committed inventory1; the original save and three prior denials are not repeated. All572 old rows across121 tables are retained, allowing only target-company head version_id/revision changes. Exactly37 request and audit entries were added. Final row SHA d3d089df1810f863cbbdcfc18992c5d426607811c465d70976d042d7df3834a4 is recorded in the journal. The source closure and global role/membership state matched again after completion.
+
+The native handlers and actual frontend decoders verified each new record and retained readback, five reports and exact HTML/JSON downloads. Final history has one process version and two inventory versions, current source/discovery bindings and separately accepted decisions, with exact gross126850.17632025. Customer release remains incomplete. There were zero hosted calls or provider authentication sessions.
+
+Original clones and failed journals were preserved. The new clone is now retained for read-only independent review; do not execute this journal/recipe again. Public result `m78-continuation-native-result.json` is an exact copy of the bounded operator terminal summary, SHAbeeeb7873bb71a58916a95912c8c3a21d85a24e95ad5f31226726f950116cb30. Root handles publication and actual hosted0/37/0 gates after independent acceptance.

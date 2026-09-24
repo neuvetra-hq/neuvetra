@@ -1,0 +1,62 @@
+[
+  {
+    "case": "blank_rationale",
+    "alerts": [
+      "Enter a rationale. The previous screening is unchanged."
+    ]
+  },
+  {
+    "case": "reopen_clears_invalid",
+    "value": null
+  },
+  {
+    "case": "missing_evidence",
+    "alerts": [
+      "Select supporting evidence. The previous screening is unchanged."
+    ]
+  },
+  {
+    "case": "wrong_year_evidence",
+    "alerts": [
+      "Evidence period does not match the reporting year. The previous screening is unchanged."
+    ]
+  },
+  {
+    "case": "blank_owner",
+    "alerts": [
+      "Enter a task owner."
+    ],
+    "invalid": "true"
+  },
+  {
+    "case": "market_based",
+    "detail": "Purchased electricity — market-based view assessment\n\nAssess applicable dual-reporting rules, instruments and quality criteria; no market-based result can be inferred from utility quantities.\n\nMethod: unsupported in demo\nActivity data: missing\nEvidence: contractual evidence missing\nReview: pending\nEmissions: unavailable\n\nSupporting evidence missing."
+  },
+  {
+    "case": "reset_clears_owner_invalid",
+    "invalid": null
+  },
+  {
+    "case": "390px_layout",
+    "metrics": {
+      "scrollWidth": 375,
+      "width": 375
+    }
+  },
+  {
+    "case": "390px_categories",
+    "metrics": {
+      "count": 15,
+      "scrollWidth": 375,
+      "width": 375
+    }
+  },
+  {
+    "case": "320px_categories",
+    "metrics": {
+      "count": 15,
+      "scrollWidth": 305,
+      "width": 305
+    }
+  }
+]

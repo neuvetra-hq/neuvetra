@@ -1,0 +1,13 @@
+{
+  "status": "m78_get_route_exact_candidate_integrated",
+  "observedAt": "2026-09-23T01:22:10.740456+00:00",
+  "historicalInventorySha256": "e1d0cd97046e21b308894d5f8757f8fc1fa580550e3ec700aa7ab0e1519bbb92",
+  "historicalCurrentSourcesVerifiedBeforeCopy": 173,
+  "historicalCurrentSourcesUnchangedAfterCopy": 172,
+  "changedPath": "apps/site-api/src/workspace/m78-routes.ts",
+  "routeSha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+  "nativeResultSha256": "caae59a5d5704c53b6d61f901d30dee55be01b7f890c62e7d6e5c1b1b7931417",
+  "independentActualResultAcceptance": "pending",
+  "publication": "not_yet",
+  "deployment": "not_yet"
+}

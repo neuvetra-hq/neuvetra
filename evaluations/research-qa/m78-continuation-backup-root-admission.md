@@ -1,0 +1,7 @@
+# M78 continuation backup: independent root source admission
+
+Root independently reviewed the new schema21-only backup/restore module authored by /root/resume_release, including fixed original save/journal/observation bindings, read-only repeatable-read snapshot, full inventory/content equality, pinned TLS and narrow application dump. Root reran five offline tests/167 assertions. The final addition preserves the original subject UUID guard. All117 current source pins and module ddd120130c304c2937ad08d3976b083d3461b9caa408cb12d484c534466b590d were verified before execution.
+
+The new fixed archive and journals are exclusive. DPAPI keeps the dump encrypted at rest; restore only targets the new local m78_ops_continuation_20260922 database. It uses existing21 restore validation and the explicit27 unrelated default-ACL projection while preserving full source permissions, old rows/content and local role prerequisites. Original backup journal, archive and snapshot identities bind restore. No SQL upgrade or hosted write is admitted.
+
+The root-authored backup-only private wrapper6022c8a16466fa5bad92685ec6ebed33bae2b388fe11e8a8ba4417dab43be196 was independently reviewed by /root/resume_release. It reads only the approved DATABASE_URL and sends it through hidden stdin. Source checks happen before its invocation. This source admission permits the authorized read-only encrypted snapshot and fresh local restore; actual results require separate verification. Provider Auth accounts/configuration/storage recovery remain excluded.

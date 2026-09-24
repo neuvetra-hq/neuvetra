@@ -1,0 +1,25 @@
+{
+  "status": "m78_get_local_comparison_root_accepted",
+  "observedAt": "2026-09-23T01:28:17.010778+00:00",
+  "independentReceipt": {
+    "path": "evaluations/research-qa/m78-get-local-comparison-independent-result.json",
+    "sha256": "7aeabac30562a0f44d44b6a760b12a199bd42f6dbc360df591fb52f91a9e3b96"
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M78-GET-LOCAL-COMPARISON-REVIEW-01-CANDIDATE1.json",
+    "sha256": "e3943d0a31c5de70c4d9fd166e6f12e7f655ee89dd942bc134e9064782bcac3c"
+  },
+  "rootReproduction": {
+    "testsPassed": 9,
+    "assertions": 230,
+    "integratedRouteTestsPassed": 9,
+    "integratedRouteAssertions": 141,
+    "siteApiTypecheck": "passed"
+  },
+  "publicationAdmission": "Exact repair and supporting evidence may be committed and pushed to the existing rolling PR5. Fresh six checks and separately reviewed live admission required before deployment.",
+  "limits": [
+    "No hosted performance result or recovery/restart/revisit acceptance.",
+    "The failed exercise remains failed; no completed operation may be replayed.",
+    "Synthetic milestone only; customer Scope1 and California corporate MVP remain incomplete."
+  ]
+}

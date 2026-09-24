@@ -1,0 +1,23 @@
+{
+  "status": "m78_retained_statement_offline_proof_passed",
+  "statementId": "023261c1-8adc-4dd7-a11e-bd2e40b3aa54",
+  "priorBaselineTextMatchesPriorActualDownload": true,
+  "expected": {
+    "sha256": "6d48e9797ad2bd6b6bfd4dbdd8d5e082e54aa991935b069691939a1ac5bdfb9b",
+    "byteLength": 2279
+  },
+  "providerEvidence": {
+    "path": ".superpowers/m78-continuation-baseline-failure-http.json",
+    "sha256": "8ff58fb73ecfd9029e7998c4f62786bb04c44d642bdfd7302ebbc72f7fc82d98",
+    "entries": [
+      {
+        "timestamp": "2026-09-22T18:15:48.318269071Z",
+        "method": "GET",
+        "status": 200,
+        "duration": 4251,
+        "path": "/workspace-api/workspace/<synthetic-id>/stationary-diesel/<synthetic-id>/statements/<synthetic-id>/download"
+      }
+    ]
+  },
+  "currentFailedResponseBytesObserved": false
+}

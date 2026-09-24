@@ -1,0 +1,69 @@
+{
+  "task": "M78-TRANSPORT-ROOT-INDEPENDENT-01",
+  "bun": "1.3.12",
+  "platform": "win32",
+  "loopbackOnly": true,
+  "serverIgnoresClientClose": true,
+  "results": [
+    {
+      "label": "healthy_default",
+      "seen": [
+        1,
+        1
+      ],
+      "outcomes": [
+        {
+          "status": 200,
+          "body": "ok",
+          "ms": 7
+        },
+        {
+          "status": 200,
+          "body": "ok",
+          "ms": 0
+        }
+      ],
+      "remainingSockets": 0
+    },
+    {
+      "label": "silent_reuse_default",
+      "seen": [
+        1,
+        1
+      ],
+      "outcomes": [
+        {
+          "status": 200,
+          "body": "ok",
+          "ms": 1
+        },
+        {
+          "error": "TimeoutError",
+          "ms": 1011
+        }
+      ],
+      "remainingSockets": 0
+    },
+    {
+      "label": "silent_reuse_fresh",
+      "seen": [
+        1,
+        2
+      ],
+      "outcomes": [
+        {
+          "status": 200,
+          "body": "ok",
+          "ms": 1
+        },
+        {
+          "status": 200,
+          "body": "ok",
+          "ms": 1
+        }
+      ],
+      "remainingSockets": 0
+    }
+  ],
+  "providerCauseEstablished": false
+}

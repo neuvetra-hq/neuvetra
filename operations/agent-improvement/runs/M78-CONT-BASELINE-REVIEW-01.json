@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "id": "M78-CONT-BASELINE-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/resume_recipe",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT-BASELINE-REVIEW-01.json",
+      "sha256": "c3fec3f0715cffc36702033852c215ac8988bc8a7af606503601ad6fe4b73d78"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-CONT-BASELINE-REVIEW-01-SUPPLEMENT.json",
+      "sha256": "7c7c57d1cdeb29f649695bb869dec04cf7e4188f72d083ba4c62262b6107ac82"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ACTUAL_FAILURE_RECONCILED",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-baseline-failure-result.json",
+        "evaluations/research-qa/m78-continuation-baseline-failure-review.md"
+      ],
+      "reason": "Exact failed journal and session closure confirmed offline; baseline remains failed."
+    },
+    {
+      "id": "BOUNDED_DIAGNOSTIC_PREPARATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-continuation-baseline-diagnostic-proposal.md",
+        "evaluations/research-qa/m78-continuation-baseline-diagnostic-preparation.json"
+      ],
+      "reason": "Provider200 evidence assessed with unresolved client failure; exact historical2279byte proof and no-execution bounded proposal."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-continuation-baseline-failure-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT-BASELINE-REVIEW-01.json",
+        "sha256": "c3fec3f0715cffc36702033852c215ac8988bc8a7af606503601ad6fe4b73d78"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M78-CONT-BASELINE-REVIEW-01-SUPPLEMENT.json",
+        "sha256": "7c7c57d1cdeb29f649695bb869dec04cf7e4188f72d083ba4c62262b6107ac82"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-continuation-baseline-failure-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Reused independent reviewer context; actual compute unknown. Assignment revised by root from baseline success review to exact failure reconciliation. No host or DB calls."
+  ],
+  "assignment": {
+    "remaining": "Hosted baseline remains failed; only exact failure reconciliation accepted. Separate guarded verification preparation."
+  }
+}

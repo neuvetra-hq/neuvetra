@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "M77-WORKSHEET-CONTROLS",
+  "role": "software-engineering",
+  "execution_context": "/root",
+  "prompt_sha256": "d658cb6f3ca266e55bdcef0e10029f82b783cf3ce485884a81d0381ae299e30e",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-WORKSHEET-CONTROLS-CANDIDATE1.json",
+      "sha256": "f46fc3048e9da5acf40e93dc2fc4087108bffa565717f376886c487ac8b11a7f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "READABLE-WORKSHEET-CONTROLS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m77-worksheet-controls-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m76_cto",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m77-worksheet-controls-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-WORKSHEET-CONTROLS-CANDIDATE1.json",
+        "sha256": "f46fc3048e9da5acf40e93dc2fc4087108bffa565717f376886c487ac8b11a7f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "No CSS, action, API, calculation or report-byte changes. Root local build and visual checks; independent targeted review.",
+    "Root actual local final-fixture screenshot confirmed visible spaced report/statement buttons and preserved accepted report. Narrow390x844 page375; viewport reset. No application writes; local tab closed/server stopped."
+  ]
+}

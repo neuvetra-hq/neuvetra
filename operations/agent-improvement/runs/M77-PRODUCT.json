@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "M77-PRODUCT",
+  "role": "cpo",
+  "execution_context": "/root/m77_cpo",
+  "prompt_sha256": "fe5237292aafa6fe307801d3d9d07414110d11dc6ecd7812ee52ed77feacb2e6",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M77-PRODUCT-CANDIDATE1.json",
+      "sha256": "0f353143fbb9eefa49f454c28e8499ac4bf67e6cf88ce7e414bb881ae5812b12"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M77-PRODUCT-BOUNDARY",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m77-root-product-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "docs/research/m77-root-product-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M77-PRODUCT-CANDIDATE1.json",
+        "sha256": "0f353143fbb9eefa49f454c28e8499ac4bf67e6cf88ce7e414bb881ae5812b12"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/m77-product-brief.md",
+      "sha256": "6f1b1249bad51134b224c8b6d1bdd9b506dfc987103e5c35469572f727fb3440"
+    }
+  ]
+}

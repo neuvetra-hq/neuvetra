@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M74-ACCOUNTING-SCOPE1",
+  "status": "independently_derived_candidate_expectations_not_implementation_review",
+  "derivedAt": "2026-09-15",
+  "methodId": "m74.mobile-diesel-medium-heavy.ca2025.ar5.v1",
+  "methodReleased": false,
+  "derivation": "Exact fractions cross-checked against Decimal precision96; no application imports. Fixtures establish arithmetic only.",
+  "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+  "factorNormalization": "Published displayed decimals corroborated with EPA2025 PDF; not XLSX binary representation tails.",
+  "profile": {
+    "reportingPeriodStart": "2025-01-01",
+    "reportingPeriodEndExclusive": "2026-01-01",
+    "modelYear": "2015",
+    "vehicleClass": "Medium- and Heavy-Duty Vehicles",
+    "fuel": "fossil_diesel_only",
+    "quantityUnit": "US_gallon",
+    "distanceUnit": "vehicle_mile",
+    "synthetic": true,
+    "releaseEligible": false
+  },
+  "factors": {
+    "co2KgPerGallon": "10.21",
+    "ch4GramsPerMile": "0.0095",
+    "n2oGramsPerMile": "0.0431",
+    "gwpCO2": "1",
+    "gwpCH4": "28",
+    "gwpN2O": "265",
+    "gwpAssessment": "IPCC_AR5",
+    "gwpHorizonYears": "100"
+  },
+  "cases": [
+    {
+      "id": "positive",
+      "quantityGallons": "1000.125",
+      "distanceMiles": "12000.500",
+      "co2Kg": "10211.27625",
+      "ch4Kg": "0.11400475",
+      "n2oKg": "0.51722155",
+      "ch4KgCo2e": "3.192133",
+      "n2oKgCo2e": "137.06371075",
+      "totalKgCo2eExact": "10351.53209375",
+      "totalKgCo2eDisplay": "10351.5321"
+    },
+    {
+      "id": "gallons_only_correction",
+      "quantityGallons": "1100.125",
+      "distanceMiles": "12000.500",
+      "co2Kg": "11232.27625",
+      "ch4Kg": "0.11400475",
+      "n2oKg": "0.51722155",
+      "ch4KgCo2e": "3.192133",
+      "n2oKgCo2e": "137.06371075",
+      "totalKgCo2eExact": "11372.53209375",
+      "totalKgCo2eDisplay": "11372.5321"
+    },
+    {
+      "id": "miles_only_correction",
+      "quantityGallons": "1000.125",
+      "distanceMiles": "12500.500",
+      "co2Kg": "10211.27625",
+      "ch4Kg": "0.11875475",
+      "n2oKg": "0.53877155",
+      "ch4KgCo2e": "3.325133",
+      "n2oKgCo2e": "142.77446075",
+      "totalKgCo2eExact": "10357.37584375",
+      "totalKgCo2eDisplay": "10357.3758"
+    },
+    {
+      "id": "both_zero",
+      "quantityGallons": "0.000",
+      "distanceMiles": "0.000",
+      "co2Kg": "0",
+      "ch4Kg": "0",
+      "n2oKg": "0",
+      "ch4KgCo2e": "0",
+      "n2oKgCo2e": "0",
+      "totalKgCo2eExact": "0",
+      "totalKgCo2eDisplay": "0.0000"
+    },
+    {
+      "id": "minimum_positive",
+      "quantityGallons": "0.001",
+      "distanceMiles": "0.001",
+      "co2Kg": "0.01021",
+      "ch4Kg": "0.0000000095",
+      "n2oKg": "0.0000000431",
+      "ch4KgCo2e": "0.000000266",
+      "n2oKgCo2e": "0.0000114215",
+      "totalKgCo2eExact": "0.0102216875",
+      "totalKgCo2eDisplay": "0.0102"
+    },
+    {
+      "id": "half_even_down",
+      "quantityGallons": "1.000",
+      "distanceMiles": "2.400",
+      "co2Kg": "10.21",
+      "ch4Kg": "0.0000228",
+      "n2oKg": "0.00010344",
+      "ch4KgCo2e": "0.0006384",
+      "n2oKgCo2e": "0.0274116",
+      "totalKgCo2eExact": "10.23805",
+      "totalKgCo2eDisplay": "10.2380"
+    },
+    {
+      "id": "half_even_up",
+      "quantityGallons": "1.000",
+      "distanceMiles": "0.800",
+      "co2Kg": "10.21",
+      "ch4Kg": "0.0000076",
+      "n2oKg": "0.00003448",
+      "ch4KgCo2e": "0.0002128",
+      "n2oKgCo2e": "0.0091372",
+      "totalKgCo2eExact": "10.21935",
+      "totalKgCo2eDisplay": "10.2194"
+    },
+    {
+      "id": "maximum",
+      "quantityGallons": "999999999999.999",
+      "distanceMiles": "999999999999.999",
+      "co2Kg": "10209999999999.98979",
+      "ch4Kg": "9499999.9999999905",
+      "n2oKg": "43099999.9999999569",
+      "ch4KgCo2e": "265999999.999999734",
+      "n2oKgCo2e": "11421499999.9999885785",
+      "totalKgCo2eExact": "10221687499999.9897783125",
+      "totalKgCo2eDisplay": "10221687499999.9898"
+    }
+  ],
+  "behaviorCases": [
+    {
+      "id": "missing_gallons",
+      "quantityGallons": null,
+      "distanceMiles": "12000.500",
+      "expected": "save_incomplete_total_null"
+    },
+    {
+      "id": "missing_miles",
+      "quantityGallons": "1000.125",
+      "distanceMiles": null,
+      "expected": "save_incomplete_total_null"
+    },
+    {
+      "id": "both_missing",
+      "quantityGallons": null,
+      "distanceMiles": null,
+      "expected": "save_incomplete_total_null"
+    },
+    {
+      "id": "zero_gallons_positive_miles",
+      "quantityGallons": "0.000",
+      "distanceMiles": "1.000",
+      "expected": "refuse_numeric_admission"
+    },
+    {
+      "id": "positive_gallons_zero_miles",
+      "quantityGallons": "1.000",
+      "distanceMiles": "0.000",
+      "expected": "refuse_numeric_admission"
+    },
+    {
+      "id": "zero_without_reason_or_matching_evidence",
+      "quantityGallons": "0.000",
+      "distanceMiles": "0.000",
+      "expected": "refuse_supported_zero"
+    }
+  ],
+  "requiredRejections": [
+    "model_year_2006",
+    "model_year_2023",
+    "model_year_missing",
+    "unsupported_class",
+    "biofuel_or_unknown_blend",
+    "wrong_units",
+    "partial_control_period",
+    "third_party_haulage",
+    "evidence_vehicle_or_year_mismatch",
+    "factor_raw_binary_tails",
+    "duplicate_vehicle_year_alias",
+    "unexplained_gallons_discrepancy",
+    "unexplained_miles_discrepancy"
+  ],
+  "notRun": [
+    "application_implementation_tests",
+    "native_driver_API_frontend_replay",
+    "independent_integrated_review",
+    "customer_method_release"
+  ]
+}

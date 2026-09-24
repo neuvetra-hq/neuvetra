@@ -1,0 +1,5 @@
+# M78 resumed release preparation — root acceptance
+
+September22 root independently read the new review and injected wrapper tests, reran the two preflight tests (62 assertions), and reran all11 integrated source/browser/operator test files (89 tests,1516 assertions before the final portability fixture comparison correction). The reviewer separately verified the final12-test449-assertion set. Current private wrapper857ecb4068d31a2c55afc1fee98d22608e48c90b6c91f84e051ec6c4c8b0f117 remains unexecuted. Root accepts the bounded external-admission wrapper model and current140 journey preparation; actual backup/restore/recipe/deployment remain separate gates.
+
+Immutable resume review snapshot62ba8e5a33bb5a40472d7e7bdfa27f5b45478c20fc00c402e51c69aff4feb5f6 preserves this follow-up. The previous recipe test portability correction is accepted with all121 production source pins retained, embedded private author artifacts verified against their original hashes, and no current private-file dependency in CI. Earlier failures and snapshots remain unchanged. This closes preparation review only, not native recipe or Scope1 release.

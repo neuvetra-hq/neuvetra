@@ -1,3 +1,846 @@
+# September 24: M78 published and accepted; PR5 merge authorized
+
+M78 synthetic Scope1 persistence is complete and independently accepted. The prior session published final evidence in f0dff848 and its evidence-link correction in df9d500a45fa4c0a449aca8dad33dd41f37008b4. Root refreshed PR5 on September24: same exact head, all six checks successful, draft/open and mergeable against main. The September22 leading publication-pending notes below are historical and superseded. Accepted recoveryeaa2f3e3/restart70211489/revisit76b481e6 retain37 additions,10sources,five reports and126850.17632025kgCO2e with zero post-restart application writes and all temporary sessions closed.
+
+Board September24 accepted continuation, explicitly authorized merging ready reviewed work and directed Scope2 only after actual Scope1 completion. Root is the sole product/Git writer. Integrate only the32-file coordinator allowlist:20files already identical,12newer pilot/metrics records, with exact hashes and preserved histories. The six-call pilot cost is0.0631382848USD reported by provider receipts; neither model is qualified for numerical work and role defaults stay unchanged. No further paid run. Independent integration QA precedes publication; verify all checks on the resulting exact PRhead, mark ready and merge PR5 if still clean. Never merge failed or unreviewed changes. Merge outcome must be verified from GitHub and reported to the coordinator.
+
+Next bounded product work is M79 method/source release after M78 merge. Existing M79 inventory, numerical and rights evidence are preparation, not production releases. Actual customer Scope1 remains incomplete: compatible method/factor/GWP/source releases and rights decisions; complete customer boundary/source/activity evidence; current applicable requirements; qualified accounting/assurance review; representative customer operational acceptance. Keep Scope2 deferred. No replay of prior M78 saves,37writes,migration21,session cleanup,recoveries,restart or revisit. Preserve all locks/journals. The last observed application remains9dd/f6d77b/schema21; merging evidence does not itself verify a fresh runtime or authorize another deployment.
+
+# September 22: synthetic Scope 1 persistence accepted; final evidence publication
+
+The synthetic M78 functional journey is independently accepted through post-restart persistence. Actual recovery QAeaa2f3e3 verifies all37 saved additions; restart QA70211489 verifies one same-image restart; final revisit QA76b481e6 verifies97requests/zero application writes, all temporary sessions closed, exact retained inventory/report/history state,10sources,five reports and126850.17632025kgCO2e. The signed-in browser refreshed successfully with the same displayed126850.1763 total,0workflow findings and11method/source release findings. Source and actual reviews are separate; root operated staging and probe independently reviewed actual evidence.
+
+Publish the final public evidence/records on existing PR5, verify its exact remote head and all six checks, then report this bounded synthetic milestone complete. The existing app remains9dd/f6d77b/image3e4c/schema21; this evidence-only publication needs no deployment. Board demonstration feedback was requested while independent publication proceeds. M79 method/source release is the next dependent milestone. Customer Scope1 is still incomplete: method/source/rights release, real customer evidence, applicable requirements and qualified human review remain separate gates.
+
+Never replay the original save,37writes,migration21,completed cleanup,any failed recovery,the accepted recovery2,the restart,or the accepted revisit2. Keep all durable locks and private captures. Final revisit closed04:50:28.366UTC on September23; execution receipt64687cec, journalba5349e1, diagnosticsf3b44ae4, rawcapturec238f327, observation0d02c5ee. Collector2bbc03eba corrected provider log parsing only; the original collector and its two output-free failures remain preserved.
+
+# September 22: one restart independently verified; final read-only comparison running
+
+Published verifier head `62e6e3dc0fff2846c1d056bea5922c8849a01119` passed all six checks at 04:33:03 UTC on September 23. Root requested exactly one restart of existing deployment f6d77b/application9dd/image3e4c at04:33:48.625489; provider acknowledged. Original collector refused twice without output because Railway returned a top-level event with an empty message. Independently reviewed collector2 bbc03eba observed exactly one startup at04:34:08.743321887 and fresh ready/schema21/legacy containment at04:41:36.740707. Actual independent QA70211489 accepts the exact restart receipts and collector provenance. Never replay the restart.
+
+Root admitted final GET-only revisit2 under4cf6a5b3 (188source files/205execution pins), launched its private wrapper exactly once as execsession52409. Preserve its durable lock and any captures; actual revisit acceptance is pending. The signed-in browser successfully refreshed after restart with10sources,0workflow findings,11release findings and126850.1763kgCO2e. No browser saves or sign-out. Probe is independently reviewing the actual persistence evidence. CustomerScope1 remains incomplete; M79 method/source release is next after this synthetic functional gate and board demonstration.
+
+# September22: final persistence tools independently accepted, ready for publication
+
+Actual recovery2 accepted under eaa2f3e3; root replayed no application writes. Corrected evaluatorc45f9484, restart source review50f8b3ed, revisit2 source reviewf974ea9c and private-entry/admission review508f862a all passed. Root reproduced4/85actualQA,2/10TS+6Python restart cases,7/125author+6/125independent revisit cases and3private mocked cases; exact188new source pins match privateQA. All required source reviews are closed; agent_ops validates222runs.
+
+Publish this reviewed tools/evidence batch on the same PR5 and pass six exact-head checks. No new app deployment is needed; current application remains9dd/f6d77b/image3e4c/schema21 with autodeploy disabled. THEN run one admitted same-image restart, collect one startup, obtain prompt independent actualstartup receipt, and admit/start GET-only revisit2 within15minutes of startup observation. No actual restart or revisit yet. Prepare all helpers before restart; preserve both predecessor locks/journals and all37completed application changes. Browser tab3 remains signedin on Scope1 inventory. CustomerScope1 remains incomplete.
+
+# September22: actual read-only reconciliation independently accepted
+
+Recovery2 actualQA eaa2f3e35e3e7b939a15aa9122fdddfea19625eefc484d305ecce656d4491bd1 independently accepts the immutable97request/zero-write capture using corrected offline evaluatorc45f9484. Root reproduced4tests/85assertions and closed the review. Exact37 added typed records, five reports, ten sources and126850.17632025kg all reconcile; every created test session closed. Keep the original failed evaluator4324 and both earlier attempts unchanged. No live replay is needed.
+
+The signed-in browser profile remains active. A stale tab handle was replaced in the same profile by tab3; it loaded existing sign-in and shows the same10sources/0workflowfindings/11releasefindings/126850.1763display. No records were saved or changed. This is pre-restart evidence only.
+
+Restart helpers are source-prepared under continuation; root inspected them and reproduced2TS/10assertions+6Python tests and the actual offline validator. Revisit2 candidate2 snapshot46700a55 is under probe source review; root reproduced7/125. Root's four new private revisit helpers compile and await probe independent QA. No actual restart, startup or revisit exists. Complete source reviews, publish reviewed correction/tools on PR5 and pass six checks BEFORE the single same-image restart. Prepare every revisit technical gate first to stay within the15minute startup-to-revisit window. CustomerScope1 remains incomplete.
+
+# September22: read-only reconciliation passed; offline correction under review
+
+Recovery2 session87622 closed exit0:97requests, zero applicationPOSTs, all created test sessions closed, unknown0. Its durable19event journal/195event diagnostics/81raw captures/observation/lock are preserved; no network replay is needed or authorized by this result. Frozen offline evaluator4324 initially rejected the population-discovery payload because a generic fugitive-source prefix preceded its exact population branch. Root preserved4324 and created corrected evaluatorc45f9484; its pure offline run passes all37typed added records, five reports, exact10sources and126850.17632025kg. Strict TypeScript passed. Independent actual/correction review is active under /root/m78_transport_probe; no actual independent acceptance, restart or revisit yet.
+
+Root corrected output is .superpowers/m78-readonly-recovery2-corrected-evaluation.json; original evaluation output remains absent. Existing runner/gates/37application changes stay immutable. /root/m78_transport_continuation prepares corrected revisit2/restart sources with exact corrected-evaluator pins and source-drift checks. Signed-in user browser is preserved. Customer Scope1 remains incomplete.
+
+# September 22: corrected read-only reconciliation running once
+
+Reviewed verifier commit c93130ee79844827816c5b162fc7375152e49f61 is published on PR5; exact remote head and all six checks passed at03:43:31UTC. The89 published artifacts preserve exact reviewed bytes. Runtime observation03:43:49UTC confirms the unchanged9dd/f6d77b/image3e4c/schema21 deployment, readiness and legacy containment, autodeploy disabled.
+
+Root admitted182source files/189execution pins under cb972ee7b2cde281e221366173ea166a438a17f525994582544b2dd7d03a7d65 and launched the reviewed private wrapper once, execsession87622. The durable lock must remain. No actual acceptance yet; no37write replay, migration, restart or revisit. Preserve the signed-in browser session. Next: closed capture, offline evaluation, independent actual review, then reviewed same-image persistence checks. Revisit2 source QA found lock-provenance and freshness issues; author is repairing those before any execution. Customer Scope1 remains incomplete.
+
+# September 22: corrected read-only verifier accepted and ready to publish
+
+Recovery2 source candidate47044480/evaluator4324a965 passed independent root review1c2325e5 after 11 tests/116 assertions, exact reconstruction of the eight archived roster reports, and strict TypeScript. The repair preserves complete proof envelopes and mobile fuel/mileage keys, captures exact response bytes before decoding, and closes test sessions even on capture/logging failures. The first recovery remains failed and immutable; its three escaped defects and the later BOM correction are recorded.
+
+Private helper reviewab15 and admission review0112 passed; root reproduced2 private tests and6 admission tests. The fresh execution will pin182 source files/189 total artifacts. All helpers remain unexecuted. Publish the reviewed tools on PR5, pass all six remote checks, then collect fresh runtime evidence and admit exactly one GET-only recovery2. Do not replay37 writes, migrations, or either failed attempt.
+
+Root owns Git/provider/private execution. /root/m78_transport_continuation is preparing NEW revisit2 source only while recovery2 proceeds; no accepted actual recovery2, restart or revisit exists. The signed-in user browser is preserved and verified. Live app remains last observed9dd/f6d77b/image3e4c/schema21 with autodeploy disabled; this tooling-only publication requires no application redeployment. Customer Scope1 remains incomplete.
+
+# September 22: recovery checker repair and independent failure review active
+
+The user confirms they are signed in. Preserve their browser session; no further sign-in or Gmail action is needed. Existing board authorization remains in force. The remaining prerequisites are technical validation, not another board approval.
+
+Root dispatched M78-READONLY-RECOVERY2-IMPLEMENTATION-01 to /root/m78_transport_continuation: new source and evidence paths, correct older report contracts, bounded raw response capture before local validation, and nonempty report tests. Root dispatched M78-READONLY-FAILURE-REVIEW-02 to /root/m78_transport_probe: reconcile the failed attempt and independently identify trustworthy retained artifact fixtures. Both use existing contexts after the previously observed thread limit; actual inherited compute remains unknown. Revisit source preparation is frozen and dependent; it has not run.
+
+The first recovery and its journals remain failed and immutable. Three escaped reconstruction defects are recorded against the original implementation and root review without changing their historical snapshots. The app remains last verified at 9dd/f6d77b/schema21. No new deployment, data write, restart or revisit has been performed. Scope 1 customer release remains incomplete.
+
+# September22: first GET-only recovery closed failed; records preserved
+
+Execsession34213 exited1 at02:32:02UTC. It completed16applicationGETs (including five full Scope1 reports), with zero network errors and zero applicationPOSTs. All four main test sessions closed via local logout204, unknown0. Legacy verification never began; no observation or actual acceptance was produced. Preserve main18events/SHA0c2062c1/headed2b807a and diagnostics49events/SHAe2e56cc5/heada72b4fe5 plus durablelock and gate841b884c. Never replay this attempt.
+
+Root reproduced a local reconstruction bug on the exact real baseline: fleet/equipment report entries are metadata-only, but the verifier attempted to hash missing HTML. Mobile artifact-key and separate-proof-envelope mismatches also require repair. See evaluations/research-qa/m78-readonly-recovery-failure.json. The direct hosted error was not persisted, so diagnosis distinguishes the deterministic local reproduction from retained hosted evidence. New recovery2 must use fresh paths, real baseline artifact-positive tests and durable raw capture before local verification. No restart/revisit may proceed from this failure. Revisit preparation is dependent and not actual acceptance.
+
+The report-read app fix remains deployed9dd/f6d77b/image3e4c, schema21, with six checks passed and autodeploypaused. User browser remains signedin and refreshed the same10source total126850.1763. Scope1 customer release remains incomplete. Earlier sections below are historical.
+
+# September 22: report-read repair deployed and staging ready
+
+Commit9dd9c85f passed all six remote checks at02:12:28UTC and was deployed once as f6d77b2e-6886-429b-a4d2-4873c9199ce8. Read-only provider verification at02:15:43UTC confirmed SUCCESS, image3e4c2c91, HTTP200 readiness, schema21, legacy containment and autodeploy disabled. Evidence: evaluations/research-qa/m78-get-route-deployed-runtime.json. No migration or application data write was requested. Preserve the immutable deployment admission and request; never repeat the deployment helper.
+
+The new graph-first read-only recovery candidate3 passed root independent source review f346310c after two repairs: cleanup under diagnostic failure/local-only logout, then final diagnostic failure veto. Root reproduced17tests/103assertions and added a two-test/27assertion token/local/global-scope challenge. Actual recovery remains unexecuted. Root-owned private helpers and final admission are under independent review. User browser remains signed in. No restart or revisit has run; no37-operation replay is permitted. Scope1 customer release remains incomplete. Earlier sections below are historical.
+
+# September 22: independently reviewed release-check correction ready to publish
+
+The historical-context correction passed independent review (35924e7c), preserving the initial finding and historical source pins. Root verified the frozen artifact bytes and reproduced five independent tests / 210 assertions. The current GET group passed 18 tests / 435 assertions; frozen historical checks passed 19 / 1590. The correction is ready for the same PR5. All six checks on the new published head must pass before deployment.
+
+The report-read repair remains un-deployed. Live remains last-observed59c/schema21 with automatic deployment paused. The new read-only recovery implementation is still under review: root rejected its first candidate for cleanup behavior after diagnostic failure and insufficient logout-scope restriction; the author is repairing it. No recovery, restart or revisit has run. Preserve the signed-in user browser and all 37 completed operations. Scope1 customer release remains incomplete. Earlier sections are historical.
+
+# September 22: release CI history-context mismatch; no deployment
+
+Repair7f7a3063 is pushed, but the application check failed because unchanged continuation2/3 historical admission positives were run against the newly optimized route. Full bun run check passed. Root reproduced allthree old source-union positives rejecting the changed route with Admitted155 graph changed. Preserve that rejection: never rewrite the173 historical pins or reuse an old gate for the new application. Evidence: evaluations/research-qa/m78-get-ci-history-failure.json.
+
+Root's bounded workflow correction uses a checkout pinned to1042348 for the unchanged historical continuation2/3/4 positives; keeps current transport and new GET coverage; adds m78-get-historical-gates.test.ts to require allthree old admissions to reject the new route. Exact frozen104 local archive runs19tests/1590assertions successfully; newcurrent regression1test/7assertions passes. Source independent review is active under /root/m78_transport_probe before another same-PR push. No historical source file was relaxed. /root/m78_transport_continuation still owns source-only new GET recovery implementation. Root owns integration/Git/provider/private admissions.
+
+Deployment helper7ae9267f and read-only observer99cf83b8 are source-accepted after independent review72363306 and root7test reproduction. Both remain unexecuted, with no deployment admission. Current7f application CI failure bars deployment. Live remains59c/schema21/deployment0f2e99/imagefe46 with autodeploypaused; user browser is signed in and must remain available. New source/private gates must precede any read-only recovery, actualrestart and revisit. Never replay37 completed operations or earlier migrations/saves/security fixes. Scope1 customer release remains incomplete. Earlier sections below are historical.
+
+# September 22: report-read repair passed local comparison; staging verification remains
+Repair commit7f7a30634d655f2763d5ababf8e9df00a8841df0 is pushed to the same PR5. Remotehead verified2026-09-23T01:33:37UTC; four of six checks passed, application/native checks pending. Deployment helpers are new, unexecuted private drafts under separate QA; no deployment admission exists. No live repair, recovery, restart or revisit has run.
+
+
+The user is signed in through their own browser tab. Preserve that session. Root's read-only comparison closed successfully (session93087, exit0): 19 cases, one warm-up and three measured samples each; every before/after response body, status and header matched. Report routes fell from86 to44 queries and local medians from3.61–3.77s to1.83–1.90s. All121 base-table digests remained exact (cec9b5e4), all173 original source files remained unchanged during comparison, and both local connections closed. Result caae59a5 is copied to evaluations/research-qa/m78-get-local-comparison-result.json. These are local measurements, not hosted latency or an SLA.
+
+Root accepted final router source fd9b1115, private finite SQL guard8ffb4f74 and comparison helper7da53e00 after separate source reviews. See evaluations/research-qa/m78-get-source-root-acceptance.json. Earlier failed candidates remain preserved. After the comparison closed, root rechecked all173 historical bytes and integrated exact routerfd9b onto the existing delivery branch; the other172 files remain unchanged. The integrated route passes9 tests/141assertions and site-api TypeScript. Independent actual-result review passed (receipt7aeabac3), and root reproduced its9 portable tests/230assertions. /root/m78_transport_continuation is implementing a new read-only recovery runner/evaluator in new files, source-only. Root owns publication, provider access and private execution. Fresh reviewer dispatch hit the runtime thread limit; the existing independent reviewer received a renewed brief, with actual inherited compute unknown.
+
+Next: publish the exact integrated repair onto rolling PR5, pass all six checks and verify the deployed runtime. Then admit the separately reviewed GET-only recovery, followed by recovery-aware restart/revisit and the final demonstration. None of those hosted actions has run. Live remains59c/schema21/deployment0f2e99/imagefe46; autodeploy paused. The earlier failed exercise remains failed:37 operations verified, final evidence download timed out, all test sessions closed. Never replay it, the original inventory save, SQL21, Terrascope fix or cleanupV3. Scope1 customer release and the California corporate MVP remain incomplete. Earlier sections below are historical.
+
+# September 22: exercise closed after a final evidence-download timeout
+
+Root session 57177 exited 1. The exercise verified all 37 planned application operations, then failed on the final reviewed inventory report snapshot download at 23:49:45 UTC (request 384; 30,011 ms). It closed all four main test sessions, with zero unknown sessions, and finished at 23:49:46 UTC. The legacy preservation phase and exercise_complete were not reached. Never rerun the exercise, original save, SQL21, Terrascope fix or cleanupV3.
+
+Preserve the closed main journal: 176 events / 9,378,221 bytes / SHA256 44e7bec2d2e6a4a554de6ba23775150bfdf29582fd69ff12bc6cfbc73770ba8b / head 44817c9e96c62576fe65198ab4ea357ef4a4b212b755f64419e8516496498ab9. Diagnostics: 1,350 events / 576,941 bytes / SHA256 d77a8f58ec92a0642a5b0b4a91113920ccd4013b9bcfee9a9c7e5de90d93e651 / head c95e235e08844012639f4a12d969231e3ae7131bb0d419d9ed0de9130b61d48f. Exercise requests: 388, one timeout, 37 writes. Baseline prefixes, gate 9fe233c9 and all 173 source pins remain frozen. No success evaluator, restart or revisit has run; existing success-only gates cannot admit this failed exercise.
+
+Failure evidence is published at 1042348f2d4849246771fee4be77fe590c34ab8a; all six checks passed at 2026-09-23 00:18:13 UTC.
+
+Current bounded work: /root/m78_transport_probe independently reviews the local GET probe candidate2, preserving its candidate1 measured-result provenance. /root/m78_transport_continuation prepares a router-only GET candidate in the isolated m78-get-performance checkout. The original 173 source files remain frozen. One local sample showed report routes use86 queries versus42 for one verified getter; this is structural evidence, not a hosted timing prediction. Comparative native sampling, source QA, publication and runtime admission remain required before deployment. No hosted recovery, restart or revisit has run. Live app remains 59c/schema21/deployment0f2e99/imagefe46; autodeploy remains paused. Root's sanitized provider observation at .superpowers/m78-continuation4-failure-http-observation.json records adjacent report requests taking 19–29 seconds and the final snapshot returning provider 499 after 29,965 ms. This supports slow processing but does not identify its internal cause.
+
+Root accepted the independent failure reconciliation: result a97a84ca, snapshot638866f4, three offline checks passed; its open product timeout finding remains. Root accepted corrected recovery design candidate3 d399a5d0/snapshot225607d8, retaining earlier candidates and first-review findings. Both bounded assignments are complete; neither admits exercise/restart/revisit success. The design author also has the bounded M78-CONT4-GET-PERFORMANCE-PROBE-01 assignment: local read-only GET query/timing measurements and counting tests, no existing source edits or hosted access. Both agents own new artifacts only. Root owns provider evidence, browser checks and shared records. Do not treat the earlier success path as executable instructions.
+
+The user authorized Gmail-assisted sign-in and corrected their address. The latest link succeeded in IAB browser2/tab2; private staging access is verified. The obsolete agent-created tab1 was closed. Do not store authentication links or codes in repository evidence. Browser tab2 shows ten sources and total126850.1763, process version1 reviewed, inventory version1 awaiting review/version2 reviewed and five reports. Both reviewed inventory downloads returned200 and exactly matched retained report bodies. Snapshot server time was90,427ms. The signed-in user tab remains available. See evaluations/research-qa/m78-continuation4-browser-partial-observation.md. This is partial UI evidence, not full preservation/restart acceptance. Scope 1 customer release remains incomplete. Earlier sections below are historical.
+
+# September 22: all37 writes verified; publish accepted revisit preparation
+
+Rootexercise57177 remainsactive in its read-only preservation tail. All37operations wereverified at23:16:23UTC; zero requesterrors atlatest23:20:40 observation. Noexerciseclosure/actualQA yet. Immutableexercisegate9fe233c9, tooling635f6ba1, sixchecks23:07:00, runtime23:07:21, originalwrapper3cef and173sources remain unchanged. Do notrerun/reset/kill oroverwritepinnedexercise/baseline artifacts. For explicitpause create .superpowers/m78-hosted-continuation4.stop andallowcleanup.
+
+Root accepted capturecandidate3b823c0b5, independentQA98526b8c/snapshot19f9c717:9tests/53expectations, realdecoders, strictTS/private syntax. Allninecurrentpins/fiveembeddedcandidatefiles verified. Earliercapturecandidates1/2 rejected foraggregate/drain andasyncdecoder errors, retainedhistorically. Newprivate revisitsource: wrapperf596f0e7, entry842d7cc4, finalizer3b518c38, fullentry2a8b8593. No revisitexecuted. Rootaccepted separate restarthelperrepair339c6f62/snapshot4c9be8c1, fivemockedtests:request264a17f1,collector06509625,validator299b2827,originalobserverbae64655. No restartexecuted. ActualassignedQA delivery/hash stillrequired.
+
+Root ispublishing theseaccepted preparationsonPR5 andaddingportablecapture/lifecycletests toexistingCI. Thisdoesnotalterliveapp59c/schema21/deployment0f2e99/imagefe46 orany173pinnedcore/sourcefile; autodeploypaused. Afterclosedexercise, runexclusive rootexerciseevaluator59ddb7aa once, obtainactualQA receiptfrom/root/m78_transport_probe, thenoneactualrestart/unique startup/freshsame-runtime read-onlyrevisit. RevisitCI observer isseparate m78-continuation4-revisit-checks.py; neveroverwriteexerciseCI. BrowserIAB2/tab1 signedout; useraskedtosignin, nopendinganswer. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: continuation4 exercise running once
+
+Root launched the reviewed originalwrapper3cef in exercise mode ONCE, execsession57177. Immutable exercisegate andworkingjourneygate SHA9fe233c964b8c40f6c7a9871eecf75a318e7a800f2ec14570c6803288ff9dce7. Publishedtooling635f6ba1b38186851e0038f63399b0a814f4e1ae hasall sixchecks passed23:07:00UTC;42publishedfiles/173sourcepins exact. Freshready/runtime23:07:21UTC confirms unchangedlive59c/schema21/deployment0f2e99/imagefe46, autodeploypaused. Gatefinalizercd496234 passed once. Do notrerun/reset, overwriteCI/runtime/gate/rootadmission artifacts, killtheprocess orchangejournalpermissions. Explicitboardpause uses .superpowers/m78-hosted-continuation4.stop andnormalcleanup.
+
+Accepted baselineprefix main42/9186947bytes/ef4d8eba anddiagnostics572/243558bytes/b98846b6 mustremain exact prefixes. Currentjournals areappend-onlyactive. Expected37remainingapplicationPOSTs; originalsave mustnotrepeat. Baselineaccepted57fc10f6+actualQA6937df29; lifecyclecandidate4snapshot440fa156/QA206130be; helperQA10f37fe5. Afterclosure, rootexclusiveevaluatorscript59ddb7aa checks actualevidence; separateactualQA requiredbefore restart. No actualexerciseacceptance yet.
+
+Capturecandidate1 failedaggregatebudget/drain review; author repairscandidate2 innewfiles only. Rootrestarthelperdrafts had3findings, nowstrengthened withactualQA+directofflineverification andsingleunique startup; independentrereviewpending. Neverexecute restartbeforeactualexerciseQA. BrowserIAB2/tab1 iscurrentlysign-in; useraskedtosignin whileworkcontinues. Restart/read-onlyrevisit/browser/independentclosure remain. Neverrepeat SQL21/originalsave/Terrascopefix/cleanupV3 orfailedjournals. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: exercise preparation accepted; publish and check
+
+Root accepted exact candidate4 lifecycle snapshot440fa156 and independent repairreceipt206130be (15tests/869assertions, strictTS), closing the identity-swap finding. Historical candidate3 acceptance and later defect remain preserved. Root also accepted independent source-only exercisehelper review10f37fe5, finalizercd496234 and evaluatorentry59ddb7aa. These helpers have not executed. Capture candidate1 is separately frozen pending independentQA; it is not needed to run the exercise.
+
+The exact continuation4 baseline remains accepted: officialresult57fc10f6 plusactualQA6937df29;285requests, zeroerrors/writes, eightclosedtest sessions, unknown0. Preserve main42/ef4d8eba anddiagnostics572/b98846b6 plusimmutablebaselinegate34a1b7a8. Originalwrapper3cef/173sources/innergate unchanged. No37-operationexercise, restart or revisit has run. Publishedhead currentlya74cffa5; samePR5 publication andall sixchecks are next, thenfreshruntime andoneexercise. Autodeploypaused;live59c/schema21/deployment0f2e99/imagefe46.
+
+Root owns publication/provider/privatehelpers. /root/m78_transport_probe independentlyreviews capture and lateractualevidence. /root/m78_transport_continuation independentlyreviews root restart-onlyhelpers (not its owncapture). BrowserIAB2/tab1 showsNeuvetra sign-in; user was asked tosignin whilecheckscontinue. No UI applicationwrite. Never repeatbaseline/SQL21/originalsave/Terrascopefix/cleanupV3 orfailedjournals. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: baseline accepted; operation binding repair before exercise
+
+The exact continuation4 baseline is accepted by root and separate actual QA (6937df29), with official result57fc10f6. It completed285requests, zeroerrors/applicationwrites, eighttest sessionsclosed andunknown0. Main42events/9186947bytes SHAef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5; diagnostics572events/243558bytes SHAb98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40. Preserve both prefixes and frozen baselinegate34a1b7a8. Never rerun baseline, originalsave, SQL21, Terrascopefix or cleanupV3.
+
+Lifecycle candidate3 received independent preparation receipt8abbabe9, but root challenged operation-to-result attribution. Separate QA confirmed swapping two valid natural-gas version identities still passes the evaluator. Aggregate state is unchanged; provenance checking is incomplete. Candidate3/QA receipt remain historical evidence; liveexercise admission is held for narrow candidate4 repair and independent supplemental review. Author /root/m78_transport_continuation owns repair; /root/m78_transport_probe owns independent challenge. Capture source is additional unfinished work and no capture/liveexercise has run.
+
+Publishedhead remainsa74cffa5 withsixchecks passed22:01:32UTC. Liveapp59c/schema21/deployment0f2e99/imagefe46 lastfresh22:01:54UTC, autodeploypaused. All173 sources andinnergate remain frozen. New root exercisegate finalizer/evaluation/restarthelpers are drafts, unexecuted, pendingreview. Next: accept candidate4, publish bounded evidence on samePR5, sixchecks, freshruntime, one37-operationexercise. Separate actualQA precedes one actualrestart, fresh read-onlyrevisit withreviewed passivecapture, browserdemo andclosure. Scope1customerrelease remains incomplete. Earliersections historical.
+
+# September 22: continuation 4 baseline closed successfully
+
+Root session32670 exited0. Baseline ended22:23:10UTC with285requests, all285headers, zeroerrors/applicationPOSTs, eighttest sessionsclosed andunknown0. Main42events/9186947bytes SHAef4d8ebaa36b447d4dfa7cf8e6636b263d587a4b29c899d875f3e5401eedf3d5, head6190671c0758e414886c1c80b3aecfa748020a58f68890072c81335e84ef7a90. Diagnostics572events/243558bytes SHAb98846b6ce33c0d943a73437f13ba83390a4c63d3ab3547729b4926d7573bf40, heada41a45097e0b13b315a03fc6c5287504a3f6e4b4880d31bf5edee2edc682e660. Preserve this exact baseline prefix; never rerun/reset it.
+
+Reviewed evaluator passed with result57fc10f6ee4dce55ced4060aa1d41cbd5a125eac3bd58d99bbad7c37ef1daddf. It verifies173source/ninehistoricalpins,328prior-download comparisons, retainedinitialinventory andallclosures. Additive closed-admission guard2f2e238e passed actual auth methods. QA reproduced an escaped offline evaluator gap (synthetic GETtoken accepted); original frozen evaluator remains unchanged, guard supplements it, and one escaped defect is recorded. Separate actual-baseline QA admission is pending.
+
+Publisheda74cffa59b18305e5eaf4dd4c65382c08bc8a151 hadall sixchecks passed22:01:32UTC. Baseline gate34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5 and its pinned CI/runtime/evaluator/rootadmission files are immutable. Live app59c/schema21/deployment0f2e99/imagefe46 wasfresh22:01:54UTC; refresh before exercise. Automaticdeployment remainspaused. All173core/sourcefiles remain frozen across phases; exerciseinnergate must equalbaselineinnergate.
+
+Lifecycle evaluator candidate1 was rejected. Candidate2 fixes diagnostics,history,recipe/identity checks andrequires an additional decoded revisit observation; full restartfreshness must be measured againstrevisit admission, notexerciseend (candidate3repair underway). Exercise-only has no remaining substantive finding reported, but exact finalreceipt ispending. Author /root/m78_transport_continuation now owns additional new revisitcapture source/tests that observe existing GETresponses without extrarequests or173corechanges; root will own anynewprivate revisitwrapper, and /root/m78_transport_probe independentlyreviews. No captureexecution exists.
+
+Next: final actualbaselineQA and lifecycle/exercise sourceadmission, bounded samePRpublication/sixchecks, freshruntime and originalwrapper3cef oneexercise37operations. Actualrestart, read-onlyrevisit withreviewed additivecapture, browserdemonstration andindependentclosure remain. Never repeat SQL21/originalsave/Terrascopefix/cleanupV3 or anyfailedjournal. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: continuation 4 baseline running once
+
+Published tooling commit a74cffa59b18305e5eaf4dd4c65382c08bc8a151 has all six checks passed at 2026-09-22T22:01:32.141329+00:00. The57 published files and173 source pins match reviewed bytes. Independent source/private resultd4131bf5 and baseline-evaluator review66fee7ea are accepted.
+
+Fresh runtime 2026-09-22T22:01:54.630066+00:00 confirms application59cda7/schema21/deployment0f2e99/imagefe46 unchanged and ready. Immutable gate .superpowers/m78-continuation4-baseline-gate.json SHA 34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5; current journey gate has identical bytes. Root launched the reviewed wrapper ONCE in exec session 32670. New4 journals are active. Do not reset/retry, change permissions, kill the process or overwrite pinned CI/runtime/gate files. For an explicit board pause, create .superpowers/m78-hosted-continuation4.stop and allow normal logout completion.
+
+Earlier failed3main24/0204a7e9 anddiag62/8b45e72d remain immutable; allfour sessionsclosed andzero applicationPOSTs. Never repeat cleanupV3, SQL21, the original inventory save or Terrascope security fix. Accepted cleanup9ce4d682 resolves selected session/refresh rows only; lost JWT usability/expiry remains unverified.
+
+Independent baseline acceptance is required after closure, before37 remaining operations. The separate lifecycle evaluator is under independent review; actual restart, revisit, browser demonstration and integrated closure remain. Automatic deployment remains paused. Scope1 customer release is incomplete. Earlier sections are historical.
+
+# September 22: continuation 4 preparation accepted; publication next
+
+Root accepted author candidate 3 (14dd03be) and independent source/private review d4131bf5, snapshot825e3772. All173 source pins and nine historical evidence pins match. The new transport disables pooling without retry or timeout changes. The composed independent test stopped after three logins and closed all three sessions, with zero application writes. Runtime helper28cases and private gates passed. The cause of the hosted timeout remains unproven.
+
+Continuation3 remains frozen and independently reconciled as failed: main24/0204a7e9, diagnostics62/8b45e72d, allfour logouts204, unknown0, zero application writes. Never repeat failed journals, SQL21, the original inventory save, completed cleanupV3 or the Terrascope security fix. Cleanup disposition9ce4d682 is accepted only for selected session/linked refresh rows; lost JWT usability/expiry remains unverified.
+
+Root owns exact same-PR publication and the private entry. Current published headc37aa357 has six checks passed. Live app last observed59cda7/schema21/deployment0f2e99/imagefe46; automatic deployment remains paused. New4 wrapper3cef7393, preflightd27b1cc0 and observer47f9cadd are independently reviewed. Only a draftgate exists; no continuation4 journal or live execution exists. Fresh runtime and exact new published checks are required before the one new baseline.
+
+Root prepared the separate baseline4 evaluator (seven tests/28assertions, strict TypeScript); targeted independent review66fee7ea passed (eight combined tests/30assertions), and root accepted snapshot32597487. /root/m78_transport_continuation is preparing a separately owned offline exercise/revisit lifecycle evaluator. Hosted baseline acceptance precedes37 remaining operations, actual restart, revisit, browser demonstration and independent closure. Scope1 customer release is incomplete. Earlier sections are historical.
+
+# September 22: prepare separate continuation4 with fresh connections
+
+Continuation3 failedread-only and remains frozen24/62events (0204a7e9/8b45e72d); root session76557exited1,all4logouts204,unknown0,0applicationPOST. Independent failure reconciliation261e4fcc accepted. No repeat/reset/cleanup. Allsixpublishedchecks on c37aa357 passed; runtime59cda7/schema21/deployment0f2e99/imagefe46 lastfresh20:57:21UTC,autodeploypaused.
+
+Local actualTCP experiment onBun1.3.12Windows reproduced silent reusedsockettimeout3/3; keepalive:false andConnectionclose eachfreshsuccess3/3. Root independent noncooperatingpeer control confirmskeepalive:false createsnewconnections even whenpeeradvertiseskeepalive. Probe sourcea2fac92d/results eaf65f60/snapshot57bbbb46 independentlyaccepted byroot. This is an inducedmechanism, NOT proven hostedcause. Sanitizedprovider/publicprobe observationsf7784d40 show noexactfailedpathcompletion and12readyreadsallpassed. No requesttimeout orauth/integritychange is proposed.
+
+Actual assigned author /root/m78_transport_continuation owns new4adapter/collector/fixtures/tests; noexistingruntimechanges. It preserves original0/37/0core, adds exactfailed3admission/new4journal+stop paths, and wraps eachtransport call once withkeepalive:false. Both prior3fixtures are now byte-identical after draftcopycorrection. Candidatefinalfreeze pending. /root/m78_transport_probe independentlyreviews4source/privateentry after completingitsprobe; originalQAcontextdispatch hitagentthreadlimit twice, fallbackobservedSolhigh request/inheritedunknown ratherthan claimedAstra.
+
+Root private4draftwrapper3cef7393, preflightd27b1cc0 andobserver47f9cadd exist buthaveNOTexecuted. Observername-only4delta passes28mockcases; private2tests70assertions passedcurrentdraft, finalbindingawaitsauthor4freeze. Canonicalcleanupdispositionstays3path9ce4d682; preflightrequiresactual3journals equalpublicfixtures beforeDPAPI. Collector expected9historicalevidencepins (all6parent plusactual3main/diag/review); source closure expected173 after explicit dependency inventory correction. Only an unusable4draftgate exists; no4executiongate orjournal hasbeen created. Next: exactauthor/independentreview, rootadmission, bounded samePRpublication/sixchecks, freshsame-runtime4baselineonce, thenindependentbaselineacceptancebefore37/restart/revisit/browser/fullclosure. Neverrepeat SQL21/originalsave/Terrascopefix/cleanupV3. Scope1customerrelease remains incomplete. Earliersections historical.
+
+# September 22: continuation3 failed read-only; investigate transport
+
+Root session76557 exited1. Preserve new3 main24events SHA0204a7e93849b305bafc45b79232b3af588619fcb851752d2ef541869d584012/head7dc4b514 and diagnostics62 SHA8b45e72d193d9f3c2b6a03c63c75e61a8055223862f13b297c9b4d26725972c1/head0dc8e2b0. Ordinal26 coverage-exportGET timed out30007ms with noheaders; fourtestlogouts204,unknown0,0applicationPOST. Independent failure reconciliation261e4fcc/snapshot8ddf868c accepted. Never reset/retry these journals; cleanup is not needed or authorized again.
+
+Provider HTTP/application logs in scoped window show preceding exports200 around3.2seconds and no later completion. Missing logs do not prove nonarrival or cause. Default-vs-explicit-close credential-free readiness6+6 allpassed. Root dispatched bounded loopback transport experiment /root/m78_transport_probe on installedBun1.3.12; no application/network workaround is admitted yet. Read-only engineering trace shows duplicated readiness/auth/history checks but no causal proof. No further long baseline until a concrete reviewed change is prepared.
+
+Published c37aa357 has sixchecks passed; live59cda7/schema21/deployment0f2e99/imagefe46 latestfresh20:57:21UTC. All166sourcepins preserved. Autodeploypaused. CleanupV3, SQL21, originalinventorysave, Terrascopefix and allpriorfailedjournals remain completed/immutable. Source and failed-baseline evidence are valid; hosted37/restart/revisit/browser/independentclosure remain undone. Scope1customerrelease incomplete. Separate coordinator owns paidpilot; no duplicatecalls. Earliersections historical.
+
+# September 22: continuation3 baseline running once
+
+Board resumed. Rolling PR5 commit c37aa357fd0984be726ee0719226b58e4bfc5d61 is published and all six required checks passed at20:56:58UTC. All79 published blobs and166 source pins match reviewed bytes. Byte representation supplement b4c541e8 independently accepted; historical snapshots preserved.
+
+Fresh ready/deployment observation20:57:21UTC confirms application59cda7/schema21/deployment0f2e99/imagefe46 unchanged and ready. Exact immutable baseline gate .superpowers/m78-continuation3-baseline-gate.json SHA60250cc38cb8a7ec8a2bb1188ba5c41e6f3dd89a1d298f0a6874eeead05ce40f; current outer gate has same bytes. Wrapperb36c launched baseline ONCE in root exec session76557. Journals .superpowers/m78-hosted-continuation3.jsonl and -diagnostics.jsonl are now active. Never repeat/reset them or mutate pinned CI/runtime artifacts. Graceful pause uses .superpowers/m78-hosted-continuation3.stop; allow normal logout completion before platform interruption. Do not kill process or change journal permissions for routine pause.
+
+Cleanup V3 completed once with independently accepted scoped disposition9ce4d682; four selected session/linked refresh rows resolved, lost JWT usability/expiry unverified. Never repeat cleanup, SQL21, original initial inventory save or Terrascope fix. Prior failed72/24 and interrupted15/30 journals remain immutable.
+
+Independent baseline evaluator preparation9894822b/snapshotdddcc799 accepted by root with six tests24assertions. Actual acceptance remains pending closed main/diagnostic hashes and immutable gate, then37remaining operations, actual restart/revisit/browser and integrated closure. Automatic deployment remains paused. Scope1 customer release remains incomplete. Coordinator task owns the separate authorized OpenRouter pilot; do not duplicate paid calls or inspect its credentials. Earlier sections are historical.
+
+# September 22: resumed; publish admitted continuation3 preparation
+
+Board resumed after the platform update. All six required checks pass on rolling PR5 commit944b5fe13aef02b7930a31b3be1c95305796d8bf at20:44:48UTC. Root accepted the independent continuation3 source/private and actual cleanup disposition deliveries. Cleanup V3 completed once; four selected session rows and linked refresh rows are resolved. Lost JWT usability/expiry remains unverified. Never repeat cleanup, SQL21, original inventory save or Terrascope fix.
+
+Continuation3 has not executed. Publication audit found ten CRLF-normalized embedded snapshot entries across six historical snapshots; source bytes still match original pins. Root added immutable byte-faithful supplement b4c541e82996dd76694d22de64966061407dd174e82bab4369028212b8063cf7, awaiting independent repair acceptance. Original snapshots and failed journals remain untouched. The actual-disposition run now points to existing public frozen evidence. Root owns exact staging/publication; no broad private directories or raw diagnostics enter Git.
+
+Next: accepted publication supplement, exact staged blob verification and six checks on the new rolling PR head; then fresh runtime and one exclusive continuation3 read-only baseline. Independent baseline acceptance precedes 37 remaining operations, actual restart/revisit, browser demonstration and integrated closure. Live application last observed59cda7/schema21/deployment0f2e99/imagefe46; refresh observations before execution. Auto deployment remains paused. Scope1 customer release is incomplete. M79 numerical/rights preparation is published; product releases remain held. Earlier sections are historical.
+
+# September 22: paused by board for platform update
+
+The latest board instruction is to pause for a platform update. Do not resume publication, provider actions, hosted verification or dependent milestones until the board resumes work. Delegates have completed or were interrupted; no new work was dispatched. No continuation3 journal exists at pause. Process enumeration was denied by the sandbox; no claim of a full system process audit is made.
+
+Cleanup V3 completed once: receipt .superpowers/m78-interrupted-session-cleanup-v3-result.json (f787a7db83183e0782199dd6b7a1edce6297ceda6384c9c3731c37c46810bb35). Independent disposition .superpowers/m78-continuation3-cleanup-disposition.json (9ce4d682156c32771f8bb6fe8dfa249cf0060b39a8ce90c6ea3daf83c209342f) confirms four selected session rows and linked refresh rows resolved. Lost access-token usability and expiry remain unverified. Never repeat cleanup, SQL21, the original inventory save or the Terrascope fix. Failed and interrupted journals remain immutable.
+
+Continuation3 source and private-wrapper/observer/CI reviews passed. Source gate 4ca66dd3d6bc645d69882ed9e94165f71e96eed29e866b83e4f8a8c94522b517; private receipt ef5de8f8ef567542a17c470802709b9abf505d2042414c02e7b356e9a732fda0. Root admission and bounded publication remain pending. First correct the actual-disposition run record's private evidence locator to its existing public frozen snapshot 7f12eb25e1cd33767e1228e788e2b502b271d1adfe85aa5b033d790e40a89157. Preserve all reviewed bytes, restrict staging to intended files, and verify exact remote head and six checks before hosted execution.
+
+Tooling/research last published to rolling PR5 at 944b5fe13aef02b7930a31b3be1c95305796d8bf. Last CI observation had five successes and one pending; recheck on resume. Live application last observed at 59cda7/schema21/deployment0f2e99/imagefe46. Automatic deployment remains paused. Refresh runtime evidence after the update. Continuation3 has not executed: fresh baseline and independent acceptance precede the remaining 37 operations, restart, revisit, browser demonstration and independent closure. Scope 1 remains incomplete. Local PostgreSQL may still be running; do not kill or reset the populated rehearsal database. Earlier sections are historical.
+
+# September 22: cleanup diagnosis and reviewed tooling publication
+
+Board resumed after the platform update. Interrupted continuation2 remains frozen (15events/3ce68c3f;30diagnostics/8ae88cd3). Four logins lack logout evidence; no application writes were recorded. Observer4570ae62 found one matching session per test user. Reviewed cleanupv2 failed; preserve exclusiveintent30aa7e00 and neverretry. Read-only post-observerbab3732a confirms allfour sessions/refreshcounts unchanged. Causeunknown; separate privilege/trigger/inventory diagnostic under /root/resume_release review. No cleanup success or JWTexpiry claim.
+
+/root/m78_cont3_review reviews new continuation3 with explicit gracefulpause and unchanged160sources. No newjourney execution. Actualcleanup acceptance, freshruntime/sourcegate, successfulbaseline,37remainingwrites,restart/revisit/browser andindependentclosure remain. Live59cda7/schema21/deployment0f2e99/imagefe46 was healthy afterupdate; autodeploynotrestored. Neverrepeat SQL21/originalinventorysave/Terrascopefix.
+
+Rootaccepted toolingcandidate3d96a4bee with20+10tests/offlinepreflight; M79numerical18cases andrights candidate3e9028738 preparation accepted. All21 rightsproductholds/non-releaseflags remain. Publishing bounded tooling/research next; rootsoleGitwriter. No paidcalls/model-defaultchanges. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: resumed after platform update; reconcile interrupted baseline first
+
+Board resumed authorized product work. Tooling e7f56bde passed all six published checks at18:48UTC. Live59cda7/schema21/deployment0f2e99/imagefe46 remains SUCCESS andready at fresh19:59UTC observation; automaticdeployment was previouslypaused and hasnotbeenrestored.
+
+Continuation2 was interrupted duringread-onlybaseline:15main events/SHA3ce68c3fc87e37623326badb88d412f2db36daceacf43060c5849f287a358507;30diagnosticevents/SHA8ae88cd344ab1a6376b91a63581c57c9c61c381eb57141e1b6a11ca7647eae08. No matching Bunprocess observed19:57:27UTC. No applicationPOST observed, but logout/terminalclosure unconfirmed. Root had set diagnosticsreadonly to trigger failclosed cleanup on pause; platform interruption prevented evidence of completion. Preserve fileattribute, journals andlock; neverreset/retry. Independent /root/resume_release is assigned exact interruption/session-recovery review before newhostedexecution. SQL21upgrade, originalinventorysave andTerrascopefix neverrepeat.
+
+/root/ops_integration independentlyauthors bounded import of previouslyreviewed featuremetrics/pilottooling with focusedCI andprospectivepolicy reference; root soleGitwriter. No paidcalls/credentialaccess, no productdependency. M79numerical independentreview passed butrootadmission pending; rights candidate2 saved, targetedreview pending. Scope1customerrelease incomplete. Earliersections historical.
+
+# September 22: continuation2 source gates accepted; publish verification tooling
+
+New adapter source gate4a1ee046 covers160files/fourevidencepins; independent snapshotf92bf6a2 andCI supplementada51bc0 accepted byroot. Wrapper01e731 andfreshobserverdd52 accepted; author/independent11tests1078assertions, portableCI subset2tests848assertions and28mockedrefreshcases passed. No newbaseline2journal/diagnostics hasbeencreated.
+
+Root publishes acceptedverificationtools/evidence tosamePR5 andverifiesrequiredchecks. Runtime stays59cda7/schema21/deployment0f2e99/imagefe46 becauseall155applicationdependenciesremainbyte-identical; no newapplicationdeployment isneeded forthis tooling-onlychange. Thenfreshsame-runtimebaselineobservation andnewexplicitgate beforesinglecontinuation2baseline. Failed8525/24events andd330/72events remainimmutable, no applicationwrites sinceoriginalinventory1. Autodeploypaused. M79rightsindependentreview/numericalpreparation continueindependently. Scope1customerreleaseincomplete. Earliersectionshistorical.
+
+# September 22: document intact; separate continuation2 source review
+
+Original newbaseline24eventfailure remains frozen8525a841/e766f74b with0applicationPOSTs/4sessionsclosed/unknown0; no journal may be reset. Root actualbrowserdownload of exactfailedhistoricalstatement succeeded18:20:32UTC:2279bytes/SHA6d48e9797ad2bd6b6bfd4dbdd8d5e082e54aa991935b069691939a1ac5bdfb9b matchesoriginal. Originalfailurecause remainsunexplained.
+
+Authorcandidate M78-CONT-BASELINE2-PREP-01-CANDIDATE1 SHA39ada02d adds separateexclusive .superpowers/m78-hosted-continuation2.jsonl and safe header/transportdiagnostics, preserving original0/37/0runner/155runtimepins; newunion160.23tests349assertions/strictTS passed. Rootdraftwrapper01e731 andfreshobserverdd52 (baseline/exercise/revisit outputs) also pendingindependent review byresume_release. No continuation2execution yet. Rootonlyhost/Git/sharedledger. Rightsreview andnumericalpreparation are separatelyactive M79work; no runtimeintegration/releaseapproval.
+
+Runtime remainsverified59cda7/schema21/deployment0f2e99/imagefe46; sixchecks passed; noappwritesafteroriginalinventory1. Autodeploypaused. SQL21upgrade/originalsave/Terrascopefix neverrepeat. Next: independentnewadapter/wrapper/observeradmission, targetedpublication/checks, freshsame-runtimeobservation andnewbaseline, onlythen37writes/actualrestart/revisit/browser/independentclosure. Scope1customerrelease incomplete. Earliersectionshistorical.
+
+# September 22: separate baseline failed read-only; preserve and diagnose
+
+New .superpowers/m78-hosted-continuation.jsonl FAILED before baseline capture:24events/SHA8525a8416b3e55f07d508c9a9ec17fc8ac0a4902e798534dc05e9f4df72d1a46/heade766f74b730bebf69849945407598c011f918b9a77b7ff9c3a5913cd6964f744. Session9748 exited1.67requests,0applicationPOSTs,all4createdsessionsclosed/unknown0. Failure stage stationary-diesel statement download; cleanup overwriteslastStatus204 so terminaldoesnotestablish failedreadstatus. Provider logs report200/4251ms for matchingread; no timeout evidence. Preserve this failedjournal, neverreset/retry it.
+
+Live59cda7/schema21/deployment0f2e99/imagefe46 remains deployed and sixchecks passed; automaticdeploymentpaused. No application writes after originalconfirmedinventory1. Originald33072eventfailure, SQL21upgrade, Terrascopefix remaincompleted/immutable. Root investigates read-only, resume_recipe independently reconciles failure and proposes boundeddiagnostic; m79_rights and m79_numerical perform independent source/numericalpreparation. Hosted37/restart/revisit/browserclosure notdone; Scope1customerreleaseincomplete. Earliersectionshistorical.
+
+# September 22: final repair live; separate read-only continuation baseline running
+
+Application59cda7a62d8dcc6b554c92372e3b032577e410c9 passed six checks and is live on deployment0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78/imagefe46a0e354252026f2bcbf6672e10ec550e52a56f064ab3e75a8af17625749c9. Admitted observer verified ready/schema21 at18:09:44UTC. Exact baseline gatebcfe8f8b and wrapperb2fbe launched separate .superpowers/m78-hosted-continuation.jsonl once: root session9748, currently baseline (zero application writes). Do not rerun/reset it.
+
+Root owns host/journal; resume_release reviews new runtime-refresh observer1b7da62f source only; m79_rights prepares primary intended-use rights matrix. Original72-event failed journal d3301eb2, original first save, SQL21 upgrade and Terrascope fix remain immutable/completed, never repeat. Automatic deployment remains paused. After successful baseline: independent acceptance, fresh runtime/exercise gate, remaining37writes once, actualrestart/read-onlyrevisit/browser and independent closure. Scope1customer release remains incomplete. Earlier sections historical.
+
+# September 22: six checks passed; final code deployment requested once
+
+Rolling PR5 commit59cda7a62d8dcc6b554c92372e3b032577e410c9 passes all six required checks (18:07:52 UTC). Both CI reference/test failures from d139628 are corrected and independently accepted; all155runtime source hashes unchanged. Exactcode deployment requested once:0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78, last observed BUILDING. Never repeat the deployment request blindly; inspect its actual provider state.
+
+Root owns hosted continuation/runtime and shared records. m79_rights is actually dispatched for independent primary intended-use rights evidence only. Prior accepted local37 journal/backup/source and all failed originals remain immutable. No hosted continuation yet; lastlive2002fea/schema21 remains until newdeployment observed. Automatic deployment paused. SQL21 upgrade, original inventory save and Terrascope security fix must never repeat. Next: newexactcode/runtime admission then exclusive0/37/0continuation, actual restart/revisit/browser and independent acceptance. Scope1customer release incomplete. Earlier sections historical.
+
+# September 22: performance repair published; CI reference repairs accepted
+
+Accepted performance repair and continuation preparation are published on rolling PR5 at d139628cb53f591bfd516a4aac41dd62e1138a53; remote branch and PR head verified. CI caught a local-only inspection evidence locator plus Windows path in the native run record, and an old resolver test expectation missing the independently accepted DB performance delta. Root independently accepted the portable record correction; resume_release independently accepted the exact test repair. Root is the only active executor for publication and hosted work. All155 final source hashes remain unchanged.
+
+No hosted continuation has executed. Live remains the last verified2002fea/schema21 with automatic deployment paused. SQL21 upgrade, original inventory save and Terrascope security fix must never repeat. Next: accepted CI repairs, all six checks on exact published commit, fresh code deployment/runtime admission, new0/37/0 hosted lifecycle, actual restart/revisit/browser and independent closure. Scope1customer release remains incomplete. Earlier sections are historical.
+
+# September 22: local continuation and final source gates accepted; publication next
+
+All37 remaining local operations independently passed, preserving572oldrows/121tables and five exact reports. Final source receipt77aec covers155files including all122runtime dependencies; CONT-R01 and CONT-R02 are repaired, with failed reviews/candidates preserved. Root's private continuation wrapper b2fbe has independent final155-source admission. The native journal113events/159630/e7788d is complete and immutable. No hosted continuation has run.
+
+Root now publishes the accepted two-file performance repair, tests and continuation preparation to the existing PR5, verifies all six required checks, then admits exact runtime deployment and the separate0/37/0 hosted lifecycle. The existing live2002fea/schema21 is unchanged since the confirmed firstsave; auto deployment remains paused. No active delegate is implied by prior notes. Completed SQL21 upgrade and Terrascope fix must never repeat. Scope1customerrelease remains incomplete. Earlier sections are historical.
+
+# September 22: remaining 37 operations passed locally; final release gates
+
+The timed-out live save was confirmed exactly once; its original failed journal remains frozen. The performance repair passed independent code/native review. The new encrypted schema21 backup and fresh local restore preserved121tables/387content entries, and the complete remaining37-operation local rehearsal passed with572oldrows and five reports. Independent read-only acceptance of the actual rehearsal is pending; never rerun it.
+
+Final hosted source admission now explicitly adds the application runtime routes to the continuation's frontend/tool closure (CONT-R02). The earlier restart-pin parser defect CONT-R01 is fixed and independently retested. Original candidates and failures remain preserved. Root owns release/CI/Git/provider actions; /root/resume_recovery authors the bounded closure correction; /root/resume_recipe independently reviews it and the actual native result. No new hosted application write occurred after the confirmed initial save.
+
+Live remains the last verified2002fea/schema21; automatic deployment stays paused. Completed SQL21 upgrade and Terrascope fix must never repeat. Next: corrected source admission, publication on PR5/sixchecks, exactcode deployment, freshbaseline/37remainingwrites/actualrestart/read-onlyrevisit/browser demonstration. Scope1customerrelease remains incomplete. Earlier sections are historical.
+
+# September 22: original save confirmed; performance repair underway
+
+The independently admitted read-only database observer confirmed the timed-out first inventory save committed exactly once, with matching request, version, head and audit. All prior content remained unchanged. The observation made zero application writes; independent review accepted its exact captured receipt.  The original 72-event failed journal remains frozen and must never be retried or reset.
+
+The reviewed two-file performance repair is assigned to /root/resume_recipe. It must retain the company lock, one validated upstream capture, fresh full post-write verification and native concurrency/rollback checks. /root/resume_recovery prepares the separate bounded continuation; /root/resume_release reviews the independent M79 source inventory preparation. Root owns shared status, Git and hosted actions. Source inventory work is not domain or production approval.
+
+Live application 2002fea/schema21 remains the last verified deployment. Automatic deployment stays paused during this repair. The schema upgrade and Terrascope fix are complete and must never be repeated. Next: independent repair QA, exact publication and deployment, then a separately reviewed continuation of the remaining 37 successful operations, followed by restart/read-only revisit and browser demonstration. Scope 1 remains incomplete. Earlier sections are historical.
+
+# September22 M78 exercise timed out — preserve original save
+
+Originalbaseline passed42events/282requests/0writes/all8sessionsclosed. Subsequentexercise failedafter4POSTs:3expecteddenials andoneinitialinventorysavewithnoresponse. Event63 intent16:53:14.403;30s clienttimeout/provider499; all4exerciseauthsessionsclosed at16:53:44.777. Frozen72eventjournal .superpowers/m78-hosted-journey.jsonl SHAd3301eb226c0cae4428c1e20cde4e2afdcf572b622e96d690cc8c262d6e44058 head8cac20e87d8d5c4dd1f5f0f4eb6eae9721b56aeb83ef2bda270855da6aea24fd. No session running. NEVER retry/reset thisjournal orsave.
+
+FreshbrowserGETshowsinventoryversion1 retained. Rootmust reconcileexactrequest/version/audit with independently admittedreadonly .superpowers/m78-timeout-observe.ts + privatewrapper beforeanycontinuation. Currentlive2002fea/schema21/imagee728 remainshealthy; completeddatabaseupgradeneverreapplied. Auto deploymentpaused. No productsourcechangesyet. PERF-F01proposes twofile performancefix preservingnativeSQL andlockedpre/postverification; sourceadmission/nativeconcurrencyQA required. Then newboundedcontinuation excludesexactconfirmedsave. Originalharnesscannotresume failedjournal.
+
+Chrome851836533 signedin/combinedinventoryv1 visible; no browserwrites. M79sourceinventorypreparation independentonly. Scope1customerrelease incomplete. Terrascopefixcomplete; neverrerun. Earliersections historical.
+
+# September22 full local recipe passed — final release review next
+
+Fresh currentbackup recipe clone m78_ops_recipe_20260922b completed all38POSTs,116events, five reports, exactgross126850.17632025 and retention568oldrows/121tables. Finaljournal SHA8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0 is immutable. Independent finalnative review pending; no rerun. Original3-writefailedclone andjournal remainpreserved. RCP-F01flat/nestedversion anddiscovery-review handling fixes independentlyaccepted in bothrunners.
+
+Fresh15:55UTC backupd92decbd and8family recoveryb940698 passed; forward revalidationfaab1a passed preserving originalSeptember17operationdates. Currentlive remains7d465485/schema20. PR5repair970a9b published; oneCIhistorical.tmp fixturecheck needed another exactallowlistfix, independentlyaccepted. Root publishes finalsource+evidence, verifies sixchecks, then freshsame-reviewer hostedcodeadmission/maintenance/upgrade/deploy/0-41-0lifecycle/browser. Scope1customerrelease remainsincomplete. Earliersections historical.
+
+# September22 exact local recipe stopped — preserve completed writes
+
+Fresh separate recipe clone m78_ops_recipe_20260922 restored and upgraded to21. Its exact recipe stopped after3successful201 outcomes, only2verified, during factual corporate successor verification. Frozen10event journal SHA1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943 must never be reset or retried. Independent diagnosis points to a local runner unwrapping a flattened numeric version as an envelope. Root publishes independently accepted recovery/test/source preparation with this native failure explicitly open; no M78hostdeployment orcompletion claim. resume_recipe authors bounded repair; resume_recovery independently reviews. Earlier status below is historical.
+
+# September22 resume — release repairs under verification
+
+Fresh live checks confirm Neuvetra still uses application7d465485/schema20, deploymenta0b1b8ff/imageeaa86c. PR5 remains b37b899a with5of6checks; repaired local suite passed89tests1516assertions. No M78 hosted mutation or recipe execution occurred during the usage-limit pause. All prior failures and encrypted archives remain preserved; September17 backups are historical and must be refreshed before hosted migration.
+
+Root restarted the existing loopback55472 test cluster after verifying its configuration. It completed automatic recovery and clonec returned20receipts. New actual workers: resume_recovery owns read-only eight-family recovery proof; resume_release delivered separately accepted wrapper/source/portability preparation and is now complete. Root owns shared ops/Git/host and will publish repairs, finish a separate original-archive20→21 exact38-write recipe rehearsal, then refresh hosted gates before deployment. The Terrascope fix is complete and must never rerun. Scope1 customer release remains incomplete. Earlier sections are historical.
+
+# M78 published; actual recovery and CI repairs in progress
+
+The Terrascope security fix is complete; never rerun it. Rolling PR5 head b37b899a294ce8f1d088adf76c5070d3f3a4af50 has five passing checks and one applications-test failure from local-only fixtures as observed September17 05:16UTC. Neuvetra remains app7d465485/schema20; no M78 hosted writes or deployment.
+
+The actual encrypted schema20 backup succeeded at05:06UTC (archive7460b387, snapshotbd11fa7d). First restore m78_ops_actual20_20260917 is retained after comparison refused27 default privilege settings for excluded provider/deferred schemas. Independent read-only comparison found all113 application tables and377 content entries exact. ACT-R01 repair explicitly records that recovery boundary while preserving full live-upgrade permission checks; independent source admission passed. Fresh restore c passed; independent actual semantic recovery is pending. An intermediate sandbox unprotect refusal b occurred before clone creation and is preserved. Never reset/retry the first clone or journals.
+
+Active: m77_backend restore/recipe author; m76_backend independent recovery/source reviewer; m78_security portable fixture checks; root shared integration and execution. Next: admitted fresh restore of original archive, separate exact38-write recipe rehearsal on a fresh upgraded clone, publish repairs and pass all six checks, then hosted migration/deployment/restart/revisit and demonstration. Full Scope1 customer release remains incomplete. Earlier sections are historical.
+
+# M78 local acceptance complete; publication and actual-data rehearsal next
+
+The approved Terrascope security fix is complete and must never be rerun. Fresh provider/readiness observations on September17 confirm Neuvetra remains application7d465485/schema20, deploymenta0b1b8ff, automatic deployment enabled. No M78 host writes have occurred. Scope1 release remains incomplete.
+
+Final SQL21 SHA546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736 uses reviewed10MB response/30MB history/4MB proof limits. Independent five native tests/175 assertions cover corrected process3/inventory2, retained reports, tenant fences, coordinated historical forgery and both actual capacity refusals with exact rollback/readability. Root's actual local member UI and final HTML/JSON downloads match retained bytes. Independent local recovery accepts113→121 tables, all old bytes/catalog/roles and occupied21 refusal. See m78-integrated-root-acceptance.md and m78-recovery-root-acceptance.md.
+
+Publish the reviewed implementation to rolling PR5 and verify all six checks. Then perform the separately admitted encrypted actual schema20 backup/restore. The live completed-M77 dataset differs from the older failed-state fixture: run the exact38-write recipe once on a fresh reviewed21 clone of today's restore before hosted migration. Root owns credentials/Git/host/browser; /root/m77_backend prepares that local-only runner; /root/m76_backend finalizes source/recovery review; /root/m78_security closes accepted operator evidence. Preserve all old sources/journals/failures. Earlier sections are historical.
+# M78 Scope 1 verification in progress
+
+The approved Supabase security fix is complete. The combined fictional ten-source inventory is working locally, with saved evidence and reports. Independent testing found an empty-company edge case; its repair passed the author checks and is being independently retested. Root also verified exact process-report downloads and corrected small-screen number wrapping.
+
+Remaining gates are independent native acceptance, actual backup/restore rehearsal, publication checks and the live demonstration. Neuvetra has not been upgraded or redeployed for M78; live remains application7d465485/schema20. Corporate/customer release, approved production methods/factors and external assurance remain incomplete. Active work: root integration/UI; m76_backend independent QA; m78_security recovery and hosted preparation. The backend author has delivered the repaired candidate and is available, not running.
+
+# M78 implementation and independent review in progress
+
+The approved Terrascope five-table fix is complete and verified. Security/planning foundation `5b7a31910e1f2f51b68d823fdf7bf008a14a6a2f` is pushed to rolling PR5; all six checks passed at the exact head on September17 03:43UTC. No new Neuvetra deployment or migration has occurred; live remains application7d465485/schema20.
+
+Independent accounting accepted the exact synthetic2025 candidate policy (38 numerical records,21 source observations,five frozen entries), with production release explicitly excluded. Root has mounted the discovery/seven-gas, totals, review and report interface; web/database/API typechecks and web lint passed on the current draft. Independent decoder challenges found real defects in proof completeness, requested-record identity, statement uniqueness and dependency timing; repairs are being retested. These are development checks, not a working runtime demonstration.
+
+Actual active work: /root/m77_backend authors additive schema21 persistence and native lifecycle; /root/m76_backend independently reviews browser semantics; /root/m78_security authors backup/recovery tooling; root owns frontend, integration, hosted preparation and shared publication. See operations/status.json for current assignments. Required factual corporate successor and full source/discovery rebinding precede the final process/inventory review. Preserve all M77 journals; never rerun the approved Terrascope fix. M78 and Scope1 remain incomplete. Earlier sections below are historical.
+
+# M78 security contained — Scope 1 implementation next
+
+The board explicitly approved the five-table Terrascope fix after automatic approval review initially refused execution. Root applied independently tested candidate3 once; fresh20-row catalog proof confirms endpoint privileges removed/RLS enabled/admin-service retained. Refreshed Terrascope advisor: zero errors, zero warnings, five intentional no-policy informational notices. Neuvetra remains schema20/application7d465485, zero advisor errors/eight warnings; no Neuvetra changes. See docs/research/m78-security-observations.md. Security author/reviewer finalize evidence; M78 product and technical plans delivered, independent accounting/design acceptance pending. Factual corporate successor must resolve retained subsidiary control/boundary gaps before all source/discovery families rebind. Scope1 remains incomplete. Continue authorized implementation, preserve M77 history; earlier sections historical.
+
+# M78 authorized — security assessment and Scope 1 reconciliation
+
+The board accepted M77 and asked to review a Supabase security email, then finish Scope 1. M77 closure receipt verifies 0e95d70 and all six checks. Existing live schema20/application7d465485 remains the accepted baseline; no new hosted changes. Root observed refreshed Neuvetra advisor zero errors/eight warnings and Terrascope five public RLS errors. These are current dashboard observations, not a complete access audit. Security specialist /root/m78_security and CPO fallback /root/m77_backend are actually dispatched. Root owns provider/Git/shared state. Preserve all M77 journals and evidence. Next: metadata-only security assessment, independently reviewed M78 criteria, then implementation and demonstration. Overall Scope 1 remains incomplete. Earlier sections are historical.
+
+# M77 delivered — refrigerants and fire suppression
+
+The live synthetic California example now reconciles five devices, five corporate sources and five workpapers, with separately accepted version4 and retained earlier reports. Independent review accepted the live execution, recovery, real same-image restart, zero-write revisit and six exact browser downloads. Overall Scope1 remains incomplete; methods and factors are still candidates.
+
+The original failed33-POST attempt remains frozen with all outcomes and sessions accounted for. A separate reviewed0/3/0 continuation completed only the three missing operations. All live verification sessions are closed. Automatic deployment is restored; live application7d465485/schema20 remains verified. No specialist worker is running.
+
+Root must verify the final closure commit and all six required checks in `.superpowers/m77-final-publication.json` before reporting completion. Read `docs/research/m77-publication.json` and `evaluations/research-qa/m77-hosted-acceptance.md` for the accepted boundary. The browser demonstration is preserved. Collect board feedback before M78: process screening, current cross-family bindings and gross Scope1 reconciliation. Do not rerun either completed continuation or the frozen failed original. Earlier sections are historical.
+
+# M77 continuation reviewed; publication and actual verification next
+
+The refrigerant and fire-suppression presentation is live on schema20 at application7d465485, deploymenta0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f. Automatic deployment remains paused. The original failed 74-event exercise is frozen at SHA84107d09; all33 attempted writes have outcomes and all sessions closed. Its interrupted read cause remains unknown.
+
+Independent review accepted continuation candidate2 (SHA80b11982). The actual failed-state restore rehearsal passed0/3/0 application writes, and final CI passed23tests/254assertions with4explicit native skips. Root separately reviewed the QA-authored guard tests. Specialists completed their scoped work; no worker is currently running.
+
+Root must publish this package on rolling PR5 and verify all six checks. Then run one fresh authoritative zero-write baseline using the reviewed private wrapper; do not duplicate it with an identical diagnostic sweep. Only after baseline closure send the three unattempted final population operations. Preserve both journals, never retry an uncertain write. Finish with a real same-image restart, zero-write revisit, final browser/download demonstration and independent acceptance, then restore automatic deployment. M77 and Scope1 remain incomplete. No M78 before board feedback. Earlier sections are historical.
+
+# M77 presentation live; reviewed failed-state recovery
+
+Final presentation commit7d465485e439566e9937b48c437bc59a6cc9591f is live in deploymenta0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f, imageeaa86c852fb9bba09421508b915a66a02cfcc2c935991528c9849148ec618597. Allsixchecks passed; exact runtime diff from1e2 is onlytwo independently reviewed frontendfiles. Reviewed observer588d55 passed uniqueSUCCESS/ready20/legacycontainment at00:17:13Z. Original0e03 deployment REMOVED. Automaticdeployment stillpaused.
+
+Original M77 exercise remains FAILED and frozen at74events/33POSTs, SHA84107d09d979d0a5086a575642ddd1f3d596f75213886588f909b047933860ba. Allsessionsclosed. Independent exactfailed-state20 recovery/replay PASS:113tables, all33outcomes/oldhistory/catalog/4actualbrowserdownloads exact. Onlypopulationv3 isstale/blocked aftercorrectedHVACreview; threefinalpopulation operations unattempted. CauseofinterruptedmobileGET remainsunknown; lateractualbrowserreadpassed.
+
+/root/m77_backend actively finishes new diagnostic/0-3-0 provenancecontinuation against aNEWclone of readonly actualrestore m77_ops_failed_state20(55472). Independentm76_cto has deliveredfailedstate/observer/UIreviews and isavailable for finalcontinuationreview. Root privatewrapper .superpowers/m77-private-continuation.ps1 isprepared butnotexecuted/reviewedfinalyet. ItpinsexactacceptedM76 andfailedM77 histories andonlyrunscheck-m77-continuation.ts. Originalrunner/recipe/journals stayunchanged. Root addednewpurecontinuationtest path toCI, pendingreview/publication.
+
+Next freeze/review finalcontinuation+CI/wrapper, publishsamePR/passchecks, runfreshactualreadonlydiagnostic/baseline andonly3writes afterreview. Thenreal same-image restart, zero-writerevisit, exactlivebrowserreports/downloads, independentfinalacceptance, restoreautodeploy andfinalpublication. M77/Scope1 incomplete; noM78 withoutboarddemo feedback. Earliersections historical.
+
+# M77 interrupted read; original exercise frozen
+
+Actual exercise exited failed after33POSTs (27successful additive writes and6expected refusals), at authorized_read:/mobile-diesel. All created sessions closed. Original .superpowers/m77-hosted-journey.jsonl remains frozen:74events, SHA84107d09d979d0a5086a575642ddd1f3d596f75213886588f909b047933860ba, terminalb43bfb5b5dc1688324a8734bcc99342a5c273a0c89d4245123ee09b113cb26ad. Cause is unknown; logs show earlier mobile200 responses and no matching final response, which does not prove a timeout or transport cause. Do not rerun/reset the original.
+
+Live remains schema20/application1e2c44f, automatic deployment paused. Only final population successor/review/report are unattempted. Root started reviewed read-only encrypted schema20 backup in session13413, outputs .superpowers/m77-failed-state20.dpapi and -backup.json. /root/m77_backend is actively preparing a new provenance-bound diagnostic/0-3-0 continuation and local exact-shape rehearsal; independent review is required before live writes. Root owns all host/Git operations. /root/m76_cto has delivered scoped label/three-class UI reviews and is available, not currently running.
+
+Label refinement da90417 is published/all6checks pass but not deployed. Three-class UI styling candidate f46fc304 is independently accepted and local browser verification in progress. Finish and publish that bounded refinement, repin reviewed final-runtime observer to its successor commit with review. Do not deploy until failed-state diagnosis/continuation plan justifies it. No restart/revisit or completeM77 claim yet; Scope1 remains incomplete. Earlier sections are historical.
+
+# M77 live exercise; label refinement ready
+
+The refrigerant and fire-suppression workflow is live on schema20, application1e2c44f. The sole fixed exercise session19234 is running against .superpowers/m77-hosted-journey.jsonl. Successful writes and expected authorization refusals are recorded; final exercise closure is pending. Do not restart, redeploy, launch another writer, reset or blindly retry while it runs. Automatic deployment remains paused.
+
+The one-line facility checklist refinement adds the owning entity to distinguish duplicate names. It passed independent review and all six required checks on publishedda90417ba302575cc6c02380adfcaeba37e7b9b6. Deploy it only after exercise completion and session closure. The read-only final runtime observer .superpowers/m77-observe-final-runtime.py is independently reviewed at SHA18e9812e8209f298d1f7a066efad9737877331b9bb8e9015ed4672fb40b5dcf1; it requires exact deployment/image-scoped startup collection provenance for restart.
+
+Root browser has already verified initial unresolved discovery, blocked unknown-gas source and population reports, and exact source HTML/JSON downloads. Browser tab m77LiveTab is on the live reconciliation report; viewport reset. Continue actual report/history checks, then final deployment/restart/zero-write revisit, independent acceptance, restore automatic deployment and publish final evidence. M77 and Scope1 remain incomplete. Scoped specialist reviews are delivered; no specialist is currently running. Earlier sections are historical.
+
+# M77 live schema20; actual synthetic exercise running
+
+Deployment0e03a761-adbb-4c0c-9a75-adc918fbf3fc isSUCCESS on exact1e2c44feb31a689363dbcde1c51dc38363d23bc1, imageb4e683f961bd612af39e79462e0dcc1a1d56bf5e68ed49811ac8d6ec6cff02ab. /ready20 andlegacycontainment verified23:34:21Z. Rootstarted fixed36POSTexercise inexisting .superpowers/m77-hosted-journey.jsonl; execution session19234. Do notstartanotherwriter/reset/retry. Initialphase performs the fulloldreadonlysweep before anynewworkpaperwrites; onlycompleted journal/outcome evidence establisheswrites/closure.
+
+Rootcontinueobserveactualexercise, signed-inbrowserinitialunresolved andretainedblocked/pending/acceptedreports, thenactualsameimage restart and0POSTrevisit, exactdownloads andindependentacceptance. /root/m76_cto auditsdeployment/execution evidence. Automaticdeployment remainspaused untilcontrolledverificationends. Allolddata/archives/journals preserved. FullM77 andScope1 stillincomplete. Earliersections historical.
+
+# M77 schema20 committed; matching application deploying
+
+Exact reviewed migration committed successfully; .superpowers/m77-hosted-migration-candidate1.json confirms20 and preservation of all earlier rows/content. Independentactualgate accepted beforeexecution. Neverdeploy19runtime now. Rootrequested exact1e2c44feb31a689363dbcde1c51dc38363d23bc1 application deployment0e03a761-adbb-4c0c-9a75-adc918fbf3fc; build/readinessnotyetverified. Automaticdeployment remains paused; oldruntime removed.
+
+Next verify exactdeploymentSUCCESS/schema20ready/legacycontainment, then rununchangedprivatewrapper correctedfixed36writeexercise onexisting4eventbaseline journal. No reset/retryuncertainwrites. Actualrestart/0writerevisit/browserdemo/independentacceptance andrestoreautomaticdeployment remain. Rootsolehost/Gitwriter; /root/m76_cto activelyauditsactualmigration/deployment evidence. Earliersections historical.
+
+# M77 maintenance active; exact20 upgrade next
+
+Root paused automatic deployment and removed the exact old152fcb0 runtime d9e200ed; provider confirms REMOVED/noactive deployment and /ready404. Database remains19; no migrationattempt yet. Allsix exact1e2c44f checks passed23:28:06Z, head observed23:26. Freshbackup/restore/replay and completed0POST baseline accepted. Reviewedbuilder220bbf passed actualgate validation and exclusivelywrote .superpowers/m77-hosted-gate-candidate1.json (ACCEPTED1 fullsnapshot). /root/m76_cto isactivelyreviewing actualmaintenance/gatebefore rootupgrade.
+
+Next executeonly reviewedm77-upgrade withprivatewrapper andexclusive .superpowers/m77-hosted-migration-candidate1.json; onknowncommitted20 deployexact1e2c44feb31a689363dbcde1c51dc38363d23bc1 usingpreparedm77-deploy.graphql. Neverstart19runtime after20commit; neverblindretryuncertainDDL. Thenready20/actualexercise/restart/revisit/browser/independentacceptance andrestoreautomaticdeployment. Rootsolehost/Gitwriter. Earliersections historical.
+
+# M77 actual-facility repair accepted; publish and deploy next
+
+Independent QA accepted the corrected source-bound three-facility recipe and exact17-file release bundle M77-RELEASE-CONTROLS-ACCEPTED1. Fresh actualrestore-derived rehearsal passed7tests/1005assertions with0/36/0 writes, all sessionsclosed, every originalfacility/source retained, explicitdiscovery atallthree locations, and intendedfive devices. Independent sixorderpermutations/eight provenance refusals and fullactualjournal/content review passed. Prior2facility localtemplate evidence remains historical; F06 is recorded as a post-software-acceptance recipe defect caughtbeforeliveM77upgrade.
+
+Actual baseline4eventprefix and fresh encrypted19restore/independentfullreplay remain accepted; no repeatbaseline needed for unchangedrunner/recipe-onlyrepair. Rootpublishes correctedrecipe/evidence onrollingPR5, verifiesnewexacthead/allsixchecks, refresheshead+maintenance observations and updatesreviewedgatebuilder constants. Then exact20upgrade/deployment,36writehostedexercise, realrestart/zero-writerevisit andbrowserdemo/independentacceptance. Live remains152fcb0/schema19; no M77 appwrites. /root/m77_backend completedrepair; /root/m76_cto completed this scoped review and is available for the next actual hosted-evidence review; no specialist worker is currently running. FullM77 andScope1 incomplete. Earliersections historical.
+
+# M77 live baseline and recovery passed; facility recipe repair
+
+Live M76/schema19 remains unchanged. Allsix checks passed published859409d; fresh encrypted application backup22:58:49Z restored105tables and independent full numerical/history/download replay passed. Actual readonly baseline finished23:09:39Z,4events terminal95620563fd46e5ff05f6cc351e98facbd4dab24513a2c8c3f7717178b9650f06,zeroapplicationPOSTs andallsessionsclosed. Preserve this completed journal prefix.
+
+Before maintenance, root caught actualcorporatev7 hasTHREE retainedfacilities, while the reviewed demonstration recipe assumedtwo from a local synthetic template. This is a recipe/fixture relevance finding, not an application migration or recovery failure. No M77 live upgrade/write occurred. /root/m77_backend is actively repairing only the fixed recipe, tests and documentation using a new clone of the fresh actualrestore; /root/m76_cto independently reviews exact source-bound facility selection and complete discovery across allthree. Preserve everyfacility/sourceobject; no merge/drop or inferredzero. Root owns sharedrecords/Git/host. New recipe must be independently reviewed, committed/pushed and pass exactheadchecks beforemaintenance. Earlieracceptance applies only its statedscope; priornative2facilityfixture is notactualhostpopulation evidence. FullM77 andScope1 remain unfinished. Earliersections historical.
+
+# M77 release software reviewed; staging recovery next
+
+The application increment8288613 passed all six required PR checks on2026-09-16T22:50:50Z. Independent release-controls review passed17 exact files in candidate2, after journal-order and wrapper predecessor-pin repairs. Pure18tests/197assertions, independent encrypted recovery62assertions and separate catalog/readiness16assertions passed. The final author hosted recipe passed2780assertions, independently confirmed0/36/0 writes and closed sessions in isolated local rehearsal. Root actual local browser verified same-device correction, separate review, blocked/accepted exact downloads, access transitions and actual local server restart.
+
+Root is publishing reviewed controls on rollingPR5, then must verify all six checks on that exact successor. Live staging freshly observed at152fcb0/schema19; no M77 live upgrade or exercise occurred. Next: fresh encrypted live19 backup and independent restore/replay, bounded read-only baseline, maintenance/exact20 upgrade and deployment,36-write synthetic exercise, real hosted restart and zero-write revisit, browser demonstration and independent hosted acceptance. Scope1 remains incomplete; no M78 execution before board feedback. Operators and journey authors completed; independent release review completed and reviewer is available, not automatically running a new task. Earlier sections historical.
+
+# M77 application accepted; release controls in progress
+
+Independent application review passed candidate3 (28 exact LF files) after F01–F04 repairs: 404 native assertions and8 independent calculator tests. Review evaluations/research-qa/m77-integrated-review.md; snapshot operations/agent-improvement/snapshots/M77-APPLICATION-CANDIDATE3.json. Canonical SQL20 hash11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc. /root/m76_cto completed application review and is available, not currently assigned. /root/m76_backend actively prepares M77-OPERATORS (encrypted recovery); /root/m77_backend actively prepares M77-HOSTED-JOURNEY (fixed synthetic recipe/guarded journal), no live actions. Root finishes browser: fresh m77_author_root_ui3, narrow390px fits, unsupported officefire gas stays visible, blocked report HTML/JSON actual downloads exactly match retained bytes. Final access/restart/correction checks continue. Root may publish this reviewed application increment onrollingPR5, without calling fullM77 complete. Live remains M76/schema19; no upgrade attempted. Earlier sections historical.
+
+# M77 integration under independent review
+
+/root/m76_cto accepted actual M77-INDEPENDENT-QA dispatch after fresh QA and historical CPO routes hit the runtime thread limit. It did not author M77. Inherited compute routing exception is disclosed; observed settings unknown. /root/m77_backend has passed 89 author native assertions and schema19-to20 old-row preservation, with final evidence handoff pending. Root actual browser saved a 2kg R410A correction with linked 1kg prior leak: 3848.0000 kg CO2e, separate source review and stale population findings verified. Local fixture m77_author_root_ui1 only. Root continues browser/packaging; reviewer is challenging physical-discovery retention and proof integrity. No M77 live changes. Full milestone and Scope1 remain unfinished. Earlier sections are historical.
+
+# M77 integrated workpapers and population in progress
+
+The board accepted the offline foundation and explicitly requested planning and execution of the next increment toward complete Scope1. Foundation b0504e0 passed all six remote checks; .superpowers/m77-foundation-publication.json records publication. /root/m77_backend is dispatched for persistent source workpapers, physical population reconciliation, authority, additive SQL20 candidate and native tests. Root owns frontend forms/decoding, server mounting, integration, shared records, Git and host.
+
+Fresh QA spawn and historical CPO followup were both rejected by the runtime agent-thread limit; no QA worker started. Independent integrated release review remains a gate. No M77 live migration or deployment has been attempted. Complete M77 and full Scope1 remain unfinished. Earlier sections are historical.
+
+# M77 offline foundation accepted; integration remains pending
+
+The board accepted the M76 browser demonstration and authorized continued California work. The first M77 increment now has source-pinned candidate rules and an unmounted deterministic calculator for admitted HVAC, refrigeration and fire-suppression gases. Eight author tests and eight independent tests passed. Independent review corrected servicing-loss semantics and release/refill chronology; initial findings are retained in docs/research/m77-accounting-review.md. This is not full M77 or a released method.
+
+Root is publishing the exact foundation on rolling PR5; final head/check receipt belongs at .superpowers/m77-foundation-publication.json. Next implement the persistent corporate-bound workpapers, complete physical-source reconciliation and browser workflow, then independent integrated security/accounting QA, recovery and a hosted demonstration. P01-P10 remain unpassed. No M77 live/schema change was attempted. /root/m77_cpo completed its assignment; no worker remains assigned. Fresh accounting spawn and historical followup failed at the runtime thread limit; root authored the foundation and the active CPO context independently reviewed it with the compute-routing exception disclosed. Earlier sections are historical.
+
+# M77 preparation; M76 board feedback received
+
+The board accepted the M76 browser demonstration and authorized continued California corporate reporting work. M76 final closure 2fec9c4 passed all six remote checks; the retained final publication receipt reconciles the older closure note. M77 addresses HVAC, refrigeration and fire-suppression evidence and calculations. No M77 application, migration or deployment is complete.
+
+/root/m77_cpo is dispatched for product criteria and independent candidate review. Root owns accounting/technical preparation, Git, host and shared records. Both fresh accounting dispatch and historical-agent followup were rejected by the runtime agent-thread limit; neither is running. Candidate source/method validation and independent implementation review remain gates. Existing live M76/schema19 remains unchanged. Earlier sections are historical.
+
+# M76 live and independently accepted
+
+Stationary equipment and fuel coverage is complete for the bounded synthetic California example. The reviewed correction retains all earlier records, separately reviews the three fuel workpapers, and reconciles the boiler, heater and fixed fossil-diesel generator. Five equipment versions/reports and three generator versions/reports preserve blocked, pending and accepted histories. All 21 corrective operations and 87 keyed download observations passed. The original failed exercise and the zero-write failed baseline remain unchanged; their history is not relabeled as success.
+
+The actual service restart and full zero-write revisit passed, with all verification sessions closed. The signed-in browser verified final reconciliation before and after restart, historical pending reviews, and six exact downloaded files. Independent acceptance: evaluations/research-qa/m76-hosted-acceptance.md. Publication: docs/research/m76-publication.json. Live application 152fcb0 / schema 19 is unchanged; the reviewed verification commit 33ad2c7 passed all six checks. Automatic deployment is restored. Root must verify the closure commit remote head and six required checks before reporting publication complete; the final receipt is .superpowers/m76-final-publication.json.
+
+No worker is assigned to a dependent milestone. Board feedback on the open stationary-equipment demonstration is next. California corporate reporting remains first; complete Scope 1, 2 and 3, released methods, requirements and assurance remain unfinished. Report-loading latency is a refinement item. Physical print/PDF pagination remains unverified. Earlier sections are historical.
+
+# M76 correction and restart passed; read-only revisit running
+
+All21 reviewed corrective POSTs and the full retained-download sweep passed at2026-09-16T17:00:34Z, with all created Auth sessions closed. The continuation journal has a70-event completed-exercise prefix, terminal4c1b93ee2bebea58ededf058ba8ab39b7f6fc9bf6ead0a6432d016029203facd. Independent review verified all21steps, original versions/downloads, corrected calculation and captured absent reviews. Actual browser showed final three-device reconciliation and historical pending-review report; six actual downloaded files matched retained bytes.
+
+Root restarted the exact live deployment: new startup17:01:45Z, SUCCESS on152fcb0 and the same image, ready200/schema19/legacy containment at17:02:06Z. Evidence .superpowers/m76-hosted-restart.json. The same reviewed wrapper's zero-write revisit is running; do not start another invocation or reset any journal. Root owns host/Git/browser, /root/m76_accounting independently reviews completion. Remaining: revisit closure, post-restart browser, final hosted acceptance, restore automatic deployment, publish closure and allsix finalchecks. Automatic deployment remains paused. No dependent milestone before board demonstration feedback. Earlier sections are historical.
+
+# M76 full live baseline passed; reviewed correction running
+
+The fresh actual-transport baseline passed at2026-09-16T16:29:36Z with zero application POSTs and all created Auth sessions closed. It is recorded in the first four events of .superpowers/m76-hosted-continuation.jsonl, terminal fbbce8ded322365465459160162612b631753eb63c1aa059aebf91254cebeae0. Both earlier failed attempts remain unchanged. The published wrapper commit33ad2c7378e5e474917e6bba99d7f9940e2da704 passed all six required checks.
+
+Root started the reviewed21-operation exercise in the same new journal. Do not start another writer or retry any failed/uncertain attempt. /root/m76_accounting independently reviews actual evidence. After correction completion: actual service restart, zero-write revisit, final browser, independent hosted acceptance, restore automatic deployment and publish closure. Live152fcb0/schema19 remains unchanged; automatic deployment paused. No dependent milestone. Earlier sections are historical.
+
+# M76 explicit continuation accepted; full live baseline running
+
+The diagnostic and separate-journal wrapper passed independent review and targeted guard/integration tests. Snapshot M76-HOSTED-CONTINUATION-CANDIDATE1 binds five exact files; review is evaluations/research-qa/m76-hosted-continuation-review.md. Root started the fresh full actual-transport baseline at2026-09-16T16:21:03Z in .superpowers/m76-hosted-continuation.jsonl. Both failed attempts remain unchanged and failed; prior baseline cause remains unknown. No21 corrective writes have occurred.
+
+Root owns publication and host. The author assignment is complete; /root/m76_accounting remains active for hosted acceptance. Publish the exact wrapper on rolling PR5 and verify six checks. Only after fresh baseline and checks pass, execute the21 reviewed operations, actual service restart, zero-write revisit, final browser and independent acceptance. Live152fcb0/schema19 remains unchanged and automatic deployment paused. No dependent milestone. Earlier sections are historical.
+
+# M76 read-only diagnosis passed; fresh verification being prepared
+
+The separately reviewed diagnostic completed at 2026-09-16T16:14:23Z: six actual register decoders,18 preconditions and54 original download comparisons passed, with zero application writes and all created Auth sessions closed. Both failed journals remain byte-identical. The original live baseline failure was not reproduced; its cause remains unknown. This diagnostic used a cached legacy adapter and does not constitute an accepted official baseline.
+
+Root owns host/Git. /root/m76_cto is preparing a minimal separately journaled continuation wrapper around the unchanged reviewed helper; /root/m76_accounting independently reviews it. A fresh full baseline must use actual legacy transport, pin both failed journals and the diagnostic, and refuse automatic retry after any failure. The21 corrective operations, actual service restart, zero-write revisit, final browser and independent acceptance are still pending. Live152fcb0/schema19 is unchanged; automatic deployment remains paused. No dependent milestone. Earlier sections are historical.
+
+# M76 live baseline stopped without writes; diagnosis in progress
+
+The reviewed recovery helper b96a249 passed all six remote checks and independent exact-data local rehearsal. Its actual live baseline stopped at authoritative_failed_state with zero application POSTs and all verification sessions closed. The second failed journal .superpowers/m76-hosted-recovery.jsonl has two events, terminal b9db5630321e6dc5fa50ede903996c29ad17b9ab4e777f982f60bd1a10c8b6b4; the original44-event failed exercise remains untouched. No21-operation live correction or restart has occurred. Do not retry either failed journal or infer the failing endpoint from the generic stage.
+
+Root owns host/Git. /root/m76_cto is dispatched for M76-HOSTED-BASELINE-DIAGNOSIS, a separately reviewed diagnostic that must refuse every application write and retain only sanitized route/status/duration observations; /root/m76_accounting independently reviews it and actual results. No frozen helper/application/schema edits. Runtime remains healthy152fcb0/schema19, auto deployment paused. Identify the exact failure before any new baseline or correction. Earlier sections are historical.
+
+# M76 reviewed correction published; live read-only verification running
+
+The fixed synthetic correction helper passed author and independent rehearsals on separate exact copies of the failed live state:21 additive API operations, zero-write repeat/revisit, preserved earlier records and captured absent reviews. The original failed live exercise remains unchanged. Independent review and exact nine-file binding are in evaluations/research-qa/m76-hosted-recovery-review.md and operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json. The application/schema/approval guards are unchanged; the helper corrects inherited missing boiler screening through ordinary evidence-backed versions and separate reviews.
+
+Root published the accepted helper as b96a249a7c9120e855be7d67188f786c59536399 on rolling draft PR5; all six checks passed at15:58:15Z. Actual read-only failed-state baseline is running in the new .superpowers/m76-hosted-recovery.jsonl, started15:53:59Z. No correction writes have occurred yet. Next complete that baseline, perform the21 reviewed operations, restart the actual service, verify zero-write revisit and exact history, inspect the final live browser and obtain independent hosted acceptance. Automatic deployment remains paused; current live is152fcb0/schema19. /root/m76_accounting is the active hosted reviewer; the operator author has completed. No dependent milestone, rollback or original-journal replay. Earlier sections are historical.
+
+# M76 live verification requires a corrected synthetic journey
+
+The schema-19 deployment remains healthy on 152fcb0, with all six required checks passed and old application records preserved. The actual exercise stopped at equipment version 2 approval: expected 201, received 422. Eighteen application POSTs were attempted and all verification Auth sessions closed. The original hash-chained journal remains unchanged at b454b9bffca96d58ce7a0ba065f5c72ca603232541503a956d82d9eed760c844. Do not replay the failed recipe or reinterpret its unexpected refusal as a pass.
+
+The inherited office-boiler corporate coverage item still declares missing screening; the new gas workpaper alone cannot clear that corporate finding. Root is preserving a fresh encrypted schema-19 backup and owns host/Git. /root/m76_cto is dispatched for M76-HOSTED-RECOVERY-PLAN; /root/m76_accounting independently diagnoses and reviews acceptance. Corrections must append ordinary corporate/workpaper/equipment successors with separate reviews, retain every earlier record and the failed journal, and pass a realistic local rehearsal before hosted continuation. Automatic deployment remains paused. Actual restart/revisit, final browser, independent acceptance and closure publication remain pending. No rollback to schema 18 and no dependent milestone. Earlier sections are historical.
+
+# M76 deployed; live verification in progress
+
+The reviewed stationary-equipment milestone is live at schema 19 on commit 152fcb070a4a81aa48ef6beccff629480fa9ffa2. All six required checks passed. Deployment d9e200ed-7f08-4547-921e-64d7b77f24fa is healthy; readiness and legacy containment were verified at 2026-09-16T15:12:31Z. The migration preserved all 90 old tables, 292 rows and 81 content entries, adding 15 initially empty tables and the exact reviewed fuel-reference guard. Do not reapply the migration or run schema-18 code against this database.
+
+The journaled synthetic live exercise is running. Root owns host, Git and shared records; /root/m76_accounting is independently reviewing actual hosted evidence under M76-HOSTED-ACCEPTANCE. Authors have finished. Remaining acceptance: complete the exercise, restart the actual service, verify exact saved records and downloads with zero application writes, inspect the signed-in browser, obtain independent acceptance, restore automatic deployment and publish closure on rolling draft PR 5 with final checks. Automatic deployment remains paused during verification. Preserved recovery evidence is listed in docs/research/m76-prepublication.json. This increment does not establish complete Scope 1 or corporate coverage, method release, compliance or external assurance. Earlier sections are historical.
+
+# M76 local final candidate; independent capacity review and publication pending
+
+Final SQL19 ed08001b passed native author68assertions, independent arithmetic/security cases and populated encrypted recovery. Root actual local browser corrected the equipment declaration, obtained a separate review, downloaded exact report HTML/JSON and restarted the service with unchanged history. Independent hosted18 restore and populated19 forward replay passed. Fresh live18 baseline made zero application POSTs and closed all verification sessions. No live database/application mutation occurred.
+
+Automatic deployment is now paused to prevent publishing19code onto18database. Root owns Git/host/shared records; backend and operator authors have finished. Only /root/m76_accounting remains dispatched for final capacity/integrated review. Next exact reviewed snapshot, same rollingPR5 commit/push and six remote checks, then concrete fresh hosted gate/execution and browser demonstration. Preserve backups/journals and failed fixtures. California remains first; synthetic stationary coverage is not complete Scope1/corporate inventory, released methods, compliance or assurance. Earlier sections are history.
+
+# M76 stationary equipment implementation in progress
+
+Board accepted M75 browser demonstration and directed continued California work. Reviewed planning M76-PLANNING-CANDIDATE1 admits separately metered gas boiler/space heater and one fixed fossil No.2 generator using explicit default-HHV evidence. Root independently checked EPA factor/guidance units and selected bounded development scope. No method/customer release, not-applicable shortcut, source deletion or aggregate emissions.
+
+Actual authors: /root/m76_backend new DB/SQL19/authority/routes; /root/m76_cto operator/recovery/helper software; root UI/shared integration. /root/m76_accounting independently challenges implementation. Draft UI/decoders typecheck and lint; independent arithmetic/admission cases and isolated18 backup restore have passed their scoped checks. No19 migration or hosted change yet; current live remains acceptedM75/schema18. Next integrated native lifecycle, security, historical proof and recovery, then demonstration/publication. Earlier sections are history.
+
+# M76 started after accepted M75 browser demonstration
+
+The board inspected the live browser, accepted it and directed continued work. M75 final published head32e1d7b passed all six checks; live implementation7e9abd2/schema18 and restored automatic deployment were verified. Private final receipt .superpowers/m75-final-publication.json. No merge.
+
+M76 now targets stationary equipment and fuel coverage for the California office/distribution profile: complete natural-gas source reconciliation and a fossil-diesel emergency-generator candidate only where primary evidence supports its exact method. Accounting and CTO contracts are actually dispatched to /root/m76_accounting and /root/m76_cto; /root/m76_backend is doing read-only backend reconnaissance. Root owns product integration, Git, host and shared records. No M76 runtime/host changes yet. Missing/unsupported equipment remains visible; no method release or complete Scope1 claim. Earlier sections are history.
+
+# M75 live fleet reconciliation accepted and published
+
+The specifically approved database17-to18 upgrade and fleet deployment are live. Implementation7e9abd2 passed all six required remote checks. Independent hosted acceptance passed with no open blocker:22 expected application POST outcomes, four retained roster versions, three reports, preserved earlier records, actual service restart and zero-write revisit with all verification sessions closed. The signed-in browser demonstrated missing-workpaper blockers, separate review, immutable history and exact HTML/JSON downloads. Evidence: docs/research/m75-publication.json and evaluations/research-qa/m75-hosted-acceptance.md.
+
+Deployment f6794f05-1f09-43c8-a4c0-bb2a5abf45fa is healthy at schema18 on implementation7e9abd2 and image26641a6547469323199a975ee49d2090db564e3b0d1fa6c79207f159d39c52e4. Automatic deployment was restored after acceptance. Root publishes this closure to the same rolling draftPR5 and verifies final documentation-head checks and live identity separately; no merge. All scoped specialists finished; no active worker. Preserve private backups and journal. Use18-compatible forward recovery only.
+
+The live Fleet reconciliation page is the board demonstration. This remains synthetic and bounded, with no aggregate emissions or complete fleet/Scope1/corporate inventory, method release, compliance or external-assurance claim. California remains first. Next proposed M76 is stationary-source completion for the supported office/distribution profile; obtain demonstration feedback before dependent implementation. Nevada/Canada expansion remains deferred. Earlier sections below are dated history, not current execution orders.
+
+# M75 schema18 committed; approved checked deployment underway
+
+Board specifically approved the live17-to18 upgrade and deployment. Exact reviewed migration committed successfully after verified writer stop; all83oldtables/224rows and old content/roles preserved, seven empty fleet tables plus migration receipt added. Receipt .superpowers/m75-hosted-migration-candidate1.json. Do not reapply or deploy17code. Checked implementation7e9abd2 passed all six remote checks; deploymentf6794f05-1f09-43c8-a4c0-bb2a5abf45fa requested for that exact commit and is pending observed readiness.
+
+Root owns host/Git/shared records. /root/m74_accounting is actually dispatched for independent M75-HOSTED-ACCEPTANCE; production/operator authors complete. Next actual18readiness, journaled hosted exercise, actual service restart/zero-write revisit and signed-in browser, independent acceptance and final publication. Automatic deployment remains paused until verification; no merge. Pending-approval text below is now historical; specific permission received. No method/corpus release or completeScope1/compliance/assurance claim.
+
+# M75 specific live upgrade approved; controlled execution in progress
+
+Reviewed implementation7e9abd2c4a852e4226e6ab195697ffdfe83b093f is published on the existing rolling draftPR5; all six required remote checks passed at2026-09-16T06:45:55Z, including actual Docker/runtime smoke and native fleet lifecycle. Final38-file integrated snapshot M75-INTEGRATED-ACCEPTED2 binds reviewed LF source; all staged bytes matched. Local scoped specialists completed; no worker is active. Root is publishing this preparation/continuation record and will verify its final documentation-head checks separately. No merge.
+
+The board explicitly approved the live17-to18 upgrade and deployment in this task. Earlier specific16-to17 approval does not name this change. No M75 upgrade was attempted or rejected. Existing service deploymentb849d413 remainsSUCCESS at M74f5d7383/schema17; site was not stopped. Automatic deployment is intentionally paused so pushed18code cannot reach17database. Approval is received. Before execution, recheck exact source/remotechecks/live state; fresh17backup/restore/independentrecovery/forward-recovery receipts expire after4hours, and maintenance proof after15minutes. Current backup was2026-09-16T06:32:23Z. Never fabricate or reuse a pre-stop maintenance attestation.
+
+Prepared receipt docs/research/m75-publication-prepared.json; private backup/restore/security-forward receipts are listed in docs/research/m75-prepublication.json. Actual hosted baseline passed0applicationPOSTs/allAuthsessionsclosed. Preserve .superpowers/m75-hosted-journey.jsonl and all prior failed fixtures. Upgrade tool tools/staging/m75-upgrade.ts requires a new exact gate after verified writer stop; root alone owns host/Git. After18use18-compatible forward recovery only. Then perform journaled hosted exercise, actual restart/revisit and signed-in browser demonstration, obtain separate hosted acceptance, restore automatic deployment, publish evidence and verify final checks before calling M75complete.
+
+Working local demo http://127.0.0.1:37177 uses m75_root_ui_final2 and fictional injected actors. Root verified correction/review/downloads, actual restart and immutable historical report. Final local/recovery QA is accepted; no complete realfleet/Scope1, method release, legal compliance or assurance claim. California first; Nevada/Canada expansion deferred. Earlier sections are historical.
+
+# M75 local implementation accepted; publication and hosted checks pending
+
+The controlled-fleet declaration/reconciliation is locally implemented and independently accepted on canonicalSQL18 `76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3`. Independent68tests/811assertions,35directSQL probes,53parity scenarios, native lifecycle/concurrency/40+40caps and6actual component transitions passed. Final populated18 restore matched90tables/2,263rows and catalog/ACL definitions. Root actual local browser correction, separate review, report HTML/JSON downloads, real service restart and historical report reopening passed. See evaluations/research-qa/m75-independent-review.md and docs/research/m75-local-browser-verification.json.
+
+Root separately accepted CTO-authored operators/helper; final integrated snapshot M75-INTEGRATED-ACCEPTED2. Authors have finished; independent QA final shared-wiring/fresh hosted-recovery review has finished. No worker is currently active. Two old17-count test expectations were repaired and independently rechecked. Root owns records/Git/host. Automatic deployment is paused deliberately before schema18 publication; existing running schema17 service has not been stopped or migrated. Fresh encrypted hosted17 backup/isolated55472 restore and independent replay passed, preserving83tables/224rows. Actual hosted baseline passed with zero application POSTs and all verification Auth sessions closed. No M75 commit/push/deployment/migration yet.
+
+Standing California-first Scope1 direction persists. Prior specific M74 16-to17 approval does not itself name this17-to18 migration; prepare exact reviewed candidate/remote checks and concrete fresh recovery first, then handle any required specific final approval before stopping the site. Do not invent a rejection: no M75 upgrade has been attempted. Keep one rolling draftPR5, no merge. No new method/factor/corpus release or real fleet/Scope1/compliance/assurance completeness claim. Earlier sections are historical.
+
+# M75 implementation and independent verification in progress
+
+The next requested milestone is controlled-vehicle fleet reconciliation. Local synthetic implementation now includes the independent fleet statement, full roster/source/workpaper comparison, separate review and retained reports. A native local positive fixture has produced a bounded reconciled report; this is not live or a Scope 1 completeness claim. Root is integrating the UI and exact historical report proof. Independent QA found and is retesting missing historical finding checks; release acceptance remains pending.
+
+Actual assignments: /root/m75_product authors backend/storage/native fixture; /root/m75_cto authors recovery and migration operators; /root/m74_accounting independently reviews classification, reports, native boundaries and UI. Root owns integration/UI/shared records/Git/host. Baseline17 backup and empty18 migration rehearsal passed locally; populated18 recovery, final native/security/browser acceptance and publication remain pending. Existing live service remains M74/schema17 at the last observed receipt; recheck before any hosted action. No M75 hosted migration, deployment or publication has occurred. Earlier sections are historical.
+
+# M75 in progress: controlled-vehicle fleet reconciliation
+
+The board explicitly requested the next milestone: the first remaining item, fleet reconciliation. M74 remains accepted/live at schema17; latest final head42b4194 passed all six checks. Root is starting bounded M75 product/technical/accounting definition, then implementation, independent QA and demonstration on the same rolling draftPR5. No M75 runtime or hosted migration has occurred.
+
+Actual dispatched roles: /root/m75_product (product brief), /root/m75_cto (technical contract), reused /root/m74_accounting (independent accounting acceptance). The fresh accounting spawn failed with agent-thread-limit; inherited fallback compute remains unknown. Root owns shared records, integration/UI, Git and host. A complete fleet roster must not be inferred from already-created workpapers. Missing/unsupported/unmatched vehicles and capacity limits remain visible; no new factor/profile release or Scope1 completeness claim. California first with all controlled trips; expired research sources remain blocked and are outside this implementation. Earlier sections are historical.
+
+# M74 complete: live verified and published
+
+At2026-09-15T23:42:05Z all six required checks passed for remote2438d1a75fcd5eae1295a42fb6a5e37935bf5f41 on rolling draftPR5. Exact remote head and healthy live schema17 deploymentb849d413-6a8a-406c-bf3e-73dd71137117 were verified; deployed runtime remains independently acceptedf5d7383/image9c4af30f3ff54ee40f6eecd833cca2774bdc7fd67787b045ca65d52ab244c306. Automatic deployment is restored. Receipt docs/research/m74-final-publication.json. This closure record does not change the runtime; root verifies its final documentation head checks separately.
+
+The supported diesel-vehicle increment is complete within its synthetic bounds, including immutable evidence, review, correction, actual reports/downloads and restart recovery. Scope1/fleet completeness and method release remain incomplete. Research sources expired2026-09-15T23:20:32Z and remain unavailable pending separate evidence review; the independently reviewed test-clock repair does not renew them. All scoped workers completed. Standing approval remains for California-first supported-profile Scope1. Next: M75 complete controlled-vehicle register reconciliation, with applicable unsupported profiles kept blocking. No separate Nevada/Canada expansion or PR merge. Earlier sections are dated history.
+
+# M74 live accepted; final test-only correction independently passed
+
+The specific board-approved migration and diesel-vehicle workflow are live at schema17, independently accepted. The final CI failure on7fca72f was traced to historical research tests mixing their Sep12 fixture clock with actual time after catalog review expiry at2026-09-15T23:20:32Z. Two test harnesses now align and reset clocks; production code, provider profiles, catalogs and review dates are unchanged. Explicit default-service and real-certificate provider checks refuse at/after expiry before any provider request or spend. Independent full API639passed/8environment skips/5662assertions and TypeScript passed. Evidence evaluations/research-qa/m74-clock-review.md; frozen M74-CLOCK-REPAIR-CANDIDATE1. Root stages/commits/pushes this correction to the same rolling draftPR5 and verifies all final checks and unchanged live identity before calling publication complete.
+
+The research corpus remains expired; renewing it requires separately reviewed source evidence. This test repair is no renewal or current research availability claim. Live vehicle implementationf5d7383 and deploymentb849d413 retain schema17, previous independent restart/history/download acceptance, and healthy readiness. No new migration or runtime code change. Standing California-first supported-profile Scope1 approval persists; M75 controlled-vehicle register reconciliation is next after publication checks. Scope1 completeness and method release remain unresolved. All scoped specialists complete, not persistent workers. Earlier sections are dated history.
+
+# M74 live accepted; final CI research-clock repair pending
+
+The board's specific migration approval was used; the supported diesel-vehicle workflow is live at schema17 and independently accepted. Final documentation-only commit7fca72f failed six research-composed tests after retained Scope2 catalog reviews expired at2026-09-15T23:20:32Z. Earlier deployed implementationf5d7383 passed all six checks before expiry. Do not describe current HEAD as green or the expired research corpus as current.
+
+Backend diagnosis reproduced the failures; independent CTO assessment is active to distinguish deterministic historical test clocks from the real production expiry gate. No catalog review dates have been extended. Root owns shared records, Git and host. M75 remains pending this closure; standing California-first Scope1 approval persists. Earlier sections are dated history.
+
+# M74 live diesel-vehicle increment independently accepted
+
+The bounded supported diesel-vehicle workpaper is live: separate fuel/mileage evidence, deterministic gas-level calculation, separate internal review, immutable mileage correction, exact report downloads and persisted history. Actual host exercise passed11POSTs (6success,5expected authorization refusals), then a real service restart and0POST revisit preserved both vehicle versions,2reports,8vehicle downloads and all earlier gas/electricity/corporate records. All verificationAuth sessions closed. Actual hosted browser history/report/download and390px checks passed; native print appearance was previously confirmed by board, no physical/PDF/pagination claim.
+
+Independent final review: evaluations/research-qa/m74-hosted-acceptance.md. Actual committed schema17 preserved74oldtables/198oldrows, added9emptytables+1migrationreceipt. Live deploymentb849d413-6a8a-406c-bf3e-73dd71137117 runs checkedf5d7383e9624027d5169578012e261a789a268e8 with image sha256:9c4af30f3ff54ee40f6eecd833cca2774bdc7fd67787b045ca65d52ab244c306. Automatic deployment restored. Never return to schema16 code; use17-compatible forward recovery. Final record commit/remote checks and unchanged live identity are verified by root after publication; recheck fresh state on continuation.
+
+Standing approval continues through supported-profile Scope1; specific live16-to17 migration approval recorded separately after auto-review required it. No routine milestone permission stops. M75 next: complete controlled-vehicle register reconciliation; additional applicable unsupported profiles remain blocking and need separate methods. Do not call single-vehicle support completefleet/Scope1. California remains first; include relevant interstate operations; regional product expansion deferred. Methods/factors still unreleased; no filing or assurance determination.
+
+All scoped specialists complete, not persistent workers. Same rolling draftPR5, no merge. Root owns host/Git/commonrecords. Evidence docs/research/m74-publication.json and M74-HOSTED-ACCEPTED1 snapshot. Preserve private backups/journal/fixtures and all historical failures. Earlier sections below are historical.
+
+# M74 live schema17 committed; checked application deployment underway
+
+Board specifically approved the live migration after the prior automatic-review rejection. Fresh stopped-writer receipt observed2026-09-15T23:00:17Z. Exact reviewed16-to17 migration committed successfully and verified old rows/content/roles preserved. Evidence .superpowers/m74-hosted-migration-candidate2.json. Do not reapply or return to schema16 code.
+
+Checked commitf5d7383e9624027d5169578012e261a789a268e8 passed all six required remote checks. Deploymentb849d413-6a8a-406c-bf3e-73dd71137117 requested for that exact commit; readiness17, journaled live exercise, actual restart/zero-write revisit and browser acceptance remain pending. Automatic deployment still paused. Root alone owns host/Git/records. Continue to completion under specific migration and standing milestone approvals; no merge.
+
+Earlier approval-pending and schema16-restoration sections below are historical. California Scope1 and factor/method release remain incomplete.
+
+# M74 ready; prior site restored, specific live-migration approval pending
+
+Restored deployment2b1f48de-0d01-48f3-8f9b-85294b7d9f51 is SUCCESS at previous M73 commit3f92fdac0bf1e681db634410ad455b61faaed790. Actual https://www.neuvetra.ai/ready returned ready/schema16/legacyContainmentVerifiedtrue after restoration. No M74 database migration executed. Automatic deployment remains intentionally paused so schema17 code is not automatically sent to unchanged schema16.
+
+All six required checks passed on61d4376. Specific board approval for the live16-to17 migration remains pending in the current task; automatic approval review rejected it before execution despite broader standing milestone approval. Do not retry without that answer. Follow the immediately following section's fresh-maintenance/gate/backup instructions once authorized. Local records capture both CI repairs and the restored live state. Root owns publication; reviewers complete. Scope1 and method release remain incomplete.
+
+Earlier sections below are historical.
+
+# M74 publication checks passed; live migration awaiting specific board approval
+
+All six required checks passed for remote61d4376f3f9d7db62292b7d6a28058003a9a9e96. Product/review evidence is published on rolling draftPR5; no merge. Automatic deployment is paused.
+
+Root stopped old deployment30c5a4af and verified REMOVED plus readiness404 at2026-09-15T22:43:47Z. The exact16-to17 migration tool was rejected by automatic approval review BEFORE execution: broad milestone approval was judged insufficiently specific for this hosted shared-database change. No migration command executed. Root asked the board explicitly to approve the live16-to17 migration and explained the rejection. This approval is pending; do not retry or bypass it.
+
+To restore service while pending, root requested the exact previous M73 commit3f92fdac through deployment2b1f48de-0d01-48f3-8f9b-85294b7d9f51. Verify its actual SUCCESS/readiness16 before calling service restored. The candidate1 maintenance/gate receipts are now HISTORICAL: a new deployment was requested after them. If the board approves, stop and verify every current writer, create new exclusive maintenance/gate receipt paths, recheck backup age and immutable source state, then execute the reviewed migration. Never reuse a stale stopped-writer attestation.
+
+The encrypted hosted backup from22:17:58Z and independent74table/198row local restore are retained. Recheck its four-hour age before use. Independent reviews/print/browsers passed within their bounded claims. Root alone owns host/Git/records; specialists complete. California Scope1 remains incomplete and methods unreleased.
+
+Earlier sections below are historical.
+
+# M74 local acceptance passed; controlled publication next
+
+Independent accounting, security/recovery and integration reviews passed. S01 recovery-proof validation repaired and independently retested. Actual local save/review/correction/download/restart and390px checks passed; board confirmed native print-window appearance. No physical/PDF/pagination claim. Source/method release and corporate Scope1 completeness remain unresolved.
+
+Fresh encrypted hosted schema16 backup at2026-09-15T22:17:58Z and independent55472 recovery passed. Automatic deployment is paused for controlled rollout. Fresh live observation remains M73 implementation3f92fdac/schema16ready; no M74 migration/deploy/push yet at this record. Recheck backup age/current head before execution. After17, use17-compatible forward recovery only.
+
+All scoped authors/reviewers complete; no worker is persistent. Root continues same rolling PR5 required remote checks, controlled exact16-to17 transition, live exercise/restart/revisit and demonstration under standing approval. No merge. Then continue sequential supported-profile Scope1 milestones; California first, relevant interstate operations included, separate regional expansion deferred.
+
+Earlier sections below are historical.
+
+# M74 independent checks and recovery underway
+
+Standing board approval remains active. Backend and operator authors have frozen candidates; independent accounting passed254 assertions and frontend QA passed46 tests/191 assertions. Actual local browser save/review/correction/download/restart preserved history. Print entry was invoked; native-window observation is pending. Root added scoped CSS for a390px overflow repair; supplemental independent review is pending.
+
+Actual live read-only baseline passed with0applicationPOSTs and verification Auth sessions closed. Fresh encrypted schema16 backup and isolated55472 restore completed,74tables; independent actual-host recovery reconstruction is in progress. No M74 migration/deploy/push yet. Preserve all earlier receipts/fixtures. Live service remains M73/schema16 until fresh verification before controlled publication.
+
+Active specialists: /root/m74_cto independent security/recovery (native6tests/70assertions passed; operator proof validation S01 found); /root/m73_accounting repairs S01 in M74 operators only; /root/m72_ops adapts independent accounting test for CI. Root owns integration, Git/host and records. Others completed, not running. Continue on same rolling PR5 without merge. California corporate reporting first; Scope1 not complete.
+
+Earlier sections below are historical.
+
+# M74 implementation underway; standing Scope1 approval remains active
+
+M74 planning is frozen in M74-PLANNING-CANDIDATE1. Initial supported profile retains all relevant stationary, fleet, fugitive and process-screening gaps. This increment covers separate fuel/mileage evidence for a supported diesel vehicle; no complete Scope1 or method-release claim.
+
+Actual active work: /root/m74_backend authors backend/calculation/storage; root authors UI/decoder/packaging and integration; reused /root/m73_accounting authors new16-to17 recovery/migration operators. Independent /root/m72_ops completed source review and11 independent numeric expectations and is currently idle awaiting a frozen implementation. Fresh-context thread-limit routing exceptions retain unknown inherited model observations. Planning specialists are complete, not running workers.
+
+Root created the vehicle form/navigation and corrected client unit/gas-result checks; web typecheck passes after replacing an unsupported array helper. Integration, independent implementation/security/QA, recovery and publication/hosted verification remain pending. No M74 hosted mutation or publication has occurred. Same rolling PR5; no merge. Continue sequential bounded Scope1 work under standing board approval without routine permission stops; retain evidence/release/human gates.
+
+Earlier sections below are historical.
+
+# M74 Scope1 completion programme underway under standing board approval
+
+The board accepted the delivered natural-gas increment and explicitly authorized sequential bounded milestones until supported-profile Scope1 is done: “let's tackle the next milestone. Let's go until the scope one is done. You have my approval for everything.” This supersedes earlier routine board-feedback waits. Continue demonstrations and concise updates without repetitive permission requests; retain independent accounting/security/QA, applicable primary-source/method rights and release gates, truthful unsupported coverage and qualified-human dependencies. No new provider/subscription, unrelated paidRAG or regional expansion.
+
+Fresh reconciliation2026-09-15T21:20Z: local/remote ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7; sixchecks pass; live implementation3f92fdac/schema16 ready, same reviewed image. Tracked tree clean before M74; preserve .tmp and existing dumps. Same rolling draft PR5, no merge; root remains sole product/Git/host/common-ledger writer.
+
+Actual active assignments: /root/m74_cpo defines initial customer profile/completion matrix and M74 product criteria (registeredSol/medium requested); /root/m74_accounting researches primary evidence/applicability/rights and candidate calculation contract (criticalAstra/high requested); /root/m74_cto defines implementation boundaries and sequencing (criticalAstra/high requested). These are fresh dispatched contexts, observed model settings unknown. Root reconciles current implementation/release mechanisms and records. No M74 code or hosted change yet.
+
+First agree a complete supported-profile matrix including stationary fuels, mobile, refrigerants/fugitives, process screening, inventory/period reconciliation, estimates/uncertainty, evidence, deterministic calculations, duplicate-free gross aggregation, history/review/reporting/recovery and release gates. Select next highest-value source family from CPO/accounting evidence; source expansion alone must not be called completeScope1. Then implement, independently challenge and publish each bounded milestone on the existing PR, continuing under standing approval.
+
+Earlier sections below are historical.
+
+# M73 hosted natural-gas increment verified; live feedback next
+
+The bounded California2025 stationary-natural-gas workflow is live on the existing site. Saved source activity, deterministic calculations, immutable corrections, separate review and exact report downloads passed actual hosted verification. A real service restart and zero-application-POST revisit preserved all saved versions/reviews/downloads and older electricity/corporate records. All created verification Auth sessions closed. Fresh independent recovery reconstructed67tables/176rows and14exactdownloads before migration; exact0016 preserved all old rows/catalog/roles.
+
+Implementation3f92fdac0bf1e681db634410ad455b61faaed790 passed all six remote checks. Deployment30c5a4af-138f-4127-b2f8-3ea8df1abc6b ran that commit with image sha256:e677c7a93c9ad703bc2f2734c054178e9bc199041701793d8816ef97e53566c6 and readiness16. Automatic deployment was restored. Final same-PR record commit, checks and live head are verified separately by root before the completion report; inspect fresh deployment evidence on continuation. Schema16 is forward-only: never return to schema15 code or delete migration receipts.
+
+Actual hosted browser history/report/download and desktop/390px readability passed. The extra postrestart browser refresh was blocked by an open extension panel; API revisit supplies exact persistence evidence. Earlier actual print invocation plus direct board confirmation satisfies the original print entry-point criterion; no physical/PDF/pagination fidelity is claimed. Live tab851834889 was marked as a deliverable, but its availability must be rechecked.
+
+Scoped specialists are complete; no worker is persistent or active. Collect board feedback before a dependent milestone. California corporate Scope1/2/3 reporting remains the goal; relevant operations elsewhere remain boundary considerations and separate regional products follow the California MVP. This is still synthetic/incomplete/unreleased, not fullScope1, a complete corporate inventory, a filing determination or assurance. No PR merge, paidRAG or new provider.
+
+Evidence: docs/research/m73-publication.json, evaluations/research-qa/m73-hosted-acceptance.md, m73-hosted-browser-verification.md and M73-HOSTED-EXECUTION/ACCEPTANCE snapshots. Preserve encrypted backups, local fixtures, earlier failed checks and journal history. Earlier sections below are historical.
+
+# M73 exact schema16 committed; live verification underway
+
+All six required remote checks passed on3f92fdac0bf1e681db634410ad455b61faaed790. Independent review accepted the test-only15-to16 receipt-count correction; earlier failed run remains recorded. Fresh20:15 recovery passed80 independent assertions,67tables/176rows and14exactdownloads. Native print entry point was confirmed by the board and accepted; no physical/PDF/pagination fidelity claim.
+
+Root paused automatic deployment, removed the actual old deployment and verified readiness404. The exact reviewed0016 committed2026-09-15T20:31:59.748Z, preserving all prior rows/catalog/roles. Never redeploy schema15 after this point. Explicit tested-commit deployment30c5a4af-138f-4127-b2f8-3ea8df1abc6b has been requested; its readiness, hosted exercise/restart/revisit and browser demonstration are pending. /root/m73_cpo is actively auditing the exact live-operation evidence. Root remains sole host/Git writer. No milestone-complete claim yet.
+
+Continue exact schema16-compatible deployment, journaled hosted exercise, actual restart and zero-write revisit, browser demonstration, independent acceptance, final same-PR records and checks. Restore automatic deployment after controlled rollout. Preserve all old data/evidence and the exclusive journal; never blindly retry unresolved writes. California corporate reporting stays first. No merge or dependent milestone.
+
+Earlier sections below are historical.
+
+# M73 demonstration accepted; controlled rollout underway
+
+The board confirmed the native print/save window opened and was closed, then accepted the demonstration. Independent M73-P09 review passes the actual print entry point together with prior open/download, exact-byte restart and desktop/390px evidence. No physical print, saved PDF, pagination or printed-number fidelity is claimed. See evaluations/research-qa/m73-print-acceptance.md. Earlier print-pending sections below are historical.
+
+Root remains sole Git/host writer. Automatic deployment was observed enabled and explicitly paused before publication; current schema15 site remains available. Fresh encrypted backup, role parity and new isolated55472 restore completed using the 2015 receipts. Independent restricted-runtime reconstruction is actively assigned to /root/m73_cpo. Remote checks, verified maintenance, exact15-to16 migration, exact-commit deployment and live exercise/restart/revisit remain pending. No M73 hosted application mutation or completion claim yet.
+
+Continue the already-authorized rollout on codex/corporate-mvp, draft PR5. Preserve all old evidence and data; use only schema16-compatible forward recovery after committed16. Restore automatic deployment after the controlled transition. California corporate reporting stays first; relevant operations elsewhere remain boundary considerations. No new dependent milestone, PR merge, paidRAG or broader reporting/assurance claim.
+
+# M73 local checkpoint ready; native print verification outstanding
+
+Candidate3 implements the bounded California2025 natural-gas source workflow with saved corporate boundary, statement/manual confirmation, deterministic calculation, immutable corrections, separate review and readable exact reports. Independent accounting/security/recovery reviews passed. Actual browser save/review/correction/history/download/restart and390px screen checks passed; V-F01 wrapping and HJ-F01 response-journaling defects are repaired and their failures preserved. Scoped specialists are complete; no worker remains active or persistent.
+
+The remaining local acceptance blocker is M73-P09 native print appearance/pagination. The real Print report action was invoked, but its native surface is unobservable and the original tab paused. Board input was requested to confirm/close the print preview. Silence is not confirmation and independent visual review has not waived this gate. Current usable candidate3 preview: http://127.0.0.1:37175/ (Chrome tab851834854); pending print tab851834844 belongs to the preserved candidate2 report. Normal viewport restored. Candidate1/2 databases/receipts remain untouched; only candidate3 preview server is intended to stay running.
+
+No M73 hosted maintenance, migration, deployment or remote publication has occurred. Live M72 remains ac359261d53d1800a8a64f3183c15a92c42572aa/schema15, freshly observed2026-09-15. Actual hosted read-only baseline passed with0applicationPOSTs and all created Auth sessions closed. Fresh encrypted application backup and isolated55472 restore passed independent reconstruction:67tables/176rows,14downloads/133998bytes. Provider/Auth and off-device recovery are excluded. The backup was made2026-09-15 around16:24UTC: recheck under-four-hour age and full locked state; use new archive/restore paths if stale, never overwrite historical recovery evidence.
+
+After print verification, continue the already-authorized rollout through codex/corporate-mvp and draft PR5. Reconcile actual Git head/activity first. Complete required remote checks, verify exact16-compatible forward recovery, stop/verify the current writer, apply only reviewed SQL aa4968c63087f353b5bf80d64bced67270bc5ad17f715393b40313bb57f7f732, deploy and exercise/revisit/restart the actual host, then demonstrate and collect feedback. Never deploy15-compatible code after confirmed16. No merge, paidRAG or regional-product expansion.
+
+Evidence: evaluations/research-qa/m73-coordinator-checkpoint-review.md, m73-visual-review.md, m73-accounting-independent-candidate3-review.md and frozen M73 snapshots. California reporting remains first; relevant out-of-state corporate operations remain boundary considerations. This is synthetic/incomplete/unreleased with no filing or assurance determination. Earlier sections below are historical, not current orders.
+
+# M73 independent local reviews passed; recovery and browser gates underway
+
+Candidate2 passed independent bounded accounting and security review. Accounting independently derived 447 checks from retained primary evidence; the reviewer's unchanged boundary tests passed 5 tests/46 assertions under root execution after a cross-worktree import restriction. Security independently verified native adversarial controls, authority isolation and both repaired findings. This is a synthetic annual California stationary-natural-gas workpaper, not complete Scope1, corporate reporting, method release or assurance.
+
+Fresh existing-service observations on 2026-09-15 show schema15 ready and live ac359261d53d1800a8a64f3183c15a92c42572aa. Root created an actual encrypted application backup and restored it into new isolated55472 m73_qa_recovery_20260915_1624 with matching67 tables/catalog/roles. First restricted-context DPAPI decryption failed before database creation; same-Windows-identity execution succeeded. Independent restricted-runtime reconstruction is assigned to /root/m73_cpo. /root/m72_ops authors a bounded hosted journey helper for separate review; neither assignment grants access to credentials or hosted writes.
+
+Actual candidate2 browser saved1250.125MMBtu and displayed66399.7643125 exact/66399.7643 kgCO2e, with readable report gas tables and supporting-statement labels. Print was requested but browser controls paused; board was asked to close/confirm any native print preview. Do not claim visual print acceptance. Correction/review/restart/narrow verification, reviewed hosted workflow, publication and demonstration remain pending. No M73 hosted write or publication yet. Retain candidate1 failure/history and uniquely pinned candidate2 outputs.
+
+Next: complete the remaining gates, preserve current data and publish through codex/corporate-mvp / draft PR5 without merge. The staged image/schema transition requires verified maintenance and exact16-compatible recovery. California reporting first; relevant operations elsewhere remain in corporate boundary assessment, separate regional products deferred. Earlier sections below are historical.
+
+# M73 Scope 1 implementation underway
+
+Accounting, product and technical contracts are delivered. Root implements the source-registration and natural-gas interface; /root/m72_ops now owns the bounded backend assignment. /root/m73_cpo independently challenges security implementation after product-criteria authorship only, following two rejected reviewer dispatches. Actual compute settings remain unknown. Independent integrated accounting and QA remain pending. No M73 hosted change or publication has occurred.
+
+The supported increment is synthetic annual 2025 California stationary natural gas with dedicated-meter consumption in MMBtu HHV, immutable source streams, corrections, separate review and exact reports. Three streams and forty total versions are demonstration limits; no aggregation or complete Scope 1 claim. Preserve M42/M71 history. Follow docs/research/m73-technical-contract.md, m73-accounting-contract.md and m73-product-brief.md.
+
+Earlier sections below record history and are superseded as execution instructions.
+
+# M73 Scope1 discovery underway after M72 board acceptance
+
+The board accepted M72 and explicitly chose Scope1 improvement as the next goal. M73 starts a bounded stationary-natural-gas workflow linked to saved corporate source/facility boundary, period, evidence/activity, deterministic calculation, corrections/review and readable reporting. Exact supported profile and source linkage are being agreed internally before implementation. M42 remains an unreleased synthetic candidate; no broad fuel/unit/year/method support is assumed.
+
+Actual assignments: /root/m73_accounting owns accounting contract/fixtures; /root/m73_cpo owns product brief; /root/m72_ops has a new CTO-only architecture contract assignment after fresh /root/m73_cto dispatch hit the runtime thread limit. Root retains sole common-record/integration/rolling PR5 publication ownership. Three specialists are actually dispatched; saved tasks are not persistent workers. Baseline ac359261d53d1800a8a64f3183c15a92c42572aa is M72's verified closure.
+
+Next: agree bounded criteria, implement and independently challenge accounting/security/QA, then publish to the same PR and demonstrate. Any hosted schema change requires fresh backup/recovery/migration gates. Keep mobile combustion, fugitive/refrigerants, process and omitted facility/period coverage explicit; a natural-gas subtotal is not fullScope1 or the corporate MVP. California reporting first; relevant operations elsewhere remain within boundary assessment. No PR merge, paidRAG/newsubscription or regional regulatory product expansion.
+
+Evidence: operations/feedback/2026-09-15-milestone-72.md; current task/run records. Prior M72 reports and snapshots remain immutable. Preserve local backups/fixtures and existing hosted data.
+
+Historical entries below are superseded as current execution instructions.
+
+# M72 hosted rollout verified; board demonstration feedback next
+
+The California-first synthetic corporate coverage register is live on the existing site. Fresh encrypted application recovery, additive migration0015, preservation of all165original rows, hosted save/correction/distinct-review/exact-export and actual restart/readback passed independent review. Implementation54d89f31ac08c7fe6f46fed68daf9f9e362ed6da passed all six required checks; the coordinator verifies closure publication and the final live deployment separately.
+
+The board closed the Chrome extension panel. Fresh hosted browser checks now show the saved corrected register, separate review, all15Scope3 categories, unresolved gaps, exact original-version download, keyboard version selection and usable narrow layout. Normal viewport restored; live history view left open for board feedback. Prior blocked reports remain historical. Scoped reviewers are complete; no persistent workers.
+
+Collect board feedback before a dependent milestone. California reporting remains first; logically necessary company operations elsewhere remain in inventory boundary assessment. This synthetic coverage increment has no released corporate calculations, completed corporate inventory, filing determination or external assurance. Provider/Auth disaster recovery remains excluded. Rolling draft PR5 stays unmerged; no paid RAG or new provider was used.
+
+Evidence: docs/research/m72-publication.json; evaluations/research-qa/m72-browser-verification.md; evaluations/research-qa/m72-visual-qa-review.md. Preserve local fixtures and sealed backup. Only schema15-compatible fix-forward is valid after committed15.
+
+Historical entries below are superseded as current execution instructions.
+
+# M71 published to PR5; saved-register board feedback next
+
+The saved California-first synthetic coverage register is independently reviewed and published to rolling draft PR5, branch codex/corporate-mvp. Implementation b887da126b4d7e08958ed0042214f579560efacf passed all six remote checks, including the clean application build, native PostgreSQL regression and dedicated staging image. The coordinator verifies this closure commit's exact remote head/checks separately before the final report. PR5 remains unmerged.
+
+The working local demonstration at http://127.0.0.1:37171 saves coverage, appends corrections, records a separate non-contributor manager review and downloads exact earlier bytes. All 15 Scope 3 categories and unresolved boundary/evidence/method gaps remain visible. Actual browser, service restart, independent restore, original-row preservation and security checks passed. Scoped specialists are complete; no persistent workers. Local PostgreSQL and the local demonstration remain running for board review.
+
+California reporting is the first product focus; logically necessary operations elsewhere stay in the company boundary with unsupported gaps. Separate Nevada/Canada reporting products are deferred. This milestone does not deliver corporate emissions totals, released methods, legal determination, external assurance or a hosted M71 deployment. No paid requests occurred.
+
+Collect board feedback before a dependent milestone. Hosted rollout, if next, needs fresh existing-service observations and the backup/migration/deployment gate in docs/research/m71-operating-notes.md. Do not recreate historical branches or overwrite earlier fixtures. Preserve .tmp local evidence and the pre-existing untracked M68 dump.
+
+Evidence: docs/research/m71-publication.json; evaluations/research-qa/m71-qa-review.md; evaluations/research-qa/m71-security-review.md; evaluations/research-qa/m71-browser-verification.md.
+
+Historical entries below are superseded as current execution instructions.
+
+# M71 reviewed; publication and board demonstration
+
+The saved California-first synthetic coverage register passed independent QA and security review. Actual browser save, correction, separate review, exact earlier download, keyboard/narrow layout and local HTTP restart passed; independent restoration preserved all original records. Source snapshot: operations/agent-improvement/snapshots/M71-INTEGRATED.json. Earlier failed findings and repaired harness cases remain in the review reports.
+
+Root is publishing to the existing codex/corporate-mvp / draft PR5 and will verify its exact remote head and required checks. Local full-repository checking was limited by missing pre-existing FrontDesk dependencies; relevant checks passed and clean remote checks remain required. Scoped specialists are complete; no persistent workers. Local synthetic PostgreSQL and the demonstration at http://127.0.0.1:37171 remain running for the board.
+
+California is the first reporting focus. Relevant company operations elsewhere can be registered with unresolved gaps; separate Nevada/Canada reporting products remain deferred. This is coverage persistence, with no released corporate method, emissions total, legal determination or assurance. No hosted M71 migration/deployment or paid request occurred. Existing-host rollout requires the fresh backup/migration/deployment gate in docs/research/m71-operating-notes.md.
+
+Next: verify publication, show the saved-register demonstration and collect board feedback before any dependent milestone. Keep the active rolling PR; do not recreate historical branches. Preserve all earlier fixtures and the pre-existing untracked M68 dump.
+
+Historical entries below are superseded as current execution instructions.
+
+# M70 accepted; M71 California coverage register underway
+
+The board accepted M70's direction and instructed the team to continue, then explicitly prioritized finishing California before Nevada, Canada and other regional support. M71 implements a saved California-first synthetic corporate boundary and coverage register. Out-of-profile operations, if discovered, remain unresolved coverage gaps; no regional expansion or complete-inventory claim is implied.
+
+Backend implementation is active at /root/m71_backend; root owns frontend/integration/operators/publication. Reused non-author contexts /root/m70_research and /root/m70_cpo provide security and implementation QA after a new security dispatch hit the runtime thread limit. Prior M70 requirements authorship is disclosed. Review verdicts remain pending.
+
+Use codex/corporate-mvp / existing draft PR5. No historical branch recreation. The task-owned local PostgreSQL cluster at port55463 has been restarted; isolated M71 author/security/QA databases are assigned. Existing data is preserved. No hosted M71 migration/deployment, paid request or source/method release has occurred.
+
+Scope: docs/research/corporate-coverage-milestone-71.md; board feedback: operations/feedback/2026-09-15-milestone-70.md. Next: implement and independently validate native/API/browser save, correction, review, exact export, tenant isolation and recovery before publishing and demonstrating the California workflow.
+
+Historical entries below are superseded as current execution instructions.
+
+# M70 planning published to PR5; board feedback next
+
+The corporate coverage planning milestone is reviewed and pushed to [rolling draft PR5](https://github.com/neuvetra-hq/neuvetra/pull/5), branch codex/corporate-mvp. Implementation beb2271ae5978f38a8b23c70eb542ff35d800a80 passed all six remote checks. The coordinator verifies this closure commit's remote head/checks separately before the completion report. PR5 remains unmerged.
+
+The demonstration reconciles omitted Nevada and discovered Canadian entities, keeps all 15 Scope 3 categories visible, rejects unsupported screening evidence, preserves period/method gaps and exports the current planning register. Actual standalone download bytes matched visible state; reset, keyboard actions and narrow layouts passed. Inline export provides copyable JSON. Independent accounting and QA passed after recorded repairs; one non-author reviewer covered both scopes following runtime thread limits.
+
+This is a nonproduction planning milestone, not the complete corporate MVP. No customer persistence, corporate calculation engine, approved corpus/method, regulatory determination, human assurance or M70 hosting deployment is delivered. Source/OAL/litigation observations are dated and require fresh review before real reporting decisions. No paid RAG run is authorized.
+
+Collect board feedback on the coverage workflow before implementing the next dependent increment: a versioned, tenant-scoped corporate boundary and coverage register. Independent source/security/human-handoff preparation may continue within authorized scope. Scoped specialists are complete; no persistent workers.
+
+PR4 merged at fb4dd370c87eafee563f18529655f41b3a720573. Board-authorized historical branch cleanup preserved files/worktrees; active local refs are main and codex/corporate-mvp. Do not recreate retired branches. Existing hosted M68 remains the synthetic accounting workflow.
+
+Evidence: docs/research/m70-publication.json; docs/research/m70-product-brief.md; docs/prototypes/README.md; evaluations/research-qa/m70-qa-review.md; evaluations/research-qa/m70-browser-verification.md.
+
+Historical entries below are superseded as current execution instructions.
+
+# M70 planning reviewed; publication and board demonstration next
+
+PR4 is merged at fb4dd370c87eafee563f18529655f41b3a720573. M70 delivers a corporate requirements matrix, proposed architecture and functioning synthetic coverage planner. Independent accounting and integrated QA passed the frozen candidate after task-link and form-accessibility repairs. One non-author reviewer covered both scopes because additional dispatches hit a runtime thread limit; no separate second reviewer is claimed.
+
+Actual standalone JSON download matched the visible snapshot exactly; omitted/overseas entities, all 15 Scope 3 categories, missing/conflicting evidence, unsupported methods, keyboard actions, reset and narrow layout were checked. Inline export provides copyable JSON. No corporate accounting engine, customer persistence, released corpus/method or assurance result is delivered.
+
+New rolling branch: codex/corporate-mvp. Root is publishing the reviewed candidate to a new draft PR and will verify its remote head/checks before calling M70 published. Collect board feedback before the next dependent increment: a versioned, tenant-scoped corporate boundary and coverage register. Source/OAL/litigation observations remain dated planning evidence and must be rechecked before real applicability decisions. No paid RAG run is authorized.
+
+Parent coordinator reported board-authorized historical branch cleanup; local branch inventory now contains only main and codex/corporate-mvp. Worktrees/files were preserved. Do not recreate retired historical branches. Existing hosted M68 remains the synthetic accounting service; no M70 deployment was performed.
+
+Evidence: docs/research/m70-product-brief.md; evaluations/research-qa/m70-accounting-review.md; evaluations/research-qa/m70-qa-review.md; evaluations/research-qa/m70-browser-verification.md. Scoped specialist assignments are complete; no persistent workers.
+
+Historical entries below are superseded as current execution instructions.
+
+# PR4 merged; M70 corporate coverage planning underway
+
+Direct board approval was executed: PR4 merged normally at fb4dd370c87eafee563f18529655f41b3a720573. New rolling delivery branch: codex/corporate-mvp. M70 is a bounded requirements, architecture and synthetic planning demonstration milestone under the [corporate reporting direction](../docs/corporate-reporting-direction.md).
+
+CPO, CTO and regulatory research assignments are active; independent accounting/QA review and publication are pending. Root owns integration and shared records. No corporate MVP, production corpus, paid RAG run or assurance result is complete. See [M70 scope](../docs/research/corporate-coverage-milestone-70.md). Next: integrate the specialist artifacts, demonstrate the coverage workflow, obtain independent review, publish to the new rolling PR and collect board feedback before dependent implementation.
+
+Historical entries below are superseded as current execution instructions.
+
 # M69 offline integration approved; no paid run
 
 Future work follows the board’s [corporate Scope 1, 2 and 3 reporting direction](../docs/corporate-reporting-direction.md), across milestones, AI/verifier preparation, UI, database and semantic layer. This strategy does not change existing release or board-feedback gates.

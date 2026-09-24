@@ -1,3 +1,13 @@
+import { createM75Routes } from "../workspace/m75-routes"
+import { createM76Routes } from "../workspace/m76-routes"
+import { createM76DieselAuthority } from "../calculation/m76-authority"
+import { createM77Routes } from "../workspace/m77-routes"
+import { createM77Authority } from "../calculation/m77-authority"
+import { createCorporateInventoryRoutes } from "../workspace/m71-routes"
+import { createM73Routes } from "../workspace/m73-routes"
+import { createM73Authority } from "../calculation/m73-authority"
+import { createM74Routes } from "../workspace/m74-routes"
+import { createM74Authority } from "../calculation/m74-authority"
 import { createAnnualEvidenceRoutes } from "../workspace/m68-routes"
 import { createAnnualEvidenceReportRoutes } from "../workspace/m68-report-routes"
 import { createAnnualWorksheetRoutes } from "../workspace/m67-routes"
@@ -90,6 +100,13 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       return access.workspace
     }),
   })
+  const corporateInventoryRoutes=createCorporateInventoryRoutes({database,validateUser,origin:config.origin})
+  const stationaryGasRoutes=createM73Routes({database,validateUser,origin:config.origin,authority:createM73Authority()})
+  const controlledFleetRoutes=createM75Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
+  const stationaryEquipmentRoutes=createM76Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),diesel:createM76DieselAuthority()}})
+  const fugitiveRoutes=createM77Routes({database,validateUser,origin:config.origin,authority:createM77Authority()})
+  const scope1Routes=createM78Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),mobile:createM74Authority(),diesel:createM76DieselAuthority(),fugitive:createM77Authority()},policy:M78_REVIEWED_POLICY})
+  const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
   const annualWorksheetRoutes=createAnnualWorksheetRoutes({database,validateUser,origin:config.origin})
@@ -101,7 +118,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 14) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 21) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -139,6 +156,13 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
+      if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+      if (url.pathname.includes('/process-screen') || url.pathname.includes('/scope1-inventory')) return scope1Routes(forwarded)
+      if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)
+      if (url.pathname.includes("/controlled-fleet")) return controlledFleetRoutes(forwarded)
+      if (url.pathname.includes("/stationary-equipment") || url.pathname.includes("/stationary-diesel")) return stationaryEquipmentRoutes(forwarded)
+      if (url.pathname.includes("/fugitive-sources") || url.pathname.includes("/fugitive-population")) return fugitiveRoutes(forwarded)
+      if (url.pathname.includes("/mobile-diesel")) return mobileDieselRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-evidence/reports")) return annualEvidenceReportRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-evidence")) return annualEvidenceRoutes(forwarded)
       if (url.pathname.includes("/annual-electricity-worksheet/reports")) return annualReportRoutes(forwarded)
@@ -189,4 +213,5 @@ if (import.meta.main) {
     process.exitCode = 1
   }
 }
-
+import {createM78Routes} from '../workspace/m78-routes'
+import {M78_REVIEWED_POLICY} from '../../../../packages/neuvetra-database/src/m78-policy'

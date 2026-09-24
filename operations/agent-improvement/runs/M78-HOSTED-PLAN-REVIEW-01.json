@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "M78-HOSTED-PLAN-REVIEW-01",
+  "role": "security-reliability",
+  "execution_context": "/root/m76_backend",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-PLAN-REVIEW-01-CANDIDATE1.json",
+      "sha256": "4ae37fb52cd8b740ac9ef4ac55d066bd182b3e598e643a374d51d88bb7d466ba"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "FICTIONAL-RECIPE-AND-INTEGRATION-PREPARATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m78-hosted-plan-review.md",
+        "evaluations/research-qa/m78-hosted-plan-independent.test.ts",
+        "operations/agent-improvement/snapshots/M78-HOSTED-PLAN-REVIEW-01-CANDIDATE1.json"
+      ],
+      "reason": "5puretests34assertions and targeted source review; HP-F01 context isolation repaired preserving old guard. No hosted/native scenario execution accepted; RUI-F01 release hold remains."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m78-hosted-preparation-root-acceptance.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M78-HOSTED-PLAN-REVIEW-01-CANDIDATE1.json",
+        "sha256": "4ae37fb52cd8b740ac9ef4ac55d066bd182b3e598e643a374d51d88bb7d466ba"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": [
+      "evaluations/research-qa/m78-hosted-plan-review.md"
+    ]
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m78-hosted-plan-review.md",
+      "sha256": "60188fce2a8ed2e96437dc614183408c13eb439cd542c0cf349f8a0fecc9d6a4"
+    },
+    {
+      "path": "evaluations/research-qa/m78-hosted-plan-independent.test.ts",
+      "sha256": "53f10a76918cc7ec01a9ec2d7760d22f4197ee32f7711ec7e86cc8a18c87b168"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M78-HOSTED-PLAN-REVIEW-01-CANDIDATE1.json",
+      "sha256": "4ae37fb52cd8b740ac9ef4ac55d066bd182b3e598e643a374d51d88bb7d466ba"
+    }
+  ]
+}

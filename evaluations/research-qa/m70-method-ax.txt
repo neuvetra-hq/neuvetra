@@ -1,0 +1,60 @@
+- generic "Neuvetra corporate coverage planning demonstration":
+  - banner:
+    - strong: Neuvetra / Corporate coverage
+    - generic: Planning demonstration · Fictional data
+  - main:
+    - heading "Juniper Office Supply Group" [level=1]
+    - paragraph: 2025 calendar year · Proposed operational control · Office and distribution group
+    - button "Export planning register"
+    - button "Reset example"
+    - status: Owner assigned. The period conflict remains open.
+    - navigation "Planning sections":
+      - button "Company boundary"
+      - button "Scope 1 & 2" [pressed]
+      - button "Scope 3 screening"
+      - button "Evidence & tasks"
+    - heading "Source and method coverage" [level=2]
+    - paragraph: These are screening rows. Every emissions value is unavailable; methods and evidence still need review.
+    - button "Stationary combustion Proposed inclusion · missing":
+      - strong: Stationary combustion
+      - text: Proposed inclusion · missing
+    - button "Mobile combustion Proposed inclusion · missing":
+      - strong: Mobile combustion
+      - text: Proposed inclusion · missing
+    - button "Fugitive emissions Unknown · missing":
+      - strong: Fugitive emissions
+      - text: Unknown · missing
+    - button "Process emissions screening Proposed not applicable · not requested pending review":
+      - strong: Process emissions screening
+      - text: Proposed not applicable · not requested pending review
+    - button "Purchased electricity — location-based view Proposed inclusion · partial":
+      - strong: Purchased electricity — location-based view
+      - text: Proposed inclusion · partial
+    - button "Purchased electricity — market-based view assessment Unknown · missing":
+      - strong: Purchased electricity — market-based view assessment
+      - text: Unknown · missing
+    - button "Purchased heat Proposed inclusion · missing" [active]:
+      - strong: Purchased heat
+      - text: Proposed inclusion · missing
+    - button "Purchased steam screening Unknown · missing":
+      - strong: Purchased steam screening
+      - text: Unknown · missing
+    - button "Purchased cooling screening Unknown · missing":
+      - strong: Purchased cooling screening
+      - text: Unknown · missing
+    - button "Discovered Canadian operation — all scopes unresolved Proposed inclusion · missing":
+      - strong: Discovered Canadian operation — all scopes unresolved
+      - text: Proposed inclusion · missing
+    - heading "Purchased heat" [level=2]
+    - paragraph: District heat identified; collect quantity and applicable method evidence.
+    - paragraph:
+      - strong: "Method: unsupported in demo"
+      - text: "Activity data: missing"
+      - text: "Evidence: synthetic statement"
+      - text: "Review: pending"
+      - text: "Emissions: unavailable"
+    - paragraph:
+      - strong: Synthetic Nevada district-heat contract
+      - text: 2025-01-01 to 2025-12-31
+      - text: Nevada warehouse purchases heat during 2025. Metered quantities, supplier information and a reviewed applicable calculation method remain unavailable.
+  - contentinfo: Nonproduction synthetic planning register · Local state resets when reloaded · Applicability not determined · No assurance

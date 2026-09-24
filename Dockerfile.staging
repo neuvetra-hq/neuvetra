@@ -25,6 +25,13 @@ COPY apps/site-web/tsconfig.json apps/site-web/tsconfig.app.json apps/site-web/t
 COPY apps/site-web/scripts/finalize-staging.ts ./apps/site-web/scripts/
 COPY apps/site-web/src/ ./apps/site-web/src/
 COPY packages/neuvetra-database/src/m64-contract.ts packages/neuvetra-database/src/m65-contract.ts packages/neuvetra-database/src/m65-template.ts packages/neuvetra-database/src/m66-contract.ts packages/neuvetra-database/src/m66-template.ts packages/neuvetra-database/src/m66-fixtures.ts packages/neuvetra-database/src/m67-contract.ts packages/neuvetra-database/src/m67-template.ts packages/neuvetra-database/src/m68-contract.ts packages/neuvetra-database/src/m68-template.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m71-contract.ts packages/neuvetra-database/src/m71-validation.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m73-contract.ts packages/neuvetra-database/src/m73-validation.ts packages/neuvetra-database/src/m73-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m74-contract.ts packages/neuvetra-database/src/m74-validation.ts packages/neuvetra-database/src/m74-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m75-contract.ts packages/neuvetra-database/src/m75-validation.ts packages/neuvetra-database/src/m75-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m76-contract.ts packages/neuvetra-database/src/m76-validation.ts packages/neuvetra-database/src/m76-report.ts packages/neuvetra-database/src/m76-diesel-contract.ts packages/neuvetra-database/src/m76-diesel-validation.ts packages/neuvetra-database/src/m76-diesel-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m77-contract.ts packages/neuvetra-database/src/m77-validation.ts packages/neuvetra-database/src/m77-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
@@ -54,6 +61,17 @@ COPY apps/site-api/src/calculation/server.ts apps/site-api/src/calculation/linke
 COPY packages/neuvetra-database/src/index.ts packages/neuvetra-database/src/workspace.ts packages/neuvetra-database/src/hosted.ts packages/neuvetra-database/src/staging-migrations.ts packages/neuvetra-database/src/staging-audit.ts packages/neuvetra-database/src/staging-tls.ts packages/neuvetra-database/src/m58.ts packages/neuvetra-database/src/m59.ts packages/neuvetra-database/src/m60.ts packages/neuvetra-database/src/m61.ts packages/neuvetra-database/src/m64.ts packages/neuvetra-database/src/m64-contract.ts packages/neuvetra-database/src/m65.ts packages/neuvetra-database/src/m65-contract.ts packages/neuvetra-database/src/m65-template.ts packages/neuvetra-database/src/m66-contract.ts packages/neuvetra-database/src/m66-template.ts packages/neuvetra-database/src/m66-fixtures.ts packages/neuvetra-database/src/m67-contract.ts packages/neuvetra-database/src/m67-template.ts packages/neuvetra-database/src/m68-contract.ts packages/neuvetra-database/src/m68-template.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m68.ts packages/neuvetra-database/src/m68-contract.ts packages/neuvetra-database/src/m68-template.ts packages/neuvetra-database/src/m68-report.ts ./packages/neuvetra-database/src/
 COPY apps/site-api/src/workspace/m68-routes.ts apps/site-api/src/workspace/m68-report-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/workspace/m71-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/workspace/m73-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/calculation/m73-authority.ts apps/site-api/src/calculation/m73_stationary_natural_gas.py apps/site-api/src/calculation/stationary_natural_gas.py ./apps/site-api/src/calculation/
+COPY packages/neuvetra-database/src/m73.ts packages/neuvetra-database/src/m73-contract.ts packages/neuvetra-database/src/m73-validation.ts packages/neuvetra-database/src/m73-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql ./packages/neuvetra-database/src/migrations/
+COPY apps/site-api/src/workspace/m74-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/calculation/m74-authority.ts apps/site-api/src/calculation/m74_mobile_diesel.py ./apps/site-api/src/calculation/
+COPY packages/neuvetra-database/src/m74.ts packages/neuvetra-database/src/m74-contract.ts packages/neuvetra-database/src/m74-validation.ts packages/neuvetra-database/src/m74-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql ./packages/neuvetra-database/src/migrations/
+COPY packages/neuvetra-database/src/m71.ts packages/neuvetra-database/src/m71-contract.ts packages/neuvetra-database/src/m71-validation.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql ./packages/neuvetra-database/src/migrations/
 COPY packages/neuvetra-database/src/m67.ts packages/neuvetra-database/src/m67-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m66.ts packages/neuvetra-database/src/m66-sources.ts packages/neuvetra-database/src/m66-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/migrations/0001_company_workspace.sql packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql packages/neuvetra-database/src/migrations/0004_inventory_review.sql packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql packages/neuvetra-database/src/migrations/0009_private_staging.sql packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql ./packages/neuvetra-database/src/migrations/
@@ -61,6 +79,23 @@ COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-
 COPY data/synthetic/m58-electricity-register-2023.json data/synthetic/m58-electricity-register-2023.manifest.json ./data/synthetic/
 COPY tools/cloud/fixtures/supabase-prod-ca-2021.crt ./tools/cloud/fixtures/
 COPY --from=web-build /app/apps/site-web/dist-staging/ ./apps/site-web/dist-staging/
+COPY apps/site-api/src/workspace/m75-routes.ts ./apps/site-api/src/workspace/
+COPY packages/neuvetra-database/src/m75.ts packages/neuvetra-database/src/m75-contract.ts packages/neuvetra-database/src/m75-validation.ts packages/neuvetra-database/src/m75-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql ./packages/neuvetra-database/src/migrations/
+COPY packages/neuvetra-database/src/m76-contract.ts packages/neuvetra-database/src/m76-validation.ts packages/neuvetra-database/src/m76-report.ts packages/neuvetra-database/src/m76-diesel-contract.ts packages/neuvetra-database/src/m76-diesel-validation.ts packages/neuvetra-database/src/m76-diesel-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m76.ts packages/neuvetra-database/src/m76-diesel.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/m76-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/calculation/m76-authority.ts apps/site-api/src/calculation/m76_stationary_diesel.py ./apps/site-api/src/calculation/
+COPY packages/neuvetra-database/src/migrations/0019_stationary_sources.sql ./packages/neuvetra-database/src/migrations/
+COPY packages/neuvetra-database/src/m77-contract.ts packages/neuvetra-database/src/m77-validation.ts packages/neuvetra-database/src/m77-report.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/m77.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/m77-routes.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/calculation/m77-authority.ts apps/site-api/src/calculation/m77_fugitive.py ./apps/site-api/src/calculation/
+COPY packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql ./packages/neuvetra-database/src/migrations/
+COPY tools/staging/m77-image-smoke.ts ./tools/staging/
+COPY packages/neuvetra-database/src/m78.ts packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
+COPY apps/site-api/src/workspace/m78-routes.ts ./apps/site-api/src/workspace/
+COPY packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql ./packages/neuvetra-database/src/migrations/
 # Import and hash verification happen without credentials or network calls.
 RUN bun --version && python --version && bun -e 'await import("./apps/site-api/src/staging/server.ts"); const {verifyStagingAssets}=await import("./apps/site-api/src/staging/assets.ts"); await verifyStagingAssets("/app/apps/site-web/dist-staging");'
 USER 10001:10001

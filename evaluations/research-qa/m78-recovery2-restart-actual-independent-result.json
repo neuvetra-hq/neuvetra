@@ -1,0 +1,22 @@
+{
+  "status": "m78_readonly_recovery2_restart_independently_verified",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "recoveryResultSha256": "eaa2f3e35e3e7b939a15aa9122fdddfea19625eefc484d305ecce656d4491bd1",
+  "restartAdmissionSha256": "bf5db0bcb6cd63672a40f2d74acc4ad497b9acc57d6ffd43e42481eb44eb7c89",
+  "requestSha256": "3bd083fe23ea3ccf6e08b95c630d763be3a43a4469eb5aec25c904ddd9f81914",
+  "acknowledgmentSha256": "eaa08602067b1328c3f0b40421f6e80e3ebb97d0e96a93e253d0c587cb62f6a1",
+  "startupSha256": "41bdf0c8eb25e38a7a3acdeab96dc9038217e7c698058b0c08757819a66aebc1",
+  "exactlyOneStartup": true,
+  "startupCollector": {
+    "path": ".superpowers/m78-recovery2-collect-startup2.py",
+    "sha256": "bbc03eba8ed216dbfca55b083a9de648790bb530eb98d1e55ad10918f6b0dddb"
+  },
+  "originalAdmissionHelperPinsPreserved": true,
+  "runtime": {
+    "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+    "autodeploy": false
+  }
+}

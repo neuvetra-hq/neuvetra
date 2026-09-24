@@ -1,0 +1,70 @@
+{
+  "status": "m78_get_local_comparison_independently_passed",
+  "reviewerId": "/root/m78_transport_probe",
+  "materialFindingsOpen": 0,
+  "actualResult": {
+    "path": "evaluations/research-qa/m78-get-local-comparison-result.json",
+    "sha256": "caae59a5d5704c53b6d61f901d30dee55be01b7f890c62e7d6e5c1b1b7931417"
+  },
+  "operatorSource": {
+    "path": "evaluations/research-qa/m78-get-local-comparison-source.json",
+    "sha256": "a3bec8644f040ec875ee4f7eb8d3fbf4c181bd7d4281b517644c35f189842f9e"
+  },
+  "admissionSha256": "517718573822d0010056361844960c124f2fd6f2cf51537cf504e4da61d237c0",
+  "helperSha256": "7da53e0014fc6f499b8341c03246388244b608e76f2da10742f56808d34b0fbc",
+  "routeReviewSha256": "00a054d0dee57117a0b689ccfb6c62550286870ad6819d1f0308686061796e6a",
+  "guardReviewSha256": "c61f9fded47337615d33941cacb05d20a0d096ae93e2a73fc1e996ca5d2765b8",
+  "helperReviewSha256": "cad16a6ae5f87a0c2fbafd9f5670bb3ad6e79eea2e71fc9e0bcffc2299e06d16",
+  "historicalSourceInventorySha256": "e1d0cd97046e21b308894d5f8757f8fc1fa580550e3ec700aa7ab0e1519bbb92",
+  "routeSha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+  "guardSha256": "8ffb4f7470e9b139201001b80b7a14f629f7d56a5f67187044e54dfb7492eb17",
+  "verified": {
+    "cases": 19,
+    "routePairs": 8,
+    "warmupsPerCase": 1,
+    "measuredSamplesPerCase": 3,
+    "measuredSamples": 57,
+    "bodyStatusAndAllHeadersEqual": true,
+    "rootRouteSqlQueriesBeforeAndAfter": 44,
+    "specificStateReadsBefore": 2,
+    "specificStateReadsAfter": 1,
+    "specificSqlQueriesBefore": 86,
+    "specificSqlQueriesAfter": 44,
+    "directGetterSqlQueries": 42,
+    "tableCount": 121,
+    "tableDigestBeforeAndAfter": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64",
+    "historicalSourcePinsAtExecution": 173,
+    "sourcesVerifiedBeforeAndAfterByExactHelper": true,
+    "currentClosure": "172 unchanged historical pins plus accepted route fd9b1115",
+    "hostCalls": 0,
+    "applicationWrites": 0,
+    "httpPostRequests": 0,
+    "localConnectionsClosed": true
+  },
+  "checks": {
+    "portableTestsPassed": 9,
+    "portableTestsFailed": 0,
+    "portableAssertions": 230,
+    "strictTargetedTypeScript": true,
+    "adversarialCountHashHeaderSampleDigestCleanupFailures": true,
+    "nativeComparisonRerun": false,
+    "databaseUsedByReviewer": false,
+    "networkUsedByReviewer": false,
+    "hostedRequestsByReviewer": 0,
+    "applicationWritesByReviewer": 0
+  },
+  "limitations": [
+    "One serial local run on synthetic data is not a hosted latency prediction or SLA; cache and order effects were not randomized.",
+    "The 121-table digest covers canonical base-table row sets, not sequences, settings, temporary state, or external effects.",
+    "The zero-write conclusion relies on the accepted finite trusted-source SQL guard and pinned reader closure; it is not an arbitrary in-process JavaScript sandbox.",
+    "This receipt accepts the exact local comparison evidence only and does not authorize publication, deployment, recovery, or release."
+  ],
+  "routing": {
+    "requestedModel": "gpt-6-astra",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null,
+    "freshDispatchUnavailable": true,
+    "fallbackReviewer": "/root/m78_transport_probe"
+  }
+}

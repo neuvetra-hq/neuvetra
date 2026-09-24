@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-15T04:53:04.184445+00:00",
+  "updated_at": "2026-09-24T16:46:48.712719+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M68",
-    "name": "Annual electricity with supporting bills",
-    "status": "in_progress",
-    "next_gate": "Independent accounting contract review, backend/UI implementation and integrated QA.",
+    "id": "M78",
+    "name": "Process screening and corporate Scope 1 reconciliation",
+    "status": "complete_bounded_synthetic",
+    "next_gate": "Board authorized PR5 merge after exact integrated-head checks and independent review. Actual customerScope1 incomplete; M79method/source release next; Scope2 deferred.",
     "evidence": [
-      "docs/research/evidence-annual-electricity-milestone-68.md",
-      "operations/feedback/2026-09-14-milestone-67.md"
+      "operations/feedback/2026-09-16-m77.md",
+      "docs/research/scope1-completion-matrix.md"
     ]
   },
   "completed_milestones": [
@@ -99,6 +99,47 @@
       "id": "M67",
       "completed_at": "2026-09-14",
       "feedback": "operations/feedback/2026-09-14-milestone-67.md"
+    },
+    {
+      "id": "M70",
+      "completed_at": "2026-09-14T22:47:14.041329-07:00",
+      "feedback": "Pending board feedback; bounded planning acceptance in evaluations/research-qa/m70-qa-review.md"
+    },
+    {
+      "id": "M73",
+      "completed_at": "2026-09-15",
+      "feedback": "operations/feedback/2026-09-15-scope1-standing-approval.md"
+    },
+    {
+      "id": "M74",
+      "completed_at": "2026-09-15",
+      "feedback": "operations/feedback/2026-09-15-m74-live-migration-approval.md"
+    },
+    {
+      "id": "M75",
+      "completed_at": "2026-09-16T10:38:11.121455-07:00",
+      "evidence": "docs/research/m75-publication.json",
+      "board_feedback": "accepted_keep_moving"
+    },
+    {
+      "id": "M76",
+      "completed_at": "2026-09-16T10:38:11.121455-07:00",
+      "evidence": "docs/research/m76-publication.json",
+      "board_feedback": "awaiting_current_demonstration_feedback"
+    },
+    {
+      "id": "M77",
+      "completed_at": "2026-09-16",
+      "evidence": "docs/research/m77-publication.json",
+      "board_feedback": "pending"
+    },
+    {
+      "id": "M78",
+      "completed_at": "2026-09-23",
+      "scope": "Bounded synthetic functional journey only",
+      "evidence": "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+      "publication_commit": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+      "customer_scope1_complete": false
     }
   ],
   "runtime": {
@@ -106,17 +147,15 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "M67 hosted and workflow accepted; M68 under implementation, not deployed.",
+    "website_preview_state": "User browser signed in. Live app59c/schema21; synthetic inventory shows10 sources and126850.1763 kgCO2e. Download-performance repair is integrated locally, not deployed.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M68 independent accounting design review complete. CTO backend implementation active as sole M68 specialist; root UI/operators in progress."
+    "last_session_work": "Read-only local GET comparison passed and independently accepted. Exact route integrated; preparing same-PR publication. New recovery source remains in preparation."
   },
   "session_handoff": {
-    "current": "M67 workflow accepted. M68 authorized on isolated milestone Git branch at exact published M67 head; technical contract drafted, accounting design review active.",
-    "next": "Complete M68 implementation and independent review; push milestone branch and integrate reviewed commits into rolling draft PR4, then verify CI/deploy/demonstrate. RAG readiness progresses independently.",
+    "current": "Failed exercise preserved after37 verified operations; no replay. User signed in. GET repair independently accepted locally:19cases, exactresponses,121tables preserved,86->44specific-route queries, bothlocalconnectionsclosed.",
+    "next": "Independent CI historical-context repair review, same-PR correction and all six passing checks; exact live deployment admission follows. No hosted repair/recovery/restart/revisit yet.",
     "evidence": [
-      "operations/feedback/2026-09-14-milestone-67.md",
-      "docs/research/m67-hosted-verification.json",
-      "evaluations/research-qa/m67-hosted-handoff.md"
+      "operations/next-session.md"
     ]
   },
   "checkpoint": {
@@ -124,7 +163,7 @@
     "commit": "367497e750530c590c7eedd229e48a34e2daf8b8",
     "github_verified": true
   },
-  "working_branch": "codex/m63-private-staging",
+  "working_branch": "codex/corporate-mvp",
   "publication": {
     "repository": "https://github.com/neuvetra-hq/neuvetra",
     "implementation_commit": "84d55b7fcfb4b0f127c5ede80b13e389652a0a80",
@@ -202,7 +241,17 @@
     "m61_commit": "b74803f23edb6b2eecdb4b1eb5af2c57796178a4",
     "m61_pull_request": "https://github.com/neuvetra-hq/neuvetra/pull/3",
     "m61_review": "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json",
-    "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5"
+    "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5",
+    "active_rolling_branch": "codex/corporate-mvp",
+    "active_rolling_pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "m75_state": "live_independently_accepted_implementation_7e9abd2_six_checks_pass_closure_head_verified_separately",
+    "current_m76": {
+      "implementation": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+      "verification": "33ad2c7378e5e474917e6bba99d7f9940e2da704",
+      "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+      "status": "hosted_accepted_closure_checks_follow",
+      "evidence": "docs/research/m76-publication.json"
+    }
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -493,7 +542,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00e2\u20ac\u201cE06 and P01\u00e2\u20ac\u201cP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153E06 and P01\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u00a0\u00c3\u00a2\u00e2\u201a\u00ac\u00e2\u201e\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00e2\u20ac\u00a6\u00c3\u201a\u00c2\u00a1\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c5\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u2020\u00e2\u20ac\u2122\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c6\u2019\u00c3\u201a\u00c2\u00a2\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00c2\u00a1\u00c3\u0192\u00e2\u20ac\u0161\u00c3\u201a\u00c2\u00ac\u00c3\u0192\u00c6\u2019\u00c3\u00a2\u00e2\u201a\u00ac\u00c2\u00a6\u00c3\u0192\u00c2\u00a2\u00c3\u00a2\u00e2\u20ac\u0161\u00c2\u00ac\u00c3\u2026\u00e2\u20ac\u0153P04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -1225,6 +1274,352 @@
         "docs/research/m64-hosted-verification.json",
         "evaluations/research-qa/milestone64-private-worksheet.md"
       ]
+    },
+    {
+      "id": "M70-CPO",
+      "owner": "/root/m70_cpo",
+      "status": "complete",
+      "scope": "cpo bounded M70 planning; owned deliverables listed in role run",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
+      ]
+    },
+    {
+      "id": "M70-CTO",
+      "owner": "/root/m70_cto",
+      "status": "complete",
+      "scope": "cto bounded M70 planning; owned deliverables listed in role run",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
+      ]
+    },
+    {
+      "id": "M70-RESEARCH",
+      "owner": "/root/m70_research",
+      "status": "complete",
+      "scope": "regulatory-research bounded M70 planning; owned deliverables listed in role run",
+      "evidence": [
+        "evaluations/research-qa/m70-qa-review.md",
+        "evaluations/research-qa/m70-accounting-review.md"
+      ]
+    },
+    {
+      "id": "M71-BACKEND",
+      "owner": "/root/m71_backend",
+      "status": "complete",
+      "scope": "data-database boundedM71implementation/review",
+      "evidence": [
+        "operations/agent-improvement/runs/M71-BACKEND.json"
+      ],
+      "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
+    },
+    {
+      "id": "M71-SECURITY",
+      "owner": "/root/m70_research",
+      "status": "complete",
+      "scope": "security-reliability boundedM71implementation/review",
+      "evidence": [
+        "operations/agent-improvement/runs/M71-SECURITY.json"
+      ],
+      "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
+    },
+    {
+      "id": "M71-QA",
+      "owner": "/root/m70_cpo",
+      "status": "complete",
+      "scope": "qa-lead boundedM71implementation/review",
+      "evidence": [
+        "operations/agent-improvement/runs/M71-QA.json"
+      ],
+      "result": "Delivered and independently reviewed scoped artifact; product publication remains coordinator-owned."
+    },
+    {
+      "id": "M72-OPS",
+      "owner": "/root/m72_ops",
+      "status": "complete",
+      "scope": "Bounded data-database M72 rollout assignment",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-OPS.json"
+      ],
+      "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
+    },
+    {
+      "id": "M72-SECURITY",
+      "owner": "/root/m72_security",
+      "status": "complete",
+      "scope": "Bounded security-reliability M72 rollout assignment",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-SECURITY.json"
+      ],
+      "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
+    },
+    {
+      "id": "M72-QA",
+      "owner": "/root/m72_qa",
+      "status": "complete",
+      "scope": "Bounded qa-lead M72 rollout assignment",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-QA.json"
+      ],
+      "result": "Scoped artifact/report delivery complete; overall hosted visual acceptance remains pending"
+    },
+    {
+      "id": "M72-VISUAL",
+      "owner": "/root/m72_qa",
+      "status": "complete",
+      "scope": "Independent supplemental review of resumed hosted browser evidence",
+      "evidence": [
+        "operations/agent-improvement/runs/M72-VISUAL.json"
+      ]
+    },
+    {
+      "id": "M73-ACCOUNTING",
+      "owner": "/root/m73_accounting",
+      "status": "complete",
+      "scope": "Bounded M73 accounting-validation contract delivery",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-ACCOUNTING.json"
+      ]
+    },
+    {
+      "id": "M73-CPO",
+      "owner": "/root/m73_cpo",
+      "status": "complete",
+      "scope": "Bounded M73 cpo contract delivery",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-CPO.json"
+      ]
+    },
+    {
+      "id": "M73-CTO",
+      "owner": "/root/m72_ops",
+      "status": "complete",
+      "scope": "Bounded M73 cto contract delivery",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-CTO.json"
+      ]
+    },
+    {
+      "id": "M73-BACKEND",
+      "owner": "/root/m72_ops",
+      "scope": "Bounded data-database artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-BACKEND.json"
+      ]
+    },
+    {
+      "id": "M73-HOSTED-JOURNEY-REVIEW",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-HOSTED-JOURNEY-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M73-HOSTED-JOURNEY",
+      "owner": "/root/m72_ops",
+      "scope": "Bounded software-engineering artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-HOSTED-JOURNEY.json"
+      ]
+    },
+    {
+      "id": "M73-INDEPENDENT-ACCOUNTING",
+      "owner": "/root/m73_independent_accounting",
+      "scope": "Bounded accounting-validation artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-INDEPENDENT-ACCOUNTING.json"
+      ]
+    },
+    {
+      "id": "M73-OPERATORS",
+      "owner": "/root/m73_accounting",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-OPERATORS.json"
+      ]
+    },
+    {
+      "id": "M73-RECOVERY-REVIEW",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-RECOVERY-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M73-SECURITY",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-SECURITY.json"
+      ]
+    },
+    {
+      "id": "M73-VISUAL-REVIEW",
+      "owner": "/root/m73_cpo",
+      "scope": "Bounded security-reliability artifact delivery; does not close M73 print/publication gates",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M73-VISUAL-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M74-CPO-COMPLETION-MATRIX",
+      "owner": "/root/m74_cpo",
+      "status": "complete",
+      "scope": "Bounded definition delivery in docs/research/scope1-completion-matrix.md, docs/research/m74-product-brief.md",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-CPO-COMPLETION-MATRIX.json"
+      ]
+    },
+    {
+      "id": "M74-ACCOUNTING-SCOPE1",
+      "owner": "/root/m74_accounting",
+      "status": "complete",
+      "scope": "Bounded definition delivery in docs/research/scope1-accounting-readiness.md, docs/research/m74-accounting-contract.md",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-ACCOUNTING-SCOPE1.json"
+      ]
+    },
+    {
+      "id": "M74-CTO-BOUNDARIES",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "scope": "Bounded definition delivery in docs/research/m74-technical-contract.md",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-CTO-BOUNDARIES.json"
+      ]
+    },
+    {
+      "id": "M74-BACKEND",
+      "owner": "/root/m74_backend",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-BACKEND.json"
+      ]
+    },
+    {
+      "id": "M74-INDEPENDENT-ACCOUNTING-REVIEW",
+      "owner": "/root/m72_ops",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-INDEPENDENT-ACCOUNTING-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M74-OPERATORS",
+      "owner": "/root/m73_accounting",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-OPERATORS.json"
+      ]
+    },
+    {
+      "id": "M74-FRONTEND-QA",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "evaluations/research-qa/m74-frontend-review.md",
+        "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json"
+      ]
+    },
+    {
+      "id": "M74-HOSTED-HELPER-REVIEW",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-HOSTED-HELPER-REVIEW.json"
+      ]
+    },
+    {
+      "id": "M74-SECURITY-RECOVERY",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "operations/agent-improvement/runs/M74-SECURITY-RECOVERY.json"
+      ]
+    },
+    {
+      "id": "M74-HOSTED-ACCEPTANCE",
+      "owner": "/root/m74_cto",
+      "status": "complete",
+      "evidence": [
+        "evaluations/research-qa/m74-hosted-acceptance.md",
+        "operations/agent-improvement/snapshots/M74-HOSTED-ACCEPTED1.json"
+      ]
+    },
+    {
+      "id": "M75-HOSTED-ACCEPTANCE",
+      "owner": "/root/m74_accounting",
+      "status": "complete",
+      "scope": "Independent hosted migration, retained records, restart and browser-evidence acceptance",
+      "evidence": [
+        "operations/agent-improvement/runs/M75-HOSTED-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "id": "M76-HOSTED-ACCEPTANCE",
+      "owner": "/root/m76_accounting",
+      "status": "complete",
+      "scope": "Independent actual deployment, failed-journey diagnosis, additive correction review and final hosted acceptance",
+      "evidence": [
+        "operations/agent-improvement/runs/M76-HOSTED-ACCEPTANCE.json"
+      ]
+    },
+    {
+      "id": "M76-HOSTED-RECOVERY-PLAN",
+      "owner": "/root/m76_cto",
+      "status": "complete",
+      "scope": "New additive correction helper and actual failed-state local rehearsal; no live or Git actions",
+      "evidence": [
+        "operations/agent-improvement/runs/M76-HOSTED-RECOVERY-PLAN.json"
+      ]
+    },
+    {
+      "id": "M76-HOSTED-BASELINE-DIAGNOSIS",
+      "owner": "/root/m76_cto",
+      "status": "complete",
+      "scope": "Read-only diagnostic addon for hosted baseline failure; no frozen helper/runtime/host/Git changes",
+      "evidence": [
+        "operations/agent-improvement/runs/M76-HOSTED-BASELINE-DIAGNOSIS.json"
+      ]
+    },
+    {
+      "id": "M77-PRODUCT",
+      "owner": "/root/m77_cpo",
+      "status": "complete",
+      "scope": "Product brief and subsequent independent candidate review; no implementation or host writes",
+      "evidence": [
+        "operations/agent-improvement/runs/M77-PRODUCT.json"
+      ]
+    },
+    {
+      "id": "M77-FOUNDATION",
+      "owner": "/root",
+      "status": "complete",
+      "scope": "Independently reviewed offline source/method calculator only; no full M77 acceptance",
+      "evidence": [
+        "operations/agent-improvement/runs/M77-FOUNDATION.json"
+      ]
+    },
+    {
+      "id": "M77-BACKEND",
+      "owner": "/root/m77_backend",
+      "status": "complete",
+      "scope": "Persistent source and population lifecycle, SQL20 candidate, authority and native tests; no live/Git actions",
+      "evidence": [
+        "operations/agent-improvement/runs/M77-BACKEND.json"
+      ]
     }
   ],
   "feedback_tasks": [
@@ -1534,6 +1929,12 @@
       "decision": "Accept M66 and start manual full-year2023CAMX electricity coverage, preserving separate M66 bill evidence.",
       "why": "Board approved demonstrated M66 and authorized full-year coverage next. Missing months must stay distinguishable from zero and evidence must not be inferred.",
       "evidence": "docs/research/annual-electricity-milestone-67.md"
+    },
+    {
+      "id": "M71-CALIFORNIA-FIRST",
+      "decision": "Prioritize California reporting while retaining logically necessary operations elsewhere in the corporate boundary. Separate regional reporting products remain deferred.",
+      "why": "Board clarified California first is a practical product priority, not a direction to omit relevant company operations.",
+      "evidence": "operations/feedback/2026-09-15-milestone-70.md"
     }
   ],
   "open_dependencies": [
@@ -2171,5 +2572,796 @@
     "source_repair_commit": "7cb1bd6a5495841612f3a6452acbe9440e0b36b1",
     "integrated_repair_commit": "9efc31f",
     "validation": "34 tests /225assertions pass; role checker passes"
+  },
+  "pr4_merge": {
+    "approved_head": "3e77d1eab4dbd400d606def7b227eec47d34cef4",
+    "merge_commit": "fb4dd370c87eafee563f18529655f41b3a720573",
+    "verified_main_head": "fb4dd370c87eafee563f18529655f41b3a720573",
+    "merged_at": "2026-09-14T22:15:24.479766-07:00",
+    "normal_merge": true,
+    "branches_deleted": false,
+    "authorization": "Direct board Approved message following exact-head merge question."
+  },
+  "current_m70": {
+    "status": "complete_bounded_planning",
+    "scope": "Bounded planning specification and synthetic interactive demonstration",
+    "base": "fb4dd370c87eafee563f18529655f41b3a720573",
+    "publication": "PR5 implementation published; closure head/checks verified separately by coordinator before final report",
+    "production_implementation": false,
+    "paid_requests": 0,
+    "candidate_snapshot": {
+      "path": "operations/agent-improvement/snapshots/M70-INTEGRATED.json",
+      "sha256": "9251a44ce0b9fc6544bc3b3f73eb7dfeb9e47fea91660f3d233f7518d244a6c3"
+    },
+    "review_arrangement": "One independent non-author context covers accounting and QA after runtime dispatch failures.",
+    "implementation_commit": "beb2271ae5978f38a8b23c70eb542ff35d800a80",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "board_feedback": "accepted_direction_then_California_first_refinement"
+  },
+  "current_m71": {
+    "status": "complete_bounded_synthetic_register",
+    "supported_profile": "California-first synthetic 2025 office/distribution group; necessary operations elsewhere retained with unsupported gaps",
+    "regional_expansion": "deferred",
+    "paid_requests": 0,
+    "hosted_changes": false,
+    "branch": "codex/corporate-mvp",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "candidate_snapshot": {
+      "path": "operations/agent-improvement/snapshots/M71-INTEGRATED.json",
+      "sha256": "89dd31db7843be17379fe4ba90fa43f4442f086299faa2baf29e7117f994ed20"
+    },
+    "migration_sha256": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19",
+    "local_demo": "http://127.0.0.1:37171",
+    "local_postgres": "running; isolated task-owned synthetic fixtures; files preserved",
+    "workers": "scoped assignments complete; no persistent workers",
+    "board_feedback": "accepted; bounded existing-host rollout authorized",
+    "implementation_commit": "b887da126b4d7e08958ed0042214f579560efacf",
+    "remote_implementation_checks": "six successful required checks",
+    "publication": "Reviewed implementation published to rolling draft PR5; root verifies closure commit separately.",
+    "publication_record": "docs/research/m71-publication.json"
+  },
+  "current_m72": {
+    "status": "complete_bounded_hosted_rollout",
+    "scope": "Existing-host synthetic corporate coverage; not actual corporate MVP",
+    "branch": "codex/corporate-mvp",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "published_head_rechecked": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+    "head_checks": "six success observed 2026-09-15T13:31:46.066982+00:00",
+    "hosted_mutations": true,
+    "paid_requests": 0,
+    "merge_authorized": false,
+    "hosted_schema": 15,
+    "hosted_application_commit": "ecfedcbfb27b18a1ebebfd960314d68299cb4a28",
+    "hosted_deployment": "da0a050a-7ce0-42b3-acfc-900c8416b56b",
+    "backup_restore": "Fresh encrypted application archive independently restored; provider Auth recovery excluded",
+    "migration": "Committed0015; all165original rows and role metadata preserved",
+    "api_exercise": "Passed108stages; two versions, separate review, exact exports and unchanged legacy records",
+    "restart": "Actual restart and57stage read-only revisit passed; exact register/reviews/exports and legacyrecords preserved",
+    "browser": "Resumed after board closed Chrome panel: saved history/review, exact earlier download, keyboard and narrow layout verified; independent supplemental review passed",
+    "product_direction": "California reporting first; logically necessary operations elsewhere remain within corporate inventory coverage, separate regional reporting products later",
+    "workers": "Scoped specialist report deliveries complete; no persistent workers",
+    "publication": "Implementation54d89f3 published with six successful required checks; closure commit separately verified by coordinator",
+    "evidence": "docs/research/m72-rollout-evidence.md",
+    "board_feedback": "Accepted: Perfect. Everything looks good."
+  },
+  "current_m73": {
+    "status": "awaiting_board_feedback",
+    "scope": "First usable synthetic candidate Scope1 natural-gas increment; not fullScope1",
+    "branch": "codex/corporate-mvp",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+    "baseline_commit": "ac359261d53d1800a8a64f3183c15a92c42572aa",
+    "hosted_mutations": false,
+    "method_release": false,
+    "paid_requests": 0,
+    "coordination": "Scoped specialists complete; root verifies final same-PR publication. No persistent workers.",
+    "routing_exception": "Fresh M73 CTO spawn hit thread-count limit; explicit bounded continuation assigned existing /root/m72_ops; requested critical Astra/high, actual unknown",
+    "local_preview": "http://127.0.0.1:37175/",
+    "hosted_application_mutations": true
+  },
+  "current_m73_verification": {
+    "candidate2_accounting": "pass bounded synthetic profile; 447 independently derived checks and 5 tests/46 assertions",
+    "candidate2_security": "pass; native41, authority6, pure45 assertions; no open material findings",
+    "recovery": "Fresh20:15 archive/isolated restore passed independent80assertions,67tables176rows,14exactdownloads.",
+    "browser": "M73-P09 passed actual print invocation with direct board confirmation; no print/PDF/pagination fidelity claim. Prior workflow and390px checks pass.",
+    "hosted_change": false,
+    "published": true,
+    "active_assignments": [],
+    "source_release": false,
+    "candidate3_accounting": "pass; exactCSS-onlydiff and62targetedindependentchecks, freshnative3tests85assertions",
+    "hosted_baseline": "pass schema15; applicationPOST0, allcreatedAuthsessionsclosed; journalfile22e92d0bac2d73acd585983872895e95173f2c2a33845d1cf3579ade1cc04bd8",
+    "remote_checks": "All six success on3f92fdac0bf1e681db634410ad455b61faaed790",
+    "hosted": "PASS actual exercise11POSTs; restart; revisit0POSTs; allsessionsclosed; preservedoldrecords/exactdownloads",
+    "independent_hosted": "pass evaluations/research-qa/m73-hosted-acceptance.md"
+  },
+  "current_m74": {
+    "status": "complete",
+    "baseline": "ae13206bea8e95aea0bbd0b0e683cbb46d87b2d7",
+    "hosted_schema": 17,
+    "active_assignments": [],
+    "standing_approval": true,
+    "hosted_changes": true,
+    "definition_snapshot": "operations/agent-improvement/snapshots/M74-PLANNING-CANDIDATE1.json",
+    "independent_accounting_checkpoint": "Independent accounting and hosted acceptance completed; see frozen reviews.",
+    "frontend_review": {
+      "status": "bounded_pass",
+      "tests": 46,
+      "assertions": 191,
+      "snapshot": "operations/agent-improvement/snapshots/M74-FRONTEND-REPAIRED1.json",
+      "native_browser": "hosted_verified"
+    },
+    "integrated_candidate": "operations/agent-improvement/snapshots/M74-INTEGRATED-ACCEPTED2.json",
+    "operator_candidate": "operations/agent-improvement/snapshots/M74-OPERATORS-ACCEPTED2.json",
+    "hosted_helper": "operations/agent-improvement/snapshots/M74-HOSTED-HELPER-CANDIDATE1.json",
+    "root_dpapi_rehearsal": ".tmp/m74-ops-1789509920941/author-result.json",
+    "local_browser": "http://127.0.0.1:37176",
+    "local_limitations": [
+      "Full local repository check historically stopped on unrelated missing FrontDesk dependency; earlier deployed commit passed full CI.",
+      "Retained Scope2 research catalog reviews expired2026-09-15T23:20:32Z; renewal not authorized by a software test repair."
+    ],
+    "browser_evidence": "evaluations/research-qa/m74-browser-verification.md",
+    "print_observation": "board_confirmed_native_window_appeared",
+    "hosted_baseline": "passed_zero_application_posts",
+    "hosted_upgrade": "verified_schema17",
+    "operator_finding": "S01 repaired independently accepted",
+    "automatic_deployment": true,
+    "security_review": "evaluations/research-qa/m74-security-review.md",
+    "integrated_review": "evaluations/research-qa/m74-integrated-qa-review.md",
+    "remote_candidate": "2438d1a75fcd5eae1295a42fb6a5e37935bf5f41",
+    "remote_initial_failures": [
+      "Windows path in root-authored evidence records; repaired3e35698",
+      "Legacy operator test expected old-schema admission under17; independently repaired61d4376"
+    ],
+    "required_checks": "six_pass_2438d1a75fcd5eae1295a42fb6a5e37935bf5f41",
+    "approval_dependency": null,
+    "prior_service_restore_deployment": "2b1f48de-0d01-48f3-8f9b-85294b7d9f51",
+    "prior_service_restore_status": "verified_success_ready16",
+    "candidate1_gate": "historical_not_reusable_after_restore_request",
+    "live_implementation": "f5d7383e9624027d5169578012e261a789a268e8",
+    "live_schema": 17,
+    "specific_live_migration_approved": true,
+    "deployment": "b849d413-6a8a-406c-bf3e-73dd71137117",
+    "deployment_candidate": "f5d7383e9624027d5169578012e261a789a268e8",
+    "migration_receipt": ".superpowers/m74-hosted-migration-candidate2.json",
+    "hosted_acceptance": "evaluations/research-qa/m74-hosted-acceptance.md",
+    "publication": "docs/research/m74-publication.json",
+    "next": "M75 mobile fleet reconciliation under standing approval",
+    "clock_repair_review": "evaluations/research-qa/m74-clock-review.md",
+    "clock_repair": "independently_passed_tests_only",
+    "research_catalog": "expired_requires_separate_source_review",
+    "final_publication": "docs/research/m74-final-publication.json"
+  },
+  "current_m75": {
+    "status": "complete_board_demo_accepted",
+    "baseline": "42b4194ba7211779c415c02b590ff5f6ced88a4e",
+    "hosted_schema": 18,
+    "hosted_changes": true,
+    "active_assignments": [],
+    "standing_approval": true,
+    "backend_executor": "/root/m75_product",
+    "dispatch_exception": "Historical m74_backend resume rejected agent-thread-limit; reused product author for implementation, independent QA separate.",
+    "planning_snapshot": "operations/agent-improvement/snapshots/M75-PLANNING-CANDIDATE1.json",
+    "interim_evidence": "evaluations/research-qa/m75-root-integration.md",
+    "hosted_database_changes": true,
+    "automatic_deployment": true,
+    "implementation_snapshot": "operations/agent-improvement/snapshots/M75-INTEGRATED-ACCEPTED2.json",
+    "local_acceptance": "evaluations/research-qa/m75-independent-review.md",
+    "browser_evidence": "docs/research/m75-local-browser-verification.json",
+    "operator_review": "evaluations/research-qa/m75-root-operator-review.md",
+    "hosted_baseline": "passed_zero_application_posts_all_auth_sessions_closed",
+    "hosted_backup": "docs/research/m75-prepublication.json",
+    "hosted_recovery": "independently_passed_83_tables_224_rows",
+    "shared_wiring_review": "evaluations/research-qa/m75-integration-review.md",
+    "final_local_review": "evaluations/research-qa/m75-final-review-addendum.md",
+    "remote_candidate": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "required_checks": "six_pass_7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "specific_live_migration_approval": "approved",
+    "site_stopped": false,
+    "migration_attempted": true,
+    "publication": "docs/research/m75-publication.json",
+    "migration_receipt": ".superpowers/m75-hosted-migration-candidate1.json",
+    "deployment": "f6794f05-1f09-43c8-a4c0-bb2a5abf45fa",
+    "deployment_candidate": "7e9abd2c4a852e4226e6ab195697ffdfe83b093f",
+    "hosted_acceptance": "evaluations/research-qa/m75-hosted-acceptance.md",
+    "hosted_browser_evidence": "docs/research/m75-hosted-browser-verification.json",
+    "restart_revisit": "passed_zero_application_posts_all_auth_sessions_closed",
+    "next": "M76 stationary sources after board demonstration feedback; not started",
+    "final_published_head": "32e1d7b879e58eabc0789552f61298a608c3f228",
+    "final_checks": "six_pass",
+    "board_feedback": "Browser looks good; keep moving."
+  },
+  "current_m76": {
+    "status": "complete_board_feedback_received",
+    "baseline": "32e1d7b879e58eabc0789552f61298a608c3f228",
+    "hosted_schema": 19,
+    "hosted_changes": true,
+    "active_assignments": [],
+    "board_feedback_received": true,
+    "next": "M77 preparation authorized.",
+    "planning_snapshot": "operations/agent-improvement/snapshots/M76-PLANNING-CANDIDATE1.json",
+    "root_ui": "Actual local browser correction, separate review, exact HTML/JSON downloads and restart/history passed on final SQL19.",
+    "migration_sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8",
+    "auto_deploy": "restored_and_verified",
+    "hosted_baseline": "passed_zero_application_posts_all_verification_sessions_closed",
+    "recovery": "Fresh hosted18 encrypted restore and independent18/19 runtime replay passed; private receipts retained.",
+    "accepted_snapshot": "operations/agent-improvement/snapshots/M76-INTEGRATED-ACCEPTED2.json",
+    "deployment_id": "d9e200ed-7f08-4547-921e-64d7b77f24fa",
+    "published_head": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+    "remote_checks": "six_pass",
+    "deployed_image": "sha256:b5f85ab871bd19f4cbf5953cfa1a93f1d7060bf5aef6cbf5d662cf7c82b7fe6f",
+    "hosted_exercise": "Failed expected approval: m76_review_2 returned422,18applicationPOSTs,allCreatedAuthSessionsClosed=true. Failed journal preserved; no retry.",
+    "recovery_helper_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-RECOVERY-ACCEPTED1.json",
+    "helper_published_head": "b96a249a7c9120e855be7d67188f786c59536399",
+    "helper_remote_checks": "all_six_passed",
+    "hosted_recovery_baseline": "failed_zero_application_posts_all_created_auth_sessions_closed",
+    "hosted_diagnostic": "passed_current_reads_zero_writes_cached_legacy_not_official_baseline",
+    "prior_baseline_failure_cause": "unreproduced_unknown",
+    "continuation_snapshot": "operations/agent-improvement/snapshots/M76-HOSTED-CONTINUATION-CANDIDATE1.json",
+    "continuation_review": "evaluations/research-qa/m76-hosted-continuation-review.md",
+    "hosted_continuation_baseline": "passed_actual_transport_zero_posts_all_sessions_closed",
+    "continuation_published_head": "33ad2c7378e5e474917e6bba99d7f9940e2da704",
+    "continuation_checks": "all_six_passed",
+    "hosted_continuation_exercise": "passed_21_verified_posts_all_downloads_all_sessions_closed",
+    "performance_observation": {
+      "evidence": ".superpowers/m76-baseline-diagnostic-1789574873811.jsonl",
+      "observed_routes": 80,
+      "median_ms": 3986,
+      "maximum_ms": 13162,
+      "scope": "One actual read-only diagnostic, not a benchmark. Saved report download validation incurs multiple reads. Investigate latency as a future refinement; no change to accepted verification or runtime during this correction."
+    },
+    "actual_restart": "passed_new_startup_exact_image_ready19",
+    "post_restart_revisit": "passed_zero_posts_exact_history_all_sessions_closed",
+    "hosted_browser": "passed_corrected_state_downloads_and_post_restart_view",
+    "publication": "docs/research/m76-publication.json",
+    "hosted_acceptance": "evaluations/research-qa/m76-hosted-acceptance.md",
+    "closure_published_head": "2fec9c40dca45bcef3590db82c8647d31459ef3e"
+  },
+  "current_m77": {
+    "status": "complete",
+    "baseline": "2fec9c40dca45bcef3590db82c8647d31459ef3e",
+    "hosted_schema": 20,
+    "hosted_changes": true,
+    "active_assignments": [],
+    "coordinator_work": "Accepted live milestone; final closure publication/checks then board demonstration.",
+    "routing_exception": "Specialists completed; requested registry settings recorded, inherited model/effort unknown.",
+    "foundation_snapshot": "operations/agent-improvement/snapshots/M77-FOUNDATION-CANDIDATE1.json",
+    "review": "docs/research/m77-accounting-review.md",
+    "next": "M78 authorized",
+    "foundation_published_head": "b0504e0de27813553b7f6a63e4ed47a513740147",
+    "foundation_checks": "six_pass",
+    "root_ui": "Actual local final browser correction, access transitions, exact retained HTML/JSON and restart passed. Actual hosted initial unresolved page and390px fit observed. Hosted completed-state browser pending.",
+    "local_review": "evaluations/research-qa/m77-integrated-review.md",
+    "application_snapshot": "operations/agent-improvement/snapshots/M77-APPLICATION-CANDIDATE3.json",
+    "migration_sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc",
+    "release_snapshot": "operations/agent-improvement/snapshots/M77-RELEASE-CONTROLS-ACCEPTED1.json",
+    "release_review": "evaluations/research-qa/m77-hosted-review.md",
+    "live_schema_version": 20,
+    "hosted_m77_mutations": true,
+    "release_software_commit": "1e2c44feb31a689363dbcde1c51dc38363d23bc1",
+    "hosted_baseline": {
+      "status": "actual_hosted_baseline_passed",
+      "observedAt": "2026-09-16T16:10:41.70749-07:00",
+      "journal": ".superpowers/m77-hosted-journey.jsonl",
+      "prefixByteLength": 2109491,
+      "prefixSha256": "396f086ee8702e7fbb48dbd0b303ab1a9a993fed62db5569ac1bf184b8fd5462",
+      "events": 4,
+      "terminalSha256": "95620563fd46e5ff05f6cc351e98facbd4dab24513a2c8c3f7717178b9650f06",
+      "finishedAt": "2026-09-16T23:09:39.016Z",
+      "applicationPostRequests": 0,
+      "allCreatedAuthSessionsClosed": true,
+      "liveSchemaVersion": 19,
+      "liveApplication": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
+      "facilityRecipeRepairRequired": true
+    },
+    "pending_review_task": null,
+    "maintenance_active": false,
+    "automatic_deployment_paused": false,
+    "migration_attempted": true,
+    "migration_committed": true,
+    "requested_deployment_id": "a0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f",
+    "live_application_commit": "7d465485e439566e9937b48c437bc59a6cc9591f",
+    "live_deployment_id": "a0b1b8ff-79ff-41dd-8d9d-ce43ce2c1a2f",
+    "hosted_exercise_started": true,
+    "exercise_execution_session": null,
+    "label_publication": "Both presentation refinements live at7d465485; six checks passed and ready20 verified00:17:13Z.",
+    "hosted_exercise_result": "failed after33POSTs on authorized_read:/mobile-diesel;27success/6expected refusals, allsessionsclosed; original preserved",
+    "failed_state_recovery": "Independent PASS:113tables; all33outcomes/oldrows/catalog/replay/4browserfiles exact; populationv3 stale/blocked, only3unattempted operations remain.",
+    "continuation_candidate": "operations/agent-improvement/snapshots/M77-CONTINUATION-CANDIDATE2.json",
+    "continuation_candidate_sha256": "80b1198275f5ba25e58d54a3a3b37ccad99a158d8f2573faa696d56bd8653dd4",
+    "continuation_author_evidence": "Full actual-restored-clone rehearsal4tests842assertions 0/0/3/0 with allsessionsclosed; separate finalguard2tests41assertions; independently accepted candidate2.",
+    "continuation_review": "evaluations/research-qa/m77-hosted-continuation-review.md",
+    "continuation_published_head": "71686967ebd64a33af034523afdc17664fc96297",
+    "continuation_checks": "all_six_passed",
+    "continuation_execution_session": null,
+    "observed_read_latency": {
+      "observedAt": "2026-09-17T00:49:54Z",
+      "evidence": ".superpowers/m77-baseline-progress-http.jsonl",
+      "observation": "Recent authenticated fugitive evidence GETs returned200 at roughly4-5seconds each; baseline remains running. Small observed sample, no original-failure cause established.",
+      "next": "Future latency refinement; preserve current accepted verification."
+    },
+    "continuation_baseline": {
+      "status": "passed",
+      "posts": 0,
+      "requests": 261,
+      "allSessionsClosed": true,
+      "journalSha256": "3dde161113d259a7e5931599210b3513aa6251b04130ea869ed2a773f0f7cbd1",
+      "terminalSha256": "af2af8b24ce2ddde6008e00da9be691d077abc34bd35e86e02677297fc2f09ed"
+    },
+    "continuation_baseline_review": "evaluations/research-qa/m77-hosted-continuation-baseline-review.md",
+    "continuation_exercise": "passed_exact3POST_493requests_all_sessions_closed",
+    "continuation_exercise_review": "evaluations/research-qa/m77-hosted-continuation-exercise-review.md",
+    "actual_restart": "passed_same_image_new_startup_ready20_2026-09-17T01:36:38Z",
+    "hosted_acceptance": "evaluations/research-qa/m77-hosted-acceptance.md",
+    "publication": "docs/research/m77-publication.json",
+    "continuation_revisit": "passed_0POST_272requests_all_sessions_closed",
+    "hosted_browser": "passed_final_and_historical_reports_6exact_downloads_narrow_view_and_postrestart",
+    "closure_publication_receipt": ".superpowers/m77-final-publication.json",
+    "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
+  },
+  "current_m78": {
+    "status": "published_synthetic_functional_complete_merge_authorized",
+    "active_assignments": [
+      {
+        "id": "M78-INTEGRATION-MERGE-ROOT-20260924",
+        "executor": "/root",
+        "scope": "Exactallowlist integration, current records, PR5 publication/merge; sole Gitwriter"
+      },
+      {
+        "id": "M78-MERGE-INTEGRATION-QA-20260924",
+        "executor": "/root/merge_integration_qa",
+        "scope": "Independent integrated evidence and bounded release review"
+      }
+    ],
+    "routing_exception": "Fresh independent reviewer dispatch requested Astra/high but failed at agent-thread limit; existing non-author reviewer received refreshed bounded brief. Actual inherited settings unknown.",
+    "hosted_changes": true,
+    "scope1_complete": false,
+    "security": {
+      "terrascope": "Five exact tables contained after explicit board approval; RLS enabled, anon/authenticated grants removed; refreshed0errors0warnings5intendedinfo",
+      "neuvetra": "Refreshed0errors8warnings; seveninvokerfunctionwarnings/authpasswordprotection assessed; no schema20changes",
+      "evidence": "docs/research/m78-security-observations.md"
+    },
+    "planning": [
+      "docs/research/m78-product-brief.md",
+      "docs/research/m78-technical-plan.md"
+    ],
+    "hosted_change_scope": "Previously approved Terrascope containment, once-only schema21 upgrade, deployed application9dd and one verified same-image restart. All original saved records and37later verified writes retained; no replay.",
+    "planning_review": "evaluations/research-qa/m78-planning-root-review.md",
+    "accounting": {
+      "status": "accepted_bounded_candidate",
+      "policy_raw_sha256": "0fe8cb9bfb48e7a8dd0b5b40d491918f57f33288da12daa9de1d9406080da6c4",
+      "review": "evaluations/research-qa/m78-accounting-review.md",
+      "root_acceptance": "evaluations/research-qa/m78-accounting-review-root-acceptance.md",
+      "production_release": false
+    },
+    "frontend": {
+      "status": "hosted_signed_in_post_restart_refresh_verified",
+      "evidence": "evaluations/research-qa/m78-restart-browser-observation.md",
+      "runtime_demonstrated": true
+    },
+    "native_author": {
+      "prior_candidates": "5928 and b62 failures preserved",
+      "assertions": 600,
+      "receipt": ".superpowers/m78_author_native_1789620106488-result.json",
+      "independent_assertions": 175,
+      "candidate_migration_sha256": "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736",
+      "independent_tests": 5,
+      "status": "accepted_bounded_native",
+      "tests": 6,
+      "database_read_only": "m78_author_native_1789620106488"
+    },
+    "local_ui": {
+      "url": "http://localhost:4188",
+      "database": "m78_author_ui_20260917_3",
+      "source_candidate": "54667347",
+      "gross_candidate_kg_co2e": "126850.1763",
+      "status": "actual_member_history_downloads_and_actor_clear_passed_local_only"
+    },
+    "capacity_decision": {
+      "evidence": "docs/research/m78-implementation-decisions.md",
+      "response_bytes": 10000000,
+      "history_bytes": 30000000,
+      "status": "actual correction and both independent capacity controls passed",
+      "proof_bytes": 4000000
+    },
+    "recovery": {
+      "evidence": "evaluations/research-qa/m78-recovery-root-acceptance.md",
+      "status": "fresh_backup_recovery_and_preserved_forward_revalidation_accepted",
+      "actual_encrypted_hosted_backup_verified": true,
+      "archive_sha256": "7460b387b521644c16d4553fc1db1f176335766a05fcd4ac947443d77a65f145",
+      "failed_clone_retained": "m78_ops_actual20_20260917",
+      "actual_tables_exact": 113,
+      "actual_content_entries_exact": 377,
+      "open_finding": "ACT-R01 source repair independently accepted; new restore explicitly excludes27 unrelated defaults while preserving fullsource inventory; actual semantic review pending",
+      "actual_successful_restore_database": "m78_ops_actual20_20260917c",
+      "actual_restore_receipt_sha256": "ab8c7cae9ad5d5b767f88d5893fe0d4c8fa30be7d5c702309416b33df3f07c8a",
+      "historical_archive_not_fresh_hosted_gate": true,
+      "fresh_backup_archive_sha256": "d92decbd58838bb77c211399a90c2516a3e54f199508cb70ce05b4014c918ebe",
+      "fresh_recovery_receipt_sha256": "b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180"
+    },
+    "publication": {
+      "commit": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+      "required_checks_passed": 6,
+      "required_checks_total": 6,
+      "refreshed_at": "2026-09-24T16:42:58.931434+00:00",
+      "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+      "merge_status": "authorized_pending_integrated_head_review_and_checks"
+    },
+    "exact_recipe_rehearsal": {
+      "status": "historical_failed_run_preserved",
+      "database": "m78_ops_recipe_20260922",
+      "journal_sha256": "1e50cbb88fecbc58170429e009b800ff391f1c915b730b66c4917c7cd20ad943",
+      "attempted_posts": 3,
+      "successful_outcomes": 3,
+      "verified_outcomes": 2,
+      "no_retry": true,
+      "suspected_cause": "Runner unwraps flattened numeric version as envelope; independent readonly diagnosis inprogress",
+      "hosted_posts": 0,
+      "preserved_failed_run": true
+    },
+    "successful_recipe_rehearsal": {
+      "status": "independently_accepted",
+      "database": "m78_ops_recipe_20260922b",
+      "journal_sha256": "8b01327dbd73517250d64044bc654b6236254d7334dcd0dfd7afcda274699fd0",
+      "events": 116,
+      "application_posts": 38,
+      "retained_old_rows": 568,
+      "table_count": 121,
+      "gross_kg_co2e_exact": "126850.17632025",
+      "reports": 5,
+      "independent_receipt_sha256": "2a8b4ee54065dae00e158274b28855c86361cda0958e3ed9c16023a74b7d7011"
+    },
+    "hosted_upgrade_20260922": {
+      "status": "committed_once",
+      "schemaVersion": 21,
+      "journal": ".superpowers/m78-hosted-upgrade-20260922.jsonl",
+      "sha256": "9a5e84356ad18cce59a9f3c751f6e1c1dc432398c632af21065e58fbbfb6a1bb",
+      "createdAt": "2026-09-22T16:23:58.948Z",
+      "oldRowsAndContentPreserved": true
+    },
+    "release_commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+    "required_checks": "six_passed",
+    "deployment_requested": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+    "automatic_deployment": "disabled",
+    "live_runtime": {
+      "commit": "9dd9c85fb674528a2c1dd1b0138f5a2d87ba683e",
+      "schemaVersion": 21,
+      "deploymentId": "f6d77b2e-6886-429b-a4d2-4873c9199ce8",
+      "imageDigest": "sha256:3e4c2c91591a5598a85f63b4099b1b4890588ce79ec832b21b7d284b5aa89d1b",
+      "observedAt": "2026-09-23T04:41:36.740707+00:00",
+      "ready": true,
+      "autodeploy": false
+    },
+    "hosted_journey": {
+      "status": "exercise_failed_original_save_confirmed_committed",
+      "journal": ".superpowers/m78-hosted-journey.jsonl",
+      "baseline": {
+        "status": "passed",
+        "events": 42,
+        "applicationPosts": 0,
+        "requests": 282,
+        "allCreatedSessionsClosed": true,
+        "prefixSha256": "98fe9f45ed62a497681bc9d5590ef34f4604f00c5dd8d8e6602636dc5fd709f1",
+        "headSha256": "7663b3931435c85c2cb433ba152b44b6082031c25ee6a3d45dab980e1ee48319"
+      },
+      "activeSession": null,
+      "do_not_retry": true,
+      "eventCount": 72,
+      "journalSha256": "d3301eb226c0cae4428c1e20cde4e2afdcf572b622e96d690cc8c262d6e44058",
+      "headSha256": "8cac20e87d8d5c4dd1f5f0f4eb6eae9721b56aeb83ef2bda270855da6aea24fd",
+      "applicationPosts": 4,
+      "observedDeniedPosts": 3,
+      "unknownSaveOutcomes": 0,
+      "allCreatedSessionsClosed": true,
+      "browserObservation": "Fresh read shows retained inventory version1; exactrequest/audit reconciliation pending",
+      "confirmedCommittedSaves": 1,
+      "outcome_reconciliation": {
+        "receipt": ".superpowers/m78-timeout-observation.json",
+        "sha256": "995f91359f1b5ce38ad5b2f1324194c24c222a73ef2f2108944b6a4bf1797d67",
+        "observedAt": "2026-09-22T17:07:20.867Z",
+        "versionId": "3e45de5d-d312-4a22-8418-35cb740a3a12",
+        "versionSha256": "977fdd9d6a5cffb07bea34ff3bee2afaadfe3cf120440cc148a2ed45501bee6e",
+        "applicationWrites": 0,
+        "priorContentPreserved": true,
+        "independent_actual_review": "accepted"
+      }
+    },
+    "performance_repair": {
+      "status": "candidate2_author_verified",
+      "candidate_snapshot_sha256": "94c6eb044d8a5b32d5ccded5127cf155acd3bcaaf575511543626a3b6e61e92b",
+      "local_first_save_ms": {
+        "before": 3563,
+        "after": 1333
+      },
+      "local_late_save_ms": {
+        "before": 6793,
+        "after": 3610
+      },
+      "sql_queries": {
+        "before": 132,
+        "after": 50
+      },
+      "hosted_performance_verified": false,
+      "independent_review": "accepted"
+    },
+    "continuation_preparation": {
+      "status": "candidate3_complete155source_and_privatewrapper_accepted",
+      "author": "/root/resume_recovery",
+      "author_currently_running": false,
+      "native_application_posts": 37,
+      "hosted_application_posts": 0
+    },
+    "continuation_backup": {
+      "status": "encrypted_backup_and_fresh_restore_verified",
+      "database": "m78_ops_continuation_20260922",
+      "archiveSha256": "b6c90c6768a5f2dfd356391b1c509e989ea4e756d6b40802f68f5650366dd636",
+      "snapshotSha256": "1d41feefb01532d85628dc633cca50804c0bf172c45bb96ac3dfabdedaaf984b",
+      "table_count": 121,
+      "content_entries": 387,
+      "root_fresh_readonly_receipt": ".superpowers/m78-continuation21-root-restore-review.json"
+    },
+    "continuation_native": {
+      "status": "independently_accepted",
+      "journal": ".superpowers/m78-continuation-native-20260922-run.jsonl",
+      "journalSha256": "159630ef6c2033651e25da8fb4afdaa439f24a2bcb4fcc3186b8768816218dfb",
+      "headSha256": "e7788dd5dca926ee66552f9f6e8c6d3442886ce923fcca09583511a969ba0a75",
+      "events": 113,
+      "posts": 37,
+      "verified": 37,
+      "retained_old_rows": 572,
+      "tables": 121,
+      "reports": 5,
+      "hosted_posts": 0,
+      "do_not_retry": true,
+      "independent_receipt_sha256": "1c81637967eb512615243dec0f64458645b694bafc71bc2153f2cdf48be7a984"
+    },
+    "continuation_ci": {
+      "published_commit": "d139628cb53f591bfd516a4aac41dd62e1138a53",
+      "remote_head_verified": true,
+      "failures": [
+        "Role record refers to local-only inspect evidence and Windows result path",
+        "Historical source-delta test omitted admitted DB performance repair"
+      ],
+      "source_pins_155_unchanged": true,
+      "hosted_continuation_executed": true,
+      "live_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
+      "schema": 21,
+      "auto_deploy_enabled": false,
+      "final_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
+      "all_six_checks_passed": true,
+      "observed_at": "2026-09-22T18:07:52.987808+00:00",
+      "deployment_requested_once": "0f2e99f3-67ef-4f4c-b3c3-a39c62eabc78",
+      "deployment_observed_status": "SUCCESS",
+      "image": "sha256:fe46a0e354252026f2bcbf6672e10ec550e52a56f064ab3e75a8af17625749c9",
+      "runtime_observed_at": "2026-09-22T18:09:44.049840+00:00",
+      "continuation_phase": "baseline_failed",
+      "continuation_session": null,
+      "baseline_events": 24,
+      "baseline_journal_sha256": "8525a8416b3e55f07d508c9a9ec17fc8ac0a4902e798534dc05e9f4df72d1a46",
+      "baseline_head_sha256": "e766f74b730bebf69849945407598c011f918b9a77b7ff9c3a5913cd6964f744",
+      "baseline_application_posts": 0,
+      "baseline_sessions_closed": true,
+      "baseline_unknown_sessions": 0
+    },
+    "baseline_target_browser": {
+      "observed_at": "2026-09-22T18:20:32.985745+00:00",
+      "statement_id": "023261c1-8adc-4dd7-a11e-bd2e40b3aa54",
+      "bytes": 2279,
+      "sha256": "6d48e9797ad2bd6b6bfd4dbdd8d5e082e54aa991935b069691939a1ac5bdfb9b",
+      "matches_original": true,
+      "application_writes": 0,
+      "original_failure_explained": false
+    },
+    "platform_update_resume": {
+      "observed_at": "2026-09-22T19:59:06.580889+00:00",
+      "status": "cleanup_failed_selected_sessions_unchanged_diagnosis_pending",
+      "main_journal": ".superpowers/m78-hosted-continuation2.jsonl",
+      "main_sha256": "3ce68c3fc87e37623326badb88d412f2db36daceacf43060c5849f287a358507",
+      "events": 15,
+      "diagnostics_sha256": "8ae88cd344ab1a6376b91a63581c57c9c61c381eb57141e1b6a11ca7647eae08",
+      "diagnostic_events": 30,
+      "matching_process_observed": false,
+      "application_posts_observed": 0,
+      "session_cleanup_verified": false,
+      "retry_or_reset_permitted": false,
+      "live_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
+      "schema": 21,
+      "live_ready": true,
+      "independent_reconciliation_owner": "/root/resume_release",
+      "tooling_commit": "e7f56bde1017b3639d6110abd86644f7669bc05e",
+      "tooling_six_checks_passed_at": "2026-09-22T18:48:01.500149+00:00",
+      "metadata_sha256": "4570ae628e05c71d8feab14acc6e5c04fe985f842ab2cdf8d111b19031d1f273",
+      "cleanup_intent_sha256": "30aa7e0076dd3e37fce77c74df632e81fed41624b2e000278bc37a68e0d24f28",
+      "post_metadata_sha256": "bab3732a77b1457b9e8a480e255abcd13519e4fc49fd2e9606c8ea3ee94c5a3b",
+      "selected_session_removal_persisted": false
+    },
+    "continuation3_closed_failure": {
+      "journal_sha256": "0204a7e93849b305bafc45b79232b3af588619fcb851752d2ef541869d584012",
+      "diagnostics_sha256": "8b45e72d193d9f3c2b6a03c63c75e61a8055223862f13b297c9b4d26725972c1",
+      "independent_review_sha256": "261e4fccf8f85fc7cb99205357baf30346852eb3930d5760984bb471bb3aafe3",
+      "events": 24,
+      "diagnostic_events": 62,
+      "application_posts": 0,
+      "known_sessions": 4,
+      "logout_204": 4,
+      "unknown_sessions": 0,
+      "retry_permitted": false,
+      "cause": "not_established"
+    },
+    "continuation4_preparation": {
+      "status": "source_private_independently_accepted",
+      "source_pins": 173,
+      "historical_evidence_pins": 9,
+      "author_snapshot_sha256": "14dd03be623702e0c08308e789533f9679b3afa141d46dd915dfb18fa3f8dd2d",
+      "hosted_executed": true,
+      "application_posts": 0,
+      "pooling_disabled": true,
+      "automatic_retries": 0,
+      "scope1_customer_release": "incomplete",
+      "independent_review_sha256": "d4131bf557459bf6db564340e1c16f48ff3524e141353c28abdbcf1edbe5b0b9"
+    },
+    "completed_session_recovery": {
+      "status": "independently_accepted",
+      "disposition_sha256": "9ce4d682156c32771f8bb6fe8dfa249cf0060b39a8ce90c6ea3daf83c209342f",
+      "selected_session_and_linked_refresh_rows_resolved": 4,
+      "repeat_permitted": false,
+      "lost_access_token_usability": "not_verified",
+      "expiry_verified": false
+    },
+    "continuation4_runtime": {
+      "session": 57177,
+      "gate_sha256": "34a1b7a8773120169264f5ce500490e87b8118f6ebfca2b8cabe2e6527a6b5e5",
+      "tooling_commit": "635f6ba1b38186851e0038f63399b0a814f4e1ae",
+      "all_six_checks_passed_at": "2026-09-22T22:01:32.141329+00:00",
+      "runtime_observed_at": "2026-09-22T22:01:54.630066+00:00",
+      "live_commit": "59cda7a62d8dcc6b554c92372e3b032577e410c9",
+      "schema": 21,
+      "baseline_status": "passed",
+      "retry_permitted": false,
+      "baseline_result_sha256": "57fc10f6ee4dce55ced4060aa1d41cbd5a125eac3bd58d99bbad7c37ef1daddf",
+      "requests": 285,
+      "application_posts": 0,
+      "sessions_closed": 8,
+      "unknown_sessions": 0,
+      "baseline_qa_sha256": "6937df29bb08b4bd253ceade366c1e19d512e0e256a0090b0d00f688fc1f6ae3",
+      "exercise_gate_sha256": "9fe233c964b8c40f6c7a9871eecf75a318e7a800f2ec14570c6803288ff9dce7",
+      "exercise_status": "failed",
+      "verified_application_operations": 37,
+      "status": "exercise_failed_after_37_verified_operations",
+      "exercise_requests": 388,
+      "request_errors": 1,
+      "all_created_auth_sessions_closed": true,
+      "unknown_auth_sessions": 0,
+      "restart_executed": false,
+      "revisit_executed": false,
+      "browser_partial": {
+        "access_verified": true,
+        "source_count": 10,
+        "display_kg_co2e": "126850.1763",
+        "process_versions": 1,
+        "inventory_versions": 2,
+        "reports": 5,
+        "reviewed_inventory_report_downloads": "both200_exact_retained_body_equality",
+        "snapshot_provider_ms": 90427,
+        "full_lifecycle_accepted": false,
+        "evidence": "evaluations/research-qa/m78-continuation4-browser-partial-observation.md"
+      },
+      "failure_review": {
+        "status": "accepted_failure_reconciliation",
+        "result_sha256": "a97a84ca66ed696a348c8c8a5ecaf65e36ca4eb311803b6f2ecccebf9d16c573",
+        "exercise_accepted": false,
+        "open_product_findings": 1
+      },
+      "failure_evidence_publication": {
+        "commit": "1042348f2d4849246771fee4be77fe590c34ab8a",
+        "all_six_checks_passed_at": "2026-09-23T00:18:13.683624+00:00"
+      }
+    },
+    "get_repair": {
+      "status": "deployed_and_actual_read_reconciliation_passed",
+      "route_sha256": "fd9b1115130d523629e58b5fcef06fe5355eedc8afd12d6dacc998623c89ff37",
+      "result": "evaluations/research-qa/m78-get-local-comparison-result.json",
+      "result_sha256": "caae59a5d5704c53b6d61f901d30dee55be01b7f890c62e7d6e5c1b1b7931417",
+      "cases": 19,
+      "warmups_per_case": 1,
+      "measured_samples_per_case": 3,
+      "before_report_queries": 86,
+      "after_report_queries": 44,
+      "table_count": 121,
+      "table_digest_sha256": "cec9b5e4ef42e38acea843f0ebba92b39cf2b42c1f6c137f6ed62d575fec5d64",
+      "application_writes": 0,
+      "hosted_requests": 0,
+      "local_connections_closed": true,
+      "live_fix_deployed": true,
+      "hosted_performance_verified": false,
+      "historical_sources_verified_before_integration": 173,
+      "historical_sources_unchanged_after_integration": 172,
+      "integration": "evaluations/research-qa/m78-get-route-integration.json",
+      "integrated_tests_passed": 9,
+      "integrated_assertions": 141,
+      "site_api_typecheck": "passed",
+      "independent_actual_review": "evaluations/research-qa/m78-get-local-comparison-independent-result.json",
+      "independent_actual_review_sha256": "7aeabac30562a0f44d44b6a760b12a199bd42f6dbc360df591fb52f91a9e3b96",
+      "independent_actual_tests_passed": 9,
+      "independent_actual_assertions": 230,
+      "publication_commit": "7f7a30634d655f2763d5ababf8e9df00a8841df0",
+      "remote_head_verified_at": "2026-09-23T01:33:37.068367+00:00",
+      "required_checks_passed": 4,
+      "required_checks_total": 6,
+      "failed_ci_evidence": "evaluations/research-qa/m78-get-ci-history-failure.json",
+      "deployment_helper_source_review": "evaluations/research-qa/m78-get-deployment-helper-result.json",
+      "deployment_helper_source_accepted": true,
+      "ci_history_repair": {
+        "status": "independently_accepted_and_published",
+        "workflow_sha256": "4a7810550658b732741992a79152527348f1b6fdd8c0340c5e0dc0015e7f9a14",
+        "historical_ref": "1042348f2d4849246771fee4be77fe590c34ab8a",
+        "historical_tests_passed": 19,
+        "historical_assertions": 1590,
+        "current_tests_passed": 18,
+        "current_assertions": 435,
+        "first_independent_finding": "Guard baseline test compared historical route with new current route; corrected to exact original pin in immutable historical result.",
+        "guard_test_sha256": "5426aadcdeb299fc15ccc63cc88bda7e0534bfaf43b352b45edb215279a88872",
+        "production_route_unchanged": true
+      },
+      "closure_note": "Original performance repair checkpoint and CI failure records remain historical. Deployed9dd passed six checks; actual GET recovery and post-restart revisit pass. No representative customer performance claim."
+    },
+    "persistence_restart": {
+      "status": "independently_verified",
+      "requestId": "ef1238a7-516b-43be-865c-a5e9806cd46f",
+      "requests": 1,
+      "startupEvents": 1,
+      "qa": "evaluations/research-qa/m78-recovery2-restart-actual-independent-result.json",
+      "qa_sha256": "70211489b2413cd5d324574e225256893470c293160763e28f16f6b5216d7d00",
+      "replay_permitted": false
+    },
+    "final_revisit": {
+      "status": "independently_accepted",
+      "session": 52409,
+      "admission_sha256": "4cf6a5b38f2d6f0576fcfc7e84948ed5a84a5a09dac3752d5d101c82645bb2dd",
+      "replay_permitted": false,
+      "completed_at": "2026-09-23T04:50:28.366Z",
+      "application_posts": 0,
+      "all_created_sessions_closed": true,
+      "unknown_sessions": 0,
+      "retained_state_exact": true,
+      "journal_sha256": "ba5349e1cf54e209318e5f9ece05eef2ac8a039f378e5bbb4310d40a9067d1b7",
+      "qa": "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+      "qa_sha256": "76b481e6b740fa1cee629d90964c13cedd8aef7e46b4a00e9b168fafcec12922",
+      "requests": 97
+    },
+    "synthetic_functional_accepted": true,
+    "board_demonstration_feedback": "Board September24: keep moving, merge ready reviewed work, assess actualScope1 beforeScope2",
+    "remaining_customer_gates": [
+      "Explicit compatible method/factor/GWP/source release and rights disposition",
+      "Real customer boundary/source/activity evidence",
+      "Current applicable requirements evidence",
+      "Qualified independent human accounting/assurance review",
+      "Representative customer operational readiness"
+    ],
+    "next_milestone": "M79 method/source release candidate, within California-first corporate Scope1"
+  },
+  "current_m79_preparation": {
+    "status": "source_inventory_independently_accepted",
+    "profiles": 4,
+    "factor_rows": 12,
+    "retained_originals": 7,
+    "source_inventory": "docs/research/m79-method-source-inventory.json",
+    "root_acceptance": "evaluations/research-qa/m79-inventory-root-acceptance.md",
+    "production_release": false,
+    "runtime_integration": false,
+    "remaining": "Domain/rights/customer/current-requirements decisions and M78 interrupted-baseline recovery/release dependency.",
+    "numerical_compatibility": {
+      "status": "independently_accepted_preparation_only",
+      "root_acceptance": "evaluations/research-qa/m79-numerical-root-acceptance.md",
+      "cases": 18,
+      "application_tests": 5,
+      "assertions": 24,
+      "production_release": false
+    },
+    "rights_evidence": {
+      "status": "independently_accepted_preparation_only",
+      "candidate": 3,
+      "root_review": "evaluations/research-qa/m79-rights-root-targeted-review.md",
+      "product_holds": 21,
+      "production_release": false
+    }
   }
 }
