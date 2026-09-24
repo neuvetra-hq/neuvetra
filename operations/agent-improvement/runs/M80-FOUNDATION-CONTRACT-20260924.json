@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "id": "M80-FOUNDATION-CONTRACT-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_foundation_contract",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE1.json",
+      "sha256": "48f2135eaa3656bcf794f9f633f2d8f042ab7ee3fb6f52770ae95efcfd98631c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json",
+      "sha256": "631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-fixed-synthetic-census-and-held-identities",
+      "status": "pass",
+      "evidence": [
+        "packages/neuvetra-database/src/m80-contract.ts",
+        "packages/neuvetra-database/src/m80-fixture.ts",
+        "docs/research/m80-foundation-contract-20260924.md"
+      ],
+      "reason": "One pinned synthetic fixture preserves fixed entity/location/source identities, fourteen source rows, nineteen metadata-only evidence requirements, all seven M78 process categories, all seven gas groups and the four exact M79 profiles as held candidates; it seeds no release or number."
+    },
+    {
+      "id": "AC-02-closed-admission-validation-and-classification",
+      "status": "pass",
+      "evidence": [
+        "packages/neuvetra-database/src/m80-validation.ts",
+        "packages/neuvetra-database/src/m80-validation.test.ts"
+      ],
+      "reason": "The pure boundary receives admission separately from caller data, checks exact company/fixture binding, rejects unknown and authority fields, enforces prototype/cardinality/reference rules and returns only held_candidate, unsupported or missing_facts with releasedSupportedCount fixed to zero."
+    },
+    {
+      "id": "AC-03-adversarial-offline-verification",
+      "status": "pass",
+      "evidence": [
+        "packages/neuvetra-database/src/m80-validation.test.ts",
+        "docs/research/m80-foundation-contract-20260924.md"
+      ],
+      "reason": "After the first-review repair, focused public-boundary tests passed 10/10 with 93 assertions; final independent QA passed 14/14 with 354 assertions against exact candidate 2; the complete package passed 49 tests with 9 configured hosted-runtime skips and package typecheck passed. Cases cover authority fields, context mismatch, prototypes, duplicate JSON, size/cardinality, cross-references, explicit and composed unknowns, unsupported rows, process/gas coverage and unavailable/duplicate/corrupt/released registry inputs."
+    },
+    {
+      "id": "AC-04-independent-review-of-frozen-candidate",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.md",
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-FIRST-REVIEW.json",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json"
+      ],
+      "reason": "Candidate 1 failed first review because a missing boundary fact erased process/gas unknowns. Exact candidate 2 SHA-256 631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15 passed independent recheck; F01 is resolved and the failed first-review snapshot remains retained."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-foundation-contract-independent-20260924.md",
+      "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+      "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE1.json",
+        "sha256": "48f2135eaa3656bcf794f9f633f2d8f042ab7ee3fb6f52770ae95efcfd98631c"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json",
+        "sha256": "631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 free Scope 1 beta synthetic foundation",
+  "applicable_lessons": [
+    "L03",
+    "L04"
+  ],
+  "source_artifacts": [
+    {
+      "path": "docs/research/scope1-free-beta-technical-20260924.md",
+      "sha256": "e7c26892a60df40b431c5d73ad5236c7deb802b7898fa80f5ca3ceaed2a469e8"
+    },
+    {
+      "path": "docs/research/scope1-free-beta-m80-plan-20260924.md",
+      "sha256": "32c198d3bb341b22d91aac5dca1a7c4837fdc45f661db45578449a8e63c3c3cb"
+    },
+    {
+      "path": "docs/research/m79-method-source-inventory.json",
+      "sha256": "d5f50b6e2d49b1ce027affe08ccfe422174b59df60c408b544212f232b9a8022"
+    }
+  ],
+  "notes": [
+    "Requested model/effort and observed settings remain distinct; observed model and effort are unavailable.",
+    "The trusted-admission argument is a future server-adapter dependency. The pure function checks context integrity but does not authenticate an actor or authorize a tenant.",
+    "Candidate 1 first review found that a missing boundary fact erased fourteen process/gas unknowns. Candidate 2 composes all applicable missing facts and preserves the failed first-review evidence.",
+    "Calendar 2025 and operational control remain synthetic proposals, not board-selected company facts.",
+    "No index export, migration, workspace adapter, route, UI, Git, provider, persistence, deployment, M78 replay, calculation, report/export or real-data heuristic was added."
+  ]
+}

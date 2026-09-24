@@ -320,3 +320,13 @@ operations/agent-improvement/integration-manifest-2026-09-24.json -text whitespa
 # Preserve reviewed evidence with intentional trailing blank lines.
 operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json whitespace=-blank-at-eof
 operations/update-pause-20260924.md whitespace=-blank-at-eof
+
+# Preserve frozen M80 independent review raw-byte identities.
+evaluations/research-qa/m80-foundation-contract-independent-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-foundation-contract-independent-20260924.md -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-FIRST-REVIEW.json -text whitespace=cr-at-eol
+
+# Preserve the two frozen M80 foundation candidate trailing newlines.
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE1.json whitespace=-blank-at-eof
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json whitespace=-blank-at-eof

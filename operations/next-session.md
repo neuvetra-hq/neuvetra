@@ -1,3 +1,11 @@
+# September 24: Scope 1 foundation accepted; persisted setup in implementation
+
+PR6 navigation head714e278cbfcc8bee4464a1c6fd108f8a09265146 passed all six checks at17:51:59UTC; it remains an undeployed draft review. The accepted offline M80 contract now preserves fourteen source rows, nineteen evidence requirements and all fourteen process/gas unknowns. Independent candidate2 QA passed14tests/354assertions after one retained failure and repair; root reproduced that suite. Publication of this added foundation/decision packet is pending the next exact-head receipt.
+
+The release-decision packet is accepted as preparation only: four profiles, twelve rows and seven retained originals. Every profile remains held. Named qualified accounting review and source-use/release decisions are still needed; the proposed smallest subset is natural gas, without waiving full source census, security or real-company authorization. No company or recipient is selected.
+
+Actual dispatched work at this checkpoint: /root/m80_foundation_runtime implements additive synthetic persistence and tenant-bound API; /root/m80_foundation_runtime_qa independently tests security and preservation. Earlier contract/packet workers have finished. Next demonstration: focused synthetic setup, visible missing/unsupported source details and saved correction history. No calculations or real documents enter this slice. Remaining beta work: effective approved methods, invitation/tenant and document controls, independent integrated numerical QA, then full onboarding/correction/export/recovery rehearsal. Scope2 stays deferred. Root owns integration/Git/provider operations; preserve every M78 no-replay lock. Marketing runs separately.
+
 # September 24: PR6 is the active rolling product review
 
 Reviewed navigation and beta plans are published on https://github.com/neuvetra-hq/neuvetra/pull/6 from source commit129ede4e9297949b4dc076cdaf3f7cb5ed66920e. PR6 is open/draft; PR5 remains merged. This publication does not deploy the website or make the beta invite-ready. Verify the current PR head and six automated checks before reporting publication fully verified; the dated exact-head result is stored in .superpowers/m80-final-publication.json when available. The earlier pause/resume sections are historical checkpoints.

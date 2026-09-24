@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-FOUNDATION-CONTRACT-QA-20260924",
+  "reviewer": "/root/m80_foundation_qa",
+  "implementation_author": "/root/m80_foundation_contract",
+  "independent": true,
+  "verdict": "pass",
+  "material_findings_open": 0,
+  "review_scope": "Pure offline contract only. No authentication, tenant authorization, database, HTTP, UI, hosted, source/domain/rights or customer-readiness acceptance.",
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    }
+  },
+  "pre_freeze_feedback": [
+    {
+      "id": "P01",
+      "finding": "Generic process source did not represent seven categories and seven gases.",
+      "disposition": "Repaired before candidate1; no frozen-candidate verdict existed then."
+    }
+  ],
+  "reviews": [
+    {
+      "candidate": 1,
+      "observed_at": "2026-09-24T18:00:03.085332+00:00",
+      "snapshot": {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE1.json",
+        "sha256": "48f2135eaa3656bcf794f9f633f2d8f042ab7ee3fb6f52770ae95efcfd98631c"
+      },
+      "source_artifacts": [
+        {
+          "path": "packages/neuvetra-database/src/m80-contract.ts",
+          "sha256": "da21a85786c9d692619c6055860239bde9683e34e86dc1ce01b879619d0e4321"
+        },
+        {
+          "path": "packages/neuvetra-database/src/m80-fixture.ts",
+          "sha256": "a5510624d56542bddf563f4a723f9ce99f9d27793155e7456369460dc4f18b30"
+        },
+        {
+          "path": "packages/neuvetra-database/src/m80-validation.ts",
+          "sha256": "681f2f02a65178dd396150f4f50899c81e0b94c1b28466c9f010a53362eeee30"
+        },
+        {
+          "path": "packages/neuvetra-database/src/m80-validation.test.ts",
+          "sha256": "be26aa841a7a6c8e103a72e2373c87164d902ddbb250e4b01dd510d6be51d794"
+        },
+        {
+          "path": "docs/research/m80-foundation-contract-20260924.md",
+          "sha256": "6fb322edd2a1539f376ffea28c02a327312c5b6819d05e6ae40952bf6cbd9055"
+        }
+      ],
+      "verdict": "fail",
+      "checks": [
+        {
+          "command": "bun test evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts",
+          "exit_code": 1,
+          "tests_passed": 13,
+          "tests_failed": 1,
+          "assertions": 320
+        },
+        {
+          "command": "bun run typecheck",
+          "cwd": "packages/neuvetra-database",
+          "exit_code": 0
+        }
+      ],
+      "findings": [
+        {
+          "id": "F01",
+          "severity": "material",
+          "status": "open",
+          "title": "Composed missing boundary facts erase process and gas gaps",
+          "reproduction": "Start createM80FixtureSetup(company), set entities[0].controlState to unknown, classify with exact admission and registry. Process source ...001012 returns requiredFactCodes [entity_control_state], dropping all fourteen process_category_* and gas_group_* unknowns.",
+          "expected": "Preserve every applicable named missing fact in classification regardless of which missing-facts branch is taken.",
+          "evidence": "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts:136"
+        }
+      ]
+    },
+    {
+      "candidate": 2,
+      "observed_at": "2026-09-24T18:03:21.828776+00:00",
+      "snapshot": {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json",
+        "sha256": "631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15"
+      },
+      "source_artifacts": [
+        {
+          "path": "packages/neuvetra-database/src/m80-contract.ts",
+          "sha256": "da21a85786c9d692619c6055860239bde9683e34e86dc1ce01b879619d0e4321"
+        },
+        {
+          "path": "packages/neuvetra-database/src/m80-fixture.ts",
+          "sha256": "a5510624d56542bddf563f4a723f9ce99f9d27793155e7456369460dc4f18b30"
+        },
+        {
+          "path": "packages/neuvetra-database/src/m80-validation.ts",
+          "sha256": "f2bb6546a71a8c52b0627f48809af2b76d21cb1b6085623fc0929123fe616919"
+        },
+        {
+          "path": "packages/neuvetra-database/src/m80-validation.test.ts",
+          "sha256": "d51a5af4641fa6443a7a20336d292d3013122bf7818a4f59e1433612ad1f45e5"
+        },
+        {
+          "path": "docs/research/m80-foundation-contract-20260924.md",
+          "sha256": "5f77116610cd0a43edaf6d2b63c63b535f88b078c93bce9d5f1e46f69809e341"
+        }
+      ],
+      "all_live_bytes_and_snapshot_text_verified": true,
+      "verdict": "pass",
+      "checks": [
+        {
+          "command": "bun test evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts",
+          "exit_code": 0,
+          "tests_passed": 14,
+          "tests_failed": 0,
+          "assertions": 354
+        },
+        {
+          "command": "bun run typecheck",
+          "cwd": "packages/neuvetra-database",
+          "exit_code": 0
+        },
+        {
+          "check": "Static exact candidate inspection and index/workspace/server mounting search",
+          "result": "No M80 import/export/mount in existing package index, workspace adapter or staging server; no calculation/database/HTTP execution in changed modules."
+        }
+      ],
+      "findings": [
+        {
+          "id": "F01",
+          "status": "resolved",
+          "evidence": "Both unknown entity-control and unknown activity-data-kind retain every process/gas missing fact in independent tests."
+        }
+      ]
+    }
+  ],
+  "accepted_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json",
+    "sha256": "631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15"
+  },
+  "test_artifact": {
+    "path": "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts",
+    "sha256": "f79bf6d5ca248af5b84fcd6f1bf37ee4b1fa43df9b9c43b86abc150abc4c6be0"
+  },
+  "first_review_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-FIRST-REVIEW.json",
+    "sha256": "9a1aee83d5be5664a319262751ff1575d62718ed7125a9282b9686f7a42e8d58"
+  },
+  "criteria": [
+    {
+      "id": "ADMISSION_AND_CLOSED_SCHEMA",
+      "verdict": "pass",
+      "evidence": "Independent tests 1-5 and 9 exercise actual exported validation/parser boundary; separate trusted argument integrity only."
+    },
+    {
+      "id": "CENSUS_CROSS_REFERENCES_AND_UNKNOWN_RETENTION",
+      "verdict": "pass",
+      "evidence": "Tests 5-10 preserve 14 sources, 19 requirements, 7 categories and 7 gas groups; composed missing-facts regression repairs F01."
+    },
+    {
+      "id": "HELD_ONLY_PROFILE_CLASSIFICATION",
+      "verdict": "pass",
+      "evidence": "Tests 6-7 and 11-12 reproduce held candidates, unsupported/missing rows and exact M79 registry identities; zero released-supported output."
+    },
+    {
+      "id": "CANONICAL_IMMUTABILITY_AND_SCOPE",
+      "verdict": "pass",
+      "evidence": "Tests 13-14, exact snapshot hash/text comparison and static scope inspection; immutable fixtures, independent canonical hash, ordering independence, no mutable alias or release/numeric output."
+    }
+  ],
+  "limitations": [
+    "Trusted admission provenance and caller/tenant authentication are not proven by a pure function; future server/database adapters must establish them.",
+    "No persistence/history/concurrency, migrations, route/body/auth/origin handling, actual browser, hosted/provider or two-tenant execution was performed.",
+    "No numerical calculation, source/domain/rights release, professional/legal/accounting assurance, real customer data or invitation readiness is accepted.",
+    "M79 identity comparison uses the accepted retained inventory; this review does not freshly reopen primary source files.",
+    "The default process family remains unsupported with fourteen named required facts; missing boundary/source facts change its state to missing_facts without losing those fourteen gaps.",
+    "Calendar 2025 and operational control are synthetic proposed values, not confirmed customer facts.",
+    "No Git, deployment, M78 replay, paid calls or model-default changes were performed."
+  ]
+}

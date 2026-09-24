@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-24T17:00:28.091345+00:00",
+  "updated_at": "2026-09-24T19:13:28.367157+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -149,11 +149,11 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "Signed-in browser preserved; coordinator read-only September24 observation shows synthetic workspace. No new deployment; runtime identity last verified September23.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "M78 merged. CPO/CTO beta plans and first navigation increment independently accepted; local typecheck/staging build/lint and isolated navigation browser checks passed. Publication exact-head checks follow."
+    "last_session_work": "Navigation/plans published on PR6 head714e with six checks passed. Offline foundation candidate2 independently accepted and root reproduced14tests/354assertions; decision packet accepted as preparation. Persisted foundation/API implementation and independent security QA dispatched. No deployment or customer readiness."
   },
   "session_handoff": {
-    "current": "M80 navigation independently accepted locally; beta product and technical plans accepted; actual customerbeta not ready.",
-    "next": "Publish navigation/planning on successor rolling PR and verify checks, collect feedback, then implement reviewed synthetic beta foundation. M79 releases and realdata/invitation gates remain.",
+    "current": "PR6 navigation published and six checks passed. Offline foundation and release-decision packet independently accepted within bounded scopes; added publication pending. Customer beta incomplete.",
+    "next": "Publish accepted foundation/packet on same PR6; integrate and independently verify persisted synthetic setup/API/UI. Resolve exact source/domain decisions and later real-company/document/calculation gates before invitations.",
     "evidence": [
       "operations/next-session.md"
     ]
@@ -3416,7 +3416,7 @@
     }
   },
   "free_scope1_beta": {
-    "status": "planning",
+    "status": "foundation_accepted_runtime_implementation",
     "target": "2-3 supported companies, free invited beta",
     "company_profiles": "not selected; early source and evidence eligibility screening required",
     "outreach_authorized": false,
@@ -3424,18 +3424,21 @@
     "independent_numerical_qa_required": true,
     "real_data_ready": false,
     "scope2_deferred": true,
-    "implementation": "Navigation increment independently accepted locally; first foundation contract accepted for synthetic fixture metadata only. No foundation implementation, realdata, source release or invitation readiness.",
+    "implementation": "Offline synthetic contract implemented and independently accepted:14source rows,19evidence requirements, all profiles held. Persistence/API implementation is dispatched and not accepted yet. No real-data/source release/invitation readiness.",
     "product_plan": "docs/research/scope1-free-beta-m80-plan-20260924.md",
     "technical_plan": "docs/research/scope1-free-beta-technical-20260924.md",
     "navigation_review": "evaluations/research-qa/m80-navigation-independent-20260924.json",
     "publication_observation_receipt": ".superpowers/m80-final-publication.json when present",
-    "navigation_publication": "Reviewed source published on draft PR6; exact-head remote verification is a separate observed receipt. No live deployment or invitation readiness."
+    "navigation_publication": "PR6 exact head714e278cbfcc8bee4464a1c6fd108f8a09265146 passed six checks at2026-09-24T17:51:59UTC. No deployment.",
+    "foundation_review": "evaluations/research-qa/m80-foundation-contract-root-closure-20260924.json",
+    "release_packet_review": "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json",
+    "customer_ready": false
   },
   "session_pause": {
     "status": "resumed_by_board",
     "observed_at": "2026-09-24T17:26:52.702120+00:00",
     "user_requested": true,
-    "active_product_workers": 0,
+    "active_product_workers": 2,
     "preview_stopped": true,
     "external_mutation_in_flight": false,
     "new_work_published": false,
@@ -3443,5 +3446,29 @@
     "resume_requires_board_instruction": false,
     "resumed_at": "2026-09-24T17:32:14.144015+00:00",
     "checkpoint_verified_files": 39
+  },
+  "current_product_execution": {
+    "observed_at": "2026-09-24T19:13:28.367157+00:00",
+    "coordinator": "/root",
+    "active_workers": [
+      {
+        "task_id": "M80-FOUNDATION-RUNTIME-20260924",
+        "executor": "/root/m80_foundation_runtime",
+        "scope": "Additive synthetic-only persistence and tenant-bound API",
+        "status": "dispatched_implementation"
+      },
+      {
+        "task_id": "M80-FOUNDATION-RUNTIME-QA-20260924",
+        "executor": "/root/m80_foundation_runtime_qa",
+        "scope": "Independent local security, versioning and migration preservation review",
+        "status": "dispatched_review_preparation"
+      }
+    ],
+    "completed_bounded_tasks": [
+      "M80-FOUNDATION-CONTRACT-20260924",
+      "M80-FOUNDATION-CONTRACT-QA-20260924",
+      "M79-BETA-RELEASE-PACKET-20260924"
+    ],
+    "limits": "Dated actual dispatch snapshot. No hosted foundation, real-company admission, source release or beta readiness."
   }
 }
