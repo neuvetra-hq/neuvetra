@@ -1,3 +1,9 @@
+# September 24: PR6 is the active rolling product review
+
+Reviewed navigation and beta plans are published on https://github.com/neuvetra-hq/neuvetra/pull/6 from source commit129ede4e9297949b4dc076cdaf3f7cb5ed66920e. PR6 is open/draft; PR5 remains merged. This publication does not deploy the website or make the beta invite-ready. Verify the current PR head and six automated checks before reporting publication fully verified; the dated exact-head result is stored in .superpowers/m80-final-publication.json when available. The earlier pause/resume sections are historical checkpoints.
+
+Next: collect navigation feedback, then implement the accepted synthetic beta foundation contract. Existing source/domain release, real-company access/documents, numerical QA and hosted rehearsal gates remain. Keep Scope2 deferred and preserve all M78 no-replay limits.
+
 # September 24: resumed after Codex update
 
 Board explicitly resumed product work. Root verified all39 saved checkpoint files and backup bytes unchanged, local main-merge HEAD e10012bc, remote main e10012bc and product branch11ba5bdb. No M78 replay or PR5 merge is required. The pause section below is historical. Resume publication of the independently reviewed M80 navigation and plans after targeted pause/resume metadata review; application sources and accepted snapshots remain unchanged. No successor PR or new-head checks existed at this observation. Customer beta remains incomplete; source/domain, real-data, invitations and full rehearsal gates remain separate.

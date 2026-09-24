@@ -243,7 +243,7 @@
     "m61_review": "evaluations/research-qa/milestone61-inventory-draft-report-review-10.json",
     "m61_review_sha256": "922bb010ad76191c64b4329d08704900a79cb6124bc44e1332ef226d82e01dc5",
     "active_rolling_branch": "codex/corporate-mvp",
-    "active_rolling_pr": null,
+    "active_rolling_pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
     "m75_state": "live_independently_accepted_implementation_7e9abd2_six_checks_pass_closure_head_verified_separately",
     "current_m76": {
       "implementation": "152fcb070a4a81aa48ef6beccff629480fa9ffa2",
@@ -298,7 +298,9 @@
       "independent_review_sha256": "18351ac7e43fd5162c8a53960dd1534d0b9b5f4a9234e4d3bde904a057a2ff07",
       "deployment_performed": false,
       "customer_scope1_complete": false
-    }
+    },
+    "m80_navigation_source_commit": "129ede4e9297949b4dc076cdaf3f7cb5ed66920e",
+    "m80_check_receipt": ".superpowers/m80-final-publication.json when available; verify current PR head"
   },
   "reporting": {
     "cadence": "milestones_and_on_request",
@@ -3426,7 +3428,8 @@
     "product_plan": "docs/research/scope1-free-beta-m80-plan-20260924.md",
     "technical_plan": "docs/research/scope1-free-beta-technical-20260924.md",
     "navigation_review": "evaluations/research-qa/m80-navigation-independent-20260924.json",
-    "publication_observation_receipt": ".superpowers/m80-final-publication.json when present"
+    "publication_observation_receipt": ".superpowers/m80-final-publication.json when present",
+    "navigation_publication": "Reviewed source published on draft PR6; exact-head remote verification is a separate observed receipt. No live deployment or invitation readiness."
   },
   "session_pause": {
     "status": "resumed_by_board",
