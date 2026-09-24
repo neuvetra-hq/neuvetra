@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-24T19:44:28.993830+00:00",
+  "reviewer": "/root",
+  "status": "navigation_hosted_demonstration_passed",
+  "commit": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+  "deployment_id": "904ac743-2e13-489b-b2a3-62163d297352",
+  "image_digest": "sha256:ff5fc867ba683f04571ea641db6208ba5d463756b076715e4252ed50dba5de4c",
+  "readiness": {
+    "status": "ready",
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 21,
+    "legacyContainmentVerified": true
+  },
+  "source_review": "evaluations/research-qa/m80-navigation-independent-20260924.json",
+  "helper_review": "evaluations/research-qa/m80-nav-deployment-helper-review-20260924.json",
+  "remote_checks": {
+    "count": 6,
+    "all_success": true,
+    "observed_at": "2026-09-24T19:32:27.823126+00:00"
+  },
+  "browser": {
+    "url": "https://www.neuvetra.ai/",
+    "signed_in": true,
+    "access_verified": true,
+    "default_panel": "Scope 1 inventory",
+    "primary_views": 2,
+    "secondary_source_register_views": 6,
+    "secondary_electricity_example_views": 5,
+    "disclosure_click_and_keyboard_collapse": "passed",
+    "viewport_width": 846,
+    "horizontal_overflow": false,
+    "saved_inventory": {
+      "corporate_version": 9,
+      "entities": 2,
+      "facilities": 3,
+      "sources": 10,
+      "workflow_findings": 0,
+      "release_findings": 11,
+      "displayed_candidate_total_kg_co2e": "126850.1763"
+    },
+    "synthetic_and_unreleased_labels_preserved": true,
+    "application_save_actions": 0,
+    "final_view": "Scope 1 inventory, secondary disclosure collapsed"
+  },
+  "review_arrangement": "Existing independent source/navigation/helper QA plus root live provider/browser verification. No new source authoring by root for navigation.",
+  "limits": [
+    "Navigation acceptance only",
+    "No database migration or calculation/source release",
+    "No real-company data or invitations",
+    "New persisted foundation/API/setup UI remains unaccepted local work"
+  ],
+  "board_feedback": "pending_demonstration_review"
+}

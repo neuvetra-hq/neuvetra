@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "id": "M80-SETUP-PUBLICATION-METADATA-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-DELIVERABLE.json",
+      "sha256": "5d1d87a52ba5f1728042cd87144bebc6ede6562a456c4d2e5dea133354c541bd"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-ATTRIBUTES-SUPPLEMENT.json",
+      "sha256": "514e1afafa43402fb74e7ecf9bcf83d426f9a24275b82697d334f384d4f6f914"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_PINS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.json"
+      ],
+      "reason": "All10rawhashes match and closure references resolve."
+    },
+    {
+      "id": "CURRENT_CONSISTENCY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.json"
+      ],
+      "reason": "Stale current fields repaired; local/hosted/customer limits accurate."
+    },
+    {
+      "id": "TEST_ONLY_SUPPLEMENT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.json"
+      ],
+      "reason": "Exactly one schema expectation21\u219222; production bytes unchanged;2/16unit checks pass,9native skipped honestly."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-setup-publication-root-closure-20260924.json",
+      "evaluations/research-qa/m80-setup-attributes-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-DELIVERABLE.json",
+        "sha256": "5d1d87a52ba5f1728042cd87144bebc6ede6562a456c4d2e5dea133354c541bd"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-ATTRIBUTES-SUPPLEMENT.json",
+        "sha256": "514e1afafa43402fb74e7ecf9bcf83d426f9a24275b82697d334f384d4f6f914"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded independent review of8 frozen coordinator metadata files. Review consistency and evidence limits only, not self-acceptance of QA authorship. Requested Astra/high observed unknown. Root accepts this review.",
+    "Initial META-F01 failure retained; one rework closes it. Root acceptance pending; own run stays in_progress."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.json",
+      "sha256": "2e275a21988a4e1b8c361113e5f7f60a9ccebb8c8b81066ba0a16554d97c55d0"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.md",
+      "sha256": "029efd5206a347a0e80a9380e084af0839e94656631d1d62701019584ed33bf1"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-first-review.json",
+      "sha256": "56e4792572d87644e3ebbcf182b0cce445fb9c59b18d1c38165f81e1e735a4b4"
+    }
+  ]
+}

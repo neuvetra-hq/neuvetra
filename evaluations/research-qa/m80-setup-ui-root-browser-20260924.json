@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root",
+  "implementation_author": "/root/m80_setup_ui",
+  "status": "candidate1_review_pending_repairs",
+  "candidate_snapshot_sha256": "6944d220e356b76c2ddfc7f36f10ebce1e96128b632ba3301e4a38aae726d684",
+  "preview_repair_snapshot_sha256": "72e18f626928ced9066a3b9a60388c691a6ad529b55511b6297b9324bd982d8e",
+  "environment": "Actual component and application CSS in loopback Vite preview; disposable synthetic in-memory mock API; CUA browser",
+  "observed": [
+    "Original preview rendered blank because the React Refresh preamble was missing. Author repaired only the private preview configuration and separately pinned it.",
+    "Manager first save visibly returned version1; changing joint ventures to unknown and saving a correction returned version2.",
+    "Saved history retained versions1 and2. Selecting version1 visibly loaded its summary.",
+    "Member scenario retained read-only access despite its intentionally spoofed client admin role. No save or correction controls; boundary select disabled.",
+    "Clicked delayed response, immediately switched fictional workspace A to B and actor to member. B stayed unsaved/read-only after the delayed response elapsed; no A version2 state appeared.",
+    "Source census retained14 details and70 selectors, including14 process/gas screening controls. Evidence screen retained19 requirements.",
+    "Server error displayed a bounded error and Try again; retry retained the error while the scenario remained failing. Switching to manager restored the interface.",
+    "Keyboard Enter activated the Company and year tab.",
+    "At1280px viewport, document width1265px; at390px viewport, document width375px. No horizontal overflow. Blockers retained14 rows and zero released-supported sources. Viewport reset after review."
+  ],
+  "open_findings": [
+    "Independent integration probes found enum array coercion, source location identity substitution and fabricated classification acceptance in Candidate1. Author repairing; this browser observation is not release acceptance."
+  ],
+  "not_demonstrated": [
+    "Actual database persistence through browser, hosted migration, real authentication-provider integration, failed-save retry recovery and concurrency conflict UI remain separate checks.",
+    "No real company data, method release, calculations, invitations, reports or beta readiness."
+  ],
+  "date": "2026-09-24"
+}

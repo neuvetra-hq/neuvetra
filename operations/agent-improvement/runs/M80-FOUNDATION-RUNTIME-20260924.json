@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "id": "M80-FOUNDATION-RUNTIME-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_foundation_runtime",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE1.json",
+      "sha256": "3d05348d7266d70e86e4d71d089f02d2fcfff710b2f5b01d51c41d6a9d821883"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+      "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-bounded-persisted-synthetic-foundation",
+      "status": "pass",
+      "evidence": [
+        "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+        "packages/neuvetra-database/src/m80.ts"
+      ],
+      "reason": "Schema 22 persists only the admitted fixed synthetic setup, exact held registry, immutable versions, idempotency requests and audit records; all reads retain releasedSupportedCount zero and expose no calculation, release promotion, real-data, document or invitation path."
+    },
+    {
+      "id": "AC-02-tenant-authority-history-and-cas",
+      "status": "pass",
+      "evidence": [
+        "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+        "packages/neuvetra-database/src/m80.ts",
+        "apps/site-api/src/workspace/m80-beta-routes.ts"
+      ],
+      "reason": "Forced RLS and trusted membership checks protect reads, the bounded definer writer requires manager authority, and exact predecessor/idempotency binding appends an immutable history that supports current, list and version-detail reads with server-derived canManage."
+    },
+    {
+      "id": "AC-03-public-and-native-runtime-verification",
+      "status": "pass",
+      "evidence": [
+        "apps/site-api/src/workspace/m80-beta-routes.test.ts",
+        "apps/site-api/src/workspace/m80-beta-postgres.test.ts",
+        "apps/site-api/src/staging/server.test.ts",
+        "docs/research/m80-foundation-runtime-20260924.md"
+      ],
+      "reason": "Candidate 2 exact bytes passed package typechecks, 14 route/mount tests with 103 assertions, 10 pure tests with 93 assertions, and 5 real PostgreSQL/API tests with 51 assertions after a clean schema-21 clone migration. Native checks cover the six forced-RLS tables, exact runtime SELECT grants, denied direct mutations, canonical positive readback, exact numeric JSON and canonical timestamp refusal, metadata and setup refusal, history, replay and concurrent CAS."
+    },
+    {
+      "id": "AC-04-independent-security-review",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924.md",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-FIRST-REVIEW.json",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-DELIVERABLE.json"
+      ],
+      "reason": "Candidate 1 failed first review for accepting string-encoded numeric metadata. Exact Candidate 2 passed independent recheck with 20 integrated native groups/298 assertions and a separate privilege test/24 assertions; the review verified all 13 source files before and after execution, exact preservation of 120 old non-receipt tables plus 21 receipts, forced RLS, least privilege, two tenants, revocation, 45 malformed setups, history/replay/CAS and coordinated integrity corruption."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-foundation-runtime-independent-20260924.md",
+      "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+      "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-FIRST-REVIEW.json",
+      "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-DELIVERABLE.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE1.json",
+        "sha256": "3d05348d7266d70e86e4d71d089f02d2fcfff710b2f5b01d51c41d6a9d821883"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+        "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 free Scope 1 beta synthetic foundation runtime",
+  "applicable_lessons": [
+    "L01",
+    "L02",
+    "L04"
+  ],
+  "source_artifacts": [
+    {
+      "path": "docs/research/scope1-free-beta-technical-20260924.md",
+      "sha256": "e7c26892a60df40b431c5d73ad5236c7deb802b7898fa80f5ca3ceaed2a469e8"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json",
+      "sha256": "631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15"
+    }
+  ],
+  "notes": [
+    "Requested model/effort and observed settings remain distinct; observed model and effort are unavailable.",
+    "The PostgreSQL run used only an explicitly named disposable loopback clone of the retained synthetic schema-21 database. No ENV export, provider or hosted target was accessed.",
+    "The four accepted pure M80 contract, fixture, validator and validator-test files were not edited.",
+    "Candidate 1 failed independent first review because the SQL writer accepted JSON strings for numeric version metadata. Candidate 2 requires exact scalar types and canonical UTC millisecond timestamps and passed independent recheck; the failed first-review evidence remains retained.",
+    "No hosted-ready or invitation-ready claim is made."
+  ]
+}

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { DevelopmentWorkspaceDatabase } from "@neuvetra/database"
+import { DevelopmentWorkspaceDatabase, createM80FixtureSetup } from "@neuvetra/database"
 import { createStagingServer, type StagingDatabase, type StagingLog } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
@@ -38,7 +38,7 @@ async function fixture() {
       if (!allowed) return null
       return { workspace: allowed, role: userId === OWNER ? "owner" as const : userId === ADMIN ? "admin" as const : "member" as const, evidenceId }
     },
-    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 21 } },
+    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 22 } },
   }) as StagingDatabase
   const app = await createStagingServer(readStagingConfig(environment), {
     database, validateUser: async (token) => token === "broken-session" ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
@@ -51,8 +51,8 @@ async function fixture() {
 }
 
 describe("M63 private staging boundary", () => {
-  test("M78 runtime refuses schema20 and unknown schema22 before serving", async () => {
-    for (const schemaVersion of [20,22]) {
+  test("M80 runtime refuses schema21 and unknown schema23 before serving", async () => {
+    for (const schemaVersion of [21,23]) {
       let closed=false
       const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion}),close:async()=>{closed=true}} as unknown as StagingDatabase
       await expect(createStagingServer(readStagingConfig(environment),{database,validateUser:async()=>null,verifyAssets:async()=>{}})).rejects.toThrow("Private staging dependencies are unavailable.")
@@ -77,12 +77,12 @@ describe("M63 private staging boundary", () => {
 
   test("explicit existing-project reuse still requires verified database containment at startup", async () => {
     let closed = false
-    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 21 }), close: async () => { closed = true } } as unknown as StagingDatabase
+    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 22 }), close: async () => { closed = true } } as unknown as StagingDatabase
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
     await expect(createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {} })).rejects.toThrow("Private staging dependencies are unavailable.")
     expect(closed).toBe(true)
     let contained = true
-    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 21, legacyContainmentVerified: contained })
+    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 22, legacyContainmentVerified: contained })
     const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)
@@ -123,6 +123,24 @@ describe("M63 private staging boundary", () => {
     expect((await (await f.request("/workspace-api/session", "test-admin-session")).json()).access.evidenceId).toBe(evidence.id)
     const mutation = await f.request(`/workspace-api/workspace/${f.workspace.id}/bills`, "test-member-session", { method: "POST", body: form })
     expect(mutation.status).toBe(403)
+  })
+
+  test("mounts the M80 current, history and save routes behind staging authentication", async () => {
+    const f = await fixture()
+    const versionId = "88888888-8888-4888-8888-888888888888"
+    const view = { profile: "m80-scope1-beta-foundation-runtime-v1", syntheticOnly: true, canManage: true, fixtureAdmission: {}, releaseRegistry: [], currentVersion: null, history: [], setup: {}, eligibility: {} } as any
+    const version = { id: versionId } as any
+    ;(f.db as any).findM80Foundation = async (userId: string, companyId: string) => userId === OWNER && companyId === f.workspace.id ? view : null
+    ;(f.db as any).findM80FoundationVersion = async (userId: string, companyId: string, id: string) => userId === OWNER && companyId === f.workspace.id && id === versionId ? version : null
+    ;(f.db as any).saveM80Foundation = async () => ({ foundation: view, savedVersion: version, replayed: false })
+    const current = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session")
+    expect(current.status).toBe(200)
+    expect((await current.json()).syntheticOnly).toBe(true)
+    const history = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup/versions/${versionId}`, "test-owner-session")
+    expect(history.status).toBe(200)
+    const save = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session", { method: "POST", body: JSON.stringify({ idempotencyKey: "89999999-9999-4999-8999-999999999999", expectedRevision: 0, expectedVersionId: null, expectedVersionSha256: null, correctionReason: null, setup: createM80FixtureSetup(f.workspace.id) }) })
+    expect(save.status).toBe(201)
+    expect((await save.json()).savedVersion.id).toBe(versionId)
   })
 
   test("readiness fails closed and errors/logs contain no credentials, personal metadata or body", async () => {

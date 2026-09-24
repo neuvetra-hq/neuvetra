@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "verdict": "fail",
+  "candidate": 1,
+  "snapshot_sha256": "3d05348d7266d70e86e4d71d089f02d2fcfff710b2f5b01d51c41d6a9d821883",
+  "migration_sha256": "b8abbea5476ac19f289e7fa0a36ea79c1403772e3753ceaf63968a036c5b2df9",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "independent": true,
+  "observed_at": "2026-09-24T19:56:09.470187+00:00",
+  "checks": {
+    "exit_code": 1,
+    "assertions": 209,
+    "passed_groups": 8,
+    "failed_group": "direct SQL-entrypoint malformed metadata",
+    "native_receipt": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279672164.json",
+    "all13candidateFilesMatched": true
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "material",
+      "title": "String numeric metadata can poison setup history",
+      "reproduction": "Call actual save_scope1_beta_setup as allowed owner with independently canonicalized valid fixture setup; change version_payload.reportingYear from numeric2025 to string2025 and recalculate versionSha256. SQL accepts and inserts numeric reporting_year2025; actual readM80Foundation then throws Stored M80 version integrity check failed.",
+      "evidence": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-F01-reproduction.json",
+      "expected": "Reject inconsistent JSON metadata types before appending; apply exact number/type and timestamp checks to all version metadata.",
+      "status": "open"
+    }
+  ],
+  "harness_history": [
+    {
+      "attempt": "initial1",
+      "outcome": "interrupted own harness when nested connection wrapper used operator connection instead of transaction for audit read",
+      "product_finding": false
+    },
+    {
+      "attempt": "initial2 and diagnostic3",
+      "outcome": "interrupted own harness while Bun promise rejects matcher stalled native transaction; explicit async try/catch repaired. Database sessions ended; no hosted actions.",
+      "product_finding": false
+    }
+  ],
+  "unrun": [
+    "later success/correction/CAS/history groups",
+    "registry/audit/request tampering groups"
+  ]
+}

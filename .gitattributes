@@ -330,3 +330,40 @@ operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-FIRST
 # Preserve the two frozen M80 foundation candidate trailing newlines.
 operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE1.json whitespace=-blank-at-eof
 operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json whitespace=-blank-at-eof
+
+# Preserve exact reviewed M80 setup evidence and metadata bytes.
+evaluations/research-qa/m80-setup-integration-independent-20260924-F03.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-candidate1-api.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-extra-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-first-review.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle-candidate2.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-native-candidate2.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-native.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924.md -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-first-review.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-workflow.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-FOUNDATION-RUNTIME-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-SETUP-CI-WORKFLOW-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-SETUP-INTEGRATION-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-SETUP-PUBLICATION-METADATA-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-CI-WORKFLOW-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-CI-WORKFLOW-SUPPLEMENT-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-FIRST-REVIEW.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-FIRST-SUPPLEMENT.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-LIFECYCLE-FIRST-REVIEW.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-FIRST-REVIEW.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-PREVIEW-REPAIR1.json -text whitespace=cr-at-eol
+operations/board-report.md -text whitespace=cr-at-eol
+operations/next-session.md -text whitespace=cr-at-eol
+operations/status.json -text whitespace=cr-at-eol

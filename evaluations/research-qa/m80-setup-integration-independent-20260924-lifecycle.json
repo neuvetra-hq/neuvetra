@@ -1,0 +1,8 @@
+{
+  "harness": "Actual component code/effects/event handlers; injected hooks and async transport, no DOM or reconciler.",
+  "sameAuthorityTokenRefresh": {
+    "draftLost": true,
+    "editingLost": true
+  },
+  "pendingPriorRequestAborted": true
+}

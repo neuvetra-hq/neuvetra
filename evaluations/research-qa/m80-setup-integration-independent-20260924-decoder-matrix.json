@@ -1,0 +1,2184 @@
+{
+  "clientSha256": "c69162732fd29efd459e6bcac9f59134e63f52398bb7bf54e477000556c5af05",
+  "positiveControls": 3,
+  "negativeChecks": 544,
+  "failures": [],
+  "checks": [
+    {
+      "name": "array scalar setup.companyId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.dataClassification",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.reportingPeriod.start",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.reportingPeriod.endExclusive",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.consolidationApproach",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.boundaryProposal.jointVentureState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.boundaryProposal.reportingYearState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.boundaryProposal.ownershipChangeState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.entities.0.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.entities.0.ownershipState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.entities.0.controlState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.entities.0.activePeriodState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.entities.0.inclusionState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.countryCode",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.regionCode",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.controlState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.activePeriodState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.0.inclusionState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.countryCode",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.regionCode",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.controlState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.activePeriodState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.locations.1.inclusionState",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.0.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.1.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.2.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.3.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.4.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.5.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.6.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.7.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.8.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.9.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.10.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.0.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.0.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.1.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.1.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.2.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.2.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.3.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.3.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.4.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.4.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.5.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.5.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.6.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.categories.6.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.0.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.0.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.1.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.1.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.2.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.2.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.3.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.3.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.4.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.4.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.5.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.5.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.6.gasGroup",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.processScreen.gasGroups.6.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.11.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.12.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.entityId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.locationId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.category",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.subtype",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.knownFacts.fuelOrGas",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.knownFacts.equipmentKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.knownFacts.activityDataKind",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.knownFacts.activityUnit",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.sources.13.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.0.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.0.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.0.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.0.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.0.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.0.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.1.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.1.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.1.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.1.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.1.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.1.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.2.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.2.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.2.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.2.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.2.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.2.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.3.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.3.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.3.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.3.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.3.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.3.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.4.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.4.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.4.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.4.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.4.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.4.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.5.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.5.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.5.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.5.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.5.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.5.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.6.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.6.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.6.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.6.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.6.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.6.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.7.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.7.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.7.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.7.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.7.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.7.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.8.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.8.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.8.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.8.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.8.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.8.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.9.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.9.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.9.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.9.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.9.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.9.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.10.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.10.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.10.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.10.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.10.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.10.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.11.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.11.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.11.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.11.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.11.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.11.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.12.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.12.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.12.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.12.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.12.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.12.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.13.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.13.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.13.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.13.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.13.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.13.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.14.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.14.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.14.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.14.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.14.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.14.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.15.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.15.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.15.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.15.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.15.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.15.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.16.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.16.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.16.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.16.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.16.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.16.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.17.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.17.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.17.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.17.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.17.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.17.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.18.requirementId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.18.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.18.requirementType",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.18.coveragePeriod",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.18.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.evidenceRequirements.18.fixtureReferenceKey",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.completeness",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.fixture.profileId",
+      "refused": true
+    },
+    {
+      "name": "array scalar setup.fixture.sha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.profile",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.fixtureSha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.dataClassification",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.completeness",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.0.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.1.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.2.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.3.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.4.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.5.evidenceRequirementIds.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.6.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.7.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.8.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.9.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.10.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.blockerCodes.2",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.2",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.3",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.4",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.5",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.6",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.7",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.8",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.9",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.10",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.11",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.12",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.13",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.requiredFactCodes.14",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.11.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.12.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.sourceId",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.sourceIdentitySha256",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.state",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.blockerCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.blockerCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.requiredFactCodes.0",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.requiredFactCodes.1",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.requiredFactCodes.2",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.requiredFactCodes.3",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.requiredFactCodes.4",
+      "refused": true
+    },
+    {
+      "name": "array scalar eligibility.results.13.evidenceRequirementIds.0",
+      "refused": true
+    },
+    {
+      "name": "source location swap 0",
+      "refused": true
+    },
+    {
+      "name": "source location swap 1",
+      "refused": true
+    },
+    {
+      "name": "source location swap 2",
+      "refused": true
+    },
+    {
+      "name": "source location swap 3",
+      "refused": true
+    },
+    {
+      "name": "source location swap 4",
+      "refused": true
+    },
+    {
+      "name": "source location swap 5",
+      "refused": true
+    },
+    {
+      "name": "source location swap 6",
+      "refused": true
+    },
+    {
+      "name": "source location swap 7",
+      "refused": true
+    },
+    {
+      "name": "source location swap 8",
+      "refused": true
+    },
+    {
+      "name": "source location swap 9",
+      "refused": true
+    },
+    {
+      "name": "source location swap 10",
+      "refused": true
+    },
+    {
+      "name": "source location swap 11",
+      "refused": true
+    },
+    {
+      "name": "source location swap 12",
+      "refused": true
+    },
+    {
+      "name": "source location swap 13",
+      "refused": true
+    },
+    {
+      "name": "eligibility 0 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 0 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 0 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 0 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 1 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 1 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 1 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 1 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 2 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 2 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 2 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 2 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 3 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 3 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 3 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 3 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 4 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 4 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 4 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 4 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 5 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 5 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 5 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 5 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 6 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 6 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 6 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 6 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 7 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 7 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 7 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 7 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 8 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 8 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 8 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 8 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 9 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 9 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 9 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 9 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 10 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 10 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 10 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 10 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 11 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 11 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 11 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 11 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 12 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 12 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 12 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 12 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 13 state",
+      "refused": true
+    },
+    {
+      "name": "eligibility 13 candidateProfileId",
+      "refused": true
+    },
+    {
+      "name": "eligibility 13 blockerCodes",
+      "refused": true
+    },
+    {
+      "name": "eligibility 13 requiredFactCodes",
+      "refused": true
+    },
+    {
+      "name": "history 0 createdBy",
+      "refused": true
+    },
+    {
+      "name": "history 0 createdAt",
+      "refused": true
+    },
+    {
+      "name": "history 0 payloadSha256",
+      "refused": true
+    },
+    {
+      "name": "history 0 versionSha256",
+      "refused": true
+    },
+    {
+      "name": "history 0 id",
+      "refused": true
+    },
+    {
+      "name": "history 0 revision",
+      "refused": true
+    },
+    {
+      "name": "history 1 createdBy",
+      "refused": true
+    },
+    {
+      "name": "history 1 createdAt",
+      "refused": true
+    },
+    {
+      "name": "history 1 payloadSha256",
+      "refused": true
+    },
+    {
+      "name": "history 1 versionSha256",
+      "refused": true
+    },
+    {
+      "name": "history 1 id",
+      "refused": true
+    },
+    {
+      "name": "history 1 revision",
+      "refused": true
+    },
+    {
+      "name": "invalid calendar",
+      "refused": true
+    },
+    {
+      "name": "first with predecessor",
+      "refused": true
+    },
+    {
+      "name": "successor without predecessor",
+      "refused": true
+    },
+    {
+      "name": "self predecessor",
+      "refused": true
+    },
+    {
+      "name": "unpaired previous hash",
+      "refused": true
+    }
+  ]
+}

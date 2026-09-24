@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-FOUNDATION-RUNTIME-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "implementation_author": "/root/m80_foundation_runtime",
+  "independent": true,
+  "verdict": "pass_synthetic_foundation_runtime_only",
+  "first_review": "fail",
+  "rework_cycles": 1,
+  "material_findings_open": 0,
+  "observed_at": "2026-09-24T20:04:15.073470+00:00",
+  "candidate": {
+    "number": 2,
+    "snapshot": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+    "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b",
+    "migration_sha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35",
+    "all13filesMatchedBeforeAndAfterExecution": true
+  },
+  "reviewed_source_files": [
+    {
+      "path": "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+      "sha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80.ts",
+      "sha256": "402e1bfe48d4a847a5dcc90949ad55bf418ca9dee3fd829182a5456681857740"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "47b3f28d7af9bcd6b57cb71d9377ea5f735ab5647c592723306e13f2d6df6eeb"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "c4fafae30771701cab3030d65443e6afae560cdce3742285ab14a2b4f3f58201"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "cf91c02df0915f9d44b0b218c7bbebc5a2bfb05c8ab3ba0c1081242a3dcceb5f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "7f7a96f2fd015ee11a94ed56d5948745f6743c82ac0ba21aa5d06a74e629ad53"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "8541837f85d78aae412c507f3c40d9fa2ccfdf47b54ccf509f9a3811915ce326"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m80-beta-routes.ts",
+      "sha256": "7be9951e2681f0df45a203aed0a2b1736f412d5f40b2e5741d8899047e95804c"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m80-beta-routes.test.ts",
+      "sha256": "4ba8863f9fcfb10ed8c5d339e65032bcd2b152c8824c6e4708123fa98da63e18"
+    },
+    {
+      "path": "apps/site-api/src/workspace/m80-beta-postgres.test.ts",
+      "sha256": "57c778c7d02e83b6e29642f88f5c9d8240007b59fe82840845eb6346f006eaea"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.ts",
+      "sha256": "e3db6c78bdc5c9b973ed4dce76c0b38730b7380b0f2c2ced83a03f2ebd7625f7"
+    },
+    {
+      "path": "apps/site-api/src/staging/server.test.ts",
+      "sha256": "a43e3a0a3797127a88151e9634882e97055cf23ab6dc4a5015ead65fa1f2c87e"
+    },
+    {
+      "path": "docs/research/m80-foundation-runtime-20260924.md",
+      "sha256": "a0cbe8074530da1920f4aeb046c2e0d16ac62db5bb89eeccff547df1985376c7"
+    }
+  ],
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    }
+  },
+  "checks": [
+    {
+      "command": "NEUVETRA_M80_INDEPENDENT_NATIVE=1 bun test evaluations/research-qa/m80-foundation-runtime-independent-20260924.test.ts",
+      "exit_code": 0,
+      "tests": 1,
+      "groups": 20,
+      "assertions": 298,
+      "elapsed_seconds": 63.45,
+      "receipt": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279919377.json"
+    },
+    {
+      "command": "NEUVETRA_M80_INDEPENDENT_PRIVILEGES=1 bun test evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.test.ts",
+      "exit_code": 0,
+      "tests": 1,
+      "assertions": 24,
+      "elapsed_seconds": 0.227,
+      "receipt": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.json"
+    }
+  ],
+  "criterion_groups": [
+    {
+      "name": "schema21 baseline and exact additive migration",
+      "passed": true
+    },
+    {
+      "name": "migration second application no-op and occupied receipt refusal",
+      "passed": true
+    },
+    {
+      "name": "dedicated runtime readiness and forced RLS",
+      "passed": true
+    },
+    {
+      "name": "operator-only fixture admission required",
+      "passed": true
+    },
+    {
+      "name": "HTTP bearer, origin, body, methods and active-access gates",
+      "passed": true
+    },
+    {
+      "name": "tenant swap and member cannot save",
+      "passed": true
+    },
+    {
+      "name": "runtime direct table writes denied",
+      "passed": true
+    },
+    {
+      "name": "closed-schema, null-enum and exact-set challenge inputs refused atomically",
+      "passed": true
+    },
+    {
+      "name": "actual SQL entrypoint refuses validator-bypass inputs and actor forgery",
+      "passed": true
+    },
+    {
+      "name": "owner save, held-only output, exact replay and changed-key-content refusal",
+      "passed": true
+    },
+    {
+      "name": "two admitted tenants can reuse a key but never each others version",
+      "passed": true
+    },
+    {
+      "name": "seven legal single-field corrections retain immutable history",
+      "passed": true
+    },
+    {
+      "name": "stale predecessor, cross-tenant history and concurrent CAS",
+      "passed": true
+    },
+    {
+      "name": "old key replay after a later successor retains original version",
+      "passed": true
+    },
+    {
+      "name": "access revocation after successful save denies retained reads and writes",
+      "passed": true
+    },
+    {
+      "name": "cached manager state cannot survive role or fixture admission revocation",
+      "passed": true
+    },
+    {
+      "name": "revocation while authentication is pending rejects late authorized identity",
+      "passed": true
+    },
+    {
+      "name": "registry corruption and promotions fail closed through actual adapter/API",
+      "passed": true
+    },
+    {
+      "name": "canonical bytes, coordinated hash forgery and audit gaps fail closed",
+      "passed": true
+    },
+    {
+      "name": "mounted staging logs omit fixture payloads and rejected canaries",
+      "passed": true
+    }
+  ],
+  "preservation": {
+    "old_non_receipt_tables": 120,
+    "old_migration_receipt_rows": 21,
+    "old_total_tables_including_receipt_table": 121,
+    "content_before_after_exact": true,
+    "metadata_before_after_exact": true,
+    "metadata_groups": [
+      "roles",
+      "memberships",
+      "defaultAcls",
+      "namespaces",
+      "relations",
+      "attributes",
+      "constraints",
+      "policies",
+      "triggers",
+      "indexes",
+      "functions"
+    ],
+    "allowed_additions": "Schema22 new objects and internal foreign-key triggers referencing retained tables; all existing object definitions and ACLs unchanged."
+  },
+  "defects": [
+    {
+      "id": "F01",
+      "candidate": 1,
+      "severity": "material",
+      "finding": "Direct SQL accepted string reportingYear2025 with a correspondingly rehashed version, inserted numeric2025, and made actual adapter history unreadable.",
+      "first_review": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-first-review.json",
+      "first_review_snapshot": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-FIRST-REVIEW.json",
+      "first_review_snapshot_sha256": "3d80392b60308b41028340760bcdebbfb4390e2827bd30ce3ac42b9fed25beb8",
+      "disposition": "closed in candidate2: exact number/scalar metadata types plus canonical UTC millisecond timestamps; all adversarial variants refuse before append; positive direct write/readback still passes."
+    }
+  ],
+  "boundary_evidence": {
+    "actual_native_postgres_driver": true,
+    "actual_mounted_staging_server_and_http_socket": true,
+    "real_auth_provider": false,
+    "auth_and_asset_overrides": "Synthetic token-to-user mapping and inert asset verifier; no Supabase/provider request.",
+    "malformed_setup_variants": 45,
+    "valid_cumulative_single_field_corrections": 7,
+    "tenant_count": 2,
+    "zero_released_supported_verified": true,
+    "direct_runtime_insert_update_delete_truncate_sequence_denied": true,
+    "operator_only_admission_and_release_authority": true,
+    "definer_fixed_search_path_and_exact_one_runtime_execute": true,
+    "negative_registry_cases": [
+      "corrupt method",
+      "corrupt decision artifact",
+      "removed exclusions",
+      "released status",
+      "superseded status",
+      "missing row",
+      "duplicate candidate",
+      "expired/superseded release"
+    ],
+    "corruption_cases": [
+      "canonical byte change",
+      "missing audit current/history",
+      "missing request current/history",
+      "request fingerprint change",
+      "coordinated payload/hash/versionHash forgery through historic read"
+    ],
+    "revocation_cases": [
+      "owner role downgraded after cached canManage",
+      "staging access revoked",
+      "fixture admission revoked",
+      "authentication pending when access revoked"
+    ]
+  },
+  "lifecycle": {
+    "qa_app_connections_closed": true,
+    "temporary_http_server_stopped": true,
+    "qa_clones_retained": true,
+    "cluster_owned_by": "/root/m80_foundation_runtime",
+    "no_hosted_database_or_provider_action": true,
+    "no_M78_application_replay": true
+  },
+  "limitations": [
+    "Local synthetic foundation only; no hosted deployment/migration or real authentication-provider verification.",
+    "No frontend/browser usability or complete UI decoder verdict in this runtime assignment.",
+    "No source/domain/rights release, calculation, real document/customer-data handling, invitations, customer readiness, SB253 completeness or independent professional assurance.",
+    "Prior interrupted harness attempts are retained in first-review history; they were test-harness connection/matcher issues, not accepted product failures."
+  ]
+}

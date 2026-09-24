@@ -1,0 +1,66 @@
+{
+  "task_id": "M80-SETUP-PUBLICATION-METADATA-QA-20260924",
+  "verdict": "fail_current_metadata_consistency",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "first_review": true,
+  "observed_at": "2026-09-24T22:23:00.699740+00:00",
+  "exact_files": [
+    {
+      "path": "operations/status.json",
+      "sha256": "ae60d02d2bc1c2939ef5ef6b45a84de731847f324085f9298c1a64721b0612a8"
+    },
+    {
+      "path": "operations/board-report.md",
+      "sha256": "f3cb665068da0e5ca89ff0d3469d4e19b9e56ecbb2a219ad5fdc6daeb0f7ad82"
+    },
+    {
+      "path": "operations/next-session.md",
+      "sha256": "fc09cdc6c3b6eca9f902f266399f6e19c5f302c889d0467db309fa9794a0c8d7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-root-closure-20260924.json",
+      "sha256": "953cdda7f40b808be09f05aef2bc1b8ac271136f980774bb07c9d20aaa79aac6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-root-closure-20260924.json",
+      "sha256": "d51ff69547e89f403dd5a05eb5bdaaa21a4ad5b0018ac8ead760e1e62d82819b"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-ui-root-browser-20260924.json",
+      "sha256": "c0d0da2b1d8df10b1494de731dc87042ccae3d4b864826e4221cd5f4a30853b8"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json",
+      "sha256": "ccd95d62750bdcd3e2298d354884023a3de0a50cfb3b24555cc84b74887321a5"
+    },
+    {
+      "path": "evaluations/research-qa/m80-navigation-hosted-20260924.json",
+      "sha256": "48140fc15e2a7dc2337c3c3990dd3ed9b047a32ef70816c4317ac184116b3fda"
+    }
+  ],
+  "all_eight_hashes_match": true,
+  "findings": [
+    {
+      "id": "META-F01",
+      "severity": "medium",
+      "path": "operations/status.json",
+      "fields": [
+        "session_handoff.current",
+        "session_handoff.next",
+        "runtime.last_session_work"
+      ],
+      "summary": "Undated current fields still describe dispatched runtime work, pre-publication pure foundation and no deployment, contradicting same-file current accepted UI/runtime and existing540c/904ac navigation deployment.",
+      "observed_session_handoff": {
+        "current": "Focused Scope1 navigation live and demonstrated at540c/schema21. Foundation pure contract published; runtime/UI implementation and independent review continue locally.",
+        "next": "Publish accepted foundation/packet on same PR6; integrate and independently verify persisted synthetic setup/API/UI. Resolve exact source/domain decisions and later real-company/document/calculation gates before invitations.",
+        "evidence": [
+          "operations/next-session.md"
+        ]
+      },
+      "observed_last_session_work": "Navigation/plans published on PR6 head714e with six checks passed. Offline foundation candidate2 independently accepted and root reproduced14tests/354assertions; decision packet accepted as preparation. Persisted foundation/API implementation and independent security QA dispatched. No deployment or customer readiness.",
+      "fix": "Update these current fields or explicitly mark dated historical observations."
+    }
+  ],
+  "unaffected": "Leading board/next, free_scope1_beta/current_product_execution, runtime-root-closure, integration-root-closure and browser receipts match referenced local acceptance counts/hashes and explicitly preserve hosted/customer limitations.",
+  "limits": "Read-only consistency review against existing acceptance receipts and observed activity; no new provider/browser verification or self-acceptance of QA product."
+}

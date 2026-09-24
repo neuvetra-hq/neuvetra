@@ -12,14 +12,16 @@ import { CorporateCoverageRegister } from "./CorporateCoverageRegister"
 import { StationaryNaturalGas } from "./StationaryNaturalGas"
 import { MobileDiesel } from "./MobileDiesel"
 import { ControlledFleet } from "./ControlledFleet"
+import { Scope1BetaSetup } from "./Scope1BetaSetup"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
-type WorkspacePanel = "scope1" | "corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example"
+type WorkspacePanel = "setup" | "scope1" | "corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example"
 
 const sourceAndRegisterPanels: readonly WorkspacePanel[] = ["gas", "generator", "stationary", "mobile", "fleet", "fugitive"]
 const continuityPanels: readonly WorkspacePanel[] = ["evidence", "annual", "source", "worksheet", "example"]
 
 const panelLabels: Record<WorkspacePanel, string> = {
+  setup: "Scope 1 setup",
   scope1: "Scope 1 inventory",
   corporate: "Corporate coverage",
   gas: "Stationary natural gas",
@@ -36,10 +38,11 @@ const panelLabels: Record<WorkspacePanel, string> = {
 }
 
 export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
-  const [panel, setPanel] = useState<WorkspacePanel>("scope1")
+  const [panel, setPanel] = useState<WorkspacePanel>("setup")
   const secondaryPanel = sourceAndRegisterPanels.includes(panel) || continuityPanels.includes(panel)
   return <>
     <nav className="worksheet-nav workspace-primary-nav" aria-label="Primary workspace views">
+      <button type="button" aria-pressed={panel === "setup"} onClick={() => setPanel("setup")}>Scope 1 setup</button>
       <button type="button" aria-pressed={panel === "scope1"} onClick={() => setPanel("scope1")}>Scope 1 inventory</button>
       <button type="button" aria-pressed={panel === "corporate"} onClick={() => setPanel("corporate")}>Corporate coverage</button>
     </nav>
@@ -58,6 +61,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
         </nav>
       </section>
     </details>
+    {panel === "setup" && <Scope1BetaSetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "corporate" && <CorporateCoverageRegister key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "scope1" && <Scope1Inventory actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "gas" && <StationaryNaturalGas key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}

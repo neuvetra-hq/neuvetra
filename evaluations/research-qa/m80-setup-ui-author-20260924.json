@@ -1,0 +1,65 @@
+{
+  "status": "author_candidate_ready",
+  "scope": "M80 private synthetic Scope 1 setup UI",
+  "task_id": "M80-SETUP-UI-20260924",
+  "runtime_dependency": {
+    "candidate": "M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2",
+    "snapshot_sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b",
+    "acceptance": "passed independent local runtime security review; integrated UI/runtime review remains pending"
+  },
+  "author_observed": [
+    {
+      "command": "bun test src/lib/m80-beta-api.test.ts src/components/Scope1BetaSetup.test.tsx",
+      "directory": "apps/site-web",
+      "exit_code": 0,
+      "tests": 17,
+      "assertions": 38
+    },
+    {
+      "command": "bun run typecheck",
+      "directory": "apps/site-web",
+      "exit_code": 0
+    },
+    {
+      "command": "bun run lint -- src/lib/m80-beta-api.ts src/lib/m80-beta-api.test.ts src/lib/m80-beta-ui-state.ts src/components/Scope1BetaSetup.tsx src/components/Scope1BetaSetup.test.tsx src/components/StagingWorkspace.tsx",
+      "directory": "apps/site-web",
+      "exit_code": 0
+    },
+    {
+      "command": "bun run build:staging",
+      "directory": "apps/site-web",
+      "exit_code": 0,
+      "modules": 159,
+      "css": "staging-COhXYLMc.css",
+      "javascript": "staging-DHhRbfYe.js",
+      "advisory": "The existing JavaScript chunk remains above Vite's 500 kB advisory threshold."
+    },
+    {
+      "command": "bun build .superpowers/m80-setup-preview/mock-server.ts --target=bun",
+      "directory": ".",
+      "exit_code": 0
+    }
+  ],
+  "preview_observed": {
+    "page": "http://127.0.0.1:5198/m80-preview/",
+    "page_status": 200,
+    "module_status": 200,
+    "module_bytes": 15250,
+    "actual_component_import": true,
+    "actual_staging_css_import": true,
+    "mock_api_status": 200,
+    "delayed_response_milliseconds_observed": 1590,
+    "claims": "Local mock preview only; no database, hosted API, authentication, deployment or customer acceptance."
+  },
+  "covered_boundaries": [
+    "Exact held release authority, fixed fixture metadata, source identity hashes, 14-source census, 19 evidence requirements and seven-by-seven process screen",
+    "Bounded duplicate-key-rejecting response parsing and post-decode actor abort checks",
+    "Exact predecessor, payload, history membership and actor-createdBy save-result binding",
+    "Stable idempotency retry, explicit conflict recovery and no local forged save",
+    "Server-derived view-only authority plus stale actor, token and workspace response suppression",
+    "Readable synthetic rehearsal flow with separate missing, unsupported, held and released-supported counts"
+  ],
+  "no_hosted_or_integrated_acceptance_claim": true,
+  "no_account_or_customer_data_changes": true,
+  "independent_review": "pending"
+}

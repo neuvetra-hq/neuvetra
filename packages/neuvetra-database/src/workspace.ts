@@ -300,6 +300,9 @@ export class WorkspaceDatabase {
   protected constructor(protected readonly db: WorkspaceConnection) {}
 
   async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}
+  async findM80Foundation(userId:string,companyId:string){return this.asUser(userId,tx=>readM80Foundation(tx,companyId))}
+  async findM80FoundationVersion(userId:string,companyId:string,versionId:string){return this.asUser(userId,tx=>readM80FoundationVersion(tx,companyId,versionId))}
+  async saveM80Foundation(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>saveM80Foundation(tx,userId,companyId,input))}
   async findScope1(userId:string,companyId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1(tx,companyId,authorities,policy))}
   async findScope1Version(userId:string,companyId:string,streamId:string,versionId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Version(tx,companyId,streamId,versionId,authorities,policy))}
   async findScope1Report(userId:string,companyId:string,streamId:string,reportId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Report(tx,companyId,streamId,reportId,authorities,policy))}
@@ -1149,3 +1152,4 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
 
 }
 import {readScope1,readScope1Version,readScope1Report,saveProcessScreen,saveScope1Inventory,reviewScope1Version,createScope1Report,type M78Authorities,type M78Policy,type M78Family,type M78ProcessSaveInput,type M78InventorySaveInput,type M78ReviewInput,type M78ReportInput} from './m78'
+import {readM80Foundation,readM80FoundationVersion,saveM80Foundation} from './m80'

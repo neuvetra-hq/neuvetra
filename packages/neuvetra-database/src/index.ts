@@ -22,3 +22,7 @@ export * from "./m66-sources"
 export * from "./m67"
 export * from "./m67-report"
 export * from './m78'
+export * from './m80-contract'
+export * from './m80-fixture'
+export * from './m80-validation'
+export * from './m80'

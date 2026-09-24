@@ -5,7 +5,7 @@ import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audi
 import { readMigrationManifest } from "./staging-migrations"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 21
+export const STAGING_SCHEMA_VERSION = 22
 export interface HostedWorkspaceOptions {
   connectionString: string
   expectedProjectRef: string

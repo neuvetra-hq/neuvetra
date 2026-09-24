@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-24T22:20:02.033582+00:00",
+  "reviewer": "/root",
+  "verdict": "pass_local_synthetic_setup_integration_only",
+  "ui_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json",
+    "sha256": "5f7464b29e64b773aabd2a67732dfbecc34f48fd79cd7c349e76a30939ed73e7"
+  },
+  "runtime_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+    "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+  },
+  "qa_deliverable": {
+    "path": "operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-DELIVERABLE.json",
+    "sha256": "2ee9bb717bd9279bc30384a058c1df7a757f954f8a6c8edf8b51d2a9842770f5"
+  },
+  "browser_review": {
+    "path": "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json",
+    "sha256": "ccd95d62750bdcd3e2298d354884023a3de0a50cfb3b24555cc84b74887321a5"
+  },
+  "checks": [
+    "Root verified all11 UI/preview,13 runtime and10 QA artifact raw hashes against immutable snapshots.",
+    "Independent8tests90assertions,544 corrupted variants refused and603 valid variants accepted; five actual-component injected-hook lifecycle tests and nine actual-client/native-API groups.",
+    "Root personally exercised Candidate2 mock browser save retry, conflict, correction/history labels, session expiry, member permissions and delayed workspace switch.",
+    "First-review F01-F03 and rework retained; zero open material findings for this local synthetic slice."
+  ],
+  "limits": [
+    "Native authentication is a synthetic stub; browser uses disposable in-memory API. Real hosted provider/session and database-backed browser acceptance remain pending.",
+    "Publication, fresh backup/restore, hosted migration22/admission/deployment and hosted demonstration remain separate.",
+    "All methods remain held. No customer data, source release, calculations, invitations, beta readiness or assurance."
+  ]
+}
