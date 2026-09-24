@@ -1,0 +1,51 @@
+{
+  "observed_at": "2026-09-24T22:49:19.397999+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+  "sha": "8ab7e67b6a0c38db66d856e66f5b960df74525ea",
+  "pr_head": "8ab7e67b6a0c38db66d856e66f5b960df74525ea",
+  "draft": true,
+  "state": "open",
+  "checks": [
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "status": "pending",
+  "status_count": 0,
+  "diagnosis": [
+    "Image allowlist omitted new M80 contract, runtime modules and migration.",
+    "Closed M78 operator pin suites assume schema21; retain exact historical context.",
+    "Local native QA fixture rejects schema22 before exercising current lifecycle."
+  ],
+  "limits": [
+    "No hosted changes. Live540c/schema21 remains unchanged.",
+    "Local acceptance did not establish container packaging or full CI readiness; escaped integration defects preserved."
+  ]
+}

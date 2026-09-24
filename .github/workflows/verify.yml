@@ -102,7 +102,7 @@ jobs:
           NEUVETRA_M77_CI_BASELINE: "1"
 
       - name: Independently verify Scope 1 blocked lifecycle and retained downloads
-        run: bun test evaluations/research-qa/m78-ci-native.test.ts
+        run: bun test evaluations/research-qa/m80-ci-schema-regression.test.ts evaluations/research-qa/m78-ci-native.test.ts
         env:
           M78_QA_CI_BASELINE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
 
@@ -176,7 +176,17 @@ jobs:
           bun install --frozen-lockfile
           bun test tools/staging/m77-operators.test.ts
       - name: Independent Scope 1 browser decoding and recovery admission
-        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-backup.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+      - name: Check out frozen schema 21 operator context
+        uses: actions/checkout@v4
+        with:
+          ref: 540c71dbea6057f35a8b44074a71ceb9cf6bd6c3
+          path: .legacy-m78-schema21
+      - name: Preserve closed schema 21 operator and source-pin safeguards
+        working-directory: .legacy-m78-schema21
+        run: |
+          bun install --frozen-lockfile
+          bun test tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts tools/staging/m78-continuation-backup.test.ts
       - name: Check out frozen continuation recovery context
         uses: actions/checkout@v4
         with:
@@ -199,7 +209,12 @@ jobs:
         working-directory: .legacy-m78
         run: bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
       - name: Scope 1 GET preservation and finite diagnostic guards
-        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
+        run: bun test evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
+      - name: Current GET behavior independent of historical byte pins
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts --test-name-pattern "metadata,|authentication,|historical candidate1|the finite set|nested calls|historical result|actual frozen|actual evidence"
+      - name: Preserve exact historical GET source closure
+        working-directory: .legacy-m78-schema21
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts --test-name-pattern "finite SQL templates|candidate4 bytes|current closure is the 172"
       - name: Continuation4 closed baseline evidence guards
         run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
       - name: Continuation4 lifecycle and passive revisit guards

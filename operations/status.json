@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-24T22:21:47.177122+00:00",
+  "updated_at": "2026-09-24T22:50:20.731037+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -149,11 +149,11 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "Live540c/904ac navigation verified September24, signed-in Scope1 first; schema21 unchanged. Synthetic-only and customer incomplete.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Navigation and pure foundation/packet published at540c with six checks and navigation deployed once as904ac743 on schema21. Persisted setup runtime/UI accepted locally; publication and hosted schema22 operations remain pending. No customer readiness."
+    "last_session_work": "Accepted runtime/UI published8ab7e67; board approved local mock flow. CI exposed packaging and historical-schema fixture integration defects, now under repair with separate review. No hosted schema22 operations."
   },
   "session_handoff": {
-    "current": "Navigation540c/schema21 is live; runtimeCandidate2 and UICandidate2 setup accepted locally after independent review and root browser recheck. Setup publication pending; all methods held.",
-    "next": "Publish accepted persisted synthetic setup/API/UI to existing PR6 and verify exact-head checks. Separately review hosted-preparation tools and prepare live executor, fresh backup/restore and schema22 demonstration. Resolve source/domain and real-company/document/calculation gates before invitations.",
+    "current": "Board approved local synthetic setup flow; published8ab7e67 has three passed and three failed CI checks. Exact CI repairs and independent review active. Live540c/schema21 unchanged; all methods held.",
+    "next": "Review and publish bounded CI packaging/fixture repairs to PR6, verify six exact-head checks, finish separate hosted-preparation security repairs and concrete live executor before fresh backup/restore/schema22 demonstration. Real-company gates remain.",
     "evidence": [
       "operations/next-session.md"
     ]

@@ -196,3 +196,10 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/m78-report.ts
 !packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql
 !apps/site-api/src/workspace/m78-routes.ts
+
+!packages/neuvetra-database/src/m80.ts
+!packages/neuvetra-database/src/m80-contract.ts
+!packages/neuvetra-database/src/m80-fixture.ts
+!packages/neuvetra-database/src/m80-validation.ts
+!packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql
+!apps/site-api/src/workspace/m80-beta-routes.ts

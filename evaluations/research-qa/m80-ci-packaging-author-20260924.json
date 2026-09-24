@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-CI-PACKAGING-20260924",
+  "author": "/root/m80_setup_ui",
+  "observed_at": "2026-09-24T22:51:59.1732217Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "remote_failure_preserved": {
+    "log_path": ".superpowers/m80-ci-job-107863323384.log",
+    "sha256": "a667702e58b10388f94d12342e9ca8edac398bc37af95b9adb94ff44eaabd12b",
+    "published_head": "8ab7e67b6a0c38db66d856e66f5b960df74525ea",
+    "merge_sha": "4b2ed08a826a3a3d7439bf00a5dd5558489199dc",
+    "command": "docker build --platform linux/amd64 --file Dockerfile.staging --tag neuvetra-m63:4b2ed08a826a3a3d7439bf00a5dd5558489199dc .",
+    "failure": "The web-build stage failed at Dockerfile.staging line 38 with TS2307 for packages/neuvetra-database/src/m80-contract.ts in Scope1BetaSetup.tsx and m80-beta-api.ts; the later implicit-any diagnostics were cascading losses of the missing imported types.",
+    "evidence_lines": [90, 92, 98, 99, 100, 117, 120, 121, 122, 413, 435, 448, 449, 463, 467, 471, 472]
+  },
+  "diagnosis": {
+    "web_build": "The site-web TypeScript build imports m80-contract.ts directly. The contract has no transitive imports and was absent from the web-build COPY set.",
+    "runtime": "The final staging server imports m80-beta-routes.ts, the database package index exports m80.ts, m80-contract.ts, m80-fixture.ts and m80-validation.ts, and staging-migrations.ts names 0022_scope1_beta_foundation.sql. All six M80 runtime inputs were absent from the final image COPY set.",
+    "context_filter": "Dockerfile.staging.dockerignore is deny-by-default and excluded the same M80 files, so a Dockerfile-only COPY change could not succeed. The coordinator explicitly expanded scope to the six exact allowlist entries."
+  },
+  "candidate": {
+    "files": [
+      {
+        "path": "Dockerfile.staging",
+        "baseline_sha256": "1e1ca95ededdb9ecefcfca033e6f477ed8c5925968182dbe7c3758fe132e43cf",
+        "candidate_sha256": "db1a22620e19bc6d8a6578836501c793fd1128fbf84967d17608c4dc0ea5d1b",
+        "lines_added": 4
+      },
+      {
+        "path": "Dockerfile.staging.dockerignore",
+        "baseline_sha256": "cc0ca4c5c01f1adfc7e4a3430b55075c163c0c252c3210afff04beb542318f36",
+        "candidate_sha256": "4be6f9c2e8a3a12d10bda3649873914a69ea7a9dcfd145e47de959cc80cabebe",
+        "lines_added": 7
+      }
+    ],
+    "web_compile_inputs_added": [
+      "packages/neuvetra-database/src/m80-contract.ts"
+    ],
+    "runtime_inputs_added": [
+      "packages/neuvetra-database/src/m80.ts",
+      "packages/neuvetra-database/src/m80-contract.ts",
+      "packages/neuvetra-database/src/m80-fixture.ts",
+      "packages/neuvetra-database/src/m80-validation.ts",
+      "apps/site-api/src/workspace/m80-beta-routes.ts",
+      "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql"
+    ]
+  },
+  "checks": [
+    {
+      "name": "site-web staging build",
+      "command": "bun run --filter site-web build:staging",
+      "result": "pass",
+      "detail": "TypeScript project build and Vite staging bundle completed; 159 modules transformed. The existing chunk-size warning remains non-failing."
+    },
+    {
+      "name": "staging server import",
+      "command": "bun -e import staging server",
+      "result": "pass",
+      "detail": "The full current source tree imported apps/site-api/src/staging/server.ts successfully."
+    },
+    {
+      "name": "staging asset verification",
+      "command": "bun -e verifyStagingAssets",
+      "result": "pass",
+      "detail": "The generated dist-staging manifest and assets passed the existing runtime verifier."
+    },
+    {
+      "name": "reconstructed Docker COPY stages",
+      "result": "pass",
+      "detail": "A disposable local mirror populated only the workspace, web-build and runtime source inputs declared by Dockerfile.staging. The reduced web tree completed the staging build, and the reduced runtime tree imported the server and verified the copied assets. It confirmed the M80 contract in web, the route plus four database modules in runtime, and migration 0022 in runtime. The mirror and helper were removed after the check."
+    },
+    {
+      "name": "allowlist and COPY symmetry",
+      "result": "pass",
+      "detail": "Each of the six new source paths is both explicitly allowed by Dockerfile.staging.dockerignore and copied by Dockerfile.staging; m80-contract.ts is additionally copied into web-build."
+    },
+    {
+      "name": "scoped diff hygiene",
+      "command": "git diff --check -- Dockerfile.staging Dockerfile.staging.dockerignore",
+      "result": "pass",
+      "detail": "Only the two authorized packaging files changed in this workstream; accepted product source files were not modified."
+    }
+  ],
+  "limits": [
+    "Docker, Podman, nerdctl and Buildah are unavailable on this Windows host, so no actual container image was built locally.",
+    "A remote Linux Docker build remains required to validate Docker engine parsing, deny-by-default context handling, layer execution and final image startup.",
+    "This candidate does not address the separately owned stale M78 schema or pin failures and does not claim hosted acceptance or deployment.",
+    "The retained local M80 synthetic mock preview stayed available during the repair; it is not evidence of container acceptance."
+  ]
+}

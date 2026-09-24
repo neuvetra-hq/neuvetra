@@ -1,3 +1,9 @@
+# September 24: setup flow approved; published CI integration repairs in review
+
+Board approved the demonstrated local synthetic setup flow. Accepted runtime/UI published to PR6 at8ab7e67b6a0c38db66d856e66f5b960df74525ea; three of six exact-head checks failed. Image packaging omitted new modules, closed M78 operator tests assumed schema21, and the current native test fixture rejected schema22. See evaluations/research-qa/m80-setup-first-ci-20260924.json. Root is repairing workflow/local fixture boundaries; the setup author owns the exact image allowlist fix, with separate independent review before publication. Historical operator guards and no-replay locks remain unchanged.
+
+Live540c/schema21 is unchanged. Local preview uses synthetic mock responses. Hosted-preparation Candidate1 failed four security findings and remains unaccepted while repaired; no hosted backup, migration22, admission or deployment has occurred. After CI repair review, publish to the same PR and require all six exact-head checks. Then finish reviewed hosted execution preparation and demonstrate the saved setup on staging. All methods remain held; real-company beta and complete Scope1 remain incomplete. Scope2 remains deferred. Earlier entries are historical checkpoints.
+
 # September 24: local Scope 1 setup accepted; publication preparation
 
 Root accepted exact runtime Candidate2 and UI Candidate2 after separate independent native security, actual client/API integration, adversarial decoder and component lifecycle review, plus root browser recheck of the actual interface against disposable mock responses. Runtime:2tests/322assertions. Integration:8tests/90assertions,544 malformed variants refused,603 valid corrections accepted. First-review failures and repairs remain preserved. See evaluations/research-qa/m80-setup-integration-root-closure-20260924.json and m80-setup-ui-root-browser-candidate2-20260924.json.
