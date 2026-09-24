@@ -316,3 +316,7 @@ operations/agent-improvement/build-usage-events.jsonl -text whitespace=cr-at-eol
 operations/agent-improvement/build-operations-continuation.md -text whitespace=cr-at-eol
 operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A-summary.json -text whitespace=cr-at-eol
 operations/agent-improvement/integration-manifest-2026-09-24.json -text whitespace=cr-at-eol
+
+# Preserve reviewed evidence with intentional trailing blank lines.
+operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json whitespace=-blank-at-eof
+operations/update-pause-20260924.md whitespace=-blank-at-eof
