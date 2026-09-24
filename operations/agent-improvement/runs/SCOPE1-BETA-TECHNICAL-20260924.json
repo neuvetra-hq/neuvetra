@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "SCOPE1-BETA-TECHNICAL-20260924",
+  "role": "cto",
+  "execution_context": "/root/scope1_beta_technical",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/SCOPE1-BETA-TECHNICAL-20260924-CANDIDATE3.json",
+      "sha256": "f45a5e7a40d5da1e1a59e2f92de03e9acc1e3d2ff35577d884d8786c0413a4d0"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-current-boundaries",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-technical-20260924.md"
+      ],
+      "reason": "Maps observed authentication, active-access membership, runtime-function allowlist, synthetic profile, Scope 1 candidate policy, document and UI boundaries against current files at merged head e10012bc."
+    },
+    {
+      "id": "AC-02-first-safe-implementable-slice",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-technical-20260924.md"
+      ],
+      "reason": "Defines an additive synthetic-only foundation with a collision recheck for migration 0022, complete source-census intake, immutable server-owned release records seeded held, exact owned files and no calculation or real-data path."
+    },
+    {
+      "id": "AC-03-tests-and-critical-path",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-technical-20260924.md"
+      ],
+      "reason": "Provides migration, tenant-swap, database-authority, real-data refusal, release fail-closed, census, concurrency, decoder/UI and independent-review tests plus the smallest M79-to-M80 implementation sequence and exact missing decisions."
+    },
+    {
+      "id": "AC-04-independent-root-review",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/scope1-beta-technical-root-review-20260924.json"
+      ],
+      "reason": "Root independently accepted exact candidate3 design; no migration or release authorized."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/scope1-beta-technical-root-review-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/SCOPE1-BETA-TECHNICAL-20260924-CANDIDATE3.json",
+        "sha256": "f45a5e7a40d5da1e1a59e2f92de03e9acc1e3d2ff35577d884d8786c0413a4d0"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 earliest safe invited Scope 1 free-beta foundation",
+  "applicable_lessons": [],
+  "source_artifacts": [
+    {
+      "path": "docs/research/scope1-free-beta-technical-20260924.md",
+      "sha256": "e7c26892a60df40b431c5d73ad5236c7deb802b7898fa80f5ca3ceaed2a469e8"
+    }
+  ],
+  "notes": [
+    "Requested Sol/high and observed settings remain distinct; observed model/effort are unavailable.",
+    "No application code, migration execution, database, hosted service, provider, invitation, customer data, paid model, Git or shared-ledger action occurred.",
+    "The proposed 2025 operational-control envelope is derived from current exact profiles and is not recorded as a board-selected customer fact.",
+    "The current four profiles remain held and release-ineligible; numerical compatibility does not grant domain, rights or production release.",
+    "A separate writer owns the concurrent navigation refinement in StagingWorkspace.tsx and scoped-staging.css; this task did not edit or claim those files.",
+    "Candidate1 remains frozen at operations/agent-improvement/snapshots/SCOPE1-BETA-TECHNICAL-20260924-CANDIDATE1.json (SHA-256 3182f4cd390fd8aec106e40fb470eb0dbeb4731bc148a5500357700735770a34). Root's early design review failed its heuristic attempt to recognize likely real filenames or contacts and required precise handling of new authorization grants.",
+    "Candidate2 removes the heuristic. It requires an operator-owned admission for one exact synthetic fixture profile/hash, uses a strict schema with fixed fixture IDs and metadata-only evidence requirements, and permits only reviewed new schema-22 policy/grant differences while preserving old authorization state.",
+    "Candidate2 remains frozen at operations/agent-improvement/snapshots/SCOPE1-BETA-TECHNICAL-20260924-CANDIDATE2.json (SHA-256 0370b478eaeea0a96be77c793c1b1d36b35c3276c9b74724c8f8e79636132e34). Root's targeted follow-up found its acceptance test required export even though the first slice expressly rejects export.",
+    "Candidate3 limits first-slice unknown preservation to save/read and makes future export preservation a later requirement, not current acceptance.",
+    "Candidate3 is frozen and pending independent root review.",
+    "Root accepted candidate3 as technical planning only, after targeted synthetic-admission, grant-preservation and no-export corrections."
+  ]
+}

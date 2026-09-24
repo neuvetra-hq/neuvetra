@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-SCOPE1-NAV-QA-20260924",
+  "verdict": "pass_navigation_only",
+  "material_findings_open": 0,
+  "reviewer": "/root/merge_integration_qa",
+  "author": "/root/m80_scope1_nav",
+  "independent": true,
+  "authored_candidate": false,
+  "observed_at": "2026-09-24T17:21:16.507817+00:00",
+  "author_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json",
+    "sha256": "5c1716f4e7fc45ec4657aa59f01c38940f6cc19a8fdd8477acd3409d811e9316"
+  },
+  "review_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-CANDIDATE1.json",
+    "sha256": "1aed9431283ec58a11064c352ae7697dd011098e72c6333e0d5de704ba294199"
+  },
+  "source_artifacts": [
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "e0bdb05822d1a1eef379f9a2d54c7fd6f6cba969acd71306bdea3b49169f23a0"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "39b472061e8b8a0dcb47955aa3db8b6ff02861021cae9bc0f74b3db239e3df93"
+    }
+  ],
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    }
+  },
+  "review_arrangement": "Existing independent QA context reused; earlier documentation/integration reviews do not confer authorship of these app changes. Actual inherited compute remains unknown.",
+  "static_checks": {
+    "child_render_block_exact_e10012bc": true,
+    "child_keys_props_callbacks_hidden_mounts_preserved": true,
+    "all_13_views_preserved": true,
+    "only_initial_view_changed_to_scope1": true,
+    "old_css_unchanged_prefix": true,
+    "added_selectors_scoped_to_new_navigation": true,
+    "PrivateStaging_exact_e10012bc": true,
+    "actual_private_synthetic_notice_unchanged": true,
+    "numerical_authorization_code_changes": false,
+    "preview_navigation_source_css_match": true
+  },
+  "independent_browser": {
+    "surface": "Chrome, new ephemeral localhost5198 tab, closed after review",
+    "boundary": "Actual navigation and CSS with inert child placeholders, no account/API/data access",
+    "scope1_initial": true,
+    "space_key_all_13_expected_headings": true,
+    "all_13_selected_aria_pressed_true": true,
+    "single_selected_state_observed": true,
+    "collapsed_summary_preserves_Fleet_reconciliation": true,
+    "summary_tab_focuses_first_source_button": true,
+    "narrow_frame_control": 375,
+    "narrow_content_width": 360,
+    "narrow_scroll_width": 360,
+    "desktop_content_width": 1702,
+    "desktop_scroll_width": 1702,
+    "screenshots_visually_inspected": true,
+    "exported_screenshots": false,
+    "product_tab_untouched": true
+  },
+  "other_validation": {
+    "root_browser_receipt": {
+      "path": "evaluations/research-qa/m80-navigation-browser-root-20260924.json",
+      "sha256": "a3d476613e5b68ec8bd532813f26fa2fb1e68cb68c661f3ca9d6bcdf9e0dc08d"
+    },
+    "author_checks": "Author reported typecheck, lint and regular build passed; not rerun by this reviewer.",
+    "root_staging_build": "Root reported build:staging passed, 156 modules and existing chunk-size advisory; not independently rerun."
+  },
+  "preserved_inspection_issues": [
+    "Initial proposed author documentation path absent; root corrected scope to two files. No missing-document acceptance claimed.",
+    "Author snapshot uses artifacts rather than files; inspector corrected key after reading actual schema.",
+    "In-app browser unavailable; fresh Chrome tab used.",
+    "Cross-frame contentDocument unavailable in read-only browser projection; frame-scoped DOM measurement succeeded."
+  ],
+  "limitations": [
+    "No deployed UI, authentication, records, save operations, numerical calculations or full accessibility acceptance tested.",
+    "Child behavior preserved by exact source comparison; actual child lifecycle interactions not exercised through inert placeholders.",
+    "Beta/customer/source/method rights readiness unchanged; no invitation or deployment authorization conferred."
+  ],
+  "next_owner": "Root closes independent review record, publishes exact candidate on successor rolling PR and verifies required checks."
+}

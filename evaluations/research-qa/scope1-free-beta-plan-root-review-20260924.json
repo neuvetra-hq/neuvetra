@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task_id": "SCOPE1-FREE-BETA-PLAN-20260924",
+  "reviewer": "/root",
+  "author": "/root/scope1_beta_plan",
+  "independent": true,
+  "status": "pass_for_product_plan_only",
+  "candidate": 2,
+  "material_findings_open": 0,
+  "first_review": "fail",
+  "rework_cycles": 1,
+  "reviewed_snapshot": "operations/agent-improvement/snapshots/SCOPE1-FREE-BETA-PLAN-20260924-CANDIDATE2.json",
+  "reviewed_snapshot_sha256": "52417d77684bb88375a07aea211db85bf08affe50876e3a3db1018001f356f36",
+  "evidence": [
+    "docs/research/m80-beta-ux-observation-2026-09-24.md",
+    "docs/research/m79-method-source-inventory.json",
+    "docs/research/m79-numerical-compatibility.md",
+    "docs/research/m79-primary-rights-evidence.md",
+    "evaluations/research-qa/m78-pr5-merge-20260924.json"
+  ],
+  "checks": [
+    "Snapshot exact bytes match current plan.",
+    "Four profiles and proposed2025 envelope match M79 inventory, without selecting a company or industry.",
+    "104 corporate findings kept separate from Scope1 0workflow/11release and82widergaps.",
+    "M78 merge prerequisite accurately satisfied; numerical,rights,realdata and invitations remain independent gates.",
+    "Prior first-review error and candidate1 preserved."
+  ],
+  "limitations": [
+    "Planning acceptance only; no source/domain release, legal opinion, customer authorization, realdata handling or invitation readiness.",
+    "Root independently reviewed CPO plan, but authors root sharedhandoff records; those records await separate review."
+  ]
+}

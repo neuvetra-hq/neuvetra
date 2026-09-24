@@ -1,0 +1,17 @@
+{
+  "status": "pass",
+  "reviewer": "/root",
+  "scope": "Independent handoff of QA authored result; root authored the underlying shared records and is not their independent release reviewer.",
+  "independent_candidate_reviewer": "/root/merge_integration_qa",
+  "candidate_review": "evaluations/research-qa/m80-handoff-merge-independent-20260924.json",
+  "checks": [
+    "Read reviewer report/result",
+    "Rehashed exact five candidate files and candidate2 snapshot",
+    "Confirmed reported merge against actual tool observations"
+  ],
+  "reviewed_deliverable": {
+    "path": "operations/agent-improvement/snapshots/M80-HANDOFF-PLAN-QA-20260924-DELIVERABLE.json",
+    "sha256": "5d771bfd4d2796cac3eefd0e1eebbf98c9c4b0d8179a6fde90fec90bf9c821c8"
+  },
+  "material_findings_open": 0
+}

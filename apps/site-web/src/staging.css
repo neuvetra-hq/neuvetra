@@ -84,3 +84,11 @@
 .scope1-history { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
 .scope1-report-preview { display: block; width: 100%; min-height: 36rem; border: 1px solid #c9d3cd; margin-top: 1rem; background: white; }
 @media (max-width: 600px) { .scope1-totals, .scope1-retained { padding: .75rem; } .scope1-process-editor .stationary-fields { grid-template-columns: 1fr; } }
+
+/* Scope 1 is the initial path; source registers and preserved electricity views stay reachable in named groups. */
+.workspace-primary-nav { margin-bottom: 0; }
+.workspace-secondary-nav { margin-top: 12px; padding: 12px; border: 1px solid #53614c; border-radius: 8px; }
+.workspace-secondary-nav summary { cursor: pointer; font-weight: 650; }
+.workspace-secondary-nav h2 { margin: 18px 0 0; font-size: 1rem; }
+.workspace-secondary-nav nav { margin-top: 12px; }
+@media (max-width: 600px) { .workspace-primary-nav button, .workspace-secondary-nav button { width: 100%; } }

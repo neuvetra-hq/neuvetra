@@ -1,0 +1,43 @@
+{
+  "status": "pass",
+  "scope": "M80 navigation local validation",
+  "source_files": [
+    {
+      "path": "apps/site-web/src/components/StagingWorkspace.tsx",
+      "sha256": "e0bdb05822d1a1eef379f9a2d54c7fd6f6cba969acd71306bdea3b49169f23a0"
+    },
+    {
+      "path": "apps/site-web/src/staging.css",
+      "sha256": "39b472061e8b8a0dcb47955aa3db8b6ff02861021cae9bc0f74b3db239e3df93"
+    }
+  ],
+  "root_observed": [
+    {
+      "command": "bun run build:staging",
+      "directory": "apps/site-web",
+      "exit_code": 0,
+      "includes": [
+        "TypeScript project build",
+        "Vite staging build",
+        "staging asset finalization"
+      ],
+      "modules": 156,
+      "css": "staging-BKGnWQw_.css",
+      "javascript": "staging-CU1OVExi.js"
+    },
+    {
+      "command": "bun run lint",
+      "directory": "apps/site-web",
+      "exit_code": 0
+    }
+  ],
+  "author_reported": [
+    "bun run typecheck passed",
+    "bun run lint passed",
+    "bun run build passed"
+  ],
+  "advisory": "Existing JavaScript chunk exceeds500kB; no new code-splitting change in this increment.",
+  "browser_evidence": "evaluations/research-qa/m80-navigation-browser-root-20260924.json",
+  "no_deployment": true,
+  "no_account_or_data_changes": true
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "M80-RESUME-METADATA-QA-20260924",
+  "role": "qa-lead",
+  "execution_context": "/root/merge_integration_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESUME-METADATA-QA-20260924-DELIVERABLE.json",
+      "sha256": "f591d9ff090eeda1213cfdcd45ecf4fef7f1b044a2611be47c63db36df3c0a45"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "RESUMED_CHECKPOINT_METADATA",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-resume-metadata-independent-20260924.json",
+        "evaluations/research-qa/m80-resume-metadata-independent-20260924.md",
+        "operations/agent-improvement/snapshots/M80-RESUME-METADATA-QA-20260924-CANDIDATE1.json"
+      ],
+      "reason": "Archive and exact checkpoint delta verified; explicit resumed state preserves historical pause and truthful pending publication."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-resume-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RESUME-METADATA-QA-20260924-DELIVERABLE.json",
+        "sha256": "f591d9ff090eeda1213cfdcd45ecf4fef7f1b044a2611be47c63db36df3c0a45"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-resume-metadata-independent-20260924.json",
+      "sha256": "58ec120d0c3f794dac4ea87fba54ad4b68c8cdd8035a9756eedcc3445b0ce770"
+    },
+    {
+      "path": "evaluations/research-qa/m80-resume-metadata-independent-20260924.md",
+      "sha256": "c0ebc894c309474992973d160f111479d0ee0c56da902022dabc2de59ae674ed"
+    }
+  ]
+}

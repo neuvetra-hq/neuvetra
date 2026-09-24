@@ -1,0 +1,20 @@
+{
+  "status": "pass_navigation_and_planning_delivery_only",
+  "reviewer": "/root",
+  "independent_candidate_reviewer": "/root/merge_integration_qa",
+  "reviewed_QA_deliverable": {
+    "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-DELIVERABLE.json",
+    "sha256": "b13b5883e01e0764e2ff66093c771e84b6171aaf21c73d92af863adb58066764"
+  },
+  "material_findings_open": 0,
+  "checks": [
+    "Read independent app and text verdicts",
+    "Rehashed exact two app files and three current records",
+    "Observed staging build and lint, isolated browser checks",
+    "Root accepts QA authored deliverable; QA independently reviews root-authored current records"
+  ],
+  "customer_scope1_complete": false,
+  "beta_invite_ready": false,
+  "deployed": false,
+  "publication": "same branch successor PR; fresh remote checks required"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "pass_navigation_only",
+  "reviewer": "/root",
+  "author": "/root/m80_scope1_nav",
+  "independent_of_navigation_author": true,
+  "source_sha256": "e0bdb05822d1a1eef379f9a2d54c7fd6f6cba969acd71306bdea3b49169f23a0",
+  "css_sha256": "39b472061e8b8a0dcb47955aa3db8b6ff02861021cae9bc0f74b3db239e3df93",
+  "preview": "http://127.0.0.1:5198",
+  "harness_boundary": "Actual navigation source with imported child panels replaced by inert synthetic placeholders. Actual compiled index CSS/fonts and current staging CSS. Loopback static whitelist; no authentication, API or database.",
+  "checks": {
+    "scope1_initial": true,
+    "keyboard_enter_all_13_expected_panels": true,
+    "all_13_selected_aria_pressed": true,
+    "tab_from_open_summary_to_first_source_button": true,
+    "collapsed_summary_keeps_active_secondary_label": true,
+    "narrow_frame_outer_width": 375,
+    "narrow_content_width": 360,
+    "narrow_scroll_width": 360,
+    "desktop_content_width": 1249,
+    "desktop_scroll_width": 1249,
+    "visible_group_headings": true,
+    "child_render_block_unchanged_from_merged_head": true
+  },
+  "preserved_verification_errors": [
+    "Initial root string matcher assumed pressed attribute ordering; direct aria-pressed observations corrected it for all13controls.",
+    "Initial harness omitted base index CSS/reset/fonts, causing harness-only overflow. Added exact compiled base CSS/font bytes and staging shell before final responsive checks."
+  ],
+  "limitations": [
+    "Navigation layout/activation only; no new live deployment or actual account/record/API/calculation validation.",
+    "Screenshots viewed in tool transcript; no exported screenshot file.",
+    "Author staging build not yet separately observed; regular typecheck/lint/build passed by author."
+  ]
+}
