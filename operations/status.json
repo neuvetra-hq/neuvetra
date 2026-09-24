@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-23T04:53:47.178678+00:00",
+  "updated_at": "2026-09-24T16:46:48.712719+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "M78",
     "name": "Process screening and corporate Scope 1 reconciliation",
-    "status": "in_progress",
-    "next_gate": "Synthetic functional journey independently accepted (recovery eaa2f3e3/restart70211489/revisit76b481e6). Final evidence publication and six exact-head checks remain; board demonstration feedback requested. M79 method/source release next; customerScope1 incomplete.",
+    "status": "complete_bounded_synthetic",
+    "next_gate": "Board authorized PR5 merge after exact integrated-head checks and independent review. Actual customerScope1 incomplete; M79method/source release next; Scope2 deferred.",
     "evidence": [
       "operations/feedback/2026-09-16-m77.md",
       "docs/research/scope1-completion-matrix.md"
@@ -132,6 +132,14 @@
       "completed_at": "2026-09-16",
       "evidence": "docs/research/m77-publication.json",
       "board_feedback": "pending"
+    },
+    {
+      "id": "M78",
+      "completed_at": "2026-09-23",
+      "scope": "Bounded synthetic functional journey only",
+      "evidence": "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+      "publication_commit": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+      "customer_scope1_complete": false
     }
   ],
   "runtime": {
@@ -2890,12 +2898,17 @@
     "board_feedback": "Accepted: looks good; finish Scope 1; review Supabase email first."
   },
   "current_m78": {
-    "status": "synthetic_functional_accepted_final_publication_pending",
+    "status": "published_synthetic_functional_complete_merge_authorized",
     "active_assignments": [
       {
-        "id": "M78-PERSISTENCE-CLOSURE-ROOT",
+        "id": "M78-INTEGRATION-MERGE-ROOT-20260924",
         "executor": "/root",
-        "scope": "Publish accepted actual evidence on PR5 and verify exact remote head/six checks; collect board demonstration feedback."
+        "scope": "Exactallowlist integration, current records, PR5 publication/merge; sole Gitwriter"
+      },
+      {
+        "id": "M78-MERGE-INTEGRATION-QA-20260924",
+        "executor": "/root/merge_integration_qa",
+        "scope": "Independent integrated evidence and bounded release review"
       }
     ],
     "routing_exception": "Fresh independent reviewer dispatch requested Astra/high but failed at agent-thread limit; existing non-author reviewer received refreshed bounded brief. Actual inherited settings unknown.",
@@ -2965,11 +2978,12 @@
       "fresh_recovery_receipt_sha256": "b94069802c7d4011c7ede7bff03e4f409aa7dbb8866fd089565bede37e6ce180"
     },
     "publication": {
-      "commit": "62e6e3dc0fff2846c1d056bea5922c8849a01119",
+      "commit": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
       "required_checks_passed": 6,
       "required_checks_total": 6,
-      "observed_at": "2026-09-23T04:33:03.893340+00:00",
-      "remaining": "Final actual persistence evidence publication"
+      "refreshed_at": "2026-09-24T16:42:58.931434+00:00",
+      "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+      "merge_status": "authorized_pending_integrated_head_review_and_checks"
     },
     "exact_recipe_rehearsal": {
       "status": "historical_failed_run_preserved",
@@ -3314,7 +3328,7 @@
       "requests": 97
     },
     "synthetic_functional_accepted": true,
-    "board_demonstration_feedback": "requested_pending",
+    "board_demonstration_feedback": "Board September24: keep moving, merge ready reviewed work, assess actualScope1 beforeScope2",
     "remaining_customer_gates": [
       "Explicit compatible method/factor/GWP/source release and rights disposition",
       "Real customer boundary/source/activity evidence",

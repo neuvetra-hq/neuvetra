@@ -124,8 +124,8 @@
       "milestone_id": "AGENT-IMPROVEMENT",
       "title": "Capped model comparison",
       "problem": "Cheaper build models have not been evaluated against Neuvetra-specific work.",
-      "delivered_behavior": "Offline adapter independently accepted after one repair cycle; live comparison waits for secure OpenRouter credential.",
-      "state": "blocked",
+      "delivered_behavior": "Completed six-request comparison and independent grading for $0.0631382848. Neither candidate qualified for numerical work; existing role defaults retained. Experiment completion is not model qualification.",
+      "state": "accepted",
       "owner": "/root/pilot_runner",
       "risk_class": "critical",
       "complexity_class": "bounded_tooling",
@@ -134,13 +134,14 @@
         "OPS-METRICS-QA-01"
       ],
       "lifecycle": {
+        "accepted_at": "2026-09-22T21:01:47.516566+00:00",
         "lead_time_seconds": null
       },
       "acceptance_coverage": {
-        "passed": 1,
+        "passed": 3,
         "applicable_denominator": 3,
         "failed": 0,
-        "pending": 2
+        "pending": 0
       },
       "qa": {
         "unique_findings": 2,
@@ -151,8 +152,8 @@
           "medium": 2
         },
         "open_or_reopened_findings": 0,
-        "review_rounds": 2,
-        "completed_rounds": 2,
+        "review_rounds": 3,
+        "completed_rounds": 3,
         "rework_cycles": 1,
         "post_acceptance_findings": 0,
         "first_review": {
@@ -162,26 +163,99 @@
         }
       },
       "cost": {
-        "actual_usd_lower_bound": null,
-        "actual_usd_known_calls": 0,
-        "total_calls": 0,
+        "actual_usd_lower_bound": "0.0631382848",
+        "actual_usd_known_calls": 6,
+        "total_calls": 6,
         "unknown_actual_usd_calls": 0,
         "unsettled_reserved_usd": null,
         "unsettled_calls_with_known_reserve": 0,
         "unsettled_calls_with_unknown_reserve": 0,
         "actual_by_phase_usd": {
-          "implementation": null,
+          "implementation": "0.0631382848",
           "orchestration": null,
           "retry": null,
           "review": null
         }
       },
       "model_settings": {
-        "routes": [],
-        "total_calls": 0,
-        "requested_model_known_calls": 0,
+        "routes": [
+          {
+            "call_id": "bf27e7b3c0f2bbe1973c9c2269451608b628fded4ab088feb42bfb5fb583d7d2",
+            "run_id": null,
+            "requested": {
+              "model": "minimax/minimax-m3",
+              "effort": null
+            },
+            "actual": {
+              "model": "minimax/minimax-m3",
+              "effort": null
+            }
+          },
+          {
+            "call_id": "2b25fa72f7ba6a2b3e360aa0db7c5238d2c5e5820cf72c3b1ec23ca8ddac20b8",
+            "run_id": null,
+            "requested": {
+              "model": "minimax/minimax-m3",
+              "effort": null
+            },
+            "actual": {
+              "model": "minimax/minimax-m3",
+              "effort": null
+            }
+          },
+          {
+            "call_id": "094ff1ce891a96ecc5d1280182c9d250f412d76b3bb775f441b9433e72333626",
+            "run_id": null,
+            "requested": {
+              "model": "minimax/minimax-m3",
+              "effort": null
+            },
+            "actual": {
+              "model": "minimax/minimax-m3",
+              "effort": null
+            }
+          },
+          {
+            "call_id": "836c17a6e23cfe51fece3d9d01d3fd1d158b8c8ee7b61a190029b51cc475c409",
+            "run_id": null,
+            "requested": {
+              "model": "moonshotai/kimi-k2.7-code",
+              "effort": null
+            },
+            "actual": {
+              "model": "moonshotai/kimi-k2.7-code",
+              "effort": null
+            }
+          },
+          {
+            "call_id": "70bde35f3908ff4f161ef13195cb0642d973fa2c97bb925b2f7f792a2be43f13",
+            "run_id": null,
+            "requested": {
+              "model": "moonshotai/kimi-k2.7-code",
+              "effort": null
+            },
+            "actual": {
+              "model": "moonshotai/kimi-k2.7-code",
+              "effort": null
+            }
+          },
+          {
+            "call_id": "3c4b5e8966fd7915aa19b172b04383c67ce82d87deec0106fb6e2a4cc389e7d3",
+            "run_id": null,
+            "requested": {
+              "model": "moonshotai/kimi-k2.7-code",
+              "effort": null
+            },
+            "actual": {
+              "model": "moonshotai/kimi-k2.7-code",
+              "effort": null
+            }
+          }
+        ],
+        "total_calls": 6,
+        "requested_model_known_calls": 6,
         "requested_effort_known_calls": 0,
-        "actual_model_known_calls": 0,
+        "actual_model_known_calls": 6,
         "actual_effort_known_calls": 0
       },
       "native_runs": {
@@ -239,15 +313,15 @@
   ],
   "portfolio": {
     "features": 2,
-    "accepted_or_later_features": 1,
+    "accepted_or_later_features": 2,
     "first_review_passes": 0,
     "first_review_completed_denominator": 2,
-    "actual_usd_lower_bound": null,
-    "actual_usd_known_calls": 0,
-    "total_calls": 0,
+    "actual_usd_lower_bound": "0.0631382848",
+    "actual_usd_known_calls": 6,
+    "total_calls": 6,
     "unknown_actual_usd_calls": 0,
-    "actual_model_known_calls": 0,
-    "actual_model_total_calls": 0,
+    "actual_model_known_calls": 6,
+    "actual_model_total_calls": 6,
     "native_run_records_joined": 4,
     "native_runs_registered": 4,
     "native_run_cost_known": 0,
@@ -255,7 +329,7 @@
   },
   "model_performance_review": {
     "groups": [],
-    "unknown_actual_setting_calls": 0,
+    "unknown_actual_setting_calls": 6,
     "limitation": "Descriptive comparable-task slices; features touched do not establish model causality."
   },
   "limitation": "Derived from supplied records only; unknown measurements remain unknown and actual spend is a measured lower bound."

@@ -312,3 +312,7 @@ operations/agent-improvement/snapshots/M78-CONT4-GET-ROUTE-OPTIMIZATION-01-CANDI
 operations/agent-improvement/snapshots/M78-READONLY-RECOVERY2-IMPLEMENTATION-01-CANDIDATE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-READONLY-REVISIT-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M78-READONLY-REVISIT2-PREP-01-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/build-usage-events.jsonl -text whitespace=cr-at-eol
+operations/agent-improvement/build-operations-continuation.md -text whitespace=cr-at-eol
+operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A-summary.json -text whitespace=cr-at-eol
+operations/agent-improvement/integration-manifest-2026-09-24.json -text whitespace=cr-at-eol

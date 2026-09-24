@@ -1,0 +1,42 @@
+{
+  "observed_at": "2026-09-24T16:42:58.931434+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "sha": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+  "pr_head": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+  "draft": true,
+  "state": "open",
+  "checks": [
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "status": "pending",
+  "status_count": 0
+}

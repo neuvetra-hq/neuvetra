@@ -1,0 +1,26 @@
+{
+  "status": "m78_sept24_published_bounded_closure_reconciled",
+  "observedAt": "2026-09-24T16:46:48.712719+00:00",
+  "publishedHead": "df9d500a45fa4c0a449aca8dad33dd41f37008b4",
+  "requiredChecksPassed": 6,
+  "checksObservedAt": "2026-09-24T16:42:58.931434+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "mergeAuthorized": true,
+  "mergePerformed": false,
+  "scope1CustomerComplete": false,
+  "scope2AdvanceAuthorized": false,
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m78-readonly-recovery2-actual-independent-result.json",
+      "sha256": "eaa2f3e35e3e7b939a15aa9122fdddfea19625eefc484d305ecce656d4491bd1"
+    },
+    {
+      "path": "evaluations/research-qa/m78-recovery2-restart-actual-independent-result.json",
+      "sha256": "70211489b2413cd5d324574e225256893470c293160763e28f16f6b5216d7d00"
+    },
+    {
+      "path": "evaluations/research-qa/m78-readonly-revisit2-actual-independent-result.json",
+      "sha256": "76b481e6b740fa1cee629d90964c13cedd8aef7e46b4a00e9b168fafcec12922"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "BUILD-MODEL-PILOT-2026-09-22",
-  "status": "approved_not_executed",
+  "status": "initial_comparison_complete",
   "approval_source": "Board instruction in coordinator conversation, 2026-09-22: Yes, you can allocate $5 for that.",
   "purpose": "Initial bounded comparison of low-cost OpenRouter build workers, including measured reviewer effort and feature-level delivery metrics",
   "currency": "USD",
@@ -21,9 +21,9 @@
     "waiving independent review"
   ],
   "openrouter_balance_verified": false,
-  "calls_made_by_this_pilot": 0,
-  "pilot_spend_observed_usd": 0,
-  "pilot_spend_observation_basis": "No live requests have been issued under this pilot authorization",
+  "calls_made_by_this_pilot": 6,
+  "pilot_spend_observed_usd": "0.0631382848",
+  "pilot_spend_observation_basis": "Six settled provider usage receipts in OPS-PILOT-01-A; no uncertain calls. Native coordination/review cost unmeasured.",
   "execution_prerequisites": [
     "Secure existing account credential binding without exposing keys in prompts or logs",
     "Reviewed external-worker adapter with allowed files/tools and no production authority",
@@ -36,8 +36,11 @@
   "execution_readiness": {
     "adapter": "implemented_independently_reviewed_offline",
     "review": "operations/agent-improvement/OPS-METRICS-QA-01.md",
-    "credential": "not_available_in_executing_process; no approved existing binding known",
-    "paid_requests_sent": 0,
-    "model_results": "not_measured"
-  }
+    "credential": "OPEN_ROUTER entry located in board-specified local file; bound only to pilot process",
+    "paid_requests_sent": 6,
+    "model_results": "independently reviewed; no role promotion",
+    "run_id": "OPS-PILOT-01-A"
+  },
+  "review_evidence": "operations/agent-improvement/OPS-PILOT-01-A-review.md",
+  "remaining_approved_budget_usd": "4.9368617152"
 }
