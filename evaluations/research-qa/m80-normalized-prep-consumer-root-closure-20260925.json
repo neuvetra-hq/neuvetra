@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_independent_normalized_preparation_candidate2_source_review_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-QA-20260925-DELIVERABLE.json",
+    "sha256": "e47f64f03c408af22715cae808244368116b38d977bb8bec60f54d0900b70b97"
+  },
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+    "sha256": "4f3b373176ad4db420d733435a79bc7fa462801a79cfea18c319d58270d5a8dd"
+  },
+  "closed_findings": [
+    "PREP-V3-ROOT-F01"
+  ],
+  "failed_candidate1_preserved": true,
+  "checks": "13 author tests71assertions and5 independent tests128assertions; raw/normalized evidence, reviewer exclusions and cross-version durable paths verified.",
+  "hosted_action": false,
+  "limits": [
+    "Source-only acceptance. Actual archived-backup result review, executor/composer acceptance, publication and fresh actual gates remain separate."
+  ]
+}

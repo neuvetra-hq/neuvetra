@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "id": "M80-NORMALIZED-PREP-CONSUMER-20260925",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_setup_ui",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+      "sha256": "4f3b373176ad4db420d733435a79bc7fa462801a79cfea18c319d58270d5a8dd"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-normalized-preservation-proof",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-prep-consumer-author-candidate2-20260925.json",
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json"
+      ],
+      "reason": "Candidate2 consumes the exact frozen Backup V2 Candidate2 normalization proof and preservation receipt, recomputes raw state hashes, and keeps raw versus normalized equality distinct. Dependency acceptance remains pending."
+    },
+    {
+      "id": "AC-02-preserved-preparation-gates",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json"
+      ],
+      "reason": "The v3 validator retains chronology, freshness, exact table inventory, content, migration, RLS, runtime read-only, denied direct-write, four-held and connection-close gates."
+    },
+    {
+      "id": "AC-03-durable-lock-compatibility",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json"
+      ],
+      "reason": "The v1 operation-scope formula plus gate, intent, observation and outcome profiles and deterministic filenames remain unchanged; the test compares the v2 and v3 intent path."
+    },
+    {
+      "id": "AC-04-focused-synthetic-verification",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-prep-consumer-author-candidate2-20260925.json",
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json"
+      ],
+      "reason": "Thirteen synthetic tests with 71 assertions, targeted TypeScript and both Bun entrypoint bundles pass; Candidate2 preserves Candidate1 failure history and is frozen for independent review."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-normalized-prep-consumer-root-closure-20260925.json",
+      "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+        "sha256": "4f3b373176ad4db420d733435a79bc7fa462801a79cfea18c319d58270d5a8dd"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "registry_recommendation": {
+    "risk": "critical",
+    "model": "gpt-5.6-sol",
+    "effort": "high"
+  },
+  "routing_notes": "This assignment reused the existing /root/m80_setup_ui context. No fresh dispatch or model/effort override occurred, and followup_task cannot change settings. The compute.requested fields retain the validator-compatible registry recommendation only; they are not a claim that gpt-5.6-sol/high ran. The actually inherited model and effort are unavailable and remain unobserved.",
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Additive normalized restore preparation consumer candidate for independent QA; no live execution authority.",
+  "applicable_lessons": [
+    "L03",
+    "L04"
+  ],
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+      "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-core.ts",
+      "sha256": "5580afe97449038a4d5a693e2fe7fa2c5aa0f38595a68af32354bc064d9af36e"
+    },
+    {
+      "path": "evaluations/research-qa/m80-v2-integration-boundary-independent-20260925.md",
+      "sha256": "2ff91bf1edae62c9466b36226e8cefe10184a1accc2acc52a7bec4627f95a010"
+    }
+  ],
+  "notes": [
+    "Root accepted bounded C2 source review; no actual operation gate or hosted execution.",
+    "Four private source/test criterion occurrences were replaced with the exact public Candidate 2 snapshot that embeds and pins those immutable bytes; frozen candidate and review history is unchanged."
+  ]
+}

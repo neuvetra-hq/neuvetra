@@ -1,0 +1,23 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_independent_actual_archive_local_rehearsal_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-BACKUP-V2-ACTUAL-ARCHIVE-QA-20260925-DELIVERABLE.json",
+    "sha256": "caaff91c88e09974d34776568722775e32230471b81b65512ad6d47ee379b13b"
+  },
+  "qa_review": {
+    "path": "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-review.json",
+    "sha256": "8f110e552a98ad3520d1802e711eda67653542ceebaee525759e5798e6f5bc64"
+  },
+  "resolved_in_successor_path": [
+    "ACTUAL-RESTORE-F01"
+  ],
+  "original_failed_attempt_preserved": true,
+  "current_and_embedded_qa_artifacts_verified": 7,
+  "hosted_action": false,
+  "fresh_upgrade_evidence": false,
+  "limits": [
+    "Old backup remains diagnostic. Fresh recovered-target backup, accepted executor/composer, publication and actual stage gates remain required.",
+    "Raw metadata hashes remain unequal; only independently reviewed scoped normalization is equal. Full Scope1 and customer release remain incomplete."
+  ]
+}

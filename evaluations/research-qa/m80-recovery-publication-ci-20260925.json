@@ -1,0 +1,45 @@
+{
+  "reviewer": "/root",
+  "published_head": "d6d590aa0b46df0521127ef114d27deb101b0561",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+  "observed_at": "2026-09-25T03:07:53.885568+00:00",
+  "checks": [
+    {
+      "conclusion": "success",
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Offline research catalog tests",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "GHG calculation specifications and engine",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Role routing and evidence records",
+      "status": "completed"
+    }
+  ],
+  "private_receipt_sha256": "70bd36e3920acfbfae0ad3768a6186e071001bec681a4ec727d1704db9a0afb0",
+  "manifest_sha256": "0b7d3ae1a402a1bf6814a1b201aaaeb35792a98386a65d2ebf55e49f4d65ad4a",
+  "hosted_upgrade_performed": false,
+  "limits": [
+    "Recovery evidence publication only. Recovered prior schema21 application remains the latest verified live state.",
+    "Repair Candidate1 remains unaccepted; no schema22 action."
+  ]
+}

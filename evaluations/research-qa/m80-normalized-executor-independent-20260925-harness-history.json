@@ -1,0 +1,19 @@
+{
+  "candidate_failures": 0,
+  "harness_only_events": [
+    {
+      "command": "bun run composer-fixture.ts",
+      "result": "Refused by bun:test afterEach outside runner; fixture rerun with bun test, generated synthetic fixture, no source changes."
+    },
+    {
+      "test": "old v1 marker blocks v2",
+      "first_result": "Expected already exists; got Exact captured pre-migration application state required before durable attempt creation.",
+      "cause": "QA supplied nonexistent captureMigrationSource injection rather than migrationSourceState.",
+      "repair": "Use correct dependency field; all five tests rerun and pass, including the intended durable collision.",
+      "first_source": {
+        "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-initial-harness.txt",
+        "sha256": "ae00e56bf0db4541eae88f943edd86f0f86fce4a393fb7a2b981c5af1465cd87"
+      }
+    }
+  ]
+}

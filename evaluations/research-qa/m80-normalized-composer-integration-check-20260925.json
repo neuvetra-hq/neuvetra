@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-NORMALIZED-COMPOSER-INTEGRATION-CHECK-20260925",
+  "status": "pass_bounded_synthetic_source_check_only",
+  "observed_at": "2026-09-25T03:40:00.000Z",
+  "reviewer": "/root/m80_setup_ui",
+  "review_arrangement": {
+    "composer_author": "/root",
+    "preparation_author": "/root/m80_setup_ui",
+    "independent_of_composer_author": true,
+    "independent_of_preparation_author": false,
+    "claim_boundary": "This checks the root-authored composer source against the reviewer's frozen preparation boundary. It is not independent acceptance of preparation-v3, the integrated release, or any actual provenance."
+  },
+  "reviewed_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-INPUT-COMPOSER-20260925-CANDIDATE1.json",
+      "sha256": "7816c1d235562898926661e69dfe4cfedeebee46ac06d0868ec1cbad1bafa815"
+    },
+    {
+      "path": ".superpowers/m80-compose-hosted-input-v4.py",
+      "sha256": "aceeb96f7827a7df8dd35676ce9fc1e2987afaec84fc48463eab4d3c47678cf2"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+      "sha256": "4f3b373176ad4db420d733435a79bc7fa462801a79cfea18c319d58270d5a8dd"
+    }
+  ],
+  "test_artifact": {
+    "path": ".superpowers/m80-normalized-composer-integration-check.test.ts",
+    "sha256": "fea3e4bcfec5a6d85f6870d091b6d958ad4e10fa0f91139586083eda076aa3a2",
+    "fixture_classification": "synthetic_no_authority",
+    "actual_private_provenance_used": false
+  },
+  "positive_result": {
+    "composer_source_executed": true,
+    "composer_snapshot_bytes_exact": true,
+    "live_composer_bytes_exact": true,
+    "composed_input_profile": "neuvetra.m80.foundation-hosted-preparation-input.v3",
+    "builder_result_profile": "neuvetra.m80.foundation-hosted-preparation.v3",
+    "exact_plan_evidence_pins_checked": 12,
+    "loaded_composed_evidence_bodies": 9,
+    "normalized_metadata_exact": true,
+    "application_metadata_equivalent": true,
+    "raw_metadata_hashes_equal": false,
+    "execution_authorized": false,
+    "network_or_hosted_action_performed": false
+  },
+  "negative_results": [
+    "wrong normalization proof pin refused",
+    "mismatched backup receipt binding refused",
+    "mismatched common completion time refused",
+    "mismatched disposable database refused",
+    "forged source raw application-state hash refused",
+    "legacy preservation profile refused",
+    "changed owner observation refused",
+    "changed target observation refused",
+    "changed current publication observation refused"
+  ],
+  "validation": {
+    "synthetic_tests": "4 pass, 0 fail, 22 assertions",
+    "targeted_typescript": "pass",
+    "database_actions": 0,
+    "provider_actions": 0,
+    "network_actions": 0,
+    "credential_actions": 0,
+    "git_mutations": 0
+  },
+  "limitations": [
+    "The harness executes the exact frozen composer logic with in-memory synthetic fixtures and extracts frozen target constants without publishing private identity values.",
+    "Synthetic success does not establish that actual private source files exist, are fresh, or are authoritative.",
+    "Preparation Candidate2 and Backup V2 Candidate2 still require their own independent acceptance before integrated use.",
+    "Root owns composer repairs, versioned snapshots, final integration review and any operational action."
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-NORMALIZED-PREP-CONSUMER-20260925",
+  "candidate": 1,
+  "status": "candidate_pending_independent_review_and_dependency_acceptance",
+  "observed_at": "2026-09-25T03:10:35.872Z",
+  "scope": "Additive offline preparation and durable-intent consumer for typed normalized restore evidence. No database, provider, network, credential, Git, hosted action, or execution authority was used.",
+  "dependency": {
+    "status": "frozen_candidate2_pending_independent_acceptance",
+    "snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+      "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+    },
+    "core": {
+      "path": ".superpowers/m80-backup-v2-core.ts",
+      "sha256": "5580afe97449038a4d5a693e2fe7fa2c5aa0f38595a68af32354bc064d9af36e"
+    },
+    "history": "Backup V2 Candidate1 hash 777e... failed its author's independent QA; this consumer pins only Candidate2 and does not claim that Candidate2 is accepted."
+  },
+  "compatibility_memo": {
+    "path": "evaluations/research-qa/m80-v2-integration-boundary-independent-20260925.md",
+    "sha256": "2ff91bf1edae62c9466b36226e8cefe10184a1accc2acc52a7bec4627f95a010"
+  },
+  "changes": [
+    "Introduces closed preparation input and plan profiles v3 while retaining gate, intent, observation, outcome, operation-scope, and durable-path v1 identities.",
+    "Pins and byte-validates the full normalization proof separately from the v2 preservation receipt.",
+    "Recomputes source and restored raw application-state hashes from each content hash plus raw metadata hash, and binds the source raw state to the backup receipt.",
+    "Requires exact content equality, normalized metadata equality, application metadata equivalence, external default-ACL exclusion counts, internal-trigger multiplicity counts, all other metadata equality, schema21-to-22 migration evidence, RLS, runtime read-only behavior, denied direct writes, four HELD rows, and closed connections.",
+    "Accepts rawMetadataHashesEqual as either boolean only when it truthfully matches both raw metadata and recomputed raw application-state equality.",
+    "Preserves the existing operation-scope formula and deterministic intent/outcome filenames, preventing a version-only lock bypass.",
+    "Leaves actual in-place migration success evidence strict: oldContentExact and oldMetadataExact remain required in the authoritative migration observation."
+  ],
+  "source_artifacts": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v3.ts",
+      "sha256": "73ae4824f2536bba7aacac06c92df4882db414e6bcdc8e15dcdb2b38750e39e0"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v3.ts",
+      "sha256": "33d07fe84e619d569f912d86cbbf9ebece1ba78e54434781860e92eecd70294b"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v3.test.ts",
+      "sha256": "582b9e3bf9d4b065868500372c8e2c713921d687eb49538cd96ec64a24c1b6e9"
+    }
+  ],
+  "validation": {
+    "focused_tests": "13 pass, 0 fail, 69 assertions",
+    "targeted_typescript": "pass",
+    "bundle_check": "two Bun entrypoints bundled successfully",
+    "hosted_actions": 0,
+    "database_actions": 0,
+    "network_actions": 0
+  },
+  "limitations": [
+    "This is an author candidate, not independent acceptance or execution authorization.",
+    "The pinned Backup V2 Candidate2 dependency was frozen by its author but remained under independent review at candidate freeze.",
+    "No actual v2 archive, receipt, database, provider, credential, or hosted execution was used in these synthetic tests.",
+    "The root-owned composer and executor successors are outside this candidate."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+    "sha256": "4f3b373176ad4db420d733435a79bc7fa462801a79cfea18c319d58270d5a8dd"
+  },
+  "closure": {
+    "candidate_files_current_and_embedded": 4,
+    "declared_dependencies_current": 3,
+    "all_exact": true
+  },
+  "author_suite_reproduced": {
+    "tests": 13,
+    "assertions": 71,
+    "passed": true
+  },
+  "independent_suite": {
+    "tests": 5,
+    "assertions": 128,
+    "passed": true,
+    "input_negative_variants": 69,
+    "contradictory_receipt_variants": 27,
+    "reviewer_identities": 4,
+    "actual_retained_synthetic_receipt_files": 4
+  },
+  "operation_scope": "Exact source expression identical across v1/v2/v3; intent/outcome paths equal for all3 stages; version-only rehash cannot change scope",
+  "raw_boundary": "Consumer recomputes application-state hashes from content+raw metadata hashes and binds source to backup. Underlying metadata recomputation belongs to accepted BackupV2 source; consumer does not claim to recompute absent full inventories.",
+  "prior_stage_boundary": "In-place migration still requires oldContentExact and oldMetadataExact; normalized proof cannot substitute. Existing predecessor chronology/unknown-outcome checks unchanged and reproduced in author suite.",
+  "source_adaptation": "QA fixture extracts author synthetic fixture helpers; C1 once source is snapshot-frozen with import paths relocated only. Current candidate files remain unchanged.",
+  "no_actual_gate": true,
+  "no_database_network_credentials_provider_git_or_archive": true
+}

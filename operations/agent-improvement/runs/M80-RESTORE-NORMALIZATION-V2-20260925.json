@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "id": "M80-RESTORE-NORMALIZATION-V2-20260925",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_foundation_runtime",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+      "sha256": "8683a123dc91ff85d788d683f97575d27fe6f24efe55254a569bec681e936fe4"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-QA-20260925-FIRST-REVIEW.json",
+      "sha256": "6ce6ef9b1ddbfe5a5c3aa6ec1a898d315c8864fd1e7b11d4a7eef8d0f1ecf799"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+      "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-scoped-normalization",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+        "docs/research/m80-restore-normalization-v2-20260925.md"
+      ],
+      "reason": "Scoped ACL normalization retains global/application rows, refuses malformed or restored external rows and compares trigger semantics as an exact multiset."
+    },
+    {
+      "id": "AC-02-raw-migration-preservation",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json"
+      ],
+      "reason": "Same-database schema21-to-22 checks stay raw and add occurrence-counted old-trigger subtraction, including duplicate-loss refusal."
+    },
+    {
+      "id": "AC-03-native-rehearsal",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-PORTABLE-NATIVE-EVIDENCE-20260925.json",
+        "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+        "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json"
+      ],
+      "reason": "Fresh isolated synthetic clone passed exact restore, raw migration preservation, four held rows, RLS/runtime boundaries and no admission; two earlier failed attempts remain append-only evidence."
+    },
+    {
+      "id": "AC-04-versioned-consumer-boundary",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-restore-normalization-v2-20260925.md",
+        "evaluations/research-qa/m80-v2-integration-boundary-independent-20260925.md"
+      ],
+      "reason": "Compatibility map keeps raw backup/restore/migration semantics, versions only normalization/preservation and requires later prep/once/executor successors with unchanged historical operation identity."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-review.json",
+      "evaluations/research-qa/m80-restore-normalization-v2-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+        "sha256": "8683a123dc91ff85d788d683f97575d27fe6f24efe55254a569bec681e936fe4"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-QA-20260925-FIRST-REVIEW.json",
+        "sha256": "6ce6ef9b1ddbfe5a5c3aa6ec1a898d315c8864fd1e7b11d4a7eef8d0f1ecf799"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+        "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Implement additive restore normalization successor after the first actual application-only backup restored content exactly but differed in reviewed metadata categories.",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Registered software-engineering routine settings requested Terra/medium; observed execution settings unavailable.",
+    "Accepted Candidate 3 sources, snapshots and journals remain immutable. Hosted archive execution and live migration authority are excluded.",
+    "Two new author-native attempts failed on bounded test assertions and remain retained; a third fresh clone passed after correcting only the new assertion logic.",
+    "Candidate 1 independent review failed V2-F01 generic write-denial handling and V2-F02 standalone raw-hash integrity. Candidate 2 repairs both; 10 tests, 40 assertions and a new fresh native clone pass. Candidate 2 independent review is pending.",
+    "Bounded source/synthetic acceptance only. Actual archived-backup rehearsal and consumer integration remain separate.",
+    "The four retained private native result/journal evidence files are byte-pinned with sanitized facts in the public portable native-evidence snapshot; their private payload files remain unpublished.",
+    "Three private core/test criterion occurrences were replaced with the exact public Candidate 2 snapshot that embeds and pins those immutable bytes; frozen candidate and review history is unchanged."
+  ]
+}

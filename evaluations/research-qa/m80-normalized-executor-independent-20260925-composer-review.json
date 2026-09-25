@@ -1,0 +1,33 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "material_findings_open": 0,
+  "evidence": {
+    "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-evidence.json",
+    "sha256": "3f2208ccf9824acdda8c5f5995e2f5974698c368bd40e1ff4d88be851f7e3b2e"
+  },
+  "stage_execution_authorized": false,
+  "limits": [
+    "Transport source acceptance only; fresh target, publication/CI and stage gates remain separate.",
+    "No real provider, credential, DB, Git or archive operation by QA."
+  ],
+  "verdict": "pass_m80_normalized_input_composer_only",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-INPUT-COMPOSER-20260925-CANDIDATE1.json",
+    "sha256": "7816c1d235562898926661e69dfe4cfedeebee46ac06d0868ec1cbad1bafa815"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-compose-hosted-input-v4.py",
+      "sha256": "aceeb96f7827a7df8dd35676ce9fc1e2987afaec84fc48463eab4d3c47678cf2"
+    },
+    {
+      "path": "docs/research/m80-normalized-input-composer-20260925.md",
+      "sha256": "1d75d8c8be84a9bf3968b49669ab03e2afecb30631b297eda98becfbe1500096"
+    }
+  ],
+  "helper_sha256": "aceeb96f7827a7df8dd35676ce9fc1e2987afaec84fc48463eab4d3c47678cf2",
+  "conditions": [
+    "Normal Python without -O or PYTHONOPTIMIZE; exact source pin must be checked by root before use.",
+    "Output is local preparation input only, requiring accepted PrepC2 validation and independent stage evidence review."
+  ]
+}

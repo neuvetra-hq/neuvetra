@@ -1,0 +1,49 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORTS-20260925-CANDIDATE2.json",
+    "sha256": "4ca9f69ea372741fd597820ddb9013270d398ceb7c7a2bbde06d91ff9191f56d"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-provider-stop-recovered21.py",
+      "sha256": "033e4d550aaa490471536deb808b0065f1bf4f36ea1644712b5c1bb6793a7ca2"
+    },
+    {
+      "path": ".superpowers/m80-provider-recover21-recovered.py",
+      "sha256": "5269ceeba9ebff06518449eeafc850daaa3e8ec85adbf9380684d7348e54ab73"
+    },
+    {
+      "path": ".superpowers/m80-provider-observe-recovered21.py",
+      "sha256": "63d8cb410a627dcdb0c13151cf7ddf7c68b6a6d88d46d7cc72041c0c1398b770"
+    },
+    {
+      "path": "docs/research/m80-recovered-target-transports-20260925.md",
+      "sha256": "f924371faf7c8de6eda2ad664c68b73819c456a7d9d22a22f0720378aa58e1bc"
+    }
+  ],
+  "material_findings_open": 0,
+  "closed_findings": [
+    "RECOVERED-TRANSPORT-F01"
+  ],
+  "limits": [
+    "Transport source acceptance only. Executor-v2 independent acceptance and fresh actual root gate remain mandatory and pending.",
+    "No provider, hosted database, credential, network or Git action was executed. All external calls in main regression checks were injected mocks.",
+    "Existing consumed original attempts remain immutable. These new paths do not bypass the global migration-intent recovery lock."
+  ],
+  "checks": {
+    "path": "evaluations/research-qa/m80-recovered-target-transports-independent-20260925-checks.json",
+    "sha256": "fcc44dbaa617f2585232eda0ea3d3bd7c3f616f54aaa64363d74eaa74a5af519"
+  },
+  "verdict": "pass_recovered_target_transports_only",
+  "first_review": {
+    "path": "evaluations/research-qa/m80-recovered-target-transports-independent-20260925-candidate1-review.json",
+    "sha256": "914fc3fa6e077300f8d50012847861d4b5041392a8a8669b47da8d308cfe04fa"
+  },
+  "verification": {
+    "candidate2": "All four current and embedded artifact hashes match; only recovery entrypoint-list correction and report failure history differ from Candidate1.",
+    "derivation": "Stop/recovery Candidate1 match declared exact substitutions from accepted immutable helpers. Observer matches accepted v2 path/hash substitutions plus CRLF normalization.",
+    "executed": "8 independent tests including 6 stop main and 13 recovery main injected scenarios; source/gate/CI/target negatives retained.",
+    "harness_history": "First run passed all 8 tests then exact observer display comparison failed on CRLF. Explicit CRLF-to-LF derivation added; complete rerun passed. No candidate source changed."
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "root_result": {
+    "path": "evaluations/research-qa/m80-backup-v2-actual-archive-root-result-20260925.json",
+    "sha256": "5f3a76dcfef88ab7aa06a2619f606745969d6af3f5c1e5aaa9a3b2ee89b61fe2"
+  },
+  "private_receipt_pins": [
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-journal.jsonl",
+      "sha256": "ce2c626c1b7cf7898941dbb538d9a05117799c372e1b573df339af4abe4cd32e"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-migration-receipt.json",
+      "sha256": "66f4af179eceda7f669f6296e7fbe398fd0f919491928e581a9ca2375b9d58dd"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-normalization-proof.json",
+      "sha256": "a1b74f91c1992a6b5d60e5bce237a98bb3e3b0d8ca9df19f3336becb7f363e08"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-preservation-receipt.json",
+      "sha256": "6b2523796170744dbda146a4cb4a9fe2ba453b8485e88d50669eacc518ed11f6"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-restore-receipt.json",
+      "sha256": "2efc0b22a2cdb4381243c63f1a4a5c1a1d847b29d7650eba3c0c063b7151cb46"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-result.json",
+      "sha256": "732a717d2ddc880e6f6216895c31fd4e76ff3a255261a51347c94396f166f5b0"
+    }
+  ],
+  "accepted_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+    "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+  },
+  "accepted_source_review": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-review.json",
+    "sha256": "f480bfbcc296d38d1752593c6e13ab786cad8b483caf9fd0df1fda8e50af983b"
+  },
+  "archive_sha256": "cad84e68dac90cb703814f9ff10bb116c615ebe13c860f54d630910ece8483fd",
+  "backup_receipt_sha256": "d0d235e14266b87d19a92fc410574ae91196529521521e816fec713518a9e0ae",
+  "source_candidate_current_and_embedded_exact": true,
+  "journal_two_events_bound": true,
+  "four_receipts_and_result_completion_exact": true,
+  "receipt_counts_and_hash_bindings_exact": true,
+  "original_failed_journal_preserved": {
+    "path": ".superpowers/m80-backup-hosted-rehearsal-1790303149992/m80-backup-journal.jsonl",
+    "sha256": "dd6ec5b250e37e68f66648cdcd0eb070a4c877a41dee9781d521237909678246"
+  },
+  "native_corroboration": {
+    "path": "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-native.json",
+    "sha256": "6379842bd2e641fc7a81c70b068a73e9d023ed9044fb026496ad969330fa7322"
+  },
+  "actual_receipt_consumer_compatibility": {
+    "path": "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-consumer-compatibility.json",
+    "sha256": "589b775b5dd8a2d0cf2040bbf3c76fbd447543032838b67436d2502600883b88"
+  },
+  "no_repeat_restore_or_unseal": true
+}

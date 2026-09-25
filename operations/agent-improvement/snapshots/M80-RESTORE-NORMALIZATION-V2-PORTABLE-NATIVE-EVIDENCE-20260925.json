@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "profile": "neuvetra.m80.restore-normalization-v2-portable-native-evidence.v1",
+  "taskId": "M80-RESTORE-NORMALIZATION-V2-20260925",
+  "status": "sanitized_portable_author_evidence_not_independent_review",
+  "createdAt": "2026-09-25T03:45:02.969Z",
+  "rehearsals": [
+    {
+      "label": "candidate1_author_native",
+      "candidate": 1,
+      "syntheticOnly": true,
+      "sourcePrivateFilesRetainedNotPublished": [
+        {
+          "path": ".superpowers/m80-backup-v2-rehearsal-1790304944838/m80-backup-v2-result.json",
+          "sha256": "c34779beae534f17cae65e542daf542032a55003945e64d0075144a00647cc4b",
+          "bytes": 1119
+        },
+        {
+          "path": ".superpowers/m80-backup-v2-rehearsal-1790304944838/m80-backup-v2-journal.jsonl",
+          "sha256": "df50d5468032b64540da55f6f19a6e5c14473b1794a07bbf90fca3c36cc72933",
+          "bytes": 871
+        }
+      ],
+      "safeFacts": {
+        "resultProfile": "neuvetra.m80.foundation-restore-normalization-rehearsal-result.v2",
+        "completedAt": "2026-09-25T02:55:49.838Z",
+        "disposableDatabaseName": "m80_backup_foundation_1790304944838",
+        "contentExact": true,
+        "applicationMetadataEquivalent": true,
+        "rawSchema21To22Preservation": true,
+        "hostedEvidence": false,
+        "liveAuthority": false,
+        "receiptHashes": {
+          "restore": "9e15c86d38e630017ea9f704fbed76bf3c6e03540d36f65e596aaf6ba7cfc572",
+          "normalization": "106af725d5f42412903fef1b70ed87890ac5353c61606e027ed79dfe73036140",
+          "preservation": "65b223311d70abd44360b47bb7d746e44bea2fc632428e33664a3513a6ab23ee",
+          "migration": "a733f38f83390e190767c1b2577f92f46a00ed7857dc723778282241e1c0b7fc"
+        },
+        "journalEventCount": 2,
+        "journalStatuses": [
+          "m80_backup_v2_started",
+          "m80_backup_v2_completed"
+        ],
+        "journalStages": [
+          "schema21_restore",
+          "complete"
+        ],
+        "completionEventMatchesResult": true
+      }
+    },
+    {
+      "label": "candidate2_author_native",
+      "candidate": 2,
+      "syntheticOnly": true,
+      "sourcePrivateFilesRetainedNotPublished": [
+        {
+          "path": ".superpowers/m80-backup-v2-rehearsal-1790305760489/m80-backup-v2-result.json",
+          "sha256": "bf4284bbb2934dd7b6dc5ed6797534e9a9d0f219836b9c06167cbaa7d13f8016",
+          "bytes": 1119
+        },
+        {
+          "path": ".superpowers/m80-backup-v2-rehearsal-1790305760489/m80-backup-v2-journal.jsonl",
+          "sha256": "8bc46df41208a1c8d088ae4c5f561f7bef4a67b94a3c6dda6a2be16cc782b487",
+          "bytes": 871
+        }
+      ],
+      "safeFacts": {
+        "resultProfile": "neuvetra.m80.foundation-restore-normalization-rehearsal-result.v2",
+        "completedAt": "2026-09-25T03:09:25.545Z",
+        "disposableDatabaseName": "m80_backup_foundation_1790305760489",
+        "contentExact": true,
+        "applicationMetadataEquivalent": true,
+        "rawSchema21To22Preservation": true,
+        "hostedEvidence": false,
+        "liveAuthority": false,
+        "receiptHashes": {
+          "restore": "aefc4465d0d7b606f03476ab1ab7de04b3494d0bf1c45d8c44c5987ccd431ba6",
+          "normalization": "15a5f6d368c061d80365b584656f592582547dbf96986633df4882bd0eb43c94",
+          "preservation": "8ba9f685058229b08f72aa0a312bea82f8648ab620d09619224bd82a283c3ce2",
+          "migration": "605637aa3ebb86516233018c3ffd1b0033ca3fde12a5e19b09d58c98f8e1b18d"
+        },
+        "journalEventCount": 2,
+        "journalStatuses": [
+          "m80_backup_v2_started",
+          "m80_backup_v2_completed"
+        ],
+        "journalStages": [
+          "schema21_restore",
+          "complete"
+        ],
+        "completionEventMatchesResult": true
+      }
+    }
+  ],
+  "sanitization": {
+    "included": "Exact private source file pins, synthetic disposable database names, completion times, four receipt hashes, bounded pass booleans and two-event journal structure.",
+    "excluded": "Raw archive bytes, snapshot or row payloads, source/restored raw application-state hashes, source backup receipt hash, credentials, provider identifiers, customer data and private receipt bodies.",
+    "privateFilesRequiredForPortableEvidenceResolution": false
+  },
+  "claimBoundary": "Author-native synthetic rehearsal portability only. This snapshot is not independent review, hosted evidence, customer evidence, migration authority, provider authority or publication approval."
+}

@@ -1,0 +1,19 @@
+{
+  "profile": "neuvetra.m80.actual-archive-rehearsal-independent-review.v2",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_actual_archived_backup_local_rehearsal_only",
+  "evidence": {
+    "path": "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-evidence.json",
+    "sha256": "c59f743b8aa62d1d499de03310f75e78112b22607202e042890f642912a682ab"
+  },
+  "material_findings_open": 0,
+  "repair_finding": "ACTUAL-RESTORE-F01 demonstrated repaired for additive normalization path; original historical failed attempt unchanged",
+  "original_failure_preserved": true,
+  "fresh_upgrade_evidence": false,
+  "stage_execution_authorized": false,
+  "limits": [
+    "Archive contents were not unsealed again. Independent earlier actual diagnosis is retained; current independent native checks are read-only local comparisons.",
+    "Old archived backup remains diagnostic, not fresh recovered-target execution evidence.",
+    "Root remains sole eventual operator; current source review and evidence do not authorize any provider, hosted migration, admission or deployment action."
+  ]
+}

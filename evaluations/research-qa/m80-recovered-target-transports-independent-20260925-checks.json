@@ -1,0 +1,11 @@
+{
+  "candidate2_exact": true,
+  "candidate1_entrypoint_failure_preserved": true,
+  "derivation_exact": true,
+  "tests": 8,
+  "stop_mock_cases": 6,
+  "recovery_mock_cases": 13,
+  "observer": "Exact path/hash substitutions plus CRLF to LF from accepted source; no observer network execution",
+  "global_migration_lock": "unchanged across target/version; checked before/after inspection and after durable recovery intent",
+  "boundaries": "All network, Git, credential, provider, subprocess observations/mutations mocked. Real isolated temp-file writes and fsync only."
+}

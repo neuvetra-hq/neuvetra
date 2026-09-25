@@ -1,0 +1,107 @@
+{
+  "boundary": "Exact composer loaded without main, validate_sources and main exercised with synthetic private observations/mocked publication, Git and writes; actual accepted public closure pins read. No network/DB/credentials/real helper outputs.",
+  "source_sha256": "aceeb96f7827a7df8dd35676ce9fc1e2987afaec84fc48463eab4d3c47678cf2",
+  "results": [
+    {
+      "case": "positive_with_real_public_accepted_closures",
+      "accepted": true
+    },
+    {
+      "case": "0_profile",
+      "accepted": false
+    },
+    {
+      "case": "0_projectRef",
+      "accepted": false
+    },
+    {
+      "case": "0_sourceSchemaVersion",
+      "accepted": false
+    },
+    {
+      "case": "0_migrationReceiptCount",
+      "accepted": false
+    },
+    {
+      "case": "0_readOnly",
+      "accepted": false
+    },
+    {
+      "case": "2_existingManagerMembershipsVerified",
+      "accepted": false
+    },
+    {
+      "case": "4_emailConfirmed",
+      "accepted": false
+    },
+    {
+      "case": "4_verifiedUserProvidedEmail",
+      "accepted": false
+    },
+    {
+      "case": "4_managerRole",
+      "accepted": false
+    },
+    {
+      "case": "1_automatic_deployments_enabled",
+      "accepted": false
+    },
+    {
+      "case": "1_environment",
+      "accepted": false
+    },
+    {
+      "case": "1_service",
+      "accepted": false
+    },
+    {
+      "case": "1_project",
+      "accepted": false
+    },
+    {
+      "case": "1_active_deployment_count",
+      "accepted": false
+    },
+    {
+      "case": "1_mode",
+      "accepted": false
+    },
+    {
+      "case": "1_read_only",
+      "accepted": false
+    },
+    {
+      "case": "3_pr",
+      "accepted": false
+    },
+    {
+      "case": "3_state",
+      "accepted": false
+    },
+    {
+      "case": "3_observed_at",
+      "accepted": false
+    },
+    {
+      "case": "2_observedAt",
+      "accepted": false
+    },
+    {
+      "case": "duplicate_check",
+      "accepted": false
+    },
+    {
+      "case": "failed_check",
+      "accepted": false
+    },
+    {
+      "case": "wrong_readiness",
+      "accepted": false
+    },
+    {
+      "case": "wrong_commit",
+      "accepted": false
+    }
+  ],
+  "mocked_main_outputs": 6
+}

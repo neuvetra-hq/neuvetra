@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "M80-NORMALIZED-PREP-CONSUMER-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-QA-20260925-FIRST-REVIEW.json",
+      "sha256": "5557c01d8f8644d185b9c15b0adb40ab0cb4cacef7cf289feb879ec7e0a53d22"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-QA-20260925-DELIVERABLE.json",
+      "sha256": "e47f64f03c408af22715cae808244368116b38d977bb8bec60f54d0900b70b97"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-source-and-adversarial-integration",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-review.json",
+        "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-evidence.json"
+      ],
+      "reason": "C1 self-review defect reproduced; C2 closed against exact source and receipt/gate negatives."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-normalized-prep-consumer-root-closure-20260925.json",
+      "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-QA-20260925-FIRST-REVIEW.json",
+        "sha256": "5557c01d8f8644d185b9c15b0adb40ab0cb4cacef7cf289feb879ec7e0a53d22"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-QA-20260925-DELIVERABLE.json",
+        "sha256": "e47f64f03c408af22715cae808244368116b38d977bb8bec60f54d0900b70b97"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent normalized preparation receipt and stage authority source review",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Existing independent agent reused under root bounded dispatch, no source authorship conflict. C1 first failure preserved; C2 source acceptance only. Requested Astra/high; observed unknown.",
+    "Root accepted bounded C2 source review; no actual operation gate or hosted execution."
+  ]
+}

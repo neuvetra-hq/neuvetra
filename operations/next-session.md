@@ -1,3 +1,27 @@
+# September 25: normalized upgrade sources accepted; publication preparation
+
+Root accepted independent ExecutorV2 Candidate2 and composerV4 review: 32 process runs across20 lifecycle scenarios,174 recursive source files and targeted normalization, replay, raw-preservation and receipt checks. Closure: evaluations/research-qa/m80-normalized-executor-root-closure-20260925.json. Actual archived-backup local rehearsal, BackupV2, PrepV3 and recovered-target helpers are independently accepted within their stated bounds.
+
+Fresh read-only provider observation at03:48:23UTC confirmed recovered7b7d/540c/schema21, one active deployment, automatic deployments paused and origin200. No new hosted migration/admission/deployment. The old backup remains diagnostic. Publication preparation found private evidence links that fail clean-checkout validation; replacing mutable run links with exact public snapshots preserves original reviewed bytes. Next: independent final manifest review and publication to PR6, six remote checks, fresh stopped-target backup/rehearsal and separately reviewed actual stage gates, then live setup demonstration. Four methods held; full Scope1/customer beta incomplete.
+
+# September 25: actual archive repair accepted; final execution review active
+
+Independent review accepted the one-time local rehearsal of the actual archived backup, corroborating all prior application records, metadata equivalence, tenant controls and held methods. ACTUAL-RESTORE-F01 is resolved for the additive normalization path; the original failed attempt remains preserved. Closure: evaluations/research-qa/m80-backup-v2-actual-archive-root-closure-20260925.json. The old backup is diagnostic only.
+
+Preparation Candidate2 and recovered-target helpers are accepted; ExecutorV2 Candidate2 and root composer are under independent review. Public evidence portability repair is active. Prior site remains at recovered schema21; no new hosted migration, admission or deployment occurred. Next: publish the exact reviewed package on PR6, verify six checks, collect fresh recovered-target backup and execution evidence, then perform the reviewed one-time upgrade and live demonstration. All four methods held; full Scope1/customer beta incomplete. Earlier sections are historical.
+
+# September 25: actual archived backup restored with corrected comparison
+
+BackupV2 Candidate2 passed independent source/synthetic review after two preserved failures. Root restored the original encrypted hosted application archive once into new local clone1790306929913; all120 prior application tables and21 migration receipts preserved,27 external-schema default ACL rows classified out of application scope,998 internal-trigger rows/multiplicities exact. Raw metadata hashes remain unequal; normalized metadata matches. The local raw21-to22 rehearsal, held registry and specific permission-denial checks passed. Evidence: evaluations/research-qa/m80-backup-v2-actual-archive-root-result-20260925.json. Independent actual-result review is pending.
+
+No hosted schema22 action or new deployment occurred. The recovered prior site returned ready schema21 at03:13:40UTC. Recovered-target stop/recovery/observer sources passed independent review; preparation and executor/composer integration reviews continue. The old backup is diagnostic evidence only; a fresh recovered-target backup and actual stage gates are still required. Original failed journals and consumed attempts remain preserved. Full Scope1/customerbeta incomplete; all four methods held.
+
+# September 25: recovery evidence published; normalized restore repair under review
+
+Recovery checkpoint d6d590aa0b46df0521127ef114d27deb101b0561 is pushed and remote-verified on PR6; all six exact-head checks passed at03:07:53UTC (evaluations/research-qa/m80-recovery-publication-ci-20260925.json). Exact36-file manifest and the sole preserved diagnostic EOF warning passed independent review. Original publication halt and separate continuation intent remain preserved. Staging remains prior540c/schema21 on recovered7b7d1c4e; no schema22 action.
+
+BackupV2 Candidate1 passed author synthetic rehearsal but independent review found generic write-error acceptance and unvalidated standalone raw-hash claims. Candidate2 repair is active; Candidate1 and all failed journals remain preserved. Versioned preparation and executor consumers are in progress. Root provider/composer successors are inert unreviewed drafts. No actual archived-backup v2 rehearsal or upgrade gate is accepted. Full Scope1 and real-company beta remain incomplete; four methods held and Scope2 deferred.
+
 # September 24: fresh backup metadata rehearsal failed; prior staging recovered
 
 Upgrade preparation published at 7bc6028cf016372f52e82a483b7f61bc49c6331e with all six exact-head checks passed. The earlier ec02446b evidence portability failure and reviewed correction are preserved. Root stopped the prior deployment once, observed all runtime connections clear, and completed a fresh encrypted application backup. The local restore reproduced every application record, but exact metadata comparison failed for default privileges and internal triggers. No migration intent, schema22 migration, fixture admission or new setup deployment occurred.

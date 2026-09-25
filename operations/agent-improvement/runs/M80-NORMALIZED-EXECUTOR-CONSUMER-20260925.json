@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "id": "M80-NORMALIZED-EXECUTOR-CONSUMER-20260925",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_foundation_runtime",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE1.json",
+      "sha256": "0202500c719b49a6c7e80fc3677986658b72a7c9dacaa8d40a928f7230394ed0"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json",
+      "sha256": "f690767d4b3ce0d19a6024be2822582f70378be23e53d46afa07d65838bd27cf"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-versioned-plan-evidence",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json"
+      ],
+      "reason": "The v2 plan, bundle and evidence loader require and reconstruct the exact normalized restore proof before durable attempt creation."
+    },
+    {
+      "id": "AC-02-raw-migration-delta",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json"
+      ],
+      "reason": "Migration execution and reconciliation use the additive raw schema delta, including occurrence-counted old-trigger preservation, against the same database."
+    },
+    {
+      "id": "AC-03-lifecycle-preservation",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json",
+        "docs/research/m80-normalized-executor-consumer-20260925.md"
+      ],
+      "reason": "Twenty-three injected tests preserve Candidate 9 durability, uncertainty, reconciliation, acknowledgement, readiness, database-lifetime and no-replay controls."
+    },
+    {
+      "id": "AC-04-private-entry-and-composer",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json",
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE1.json"
+      ],
+      "reason": "The fixed private v2 entrypoint and offline composer fail closed, carry the exact normalized proof, and keep every durable operation path byte-identical across versions."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-normalized-executor-independent-20260925-review.json",
+      "evaluations/research-qa/m80-normalized-executor-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE1.json",
+        "sha256": "0202500c719b49a6c7e80fc3677986658b72a7c9dacaa8d40a928f7230394ed0"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json",
+        "sha256": "f690767d4b3ce0d19a6024be2822582f70378be23e53d46afa07d65838bd27cf"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Consume accepted normalized restore evidence in a versioned executor without changing accepted C9 lifecycle or operation identity.",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Registered software-engineering routine settings requested Terra/medium; observed execution settings unavailable.",
+    "Only additive v2 executor, private bridge and bundle composer files are owned. No hosted, provider, archive, environment, Git or live database action is authorized.",
+    "Candidate 1 has 23 passing tests and 84 assertions; targeted TypeScript, executor bundle, composer bundle and recursive 30-artifact current-byte closure validation pass.",
+    "Candidate 1 preserved the then-pending preparation dependency honestly. Backup normalization Candidate 2 and normalized preparation Candidate 2 subsequently passed bounded independent source review; Candidate 2 records their exact review pins.",
+    "No hosted gate or stage authority exists. Executor Candidate 2 remains pending independent executor review and root acceptance.",
+    "Root accepted exact bounded independent source review only; no fresh hosted gate. Existing context reused: registry model recommendation is not a newly applied dispatch override; inherited actual settings unknown.",
+    "Publication portability: replaced 8 private criterion path occurrences with the exact accepted public Candidate2 source snapshot; frozen source/review bytes and historical results unchanged."
+  ]
+}

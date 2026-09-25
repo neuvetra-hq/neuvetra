@@ -1,0 +1,42 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact36_recovery_evidence_publication_manifest_only",
+  "manifest": {
+    "path": ".superpowers/m80-recovery-final-publication-manifest.json",
+    "sha256": "0b7d3ae1a402a1bf6814a1b201aaaeb35792a98386a65d2ebf55e49f4d65ad4a"
+  },
+  "base": "7bc6028cf016372f52e82a483b7f61bc49c6331e",
+  "files": 36,
+  "bytes": 1194462,
+  "prior_exact29_review": {
+    "path": "evaluations/research-qa/m80-recovery-publication-independent-20260925-review.json",
+    "sha256": "35c3eb1b6a1066be5cd0dc4f8da801e87fd42b79b35a57c486f21405458831bb"
+  },
+  "checks": [
+    "All36 raw file hashes and byte lengths match; all29 previously accepted evidence pins unchanged.",
+    "Seven additions are the accepted review, small immutable snapshot, root closure, closed QA run and three shared status files.",
+    "Board/next CRLF bytes are protected by existing exact-path -text whitespace=cr-at-eol rules; no new rules are needed.",
+    "Full36 UTF-8 files scanned against known private owner identifiers and credential/private-key/JWT patterns; no findings.",
+    "Current leading board/handoff and status distinguish recovered prior540c/schema21 availability, actual failed restore, accepted diagnosis only, active unaccepted versioned repair and held/incomplete product boundaries.",
+    "Both named repair/consumer workers were observed running through collaboration status.",
+    "Older dated sections and navigation deployment facts remain historical; current recovered deployment is explicitly identified.",
+    "QA closure accepts only exact29 evidence review. Final shared metadata review is this separate receipt."
+  ],
+  "root_clean_overlay_evidence": {
+    "path": ".superpowers/m80-recovery-final-clean-validation.json",
+    "sha256": "37ed8f9e9274c02db33e21e859b798a0051b06b0b68200bfb6a69032beb2c68a",
+    "result": {
+      "valid": true,
+      "runs": 263
+    },
+    "attribution": "Root-run exact36 clean overlay; receipt inspected, not independently rerun in this final bounded follow-up."
+  },
+  "material_findings_open": 0,
+  "limits": [
+    "Evidence publication only. ACTUAL-RESTORE-F01 remains open; no repaired restore, schema22 migration, admission or deployment is approved.",
+    "This manifest uses base_commit and has no reviews array. Previously consumed publication helpers are incompatible and must not be replayed. Root will bind a new exact36 publication action to this manifest/review and its source before execution.",
+    "This review does not accept a yet-unreviewed publication helper or authorize automatic retries.",
+    "No Git command, database, provider, hosted operation or runtime suite execution occurred in this final review.",
+    "This receipt stays outside the exact36 publication set to avoid a self-hash cycle."
+  ]
+}

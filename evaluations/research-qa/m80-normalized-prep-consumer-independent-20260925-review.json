@@ -1,0 +1,47 @@
+{
+  "profile": "neuvetra.m80.normalized-preparation-independent-review.v1",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_normalized_preparation_consumer_only",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+    "sha256": "4f3b373176ad4db420d733435a79bc7fa462801a79cfea18c319d58270d5a8dd"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v3.ts",
+      "sha256": "73ae4824f2536bba7aacac06c92df4882db414e6bcdc8e15dcdb2b38750e39e0"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v3.ts",
+      "sha256": "4b1d3f96e68142584f2c0377ff4a46c9ecfd8ddf3582e5f63beadae607012f79"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v3.test.ts",
+      "sha256": "24b99ad2e18b0802b5d7f9552e9a736c7f55e8ceb82ef309099fbc7ec7a3ea77"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-prep-consumer-author-candidate2-20260925.json",
+      "sha256": "e4ee88bd20faa7d4100503bd827f84afb98bdb0326c7af21e485ecabb3804c4d"
+    }
+  ],
+  "accepted_backup_review": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-review.json",
+    "sha256": "f480bfbcc296d38d1752593c6e13ab786cad8b483caf9fd0df1fda8e50af983b"
+  },
+  "first_review": {
+    "path": "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-candidate1-review.json",
+    "sha256": "29ea32189ef89d0fc340285505978205542697ab96548a519657164b0492abdf"
+  },
+  "material_findings_open": 0,
+  "closed_findings": [
+    "NORMALIZED-PREP-F01"
+  ],
+  "evidence": {
+    "path": "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-evidence.json",
+    "sha256": "830ad932e2669e51cd84b1b5f0d3d72534fbd06e5e1a5487c87fe4e29971c09c"
+  },
+  "limits": [
+    "Offline synthetic source acceptance only; no stage gate.",
+    "Actual archived-backup result, executor and composer integration are outside this verdict."
+  ]
+}

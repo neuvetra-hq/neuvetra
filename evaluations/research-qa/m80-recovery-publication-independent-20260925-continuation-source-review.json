@@ -1,0 +1,27 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact_recovery_publication_continuation_source_only",
+  "source": {
+    "path": ".superpowers/m80-continue-recovery-publication.py",
+    "sha256": "db26fe20384387b9ba8aed066a0af28571c2971425059b21d708ee05dd304e91"
+  },
+  "whitespace_exception": {
+    "path": "evaluations/research-qa/m80-recovery-publication-independent-20260925-whitespace-continuation-review.json",
+    "sha256": "c5f077f6e08bd3e988a0c15b36452255d69400d4ad9abd786c6807e152fdc423"
+  },
+  "checks": [
+    "Full static source inspection and Python AST parse.",
+    "Exact original intent, manifest, prior review and whitespace exception hashes are hardcoded.",
+    "Exact local and remote base, branch,36 staged and working bytes, sole warning and empty stderr checked.",
+    "Separate exclusive fsynced continuation marker precedes one commit; exact parent/path delta/committed bytes checked before one push.",
+    "Remote equality precedes exclusive published receipt; no retries, restaging, old publisher call, provider or database action."
+  ],
+  "invocation_requirements": [
+    "Root must verify exact helper hash immediately before normal Python; -O/PYTHONOPTIMIZE must not disable assertion gates.",
+    "Retain all markers on uncertainty; inspect authoritative state, never automatically replay."
+  ],
+  "material_findings_open": 0,
+  "timing": "Pre-invocation source acceptance was sent to root by collaboration message; this supplement records the same review without asserting whether publication has since occurred.",
+  "executed_by_qa": false,
+  "scope": "Publication continuation only; no repair or hosted upgrade acceptance."
+}

@@ -1,0 +1,92 @@
+{
+  "task_id": "M80-RESTORE-NORMALIZATION-V2-QA-20260925",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+    "sha256": "8683a123dc91ff85d788d683f97575d27fe6f24efe55254a569bec681e936fe4"
+  },
+  "frozen_embedded_artifacts_exact": 4,
+  "historical_backup_C3_current_artifacts_exact": 110,
+  "author_suite_reproduced": {
+    "tests_passed": 8,
+    "assertions": 24,
+    "fixture": "Read-only retained local synthetic schema21 state; these are not entirely database-free tests."
+  },
+  "runtime_boundary_probe": [
+    {
+      "code": "42501",
+      "accepted": true
+    },
+    {
+      "code": "23503",
+      "accepted": true
+    },
+    {
+      "code": "ECONNRESET",
+      "accepted": true
+    },
+    {
+      "code": null,
+      "accepted": false
+    }
+  ],
+  "standalone_raw_hash_probe": {
+    "forged_source_metadata_accepted": true,
+    "forged_restored_metadata_accepted": true,
+    "forged_source_application_state_accepted": true,
+    "forged_restored_application_state_accepted": true
+  },
+  "independent_unaffected_controls_passed": 50,
+  "controls_scope": [
+    "malformed owner/schema/type/ACL fields including multibyte identifiers",
+    "global/application scope changes and positive exact retention",
+    "remaining metadata loss",
+    "trigger permutation, missing/extra/changed occurrence",
+    "raw in-place external/global/application ACL changes refused",
+    "exclusive writer collision retains first bytes",
+    "sync failure rejects and closes after write/sync",
+    "unexpected error redacted to bounded journal code",
+    "actual QA clone all6newtable forcedRLS/select-only plus sequence denied and admission0"
+  ],
+  "native_synthetic_rehearsal": {
+    "database": "m80_backup_foundation_1790305455270",
+    "directory": ".superpowers/m80-backup-v2-rehearsal-1790305455270",
+    "status": "passed_with_candidate1_limitations",
+    "receipts": [
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790305455270/m80-backup-v2-restore-receipt.json",
+        "sha256": "0370cbe9a9e924c0badd0e1e9eca6b6ceb2f45bbff325b2201b798949dd5ffae"
+      },
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790305455270/m80-backup-v2-normalization-proof.json",
+        "sha256": "f84876e0415c6f6714ec6a53a6c9a75cf27f2fec8a7300995eb7174211420244"
+      },
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790305455270/m80-backup-v2-preservation-receipt.json",
+        "sha256": "6a2edd44bc5e32261a39504a1acd7a12bdf0dcd997bdcad6a6834cf80035c6e0"
+      },
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790305455270/m80-backup-v2-migration-receipt.json",
+        "sha256": "224ecd1c4410ebd256b7b4e13791d425be7b31bb10c89f157ea40aa2a0990bc8"
+      }
+    ],
+    "common_completion_time": "2026-09-25T03:04:20.324Z",
+    "raw_and_normalized_metadata_hashes_distinct": true,
+    "local_connections_closed": true,
+    "retained_without_cleanup": true
+  },
+  "author_retained_failed_journals": [
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790304796547/m80-backup-v2-journal.jsonl",
+      "sha256": "e40ab50887d97e104b4b2a04396226fb30cd3a508af40e6f06bfa90d34fb293a",
+      "recorded_failure": "M80_V2_RUNTIME_SELECT_BOUNDARY_CHANGED"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790304843177/m80-backup-v2-journal.jsonl",
+      "sha256": "c09ee1c5db020b143619bf15d7427eaa057a9f636cca532121ec976ea43d2972",
+      "recorded_failure": "M80_V2_RUNTIME_SELECT_BOUNDARY_CHANGED"
+    }
+  ],
+  "test_harness_interruption": "First additional-control attempt loaded the author mutable successor raw-hash repair and refused an intentionally perturbed unrehash fixture. That harness interruption is not a Candidate1 product failure. Remaining controls ran from exact Candidate1 snapshot-extracted copies with relative import relocation only.",
+  "actual_hosted_archive_opened": false,
+  "hosted_or_provider_actions": false
+}
