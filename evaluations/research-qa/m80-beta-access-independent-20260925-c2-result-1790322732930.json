@@ -1,0 +1,4368 @@
+{
+  "task": "M80-BETA-ACCESS-QA-20260925",
+  "candidate": 2,
+  "verdict": "pass_executed_subset",
+  "phase": "post_execution_source_check",
+  "checks": [
+    {
+      "id": "freeze.snapshot",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.files",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze..github/workflows/verify.yml",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-contract.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations/0001_access.sql",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/index.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/config.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/listener.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/listener.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/routes.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/postgres.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/ci-prerequisites.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/local-rehearsal.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.evaluations/research-qa/m80-beta-access-author-20260925.json",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.required_boundaries",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.22_migrations",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0019_stationary_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/hosted.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/workspace.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/staging-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0001_company_workspace.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0002_synthetic_bill_intake.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0003_synthetic_bill_calculation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0004_inventory_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0005_annual_electricity_register.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0006_inventory_evidence_pack.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0007_inventory_draft_report.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0008_inventory_draft_report_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0009_private_staging.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.exact_role_removal",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0010_manual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0011_worksheet_reports.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0012_source_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0013_annual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0014_annual_electricity_evidence.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0015_corporate_coverage.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0016_stationary_natural_gas.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0017_mobile_diesel.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0018_controlled_fleet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0019_stationary_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0020_fugitive_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0021_scope1_inventory.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0022_scope1_beta_foundation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "resume.no_beta_install",
+      "result": "pass"
+    },
+    {
+      "id": "resume.exact22",
+      "result": "pass"
+    },
+    {
+      "id": "resume.exact_synthetic_users",
+      "result": "pass"
+    },
+    {
+      "id": "resume.exact_synthetic_companies",
+      "result": "pass"
+    },
+    {
+      "id": "Q09.install_replay_legacy_parity",
+      "result": "pass"
+    },
+    {
+      "id": "F01.new_owner_default_denies",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.first201",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.expired_restart_replay",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.no_mutation",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.consumed_different_key",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.same_key_other_input",
+      "result": "pass"
+    },
+    {
+      "id": "Q01.confirmation_changed_after_provider",
+      "result": "pass"
+    },
+    {
+      "id": "Q01.no_partial_effects",
+      "result": "pass"
+    },
+    {
+      "id": "Q01.current_email_mismatch",
+      "result": "pass"
+    },
+    {
+      "id": "Q04.same_key_race",
+      "result": "pass"
+    },
+    {
+      "id": "Q04.same_immutable_receipt",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.memberships",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.memberships",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.invitations",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.invitations",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.requests",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.requests",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.audit",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.audit",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.token_still_usable",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.generation_replay_denied",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.revocation_replay_denied",
+      "result": "pass"
+    },
+    {
+      "id": "Q06.cross_tenant",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.tombstone_other_member",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.tombstone_issue_refused",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.hash_tamper_read",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.hash_tamper_replay",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.invitation_authority",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.auth_users",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.direct_insert",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.old_helper",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.schema_create",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.set_owner",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.only_three_entrypoints",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.force_rls",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.escaped_duplicate",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.stream_bytes.2048",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.failure_headers.2048",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.stream_bytes.2049",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.failure_headers.2049",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.origin",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.0",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.1",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.2",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.3",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.4",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.5",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.6",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.7",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.8",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.9",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.10",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.11",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.12",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.13",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.14",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.15",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.16",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.17",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.18",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.19",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.20",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.21",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.22",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.23",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.24",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.25",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.26",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.27",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.28",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.29",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.30",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.31",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.32",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.33",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.34",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.35",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.36",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.37",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.38",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.39",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.40",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.41",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.42",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.43",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.44",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.45",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.46",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.47",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.48",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.49",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.50",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.51",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.52",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.53",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.54",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.55",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.56",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.57",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.58",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.59",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.global_before_auth.60",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.auth_call_bound",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.no_sensitive_logs",
+      "result": "pass"
+    },
+    {
+      "id": "F02.actual_raw_connection_close",
+      "result": "pass"
+    },
+    {
+      "id": "F02.reconnect403_headers",
+      "result": "pass"
+    },
+    {
+      "id": "Q09.end_legacy_parity",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.snapshot",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.files",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze..github/workflows/verify.yml",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-contract.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations/0001_access.sql",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/index.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/config.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/listener.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/listener.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/routes.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/postgres.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/ci-prerequisites.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/local-rehearsal.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.evaluations/research-qa/m80-beta-access-author-20260925.json",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.required_boundaries",
+      "result": "pass"
+    }
+  ],
+  "details": {
+    "legacyBefore": {
+      "databaseName": "m80_beta_access_qa_20260925c",
+      "rows": {
+        "annual_electricity_evidence_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_evidence_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_evidence_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_evidence_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_evidence_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_evidence_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_evidence_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_inventory_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_inventory_review_decisions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_inventory_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_source_register_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "audit_events": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "bill_evidence": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "bill_summary_cache": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "bill_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "boundary_facilities": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "calculation_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "companies": {
+          "count": "2",
+          "sha256": "63fff93ba6c238ecb4eda3b5be05a4b995cbae6bd80de6c98609a89953b44fdc"
+        },
+        "company_members": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_source_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_source_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_sources": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "evidence_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "evidence_search_documents": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "extraction_jobs": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "facilities": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_event_reservations": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_activity_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_calculation_results": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_report_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_report_review_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_report_review_decisions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_evidence_pack_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_evidence_packs": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_review_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_review_decisions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_evidence_reservations": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_fuel_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_mileage_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reporting_boundaries": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "schema_migrations": {
+          "count": "22",
+          "sha256": "6270da0bc129331f0f1c578e75ca114f636f755426d173456848fe006d8427a2"
+        },
+        "scope1_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_fixture_admissions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_release_records": {
+          "count": "4",
+          "sha256": "2eb3a9a50861e2fd178a8f523b53e94d3abbeb2bd9795a36a28c1a2ec9ed556a"
+        },
+        "scope1_beta_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_setup_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_setup_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_process_discoveries": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "staging_access": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "staging_target": {
+          "count": "1",
+          "sha256": "e392c02924e8feb7a3a70514d44d93a0691d24f1efeac0dabba1a3d3498d96bc"
+        },
+        "stationary_diesel_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_evidence_reservations": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "worksheet_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "worksheet_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "worksheet_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "hashes": {
+        "schemas": {
+          "sha256": "e4d6d92cc73e7803f79195381bddea5d3ea28c4f5d16fcf9f80261c4bac70ad3",
+          "records": 3
+        },
+        "relations": {
+          "sha256": "5f0166f01b91af32fc218b1b0e54fa117872832a4b604e9b3647cf634e3e3b29",
+          "records": 435
+        },
+        "columns": {
+          "sha256": "caa6cd1853fb08c649e0c00b02d81cd6c84573922fc69692d2990ae17ee31925",
+          "records": 1629
+        },
+        "functions": {
+          "sha256": "64588dddfcb6eeb077818278c76210e504a87680a454cf486b2835e8d41310b3",
+          "records": 212
+        },
+        "constraints": {
+          "sha256": "cb1dea0050d258aae766cae0dc2296d2b5e778531b5ed362a56bfe963ae7642d",
+          "records": 823
+        },
+        "policies": {
+          "sha256": "fe9dfa1e5f40817025bc35694db7e0eef01358498f73d4496ac2ab8d99550dfc",
+          "records": 188
+        },
+        "indexes": {
+          "sha256": "a166e50de82d44459c0aa8eca5ee18b67a4449ff5657130c2f82f96a060371a8",
+          "records": 305
+        },
+        "triggers": {
+          "sha256": "7487c2a796a7132def096e0e2dd1605ca731aad57cff7ff57fb3c837383f16a8",
+          "records": 1142
+        },
+        "enums": {
+          "sha256": "66150219e86f1769acaae038ae3572c8752d9b0a9fdfb7e77a9c0be3d45b3cc7",
+          "records": 9
+        },
+        "roles": {
+          "sha256": "b78edbd22270594fbb6c69581fc514cc1422b3d9256fa22cde83a652e9ab0ba1",
+          "records": 88
+        },
+        "memberships": {
+          "sha256": "6c0eccc471529732c3cc27f31ed76a9e5a99e662c9e483822f29485a163ad005",
+          "records": 22
+        },
+        "defaults": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "records": 0
+        }
+      },
+      "allowedAddedFkTriggers": []
+    },
+    "installLegacyParity": {
+      "pass": true,
+      "equalRows": true,
+      "changedMetadata": [],
+      "allowedFkDependencies": true,
+      "addedFkTriggerCount": 2
+    },
+    "ownerSplit": {
+      "flags": [
+        {
+          "rolname": "m80_beta_access_owner_qa_20260925c",
+          "rolsuper": false,
+          "rolinherit": false,
+          "rolcreaterole": false,
+          "rolcreatedb": false,
+          "rolcanlogin": false,
+          "rolreplication": false,
+          "rolbypassrls": false
+        },
+        {
+          "rolname": "m80_beta_access_runtime_qa_20260925c",
+          "rolsuper": false,
+          "rolinherit": false,
+          "rolcreaterole": false,
+          "rolcreatedb": false,
+          "rolcanlogin": true,
+          "rolreplication": false,
+          "rolbypassrls": false
+        }
+      ],
+      "memberships": [],
+      "crossSchema": [
+        {
+          "nspname": "auth",
+          "can_use": false,
+          "can_create": false
+        },
+        {
+          "nspname": "neuvetra",
+          "can_use": false,
+          "can_create": false
+        }
+      ],
+      "crossObjects": [
+        {
+          "nspname": "auth",
+          "relname": "users",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_evidence_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_evidence_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_evidence_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_evidence_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_report_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_report_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_worksheet_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_worksheet_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_worksheet_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_electricity_worksheet_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_evidence_report_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_evidence_report_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_evidence_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_inventory_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_inventory_review_decisions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_inventory_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "annual_source_register_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "audit_events",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "bill_evidence",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "bill_summary_cache",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "bill_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "boundary_facilities",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "calculation_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "companies",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "company_members",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "controlled_fleet_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "corporate_inventory_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "corporate_inventory_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "corporate_inventory_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "corporate_inventory_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "corporate_inventory_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_source_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_source_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_sources",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_worksheet_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_worksheet_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_worksheet_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "electricity_worksheet_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "evidence_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "evidence_search_documents",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "extraction_jobs",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "facilities",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_audit_sequence_seq",
+          "relkind": "S",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_event_reservations",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "fugitive_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_activity_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_calculation_results",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_draft_report_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_draft_report_review_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_draft_report_review_decisions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_draft_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_evidence_pack_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_evidence_packs",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_review_audit_log",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_review_decisions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "inventory_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_evidence_reservations",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_fuel_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_mileage_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "mobile_diesel_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "reporting_boundaries",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "schema_migrations",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_audit_sequence_seq",
+          "relkind": "S",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_audit_sequence_seq",
+          "relkind": "S",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_fixture_admissions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_release_records",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_setup_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_beta_setup_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_process_discoveries",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "scope1_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_report_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_report_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "source_worksheet_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "staging_access",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "staging_target",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_evidence_reservations",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_diesel_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_equipment_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_heads",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_reviews",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_statements",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "stationary_gas_versions",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "worksheet_report_audit",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "worksheet_report_requests",
+          "relkind": "r",
+          "effective_privilege": false
+        },
+        {
+          "nspname": "neuvetra",
+          "relname": "worksheet_reports",
+          "relkind": "r",
+          "effective_privilege": false
+        }
+      ],
+      "crossFunctions": [
+        {
+          "nspname": "auth",
+          "proname": "uid",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "annual_electricity_report_template",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "annual_evidence_report_template",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "can_manage_company",
+          "args": "target_company_id uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "complete_annual_source_register",
+          "args": "target_company_id uuid, prior_register_id uuid, register_id uuid, audit_id uuid, request_payload_json text, request_fixture_sha256 text, request_snapshot_sha256 text, request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "correct_synthetic_bill",
+          "args": "target_company_id uuid, target_facility_id uuid, evidence_id uuid, prior_bill_version_id uuid, bill_version_id uuid, cache_id uuid, log_id uuid, corrected_kwh numeric, requested_reason text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_annual_electricity_report",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_annual_evidence_report",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_annual_inventory_v2",
+          "args": "target_company_id uuid, target_register_id uuid, inventory_id uuid, audit_id uuid, request_payload_json text, request_snapshot_sha256 text, request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_annual_source_register",
+          "args": "target_company_id uuid, prior_inventory_id uuid, register_id uuid, audit_id uuid, request_payload_json text, request_snapshot_sha256 text, request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_company_workspace",
+          "args": "company_id uuid, company_name text, facility_id uuid, facility_name text, boundary_id uuid, reporting_year integer, audit_event_id uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_controlled_fleet_report",
+          "args": "target_company uuid, target_roster uuid, request jsonb, report_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_fugitive_report",
+          "args": "target_company uuid, target_stream uuid, family text, request jsonb, p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_inventory_draft_report",
+          "args": "target_company_id uuid, target_inventory_id uuid, target_pack_id uuid, requested_report_id uuid, requested_audit_id uuid, expected_inventory_snapshot_sha256 text, expected_archive_sha256 text, request_report_bytes bytea, request_report_sha256 text, request_report_byte_length integer, request_manifest_sha256 text, request_lineage_sha256 text, request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_inventory_evidence_pack",
+          "args": "target_company_id uuid, target_inventory_id uuid, requested_pack_id uuid, requested_audit_id uuid, expected_inventory_snapshot_sha256 text, request_manifest_sha256 text, request_lineage_root_sha256 text, request_archive_bytes bytea, request_archive_sha256 text, request_archive_byte_length integer, request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_mobile_diesel_report",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_scope1_report",
+          "args": "target_company uuid, target_stream uuid, family text, request jsonb, r jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_source_worksheet_report",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_stationary_diesel_report",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_stationary_equipment_report",
+          "args": "target_company uuid, target_roster uuid, request jsonb, report_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_stationary_gas_report",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_synthetic_bill_calculation",
+          "args": "target_company_id uuid, target_evidence_id uuid, target_activity_id uuid, calculation_id uuid, audit_id uuid, request_idempotency_key uuid, request_operation_fingerprint text, canonical_result_json text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_synthetic_scope2_inventory",
+          "args": "target_company_id uuid, target_calculation_id uuid, inventory_id uuid, audit_id uuid, request_idempotency_key uuid, request_operation_fingerprint text, request_snapshot_sha256 text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "create_worksheet_report",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "current_user_id",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "electricity_source_fixtures",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "electricity_source_metadata",
+          "args": "source_id uuid, target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "has_staging_access",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "ingest_synthetic_bill",
+          "args": "target_company_id uuid, evidence_id uuid, job_id uuid, bill_version_id uuid, search_id uuid, cache_id uuid, log_id uuid, original_bytes bytea, original_sha256 text, original_name text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "is_company_member",
+          "args": "target_company_id uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "link_synthetic_bill",
+          "args": "target_company_id uuid, target_boundary_id uuid, target_facility_id uuid, bill_version_id uuid, activity_id uuid, log_id uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "lock_annual_electricity_report_read",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "lock_annual_evidence_report_read",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "lock_source_worksheet_report_read",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "lock_worksheet_report_read",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m67_calculate_months",
+          "args": "input jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m67_canonical",
+          "args": "value jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m67_hash",
+          "args": "value jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m67_limitations",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m67_method",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m67_quantity",
+          "args": "milli numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m68_effective",
+          "args": "payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m68_limitations",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m71_findings",
+          "args": "s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m71_keys",
+          "args": "v jsonb, keys text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m71_lock",
+          "args": "target_company uuid, manager boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m71_node",
+          "args": "v jsonb, kind text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m71_snapshot",
+          "args": "s jsonb, prior jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_calculation",
+          "args": "a jsonb, statement_hash text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_capacity",
+          "args": "target_company uuid, new_bytes integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_coverage",
+          "args": "target_company uuid, b jsonb, current_required boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_display",
+          "args": "v numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_escape",
+          "args": "v text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_exact",
+          "args": "v numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_findings",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_method",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_pair",
+          "args": "label text, v text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_quantity",
+          "args": "v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_render_report",
+          "args": "snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_statement",
+          "args": "a jsonb, coverage jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_text",
+          "args": "v jsonb, maximum integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m73_validate_request",
+          "args": "r jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_activity_status",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_calculation",
+          "args": "a jsonb, fuel_hash text, mileage_hash text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_can_calculate",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_capacity",
+          "args": "target_company uuid, new_bytes integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_coverage",
+          "args": "target_company uuid, b jsonb, current_required boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_display",
+          "args": "v numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_escape",
+          "args": "v text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_exact",
+          "args": "v numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_findings",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_method",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_pair",
+          "args": "label text, v text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_quantity",
+          "args": "v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_render_report",
+          "args": "snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_statement",
+          "args": "a jsonb, coverage jsonb, kind text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_text",
+          "args": "v jsonb, maximum integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m74_validate_request",
+          "args": "r jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_acceptance_ready",
+          "args": "target_company uuid, version_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_activity_valid",
+          "args": "activity jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_current_dependencies",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_current_reconciliation",
+          "args": "target_company uuid, review_override jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_derive_reconciliation",
+          "args": "target_company uuid, coverage jsonb, workpapers jsonb, version_payload jsonb, reviews jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_exact_keys",
+          "args": "value jsonb, expected text[]",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_html_escape",
+          "args": "value text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_local_blocked",
+          "args": "target_company uuid, activity jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_reconciliation_shape_valid",
+          "args": "target_company uuid, snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_render_report",
+          "args": "snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_roster_findings",
+          "args": "activity jsonb, coverage jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_row_status",
+          "args": "findings jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_source_eligible",
+          "args": "coverage jsonb, source jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m75_text_valid",
+          "args": "value jsonb, max_chars integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_acceptance_ready",
+          "args": "target_company uuid, version_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_activity_valid",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_current_dependencies",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_current_reconciliation",
+          "args": "target_company uuid, review_override jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_current_workpapers",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_dependencies",
+          "args": "coverage jsonb, workpapers jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_derive_reconciliation",
+          "args": "target_company uuid, coverage jsonb, workpapers jsonb, version_payload jsonb, reviews jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_activity_status",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_calculation",
+          "args": "a jsonb, statement_hash text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_can_calculate",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_capacity",
+          "args": "target_company uuid, new_bytes integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_coverage",
+          "args": "target_company uuid, b jsonb, current_required boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_display",
+          "args": "v numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_escape",
+          "args": "v text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_exact",
+          "args": "v numeric",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_findings",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_method",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_pair",
+          "args": "label text, v text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_quantity",
+          "args": "v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_render_report",
+          "args": "snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_statement",
+          "args": "a jsonb, coverage jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_text",
+          "args": "v jsonb, maximum integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_diesel_validate_request",
+          "args": "r jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_exact_keys",
+          "args": "value jsonb, expected text[]",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_f",
+          "args": "code text, row_key text, message text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_html_escape",
+          "args": "value text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_mobile_fuel_evidence_guard",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_reconciliation_shape_valid",
+          "args": "target_company uuid, snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_render_report",
+          "args": "snapshot jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_resolved_references",
+          "args": "activity jsonb, coverage jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_roster_findings",
+          "args": "activity jsonb, coverage jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_row_status",
+          "args": "findings jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_source_eligible",
+          "args": "coverage jsonb, source jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m76_text_valid",
+          "args": "value jsonb, max_chars integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_calculate",
+          "args": "v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_current_coverage",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_current_dependencies",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_current_workpapers",
+          "args": "target_company uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_date",
+          "args": "v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_dependencies",
+          "args": "coverage jsonb, workpapers jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_evidence_text",
+          "args": "target_company uuid, asset text, s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_f",
+          "args": "code text, message text, asset text, source text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_history_capacity",
+          "args": "target_company uuid, extra integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_id",
+          "args": "v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_kg",
+          "args": "v jsonb, positive boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_reconciliation",
+          "args": "target_company uuid, coverage jsonb, workpapers jsonb, population jsonb, review jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_render_report",
+          "args": "s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_source_findings",
+          "args": "a jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_validate_activity",
+          "args": "family text, a jsonb, coverage jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m77_validate_population_correction",
+          "args": "previous jsonb, current jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_assert_current_proof",
+          "args": "target_company uuid, p jsonb, check_process boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_capacity",
+          "args": "target_company uuid, extra integer",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_contributors",
+          "args": "p jsonb, prior jsonb, actor uuid, family text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_corporate_findings",
+          "args": "p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_dependencies",
+          "args": "p jsonb, family text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_finding",
+          "args": "code text, message text, record_id text, family text, classification text, resolution jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_gas_lines",
+          "args": "rows jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_gas_sources",
+          "args": "p jsonb, gas_group text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_limitations",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_lock",
+          "args": "target_company uuid, writing boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_physical",
+          "args": "p jsonb, family text, v jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_pin",
+          "args": "v jsonb, review boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_policy",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_process_findings",
+          "args": "a jsonb, c jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_reconciliation",
+          "args": "p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_record_request",
+          "args": "target_company uuid, target_stream uuid, family text, kind text, request jsonb, record_id uuid, record_sha text, captured timestamp with time zone",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_render_report",
+          "args": "s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_report_detail_sections",
+          "args": "s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_report_statements",
+          "args": "s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_report_table",
+          "args": "title text, rows jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_request",
+          "args": "target_company uuid, target_stream uuid, family text, kind text, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_rollup",
+          "args": "p jsonb, rows jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_rollup_row",
+          "args": "id text, label text, rows jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_screen_findings",
+          "args": "a jsonb, p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_sorted_strings",
+          "args": "a jsonb, maximum integer, kind text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_source_label",
+          "args": "c jsonb, id text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_statement_links",
+          "args": "refs jsonb, statements jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m78_validate_activity",
+          "args": "family text, a jsonb, c jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "m80_assert_setup",
+          "args": "target_company uuid, s jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "record_synthetic_inventory_review",
+          "args": "target_company_id uuid, target_inventory_id uuid, review_id uuid, audit_id uuid, requested_decision text, requested_reason_code text, requested_acknowledgments text[], request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "reject_inventory_history_mutation",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "render_annual_electricity_report",
+          "args": "report_id uuid, company uuid, creator uuid, captured text, source jsonb, identity_sha text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "render_annual_evidence_report",
+          "args": "report_id uuid, company uuid, creator uuid, captured text, source jsonb, identity_sha text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "render_source_worksheet_report",
+          "args": "report_id uuid, company uuid, creator uuid, captured text, source jsonb, identity_sha text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "render_worksheet_report",
+          "args": "report_id uuid, company uuid, creator uuid, captured text, source jsonb, identity_sha text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_annual_electricity_evidence",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_annual_electricity_worksheet",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_annual_inventory_v2",
+          "args": "target_company_id uuid, target_inventory_id uuid, review_id uuid, audit_id uuid, requested_decision text, requested_reason text, requested_warnings text[], request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_controlled_fleet",
+          "args": "target_company uuid, target_roster uuid, request jsonb, review_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_corporate_inventory",
+          "args": "target_company uuid, target_inventory uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_electricity_worksheet",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_fugitive_version",
+          "args": "target_company uuid, target_stream uuid, family text, request jsonb, p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_inventory_draft_report",
+          "args": "target_company_id uuid, target_inventory_id uuid, target_report_id uuid, requested_decision_id uuid, requested_audit_id uuid, request_decision text, request_reason_code text, request_acknowledged_limitations text[], request_change_route_code text, request_change_note text, expected_report_sha256 text, expected_inventory_snapshot_sha256 text, expected_archive_sha256 text, expected_manifest_sha256 text, expected_lineage_sha256 text, expected_report_created_by uuid, request_decision_snapshot_sha256 text, request_idempotency_key uuid, request_operation_fingerprint text",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_mobile_diesel",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_scope1_version",
+          "args": "target_company uuid, target_stream uuid, family text, request jsonb, r jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_source_worksheet",
+          "args": "target_company uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_stationary_diesel",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_stationary_equipment",
+          "args": "target_company uuid, target_roster uuid, request jsonb, review_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "review_stationary_gas",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_annual_electricity_evidence",
+          "args": "target_company uuid, request jsonb, correction boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_annual_electricity_worksheet",
+          "args": "target_company uuid, request jsonb, correction boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_controlled_fleet",
+          "args": "target_company uuid, target_roster uuid, request jsonb, version_payload jsonb, statement_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_corporate_inventory",
+          "args": "target_company uuid, target_inventory uuid, request jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_electricity_worksheet",
+          "args": "target_company uuid, request jsonb, correction boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_fugitive_version",
+          "args": "target_company uuid, target_stream uuid, family text, request jsonb, p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_mobile_diesel",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb, calculation jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_scope1_beta_setup",
+          "args": "target_company uuid, request jsonb, setup jsonb, version_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_scope1_version",
+          "args": "target_company uuid, target_stream uuid, family text, request jsonb, v jsonb, p jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_source_worksheet",
+          "args": "target_company uuid, request jsonb, correction boolean",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_stationary_diesel",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb, calculation jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_stationary_equipment",
+          "args": "target_company uuid, target_roster uuid, request jsonb, version_payload jsonb, statement_payload jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "save_stationary_gas",
+          "args": "target_company uuid, target_worksheet uuid, request jsonb, calculation jsonb",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "source_worksheet_report_template",
+          "args": "",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "upload_electricity_source",
+          "args": "target_company uuid, source_name text, source_type text, source_hex text, request_key uuid",
+          "can_execute": false
+        },
+        {
+          "nspname": "neuvetra",
+          "proname": "worksheet_report_template",
+          "args": "",
+          "can_execute": false
+        }
+      ],
+      "owners": [
+        {
+          "kind": "r",
+          "name": "audit",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "baseline_receipts",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "invitations",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "memberships",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "requests",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "schema_migrations",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "target",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "r",
+          "name": "tenant_admissions",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        },
+        {
+          "kind": "schema",
+          "name": "neuvetra_beta",
+          "owner": "m80_beta_access_owner_qa_20260925c"
+        }
+      ],
+      "functions": [
+        {
+          "proname": "assert_runtime_target",
+          "args": "",
+          "owner": "supabase_admin",
+          "prosecdef": true,
+          "proconfig": [
+            "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+          ],
+          "acl": "{supabase_admin=X/supabase_admin,m80_beta_access_owner_qa_20260925c=X/supabase_admin}",
+          "runtime_execute": false,
+          "owner_execute": true
+        },
+        {
+          "proname": "read_session",
+          "args": "",
+          "owner": "m80_beta_access_owner_qa_20260925c",
+          "prosecdef": true,
+          "proconfig": [
+            "search_path=pg_catalog, neuvetra_beta, pg_temp"
+          ],
+          "acl": "{m80_beta_access_owner_qa_20260925c=X/m80_beta_access_owner_qa_20260925c,m80_beta_access_runtime_qa_20260925c=X/m80_beta_access_owner_qa_20260925c}",
+          "runtime_execute": true,
+          "owner_execute": true
+        },
+        {
+          "proname": "read_workspace",
+          "args": "requested_company_id uuid",
+          "owner": "m80_beta_access_owner_qa_20260925c",
+          "prosecdef": true,
+          "proconfig": [
+            "search_path=pg_catalog, neuvetra_beta, pg_temp"
+          ],
+          "acl": "{m80_beta_access_owner_qa_20260925c=X/m80_beta_access_owner_qa_20260925c,m80_beta_access_runtime_qa_20260925c=X/m80_beta_access_owner_qa_20260925c}",
+          "runtime_execute": true,
+          "owner_execute": true
+        },
+        {
+          "proname": "redeem_invitation",
+          "args": "token_digest text, request_id uuid, verified_email text",
+          "owner": "m80_beta_access_owner_qa_20260925c",
+          "prosecdef": true,
+          "proconfig": [
+            "search_path=pg_catalog, neuvetra_beta, pg_temp"
+          ],
+          "acl": "{m80_beta_access_owner_qa_20260925c=X/m80_beta_access_owner_qa_20260925c,m80_beta_access_runtime_qa_20260925c=X/m80_beta_access_owner_qa_20260925c}",
+          "runtime_execute": true,
+          "owner_execute": true
+        },
+        {
+          "proname": "require_identity",
+          "args": "supplied_email text",
+          "owner": "supabase_admin",
+          "prosecdef": true,
+          "proconfig": [
+            "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+          ],
+          "acl": "{supabase_admin=X/supabase_admin,m80_beta_access_owner_qa_20260925c=X/supabase_admin}",
+          "runtime_execute": false,
+          "owner_execute": true
+        }
+      ],
+      "defaults": [
+        {
+          "schema": "GLOBAL",
+          "kind": "f",
+          "acl": "{m80_beta_access_owner_qa_20260925c=X/m80_beta_access_owner_qa_20260925c}"
+        }
+      ]
+    },
+    "futureDefault": {
+      "pass": true,
+      "callable": false,
+      "sqlstate": "42501"
+    },
+    "rawClose": {
+      "status": 413,
+      "closeHeader": true,
+      "noStore": true,
+      "eof": true,
+      "timeout": false
+    },
+    "legacyAfter": {
+      "databaseName": "m80_beta_access_qa_20260925c",
+      "rows": {
+        "annual_electricity_evidence_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_evidence_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_evidence_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_evidence_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_electricity_worksheet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_evidence_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_evidence_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_evidence_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_inventory_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_inventory_review_decisions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_inventory_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "annual_source_register_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "audit_events": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "bill_evidence": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "bill_summary_cache": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "bill_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "boundary_facilities": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "calculation_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "companies": {
+          "count": "2",
+          "sha256": "63fff93ba6c238ecb4eda3b5be05a4b995cbae6bd80de6c98609a89953b44fdc"
+        },
+        "company_members": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "controlled_fleet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "corporate_inventory_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_source_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_source_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_sources": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "electricity_worksheet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "evidence_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "evidence_search_documents": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "extraction_jobs": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "facilities": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_event_reservations": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fugitive_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_activity_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_calculation_results": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_report_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_report_review_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_report_review_decisions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_draft_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_evidence_pack_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_evidence_packs": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_review_audit_log": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_review_decisions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "inventory_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_evidence_reservations": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_fuel_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_mileage_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "mobile_diesel_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "reporting_boundaries": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "schema_migrations": {
+          "count": "22",
+          "sha256": "6270da0bc129331f0f1c578e75ca114f636f755426d173456848fe006d8427a2"
+        },
+        "scope1_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_fixture_admissions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_release_records": {
+          "count": "4",
+          "sha256": "2eb3a9a50861e2fd178a8f523b53e94d3abbeb2bd9795a36a28c1a2ec9ed556a"
+        },
+        "scope1_beta_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_setup_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_beta_setup_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_process_discoveries": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "scope1_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_worksheet_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "staging_access": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "staging_target": {
+          "count": "1",
+          "sha256": "e392c02924e8feb7a3a70514d44d93a0691d24f1efeac0dabba1a3d3498d96bc"
+        },
+        "stationary_diesel_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_evidence_reservations": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_diesel_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_equipment_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_heads": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_reviews": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_statements": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stationary_gas_versions": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "worksheet_report_audit": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "worksheet_report_requests": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "worksheet_reports": {
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "hashes": {
+        "schemas": {
+          "sha256": "e4d6d92cc73e7803f79195381bddea5d3ea28c4f5d16fcf9f80261c4bac70ad3",
+          "records": 3
+        },
+        "relations": {
+          "sha256": "5f0166f01b91af32fc218b1b0e54fa117872832a4b604e9b3647cf634e3e3b29",
+          "records": 435
+        },
+        "columns": {
+          "sha256": "caa6cd1853fb08c649e0c00b02d81cd6c84573922fc69692d2990ae17ee31925",
+          "records": 1629
+        },
+        "functions": {
+          "sha256": "64588dddfcb6eeb077818278c76210e504a87680a454cf486b2835e8d41310b3",
+          "records": 212
+        },
+        "constraints": {
+          "sha256": "cb1dea0050d258aae766cae0dc2296d2b5e778531b5ed362a56bfe963ae7642d",
+          "records": 823
+        },
+        "policies": {
+          "sha256": "fe9dfa1e5f40817025bc35694db7e0eef01358498f73d4496ac2ab8d99550dfc",
+          "records": 188
+        },
+        "indexes": {
+          "sha256": "a166e50de82d44459c0aa8eca5ee18b67a4449ff5657130c2f82f96a060371a8",
+          "records": 305
+        },
+        "triggers": {
+          "sha256": "7487c2a796a7132def096e0e2dd1605ca731aad57cff7ff57fb3c837383f16a8",
+          "records": 1142
+        },
+        "enums": {
+          "sha256": "66150219e86f1769acaae038ae3572c8752d9b0a9fdfb7e77a9c0be3d45b3cc7",
+          "records": 9
+        },
+        "roles": {
+          "sha256": "b78edbd22270594fbb6c69581fc514cc1422b3d9256fa22cde83a652e9ab0ba1",
+          "records": 88
+        },
+        "memberships": {
+          "sha256": "6c0eccc471529732c3cc27f31ed76a9e5a99e662c9e483822f29485a163ad005",
+          "records": 22
+        },
+        "defaults": {
+          "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "records": 0
+        }
+      },
+      "allowedAddedFkTriggers": [
+        {
+          "parent_relation": "neuvetra.companies",
+          "child_relation": "neuvetra_beta.tenant_admissions",
+          "conname": "tenant_admissions_company_id_fkey",
+          "tgname": "RI_ConstraintTrigger_a_424746"
+        },
+        {
+          "parent_relation": "neuvetra.companies",
+          "child_relation": "neuvetra_beta.tenant_admissions",
+          "conname": "tenant_admissions_company_id_fkey",
+          "tgname": "RI_ConstraintTrigger_a_424747"
+        }
+      ]
+    },
+    "finalLegacyParity": {
+      "pass": true,
+      "equalRows": true,
+      "changedMetadata": [],
+      "allowedFkDependencies": true,
+      "addedFkTriggerCount": 2
+    }
+  },
+  "nativeTargets": {
+    "database": "m80_beta_access_qa_20260925c",
+    "restore": "m80_beta_access_restore_qa_20260925c",
+    "role": "m80_beta_access_runtime_qa_20260925c"
+  },
+  "identityProvider": "mocked_getUser_response",
+  "frozenSnapshot": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+  "frozenSha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676",
+  "actualCostUsd": null,
+  "limitations": [
+    "Provisional prepared subset; Q04 ordered races, listener disconnect settlement and Q10 native restore require supplemental review checks.",
+    "No provider or customer-readiness verdict."
+  ],
+  "errorCode": null
+}

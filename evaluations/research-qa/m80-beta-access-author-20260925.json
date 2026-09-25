@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
+  "candidate": 2,
+  "author": "/root/m80_beta_access_engineer",
+  "observed_at": "2026-09-25T08:05:00Z",
+  "verdict": "candidate_ready_for_independent_rereview",
+  "material_findings_open": 0,
+  "accepted_contract": {
+    "snapshot_path": "operations/agent-improvement/snapshots/M80-BETA-NEXT-CONTRACT-20260925-CANDIDATE2.json",
+    "sha256": "9417cc5ea23fd8e5c12bcc21498045870ec6d3c38cd35262e905ac85f8721c71",
+    "root_review": "evaluations/research-qa/m80-beta-next-contract-root-review2-20260925.json"
+  },
+  "correction_authorization": {
+    "path": "evaluations/research-qa/m80-beta-access-correction-authorization-20260925.json",
+    "sha256": "8162fd5008ea7ad856186b678e39db8552bb5226c7f81b318ed1a88bea5ec5c8",
+    "ticket": "2cc281b1d0a54b47b53aa371dfa652e7",
+    "task_version": 2
+  },
+  "candidate1_preserved": {
+    "snapshot_path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json",
+    "sha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5",
+    "review_path": "evaluations/research-qa/m80-beta-access-independent-20260925-review1.json",
+    "review_sha256": "14f48acbfc5c7edc74599b0437b821bd3d424e5af1952e8445d7eee3849159b1",
+    "verdict": "fail",
+    "findings": ["BETA-ACCESS-F01", "BETA-ACCESS-F02"]
+  },
+  "candidate_files": [
+    { "path": ".github/workflows/verify.yml", "sha256": "7b878362c8920cde0f931c2fda760ce48127aad89386d6a0156de0186de790f3" },
+    { "path": "packages/neuvetra-database/src/beta-access-contract.ts", "sha256": "8c5388a8f7932d6c266251a46b08056777ecc9dfc03fe44c055e26893200a929" },
+    { "path": "packages/neuvetra-database/src/beta-access.ts", "sha256": "1c40182448540965c7a484b82d7df538e9f4a9a43cfc659f50e0cc1b1d419bf6" },
+    { "path": "packages/neuvetra-database/src/beta-access-migrations.ts", "sha256": "954fcd1e7b388976b9d2e81a39ad922de474295726efd8a0ce882bce4421313c" },
+    { "path": "packages/neuvetra-database/src/beta-access-migrations/0001_access.sql", "sha256": "03481674d8e4c17a3c6a8fe9024d92889ca1cc7ead61e0f29c73b44da0393091" },
+    { "path": "packages/neuvetra-database/src/index.ts", "sha256": "f3b58742d3707d87bb145d84a58f442e1ae65bcd10e096ac11150d26e009a1a3" },
+    { "path": "apps/site-api/src/beta-access/auth.ts", "sha256": "6ac82fb77db098022439a9842fa93b7976dd2b6e46223cf6df4104dbf40bf73e" },
+    { "path": "apps/site-api/src/beta-access/auth.test.ts", "sha256": "f289953d6ca02215b199b53950c71c6fcd8469dc8a5aaed7001bb878a9e28768" },
+    { "path": "apps/site-api/src/beta-access/config.ts", "sha256": "5a3b0ee11d6cab777915ce22a8044bbef94755edfb15d1b129ed0140fc310894" },
+    { "path": "apps/site-api/src/beta-access/listener.ts", "sha256": "1f32325371dc9d80cda22ee4b983529454cb8de8132412665931714692538dfd" },
+    { "path": "apps/site-api/src/beta-access/listener.test.ts", "sha256": "c4a16f7c80759c03f58546d72a04202a7b976460bb06e380b4e604dd67ff2aef" },
+    { "path": "apps/site-api/src/beta-access/routes.ts", "sha256": "a95872bb9d7ae467c6b6aa3a2be37c2b715e45264b226f239f29684419107c6a" },
+    { "path": "apps/site-api/src/beta-access/server.ts", "sha256": "ca1d8ebc679e181b7644b86b1010b6106e81863dd26ac6c9a83157241c62dd21" },
+    { "path": "apps/site-api/src/beta-access/server.test.ts", "sha256": "ed233e498e6be74a3bf10ec74f8f8b80b19a91b699dd62a63e8f664a5b7a8134" },
+    { "path": "apps/site-api/src/beta-access/postgres.test.ts", "sha256": "c932ead05b9bd20d029720543cb3e046ee94ac7b2003dfdb61ea6d7fb91baed0" },
+    { "path": "tools/beta-access/ci-prerequisites.ts", "sha256": "5f5fbb5305cb820ae4c13cc8ebae0d1ab49414843dd3a601671eec8b8384e036" },
+    { "path": "tools/beta-access/local-rehearsal.ts", "sha256": "adef448fdde284564ec0baab123657f95043b75c81d5cc3c7cfb0129e23baef4" }
+  ],
+  "candidate2_correction": {
+    "F01": "Each fresh fixture creates a second unique NOLOGIN beta owner. Only that new role receives a global default-function PUBLIC EXECUTE revocation. Installation creates the three entrypoints under SET LOCAL ROLE beta owner; schema, eight tables and entrypoints are beta-owner owned. The two cross-boundary helpers remain operator-owned, PUBLIC/runtime/other-role denied and executable only by the beta owner. The identity helper derives auth.uid internally, so the beta owner has no auth or neuvetra schema/table/sequence/function privileges. Readiness and install replay verify exact role flags and memberships in both directions, owner identities, default ACL, five-function split and grants.",
+    "F02": "The production-intended local adapter uses node:http under Bun, streams requests without buffering, and explicitly ends the underlying socket after a decorated 413. At the 2048-byte application boundary, cancellation permits at most 6144 residual bytes for at most 50ms while the response closes; it never waits for an unbounded drain. Incoming premature close errors and settles the request stream; output or socket close settles backpressure and cancels the response body. The old Bun.serve boundary is no longer used by the canonical rehearsal. Imports remain inert."
+  },
+  "successful_native_rehearsal": {
+    "command": "C:/Users/nimab/.bun/bin/bun.exe tools/beta-access/local-rehearsal.ts",
+    "database": "m80_beta_access_1790322331777_ede79e41",
+    "runtime_role": "m80_beta_access_runtime_1790322331777_ede79e41",
+    "owner_role": "m80_beta_access_owner_1790322331777_ede79e41",
+    "assertions": 65,
+    "result": "pass",
+    "profile": "neuvetra.beta-access.synthetic-rehearsal.v1",
+    "identity_provider": "mocked_getUser_response",
+    "database_boundary": "native_restricted_postgresql",
+    "restore_target_mismatch_refused": true,
+    "restore_after_explicit_exact_rebind": true,
+    "restored_split_ownership_and_default_acl": true,
+    "legacy_security_boundary_equal": true,
+    "future_owner_helper_runtime_denied": true,
+    "raw_unfinished_2049_socket_closed_after_decorated_413": true,
+    "post_413_reconnected_403": true
+  },
+  "checks": [
+    { "name": "focused identity, server and listener lifecycle tests", "command": "bun test auth.test.ts server.test.ts listener.test.ts", "result": "pass", "tests": 6, "expectations": 28 },
+    { "name": "native HTTP and PostgreSQL integration", "command": "$env:M80_BETA_ACCESS_NATIVE='enabled'; bun test postgres.test.ts", "result": "pass", "tests": 1, "expectations": 3 },
+    { "name": "strict scoped TypeScript", "command": "bun x tsc --noEmit --strict --skipLibCheck [owned TypeScript files]", "result": "pass" },
+    { "name": "workflow YAML parse", "result": "pass" },
+    { "name": "scoped diff hygiene", "result": "pass" },
+    { "name": "workflow/run validation", "command": "python tools/agent_ops.py validate", "result": "pending_until_candidate2_snapshot" },
+    { "name": "repository-wide check", "command": "bun run check", "result": "fail_preexisting_outside_scope", "detail": "FrontDesk database cannot resolve drizzle-orm/postgres-js, its migrator or pg-core; two downstream callback parameters are implicit any." }
+  ],
+  "preserved_failed_attempts": [
+    "Candidate1 independent review failed F01 because future operator-owner functions inherited PUBLIC EXECUTE and F02 because Bun.serve returned an unlogged listener400 after an application413.",
+    "The first Candidate2 transport attempt added Connection: close to the application413 but Bun.serve 1.3.12 sent the header without closing the socket and the next request still received listener400.",
+    "A bounded residual settlement made Bun.fetch reconnect correctly, but a raw Bun.serve socket still remained open. Root authorized the local node:http adapter rather than claiming the header alone closed the connection.",
+    "The first node:http bridge used Readable.toWeb; cancelling that stream destroyed the inbound socket before the413 could be written. A bounded custom streamed adapter now separates input cancellation from the response socket close.",
+    "The Candidate2 prefreeze lifecycle probe exposed an unsettled response body after peer close during output backpressure. The final adapter observes both ServerResponse and socket close, settles drain waits, cancels the response reader and errors prematurely closed request streams; focused tests reproduce both edges.",
+    "Initial Candidate1 PostgreSQL/typecheck/bootstrap failures and every pre-freeze repair remain embedded in the immutable Candidate1 snapshot and first review."
+  ],
+  "independent_rereview_scope": [
+    "Challenge the split owner, default ACL, helper grants, restore ownership and exact legacy catalog parity from frozen Candidate2 bytes.",
+    "Repeat exact2048, ASCII/multibyte/unfinished2049, 413 socket close and reconnect403 against the local node:http adapter.",
+    "Complete the first review's still-pending ordered admission/revoke races, pool identity variations, Auth timeout/banned outcomes and search-path probes.",
+    "No real provider Auth, hosted proxy/listener, distributed rate limit, hosted recovery, customer data, real invitation, released method or customer readiness is tested or claimed."
+  ],
+  "workflow": {
+    "ticket": "2cc281b1d0a54b47b53aa371dfa652e7",
+    "task_version": 2,
+    "dependency_versions": {},
+    "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+    "reservation_usd": 10,
+    "reservation_meaning": "local planning allowance; no actual billing or paid-call authority",
+    "actual_cost_usd": null,
+    "requested_compute": { "model": "gpt-5.6-sol", "effort": "high" },
+    "observed_compute": { "model": null, "effort": null },
+    "controller_owner": "/root"
+  },
+  "limits": [
+    "Candidate2 is author evidence pending independent security/reliability rereview and is not self-approved.",
+    "Candidate2 prefreeze draft df281dca414bf4bc8a4035f3c74c24455c010a969846ddc84d96668a328cc1b5 is retained as M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2-PREFREEZE1.json and was not independently reviewed.",
+    "Only new task-named runtime and beta-owner roles were created; existing roles/defaults and legacy object ACLs/owners were unchanged in the author parity projection.",
+    "The retained task databases and roles were not deleted because deletion was outside authorization.",
+    "The local helper owner remains the pre-existing supabase_admin fixture superuser. Hosted least-privilege ownership and proxy behavior remain separate predeployment gates."
+  ]
+}

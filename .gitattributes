@@ -391,3 +391,27 @@ operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CAN
 operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json -text whitespace=cr-at-eol
 evaluations/research-qa/ops-graph-01-product-integration-20260925.json -text whitespace=cr-at-eol
 evaluations/research-qa/ops-graph-01-product-ci-20260925.json -text whitespace=cr-at-eol
+
+# Preserve exact Scope 1 beta access and review evidence.
+docs/research/m80-evidence-boundary-root-review-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-archive-relocation.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-baseline-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review1.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-next-contract-root-review1-20260925.md -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-next-contract-root-review2-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-evidence-boundary-root-review-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-checkpoint-publication-success-20260925.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-BETA-NEXT-CONTRACT-20260925.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-EVIDENCE-BOUNDARY-CONTRACT-20260925.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW1.json -text whitespace=cr-at-eol
+operations/feedback/2026-09-25-scope1-continue.md -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-checks.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-final-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-native-first.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-native.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2-PREFREEZE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json -text whitespace=cr-at-eol

@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_beta_access_engineer",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+      "sha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-author-20260925.json",
+      "sha256": "346ae84e0b77fe2de21574df00d46ff4d059231654bbaf286badc2bafd7bc8e4"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-IMPLEMENTATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-author-20260925.json"
+      ],
+      "reason": "Candidate2 author implementation and fresh template0 native rehearsal passed after the first independent review findings were corrected; independent rereview remains separate."
+    },
+    {
+      "id": "AC-NATIVE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-author-20260925.json"
+      ],
+      "reason": "Author exercised the real loopback node:http listener and restricted PostgreSQL runtime against a fresh wholly synthetic database with 65 assertions."
+    },
+    {
+      "id": "AC-INDEPENDENT-REVIEW",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json"
+      ],
+      "reason": "Independent Candidate2 review accepted; first Candidate1 failure retained in outcome and immutable snapshots."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_beta_access_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+        "sha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676"
+      },
+      {
+        "path": "evaluations/research-qa/m80-beta-access-author-20260925.json",
+        "sha256": "346ae84e0b77fe2de21574df00d46ff4d059231654bbaf286badc2bafd7bc8e4"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-NEXT-CONTRACT-20260925-CANDIDATE2.json",
+      "sha256": "9417cc5ea23fd8e5c12bcc21498045870ec6d3c38cd35262e905ac85f8721c71"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json",
+      "sha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review1.json",
+      "sha256": "14f48acbfc5c7edc74599b0437b821bd3d424e5af1952e8445d7eee3849159b1"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2-PREFREEZE1.json",
+      "sha256": "df281dca414bf4bc8a4035f3c74c24455c010a969846ddc84d96668a328cc1b5"
+    }
+  ],
+  "parent_outcome": "Supported Scope1 invitation and access foundation for local synthetic beta; no real invitations or hosted enablement",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "notes": [
+    "Candidate1 failed independent review with BETA-ACCESS-F01 and BETA-ACCESS-F02. Candidate2 corrects those findings and is frozen pending independent rereview; no self-approval is claimed.",
+    "Workflow correction ticket 2cc281b1d0a54b47b53aa371dfa652e7 was started by root as task version 2 with dependency_versions {}; root owns submission and shared records.",
+    "The $10 reservation is a local planning allowance only. Actual cost and observed compute remain unknown.",
+    "No hosted database, provider, credential, private ENV, actual backup, real invitation, customer data, method release, deployment or Git/provider action was performed.",
+    "The full repository check remains limited by pre-existing FrontDesk drizzle imports and cascading implicit-any diagnostics outside this task's ownership; focused unit, native, TypeScript, YAML and diff checks passed.",
+    "Candidate2 prefreeze draft df281dca414bf4bc8a4035f3c74c24455c010a969846ddc84d96668a328cc1b5 is retained but was not reviewed; the final Candidate2 snapshot is 1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676.",
+    "Independent QA should challenge the explicit untested timing, generation, byte-boundary, pool-reuse, disconnect/backpressure and default-ACL variants listed in the author evidence.",
+    "Root closed this bounded run after exact independent Candidate2 acceptance. Publication and customer/hosted readiness are separate; first failure preserved.",
+    "Closure validator initially rejected incomplete review binding. Accepted deliverables now bind exact Candidate2 snapshot/report; failed and prefreeze versions remain source artifacts, not accepted deliverables."
+  ]
+}

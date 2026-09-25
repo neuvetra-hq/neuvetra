@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M80-EVIDENCE-BOUNDARY-CONTRACT-20260925",
+  "status": "design_candidate_pending_independent_review",
+  "wordCount": 1219,
+  "dependency": {
+    "accessContract": "docs/research/m80-beta-next-contract-20260925.md",
+    "snapshot": "operations/agent-improvement/snapshots/M80-BETA-NEXT-CONTRACT-20260925-CANDIDATE2.json",
+    "snapshotSha256": "9417cc5ea23fd8e5c12bcc21498045870ec6d3c38cd35262e905ac85f8721c71",
+    "state": "root reports contract accepted; evolving implementation not inspected or assumed integrated"
+  },
+  "implementationPaths": [
+    "apps/site-api/src/beta-evidence/routes.ts",
+    "apps/site-api/src/beta-evidence/service.ts",
+    "apps/site-api/src/beta-evidence/storage.ts",
+    "apps/site-api/src/beta-evidence/scanner.ts",
+    "packages/neuvetra-database/src/beta-evidence-contract.ts",
+    "packages/neuvetra-database/src/beta-evidence.ts",
+    "packages/neuvetra-database/src/beta-evidence-migrations/0001_evidence.sql",
+    "tools/beta-evidence/local-rehearsal.ts"
+  ],
+  "wire": {
+    "prefix": "/beta-api/workspaces/:companyId/evidence",
+    "create": "POST /uploads",
+    "createKeys": [
+      "requestId",
+      "fixtureId",
+      "reportingYear",
+      "facilityId",
+      "sourceId",
+      "evidenceKind",
+      "periodStart",
+      "periodEnd",
+      "declaredBytes",
+      "declaredSha256",
+      "declaredMime"
+    ],
+    "stream": "PUT /uploads/:attemptId/content",
+    "metadata": "GET /:evidenceId",
+    "download": "GET /:evidenceId/download",
+    "delete": "DELETE /:evidenceId",
+    "metadataMaxBytes": 4096,
+    "fileMaxBytes": 5242880,
+    "tenantReservedAndRetainedBytes": 20971520,
+    "concurrentUploads": 2,
+    "leaseSeconds": 600,
+    "bodyMode": "raw identity-encoded application/pdf; streaming count/hash/sniff; no multipart buffering"
+  },
+  "states": {
+    "normal": [
+      "reserved",
+      "uploading",
+      "quarantined",
+      "scan_pending",
+      "verified_clean"
+    ],
+    "other": [
+      "rejected",
+      "abandoned",
+      "synthetic_fixture_verified",
+      "delete_pending",
+      "deleted"
+    ],
+    "realCleanRequires": [
+      "worker-only capability",
+      "current revision and attempt nonce",
+      "exact object version/hash/size",
+      "scanner engine/signatures/time and clean verdict",
+      "isolated structural validation success",
+      "active applicable admission and membership generation",
+      "no tombstone or superseding verdict"
+    ],
+    "localFixtureDownloadRequires": [
+      "exact operator fixture manifest",
+      "synthetic_fixture_verified",
+      "scannerAssurance=not_established",
+      "realDataEligible=false",
+      "authorized beta actor",
+      "complete pinned-byte integrity verification"
+    ],
+    "simulatedScanMaySetVerifiedClean": false,
+    "defaultScanner": "unavailable"
+  },
+  "storage": {
+    "localAdapter": "task-local private filesystem directory, exclusive opaque keys, no public mount",
+    "encryptionEstablished": false,
+    "rawBytesInDatabase": false,
+    "objectDatabaseAtomicity": false,
+    "orphanGraceSeconds": 3600,
+    "localFixtureRetentionSeconds": 86400,
+    "backupPurgeEstablished": false,
+    "realDataEligible": false
+  },
+  "acceptanceMap": [
+    {
+      "id": "E01",
+      "criterion": "Actual functional native boundary",
+      "requiredEvidence": "Create/reserve, stream, quarantine, exact synthetic verification, authorized download, restart and deletion through actual HTTP/native PG/storage; mock identity explicitly labeled",
+      "executionResult": null
+    },
+    {
+      "id": "E02",
+      "criterion": "Streaming validation",
+      "requiredEvidence": "Wrong MIME/magic/encoding, empty/oversize/chunked/disconnected body, mismatched declared size/hash and storage failure; no partial evidence success",
+      "executionResult": null
+    },
+    {
+      "id": "E03",
+      "criterion": "Authority and tenant isolation",
+      "requiredEvidence": "Two tenants; own/other IDs; no member writes; revoked admission/membership during upload and before download; no cross-tenant dedupe/metadata exposure",
+      "executionResult": null
+    },
+    {
+      "id": "E04",
+      "criterion": "Storage safety and crash recovery",
+      "requiredEvidence": "Exclusive opaque keys; traversal/symlink/reparse rejection; no overwrite; failure before/after seal and DB commit; orphan cleanup never adopts bytes",
+      "executionResult": null
+    },
+    {
+      "id": "E05",
+      "criterion": "Scanner fails closed",
+      "requiredEvidence": "Missing scanner, timeout/error/unknown/malformed/forged/stale/replayed receipt; exact version/hash/size mismatch; simulated clean cannot set verified_clean; deletion supersedes late verdict",
+      "executionResult": null
+    },
+    {
+      "id": "E06",
+      "criterion": "Download integrity",
+      "requiredEvidence": "Pinned immutable object hash/size verified before response bytes; substituted/missing object denies; no public URL, token, key or content in logs",
+      "executionResult": null
+    },
+    {
+      "id": "E07",
+      "criterion": "Replay/quota/concurrency",
+      "requiredEvidence": "Same request+same metadata recovers attempt; changed metadata conflicts; one writer/lease; completed retry rehashes bounded body; reservation+retained quota cannot be bypassed; authorized same-tenant duplicate receipt",
+      "executionResult": null
+    },
+    {
+      "id": "E08",
+      "criterion": "Deletion/retention/restart",
+      "requiredEvidence": "Immediate tombstone; delete_pending on storage failure; exact-version idempotent cleanup; scan/delete race; restore replays revocation/deletion before access; primary delete never claims backup purge",
+      "executionResult": null
+    },
+    {
+      "id": "E09",
+      "criterion": "Preservation and local scope",
+      "requiredEvidence": "Fresh wholly synthetic database/root, no private clones/env/provider; old helper/migration hashes and state unchanged; access dependency proven before integration",
+      "executionResult": null
+    },
+    {
+      "id": "E10",
+      "criterion": "Independent acceptance",
+      "requiredEvidence": "Independent root/security review of frozen design; later independent native implementation and hosted security review remain separate",
+      "executionResult": null
+    }
+  ],
+  "indispensableDecisions": [
+    "Named data/privacy owner: authorized companies/types/providers/region/subprocessors",
+    "Storage owner: private bucket/encryption/key access/backups",
+    "Security owner: real scanner, signatures, isolated PDF validator, resource/time/abuse limits",
+    "Retention owner: deletion/holds/retention/backup expiry and restore tombstones",
+    "Support owner: audited access and incident process"
+  ],
+  "localSafety": {
+    "host": "127.0.0.1",
+    "port": 55472,
+    "database": "fresh task-named wholly synthetic fixture DB",
+    "storageRoot": "fresh exclusive task directory outside web assets",
+    "privateBackupCloneAllowed": false,
+    "environmentExportReadAllowed": false,
+    "existingDatabaseDeleteAllowed": false,
+    "existingGlobalRoleChangesAllowed": false,
+    "providerActionsAllowed": false
+  },
+  "workflow": {
+    "ticket": "be98b9a0f6644f2d89d48cd9687eacb8",
+    "dependencyVersions": {},
+    "reservationUsd": 5,
+    "reservationMeaning": "local planning allowance only; no paid-call permission or actual charge claim",
+    "actualCostUsd": null,
+    "controllerOwner": "root"
+  },
+  "checksPerformed": [
+    "Current fixed parser/upload/SQL inspection",
+    "Accepted beta plan and access Candidate2 reconciliation",
+    "JSON parsing and source/snapshot hashes"
+  ],
+  "notPerformed": [
+    "Runtime/native tests",
+    "Provider/storage/scanner queries",
+    "Credential access",
+    "Package installs",
+    "Real evidence/invitations",
+    "Source/app/database edits",
+    "Independent acceptance"
+  ],
+  "customerReady": false,
+  "sourceMethodsReleased": false,
+  "scope2": "deferred",
+  "candidate": 2,
+  "cosmeticCorrection": {
+    "reason": "Root byte-level review found malformed arrow and less-than-or-equal symbols in UTF-8 prose; replaced with ASCII -> and <=.",
+    "architectureChanged": false,
+    "runtimeFailure": false,
+    "originalSnapshotPreserved": true
+  }
+}

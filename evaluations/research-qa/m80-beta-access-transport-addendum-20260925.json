@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
+  "recorded_at": "2026-09-25T07:35:10.821033+00:00",
+  "controller_ticket": "2cc281b1d0a54b47b53aa371dfa652e7",
+  "parent_authorization": {
+    "path": "evaluations/research-qa/m80-beta-access-correction-authorization-20260925.json",
+    "sha256": "8162fd5008ea7ad856186b678e39db8552bb5226c7f81b318ed1a88bea5ec5c8"
+  },
+  "observation_status": "Author-reported development probes; not independent acceptance",
+  "trigger": "Bun.serve1.3.12 Connection-close response did not produce socket FIN in author raw-socket probe. First workaround not accepted as sufficient.",
+  "authorized_adjustment": "Within existing owned apps/site-api/src/beta-access scope, implement local-only node:http listener adapter streaming to the same app.fetch handler with explicit response keep-alive disable/connection close on413. No hosted server or configuration change.",
+  "required_checks": [
+    "Actual adapter raw socket closure after streamed2049/413; next client request receives normal403 with headers and log",
+    "Bounded request streaming without unbounded buffering or draining; cancel/error resource cleanup",
+    "Inert imports, loopback-only listener and controlled close",
+    "Independent QA exercises this actual adapter, preserves author development failures and checks exact frozen source"
+  ],
+  "limits": "This does not claim hosted proxy/parser security, customer readiness or deployment. Existing first correction reservation unchanged; actual cost unknown."
+}

@@ -32,6 +32,19 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      beta-postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: supabase_admin
+          POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 55472:5432
+        options: >-
+          --health-cmd "pg_isready -U supabase_admin -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -105,6 +118,14 @@ jobs:
         run: bun test evaluations/research-qa/m80-ci-schema-regression.test.ts evaluations/research-qa/m78-ci-native.test.ts
         env:
           M78_QA_CI_BASELINE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+
+      - name: Exercise beta invitation access through native restricted PostgreSQL
+        run: |
+          bun tools/beta-access/ci-prerequisites.ts
+          bun test apps/site-api/src/beta-access/auth.test.ts apps/site-api/src/beta-access/server.test.ts apps/site-api/src/beta-access/listener.test.ts apps/site-api/src/beta-access/postgres.test.ts
+        env:
+          M80_BETA_ACCESS_NATIVE: enabled
+          M80_BETA_ACCESS_CI: enabled
 
       - name: Challenge Scope 1 concurrent writes and post-write rollback
         run: bun test evaluations/research-qa/m78-perf-concurrency.test.ts evaluations/research-qa/m78-perf-independent.test.ts

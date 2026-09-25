@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "id": "M80-EVIDENCE-BOUNDARY-CONTRACT-20260925",
+  "role": "cto",
+  "execution_context": "/root/m80_beta_next_contract",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EVIDENCE-BOUNDARY-CONTRACT-20260925-CANDIDATE2.json",
+      "sha256": "3982ec958a8807c2794d08f7a69b53cde8de269d66b9656350c8b8d176029fd0"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "E01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E02",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E03",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E04",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E05",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E06",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E07",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E08",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E09",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-evidence-boundary-contract-20260925.md",
+        "docs/research/m80-evidence-boundary-contract-20260925.json"
+      ],
+      "reason": "Design criterion specified; implementation tests unrun and independent review pending."
+    },
+    {
+      "id": "E10",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-evidence-boundary-root-review-20260925.json"
+      ],
+      "reason": "Root independently accepted design only; implementation tests remain unrun."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-evidence-boundary-root-review-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EVIDENCE-BOUNDARY-CONTRACT-20260925-CANDIDATE2.json",
+        "sha256": "3982ec958a8807c2794d08f7a69b53cde8de269d66b9656350c8b8d176029fd0"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Functional evidence intake toward Scope1 free beta; real-data gates remain closed",
+  "source_artifacts": [
+    {
+      "path": "docs/research/m80-evidence-boundary-contract-20260925.md",
+      "sha256": "fd111f7247d1f17c2ad666337e8ef6e2758ca74e9508759bff92bcece0d7889e"
+    },
+    {
+      "path": "docs/research/m80-evidence-boundary-contract-20260925.json",
+      "sha256": "5476d3f384dc9b7092fe04a705b2135cf9a94f3ab7c57db7be8794171b4e50c3"
+    }
+  ],
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Own evidence contract only; access contract/run/source untouched.",
+    "Prospective accepted access contract is an assumption; evolving implementation not claimed integrated.",
+    "Workflow ticket be98b9a0f6644f2d89d48cd9687eacb8 started by root; deps {}; $5 planning reservation only; actual cost null.",
+    "No app/source/DB/provider/credential/package/real-data/invitation action.",
+    "Independent review pending; no self acceptance.",
+    "Root content review found design acceptable for later local-only implementation, pending exact Candidate2 byte check.",
+    "Cosmetic correction only: replace actual UTF-8 mojibake arrows and less-than-or-equal symbols with ASCII. No architecture change, material finding or runtime failure asserted. Original snapshot retained at SHA256 5364814f70b003a8a33ce87189aa2661e48ec17278f2737f87c17f2c22a7a6ad.",
+    "Candidate2 source files pass strict ASCII/UTF-8 and JSON checks; no-real-clean scanner invariants preserved. Independent final acceptance remains root-owned.",
+    "Root design review passed with cosmetic encoding correction noted separately. Controller initially rejected out-of-root QA receipt path; exact receipt copy under docs/research was accepted without resetting journal or changing task artifacts."
+  ],
+  "cosmetic_corrections": [
+    {
+      "candidate": 2,
+      "kind": "encoding_presentation",
+      "material": false,
+      "runtime_failure": false
+    }
+  ]
+}

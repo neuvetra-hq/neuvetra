@@ -1,0 +1,258 @@
+{
+  "verdict": "fail_or_incomplete_preserved",
+  "phase": "Q10_native_restore",
+  "completed": true,
+  "errorCode": null,
+  "candidateSha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5",
+  "checks": [
+    {
+      "id": "Q08.stream_repeat.2048",
+      "pass": true,
+      "details": {
+        "status": 404
+      }
+    },
+    {
+      "id": "Q08.stream_repeat.2049",
+      "pass": true,
+      "details": {
+        "status": 413
+      }
+    },
+    {
+      "id": "Q08.origin_repeat",
+      "pass": false,
+      "details": {
+        "status": 400,
+        "observed": [
+          {
+            "origin": "http://127.0.0.1:3080",
+            "status": 404
+          },
+          {
+            "origin": "http://127.0.0.1:3080",
+            "status": 413
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q08.multibyte_bytes",
+      "pass": true
+    },
+    {
+      "id": "Q08.global_limit",
+      "pass": true,
+      "details": {
+        "statuses": [
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          200,
+          429
+        ],
+        "authCalls": 60
+      }
+    },
+    {
+      "id": "Q08.global_before_auth",
+      "pass": true
+    },
+    {
+      "id": "Q08.bucket_capacity",
+      "pass": true
+    },
+    {
+      "id": "Q08.bucket_expiry",
+      "pass": true
+    },
+    {
+      "id": "Q04.redemption_observed_waiting",
+      "pass": true
+    },
+    {
+      "id": "Q04.expiry_rechecked_after_lock",
+      "pass": true,
+      "details": {
+        "status": 404
+      }
+    },
+    {
+      "id": "Q04.expired_no_membership",
+      "pass": true
+    },
+    {
+      "id": "Q04.redeem_first",
+      "pass": true
+    },
+    {
+      "id": "Q04.redeem_then_revoke_no_access",
+      "pass": true
+    },
+    {
+      "id": "Q04.redeem_then_revoke_no_receipt",
+      "pass": true
+    },
+    {
+      "id": "Q04.revoke_before_redeem",
+      "pass": true
+    },
+    {
+      "id": "Q07.fixed_search_path",
+      "pass": true
+    },
+    {
+      "id": "Q07.future_function_default_denied",
+      "pass": false,
+      "details": {
+        "restrictedRuntimeCalledUnlistedDefiner": true
+      }
+    },
+    {
+      "id": "Q07.other_role_schema_denied.anon",
+      "pass": true
+    },
+    {
+      "id": "Q07.other_role_schema_denied.authenticated",
+      "pass": true
+    },
+    {
+      "id": "Q07.other_role_schema_denied.neuvetra_runtime",
+      "pass": true
+    },
+    {
+      "id": "Q10.exact_access_state",
+      "pass": true
+    },
+    {
+      "id": "Q10.unrebound_target_denied",
+      "pass": true
+    },
+    {
+      "id": "Q10.active_member",
+      "pass": true
+    },
+    {
+      "id": "Q10.revoked_member",
+      "pass": true
+    },
+    {
+      "id": "Q10.tombstone_member",
+      "pass": true
+    },
+    {
+      "id": "Q10.revoked_receipt_denied",
+      "pass": true
+    },
+    {
+      "id": "Q10.source_preserved",
+      "pass": true
+    },
+    {
+      "id": "Q08.no_secret_logs",
+      "pass": true
+    }
+  ],
+  "details": {
+    "defaultAcls": [],
+    "definers": [
+      {
+        "name": "assert_runtime_target",
+        "config": [
+          "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+        ],
+        "definer": true,
+        "owner": "supabase_admin"
+      },
+      {
+        "name": "read_session",
+        "config": [
+          "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+        ],
+        "definer": true,
+        "owner": "supabase_admin"
+      },
+      {
+        "name": "read_workspace",
+        "config": [
+          "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+        ],
+        "definer": true,
+        "owner": "supabase_admin"
+      },
+      {
+        "name": "redeem_invitation",
+        "config": [
+          "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+        ],
+        "definer": true,
+        "owner": "supabase_admin"
+      },
+      {
+        "name": "require_identity",
+        "config": [
+          "search_path=pg_catalog, neuvetra_beta, auth, pg_temp"
+        ],
+        "definer": true,
+        "owner": "supabase_admin"
+      }
+    ]
+  },
+  "actualCostUsd": null
+}

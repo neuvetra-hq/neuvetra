@@ -1,0 +1,383 @@
+{
+  "task": "M80-BETA-ACCESS-QA-20260925",
+  "candidate": 2,
+  "verdict": "fail_preserved",
+  "phase": "fresh_fixture_bootstrap",
+  "checks": [
+    {
+      "id": "freeze.snapshot",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.files",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze..github/workflows/verify.yml",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-contract.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations/0001_access.sql",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/index.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/config.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/listener.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/listener.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/routes.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/postgres.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/ci-prerequisites.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/local-rehearsal.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.evaluations/research-qa/m80-beta-access-author-20260925.json",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.required_boundaries",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.22_migrations",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0019_stationary_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/hosted.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/workspace.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/staging-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0001_company_workspace.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0002_synthetic_bill_intake.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0003_synthetic_bill_calculation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0004_inventory_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0005_annual_electricity_register.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0006_inventory_evidence_pack.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0007_inventory_draft_report.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0008_inventory_draft_report_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0009_private_staging.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.exact_role_removal",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0010_manual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0011_worksheet_reports.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0012_source_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0013_annual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0014_annual_electricity_evidence.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0015_corporate_coverage.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0016_stationary_natural_gas.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0017_mobile_diesel.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0018_controlled_fleet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0019_stationary_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0020_fugitive_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0021_scope1_inventory.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0022_scope1_beta_foundation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.targets_absent",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.existing_roles",
+      "result": "pass"
+    }
+  ],
+  "details": {},
+  "nativeTargets": {
+    "database": "m80_beta_access_qa_20260925c",
+    "restore": "m80_beta_access_restore_qa_20260925c",
+    "role": "m80_beta_access_runtime_qa_20260925c"
+  },
+  "identityProvider": "mocked_getUser_response",
+  "frozenSnapshot": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+  "frozenSha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676",
+  "actualCostUsd": null,
+  "limitations": [
+    "Provisional prepared subset; Q04 ordered races, listener disconnect settlement and Q10 native restore require supplemental review checks.",
+    "No provider or customer-readiness verdict."
+  ],
+  "errorCode": null
+}

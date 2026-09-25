@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-ROOT-CLOSURE-20260925",
+  "observed_at": "2026-09-25T08:03:25.257542+00:00",
+  "coordinator": "/root",
+  "verdict": "accepted_bounded_local_synthetic_access",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+    "sha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676"
+  },
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json",
+    "sha256": "949d9d2742afc25033ac9a4b8ec31ec99291f5a83f848bd065073602da94a126"
+  },
+  "qa_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
+    "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+  },
+  "root_verification": "All18 candidate and14 QA snapshot embedded/current files verified byte-exact; independent acceptance map and limits read; controller version2 accepted after preserved version1 rejection.",
+  "demonstrated": "Real local HTTP invitation redemption, restricted tenant/session access, revocation/retry/races, bounded transport and native restore. Provider identity remains mocked.",
+  "legacy_preservation": {
+    "tables": 127,
+    "row_and_metadata_hashes_equal": true,
+    "classified_new_beta_fk_triggers": 2
+  },
+  "first_review": "fail",
+  "material_corrections": 1,
+  "open_material_findings": 0,
+  "publication": "pending_clean_checkout_and_exact_remote_checks_on_existing_PR6",
+  "hosted_beta_access": false,
+  "customer_ready": false,
+  "method_release": false,
+  "limits": [
+    "Four methods remain held; source/domain/release-owner decisions are separate.",
+    "New owner default policy covers supported creation; malicious operator superuser is not contained.",
+    "Real provider identity/deadlines, hosted integration and real document/customer readiness are unverified.",
+    "Full local repository check has recorded FrontDesk dependency/type failures; relevant checks passed and required remote checks remain pending."
+  ],
+  "proposed_lessons": [
+    {
+      "status": "proposed_not_policy",
+      "finding": "BETA-ACCESS-F01",
+      "lesson": "Test future function creation under the intended creator role; current explicit grants do not prove safe defaults."
+    },
+    {
+      "status": "proposed_not_policy",
+      "finding": "BETA-ACCESS-F02",
+      "lesson": "Test real socket closure and the next request after an oversized body, alongside handler-level status assertions."
+    }
+  ],
+  "actual_cost_usd": null
+}

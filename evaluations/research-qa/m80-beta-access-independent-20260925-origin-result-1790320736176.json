@@ -1,0 +1,51 @@
+{
+  "candidateSha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5",
+  "bunVersion": "1.3.12",
+  "responses": [
+    {
+      "status": 413,
+      "cacheControl": "no-store",
+      "contentType": "application/json; charset=utf-8",
+      "requestIdPresent": true,
+      "noSniff": "nosniff",
+      "csp": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "bodyBytes": 30,
+      "applicationRequestsObserved": 1,
+      "applicationLogs": 1
+    },
+    {
+      "status": 400,
+      "cacheControl": null,
+      "contentType": null,
+      "requestIdPresent": false,
+      "noSniff": null,
+      "csp": null,
+      "bodyBytes": 0,
+      "applicationRequestsObserved": 1,
+      "applicationLogs": 1
+    },
+    {
+      "status": 403,
+      "cacheControl": "no-store",
+      "contentType": "application/json;charset=utf-8",
+      "requestIdPresent": true,
+      "noSniff": "nosniff",
+      "csp": "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'",
+      "bodyBytes": 22,
+      "applicationRequestsObserved": 2,
+      "applicationLogs": 2
+    }
+  ],
+  "observed": [
+    {
+      "method": "POST",
+      "origin": "http://127.0.0.1:3080"
+    },
+    {
+      "method": "GET",
+      "origin": "http://127.0.0.1:3081"
+    }
+  ],
+  "sensitiveValuesPersisted": false,
+  "interpretation": "Oversized application413 followed by listener400 without application invocation; fresh subsequent forbidden Origin reaches application403. No authorization grant observed."
+}

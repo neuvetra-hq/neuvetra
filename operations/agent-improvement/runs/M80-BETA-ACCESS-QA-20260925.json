@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "id": "M80-BETA-ACCESS-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_beta_access_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
+      "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-PLAN",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-matrix.md"
+      ],
+      "reason": "Independent preimplementation attack matrix delivered; no implementation verdict."
+    },
+    {
+      "id": "AC-NATIVE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json"
+      ],
+      "reason": "Exact Candidate2 independently accepted for bounded local access after new-owner and listener repairs plus remaining native matrix checks."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-beta-access-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
+        "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent local synthetic beta access boundary review; no release or customer-readiness approval",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "notes": [
+    "Initial read-only planning complete; native/application/provider work unrun.",
+    "Root owns prospective implementation workflow ticket 36a47115512a48e8aa67c05938f3d605; this review is separate.",
+    "No authorship of implementation under review; root owns Git/provider/shared-status/controller actions.",
+    "Candidate2 accepted design snapshot and both embedded/current source bytes verified. First design failure retained upstream.",
+    "Actual cost and observed compute unknown; no native work authorized until frozen implementation and exact QA targets arrive.",
+    "Root authorized harness preparation with exact future QA database m80_beta_access_qa_20260925a, restore m80_beta_access_restore_qa_20260925a, role m80_beta_access_runtime_qa_20260925a. No connection or creation before frozen manifest. Executable provisional subset prepared; complete native race/catalog/restore challenges remain.",
+    "Candidate1 frozen implementation received and native execution explicitly authorized by root. Source pins verified.",
+    "First a setup failure was QA fixture-hash drift, not product failure. Fresh b independently authorized; a preserved.",
+    "Candidate1 rejected for BETA-ACCESS-F01 and F02. Independent root disposition of this QA report remains pending; task remains in_progress for correction review.",
+    "The synthetic dump is retained diagnostic evidence and excluded from text snapshot/publication recommendation.",
+    "No actual cost basis or observed compute settings; values remain null.",
+    "Root specifically authorized moving the exact synthetic archive to private .superpowers/m80-beta-access-independent-20260925-qa-b-synthetic.dump. Source and destination checks plus equal SHA256 verified; old public path absent. Public relocation receipt exposes only archive hash and locator, no authority rows/token digests. REVIEW1 snapshot remains immutable.",
+    "Candidate2 correction preparation authorized read-only. Root split-owner/Connection-close addendum SHA8162fd5008ea7ad856186b678e39db8552bb5226c7f81b318ed1a88bea5ec5c8 verified. Design cautions and executable legacy/ACL/raw-socket helpers prepared; syntax-only check. No Candidate2 native targets or execution yet. REVIEW1 remains immutable.",
+    "Exact Candidate2 independently passed; F01/F02 closed only for Candidate2. Candidate1 first rejection preserved.",
+    "Root explicitly authorized c source/restore/runtime/owner and narrow c continuation after QA IPv4 mask-format guard failure; no bootstrap or role recreation.",
+    "239 main recorded checks include pins/bootstrap;67 supplemental and27 drift/race checks passed.127 old table row hashes and catalog/role/default comparisons equal;2 exact beta-FK triggers classified.",
+    "All18 source/current embedded UTF8 bytes verified after review. Final default-Windows decoding false comparison resolved with raw bytes; no author source drift.",
+    "Candidate2 archive was written directly to authorized private .superpowers path; public artifacts record hash only.",
+    "Root acceptance of this QA output/publication checks still pending; own run remains in_progress until coordinator disposition. Actual cost remains null.",
+    "Root closed this bounded run after exact independent Candidate2 acceptance. Publication and customer/hosted readiness are separate; first failure preserved."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-checks-first.ts",
+      "sha256": "a1ce3425c4c9dfd5ba7746c71938d76c563dc36eb0c816f90f35634284a9586c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-checks.ts",
+      "sha256": "d46d22268bd68e6d2de120d8f16ada052f57e8725bc8c010c2768c930b074715"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-drift-result-1790323103762.json",
+      "sha256": "3e85f594afb6c4bb50a6dd3e3a1691a7c0648ad23a3b3446ccd4969dbda61ced"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-drift.ts",
+      "sha256": "ac6b64e83ab0a7fe61ce9ecde011eedd41ccd0516c2d31596232d91953e6fb6f"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-final-pins.json",
+      "sha256": "4fee029f78d8c5a65c568aad07752fb78e53ec3cd58ed6dbcc1e12b33e662ae0"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-native-first.ts",
+      "sha256": "3d26fcea46132bd1df93bec7f5e95e4354f546882f457d7075f857adca4a4b02"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-native.ts",
+      "sha256": "b38428c0a57124495f8a0f7d979c09876f6070cba4f7caf7efea9e18aa53e021"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-preparation.md",
+      "sha256": "79729e1ca7ca63faee989785f028bbae150c1829b3e714c764a76babd3a92f58"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-result-1790322648589.json",
+      "sha256": "6143972e5d70c02bebbe950b7cf74b0efe8ee17afe2e83d8a713d2ea0943869a"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-result-1790322732930.json",
+      "sha256": "0d3c9666ebc8908745619f2377d43f85c8ab1c5bcc2999278b99cc66ea4c853e"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement-result-1790322971984.json",
+      "sha256": "56c16ebe0cd26ac9650d5fd85dbcd881ee6def9bd6313c41488deec03eecadd6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement.ts",
+      "sha256": "c466a5d876029131881d9b589845ce9b22c14c90598b717c3bba161e5d1a5958"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json",
+      "sha256": "949d9d2742afc25033ac9a4b8ec31ec99291f5a83f848bd065073602da94a126"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review2.md",
+      "sha256": "d4885e2b0e566b28ae896ea90519c92bdd19a1ba195840d25b3ca8795dea0033"
+    }
+  ]
+}

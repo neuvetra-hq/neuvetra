@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
+  "recorded_at": "2026-09-25T07:24:13.030344+00:00",
+  "coordinator": "/root",
+  "purpose": "Bounded local Candidate2 correction; no hosted authority or customer readiness",
+  "prior_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json",
+    "sha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5"
+  },
+  "rejection": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review1.json",
+    "sha256": "14f48acbfc5c7edc74599b0437b821bd3d424e5af1952e8445d7eee3849159b1"
+  },
+  "findings": [
+    "BETA-ACCESS-F01",
+    "BETA-ACCESS-F02"
+  ],
+  "design_addendum": {
+    "owner": "Authorize one new unique task-named m80_beta_access_owner_<suffix> NOLOGIN/NOSUPERUSER/NOINHERIT/NOCREATEDB/NOCREATEROLE/NOREPLICATION/NOBYPASSRLS role per new synthetic fixture, without role membership in either direction. No existing role changes.",
+    "objects": "Transfer only new beta schema, eight tables and three public entrypoints to new owner. Two internal cross-boundary helpers stay exact existing operator-owned and PUBLIC-revoked; only new beta owner receives their EXECUTE. Refactor identity helper to obtain the authoritative actor itself and return the locked identity; new entrypoints need no direct auth/neuvetra privileges.",
+    "defaults": "Only new owner receives global default function PUBLIC EXECUTE revocation. Supported future creation uses SET LOCAL ROLE new owner. Current/operator/legacy defaults unchanged; schema-only revocation is ineffective. An operator superuser remains trusted and can bypass ACLs; this is not a defense against a malicious superuser.",
+    "validation": "Exact install replay/readiness must enforce owner identity/flags/membership/default ACL, schema/table/function owners, private helper grants and only three runtime entrypoints. Fail closed on drift. New-owner future helper must be runtime-inaccessible. Prove existing legacy rows/catalog/roles/defaults unchanged; explicitly classify only new role/new beta objects.",
+    "transport": "Bounded cancel at over2048 bytes and decorated413 with Connection close; never unbounded drain. Prove raw connection closes and the next client request reconnects to normal403 with headers/log, with exact2048/2049/multibyte tests. Listener cap above tested application boundary. Hosted proxy/listener limits remain untested."
+  },
+  "allowed_files": "Same existing implementation-owned paths; own new Candidate2 snapshot and run updates. Do not edit Candidate1 snapshot or independent first-review artifacts.",
+  "native_scope": "New uniquely named source/restore databases from template0 and fixed synthetic fixtures only at127.0.0.1:55472. New runtime and new owner roles only. No existing fixture deletion, backup cloning, provider access, private ENV, real invitations/data or method releases.",
+  "evidence": "Preserve first review failure and all first attempts. Candidate2 must pin exact sources and report known limitations. Independent reviewer must complete remaining accepted-matrix cases and challenge corrective design before acceptance.",
+  "default_privilege_reference": "https://www.postgresql.org/docs/17/sql-alterdefaultprivileges.html",
+  "actual_cost_usd": null,
+  "reservation_usd": 10,
+  "reservation_meaning": "Previously bounded local planning allowance only; no paid-call authorization."
+}

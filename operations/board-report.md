@@ -1,3 +1,15 @@
+# September 25: local beta access accepted; publication checks pending
+
+Candidate2 passed independent native review after two preserved findings: future-function default permissions and oversized-stream connection behavior. The local HTTP boundary now supports synthetic invitation redemption, tenant/session reads, revocation/retries and recovery. Split ownership and the actual listener were tested; all127 legacy table row hashes and recorded metadata remained unchanged apart from2 classified beta foreign-key triggers. Root verified18 candidate and14 QA snapshot files and accepted the bounded result. Evidence: evaluations/research-qa/m80-beta-access-root-closure-20260925.json.
+
+Root is publishing to the existing rollingPR6 and will verify its exact remote checks before calling this increment published. The live setup remains the prior hosted application; beta access is local only with mocked provider identity. Customer readiness, hosted integration, real evidence and four held methods remain separate gates. Source/domain/release-owner decisions are still outstanding. The board approved continuing the setup flow. Earlier sections are historical.
+
+# September 25: board authorizes continued Scope 1 beta work
+
+Hosted checkpoint ecb5b9d3 is published on PR6, exact remote verified and all six checks passed06:03:17UTC. The board authorized continuing beyond the setup demonstration until supported Scope1 is done; this is permission to proceed, not independent verification of numbers. See operations/feedback/2026-09-25-scope1-continue.md.
+
+Access/evidence design contracts are accepted. Independent native review rejected access Candidate1 for future-function default permissions and oversized-stream follow-on response behavior (F01/F02). Existing three-function access boundary and tested restore cases passed; remaining acceptance checks are explicit. The first failure and frozen sources remain preserved. Candidate2 correction is dispatched under a new reserved/started ticket after root accepted the narrow new-owner/transport design. Independent QA is preparing correction tests; no beta publication or hosted change. Root retains sole product/Git/provider ownership. Qualified accounting and source-use owner assignments/decisions remain outstanding and have been raised with the coordinator; four methods stay held. No real invitations or customer data, Scope2 deferred. Earlier sections are historical.
+
 # September 25: Scope 1 setup live; independent review accepted
 
 The one-time schema22 upgrade, existing synthetic-company admission and deployment succeeded. Deployment40546ef7 serves the exact reviewed application75d8ec4b; provider SUCCESS and schema22 readiness were verified at05:47:51UTC. Fresh encrypted backup and local restore/rehearsal preceded separately reviewed stage gates. All prior application records and metadata were preserved. Original attempts, two pending deployment observations and receipt-only reconciliation remain recorded; never replay the migration, admission or deployment. Schema21 recovery is no longer allowed.

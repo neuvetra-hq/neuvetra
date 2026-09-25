@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "id": "M80-BETA-NEXT-CONTRACT-20260925",
+  "role": "cto",
+  "execution_context": "/root/m80_beta_next_contract",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-NEXT-CONTRACT-20260925-CANDIDATE2.json",
+      "sha256": "9417cc5ea23fd8e5c12bcc21498045870ec6d3c38cd35262e905ac85f8721c71"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-beta-next-contract-20260925.json",
+        "docs/research/m80-beta-next-contract-20260925.md"
+      ],
+      "reason": "Author design delivery only; execution and independent acceptance not claimed."
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-beta-next-contract-20260925.json",
+        "docs/research/m80-beta-next-contract-20260925.md"
+      ],
+      "reason": "Author design delivery only; execution and independent acceptance not claimed."
+    },
+    {
+      "id": "AC-03",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-beta-next-contract-20260925.json",
+        "docs/research/m80-beta-next-contract-20260925.md"
+      ],
+      "reason": "Author design delivery only; execution and independent acceptance not claimed."
+    },
+    {
+      "id": "AC-04",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-beta-next-contract-20260925.json",
+        "docs/research/m80-beta-next-contract-20260925.md"
+      ],
+      "reason": "Author design delivery only; execution and independent acceptance not claimed."
+    },
+    {
+      "id": "AC-05",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-beta-next-contract-20260925.json",
+        "docs/research/m80-beta-next-contract-20260925.md"
+      ],
+      "reason": "Author design delivery only; execution and independent acceptance not claimed."
+    },
+    {
+      "id": "AC-06",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-next-contract-root-review2-20260925.json"
+      ],
+      "reason": "Root independently accepted Candidate2 design; implementation and hosted gates remain separate."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-beta-next-contract-root-review2-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BETA-NEXT-CONTRACT-20260925-CANDIDATE2.json",
+        "sha256": "9417cc5ea23fd8e5c12bcc21498045870ec6d3c38cd35262e905ac85f8721c71"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/m80-beta-next-contract-20260925.md",
+      "sha256": "75463f930c353a08356839711f74f76e86e93c0facac2f736f7a4133a77b8e2f"
+    },
+    {
+      "path": "docs/research/m80-beta-next-contract-20260925.json",
+      "sha256": "0009a1cba64ea7d624a79522aef9dce42c0b66c4f15879e88b9922f60bbe3533"
+    }
+  ],
+  "parent_outcome": "Supported Scope1 invite-ready free beta; California first; no real invitations",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "notes": [
+    "Frozen candidate awaiting independent root/security review; no self acceptance.",
+    "Observed compute and actual resource costs unknown. Reservation $5 is local planning allowance only.",
+    "Workflow ticket d5d45523b6f34fa7b8b0e81773a31c36 started by root; dependency_versions {}; root owns submission.",
+    "Read-only source inspection; no application, database, provider, external invitation or Git mutation.",
+    "Root first-review F01 failed ambiguous pending-token/idempotency branch ordering. Original snapshot M80-BETA-NEXT-CONTRACT-20260925.json remains unchanged at SHA256 d01e66ba98db52862400c33a8fb1a23c5ae370fd77f012c2e5a2860994986eae.",
+    "Candidate2 checks successful receipt first, permits post-token-expiry recovery only with matching verified identity and exact active membership/admission, and keeps different-request consumed tokens denied. Independent re-review pending.",
+    "Root workflow first delivery rejected with evaluations/research-qa/m80-beta-next-contract-root-review1-20260925.md. Correction ticket ba72b164bb8c4aee9ed23f5536795ab1 started; version2 dependency_versions {}; two $5 local planning reservations retained, actual costs unknown. Root owns controller submission."
+  ]
+}
