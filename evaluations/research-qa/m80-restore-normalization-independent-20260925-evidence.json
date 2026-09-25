@@ -1,0 +1,65 @@
+{
+  "task_id": "M80-RESTORE-NORMALIZATION-DIAG-QA-20260925",
+  "source_pins": [
+    {
+      "path": "docs/research/m80-hosted-backup-restore-metadata-diagnostic-20260925.md",
+      "sha256": "e2049c3be423e2d39994347e81c1970e28baef6eec73234db037df056e0b76b8"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-BACKUP-RESTORE-METADATA-DIAGNOSTIC-20260925.json",
+      "sha256": "db20c62c938be5442ff8d2ea60fc28141808454293e7ce15f89163e51aeeb56a"
+    },
+    {
+      "path": "evaluations/research-qa/m80-restore-normalization-independent-20260925.test.ts",
+      "sha256": "7ba7eac53c08e5f14bc32d97755608fb2fc06818105217bed1fe36039740fd8a"
+    },
+    {
+      "path": ".superpowers/m80-backup-core.ts",
+      "sha256": "01e88cafc1eb9f1613589d09e3dcfc20ba7c45f93c5321959fdd72cf371aaa2f"
+    },
+    {
+      "path": "tools/staging/m73-common.ts",
+      "sha256": "a47f8904fab503272173e3db8f39144f52d3b3d4eb14da03784349ac88466ab7"
+    }
+  ],
+  "execution": {
+    "exit_code": 0,
+    "authorization": "Read-only accepted encrypted archive unseal in memory and retained localhost55472 failed restore; sandbox escalation allowed Windows DPAPI.",
+    "accepted_backup_source_pins_exact": 110,
+    "source_acl_rows": 27,
+    "restored_acl_rows": 0,
+    "source_global_or_application_acl_rows": 0,
+    "restored_global_or_application_acl_rows": 0,
+    "excluded_rows_all_explicit_external_schema": true,
+    "source_trigger_rows": 998,
+    "restored_trigger_rows": 998,
+    "distinct_semantic_trigger_rows": 485,
+    "semantic_multiset_exact_including_multiplicity": true,
+    "raw_order_differs": true,
+    "all_other_captured_state_exact": true,
+    "source_and_restored_content_sha256": "65d68c06c843da60841902a8fe0d3b8c9ff9131d1dc8edaad3a05035545f25c7",
+    "pure_in_memory_challenges_passed": 17,
+    "connections_closed": true,
+    "database_mutations": false,
+    "decrypted_snapshot_written": false
+  },
+  "controls": [
+    "trigger permutation accepted",
+    "missing trigger occurrence refused",
+    "added duplicate occurrence refused",
+    "enabled-state change refused",
+    "constraint identity change refused",
+    "trigger relation change refused",
+    "explicit external schema ACL classified outside application scope",
+    "global ACL addition/change/loss each refused",
+    "application ACL addition/change/loss each refused",
+    "existing table ACL change refused",
+    "application schema ACL change refused",
+    "migration receipt change refused",
+    "malformed ACL scope refused"
+  ],
+  "limits": [
+    "Comparison covers the accepted captured application-state fields; no new provider state was fetched.",
+    "Only aggregate counts, source hashes and booleans are retained; no row, account, schema-inventory or Auth-identifier values are emitted."
+  ]
+}

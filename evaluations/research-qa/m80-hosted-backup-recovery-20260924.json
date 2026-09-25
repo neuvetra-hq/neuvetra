@@ -1,0 +1,51 @@
+{
+  "profile": "neuvetra.m80.hosted-backup-rehearsal-stop-and-recovery.v1",
+  "observed_at": "2026-09-25T02:32:29.348027+00:00",
+  "published_upgrade_head": "7bc6028cf016372f52e82a483b7f61bc49c6331e",
+  "required_checks": "six passed",
+  "prior_deployment_stopped_once": true,
+  "backup_completed": true,
+  "backup_receipt_sha256": "d0d235e14266b87d19a92fc410574ae91196529521521e816fec713518a9e0ae",
+  "fresh_backup_restored_application_content_exactly": true,
+  "source_and_restored_content_sha256": "65d68c06c843da60841902a8fe0d3b8c9ff9131d1dc8edaad3a05035545f25c7",
+  "restore_rehearsal_passed": false,
+  "metadata_mismatches": [
+    "inventory.defaultAcls",
+    "internalTriggers"
+  ],
+  "diagnosis": "Unresolved; exact record preservation does not establish permission/trigger metadata equivalence.",
+  "schema_migration_attempted": false,
+  "fixture_admission_attempted": false,
+  "new_setup_deployed": false,
+  "recovery": {
+    "availability_verified": true,
+    "commit": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+    "deployment_id": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee",
+    "deployment_status": "SUCCESS",
+    "image_digest": "sha256:ff5fc867ba683f04571ea641db6208ba5d463756b076715e4252ed50dba5de4c",
+    "observed_at": "2026-09-25T02:31:08.745540+00:00",
+    "origin_http_status": 200,
+    "profile": "neuvetra.m80.recovery21-readonly-observation.v1",
+    "read_only": true,
+    "readiness": {
+      "legacyContainmentVerified": true,
+      "profile": "neuvetra.private-synthetic-staging.v1",
+      "schemaVersion": 21,
+      "status": "ready"
+    }
+  },
+  "recovery_receipt_sha256": "dfc7311a594b782302a4d1044629ecb913120192cdf471a850e0b0f1f3017fab",
+  "next": "Offline bounded restore metadata diagnosis and independent review before any newly planned stop or upgrade. Original stop/recovery attempts must never be replayed.",
+  "browser_recovery_verified": {
+    "observed_at": "2026-09-25T02:32:57.904878+00:00",
+    "signed_in_access_verified": true,
+    "corporate_version": 9,
+    "entities": 2,
+    "facilities": 3,
+    "source_records": 10,
+    "workflow_findings": 0,
+    "release_findings": 11,
+    "synthetic_candidate_kg_co2e": "126850.1763",
+    "user_edits_performed": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_independent_diagnosis_and_proposal_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-DIAG-QA-20260925-DELIVERABLE.json",
+    "sha256": "60b1df4738da2edbd4e55a91f9a9bfc69d7959a27b1f7082a371f9687c17420d"
+  },
+  "verified_current_and_embedded_artifacts": 3,
+  "repair_accepted": false,
+  "migration_authorized": false,
+  "open_restore_finding": "ACTUAL-RESTORE-F01",
+  "evidence_summary": "Independent native read-only comparison and17 perturbations support external-only ACL difference and998-entry exact trigger multiset. Every other captured state component matches.",
+  "required_next": "Versioned repair, independent adversarial source review, and new disposable restore; raw and normalized hashes must remain distinct."
+}

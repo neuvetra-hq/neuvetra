@@ -1,0 +1,49 @@
+{
+  "task_id": "M80-RESTORE-NORMALIZATION-DIAG-QA-20260925",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_actual_diagnosis_and_bounded_normalization_proposal_only",
+  "evidence": {
+    "path": "evaluations/research-qa/m80-restore-normalization-independent-20260925-evidence.json",
+    "sha256": "a81dddd8fc9ffe5d125556ec5c900551f02f47c3813e10cad420cf7e388c07f9"
+  },
+  "material_diagnosis_findings_open": 0,
+  "existing_restore_failure": "ACTUAL-RESTORE-F01 remains open; original actual rehearsal remains failed.",
+  "repair_accepted": false,
+  "migration_authorized": false,
+  "assessment": [
+    "Actual default ACL differences are confined to27 explicitly named external-schema rows, with no global or neuvetra row omitted. Application-only provider-exclusion boundary supports excluding only those rows from application preservation comparison.",
+    "Both998-entry internal-trigger arrays have exactly the same multiset of all four captured semantic fields, including485 distinct rows and every duplicate occurrence. Canonical ordering removes generated-name order noise without removing a semantic row.",
+    "All other captured state is exact under an independently written canonical projection; application content, existing metadata, migration receipts and runtime boundaries must remain exact in a successor."
+  ],
+  "default_acl_query_review": {
+    "path": "tools/staging/m73-common.ts",
+    "line": 33,
+    "mechanism": "LEFT JOIN pg_namespace on defaclnamespace; coalesce missing namespace name to wildcard marker *. PostgreSQL identifies defaclnamespace=0 as global. Every real global row therefore projects to * and must be retained.",
+    "actual_scope": "No * row exists in this archived inventory. All27 omitted rows have explicit other schema names.",
+    "caveat": "The display marker is not a globally unique schema encoding: a quoted schema named * also projects to *. Keeping every * row is conservative and cannot exclude a global row. Do not reinterpret * as an external schema or discard malformed/missing scope."
+  },
+  "primary_sources": [
+    {
+      "url": "https://www.postgresql.org/docs/17/sql-alterdefaultprivileges.html",
+      "support": "Defaults can apply globally or to specified schemas; per-schema defaults add to global defaults. Existing-object ACLs are separate and remain exact."
+    },
+    {
+      "url": "https://www.postgresql.org/docs/17/catalog-pg-default-acl.html",
+      "support": "Global pg_default_acl entries use defaclnamespace zero; per-schema entries identify one namespace."
+    }
+  ],
+  "required_successor_boundaries": [
+    "Version sources and receipts; preserve accepted C3 and all failed journals/archives unchanged.",
+    "Apply the same explicit normalization to both sides; retain all global/application defaults and all other metadata/content checks.",
+    "Canonical trigger arrays must preserve multiplicity, including preservation across migration; some/Set membership alone is insufficient for duplicate counts.",
+    "Reject unknown ACL scope and changed/missing/added old trigger semantics; classify excluded external-schema defaults explicitly.",
+    "Fresh disposable restore and independent successor tests must pass before any actual rehearsal or stage gate is accepted.",
+    "Do not relabel raw metadata hashes or report unqualified raw metadata exactness when only the reviewed projection matches.",
+    "No old stop/recovery/backup attempt may be replayed; any future operation requires new reviewed target evidence and current freshness."
+  ],
+  "limitations": [
+    "This review used17 diagnostic in-memory perturbations against actual archived/restored states; it did not test a production repair because no repair is implemented.",
+    "Trigger comparison is limited to existing captured semantic fields with constraint/object definitions otherwise exact. It is not a claim that every PostgreSQL catalog field is captured.",
+    "No hosted/provider/ENV/Git action or database mutation occurred. Official public PostgreSQL documentation was read for semantic interpretation."
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-25T01:49:14.731053+00:00",
+  "updated_at": "2026-09-25T02:52:12.373990+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -147,13 +147,13 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "Live540c/904ac navigation verified September24, signed-in Scope1 first; schema21 unchanged. Synthetic-only and customer incomplete.",
+    "website_preview_state": "Recovered deployment7b7d1c4e at prior540c/schema21 verified healthy September25 02:31UTC; signed-in prior synthetic workflow verified. New setup not deployed.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Board flow approved. Published 7f68f450 passed six checks. Live schema21 unchanged. Executor C9, preparation C6, coordinator helpers v2 and offline stage bundle composer passed independent bounded reviews and root exact-source acceptance. Root is freezing final public manifest for separate review and same-PR publication."
+    "last_session_work": "Actual failure/recovery QA accepted. Author identified external-schema default ACL scope and internal-trigger ordering; independent diagnosis review and versioned offline repair dispatched. Prior site recovered; no schema22 migration."
   },
   "session_handoff": {
-    "current": "Board flow approved. Published 7f68f450 passed six checks. Live schema21 unchanged. Executor C9, preparation C6, coordinator helpers v2 and offline stage bundle composer passed independent bounded reviews and root exact-source acceptance. Root is freezing final public manifest for separate review and same-PR publication.",
-    "next": "Publish independently reviewed upgrade evidence to rolling PR6 and verify exact-head checks. Then stop the prior app once, take and rehearse a fresh hosted backup, review each actual stage, execute migration/admission/deployment once and demonstrate signed-in setup saving, correction and history. Methods held; full Scope1 and real-company beta incomplete.",
+    "current": "Staging recovered to prior540c/schema21 at7b7d1c4e; no migration. Failure containment and exact diagnosis independently reviewed. Additive repair and receipt consumers are active; repair remains unaccepted.",
+    "next": "Complete independent versioned repair and local restore review, then refresh concrete recovered-target transport review and fresh evidence. Never replay consumed attempts.",
     "evidence": [
       "operations/next-session.md"
     ]
@@ -3416,7 +3416,7 @@
     }
   },
   "free_scope1_beta": {
-    "status": "setup_published_hosted_acceptance_pending",
+    "status": "setup_published_hosted_upgrade_withheld_restore_metadata",
     "target": "2-3 supported companies, free invited beta",
     "company_profiles": "not selected; early source and evidence eligibility screening required",
     "outreach_authorized": false,
@@ -3459,6 +3459,18 @@
       "checks_passed": 6,
       "evidence": "evaluations/research-qa/m80-setup-ci-success-20260924.json",
       "hosted_acceptance": false
+    },
+    "upgrade_publication": {
+      "head": "7bc6028cf016372f52e82a483b7f61bc49c6331e",
+      "checks_passed": 6,
+      "hosted_acceptance": false
+    },
+    "recovered_staging": {
+      "deployment_id": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee",
+      "commit": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+      "schema_version": 21,
+      "availability_verified": true,
+      "observed_at": "2026-09-25T02:31:08.745540+00:00"
     }
   },
   "session_pause": {
@@ -3475,9 +3487,22 @@
     "checkpoint_verified_files": 39
   },
   "current_product_execution": {
-    "observed_at": "2026-09-25T01:45:08.767829+00:00",
+    "observed_at": "2026-09-25T02:52:12.373990+00:00",
     "coordinator": "/root",
-    "active_workers": [],
+    "active_workers": [
+      {
+        "task_id": "M80-RESTORE-NORMALIZATION-V2-20260925",
+        "executor": "/root/m80_foundation_runtime",
+        "scope": "Offline versioned repair and synthetic native rehearsal",
+        "status": "running_dispatched"
+      },
+      {
+        "task_id": "M80-NORMALIZED-PREP-CONSUMER-20260925",
+        "executor": "/root/m80_setup_ui",
+        "scope": "Versioned typed preparation consumers; dependent on frozen repair proof",
+        "status": "running_dispatched"
+      }
+    ],
     "completed_bounded_tasks": [
       "M80-FOUNDATION-CONTRACT-20260924",
       "M80-FOUNDATION-CONTRACT-QA-20260924",
@@ -3500,8 +3525,11 @@
       "M80-HOSTED-PUBLICATION-PREP-20260924",
       "M80-COORDINATOR-HELPERS-QA-20260924",
       "M80-STAGE-BUNDLE-COMPOSE-20260924",
-      "M80-STAGE-BUNDLE-COMPOSE-QA-20260924"
+      "M80-STAGE-BUNDLE-COMPOSE-QA-20260924",
+      "M80-ACTUAL-BACKUP-RECOVERY-QA-20260924",
+      "M80-RESTORE-NORMALIZATION-DIAG-QA-20260925",
+      "M80-RECOVERY-PUBLICATION-QA-20260925"
     ],
-    "limits": "No provider stop, fresh hosted backup, migration22, fixture admission or setup deployment. Transport components accepted; final publication and actual hosted stage evidence remain pending. Four methods held; full Scope1 and real-company beta incomplete."
+    "limits": "Staging recovered to prior schema21. Exact restore metadata failed; schema22 upgrade withheld. No migration or fixture admission. All methods held; Scope1 and real-company beta incomplete."
   }
 }

@@ -1,0 +1,25 @@
+{
+  "task_id": "M80-HOSTED-FINAL-PUBLICATION-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_current_status_claims_only",
+  "manifest": {
+    "path": ".superpowers/m80-hosted-final-publication-manifest-candidate1.json",
+    "sha256": "4545a0f19f1b3a3a7c7da4cc0b326f85f267a2e3979158d99658fec76034b19b"
+  },
+  "finding": {
+    "id": "PUB-F01",
+    "severity": "medium",
+    "path": "operations/status.json",
+    "fields": [
+      "free_scope1_beta.status",
+      "free_scope1_beta.implementation",
+      "free_scope1_beta.navigation_publication",
+      "session_handoff.next"
+    ],
+    "summary": "Current fields still called setup unpublished and executor review unfinished despite published7f68/six checks and accepted C9."
+  },
+  "raw_pins_verified_before_repair": 318,
+  "original_total_bytes": 38700735,
+  "historical_encoding_exception_evidence": "evaluations/research-qa/m80-hosted-final-publication-independent-20260924-historical-encoding.json",
+  "boundary": "No frozen sources or prior snapshots altered; root preserved original manifest and corrected status."
+}

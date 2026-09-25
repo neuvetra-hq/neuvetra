@@ -1,0 +1,83 @@
+{
+  "task_id": "M80-HOSTED-FINAL-PUBLICATION-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact_existing_attempt_continuation_helper_only",
+  "manifest": {
+    "path": ".superpowers/m80-hosted-final-publication-manifest.json",
+    "sha256": "816c15c27f40ee0a49b0a2d0fa341283f0b4dd4e76089a07b582fde95ea41ffc"
+  },
+  "prior_publication_review": {
+    "path": "evaluations/research-qa/m80-hosted-final-publication-independent-20260924-review.json",
+    "sha256": "9aa811c9fedebae723340c4702cd2df558087ed5cade3380c7b550dc6c5c174c"
+  },
+  "existing_publication_intent": {
+    "path": ".superpowers/m80-hosted-publication-intent.json",
+    "sha256": "2f9a3bf617d051d14f435ea4cb5622355c432578af6459cc918409637030cba6"
+  },
+  "independent_staged_observation": {
+    "path": "evaluations/research-qa/m80-hosted-final-publication-independent-20260924-whitespace-observation.json",
+    "sha256": "599eb5409b07ea69ea60b938ad5946adf196dd5233b333c104e8c30c9478512e"
+  },
+  "exact_allowed_check_exit_code": 2,
+  "exact_allowed_check_stdout": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md:3: trailing whitespace.\n+Date: 2026-09-24  \nevaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts:142: new blank line at EOF.\n",
+  "exact_allowed_check_stderr": "",
+  "material_findings_open": 0,
+  "disposition": [
+    {
+      "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md",
+      "line": 3,
+      "warning": "trailing whitespace",
+      "reason": "The exact two trailing spaces after Date: 2026-09-24 are intentional Markdown hard-break syntax; source bytes were already frozen and accepted."
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts",
+      "line": 142,
+      "warning": "new blank line at EOF",
+      "reason": "Preserved historical synthetic QA fixture trailing blank line; no executable semantics or acceptance claim changes."
+    }
+  ],
+  "continuation_requirements": [
+    "Continue only the existing reserved publication attempt; never rerun the publisher or create a replacement intent.",
+    "Immediately reverify exact intent, manifest and review pins; HEAD/base and branch remain fixed; published receipt absent.",
+    "Reverify exactly318 staged paths and every staged blob SHA against the immutable manifest before one commit.",
+    "Require git diff --cached --check to return precisely the recorded exit code/stdout/empty stderr; any extra or changed finding refuses continuation.",
+    "Commit once; verify exact parent and committed318 blobs, then push that exact head, verify remote equality and write the published receipt exclusively.",
+    "After any uncertain commit/push/result, inspect authoritative local/remote state before further action; do not repeat automatically.",
+    "Require all six successful exact-head remote checks before maintenance; no provider/DB action follows from this exception."
+  ],
+  "limits": [
+    "This narrow receipt changes no file, attribute, source pin, global whitespace policy or historical artifact.",
+    "QA performed read-only local Git inspection, not staging/commit/push/network/provider/DB action.",
+    "No broader whitespace waiver or publisher retry authorization.",
+    "Source-only helper acceptance; no commit/push was executed or observed by QA during this supplemental review."
+  ],
+  "prior_whitespace_review": {
+    "path": "evaluations/research-qa/m80-hosted-final-publication-independent-20260924-whitespace-continuation-review.json",
+    "sha256": "3d1ce7ec0eab4560a659a57c903edfb9d614f906634255fc437b713d0fd5b984"
+  },
+  "helper": {
+    "path": ".superpowers/m80-publish-hosted-continue.py",
+    "sha256": "72e630c841825dc91225a54484426c006b8643323f9a3db104b6ed16057b81fc"
+  },
+  "root_whitespace_observation": {
+    "path": ".superpowers/m80-publication-whitespace-observation.json",
+    "sha256": "a4a491c61e59e0e6001f9e06f38e7d5d48f591d957bbf35803ab1705930dfa04"
+  },
+  "review_method": [
+    "Static full-source inspection and Python AST parse; helper was not imported or executed.",
+    "Compared pinned root observation stdout to independently verified exact two-warning exception.",
+    "Preserved prior independent staged318 blob/path verification and original whitespace review unchanged."
+  ],
+  "source_findings": [
+    "Current working and staged bytes are checked against exact manifest before mutation; exact base and branch are required.",
+    "Pinned observation restricts exit2 to exact known stdout and empty stderr.",
+    "A second exclusive fsynced continuation marker is reserved before commit, inside the existing reserved attempt; original intent is never replaced.",
+    "One commit and one push occur; parent,318 committed blobs and remote equality are verified before exclusive fsynced published receipt.",
+    "Any failure propagates with marker retained; helper has no retry loop, restaging, provider or database call."
+  ],
+  "mandatory_external_invocation_checks": [
+    "Root must assert this exact review SHA, exact helper SHA and original intent SHA immediately before invocation. The helper itself checks only base/manifest fields of the original intent; exact original byte identity is enforced by the root caller.",
+    "Invoke ordinary Python without -O/PYTHONOPTIMIZE; assertions are security gates.",
+    "Do not rerun the original publisher or this continuation after its marker exists. Resolve uncertainty through authoritative state inspection."
+  ]
+}

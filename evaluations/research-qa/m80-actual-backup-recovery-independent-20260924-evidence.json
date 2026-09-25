@@ -1,0 +1,94 @@
+{
+  "task_id": "M80-ACTUAL-BACKUP-RECOVERY-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "evidence_pins": [
+    {
+      "path": ".superpowers/m80-ci-observation-portability-005.json",
+      "sha256": "216538834581452c639c88eb5c8b6821aebb2b7b2542953fea78109f66f6d3d9"
+    },
+    {
+      "path": ".superpowers/m80-provider-stop-gate.json",
+      "sha256": "c85dc03cdaa46da2beb9de28934130339b32d395871502331ce7acbe27dabc95"
+    },
+    {
+      "path": ".superpowers/m80-provider-stop-intent.json",
+      "sha256": "377ba9b0bbae9374c157e36b30c64373ea58d14ca21f4a597ded1f9f41613fe9"
+    },
+    {
+      "path": ".superpowers/m80-provider-stop-response.json",
+      "sha256": "8a1afbb1c48d59e0446902e1cda6cf44ce23ed5b59bcd5d1ccee76d8b6db1f46"
+    },
+    {
+      "path": ".superpowers/m80-provider-observation-stopped-001.json",
+      "sha256": "4e0536b8e79db9efd1962575bb5d104856caaee5fa85f484b5c22cd9184cb260"
+    },
+    {
+      "path": ".superpowers/m80-backup-hosted-inspection-20260925-002.json",
+      "sha256": "4730afe2a5c660930199552b40e868ae7ab19a36c2ef3f39273b4bbb91d708f2"
+    },
+    {
+      "path": ".superpowers/m80-backup-hosted-receipt-20260925-001.json",
+      "sha256": "d0d235e14266b87d19a92fc410574ae91196529521521e816fec713518a9e0ae"
+    },
+    {
+      "path": ".superpowers/m80-provider-recover21-gate.json",
+      "sha256": "c61fafc49f07921fdd0deeb39110d08be2c6b2fecf5cb06fa1be6a3bce8e126f"
+    },
+    {
+      "path": ".superpowers/m80-provider-recover21-intent.json",
+      "sha256": "75a4c37e2624799fb6d5db113e3ace318522a2ae88a5f24df1ffa2ad94a9848b"
+    },
+    {
+      "path": ".superpowers/m80-provider-recover21-response.json",
+      "sha256": "028d29b7029f7747b57f5d9f4234aa3c8d725a5ff36946936411f6400bdbaf76"
+    },
+    {
+      "path": ".superpowers/m80-backup-recovery21-inspection.json",
+      "sha256": "68542f1ae1b5925a0bacc4bf992f87987ea23c0ba6cbd03bfdd17a5055df9c7d"
+    },
+    {
+      "path": ".superpowers/m80-recovery21-observation-001.json",
+      "sha256": "dfc7311a594b782302a4d1044629ecb913120192cdf471a850e0b0f1f3017fab"
+    },
+    {
+      "path": ".superpowers/m80-restore-compare-readonly.ts",
+      "sha256": "7d11dfc6f3b561f4545c345840ba45bb1155290c57c25163b88778045f9b32bc"
+    },
+    {
+      "path": ".superpowers/m80-backup-hosted-rehearsal-1790303149992/m80-backup-journal.jsonl",
+      "sha256": "dd6ec5b250e37e68f66648cdcd0eb070a4c877a41dee9781d521237909678246"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-backup-recovery-20260924.json",
+      "sha256": "5794eec3da911d2ef69dabdc5623a3c8238f83107344d81bc984dee00d298237"
+    }
+  ],
+  "native_readonly_comparison": {
+    "method": "Exact root diagnostic source inspected before execution; reviewed Backup C3 all110 current pins matched. DPAPI unseal and read-only repeatable-read local clone comparison succeeded after sandbox elevation. Connection closed in finally.",
+    "first_sandbox_attempt": "unseal refused before database connection",
+    "elevated_attempt_exit_code": 0,
+    "source_content_sha256": "65d68c06c843da60841902a8fe0d3b8c9ff9131d1dc8edaad3a05035545f25c7",
+    "restored_content_sha256": "65d68c06c843da60841902a8fe0d3b8c9ff9131d1dc8edaad3a05035545f25c7",
+    "mismatch": [
+      "inventory",
+      "internalTriggers",
+      "metadataSha256",
+      "applicationStateSha256"
+    ],
+    "inventory_mismatch": [
+      "defaultAcls"
+    ]
+  },
+  "bindings_checked": [
+    "six exact-head success checks preceded stop by less than15minutes",
+    "stop helper/gate/intent/ack/exact REMOVED target",
+    "zero-session exact schema21 inspection before backup and before recovery",
+    "encrypted archive hash equals backup receipt",
+    "failed fresh-local-restore journal binds exact backup receipt",
+    "recovery gate binds original stop and exact fresh inspection",
+    "recovery ack ID matches later SUCCESS/schema21/same commit/image readiness observation",
+    "chronology across stop,inspection,backup,failure,recovery verified",
+    "current exact migration-intent glob absent",
+    "current public root recovery facts match private recovery observation"
+  ]
+}

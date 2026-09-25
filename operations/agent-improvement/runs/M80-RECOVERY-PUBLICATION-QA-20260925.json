@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "M80-RECOVERY-PUBLICATION-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RECOVERY-PUBLICATION-QA-20260925-DELIVERABLE.json",
+      "sha256": "31c30358d7832177b5c78ea0a60b55d92ed9af6e1c096881a3c7cce780439c62"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-public-evidence-closure",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-recovery-publication-independent-20260925-review.json",
+        "operations/agent-improvement/snapshots/M80-RECOVERY-PUBLICATION-QA-20260925-DELIVERABLE.json"
+      ],
+      "reason": "29 exact files,725 references,17 embedded artifacts and historical mismatch classifications independently checked."
+    },
+    {
+      "id": "AC-02-private-and-claim-boundaries",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-recovery-publication-independent-20260925-review.json"
+      ],
+      "reason": "All29 scanned; actual failure/recovery/proposal distinctions and no-replay limits remain explicit."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-recovery-publication-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RECOVERY-PUBLICATION-QA-20260925-DELIVERABLE.json",
+        "sha256": "31c30358d7832177b5c78ea0a60b55d92ed9af6e1c096881a3c7cce780439c62"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Truthful bounded publication of actual failure, recovery and diagnosis evidence",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Planning/source repair excluded. Independent publication-evidence review only; root QA-delivery acceptance pending. Requested Astra/high; observed unknown.",
+    "Root accepted exact29 evidence review only; final manifest and shared metadata separate."
+  ]
+}

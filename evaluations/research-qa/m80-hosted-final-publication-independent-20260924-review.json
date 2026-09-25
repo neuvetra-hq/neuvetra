@@ -1,0 +1,118 @@
+{
+  "task_id": "M80-HOSTED-FINAL-PUBLICATION-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact_reviewed_publication_manifest_only",
+  "manifest": {
+    "path": ".superpowers/m80-hosted-final-publication-manifest.json",
+    "sha256": "816c15c27f40ee0a49b0a2d0fa341283f0b4dd4e76089a07b582fde95ea41ffc"
+  },
+  "manifest_sha256": "816c15c27f40ee0a49b0a2d0fa341283f0b4dd4e76089a07b582fde95ea41ffc",
+  "publisher_helper": {
+    "path": ".superpowers/m80-publish-hosted-reviewed.py",
+    "sha256": "14d7b932dab50e3b7664d12865abda4249a29d6fdd3239ed1ae983e4c070a483"
+  },
+  "base_commit": "7f68f4509074f817e5b584c6f8bcb29d1d32392e",
+  "file_count": 318,
+  "total_bytes": 38701153,
+  "material_findings_open": 0,
+  "checks": {
+    "all318_current_raw_hashes_match": true,
+    "four_manifest_review_hashes_match": true,
+    "base206_rows_unchanged": true,
+    "supplement87_rows_match": true,
+    "additional_accepted_helper_and_metadata_rows": 25,
+    "path_set_unchanged_from_failed_manifest": true,
+    "only_status_file_pin_changed": true,
+    "crlf_files": 19,
+    "exact_crlf_preservation_rules_present": true,
+    "production_workflow_or_private_raw_paths": 0,
+    "evaluation_script_paths": 122,
+    "embedded_raw_text_hash_pairs_exact": 668,
+    "historical_display_normalization_exceptions": 8,
+    "private_owner_identifier_matches": 0,
+    "credential_pattern_matches": 0,
+    "known_synthetic_invalid_example_fixture_confirmed": true
+  },
+  "current_claims": "Status/board/handoff accurately separate source published7f68 with six successful checks, live540c/schema21, accepted bounded C9/C6/helper reviews, and pending actual stop/backup/migration/admission/deployment/demo. Methods remain held; full Scope1 and real-company beta incomplete.",
+  "finding_disposition": {
+    "PUB-F01": "Corrected current beta publication state and next handoff; explicit setup publication record added. Earlier navigation milestone fields and dated historical sections retained."
+  },
+  "historical_encoding_exception": {
+    "disposition": "Root explicitly accepted these exact8 entries in three failed/early QA snapshots only. Their raw source files match declared hashes; embedded text is LF-normalized display. No current executable acceptance relies on those embedded strings as exact bytes. No general exception granted.",
+    "entries": [
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-scalar-probes.ts",
+        "declared_raw_sha256": "de4961fa7b612468d8cfb7f1d57830b99cb5b3718ab34ef952ac227ba4d064d9",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-controls.test.ts",
+        "declared_raw_sha256": "92e5ee1579a5caa620c5f488c499e0b6897925573baf0741fd3b8fa5ca5015cd",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts",
+        "declared_raw_sha256": "559689df886a152ff74e2ad472fdb2d5fff742b62272c68682bc06605bca948c",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-probes.ts",
+        "declared_raw_sha256": "e7b39fb9e7fb0255cb978503b6f2e9898cce78c9640f8e2f422562027daf1bec",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-evidence-probes.ts",
+        "declared_raw_sha256": "6531d75d2adcdc078639c0010d1f4076c553e2f2eaa91ca14ebb5df2048da273",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.ts",
+        "declared_raw_sha256": "d82c034b563b593ef04e3673d9377545d215a3870698533bcbb487745fa9124f",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-path-probes.ts",
+        "declared_raw_sha256": "4b93265affbbf5df9bc3c921ea6f0d5631e1b9bdbb5bbc2b4b70d45ebdf69b5f",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      },
+      {
+        "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+        "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-chronology.ts",
+        "declared_raw_sha256": "3ab78bb7a8a970577abc6783c31eb278fba55a2b3bd87619e30030e2d92c89e7",
+        "raw_source_bytes_match": true,
+        "embedded_equals_lf_normalized_raw": true,
+        "current_acceptance_authority": false
+      }
+    ]
+  },
+  "privacy_disposition": "No real private owner company/user IDs found; credential marker scans found no tokens/private keys. Connection-like strings are loopback fixtures, code templates/regex fragments without credentials, or deliberately fake invalid.example input retained in QA history. Supplied email scan independently supported by only invalid.example email-domain matches. No raw private archive, source receipt, ENV export, live gate or signed-in observation included.",
+  "publisher_gate": "Root must verify this exact review receipt SHA and manifest SHA immediately before the unchanged publisher invocation. Existing publisher enforces base/branch, exact staged set/bytes, commit parent/content and remote equality and durable no-replay intent. This review does not execute it.",
+  "postpublication_gate": "All six required checks must succeed for the new exact remote head before maintenance; actual stage gates and raw provenance reviews remain mandatory.",
+  "limits": [
+    "No Git, provider, DB, credentials or publication action by QA. No remote observation refreshed.",
+    "Accepted behavioral suites not rerun; review covers exact inventory, evidence/claim boundaries, privacy and byte preservation.",
+    "Large full-source snapshots are accepted immutable review/history artifacts under explicit root disposition, not blanket approval of unreviewed code.",
+    "Own current review/run is outside the318-file manifest by design to avoid a self-hash cycle; root accepts and publishes closure later."
+  ]
+}
