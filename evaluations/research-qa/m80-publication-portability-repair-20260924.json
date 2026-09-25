@@ -1,0 +1,75 @@
+{
+  "profile": "neuvetra.m80.publication-portability-repair.v1",
+  "author": "/root",
+  "failed_publication_head": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+  "failed_check_observation": {
+    "checks": [
+      {
+        "conclusion": null,
+        "name": "Native PostgreSQL worksheet and tenant regression",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "success",
+        "name": "GHG calculation specifications and engine",
+        "status": "completed"
+      },
+      {
+        "conclusion": null,
+        "name": "Typecheck, lint, unit tests and web builds",
+        "status": "in_progress"
+      },
+      {
+        "conclusion": "success",
+        "name": "Dedicated staging image and offline runtime smoke",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Offline research catalog tests",
+        "status": "completed"
+      },
+      {
+        "conclusion": "failure",
+        "name": "Role routing and evidence records",
+        "status": "completed"
+      }
+    ],
+    "observed_at": "2026-09-25T02:06:04.157779+00:00",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+    "pr_head": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+    "sha": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+    "state": "open"
+  },
+  "clean_archive_failures": [
+    {
+      "run": "M80-CI-PACKAGING-20260924.json",
+      "error": "Missing evidence file: evaluations/research-qa/m80-setup-ci-success-20260924.json"
+    },
+    {
+      "run": "M80-FOUNDATION-HOSTED-PREP-20260924.json",
+      "error": "Missing evidence file: .superpowers/m80-foundation-hosted-prepare.ts"
+    },
+    {
+      "run": "M80-HOSTED-EXECUTOR-PREP-20260924.json",
+      "error": "Missing evidence file: .superpowers/m80-foundation-executor.ts"
+    },
+    {
+      "run": "M80-STAGE-BUNDLE-COMPOSE-20260924.json",
+      "error": "Missing evidence file: .superpowers/m80-stage-bundle-compose.ts"
+    }
+  ],
+  "changed_source_files": [
+    "operations/agent-improvement/runs/M80-FOUNDATION-HOSTED-PREP-20260924.json",
+    "operations/agent-improvement/runs/M80-HOSTED-EXECUTOR-PREP-20260924.json",
+    "operations/agent-improvement/runs/M80-STAGE-BUNDLE-COMPOSE-20260924.json",
+    "evaluations/research-qa/m80-setup-ci-success-20260924.json"
+  ],
+  "clean_repaired_validation": {
+    "exit_code": 0,
+    "stdout": "{\n  \"valid\": true,\n  \"roles\": 11,\n  \"runs\": 259\n}",
+    "stderr": ""
+  },
+  "source_or_runtime_changes": false,
+  "no_hosted_action": true
+}

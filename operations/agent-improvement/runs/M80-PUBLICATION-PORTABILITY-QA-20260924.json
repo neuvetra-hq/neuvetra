@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "M80-PUBLICATION-PORTABILITY-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-PUBLICATION-PORTABILITY-QA-20260924-DELIVERABLE.json",
+      "sha256": "ed1eb1607f38d2e2bf0f7781efe10ecbfe992fb89d232583e43c3d08ee9bcc91"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-portable-records",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-publication-portability-independent-20260924-checks.json",
+        "evaluations/research-qa/m80-publication-portability-independent-20260924-review.json"
+      ],
+      "reason": "Exact current snapshots and removed private references reconciled; clean validator passes259."
+    },
+    {
+      "id": "AC-02-narrow-helpers-and-history",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-publication-portability-independent-20260924-review.json",
+        "operations/agent-improvement/snapshots/M80-PUBLICATION-PORTABILITY-QA-20260924-DELIVERABLE.json"
+      ],
+      "reason": "Exact named substitutions and line-ending normalization only; failed published head and first reviews preserved."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-publication-portability-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-PUBLICATION-PORTABILITY-QA-20260924-DELIVERABLE.json",
+        "sha256": "ed1eb1607f38d2e2bf0f7781efe10ecbfe992fb89d232583e43c3d08ee9bcc91"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Portable publication evidence before any M80 hosted maintenance",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Independent bounded follow-up. No hosted action or Git mutation. Root acceptance pending."
+  ]
+}

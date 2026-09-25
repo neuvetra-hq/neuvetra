@@ -6,32 +6,8 @@
   "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
   "artifacts": [
     {
-      "path": ".superpowers/m80-foundation-executor.ts",
-      "sha256": "4cf676a7f93e664800205146afcb45621d6018d1e821c7bcf7c2c5d7a48f18fb"
-    },
-    {
-      "path": ".superpowers/m80-foundation-executor.test.ts",
-      "sha256": "6773a52a3cd45a9c8ac8de6cabc42be5f698eca6b68d59a71ef57d7ec1e075e9"
-    },
-    {
-      "path": ".superpowers/m80-executor-private.ps1",
-      "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3"
-    },
-    {
       "path": "docs/research/m80-foundation-executor-preparation-20260924.md",
       "sha256": "76a8ba62f971e36d05e39262350727d53b4b5bd66ca7e38895c801e5573460c8"
-    },
-    {
-      "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
-      "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
-    },
-    {
-      "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
-      "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
-    },
-    {
-      "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts",
-      "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead"
     },
     {
       "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md",
@@ -70,9 +46,7 @@
       "id": "AC-02-exact-migration-admission-deployment-boundaries",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-foundation-executor.ts",
-        ".superpowers/m80-executor-private.ps1",
-        ".superpowers/m80-foundation-executor.test.ts"
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json"
       ],
       "reason": null
     },
@@ -80,8 +54,7 @@
       "id": "AC-03-exclusive-intent-uncertainty-no-replay",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-foundation-executor.ts",
-        ".superpowers/m80-foundation-executor.test.ts"
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json"
       ],
       "reason": null
     },
@@ -89,7 +62,7 @@
       "id": "AC-04-injected-dry-run-challenges",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-foundation-executor.test.ts",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
         "docs/research/m80-foundation-executor-preparation-20260924.md"
       ],
       "reason": null
@@ -114,32 +87,8 @@
     ],
     "reviewed_artifacts": [
       {
-        "path": ".superpowers/m80-foundation-executor.ts",
-        "sha256": "4cf676a7f93e664800205146afcb45621d6018d1e821c7bcf7c2c5d7a48f18fb"
-      },
-      {
-        "path": ".superpowers/m80-foundation-executor.test.ts",
-        "sha256": "6773a52a3cd45a9c8ac8de6cabc42be5f698eca6b68d59a71ef57d7ec1e075e9"
-      },
-      {
-        "path": ".superpowers/m80-executor-private.ps1",
-        "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3"
-      },
-      {
         "path": "docs/research/m80-foundation-executor-preparation-20260924.md",
         "sha256": "76a8ba62f971e36d05e39262350727d53b4b5bd66ca7e38895c801e5573460c8"
-      },
-      {
-        "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
-        "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
-      },
-      {
-        "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
-        "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
-      },
-      {
-        "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts",
-        "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead"
       },
       {
         "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md",
@@ -168,7 +117,7 @@
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 8,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {
@@ -239,6 +188,7 @@
     "Accepted Preparation Candidate6 and its author delivery are recorded in this bounded successor run; the closed original Candidate5 run and historical sources remain unchanged.",
     "Candidate9 awaits execute and reconcile through a close-after lifetime guard, so the operator database remains open throughout asynchronous stage work and closes last on success or failure.",
     "All Candidate8 preparation v2, source closure, session distinction, provider acknowledgement, no-replay and observation boundaries remain unchanged.",
-    "Root is the sole eventual hosted operator; independent executor review, fresh live evidence and accepted recovery transport remain required."
+    "Root is the sole eventual hosted operator; independent executor review, fresh live evidence and accepted recovery transport remain required.",
+    "Published ec02446b exposed nonportable private evidence references in CI. Active run links now use already-reviewed public immutable snapshots containing the exact private source bytes. Historical published run remains in Git; no accepted source or snapshot changed. Escaped portability defect recorded separately from implementation acceptance."
   ]
 }

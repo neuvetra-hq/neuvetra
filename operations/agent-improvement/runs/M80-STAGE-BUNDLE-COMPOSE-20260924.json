@@ -6,10 +6,6 @@
   "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
   "artifacts": [
     {
-      "path": ".superpowers/m80-stage-bundle-compose.ts",
-      "sha256": "0969b8417e88ca261acb365bfe8c5e1ce9de08b324f47172cbd8bfafdf1837c3"
-    },
-    {
       "path": "docs/research/m80-stage-bundle-compose-20260924.md",
       "sha256": "a875e4911893ad8bff4cc2db6796572cc5e28b4d3c61a18ad1693f976e6ba443"
     },
@@ -23,7 +19,7 @@
       "id": "AC-01-exact-read-only-input-validation",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-stage-bundle-compose.ts",
+        "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json",
         "docs/research/m80-stage-bundle-compose-20260924.md"
       ],
       "reason": "The helper reads explicit paths, computes exact byte pins, opens typed plan, gate, plan evidence and predecessor chains, reconstructs the sealed intent, and validates the accepted executor review and recursive source closure before output."
@@ -32,7 +28,6 @@
       "id": "AC-02-deterministic-exclusive-secret-free-output",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-stage-bundle-compose.ts",
         "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json"
       ],
       "reason": "Only the operation-scope and stage-derived .superpowers bundle path is permitted; the accepted synced exclusive writer refuses an existing path. The helper contains no credential, database, provider, network or Git transport."
@@ -66,10 +61,6 @@
     ],
     "reviewed_artifacts": [
       {
-        "path": ".superpowers/m80-stage-bundle-compose.ts",
-        "sha256": "0969b8417e88ca261acb365bfe8c5e1ce9de08b324f47172cbd8bfafdf1837c3"
-      },
-      {
         "path": "docs/research/m80-stage-bundle-compose-20260924.md",
         "sha256": "a875e4911893ad8bff4cc2db6796572cc5e28b4d3c61a18ad1693f976e6ba443"
       },
@@ -84,7 +75,7 @@
     "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": 0,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": []
   },
   "compute": {
@@ -133,6 +124,7 @@
   "notes": [
     "Requested model and effort are inherited from the registered software-engineering route. Observed model and effort remain unavailable and are recorded separately.",
     "Candidate 1 is offline and secret-free. No credential read, network, provider, database, hosted, Git, plan, gate, review, intent or predecessor evidence creation occurred.",
-    "The accepted executor run remains closed and unchanged. This bounded run records only the optional bundle-composition convenience helper and its sanitized reproducibility artifacts."
+    "The accepted executor run remains closed and unchanged. This bounded run records only the optional bundle-composition convenience helper and its sanitized reproducibility artifacts.",
+    "Published ec02446b exposed nonportable private evidence references in CI. Active run links now use already-reviewed public immutable snapshots containing the exact private source bytes. Historical published run remains in Git; no accepted source or snapshot changed. Escaped portability defect recorded separately from implementation acceptance."
   ]
 }

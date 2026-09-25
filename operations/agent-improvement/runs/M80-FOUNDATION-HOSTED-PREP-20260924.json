@@ -35,7 +35,7 @@
       "id": "AC-01-fresh-exact-preparation-gate",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-foundation-hosted-prepare.ts",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
         "docs/research/m80-foundation-hosted-preparation-20260924.md"
       ],
       "reason": "Candidate 5 requires byte-pinned and typed fresh schema-21/provider/application observations, actual hosted table names/count, exact final head and six checks, accepted runtime pins, an exact backup/restore/preservation rehearsal, and an existing synthetic company/manager observation. Exact scalar types and receipt bodies are validated. Missing real inputs remain unset and fail closed; every plan is unauthorized."
@@ -44,7 +44,7 @@
       "id": "AC-02-once-only-stage-intent-and-uncertainty",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-foundation-hosted-once.ts",
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
         "docs/research/m80-foundation-hosted-preparation-20260924.md"
       ],
       "reason": "Candidate 5 separates migration, admission and deployment, opens exact independent gate evidence, reconstructs complete same-plan/target predecessor chains, and reapplies gate, target-observation and intent chronology against each predecessor stage's own prerequisite outcome. It writes deterministic stage evidence with exclusive create, full write, explicit file sync and close before completion. It performs no hosted action."
@@ -53,7 +53,7 @@
       "id": "AC-03-offline-adversarial-tests",
       "status": "pass",
       "evidence": [
-        ".superpowers/m80-foundation-hosted-preparation.test.ts"
+        "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json"
       ],
       "reason": "Eleven focused offline tests with 51 assertions, targeted TypeScript and a two-entrypoint bundle check cover exact typed plans/receipts, scalar/path/deep-plan refusals, independent gate bytes, promoted-failure and nested predecessor-gate chronology challenges, uncertainty, deterministic locking, exclusive byte preservation and injected sync failure."
     },
@@ -120,7 +120,7 @@
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 4,
-    "escaped_defects": null,
+    "escaped_defects": 1,
     "repeated_findings": [
       "L02"
     ]
@@ -169,6 +169,7 @@
     "Current hosted inputs remain intentionally unset; helpers must fail closed until fresh exact evidence and independent review exist.",
     "Root is the sole eventual hosted executor.",
     "Candidates 1, 2, 3 and 4 are immutable review evidence. Candidate 5 retains Candidate 4 semantics and adds explicit write, sync and close completion before reporting durable intent/outcome success. Independent Candidate 5 review passed; no hosted action was authorized or executed.",
-    "Root verified Candidate5 current bytes and exact independent deliverable. Candidate2 repeated F01 predecessor outcome semantics and F02 scalar/deep-plan validation, tracked under L02 semantic lineage. Candidate4 passed semantics only before new durability repair. Final pass applies only to offline preparation and synced exclusive writer."
+    "Root verified Candidate5 current bytes and exact independent deliverable. Candidate2 repeated F01 predecessor outcome semantics and F02 scalar/deep-plan validation, tracked under L02 semantic lineage. Candidate4 passed semantics only before new durability repair. Final pass applies only to offline preparation and synced exclusive writer.",
+    "Published ec02446b exposed nonportable private evidence references in CI. Active run links now use already-reviewed public immutable snapshots containing the exact private source bytes. Historical published run remains in Git; no accepted source or snapshot changed. Escaped portability defect recorded separately from implementation acceptance."
   ]
 }

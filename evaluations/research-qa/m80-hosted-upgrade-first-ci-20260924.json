@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "conclusion": "success",
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "GHG calculation specifications and engine",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Offline research catalog tests",
+      "status": "completed"
+    },
+    {
+      "conclusion": "failure",
+      "name": "Role routing and evidence records",
+      "status": "completed"
+    }
+  ],
+  "observed_at": "2026-09-25T02:09:13.944468+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+  "pr_head": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+  "sha": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+  "state": "open",
+  "verdict": "five_checks_passed_role_evidence_failed",
+  "no_hosted_action": true,
+  "failure_reproduced_clean_checkout": true,
+  "repair_review": "metadata-only references to existing public source snapshots and inclusion of omitted prior check receipt"
+}
