@@ -1,0 +1,101 @@
+{
+  "id": "CONNECTED-INVENTORY-PLAN-01",
+  "status": "ready_for_board_test",
+  "owner": "/root",
+  "scope": "Connected local onboarding, activity collection, scope screening, evidence and durable single-workspace persistence; no calculations or production release",
+  "isolation_reason": "Original onboarding worktree has uncommitted changes; active product evidence milestone is separate",
+  "baseline": "a12636cdf9c26022eb15fe263bf59275271aafb0 plus snapshot of existing onboarding changes",
+  "assignments": [
+    {
+      "id": "PLAN-DOMAIN-01",
+      "role": "accounting-validation",
+      "execution_context": "/root/catalog",
+      "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+      "compute": {
+        "requested": {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "observed": {
+          "model": null,
+          "effort": null
+        }
+      },
+      "status": "completed",
+      "cost_usd": null
+    },
+    {
+      "id": "PLAN-DATA-01",
+      "role": "data-database",
+      "execution_context": "/root/storage",
+      "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
+      "compute": {
+        "requested": {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "observed": {
+          "model": null,
+          "effort": null
+        }
+      },
+      "status": "completed",
+      "cost_usd": null
+    },
+    {
+      "id": "PLAN-ENGINE-01",
+      "role": "software-engineering",
+      "execution_context": "/root/engine",
+      "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+      "compute": {
+        "requested": {
+          "model": "gpt-5.6-sol",
+          "effort": "high"
+        },
+        "observed": {
+          "model": null,
+          "effort": null
+        }
+      },
+      "status": "completed",
+      "cost_usd": null
+    },
+    {
+      "id": "PLAN-QA-01",
+      "role": "qa-lead",
+      "execution_context": "/root/qa",
+      "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+      "compute": {
+        "requested": {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        },
+        "observed": {
+          "model": null,
+          "effort": null
+        }
+      },
+      "status": "completed",
+      "cost_usd": null
+    }
+  ],
+  "independent_review": {
+    "verdict": "pass_for_local_demo",
+    "report": "prototypes/company-onboarding/independent-review.md",
+    "limits": [
+      "Browser file chooser stalled; HTTP evidence capture/hash/link/restart passed",
+      "Windows denied symlink execution test; path review and other traversal tests passed",
+      "Single local workspace; no production tenant identity, calculations or assurance"
+    ]
+  },
+  "updated_at": "2026-09-25T21:45:52.649367+00:00",
+  "checks": {
+    "core_author": 19,
+    "storage_author_independently_rerun": 14,
+    "core_independent": 10,
+    "http_independent_pass": 8,
+    "http_independent_skip": 1,
+    "existing_intake": "pass",
+    "actual_acknowledgment_to_plan": "pass"
+  }
+}

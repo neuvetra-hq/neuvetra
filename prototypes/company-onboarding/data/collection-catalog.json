@@ -1,0 +1,1350 @@
+{
+  "version": "2026-09-25.1",
+  "sources": [
+    {
+      "id": "epa-boundary",
+      "title": "EPA — Scopes 1 and 2 inventory development",
+      "url": "https://www.epa.gov/climateleadership/scopes-1-and-2-emissions-inventorying-and-guidance",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "epa-guidance",
+      "title": "EPA — Scope 1 and Scope 2 Inventory Guidance",
+      "url": "https://www.epa.gov/climateleadership/scope-1-and-scope-2-inventory-guidance",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "epa-stationary",
+      "title": "EPA — Stationary combustion guidance, December 2023",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/stationaryemissions.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "epa-mobile",
+      "title": "EPA — Mobile combustion guidance, December 2023",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/mobileemissions.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "epa-fugitive",
+      "title": "EPA — Refrigeration, fire suppression and industrial gases, December 2023",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/fugitiveemissions.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "epa-electricity",
+      "title": "EPA — Purchased energy guidance, December 2023",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/electricityemissions.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "epa-sectors",
+      "title": "EPA — Sources of greenhouse gas emissions (source discovery only)",
+      "url": "https://www.epa.gov/ghgemissions/sources-greenhouse-gas-emissions",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-corporate",
+      "title": "GHG Protocol — Corporate Standard, revised edition",
+      "url": "https://ghgprotocol.org/sites/default/files/standards/ghg-protocol-revised.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-scope2",
+      "title": "GHG Protocol — Scope 2 Guidance (2015), chapters 5–8 and Appendix A",
+      "url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-scope3",
+      "title": "GHG Protocol — Scope 3 Calculation Guidance, category index",
+      "url": "https://ghgprotocol.org/scope-3-calculation-guidance-2",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat1",
+      "title": "GHG Protocol — Category 1: Purchased goods and services",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter1.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat2",
+      "title": "GHG Protocol — Category 2: Capital goods",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter2.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat3",
+      "title": "GHG Protocol — Category 3: Fuel- and energy-related activities",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter3.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat4",
+      "title": "GHG Protocol — Category 4: Upstream transportation and distribution",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter4.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat5",
+      "title": "GHG Protocol — Category 5: Waste generated in operations",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Ch5_GHGP_Tech.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat6",
+      "title": "GHG Protocol — Category 6: Business travel",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter6.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat7",
+      "title": "GHG Protocol — Category 7: Employee commuting",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter7.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat8",
+      "title": "GHG Protocol — Category 8: Upstream leased assets",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter8.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat9",
+      "title": "GHG Protocol — Category 9: Downstream transportation and distribution",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter9.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat10",
+      "title": "GHG Protocol — Category 10: Processing of sold products",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter10.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat11",
+      "title": "GHG Protocol — Category 11: Use of sold products",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter11.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat12",
+      "title": "GHG Protocol — Category 12: End-of-life treatment of sold products",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter12.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat13",
+      "title": "GHG Protocol — Category 13: Downstream leased assets",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter13.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat14",
+      "title": "GHG Protocol — Category 14: Franchises",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter14.pdf",
+      "checkedAt": "2026-09-25"
+    },
+    {
+      "id": "ghgp-cat15",
+      "title": "GHG Protocol — Category 15: Investments",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter15.pdf",
+      "checkedAt": "2026-09-25"
+    }
+  ],
+  "families": [
+    {
+      "id": "stationary",
+      "title": "Fuel burned in fixed equipment",
+      "description": "Collect fuel evidence for confirmed ovens, boilers, heaters and other fixed equipment. Generators have a separate collection card; reconcile any shared fuel once.",
+      "checklist": [
+        {
+          "id": "stationary-1",
+          "label": "Map equipment to each location",
+          "help": "List asset IDs, purpose, ownership or control, operating dates, fuel type and shared meters."
+        },
+        {
+          "id": "stationary-2",
+          "label": "Collect fuel bills and meter readings",
+          "help": "Keep service dates, supplier, meter ID, original quantity and unit. Mark missing or estimated periods."
+        },
+        {
+          "id": "stationary-3",
+          "label": "Reconcile fuel purchases and use",
+          "help": "Document tank opening/closing stocks, deliveries, transfers and non-combustion uses. Do not count commodity and delivery invoices twice."
+        },
+        {
+          "id": "stationary-4",
+          "label": "Preserve fuel specifications and evidence",
+          "help": "Retain available fuel composition, blend and heating-value documentation with its measurement basis. Record the evidence owner and unresolved questions."
+        }
+      ],
+      "records": [
+        {
+          "id": "fuel",
+          "label": "Fuel consumed",
+          "unitOptions": [
+            "therm",
+            "MMBtu",
+            "kWh (fuel energy)",
+            "standard cubic feet",
+            "standard cubic metres",
+            "US gallon",
+            "litre",
+            "kg",
+            "metric tonne",
+            "other / review"
+          ]
+        }
+      ],
+      "subtypes": [
+        {
+          "id": "oven",
+          "label": "Oven or cooking equipment",
+          "help": "Fuel-fired cooking, baking or curing equipment.",
+          "checklist": [
+            {
+              "id": "oven-1",
+              "label": "Identify burners and fuel supply",
+              "help": "Record oven/burner IDs and whether consumption is individually metered or shares a site meter."
+            }
+          ]
+        },
+        {
+          "id": "boiler",
+          "label": "Boiler or water heater",
+          "help": "Equipment producing hot water or steam from fuel.",
+          "checklist": [
+            {
+              "id": "boiler-1",
+              "label": "Map boilers and steam destinations",
+              "help": "Identify boilers, fuels and shared supplies. Distinguish purchased steam from steam generated on site."
+            }
+          ]
+        },
+        {
+          "id": "space-heat",
+          "label": "Furnace or space heater",
+          "help": "Fuel burned for building heat.",
+          "checklist": [
+            {
+              "id": "space-heat-1",
+              "label": "Check all heated spaces",
+              "help": "Include workshops, warehouses and auxiliary heaters within the agreed boundary."
+            }
+          ]
+        },
+        {
+          "id": "kiln-dryer",
+          "label": "Kiln, dryer or process heater",
+          "help": "Combustion heat used in production.",
+          "checklist": [
+            {
+              "id": "kiln-dryer-1",
+              "label": "Separate fuel and process chemistry",
+              "help": "Collect fuel records and flag reactions or feedstocks that may release gas independently of combustion."
+            }
+          ]
+        },
+        {
+          "id": "torch",
+          "label": "Fuel-fired torch or cutting equipment",
+          "help": "For example propane or acetylene burned during work.",
+          "checklist": [
+            {
+              "id": "torch-1",
+              "label": "Identify fuel cylinders and use",
+              "help": "Separate fuel gases from shielding gases; retain cylinder contents, returns and consumption records."
+            }
+          ]
+        },
+        {
+          "id": "flare",
+          "label": "Flare or thermal oxidizer",
+          "help": "Combustion of process or waste gas; specialist review.",
+          "checklist": [
+            {
+              "id": "flare-1",
+              "label": "Retain waste-gas operating evidence",
+              "help": "Collect gas composition, flow, operating periods and available monitoring records for a method review."
+            }
+          ]
+        },
+        {
+          "id": "biomass",
+          "label": "Biomass or mixed waste fuel",
+          "help": "Track fuel composition; no automatic zero-emission assumption.",
+          "checklist": [
+            {
+              "id": "biomass-1",
+              "label": "Identify fossil and biogenic components",
+              "help": "Retain feedstock, blend, moisture and supplier evidence. Keep biogenic reporting questions visible."
+            }
+          ]
+        },
+        {
+          "id": "stationary-other",
+          "label": "Other or unknown fixed source",
+          "help": "Use when equipment, fuel or method is not yet clear.",
+          "checklist": [
+            {
+              "id": "stationary-other-1",
+              "label": "Describe the source for review",
+              "help": "Attach a nameplate, site description or supplier record and assign an owner to resolve fuel and method."
+            }
+          ]
+        }
+      ],
+      "sourceIds": [
+        "epa-stationary",
+        "epa-boundary"
+      ]
+    },
+    {
+      "id": "generator",
+      "title": "Generators and on-site power",
+      "description": "A collection group for fuel-burning power equipment. This overlaps stationary combustion in accounting; avoid duplicating fuel in the fixed-equipment card.",
+      "checklist": [
+        {
+          "id": "generator-1",
+          "label": "List generators and responsibility",
+          "help": "Record site, asset ID, fuel, engine type, ownership/control and operating dates, including hired units."
+        },
+        {
+          "id": "generator-2",
+          "label": "Collect fuel and tank records",
+          "help": "Retain deliveries, meter readings, opening/closing stock and transfers, separated from vehicle and other site fuel."
+        },
+        {
+          "id": "generator-3",
+          "label": "Keep operating and test logs",
+          "help": "Identify routine tests, outages, other operating periods and any metered output. Runtime alone is not measured fuel use."
+        },
+        {
+          "id": "generator-4",
+          "label": "Reconcile shared supply",
+          "help": "Link the same fuel evidence to a single allocation record; explain any estimates or missing periods."
+        }
+      ],
+      "records": [
+        {
+          "id": "generator-fuel",
+          "label": "Generator fuel consumed",
+          "unitOptions": [
+            "US gallon",
+            "litre",
+            "therm",
+            "MMBtu",
+            "standard cubic feet",
+            "kg",
+            "other / review"
+          ]
+        },
+        {
+          "id": "generator-runtime",
+          "label": "Operating time (supporting evidence)",
+          "unitOptions": [
+            "hour"
+          ]
+        },
+        {
+          "id": "generator-output",
+          "label": "Electricity generated (supporting evidence)",
+          "unitOptions": [
+            "kWh",
+            "MWh"
+          ]
+        }
+      ],
+      "subtypes": [
+        {
+          "id": "standby",
+          "label": "Standby or emergency generator",
+          "help": "Includes periodic testing.",
+          "checklist": [
+            {
+              "id": "standby-1",
+              "label": "Include test runs",
+              "help": "Collect test and outage logs even when there was no extended power outage."
+            }
+          ]
+        },
+        {
+          "id": "prime",
+          "label": "Prime-power generator",
+          "help": "Regular electricity production.",
+          "checklist": [
+            {
+              "id": "prime-1",
+              "label": "Separate output and fuel",
+              "help": "Retain output meters and fuel records; identify exported versus on-site electricity without netting fuel use."
+            }
+          ]
+        },
+        {
+          "id": "chp",
+          "label": "Combined heat and power",
+          "help": "Produces electricity and useful heat; specialist method review.",
+          "checklist": [
+            {
+              "id": "chp-1",
+              "label": "Document both energy outputs",
+              "help": "Collect fuel, electricity and useful heat records with export and consumption destinations."
+            }
+          ]
+        },
+        {
+          "id": "portable-generator",
+          "label": "Portable or rented generator",
+          "help": "Track the actual operating boundary.",
+          "checklist": [
+            {
+              "id": "portable-generator-1",
+              "label": "Confirm operator and fuel responsibility",
+              "help": "Retain hire agreements, site dates and who supplied fuel; request scope classification review if uncertain."
+            }
+          ]
+        },
+        {
+          "id": "generator-other",
+          "label": "Other or unknown generation",
+          "help": "For an unlisted technology or unclear operating arrangement.",
+          "checklist": [
+            {
+              "id": "generator-other-1",
+              "label": "Describe generation technology",
+              "help": "Identify fuel-burning versus non-combustion equipment and preserve the classification question for review."
+            }
+          ]
+        }
+      ],
+      "sourceIds": [
+        "epa-stationary",
+        "ghgp-corporate"
+      ]
+    },
+    {
+      "id": "mobile",
+      "title": "Vehicles and mobile equipment",
+      "description": "Collect records for owned or controlled fuel-burning vehicles and equipment. Electricity and outsourced transport need separate scope classification.",
+      "checklist": [
+        {
+          "id": "mobile-1",
+          "label": "Build the vehicle and equipment register",
+          "help": "Record asset ID, type, model year, fuel, site and ownership/control; include assets added or retired in the year."
+        },
+        {
+          "id": "mobile-2",
+          "label": "Collect fuel consumption by fuel type",
+          "help": "Keep fuel-card exports, receipts and depot withdrawals with dates and original units."
+        },
+        {
+          "id": "mobile-3",
+          "label": "Retain distance and operating evidence",
+          "help": "Record vehicle distance, odometer dates or equipment runtime where available; identify estimates explicitly."
+        },
+        {
+          "id": "mobile-4",
+          "label": "Reconcile shared tanks and third parties",
+          "help": "Separate stationary fuel, hired transport, employee travel and charging electricity. Resolve lease/control uncertainty."
+        }
+      ],
+      "records": [
+        {
+          "id": "mobile-fuel",
+          "label": "Vehicle or equipment fuel consumed",
+          "unitOptions": [
+            "US gallon",
+            "litre",
+            "kg",
+            "standard cubic feet",
+            "other / review"
+          ]
+        },
+        {
+          "id": "distance",
+          "label": "Vehicle distance",
+          "unitOptions": [
+            "vehicle-mile",
+            "vehicle-km"
+          ]
+        },
+        {
+          "id": "mobile-runtime",
+          "label": "Equipment runtime (supporting evidence)",
+          "unitOptions": [
+            "hour"
+          ]
+        }
+      ],
+      "subtypes": [
+        {
+          "id": "light-road",
+          "label": "Cars, vans or pickup trucks",
+          "help": "Company-operated road fleet.",
+          "checklist": [
+            {
+              "id": "light-road-1",
+              "label": "Retain model year and odometers",
+              "help": "Map fuel-card entries and vehicle distance to each vehicle or documented fleet grouping."
+            }
+          ]
+        },
+        {
+          "id": "heavy-road",
+          "label": "Heavy trucks or buses",
+          "help": "Fuel use may include substantial idling.",
+          "checklist": [
+            {
+              "id": "heavy-road-1",
+              "label": "Check idling and auxiliary equipment",
+              "help": "Identify separate auxiliary engines and whether their fuel is already in the vehicle total."
+            }
+          ]
+        },
+        {
+          "id": "off-road",
+          "label": "Construction or agricultural equipment",
+          "help": "For example loaders, excavators or tractors.",
+          "checklist": [
+            {
+              "id": "off-road-1",
+              "label": "Identify equipment and engine use",
+              "help": "Retain fuel withdrawals, equipment class and hours; do not treat runtime as fuel without a reviewed estimate."
+            }
+          ]
+        },
+        {
+          "id": "forklift",
+          "label": "Forklifts or material-handling equipment",
+          "help": "Fuel-powered or electric; confirm actual power source.",
+          "checklist": [
+            {
+              "id": "forklift-1",
+              "label": "Separate fuel and charging",
+              "help": "Track LPG cylinders or other fuel by machine; route purchased electricity to the energy checklist."
+            }
+          ]
+        },
+        {
+          "id": "small-engine",
+          "label": "Small engines and grounds equipment",
+          "help": "For example mowers, pumps and portable machinery.",
+          "checklist": [
+            {
+              "id": "small-engine-1",
+              "label": "Capture small fuel purchases",
+              "help": "Document fuel type and which equipment used shared cans or tanks."
+            }
+          ]
+        },
+        {
+          "id": "marine-rail-air",
+          "label": "Vessels, locomotives or aircraft",
+          "help": "Specialist classification and method review.",
+          "checklist": [
+            {
+              "id": "marine-rail-air-1",
+              "label": "Collect operating detail for review",
+              "help": "Record engine/vehicle type, fuel, routes or operating areas, activity periods and available logs."
+            }
+          ]
+        },
+        {
+          "id": "mobile-other",
+          "label": "Other or unknown mobile source",
+          "help": "Unlisted equipment, mixed fuels or uncertain control.",
+          "checklist": [
+            {
+              "id": "mobile-other-1",
+              "label": "Resolve the equipment boundary",
+              "help": "Describe the machine and working arrangement; assign fuel and scope questions to a reviewer."
+            }
+          ]
+        }
+      ],
+      "sourceIds": [
+        "epa-mobile",
+        "ghgp-corporate"
+      ]
+    },
+    {
+      "id": "fugitive",
+      "title": "Refrigerants and released gases",
+      "description": "Collect gas identities and movement records. A purchase or refill is evidence to reconcile, not automatically the quantity emitted.",
+      "checklist": [
+        {
+          "id": "fugitive-1",
+          "label": "Identify gases and equipment",
+          "help": "Record equipment/site IDs, exact gas or blend name, nameplate charge and ownership/control."
+        },
+        {
+          "id": "fugitive-2",
+          "label": "Collect service and gas movement records",
+          "help": "Retain additions, recoveries, purchases, sales, returns and beginning/ending storage quantities with original units."
+        },
+        {
+          "id": "fugitive-3",
+          "label": "Record installation, leaks and retirement",
+          "help": "Retain contractor logs, new equipment charging, discharge events and recovered gas at disposal."
+        },
+        {
+          "id": "fugitive-4",
+          "label": "Resolve missing gas identity or quantities",
+          "help": "Request supplier composition and measured mass evidence. Do not assign a gas or zero leak from an invoice total."
+        }
+      ],
+      "records": [
+        {
+          "id": "gas-mass",
+          "label": "Gas movement or measured release — identify event type",
+          "unitOptions": [
+            "kg",
+            "lb",
+            "other / review"
+          ]
+        }
+      ],
+      "subtypes": [
+        {
+          "id": "refrigeration",
+          "label": "Refrigeration or cold storage",
+          "help": "Commercial, industrial or transport refrigeration.",
+          "checklist": [
+            {
+              "id": "refrigeration-1",
+              "label": "Map refrigeration circuits",
+              "help": "Record circuit charges and servicing, including equipment installed or disposed of during the period."
+            }
+          ]
+        },
+        {
+          "id": "air-conditioning",
+          "label": "Air conditioning or heat pumps",
+          "help": "Building or vehicle systems within the boundary.",
+          "checklist": [
+            {
+              "id": "air-conditioning-1",
+              "label": "Obtain service records",
+              "help": "Ask the service provider for gas identity, quantities added/recovered and equipment IDs."
+            }
+          ]
+        },
+        {
+          "id": "fire-suppression",
+          "label": "Fire suppression",
+          "help": "Only identify actual extinguishing agents; not every agent is a GHG.",
+          "checklist": [
+            {
+              "id": "fire-suppression-1",
+              "label": "Confirm agent and events",
+              "help": "Retain cylinder labels, agent composition, discharges, refills and decommissioning recoveries."
+            }
+          ]
+        },
+        {
+          "id": "industrial-gas",
+          "label": "Purchased industrial or shielding gas",
+          "help": "For example CO2-containing welding mixtures; gas composition matters.",
+          "checklist": [
+            {
+              "id": "industrial-gas-1",
+              "label": "Reconcile cylinders and mixtures",
+              "help": "Collect gas specifications, quantities, stock changes and returns. Distinguish released gas from fuel burned in a torch."
+            }
+          ]
+        },
+        {
+          "id": "electrical-gas",
+          "label": "Gas-insulated electrical equipment",
+          "help": "For example SF6-containing switchgear; specialist review.",
+          "checklist": [
+            {
+              "id": "electrical-gas-1",
+              "label": "Collect utility or maintenance records",
+              "help": "Identify insulating gas, equipment charge, top-ups, recovery and responsibility for the equipment."
+            }
+          ]
+        },
+        {
+          "id": "fuel-leaks",
+          "label": "Fuel handling, storage or distribution leaks",
+          "help": "For example methane leaks; separate from fuel combustion.",
+          "checklist": [
+            {
+              "id": "fuel-leaks-1",
+              "label": "Retain leak and vent evidence",
+              "help": "Describe components, inspections, repairs, measurements and known venting; request a source-specific method review."
+            }
+          ]
+        },
+        {
+          "id": "fugitive-other",
+          "label": "Other or unknown gas release",
+          "help": "Aerosols, foams, solvents or other unusual applications need review.",
+          "checklist": [
+            {
+              "id": "fugitive-other-1",
+              "label": "Describe material and release pathway",
+              "help": "Collect safety/specification sheets and process records. Confirm whether a GHG is present before quantification."
+            }
+          ]
+        }
+      ],
+      "sourceIds": [
+        "epa-fugitive",
+        "epa-stationary",
+        "epa-guidance"
+      ]
+    },
+    {
+      "id": "process",
+      "title": "Process and other direct sources",
+      "description": "Discovery and specialist-review route for direct sources beyond ordinary fuel use. Selection does not approve a sector method or establish scope.",
+      "checklist": [
+        {
+          "id": "process-1",
+          "label": "Describe each activity and release pathway",
+          "help": "Map site, process, ownership/control and operating dates. Identify combustion and purchased gas already recorded elsewhere."
+        },
+        {
+          "id": "process-2",
+          "label": "Collect production and material evidence",
+          "help": "Keep input/output quantities, composition, process diagrams, monitoring records and original units where available."
+        },
+        {
+          "id": "process-3",
+          "label": "Assign a source-specific review",
+          "help": "Name the responsible specialist and track gas identity, classification, method, boundary and evidence questions as unresolved."
+        },
+        {
+          "id": "process-4",
+          "label": "Document coverage and exclusions",
+          "help": "Keep a reason and supporting evidence for every excluded activity. Missing measurements are not zero emissions."
+        }
+      ],
+      "records": [
+        {
+          "id": "process-activity",
+          "label": "Activity quantity — preserve original measure",
+          "unitOptions": [
+            "kg",
+            "metric tonne",
+            "litre",
+            "cubic metre",
+            "unit produced",
+            "head of livestock",
+            "hectare",
+            "other / review"
+          ]
+        }
+      ],
+      "subtypes": [
+        {
+          "id": "chemical",
+          "label": "Chemical reactions or material transformation",
+          "help": "Includes mineral, metal and chemical production; specialist review.",
+          "checklist": [
+            {
+              "id": "chemical-1",
+              "label": "Describe reactions and material balances",
+              "help": "Identify feedstocks, products, by-products, composition and any direct gas measurements."
+            }
+          ]
+        },
+        {
+          "id": "fermentation",
+          "label": "Fermentation or biological processing",
+          "help": "A discovery route, including food/beverage operations where present.",
+          "checklist": [
+            {
+              "id": "fermentation-1",
+              "label": "Document feedstocks and gas handling",
+              "help": "Identify process volumes, gas recovery/release and possible biogenic treatment for review."
+            }
+          ]
+        },
+        {
+          "id": "wastewater",
+          "label": "On-site wastewater treatment",
+          "help": "Confirm ownership/control and distinguish contracted treatment.",
+          "checklist": [
+            {
+              "id": "wastewater-1",
+              "label": "Describe treatment and sludge handling",
+              "help": "Collect flow, available organic-load tests, treatment type, sludge routes and gas capture records."
+            }
+          ]
+        },
+        {
+          "id": "waste-treatment",
+          "label": "On-site waste, composting or digestion",
+          "help": "Specialist review; off-site contracted waste is screened separately.",
+          "checklist": [
+            {
+              "id": "waste-treatment-1",
+              "label": "Map waste streams and gas capture",
+              "help": "Collect waste types/masses, treatment processes, operating dates and recovery/flare records."
+            }
+          ]
+        },
+        {
+          "id": "agriculture",
+          "label": "Livestock, soils or crop activities",
+          "help": "Enteric fermentation, manure, soil inputs and rice require sector review.",
+          "checklist": [
+            {
+              "id": "agriculture-1",
+              "label": "Collect an activity description",
+              "help": "Identify livestock classes, manure systems, land area, fertilizer applications and relevant seasonal practices."
+            }
+          ]
+        },
+        {
+          "id": "land",
+          "label": "Land-use change or land management",
+          "help": "Flag land emissions and removals for separate specialist evaluation.",
+          "checklist": [
+            {
+              "id": "land-1",
+              "label": "Document land and management changes",
+              "help": "Retain locations, area, dates, prior/current use and ownership/control. Do not net assumed removals against fuel emissions."
+            }
+          ]
+        },
+        {
+          "id": "electronics",
+          "label": "Semiconductor or other process gases",
+          "help": "Specialist review of gas use, conversion and abatement.",
+          "checklist": [
+            {
+              "id": "electronics-1",
+              "label": "Preserve gas and abatement data",
+              "help": "Record gas identity, input quantities, process routes and available control-system operating evidence."
+            }
+          ]
+        },
+        {
+          "id": "process-other",
+          "label": "Other or unknown direct source",
+          "help": "Use this catch-all rather than omitting an unlisted activity.",
+          "checklist": [
+            {
+              "id": "process-other-1",
+              "label": "Create a source-review question",
+              "help": "Describe materials, physical activity, possible gas release and available records; assign an owner and due date."
+            }
+          ]
+        }
+      ],
+      "sourceIds": [
+        "epa-guidance",
+        "epa-sectors",
+        "ghgp-corporate"
+      ]
+    }
+  ],
+  "scope2": [
+    {
+      "id": "electricity",
+      "title": "Purchased electricity",
+      "description": "Include utility, landlord and directly supplied electricity consumed within the boundary.",
+      "checklist": [
+        {
+          "id": "electricity-1",
+          "label": "Collect electricity statements",
+          "help": "Retain meters, supplier, site, service dates and consumed kWh or MWh; record gaps and estimates."
+        },
+        {
+          "id": "electricity-2",
+          "label": "Reconcile imports and on-site generation",
+          "help": "Separate consumption, self-generation, exports and charging records to avoid duplicate totals."
+        },
+        {
+          "id": "electricity-3",
+          "label": "Retain contract and attribute evidence",
+          "help": "Collect tariffs, supplier information and any energy certificates or retirement records for later quality review."
+        },
+        {
+          "id": "electricity-4",
+          "label": "Document location and allocation",
+          "help": "Keep service address/grid location and any landlord or shared-meter allocation evidence."
+        }
+      ],
+      "sourceIds": [
+        "epa-electricity",
+        "ghgp-scope2"
+      ]
+    },
+    {
+      "id": "steam",
+      "title": "Purchased steam",
+      "description": "Collect purchased steam separately from steam produced by your own boilers.",
+      "checklist": [
+        {
+          "id": "steam-1",
+          "label": "Collect steam delivery records",
+          "help": "Preserve quantity, unit, service dates, supplier and metering location."
+        },
+        {
+          "id": "steam-2",
+          "label": "Record steam characteristics",
+          "help": "Retain available pressure, temperature, condensate return and energy-content information."
+        },
+        {
+          "id": "steam-3",
+          "label": "Request supplier generation evidence",
+          "help": "Ask for fuel mix, efficiency or emissions documentation and any shared-production allocation."
+        },
+        {
+          "id": "steam-4",
+          "label": "Resolve shared use and contracts",
+          "help": "Keep tenant allocations and contractual claims for review; mark missing information."
+        }
+      ],
+      "sourceIds": [
+        "epa-electricity",
+        "ghgp-scope2"
+      ]
+    },
+    {
+      "id": "heat",
+      "title": "Purchased heat",
+      "description": "District or other externally supplied heat.",
+      "checklist": [
+        {
+          "id": "heat-1",
+          "label": "Collect heat statements",
+          "help": "Keep delivered energy, unit, supplier, site and service period."
+        },
+        {
+          "id": "heat-2",
+          "label": "Record supply technology",
+          "help": "Request supplier fuel and generation information, including shared heat/power production where applicable."
+        },
+        {
+          "id": "heat-3",
+          "label": "Retain allocation records",
+          "help": "Explain shared meters and landlord estimates with original supporting evidence."
+        },
+        {
+          "id": "heat-4",
+          "label": "Retain contractual claims",
+          "help": "Keep relevant supply contracts for later review; do not infer zero emissions."
+        }
+      ],
+      "sourceIds": [
+        "epa-electricity",
+        "ghgp-scope2"
+      ]
+    },
+    {
+      "id": "cooling",
+      "title": "Purchased cooling",
+      "description": "District chilled water or other externally supplied cooling.",
+      "checklist": [
+        {
+          "id": "cooling-1",
+          "label": "Collect cooling delivery records",
+          "help": "Keep quantity, original unit, supplier, site, meter and period."
+        },
+        {
+          "id": "cooling-2",
+          "label": "Record delivered-energy basis",
+          "help": "Retain available temperature, flow and equipment-performance evidence if bills give non-energy units."
+        },
+        {
+          "id": "cooling-3",
+          "label": "Request supplier energy information",
+          "help": "Document how cooling is produced and available supplier emissions evidence."
+        },
+        {
+          "id": "cooling-4",
+          "label": "Separate customer equipment",
+          "help": "Avoid confusing purchased cooling with electricity for your own chillers or refrigerant servicing."
+        }
+      ],
+      "sourceIds": [
+        "epa-electricity",
+        "ghgp-scope2"
+      ]
+    }
+  ],
+  "scope3": [
+    {
+      "id": "category-1",
+      "title": "1. Purchased goods and services",
+      "description": "Goods and services acquired during the reporting year.",
+      "checklist": [
+        {
+          "id": "scope3-1-1",
+          "label": "Reconcile purchasing records",
+          "help": "Collect supplier, product/service, quantity, original unit, dates and value with currency; separate capital purchases."
+        },
+        {
+          "id": "scope3-1-2",
+          "label": "Request supplier evidence",
+          "help": "Keep product-level emissions or activity data, boundaries, period and allocation notes."
+        },
+        {
+          "id": "scope3-1-3",
+          "label": "Record gaps and classification",
+          "help": "Identify missing suppliers or quantities and any spend-only screening assumptions."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat1"
+      ]
+    },
+    {
+      "id": "category-2",
+      "title": "2. Capital goods",
+      "description": "Equipment, buildings and other capital goods acquired in the year.",
+      "checklist": [
+        {
+          "id": "scope3-2-1",
+          "label": "Collect capital additions",
+          "help": "Reconcile fixed-asset additions with procurement; capture quantity, supplier, dates and asset type."
+        },
+        {
+          "id": "scope3-2-2",
+          "label": "Collect product or project evidence",
+          "help": "Request embodied-production data with scope and allocation information."
+        },
+        {
+          "id": "scope3-2-3",
+          "label": "Check purchase classification",
+          "help": "Document the financial classification and avoid duplicating the same acquisition under goods and services."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat2"
+      ]
+    },
+    {
+      "id": "category-3",
+      "title": "3. Fuel- and energy-related activities",
+      "description": "Upstream fuel/energy activities and losses outside Scope 1 and 2.",
+      "checklist": [
+        {
+          "id": "scope3-3-1",
+          "label": "Reuse reconciled energy quantities",
+          "help": "Link fuel and purchased-energy consumption by type, location and period; do not duplicate direct combustion."
+        },
+        {
+          "id": "scope3-3-2",
+          "label": "Request upstream and loss data",
+          "help": "Keep supplier or grid data with geography, year and lifecycle boundaries."
+        },
+        {
+          "id": "scope3-3-3",
+          "label": "Screen energy resale",
+          "help": "Identify purchased energy sold to end users and request a separate classification review when relevant."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat3"
+      ]
+    },
+    {
+      "id": "category-4",
+      "title": "4. Upstream transportation and distribution",
+      "description": "Third-party inbound transport and transport services purchased by the company.",
+      "checklist": [
+        {
+          "id": "scope3-4-1",
+          "label": "Map purchased transport services",
+          "help": "Identify freight legs, warehouses, payor and operator; include purchased outbound services where applicable."
+        },
+        {
+          "id": "scope3-4-2",
+          "label": "Collect shipment activity",
+          "help": "Retain mode, origin/destination, distance, mass, loading and storage information where available."
+        },
+        {
+          "id": "scope3-4-3",
+          "label": "Reconcile supplier records",
+          "help": "Keep carrier fuel/emissions evidence and mark missing legs or estimates."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat4"
+      ]
+    },
+    {
+      "id": "category-5",
+      "title": "5. Waste generated in operations",
+      "description": "Waste from operations treated by other organizations.",
+      "checklist": [
+        {
+          "id": "scope3-5-1",
+          "label": "Collect waste and wastewater records",
+          "help": "List stream, quantity, unit, date and receiving operator."
+        },
+        {
+          "id": "scope3-5-2",
+          "label": "Identify treatment routes",
+          "help": "Retain disposal, recycling, composting or treatment evidence and destination."
+        },
+        {
+          "id": "scope3-5-3",
+          "label": "Resolve boundary and gaps",
+          "help": "Separate owned/controlled treatment and preserve assumptions for unknown treatment routes."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat5"
+      ]
+    },
+    {
+      "id": "category-6",
+      "title": "6. Business travel",
+      "description": "Employee business travel using third-party transport.",
+      "checklist": [
+        {
+          "id": "scope3-6-1",
+          "label": "Collect trip activity",
+          "help": "Retain mode, route, distance and travel class where available; identify covered period."
+        },
+        {
+          "id": "scope3-6-2",
+          "label": "Reconcile travel systems",
+          "help": "Compare agency exports, expenses and corporate cards; avoid duplicates."
+        },
+        {
+          "id": "scope3-6-3",
+          "label": "Document optional activity coverage",
+          "help": "Record whether hotel stays and other optional elements are included and explain missing records."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat6"
+      ]
+    },
+    {
+      "id": "category-7",
+      "title": "7. Employee commuting",
+      "description": "Travel between employees' homes and workplaces.",
+      "checklist": [
+        {
+          "id": "scope3-7-1",
+          "label": "Collect representative commute data",
+          "help": "Use privacy-preserving totals for mode, distance, commuting days and occupancy."
+        },
+        {
+          "id": "scope3-7-2",
+          "label": "Document survey coverage",
+          "help": "Retain respondent coverage, sampling period and extrapolation assumptions."
+        },
+        {
+          "id": "scope3-7-3",
+          "label": "Record work-pattern boundaries",
+          "help": "Identify remote/hybrid arrangements and whether optional homeworking emissions are considered."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat7"
+      ]
+    },
+    {
+      "id": "category-8",
+      "title": "8. Upstream leased assets",
+      "description": "Assets leased by the company and outside its Scope 1 and 2 boundary.",
+      "checklist": [
+        {
+          "id": "scope3-8-1",
+          "label": "Review lease register",
+          "help": "Identify assets, lessors, lease dates and accounting/control treatment."
+        },
+        {
+          "id": "scope3-8-2",
+          "label": "Request asset operating data",
+          "help": "Collect fuel, energy and other relevant emissions evidence from the lessor."
+        },
+        {
+          "id": "scope3-8-3",
+          "label": "Resolve allocations",
+          "help": "Retain floor area, occupancy or other allocation basis and avoid duplicate Scope 1/2 records."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat8"
+      ]
+    },
+    {
+      "id": "category-9",
+      "title": "9. Downstream transportation and distribution",
+      "description": "Downstream third-party distribution outside purchased transport services.",
+      "checklist": [
+        {
+          "id": "scope3-9-1",
+          "label": "Map post-sale movement",
+          "help": "Identify distribution legs, retailers, storage and who pays for transport."
+        },
+        {
+          "id": "scope3-9-2",
+          "label": "Collect physical activity",
+          "help": "Request shipment quantities, modes, distances and storage-energy evidence."
+        },
+        {
+          "id": "scope3-9-3",
+          "label": "Check category boundary",
+          "help": "Separate company-purchased transport already screened in Category 4 and document unavailable downstream data."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat9"
+      ]
+    },
+    {
+      "id": "category-10",
+      "title": "10. Processing of sold products",
+      "description": "Further processing of intermediate products sold by the company.",
+      "checklist": [
+        {
+          "id": "scope3-10-1",
+          "label": "Identify intermediate products",
+          "help": "Record quantities, customers or customer groups and likely further processing."
+        },
+        {
+          "id": "scope3-10-2",
+          "label": "Request processing information",
+          "help": "Collect customer energy/process data or documented processing scenarios."
+        },
+        {
+          "id": "scope3-10-3",
+          "label": "Record allocation and gaps",
+          "help": "Explain the share attributable to sold products and uncertainty in downstream pathways."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat10"
+      ]
+    },
+    {
+      "id": "category-11",
+      "title": "11. Use of sold products",
+      "description": "Use over the expected lifetime of products sold during the year.",
+      "checklist": [
+        {
+          "id": "scope3-11-1",
+          "label": "Map products and use pathways",
+          "help": "Record sales volumes, product types and direct energy, fuel or gas-release activity during use."
+        },
+        {
+          "id": "scope3-11-2",
+          "label": "Document lifetime assumptions",
+          "help": "Retain expected lifespan, usage rate, efficiency and regional scenarios."
+        },
+        {
+          "id": "scope3-11-3",
+          "label": "Separate optional indirect use",
+          "help": "Record which indirect use activities are considered and why; keep uncertainty visible."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat11"
+      ]
+    },
+    {
+      "id": "category-12",
+      "title": "12. End-of-life treatment of sold products",
+      "description": "Disposal and treatment of products and packaging sold during the year.",
+      "checklist": [
+        {
+          "id": "scope3-12-1",
+          "label": "Collect sold-material quantities",
+          "help": "Record product/packaging mass and composition by material type."
+        },
+        {
+          "id": "scope3-12-2",
+          "label": "Document disposal scenarios",
+          "help": "Retain treatment routes, regional assumptions and expected recycling/disposal shares."
+        },
+        {
+          "id": "scope3-12-3",
+          "label": "Keep evidence and uncertainty",
+          "help": "Identify supplier/customer evidence and unknown destinations without assuming universal recycling."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat12"
+      ]
+    },
+    {
+      "id": "category-13",
+      "title": "13. Downstream leased assets",
+      "description": "Assets owned by the company and leased to others outside Scope 1 and 2.",
+      "checklist": [
+        {
+          "id": "scope3-13-1",
+          "label": "Review lessor asset register",
+          "help": "Collect asset type, lessee, location, lease dates and boundary decision."
+        },
+        {
+          "id": "scope3-13-2",
+          "label": "Request lessee operating data",
+          "help": "Collect relevant fuel, energy and other operational emissions information."
+        },
+        {
+          "id": "scope3-13-3",
+          "label": "Retain allocation basis",
+          "help": "Document leased share, use periods and estimates; avoid double counting consolidated operations."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat13"
+      ]
+    },
+    {
+      "id": "category-14",
+      "title": "14. Franchises",
+      "description": "Franchises outside the company's Scope 1 and 2 boundary.",
+      "checklist": [
+        {
+          "id": "scope3-14-1",
+          "label": "Collect franchise register",
+          "help": "List franchise locations, agreement periods and control/boundary decisions."
+        },
+        {
+          "id": "scope3-14-2",
+          "label": "Request operating data",
+          "help": "Collect franchise fuel, electricity and other relevant operational emissions evidence."
+        },
+        {
+          "id": "scope3-14-3",
+          "label": "Document estimation coverage",
+          "help": "Retain data coverage, proxy-site selection, allocation and gaps."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat14"
+      ]
+    },
+    {
+      "id": "category-15",
+      "title": "15. Investments",
+      "description": "Investment activities outside the company's Scope 1 and 2 boundary.",
+      "checklist": [
+        {
+          "id": "scope3-15-1",
+          "label": "Screen investment portfolio",
+          "help": "Identify equity, debt, project finance and other investments, with values, shares and dates."
+        },
+        {
+          "id": "scope3-15-2",
+          "label": "Request investee evidence",
+          "help": "Collect investee/project emissions, reporting boundaries and period."
+        },
+        {
+          "id": "scope3-15-3",
+          "label": "Assign specialist boundary review",
+          "help": "Resolve category applicability and attribution before any financed-emissions calculation."
+        }
+      ],
+      "sourceIds": [
+        "ghgp-cat15"
+      ]
+    }
+  ]
+}

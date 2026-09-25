@@ -1,0 +1,17 @@
+{
+  "name": "neuvetra-company-intake-preview",
+  "private": true,
+  "scripts": {
+    "start": "python -B server.py --port 4319",
+    "build": "node build.cjs",
+    "test": "node check.cjs",
+    "start:static-legacy": "node serve.cjs",
+    "test:plan": "node --test plan-core.test.cjs && node qa-core.cjs && python -B -m unittest test_server -v && python -B qa-http.py"
+  },
+  "dependencies": {
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "esbuild": "0.27.7"
+  }
+}

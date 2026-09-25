@@ -1,0 +1,10 @@
+{
+  "source": "https://www.census.gov/naics/2022NAICS/2022_NAICS_Structure.xlsx",
+  "retrieved": "2026-09-25",
+  "vintage": "2022 United States NAICS",
+  "sha256": "217c9e0d4d74e7517bc288f5f308b73aa0de5ee787976a6dd222412be28ada22",
+  "rows": 2125,
+  "six_digit_industries": 1012,
+  "sectors": 20,
+  "transformation": "Strip whitespace and superscript trilateral-agreement T markers only; retain official codes and titles."
+}

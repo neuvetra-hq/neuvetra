@@ -1,0 +1,32 @@
+name: Inventory plan preview
+on:
+  pull_request:
+    paths:
+      - 'prototypes/company-onboarding/**'
+      - '.github/workflows/inventory-plan.yml'
+  push:
+    branches: [codex/corporate-mvp]
+    paths:
+      - 'prototypes/company-onboarding/**'
+      - '.github/workflows/inventory-plan.yml'
+permissions:
+  contents: read
+jobs:
+  connected-collection:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prototypes/company-onboarding
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: node check.cjs
+      - run: node --test plan-core.test.cjs
+      - run: node qa-core.cjs
+      - run: python -B -m unittest test_server -v
+      - run: python -B qa-http.py
