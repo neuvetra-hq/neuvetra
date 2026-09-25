@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
+  "observed_at": "2026-09-25T08:10:42.772151+00:00",
+  "failed_head": "3331b62c8328b54c0b35f016d6078e2b5f4ce3ef",
+  "failed_check": "Dedicated staging image and offline runtime smoke",
+  "job": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36111183061/job/107994755519",
+  "failure": "Cannot find module ./beta-access-contract from /app/packages/neuvetra-database/src/index.ts at Dockerfile.staging import smoke.",
+  "private_log_sha256": "78ffb254b1f92e70d9ae761545d3a6337c3b74626d30ff83120e41ce210b1971",
+  "finding": "BETA-ACCESS-CI-F01",
+  "design": "Remove the three beta-access exports from the shared legacy database index. Beta consumers already use dedicated direct imports. Keep the new local-only boundary out of the staging import graph; do not copy or mount it into the hosted image. This supersedes the optional scoped-export detail in the first access contract.",
+  "allowed_source_change": "packages/neuvetra-database/src/index.ts only, plus own author evidence/run/new Candidate3 snapshot. Any required additional change must first be explained to root.",
+  "validation": [
+    "Prove every actual beta consumer uses dedicated imports and scoped TypeScript/tests still pass",
+    "Prove shared index exactly matches pre-access base ecb5b9d3 and staging import graph no longer requires beta access files",
+    "Independent focused review, exact source pins and required remote container/native/full checks"
+  ],
+  "preservation": "Preserve Candidate2 local acceptance, first CI failure and earlier versions; record the escaped packaging defect rather than claiming the first publication complete. No hosted/provider mutation.",
+  "actual_cost_usd": null,
+  "reservation_usd": 10,
+  "reservation_meaning": "Final existing local planning allowance; not measured cost or paid-call authority."
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-25T13:41:29.628791+00:00",
+  "correction": "Root earlier decoded C3 JSON with Windows-default Path.read_text() rather than explicit UTF8, producing a false embedded-text mismatch. The immutable C3 snapshot was not corrupted.",
+  "candidate3_snapshot_sha256": "77aba791a6b48e1306138a1bb62cddb16ee99ab4ee4531802921ffbe07a51f7c",
+  "explicit_utf8_embedded_hashes_match": 18,
+  "source_change": false,
+  "supersedes_measurement_claims_in": [
+    "evaluations/research-qa/m80-beta-access-candidate3-root-disposition-20260925.json",
+    "evaluations/research-qa/m80-beta-access-candidate4-metadata-20260925.json",
+    "evaluations/research-qa/m80-beta-access-ci-extension-authorization-20260925.json"
+  ],
+  "scope": "Corrects only snapshot-encoding diagnosis. C3 CI source provisioning rejection remains valid."
+}

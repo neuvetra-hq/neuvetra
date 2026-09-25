@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-QA-20260925",
+  "candidate": 4,
+  "reviewer": "/root/m80_beta_access_qa",
+  "independent": true,
+  "verdict": "pass",
+  "scope": "Focused source and CI configuration repair; remote execution remains pending",
+  "material_findings_open": 0,
+  "candidate_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE4.json",
+    "sha256": "63bc8ca34e40c62be20d2e068580305d2911c9b6e1c6794799008e0c377f6959"
+  },
+  "author_evidence_sha256": "b94a39f4f570211651a3d39b65ca16615e446f78566aa6b5de87c14b7de0f675",
+  "report": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4.md",
+    "sha256": "faa58615f12ff93bce6210c0e01b32bcd1525e17a1c9fe10efdc852d188114a6"
+  },
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks.py",
+      "sha256": "1d9dffe5c9b573248b814423ee6d307506e20096d40b64a038aea7a69fc122ee"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks.json",
+      "sha256": "c77ffd83139a8906be4b1f5691d6ca079ddf3fe59c631e576a6573d2923bbaef"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks-first.py",
+      "sha256": "4b587a3bb7ad933f31120000e6d079a915f2d717f33dcb7c042b42de691be302"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-first-result.txt",
+      "sha256": "5f2a281b8771cbd17085b9ba3430b23380d41efbe8610117aa44f5964ccf043d"
+    }
+  ],
+  "exact_current_embedded_utf8_files": 18,
+  "only_source_delta_from_candidate3": ".github/workflows/verify.yml",
+  "runtime_sql_listener_candidate2_parity": true,
+  "findings": [
+    {
+      "id": "CI-C3-F01",
+      "status": "closed_in_candidate4",
+      "reason": "Official signed PGDG source provisioned before client17 installation; remote execution pending."
+    }
+  ],
+  "candidate3_reported_encoding_defect": "Root default Windows decoding measurement error; immutable explicit UTF8 content matches declared hash. First QA assumption failure preserved.",
+  "candidate2_local_acceptance_preserved": true,
+  "escaped_remote_defects_preserved": 2,
+  "new_native_rehearsal": false,
+  "package_install": false,
+  "remote_ci_executed": false,
+  "actual_cost_usd": null,
+  "continuation_journal": {
+    "version": 1,
+    "ticket": "2677ff1a487b43c18f79ce478d83645f",
+    "author_task_version4": "candidate ordinal; root owns clarification"
+  },
+  "primary_sources": [
+    "https://www.postgresql.org/download/linux/ubuntu/"
+  ]
+}

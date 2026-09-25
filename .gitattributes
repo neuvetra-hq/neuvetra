@@ -415,3 +415,9 @@ evaluations/research-qa/m80-beta-access-independent-20260925-review2.json -text 
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2-PREFREEZE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review3-ci.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review3.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review4-first-result.txt -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3-PREFREEZE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW3.json -text whitespace=cr-at-eol

@@ -1,0 +1,12 @@
+{
+  "candidateSha256": "77aba791a6b48e1306138a1bb62cddb16ee99ab4ee4531802921ffbe07a51f7c",
+  "exactFiles": 18,
+  "graphFiles": 98,
+  "databaseGraphFiles": 66,
+  "missingImports": [],
+  "betaEdges": [],
+  "databaseCopyMissing": [],
+  "databaseIgnoreMissing": [],
+  "localBundleSuccess": true,
+  "limitations": "Static local source graph and bundler only; not a Linux container build, package installation, or remote CI result."
+}

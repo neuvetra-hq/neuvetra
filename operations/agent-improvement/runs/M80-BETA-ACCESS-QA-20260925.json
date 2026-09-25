@@ -6,8 +6,8 @@
   "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
   "artifacts": [
     {
-      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
-      "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW4.json",
+      "sha256": "27a2282382b1d386b61b144362dfc523d08919584a6f8056377d943de9f6dedd"
     }
   ],
   "criteria": [
@@ -26,6 +26,22 @@
         "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json"
       ],
       "reason": "Exact Candidate2 independently accepted for bounded local access after new-owner and listener repairs plus remaining native matrix checks."
+    },
+    {
+      "id": "AC-C3-PACKAGING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-candidate4-root-closure-20260925.json"
+      ],
+      "reason": "Exact Candidate4 focused independent correction review accepted; prior failures preserved."
+    },
+    {
+      "id": "AC-C4-CI-REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-review4.json"
+      ],
+      "reason": "Signed PGDG correction and exact18 bytes independently pass; root remote execution remains separate."
     }
   ],
   "review": {
@@ -33,12 +49,12 @@
     "independent": true,
     "verdict": "pass",
     "evidence": [
-      "evaluations/research-qa/m80-beta-access-root-closure-20260925.json"
+      "evaluations/research-qa/m80-beta-access-candidate4-root-closure-20260925.json"
     ],
     "reviewed_artifacts": [
       {
-        "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
-        "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+        "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW4.json",
+        "sha256": "27a2282382b1d386b61b144362dfc523d08919584a6f8056377d943de9f6dedd"
       }
     ]
   },
@@ -47,7 +63,7 @@
     "first_review": "fail",
     "material_findings_open": 0,
     "rework_cycles": 1,
-    "escaped_defects": null,
+    "escaped_defects": 2,
     "repeated_findings": []
   },
   "compute": {
@@ -98,64 +114,80 @@
     "All18 source/current embedded UTF8 bytes verified after review. Final default-Windows decoding false comparison resolved with raw bytes; no author source drift.",
     "Candidate2 archive was written directly to authorized private .superpowers path; public artifacts record hash only.",
     "Root acceptance of this QA output/publication checks still pending; own run remains in_progress until coordinator disposition. Actual cost remains null.",
-    "Root closed this bounded run after exact independent Candidate2 acceptance. Publication and customer/hosted readiness are separate; first failure preserved."
+    "Root closed this bounded run after exact independent Candidate2 acceptance. Publication and customer/hosted readiness are separate; first failure preserved.",
+    "Reopened for Candidate3 focused source/CI review after two escaped remote packaging/client-selection failures at3331b62c. Candidate2 local acceptance preserved in history; no native or hosted rerun authorized.",
+    "Candidate3 focused independent rejection CI-C3-F01: signed PostgreSQL apt repository missing. Exact local source graph/index and Candidate2 runtime parity pass. No new DB/package/remote execution. Primary docs verified read-only; next correction/journal authority remains root-owned.",
+    "Candidate4 narrow review explicitly authorized after board extension; no native replay/package installation/provider writes. CI-C3-F01 closed in Candidate4; exact18 current/embedded UTF8 bytes pass. Root disposition remains pending.",
+    "Corrected root-reported C3 encoding issue: explicit UTF8 read proves snapshot unchanged and embedded bytes exact. Root default Windows decoding was measurement error. Initial QA expectation failure and first harness preserved in review4 evidence.",
+    "Author task_version4 is candidate ordinal; continuation journal version1 ticket2677ff1a487b43c18f79ce478d83645f. Root owns metadata clarification.",
+    "Root accepted exact Candidate4 after independent review; remote publication checks remain separate. C3 encoding mismatch was a root default-decoding observation error, corrected in a separate receipt."
   ],
   "source_artifacts": [
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-checks-first.ts",
-      "sha256": "a1ce3425c4c9dfd5ba7746c71938d76c563dc36eb0c816f90f35634284a9586c"
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks.py",
+      "sha256": "1d9dffe5c9b573248b814423ee6d307506e20096d40b64a038aea7a69fc122ee"
     },
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-checks.ts",
-      "sha256": "d46d22268bd68e6d2de120d8f16ada052f57e8725bc8c010c2768c930b074715"
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks.json",
+      "sha256": "c77ffd83139a8906be4b1f5691d6ca079ddf3fe59c631e576a6573d2923bbaef"
     },
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-drift-result-1790323103762.json",
-      "sha256": "3e85f594afb6c4bb50a6dd3e3a1691a7c0648ad23a3b3446ccd4969dbda61ced"
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks-first.py",
+      "sha256": "4b587a3bb7ad933f31120000e6d079a915f2d717f33dcb7c042b42de691be302"
     },
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-drift.ts",
-      "sha256": "ac6b64e83ab0a7fe61ce9ecde011eedd41ccd0516c2d31596232d91953e6fb6f"
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-first-result.txt",
+      "sha256": "5f2a281b8771cbd17085b9ba3430b23380d41efbe8610117aa44f5964ccf043d"
     },
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-final-pins.json",
-      "sha256": "4fee029f78d8c5a65c568aad07752fb78e53ec3cd58ed6dbcc1e12b33e662ae0"
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4.md",
+      "sha256": "faa58615f12ff93bce6210c0e01b32bcd1525e17a1c9fe10efdc852d188114a6"
     },
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-native-first.ts",
-      "sha256": "3d26fcea46132bd1df93bec7f5e95e4354f546882f457d7075f857adca4a4b02"
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4.json",
+      "sha256": "85d1e869fff7b9764777b02a199ccd12dc0adada5217302f060b7b2b0a19b82f"
+    }
+  ],
+  "review_history": [
+    {
+      "phase": "candidate2_root_accepted",
+      "review": {
+        "reviewer_execution_context": "/root",
+        "independent": true,
+        "verdict": "pass",
+        "evidence": [
+          "evaluations/research-qa/m80-beta-access-root-closure-20260925.json"
+        ],
+        "reviewed_artifacts": [
+          {
+            "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
+            "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+          }
+        ]
+      },
+      "outcome": {
+        "status": "complete",
+        "first_review": "fail",
+        "material_findings_open": 0,
+        "rework_cycles": 1,
+        "escaped_defects": null,
+        "repeated_findings": []
+      }
     },
     {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-native.ts",
-      "sha256": "b38428c0a57124495f8a0f7d979c09876f6070cba4f7caf7efea9e18aa53e021"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-preparation.md",
-      "sha256": "79729e1ca7ca63faee989785f028bbae150c1829b3e714c764a76babd3a92f58"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-result-1790322648589.json",
-      "sha256": "6143972e5d70c02bebbe950b7cf74b0efe8ee17afe2e83d8a713d2ea0943869a"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-result-1790322732930.json",
-      "sha256": "0d3c9666ebc8908745619f2377d43f85c8ab1c5bcc2999278b99cc66ea4c853e"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement-result-1790322971984.json",
-      "sha256": "56c16ebe0cd26ac9650d5fd85dbcd881ee6def9bd6313c41488deec03eecadd6"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement.ts",
-      "sha256": "c466a5d876029131881d9b589845ce9b22c14c90598b717c3bba161e5d1a5958"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json",
-      "sha256": "949d9d2742afc25033ac9a4b8ec31ec99291f5a83f848bd065073602da94a126"
-    },
-    {
-      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review2.md",
-      "sha256": "d4885e2b0e566b28ae896ea90519c92bdd19a1ba195840d25b3ca8795dea0033"
+      "phase": "candidate3_independent_rejection_preserved",
+      "review_artifact": {
+        "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3.json",
+        "sha256": "e0a6747f9c8a42483550e1df6be9ffcc07548511313fea505d87722139eeb24c"
+      },
+      "outcome": {
+        "status": "in_progress",
+        "first_review": "fail",
+        "material_findings_open": 1,
+        "rework_cycles": 1,
+        "escaped_defects": 2,
+        "repeated_findings": []
+      }
     }
   ]
 }

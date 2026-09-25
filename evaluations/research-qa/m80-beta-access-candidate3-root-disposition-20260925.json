@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-25T08:28:29.341227+00:00",
+  "verdict": "rejected_correction_pending_board_extension",
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3.json",
+    "sha256": "e0a6747f9c8a42483550e1df6be9ffcc07548511313fea505d87722139eeb24c"
+  },
+  "qa_snapshot_sha256": "d86878a363704833950aaa35e164c1e7cd32dcae51598d6372941ced424c09d5",
+  "controller": "Version3 rejected; correction_ready but original planning allowance fully encumbered. No new attempt or journal reset.",
+  "root_checks": {
+    "candidate_current_hashes_match": 18,
+    "candidate_embedded_utf8_hashes_match": 17,
+    "qa_current_and_embedded_hashes_match": 5,
+    "embedding_exception": {
+      "path": "tools/beta-access/local-rehearsal.ts",
+      "current_and_declared_sha256": "adef448fdde284564ec0baab123657f95043b75c81d5cc3c7cfb0129e23baef4",
+      "embedded_utf8_sha256": "d8c9ad94325c87e277fe2d7cbb9ff56506833073e5e7d4d5da1d2e90b89b4724",
+      "interpretation": "Current source is unchanged; frozen embedded text does not reencode byte-exact. Preserve snapshot and repair future snapshot encoding. Do not claim all18 embedded entries exact."
+    }
+  },
+  "candidate2_bounded_runtime_acceptance_preserved": true,
+  "new_native_rehearsal": false,
+  "publication_head": "3331b62c8328b54c0b35f016d6078e2b5f4ce3ef",
+  "remote_checks": "four_pass_two_fail",
+  "new_hosted_mutation": false,
+  "customer_ready": false,
+  "actual_cost_usd": null
+}

@@ -1,3 +1,15 @@
+# September 25: CI correction independently accepted; remote verification next
+
+Candidate4 passes focused independent review: official signed PostgreSQL repository setup, client17 selection/version guards and real native restore retained. Shared exports removed; accepted runtime code unchanged. All current and embedded review bytes verified with explicit UTF8. Prior reported C3 embedding mismatch was a root decoding measurement error; separate correction receipt preserves that history. The board-authorized continuation is accepted; publish to rolling PR6 and require all six exact-head checks. Earlier local C2 acceptance remains bounded; no hosted beta access, real invitations or method release. Full Scope1 remains incomplete. Earlier sections are historical.
+
+# September 25: board authorizes one bounded CI correction
+
+Board instruction "lets fix it" approves the pending extension. Engineer is correcting only signed PGDG client17 provisioning and future snapshot encoding; native runtime source remains unchanged. The original three-attempt journal is preserved, and a separately identified authorized continuation has one reserved/started attempt. Independent review, exact publication to rolling PR6 and six remote checks remain required. No hosted deployment, real invitations or method release. Earlier sections are historical.
+
+# September 25: CI correction diagnosed; bounded extension decision pending
+
+First publication3331b62c passed four checks and failed two: local-only beta exports entered the staging import graph, and backup client16 could not dump server17. Independent Candidate3 review found an additional provisioning gap: the Ubuntu runner removes its PGDG source after image creation, so installing client17 requires explicit signed repository setup. Root confirmed primary evidence and recorded independent Candidate3 rejection. All18 current candidate hashes match; one embedded text encoding differs and must be corrected in a future snapshot. No correction after C3 freeze or new publication has occurred. The original three-attempt planning allowance is fully encumbered, actual cost unknown; board permission for one bounded correction/review is pending. Preserve the original journal and all failures. Local C2 runtime acceptance remains bounded and valid. No hosted change, four methods held, full Scope1/customer readiness incomplete. Earlier sections are historical.
+
 # September 25: local beta access accepted; publication checks pending
 
 Candidate2 passed independent native review after two preserved findings: future-function default permissions and oversized-stream connection behavior. The local HTTP boundary now supports synthetic invitation redemption, tenant/session reads, revocation/retries and recovery. Split ownership and the actual listener were tested; all127 legacy table row hashes and recorded metadata remained unchanged apart from2 classified beta foreign-key triggers. Root verified18 candidate and14 QA snapshot files and accepted the bounded result. Evidence: evaluations/research-qa/m80-beta-access-root-closure-20260925.json.

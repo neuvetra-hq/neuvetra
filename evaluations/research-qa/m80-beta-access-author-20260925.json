@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "task_id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
-  "candidate": 2,
+  "candidate": 4,
   "author": "/root/m80_beta_access_engineer",
-  "observed_at": "2026-09-25T08:05:00Z",
+  "observed_at": "2026-09-25T13:45:00Z",
   "verdict": "candidate_ready_for_independent_rereview",
   "material_findings_open": 0,
   "accepted_contract": {
@@ -17,6 +17,25 @@
     "ticket": "2cc281b1d0a54b47b53aa371dfa652e7",
     "task_version": 2
   },
+  "ci_repair_authorization": {
+    "path": "evaluations/research-qa/m80-beta-access-ci-repair-authorization-20260925.json",
+    "sha256": "3e2fe020c93577b904a7eda8a6a7c9cc6a57ced90070b9b60da863d201252829",
+    "ticket": "777e91a713c3484c8c4d69e2c7161126",
+    "task_version": 3
+  },
+  "ci_client_addendum": {
+    "path": "evaluations/research-qa/m80-beta-access-ci-client-addendum-20260925.json",
+    "sha256": "b47d22b176fec8a6fe9aef6d5a3164b1696015b38571241cad922aeff1f0ac58",
+    "finding": "BETA-ACCESS-CI-F02",
+    "reference": "https://www.postgresql.org/download/linux/ubuntu/"
+  },
+  "ci_extension_authorization": {
+    "path": "evaluations/research-qa/m80-beta-access-ci-extension-authorization-20260925.json",
+    "sha256": "7898c7410b20e567d6da80f1115fe52c9ffc3cd885a2da845043d3415b4db486",
+    "ticket": "2677ff1a487b43c18f79ce478d83645f",
+    "continuation_workflow": "M80-BETA-ACCESS-CI-EXTENSION-20260925",
+    "board_instruction": "lets fix it"
+  },
   "candidate1_preserved": {
     "snapshot_path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json",
     "sha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5",
@@ -25,13 +44,33 @@
     "verdict": "fail",
     "findings": ["BETA-ACCESS-F01", "BETA-ACCESS-F02"]
   },
+  "candidate2_preserved": {
+    "snapshot_path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+    "sha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676",
+    "embedded_author_evidence_sha256": "346ae84e0b77fe2de21574df00d46ff4d059231654bbaf286badc2bafd7bc8e4",
+    "local_verdict": "pass",
+    "remote_packaging_verdict": "fail",
+    "remote_failed_head": "3331b62c8328b54c0b35f016d6078e2b5f4ce3ef",
+    "findings": ["BETA-ACCESS-CI-F01", "BETA-ACCESS-CI-F02"]
+  },
+  "candidate3_preserved": {
+    "snapshot_path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3.json",
+    "sha256": "77aba791a6b48e1306138a1bb62cddb16ee99ab4ee4531802921ffbe07a51f7c",
+    "embedded_author_evidence_sha256": "c2be6bb9b39a5da28de3a5048b5f3c573d65ccbad3a781b06e746aa054e5d7b4",
+    "review_path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3.json",
+    "review_sha256": "e0a6747f9c8a42483550e1df6be9ffcc07548511313fea505d87722139eeb24c",
+    "verdict": "fail",
+    "finding": "CI-C3-F01",
+    "diagnosis_path": "evaluations/research-qa/m80-beta-access-ci-diagnosis-20260925.json",
+    "diagnosis_sha256": "63f56e29087dcd97644d738c28c11810dba36b4ced33818f2c26b505883e5735"
+  },
   "candidate_files": [
-    { "path": ".github/workflows/verify.yml", "sha256": "7b878362c8920cde0f931c2fda760ce48127aad89386d6a0156de0186de790f3" },
+    { "path": ".github/workflows/verify.yml", "sha256": "012ca24cf50abce76ea502e73bc476161c76774b569bc93534ee032da53d1888" },
     { "path": "packages/neuvetra-database/src/beta-access-contract.ts", "sha256": "8c5388a8f7932d6c266251a46b08056777ecc9dfc03fe44c055e26893200a929" },
     { "path": "packages/neuvetra-database/src/beta-access.ts", "sha256": "1c40182448540965c7a484b82d7df538e9f4a9a43cfc659f50e0cc1b1d419bf6" },
     { "path": "packages/neuvetra-database/src/beta-access-migrations.ts", "sha256": "954fcd1e7b388976b9d2e81a39ad922de474295726efd8a0ce882bce4421313c" },
     { "path": "packages/neuvetra-database/src/beta-access-migrations/0001_access.sql", "sha256": "03481674d8e4c17a3c6a8fe9024d92889ca1cc7ead61e0f29c73b44da0393091" },
-    { "path": "packages/neuvetra-database/src/index.ts", "sha256": "f3b58742d3707d87bb145d84a58f442e1ae65bcd10e096ac11150d26e009a1a3" },
+    { "path": "packages/neuvetra-database/src/index.ts", "sha256": "7f7a96f2fd015ee11a94ed56d5948745f6743c82ac0ba21aa5d06a74e629ad53" },
     { "path": "apps/site-api/src/beta-access/auth.ts", "sha256": "6ac82fb77db098022439a9842fa93b7976dd2b6e46223cf6df4104dbf40bf73e" },
     { "path": "apps/site-api/src/beta-access/auth.test.ts", "sha256": "f289953d6ca02215b199b53950c71c6fcd8469dc8a5aaed7001bb878a9e28768" },
     { "path": "apps/site-api/src/beta-access/config.ts", "sha256": "5a3b0ee11d6cab777915ce22a8044bbef94755edfb15d1b129ed0140fc310894" },
@@ -47,6 +86,27 @@
   "candidate2_correction": {
     "F01": "Each fresh fixture creates a second unique NOLOGIN beta owner. Only that new role receives a global default-function PUBLIC EXECUTE revocation. Installation creates the three entrypoints under SET LOCAL ROLE beta owner; schema, eight tables and entrypoints are beta-owner owned. The two cross-boundary helpers remain operator-owned, PUBLIC/runtime/other-role denied and executable only by the beta owner. The identity helper derives auth.uid internally, so the beta owner has no auth or neuvetra schema/table/sequence/function privileges. Readiness and install replay verify exact role flags and memberships in both directions, owner identities, default ACL, five-function split and grants.",
     "F02": "The production-intended local adapter uses node:http under Bun, streams requests without buffering, and explicitly ends the underlying socket after a decorated 413. At the 2048-byte application boundary, cancellation permits at most 6144 residual bytes for at most 50ms while the response closes; it never waits for an unbounded drain. Incoming premature close errors and settles the request stream; output or socket close settles backpressure and cancels the response body. The old Bun.serve boundary is no longer used by the canonical rehearsal. Imports remain inert."
+  },
+  "candidate3_ci_packaging_correction": {
+    "findings": ["BETA-ACCESS-CI-F01", "BETA-ACCESS-CI-F02"],
+    "escaped_ci_integration_findings": 2,
+    "change": "Removed only the three beta-access re-exports from the shared packages/neuvetra-database/src/index.ts. Dedicated beta consumers continue to import beta-access, beta-access-contract or beta-access-migrations directly. The native CI job explicitly installs PostgreSQL client17, publishes /usr/lib/postgresql/17/bin through GITHUB_PATH, and fails unless both pg_dump and pg_restore report major version17 before running the unchanged backup and restore rehearsal. No beta source was copied or mounted into the staging image.",
+    "base_commit": "ecb5b9d3",
+    "working_index_git_blob": "d06f64e9c7ae04b994472de56e45a91858513144",
+    "base_index_git_blob": "d06f64e9c7ae04b994472de56e45a91858513144",
+    "exact_base_match": true,
+    "shared_index_beta_imports": 0,
+    "direct_beta_import_matches": 13
+  },
+  "candidate4_ci_repository_correction": {
+    "finding": "CI-C3-F01",
+    "source_delta_from_candidate3": [".github/workflows/verify.yml"],
+    "change": "The client17 setup now reads VERSION_CODENAME from /etc/os-release, requires a nonempty value, downloads the official PGDG ACCC4CF8 key over HTTPS, binds that key with Signed-By in a codename-specific HTTPS PGDG source, refreshes Apt, installs postgresql-client-17, publishes the version17 bin directory through GITHUB_PATH, and retains explicit pg_dump17 and pg_restore17 version gates before the unchanged real native dump and restore.",
+    "official_key_url": "https://www.postgresql.org/media/keys/ACCC4CF8.asc",
+    "official_repository": "https://apt.postgresql.org/pub/repos/apt",
+    "runtime_source_bytes_unchanged_from_candidate3": true,
+    "local_package_install": false,
+    "native_rehearsal_replayed": false
   },
   "successful_native_rehearsal": {
     "command": "C:/Users/nimab/.bun/bin/bun.exe tools/beta-access/local-rehearsal.ts",
@@ -67,15 +127,23 @@
     "post_413_reconnected_403": true
   },
   "checks": [
-    { "name": "focused identity, server and listener lifecycle tests", "command": "bun test auth.test.ts server.test.ts listener.test.ts", "result": "pass", "tests": 6, "expectations": 28 },
-    { "name": "native HTTP and PostgreSQL integration", "command": "$env:M80_BETA_ACCESS_NATIVE='enabled'; bun test postgres.test.ts", "result": "pass", "tests": 1, "expectations": 3 },
-    { "name": "strict scoped TypeScript", "command": "bun x tsc --noEmit --strict --skipLibCheck [owned TypeScript files]", "result": "pass" },
+    { "name": "focused identity, server and listener lifecycle tests", "command": "bun test auth.test.ts server.test.ts listener.test.ts", "result": "preserved_candidate3_pass_not_rerun_for_workflow_only_change", "tests": 6, "expectations": 28 },
+    { "name": "native HTTP and PostgreSQL integration", "command": "$env:M80_BETA_ACCESS_NATIVE='enabled'; bun test postgres.test.ts", "result": "preserved_candidate2_pass_not_rerun_for_index_only_change", "tests": 1, "expectations": 3 },
+    { "name": "strict scoped TypeScript", "command": "bun x tsc --noEmit --strict --skipLibCheck [owned TypeScript files]", "result": "preserved_candidate3_pass_not_rerun_for_workflow_only_change" },
+    { "name": "shared index exact pre-access base", "command": "git hash-object index.ts; git rev-parse ecb5b9d3:index.ts; git diff --exit-code ecb5b9d3 -- index.ts", "result": "pass", "git_blob": "d06f64e9c7ae04b994472de56e45a91858513144" },
+    { "name": "dedicated beta import graph", "command": "rg direct beta imports and shared-index imports", "result": "pass", "shared_index_imports": 0, "direct_import_matches": 13 },
+    { "name": "shared index local import smoke", "command": "bun -e await import('./packages/neuvetra-database/src/index.ts')", "result": "pass" },
     { "name": "workflow YAML parse", "result": "pass" },
+    { "name": "official signed PGDG and PostgreSQL17 client selection gate", "command": "read VERSION_CODENAME; fetch official HTTPS key; configure Signed-By HTTPS PGDG source; install postgresql-client-17; add version17 bin to GITHUB_PATH; require pg_dump and pg_restore version17", "result": "static_configuration_pass_remote_execution_pending" },
     { "name": "scoped diff hygiene", "result": "pass" },
-    { "name": "workflow/run validation", "command": "python tools/agent_ops.py validate", "result": "pending_until_candidate2_snapshot" },
+    { "name": "Candidate4 UTF8 snapshot bytes", "command": "Python UTF8 read/write plus embedded text/hash/current byte verification for all18 files", "result": "pending_until_candidate4_snapshot" },
+    { "name": "workflow/run validation", "command": "python tools/agent_ops.py validate", "result": "pending_until_candidate4_snapshot" },
     { "name": "repository-wide check", "command": "bun run check", "result": "fail_preexisting_outside_scope", "detail": "FrontDesk database cannot resolve drizzle-orm/postgres-js, its migrator or pg-core; two downstream callback parameters are implicit any." }
   ],
   "preserved_failed_attempts": [
+    "Candidate3 independent review failed CI-C3-F01 because the GitHub runner build removes its temporary PGDG source and key, so apt availability of postgresql-client-17 was not established. Candidate4 configures the official signed source explicitly.",
+    "Candidate2 remote head 3331b62c8328b54c0b35f016d6078e2b5f4ce3ef failed Dedicated staging image and offline runtime smoke because the shared database index re-exported local beta modules absent from the staging image. This escaped packaging defect is preserved as BETA-ACCESS-CI-F01.",
+    "The same remote head reached the native backup and then failed because PostgreSQL server17.11 rejected pg_dump16.15 before restore. Candidate3 preserves the real restore and adds a fail-closed PostgreSQL17 pg_dump/pg_restore selection gate for BETA-ACCESS-CI-F02.",
     "Candidate1 independent review failed F01 because future operator-owner functions inherited PUBLIC EXECUTE and F02 because Bun.serve returned an unlogged listener400 after an application413.",
     "The first Candidate2 transport attempt added Connection: close to the application413 but Bun.serve 1.3.12 sent the header without closing the socket and the next request still received listener400.",
     "A bounded residual settlement made Bun.fetch reconnect correctly, but a raw Bun.serve socket still remained open. Root authorized the local node:http adapter rather than claiming the header alone closed the connection.",
@@ -84,14 +152,18 @@
     "Initial Candidate1 PostgreSQL/typecheck/bootstrap failures and every pre-freeze repair remain embedded in the immutable Candidate1 snapshot and first review."
   ],
   "independent_rereview_scope": [
+    "Verify Candidate4 source delta from frozen Candidate3 is only .github/workflows/verify.yml and all runtime, SQL, listener and index bytes remain unchanged.",
+    "Verify the workflow uses the runner's actual Ubuntu codename, official HTTPS PGDG key and Signed-By HTTPS source before installing client17, then proves both client major versions and completes the real dump and restore without a skip or weakened check.",
+    "Verify the Python-generated Candidate4 snapshot preserves exact UTF8 text and declared SHA256 for all18 embedded files, including local-rehearsal.ts.",
     "Challenge the split owner, default ACL, helper grants, restore ownership and exact legacy catalog parity from frozen Candidate2 bytes.",
     "Repeat exact2048, ASCII/multibyte/unfinished2049, 413 socket close and reconnect403 against the local node:http adapter.",
     "Complete the first review's still-pending ordered admission/revoke races, pool identity variations, Auth timeout/banned outcomes and search-path probes.",
     "No real provider Auth, hosted proxy/listener, distributed rate limit, hosted recovery, customer data, real invitation, released method or customer readiness is tested or claimed."
   ],
   "workflow": {
-    "ticket": "2cc281b1d0a54b47b53aa371dfa652e7",
-    "task_version": 2,
+    "ticket": "2677ff1a487b43c18f79ce478d83645f",
+    "task_version": 4,
+    "continuation_workflow": "M80-BETA-ACCESS-CI-EXTENSION-20260925",
     "dependency_versions": {},
     "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
     "reservation_usd": 10,
@@ -102,7 +174,10 @@
     "controller_owner": "/root"
   },
   "limits": [
-    "Candidate2 is author evidence pending independent security/reliability rereview and is not self-approved.",
+    "Candidate4 is author evidence pending independent packaging rereview and required remote checks; it is not self-approved.",
+    "Candidate3 failed independent review with CI-C3-F01; its snapshot, review and diagnosis remain preserved.",
+    "Candidate2 passed local author acceptance but escaped two remote CI integration findings; escaped_defects is recorded as 2 in the run record.",
+    "Candidate3 prefreeze draft 0964997693e3b27156ad534d5bb65f8dcbef1f9e1847d1246a7d495d10d6ffdc is retained as M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3-PREFREEZE1.json and predates the authorized client17 correction.",
     "Candidate2 prefreeze draft df281dca414bf4bc8a4035f3c74c24455c010a969846ddc84d96668a328cc1b5 is retained as M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2-PREFREEZE1.json and was not independently reviewed.",
     "Only new task-named runtime and beta-owner roles were created; existing roles/defaults and legacy object ACLs/owners were unchanged in the author parity projection.",
     "The retained task databases and roles were not deleted because deletion was outside authorization.",
