@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "workflow_id": "OFFLINE-DEMO-ONLY",
+  "max_workers": 2,
+  "budget_usd": "0.00",
+  "supported_evidence_roots": [
+    "output",
+    "evidence"
+  ],
+  "tasks": [
+    {
+      "id": "input-contract",
+      "owner": "demo-engineer-a",
+      "risk": "low",
+      "dependencies": [],
+      "allowed_paths": [
+        "output/input.txt",
+        "evidence/input-check.txt"
+      ],
+      "reservation_usd": "0.00",
+      "criteria": [
+        {
+          "id": "shape",
+          "description": "Independent reviewer checks the synthetic input contract",
+          "evidence_paths": [
+            "evidence/input-check.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "help-copy",
+      "owner": "demo-engineer-b",
+      "risk": "low",
+      "dependencies": [],
+      "allowed_paths": [
+        "output/help.txt",
+        "evidence/help-check.txt"
+      ],
+      "reservation_usd": "0.00",
+      "criteria": [
+        {
+          "id": "clarity",
+          "description": "Independent reviewer checks the synthetic help text",
+          "evidence_paths": [
+            "evidence/help-check.txt"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "integration",
+      "owner": "demo-integrator",
+      "risk": "medium",
+      "dependencies": [
+        "input-contract",
+        "help-copy"
+      ],
+      "allowed_paths": [
+        "output/integrated.txt",
+        "evidence/integration-check.txt"
+      ],
+      "reservation_usd": "0.00",
+      "criteria": [
+        {
+          "id": "combined",
+          "description": "Check the exact accepted upstream versions together",
+          "evidence_paths": [
+            "evidence/integration-check.txt"
+          ]
+        }
+      ]
+    }
+  ]
+}

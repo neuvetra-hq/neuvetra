@@ -1,0 +1,103 @@
+{
+  "scope": "Offline synthetic CLI demonstration; all review dispositions simulated, no agents/providers executed",
+  "initial": {
+    "tasks": [
+      {
+        "task_id": "help-copy",
+        "version": 1,
+        "ready": true,
+        "blockers": []
+      },
+      {
+        "task_id": "input-contract",
+        "version": 1,
+        "ready": true,
+        "blockers": []
+      },
+      {
+        "task_id": "integration",
+        "version": 1,
+        "ready": false,
+        "blockers": [
+          "dependency:help-copy:pending",
+          "dependency:input-contract:pending"
+        ]
+      }
+    ]
+  },
+  "first_accepted": {
+    "task_id": "input-contract",
+    "reviewed_version": 1,
+    "verdict": "accept",
+    "status": "accepted",
+    "correction_failures": 0
+  },
+  "rejected": {
+    "task_id": "help-copy",
+    "reviewed_version": 1,
+    "verdict": "reject",
+    "status": "correction_ready",
+    "correction_failures": 0
+  },
+  "after_rejection": {
+    "tasks": [
+      {
+        "task_id": "help-copy",
+        "version": 2,
+        "ready": true,
+        "blockers": []
+      },
+      {
+        "task_id": "input-contract",
+        "version": 1,
+        "ready": false,
+        "blockers": [
+          "state:accepted"
+        ]
+      },
+      {
+        "task_id": "integration",
+        "version": 1,
+        "ready": false,
+        "blockers": [
+          "dependency:help-copy:correction_ready"
+        ]
+      }
+    ]
+  },
+  "repair": {
+    "task_id": "help-copy",
+    "reviewed_version": 2,
+    "verdict": "accept",
+    "status": "accepted",
+    "correction_failures": 0
+  },
+  "after_repair": {
+    "tasks": [
+      {
+        "task_id": "help-copy",
+        "version": 2,
+        "ready": false,
+        "blockers": [
+          "state:accepted"
+        ]
+      },
+      {
+        "task_id": "input-contract",
+        "version": 1,
+        "ready": false,
+        "blockers": [
+          "state:accepted"
+        ]
+      },
+      {
+        "task_id": "integration",
+        "version": 1,
+        "ready": true,
+        "blockers": []
+      }
+    ]
+  },
+  "controller_sha256": "edb0e3779e14eec77ae72f5967f322519ba5afe3405d065c2a250affbaca056e",
+  "actual_build_cost_usd": null
+}

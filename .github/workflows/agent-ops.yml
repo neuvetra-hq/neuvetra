@@ -11,6 +11,8 @@ on:
       - 'operations/agent-improvement/**'
       - 'tools/agent_ops.py'
       - 'tools/test_agent_ops.py'
+      - 'tools/agent_workflow.py'
+      - 'tools/test_agent_workflow.py'
       - 'tools/feature_metrics.py'
       - 'tools/test_feature_metrics.py'
       - 'tools/build_model_pilot.py'
@@ -27,6 +29,8 @@ on:
       - 'operations/agent-improvement/**'
       - 'tools/agent_ops.py'
       - 'tools/test_agent_ops.py'
+      - 'tools/agent_workflow.py'
+      - 'tools/test_agent_workflow.py'
       - 'tools/feature_metrics.py'
       - 'tools/test_feature_metrics.py'
       - 'tools/build_model_pilot.py'
@@ -53,7 +57,10 @@ jobs:
         run: |
           python -B -m unittest discover -s tools -p test_feature_metrics.py -v
           python -B -m unittest discover -s tools -p test_build_model_pilot.py -v
-      - name: Validate current role records
+      - name: Challenge bounded workflow controller
+        # This controller never dispatches agents or contacts providers in CI.
+        run: python -B -m unittest discover -s tools -p test_agent_workflow.py -v
+      - name: Validate current role records and evidence
         run: python -B tools/agent_ops.py validate
       - name: Validate recorded feature and pilot evidence
         run: python -B tools/feature_metrics.py validate --registry operations/agent-improvement/build-feature-registry.json --feature-events operations/agent-improvement/build-feature-events-v1.jsonl --usage-events operations/agent-improvement/build-usage-events.jsonl --runs-dir operations/agent-improvement/runs
