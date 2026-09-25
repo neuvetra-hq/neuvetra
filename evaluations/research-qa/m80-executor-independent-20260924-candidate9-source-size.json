@@ -1,0 +1,20 @@
+{
+  "boundary": "Actual local native source shape and exact frozen C9 writer-size guard; all DB/transport/journal mocked",
+  "nativeBytes": 3224598,
+  "results": [
+    {
+      "large": false,
+      "sourceFixture": "Actual local inventory structure, applicationStateSha256 replaced only with synthetic plan binding; no inventory data exported",
+      "journalRecords": 3,
+      "mutations": 1,
+      "error": "Error: Authoritative observation remains pending; side effect was not retried."
+    },
+    {
+      "large": true,
+      "sourceFixture": "Actual local inventory structure, applicationStateSha256 replaced only with synthetic plan binding; no inventory data exported",
+      "journalRecords": 0,
+      "mutations": 0,
+      "error": "Error: Pre-migration source receipt exceeds the bounded restart loader."
+    }
+  ]
+}

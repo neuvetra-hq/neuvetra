@@ -1,0 +1,27 @@
+import {readFile} from 'node:fs/promises'
+import {resolve,dirname} from 'node:path'
+import {readMigrationManifest} from '../../packages/neuvetra-database/src/staging-migrations'
+import {check,exactKeys,hash,sha} from '../../.superpowers/m80-backup-core'
+import {helperPins} from '../../.superpowers/m80-backup-hosted-entry'
+const snapshotPath='operations/agent-improvement/snapshots/M80-STAGE-OBSERVE-20260924-CANDIDATE1.json',bytes=await readFile(snapshotPath),snapshot=JSON.parse(bytes.toString())
+check(sha(bytes)==='ee9ca46d56eb031b21c7fa66430739f3d439da4000b68f8efa86068d7204fbed','Snapshot changed');for(const a of snapshot.artifacts)check(sha(await readFile(a.path))===a.sha256&&sha(a.text)===a.sha256,'Source changed')
+const source=snapshot.artifacts.find((a:any)=>a.path==='.superpowers/m80-stage-observe.ts').text as string,code=source.slice(source.indexOf('export const ACCEPTED_BACKUP_HELPER'),source.indexOf('if (import.meta.main)')).replaceAll('export ','')
+const pins=await helperPins();check(pins.helperSha256==='429ac122e20aec4230300ef092d9534a7cd912ec39ee65d2c6e33f8b040faf07','Accepted109 closure changed')
+const manifest=await readMigrationManifest(),AsyncFunction=Object.getPrototypeOf(async()=>{}).constructor,results:any[]=[]
+async function exercise(name:string,options:any={},pass=false){
+ const events:string[]=[],schema=options.schema??22,input:any={operatorId:'/root',operatorDatabaseUrl:'synthetic-never-connected',schemaVersion:schema,outputPath:resolve('.superpowers/m80-stage-observation-qa-virtual.json'),...options.input}
+ const target={database:'postgres',actor:'postgres',readOnly:'on',...options.target},profile={projectRef:'icockcoguyadhryzydvl',profile:'neuvetra.private-synthetic-staging.v1',...options.profile}
+ const receipts=manifest.slice(0,schema).map(({name,sha256})=>({name,sha256}));if(options.corruptReceipt)receipts[0]!.sha256='0'.repeat(64)
+ const tx={exec:async(sql:string)=>{check(sql==='set transaction isolation level repeatable read read only','Unexpected mutating SQL');events.push('readonly')},query:async(sql:string)=>{check(sql.startsWith('select '),'Unexpected mutating SQL');return {rows:sql.includes('current_database() database')?[target]:sql.includes('staging_target')?[profile]:[{count:options.sessions??0}]}}}
+ let captured:any=null;const db={transaction:async(fn:any)=>fn(tx),close:async()=>{events.push('db-close')}}
+ const bindings={resolve,dirname,realpath:async(p:string)=>resolve(p),readMigrationManifest,check,exactKeys,hash,sha,helperPins:async()=>options.changedSource?{helperSha256:'0'.repeat(64)}:pins,connectOperator:async()=>{events.push('connect');return db},captureApplicationState:async()=>({migrationReceipts:receipts,applicationStateSha256:'a'.repeat(64),observedNonReceiptTables:['neuvetra.synthetic_qa']}),Bun:{file:()=>({exists:async()=>!!options.existing})},open:async(_path:string,flags:string,mode:number)=>{check(flags==='wx'&&mode===0o600,'Exclusive private mode required');events.push('open');return {writeFile:async(v:string)=>{events.push('write');captured=JSON.parse(v);if(options.failWrite)throw Error('injected write failure')},sync:async()=>{events.push('sync');if(options.failSync)throw Error('injected sync failure')},close:async()=>{events.push('file-close')}}}}
+ let error='';try{await new AsyncFunction(...Object.keys(bindings),new Bun.Transpiler({loader:'ts'}).transformSync(code)+';return runStageObserver('+JSON.stringify(input)+')')(...Object.values(bindings))}catch(e){error=String(e)}
+ check(Boolean(error)!==pass,'Unexpected result '+name+': '+error)
+ if(events.includes('connect'))check(events.includes('db-close'),'Connection leak')
+ if(events.includes('open'))check(events.indexOf('db-close')<events.indexOf('open')&&events.includes('file-close'),'Close/sync ordering invalid')
+ if(pass)check(captured.currentSchemaVersion===schema&&captured.currentMigrationReceiptCount===schema&&captured.acceptedBackupHelperSha256===pins.helperSha256,'Receipt changed')
+ results.push({name,passed:!error,error,events})
+}
+for(const schema of [21,22])await exercise('positive_'+schema,{schema},true)
+for(const [name,options] of Object.entries({wrong_actor:{input:{operatorId:'other'}},string_schema:{input:{schemaVersion:'22'}},wrong_schema:{input:{schemaVersion:23}},unknown_field:{input:{extra:true}},foreign_path:{input:{outputPath:resolve('evaluations/research-qa/foreign.json')}},wrong_name:{input:{outputPath:resolve('.superpowers/other.json')}},existing:{existing:true},changed_source:{changedSource:true},wrong_database:{target:{database:'foreign'}},wrong_db_actor:{target:{actor:'other'}},writable:{target:{readOnly:'off'}},wrong_project:{profile:{projectRef:'foreign'}},wrong_profile:{profile:{profile:'other'}},active_session:{sessions:1},string_zero:{sessions:'0'},boolean_zero:{sessions:false},corrupt_manifest_receipt:{corruptReceipt:true},write_failure:{failWrite:true},sync_failure:{failSync:true}}))await exercise(name,options)
+await Bun.write('evaluations/research-qa/m80-stage-observe-independent-20260924-controls.json',JSON.stringify({boundary:'Exact frozen functions, real accepted109 source/toolchain closure and migration manifest; synthetic DB/filesystem write bindings only; no credentials/network/DB',sourcePins:snapshot.artifacts.map((a:any)=>({path:a.path,sha256:a.sha256})),helperSha256:pins.helperSha256,results},null,2)+'\n');console.log(JSON.stringify({cases:results.length,positive:2,negative:results.length-2}))

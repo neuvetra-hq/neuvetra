@@ -1,0 +1,25 @@
+{
+  "boundary": "Actual accepted preparation C5 validator; synthetic typed inputs only; no hosted evidence claimed",
+  "results": [
+    {
+      "name": "baseline",
+      "accepted": true,
+      "error": ""
+    },
+    {
+      "name": "authentic_prestop_baseline_then_backup",
+      "accepted": false,
+      "error": "Error: Verified application-only schema-21 backup bound to the observed target is required."
+    },
+    {
+      "name": "authentic_prestop_baseline_then_rehearsal",
+      "accepted": false,
+      "error": "Error: Exact disposable schema-21 to schema-22 preservation rehearsal required."
+    },
+    {
+      "name": "actual_removed_target",
+      "accepted": false,
+      "error": "Error: Fresh exact schema-21 synthetic target observation and reviewed quiescence requirement required."
+    }
+  ]
+}

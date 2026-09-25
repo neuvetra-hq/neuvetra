@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "M80-STAGE-OBSERVE-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-STAGE-OBSERVE-QA-20260924-DELIVERABLE.json",
+      "sha256": "e589e691d068a3c0a9f94aba62b44fc5cfb60f0a8ceea39c301a47d7e4f0006a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "READONLY_TARGET",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-stage-observe-independent-20260924-controls.json"
+      ],
+      "reason": "Exact readonly target/source/manifest/session controls pass."
+    },
+    {
+      "id": "PRIVATE_RECEIPT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-stage-observe-independent-20260924-controls.json",
+        "evaluations/research-qa/m80-stage-observe-independent-20260924-bridge.json"
+      ],
+      "reason": "Contained exclusive synced receipt and generic refusal before credential child tested offline."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-stage-observe-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-STAGE-OBSERVE-QA-20260924-DELIVERABLE.json",
+        "sha256": "e589e691d068a3c0a9f94aba62b44fc5cfb60f0a8ceea39c301a47d7e4f0006a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent offline root-authored read-only stage collector QA. No credential/hosted/provider/Git action.",
+    "Bounded QA deliverable pending root acceptance; no hosted observation performed.",
+    "Root verified exact candidate and QA embedded/current bytes; accepted bounded read-only collector review. No hosted invocation."
+  ],
+  "source_artifacts": []
+}

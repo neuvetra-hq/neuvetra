@@ -1,0 +1,30 @@
+{
+  "coordinator": "/root",
+  "verdict": "accepted_provider_stop_transport_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-20260924-CANDIDATE2.json",
+    "sha256": "be5331af0b1926aa3a321af01041ed21f6bdb26df0bf786199585cfcc8071ae6"
+  },
+  "review": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-QA-20260924-DELIVERABLE.json",
+    "sha256": "99d882a1c2dabd31bc51a27adbf9541e5304ffdc0d84feb5656cad95754f0b27"
+  },
+  "checks": {
+    "author_tests_reproduced": 5,
+    "independent_tests": 4,
+    "independent_scenarios": {
+      "reviewer_and_source_closure": 40,
+      "identity_or_freshness": 8,
+      "actual_CI_fetch_rejection_before_intent": 5,
+      "sync_and_uncertainty": 6
+    }
+  },
+  "limitations": [
+    "No real credentials, exports, Git network, provider API or hosted actions performed by QA. Every external read/mutation is mocked; exact CLI/schema endpoint correctness retains root read-only source observation.",
+    "No actual stop gate, real intent or response created by QA. Synthetic tests run in isolated temporary directories and clean up.",
+    "This verdict approves only stop transport; backup/executor/recovery transport acceptance and fresh actual gate evidence remain mandatory. BackupCandidate1 is separately failed and cannot currently satisfy that prerequisite.",
+    "Exclusive file sync mechanism/order tested; no physical power-loss proof.",
+    "A source snapshot/review is trusted evidence, not cryptographic authentication of reviewer identity; root must supply actual accepted independent receipts."
+  ],
+  "no_hosted_action_performed": true
+}

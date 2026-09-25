@@ -1,0 +1,37 @@
+{
+  "task_id": "M80-BACKUP-REHEARSAL-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate2_receipt_integration",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE2.json",
+    "sha256": "41ea2b5b3bdc9d11a9b523bc6bc1af76537350dca2feeb77aacda3cab719e37c"
+  },
+  "material_findings_open": 1,
+  "findings": [
+    {
+      "id": "BACKUP-F05",
+      "severity": "high",
+      "summary": "Actual generated restore/preservation/migration receipts cannot jointly satisfy accepted preparation Candidate5 because completion timestamps differ.",
+      "evidence": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate2-timestamps.json",
+      "observed": "Restore and preservation 23:47:54.412Z; migration 23:47:57.327Z. Accepted C5 builder rejects actual original receipts. Exact comparisons show completion timestamp is the sole content difference. Normalized positive passes.",
+      "repair": "One common final completedAt, captured after every required restore/migration/runtime check, in all three receipts; preserve stage timings in journal if desired."
+    }
+  ],
+  "closed_prior_findings": [
+    "BACKUP-F01 full 109 source/toolchain closure verified",
+    "BACKUP-F02 exact named reviewer/verdict schema; 29 independent negatives refused",
+    "BACKUP-F03 concrete fresh archive/receipt to local-only restore path present; final native QA replay reserved for repaired candidate",
+    "BACKUP-F04 exact four-held field now emitted; accepted prep content matches aside from F05"
+  ],
+  "checks": {
+    "all110_artifacts_match": true,
+    "source_pin_count": 109,
+    "helper_sha256": "c88d2fb688c29cf70ec24e4c9652205c0cf9e3362e06cc92bd2ffff6e741f4d0",
+    "admission_cases": 30,
+    "session_cases": 4,
+    "receipt_positive": 1,
+    "receipt_negatives": 14,
+    "actual_generated_receipt_builder_rejection_reproduced": true
+  },
+  "boundary": "No hosted/provider/credential/DB action. Frozen private functions tested with synthetic bindings; source and external executable hashes read. Actual author private receipt bodies compared without exposing table inventory."
+}

@@ -1,0 +1,19 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_pre_migration_schema21_recovery_transport_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-RECOVERY21-20260924-CANDIDATE2.json",
+    "sha256": "ba5570895398ef7bb922ea22bad4e94a53a5d3cff7e3897310f45f18b15ad7a8"
+  },
+  "review": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-RECOVERY21-QA-20260924-DELIVERABLE.json",
+    "sha256": "1c2f07d6121e12a2027b328a8a44727a3bb35f608a078cf71ddafecff419c144"
+  },
+  "no_hosted_action_performed": true,
+  "limits": [
+    "Never after any M80 migration intent",
+    "Fresh independently reviewed actual database inspection required",
+    "One acknowledged deployment request does not establish availability",
+    "Original PowerShell5.1 failure preserved; exact PowerShell7 child capability tested"
+  ]
+}

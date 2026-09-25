@@ -1,0 +1,22 @@
+{
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "verdict": "fail_candidate1_supplement",
+  "findings": [
+    {
+      "id": "F01",
+      "extension": "A success observation10minutes before intent still becomes verified_success; post-intent chronology missing."
+    },
+    {
+      "id": "F03",
+      "extension": "Actual frozen seal CLI with virtual filesystem reads only plan/gate/output. Missing security-review receipt is never opened; intent stillsealed."
+    },
+    {
+      "id": "F04",
+      "severity": "medium",
+      "summary": "prepare CLI output prefix/suffix validation permits traversal outside required .superpowers directory.",
+      "reproduction": "Prefixed path .superpowers/m80-foundation-hosted-unused/../../evaluations/research-qa/...-ESCAPE.json accepted. Virtual filesystem captured resolved out-of-directory write.",
+      "fix": "Resolve/canonicalize and confine exact output directory/basename; reject traversal/backslash/absolute paths. Preserve exclusive write."
+    }
+  ],
+  "boundary": "Actual frozen CLI bodies transpiled with injected filesystem/clock/process; all output writes intercepted in memory. No real .superpowers journal writes, no hosted/network/DB actions. Evidence JSON alone written under ownedQA paths."
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-PROVIDER-STOP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_provider_stop_transport_only",
+  "helper_sha256": "a555f5d5dfcbb21ae3fe59cc3d4f6f6a803c37b85ab442e31177e329b317d62d",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-20260924-CANDIDATE2.json",
+    "sha256": "be5331af0b1926aa3a321af01041ed21f6bdb26df0bf786199585cfcc8071ae6"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-provider-stop.py",
+      "sha256": "a555f5d5dfcbb21ae3fe59cc3d4f6f6a803c37b85ab442e31177e329b317d62d"
+    },
+    {
+      "path": ".superpowers/m80-provider-stop-test.py",
+      "sha256": "a0a5f55425619f80103445b86645048a615e6a202a4adb6b129c21ab3651796b"
+    }
+  ],
+  "material_findings_open": 0,
+  "first_review": "fail",
+  "rework_cycles": 1,
+  "checks": {
+    "author_tests_reproduced": 5,
+    "independent_tests": 4,
+    "independent_scenarios": {
+      "reviewer_and_source_closure": 40,
+      "identity_or_freshness": 8,
+      "actual_CI_fetch_rejection_before_intent": 5,
+      "sync_and_uncertainty": 6
+    }
+  },
+  "conclusions": [
+    "Exact prior deployment904ac743/commit540c71d/imageff5fc867 and fixed project/service/environment required; other nonterminal deployment refuses.",
+    "Exact dispatched independent reviewer required for every receipt. Full source pin set must equal pinned snapshot artifact set, contain known entrypoint and match snapshot text/current raw bytes.",
+    "Authenticated GitHub PR and exact-head check-runs are freshly loaded before validation. Failed/pending/missing checks, changed PRhead or closedPR prevent query/intent despite locally saved green claims. No redirect accepted by API opener.",
+    "Real isolated query and intent files are written exclusively and synced before one mocked mutation; sync failure at either step prevents mutation.",
+    "Acknowledgment, timeout, malformed response and refusal all leave attempt closed against replay. Response never substitutes for authoritative quiescence observation."
+  ],
+  "limits": [
+    "No real credentials, exports, Git network, provider API or hosted actions performed by QA. Every external read/mutation is mocked; exact CLI/schema endpoint correctness retains root read-only source observation.",
+    "No actual stop gate, real intent or response created by QA. Synthetic tests run in isolated temporary directories and clean up.",
+    "This verdict approves only stop transport; backup/executor/recovery transport acceptance and fresh actual gate evidence remain mandatory. BackupCandidate1 is separately failed and cannot currently satisfy that prerequisite.",
+    "Exclusive file sync mechanism/order tested; no physical power-loss proof.",
+    "A source snapshot/review is trusted evidence, not cryptographic authentication of reviewer identity; root must supply actual accepted independent receipts."
+  ],
+  "failed_review_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-QA-20260924-FIRST-REVIEW.json",
+    "sha256": "fbde6a6208ecaccecd74e5e0b24b4941b01b3e3a4a3c5458d7ed64364f062105"
+  },
+  "observed_at": "2026-09-24T23:42:31.948450+00:00"
+}

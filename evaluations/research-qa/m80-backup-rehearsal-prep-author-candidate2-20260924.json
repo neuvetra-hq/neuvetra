@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BACKUP-REHEARSAL-PREP-20260924",
+  "candidate": 2,
+  "author": "/root/m80_setup_ui",
+  "observed_at": "2026-09-24T23:48:55.8848453Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "first_review": {
+    "verdict": "fail",
+    "preserved_candidate": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE1.json",
+    "preserved_candidate_sha256": "7561242ae3b26e7595d4afdcb4287f2d400721efb17385a639ee84cf25c44257",
+    "findings": [
+      "Hosted backup was intentionally unavailable because the accepted preparation candidate was not yet pinned.",
+      "Independent review validation searched recursively for hashes and a pass-like string instead of requiring an exact reviewer and verdict schema.",
+      "The helper aggregate covered only direct helper files and omitted imported implementation, migration, CA and dependency-lock inputs.",
+      "The migration rehearsal receipt omitted the exact four-held release-record assertion required by the accepted hosted-preparation contract.",
+      "There was no guarded fresh hosted encrypted archive and receipt to fresh local restore and schema22 rehearsal entrypoint.",
+      "The credential-bearing pg_dump child accepted a caller-selected executable path.",
+      "The documented Windows PowerShell bridge relied on ProcessStartInfo.ArgumentList without requiring the reviewed PowerShell 7 runtime."
+    ]
+  },
+  "accepted_preparation": {
+    "candidate_path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+    "candidate_sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe",
+    "review_bundle_path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+    "review_bundle_sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74",
+    "typed_review_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-review.json",
+    "typed_review_sha256": "7b6e6b638d36a118aa927eb74d1426410d02b584a27642e79cad610865e53468",
+    "reviewer": "/root/m80_foundation_runtime_qa",
+    "verdict": "pass_offline_preparation_and_synced_exclusive_writer_only"
+  },
+  "candidate_files": [
+    {
+      "path": ".superpowers/m80-backup-core.ts",
+      "sha256": "01e88cafc1eb9f1613589d09e3dcfc20ba7c45f93c5321959fdd72cf371aaa2f"
+    },
+    {
+      "path": ".superpowers/m80-backup-local-rehearsal.ts",
+      "sha256": "d4885d51faa37fbd790f0e3d839a13a5314dc164480e45c6881b8ce3c2b12c45"
+    },
+    {
+      "path": ".superpowers/m80-backup-hosted-entry.ts",
+      "sha256": "f63f7c6b645c6a0292b7b85db88793e7163874d9ea47f08d5c0fdcb43846ef8e"
+    },
+    {
+      "path": ".superpowers/m80-backup-private.ps1",
+      "sha256": "db31d442ab4458bfc5a16e723bac6505786552f074cc638bb0426b8ac24cb030"
+    },
+    {
+      "path": ".superpowers/m80-backup-seal.ps1",
+      "sha256": "85358f1512a092b885ac5db00bc3f4afb698cbbc38836aed9a73715fb3c55f23"
+    }
+  ],
+  "source_closure": {
+    "pin_count": 109,
+    "helper_sha256": "c88d2fb688c29cf70ec24e4c9652205c0cf9e3362e06cc92bd2ffff6e741f4d0",
+    "coverage": "Every recursively imported repository TypeScript implementation, the 22 migration files, package manifest, dependency lock, pinned CA, accepted preparation candidate and review bundle, five helper files, and the exact local toolchain pins.",
+    "toolchain": {
+      "pg_dump_sha256": "e856d19e6b73f351069d2d3d9f442e8c0371bebfc53c7e55b455adfc0b8ee14b",
+      "pg_restore_sha256": "c85a472c22c4eb657f76e70a87b55e2070474cd0042bcb87b50a787d085d950c",
+      "pwsh_sha256": "362a356ce7f0940ec74f73a8fc2c990a2cc24a38a11c90bbd8eca947110ad139",
+      "pwsh_version": "7.6.5"
+    }
+  },
+  "repairs": [
+    "The accepted Candidate5 preparation snapshot and exact typed independent review artifact are byte-pinned and structurally validated with the named reviewer and exact verdict.",
+    "Backup admission requires a separate fixed-path Candidate2 transport review with a closed schema, reviewer /root/m80_foundation_runtime_qa, verdict pass_m80_backup_transport_only, exact source snapshot and every frozen source pin.",
+    "The helper aggregate recursively binds imported local implementation plus dynamic migrations, dependency lock, CA, accepted preparation evidence and exact pg_dump, pg_restore and PowerShell binaries.",
+    "The credential-bearing backup validates the exact pg_dump real path and SHA before opening any database connection or child process.",
+    "Both PowerShell helpers require version 7 and verify the exact reviewed pwsh executable path and SHA. TypeScript invokes that exact binary.",
+    "The local restore path hardcodes and hashes the exact pg_restore binary and loopback-only PostgreSQL target; no restore-program or database target is caller-selectable.",
+    "The migration rehearsal receipt now includes releaseRecordsExactFourHeld true.",
+    "A closed restore-hosted stdin mode validates a fresh encrypted archive and exact backup receipt, restores only into a new local m80_backup_* database, and binds restore, preservation and migration receipts to sourceBackupReceiptSha256.",
+    "A distinct read-only preflight mode captures the exact schema21 application state, table inventory and existing synthetic company-manager memberships while reporting, rather than forbidding, active runtime sessions. The separate recovery/backup inspect mode still requires zero runtime sessions."
+  ],
+  "fresh_archive_restore_rehearsal": {
+    "boundary": "Local synthetic hosted-shape archive derived from the already verified schema21 snapshot. This is transport/rehearsal evidence only and is not a hosted backup claim.",
+    "source_backup_receipt_sha256": "1a55a0696c982a39d0b55b3258d41fbc93da4da09c41a372a3136e780b781327",
+    "result_path": ".superpowers/m80-backup-hosted-rehearsal-1790293672448/m80-backup-result.json",
+    "result_sha256": "324f36eabcbfa5c320e9f19fa7622278dfbd99a7b341c1904ee64c14123a227d",
+    "journal_sha256": "6efc5c3d439b55818f6dec484eeb1809fa3ac1c1a1d2eac0590af1356772524f",
+    "disposable_database": "m80_backup_foundation_1790293672448",
+    "all_connections_closed": true,
+    "derived_non_receipt_table_count": 120,
+    "observed_non_receipt_tables_sha256": "c1a014795e3e77f89c4d539605a579144d99e9bd3a3472f8b297fa4ddc5a580e",
+    "source_content_sha256": "109d018049cd8f04add0a7a0787f3bf72271f9674b27aad67baf288969250c64",
+    "restored_content_sha256": "109d018049cd8f04add0a7a0787f3bf72271f9674b27aad67baf288969250c64",
+    "source_metadata_sha256": "f16a2d7532e7fe46a83f29670668703bbb6f2e8690d4e45280150fdf1444c229",
+    "restored_metadata_sha256": "f16a2d7532e7fe46a83f29670668703bbb6f2e8690d4e45280150fdf1444c229",
+    "receipt_sha256": {
+      "restore": "c446bcb8b1a0485e3899302e73aaaa7ed0b16862bf6344e16941a63ebf9e9af0",
+      "preservation": "e75e50b132e9c1dc214a83e611455b7119a78eb0b3d892da935e35646d3e55ef",
+      "migration": "6233b9456c88a91afccf9721464e0bde32cd270b456c4337fe68af41590bc6d8"
+    },
+    "release_records_exact_four_held": true,
+    "forced_rls_verified": true,
+    "runtime_select_only_verified": true,
+    "runtime_direct_writes_denied": true,
+    "operator_admission_not_executed": true
+  },
+  "checks": [
+    {
+      "name": "focused TypeScript and Bun compilation",
+      "result": "pass"
+    },
+    {
+      "name": "accepted Candidate5 typed evidence binding",
+      "result": "pass"
+    },
+    {
+      "name": "separate pre-stop preflight and zero-session recovery inspection boundaries",
+      "result": "pass"
+    },
+    {
+      "name": "109-file source closure and three executable toolchain hashes",
+      "result": "pass"
+    },
+    {
+      "name": "fresh hosted-shape archive to fresh local restore and schema22 rehearsal",
+      "result": "pass"
+    },
+    {
+      "name": "tampered archive hash refused before decryption or database creation",
+      "result": "pass"
+    },
+    {
+      "name": "caller-selected credential child refused before database connection",
+      "result": "pass"
+    },
+    {
+      "name": "exact PowerShell 7 DPAPI seal and unseal round trip",
+      "result": "pass"
+    },
+    {
+      "name": "PowerShell helpers parse under exact PowerShell 7.6.5",
+      "result": "pass"
+    },
+    {
+      "name": "accepted synthetic UI preview continuity",
+      "result": "pass"
+    }
+  ],
+  "limitations": [
+    "No hosted database, provider, credential export, deployment, migration, admission, Git or network action was executed.",
+    "The positive fresh-archive restore test uses a local synthetic hosted-shape archive. A real hosted backup and its exact successor restore rehearsal remain required before any migration intent.",
+    "DPAPI is bound to the reviewed Windows user and machine context.",
+    "The Candidate2 transport review receipt does not exist yet. Until its exact bytes are provided in backup admission, hosted backup remains fail closed.",
+    "Public evidence contains hashes and synthetic metadata only; raw Auth UUIDs, exact table inventory, dump payload and credential material remain private."
+  ]
+}

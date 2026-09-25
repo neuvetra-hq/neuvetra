@@ -1,0 +1,31 @@
+{
+  "profile": "neuvetra.independent-security-review.v1",
+  "task_id": "M80-PROVIDER-RECOVERY21-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate1_recovery_transport",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-RECOVERY21-20260924-CANDIDATE1.json",
+    "sha256": "471b0d4243d5739916d39b658ecb1192bca98a13fc826ef8e67da5ba9989f002"
+  },
+  "findings": [
+    {
+      "id": "RECOVERY-F01",
+      "severity": "high",
+      "summary": "Recovery invokes Windows PowerShell 5.1, which lacks the bridge-required ProcessStartInfo.ArgumentList.",
+      "evidence": "Independent no-secret child capability check returned version 5.1.26100.9444 and argumentListAvailable=false. Bridge invocation cannot reach valid inspection.",
+      "required_repair": "Use exact available modern shell and test child capability without credentials."
+    }
+  ],
+  "validation": {
+    "all_three_frozen_source_hashes_match": true,
+    "author_tests_pass": 4,
+    "independent_tests_pass": 2,
+    "independent_gate_negative_cases": 9,
+    "independent_main_scenarios": 13,
+    "boundary": "Frozen real admission/main with synthetic review artifacts, isolated files and actual fsync; all external processes/provider observations mocked. Only shell capability probe used a real no-secret child."
+  },
+  "limits": [
+    "No credential, provider, hosted database, deployment or source release action.",
+    "Acknowledgement does not prove availability or readiness."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "actualBytePinsVerified": 11,
+  "contradictoryReceiptAccepted": true,
+  "planClaimedCurrentTableCount": 123,
+  "actualReceiptTableCount": 1,
+  "planClaimedPreservation": true,
+  "receiptPreservation": false,
+  "executionAuthorized": false
+}

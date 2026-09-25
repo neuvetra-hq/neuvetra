@@ -367,3 +367,22 @@ operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-PREVIEW-REPAIR1.jso
 operations/board-report.md -text whitespace=cr-at-eol
 operations/next-session.md -text whitespace=cr-at-eol
 operations/status.json -text whitespace=cr-at-eol
+# Preserve byte-pinned M80 hosted preparation review evidence.
+evaluations/research-qa/m80-hosted-prep-independent-20260924-chronology.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-controls.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-evidence-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-path-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-scalar-probes.ts -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE1.json -text whitespace=cr-at-eol
+# Preserve exact accepted supplemental review evidence.
+evaluations/research-qa/m80-coordinator-helpers-root-closure-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-executor-root-closure-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-publication-inventory-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-COORDINATOR-HELPERS-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-EXECUTOR-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json -text whitespace=cr-at-eol

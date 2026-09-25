@@ -1,0 +1,29 @@
+{
+  "boundary": "Frozen actual CLI with virtual filesystem/clock/process; no real intent or provider action",
+  "scenarios": [
+    {
+      "missing": "evaluations/research-qa/m80-hosted-preparation-deployment-security.json",
+      "readCount": 3,
+      "writeCount": 0,
+      "error": "Error: missing evidence C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m80-hosted-preparation-deployment-security.json"
+    },
+    {
+      "missing": ".superpowers/m80-foundation-hosted-migration-gate.json",
+      "readCount": 9,
+      "writeCount": 0,
+      "error": "Error: missing evidence C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\.superpowers\\m80-foundation-hosted-migration-gate.json"
+    },
+    {
+      "missing": ".superpowers/m80-foundation-hosted-admission-gate.json",
+      "readCount": 16,
+      "writeCount": 0,
+      "error": "Error: missing evidence C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\.superpowers\\m80-foundation-hosted-admission-gate.json"
+    },
+    {
+      "missing": null,
+      "readCount": 39,
+      "writeCount": 1,
+      "error": ""
+    }
+  ]
+}

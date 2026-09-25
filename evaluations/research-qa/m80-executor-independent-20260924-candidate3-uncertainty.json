@@ -1,0 +1,19 @@
+{
+  "boundary": "Exact frozen C3 executor; synthetic journals/transports/provider only; no DB/network",
+  "migration": {
+    "firstOutcome": "uncertain_do_not_retry",
+    "reconcileError": "Error: already exists",
+    "transports": 1,
+    "observations": 1,
+    "earlierReceiptsRetained": true
+  },
+  "deployment": {
+    "requestRefused": true,
+    "observationOutcome": "definitive_success",
+    "historicalSameCommitAccepted": true
+  },
+  "attribution": {
+    "deployment": "Author self-audit announced before independent reproduction",
+    "migration": "Independent continuation of root pending reconciliation concern; covers ordinary uncertainty not only process crash"
+  }
+}

@@ -40,12 +40,12 @@
     },
     {
       "id": "AC-04-independent-review-and-remote-image",
-      "status": "pending",
+      "status": "pass",
       "evidence": [
         "evaluations/research-qa/m80-ci-repair-independent-20260924.json",
-        "evaluations/research-qa/m80-ci-repair-root-closure-20260924.json"
+        "evaluations/research-qa/m80-setup-ci-success-20260924.json"
       ],
-      "reason": "Independent offline review passed; actual remote Linux image and exact-head CI remain pending."
+      "reason": "Separate offline QA passed and all six exact-head remote checks including actual Linux Docker build/runtime and native PostgreSQL passed at7f68f450."
     }
   ],
   "review": {
@@ -54,7 +54,8 @@
     "verdict": "pass",
     "evidence": [
       "evaluations/research-qa/m80-ci-repair-independent-20260924.json",
-      "evaluations/research-qa/m80-ci-repair-root-closure-20260924.json"
+      "evaluations/research-qa/m80-ci-repair-root-closure-20260924.json",
+      "evaluations/research-qa/m80-setup-ci-success-20260924.json"
     ],
     "reviewed_artifacts": [
       {
@@ -64,7 +65,7 @@
     ]
   },
   "outcome": {
-    "status": "in_progress",
+    "status": "complete",
     "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": 0,

@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BACKUP-REHEARSAL-PREP-20260924",
+  "author": "/root/m80_setup_ui",
+  "observed_at": "2026-09-24T23:30:34.1441191Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "scope": {
+    "source": "Read-only local private-synthetic schema 21 source; no source database writes, provider operations, hosted network, credential, ENV-export, Git or historical M78 journal operations.",
+    "restore": "One new disposable local database per attempt; failed clones are retained and never silently reused or dropped.",
+    "archive": "Application-only neuvetra schema dump plus the minimum referenced synthetic Auth UUID stubs and auth.uid definition needed for foreign keys and RLS. Provider Auth accounts, credentials, sessions, platform configuration, storage and provider-wide recovery are excluded.",
+    "hosted_boundary": "The fixed hosted inspection and backup transports are prepared but unexecuted. Backup is deliberately disabled until an independently accepted repaired preparation candidate SHA is configured and the exact helper candidate is re-reviewed."
+  },
+  "candidate": {
+    "files": [
+      {
+        "path": ".superpowers/m80-backup-core.ts",
+        "sha256": "c6c472a6bb6ab2100dbe5e65039711e99f2a10cd6dbaf891f4ce7fe52906274a"
+      },
+      {
+        "path": ".superpowers/m80-backup-local-rehearsal.ts",
+        "sha256": "d6fb012d814c69a2ad740f9c089f739f8593fa9e4ec32da80192bbc6eed2e40e"
+      },
+      {
+        "path": ".superpowers/m80-backup-hosted-entry.ts",
+        "sha256": "d95d4fb53e36e2f6697c6166dad51ea42144622ba2a1450347e93a04ce9e4149"
+      },
+      {
+        "path": ".superpowers/m80-backup-private.ps1",
+        "sha256": "258afb1a2ca603c1d0e04c3ee32e3db8b506047de7c5534b4cce151a3e390729"
+      },
+      {
+        "path": ".superpowers/m80-backup-seal.ps1",
+        "sha256": "85e6d57016980c9f7bdfebb5377a71bea1c4e7f4fdd20c92d6b92346f711ea09"
+      }
+    ],
+    "hosted_helper_sha256": "73a3069f31a3dc4fd2780894d8219a2e82e2020419206a253f013d7d153dbde3",
+    "hosted_entrypoint": ".superpowers/m80-backup-hosted-entry.ts",
+    "credential_bridge": ".superpowers/m80-backup-private.ps1",
+    "accepted_preparation_candidate_sha256": null
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "private_directory": ".superpowers/m80-backup-rehearsal-1790291950944",
+      "result": "failed_before_restore",
+      "failure": "The restricted child environment could not use Windows DPAPI. No encrypted archive or database was created.",
+      "journal_sha256": "ba43bf29eab2deeaa76f9a98198999332a66f4cd26927f37dac79ca8f3b6b978",
+      "silent_retry": false
+    },
+    {
+      "attempt": 2,
+      "private_directory": ".superpowers/m80-backup-rehearsal-1790292070930",
+      "result": "failed_after_fresh_restore",
+      "failure": "The first comparator treated PostgreSQL-generated internal foreign-key trigger names as stable identities. Restore correctly regenerated different OID-derived names. Content, receipts, ACL/RLS, schema ACL and other catalog projections matched. The comparator was narrowed to semantic constraint identity before a new attempt.",
+      "journal_sha256": "1f0c6a891454c9b9a9114db9c2c1c033cc5acaa6b17dbd11d38f1d309f96f65c",
+      "fresh_database_retained": true,
+      "silent_retry": false
+    },
+    {
+      "attempt": 3,
+      "private_directory": ".superpowers/m80-backup-rehearsal-1790292230124",
+      "result": "pass",
+      "result_sha256": "f784d05e2368878c54e9322224e6f155bdb9a0e89318460fbd05f555248b880f",
+      "journal_sha256": "a9ec8b0e9cfcbbd20ceaeb74ac2d717820cd9488aab18c1240df111144662650",
+      "database": "m80_backup_foundation_1790292230124",
+      "all_connections_closed": true
+    }
+  ],
+  "successful_rehearsal": {
+    "completed_at": "2026-09-24T23:23:58.370Z",
+    "source_schema_version": 21,
+    "target_schema_version": 22,
+    "derived_non_receipt_table_count": 120,
+    "source_application_state_sha256": "12bfd793aba2ae3332b141bbe36e7de7a213c3f3291f70ca4c7d6f3ee32b56dc",
+    "encrypted_archive_sha256": "d879f5321cf52a7b169714a61132a3ec598998e40dbcc1c8e3bd9ad1d25037d4",
+    "snapshot_sha256": "3a7e6928e32ac324b9bc1fe1c625eaab3470037406f98f17581d7c0a1cb4ccc4",
+    "custom_dump_sha256": "65560ae1ab58a5de70003261c1dd72879490590a34c4d01769052165a2b8734f",
+    "observed_non_receipt_tables_sha256": "c1a014795e3e77f89c4d539605a579144d99e9bd3a3472f8b297fa4ddc5a580e",
+    "source_content_sha256": "109d018049cd8f04add0a7a0787f3bf72271f9674b27aad67baf288969250c64",
+    "restored_content_sha256": "109d018049cd8f04add0a7a0787f3bf72271f9674b27aad67baf288969250c64",
+    "source_metadata_sha256": "f16a2d7532e7fe46a83f29670668703bbb6f2e8690d4e45280150fdf1444c229",
+    "restored_metadata_sha256": "f16a2d7532e7fe46a83f29670668703bbb6f2e8690d4e45280150fdf1444c229",
+    "old_content_exact": true,
+    "old_metadata_exact": true,
+    "source_database_unchanged": true,
+    "snapshot_tamper_rejected": true,
+    "archive_exclusive_and_durable": true,
+    "provider_recovery_excluded": true,
+    "receipt_sha256": {
+      "backup": "e23f494288a9540ec7a8f44912cf01ad2c72c25dadc84fb06bdc2fa2d9b91e6a",
+      "restore": "e4f47a77301765e3c73164c6e0ac5447dbbd4a51e91d531f34bf25fb77aa4e0b",
+      "preservation": "b96150971eca1fa8b8c5160b4f5b45a3ffa8250c9b8e1774f8901286874c536a",
+      "migration_rehearsal": "fcc0d9b6665738e22804fa2b3b08ad34c75f416fd602af809aa8e738c2c2e495"
+    },
+    "schema22": {
+      "migration_sha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35",
+      "new_table_row_counts": {
+        "scope1_beta_audit": 0,
+        "scope1_beta_fixture_admissions": 0,
+        "scope1_beta_release_records": 4,
+        "scope1_beta_requests": 0,
+        "scope1_beta_setup_heads": 0,
+        "scope1_beta_setup_versions": 0
+      },
+      "held_release_registry_exact": true,
+      "forced_rls_verified": true,
+      "runtime_select_only_verified": true,
+      "runtime_direct_writes_denied": true,
+      "operator_admission_not_executed": true
+    }
+  },
+  "hosted_transport": {
+    "inspection_profile": "neuvetra.m80.foundation-backup-source-inspection.v1",
+    "inspection_behavior": "Read-only exact-project/schema21/21-receipt observation with application-state hash, derived table inventory, zero active neuvetra_runtime client sessions and exact helper pins. Output is private and exclusive.",
+    "backup_admission_profile": "neuvetra.m80.foundation-backup-admission.v1",
+    "fixed_target": "The credential bridge accepts exactly one DATABASE_URL for the pinned private staging project, host, port, database and operator username; TLS uses the pinned repository CA with hostname verification.",
+    "stderr": "Captured privately and never emitted by the bridge.",
+    "current_state": "fail_closed_pending_accepted_preparation_candidate_and_independent_review"
+  },
+  "checks": [
+    {
+      "name": "local application backup, restore and schema22 rehearsal",
+      "result": "pass",
+      "detail": "A snapshot-consistent custom dump was encrypted to an exclusive durable DPAPI archive, restored into a new local database, compared exactly for old content and metadata, migrated to schema22 and verified against the bounded six-table delta and four held release rows."
+    },
+    {
+      "name": "source immutability",
+      "result": "pass",
+      "detail": "The source was opened read-only, recaptured after the rehearsal and matched the captured state exactly."
+    },
+    {
+      "name": "candidate type and syntax checks",
+      "result": "pass",
+      "detail": "The three TypeScript entry modules passed focused TypeScript checking; the hosted entry bundled for Bun; the PowerShell credential bridge parsed without syntax errors."
+    },
+    {
+      "name": "hosted entry boundary",
+      "result": "pass",
+      "detail": "Pins mode returned the exact four-file helper aggregate; malformed backup invocation refused. No hosted connection or provider action occurred."
+    },
+    {
+      "name": "preview continuity",
+      "result": "pass",
+      "detail": "The accepted synthetic UI preview continued returning HTTP 200 after the database rehearsal."
+    }
+  ],
+  "limitations": [
+    "This proves a local rehearsal using a private synthetic schema21 clone source. It does not prove a hosted backup, restore, migration, deployment stop or recovery.",
+    "DPAPI encryption is tied to the current Windows user and machine context; root must execute and retain the hosted archive under the intended recovery identity.",
+    "The current source happened to contain 120 non-receipt tables. The implementation derives and binds the exact sorted names; 120 is retained only as the typed informational historical reference.",
+    "The hosted backup entrypoint remains deliberately unusable until the repaired preparation candidate is independently accepted and its exact SHA is configured, followed by review of the resulting helper aggregate.",
+    "No raw referenced Auth UUIDs, table inventory, dump payload or credential material is included in this public report."
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BACKUP-REHEARSAL-PREP-20260924",
+  "candidate": 3,
+  "author": "/root/m80_setup_ui",
+  "observed_at": "2026-09-25T00:03:28.9030499Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "candidate2_review": {
+    "verdict": "fail",
+    "candidate_snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE2.json",
+      "sha256": "41ea2b5b3bdc9d11a9b523bc6bc1af76537350dca2feeb77aacda3cab719e37c"
+    },
+    "review": {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate2-review.json",
+      "sha256": "c2c0dcd245b7fa18510607a65496b9da6e1712c71352418d88ca4cd40a256c5f"
+    },
+    "review_snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-CANDIDATE2-REVIEW.json",
+      "sha256": "881b6b326d14059a78bea4dec7806948a8fed579d0272b832ec34bf8facb1f7c"
+    },
+    "only_open_finding": "BACKUP-F05: restore, preservation and migration receipts used different completion timestamps, while accepted preparation Candidate5 binds one rehearsal.completedAt across all three exact receipts."
+  },
+  "repair": {
+    "scope": "The Candidate2 transport, admission, source closure, toolchain, preflight, inspection, restore and schema22 verification logic is unchanged except for the required final completion time and successor review/snapshot paths.",
+    "behavior": "After restore, preservation, schema22, RLS/runtime, admission absence and connection-close checks finish, one canonical UTC completion time is assigned to the restore receipt, preservation receipt, migration rehearsal receipt and local result before exclusive durable writes.",
+    "successor_review_path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json",
+    "successor_snapshot_path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json"
+  },
+  "candidate_files": [
+    {
+      "path": ".superpowers/m80-backup-core.ts",
+      "sha256": "01e88cafc1eb9f1613589d09e3dcfc20ba7c45f93c5321959fdd72cf371aaa2f"
+    },
+    {
+      "path": ".superpowers/m80-backup-local-rehearsal.ts",
+      "sha256": "ecce35bd3f96e642511e6630db30618b65455a7f0468d24ae9f29af44aa9d4ee"
+    },
+    {
+      "path": ".superpowers/m80-backup-hosted-entry.ts",
+      "sha256": "35e88ebe4cbc9adb1fdec8ee83db45c33fb4658c6db4e1a8e2a8ea60adc1cb29"
+    },
+    {
+      "path": ".superpowers/m80-backup-private.ps1",
+      "sha256": "db31d442ab4458bfc5a16e723bac6505786552f074cc638bb0426b8ac24cb030"
+    },
+    {
+      "path": ".superpowers/m80-backup-seal.ps1",
+      "sha256": "85358f1512a092b885ac5db00bc3f4afb698cbbc38836aed9a73715fb3c55f23"
+    }
+  ],
+  "source_closure": {
+    "pin_count": 109,
+    "helper_sha256": "429ac122e20aec4230300ef092d9534a7cd912ec39ee65d2c6e33f8b040faf07",
+    "pg_dump_sha256": "e856d19e6b73f351069d2d3d9f442e8c0371bebfc53c7e55b455adfc0b8ee14b",
+    "pg_restore_sha256": "c85a472c22c4eb657f76e70a87b55e2070474cd0042bcb87b50a787d085d950c",
+    "pwsh_sha256": "362a356ce7f0940ec74f73a8fc2c990a2cc24a38a11c90bbd8eca947110ad139"
+  },
+  "actual_fresh_archive_rehearsal": {
+    "boundary": "Device-local synthetic hosted-shape encrypted archive and exact backup receipt; no hosted connection or credential was used.",
+    "source_backup_receipt_sha256": "1a55a0696c982a39d0b55b3258d41fbc93da4da09c41a372a3136e780b781327",
+    "result_path": ".superpowers/m80-backup-hosted-rehearsal-1790294408720/m80-backup-result.json",
+    "result_sha256": "557a59d8573883c11f549e70589d86f025aedd2d7a0fca1b2b3f75657cf2836c",
+    "journal_sha256": "d359fd4c713e124744b43ea4b529e7e983e629575bd8c9d68176e7add8ef1e8e",
+    "disposable_database": "m80_backup_foundation_1790294408720",
+    "common_completed_at": "2026-09-25T00:00:14.897Z",
+    "receipt_sha256": {
+      "restore": "b5e8988cc84bf513418eae1a632854c7a4c2ca8cf3bac14329203fe96f7f397a",
+      "preservation": "4a95ee018cc091aca22a9169967f2bc402eeb25d685b3ee81b2ffed5ec895785",
+      "migration": "d3cd95c3d89d536ad3e2d38b35dd88b83eca5d86224e45f26d01f6553119c6f4"
+    },
+    "all_three_receipt_completion_times_exact": true,
+    "all_connections_closed": true,
+    "old_content_exact": true,
+    "old_metadata_exact": true,
+    "release_records_exact_four_held": true,
+    "forced_rls_verified": true,
+    "runtime_select_only_verified": true,
+    "runtime_direct_writes_denied": true,
+    "operator_admission_not_executed": true
+  },
+  "checks": [
+    {
+      "name": "actual fresh encrypted archive restore through exact pinned PowerShell and pg_restore",
+      "result": "pass"
+    },
+    {
+      "name": "three exact receipts and result share one final completion time",
+      "result": "pass"
+    },
+    {
+      "name": "actual receipt objects through accepted preparation Candidate5 validator and semantic evidence checks",
+      "result": "pass"
+    },
+    {
+      "name": "focused TypeScript check and source closure recomputation",
+      "result": "pass"
+    }
+  ],
+  "limitations": [
+    "No hosted database, provider, credential export, deployment, migration, admission, Git or network action was executed.",
+    "A real hosted encrypted backup and its fresh local restore rehearsal remain required before any migration intent.",
+    "Candidate3 remains fail closed until the fixed Candidate3 independent review receipt exists and is pinned by backup admission.",
+    "Public evidence contains hashes and synthetic metadata only. Raw Auth UUIDs, exact table inventory, dump payload and credential material remain private."
+  ]
+}

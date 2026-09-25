@@ -1,0 +1,48 @@
+{
+  "profile": "neuvetra.independent-security-review.v1",
+  "task_id": "M80-PROVIDER-RECOVERY21-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_recovery_transport_only",
+  "helper_sha256": "098e4be279ba962d48f0cd5032003267a0317363882360e7f769b1447d416b89",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-PROVIDER-RECOVERY21-20260924-CANDIDATE2.json",
+    "sha256": "ba5570895398ef7bb922ea22bad4e94a53a5d3cff7e3897310f45f18b15ad7a8"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-provider-recover21.py",
+      "sha256": "098e4be279ba962d48f0cd5032003267a0317363882360e7f769b1447d416b89"
+    },
+    {
+      "path": ".superpowers/m80-provider-recover21-test.py",
+      "sha256": "e8585a89fced5f7737a54d309773b1c70af8ff458dfc1e8823fd0836a0c2951f"
+    },
+    {
+      "path": ".superpowers/m80-provider-stop.py",
+      "sha256": "a555f5d5dfcbb21ae3fe59cc3d4f6f6a803c37b85ab442e31177e329b317d62d"
+    }
+  ],
+  "materialFindingsOpen": 0,
+  "first_review": {
+    "verdict": "fail",
+    "path": "evaluations/research-qa/m80-provider-recovery21-independent-20260924-first-review.json",
+    "resolved_finding": "RECOVERY-F01"
+  },
+  "validation": {
+    "exact_all_source_pins_match": true,
+    "production_delta": "Exact installed modern PowerShell path replaces incompatible Windows PowerShell command. Stop dependency and all other recovery logic unchanged.",
+    "author_tests_pass": 5,
+    "independent_tests_pass": 2,
+    "independent_gate_negative_cases": 9,
+    "independent_main_scenarios": 13,
+    "real_child_capability": "Exact selected executable returned True for major version >=7 and non-null ProcessStartInfo.ArgumentList.",
+    "controls": "Actual frozen validate_gate and main executed with synthetic full source snapshots/reviews and real temporary files/fsync; nine gate negatives and thirteen main scenarios refuse wrong targets/stale state/changed transitive dependency/schema22/sessions/live deployment/autodeploy/migration marker/failed inspection/sync errors. Timeout, malformed and refused deployment replies retain no-replay marker. Two sync completions precede sole mocked mutation."
+  },
+  "limits": [
+    "Offline transport review only; no credentials, private bridge database inspection, provider mutation or actual recovery occurred.",
+    "Passing source review does not manufacture required backup review/gate or fresh schema21/quiescence observations. Those must exist and pass at execution.",
+    "A deployment acknowledgement is not readiness or availability verification.",
+    "SourceHelperPins inspection membership is a subset check; complete accepted source closure is independently rehashed by validate_gate before and after inspection.",
+    "Filesystem sync was exercised; no physical power-loss proof claimed."
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "candidate": "e312e20124a2a5e0977bb54bc15cf56234c1eba15fa53f82f81975fb931a05e1",
+  "results": [
+    {
+      "name": "valid migration positive control",
+      "accepted": true,
+      "value": {
+        "stage": "migration",
+        "status": "intent_sealed_not_executed",
+        "targetProjectRef": "abcdefghijklmnopqrst",
+        "actionIdentity": {
+          "migrationName": "0022_scope1_beta_foundation.sql",
+          "migrationSha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35",
+          "fromSchemaVersion": 21,
+          "toSchemaVersion": 22,
+          "expectedReceiptCount": 22
+        }
+      }
+    },
+    {
+      "name": "cross-project migration outcome authorizes foreign admission",
+      "accepted": true,
+      "value": {
+        "stage": "admission",
+        "status": "intent_sealed_not_executed",
+        "targetProjectRef": "zzzzzzzzzzzzzzzzzzzz",
+        "actionIdentity": {
+          "companyId": "80000000-0000-4000-8000-000000000101",
+          "managerUserId": "80000000-0000-4000-8000-000000000102",
+          "fixtureProfileId": "m80-synthetic-scope1-foundation-v1",
+          "fixtureVersion": 1,
+          "fixtureSha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1",
+          "expectedRows": 1
+        }
+      }
+    },
+    {
+      "name": "rehash plan with admission company inconsistent with observed company",
+      "accepted": true,
+      "value": {
+        "stage": "admission",
+        "status": "intent_sealed_not_executed",
+        "targetProjectRef": "abcdefghijklmnopqrst",
+        "actionIdentity": {
+          "companyId": "6c14905c-1c02-45cc-9de9-535aca767f9a",
+          "managerUserId": "80000000-0000-4000-8000-000000000102",
+          "fixtureProfileId": "m80-synthetic-scope1-foundation-v1",
+          "fixtureVersion": 1,
+          "fixtureSha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1",
+          "expectedRows": 1
+        }
+      }
+    },
+    {
+      "name": "rehash plan six duplicate check names",
+      "accepted": true,
+      "value": {
+        "stage": "migration",
+        "status": "intent_sealed_not_executed",
+        "targetProjectRef": "abcdefghijklmnopqrst",
+        "actionIdentity": {
+          "migrationName": "0022_scope1_beta_foundation.sql",
+          "migrationSha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35",
+          "fromSchemaVersion": 21,
+          "toSchemaVersion": 22,
+          "expectedReceiptCount": 22
+        }
+      }
+    },
+    {
+      "name": "rehash plan denies synthetic and preservation facts",
+      "accepted": true,
+      "value": {
+        "stage": "migration",
+        "status": "intent_sealed_not_executed",
+        "targetProjectRef": "abcdefghijklmnopqrst",
+        "actionIdentity": {
+          "migrationName": "0022_scope1_beta_foundation.sql",
+          "migrationSha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35",
+          "fromSchemaVersion": 21,
+          "toSchemaVersion": 22,
+          "expectedReceiptCount": 22
+        }
+      }
+    },
+    {
+      "name": "rehash plan deployment target inconsistent with observed target",
+      "accepted": true,
+      "value": {}
+    },
+    {
+      "name": "self-hashed fabricated success with no referenced intent",
+      "accepted": true,
+      "value": {
+        "stage": "admission",
+        "status": "intent_sealed_not_executed",
+        "targetProjectRef": "abcdefghijklmnopqrst",
+        "actionIdentity": {
+          "companyId": "80000000-0000-4000-8000-000000000101",
+          "managerUserId": "80000000-0000-4000-8000-000000000102",
+          "fixtureProfileId": "m80-synthetic-scope1-foundation-v1",
+          "fixtureVersion": 1,
+          "fixtureSha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1",
+          "expectedRows": 1
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "task_id": "M80-EXECUTOR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate7_integrated_lifecycle_and_preparation_order",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE7.json",
+    "sha256": "536de681d13ae4ca76225cd30379a5a52d69402f9afc06c563f437cd7b52b276"
+  },
+  "material_findings_open": 2,
+  "findings": [
+    {
+      "id": "EXECUTOR-F06",
+      "severity": "high",
+      "origin": "Root integration concern, independently reproduced through frozen private entry path in two actual Bun processes with synthetic DB/provider.",
+      "summary": "Read-only deployment reconciliation refuses legitimate runtime sessions after app startup.",
+      "evidence": "evaluations/research-qa/m80-executor-independent-20260924-process-c7-live-session-1790297589265/reconcile.json",
+      "reproduction": "Execute with zero runtime sessions persists exact acknowledgement and stops at BUILDING. New process with one runtime session refuses before provider observation; closes DB and performs no mutation.",
+      "repair": "Separate pre-mutation quiescence from read-only deployment completion; retain exact target/schema/ack/source checks and prohibit all reconciliation mutations."
+    },
+    {
+      "id": "EXECUTOR-F07",
+      "severity": "high",
+      "origin": "Root integrated sequence concern, independently reproduced using actual accepted C5 input validator.",
+      "summary": "Preparation requires a SUCCESS/ready target observation after backup/rehearsal although the reviewed operating sequence stops the app before backup.",
+      "evidence": "evaluations/research-qa/m80-executor-independent-20260924-candidate7-preparation-order.json",
+      "reproduction": "Baseline positive passes; backup or rehearsal one second after genuine pre-stop target observation refuses; actual REMOVED target also refuses.",
+      "repair": "Represent authentic pre-stop baseline separately from fresh stopped stage evidence, preserve exact state/identity and deterministic no-replay scope, and keep historical dependency bytes immutable. Never refresh a historical timestamp without a fresh observation."
+    }
+  ],
+  "repaired_prior_findings": [
+    "F01 acknowledgement required; historical same-commit deployment cannot complete ack-less attempt.",
+    "F02 pending observer failures reconcile through fresh process without replay; existing terminal unknown stays blocked.",
+    "F03 Execute compares schema22 current state with gate; committed admission reconcile does not demand pre-action state.",
+    "F04 acknowledgement must be within attempt/current reconciliation time.",
+    "F05 fresh and retained definitive success require exact acknowledgement ID and observation chronology."
+  ],
+  "checks": {
+    "author_tests": 16,
+    "author_assertions": 57,
+    "current_source_validation_reads": 125,
+    "distinct_artifact_paths": 123,
+    "nested_mutation_cases": 8,
+    "parser_cases": 7,
+    "ordinary_challenges": 18,
+    "source_size_cases": 2,
+    "persisted_binding_cases": 4,
+    "fresh_binding_cases": 4,
+    "prior_private_process_scenarios": 7,
+    "prior_private_processes": 12,
+    "bridge_refusals": 3,
+    "new_runtime_session_processes": 2,
+    "preparation_order_cases": 4
+  },
+  "source_pin_verification": [
+    {
+      "path": ".superpowers/m80-foundation-executor.ts",
+      "sha256": "083d3e93d82d1ab36b7907310df580cd9fa71c55d0573462bfa9e71f5b71301c",
+      "current_match": true
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor.test.ts",
+      "sha256": "667df0aa7d3599570a36e05344b07f4da12561966a1f6f1c14c9eb939710b711",
+      "current_match": true
+    },
+    {
+      "path": ".superpowers/m80-executor-private.ps1",
+      "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3",
+      "current_match": true
+    },
+    {
+      "path": "docs/research/m80-foundation-executor-preparation-20260924.md",
+      "sha256": "5004b6a16d6a21791a60d0a817ad5caae8f9c927b5f06ca07afa660dc2775675",
+      "current_match": true
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare.ts",
+      "sha256": "3b3d7a6785fa5cad30dabc20b93ed1d8947466dd9fb1eaae7782ca35d30968bb",
+      "current_match": true
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once.ts",
+      "sha256": "2fc7a23e263451c0734ff36e7c0418d40146abf38754bccc5a71a9018388fefc",
+      "current_match": true
+    },
+    {
+      "path": ".superpowers/m80-backup-core.ts",
+      "sha256": "01e88cafc1eb9f1613589d09e3dcfc20ba7c45f93c5321959fdd72cf371aaa2f",
+      "current_match": true
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+      "sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe",
+      "current_match": true
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+      "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "47b3f28d7af9bcd6b57cb71d9377ea5f735ab5647c592723306e13f2d6df6eeb",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "8541837f85d78aae412c507f3c40d9fa2ccfdf47b54ccf509f9a3811915ce326",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "c4fafae30771701cab3030d65443e6afae560cdce3742285ab14a2b4f3f58201",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71-validation.ts",
+      "sha256": "44add799b85939bc0825a0e1fe095e41104faea13796d5ee1b58227660b0b7ec",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80-validation.ts",
+      "sha256": "f2bb6546a71a8c52b0627f48809af2b76d21cb1b6085623fc0929123fe616919",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80-contract.ts",
+      "sha256": "da21a85786c9d692619c6055860239bde9683e34e86dc1ce01b879619d0e4321",
+      "current_match": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80-fixture.ts",
+      "sha256": "a5510624d56542bddf563f4a723f9ce99f9d27793155e7456369460dc4f18b30",
+      "current_match": true
+    },
+    {
+      "path": "tools/staging/m73-common.ts",
+      "sha256": "a47f8904fab503272173e3db8f39144f52d3b3d4eb14da03784349ac88466ab7",
+      "current_match": true
+    },
+    {
+      "path": "tools/staging/m78-inventory.ts",
+      "sha256": "ea93686812910082438bf8ecfd9ef8756dddd6048897d369a494e0fdd700f40a",
+      "current_match": true
+    }
+  ],
+  "limitations": [
+    "Actual private entry implementation extracted unchanged into injected DB/provider harness; real filesystem create-new/write/sync/close and separate processes exercised. No real database/provider/network/credential action.",
+    "Initial process-fixture clock error retained, corrected by shared controlled fixture clock; prior zero-session deployment fixture did not cover app-started sessions.",
+    "Prior transport-only reviews remain historical evidence, not proof of executable full workflow."
+  ]
+}

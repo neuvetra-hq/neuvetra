@@ -1,0 +1,25 @@
+{
+  "boundary": "Actual author-generated three private receipts loaded only for hashing/comparison; other preparation evidence synthetic; no DB/network/archive data read",
+  "normalizedPositive": true,
+  "rejection": "",
+  "checks": [
+    {
+      "name": "restore-receipt",
+      "sha256": "b5e8988cc84bf513418eae1a632854c7a4c2ca8cf3bac14329203fe96f7f397a",
+      "completedAt": "2026-09-25T00:00:14.897Z",
+      "onlyTimestampDiff": true
+    },
+    {
+      "name": "preservation-receipt",
+      "sha256": "4a95ee018cc091aca22a9169967f2bc402eeb25d685b3ee81b2ffed5ec895785",
+      "completedAt": "2026-09-25T00:00:14.897Z",
+      "onlyTimestampDiff": true
+    },
+    {
+      "name": "migration-rehearsal-receipt",
+      "sha256": "d3cd95c3d89d536ad3e2d38b35dd88b83eca5d86224e45f26d01f6553119c6f4",
+      "completedAt": "2026-09-25T00:00:14.897Z",
+      "onlyTimestampDiff": true
+    }
+  ]
+}

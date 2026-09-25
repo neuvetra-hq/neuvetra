@@ -1,0 +1,66 @@
+{
+  "task_id": "M80-EXECUTOR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_executor_transport_only",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
+    "sha256": "1e62195be433c6a5ed3cc5a68ab789845b093107a0e41ea4f37c324d0c5b1481"
+  },
+  "canonical_review": {
+    "path": "evaluations/research-qa/m80-executor-independent-20260924-candidate9-review.json",
+    "sha256": "b589b0ab127cb537c91f9c80e584382255a45cf537a1703104ee4df4f31174a2"
+  },
+  "material_findings_open": 0,
+  "finding_disposition": {
+    "F01": "Missing deployment acknowledgement cannot accept historical same-commit success.",
+    "F02": "Nonterminal observer uncertainty can complete through fresh-process observation, with no repeated mutation. Explicit terminal unknown remains blocked.",
+    "F03": "Admission/deployment Execute verifies current application-state gate hash before journaling/mutation.",
+    "F04": "Acknowledgement time bound by attempt/current verification.",
+    "F05": "Fresh and retained deployment success require exact acknowledged ID and observation chronology.",
+    "F06": "Read-only deployment reconciliation permits runtime sessions and changed content, retains exact schema22 target and ack/provider/readiness checks. Zero runtime sessions still required before every mutation.",
+    "F07": "Prep C6 versioned chronology accepted separately; v1 and BackupC3 closure retained.",
+    "F08": "Awaited private lifetime keeps database open through async stage completion and closes exactly once last on success/error."
+  },
+  "checks": {
+    "author_tests_reproduced": 19,
+    "author_assertions": 65,
+    "outer_current_pins": 23,
+    "distinct_artifact_paths": 159,
+    "source_reads_including_outer_snapshot_and_review": 161,
+    "nested_mutation_cases": 10,
+    "parser_boundary_duplicate_cases": 7,
+    "ordinary_challenges": 18,
+    "source_size_cases": 2,
+    "retained_binding_cases": 4,
+    "fresh_binding_cases": 4,
+    "private_entry_process_scenarios": 20,
+    "actual_separate_processes": 32,
+    "local_native_source_bytes": 3224598,
+    "source_snapshot_bytes": 3336487
+  },
+  "critical_process_evidence": "Exact frozen private entry and preflight/observer/lifetime functions extracted unchanged; injected DB/provider reject all use after close; real create-new filesystem writes await file sync/close. All mutations precede close; close is last exactly once for success, refusal, pending uncertainty and reconciliation. BUILDING then fresh-process SUCCESS uses retained acknowledgement with one active runtime session and different application hash; no content recapture and no repeated provider mutation.",
+  "source_copy_transformations": "Frozen executor copy changes only relative module paths and repository-root resolution for owned evaluation location; fixtures use a shared fixed test clock. Private entry slices are taken directly from frozen C9 snapshot at runtime.",
+  "evidence": [
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate9-loaders.json",
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate9-challenges.json",
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate9-source-size.json",
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate9-persisted-binding.json",
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate9-fresh-binding.json",
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate9-process.json"
+  ],
+  "retained_failures": [
+    "M80-EXECUTOR-QA-20260924-FIRST-REVIEW.json",
+    "M80-EXECUTOR-QA-20260924-CANDIDATE4-REVIEW.json",
+    "M80-EXECUTOR-QA-20260924-CANDIDATE5-REVIEW.json",
+    "M80-EXECUTOR-QA-20260924-CANDIDATE6-REVIEW.json",
+    "M80-EXECUTOR-QA-20260924-CANDIDATE7-REVIEW.json",
+    "M80-EXECUTOR-QA-20260924-CANDIDATE8-REVIEW.json"
+  ],
+  "limits": [
+    "Transport-only independent acceptance, not permission to stop, migrate, admit or deploy. Actual fresh stage gates and root acceptance remain required.",
+    "No hosted/provider/network/credential/real database/Git action performed by this review. DB/provider behavior injected; no real provider deployment or hosted mutation exercised.",
+    "Actual full local synthetic source receipt and delivered nested source bytes read; no raw source inventory published. Root separately reported actual hosted source size, not counted as independent execution.",
+    "File sync/order verified; no simulated hardware power-loss guarantee. Pins and typed receipts alone do not prove observation provenance.",
+    "Earlier mocked private lifecycle tests recorded but did not enforce closed connections; their gap and F08 failure are preserved. C9 enforces it throughout."
+  ]
+}

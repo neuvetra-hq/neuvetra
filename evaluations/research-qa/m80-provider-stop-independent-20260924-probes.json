@@ -1,0 +1,117 @@
+{
+  "candidate_sha256": "5ca69ee0744c54160b1d91e469703f5709ccdc51ea5bbcc5cc7bc54108ac3219",
+  "boundary": "Pure validate function with actual synthetic temporary pinned review files. No main/network/provider execution.",
+  "results": [
+    {
+      "case": "reviewer_shape",
+      "receipt": "independent_review",
+      "reviewer": null,
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "independent_review",
+      "reviewer": "",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "independent_review",
+      "reviewer": "fictional-unregistered-reviewer",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "independent_review",
+      "reviewer": "/root/m80_foundation_runtime",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "backup_transport_review",
+      "reviewer": null,
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "backup_transport_review",
+      "reviewer": "",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "backup_transport_review",
+      "reviewer": "fictional-unregistered-reviewer",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "backup_transport_review",
+      "reviewer": "/root/m80_foundation_runtime",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "executor_transport_review",
+      "reviewer": null,
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "executor_transport_review",
+      "reviewer": "",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "executor_transport_review",
+      "reviewer": "fictional-unregistered-reviewer",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "executor_transport_review",
+      "reviewer": "/root/m80_foundation_runtime",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "recovery_transport_review",
+      "reviewer": null,
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "recovery_transport_review",
+      "reviewer": "",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "recovery_transport_review",
+      "reviewer": "fictional-unregistered-reviewer",
+      "accepted": true
+    },
+    {
+      "case": "reviewer_shape",
+      "receipt": "recovery_transport_review",
+      "reviewer": "/root/m80_foundation_runtime",
+      "accepted": true
+    },
+    {
+      "case": "unrelated_single_source_pin",
+      "receipt": "backup_transport_review",
+      "accepted": true
+    },
+    {
+      "case": "unrelated_single_source_pin",
+      "receipt": "executor_transport_review",
+      "accepted": true
+    },
+    {
+      "case": "unrelated_single_source_pin",
+      "receipt": "recovery_transport_review",
+      "accepted": true
+    }
+  ]
+}

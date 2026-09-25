@@ -1,0 +1,50 @@
+{
+  "task_id": "M80-EXECUTOR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate8_database_lifetime",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE8.json",
+    "sha256": "28d73baec7a3058faed5cb4480feec0fa1a95713777647db4e79f6493ba8df9e"
+  },
+  "material_findings_open": 1,
+  "findings": [
+    {
+      "id": "EXECUTOR-F08",
+      "severity": "high",
+      "origin": "Independent QA private-process trace review; earlier mock recorded close without refusing later DB access.",
+      "summary": "Private entry returns a pending stage promise from try and closes its DB in finally before stage work finishes.",
+      "reproduction": "Both execute and reconcile close DB before asynchronous executor finishes source validation. With closed-connection enforcement, initial migration is refused after source and attempt journals; subsequent read-only reconcile also cannot observe because its connection was closed. Both yield pending.",
+      "evidence": [
+        "evaluations/research-qa/m80-executor-independent-20260924-process-c8-closed-1790299034297/execute.json",
+        "evaluations/research-qa/m80-executor-independent-20260924-process-c8-closed-1790299034297/reconcile.json"
+      ],
+      "repair": "Await execution/reconciliation promise within try before finally closes DB; verify close follows mutation, observer and durable completion on both success and error."
+    }
+  ],
+  "repaired": [
+    "F06 live-runtime-session read-only deployment reconciliation passes without application-content capture; pre-mutation zero sessions/current hash remain enforced.",
+    "F07 accepted additive Prep C6 preserves historical closure and truthful baseline/backup/rehearsal chronology.",
+    "Prior F01-F05 acknowledgement, uncertainty, state binding, retained success and chronology regressions pass."
+  ],
+  "checks": {
+    "author_tests": 18,
+    "author_assertions": 61,
+    "outer_pins_matched_at_start": 22,
+    "source_closure_paths": 140,
+    "source_reads_including_snapshot_and_review": 142,
+    "nested_mutation_cases": 10,
+    "parser_cases": 7,
+    "ordinary_challenges": 18,
+    "size_cases": 2,
+    "retained_binding_cases": 4,
+    "fresh_binding_cases": 4,
+    "unaffected_private_process_scenarios": 17,
+    "unaffected_private_processes": 29,
+    "closed_connection_failure_processes": 2
+  },
+  "limits": [
+    "Exact frozen private source extracted with injected synthetic DB/provider; actual filesystem journal write/sync/close and separate processes. No network/hosted/provider/credential/real DB action.",
+    "Unaffected lifecycle matrix recorded close but did not enforce use-after-close except focused F08 probe; it cannot establish DB lifetime correctness.",
+    "Initial process driver used wrong expected acknowledgement filename suffix; trace inspected, assertion corrected to exact deployment-ack.json, no production change."
+  ]
+}

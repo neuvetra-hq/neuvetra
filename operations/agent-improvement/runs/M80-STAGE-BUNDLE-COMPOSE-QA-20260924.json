@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "M80-STAGE-BUNDLE-COMPOSE-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-QA-20260924-DELIVERABLE.json",
+      "sha256": "90b5c71defb0893672f40b882ad3bbce99aa16aec267bc86756657e6a91b855a"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "OFFLINE_BUNDLE_COMPOSER",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-stage-bundle-compose-independent-20260924-review.json"
+      ],
+      "reason": "Exact source and21 independent cases pass bounded offline bundle validation; no actions or approvals invented."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-stage-bundle-compose-independent-20260924-review.json",
+      "evaluations/research-qa/m80-stage-bundle-compose-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-QA-20260924-DELIVERABLE.json",
+        "sha256": "90b5c71defb0893672f40b882ad3bbce99aa16aec267bc86756657e6a91b855a"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded optional offline stage bundle composer independent QA; root acceptance and actual stage evidence remain separate."
+  ],
+  "source_artifacts": []
+}

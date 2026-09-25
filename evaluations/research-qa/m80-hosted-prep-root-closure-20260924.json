@@ -1,0 +1,40 @@
+{
+  "profile": "neuvetra.m80.preparation-root-closure.v1",
+  "coordinator": "/root",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+    "sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe"
+  },
+  "independent_review": {
+    "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+    "sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74"
+  },
+  "verdict": "accepted_offline_preparation_and_synced_exclusive_writer_only",
+  "checks": {
+    "author_reproduced": {
+      "tests": 11,
+      "assertions": 51
+    },
+    "independent_narrow_recheck": {
+      "tests": 3,
+      "assertions": 28
+    },
+    "retained_candidate4_independent_regression": {
+      "tests": 10,
+      "assertions": 114,
+      "historical": true
+    }
+  },
+  "preserved_history": [
+    "Candidate1 failed F01-F04",
+    "Candidate2 repeated F01/F02",
+    "Candidate3 failed nested predecessor chronology",
+    "Candidate4 semantic pass with file-sync mechanism gap",
+    "Candidate5 closes file-sync mechanism gap"
+  ],
+  "limits": [
+    "No hosted transport execution authorized by this receipt",
+    "No provider stop, hosted backup, migration, admission or deployment performed",
+    "Hardware durability and customer readiness not proven"
+  ]
+}

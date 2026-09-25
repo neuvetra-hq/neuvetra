@@ -1,0 +1,26 @@
+import {readFile} from 'node:fs/promises'
+import {input,semanticEvidence} from './m80-hosted-prep-independent-20260924-candidate6-fixture'
+import {buildM80HostedPreparationPlan,m80ExpectedHostedEvidence,m80HostedCanonicalJson,m80HostedSha256} from '../../.superpowers/m80-foundation-hosted-prepare-v2'
+const root="C:/Users/nimab/.codex/worktrees/4441/Neuvetra/.superpowers/m80-backup-hosted-rehearsal-1790294868379/"
+const receipts=await Promise.all(['restore-receipt','preservation-receipt','migration-rehearsal-receipt'].map(async name=>{const bytes=await readFile(root+'m80-backup-'+name+'.json');return {name,bytes,body:JSON.parse(bytes.toString())}}))
+const [restore,preservation,migration]=receipts.map(r=>r.body)
+const value=input(),t=Date.parse(migration.completedAt),iso=(offset:number)=>new Date(t+offset).toISOString()
+value.observedTarget.observedAt=iso(60_000);value.publication.headObservedAt=iso(60_000);value.publication.checksObservedAt=iso(60_000);value.admission.verifiedAt=iso(60_000)
+value.backup.completedAt=iso(-60_000);value.backup.backupReceipt.sha256=restore.sourceBackupReceiptSha256
+value.rehearsal.completedAt=migration.completedAt;value.rehearsal.disposableDatabaseName=migration.disposableDatabaseName;value.rehearsal.sourceBackupReceiptSha256=restore.sourceBackupReceiptSha256
+value.observedTarget.observedNonReceiptTables=restore.observedNonReceiptTables;value.observedTarget.observedNonReceiptTableCount=restore.observedNonReceiptTableCount
+value.rehearsal.sourceObservedNonReceiptTableCount=restore.observedNonReceiptTableCount;value.rehearsal.sourceObservedNonReceiptTablesSha256=preservation.observedNonReceiptTablesSha256
+for(const key of ['sourceContentSha256','restoredContentSha256','sourceMetadataSha256','restoredMetadataSha256'] as const)value.rehearsal[key]=preservation[key]
+const actualBackupBytes=await readFile('.superpowers/m80-backup-simulated-hosted-receipt-1790293458612.json'),actualBackup=JSON.parse(actualBackupBytes.toString());for(const key of ['completedAt','sourceSchemaVersion','sourceApplicationStateSha256','applicationOnly','syntheticDataOnly','providerRecoveryExcluded','encryptedArchiveSha256','snapshotSha256','customDumpSha256']) (value.backup as any)[key]=actualBackup[key];value.observedTarget.projectRef=actualBackup.projectRef;value.observedTarget.applicationStateSha256=actualBackup.sourceApplicationStateSha256;value.backup.backupReceipt.sha256=m80HostedSha256(actualBackupBytes);
+value.publication.integrationAcceptance.sha256=m80HostedSha256(JSON.stringify(m80ExpectedHostedEvidence(value,'integration'),null,2)+'\n')
+value.observedTarget.observedAt=new Date(Date.parse(actualBackup.completedAt)-60_000).toISOString();
+const evidence=semanticEvidence(value),now=new Date(t+120_000)
+const options={now,verifyPin:async()=>{},loadJsonEvidence:async(p:{path:string})=>evidence.get(p.path)}
+await buildM80HostedPreparationPlan(value,options)
+const normalizedPositive=true; evidence.set(value.backup.backupReceipt.path,actualBackup)
+for(const [i,pin] of [value.rehearsal.restoreReceipt,value.rehearsal.preservationReceipt,value.rehearsal.migrationReceipt].entries())evidence.set(pin.path,receipts[i]!.body)
+let rejection='';try{await buildM80HostedPreparationPlan(value,options)}catch(error){rejection=String(error)}
+if(rejection)throw Error('Actual successor receipts rejected: '+rejection)
+const checks=receipts.map((r,i)=>{const expected=m80ExpectedHostedEvidence(value,(['restore','preservation','rehearsal'] as const)[i]!);return {name:r.name,sha256:m80HostedSha256(r.bytes),completedAt:r.body.completedAt,onlyTimestampDiff:m80HostedCanonicalJson({...r.body,completedAt:value.rehearsal.completedAt})===m80HostedCanonicalJson(expected)}})
+await Bun.write('evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-actual-receipts.json',JSON.stringify({boundary:'Actual independent native three receipts plus immutable actual backup receipt; other preparation evidence synthetic; exact Candidate6 v2 builder accepted all four; truthful chronology synthetic baseline one minute before actual backup; no additional DB/network action',normalizedPositive,rejection,checks},null,2)+'\n')
+console.log(JSON.stringify({normalizedPositive,rejection,checks}))

@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "id": "M80-HOSTED-PREP-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+      "sha256": "e7bfbe84e5298be18a427d2e16bd6d5e803e770fbc3c5637464bca7c00b3d436"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+      "sha256": "13a130d60811d20fcde85fd35d823441c71dfb21d09b16b1fced31b7565bc754"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+      "sha256": "79b364f655accb1672b31a104d9e2432a27a99ced5b169c5b641847ce6df33b6"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE2-REVIEW.json",
+      "sha256": "117236fa90ab8737e1f52c6d86beab0cd925a2fb29221f7512f6ad0eb8525e06"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE3-REVIEW.json",
+      "sha256": "f693745ef7c6acce8bd68db977383703d663951987110d5f4895daa3dec6e5c2"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-DELIVERABLE.json",
+      "sha256": "ead4e1335bf202227f18e57ae3c2070a41b987c1896c02883b8b0e11339c43c0"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-DURABILITY-SUPPLEMENT.json",
+      "sha256": "f631dcad9c385c0fddb2c2bd80adcde04a319e0ff3b0300f585c751adc20b80f"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+      "sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EVIDENCE_BINDING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-prep-independent-20260924.json"
+      ],
+      "reason": "Exact Candidate4 passed bounded offline evidence/journal recheck; final report scopes limitations."
+    },
+    {
+      "id": "STAGE_CHAIN",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-prep-independent-20260924.json"
+      ],
+      "reason": "Exact Candidate4 passed bounded offline evidence/journal recheck; final report scopes limitations."
+    },
+    {
+      "id": "DURABLE_JOURNAL",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-review.json"
+      ],
+      "reason": "Candidate5 explicit sync ordering, failures, retained marker and exclusive race checked independently; no hardware power-loss proof."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-hosted-prep-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+        "sha256": "e7bfbe84e5298be18a427d2e16bd6d5e803e770fbc3c5637464bca7c00b3d436"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+        "sha256": "13a130d60811d20fcde85fd35d823441c71dfb21d09b16b1fced31b7565bc754"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+        "sha256": "79b364f655accb1672b31a104d9e2432a27a99ced5b169c5b641847ce6df33b6"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE2-REVIEW.json",
+        "sha256": "117236fa90ab8737e1f52c6d86beab0cd925a2fb29221f7512f6ad0eb8525e06"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE3-REVIEW.json",
+        "sha256": "f693745ef7c6acce8bd68db977383703d663951987110d5f4895daa3dec6e5c2"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-DELIVERABLE.json",
+        "sha256": "ead4e1335bf202227f18e57ae3c2070a41b987c1896c02883b8b0e11339c43c0"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-DURABILITY-SUPPLEMENT.json",
+        "sha256": "f631dcad9c385c0fddb2c2bd80adcde04a319e0ff3b0300f585c751adc20b80f"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+        "sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 3,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent hosted-preparation offline validator/journal review; no prep authorship. Fresh reviewer spawn rejected runtime thread limit, root reused existing security reviewer. Requested Astra/high observed unknown. No hosted/network/DB/Git mutations. L01/L02/L05-L06.",
+    "FrozenCandidate1 original6tests26assertions reproduced. Novel4material findings preserved; independent existingcontrols1test23assertions pass. Candidate2 repair/recheck pending.",
+    "Candidate2 failed independent recheck; separate immutable review. Candidate3 pending; no hosted action.",
+    "Repeated candidate findings F01 (predecessor semantics/chronology) and F02 (list scalar coercion) recorded in Candidate2 review; no registered repeated lesson ID asserted.",
+    "Candidate3 repaired prior observed failures but fails nested historical admission gate chronology (F01-C3). Seven independent tests88assertions pass; third failed review retained.",
+    "Candidate4 independently passes10tests114assertions plus reproduced author10/47. Prior failures/repeated F01/F02 retained. Awaiting root acceptance; no hosted authority granted.",
+    "Separate durability supplement narrows offline acceptance: wx exclusive creation tested; no fsync/power-loss guarantee. Actual executor must provide separately reviewed synced pre-action journal. Root raised and QA confirmed before executable admission.",
+    "Candidate5 narrow synced-writer supplement passes3independent tests28assertions and author11/51. Supersedes unsynced execution limitation at mechanism level; no power-loss or live executor proof. Await root acceptance.",
+    "Root accepted the independent QA deliverable and exact frozen evidence. Product/helper acceptance remains limited to the stated offline transport/preparation scope; this closes no live operation."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924.json",
+      "sha256": "a2de84ea9ad33b9b7fafe36c3fe7d196b70e4ecae35a71bddfd53e3cf8e01945"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-fixture.ts",
+      "sha256": "ad48e4385022b84d5a9541fb18e627ecc439d8541b1fc07d9577eea9616b1944"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-frozen-prepare.ts",
+      "sha256": "98bad04e3b61711b9348badce50774946da0dd2ca6f6a56418668abc3b42f212"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-frozen-once.ts",
+      "sha256": "47150e21fdf8148ff9bc230528fc0adbe3523876acb4e275c933c71b5125736c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-controls.test.ts",
+      "sha256": "c8e9f837b0878eacc3ade481053d67c94e9488b88dd83141ad8f49d2f80894f7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-regression.test.ts",
+      "sha256": "161670639f9ed6843afbde6aa84065abb9ce9fabed053968976ef7fe2967820c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-receipts.test.ts",
+      "sha256": "5d979c731d7ab9031c9eb162f27ec6fe59d6aa3092f2ef5b74526b447c2e7bed"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-quiescence.test.ts",
+      "sha256": "925f2fab7803c5396786caa122d3aed7060c1c586f27fdc7bc37ff9f72fd2f37"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-nested.test.ts",
+      "sha256": "72c20ca23ddbbc5b3ad39a16f68fabac09718e673a60930074cfecc7545991d4"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-journal.test.ts",
+      "sha256": "bc6daeb003b82fe6fa692f22939062052fa18133ff5ca6832b107c7a9976f3b6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-cli.test.ts",
+      "sha256": "9b69d3bbc8d707df970a66fcec4f6969a3998fa5760211bad813431255b9ce4d"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate4-cli.json",
+      "sha256": "7a6ef04dc190c566848167c50428867832aa0da139bcfeeb678ac9a1b4283bb5"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-durability-boundary.json",
+      "sha256": "354260e8230d9b008435575e86d6d8e36299c8b6a23bddc551c8d7e026e88d93"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-review.json",
+      "sha256": "7b6e6b638d36a118aa927eb74d1426410d02b584a27642e79cad610865e53468"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-frozen-prepare.ts",
+      "sha256": "98bad04e3b61711b9348badce50774946da0dd2ca6f6a56418668abc3b42f212"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-frozen-once.ts",
+      "sha256": "e1620682d3d229831e330e475040a3dba34fb239a7cb56d9a73a705c2748d9f7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-writer.test.ts",
+      "sha256": "451a7d5599d2e6086e9070ca1a8f62ffef48e2271941c55e8f742be2ed325015"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-cli.test.ts",
+      "sha256": "ef106b72b44d6c2a01ba889cb7447df2993185a3dc8956a65239812975fee8b6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-cli.json",
+      "sha256": "7a6ef04dc190c566848167c50428867832aa0da139bcfeeb678ac9a1b4283bb5"
+    }
+  ]
+}

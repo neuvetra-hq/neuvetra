@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-24T22:50:20.731037+00:00",
+  "updated_at": "2026-09-25T01:49:14.731053+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -149,11 +149,11 @@
     "role_prompts_are_live_workers": false,
     "website_preview_state": "Live540c/904ac navigation verified September24, signed-in Scope1 first; schema21 unchanged. Synthetic-only and customer incomplete.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Accepted runtime/UI published8ab7e67; board approved local mock flow. CI exposed packaging and historical-schema fixture integration defects, now under repair with separate review. No hosted schema22 operations."
+    "last_session_work": "Board flow approved. Published 7f68f450 passed six checks. Live schema21 unchanged. Executor C9, preparation C6, coordinator helpers v2 and offline stage bundle composer passed independent bounded reviews and root exact-source acceptance. Root is freezing final public manifest for separate review and same-PR publication."
   },
   "session_handoff": {
-    "current": "Board approved local synthetic setup flow; published8ab7e67 has three passed and three failed CI checks. Exact CI repairs and independent review active. Live540c/schema21 unchanged; all methods held.",
-    "next": "Review and publish bounded CI packaging/fixture repairs to PR6, verify six exact-head checks, finish separate hosted-preparation security repairs and concrete live executor before fresh backup/restore/schema22 demonstration. Real-company gates remain.",
+    "current": "Board flow approved. Published 7f68f450 passed six checks. Live schema21 unchanged. Executor C9, preparation C6, coordinator helpers v2 and offline stage bundle composer passed independent bounded reviews and root exact-source acceptance. Root is freezing final public manifest for separate review and same-PR publication.",
+    "next": "Publish independently reviewed upgrade evidence to rolling PR6 and verify exact-head checks. Then stop the prior app once, take and rehearse a fresh hosted backup, review each actual stage, execute migration/admission/deployment once and demonstrate signed-in setup saving, correction and history. Methods held; full Scope1 and real-company beta incomplete.",
     "evidence": [
       "operations/next-session.md"
     ]
@@ -3416,7 +3416,7 @@
     }
   },
   "free_scope1_beta": {
-    "status": "local_setup_accepted_publication_pending",
+    "status": "setup_published_hosted_acceptance_pending",
     "target": "2-3 supported companies, free invited beta",
     "company_profiles": "not selected; early source and evidence eligibility screening required",
     "outreach_authorized": false,
@@ -3424,12 +3424,12 @@
     "independent_numerical_qa_required": true,
     "real_data_ready": false,
     "scope2_deferred": true,
-    "implementation": "Exact runtimeCandidate2 and UICandidate2 accepted locally after independent native, decoder and component lifecycle reviews plus root actual mock-browser recheck. Runtime2tests322assertions; integration8tests90assertions with544 malformed refusals and603 valid corrections. Failed first reviews retained. Publication and hosted schema22 acceptance remain pending; all methods held.",
+    "implementation": "Exact runtimeCandidate2 and UICandidate2 accepted locally after independent native, decoder and component lifecycle reviews plus root actual mock-browser recheck. Runtime2tests322assertions; integration8tests90assertions with544 malformed refusals and603 valid corrections. Failed first reviews retained. Persisted setup and reviewed CI repairs are published at 7f68f450 with six exact-head checks passed; hosted schema22 acceptance remains pending. All methods held.",
     "product_plan": "docs/research/scope1-free-beta-m80-plan-20260924.md",
     "technical_plan": "docs/research/scope1-free-beta-technical-20260924.md",
     "navigation_review": "evaluations/research-qa/m80-navigation-independent-20260924.json",
-    "publication_observation_receipt": ".superpowers/m80-final-publication.json when present",
-    "navigation_publication": "Navigation and pure foundation published at540c71dbea6057f35a8b44074a71ceb9cf6bd6c3; six checks passed and navigation deployed as904ac743 on schema21. Persisted setup remains unpublished.",
+    "publication_observation_receipt": "evaluations/research-qa/m80-setup-ci-success-20260924.json",
+    "navigation_publication": "Navigation and pure foundation published at540c71dbea6057f35a8b44074a71ceb9cf6bd6c3; six checks passed and navigation deployed as904ac743 on schema21. Persisted setup and CI repairs are published at 7f68f4509074f817e5b584c6f8bcb29d1d32392e with six checks passed, but are not yet deployed.",
     "foundation_review": "evaluations/research-qa/m80-foundation-contract-root-closure-20260924.json",
     "release_packet_review": "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json",
     "customer_ready": false,
@@ -3452,7 +3452,14 @@
     "navigation_board_feedback": "Board confirmed sign-in and instructed: Let us move on. Continue Scope1.",
     "runtime_review": "evaluations/research-qa/m80-foundation-runtime-root-closure-20260924.json",
     "setup_integration_review": "evaluations/research-qa/m80-setup-integration-root-closure-20260924.json",
-    "setup_browser_review": "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json"
+    "setup_browser_review": "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json",
+    "setup_publication": {
+      "head": "7f68f4509074f817e5b584c6f8bcb29d1d32392e",
+      "pr": 6,
+      "checks_passed": 6,
+      "evidence": "evaluations/research-qa/m80-setup-ci-success-20260924.json",
+      "hosted_acceptance": false
+    }
   },
   "session_pause": {
     "status": "resumed_by_board",
@@ -3468,16 +3475,9 @@
     "checkpoint_verified_files": 39
   },
   "current_product_execution": {
-    "observed_at": "2026-09-24T22:21:47.177122+00:00",
+    "observed_at": "2026-09-25T01:45:08.767829+00:00",
     "coordinator": "/root",
-    "active_workers": [
-      {
-        "task_id": "M80-SETUP-PUBLICATION-METADATA-QA-20260924",
-        "executor": "/root/m80_foundation_runtime_qa",
-        "scope": "Final exact publication metadata review; hosted-prep security review will follow separately",
-        "status": "dispatched_metadata_review"
-      }
-    ],
+    "active_workers": [],
     "completed_bounded_tasks": [
       "M80-FOUNDATION-CONTRACT-20260924",
       "M80-FOUNDATION-CONTRACT-QA-20260924",
@@ -3485,8 +3485,23 @@
       "M80-FOUNDATION-RUNTIME-20260924",
       "M80-FOUNDATION-RUNTIME-QA-20260924",
       "M80-SETUP-INTEGRATION-QA-20260924",
-      "M80-SETUP-UI-20260924"
+      "M80-SETUP-UI-20260924",
+      "M80-FOUNDATION-HOSTED-PREP-20260924",
+      "M80-HOSTED-PREP-QA-20260924",
+      "M80-PROVIDER-STOP-QA-20260924",
+      "M80-PROVIDER-RECOVERY21-QA-20260924",
+      "M80-BACKUP-REHEARSAL-PREP-20260924",
+      "M80-BACKUP-REHEARSAL-QA-20260924",
+      "M80-CI-REPAIR-QA-20260924",
+      "M80-STAGE-OBSERVE-QA-20260924",
+      "M80-HOSTED-PREP-C6-QA-20260924",
+      "M80-HOSTED-EXECUTOR-PREP-20260924",
+      "M80-EXECUTOR-QA-20260924",
+      "M80-HOSTED-PUBLICATION-PREP-20260924",
+      "M80-COORDINATOR-HELPERS-QA-20260924",
+      "M80-STAGE-BUNDLE-COMPOSE-20260924",
+      "M80-STAGE-BUNDLE-COMPOSE-QA-20260924"
     ],
-    "limits": "Dated handoff snapshot. Hosted preparation candidate exists but independent security review is pending; it is evidence-validation/journal tooling only and executes no live action. Fresh-reviewer spawn hit runtime thread limit; reuse independent existing reviewer after metadata review. No hosted foundation, real-company admission, source release or beta readiness."
+    "limits": "No provider stop, fresh hosted backup, migration22, fixture admission or setup deployment. Transport components accepted; final publication and actual hosted stage evidence remain pending. Four methods held; full Scope1 and real-company beta incomplete."
   }
 }

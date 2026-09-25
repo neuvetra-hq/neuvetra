@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "id": "M80-FOUNDATION-HOSTED-PREP-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_foundation_runtime",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE1.json",
+      "sha256": "e312e20124a2a5e0977bb54bc15cf56234c1eba15fa53f82f81975fb931a05e1"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE2.json",
+      "sha256": "3dd4e1b8ba6f84b176c7ec34823a4f40ea1886425af0a19a1cd94e2d7c11a82c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE3.json",
+      "sha256": "4819c802c75ecb639d6eb7966baaa9579d05a15c06668943b882380af0fb90d6"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE4.json",
+      "sha256": "96c98c56965fb31a39b1bc151b07f31c268a7cfa48b56fc172672a36c4c77af7"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+      "sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+      "sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-fresh-exact-preparation-gate",
+      "status": "pass",
+      "evidence": [
+        ".superpowers/m80-foundation-hosted-prepare.ts",
+        "docs/research/m80-foundation-hosted-preparation-20260924.md"
+      ],
+      "reason": "Candidate 5 requires byte-pinned and typed fresh schema-21/provider/application observations, actual hosted table names/count, exact final head and six checks, accepted runtime pins, an exact backup/restore/preservation rehearsal, and an existing synthetic company/manager observation. Exact scalar types and receipt bodies are validated. Missing real inputs remain unset and fail closed; every plan is unauthorized."
+    },
+    {
+      "id": "AC-02-once-only-stage-intent-and-uncertainty",
+      "status": "pass",
+      "evidence": [
+        ".superpowers/m80-foundation-hosted-once.ts",
+        "docs/research/m80-foundation-hosted-preparation-20260924.md"
+      ],
+      "reason": "Candidate 5 separates migration, admission and deployment, opens exact independent gate evidence, reconstructs complete same-plan/target predecessor chains, and reapplies gate, target-observation and intent chronology against each predecessor stage's own prerequisite outcome. It writes deterministic stage evidence with exclusive create, full write, explicit file sync and close before completion. It performs no hosted action."
+    },
+    {
+      "id": "AC-03-offline-adversarial-tests",
+      "status": "pass",
+      "evidence": [
+        ".superpowers/m80-foundation-hosted-preparation.test.ts"
+      ],
+      "reason": "Eleven focused offline tests with 51 assertions, targeted TypeScript and a two-entrypoint bundle check cover exact typed plans/receipts, scalar/path/deep-plan refusals, independent gate bytes, promoted-failure and nested predecessor-gate chronology challenges, uncertainty, deterministic locking, exclusive byte preservation and injected sync failure."
+    },
+    {
+      "id": "AC-04-independent-security-review",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+        "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-review.json"
+      ],
+      "reason": "Independent Candidate 5 review passed 3 tests and 28 assertions, retained Candidate 4's 10-test/114-assertion semantic regression, exercised every writer I/O failure phase, preserved a failed-sync marker, and proved one winner under a four-way exclusive-create race."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-first-review.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-first-supplement.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-first-probes.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-evidence-probes.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-path-probes.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-chronology.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-scalar-probes.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate2-review.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate2-probes.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate2-additional.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate3-nested-gate.json",
+      "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate5-review.json",
+      "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+      "evaluations/research-qa/m80-hosted-prep-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE1.json",
+        "sha256": "e312e20124a2a5e0977bb54bc15cf56234c1eba15fa53f82f81975fb931a05e1"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE2.json",
+        "sha256": "3dd4e1b8ba6f84b176c7ec34823a4f40ea1886425af0a19a1cd94e2d7c11a82c"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE3.json",
+        "sha256": "4819c802c75ecb639d6eb7966baaa9579d05a15c06668943b882380af0fb90d6"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE4.json",
+        "sha256": "96c98c56965fb31a39b1bc151b07f31c268a7cfa48b56fc172672a36c4c77af7"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+        "sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+        "sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 4,
+    "escaped_defects": null,
+    "repeated_findings": [
+      "L02"
+    ]
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 synthetic Scope 1 beta hosted migration preparation",
+  "applicable_lessons": [
+    "L01",
+    "L02",
+    "L04"
+  ],
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+      "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-root-closure-20260924.json",
+      "sha256": "953cdda7f40b808be09f05aef2bc1b8ac271136f980774bb07c9d20aaa79aac6"
+    }
+  ],
+  "notes": [
+    "Preparation only: no hosted, provider, network, database, Git or product mutation is authorized or performed.",
+    "Current hosted inputs remain intentionally unset; helpers must fail closed until fresh exact evidence and independent review exist.",
+    "Root is the sole eventual hosted executor.",
+    "Candidates 1, 2, 3 and 4 are immutable review evidence. Candidate 5 retains Candidate 4 semantics and adds explicit write, sync and close completion before reporting durable intent/outcome success. Independent Candidate 5 review passed; no hosted action was authorized or executed.",
+    "Root verified Candidate5 current bytes and exact independent deliverable. Candidate2 repeated F01 predecessor outcome semantics and F02 scalar/deep-plan validation, tracked under L02 semantic lineage. Candidate4 passed semantics only before new durability repair. Final pass applies only to offline preparation and synced exclusive writer."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "boundary": "Exact frozen private functions evaluated with synthetic virtual files; null pin changed only in isolated latent-gate probe; no DB/process/credential/network action.",
+  "results": [
+    {
+      "case": "failed_null_reviewer_with_unrelated_pass",
+      "enabledOnlyInIsolatedHarness": false,
+      "accepted": false,
+      "error": "Error: No independently accepted preparation candidate is configured."
+    },
+    {
+      "case": "failed_null_reviewer_with_unrelated_pass",
+      "enabledOnlyInIsolatedHarness": true,
+      "accepted": true
+    },
+    {
+      "case": "generated_rehearsal_receipt",
+      "accepted": false,
+      "missingHeldFlag": true,
+      "error": "Error: Evidence content contradicts hosted preparation input: evaluations/research-qa/m80-hosted-rehearsal.json"
+    },
+    {
+      "case": "closure",
+      "directImports": [
+        "node:fs/promises",
+        "node:path",
+        "../tools/staging/m73-common",
+        "./m80-backup-core"
+      ],
+      "pinDeclaration": "const HELPER_PATHS = [\n  \".superpowers/m80-backup-core.ts\",\n  \".superpowers/m80-backup-hosted-entry.ts\",\n  \".superpowers/m80-backup-private.ps1\",\n  \".superpowers/m80-backup-seal.ps1\",\n] as const\n",
+      "importedInventoryPinned": false,
+      "operatorPinned": false,
+      "freshHostedArchiveRestoreEntrypoint": false
+    }
+  ]
+}

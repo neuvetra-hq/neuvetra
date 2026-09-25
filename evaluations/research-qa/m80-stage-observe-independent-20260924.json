@@ -1,0 +1,44 @@
+{
+  "task_id": "M80-STAGE-OBSERVE-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_stage_readonly_collector_only",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-STAGE-OBSERVE-20260924-CANDIDATE1.json",
+    "sha256": "ee9ca46d56eb031b21c7fa66430739f3d439da4000b68f8efa86068d7204fbed"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-stage-observe.ts",
+      "sha256": "9efdb15760e025de37d397c13f91f24b4f70226ef36207d33de1c3b309e0ac98"
+    },
+    {
+      "path": ".superpowers/m80-stage-observe.test.ts",
+      "sha256": "64c20c3dd627fbafc5441cf992adfe8f008ddc0d6908ed6be473879cd03f0457"
+    },
+    {
+      "path": ".superpowers/m80-stage-observe-private.ps1",
+      "sha256": "ee5c06f0177ab9e6fb6f8bbb89b54ecd43080c3119a110315b37c066a45b73ee"
+    }
+  ],
+  "accepted_backup_helper_sha256": "429ac122e20aec4230300ef092d9534a7cd912ec39ee65d2c6e33f8b040faf07",
+  "material_findings_open": 0,
+  "checks": {
+    "author_tests": 2,
+    "author_assertions": 20,
+    "independent_cases": 21,
+    "actual_bridge_malformed_input_refusals": 3,
+    "all3_source_pins_match": true,
+    "actual_109_dependency_closure_and_three_binary_hashes_match": true
+  },
+  "conclusions": [
+    "Schema21/schema22 require exact migration receipts and fixed read-only postgres operator/project/profile.",
+    "Active runtime sessions, wrong scalar schema/count/target/source hash and output paths refuse.",
+    "Actual frozen run closes DB before receipt creation; exclusive0600 write then sync then close. Injected write/sync failures reject and close.",
+    "Bridge actual three malformed synthetic inputs emit only generic refusal, never create output; fixed target check precedes child start."
+  ],
+  "limits": [
+    "No real credential export, hosted/database/provider/network action. DB and receipt filesystem writes mocked; three bridge children use only owned malformed synthetic files.",
+    "Only database state/session observation; separate provider-stop observation and current stage gate review remain required.",
+    "No claim of full maintenance/deployment readiness."
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "boundary": "Synthetic offline evidence; real accepted v1 and frozen v2 builders/gate validators, no network/DB",
+  "results": [
+    {
+      "name": "baseline",
+      "accepted": true,
+      "error": ""
+    },
+    {
+      "name": "exact_15m_boundary",
+      "accepted": true,
+      "error": ""
+    },
+    {
+      "name": "15m_plus_1ms",
+      "accepted": false,
+      "error": "Error: Verified application-only schema-21 backup must follow and match the recent healthy pre-stop baseline."
+    },
+    {
+      "name": "backup_before_baseline",
+      "accepted": false,
+      "error": "Error: Verified application-only schema-21 backup must follow and match the recent healthy pre-stop baseline."
+    },
+    {
+      "name": "rehearsal_before_backup",
+      "accepted": false,
+      "error": "Error: Exact disposable schema-21 to schema-22 preservation rehearsal must follow the bound backup."
+    },
+    {
+      "name": "wrong_phase",
+      "accepted": false,
+      "error": "Error: A canonical historical healthy pre-stop baseline is required."
+    },
+    {
+      "name": "missing_phase",
+      "accepted": false,
+      "error": "Error: observedTarget must contain only its exact reviewed fields."
+    },
+    {
+      "name": "noncanonical_baseline",
+      "accepted": false,
+      "error": "Error: observedTarget.observedAt must be canonical ISO UTC."
+    },
+    {
+      "name": "stopped_baseline",
+      "accepted": false,
+      "error": "Error: Fresh exact schema-21 synthetic target observation and reviewed quiescence requirement required."
+    },
+    {
+      "name": "changed_backup_state",
+      "accepted": false,
+      "error": "Error: Verified application-only schema-21 backup must follow and match the recent healthy pre-stop baseline."
+    },
+    {
+      "name": "old_backup",
+      "accepted": false,
+      "error": "Error: backup.completedAt is stale or future-dated."
+    },
+    {
+      "name": "future_rehearsal",
+      "accepted": false,
+      "error": "Error: rehearsal.completedAt is stale or future-dated."
+    },
+    {
+      "name": "stale_publication",
+      "accepted": false,
+      "error": "Error: publication.headObservedAt is stale or future-dated."
+    },
+    {
+      "name": "stale_membership",
+      "accepted": false,
+      "error": "Error: admission.verifiedAt is stale or future-dated."
+    },
+    {
+      "name": "altered_target",
+      "accepted": false,
+      "error": "Error: Evidence content contradicts hosted preparation input: .superpowers/m80-foundation-hosted-target-observation.json"
+    },
+    {
+      "name": "altered_backup",
+      "accepted": false,
+      "error": "Error: Evidence content contradicts hosted preparation input: .superpowers/m80-foundation-hosted-backup-receipt.json"
+    },
+    {
+      "name": "altered_restore",
+      "accepted": false,
+      "error": "Error: Evidence content contradicts hosted preparation input: evaluations/research-qa/m80-hosted-restore.json"
+    },
+    {
+      "name": "altered_preservation",
+      "accepted": false,
+      "error": "Error: Evidence content contradicts hosted preparation input: evaluations/research-qa/m80-hosted-preservation.json"
+    },
+    {
+      "name": "altered_rehearsal",
+      "accepted": false,
+      "error": "Error: Evidence content contradicts hosted preparation input: evaluations/research-qa/m80-hosted-rehearsal.json"
+    },
+    {
+      "name": "gate_activeDeploymentCount",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    },
+    {
+      "name": "gate_originReadinessUnavailable",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    },
+    {
+      "name": "gate_noActiveApplicationWritesObserved",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    },
+    {
+      "name": "gate_currentApplicationStateSha256",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    },
+    {
+      "name": "gate_targetReobservedAt",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    },
+    {
+      "name": "gate_targetProjectRef",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    },
+    {
+      "name": "v1_v2_migration_paths",
+      "identical": true
+    },
+    {
+      "name": "v1_v2_admission_paths",
+      "identical": true
+    },
+    {
+      "name": "v1_v2_deployment_paths",
+      "identical": true
+    }
+  ]
+}

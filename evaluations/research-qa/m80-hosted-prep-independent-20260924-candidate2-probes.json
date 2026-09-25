@@ -1,0 +1,31 @@
+{
+  "candidate": "3dd4e1b8ba6f84b176c7ec34823a4f40ea1886425af0a19a1cd94e2d7c11a82c",
+  "results": [
+    {
+      "case": "promoted_unknown",
+      "original": "uncertain_do_not_retry",
+      "observation": {
+        "profile": "neuvetra.m80.foundation-hosted-outcome-observation.v1",
+        "observedAt": "2026-09-24T22:12:00.000Z",
+        "stage": "migration",
+        "transportOutcome": "unknown",
+        "authoritativeState": {}
+      },
+      "admitted": "intent_sealed_not_executed",
+      "stage": "admission"
+    },
+    {
+      "case": "promoted_definitive_failure",
+      "original": "verified_failure_do_not_retry",
+      "observation": {
+        "profile": "neuvetra.m80.foundation-hosted-outcome-observation.v1",
+        "observedAt": "2026-09-24T22:12:00.000Z",
+        "stage": "migration",
+        "transportOutcome": "definitive_failure",
+        "authoritativeState": {}
+      },
+      "admitted": "intent_sealed_not_executed",
+      "stage": "admission"
+    }
+  ]
+}

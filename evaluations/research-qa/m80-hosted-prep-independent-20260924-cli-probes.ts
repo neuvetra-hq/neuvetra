@@ -1,0 +1,15 @@
+import {readFile,writeFile} from 'node:fs/promises'
+import * as paths from 'node:path'
+import * as prep from './m80-hosted-prep-independent-20260924-frozen-prepare'
+import {input,gate,NOW} from './m80-hosted-prep-independent-20260924-fixture'
+import {parseM80Json} from '../../packages/neuvetra-database/src/m80-validation'
+const snapshot=JSON.parse(await readFile('operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE1.json','utf8'))
+const frozen=snapshot.files.find((x:any)=>x.path.endsWith('once.ts')).text
+const plan=await prep.buildM80HostedPreparationPlan(input(),{now:NOW}),planPath='evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-plan.json',planBytes=JSON.stringify(plan),planPin={path:planPath,sha256:prep.m80HostedSha256(planBytes)},review=gate(plan,planPin),gatePath='evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-gate.json'
+review.securityReview={path:'evaluations/research-qa/m80-hosted-prep-independent-20260924-NONEXISTENT-SECURITY.json',sha256:'7'.repeat(64)}
+const virtual=new Map<string,Buffer>([[paths.resolve(planPath),Buffer.from(planBytes)],[paths.resolve(gatePath),Buffer.from(JSON.stringify(review))]]),reads:string[]=[],writes:string[]=[],logs:any[]=[]
+const read=async(p:string)=>{reads.push(p);const value=virtual.get(p);if(!value)throw Error('Attempted missing evidence '+p);return value},write=async(p:string,data:string,opts:any)=>{if(opts?.flag!=='wx'||virtual.has(p))throw Error('Exclusive write refused');writes.push(p);virtual.set(p,Buffer.from(data))}
+const FakeDate=class extends Date{constructor(value?:any){super(value===undefined?NOW.getTime():value)}}
+const text=frozen.replace(/^import[\s\S]*?from ["'][^"']+["']\r?\n/gm,'').replace(/^export /gm,'').replaceAll('import.meta.dir',JSON.stringify(paths.resolve('.superpowers'))).replace('if (import.meta.main)','if (true)')
+const compiled=new Bun.Transpiler({loader:'ts'}).transformSync(text),bindings={...prep,readFile:read,writeFile:write,isAbsolute:paths.isAbsolute,relative:paths.relative,resolve:paths.resolve,parseM80Json,process:{argv:['bun','frozen-once','seal',planPath,gatePath,'migration','-','-']},console:{log:(x:any)=>logs.push(JSON.parse(x))},Date:FakeDate},AsyncFunction=Object.getPrototypeOf(async()=>{}).constructor
+await new AsyncFunction(...Object.keys(bindings),compiled)(...Object.values(bindings));const result={candidateSha256:'e312e20124a2a5e0977bb54bc15cf56234c1eba15fa53f82f81975fb931a05e1',boundary:'Frozen actual seal CLI body executed with virtual file system and fixed clock. All output writes intercepted; no actual journal/helper/network/provider/DB action.',reads:reads.map(p=>paths.relative(process.cwd(),p).replaceAll('\\','/')),writes:writes.map(p=>paths.relative(process.cwd(),p).replaceAll('\\','/')),logs,missingSecurityEvidenceOpened:reads.some(p=>p.includes('NONEXISTENT-SECURITY')),acceptedWithoutSecurityReviewBytes:writes.length===1};await writeFile('evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.json',JSON.stringify(result,null,2)+'\n');console.log(result)

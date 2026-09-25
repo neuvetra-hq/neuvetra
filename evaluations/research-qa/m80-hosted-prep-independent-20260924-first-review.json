@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate1_offline_preparation",
+  "candidate_sha256": "e312e20124a2a5e0977bb54bc15cf56234c1eba15fa53f82f81975fb931a05e1",
+  "author_suite_reproduced": {
+    "tests": 6,
+    "assertions": 26,
+    "passed": true
+  },
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "high",
+      "summary": "Prior outcome checks verify self-hash and stage but not originating intent, observation, scope, project or plan.",
+      "reproduction": "ProjectA migration success seals projectB admission; fabricated self-hashed success with nonexistent intent also seals admission.",
+      "fix": "Load/revalidate actual prior intent/outcome/observation byte chains against same plan, target, operation scope and exact stage/action identity."
+    },
+    {
+      "id": "F02",
+      "severity": "high",
+      "summary": "Sealing validates plan only shallowly; rehashed nested plan contradicts mandatory original input and actions.",
+      "reproduction": "Duplicate six check names, false synthetic-only/preservation flags, changed admitted company, mismatched deployment service/environment all accepted by plan/seal validators.",
+      "fix": "Closed deep plan validation and deterministic reconstruction of input, pins, actions, SQL and identities before sealing."
+    },
+    {
+      "id": "F03",
+      "severity": "high",
+      "summary": "Preparation verifies referenced file hashes without validating receipt semantics or deriving inventory counts.",
+      "reproduction": "All11 actual byte pins verified;8dynamic references point to real contradictory receipt with failed verdict,other project,schema99,count1,preservationfalse. Plan claims schema21,count123,preservationtrue.",
+      "fix": "Define typed receipt schemas, check exact target/head/backup/restore/preservation/admission bindings and derive table counts from actual receipt inventories."
+    }
+  ],
+  "limits": [
+    "All tests offline. No hosted/network/DB/Git mutation or execution gate for real target. Plan remains executionAuthorizedfalse; findings concern claimed evidence and downstream journal authorization.",
+    "Frozen helper copies preserve Candidate1 logic with import locations adjusted to QA-owned paths; no product/helper edits.",
+    "Additional gate-reference/output-path checks remain in progress.",
+    "Initial Bun hidden-directory filter matched no files; explicit ./ path reproduced6tests26assertions. In-progress ownrun initially lacked criteria, corrected before rootpublication; validator245passes."
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "task_id": "M80-COORDINATOR-HELPERS-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_composer_v2_and_readonly_observer_source_only",
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-compose-hosted-input-v2.py",
+      "sha256": "31b1b2e8b82efe67bfb38beaca8b930273e4fa9278a1a216f9a06d5e8de93254"
+    },
+    {
+      "path": ".superpowers/m80-provider-observe-readonly-v2.py",
+      "sha256": "d521e6290c8feeacb33536c5e17744e74480efae121f1ac9d14aac6f5f691374"
+    }
+  ],
+  "material_findings_open": 0,
+  "repaired_findings": {
+    "COORD-F01": "Composer now verifies immutable accepted integration/runtime closure hashes, verdicts, reviewer and referenced candidate/QA/browser pins. Derived acceptance remains explicitly local synthetic integration.",
+    "COORD-F02": "Source profiles, fixed schema/identity, required true verification flags, provider baseline, six unique check names/PR/freshness and publication manifest/head matching now validated. Independently reviewed actual stage input provenance remains required.",
+    "COORD-F03": "Observer now hashes accepted stop-helper raw bytes before executing its module, retaining post-load hash check."
+  },
+  "checks": {
+    "python_ast_parse": 2,
+    "independent_composer_cases": 25,
+    "mocked_main_generated_receipts": 6,
+    "actual_prep_c6_builder_accepts_composed_shapes": true,
+    "accepted_public_closure_pins_read_and_verified": true,
+    "original_three_helper_hashes_unchanged": true
+  },
+  "evidence": [
+    "evaluations/research-qa/m80-coordinator-helpers-independent-20260924-v2-checks.json",
+    "evaluations/research-qa/m80-coordinator-helpers-independent-20260924-v2-contract.json"
+  ],
+  "execution_boundary": "Exact composer functions and main exercised using synthetic source observations, mocked publication/owner authority, mocked Git and in-memory output writes. Actual accepted public closure bytes verified. No actual helper outputs, network, credentials, provider, database, Git command or live observation. Observer inspected statically only; not imported or executed.",
+  "publication_boundary": "No final inventory approval. Root explicitly retains separate independent exact-manifest review and execution-time manifest SHA verification. Publisher helper records checks pending; fresh exact-head CI remains required before maintenance.",
+  "provenance_boundary": "Composer validates receipt consistency and accepted historical release pins. It does not authenticate arbitrary input files; actual DB/provider/CI/owner/backup/restore source pins and provenance must be independently inspected at stage review. No mock fixture is a live receipt.",
+  "remaining_limits": [
+    "Final publication manifest and actual published receipt did not yet exist; their branches were exercised with synthetic in-memory fixtures.",
+    "Accepted integration evidence is local API/auth-stub and mock-browser acceptance, not real hosted setup acceptance.",
+    "DB input is the accepted BackupC3 preflight shape, not the later stage-observer receipt; source callers must supply the documented preflight.",
+    "Original failed composer and observer remain untouched and must not be used."
+  ]
+}

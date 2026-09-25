@@ -1,0 +1,36 @@
+{
+  "task_id": "M80-EXECUTOR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate6_persisted_deployment_identity",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE6.json",
+    "sha256": "0a1d01550940387accaf989acdafeb5e95d3cd72cb1a22baefce622c4b11cbaa"
+  },
+  "material_findings_open": 1,
+  "findings": [
+    {
+      "id": "EXECUTOR-F05",
+      "severity": "high",
+      "summary": "Retained deployment observation bypasses acknowledgement identity and chronology checks.",
+      "evidence": "evaluations/research-qa/m80-executor-independent-20260924-candidate6-persisted-binding.json",
+      "reproduction": "Exact positive control and three negatives all return verified_success without observing: foreign observation deployment ID versus valid acknowledgement; observation predating acknowledgement; missing acknowledgement.",
+      "repair": "Before accepting deployment definitive_success, require exact attempt-bound acknowledgement, same deployment ID and observation time at or after acknowledgement in both fresh and retained completion paths."
+    }
+  ],
+  "repaired_prior_findings": [
+    "C6 rejects future acknowledgements before observer; all12 acknowledgement field/time negatives pass.",
+    "Serialized source receipt over4MB refuses before journal/mutation; actual3.224MB source shape accepts."
+  ],
+  "checks": {
+    "author_tests": 15,
+    "author_assertions": 52,
+    "current_source_review_files": 125,
+    "nested_mutation_cases": 8,
+    "parser_cases": 7,
+    "ordinary_challenges": 18,
+    "source_size_cases": 2,
+    "persisted_binding_positive": 1,
+    "persisted_binding_failed_negatives": 3
+  },
+  "boundary": "Offline only; exact frozen source; actual source bytes read and synthetic injected transports/DB/journals. No hosted/provider/network/credential action."
+}

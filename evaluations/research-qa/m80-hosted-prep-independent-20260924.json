@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_offline_hosted_preparation_and_journal_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE4.json",
+    "sha256": "96c98c56965fb31a39b1bc151b07f31c268a7cfa48b56fc172672a36c4c77af7"
+  },
+  "files": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare.ts",
+      "sha256": "3b3d7a6785fa5cad30dabc20b93ed1d8947466dd9fb1eaae7782ca35d30968bb"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once.ts",
+      "sha256": "984fd7e2a2a6871870a61c322cb4f55271957e3a05dc54d1dffa4d0cf3264eee"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation.test.ts",
+      "sha256": "97fd5592e3ea049b9b7ff92bd0ce744e0d5508b8b09951d5072712faaba96297"
+    },
+    {
+      "path": "docs/research/m80-foundation-hosted-preparation-20260924.md",
+      "sha256": "239c3d6fe0811a1b74cee2c96fbb0cd6adad11f5d403f1745e2c88c0dd5d5bda"
+    }
+  ],
+  "material_findings_open": 0,
+  "first_review": "fail",
+  "rework_cycles": 3,
+  "checks": {
+    "author_reproduced": {
+      "tests": 10,
+      "assertions": 47
+    },
+    "independent": {
+      "tests": 10,
+      "assertions": 114
+    },
+    "combined": {
+      "tests": 20,
+      "assertions": 161
+    },
+    "actual_receipt_files": 8,
+    "actual_file_hashes_verified": 11,
+    "simulated_actual_cli_cases": 4,
+    "concurrent_exclusive_writers": 8
+  },
+  "conclusions": [
+    "All observed Candidate1-3 findings repaired. Every failed candidate and review retained separately.",
+    "Plans reconstruct exact facts/actions/pins; exact scalar types, table inventories and row counts are validated. Historical120 is separate from current count derived from unique sorted observed table names.",
+    "All eight typed receipt bodies are read and checked against facts. Actual filesystem challenge verifies eleven hashes; altered bytes refuse and rehashed contradictory preservation content still refuses.",
+    "Unknown and failed observations cannot become success through outcome rehashing. Full predecessor intent/gate/review/observation/outcome chains bind same plan/target/action and reconstruct outcome semantics.",
+    "Every successor and nested historic admission gate review, target observation and intent follow prerequisite outcome. Six novel earlier-time variants refuse; valid equality boundary succeeds.",
+    "Root-only operator and independent reviewer binding, exact publication checks, concrete stopped-provider state and held-only initial rows fail closed on challenged corruption.",
+    "Equivalent plans retain target/milestone/stage intent identity. Eight concurrent exclusive writes produce one winner; later overwrite refuses and bytes remain exact.",
+    "Actual frozen seal CLI with virtual IO loads both predecessor gates and their security receipts. Missing current review or either predecessor gate prevents output; valid chain writes once and repeated CLI refuses.",
+    "Runbook distinguishes accepted local mock/authstub integration from actual real-Auth postdeployment acceptance, with no circular prerequisite."
+  ],
+  "failed_reviews": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+      "sha256": "e7bfbe84e5298be18a427d2e16bd6d5e803e770fbc3c5637464bca7c00b3d436"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE2-REVIEW.json",
+      "sha256": "117236fa90ab8737e1f52c6d86beab0cd925a2fb29221f7512f6ad0eb8525e06"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE3-REVIEW.json",
+      "sha256": "f693745ef7c6acce8bd68db977383703d663951987110d5f4895daa3dec6e5c2"
+    }
+  ],
+  "limits": [
+    "Offline evidence validators and exclusive journals only; no hosted executor, backup, restore, migration, admission, deployment or provider stop executed/reviewed as ready here.",
+    "Hashes and typed receipt agreement do not authenticate collectors/reviewers or establish actual observed provider state. Root must supply independently reviewed fresh authoritative evidence.",
+    "Eight receipt fixtures and exclusive-write winner retained only beneath own synthetic QA sandbox. No real .superpowers intent/outcome created.",
+    "CLI filesystem/path-realpath/clock/process are injected; actual CLI body executed but no provider/network transport exists.",
+    "The accepted runtime snapshot remains historical with separately reviewed root test-only CI expectation supplement.",
+    "Observed model/effort, token usage and cost unknown. Requested registered Astra/high."
+  ],
+  "observed_at": "2026-09-24T23:24:00.134755+00:00"
+}

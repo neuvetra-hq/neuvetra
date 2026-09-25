@@ -1,0 +1,38 @@
+{
+  "profile": "neuvetra.m80.hosted-readonly-preflight.v1",
+  "operator": "/root",
+  "database_observed_at": "2026-09-25T00:11:53.578Z",
+  "provider_observed_at": "2026-09-25T00:12:35.323187+00:00",
+  "schema_version": 21,
+  "migration_receipts": 21,
+  "non_receipt_tables": 120,
+  "active_runtime_sessions": 1,
+  "existing_synthetic_managers": 3,
+  "application_state_sha256": "43e37ffcf227e3f33587b52f3918efc836755901edd545b7b271e3505edda990",
+  "helper_sha256": "429ac122e20aec4230300ef092d9534a7cd912ec39ee65d2c6e33f8b040faf07",
+  "database_receipt_sha256": "7854dbf55c870e566df5f17dc3d9d30ed0d084305a69570e714ea6ff19e1d664",
+  "provider_receipt_sha256": "ca7f13eb5d22f6b434470bf16c6234b040e56a95bc699a990a41d508955a4903",
+  "live_deployment": "904ac743-2e13-489b-b2a3-62163d297352",
+  "live_commit": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+  "readiness": {
+    "status": "ready",
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 21,
+    "legacyContainmentVerified": true
+  },
+  "automatic_deployments_enabled": false,
+  "read_only": true,
+  "provider_stop_performed": false,
+  "hosted_backup_performed": false,
+  "migration_performed": false,
+  "admission_performed": false,
+  "deployment_performed": false,
+  "attempts": [
+    "Restricted bridge attempt returned sanitized refusal; no output receipt existed.",
+    "Authorized elevated read-only bridge succeeded; no hosted mutation."
+  ],
+  "limits": [
+    "Private receipts retain existing synthetic identifiers; public record contains counts and hashes only.",
+    "This pre-stop observation does not prove later write quiescence or upgrade success."
+  ]
+}

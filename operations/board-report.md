@@ -1,3 +1,25 @@
+# September 24: approved setup flow; upgrade transport review passed
+
+The board approved company → locations → sources → evidence → blockers → history. Published PR6 head 7f68f450 passed all six checks. Independent executor Candidate9 review passed 32 actual process runs across 20 scenarios. Versioned preparation Candidate6 preserves truthful pre-stop baseline and backup chronology. All eight recorded executor findings are resolved; failed candidates remain preserved. Root verified current and embedded accepted source bytes. These are bounded transport reviews, not hosted execution acceptance.
+
+Live 540c/schema21 remains unchanged. No provider stop, fresh hosted backup, migration22, fixture admission or setup deployment has occurred. Next: finish and review the public evidence manifest, publish to rolling PR6, require six exact-head checks, then collect fresh actual baseline and stopped-stage evidence for the one-time upgrade. Each actual stage requires independent evidence review. Preserve every existing no-replay journal.
+
+The next demonstration is saving, correction and history through the signed-in live site. Four methods remain held; full Scope1 and real-company beta remain incomplete. Scope2 is deferred. Earlier sections are dated checkpoints.
+
+# September 24: approved setup flow; live upgrade review continues
+
+The board approved company → locations → sources → evidence → blockers → history. Published PR6 head 7f68f450 passed all six checks. Preparation C5, backup/restore C3, provider-stop C2, schema21 recovery C2 and the read-only stage collector C1 passed their bounded component reviews. Root verified the actual hosted schema21 preflight and the provided account's existing synthetic-company owner membership. The signed-in browser still shows corporate version 9, two entities, three facilities, ten sources and the unchanged synthetic candidate total.
+
+No provider stop, fresh hosted backup, migration22, fixture admission or setup deployment has occurred. Integrated sequencing review identified two remaining problems: deployment reconciliation wrongly requires zero application sessions after startup, and the preparation timestamps require a healthy running-app observation after a backup that requires stopping the app. Do not fabricate fresh provider observations from historical evidence. Repair and independently review these concrete integration boundaries before maintenance. Previous component passes do not establish end-to-end hosted readiness.
+
+The next demonstration is saving, correction and history through the signed-in live site. Four methods remain held; full Scope1 and real-company beta remain incomplete. Scope2 is deferred. Preserve all historical once-only journals. Earlier sections are dated checkpoints.
+
+# September 24: setup published with six checks; hosted preparation still under review
+
+Board approved the local synthetic company-to-history flow. PR6 head7f68f4509074f817e5b584c6f8bcb29d1d32392e passed all six checks at23:05:34UTC, including actual Linux image/runtime smoke and native PostgreSQL regression. First CI failures and independently reviewed packaging/fixture repairs remain recorded. Evidence: evaluations/research-qa/m80-setup-ci-success-20260924.json.
+
+Live540c/schema21 remains unchanged; no hosted backup, migration22, admission or setup deployment has occurred. Hosted-preparation Candidate2 failed independent predecessor-success/chronology and scalar-array checks; immutable failed evidence is preserved, Candidate3 repair and a separate injected executor preparation are active. Do not execute either unaccepted candidate. The app has no verified maintenance-mode switch: concrete write-quiescence and private transports still need review. Continue these bounded preparations, then fresh backup/restore and one-time staging migration/admission/deployment before the live walkthrough. All methods remain held; real-company beta and complete Scope1 remain incomplete. Scope2 deferred. These success/closure records are local follow-up evidence after7f68f450, pending the next reviewed publication.
+
 # September 24: setup flow approved; published CI integration repairs in review
 
 Board approved the demonstrated local synthetic setup flow. Accepted runtime/UI published to PR6 at8ab7e67b6a0c38db66d856e66f5b960df74525ea; three of six exact-head checks failed. Image packaging omitted new modules, closed M78 operator tests assumed schema21, and the current native test fixture rejected schema22. See evaluations/research-qa/m80-setup-first-ci-20260924.json. Root is repairing workflow/local fixture boundaries; the setup author owns the exact image allowlist fix, with separate independent review before publication. Historical operator guards and no-replay locks remain unchanged.

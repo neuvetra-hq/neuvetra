@@ -1,0 +1,23 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_backup_transport_and_local_restore_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+    "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+  },
+  "independent_review": {
+    "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-DELIVERABLE.json",
+    "sha256": "b4a552220cd529b01b9e86a474e0d73aa1827d697dd0563c3437b90813423fd0"
+  },
+  "canonical_review": {
+    "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json",
+    "sha256": "991317f91a9ec71f6ed862298224a1e131de7a93839483d09b22bf340d5f9196"
+  },
+  "no_hosted_action_performed": true,
+  "limits": [
+    "Actual hosted preflight/backup still required",
+    "No provider stop, migration, admission or deployment accepted by this receipt",
+    "First two failed candidates and restricted DPAPI attempt preserved",
+    "Application-only backup excludes provider Auth/infrastructure recovery"
+  ]
+}

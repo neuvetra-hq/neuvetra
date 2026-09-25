@@ -1,0 +1,213 @@
+{
+  "boundary": "Exact frozen functions, real accepted109 source/toolchain closure and migration manifest; synthetic DB/filesystem write bindings only; no credentials/network/DB",
+  "sourcePins": [
+    {
+      "path": ".superpowers/m80-stage-observe.ts",
+      "sha256": "9efdb15760e025de37d397c13f91f24b4f70226ef36207d33de1c3b309e0ac98"
+    },
+    {
+      "path": ".superpowers/m80-stage-observe.test.ts",
+      "sha256": "64c20c3dd627fbafc5441cf992adfe8f008ddc0d6908ed6be473879cd03f0457"
+    },
+    {
+      "path": ".superpowers/m80-stage-observe-private.ps1",
+      "sha256": "ee5c06f0177ab9e6fb6f8bbb89b54ecd43080c3119a110315b37c066a45b73ee"
+    }
+  ],
+  "helperSha256": "429ac122e20aec4230300ef092d9534a7cd912ec39ee65d2c6e33f8b040faf07",
+  "results": [
+    {
+      "name": "positive_21",
+      "passed": true,
+      "error": "",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close",
+        "open",
+        "write",
+        "sync",
+        "file-close"
+      ]
+    },
+    {
+      "name": "positive_22",
+      "passed": true,
+      "error": "",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close",
+        "open",
+        "write",
+        "sync",
+        "file-close"
+      ]
+    },
+    {
+      "name": "wrong_actor",
+      "passed": false,
+      "error": "Error: Exact root stage observer input required.",
+      "events": []
+    },
+    {
+      "name": "string_schema",
+      "passed": false,
+      "error": "Error: Exact root stage observer input required.",
+      "events": []
+    },
+    {
+      "name": "wrong_schema",
+      "passed": false,
+      "error": "Error: Exact root stage observer input required.",
+      "events": []
+    },
+    {
+      "name": "unknown_field",
+      "passed": false,
+      "error": "Error: Closed stage observer input required.",
+      "events": []
+    },
+    {
+      "name": "foreign_path",
+      "passed": false,
+      "error": "Error: Fixed private observation path required.",
+      "events": []
+    },
+    {
+      "name": "wrong_name",
+      "passed": false,
+      "error": "Error: Fixed private observation path required.",
+      "events": []
+    },
+    {
+      "name": "existing",
+      "passed": false,
+      "error": "Error: Existing observation refused.",
+      "events": []
+    },
+    {
+      "name": "changed_source",
+      "passed": false,
+      "error": "Error: Accepted complete backup source closure changed.",
+      "events": []
+    },
+    {
+      "name": "wrong_database",
+      "passed": false,
+      "error": "Error: Exact read-only operator target required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "wrong_db_actor",
+      "passed": false,
+      "error": "Error: Exact read-only operator target required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "writable",
+      "passed": false,
+      "error": "Error: Exact read-only operator target required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "wrong_project",
+      "passed": false,
+      "error": "Error: Fixed synthetic project required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "wrong_profile",
+      "passed": false,
+      "error": "Error: Fixed synthetic project required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "active_session",
+      "passed": false,
+      "error": "Error: Zero runtime sessions required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "string_zero",
+      "passed": false,
+      "error": "Error: Zero runtime sessions required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "boolean_zero",
+      "passed": false,
+      "error": "Error: Zero runtime sessions required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "corrupt_manifest_receipt",
+      "passed": false,
+      "error": "Error: Exact requested migration receipts required.",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close"
+      ]
+    },
+    {
+      "name": "write_failure",
+      "passed": false,
+      "error": "Error: injected write failure",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close",
+        "open",
+        "write",
+        "file-close"
+      ]
+    },
+    {
+      "name": "sync_failure",
+      "passed": false,
+      "error": "Error: injected sync failure",
+      "events": [
+        "connect",
+        "readonly",
+        "db-close",
+        "open",
+        "write",
+        "sync",
+        "file-close"
+      ]
+    }
+  ]
+}

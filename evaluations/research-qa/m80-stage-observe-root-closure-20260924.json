@@ -1,0 +1,25 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_readonly_stage_observation_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-STAGE-OBSERVE-20260924-CANDIDATE1.json",
+    "sha256": "ee9ca46d56eb031b21c7fa66430739f3d439da4000b68f8efa86068d7204fbed"
+  },
+  "review": {
+    "path": "operations/agent-improvement/snapshots/M80-STAGE-OBSERVE-QA-20260924-DELIVERABLE.json",
+    "sha256": "e589e691d068a3c0a9f94aba62b44fc5cfb60f0a8ceea39c301a47d7e4f0006a"
+  },
+  "current_artifact_hashes_verified": true,
+  "no_hosted_action_performed": true,
+  "checks": {
+    "author_tests": 2,
+    "author_assertions": 20,
+    "independent_cases": 21,
+    "actual_malformed_bridge_refusals": 3
+  },
+  "limits": [
+    "Database observation only; provider quiescence and each actual stage gate require separate evidence and independent review.",
+    "No real credential or hosted invocation in this collector acceptance.",
+    "Extra strict TypeScript probe exposed pre-existing accepted dependency optional-stdin typing; ordinary targeted type check passed."
+  ]
+}

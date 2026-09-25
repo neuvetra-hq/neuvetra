@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "id": "M80-EXECUTOR-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-FIRST-REVIEW.json",
+      "sha256": "b8bfa23b0b15c2cb73a5b2c0acd1e650f829c4d1c12b580fa6a6696c6994019a"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE4-REVIEW.json",
+      "sha256": "a36761a30c98a2d12f6aa3736e6b2f9b6b7828b567981f081e3618123bf24a22"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE5-REVIEW.json",
+      "sha256": "b54b26303707f58bb72590ef6c7f1bb5715dcf24432ef7fa9ca9d9ab14a6810c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE6-REVIEW.json",
+      "sha256": "b479349fec91abda16c8746bd214c060df937de3b81aa89653a52b8b69a8b8ba"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE7-REVIEW.json",
+      "sha256": "d6423be184321298ba2e4ed7fc02c338b9a23f048e0dca547db120720fc6391e"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE8-REVIEW.json",
+      "sha256": "1c265f55432b8814595be79c82368b9a96d52c8ca0f9c25c6572a5741a079cb6"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE9-DELIVERABLE.json",
+      "sha256": "b697abf1fb197aa977879335dd87842ccf751b7fd2724fdbfd82546010d391c4"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXECUTOR_IDENTITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-executor-independent-20260924-candidate9-loaders.json",
+        "evaluations/research-qa/m80-executor-independent-20260924-candidate9-canonical.json"
+      ],
+      "reason": "Exact C9 outer23-source and nested current/historical closure accepted; canonical independent transport review consumed by actual frozen validator."
+    },
+    {
+      "id": "EXECUTOR_UNCERTAINTY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-executor-independent-20260924-candidate9-report.json",
+        "evaluations/research-qa/m80-executor-independent-20260924-candidate9-process.json"
+      ],
+      "reason": "F01-F08 repaired; private lifetime, durable acknowledgement, live-session observer reconciliation, uncertainty/no-replay and prior negatives pass. Transport-only, no actual live action."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-executor-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-FIRST-REVIEW.json",
+        "sha256": "b8bfa23b0b15c2cb73a5b2c0acd1e650f829c4d1c12b580fa6a6696c6994019a"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE4-REVIEW.json",
+        "sha256": "a36761a30c98a2d12f6aa3736e6b2f9b6b7828b567981f081e3618123bf24a22"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE5-REVIEW.json",
+        "sha256": "b54b26303707f58bb72590ef6c7f1bb5715dcf24432ef7fa9ca9d9ab14a6810c"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE6-REVIEW.json",
+        "sha256": "b479349fec91abda16c8746bd214c060df937de3b81aa89653a52b8b69a8b8ba"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE7-REVIEW.json",
+        "sha256": "d6423be184321298ba2e4ed7fc02c338b9a23f048e0dca547db120720fc6391e"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE8-REVIEW.json",
+        "sha256": "1c265f55432b8814595be79c82368b9a96d52c8ca0f9c25c6572a5741a079cb6"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE9-DELIVERABLE.json",
+        "sha256": "b697abf1fb197aa977879335dd87842ccf751b7fd2724fdbfd82546010d391c4"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 6,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded independent frozen executor review; source ownership author/root; no hosted/provider/network/credential/Git action.",
+    "Root verified exact C9 canonical source pins and current/embedded candidate and QA bytes. Accepted transport-only; actual hosted stage gates pending."
+  ],
+  "source_artifacts": []
+}

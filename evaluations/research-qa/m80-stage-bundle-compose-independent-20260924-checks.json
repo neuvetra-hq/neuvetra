@@ -1,0 +1,107 @@
+{
+  "boundary": "Actual frozen bundle function; synthetic stage receipts; actual accepted executor review/source closure read; no output bundle written or execution transport invoked",
+  "results": [
+    {
+      "case": "migration_positive_actual_executor_review",
+      "accepted": true
+    },
+    {
+      "case": "admission_positive_actual_executor_review",
+      "accepted": true
+    },
+    {
+      "case": "deployment_positive_actual_executor_review",
+      "accepted": true
+    },
+    {
+      "case": "output_alias",
+      "accepted": false,
+      "error": "Error: Output path must be the deterministic stage bundle path .superpowers/m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-bundle.json."
+    },
+    {
+      "case": "output_traversal",
+      "accepted": false,
+      "error": "Error: Output path must be the deterministic stage bundle path .superpowers/m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-bundle.json."
+    },
+    {
+      "case": "input_traversal",
+      "accepted": false,
+      "error": "Error: Evidence path must be a safe workspace-relative path."
+    },
+    {
+      "case": "absolute_input",
+      "accepted": false,
+      "error": "Error: Evidence path must be a safe workspace-relative path."
+    },
+    {
+      "case": "backslash_input",
+      "accepted": false,
+      "error": "Error: Evidence path must be a safe workspace-relative path."
+    },
+    {
+      "case": "wrong_stage",
+      "accepted": false,
+      "error": "Error: Exact migration, admission or deployment stage required."
+    },
+    {
+      "case": "missing_migration",
+      "accepted": false,
+      "error": "Error: Actual verified migration intent, gate, observation and outcome chain required."
+    },
+    {
+      "case": "missing_admission",
+      "accepted": false,
+      "error": "Error: Actual verified admission intent, gate, observation and outcome chain required."
+    },
+    {
+      "case": "foreign_outcome",
+      "accepted": false,
+      "error": "Error: admission must have one actual recomputed verified-success intent/observation/outcome chain before the next stage."
+    },
+    {
+      "case": "modified_gate_bytes",
+      "accepted": false,
+      "error": "Error: Execution gate evidence bytes or typed contents are not bound to this stage."
+    },
+    {
+      "case": "modified_intent_bytes",
+      "accepted": false,
+      "error": "Error: Supplied intent is not the exact reconstructed sealed intent."
+    },
+    {
+      "case": "modified_receipt",
+      "accepted": false,
+      "error": "Error: plan evidence backupReceipt bytes changed."
+    },
+    {
+      "case": "missing_review",
+      "accepted": false,
+      "error": "Error: ENOENT: no such file or directory, open 'evaluations/research-qa/nonexistent-review.json'"
+    },
+    {
+      "case": "changed_executor_source",
+      "accepted": false,
+      "error": "Error: Reviewed executor source changed at .superpowers/m80-foundation-executor.ts."
+    },
+    {
+      "case": "duplicate_plan_key",
+      "accepted": false,
+      "error": "Error: Duplicate JSON keys are not accepted."
+    },
+    {
+      "case": "oversized_plan",
+      "accepted": false,
+      "error": "Error: Evidence size is outside the bundle composer bound for .superpowers/m80-hosted-plan.json."
+    },
+    {
+      "case": "future_intent",
+      "accepted": false,
+      "error": "Error: Sealed intent stage or chronology differs from the requested bundle."
+    },
+    {
+      "case": "late_gate",
+      "accepted": false,
+      "error": "Error: Fresh independent stage-specific execution gate with observed provider-stop write quiescence required."
+    }
+  ]
+}

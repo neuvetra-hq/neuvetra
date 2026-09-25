@@ -1,0 +1,48 @@
+{
+  "task_id": "M80-PROVIDER-STOP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate1_provider_stop_gate",
+  "helper_sha256": "4afb485ee90d5cbd0e487e828b422520e97e1f8c966932e0059642feb8704508",
+  "candidate_sha256": "5ca69ee0744c54160b1d91e469703f5709ccdc51ea5bbcc5cc7bc54108ac3219",
+  "checks": {
+    "author_tests": 3,
+    "independent_control_test": 1,
+    "independent_control_scenarios": 6,
+    "accepted_bad_review_variants": 19
+  },
+  "findings": [
+    {
+      "id": "STOP-F01",
+      "severity": "high",
+      "title": "Missing/arbitrary reviewer accepted as independent",
+      "detail": "All four review receipts accept null, empty and arbitrary reviewer labels. Runtime helper author ID also accepted for dependency review. Require exact dispatched independent reviewer and explicit author exclusion for each source workstream.",
+      "evidence": "evaluations/research-qa/m80-provider-stop-independent-20260924-probes.json"
+    },
+    {
+      "id": "STOP-F02",
+      "severity": "high",
+      "title": "Unrelated source file fulfills concrete transport prerequisite",
+      "detail": "Each backup/executor/recovery review accepts one unrelated.txt hash in source_pins, with no expected entrypoint or full required closure. Stop can be admitted without reviewed usable transport. Bind known concrete helper entrypoints and exact dependency closure from accepted snapshots/typed review.",
+      "evidence": "evaluations/research-qa/m80-provider-stop-independent-20260924-probes.json"
+    },
+    {
+      "id": "STOP-F03",
+      "severity": "medium",
+      "title": "Fresh local CI claims never checked against current GitHub state",
+      "detail": "main reads local m80-current-checks.json and compares local/remote commit, but never refreshes GitHub PR/check state. Six mocked main paths capture only Railway deployment/autodeploy reads, readiness and head checks. Require fresh authoritative CI observation at same head before stop; arbitrary local freshness field alone is insufficient.",
+      "evidence": "evaluations/research-qa/m80-provider-stop-independent-20260924-controls.json"
+    }
+  ],
+  "passing_boundaries": [
+    "Exact pinned prior deployment/commit/image and other-live-deployment guard inspected; author identity negatives reproduced.",
+    "Frozen actual main uses real exclusive file writes and fsync before one mocked mutation. Ack, timeout, malformed reply, refusal and both pre-action sync failures checked.",
+    "Sync failure prevents mutation; any prior query/intent/response reserves attempt and subsequent main refuses.",
+    "Response acknowledges request only; no claim of confirmed quiescence."
+  ],
+  "limits": [
+    "All network, Git remote observations and provider process calls mocked; no provider/network/hosted mutation.",
+    "File sync call ordering establishes mechanism, not hardware/filesystem power-loss guarantees.",
+    "Frozen copied helper has exact Candidate1 source text; fixture import path adjusted. All new artifacts LF."
+  ],
+  "observed_at": "2026-09-24T23:28:46.069687+00:00"
+}
