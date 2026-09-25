@@ -1,0 +1,111 @@
+{
+  "profile": "neuvetra.m80.actual-upgrade-final-independent-check.v1",
+  "observedAt": "2026-09-25T05:49:40.178Z",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_actual_schema22_upgrade_receipt_chain_only",
+  "plan": {
+    "path": ".superpowers/m80-foundation-hosted-live002-plan.json",
+    "sha256": "5934bb3eeb4093ed68caa644fa6b0c3b44fc70ec8cb9dd466de7cd7efdf9c285"
+  },
+  "bundle": {
+    "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-bundle.json",
+    "sha256": "652bc91a6e89afc02b189dcfd69f0ae17d2050b077594fb3daa7d7f944f5bd7d"
+  },
+  "stages": [
+    {
+      "stage": "migration",
+      "intent": {
+        "path": ".superpowers/m80-foundation-hosted-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-intent.json",
+        "sha256": "0d60861f836a3996e00937f69ffe5ae0fc719be095450c3dc068401d4edd0b7e"
+      },
+      "observation": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-observation.json",
+        "sha256": "16f8d15a9843fb90e1e751e598d8167ee485498f987ba06df938bb940c9d60af"
+      },
+      "outcome": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-outcome.json",
+        "sha256": "3d8f5656c6e1b8a24fe68b0e37ec57c1cebbde7d78ea6b46f34a83aa073f25e8"
+      },
+      "observedAt": "2026-09-25T05:30:58.242Z",
+      "recordedAt": "2026-09-25T05:30:58.273Z"
+    },
+    {
+      "stage": "admission",
+      "intent": {
+        "path": ".superpowers/m80-foundation-hosted-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-intent.json",
+        "sha256": "51d922977d99943a17d8c8ed2b76e711ee7ecda0f84e9cf5623a4ca4a749c7b7"
+      },
+      "observation": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-observation.json",
+        "sha256": "7a7a2e4d43839239b9228696085aaf7244af4c3599d23ea4dfb6912e9bd2d22f"
+      },
+      "outcome": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-outcome.json",
+        "sha256": "3d2cb12ee0cb93b86721323066ae94b23b01e2c79fc5b20f40d04d0d1b96a7ac"
+      },
+      "observedAt": "2026-09-25T05:35:42.609Z",
+      "recordedAt": "2026-09-25T05:35:42.610Z"
+    },
+    {
+      "stage": "deployment",
+      "intent": {
+        "path": ".superpowers/m80-foundation-hosted-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-intent.json",
+        "sha256": "f9e85924c2bbc424ffb967f01a0292ca8c16a745e46d8a82e07832f3ac321937"
+      },
+      "observation": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-observation.json",
+        "sha256": "81dd25b5b0dfcc074214e93b805785598f367ea9fd208484e2c2121e37a5fdfa"
+      },
+      "outcome": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-outcome.json",
+        "sha256": "6a7163c9662e92d55803121d88be06989ea5beda5e62569544efbb0515c5c90f"
+      },
+      "observedAt": "2026-09-25T05:47:51.017Z",
+      "recordedAt": "2026-09-25T05:47:51.018Z"
+    }
+  ],
+  "deploymentAttempt": {
+    "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-attempt.json",
+    "sha256": "a216bd0376d584e9ef7fcb81e793f66606c2b9fae6aa84704a29f09ac3025c49"
+  },
+  "deploymentAcknowledgement": {
+    "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-ack.json",
+    "sha256": "ef2f32865f91d16d57e9d9879b1a64ed535687c402a384fd48248461c02ee22b"
+  },
+  "pendingReceipts": [
+    {
+      "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-pending-20260925054039729.json",
+      "sha256": "f5a152d70eb8eaa57f34d139ddcf3d19fea8904611f80bf44f4aec14b2e71e55"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-deployment-pending-20260925054135205.json",
+      "sha256": "2d11d9712f84bedbbce7e2247a00c02762b70e5cc6b703bbf6353208e84847a3"
+    }
+  ],
+  "acceptedExecutorReceiptOnlyReconciliationExact": true,
+  "currentRecursiveSourceClosureVerified": true,
+  "negativeActualBindingProbes": [
+    "missing_ack",
+    "foreign_ack_id",
+    "future_ack"
+  ],
+  "inMemoryOutcomeWrites": 1,
+  "actualObserverCalls": 0,
+  "actualProviderCalls": 0,
+  "actualDatabaseCalls": 0,
+  "finalDeployment": {
+    "id": "40546ef7-9004-4486-a471-370aaa305c80",
+    "commit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+    "status": "SUCCESS",
+    "schemaVersion": 22,
+    "readinessOk": true,
+    "observedAt": "2026-09-25T05:47:51.017Z"
+  },
+  "noReplayEvidence": "One exact durable deployment attempt and acknowledgement, two nonterminal observations, then matching terminal success; retained source enforces no second mutation. No provider request was made by QA.",
+  "browserAcceptance": "pending_separate_root_demonstration",
+  "limitations": [
+    "Receipt/source verification only; QA did not independently query provider or hosted database.",
+    "Source and actual gates are bounded synthetic foundation acceptance; four methods remain held, full corporate Scope1/customer beta incomplete.",
+    "All original failed/consumed attempts, pending observations and QA harness failure remain retained; no replay or schema21 recovery authorized."
+  ]
+}

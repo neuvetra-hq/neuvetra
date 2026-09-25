@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925-DELIVERABLE.json",
+      "sha256": "ef21633c401af9c205decadc32d339c2125733782583607f715d32f90686becd"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-manifest-portability-privacy-and-claims",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-review.json",
+        "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-checks.json",
+        "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-first-review.json"
+      ],
+      "reason": "Corrected exact manifest accepted, preserved initial failures and clean checkout independently passes271."
+    },
+    {
+      "id": "AC-02-publisher-single-attempt-boundary",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-publisher-checks.json",
+        "operations/agent-improvement/snapshots/M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925-DELIVERABLE.json"
+      ],
+      "reason": "Ten injected negative/success cases pass; actual Git/hosted actions excluded."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-normalized-upgrade-publication-root-closure-20260925.json",
+      "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925-DELIVERABLE.json",
+        "sha256": "ef21633c401af9c205decadc32d339c2125733782583607f715d32f90686becd"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Exact normalized upgrade source/evidence publication review only",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Existing independent context reused; requested registered settings retained, observed unknown. No Git/provider/credentials/DB actions.",
+    "Proposal2 root-observed clean failure and independent first final-manifest current-status failure preserved. Revision2 passes. Coordinator acceptance of QA delivery remains pending.",
+    "Root verified all8 current/embedded QA files and exact publication receipt. First publication findings preserved; CI pending at closure. Manifest-selected files remain frozen for actual input composition."
+  ]
+}

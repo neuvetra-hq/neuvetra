@@ -389,3 +389,5 @@ operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CAND
 operations/agent-improvement/snapshots/M80-NORMALIZED-COMPOSER-INTEGRATION-CHECK-20260925-DELIVERABLE.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json -text whitespace=cr-at-eol
+evaluations/research-qa/ops-graph-01-product-integration-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/ops-graph-01-product-ci-20260925.json -text whitespace=cr-at-eol

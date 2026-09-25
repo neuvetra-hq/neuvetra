@@ -1,0 +1,73 @@
+{
+  "profile": "neuvetra.m80.actual-admission-independent-review.v1",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_existing_synthetic_admission_stage_only",
+  "reviewedAt": "2026-09-25T05:34:31.466Z",
+  "expiresAt": "2026-09-25T05:46:41.756Z",
+  "plan": {
+    "path": ".superpowers/m80-foundation-hosted-live002-plan.json",
+    "sha256": "5934bb3eeb4093ed68caa644fa6b0c3b44fc70ec8cb9dd466de7cd7efdf9c285"
+  },
+  "gate": {
+    "path": ".superpowers/m80-foundation-hosted-live002-admission-qa-001-gate.json",
+    "sha256": "67cd9042b84ef74770a8436da7ec4cb05771a82bf7b387b9e63acd23f0a89e4f"
+  },
+  "security": {
+    "path": ".superpowers/m80-foundation-hosted-live002-admission-qa-001-security.json",
+    "sha256": "1ad67d661f13c16b72c54a9882610b9684de419fe3ad1515d210983822fdce05"
+  },
+  "target": {
+    "path": ".superpowers/m80-foundation-hosted-live002-admission-qa-001-target.json",
+    "sha256": "7b114c732b7e5111a596d0f5ae539a0fe11e51aa6f4bf0f3aaeafbab052767e8"
+  },
+  "migrationEvidence": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-intent.json",
+      "sha256": "0d60861f836a3996e00937f69ffe5ae0fc719be095450c3dc068401d4edd0b7e"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-attempt.json",
+      "sha256": "d97cfd71cd860c64dfad9077087ad20204b04825c29e6f126e788c071b951f03"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-source.json",
+      "sha256": "e15207fccee4321b33dce0f6e36552ca2408f191b72b318fe213b7affd65e317"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-observation.json",
+      "sha256": "16f8d15a9843fb90e1e751e598d8167ee485498f987ba06df938bb940c9d60af"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-outcome.json",
+      "sha256": "3d8f5656c6e1b8a24fe68b0e37ec57c1cebbde7d78ea6b46f34a83aa073f25e8"
+    }
+  ],
+  "freshEvidence": [
+    {
+      "path": ".superpowers/m80-provider-observation-recovered21-stopped-admission-001.json",
+      "sha256": "a93b29c27b48849e8e98c50a42e49ad880e28e6971bc71d0f73434bcdb466a9c"
+    },
+    {
+      "path": ".superpowers/m80-stage-observation-normalized-admission-001.json",
+      "sha256": "42684a73edfcae96e35acf2eee2c8efe63b1b01184c51e0835f23336adfc66ea"
+    },
+    {
+      "path": ".superpowers/m80-ci-observation-controller-006.json",
+      "sha256": "a0f2235262386aeaf2356d26e0b66e1a4a6047a8ecc7fcd606509d032055cdc1"
+    }
+  ],
+  "rawSourceStateRecomputed": true,
+  "sourceBytes": 3230270,
+  "sourceNonReceiptTables": 120,
+  "sourceMigrationReceipts": 21,
+  "actualMigrationObserverReportedRawContentAndMetadataExact": true,
+  "freshSchemaVersion": 22,
+  "freshMigrationReceipts": 22,
+  "freshRuntimeSessions": 0,
+  "controllerSixChecksPrecededMigration": true,
+  "onceV3ExactPredecessorAndGateValidationPassed": true,
+  "schema21RecoveryNowForbidden": true,
+  "noCompanyUserOrRoleCreation": true,
+  "actualIntentWritten": false,
+  "limits": "Independent receipt/source review; no independent DB query. Admission only, bound original plan existing company/manager and exact fixture. Root alone executes; deployment needs a new actual outcome and fresh gate."
+}

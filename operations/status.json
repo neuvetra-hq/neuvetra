@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-25T03:55:33.225902+00:00",
+  "updated_at": "2026-09-25T05:53:05.229167+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -147,15 +147,16 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "Recovered7b7d deployment at prior540c/schema21 reverified SUCCESS and origin200 September25 03:48:23UTC; earlier signed-in synthetic workflow demonstration retained. New setup not deployed.",
+    "website_preview_state": "Deployment40546ef7 at reviewed75d8ec4b/schema22 verified SUCCESS and ready September25 05:47:51UTC. Signed-in synthetic setup saved v1, corrected v2, loaded history summary and persisted v2 after reload.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Independent normalized source and actual archived-backup diagnostic reviews accepted. Clean-copy run-evidence portability repair passed; final publication review active. Prior site recovered and reverified; no schema22 hosted migration."
+    "last_session_work": "Fresh backup/rehearsal, one-time migration/admission/deployment and independent actual-chain review accepted. Root browser evidence separately reviewed. OPS-GRAPH-01 integrated at1ae with six checks. Final evidence publication and board feedback pending; four methods held."
   },
   "session_handoff": {
-    "current": "Recovery evidence d6d590aa is published with six checks. BackupV2 C2, PrepV3 C2, recovered-target helpers, actual archived-backup local rehearsal, ExecutorV2 C2 and composerV4 are independently accepted within their stated bounds. Final normalized publication review is active. Provider/readiness reverified03:48:23UTC at recovered7b7d/540c/schema21; no new hosted migration/admission/deployment.",
-    "next": "Finish exact normalized publication review, publish to PR6 and verify six checks. Then obtain fresh recovered-target backup/rehearsal and independent actual stage gates before one-time migration/admission/deployment and live setup demonstration. Preserve consumed attempts and all held-method/customer-readiness limits.",
+    "current": "Schema22 upgrade, synthetic admission and deployment verified once at05:47:51UTC. Root browser save/correction/history/reload demonstration passed. Independent evidence review accepted; final publication pending. OPS-GRAPH-01 integrated at1ae0074f with six checks; deployed app75d8ec4b.",
+    "next": "Publish scoped evidence to PR6, verify remote checks and collect live board feedback. Never replay consumed attempts. Four methods held; qualified source/accounting releases and real-company readiness remain outstanding.",
     "evidence": [
-      "operations/next-session.md"
+      "operations/next-session.md",
+      "evaluations/research-qa/m80-setup-hosted-browser-20260925.json"
     ]
   },
   "checkpoint": {
@@ -591,7 +592,7 @@
         "M2-05"
       ],
       "acceptance": "Independently approved source spans, version/status fields and explicit unsupported coverage; approved fixtures prepared for live answer evaluation",
-      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œE06 and P01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
+      "review_disposition": "Independent original-source review approved EPA source epa-electricity-2023, E01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œE06 and P01ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œP04 for private internal evaluation; pinned release c926e527ebb276aad1f279f950cb87f997557f86b3e993ba65957de9bb51ed0f; comparative content and commercial reuse withheld",
       "evidence": [
         "data/research/releases/scope2-pilot.v1.json",
         "docs/research/scope2-pilot-evidence.md",
@@ -3416,7 +3417,7 @@
     }
   },
   "free_scope1_beta": {
-    "status": "setup_published_normalized_upgrade_sources_accepted_publication_pending",
+    "status": "synthetic_setup_live_independent_review_accepted",
     "target": "2-3 supported companies, free invited beta",
     "company_profiles": "not selected; early source and evidence eligibility screening required",
     "outreach_authorized": false,
@@ -3424,12 +3425,12 @@
     "independent_numerical_qa_required": true,
     "real_data_ready": false,
     "scope2_deferred": true,
-    "implementation": "Exact runtimeCandidate2 and UICandidate2 accepted locally after independent native, decoder and component lifecycle reviews plus root actual mock-browser recheck. Runtime2tests322assertions; integration8tests90assertions with544 malformed refusals and603 valid corrections. Failed first reviews retained. Persisted setup and reviewed CI repairs are published at 7f68f450 with six exact-head checks passed; hosted schema22 acceptance remains pending. All methods held.",
+    "implementation": "Accepted runtime and UI are deployed at75d8ec4b on schema22. Root browser saved v1, corrected uncertainty in v2, selected v1 history summary and verified v2 persistence after reload. Four methods held; no real customer readiness.",
     "product_plan": "docs/research/scope1-free-beta-m80-plan-20260924.md",
     "technical_plan": "docs/research/scope1-free-beta-technical-20260924.md",
     "navigation_review": "evaluations/research-qa/m80-navigation-independent-20260924.json",
     "publication_observation_receipt": "evaluations/research-qa/m80-setup-ci-success-20260924.json",
-    "navigation_publication": "Navigation and pure foundation published at540c71dbea6057f35a8b44074a71ceb9cf6bd6c3; six checks passed and navigation deployed as904ac743 on schema21. Persisted setup and CI repairs are published at 7f68f4509074f817e5b584c6f8bcb29d1d32392e with six checks passed, but are not yet deployed.",
+    "navigation_publication": "Historical navigation540c/schema21 superseded by setup75d8ec4b/schema22 deployment40546ef7. OPS-GRAPH-01 ops-only descendant1ae0074f published on PR6 with six checks.",
     "foundation_review": "evaluations/research-qa/m80-foundation-contract-root-closure-20260924.json",
     "release_packet_review": "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json",
     "customer_ready": false,
@@ -3471,6 +3472,16 @@
       "schema_version": 21,
       "availability_verified": true,
       "observed_at": "2026-09-25T02:31:08.745540+00:00"
+    },
+    "hosted_setup": {
+      "deployment_id": "40546ef7-9004-4486-a471-370aaa305c80",
+      "commit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+      "schema_version": 22,
+      "status": "SUCCESS",
+      "readiness_verified_at": "2026-09-25T05:47:51.017Z",
+      "browser_evidence": "evaluations/research-qa/m80-setup-hosted-browser-20260925.json",
+      "independent_final_review": "evaluations/research-qa/m80-actual-hosted-root-closure-20260925.json",
+      "board_feedback": "pending_live_demo"
     }
   },
   "session_pause": {
@@ -3487,16 +3498,9 @@
     "checkpoint_verified_files": 39
   },
   "current_product_execution": {
-    "observed_at": "2026-09-25T03:55:33.225902+00:00",
+    "observed_at": "2026-09-25T05:51:18.257781+00:00",
     "coordinator": "/root",
-    "active_workers": [
-      {
-        "task_id": "M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925",
-        "executor": "/root/m80_foundation_runtime_qa",
-        "scope": "Exact publication privacy, evidence closure and publisher review",
-        "status": "running_observed"
-      }
-    ],
+    "active_workers": [],
     "completed_bounded_tasks": [
       "M80-FOUNDATION-CONTRACT-20260924",
       "M80-FOUNDATION-CONTRACT-QA-20260924",
@@ -3528,8 +3532,10 @@
       "M80-RESTORE-NORMALIZATION-V2-QA-20260925",
       "M80-RECOVERED-TARGET-TRANSPORT-QA-20260925",
       "M80-NORMALIZED-EXECUTOR-CONSUMER-20260925",
-      "M80-NORMALIZED-EXECUTOR-QA-20260925"
+      "M80-NORMALIZED-EXECUTOR-QA-20260925",
+      "M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925",
+      "M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925"
     ],
-    "limits": "Normalized sources independently accepted; publication, fresh recovered-target backup and actual stage gates pending. No new hosted action. Full Scope1/customer beta incomplete."
+    "limits": "Live synthetic setup and independent actual-chain/browser-evidence review accepted; final evidence publication and board feedback pending. Four methods held; full Scope1/customer beta incomplete."
   }
 }

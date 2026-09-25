@@ -1,0 +1,83 @@
+{
+  "profile": "neuvetra.m80.actual-upgrade-independent-review.v1",
+  "task_id": "M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_actual_schema22_upgrade_receipt_chain_only",
+  "observedAt": "2026-09-25T05:49:40.178Z",
+  "plan": {
+    "path": ".superpowers/m80-foundation-hosted-live002-plan.json",
+    "sha256": "5934bb3eeb4093ed68caa644fa6b0c3b44fc70ec8cb9dd466de7cd7efdf9c285"
+  },
+  "final_deployment": {
+    "id": "40546ef7-9004-4486-a471-370aaa305c80",
+    "commit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+    "status": "SUCCESS",
+    "schemaVersion": 22,
+    "readinessOk": true,
+    "observedAt": "2026-09-25T05:47:51.017Z"
+  },
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-plan-check.json",
+      "sha256": "163a9379950706584351c27914dbe260d18fc204d922e545d9fdf058fe0dc26d"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-migration-review.json",
+      "sha256": "fafc0e6f26166649bf47fe7e487b7ddfd8e640357817f462d1152ce16820cd72"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-admission-review.json",
+      "sha256": "fd6ac60951a97448bd899b5d491b64c0b4bea430a69364bb203e04b09c176d1c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-deployment-review.json",
+      "sha256": "374f91ed25d3b672b6f5ceebaa0014262806f50af970ab769943d0f8e5fd9753"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-final-check.ts",
+      "sha256": "32bc5f839eb309779e0c6faa52189b8f1d0a3a47397f4ae355c94dd643fb3034"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-final-check.json",
+      "sha256": "6c2e1f665a43d310836815c01492242d8bb4c34191ba9ea259a40409de98bed3"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-harness-history.json",
+      "sha256": "0203f9e7ae809c9cb84eb377017527e40381cd47d1b527fd50ac59002cf767a8"
+    }
+  ],
+  "findings_open": 0,
+  "review_summary": [
+    "Original plan5934 and app75d8 remained immutable through separately published ops-only descendant1ae. Six exact checks for both commits were evidenced before hosted migration.",
+    "Fresh stopped-target backup, actual local restore/rehearsal and raw versus normalized metadata proof were byte-bound; original baseline and completion times were not re-timestamped.",
+    "Three independently reviewed typed gates used actual fresh target observations and accepted once-v3 validation, with exact predecessor chronology.",
+    "Migration preserved120 prior application tables and21 prior receipts according to the accepted actual observer; QA independently recomputed the pre-migration raw content, raw metadata and combined state hashes.",
+    "Admission observation contains exactly one expected existing synthetic company/manager fixture row; no company, user or role creation authorized.",
+    "Deployment actual acknowledgement binds exact attempt/intent/target/app75d8 and deployment40546ef7. Two pending receipts were retained before definitive SUCCESS/schema22 readiness.",
+    "Accepted executor reconciliation of actual receipt bytes was independently reproduced with a memory-only journal, zero observer/provider/database calls; three altered acknowledgement variants were rejected."
+  ],
+  "preserved_history": {
+    "original_failed_backup_restore": true,
+    "prior_superseded_source_candidates": true,
+    "both_deployment_pending_receipts": true,
+    "qa_mixed_pin_parsing_harness_failure": true,
+    "no_author_source_edits": true
+  },
+  "limits": [
+    "Receipt/source verification only; QA did not independently query provider or hosted database.",
+    "Source and actual gates are bounded synthetic foundation acceptance; four methods remain held, full corporate Scope1/customer beta incomplete.",
+    "All original failed/consumed attempts, pending observations and QA harness failure remain retained; no replay or schema21 recovery authorized.",
+    "Signed-in live setup save/correction/history demonstration remains separately reviewed by root. This receipt makes no browser acceptance claim.",
+    "Provider request count outside retained evidence was not independently queried; retained exact attempts, acknowledgements and source behavior are consistent with one request per stage.",
+    "No future replay, new stage authority, method release, legal compliance or customer-readiness approval is granted."
+  ],
+  "actions_by_qa": {
+    "provider": false,
+    "database": false,
+    "git": false,
+    "credentials": false,
+    "archive_unseal": false,
+    "private_gate_receipt_writes": true,
+    "local_offline_receipt_validation": true
+  }
+}

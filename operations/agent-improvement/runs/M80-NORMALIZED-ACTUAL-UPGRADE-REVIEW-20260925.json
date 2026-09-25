@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-MIGRATION.json",
+      "sha256": "4168c425714534109477959c906d71382ef569b8aad77720929e8e24f771e969"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-STAGE-GATES.json",
+      "sha256": "3971ec96220bf21329a6bef8ec0c7b02c72b7cff720aa5107f1990a5afd516ef"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-DELIVERABLE.json",
+      "sha256": "8c4afeeddc02374ca03f3e0d3a096462b028f977a4890b5323376291dc693391"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-BROWSER-SUPPLEMENT.json",
+      "sha256": "8c547d24bafba49e23d6f31709acc4117b3e5d4a584a4401b81380448701040b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-fresh-plan-backup-and-rehearsal-provenance",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-plan-check.json",
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-migration-review.json"
+      ],
+      "reason": "Exact real backup/restore/journal/plan chain, refreshed schema21/provider/membership/original app checks verified. Migration-only gate issued; no execution by QA."
+    },
+    {
+      "id": "AC-02-sequential-independent-actual-stage-reviews",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-migration-review.json",
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-admission-review.json",
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-deployment-review.json"
+      ],
+      "reason": "Three separate fresh actual stage reviews, both causal predecessors and once-v3 validation passed; rootsoleexecutor. Deployment result still pending."
+    },
+    {
+      "id": "AC-03-definitive-actual-chain-preserves-no-replay-boundary",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-review.json",
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-final-check.json"
+      ],
+      "reason": "Actual definitive outcome, ack binding, two pending records and accepted receipt-only reconciliation verified. Browser acceptance excluded."
+    },
+    {
+      "id": "AC-04-root-browser-evidence-claim-boundaries",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-hosted-browser-20260925.json",
+        "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-browser-review.json"
+      ],
+      "reason": "Root-operated bounded save/correction/history/reload record matches exact deployment. QA evidence review only; no independent replay or historical full-field UI claim."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-actual-hosted-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-MIGRATION.json",
+        "sha256": "4168c425714534109477959c906d71382ef569b8aad77720929e8e24f771e969"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-STAGE-GATES.json",
+        "sha256": "3971ec96220bf21329a6bef8ec0c7b02c72b7cff720aa5107f1990a5afd516ef"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-DELIVERABLE.json",
+        "sha256": "8c4afeeddc02374ca03f3e0d3a096462b028f977a4890b5323376291dc693391"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-BROWSER-SUPPLEMENT.json",
+        "sha256": "8c547d24bafba49e23d6f31709acc4117b3e5d4a584a4401b81380448701040b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent actual evidence review for sequential migration, admission and deployment stage gates",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Existing independent context reused, requested registered Astra/high inherited, actual observed settings unknown. No stage authority from old backup or premaintenance preflight. No Git/provider/credentials/DB actions. Frozen publication-selected files remain untouched.",
+    "One QA harness failure parsed migration SQL as JSON during generic byte-pin iteration before any gate output; retained initial source/history, corrected byte-only validation, no source candidate mutation. Stage approvals are not deployment success.",
+    "Final bounded actual receipt-chain review delivered; root acceptance pending. One harness error retained without classifying candidate as failed. No separate browser acceptance.",
+    "Root independently checked 16 current and embedded final chain/browser evidence artifacts and accepted the QA deliverables. First review and harness history retained; escaped defects unknown. Final checkpoint publication and board feedback remain separate."
+  ]
+}

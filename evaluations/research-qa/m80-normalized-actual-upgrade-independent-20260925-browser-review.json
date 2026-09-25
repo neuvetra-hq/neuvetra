@@ -1,0 +1,32 @@
+{
+  "profile": "neuvetra.m80.hosted-browser-evidence-independent-review.v1",
+  "task_id": "M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_root_observed_bounded_browser_demonstration_only",
+  "browser_evidence": {
+    "path": "evaluations/research-qa/m80-setup-hosted-browser-20260925.json",
+    "sha256": "3e77fe62afb3ff530b742a7bcd8e7b4b3afc27a20bcb031a5172f84e610075b5"
+  },
+  "actual_chain_review": {
+    "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-review.json",
+    "sha256": "185ee2daa432c51d442c33a15a8c4cc247d70f6ffbfc8ae4b4cbc33a10d0ac77"
+  },
+  "arrangement": "Root operated signed-in browser. QA independently reviewed its sanitized observation record and target/claim consistency, without browser replay.",
+  "accepted_reported_behaviors": [
+    "Initial synthetic setup saved as version1.",
+    "Correction changed Joint ventures from None proposed to Unknown and saved version2.",
+    "Version1 and version2 remained in history; version1 summary loaded.",
+    "Company and year navigation explicitly returned to current version2; no claim full version1 field inspection.",
+    "Full page reload restored version2, Joint ventures Unknown, Ownership changes None proposed.",
+    "Blockers remain14 missing facts, zero released/supported;2 locations,14 sources,19 requirements,zero fictional references,19missing/unknown requirements.",
+    "Incomplete/synthetic-only/no calculation or export constraints and four held methods remain visible."
+  ],
+  "claim_limits": [
+    "No independent browser replay or direct browser tool observation by QA.",
+    "History full-field immutability depends on separate accepted runtime tests, not this summary-only UI demonstration.",
+    "Root observation record is dated, not a continuous uptime/authentication guarantee.",
+    "No customer readiness, methodology release, accounting accuracy, legal compliance or assurance approval.",
+    "Board feedback remains pending."
+  ],
+  "material_findings_open": 0
+}

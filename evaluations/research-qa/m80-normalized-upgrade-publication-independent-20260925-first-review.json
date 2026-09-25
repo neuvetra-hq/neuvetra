@@ -1,0 +1,30 @@
+{
+  "task_id": "M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_current_metadata_then_repaired",
+  "failed_manifest": {
+    "path": ".superpowers/m80-normalized-upgrade-publication-manifest1-preserved.json",
+    "sha256": "1d42700950f73480c4838ba22778f8af7df52611bed45b0f22ff691f8d426adb"
+  },
+  "findings": [
+    {
+      "id": "NORMALIZED-PUB-F01",
+      "scope": "proposal2 clean-checkout portability",
+      "observed_by": "root; independently verified corrected clean copy",
+      "evidence": {
+        "path": ".superpowers/m80-normalized-proposal2-clean-validation.json",
+        "sha256": "f1df1c606476c8152681e16ce949b8cedf31e3688db9f3d5ee0eb7e23a417db9"
+      },
+      "failure": "Missing evidence .superpowers/m80-foundation-hosted-prepare-v3.ts. Snapshot coverage did not resolve an active private criterion path. Final included run records use public immutable snapshots."
+    },
+    {
+      "id": "NORMALIZED-PUB-F02",
+      "scope": "first final manifest current status",
+      "independently_observed": true,
+      "source_sha256": "1c02a9a38d3b9aac1a16b2588a59d439738522f7644dfaa5ec572fffac790c62",
+      "failure": "session_handoff.current still called actual archive independent review pending; next requested already accepted Prep/archive/executor/composer reviews; runtime.last_session_work described earlier diagnosis/repair dispatch. Leading board/next sections were accurate.",
+      "resolution": "Revision2 changes only operations/status.json pin; current fields now state bounded acceptance and publication pending."
+    }
+  ],
+  "no_publication_performed_by_qa": true
+}

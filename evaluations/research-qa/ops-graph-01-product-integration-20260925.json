@@ -1,0 +1,58 @@
+{
+  "observed_at": "2026-09-25T05:25:31.946674+00:00",
+  "head": "1ae0074f662394f66172b6b80aab9a0a1414773e",
+  "parent": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "remote_verified": "1ae0074f662394f66172b6b80aab9a0a1414773e",
+  "pr": 6,
+  "files": [
+    {
+      "path": ".github/workflows/agent-ops.yml",
+      "sha256": "741d3f5141d33fff9a627604b697d1d08f557a491074a7e870e40d4b81bfcc30"
+    },
+    {
+      "path": "operations/agent-improvement/README.md",
+      "sha256": "ba73ed5064e3b0ea9580b7f646a83ed6e06e3a45dc1bc736a44aa4e8af426b76"
+    },
+    {
+      "path": "operations/agent-improvement/runs/OPS-GRAPH-01.json",
+      "sha256": "7236ef3d5d8dfb83cdd9989c7f6e81a856face03e82edd325c3dc3427c7cdc46"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/OPS-GRAPH-01-v1.json",
+      "sha256": "e2f4464f3a38dd45a3e9082563cd1388a2507f3acce91caceddf760ff9b4f4d4"
+    },
+    {
+      "path": "operations/agent-improvement/workflow/README.md",
+      "sha256": "8da7a88f93bc5e90967739f77ebf4345c45cd5eaf31751ebf3d4a1fd508cf87e"
+    },
+    {
+      "path": "operations/agent-improvement/workflow/acceptance.md",
+      "sha256": "f651982df8e7e261fe765e76379708b65660a03995195343bb27dd499a51cfb4"
+    },
+    {
+      "path": "operations/agent-improvement/workflow/demo-result.json",
+      "sha256": "e97c3ce6c1447f2a9ae9873cd0f7c03d00e7d55ff098fdeb12c550335719ad4b"
+    },
+    {
+      "path": "operations/agent-improvement/workflow/example-plan.json",
+      "sha256": "eca30402919b454afd065201409a27661545594c70a5cf553ccd44159b4a3405"
+    },
+    {
+      "path": "operations/agent-improvement/workflow/qa-review.md",
+      "sha256": "935ab38f9ff38c03d4c96c2bb78cf952e9de02b1d833e8aa0924dcf440cff8d5"
+    },
+    {
+      "path": "tools/agent_workflow.py",
+      "sha256": "13ef3515861b14c0d24289b984ff1d916a3bdcad5443f1622c1e8a981d9f8b8e"
+    },
+    {
+      "path": "tools/test_agent_workflow.py",
+      "sha256": "93032e22ad51a2b38383de63f80cd267d315bac31b647fa1545d2e34048e8482"
+    }
+  ],
+  "exact_commit_integrated": true,
+  "application_files_changed": false,
+  "ci": "pending",
+  "maintenance_warning": "Git automatic maintenance reported inability to delete an old worktree metadata directory; merge and push succeeded. No manual cleanup performed.",
+  "existing_m80_plan_unchanged": true
+}

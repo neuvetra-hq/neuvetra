@@ -1,0 +1,241 @@
+{
+  "profile": "neuvetra.m80.actual-hosted-checkpoint-independent-publication-review.v1",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact_actual_hosted_checkpoint_manifest_only",
+  "manifest": {
+    "path": ".superpowers/m80-actual-hosted-publication-manifest3.json",
+    "sha256": "2a449c7f67dc7c41625b4a7722037ff65175fda97f28522b5439bf51414436da"
+  },
+  "parent": "1ae0074f662394f66172b6b80aab9a0a1414773e",
+  "file_count": 38,
+  "total_bytes": 1161572,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "14668d63c42e39a99ddf9891fe4e5b256400071a6efab2cc82106b79586cc0d3",
+      "bytes": 31682
+    },
+    {
+      "path": "evaluations/research-qa/m80-actual-hosted-root-closure-20260925.json",
+      "sha256": "95be07122d7772ccfd49c95c87f9f21a60ec1728b2b5e608f908fe617705bfbd",
+      "bytes": 1319
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-admission-review.json",
+      "sha256": "fd6ac60951a97448bd899b5d491b64c0b4bea430a69364bb203e04b09c176d1c",
+      "bytes": 3504
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-admission-review.ts",
+      "sha256": "46d86f468895dc0204750cbff189709531ba515d5cf635146b4ced858a630c6c",
+      "bytes": 12072
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-browser-review.json",
+      "sha256": "1befd0e1ff19fa33a92750ad15e5bf926a8f32506158698e98298e708b599176",
+      "bytes": 2068
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-deployment-review.initial.txt",
+      "sha256": "f294f92d83930f360235654a88955619aed8e4bba2ded8fb6f1b7af3dfc65a0e",
+      "bytes": 12177
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-deployment-review.json",
+      "sha256": "374f91ed25d3b672b6f5ceebaa0014262806f50af970ab769943d0f8e5fd9753",
+      "bytes": 4718
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-deployment-review.ts",
+      "sha256": "818912e6f8cda24bfe385508581a02a3a60b2bf2d5f3012ea1f89fa30c1f3f73",
+      "bytes": 12227
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-final-check.json",
+      "sha256": "6c2e1f665a43d310836815c01492242d8bb4c34191ba9ea259a40409de98bed3",
+      "bytes": 5728
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-final-check.ts",
+      "sha256": "32bc5f839eb309779e0c6faa52189b8f1d0a3a47397f4ae355c94dd643fb3034",
+      "bytes": 7582
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-harness-history.json",
+      "sha256": "0203f9e7ae809c9cb84eb377017527e40381cd47d1b527fd50ac59002cf767a8",
+      "bytes": 562
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-migration-review.json",
+      "sha256": "fafc0e6f26166649bf47fe7e487b7ddfd8e640357817f462d1152ce16820cd72",
+      "bytes": 2984
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-migration-review.ts",
+      "sha256": "88b05e7eefcdead5346bc171d35d2bd1f7bce3d1b79dcf37b885873b28d207e5",
+      "bytes": 11781
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-plan-check.json",
+      "sha256": "163a9379950706584351c27914dbe260d18fc204d922e545d9fdf058fe0dc26d",
+      "bytes": 1494
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-plan-check.ts",
+      "sha256": "2fbb36b2e0e1cb12fa9cb074b7a4e9bd4cbf8776010ccc743d5b14381dd57f0b",
+      "bytes": 4313
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-review.json",
+      "sha256": "185ee2daa432c51d442c33a15a8c4cc247d70f6ffbfc8ae4b4cbc33a10d0ac77",
+      "bytes": 4898
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-review.md",
+      "sha256": "ebdb32ffb2a7b7f4e72e974968623e2d39b3b73a774599a9e76b6cf967436211",
+      "bytes": 1476
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-checks.json",
+      "sha256": "bf85cf0c8ffbe2f5813525b14821f4139174c042be60b3ca226c852fc4433ef9",
+      "bytes": 3162
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-checks.py",
+      "sha256": "54fc95f89736a4e5d5c132655b8be8b40b59e3ea0444ccccec39f0eb05d47061",
+      "bytes": 4934
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-first-review.json",
+      "sha256": "d160fca3b420b8e063ae296817a71bea7d09f3237de0c8b523377eeb8bbba5f6",
+      "bytes": 1666
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-publisher-checks.json",
+      "sha256": "777b09a4978accaab55a4b3352568cd64da4d370e85c01d3f0448498fb6021db",
+      "bytes": 2043
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-publisher.test.py",
+      "sha256": "6cc76a00f2253ac82e2d5c0b47c416575f761fb077476cf6332064d287d1a958",
+      "bytes": 5434
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-review.json",
+      "sha256": "cb1cbbafc8a99f4248b0e8ac4f794444f6b8408b2d43262d14f8112c3079a39d",
+      "bytes": 4349
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-review.md",
+      "sha256": "02255906b15a3cf039a8c7a6eeba8254c6d3b301336bb24cfdf36a831e9d7693",
+      "bytes": 1678
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-root-closure-20260925.json",
+      "sha256": "139d3c81c73b465a1510b767316672686011fb609b93a57fd72676ac59b0367e",
+      "bytes": 1002
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-hosted-browser-20260925.json",
+      "sha256": "3e77fe62afb3ff530b742a7bcd8e7b4b3afc27a20bcb031a5172f84e610075b5",
+      "bytes": 2330
+    },
+    {
+      "path": "evaluations/research-qa/ops-graph-01-product-ci-20260925.json",
+      "sha256": "6e94e7b20aed1a5d2d5944683eea0da9a67c47fe43f767291be8acc9098e3cdd",
+      "bytes": 1274
+    },
+    {
+      "path": "evaluations/research-qa/ops-graph-01-product-integration-20260925.json",
+      "sha256": "6441487b78b4e0aef0d87d963badfc71c89cc0941a078e3b71659943fad3c9af",
+      "bytes": 2363
+    },
+    {
+      "path": "operations/agent-improvement/runs/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925.json",
+      "sha256": "b9a8b777ff02b7b92ebf8064dfdeec668e270fa99b77097d9a41bdc697281b65",
+      "bytes": 6295
+    },
+    {
+      "path": "operations/agent-improvement/runs/M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925.json",
+      "sha256": "8c94167c5f16582de14c052dfecd8133376c5772b5fda5a55b03928b13c000c3",
+      "bytes": 3502
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-BROWSER-SUPPLEMENT.json",
+      "sha256": "8c547d24bafba49e23d6f31709acc4117b3e5d4a584a4401b81380448701040b",
+      "bytes": 5248
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-DELIVERABLE.json",
+      "sha256": "8c4afeeddc02374ca03f3e0d3a096462b028f977a4890b5323376291dc693391",
+      "bytes": 90720
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-MIGRATION.json",
+      "sha256": "4168c425714534109477959c906d71382ef569b8aad77720929e8e24f771e969",
+      "bytes": 22125
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-STAGE-GATES.json",
+      "sha256": "3971ec96220bf21329a6bef8ec0c7b02c72b7cff720aa5107f1990a5afd516ef",
+      "bytes": 69495
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925-DELIVERABLE.json",
+      "sha256": "ef21633c401af9c205decadc32d339c2125733782583607f715d32f90686becd",
+      "bytes": 31022
+    },
+    {
+      "path": "operations/board-report.md",
+      "sha256": "11eb0f3047c09b3fa590666cc7d70bf9a80867788f6ae30f1de0d49768088f33",
+      "bytes": 266328
+    },
+    {
+      "path": "operations/next-session.md",
+      "sha256": "787e6fa181dd7567e68d881f8d8aaf7a1b12c66abb381bd7e237fc68adb129d2",
+      "bytes": 303164
+    },
+    {
+      "path": "operations/status.json",
+      "sha256": "7af68ae91e4955715d6eadfd9b31a31ffe4c862490ab762f9887349e9c8c92e0",
+      "bytes": 212853
+    }
+  ],
+  "checks": {
+    "all_current_bytes_exact": true,
+    "embedded_hashes_verified": 38,
+    "named_private_fixture_identifier_hits": 0,
+    "credential_pattern_hits": 0,
+    "active_run_private_evidence_paths": 0,
+    "both_selected_runs_complete_with_root_acceptance": true,
+    "exact_new_attribute_rules": [
+      "evaluations/research-qa/ops-graph-01-product-integration-20260925.json -text whitespace=cr-at-eol",
+      "evaluations/research-qa/ops-graph-01-product-ci-20260925.json -text whitespace=cr-at-eol"
+    ],
+    "attribute_file_lf_only": true,
+    "all_other_crlf_paths_have_exact_preservation_rules": true,
+    "current_status_board_handoff_match_actual_chain_and_browser_limits": true,
+    "independent_clean_overlay_validation_before_attribute_only_lf_fix": {
+      "valid": true,
+      "runs": 274
+    }
+  },
+  "preserved_first_findings": [
+    {
+      "manifest_sha256": "970d79660b64242354299d1adc111ac952ebd1a26e28fb2c67a1c0bc3fd25bec",
+      "finding": "Current runtime strings still described prior schema21 and no hosted schema22 migration. Manifest2 corrected only status.json."
+    },
+    {
+      "manifest_sha256": "49382c69ece335745491e1d6125574060e101328b1a32a095ec66889596e6475",
+      "finding": "Attributes file contained CRLF under LF normalization, so staged rawhash would differ. Manifest3 changes only .gitattributes to LF; exact two new rules preserved."
+    }
+  ],
+  "limits": [
+    "Exact publication review only; no new provider/source/milestone operation or replay is approved.",
+    "Root must independently verify parent/current exact38 staged and committed bytes/path set, then remote head/checks. QA invoked no Git/provider/DB commands.",
+    "Root-operated browser evidence is independently reviewed as an observation record, not an independent browser replay or full historical-field UI inspection.",
+    "Historical pending statements remain in dated immutable reviews and are superseded by final/browser supplement, not overwritten.",
+    "Private stage bodies/account identifiers, full inventory and archive are excluded; only safe paths/hashes and review source are published. Prior accepted snapshot embeds its exact inert publisher source only.",
+    "Four methods held; full corporate Scope1/customer beta incomplete; board feedback pending."
+  ]
+}

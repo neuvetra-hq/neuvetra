@@ -1,0 +1,90 @@
+{
+  "profile": "neuvetra.m80.actual-deployment-independent-review.v1",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_original_app_deployment_stage_only",
+  "reviewedAt": "2026-09-25T05:39:29.103Z",
+  "expiresAt": "2026-09-25T05:51:20.044Z",
+  "plan": {
+    "path": ".superpowers/m80-foundation-hosted-live002-plan.json",
+    "sha256": "5934bb3eeb4093ed68caa644fa6b0c3b44fc70ec8cb9dd466de7cd7efdf9c285"
+  },
+  "gate": {
+    "path": ".superpowers/m80-foundation-hosted-live002-deployment-qa-001-gate.json",
+    "sha256": "b54aab60190fd51cd409b1a6a9d0247be99aacdfce3c0ed780e8830db45acf7b"
+  },
+  "security": {
+    "path": ".superpowers/m80-foundation-hosted-live002-deployment-qa-001-security.json",
+    "sha256": "16039cbb7c56e596aa16224f3375f4f6638a44f28d241b1f09814a83bd5aa83d"
+  },
+  "target": {
+    "path": ".superpowers/m80-foundation-hosted-live002-deployment-qa-001-target.json",
+    "sha256": "c983fee7faf62c34aef1dd5d5bf9bdffc392ded1254f62154a41238c6e98fa33"
+  },
+  "predecessors": {
+    "migration": {
+      "intent": {
+        "path": ".superpowers/m80-foundation-hosted-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-intent.json",
+        "sha256": "0d60861f836a3996e00937f69ffe5ae0fc719be095450c3dc068401d4edd0b7e"
+      },
+      "attempt": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-attempt.json",
+        "sha256": "d97cfd71cd860c64dfad9077087ad20204b04825c29e6f126e788c071b951f03"
+      },
+      "observation": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-observation.json",
+        "sha256": "16f8d15a9843fb90e1e751e598d8167ee485498f987ba06df938bb940c9d60af"
+      },
+      "outcome": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-migration-outcome.json",
+        "sha256": "3d8f5656c6e1b8a24fe68b0e37ec57c1cebbde7d78ea6b46f34a83aa073f25e8"
+      }
+    },
+    "admission": {
+      "intent": {
+        "path": ".superpowers/m80-foundation-hosted-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-intent.json",
+        "sha256": "51d922977d99943a17d8c8ed2b76e711ee7ecda0f84e9cf5623a4ca4a749c7b7"
+      },
+      "attempt": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-attempt.json",
+        "sha256": "a2a8cbd57da1ca6732c0b590273c15ecf6836ee6e5c2610ee29370a0b94daf7b"
+      },
+      "observation": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-observation.json",
+        "sha256": "7a7a2e4d43839239b9228696085aaf7244af4c3599d23ea4dfb6912e9bd2d22f"
+      },
+      "outcome": {
+        "path": ".superpowers/m80-foundation-executor-e522e5628ec866b072f54056940287de93faefe7949a08c8ea62757fba2cdf6f-admission-outcome.json",
+        "sha256": "3d2cb12ee0cb93b86721323066ae94b23b01e2c79fc5b20f40d04d0d1b96a7ac"
+      }
+    }
+  },
+  "freshEvidence": [
+    {
+      "path": ".superpowers/m80-provider-observation-recovered21-stopped-deployment-001.json",
+      "sha256": "d728522a73578ebd20994290602041e3bd1d8429b6dbc23a942dafe27a1d19bc"
+    },
+    {
+      "path": ".superpowers/m80-stage-observation-normalized-deployment-001.json",
+      "sha256": "18e19c971b0c1f4555f63be29bfeee9f9f248d7f54981d0abaf4571dd67aa93a"
+    },
+    {
+      "path": ".superpowers/m80-ci-observation-original-plan-resumed-002.json",
+      "sha256": "7b256a22aff6aea6a223e37881baa15e332b74d8bf5d3e45ae167931cee1c228"
+    },
+    {
+      "path": ".superpowers/m80-ci-observation-controller-006.json",
+      "sha256": "a0f2235262386aeaf2356d26e0b66e1a4a6047a8ecc7fcd606509d032055cdc1"
+    }
+  ],
+  "exactExistingFixtureAdmissionRowCount": 1,
+  "predecessorReconstructionAndChronologyPassed": true,
+  "freshSchemaVersion": 22,
+  "freshMigrationReceipts": 22,
+  "freshRuntimeSessions": 0,
+  "currentApplicationStateSha256": "9f219e5f17d16e7b19b0ae558b41e3d3f194ac772694f0c7b71070966872e3cd",
+  "deploymentCommit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "newOpsCommit": "1ae0074f662394f66172b6b80aab9a0a1414773e",
+  "onceV3GateAndPureIntentValidationPassed": true,
+  "actualIntentWritten": false,
+  "limits": "Root alone may invoke reviewed deployment once for exact original75d8 app; API acknowledgement is not success. Persist acknowledgement and observe exact deployment ID/commit/schema22 readiness; reconcile pending only, never replay mutation. No hosted calls by QA; actual deployment success and signed-in live demo remain pending."
+}

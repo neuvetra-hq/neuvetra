@@ -1,0 +1,93 @@
+{
+  "helper_sha256": "903e71a94b14569a33c848ab3c0fef0342498962140b2ba0edd5f9d4b16ca959",
+  "cases": [
+    {
+      "case": "success",
+      "pass": true,
+      "mock_mutations": [
+        "add",
+        "commit",
+        "push"
+      ],
+      "replay_refused_before_git": true,
+      "durable_sync_calls": 3
+    },
+    {
+      "case": "existing_intent",
+      "pass": true,
+      "mock_mutations": [],
+      "replay_refused_before_git": true,
+      "durable_sync_calls": 0
+    },
+    {
+      "case": "bad_review",
+      "pass": true,
+      "mock_mutations": [],
+      "replay_refused_before_git": false,
+      "durable_sync_calls": 0
+    },
+    {
+      "case": "changed_bytes",
+      "pass": true,
+      "mock_mutations": [],
+      "replay_refused_before_git": false,
+      "durable_sync_calls": 0
+    },
+    {
+      "case": "private_path",
+      "pass": true,
+      "mock_mutations": [],
+      "replay_refused_before_git": false,
+      "durable_sync_calls": 0
+    },
+    {
+      "case": "dirty_index",
+      "pass": true,
+      "mock_mutations": [],
+      "replay_refused_before_git": false,
+      "durable_sync_calls": 0
+    },
+    {
+      "case": "staged_hash",
+      "pass": true,
+      "mock_mutations": [
+        "add"
+      ],
+      "replay_refused_before_git": true,
+      "durable_sync_calls": 2
+    },
+    {
+      "case": "whitespace_failure",
+      "pass": true,
+      "mock_mutations": [
+        "add"
+      ],
+      "replay_refused_before_git": true,
+      "durable_sync_calls": 2
+    },
+    {
+      "case": "push_uncertain",
+      "pass": true,
+      "mock_mutations": [
+        "add",
+        "commit",
+        "push"
+      ],
+      "replay_refused_before_git": true,
+      "durable_sync_calls": 2
+    },
+    {
+      "case": "remote_unconfirmed",
+      "pass": true,
+      "mock_mutations": [
+        "add",
+        "commit",
+        "push"
+      ],
+      "replay_refused_before_git": true,
+      "durable_sync_calls": 2
+    }
+  ],
+  "all_git_and_subprocess_calls_injected": true,
+  "actual_provider_git_network_db_actions": 0
+}

@@ -1,0 +1,32 @@
+{
+  "profile": "neuvetra.m80.actual-plan-independent-check.v1",
+  "observedAt": "2026-09-25T05:23:56.891Z",
+  "plan": {
+    "path": ".superpowers/m80-foundation-hosted-live002-plan.json",
+    "sha256": "5934bb3eeb4093ed68caa644fa6b0c3b44fc70ec8cb9dd466de7cd7efdf9c285"
+  },
+  "input": {
+    "path": ".superpowers/m80-foundation-hosted-live002-input.json",
+    "sha256": "187c7591851085d5ab43cda7a1c40eb3ed7fe7c2d2238a8f9e9b72efa107712a"
+  },
+  "provenance": {
+    "path": ".superpowers/m80-foundation-hosted-live002-provenance.json",
+    "sha256": "75676eca0588fc96e8c490ed9d6dc0501224e16a1638b50c2b619ba5e67e854d"
+  },
+  "bytePinsChecked": 36,
+  "exactOriginalPlanRebuilt": true,
+  "currentRecursiveExecutorClosureVerified": true,
+  "encryptedArchiveHashVerifiedWithoutUnseal": true,
+  "journalAndFourReceiptsExact": true,
+  "sourceTableCount": 120,
+  "sourceSchemaVersion": 21,
+  "rehearsalTargetSchemaVersion": 22,
+  "sourceRawStateSha256": "43e37ffcf227e3f33587b52f3918efc836755901edd545b7b271e3505edda990",
+  "normalizedMetadataSha256": "20991c3220306ba11d34fbbe60325f9a6a1c3db008369c404c33c1c6b38c87d0",
+  "rawMetadataHashesEqual": false,
+  "deploymentCommit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "createdAt": "2026-09-25T04:13:35.375Z",
+  "expiresAt": "2026-09-25T08:13:35.375Z",
+  "stageGateIssued": false,
+  "limits": "Original creation-time freshness retained; fresh stage provider/database/membership/CI review still required. No Git/provider/DB/archive-unseal actions."
+}
