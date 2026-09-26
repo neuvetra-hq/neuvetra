@@ -1,0 +1,24 @@
+{
+  "databaseName": "hosted_setup_01_qa_1790405660161",
+  "sourceHashes": {
+    "packages/neuvetra-database/src/migrations/0023_company_setup.sql": "d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb",
+    "packages/neuvetra-database/src/company-setup.ts": "a9f5ec15f856b86660bb7519a336eec80b148ccf020704d581929e09e0857dc0",
+    "apps/site-api/src/workspace/company-setup-routes.ts": "f1e41c5c1d25a639a3f3bc7eb14aefcf6efb9746cd1475663713ca08029d1016"
+  },
+  "sourceHashesAfter": {
+    "packages/neuvetra-database/src/migrations/0023_company_setup.sql": "d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb",
+    "packages/neuvetra-database/src/company-setup.ts": "a9f5ec15f856b86660bb7519a336eec80b148ccf020704d581929e09e0857dc0",
+    "apps/site-api/src/workspace/company-setup-routes.ts": "f1e41c5c1d25a639a3f3bc7eb14aefcf6efb9746cd1475663713ca08029d1016"
+  },
+  "checks": [],
+  "detail": {},
+  "limitations": [
+    "Synthetic token map; provider auth untested",
+    "Legacy schemas present but M71/M78 populated history not yet seeded",
+    "No hosted deployment/backup/restore/browser/storage/export/job tests"
+  ],
+  "requestedModel": "gpt-6-astra",
+  "requestedEffort": "high",
+  "observedModel": null,
+  "observedEffort": null
+}

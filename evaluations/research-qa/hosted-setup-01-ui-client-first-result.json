@@ -1,0 +1,25 @@
+{
+  "sourceSha256": "b3133962f9b37b5970faf0dc431c2e3933256ddf8bcb9845f4914a3221b37bbe",
+  "findings": [
+    {
+      "name": "foreign foundation",
+      "accepted": true
+    },
+    {
+      "name": "foreign actor",
+      "accepted": true
+    },
+    {
+      "name": "changed saved payload",
+      "accepted": true
+    },
+    {
+      "name": "unexpected revision",
+      "accepted": true
+    },
+    {
+      "name": "abort during response body",
+      "accepted": false
+    }
+  ]
+}

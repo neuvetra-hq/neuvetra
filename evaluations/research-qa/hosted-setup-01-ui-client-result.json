@@ -1,0 +1,35 @@
+{
+  "sourceSha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d",
+  "findings": [
+    {
+      "name": "valid exact initial save receipt",
+      "accepted": false,
+      "positiveAccepted": true
+    },
+    {
+      "name": "valid old-key replay with newer foundation",
+      "accepted": false,
+      "positiveAccepted": true
+    },
+    {
+      "name": "foreign foundation",
+      "accepted": false
+    },
+    {
+      "name": "foreign actor",
+      "accepted": false
+    },
+    {
+      "name": "changed saved payload",
+      "accepted": false
+    },
+    {
+      "name": "unexpected revision",
+      "accepted": false
+    },
+    {
+      "name": "abort during response body",
+      "accepted": false
+    }
+  ]
+}

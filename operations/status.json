@@ -1,17 +1,18 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-26T04:11:29.468455+00:00",
+  "updated_at": "2026-09-26T07:24:00+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
-    "id": "M78",
-    "name": "Process screening and corporate Scope 1 reconciliation",
-    "status": "complete_bounded_synthetic",
-    "next_gate": "PR5 merged and verified; bounded M79 method/source release then M80 invite-ready free Scope1 beta. CustomerScope1 incomplete; Scope2 deferred.",
+    "id": "HOSTED-SETUP-REBUILD",
+    "name": "Hosted corporate setup and collection rebuild",
+    "status": "in_progress_increment_1_local_candidate_independently_reviewed",
+    "next_gate": "Publish exact increment to PR6 and verify its checks, then fresh hosted backup and actual restore rehearsal, reviewed schema23 upgrade and signed-in staging demonstration before board feedback. Collection and readiness increments remain future work.",
     "evidence": [
-      "operations/feedback/2026-09-16-m77.md",
-      "docs/research/scope1-completion-matrix.md"
+      "operations/hosted-setup/decision.md",
+      "evaluations/research-qa/hosted-setup-01-independent-review.md",
+      "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"
     ]
   },
   "completed_milestones": [
@@ -1674,6 +1675,27 @@
       "scope": "Persistent source and population lifecycle, SQL20 candidate, authority and native tests; no live/Git actions",
       "evidence": [
         "operations/agent-improvement/runs/M77-BACKEND.json"
+      ]
+    },
+    {
+      "id": "HOSTED-SETUP-DATA-01",
+      "owner": "/root/hosted_data",
+      "status": "local_foundation_independently_reviewed",
+      "scope": "Additive schema23, versioned company setup, tenant-safe adapter and operator-only synthetic company admission; no hosted data mutation",
+      "evidence": [
+        "operations/agent-improvement/runs/HOSTED-SETUP-DATA-01.json",
+        "evaluations/research-qa/hosted-setup-01-independent-review.md"
+      ]
+    },
+    {
+      "id": "HOSTED-SETUP-UI-01",
+      "owner": "/root",
+      "status": "local_candidate_independently_reviewed",
+      "scope": "Signed-in seven-step general setup screen and API integration; same rolling PR6; no hosted deployment yet",
+      "evidence": [
+        "apps/site-web/src/components/CompanySetup.tsx",
+        "apps/site-api/src/workspace/company-setup-routes.ts",
+        "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"
       ]
     }
   ],
@@ -3524,16 +3546,9 @@
     "checkpoint_verified_files": 39
   },
   "current_product_execution": {
-    "observed_at": "2026-09-25T08:12:20.425949+00:00",
+    "observed_at": "2026-09-26T07:24:00+00:00",
     "coordinator": "/root",
-    "active_workers": [
-      {
-        "task_id": "M80-BETA-ACCESS-IMPLEMENTATION-20260925",
-        "executor": "/root/m80_beta_access_engineer",
-        "scope": "Index-only remote container packaging correction under version3 ticket777e91a713c3484c8c4d69e2c7161126",
-        "status": "running_observed"
-      }
-    ],
+    "active_workers": [],
     "completed_bounded_tasks": [
       "M80-FOUNDATION-CONTRACT-20260924",
       "M80-FOUNDATION-CONTRACT-QA-20260924",

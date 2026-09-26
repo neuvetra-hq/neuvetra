@@ -1,0 +1,14 @@
+{
+  "task": "HOSTED-SETUP-UI-01",
+  "status": "pass_targeted_whitespace_recheck",
+  "path": "packages/neuvetra-database/src/company-setup-contract.ts",
+  "previousSha256": "441669878a089e8585c0f05d4a94370533b9160d50e4b62615e86da8c83b82a6",
+  "finalSha256": "93cc5fe6b8af6416354b2d461800bcaf108a386200d75b3f7838172e4e505d74",
+  "byteProof": "Appending exactly one LF byte reconstructs the previous reviewed SHA256",
+  "checks": [
+    "client and native API tests:2 pass,12 assertions",
+    "Node/Chrome browser:7 checks pass"
+  ],
+  "runtimeBehaviorChanged": false,
+  "scope": "Only type-only trailing blank-line removal; no new release authorization"
+}

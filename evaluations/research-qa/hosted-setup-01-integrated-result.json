@@ -1,0 +1,29 @@
+{
+  "databaseName": "hosted_setup_01_qa_1790406152509",
+  "sourceHashes": {
+    "packages/neuvetra-database/src/hosted.ts": "3bd3398fe582d2cf74e6868ab7fdfcd0f7158fb1e96dce5c5b59069ed1c59e04",
+    "packages/neuvetra-database/src/workspace.ts": "dc48e7fa9460ba08c7588f7052c9b3035f978c361ec67a079ffc0101b0f3f8f4",
+    "packages/neuvetra-database/src/company-setup.ts": "fabed47f0853675a61bb3556c367126cae5b68f4de5a6fa07f2f8fc437fb0a14",
+    "packages/neuvetra-database/src/staging-migrations.ts": "8d22b9c3ca6ba56ca62250dc10306ddbadbd2ddda4075186556d5dc82e6081d4",
+    "packages/neuvetra-database/src/migrations/0023_company_setup.sql": "d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb",
+    "apps/site-api/src/staging/server.ts": "c7e2c0701c2e8398b907a907200edb12eaac70890aaded6dcfde567985ca53b0",
+    "apps/site-api/src/workspace/company-setup-routes.ts": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc"
+  },
+  "sourceHashesAfter": {
+    "packages/neuvetra-database/src/hosted.ts": "3bd3398fe582d2cf74e6868ab7fdfcd0f7158fb1e96dce5c5b59069ed1c59e04",
+    "packages/neuvetra-database/src/workspace.ts": "dc48e7fa9460ba08c7588f7052c9b3035f978c361ec67a079ffc0101b0f3f8f4",
+    "packages/neuvetra-database/src/company-setup.ts": "fabed47f0853675a61bb3556c367126cae5b68f4de5a6fa07f2f8fc437fb0a14",
+    "packages/neuvetra-database/src/staging-migrations.ts": "8d22b9c3ca6ba56ca62250dc10306ddbadbd2ddda4075186556d5dc82e6081d4",
+    "packages/neuvetra-database/src/migrations/0023_company_setup.sql": "d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb",
+    "apps/site-api/src/staging/server.ts": "c7e2c0701c2e8398b907a907200edb12eaac70890aaded6dcfde567985ca53b0",
+    "apps/site-api/src/workspace/company-setup-routes.ts": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc"
+  },
+  "checks": [
+    "operator provisions a non-CA synthetic company without fixtures and runtime cannot provision",
+    "actual mounted server performs persisted saves and rejects both foreign directions",
+    "actual wrapper bounds bytes and reads histories after listener restart",
+    "in-flight authorized save holds admission lock until commit; revoked identity denied afterward",
+    "committed revocation wins against a waiting writer and leaves no new version"
+  ],
+  "auth": "Synthetic token map with actual mounted HTTP listener and restricted native PostgreSQL; provider auth untested"
+}

@@ -13,15 +13,17 @@ import { StationaryNaturalGas } from "./StationaryNaturalGas"
 import { MobileDiesel } from "./MobileDiesel"
 import { ControlledFleet } from "./ControlledFleet"
 import { Scope1BetaSetup } from "./Scope1BetaSetup"
+import { CompanySetup } from "./CompanySetup"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 
-type WorkspacePanel = "setup" | "scope1" | "corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example"
+type WorkspacePanel = "setup" | "legacy-setup" | "scope1" | "corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example"
 
-const sourceAndRegisterPanels: readonly WorkspacePanel[] = ["gas", "generator", "stationary", "mobile", "fleet", "fugitive"]
-const continuityPanels: readonly WorkspacePanel[] = ["evidence", "annual", "source", "worksheet", "example"]
+const sourceAndRegisterPanels: readonly WorkspacePanel[] = ["scope1", "corporate", "gas", "generator", "stationary", "mobile", "fleet", "fugitive"]
+const continuityPanels: readonly WorkspacePanel[] = ["legacy-setup", "evidence", "annual", "source", "worksheet", "example"]
 
 const panelLabels: Record<WorkspacePanel, string> = {
-  setup: "Scope 1 setup",
+  setup: "Company setup",
+  "legacy-setup": "Earlier Scope 1 fixture setup",
   scope1: "Scope 1 inventory",
   corporate: "Corporate coverage",
   gas: "Stationary natural gas",
@@ -42,14 +44,12 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   const secondaryPanel = sourceAndRegisterPanels.includes(panel) || continuityPanels.includes(panel)
   return <>
     <nav className="worksheet-nav workspace-primary-nav" aria-label="Primary workspace views">
-      <button type="button" aria-pressed={panel === "setup"} onClick={() => setPanel("setup")}>Scope 1 setup</button>
-      <button type="button" aria-pressed={panel === "scope1"} onClick={() => setPanel("scope1")}>Scope 1 inventory</button>
-      <button type="button" aria-pressed={panel === "corporate"} onClick={() => setPanel("corporate")}>Corporate coverage</button>
+      <button type="button" aria-pressed={panel === "setup"} onClick={() => setPanel("setup")}>Company setup</button>
     </nav>
     <details className="workspace-secondary-nav">
       <summary>Other workspace views{secondaryPanel ? ` · Current: ${panelLabels[panel]}` : ""}</summary>
       <section aria-labelledby="scope1-sources-registers-heading">
-        <h2 id="scope1-sources-registers-heading">Scope 1 sources and registers</h2>
+        <h2 id="scope1-sources-registers-heading">Earlier registers and source worksheets</h2>
         <nav className="worksheet-nav" aria-labelledby="scope1-sources-registers-heading">
         {sourceAndRegisterPanels.map(id => <button type="button" key={id} aria-pressed={panel === id} onClick={() => setPanel(id)}>{panelLabels[id]}</button>)}
         </nav>
@@ -61,7 +61,8 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
         </nav>
       </section>
     </details>
-    {panel === "setup" && <Scope1BetaSetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
+    {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
+    {panel === "legacy-setup" && <Scope1BetaSetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "corporate" && <CorporateCoverageRegister key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "scope1" && <Scope1Inventory actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "gas" && <StationaryNaturalGas key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}

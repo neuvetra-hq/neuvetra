@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-DATA-01",
+  "role": "data-database",
+  "execution_context": "/root/hosted_data",
+  "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
+  "artifacts": ["packages/neuvetra-database/src/company-setup.ts", "packages/neuvetra-database/src/migrations/0023_company_setup.sql"],
+  "criteria": [
+    {
+      "id": "DATA-01",
+      "status": "pass",
+      "evidence": [
+        "packages/neuvetra-database/src/company-setup-upgrade.md",
+        "evaluations/research-qa/hosted-setup-01-independent-review.md"
+      ],
+      "reason": "Author PGlite tests and independent native PostgreSQL/API tenant and preservation review passed for the local foundation. Hosted upgrade remains a separate milestone gate."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/hosted_qa",
+    "independent": true,
+    "verdict": "pass_local_foundation",
+    "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md"],
+    "reviewed_artifacts": ["packages/neuvetra-database/src/company-setup.ts", "packages/neuvetra-database/src/migrations/0023_company_setup.sql"]
+  },
+  "outcome": {
+    "status": "complete_bounded_local",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": 0,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "dispatch_exception": "Direct collaboration dispatch by coordinator after controller unknown_cost_reservation; no zero-cost claim. Requested compute only, observed settings and cost unknown.",
+  "applied_lessons": [
+    "L02",
+    "L03"
+  ]
+}

@@ -5,7 +5,7 @@ import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audi
 import { readMigrationManifest } from "./staging-migrations"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 22
+export const STAGING_SCHEMA_VERSION = 23
 export interface HostedWorkspaceOptions {
   connectionString: string
   expectedProjectRef: string
@@ -134,6 +134,22 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
     if (!result) return null
     const workspace = await this.findWorkspace(userId, result.company_id)
     return workspace ? { workspace, role: result.role, evidenceId: result.evidenceId } : null
+  }
+
+  /** General membership lookup: new companies need no legacy synthetic facility/boundary. */
+  async findStagingMembershipForUser(userId: string): Promise<{ companyId: string; role: "owner" | "admin" | "member"; evidenceId: string | null } | null> {
+    return this.asUser(userId, async tx => {
+      // The membership helper verifies current staging admission. Runtime RLS covers company and evidence rows.
+      const result = await tx.query<{ company_id: string; role: "owner" | "admin" | "member"; evidence_id: string | null }>(`select m.company_id,m.role,
+        (select e.id from neuvetra.bill_evidence e where e.company_id=m.company_id order by e.created_at,e.id limit 1) evidence_id
+        from neuvetra.company_members m join neuvetra.companies c on c.id=m.company_id
+        where m.user_id=$1 and neuvetra.is_company_member(m.company_id)`, [userId])
+      if (result.rows.length !== 1) return null
+      const row=result.rows[0]!
+      const locked=await tx.query<{allowed:boolean}>('select neuvetra.m71_lock($1,false) allowed',[row.company_id])
+      if(locked.rows[0]?.allowed!==true) return null
+      return { companyId: row.company_id, role: row.role, evidenceId: row.evidence_id }
+    })
   }
 
   override async createWorkspace(userId: string, _input: SyntheticWorkspaceInput): Promise<CompanyWorkspaceRecord> {

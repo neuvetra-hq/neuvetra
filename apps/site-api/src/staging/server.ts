@@ -24,6 +24,7 @@ import { createRateLimiter } from "../lib/rate-limit"
 import { createWorkspaceRoutes } from "../workspace/routes"
 import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
+import { createCompanySetupRoutes } from "../workspace/company-setup-routes"
 import { readStagingConfig, STAGING_PROFILE, type StagingConfig } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
 
@@ -32,6 +33,7 @@ type Access = { workspace: CompanyWorkspaceRecord; role: "owner" | "admin" | "me
 export type StagingDatabase = WorkspaceDatabase & {
   hasStagingAccess(userId: string): Promise<boolean>
   findStagingWorkspaceForUser(userId: string): Promise<Access | null>
+  findStagingMembershipForUser(userId: string): Promise<{ companyId: string; role: "owner" | "admin" | "member"; evidenceId: string | null } | null>
   checkReadiness(): Promise<{ profile: string; schemaVersion: number; legacyContainmentVerified?: boolean }>
 }
 
@@ -108,6 +110,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const fugitiveRoutes=createM77Routes({database,validateUser,origin:config.origin,authority:createM77Authority()})
   const scope1Routes=createM78Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),mobile:createM74Authority(),diesel:createM76DieselAuthority(),fugitive:createM77Authority()},policy:M78_REVIEWED_POLICY})
   const scope1BetaRoutes=createM80BetaRoutes({database,validateUser,origin:config.origin})
+  const companySetupRoutes=createCompanySetupRoutes({database,validateUser,origin:config.origin})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -120,7 +123,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 22) throw new Error("Staging database unavailable.")
+    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 23) throw new Error("Staging database unavailable.")
     if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
@@ -151,14 +154,15 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       if (!actors.check(user.id).allowed) return json(429, { error: "Request limit reached." })
       if (!await database.hasStagingAccess(user.id)) return json(403, { error: "Private staging access required." })
       if (url.pathname === "/workspace-api/session" && isGet) {
-        const access = await database.findStagingWorkspaceForUser(user.id)
+        const access = await database.findStagingMembershipForUser(user.id)
         if (!access) return json(403, { error: "Private staging access required." })
-        return json(200, { profile: STAGING_PROFILE, user: { id: user.id }, access: { role: access.role, workspaceId: access.workspace.id, evidenceId: access.evidenceId } })
+        return json(200, { profile: STAGING_PROFILE, user: { id: user.id }, access: { role: access.role, workspaceId: access.companyId, evidenceId: access.evidenceId } })
       }
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) return companySetupRoutes(forwarded)
       if (url.pathname.includes("/scope1-beta-setup")) return scope1BetaRoutes(forwarded)
       if (url.pathname.includes('/process-screen') || url.pathname.includes('/scope1-inventory')) return scope1Routes(forwarded)
       if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)

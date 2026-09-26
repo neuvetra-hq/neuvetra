@@ -297,6 +297,9 @@ export interface WorkspaceConnection extends WorkspaceSql {
 }
 
 export class WorkspaceDatabase {
+  async findCompanySetup(userId:string,companyId:string){return this.asUser(userId,tx=>readCompanySetup(tx,companyId))}
+  async findCompanySetupVersion(userId:string,companyId:string,versionId:string){return this.asUser(userId,tx=>readCompanySetupVersion(tx,companyId,versionId))}
+  async saveCompanySetup(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>saveCompanySetup(tx,userId,companyId,input))}
   protected constructor(protected readonly db: WorkspaceConnection) {}
 
   async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}
@@ -1153,3 +1156,4 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
 }
 import {readScope1,readScope1Version,readScope1Report,saveProcessScreen,saveScope1Inventory,reviewScope1Version,createScope1Report,type M78Authorities,type M78Policy,type M78Family,type M78ProcessSaveInput,type M78InventorySaveInput,type M78ReviewInput,type M78ReportInput} from './m78'
 import {readM80Foundation,readM80FoundationVersion,saveM80Foundation} from './m80'
+import {readCompanySetup,readCompanySetupVersion,saveCompanySetup} from './company-setup'

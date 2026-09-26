@@ -203,3 +203,7 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/m80-validation.ts
 !packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql
 !apps/site-api/src/workspace/m80-beta-routes.ts
+!packages/neuvetra-database/src/company-setup.ts
+!packages/neuvetra-database/src/company-setup-contract.ts
+!packages/neuvetra-database/src/migrations/0023_company_setup.sql
+!apps/site-api/src/workspace/company-setup-routes.ts
