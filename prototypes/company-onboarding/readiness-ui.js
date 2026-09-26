@@ -3,7 +3,7 @@ const $ = selector => document.querySelector(selector);
 const E = value => PlanCore.escapeHtml(value);
 let workspace, assessment, history = [], filter = 'all', historical = false, busy = false, lastFocus;
 const labels = {'needs-input':'Information needed','facts-collected':'Customer facts collected','unsupported':'Specialist method needed','excluded-pending-review':'Exclusion needs review'};
-const optionLabel=value=>String(value).split('-').map(word=>word.charAt(0).toUpperCase()+word.slice(1)).join(' ');
+const optionLabel=value=>{const words=String(value).replaceAll('-',' ');return words.charAt(0).toUpperCase()+words.slice(1);};
 const sentence=name=>/[.!?]$/.test(name)?name:name+'.';
 async function request(path, options = {}) {
   const response = await fetch(path, {...options, cache:'no-store', headers:{'X-Neuvetra-Local':'1', ...options.headers}});
@@ -14,6 +14,7 @@ async function request(path, options = {}) {
 function status(message, error = false) { $('#globalStatus').textContent = message; $('#globalStatus').className = error ? 'error' : ''; }
 function notifyFailure(error) { status(error.message, true); }
 function dateLabel(value) { const d = new Date(value); return Number.isNaN(d.valueOf()) ? 'Date unavailable' : d.toLocaleString(); }
+function localDateStamp(value) { const parsed=value?new Date(value):new Date(),d=Number.isNaN(parsed.valueOf())?new Date():parsed;return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-'); }
 async function consistentReview() {
   for (let attempt=0;attempt<2;attempt++) {
     const current=await request('/api/workspace'),review=await request('/api/readiness');
@@ -101,7 +102,7 @@ async function saveSnapshot() {
 }
 function exportReview() {
   const blob = new Blob([JSON.stringify(assessment,null,2)],{type:'application/json'}), url=URL.createObjectURL(blob), a=document.createElement('a');
-  const savedDate=(assessment.createdAt||new Date().toISOString()).slice(0,10);
+  const savedDate=localDateStamp(assessment.createdAt);
   a.href=url;a.download=`neuvetra-readiness-review-${savedDate}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 function fieldControl(definition,value,index){

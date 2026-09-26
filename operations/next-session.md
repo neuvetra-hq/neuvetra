@@ -1,3 +1,9 @@
+# September 26: Claude review corrections independently accepted
+
+Claude found two escaped issues after the earlier completion: returning-user setup initialization and fuel linkage based on record-type prose. Both are fixed. A composed full-page script-load regression test now covers saved-location startup. Explicit per-record fuel values drive readiness; unknown values remain gaps. Three minor presentation/recovery comments are also addressed. Independent QA passed the final candidate and all 12 workflow commands passed. Root reproduced the blank page before the fix, then verified restored setup, saved edits, fuel positive/negative cases and exact synthetic workspace preservation after restart.
+
+The earlier attribution of failed setup navigation to browser-tool unreliability was incorrect. Claude independently verified downloads on Linux/Chromium; the coordinator's earlier timeout is historical. Review communications live in C:/Users/nimab/Neuvetra/notes/reviews/2026-09-26-readiness-feedback/. See the updated FEEDBACK-HANDOFF.md and R2 review/test/browser receipts. Publish this correction to the same PR6 and verify its exact remote head/checks; the final publication receipt belongs in the local review packet. No Acme data, hosted service, method/factor release or dependent feature milestone changed. Earlier sections are historical.
+
 # September 26: readiness feedback repair published — external review next
 
 All nine bugs and concerns A-F are addressed within the local prototype scope and independently accepted. Implementation `13eac6c20d92aac29f0c313ed3c1c71de7112d44` is pushed to rolling PR6; all eight exact-head check entries passed, including Linux collection and native PostgreSQL regressions. Eleven focused local commands passed. Bayline workspace, evidence metadata and readiness history survived a clean restart exactly.

@@ -378,3 +378,20 @@ test('inputs are not mutated and malicious display text has an explicit escape b
   assert.equal(PlanCore.escapeHtml(result.company.legal), '&lt;img src=x onerror=alert(1)&gt;');
   assert.equal(PlanCore.escapeHtml(result.items[0].source.names), '&lt;script&gt;bad()&lt;/script&gt;');
 });
+
+test('record normalization preserves narrow legacy fuel provenance and never overrides a structured answer', () => {
+  const migrated = PlanCore.normalizeRecord({ recordType: 'Gasoline purchases', unit: 'gal' });
+  assert.equal(migrated.unit, 'US gallon');
+  assert.equal(migrated.unitOriginal, 'gal');
+  assert.equal(migrated.fuelType, 'gasoline');
+  assert.equal(migrated.fuelTypeSource, 'legacy-record-type');
+  const selected = PlanCore.selectRecordFuel(migrated, 'diesel');
+  assert.equal(selected.fuelType, 'diesel');
+  assert.equal(selected.fuelTypeSource, 'user');
+  assert.equal(PlanCore.inferLegacyFuelType('Diesel bill'), 'diesel');
+  assert.equal(PlanCore.inferLegacyFuelType('Fleet fuel purchase'), '');
+  assert.equal(PlanCore.inferLegacyFuelType('A gasoline note in arbitrary prose'), '');
+  const explicit = PlanCore.normalizeRecord({ recordType: 'Gasoline purchases', fuelType: 'unknown', fuelTypeSource: 'user', unit: 'US gallon' });
+  assert.equal(explicit.fuelType, 'unknown');
+  assert.equal(explicit.fuelTypeSource, 'user');
+});

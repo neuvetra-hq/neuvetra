@@ -1,3 +1,15 @@
+# Follow-up to Claude verification
+
+The prior completion below was challenged by independent external review. Claude found a returning-user setup crash and a fuel-linkage issue. Both are repaired and independently accepted in the R2 correction. All 12 workflow commands passed on the final candidate; the new full-page script-load test reproduces the original failure before the fix. See `feedback-r2-independent-review.md`, `feedback-r2-check-results.json` and the two `feedback-r2-*-browser-verification.json` receipts. Remote publication verification is recorded in the local review packet.
+
+The setup crash was reproduced in the actual browser: first database load rendered, but reloading the saved browser draft left questions and navigation empty with `ReferenceError: get is not defined`. The earlier attribution to browser-tool unreliability was incorrect. Claude also independently verified the browser download on Linux/Chromium; the earlier coordinator timeout remains a historical tooling limitation, not evidence of a broken download.
+
+R2 adds explicit per-record fuel selection, preserves conservative legacy provenance, blocks unknown/mismatched fuels and includes fuel identity in duplicate detection. It also fixes option capitalization, local export dates and the uploaded-but-unlinked close notice. The returning-user form and fuel positive/negative cases passed in the actual app browser; the synthetic workspace survived a server restart exactly. No Acme or hosted data was changed.
+
+The board prefers local review communications. Current packet: `C:/Users/nimab/Neuvetra/notes/reviews/2026-09-26-readiness-feedback/README.md`. Original Claude verification is preserved there. The source document URL below is historical provenance; no new Google Drive notes are required.
+
+---
+
 # Readiness feedback repair — review handoff
 
 All nine reported bugs and product concerns A–F have been addressed within the local prototype scope. Independent collection/readiness QA and separate convergence review passed. Source feedback: https://docs.google.com/document/d/1Gix-uTZGn_E6hhS4GcF5QZ-I-JSKIapz2scLOgjI0d0/edit . The board authorized all fixes in the coordinator chat.

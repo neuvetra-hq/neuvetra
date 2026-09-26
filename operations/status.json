@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-26T03:20:47.831487+00:00",
+  "updated_at": "2026-09-26T04:11:29.468455+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -3577,7 +3577,7 @@
   },
   "readiness_feedback_repair": {
     "id": "READY-FIX-ALL",
-    "status": "complete_published_awaiting_board_external_review",
+    "status": "r2_independently_accepted_publication_pending",
     "scope": "Bugs1-9 and concerns A-F local feedback repair; F architecture/handoff decision, not hosted cutover",
     "evidence": [
       "prototypes/company-onboarding/FEEDBACK-HANDOFF.md",
@@ -3586,9 +3586,18 @@
       "prototypes/company-onboarding/feedback-convergence-review.md",
       "prototypes/company-onboarding/feedback-publication.json"
     ],
-    "next_gate": "Board asks other AI for review; dependent feature work waits for feedback",
+    "next_gate": "Publish accepted R2 to rolling PR6 and verify exact remote checks; board/external follow-up before dependent features.",
     "active_workers": [],
     "implementation_head": "13eac6c20d92aac29f0c313ed3c1c71de7112d44",
-    "remote_checks": "8 success on implementation head"
+    "remote_checks": "8 success on implementation head",
+    "external_review": "Local notes/reviews/2026-09-26-readiness-feedback/CLAUDE-VERIFICATION.md: 13/15 verified; setup regression and fuel linkage issue; browser download verified by external reviewer.",
+    "r2_evidence": [
+      "prototypes/company-onboarding/feedback-r2-independent-review.md",
+      "prototypes/company-onboarding/feedback-r2-check-results.json",
+      "prototypes/company-onboarding/feedback-r2-setup-browser-verification.json",
+      "prototypes/company-onboarding/feedback-r2-fuel-browser-verification.json"
+    ],
+    "local_review_index": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-09-26-readiness-feedback\\README.md",
+    "r2_review": "Independent PASS on frozen final candidate; original escaped defects and test-harness failures preserved."
   }
 }

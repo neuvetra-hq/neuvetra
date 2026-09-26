@@ -169,8 +169,10 @@ def validate_item(item):
         if field in item and (type(item[field]) is not list or any(type(row) is not dict for row in item[field])):
             raise ValueError('Records and evidence must be lists of objects.')
     for record in item.get('records', []):
-        string_fields(record, ('id', 'recordType', 'unit', 'unitOriginal', 'quantityOriginal', 'quality', 'periodStart', 'periodEnd', 'reference', 'notes'))
+        string_fields(record, ('id', 'recordType', 'fuelType', 'fuelTypeSource', 'unit', 'unitOriginal', 'quantityOriginal', 'quality', 'periodStart', 'periodEnd', 'reference', 'notes'))
         string_list(record, 'evidenceIds')
+        if 'fuelType' in record and record['fuelType'] not in ('natural-gas', 'gasoline', 'diesel', 'propane', 'fuel-oil', 'other', 'not-a-fuel-record', 'unknown'):
+            raise ValueError('Unsupported record fuel type.')
         quantity = record.get('quantity')
         if quantity is not None and type(quantity) is not str:
             raise ValueError('Quantity must be a nonnegative decimal string or unknown.')

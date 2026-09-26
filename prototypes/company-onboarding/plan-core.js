@@ -9,6 +9,8 @@
   const SOURCE_FAMILY_IDS = ['stationary', 'generator', 'mobile', 'fugitive', 'process'];
   const VALID_STATUSES = new Set(['not-started', 'in-progress', 'complete']);
   const VALID_QUALITIES = new Set(['actual', 'estimated', 'unknown']);
+  const RECORD_FUEL_TYPES = Object.freeze(['natural-gas', 'gasoline', 'diesel', 'propane', 'fuel-oil', 'other', 'not-a-fuel-record', 'unknown']);
+  const VALID_RECORD_FUEL_TYPES = new Set(RECORD_FUEL_TYPES);
   const VALID_LOCATION_MODES = new Set(['sites', 'company-wide', 'unknown']);
   const SOURCE_LOCATION_SENTINELS = new Set(['', 'Not sure', 'Multiple locations — describe below']);
   const UNIT_ALIASES = Object.freeze({
@@ -634,6 +636,7 @@
     if (!text(value.recordType).trim()) errors.push('Record type is required.');
     if (!text(value.unit).trim()) errors.push('Unit is required.');
     if (!VALID_QUALITIES.has(value.quality)) errors.push('Quality must be actual, estimated or unknown.');
+    if (Object.prototype.hasOwnProperty.call(value, 'fuelType') && !VALID_RECORD_FUEL_TYPES.has(text(value.fuelType))) errors.push('Fuel for this record is invalid.');
 
     const start = text(value.periodStart);
     const end = text(value.periodEnd);
@@ -672,6 +675,20 @@
     return { original: original, canonical: canonical, changed: canonical !== original };
   }
 
+  function inferLegacyFuelType(value) {
+    const label = text(value).trim().toLowerCase().replace(/[\s_-]+/g, ' ');
+    const match = label.match(/^(natural gas|gasoline|diesel|propane|fuel oil)(?: (?:bill|bills|purchase|purchases|purchased|consumed|consumption|use|usage|fuel))?$/);
+    return match ? {'natural gas':'natural-gas','fuel oil':'fuel-oil'}[match[1]] || match[1] : '';
+  }
+
+  function selectRecordFuel(record, fuelType) {
+    const selected = clone(asObject(record)) || {};
+    if (!VALID_RECORD_FUEL_TYPES.has(text(fuelType))) return selected;
+    selected.fuelType = text(fuelType);
+    selected.fuelTypeSource = 'user';
+    return selected;
+  }
+
   function normalizeRecord(record) {
     const normalized = clone(asObject(record)) || {};
     const quantity = normalizeQuantity(normalized.quantity);
@@ -684,6 +701,13 @@
     if (unit.canonical !== unit.original) normalized.unitOriginal = unit.original;
     else if (Object.prototype.hasOwnProperty.call(normalized, 'unitOriginal') && normalizeUnit(normalized.unitOriginal).canonical !== unit.canonical) delete normalized.unitOriginal;
     normalized.unit = unit.canonical;
+    if (!Object.prototype.hasOwnProperty.call(normalized, 'fuelType')) {
+      const legacyFuel = inferLegacyFuelType(normalized.recordType);
+      if (legacyFuel) {
+        normalized.fuelType = legacyFuel;
+        normalized.fuelTypeSource = 'legacy-record-type';
+      }
+    }
     return normalized;
   }
 
@@ -696,6 +720,7 @@
   return Object.freeze({
     SCHEMA_VERSION: SCHEMA_VERSION,
     SOURCE_FAMILY_IDS: Object.freeze(SOURCE_FAMILY_IDS.slice()),
+    RECORD_FUEL_TYPES: RECORD_FUEL_TYPES,
     createPlan: createPlan,
     onboardingFingerprint: onboardingFingerprint,
     fingerprintOnboarding: onboardingFingerprint,
@@ -705,6 +730,8 @@
     validateRecord: validateRecord,
     normalizeQuantity: normalizeQuantity,
     normalizeUnit: normalizeUnit,
+    inferLegacyFuelType: inferLegacyFuelType,
+    selectRecordFuel: selectRecordFuel,
     normalizeRecord: normalizeRecord,
     escapeHtml: escapeHtml
   });

@@ -1,6 +1,6 @@
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./plan-core.js'));else root.ReadinessCore=factory(root.PlanCore);})(typeof globalThis!=='undefined'?globalThis:this,function(PlanCore){
 'use strict';
-const ENGINE_VERSION='2026-09-25.2',arr=v=>Array.isArray(v)?v:[],txt=v=>typeof v==='string'?v:'';
+const ENGINE_VERSION='2026-09-26.1',arr=v=>Array.isArray(v)?v:[],txt=v=>typeof v==='string'?v:'';
 const EMPTY_FACT=/^(?:n\/?a|none|not applicable|unknown|tbd|to be determined|-+)$/i;
 function day(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(txt(s)))return null;const n=Date.parse(s+'T00:00:00Z');return Number.isFinite(n)&&new Date(n).toISOString().slice(0,10)===s?n/86400000:null;}
 const field=(id,label,type='text',options=[],help='',rules={})=>({id,label,type,options,help,...rules});
@@ -26,6 +26,7 @@ function validModelYears(value,reportingEnd){
  return tokens.every(token=>{const match=token.match(/^(\d{4})(?:\s*-\s*(\d{4}))?$/);if(!match)return false;const first=Number(match[1]),last=Number(match[2]||match[1]);return first>=1900&&last>=first&&last<=max;});
 }
 function answered(value,definition,view){const answer=txt(value).trim();if(!answer||EMPTY_FACT.test(answer)||definition.options.length&&!definition.options.includes(answer))return false;if(definition.format==='positive-number')return /^\d+(?:\.\d+)?$/.test(answer)&&Number(answer)>0;if(definition.format==='model-years')return validModelYears(answer,view.period.end);return true;}
+function recordFuel(record){if(Object.prototype.hasOwnProperty.call(record||{},'fuelType'))return txt(record.fuelType);return PlanCore.inferLegacyFuelType(record&&record.recordType);}
 function evaluate(onboarding,plan,catalog,methods){
  const view=PlanCore.derive(onboarding,plan,catalog),registry=arr(methods&&methods.methods);
  const globalIssues=view.issues.map(message=>({code:'plan-review',message,severity:'blocking'}));
@@ -63,14 +64,24 @@ function evaluate(onboarding,plan,catalog,methods){
    if(!txt(record.reference).trim()&&!arr(record.evidenceIds).length)add('evidence-missing','Link uploaded evidence or provide a traceable document reference.',rid);
    if(record.quality==='estimated'&&!txt(record.notes).trim())add('estimate-basis-missing','Document the estimation method, assumptions and uncertainty in record notes.',rid);
    if(record.quality==='unknown')add('quality-unknown','Confirm whether this is measured or estimated data.',rid);
-   const signature=JSON.stringify([txt(record.recordType).trim().toLowerCase(),txt(q).replace(/^0+(?=\d)/,'').replace(/\.0+$/,''),txt(record.unit).trim().toLowerCase(),record.periodStart,record.periodEnd,txt(record.reference).trim().toLowerCase(),arr(record.evidenceIds).slice().sort()]);
+   const signature=JSON.stringify([txt(record.recordType).trim().toLowerCase(),recordFuel(record),txt(q).replace(/^0+(?=\d)/,'').replace(/\.0+$/,''),txt(record.unit).trim().toLowerCase(),record.periodStart,record.periodEnd,txt(record.reference).trim().toLowerCase(),arr(record.evidenceIds).slice().sort()]);
    if(seen.has(signature))add('duplicate-record','Potential duplicate activity record; reconcile before calculating.',rid);seen.add(signature);
    const recordStart=day(record.periodStart),recordEnd=day(record.periodEnd);if(recordStart!==null&&recordEnd!==null&&recordStart<=recordEnd)intervals.push({start:recordStart,end:recordEnd,rid});
   });
-  const namedFuels=new Set();
-  for(const record of item.records){const label=txt(record.recordType).toLowerCase();if(label.includes('natural gas'))namedFuels.add('natural-gas');if(label.includes('gasoline'))namedFuels.add('gasoline');if(label.includes('diesel'))namedFuels.add('diesel');if(label.includes('propane'))namedFuels.add('propane');if(label.includes('fuel oil'))namedFuels.add('fuel-oil');}
-  if(details['fuel-type']==='gasoline-and-diesel'&&(!namedFuels.has('gasoline')||!namedFuels.has('diesel')))add('fuel-record-linkage','Label the gasoline and diesel records separately so each fuel is traceable.');
-  if(namedFuels.size>1){const expected=namedFuels.size===2&&namedFuels.has('gasoline')&&namedFuels.has('diesel')?'gasoline-and-diesel':'multiple-fuels';if(details['fuel-type']!==expected)add('fuel-profile-conflict','Choose a mixed-fuel profile that matches the fuels named on the activity records.');}
+  if(factFields.some(field=>field.id==='fuel-type')){
+   const namedFuels=new Set(),validFuels=new Set(['natural-gas','gasoline','diesel','propane','fuel-oil','other']);let unresolved=false;
+   for(const [index,record] of item.records.entries()){
+    const fuel=recordFuel(record),rid=txt(record.id)||'record-'+(index+1);
+    if(validFuels.has(fuel))namedFuels.add(fuel);
+    else if(fuel!=='not-a-fuel-record'){unresolved=true;add('fuel-record-linkage','Select the fuel for this record, or mark it as not a fuel quantity.',rid);}
+   }
+   const profile=details['fuel-type'];let matches=false;
+   if(profile==='gasoline-and-diesel')matches=namedFuels.size===2&&namedFuels.has('gasoline')&&namedFuels.has('diesel');
+   else if(profile==='multiple-fuels')matches=namedFuels.size>=2;
+   else if(validFuels.has(profile))matches=namedFuels.size===1&&namedFuels.has(profile);
+   if(namedFuels.size&&!matches)add('fuel-profile-conflict','Choose a fuel profile that matches the structured fuel selected on each activity record.');
+   else if(!namedFuels.size&&item.records.length&&!unresolved)add('fuel-record-linkage','At least one activity record must identify the fuel represented by this fuel profile.');
+  }
   const start=day(view.period.start),end=day(view.period.end);
   if(start!==null&&end!==null&&start<=end){
    intervals.sort((a,b)=>a.start-b.start||a.end-b.end);let cursor=start,previousEnd=null;

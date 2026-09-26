@@ -130,12 +130,16 @@ test('next-action presentation caps five findings, groups them, and collapses fu
   assert.doesNotMatch(ui, /item\.findings\.slice\(0,5\)/);
 });
 
-test('company punctuation is sentence-safe and user-facing readiness copy avoids revision jargon', () => {
+test('company punctuation, option labels and local export dates are presentation-safe', () => {
   const ui = fs.readFileSync(path.join(ROOT, 'readiness-ui.js'), 'utf8');
-  const end = ui.indexOf('async function request');
+  const end = ui.indexOf('async function consistentReview');
   const context = { input: 'Northwind Bakery, Inc.' }; vm.createContext(context);
-  vm.runInContext(ui.slice(0, end) + '\nglobalThis.answer=sentence(input);', context);
+  const previousTimezone=process.env.TZ;process.env.TZ='America/Los_Angeles';
+  try { vm.runInContext(ui.slice(0, end) + '\nglobalThis.answer=sentence(input);globalThis.option=optionLabel("gasoline-and-diesel");globalThis.stamp=localDateStamp(new Date("2026-09-26T06:59:00Z"));', context); }
+  finally { if(previousTimezone===undefined)delete process.env.TZ;else process.env.TZ=previousTimezone; }
   assert.equal(context.answer, 'Northwind Bakery, Inc.');
+  assert.equal(context.option, 'Gasoline and diesel');
+  assert.equal(context.stamp, '2026-09-25');
   assert.doesNotMatch(ui, /neuvetra-readiness-revision-/i);
   assert.doesNotMatch(ui, />Revision\s/i);
 });
@@ -160,4 +164,5 @@ test('file selection, in-flight upload and orphan recovery have explicit UI guar
   assert.match(ui, /Use a document already stored in this workspace/);
   assert.match(ui, /Removed location links:/);
   assert.match(ui, /request\('\/api\/evidence'\)/);
+  assert.match(ui, /uploaded document is stored but was not linked/i);
 });

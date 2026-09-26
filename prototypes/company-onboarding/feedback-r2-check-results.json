@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "taskId": "READY-FIX-R2",
+  "checkedAt": "2026-09-26T04:04:09Z",
+  "workingDirectory": "prototypes/company-onboarding",
+  "originalFailure": {
+    "command": "node --test setup-page-load.test.cjs",
+    "exitCode": 1,
+    "finding": "locations.js:24 ReferenceError: get is not defined from app.js:11 when restoring a saved location"
+  },
+  "finalChecks": [
+    {"command": "node check.cjs", "exitCode": 0, "result": "3 bounded validation groups passed"},
+    {"command": "node --test setup-page-load.test.cjs", "exitCode": 0, "result": "1 passed"},
+    {"command": "node --test plan-core.test.cjs", "exitCode": 0, "result": "25 passed"},
+    {"command": "node qa-core.cjs", "exitCode": 0, "result": "10 boundary checks passed"},
+    {"command": "node --test convergence-export.test.cjs", "exitCode": 0, "result": "5 passed"},
+    {"command": "node --test feedback-qa-core.test.cjs", "exitCode": 0, "result": "10 passed"},
+    {"command": "python -B feedback-qa-server.py", "exitCode": 0, "result": "3 passed"},
+    {"command": "python -B -m unittest test_server -v", "exitCode": 0, "result": "19 passed"},
+    {"command": "python -B qa-http.py", "exitCode": 0, "result": "8 passed, 1 skipped because Windows did not allow symlink creation"},
+    {"command": "node --test readiness-core.test.cjs", "exitCode": 0, "result": "15 passed"},
+    {"command": "node qa-readiness.cjs", "exitCode": 0, "result": "7 passed"},
+    {"command": "python -B qa-readiness.py", "exitCode": 0, "result": "6 passed"}
+  ],
+  "browserChecksReportedByCoordinator": [
+    "Returning saved setup with two already-canonical sites reloads, exposes exactly one Reporting company option, remains editable, persists after reload, and shows no new console errors.",
+    "Structured Gasoline and Diesel records with otherwise generic record types satisfy mixed-fuel linkage without a duplicate-record block; same-period overlap remains review-only.",
+    "Sentence-case readiness option labels are visible."
+  ],
+  "automatedComposedPageCheck": "The complete script-order regression restores and migrates one synthetic legacy legal-name location to Reporting company, then edits and persists it.",
+  "claimsBoundary": "Passing checks do not approve calculation methods, factors, accounting conclusions, legal compliance, external assurance, or release readiness."
+}

@@ -26,6 +26,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: node check.cjs
+      - run: node --test setup-page-load.test.cjs
       - run: node --test plan-core.test.cjs
       - run: node qa-core.cjs
       - run: node --test convergence-export.test.cjs

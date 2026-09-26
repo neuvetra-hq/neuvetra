@@ -1,0 +1,23 @@
+{
+  "date_utc": "2026-09-26T03:54:03.317045+00:00",
+  "origin": "http://127.0.0.1:4333",
+  "data": "separate synthetic Bayline fixture; no Acme access",
+  "before": {
+    "first_database_load": "rendered",
+    "returning_browser_reload": "blank questions and steps",
+    "console": "ReferenceError get is not defined at locations.js:24 / app.js:11",
+    "error_timestamp": "2026-09-26T03:49:24.431Z"
+  },
+  "after": {
+    "same_saved_draft_reload": "7 setup steps and populated company form",
+    "locations_navigation": "semantic button works",
+    "reporting_entity": "one company option per site",
+    "edit": "Oakland HQ/shop — returning edit",
+    "reload_persistence": "exact edited location name displayed",
+    "new_console_errors": 0
+  },
+  "screenshots": [
+    "setup-before-fix.png",
+    "setup-after-fix.png"
+  ]
+}

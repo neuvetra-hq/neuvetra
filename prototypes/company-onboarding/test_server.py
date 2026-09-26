@@ -253,6 +253,18 @@ class LocalServerTests(unittest.TestCase):
             self.assertEqual(self.put(value)[0], 400)
         self.assertEqual(self.get()[2]['revision'], 0)
 
+    def test_structured_record_fuel_roundtrip_and_enum_validation(self):
+        value = self.value()
+        value['plan']['items']['one']['records'] = [{'id': 'fuel-1', 'fuelType': 'gasoline', 'fuelTypeSource': 'user'}]
+        self.assertEqual(self.put(value)[0], 200)
+        saved = self.get()[2]['plan']['items']['one']['records'][0]
+        self.assertEqual(saved['fuelType'], 'gasoline')
+        self.assertEqual(saved['fuelTypeSource'], 'user')
+        invalid = self.value(revision=1)
+        invalid['plan']['items']['one']['records'] = [{'id': 'fuel-2', 'fuelType': 'gasoline-and-diesel', 'fuelTypeSource': 'user'}]
+        self.assertEqual(self.put(invalid)[0], 400)
+        self.assertEqual(self.get()[2]['revision'], 1)
+
     def test_record_decimal_dates_and_incomplete_safe_drafts(self):
         invalid = [
             {'quantity': -1}, {'quantity': '1e2'}, {'quantity': '-1'}, {'quantity': '12,34'},
