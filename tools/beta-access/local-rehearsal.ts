@@ -1,6 +1,6 @@
 import { createPostgresConnection } from "../../packages/neuvetra-database/src/hosted"
 import { admitBetaTenant, disableBetaAdmission, issueBetaInvitation, revokeBetaInvitation, revokeBetaMembership, type SyntheticBetaFixtureManifest } from "../../packages/neuvetra-database/src/beta-access"
-import { installBetaAccess } from "../../packages/neuvetra-database/src/beta-access-migrations"
+import { installBetaAccess, readBetaAccessBaselineManifest } from "../../packages/neuvetra-database/src/beta-access-migrations"
 import { readMigrationManifest } from "../../packages/neuvetra-database/src/staging-migrations"
 import { BETA_ACCESS_PROFILE } from "../../packages/neuvetra-database/src/beta-access-contract"
 import { createBetaAccessServer } from "../../apps/site-api/src/beta-access/server"
@@ -94,8 +94,7 @@ export async function runLocalBetaAccessRehearsal(options: { suffix?: string } =
   const quotedRestore = safeName(restoreDatabase, "m80_beta_access_restore_")
   const quotedRole = safeName(runtimeRole, "m80_beta_access_runtime_")
   const quotedOwner = safeName(ownerRole, "m80_beta_access_owner_")
-  const expected = await readMigrationManifest()
-  if (expected.length !== 22) throw new Error("Exact schema 22 source manifest required.")
+  const expected = await readBetaAccessBaselineManifest()
 
   const cluster = createPostgresConnection(`${ADMIN_BASE}/postgres`, { tls: false, maxConnections: 1 })
   try {

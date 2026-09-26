@@ -11,6 +11,17 @@ export async function readBetaAccessMigrationManifest() {
   }))
 }
 
+/** The isolated M80 rehearsal intentionally starts from the frozen schema-22 prefix. */
+export async function readBetaAccessBaselineManifest() {
+  const baseline = (await readMigrationManifest()).slice(0, 22)
+  if (baseline.length !== 22
+    || baseline[20]?.name !== "0021_scope1_inventory.sql"
+    || baseline[20]?.sha256 !== "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736"
+    || baseline[21]?.name !== "0022_scope1_beta_foundation.sql"
+    || baseline[21]?.sha256 !== "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35") throw new Error("Exact schema 22 source baseline required.")
+  return baseline
+}
+
 const safeName = /^[a-z][a-z0-9_]{7,62}$/
 function quoteIdentifier(value: string): string { if (!safeName.test(value)) throw new Error("Unsafe local identifier."); return `"${value}"` }
 const betaTables = ["target", "schema_migrations", "baseline_receipts", "tenant_admissions", "invitations", "memberships", "requests", "audit"] as const
@@ -93,8 +104,7 @@ export interface BetaAccessInstallApproval {
 /** Explicit local operator action. The application never calls this function. */
 export async function installBetaAccess(db: WorkspaceConnection, approval: BetaAccessInstallApproval) {
   if (approval.syntheticTargetConfirmed !== true || !approval.databaseName.startsWith("m80_beta_access_") || !approval.runtimeRole.startsWith("m80_beta_access_runtime_") || !approval.ownerRole.startsWith("m80_beta_access_owner_") || !safeName.test(approval.databaseName) || !safeName.test(approval.runtimeRole) || !safeName.test(approval.ownerRole) || approval.ownerRole === approval.runtimeRole || !/^[0-9a-f]{64}$/.test(approval.fixtureManifestSha256)) throw new Error("Exact synthetic beta target required.")
-  const baseline = await readMigrationManifest()
-  if (baseline.length !== 22) throw new Error("Schema 22 baseline required.")
+  const baseline = await readBetaAccessBaselineManifest()
   const module = await readBetaAccessMigrationManifest()
   await db.transaction(async tx => {
     await tx.query("select pg_advisory_xact_lock(802530001)")
