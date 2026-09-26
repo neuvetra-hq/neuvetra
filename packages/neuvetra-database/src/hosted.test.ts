@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
 import { HostedWorkspaceDatabase, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
 import { loadStagingDatabaseCa, validateDatabaseCaPem } from "./staging-tls"
-import { auditLegacyStagingExposure, EXISTING_PROJECT_REF, planLegacyStagingContainment } from "./staging-audit"
+import { auditLegacyStagingExposure, planLegacyStagingContainment } from "./staging-audit"
 import { migratePrivateStaging, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
 import { M57_WARNINGS, M58_WARNINGS, M61_LIMITATION_ACKNOWLEDGMENTS, type WorkspaceConnection } from "./workspace"
 
@@ -59,13 +59,15 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
   let another: HostedWorkspaceDatabase
   let readinessVersions: number[] = []
   let setupTables: Array<string | null> = []
-  const nativeRef = EXISTING_PROJECT_REF
+  // This database is the shared CI fixture for the staged API suites below.
+  // Keep its project ref stable; the exact existing-project bridge is covered separately.
+  const nativeRef = REF
   const owner = crypto.randomUUID(), admin = crypto.randomUUID(), member = crypto.randomUUID(), outsider = crypto.randomUUID(), uninvited = crypto.randomUUID()
   const company = crypto.randomUUID(), otherCompany = crypto.randomUUID()
   const roster = { expectedProjectRef: nativeRef, workspaceId: company, ownerUserId: owner, members: [{ userId: admin, role: "admin" as const }, { userId: member, role: "member" as const }] }
   // Test-only bypass of provider URL validation, while exercising actual restricted-session readiness.
   // Hosted startup itself is tested separately against an isolated provider before release.
-  const construct = (connection: WorkspaceConnection) => new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(connection, nativeRef, true)
+  const construct = (connection: WorkspaceConnection) => new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(connection, nativeRef, false)
   const runtimeUrl = () => { const url = new URL(testUrl!); url.username = "neuvetra_runtime"; return url.toString() }
   const scoped = <T>(actor: string, sql: string, params: unknown[] = []) => runtime.transaction(async tx => {
     await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [actor])
@@ -94,9 +96,9 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     await operator.exec("alter role neuvetra_runtime login")
     runtime = createPostgresConnection(runtimeUrl(), { tls: false, maxConnections: 2 })
     database = construct(runtime)
-    readinessVersions.push((await database.checkReadiness()).schemaVersion)
+    expect(await rejectionMessage(database.checkReadiness())).toContain("Staging schema receipt mismatch.")
     setupTables.push((await operator.query<{ name: string | null }>("select to_regclass('neuvetra.company_setup_versions')::text name")).rows[0]?.name ?? null)
-    await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true, reuseExistingProject: true })
+    await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })
     readinessVersions.push((await database.checkReadiness()).schemaVersion)
     setupTables.push((await operator.query<{ name: string | null }>("select to_regclass('neuvetra.company_setup_versions')::text name")).rows[0]?.name ?? null)
     for (const id of [owner, admin, member, outsider, uninvited]) await operator.query("insert into auth.users(id) values($1)", [id])
@@ -107,10 +109,10 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
   afterAll(async () => { await database?.close(); await another?.close(); await operator?.close() })
 
   test("checks exact migration receipts, restricted role and no ordinary-start migrations", async () => {
-    expect(readinessVersions).toEqual([22, 23])
+    expect(readinessVersions).toEqual([23])
     expect(setupTables).toEqual([null, "neuvetra.company_setup_versions"])
     expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 23, legacyContainmentVerified: true })
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true, reuseExistingProject: true })).migrations).toHaveLength(23)
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })).migrations).toHaveLength(23)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
     expect((await readMigrationManifest()).every(m => /^[0-9a-f]{64}$/.test(m.sha256))).toBe(true)
