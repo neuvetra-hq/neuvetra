@@ -1,0 +1,28 @@
+import {test,expect} from 'bun:test'
+import {readMigrationManifest,migratePrivateStaging} from '../../packages/neuvetra-database/src/staging-migrations'
+import {validateM78QaManifest,m78QaBaseline} from './m78-integrated-fixture'
+import {HostedWorkspaceDatabase,createPostgresConnection} from '../../packages/neuvetra-database/src/hosted'
+import {fixture,REF} from './hosted-setup-01-native-fixture'
+import {readFileSync} from 'node:fs'
+import {createHash} from 'node:crypto'
+import {createStagingServer} from '../../apps/site-api/src/staging/server'
+import {readStagingConfig,STAGING_PROFILE} from '../../apps/site-api/src/staging/config'
+const files=['packages/neuvetra-database/src/hosted.test.ts','evaluations/research-qa/m78-integrated-fixture.ts','evaluations/research-qa/m80-ci-schema-regression.test.ts','evaluations/research-qa/m78-get-guard-independent.test.ts','operations/agent-improvement/runs/HOSTED-SETUP-DATA-01.json','operations/agent-improvement/runs/HOSTED-SETUP-UI-01.json','.github/workflows/verify.yml']
+const hashes=()=>Object.fromEntries(files.map(p=>[p,createHash('sha256').update(readFileSync(p)).digest('hex')]))
+test('independent CI schema23 repair pins and native expectation semantics',async()=>{
+ const sourceHashes=hashes(),manifest=await readMigrationManifest(),checks:string[]=[]
+ const workflow=readFileSync('.github/workflows/verify.yml','utf8'),smoke=workflow.slice(workflow.indexOf('const manifest=await readMigrationManifest();'),workflow.indexOf('const server=Bun.serve({hostname:"127.0.0.1",port:8080'))
+ expect(smoke).toContain('schemaVersion:23');expect(smoke).toContain('manifest[22].name!=="0023_company_setup.sql"')
+ const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor
+ const smokeApp=await new AsyncFunction('readMigrationManifest','readStagingConfig','STAGING_PROFILE','createStagingServer',smoke+'return app;')(readMigrationManifest,readStagingConfig,STAGING_PROFILE,(config:any,overrides:any)=>createStagingServer(config,{...overrides,verifyAssets:async()=>{}}))
+ try{for(const [path,status] of [['/health',200],['/ready',200],['/workspace-api/config',200],['/workspace-api/session',401]]as const){const response=await smokeApp.fetch(new Request('http://127.0.0.1:8080'+path));expect(response.status).toBe(status);expect(response.headers.get('cache-control')).toBe('no-store')}}finally{await smokeApp.close()}
+ checks.push('exact current workflow smoke manifest/config/database/server initialization block executes with asset verification stub; ready/config200 and unauthenticated session401; actual Docker/assets/Python smoke still required remotely')
+ for(const size of [21,22,23]){expect(()=>validateM78QaManifest(manifest.slice(0,size))).not.toThrow();for(let index=20;index<size;index++){for(const field of ['name','sha256']as const){const invalid=manifest.slice(0,size).map((v,i)=>i===index?{...v,[field]:field==='name'?'0999_unknown.sql':'0'.repeat(64)}:v);expect(()=>validateM78QaManifest(invalid)).toThrow()}}}
+ expect(()=>validateM78QaManifest([...manifest,manifest[22]!])).toThrow();expect(()=>validateM78QaManifest([...manifest.slice(0,21),manifest[22]!,manifest[21]!])).toThrow();checks.push('historical21/22 and current23 shapes accepted; all admitted suffix pins, filenames, order and future length challenged')
+ const digest=createHash('sha256').update(readFileSync('packages/neuvetra-database/src/migrations/0023_company_setup.sql','utf8').replace(/\r\n/g,'\n')).digest('hex');expect(digest).toBe('d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb');expect(manifest[22]!.sha256).toBe(digest);checks.push('new pin independently recomputed from actual normalized migration23 bytes')
+ for(const url of ['postgres://m63_test_admin@127.0.0.1:55464/m63_integration','postgres://supabase_admin@127.0.0.1:55472/postgres','postgres://m63_test_admin@127.0.0.1:55463/m63_integration?sslmode=disable','postgres://m63_test_admin@127.0.0.1:55463/m63_integration#fragment'])expect(()=>m78QaBaseline(url)).toThrow();checks.push('extra loopback port/database/query/fragment negatives refused')
+ const f=await fixture();let another:any
+ const migrationRef='abcdefghijklmnopqrst';await f.op.query('update neuvetra.staging_target set project_ref=$1',[migrationRef])
+ try{const db=new(HostedWorkspaceDatabase as any)(f.runtime,migrationRef);expect(await db.checkReadiness()).toEqual({profile:'neuvetra.private-synthetic-staging.v1',schemaVersion:23});const before=await f.snapshot();expect((await migratePrivateStaging(f.op,{expectedProjectRef:migrationRef,syntheticTargetConfirmed:true})).migrations).toHaveLength(23);expect(await f.snapshot()).toEqual(before);another=new(HostedWorkspaceDatabase as any)(createPostgresConnection(f.runtimeUrl,{tls:false,maxConnections:1}),migrationRef);expect(await another.checkReadiness()).toMatchObject({schemaVersion:23});checks.push('three revised expectations reproduced with actual restricted native readiness, idempotent migration manifest23 and reopened connection; old rows unchanged')}
+ finally{await another?.close();await f.close();const after=hashes();expect(after).toEqual(sourceHashes);await Bun.write('evaluations/research-qa/hosted-setup-01-ci-repair-result.json',JSON.stringify({status:'pass_bounded_ci_repair',sourceHashes,sourceHashesAfter:after,checks,limitations:['Full hosted.test.ts historical lifecycle not rerun locally; revised semantics exercised on separate fresh synthetic native fixture','Full remote CI still required','Validator accepts historical manifest shapes; actual clone loader requires complete source receipts equal current checkout manifest and does not automatically upgrade older clones'],databaseName:f.databaseName},null,2))}
+},30000)

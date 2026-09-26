@@ -8,7 +8,8 @@ const guardSha256 = '8ffb4f7470e9b139201001b80b7a14f629f7d56a5f67187044e54dfb749
 const snapshotSha256 = '112b13cba11a4cbecdcf4e82004cc5a05784db631ef71426d06246c2a3f40cea';
 const actor = '40000000-0000-4000-8000-000000000001';
 const sourceCounts = new Map<string, number>([
-  ['packages/neuvetra-database/src/hosted.ts', 2],
+  // General membership reuses an already-pinned m71_lock read template.
+  ['packages/neuvetra-database/src/hosted.ts', 3],
   ['packages/neuvetra-database/src/m71.ts', 2],
   ['packages/neuvetra-database/src/m73.ts', 2],
   ['packages/neuvetra-database/src/m74.ts', 2],
@@ -43,14 +44,16 @@ const acceptedValues = (sql: string) => {
   });
 };
 
-test('candidate4 bytes, private enforcement state and source pins are exact', async () => {
+test('candidate4 probe and snapshot bytes stay exact; changed current source is assessed separately', async () => {
   expect(sha(await readFile('evaluations/research-qa/m78-continuation4-get-perf-probe.ts'))).toBe(guardSha256);
   expect(sha(await readFile('operations/agent-improvement/snapshots/M78-CONT4-GET-PERFORMANCE-PROBE-01-CANDIDATE4.json'))).toBe(snapshotSha256);
   expect(guard.M78_GET_SQL_TEMPLATE_COUNT).toBe(20);
   expect(guard.M78_GET_SQL_SOURCE_PIN_COUNT).toBe(10);
   expect(Object.keys(guard)).not.toContain('M78_GET_SQL_TEMPLATES');
   expect(Object.keys(guard)).not.toContain('M78_GET_SQL_SOURCE_PINS');
-  expect(await guard.verifyM78GetSqlSourcePins()).toBeTrue();
+  // The historical probe must refuse execution against this later hosted adapter.
+  // The current finite SQL-template boundary is exercised below without rewriting its frozen pins.
+  expect(await guard.verifyM78GetSqlSourcePins().then(() => 'unexpected success', error => error.message)).toContain('Changed GET SQL source packages/neuvetra-database/src/hosted.ts');
 });
 
 test('the finite set is exactly the 20 static read templates in the ten pinned callers', async () => {

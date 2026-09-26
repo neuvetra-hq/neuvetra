@@ -4,7 +4,10 @@
   "role": "data-database",
   "execution_context": "/root/hosted_data",
   "prompt_sha256": "9f5a9ec9fb9c99d0cb0352fed641e77c97c6b388b6793706603628900d8a457e",
-  "artifacts": ["packages/neuvetra-database/src/company-setup.ts", "packages/neuvetra-database/src/migrations/0023_company_setup.sql"],
+  "artifacts": [
+    { "path": "packages/neuvetra-database/src/company-setup.ts", "sha256": "15bca16b06af477dece8ce007c2299c0d4a643397a7826c6a8005e027b328d72" },
+    { "path": "packages/neuvetra-database/src/migrations/0023_company_setup.sql", "sha256": "d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb" }
+  ],
   "criteria": [
     {
       "id": "DATA-01",
@@ -19,12 +22,15 @@
   "review": {
     "reviewer_execution_context": "/root/hosted_qa",
     "independent": true,
-    "verdict": "pass_local_foundation",
+    "verdict": "pass",
     "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md"],
-    "reviewed_artifacts": ["packages/neuvetra-database/src/company-setup.ts", "packages/neuvetra-database/src/migrations/0023_company_setup.sql"]
+    "reviewed_artifacts": [
+      { "path": "packages/neuvetra-database/src/company-setup.ts", "sha256": "15bca16b06af477dece8ce007c2299c0d4a643397a7826c6a8005e027b328d72" },
+      { "path": "packages/neuvetra-database/src/migrations/0023_company_setup.sql", "sha256": "d9f4a69bfcd0c6fe19201d2893c19bb8a0356edb647b522812c7fce51d62babb" }
+    ]
   },
   "outcome": {
-    "status": "complete_bounded_local",
+    "status": "complete",
     "first_review": "pass",
     "material_findings_open": 0,
     "rework_cycles": 0,

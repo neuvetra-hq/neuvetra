@@ -4,14 +4,22 @@
   "role": "software-engineering",
   "execution_context": "/root",
   "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
-  "artifacts": ["apps/site-web/src/components/CompanySetup.tsx", "apps/site-web/src/lib/company-setup-api.ts", "apps/site-api/src/workspace/company-setup-routes.ts"],
+  "artifacts": [
+    { "path": "apps/site-web/src/components/CompanySetup.tsx", "sha256": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5" },
+    { "path": "apps/site-web/src/lib/company-setup-api.ts", "sha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d" },
+    { "path": "apps/site-api/src/workspace/company-setup-routes.ts", "sha256": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc" }
+  ],
   "criteria": [
     { "id": "UI-01", "status": "pass", "evidence": ["apps/site-web/src/components/CompanySetup.tsx", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reason": "Seven React/Chrome checks, strict response decoder tests and staging build passed for the reviewed local candidate." },
     { "id": "API-01", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reason": "Independent native PostgreSQL, mounted API and real client integration passed locally." },
     { "id": "HOST-01", "status": "pending", "evidence": ["Dockerfile.staging"], "reason": "Staging source allowlist updated; no Docker build or hosted backup/deployment yet." }
   ],
-  "review": { "reviewer_execution_context": "/root/hosted_qa", "independent": true, "verdict": "pass_local_ui_api", "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reviewed_artifacts": ["apps/site-web/src/components/CompanySetup.tsx", "apps/site-web/src/lib/company-setup-api.ts", "apps/site-api/src/workspace/company-setup-routes.ts"] },
-  "outcome": { "status": "in_progress_hosted_gate", "first_review": "fail_pre_release", "material_findings_open": 0, "rework_cycles": 1, "escaped_defects": 0, "repeated_findings": [] },
+  "review": { "reviewer_execution_context": "/root/hosted_qa", "independent": true, "verdict": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reviewed_artifacts": [
+    { "path": "apps/site-web/src/components/CompanySetup.tsx", "sha256": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5" },
+    { "path": "apps/site-web/src/lib/company-setup-api.ts", "sha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d" },
+    { "path": "apps/site-api/src/workspace/company-setup-routes.ts", "sha256": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc" }
+  ] },
+  "outcome": { "status": "in_progress", "first_review": "fail", "material_findings_open": 0, "rework_cycles": 1, "escaped_defects": 0, "repeated_findings": [] },
   "compute": { "requested": { "model": "gpt-5.6-terra", "effort": "medium" }, "observed": { "model": null, "effort": null }, "observation_evidence": [] },
   "metrics": { "elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null },
   "metrics_evidence": [],

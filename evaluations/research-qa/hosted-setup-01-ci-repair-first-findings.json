@@ -1,0 +1,16 @@
+{
+  "scope": "Independent first local review of schema23 CI repair; before final corrections",
+  "findings": [
+    {
+      "id": "CI-F01",
+      "evidence": "Focused Bun run produced 4 pass / 1 fail / 173 assertions. Historical guard test still expected current source pins to pass and failed with Changed GET SQL source packages/neuvetra-database/src/hosted.ts. The finite template count and negative template tests passed.",
+      "reviewed_test_sha256": "49a93050808d076a060652d7246eebd190a7a5dd84d138f91861f7cafd87f60f",
+      "resolution": "Author changed current compatibility test to expect frozen historical probe refusal. Original probe and snapshot byte pins remain unchanged. Final rerun recorded separately."
+    },
+    {
+      "id": "CI-F02",
+      "evidence": "Read-only workflow review found manifest expectation23 but injected database.checkReadiness still reported schemaVersion22; createStagingServer currently requires23. Initial source finding, not an observed Docker run.",
+      "resolution": "Author updated the current image smoke readiness stub to23. Independent final check executes the workflow initialization block locally; actual container build remains remote."
+    }
+  ]
+}

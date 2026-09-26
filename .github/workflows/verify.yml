@@ -277,10 +277,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==22||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql"||manifest[18].name!=="0019_stationary_sources.sql"||manifest[19].name!=="0020_fugitive_sources.sql"||manifest[20].name!=="0021_scope1_inventory.sql"||manifest[21].name!=="0022_scope1_beta_foundation.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==23||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql"||manifest[18].name!=="0019_stationary_sources.sql"||manifest[19].name!=="0020_fugitive_sources.sql"||manifest[20].name!=="0021_scope1_inventory.sql"||manifest[21].name!=="0022_scope1_beta_foundation.sql"||manifest[22].name!=="0023_company_setup.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:22}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:23}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {
