@@ -4,18 +4,21 @@ import {chmod,copyFile,lstat,mkdir,mkdtemp,readFile,readdir,realpath,writeFile}f
 import {createRequire}from'node:module'
 import {tmpdir}from'node:os'
 import {dirname,join}from'node:path'
+import {fileURLToPath,pathToFileURL}from'node:url'
 import {ARTIFACT_CONFIG,type ArtifactPaths,type ArtifactTrustPolicy,verifyHostedSetupArtifact}from'./hosted-setup-artifact-source'
 import {materializeHostedSetupArtifact}from'./hosted-setup-artifact-materialize'
 import {ARTIFACT_PUBLISHER_PROFILE,PR_CHECKS_EVIDENCE_PROFILE,PR_HEAD_EVIDENCE_PROFILE,PR_REVIEW_EVIDENCE_PROFILE,publishHostedSetupArtifact,type ArtifactPublisherPaths,type ArtifactPublisherPolicy}from'./hosted-setup-artifact-publisher'
 
 const GIT=Bun.which('git');if(!GIT)throw Error('git required for artifact publisher tests')
+const REAL_REPOSITORY_ROOT=join(dirname(fileURLToPath(import.meta.url)),'..','..')
 const sha=(value:string|Uint8Array)=>createHash('sha256').update(value).digest('hex')
 async function put(path:string,value:string|Uint8Array){await mkdir(dirname(path),{recursive:true});await writeFile(path,value)}
 async function command(root:string,...args:string[]){const child=Bun.spawn([GIT!,'-C',root,...args],{stdin:'ignore',stdout:'pipe',stderr:'pipe',windowsHide:true});const stdout=await new Response(child.stdout).text(),stderr=await new Response(child.stderr).text(),code=await child.exited;if(code!==0)throw Error(stderr);return stdout.trim()}
+async function gitCommand(...args:string[]){const child=Bun.spawn([GIT!,...args],{stdin:'ignore',stdout:'pipe',stderr:'pipe',windowsHide:true});const stdout=await new Response(child.stdout).text(),stderr=await new Response(child.stderr).text(),code=await child.exited;if(code!==0)throw Error(stderr);return stdout.trim()}
 const migrationNames=[
  '0001_company_workspace.sql','0002_synthetic_bill_intake.sql','0003_synthetic_bill_calculation.sql','0004_inventory_review.sql','0005_annual_electricity_register.sql','0006_inventory_evidence_pack.sql','0007_inventory_draft_report.sql','0008_inventory_draft_report_review.sql','0009_private_staging.sql','0010_manual_electricity_worksheet.sql','0011_worksheet_reports.sql','0012_source_electricity_worksheet.sql','0013_annual_electricity_worksheet.sql','0014_annual_electricity_evidence.sql','0015_corporate_coverage.sql','0016_stationary_natural_gas.sql','0017_mobile_diesel.sql','0018_controlled_fleet.sql','0019_stationary_sources.sql','0020_fugitive_sources.sql','0021_scope1_inventory.sql','0022_scope1_beta_foundation.sql','0023_company_setup.sql',
 ]
-interface FixtureOptions{workerImport?:string;missingDependency?:boolean;missingSource?:boolean;peerMode?:'optional-absent'|'required-absent'|'malformed'|'optional-present';actualDependencies?:boolean}
+interface FixtureOptions{workerImport?:string;missingDependency?:boolean;missingSource?:boolean;peerMode?:'optional-absent'|'required-absent'|'malformed'|'optional-present';actualDependencies?:boolean;externalMutation?:'pg-subpath'|'pglite-kind'|'postgres-subpath'}
 async function copyInstalledPgClosure(target:string){
  const initial=createRequire(new URL('../../packages/neuvetra-database/package.json',import.meta.url)),seen=new Map<string,string>()
  async function collect(name:string,from:ReturnType<typeof createRequire>,optional=false):Promise<void>{
@@ -32,15 +35,19 @@ async function copyInstalledPgClosure(target:string){
 }
 async function fixture(options:FixtureOptions={}){
  const root=await mkdtemp(join(tmpdir(),'hosted-artifact-publisher-')),repo=join(root,'repo'),dependencies=join(root,'private-dependencies'),evidence=join(root,'authenticated-evidence'),output=join(root,'output');await mkdir(repo);await mkdir(dependencies);await mkdir(evidence);await mkdir(output)
+ const pgSpecifier=options.externalMutation==='pg-subpath'?'pg/lib/client':'pg',postgresSpecifier=options.externalMutation==='postgres-subpath'?'postgres/cjs':'postgres'
  const source=new Map<string,string>([
   ['tools/staging/hosted-setup-artifact-worker.ts',`import './hosted-setup-artifact-bindings';import './hosted-setup-transactional-upgrade';import('./hosted-setup-artifact-source');import('./hosted-setup-dedicated-client');${options.workerImport??''}export const worker=true\n`],
-  ['tools/staging/hosted-setup-artifact-bindings.ts',`import './hosted-setup-transactional-upgrade';export const bindings=true\n`],
+  ['tools/staging/hosted-setup-artifact-bindings.ts',`import './hosted-setup-transactional-upgrade';import '../../packages/neuvetra-database/src/hosted';import '../cloud/database-inventory';export const bindings=true\n`],
   ['tools/staging/hosted-setup-transactional-upgrade.ts',`import '../../packages/neuvetra-database/src/staging-migrations';export const runner=true\n`],
   ['tools/staging/hosted-setup-artifact-source.ts',`export const source=true\n`],
   ['tools/staging/hosted-setup-dedicated-client.ts',`import '../../packages/neuvetra-database/src/staging-tls';export const client=true\n`],
   ['packages/neuvetra-database/src/staging-migrations.ts',`import './staging-audit';export const migrations=23\n`],
   ['packages/neuvetra-database/src/staging-audit.ts',`export const audit=true\n`],
   ['packages/neuvetra-database/src/staging-tls.ts',`export const tls=true\n`],
+  ['packages/neuvetra-database/src/hosted.ts',`import '${pgSpecifier}';import './workspace';export const hosted=true\n`],
+  ['packages/neuvetra-database/src/workspace.ts',options.externalMutation==='pglite-kind'?`export function syntheticOnly(){return require('@electric-sql/pglite')}\n`:`export async function syntheticOnly(){return import('@electric-sql/pglite')}\n`],
+  ['tools/cloud/database-inventory.ts',`import{createRequire}from'node:module';const require=createRequire(import.meta.url);export function historicalOnly(){return require('${postgresSpecifier}')}\n`],
   ['packages/neuvetra-database/package.json','{"name":"@neuvetra/database","private":true,"type":"module"}\n'],
  ])
  if(options.missingSource)source.set('tools/staging/hosted-setup-artifact-bindings.ts',`import './absent-module';export const bindings=true\n`)
@@ -69,6 +76,21 @@ async function fixture(options:FixtureOptions={}){
  const policy:ArtifactPublisherPolicy={reviewedProductHead:head,requiredChecks:['synthetic-required'],operatorId:'synthetic-operator',independentReviewerId:'synthetic-reviewer',nowMs:now,headEvidenceSha256:sha(await readFile(evidencePaths.headEvidence)),checksEvidenceSha256:sha(await readFile(evidencePaths.checksEvidence)),reviewEvidenceSha256:sha(await readFile(evidencePaths.reviewEvidence)),gitSha256:sha(await readFile(GIT!)),runtimeSha256:sha(await readFile(process.execPath)),supervisorSha256:sha(await readFile(supervisor)),configSha256:sha(ARTIFACT_CONFIG)}
  return{root,repo,dependencies,paths,policy,docs,evidencePaths,head}
 }
+async function realHeadFixture(){
+ const root=await mkdtemp(join(tmpdir(),'hosted-artifact-real-head-')),repo=join(root,'repo'),dependencies=join(root,'private-dependencies'),evidence=join(root,'synthetic-authenticated-evidence'),output=join(root,'output');await mkdir(dependencies);await mkdir(evidence);await mkdir(output)
+ const head=await command(REAL_REPOSITORY_ROOT,'rev-parse','HEAD');await gitCommand('clone','--quiet','--no-local','--no-checkout',REAL_REPOSITORY_ROOT,repo);await command(repo,'checkout','--quiet','--detach',head);expect(await command(repo,'status','--porcelain=v1','--untracked-files=all')).toBe('')
+ await copyInstalledPgClosure(dependencies)
+ const supervisor=join(repo,'tools/staging/hosted-setup-artifact-supervisor.ts'),config=join(root,'controlled.toml');await put(config,ARTIFACT_CONFIG)
+ const now=Date.now(),expires=now+10*60*1000,docs={
+  head:{profile:PR_HEAD_EVIDENCE_PROFILE,repository:'neuvetra-hq/neuvetra',pullRequest:6,head,observedAtMs:now-4000,expiresAtMs:expires},
+  checks:{profile:PR_CHECKS_EVIDENCE_PROFILE,repository:'neuvetra-hq/neuvetra',pullRequest:6,head,observedAtMs:now-3000,expiresAtMs:expires,checks:[{name:'synthetic-real-head-check',head,conclusion:'success'}]},
+  review:{profile:PR_REVIEW_EVIDENCE_PROFILE,repository:'neuvetra-hq/neuvetra',pullRequest:6,head,operatorId:'synthetic-real-head-operator',independentReviewerId:'synthetic-real-head-reviewer',verdict:'accepted',materialFindingsOpen:0,reviewedAtMs:now-2000,expiresAtMs:expires},
+ }
+ const evidencePaths={headEvidence:join(evidence,'head.json'),checksEvidence:join(evidence,'checks.json'),reviewEvidence:join(evidence,'review.json')};await put(evidencePaths.headEvidence,JSON.stringify(docs.head));await put(evidencePaths.checksEvidence,JSON.stringify(docs.checks));await put(evidencePaths.reviewEvidence,JSON.stringify(docs.review))
+ const paths:ArtifactPublisherPaths={repositoryRoot:repo,dependencyRoot:dependencies,gitExecutable:GIT!,runtimeExecutable:process.execPath,supervisor,config,...evidencePaths,sourceArchive:join(output,'source.archive.json'),dependencyArchive:join(output,'dependency.archive.json'),publication:join(output,'publication.json')}
+ const policy:ArtifactPublisherPolicy={reviewedProductHead:head,requiredChecks:['synthetic-real-head-check'],operatorId:'synthetic-real-head-operator',independentReviewerId:'synthetic-real-head-reviewer',nowMs:now,headEvidenceSha256:sha(await readFile(evidencePaths.headEvidence)),checksEvidenceSha256:sha(await readFile(evidencePaths.checksEvidence)),reviewEvidenceSha256:sha(await readFile(evidencePaths.reviewEvidence)),gitSha256:sha(await readFile(GIT!)),runtimeSha256:sha(await readFile(process.execPath)),supervisorSha256:sha(await readFile(supervisor)),configSha256:sha(ARTIFACT_CONFIG)}
+ return{root,repo,dependencies,paths,policy,head}
+}
 async function rewrite(path:string,value:unknown){await put(path,JSON.stringify(value));return sha(await readFile(path))}
 async function repin(f:Awaited<ReturnType<typeof fixture>>){const next=await command(f.repo,'rev-parse','HEAD');f.head=next;f.policy.reviewedProductHead=next;f.docs.head.head=next;f.docs.checks.head=next;f.docs.checks.checks[0]!.head=next;f.docs.review.head=next;f.policy.headEvidenceSha256=await rewrite(f.evidencePaths.headEvidence,f.docs.head);f.policy.checksEvidenceSha256=await rewrite(f.evidencePaths.checksEvidence,f.docs.checks);f.policy.reviewEvidenceSha256=await rewrite(f.evidencePaths.reviewEvidence,f.docs.review)}
 const looseObject=(repo:string,oid:string)=>join(repo,'.git','objects',oid.slice(0,2),oid.slice(2))
@@ -81,6 +103,22 @@ test('publishes a clean exact commit and round-trips through the real materializ
  const trust:ArtifactTrustPolicy={publicationSha256:published.publicationSha256,reviewedProductHead:f.head,operatorId:f.policy.operatorId,independentReviewerId:f.policy.independentReviewerId,requiredChecks:f.policy.requiredChecks,activeCheckoutRoots:[f.repo]}
  const materialized=await materializeHostedSetupArtifact(artifactPaths,trust),verified=await verifyHostedSetupArtifact(artifactPaths,trust)
  expect(materialized.sourceFileCount).toBe(published.sourceFileCount);expect(materialized.dependencyFileCount).toBe(published.dependencyFileCount);expect(materialized.inspection.executionArtifactSha256).toBe(verified.executionArtifactSha256);expect(verified.migrationManifestSha256).toBe(published.migrationManifestSha256);expect(verified.launchAuthorized).toBe(false)
+},30000)
+
+test('publishes the actual clean repository head and its fixed import closure loads from only the pg dependency archive',async()=>{
+ const f=await realHeadFixture(),published=await publishHostedSetupArtifact(f.paths,f.policy)
+ const archive=JSON.parse(await readFile(f.paths.sourceArchive,'utf8')),names=new Set(archive.files.map((row:any)=>row.path)),dependencyArchive=JSON.parse(await readFile(f.paths.dependencyArchive,'utf8')),dependencyNames=new Set<string>(dependencyArchive.files.map((row:any)=>row.path))
+ for(const path of['packages/neuvetra-database/src/hosted.ts','packages/neuvetra-database/src/workspace.ts','tools/cloud/database-inventory.ts'])expect(names.has(path)).toBe(true)
+ expect([...dependencyNames].some(path=>path.startsWith('node_modules/pg/'))).toBe(true);expect([...dependencyNames].some(path=>path.startsWith('node_modules/@electric-sql/pglite/')||path.startsWith('node_modules/postgres/'))).toBe(false)
+ const artifactPaths:ArtifactPaths={publication:f.paths.publication,sourceArchive:f.paths.sourceArchive,dependencyArchive:f.paths.dependencyArchive,sourceRoot:join(f.root,'materialized-source'),dependencyRoot:join(f.root,'materialized-dependencies'),runtimeExecutable:f.paths.runtimeExecutable,supervisor:f.paths.supervisor,config:f.paths.config}
+ const trust:ArtifactTrustPolicy={publicationSha256:published.publicationSha256,reviewedProductHead:f.head,operatorId:f.policy.operatorId,independentReviewerId:f.policy.independentReviewerId,requiredChecks:f.policy.requiredChecks,activeCheckoutRoots:[f.repo,REAL_REPOSITORY_ROOT]}
+ const materialized=await materializeHostedSetupArtifact(artifactPaths,trust);expect(materialized.sourceFileCount).toBe(published.sourceFileCount)
+ const bindings=pathToFileURL(join(artifactPaths.sourceRoot,'tools/staging/hosted-setup-artifact-bindings.ts')).href,dedicatedClient=pathToFileURL(join(artifactPaths.sourceRoot,'tools/staging/hosted-setup-dedicated-client.ts')).href,child=Bun.spawn([process.execPath,'--no-env-file','--no-install','--config='+artifactPaths.config,'-e',`await import(${JSON.stringify(bindings)});await import(${JSON.stringify(dedicatedClient)});console.log('fixed-runtime-imports-loaded')`],{cwd:artifactPaths.sourceRoot,env:{SystemRoot:process.env.SystemRoot??'C:\\Windows',NODE_PATH:join(artifactPaths.dependencyRoot,'node_modules')},stdin:'ignore',stdout:'pipe',stderr:'pipe',windowsHide:true})
+ const stdout=await new Response(child.stdout).text(),stderr=await new Response(child.stderr).text(),code=await child.exited;expect({code,stdout:stdout.trim(),stderr}).toEqual({code:0,stdout:'fixed-runtime-imports-loaded',stderr:''})
+},60000)
+
+test('external import exceptions are exact importer, kind and bare package tuples',async()=>{
+ for(const externalMutation of['pg-subpath','pglite-kind','postgres-subpath']as const){const f=await fixture({externalMutation});await expect(publishHostedSetupArtifact(f.paths,f.policy)).rejects.toThrow('PATH_ALIAS_OR_EXTERNAL_IMPORT_REFUSED');for(const path of[f.paths.sourceArchive,f.paths.dependencyArchive,f.paths.publication])expect(await Bun.file(path).exists()).toBe(false)}
 },30000)
 
 test('refuses clean committed sibling directory case aliases before creating archive outputs',async()=>{

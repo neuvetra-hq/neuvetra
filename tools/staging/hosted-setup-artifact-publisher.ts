@@ -31,6 +31,14 @@ const SOURCE_SEEDS=Object.freeze([
  'tools/staging/hosted-setup-transactional-upgrade.ts',
 ])
 const SOURCE_EXTRAS=Object.freeze(['packages/neuvetra-database/package.json'])
+// Exact byte-reviewed exceptions to the relative-import rule. `pg` is the
+// packaged runtime driver. The other two are lazy alternatives in shared
+// source and must remain absent from this artifact's private dependency tree.
+const EXTERNAL_IMPORT_RULES=Object.freeze([
+ {importer:'packages/neuvetra-database/src/hosted.ts',kind:'import-statement',specifier:'pg',resolution:'packaged-runtime'},
+ {importer:'packages/neuvetra-database/src/workspace.ts',kind:'dynamic-import',specifier:'@electric-sql/pglite',resolution:'inert-unavailable'},
+ {importer:'tools/cloud/database-inventory.ts',kind:'require-call',specifier:'postgres',resolution:'inert-unavailable'},
+] as const)
 const decoder=new TextDecoder('utf-8',{fatal:true})
 const sha=(value:string|Uint8Array)=>createHash('sha256').update(value).digest('hex')
 function check(value:unknown,message:string):asserts value{if(!value)throw Error('ARTIFACT_PUBLISHER_'+message)}
@@ -144,15 +152,20 @@ function resolveImport(importer:string,specifier:string,entries:Map<string,TreeE
  check(candidates.length===1,'IMPORT_RESOLUTION_REFUSED');return candidates[0]!
 }
 async function sourceClosure(gitExecutable:string,root:string,entries:Map<string,TreeEntry>){
- const selected=new Map<string,Uint8Array>(),queue=[...SOURCE_SEEDS],transpiler=new Bun.Transpiler({loader:'ts'})
+ const selected=new Map<string,Uint8Array>(),queue=[...SOURCE_SEEDS],transpiler=new Bun.Transpiler({loader:'ts'}),externals=new Set<string>()
+ const rule=(importer:string,kind:string,specifier:string)=>EXTERNAL_IMPORT_RULES.find(item=>item.importer===importer&&item.kind===kind&&item.specifier===specifier)
  for(const path of SOURCE_EXTRAS)selected.set(path,await blob(gitExecutable,root,path,entries))
  for(const name of MIGRATIONS){const path='packages/neuvetra-database/src/migrations/'+name;selected.set(path,await blob(gitExecutable,root,path,entries))}
  while(queue.length){const path=canonicalPath(queue.shift()!);if(selected.has(path))continue
   const bytes=await blob(gitExecutable,root,path,entries);selected.set(path,bytes)
   check(path.endsWith('.ts')||path.endsWith('.tsx')||path.endsWith('.js'),'EXECUTABLE_SOURCE_TYPE_REFUSED')
   let imports:ReturnType<typeof transpiler.scanImports>;try{imports=transpiler.scanImports(decoder.decode(bytes))}catch{throw Error('ARTIFACT_PUBLISHER_SOURCE_PARSE_REFUSED')}
-  for(const item of imports){const target=resolveImport(path,item.path,entries);if(target&&!selected.has(target))queue.push(target)}
+  for(const item of imports){
+   if(!item.path.startsWith('.')&&!item.path.startsWith('node:')){const allowed=rule(path,item.kind,item.path);check(allowed&&!externals.has(allowed.importer+'\0'+allowed.kind+'\0'+allowed.specifier),'PATH_ALIAS_OR_EXTERNAL_IMPORT_REFUSED');externals.add(allowed.importer+'\0'+allowed.kind+'\0'+allowed.specifier);continue}
+   const target=resolveImport(path,item.path,entries);if(target&&!selected.has(target))queue.push(target)
+  }
  }
+ check(externals.size===EXTERNAL_IMPORT_RULES.length,'EXTERNAL_IMPORT_SET_REFUSED')
  return selected
 }
 async function findPackage(root:string,name:string,issuer?:string,optional=false):Promise<string|null>{
@@ -182,7 +195,7 @@ async function dependencyClosure(root:string){
  const actual=new Set<string>()
  const walkAll=async(directory:string)=>{for(const name of(await readdir(directory)).sort()){const full=join(directory,name),stat=await lstat(full);check(!stat.isSymbolicLink()&&comparable(await realpath(full))===comparable(full),'DEPENDENCY_LINK_REFUSED');if(stat.isDirectory())await walkAll(full);else{check(stat.isFile()&&stat.nlink===1,'DEPENDENCY_NONREGULAR_REFUSED');actual.add(canonicalPath(relative(dependencyRoot,full).replaceAll('\\','/')))}}}
  await walkAll(dependencyRoot);check(actual.size===files.size&&[...actual].every(path=>files.has(path)),'DEPENDENCY_ROOT_NOT_PRIVATE_CLOSURE')
- return files
+ return{files,packageNames:new Set([...packages.values()].map(pkg=>pkg.metadata.name as string))}
 }
 function archive(files:Map<string,Uint8Array>,kind:'source'|'dependency'){
  check(files.size>0&&files.size<=ARCHIVE_LIMITS.files,'ARCHIVE_FILE_COUNT_REFUSED');let total=0,prior='';const names=new Map<string,string>(),fileNames=new Set<string>()
@@ -223,7 +236,8 @@ export async function publishHostedSetupArtifact(paths:ArtifactPublisherPaths,po
  const checks=(checksDoc.checks as unknown[]).map(value=>{const row=object(value);exact(row,['name','head','conclusion']);return{name:text(row.name),head:head(row.head),conclusion:row.conclusion}})
  for(const name of q.requiredChecks)check(checks.filter(item=>item.name===name&&item.head===reviewedHead&&item.conclusion==='success').length===1,'CHECKS_REFUSED')
  const treeOid=await assertCleanHead(gitExecutable,repositoryRoot,reviewedHead),entries=await tree(gitExecutable,repositoryRoot,treeOid)
- const sourceFiles=await sourceClosure(gitExecutable,repositoryRoot,entries),dependencyFiles=await dependencyClosure(dependencyRoot)
+ const sourceFiles=await sourceClosure(gitExecutable,repositoryRoot,entries),dependencyClosureResult=await dependencyClosure(dependencyRoot),dependencyFiles=dependencyClosureResult.files
+ for(const rule of EXTERNAL_IMPORT_RULES)check(rule.resolution==='packaged-runtime'?dependencyClosureResult.packageNames.has(rule.specifier):!dependencyClosureResult.packageNames.has(rule.specifier),'EXTERNAL_IMPORT_DEPENDENCY_REFUSED')
  const source=archive(sourceFiles,'source'),dependencies=archive(dependencyFiles,'dependency')
  const migrations=[] as{path:string;name:string;sha256:string;normalizedSha256:string}[],manifest=[]as{name:string;sha256:string;sql:string}[]
  for(const name of MIGRATIONS){const path='packages/neuvetra-database/src/migrations/'+name,bytes=sourceFiles.get(path);check(bytes&&bytes.length>0,'MIGRATION_MISSING');const sql=decoder.decode(bytes).replace(/\r\n/g,'\n'),normalizedSha256=sha(sql);migrations.push({path,name,sha256:sha(bytes),normalizedSha256});manifest.push({name,sha256:normalizedSha256,sql})}
