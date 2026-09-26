@@ -1,0 +1,49 @@
+{
+  "verifiedAt": "2026-09-26T03:27:48.358473+00:00",
+  "implementationHead": "13eac6c20d92aac29f0c313ed3c1c71de7112d44",
+  "pullRequest": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+  "checks": [
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567188/job/108327862454"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567188/job/108327862440"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567188/job/108327862438"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567188/job/108327862427"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567254/job/108327862383"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567188/job/108327862321"
+    },
+    {
+      "name": "connected-collection",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214567160/job/108327862235"
+    },
+    {
+      "name": "connected-collection",
+      "conclusion": "success",
+      "url": "https://github.com/neuvetra-hq/neuvetra/actions/runs/36214563532/job/108327852315"
+    }
+  ],
+  "restart": "Exact workspace, evidence metadata and readiness history unchanged after clean test-server restart",
+  "closure": "This receipt binds implementation head; later documentation-only closure head must also be verified remotely."
+}

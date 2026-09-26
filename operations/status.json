@@ -3577,15 +3577,18 @@
   },
   "readiness_feedback_repair": {
     "id": "READY-FIX-ALL",
-    "status": "independently_accepted_publication_pending",
+    "status": "complete_published_awaiting_board_external_review",
     "scope": "Bugs1-9 and concerns A-F local feedback repair; F architecture/handoff decision, not hosted cutover",
     "evidence": [
       "prototypes/company-onboarding/FEEDBACK-HANDOFF.md",
       "prototypes/company-onboarding/feedback-check-results.json",
       "prototypes/company-onboarding/feedback-independent-review.md",
-      "prototypes/company-onboarding/feedback-convergence-review.md"
+      "prototypes/company-onboarding/feedback-convergence-review.md",
+      "prototypes/company-onboarding/feedback-publication.json"
     ],
-    "next_gate": "Publish same rolling PR6; verify exact remote checks; board external AI review before dependent features",
-    "active_workers": []
+    "next_gate": "Board asks other AI for review; dependent feature work waits for feedback",
+    "active_workers": [],
+    "implementation_head": "13eac6c20d92aac29f0c313ed3c1c71de7112d44",
+    "remote_checks": "8 success on implementation head"
   }
 }

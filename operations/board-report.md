@@ -1,3 +1,9 @@
+# September 26: readiness feedback repair published — external review next
+
+All nine bugs and concerns A-F are addressed within the local prototype scope and independently accepted. Implementation `13eac6c20d92aac29f0c313ed3c1c71de7112d44` is pushed to rolling PR6; all eight exact-head check entries passed, including Linux collection and native PostgreSQL regressions. Eleven focused local commands passed. Bayline workspace, evidence metadata and readiness history survived a clean restart exactly.
+
+The board will ask another AI to review. Start with prototypes/company-onboarding/FEEDBACK-HANDOFF.md and feedback-publication.json. F establishes the tested offline handoff and hosted migration/cutover decision; hosted import remains future implementation, not a completed migration. Native browser download remains unverified; snapshot replay passed. No dependent feature milestone, hosted service change or persistent worker is active. Earlier sections are historical.
+
 # September 26: readiness feedback repair independently accepted; publication next
 
 The board authorized all nine bugs and A-F concerns from the linked Bayline review. All eleven focused test commands passed, and independent product QA plus separate convergence review accepted the bounded changes. Collection now guides units, preserves originals, recovers uploads and prevents duplicate quota/self-review flags. Readiness separates structured customer facts from reviewer approvals and shows five prioritized actions. F is resolved as a concrete hosted migration/cutover decision with an offline validator; no hosted migration occurred.

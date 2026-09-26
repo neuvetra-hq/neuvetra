@@ -37,3 +37,5 @@ Open the collection page. Test boiler units and 4,210 quantity; save first subty
 The browser automation's download event timed out; a newly downloaded file was not confirmed this turn. Snapshot integrity and execution from archived bytes passed. Browser locations were visually checked; the tool's semantic click routing was unreliable, and the visible coordinate navigation worked. Mobile check requested390px; the app browser reported355 CSS pixels with341px document width and no horizontal overflow. A physical device and assistive technology audit were not performed.
 
 This completion is the feedback repair, not a complete corporate inventory, hosted tenant cutover, source/method release, customer launch, compliance claim or assurance opinion. The other AI should independently challenge the changes and these boundaries before a dependent feature milestone.
+
+Publication: implementation `13eac6c20d92aac29f0c313ed3c1c71de7112d44` passed all eight remote check entries on PR6. See `feedback-publication.json`. Clean test-server restart preserved workspace, evidence metadata and readiness history exactly.
