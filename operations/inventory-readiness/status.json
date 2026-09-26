@@ -1,0 +1,91 @@
+{
+  "id": "READY-01",
+  "status": "local_validation_passed_production_blocked",
+  "updatedAt": "2026-09-26T01:49:41.415715+00:00",
+  "baseCommit": "a54d48416d9abdc257f9536c14d50121bfc75222",
+  "checks": {
+    "intake": "pass",
+    "coreAuthor": 27,
+    "independentCollectionCore": 10,
+    "independentReadinessCore": 7,
+    "serverAuthor": 17,
+    "independentCollectionHTTP": 8,
+    "independentReadinessHTTP": 6,
+    "platformSkipped": 1
+  },
+  "browser": {
+    "isolatedDatabase": true,
+    "collectionDeepLink": "pass",
+    "subtypeSave": "pass",
+    "methodDetailsSaveReload": "pass",
+    "snapshotSaveHistory": "pass",
+    "historicalSaveDisabled": "pass"
+  },
+  "productionBlockers": [
+    "Authenticated company identity and tenant authorization",
+    "Production recovery and operational acceptance",
+    "Approved source use and released method/factor applicability",
+    "Appropriate qualified accounting and release review"
+  ],
+  "routingException": "Registered model override dispatches failed authentication before outputs; inherited fallbacks used; actual compute unknown",
+  "assignments": [
+    {
+      "id": "READY-ENGINE-02",
+      "role": "software-engineering",
+      "executor": "/root/readiness_impl",
+      "promptSha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+      "requestedPolicy": {
+        "model": "gpt-5.6-sol",
+        "effort": "high"
+      },
+      "actualDispatch": "inherited fallback",
+      "observedModel": null,
+      "observedEffort": null,
+      "costUSD": null,
+      "files": [
+        "prototypes/company-onboarding/readiness-core.js",
+        "prototypes/company-onboarding/readiness-core.test.cjs",
+        "prototypes/company-onboarding/readiness-cli.cjs",
+        "prototypes/company-onboarding/server.py",
+        "prototypes/company-onboarding/test_server.py"
+      ]
+    },
+    {
+      "id": "READY-DOMAIN-02",
+      "role": "accounting-validation",
+      "executor": "/root/readiness_sources",
+      "promptSha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+      "requestedPolicy": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "actualDispatch": "inherited fallback",
+      "observedModel": null,
+      "observedEffort": null,
+      "costUSD": null,
+      "files": [
+        "prototypes/company-onboarding/READINESS-DOMAIN.md",
+        "prototypes/company-onboarding/data/readiness-methods.json"
+      ]
+    },
+    {
+      "id": "READY-QA-01",
+      "role": "qa-lead",
+      "executor": "/root/readiness_review",
+      "promptSha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+      "requestedPolicy": {
+        "model": "gpt-6-astra",
+        "effort": "high"
+      },
+      "actualDispatch": "inherited fallback",
+      "observedModel": null,
+      "observedEffort": null,
+      "costUSD": null,
+      "files": [
+        "prototypes/company-onboarding/readiness-review.md",
+        "prototypes/company-onboarding/qa-readiness.py",
+        "prototypes/company-onboarding/qa-readiness.cjs"
+      ]
+    }
+  ]
+}

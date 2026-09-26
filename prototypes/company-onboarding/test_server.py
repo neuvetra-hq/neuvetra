@@ -288,5 +288,65 @@ class LocalServerTests(unittest.TestCase):
             self.assertEqual(db.execute('SELECT SUM(size) FROM evidence').fetchone()[0], MAX_EVIDENCE_TOTAL)
 
 
+    def test_readiness_server_computed_immutable_and_restart(self):
+        self.assertEqual(self.put(self.value())[0], 200)
+        status, _, live = self.request('GET', '/api/readiness', headers=self.headers())
+        self.assertEqual(status, 200)
+        self.assertFalse(live['result']['readyForCalculation'])
+        self.assertEqual(live['workspaceRevision'], 1)
+        artifacts = live['artifacts']
+        self.assertEqual(hashlib.sha256(artifacts['catalogUtf8'].encode('utf-8')).hexdigest(), live['catalogSha256'])
+        self.assertEqual(hashlib.sha256(artifacts['methodsUtf8'].encode('utf-8')).hexdigest(), live['methodsSha256'])
+        engine = ''.join(artifacts['engineFiles'][name] for name in ('readiness-core.js', 'plan-core.js', 'readiness-cli.cjs'))
+        self.assertEqual(hashlib.sha256(engine.encode('utf-8')).hexdigest(), live['engineSha256'])
+        canonical = json.dumps(live['inputs'], ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8')
+        self.assertEqual(hashlib.sha256(canonical).hexdigest(), live['inputSha256'])
+        body = {'expectedRevision': 1}
+        status, _, saved = self.request('POST', '/api/readiness', body, self.headers())
+        self.assertEqual(status, 201)
+        self.assertEqual(self.request('POST', '/api/readiness', body, self.headers())[2], saved)
+        self.assertEqual(self.request('GET', '/api/readiness/history', headers=self.headers())[2]['snapshots'][0]['id'], saved['id'])
+        for extra in ({'result': {'readyForCalculation': True}}, {'methods': []}, {'inputSha256': 'forged'}):
+            self.assertEqual(self.request('POST', '/api/readiness', dict(body, **extra), self.headers())[0], 400)
+        self.assertEqual(self.request('POST', '/api/readiness', {'expectedRevision': True}, self.headers())[0], 400)
+        self.assertEqual(self.request('POST', '/api/readiness', body, {'X-Neuvetra-Local': '1'})[0], 403)
+        self.assertEqual(self.put(self.value(1))[0], 200)
+        self.assertEqual(self.request('POST', '/api/readiness', body, self.headers())[0], 409)
+        self.stop()
+        self.start()
+        self.assertEqual(self.request('GET', '/api/readiness/' + saved['id'], headers=self.headers())[2], saved)
+        with closing(sqlite3.connect(self.db)) as db:
+            self.assertEqual(db.execute('PRAGMA user_version').fetchone()[0], 2)
+            for statement in ('UPDATE readiness_snapshot SET input_sha256="forged"', 'DELETE FROM readiness_snapshot'):
+                with self.assertRaises(sqlite3.IntegrityError):
+                    db.execute(statement)
+
+    def test_readiness_cas_race_and_legacy_migration(self):
+        from server import Store
+        store = Store(self.db)
+        original = store.readiness
+        def raced():
+            snapshot = original()
+            store.write(self.value(0))
+            return snapshot
+        store.readiness = raced
+        self.assertIsNone(store.save_readiness(0))
+        self.assertEqual(store.readiness_history(), {'snapshots': []})
+        self.stop()
+        with closing(sqlite3.connect(self.db)) as db, db:
+            db.execute('DROP TABLE readiness_snapshot')
+            db.execute('PRAGMA user_version=1')
+        before = Store(self.db).read()
+        self.start()
+        self.assertEqual(self.get()[2], before)
+        self.assertEqual(self.request('POST', '/api/readiness', {'expectedRevision': 1}, self.headers())[0], 201)
+
+    def test_readiness_detail_shapes(self):
+        for details in ([1], {'fuel': True}, {'fuel': 'x' * 4001}, {str(i): 'x' for i in range(31)}):
+            value = self.value()
+            value['plan']['items']['one']['readinessDetails'] = details
+            self.assertEqual(self.put(value)[0], 400)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

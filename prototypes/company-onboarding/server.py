@@ -11,6 +11,8 @@ import re
 import mimetypes
 import secrets
 import sqlite3
+import subprocess
+import shutil
 import tempfile
 from datetime import date, datetime, timezone
 from http.cookies import SimpleCookie, CookieError
@@ -150,6 +152,10 @@ def validate_item(item):
     if type(item) is not dict:
         raise ValueError('Plan items must be objects.')
     string_fields(item, ('id', 'status', 'inputFingerprint', 'subtypeId', 'notes', 'equipment', 'title', 'scope', 'familyId', 'description'))
+    if 'readinessDetails' in item:
+        details = item['readinessDetails']
+        if type(details) is not dict or len(details) > 30 or any(type(v) is not str or len(v) > 4000 for v in details.values()):
+            raise ValueError('Readiness details must be a bounded map of text answers.')
     string_list(item, 'locationIds')
     string_list(item, 'evidenceIds')
     if 'needsReview' in item and type(item['needsReview']) is not bool:
@@ -204,7 +210,7 @@ class Store:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.connect() as db:
             version = db.execute('PRAGMA user_version').fetchone()[0]
-            if version not in (0, 1):
+            if version not in (0, 1, 2):
                 raise ValueError('Unsupported local database schema version.')
             db.executescript('''
                 PRAGMA journal_mode=WAL;
@@ -242,7 +248,22 @@ class Store:
                     BEGIN SELECT RAISE(ABORT, 'Evidence is immutable'); END;
                 CREATE TRIGGER IF NOT EXISTS evidence_no_delete BEFORE DELETE ON evidence
                     BEGIN SELECT RAISE(ABORT, 'Evidence is immutable'); END;
-                PRAGMA user_version=1;
+                CREATE TABLE IF NOT EXISTS readiness_snapshot (
+                    id TEXT PRIMARY KEY,
+                    workspace_revision INTEGER NOT NULL,
+                    input_sha256 TEXT NOT NULL,
+                    engine_sha256 TEXT NOT NULL,
+                    catalog_sha256 TEXT NOT NULL,
+                    methods_sha256 TEXT NOT NULL,
+                    snapshot_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    UNIQUE(workspace_revision,input_sha256,engine_sha256,catalog_sha256,methods_sha256)
+                );
+                CREATE TRIGGER IF NOT EXISTS readiness_no_update BEFORE UPDATE ON readiness_snapshot
+                    BEGIN SELECT RAISE(ABORT, 'Readiness history is immutable'); END;
+                CREATE TRIGGER IF NOT EXISTS readiness_no_delete BEFORE DELETE ON readiness_snapshot
+                    BEGIN SELECT RAISE(ABORT, 'Readiness history is immutable'); END;
+                PRAGMA user_version=2;
             ''')
             db.execute('BEGIN IMMEDIATE')
             if db.execute('SELECT 1 FROM workspace').fetchone() is None:
@@ -297,6 +318,53 @@ class Store:
             result = self.decode(db.execute('SELECT * FROM workspace WHERE id=?', ('local-workspace',)).fetchone())
         return result
 
+
+    def readiness(self):
+        state = self.read()
+        catalog_bytes = (ROOT / 'data' / 'collection-catalog.json').read_bytes()
+        methods_bytes = (ROOT / 'data' / 'readiness-methods.json').read_bytes()
+        engine_files = {name: (ROOT / name).read_bytes() for name in ('readiness-core.js', 'plan-core.js', 'readiness-cli.cjs')}
+        engine_bytes = b''.join(engine_files.values())
+        inputs = {'onboarding': state['onboarding'], 'plan': state['plan']}
+        request = dict(inputs, catalog=json.loads(catalog_bytes), methods=json.loads(methods_bytes))
+        node = shutil.which('node')
+        if not node:
+            raise ValueError('Node runtime unavailable')
+        completed = subprocess.run([node, str(ROOT / 'readiness-cli.cjs')], input=encoded(request), capture_output=True, timeout=15, check=True, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        result = json.loads(completed.stdout)
+        if engine_bytes != b''.join((ROOT / name).read_bytes() for name in ('readiness-core.js', 'plan-core.js', 'readiness-cli.cjs')):
+            raise ValueError('Engine changed during evaluation')
+        return {'inputs': inputs, 'catalog': request['catalog'], 'methods': request['methods'],
+                'artifacts': {'catalogUtf8': catalog_bytes.decode('utf-8'), 'methodsUtf8': methods_bytes.decode('utf-8'), 'engineFiles': {name: content.decode('utf-8') for name, content in engine_files.items()}},
+                'workspaceRevision': state['revision'], 'inputSha256': hashlib.sha256(json.dumps(inputs, ensure_ascii=False, sort_keys=True, separators=(',', ':'), allow_nan=False).encode('utf-8')).hexdigest(),
+                'engineSha256': hashlib.sha256(engine_bytes).hexdigest(), 'catalogSha256': hashlib.sha256(catalog_bytes).hexdigest(),
+                'methodsSha256': hashlib.sha256(methods_bytes).hexdigest(), 'result': result}
+
+    def save_readiness(self, expected_revision):
+        snapshot = self.readiness()
+        if snapshot['workspaceRevision'] != expected_revision:
+            return None
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            revision = db.execute('SELECT revision FROM workspace WHERE id=?', ('local-workspace',)).fetchone()[0]
+            if revision != expected_revision:
+                return None
+            values = tuple(snapshot[key] for key in ('workspaceRevision', 'inputSha256', 'engineSha256', 'catalogSha256', 'methodsSha256'))
+            prior = db.execute('SELECT snapshot_json FROM readiness_snapshot WHERE workspace_revision=? AND input_sha256=? AND engine_sha256=? AND catalog_sha256=? AND methods_sha256=?', values).fetchone()
+            if prior:
+                return json.loads(prior[0])
+            snapshot.update(id='rd_' + secrets.token_hex(16), createdAt=timestamp())
+            db.execute('INSERT INTO readiness_snapshot VALUES (?,?,?,?,?,?,?,?)', (snapshot['id'], *values, encoded(snapshot).decode('utf-8'), snapshot['createdAt']))
+        return snapshot
+
+    def readiness_history(self, snapshot_id=None):
+        with self.connect() as db:
+            if snapshot_id is not None:
+                row = db.execute('SELECT snapshot_json FROM readiness_snapshot WHERE id=?', (snapshot_id,)).fetchone()
+                return json.loads(row[0]) if row else None
+            rows = db.execute('SELECT snapshot_json FROM readiness_snapshot ORDER BY created_at DESC,id DESC').fetchall()
+            snapshots = [json.loads(row[0]) for row in rows]
+            return {'snapshots': [dict((key, item[key]) for key in ('id', 'workspaceRevision', 'createdAt', 'inputSha256')) | {'summary': item['result']['summary']} for item in snapshots]}
 
     def add_evidence(self, name, mime, content):
         evidence_id = 'ev_' + secrets.token_hex(16)
@@ -450,6 +518,21 @@ class Handler(BaseHTTPRequestHandler):
             except (sqlite3.Error, ValueError):
                 self.error(503, 'Local storage is unavailable. Try again later.')
             return
+        if path == '/api/readiness' or path.startswith('/api/readiness/'):
+            try:
+                if path == '/api/readiness':
+                    result = self.server.store.readiness()
+                elif path == '/api/readiness/history':
+                    result = self.server.store.readiness_history()
+                else:
+                    result = self.server.store.readiness_history(path.removeprefix('/api/readiness/'))
+                if result is None:
+                    self.error(404, 'Readiness snapshot not found.')
+                else:
+                    self.respond(200, result, head=head)
+            except (sqlite3.Error, ValueError, OSError, subprocess.SubprocessError):
+                self.error(503, 'Readiness evaluation is unavailable. No calculation readiness is confirmed.')
+            return
         if path.startswith('/api/evidence/'):
             try:
                 result = self.server.store.read_evidence(path.removeprefix('/api/evidence/'))
@@ -526,6 +609,9 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if not self.trusted(mutation=True, api=True):
             return
+        if self.path == '/api/readiness':
+            self.post_readiness()
+            return
         if self.path != '/api/evidence':
             self.error(404, 'Endpoint not found.')
             return
@@ -558,6 +644,36 @@ class Handler(BaseHTTPRequestHandler):
             self.error(413, 'This local workspace has reached its 50 MiB evidence limit.')
         except (sqlite3.Error, ValueError, OSError):
             self.error(503, 'Local storage is unavailable. Upload was not confirmed saved.')
+
+    def post_readiness(self):
+        if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
+            self.error(415, 'Use application/json.')
+            return
+        lengths = self.headers.get_all('Content-Length') or []
+        if self.headers.get('Transfer-Encoding') or len(lengths) != 1 or not lengths[0].isdigit() or int(lengths[0]) > 1024:
+            self.error(400, 'A bounded Content-Length is required.')
+            return
+        try:
+            raw = self.rfile.read(int(lengths[0]))
+            if len(raw) != int(lengths[0]):
+                raise ValueError()
+            value = json.loads(raw.decode('utf-8'), object_pairs_hook=unique_object)
+            if type(value) is not dict or set(value) != {'expectedRevision'} or type(value['expectedRevision']) is not int or value['expectedRevision'] < 0:
+                raise ValueError()
+        except (ValueError, UnicodeError, RecursionError):
+            self.error(400, 'Only an expectedRevision integer is accepted. Readiness is evaluated from saved inputs.')
+            return
+        except (TimeoutError, OSError):
+            self.error(408, 'Request body timed out.')
+            return
+        try:
+            result = self.server.store.save_readiness(value['expectedRevision'])
+            if result is None:
+                self.error(409, 'Workspace changed. Reload and reassess the saved revision.')
+            else:
+                self.respond(201, result)
+        except (sqlite3.Error, ValueError, OSError, subprocess.SubprocessError):
+            self.error(503, 'Readiness snapshot was not confirmed saved.')
 
     def do_OPTIONS(self):
         self.error(405, 'Cross-origin access is not enabled.')

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "id": "READY-ENGINE-02",
+  "role": "software-engineering",
+  "execution_context": "/root/readiness_impl",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-ENGINE-02-LOCAL.json",
+      "sha256": "5befb5bc45d9de11e5bf9d0e83f35f30bb82013cad673756f26fcf9c47cda5eb"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "LOCAL-01",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/readiness-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/readiness_review",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "prototypes/company-onboarding/readiness-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-ENGINE-02-LOCAL.json",
+        "sha256": "5befb5bc45d9de11e5bf9d0e83f35f30bb82013cad673756f26fcf9c47cda5eb"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/readiness-core.js",
+      "sha256": "4e9a0a8923d81177ed6793e0dae14a26f1c6f40d5ea5a92c6cfa9ae142a08fc5"
+    },
+    {
+      "path": "prototypes/company-onboarding/readiness-core.test.cjs",
+      "sha256": "ec47db1de8a401809a1902f14809935777e83733315e8c236432dfd096152a1b"
+    },
+    {
+      "path": "prototypes/company-onboarding/readiness-cli.cjs",
+      "sha256": "a0c30f99e12fa2203ebf73c11c09ca1bee383062c720caf1687e5c09d08a62c2"
+    },
+    {
+      "path": "prototypes/company-onboarding/server.py",
+      "sha256": "043328848881222b6cd3ee2f0fcfad1032940f0f67ae51b32312e020d73ef115"
+    },
+    {
+      "path": "prototypes/company-onboarding/test_server.py",
+      "sha256": "6ad87827b3417c4896d2446b1db9d8290bbe0b7d37fd75c91a3ae04abb541636"
+    }
+  ],
+  "parent_outcome": "READY-01 local stage; production blocked",
+  "scope": "Bounded local scope only. See operations/inventory-readiness/acceptance.md",
+  "routing_exception": "Registry override authentication failed; actual dispatch inherited settings, observed unknown. Requested field records intended policy route, not applied model."
+}

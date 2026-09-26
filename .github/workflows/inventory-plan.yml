@@ -30,3 +30,6 @@ jobs:
       - run: node qa-core.cjs
       - run: python -B -m unittest test_server -v
       - run: python -B qa-http.py
+      - run: node --test readiness-core.test.cjs
+      - run: node qa-readiness.cjs
+      - run: python -B qa-readiness.py

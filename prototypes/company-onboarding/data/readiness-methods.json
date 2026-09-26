@@ -1,0 +1,4589 @@
+{
+  "schemaVersion": "1.0",
+  "version": "2026-09-25.1",
+  "status": "candidate-only",
+  "checkedAt": "2026-09-25",
+  "purpose": "Local readiness questions only; no emissions calculations or production release.",
+  "productionApproval": false,
+  "sources": [
+    {
+      "id": "epa-stationary",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/stationaryemissions.pdf",
+      "title": "EPA Stationary combustion",
+      "locator": "Sections 1-4 and 6",
+      "publicationDate": "2023-12",
+      "finding": "Fuel identity, consumption basis and heat-content policy need review; separate biomass and process sources.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "epa-mobile",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/mobileemissions.pdf",
+      "title": "EPA Mobile combustion",
+      "locator": "Activity data and emission factor sections",
+      "publicationDate": "2023-12",
+      "finding": "Fuel, road distance, vehicle class and model year support gas-specific approaches.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "epa-fugitive",
+      "url": "https://www.epa.gov/sites/default/files/2020-12/documents/fugitiveemissions.pdf",
+      "title": "EPA Fugitive emissions",
+      "locator": "Purchased gas and material balance methods",
+      "publicationDate": "2023-12",
+      "finding": "Gas use and movement evidence determine method; purchases are not automatically emissions.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-scope2",
+      "url": "https://ghgprotocol.org/sites/default/files/2023-03/Scope%202%20Guidance.pdf",
+      "title": "GHG Protocol Scope 2 Guidance",
+      "locator": "Chapters 5-7, Tables 6.2/6.3 and Appendix A",
+      "publicationDate": "2015",
+      "finding": "Consumption and factor context differ by energy supply; contractual instruments need quality review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-scope2-status",
+      "url": "https://ghgprotocol.org/scope-2-guidance",
+      "title": "Scope 2 Guidance page",
+      "locator": "Consultation notice",
+      "publicationDate": "2015 guidance; later consultation notice",
+      "finding": "Consultation proposals are distinct from published guidance and are not adopted here.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "epa-hub",
+      "url": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub",
+      "title": "EPA Emission Factors Hub",
+      "locator": "2025 annual update paragraph",
+      "publicationDate": "2025-01 update",
+      "finding": "Listed factors and release history do not establish source-use rights, applicability or release approval.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-scope3",
+      "url": "https://ghgprotocol.org/scope-3-calculation-guidance-2",
+      "title": "Scope 3 Calculation Guidance",
+      "locator": "Guidance by Scope 3 Category",
+      "publicationDate": "2013",
+      "finding": "Category-specific decision trees do not imply one generic factor per category.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat1",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter1.pdf",
+      "title": "Scope 3 Category 1",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat2",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter2.pdf",
+      "title": "Scope 3 Category 2",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat3",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter3.pdf",
+      "title": "Scope 3 Category 3",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat4",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter4.pdf",
+      "title": "Scope 3 Category 4",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-10",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat5",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Ch5_GHGP_Tech.pdf",
+      "title": "Scope 3 Category 5",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat6",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter6.pdf",
+      "title": "Scope 3 Category 6",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat7",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter7.pdf",
+      "title": "Scope 3 Category 7",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat8",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter8.pdf",
+      "title": "Scope 3 Category 8",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat9",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter9.pdf",
+      "title": "Scope 3 Category 9",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat10",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter10.pdf",
+      "title": "Scope 3 Category 10",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat11",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter11.pdf",
+      "title": "Scope 3 Category 11",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat12",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter12.pdf",
+      "title": "Scope 3 Category 12",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat13",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter13.pdf",
+      "title": "Scope 3 Category 13",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat14",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter14.pdf",
+      "title": "Scope 3 Category 14",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    },
+    {
+      "id": "ghgp-cat15",
+      "url": "https://ghgprotocol.org/sites/default/files/2022-12/Chapter15.pdf",
+      "title": "Scope 3 Category 15",
+      "locator": "Category description; methods and activity data sections",
+      "publicationDate": "2013-04",
+      "finding": "Candidate choices require category-specific applicability and input review.",
+      "retrievedAt": "2026-09-25",
+      "releaseStatus": "research-reference-only"
+    }
+  ],
+  "methods": [
+    {
+      "id": "candidate-oven",
+      "scope": "scope1",
+      "catalogId": "oven",
+      "status": "candidate",
+      "label": "Oven or cooking equipment",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-boiler",
+      "scope": "scope1",
+      "catalogId": "boiler",
+      "status": "candidate",
+      "label": "Boiler or water heater",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-space-heat",
+      "scope": "scope1",
+      "catalogId": "space-heat",
+      "status": "candidate",
+      "label": "Furnace or space heater",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-kiln-dryer",
+      "scope": "scope1",
+      "catalogId": "kiln-dryer",
+      "status": "candidate",
+      "label": "Kiln, dryer or process heater",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-torch",
+      "scope": "scope1",
+      "catalogId": "torch",
+      "status": "candidate",
+      "label": "Fuel-fired torch or cutting equipment",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-flare",
+      "scope": "scope1",
+      "catalogId": "flare",
+      "status": "unsupported",
+      "label": "Flare or thermal oxidizer",
+      "approach": "Destruction efficiency and inlet composition need a dedicated method.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-biomass",
+      "scope": "scope1",
+      "catalogId": "biomass",
+      "status": "unsupported",
+      "label": "Biomass or mixed waste fuel",
+      "approach": "Mixed-fuel composition and biogenic treatment need a dedicated method.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-stationary-other",
+      "scope": "scope1",
+      "catalogId": "stationary-other",
+      "status": "unsupported",
+      "label": "Other or unknown fixed source",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-standby",
+      "scope": "scope1",
+      "catalogId": "standby",
+      "status": "candidate",
+      "label": "Standby or emergency generator",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-prime",
+      "scope": "scope1",
+      "catalogId": "prime",
+      "status": "candidate",
+      "label": "Prime-power generator",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-chp",
+      "scope": "scope1",
+      "catalogId": "chp",
+      "status": "unsupported",
+      "label": "Combined heat and power",
+      "approach": "CHP useful-energy allocation requires a reviewed method.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-portable-generator",
+      "scope": "scope1",
+      "catalogId": "portable-generator",
+      "status": "candidate",
+      "label": "Portable or rented generator",
+      "approach": "Candidate fuel-consumption approach; factors and gas treatment remain unresolved.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis",
+          "help": "Describe equipment, HHV/LHV heat basis and conversion evidence."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "energy-basis",
+          "label": "Energy and equipment basis"
+        }
+      ],
+      "acceptedUnits": [
+        "therm",
+        "MMBtu",
+        "m3",
+        "cubic metre",
+        "ft3",
+        "cubic foot",
+        "CCF",
+        "MCF",
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "fuel energy, volume or mass; no automatic conversions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-generator-other",
+      "scope": "scope1",
+      "catalogId": "generator-other",
+      "status": "unsupported",
+      "label": "Other or unknown generation",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-stationary"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-light-road",
+      "scope": "scope1",
+      "catalogId": "light-road",
+      "status": "candidate",
+      "label": "Cars, vans or pickup trucks",
+      "approach": "Candidate mobile combustion approach; gas-specific fuel/distance and equipment inputs need review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification",
+          "help": "Identify road/non-road class, technology and model year."
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence",
+          "help": "Provide road distance by vehicle/year where relevant; explain non-road fuel basis or missing data."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification"
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence"
+        }
+      ],
+      "acceptedUnits": [
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "mile",
+        "km"
+      ],
+      "unitDimension": "fuel and road distance as separate inputs",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-heavy-road",
+      "scope": "scope1",
+      "catalogId": "heavy-road",
+      "status": "candidate",
+      "label": "Heavy trucks or buses",
+      "approach": "Candidate mobile combustion approach; gas-specific fuel/distance and equipment inputs need review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification",
+          "help": "Identify road/non-road class, technology and model year."
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence",
+          "help": "Provide road distance by vehicle/year where relevant; explain non-road fuel basis or missing data."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification"
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence"
+        }
+      ],
+      "acceptedUnits": [
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "mile",
+        "km"
+      ],
+      "unitDimension": "fuel and road distance as separate inputs",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-off-road",
+      "scope": "scope1",
+      "catalogId": "off-road",
+      "status": "candidate",
+      "label": "Construction or agricultural equipment",
+      "approach": "Candidate mobile combustion approach; gas-specific fuel/distance and equipment inputs need review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification",
+          "help": "Identify road/non-road class, technology and model year."
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence",
+          "help": "Provide road distance by vehicle/year where relevant; explain non-road fuel basis or missing data."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification"
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence"
+        }
+      ],
+      "acceptedUnits": [
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "mile",
+        "km"
+      ],
+      "unitDimension": "fuel and road distance as separate inputs",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-forklift",
+      "scope": "scope1",
+      "catalogId": "forklift",
+      "status": "candidate",
+      "label": "Forklifts or material-handling equipment",
+      "approach": "Candidate mobile combustion approach; gas-specific fuel/distance and equipment inputs need review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification",
+          "help": "Identify road/non-road class, technology and model year."
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence",
+          "help": "Provide road distance by vehicle/year where relevant; explain non-road fuel basis or missing data."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification"
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence"
+        }
+      ],
+      "acceptedUnits": [
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "mile",
+        "km"
+      ],
+      "unitDimension": "fuel and road distance as separate inputs",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-small-engine",
+      "scope": "scope1",
+      "catalogId": "small-engine",
+      "status": "candidate",
+      "label": "Small engines and grounds equipment",
+      "approach": "Candidate mobile combustion approach; gas-specific fuel/distance and equipment inputs need review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition",
+          "help": "Identify fuels and fossil/biogenic fractions where relevant."
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation",
+          "help": "Explain purchases versus consumption, stocks, shared meters/tanks and allocation."
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification",
+          "help": "Identify road/non-road class, technology and model year."
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence",
+          "help": "Provide road distance by vehicle/year where relevant; explain non-road fuel basis or missing data."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "fuel",
+          "label": "Fuel identity and composition"
+        },
+        {
+          "id": "consumption",
+          "label": "Consumed fuel and reconciliation"
+        },
+        {
+          "id": "vehicle",
+          "label": "Vehicle or engine classification"
+        },
+        {
+          "id": "distance",
+          "label": "Distance and utilization evidence"
+        }
+      ],
+      "acceptedUnits": [
+        "US gallon",
+        "litre",
+        "L",
+        "kg",
+        "mile",
+        "km"
+      ],
+      "unitDimension": "fuel and road distance as separate inputs",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-marine-rail-air",
+      "scope": "scope1",
+      "catalogId": "marine-rail-air",
+      "status": "unsupported",
+      "label": "Vessels, locomotives or aircraft",
+      "approach": "A transport-mode-specific method is not selected.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-mobile-other",
+      "scope": "scope1",
+      "catalogId": "mobile-other",
+      "status": "unsupported",
+      "label": "Other or unknown mobile source",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-mobile"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-refrigeration",
+      "scope": "scope1",
+      "catalogId": "refrigeration",
+      "status": "candidate",
+      "label": "Refrigeration or cold storage",
+      "approach": "Candidate material-balance or documented-release approach; choose for actual gas use.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity",
+          "help": "Identify substance/blend and composition; no generic GWP for unknown gas."
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation",
+          "help": "Explain stocks, additions, recovery, returns, disposals and transfers."
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis",
+          "help": "Explain emitted quantity, capacity changes, recovery and retention."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity"
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation"
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis"
+        }
+      ],
+      "acceptedUnits": [
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "gas mass; purchases kept distinct from emissions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-air-conditioning",
+      "scope": "scope1",
+      "catalogId": "air-conditioning",
+      "status": "candidate",
+      "label": "Air conditioning or heat pumps",
+      "approach": "Candidate material-balance or documented-release approach; choose for actual gas use.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity",
+          "help": "Identify substance/blend and composition; no generic GWP for unknown gas."
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation",
+          "help": "Explain stocks, additions, recovery, returns, disposals and transfers."
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis",
+          "help": "Explain emitted quantity, capacity changes, recovery and retention."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity"
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation"
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis"
+        }
+      ],
+      "acceptedUnits": [
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "gas mass; purchases kept distinct from emissions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-fire-suppression",
+      "scope": "scope1",
+      "catalogId": "fire-suppression",
+      "status": "candidate",
+      "label": "Fire suppression",
+      "approach": "Candidate material-balance or documented-release approach; choose for actual gas use.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity",
+          "help": "Identify substance/blend and composition; no generic GWP for unknown gas."
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation",
+          "help": "Explain stocks, additions, recovery, returns, disposals and transfers."
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis",
+          "help": "Explain emitted quantity, capacity changes, recovery and retention."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity"
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation"
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis"
+        }
+      ],
+      "acceptedUnits": [
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "gas mass; purchases kept distinct from emissions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-industrial-gas",
+      "scope": "scope1",
+      "catalogId": "industrial-gas",
+      "status": "candidate",
+      "label": "Purchased industrial or shielding gas",
+      "approach": "Candidate material-balance or documented-release approach; choose for actual gas use.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity",
+          "help": "Identify substance/blend and composition; no generic GWP for unknown gas."
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation",
+          "help": "Explain stocks, additions, recovery, returns, disposals and transfers."
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis",
+          "help": "Explain emitted quantity, capacity changes, recovery and retention."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "gas",
+          "label": "Gas or refrigerant identity"
+        },
+        {
+          "id": "movements",
+          "label": "Gas movement reconciliation"
+        },
+        {
+          "id": "release-basis",
+          "label": "Emission versus purchase basis"
+        }
+      ],
+      "acceptedUnits": [
+        "kg",
+        "lb"
+      ],
+      "unitDimension": "gas mass; purchases kept distinct from emissions",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive",
+        "epa-hub"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-electrical-gas",
+      "scope": "scope1",
+      "catalogId": "electrical-gas",
+      "status": "unsupported",
+      "label": "Gas-insulated electrical equipment",
+      "approach": "Electrical gas equipment method is not implemented.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-fuel-leaks",
+      "scope": "scope1",
+      "catalogId": "fuel-leaks",
+      "status": "unsupported",
+      "label": "Fuel handling, storage or distribution leaks",
+      "approach": "Equipment-specific leak method is not implemented.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-fugitive-other",
+      "scope": "scope1",
+      "catalogId": "fugitive-other",
+      "status": "unsupported",
+      "label": "Other or unknown gas release",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "epa-fugitive"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-chemical",
+      "scope": "scope1",
+      "catalogId": "chemical",
+      "status": "unsupported",
+      "label": "Chemical reactions or material transformation",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Reaction, feedstock/product composition, recovery and controls"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-fermentation",
+      "scope": "scope1",
+      "catalogId": "fermentation",
+      "status": "unsupported",
+      "label": "Fermentation or biological processing",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Feedstock carbon, gas recovery and fossil/biogenic split"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-wastewater",
+      "scope": "scope1",
+      "catalogId": "wastewater",
+      "status": "unsupported",
+      "label": "On-site wastewater treatment",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Flow, organic load, nitrogen, treatment and gas recovery"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-waste-treatment",
+      "scope": "scope1",
+      "catalogId": "waste-treatment",
+      "status": "unsupported",
+      "label": "On-site waste, composting or digestion",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Waste composition, treatment and gas recovery"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-agriculture",
+      "scope": "scope1",
+      "catalogId": "agriculture",
+      "status": "unsupported",
+      "label": "Livestock, soils or crop activities",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Livestock, feed/manure, soils and crop practices"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-land",
+      "scope": "scope1",
+      "catalogId": "land",
+      "status": "unsupported",
+      "label": "Land-use change or land management",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Land areas, changes, carbon pools and framework"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-electronics",
+      "scope": "scope1",
+      "catalogId": "electronics",
+      "status": "unsupported",
+      "label": "Semiconductor or other process gases",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Gas species, utilization, byproducts and abatement"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-process-other",
+      "scope": "scope1",
+      "catalogId": "process-other",
+      "status": "unsupported",
+      "label": "Other or unknown direct source",
+      "approach": "No candidate calculation route is selected for this source.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts",
+          "help": "Actual process, gas/fuel, equipment and available measurements"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method",
+          "help": "Identify unresolved technical method and evidence needed for review."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "source-details",
+          "label": "Source-specific facts"
+        },
+        {
+          "id": "specialist-route",
+          "label": "Needed specialist method"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "This source stays unsupported even when questions are answered."
+      ]
+    },
+    {
+      "id": "candidate-electricity",
+      "scope": "scope2",
+      "catalogId": "electricity",
+      "status": "candidate",
+      "label": "Purchased electricity",
+      "approach": "Candidate purchased-energy approach; separate location/market treatment where applicable.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location",
+          "help": "Identify supplier, site, meter and purchased versus self-generated supply."
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis",
+          "help": "Explain consumption, imports/exports, allocation and period gaps."
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply",
+          "help": "List instruments, ownership/retirement, period/market match and uncovered supply; none does not imply zero."
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context",
+          "help": "Thermal supply: generation, useful energy and allocation. Electricity: grid and generation/consumption year."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location"
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis"
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply"
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context"
+        }
+      ],
+      "acceptedUnits": [
+        "kWh",
+        "MWh"
+      ],
+      "unitDimension": "energy; thermal mass needs conversion review",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-scope2"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-steam",
+      "scope": "scope2",
+      "catalogId": "steam",
+      "status": "candidate",
+      "label": "Purchased steam",
+      "approach": "Candidate purchased-energy approach; separate location/market treatment where applicable.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location",
+          "help": "Identify supplier, site, meter and purchased versus self-generated supply."
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis",
+          "help": "Explain consumption, imports/exports, allocation and period gaps."
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply",
+          "help": "List instruments, ownership/retirement, period/market match and uncovered supply; none does not imply zero."
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context",
+          "help": "Thermal supply: generation, useful energy and allocation. Electricity: grid and generation/consumption year."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location"
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis"
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply"
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context"
+        }
+      ],
+      "acceptedUnits": [
+        "kWh",
+        "MWh",
+        "MMBtu",
+        "GJ"
+      ],
+      "unitDimension": "energy; thermal mass needs conversion review",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-scope2"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-heat",
+      "scope": "scope2",
+      "catalogId": "heat",
+      "status": "candidate",
+      "label": "Purchased heat",
+      "approach": "Candidate purchased-energy approach; separate location/market treatment where applicable.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location",
+          "help": "Identify supplier, site, meter and purchased versus self-generated supply."
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis",
+          "help": "Explain consumption, imports/exports, allocation and period gaps."
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply",
+          "help": "List instruments, ownership/retirement, period/market match and uncovered supply; none does not imply zero."
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context",
+          "help": "Thermal supply: generation, useful energy and allocation. Electricity: grid and generation/consumption year."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location"
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis"
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply"
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context"
+        }
+      ],
+      "acceptedUnits": [
+        "kWh",
+        "MWh",
+        "MMBtu",
+        "GJ"
+      ],
+      "unitDimension": "energy; thermal mass needs conversion review",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-scope2"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-cooling",
+      "scope": "scope2",
+      "catalogId": "cooling",
+      "status": "candidate",
+      "label": "Purchased cooling",
+      "approach": "Candidate purchased-energy approach; separate location/market treatment where applicable.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location",
+          "help": "Identify supplier, site, meter and purchased versus self-generated supply."
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis",
+          "help": "Explain consumption, imports/exports, allocation and period gaps."
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply",
+          "help": "List instruments, ownership/retirement, period/market match and uncovered supply; none does not imply zero."
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context",
+          "help": "Thermal supply: generation, useful energy and allocation. Electricity: grid and generation/consumption year."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "supply",
+          "label": "Supplier and delivery location"
+        },
+        {
+          "id": "consumed",
+          "label": "Consumption basis"
+        },
+        {
+          "id": "instruments",
+          "label": "Contractual evidence and uncovered supply"
+        },
+        {
+          "id": "thermal",
+          "label": "Energy-specific context"
+        }
+      ],
+      "acceptedUnits": [
+        "kWh",
+        "MWh",
+        "MMBtu",
+        "GJ"
+      ],
+      "unitDimension": "energy; thermal mass needs conversion review",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-scope2"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied."
+      ]
+    },
+    {
+      "id": "candidate-category-1",
+      "scope": "scope3",
+      "catalogId": "category-1",
+      "status": "candidate",
+      "label": "1. Purchased goods and services",
+      "approach": "Supplier-specific, hybrid, average-data or spend-based routes need selection.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Goods/services, quantities, supplier product boundaries; spend currency, price year and sector match."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat1",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-2",
+      "scope": "scope3",
+      "catalogId": "category-2",
+      "status": "candidate",
+      "label": "2. Capital goods",
+      "approach": "Capital-goods routes follow category 1 with capital purchase boundary.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Acquired capital assets, purchase year, cradle-to-gate data and purchasing overlap."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat2",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-3",
+      "scope": "scope3",
+      "catalogId": "category-3",
+      "status": "candidate",
+      "label": "3. Fuel- and energy-related activities",
+      "approach": "Select upstream fuel/electricity, transmission/distribution or sold-energy activities.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Fuel/energy amounts, upstream boundary, supplier/grid and losses; separate Scope 1/2 combustion."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat3",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-4",
+      "scope": "scope3",
+      "catalogId": "category-4",
+      "status": "candidate",
+      "label": "4. Upstream transportation and distribution",
+      "approach": "Transport fuel/distance/spend and storage site/average routes need separate selection.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Legs, mode, mass/load, distance or allocated fuel; storage energy and allocation."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat4",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-5",
+      "scope": "scope3",
+      "catalogId": "category-5",
+      "status": "candidate",
+      "label": "5. Waste generated in operations",
+      "approach": "Supplier-specific, waste-type-specific or average-data routes require treatment evidence.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Waste mass/composition, destination, treatment shares and allocated operator data."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat5",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-6",
+      "scope": "scope3",
+      "catalogId": "category-6",
+      "status": "candidate",
+      "label": "6. Business travel",
+      "approach": "Fuel, distance or spend routes need travel-mode context.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Trips, mode, distance/passengers, allocated fuel or currency/year; accommodation boundary."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat6",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-7",
+      "scope": "scope3",
+      "catalogId": "category-7",
+      "status": "candidate",
+      "label": "7. Employee commuting",
+      "approach": "Fuel, distance or average-data routes need commuting assumptions.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Population, modes, frequency, distance/occupancy and survey coverage."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat7",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-8",
+      "scope": "scope3",
+      "catalogId": "category-8",
+      "status": "candidate",
+      "label": "8. Upstream leased assets",
+      "approach": "Asset-specific, lessor-specific or average-data routes need lease review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Leased-in asset/control, period, energy/emissions and allocation; reconcile Scope 1/2."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat8",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-9",
+      "scope": "scope3",
+      "catalogId": "category-9",
+      "status": "candidate",
+      "label": "9. Downstream transportation and distribution",
+      "approach": "Downstream transport/storage routes require category 4 method review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Sold-product transport legs, mass/distance/mode, storage and payment classification."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat9",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-10",
+      "scope": "scope3",
+      "catalogId": "category-10",
+      "status": "candidate",
+      "label": "10. Processing of sold products",
+      "approach": "Site-specific or average-data routes need processing boundary review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Intermediate product quantity, downstream process, energy/emissions and allocation."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat10",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-11",
+      "scope": "scope3",
+      "catalogId": "category-11",
+      "status": "candidate",
+      "label": "11. Use of sold products",
+      "approach": "Use-phase approach depends on energy use, fuels/feedstocks or contained gases.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Sold units, lifetime/use, markets, energy/gas releases and direct/indirect boundary."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat11",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-12",
+      "scope": "scope3",
+      "catalogId": "category-12",
+      "status": "candidate",
+      "label": "12. End-of-life treatment of sold products",
+      "approach": "Waste-type-specific end-of-life approach needs material scenarios.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Products/packaging sold, material mass, disposal routes and treatment shares."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat12",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-13",
+      "scope": "scope3",
+      "catalogId": "category-13",
+      "status": "candidate",
+      "label": "13. Downstream leased assets",
+      "approach": "Asset-specific, lessee-specific or average-data routes need lease review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Leased-out assets, period, lessee emissions/energy and allocation; organizational boundary."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat13",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-14",
+      "scope": "scope3",
+      "catalogId": "category-14",
+      "status": "candidate",
+      "label": "14. Franchises",
+      "approach": "Franchise-specific or average-data routes need franchise boundary review.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Operations, energy/emissions, size/type, allocation and overlap with Scope 1/2."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat14",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    },
+    {
+      "id": "candidate-category-15",
+      "scope": "scope3",
+      "catalogId": "category-15",
+      "status": "candidate",
+      "label": "15. Investments",
+      "approach": "Investment-specific, project-specific or average-data routes depend on asset class.",
+      "requiredFields": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale",
+          "help": "Explain the proposed approach and why it fits these records; this answer is not approval."
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage",
+          "help": "Identify included assets, ownership/control, period gaps, allocations and overlaps."
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context",
+          "help": "Identify proposed source/version/locator, geography/year/technology, gas basis, GWP and conversion policy; unknown remains unresolved."
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions",
+          "help": "Investment class, financing/ownership share, investee/project emissions and boundary."
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets",
+          "help": "List branch, activity streams, original units, factor denominators, allocations and missing datasets; one quantity is not sufficient for every branch."
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions",
+          "help": "Explain relevance, lifecycle coverage, excluded activities and cross-category overlap."
+        }
+      ],
+      "requiredInputs": [
+        {
+          "id": "method-choice",
+          "label": "Proposed method and rationale"
+        },
+        {
+          "id": "coverage",
+          "label": "Boundary and period coverage"
+        },
+        {
+          "id": "factor-context",
+          "label": "Factor and conversion context"
+        },
+        {
+          "id": "category-inputs",
+          "label": "Category input questions"
+        },
+        {
+          "id": "branch-data",
+          "label": "Method branch and required datasets"
+        },
+        {
+          "id": "relevance",
+          "label": "Category boundary and exclusions"
+        }
+      ],
+      "acceptedUnits": [],
+      "unitDimension": "branch-specific; manual validation required",
+      "unitPolicy": "Recognized original-record units only; no automatic conversion or factor compatibility approval.",
+      "sourceIds": [
+        "ghgp-cat15",
+        "ghgp-scope3"
+      ],
+      "approvalStatus": "blocked",
+      "blockers": [
+        "Method applicability and complete inputs require independent review.",
+        "Source-use approval and pinned factor/method release are unverified.",
+        "Qualified accounting review and production implementation are not supplied.",
+        "No unit is automatically accepted until a concrete category method branch is reviewed."
+      ]
+    }
+  ]
+}
