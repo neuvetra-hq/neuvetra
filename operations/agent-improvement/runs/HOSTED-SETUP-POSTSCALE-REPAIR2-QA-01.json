@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-POSTSCALE-REPAIR2-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "854b0e9285ce6d3c7c5c51720d116a6c63f327c6ee7611675485fdc5721a54ff",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-postscale-repair2-independent-review.md", "sha256": "1d04fbb8d088996707104a96b9efac00e9e4678f77552755a6626d5bd01eb34b"},
+    {"path": "tools/staging/hosted-setup-postscale-repair2-independent.test.ts", "sha256": "d8b18a31b1ef18775a0951a1fc983fd0f1b414fb7ce104f80310dc04392dc34e"}
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-postscale.ts", "sha256": "fb7eac353228528f58fffb83d5ec3d49bf5365a3c99b1a59e4259c716b612b96"},
+    {"path": "tools/staging/hosted-setup-postscale.test.ts", "sha256": "e7709358d07c1ba725dc61332c3bbe356f6afc570a210c361475e8888364d73f"},
+    {"path": "evaluations/research-qa/hosted-setup-01-postscale-repair2-author.md", "sha256": "3cf0782b58dbe6bd5515805d1968996919b8ded4ea631670a3f3513140a02df4"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-EXACT-REPAIR2-BYTES",
+      "status": "pass",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-postscale-repair2-independent-review.md"],
+      "reason": "Reviewer matched the exact frozen source, test and author-report SHA-256 values before testing; candidate files were not edited."
+    },
+    {
+      "id": "AC-02-POST-F01-STOPPED-BOUNDARY",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-postscale-repair2-independent.test.ts", "evaluations/research-qa/hosted-setup-01-postscale-repair2-independent-review.md"],
+      "reason": "The public stopped-only verifier returns pre-migration evidence without resume observations and sets every migration, resume, launch, mutation and provider-authentication authority flag false. Historical POST-F01 FAIL remains preserved."
+    },
+    {
+      "id": "AC-03-POST-F02-SNAPSHOT-BINDING",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-postscale-repair2-independent.test.ts", "evaluations/research-qa/hosted-setup-01-postscale-repair2-independent-review.md"],
+      "reason": "Independent chronology/image getter attacks in both repaired boundaries refuse without getter execution; nested accessors refuse and later source mutation cannot change the accepted hash, chronology, image or returned nested hashes. Historical POST-F02 FAIL remains preserved."
+    },
+    {
+      "id": "AC-04-PROVIDER-SHAPE-FRESHNESS-AUTHORITY",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-postscale-repair2-independent.test.ts", "evaluations/research-qa/hosted-setup-01-postscale-repair2-independent-review.md"],
+      "reason": "Synthetic reproduction accepts omitted/null/empty status region only with the exact configured target region, enforces the five-minute resume boundary and strict stop-review-resume chronology, and refuses forged stopped authority even with a recomputed serialized pin."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-6-astra", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_task": "HOSTED-SETUP-POSTSCALE-REPAIR-02",
+  "applied_lessons": ["L04", "L06"],
+  "assessment": {
+    "candidate_author_execution_context": "/root/artifact_runner",
+    "independent_of_candidate_author": true,
+    "candidate_verdict": "pass",
+    "preserved_historical_first_review": "fail",
+    "preserved_finding_ids": ["POST-F01", "POST-F02"],
+    "reviewed_candidate_artifacts": [
+      {"path": "tools/staging/hosted-setup-postscale.ts", "sha256": "fb7eac353228528f58fffb83d5ec3d49bf5365a3c99b1a59e4259c716b612b96"},
+      {"path": "tools/staging/hosted-setup-postscale.test.ts", "sha256": "e7709358d07c1ba725dc61332c3bbe356f6afc570a210c361475e8888364d73f"}
+    ]
+  },
+  "routing_note": "Critical qa-lead gpt-6-astra/high was requested; the inherited follow-up did not expose actual model or effort. One QA fixture chronology vector was corrected after the first executed probe; no candidate byte changed. Local pure-verifier PASS only, with no provider, database, Git, stop, resume, migration or launch operation. Root owns administrative closure."
+}

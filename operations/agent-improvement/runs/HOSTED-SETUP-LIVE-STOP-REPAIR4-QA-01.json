@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-LIVE-STOP-REPAIR4-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-live-stop-independent-review5.md",
+      "sha256": "80bb4b0330aa8f7f5e99420e64f0d301d687daffb2ac7a9da710212447c60084"
+    }
+  ],
+  "criteria": [
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review5.md"
+      ],
+      "status": "pass",
+      "reason": "Unchanged independent same-journal follow-on probe9/44: native open identity restored and zero synthetic close faults.",
+      "id": "F06_MODULE_RESTORATION"
+    },
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review5.md"
+      ],
+      "status": "pass",
+      "reason": "Exact source unchanged; prior F01-F05 bounded PASS carries forward; combined38/201 with later tests and scoped strict TS pass.",
+      "id": "UNCHANGED_SOURCE_AND_CHECKS"
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded local source-and-test package PASS; QA1-QA4 failures preserved. QA artifact awaits coordinator review/immutable packaging.",
+    "Reviewer did not author candidate. Requested registered critical gpt-6-astra/high; observed follow-up settings unknown.",
+    "No provider/DB/live/Git/source actions; synthetic local fixture tests only. This review grants no stop or migration authority."
+  ]
+}

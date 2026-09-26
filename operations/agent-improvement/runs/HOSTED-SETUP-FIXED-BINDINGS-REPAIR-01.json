@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-FIXED-BINDINGS-REPAIR-01",
+  "role": "software-engineering",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "5484364a0cd3d9f13058e4b49d9718eaf1248bbe2ad91f68a036dbed7ba28a88",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-fixed-bindings-repair1-author.md", "sha256": "f92ae212223aec641e26e7c279b679d2d3fed5d7249002b0a8e04f8367cdf033"}
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-bindings.ts", "sha256": "cbe42173cd354559901fea9821c7314751c20b2e0febd895d7cb13fa27955514"},
+    {"path": "tools/staging/hosted-setup-artifact-bindings.test.ts", "sha256": "4975c5f0d1b7ddb9e31a2ab1db5ec00891fbf9381d7cb1f63a9711864e693300"},
+    {"path": "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review1.md", "sha256": "2b02ecf7d1b71f6ddf8dbfc33a9785c908e307c23b5f6f40632e26b262e21740"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-FIXED-BIND-F01",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-bindings.ts", "tools/staging/hosted-setup-artifact-bindings.test.ts", "evaluations/research-qa/hosted-setup-01-fixed-bindings-repair1-author.md"],
+      "reason": "Array copying validates the built-in prototype and complete own descriptor set before recursively copying indexed data values. Index accessors, custom map methods/prototypes, sparse arrays, extra names and symbols refuse without executing caller code."
+    },
+    {
+      "id": "AC-02-FIXED-BIND-F02",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-bindings.ts", "tools/staging/hosted-setup-artifact-bindings.test.ts", "evaluations/research-qa/hosted-setup-01-fixed-bindings-repair1-author.md"],
+      "reason": "Deferred product verification rechecks publication expiry, exact pinned review expiry/identity and exact pinned current-head freshness using the process clock after callback-byte equality. Separate review-expiry and publication-expiry regressions pass while current-head evidence remains valid."
+    },
+    {
+      "id": "AC-03-PRESERVE-ACCEPTED-BOUNDARIES",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-bindings.test.ts", "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review1.md", "evaluations/research-qa/hosted-setup-01-fixed-bindings-repair1-author.md"],
+      "reason": "The exact QA1 probe now passes all six cases, retaining the 9,466,390-byte archive and >8 MiB snapshot file transport, metadata/race refusal, six synthetic provider acquisitions across three ordered phases, callback pinning and fail-closed reconciliation."
+    },
+    {
+      "id": "AC-04-INDEPENDENT-REVIEW",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review1.md"],
+      "reason": "The preserved first review is FAIL with FIXED-BIND-F01 and FIXED-BIND-F02. A new independent review of the exact repaired hashes is required before integration."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": ["evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review1.md"],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 2,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_task": "HOSTED-SETUP-FIXED-BINDINGS-01",
+  "applied_lessons": ["L04", "L06"],
+  "routing_note": "Critical software-engineering gpt-5.6-sol/high was requested; actual model and effort were not observable in the inherited follow-up. The original independent FAIL and both finding IDs remain preserved. All validation was local with synthetic inputs; no provider, database, Git, maintenance or launch authority was exercised."
+}

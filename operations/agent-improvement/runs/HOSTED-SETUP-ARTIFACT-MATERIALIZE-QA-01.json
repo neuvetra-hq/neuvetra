@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-MATERIALIZE-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/materializer_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-artifact-materialize-independent-review.md",
+      "sha256": "eff6b90140ca7fd4dd7d294e108d329c55d2a214a9dd5c610d1809fde5344efb"
+    }
+  ],
+  "criteria": [
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-artifact-materialize-independent-review.md"
+      ],
+      "id": "AC-01",
+      "reason": "Independent review exercised archive, extraction, verifier and real Bun/pg boundaries against exact candidate hashes.",
+      "status": "pass"
+    },
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-artifact-materialize-independent-review.md"
+      ],
+      "id": "AC-02",
+      "reason": "MAT-F01: canonical valid 4,128,765-byte and 16 MiB files falsely reject at base64 regex; 4,128,764 bytes succeeds.",
+      "status": "fail"
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/materializer_qa",
+    "independent": false,
+    "verdict": "fail",
+    "evidence": [
+      "evaluations/research-qa/hosted-setup-01-artifact-materialize-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "evaluations/research-qa/hosted-setup-01-artifact-materialize-independent-review.md",
+        "sha256": "eff6b90140ca7fd4dd7d294e108d329c55d2a214a9dd5c610d1809fde5344efb"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "blocked",
+    "first_review": "fail",
+    "material_findings_open": 1,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": [],
+    "blocker": "Candidate acceptance blocked by MAT-F01; CEO to route author repair and fresh independent candidate re-review. This QA deliverable is complete."
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "record_semantics": "This is the QA-owned run and report, not the author run. The QA report itself has not received a separate independent review, hence review.independent=false. The underlying candidate review was independent of its author and returned FAIL.",
+  "candidate_review": {
+    "source_sha256": "73355137f1c6cf6adb6d07c97df658cba5350c7cee056a20dcb24843b502adab",
+    "verifier_sha256": "3e1069aba42eca77a861f9c395c966269758a79a16207c53c19b15b6c8d4c691",
+    "reviewer": "/root/materializer_qa",
+    "test_sha256": "d867c5e5931fe081bbaf494904ce78ddb5442778aa8d01dfcfaea579f656fc78",
+    "independent": true,
+    "author": "/root/artifact_launcher",
+    "finding": "MAT-F01",
+    "verdict": "fail"
+  },
+  "applied_lessons": [
+    "L04",
+    "L06"
+  ]
+}

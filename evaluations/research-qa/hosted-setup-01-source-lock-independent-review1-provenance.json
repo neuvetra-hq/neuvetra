@@ -1,0 +1,14 @@
+{
+  "profile": "neuvetra.hosted-setup.source-lock-independent-review1-provenance.v1",
+  "reviewerExecutionContext": "Codex CLI ephemeral session 01a0dd46-f8fc-7340-acd0-eb926f58c064",
+  "dispatchFallback": "collaboration follow-up rejected by runtime thread limit",
+  "modelObserved": "gpt-6-astra",
+  "reasoningEffortObserved": "high",
+  "sandboxObserved": "read-only",
+  "reviewerAuthorshipOfReviewedFiles": false,
+  "promptSha256": "23961fc1287bf2a35b5166d8bd8f8bdde77b050ce8a3d2e1c75b0b716eda1e0c",
+  "exactVerdictSha256": "ff50a30843dec6899436b7e6979eaa4b6f291508b317849bf7effc49db437b75",
+  "verdict": "fail-executable-source-identity",
+  "pinnedSqlComponentConditionallyPassed": true,
+  "hostedUpgradeAuthorized": false
+}

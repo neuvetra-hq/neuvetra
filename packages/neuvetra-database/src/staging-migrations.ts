@@ -16,13 +16,30 @@ export const STAGING_MIGRATIONS = [
   "0023_company_setup.sql",
 ] as const
 
-export async function readMigrationManifest() {
-  return Promise.all(STAGING_MIGRATIONS.map(async name => {
+export interface StagingMigration { name: string; sha256: string; sql: string }
+export type StagingMigrationManifest = ReadonlyArray<Readonly<StagingMigration>>
+export interface PrivateStagingMigrationApproval { expectedProjectRef: string; syntheticTargetConfirmed: true; reuseExistingProject?: boolean }
+
+export function pinStagingMigrationManifest(source: StagingMigrationManifest): StagingMigrationManifest {
+  if (!Array.isArray(source) || source.length !== STAGING_MIGRATIONS.length) throw new Error("Complete staging migration manifest required.")
+  const pinned = source.map((entry, index) => {
+    const name = entry?.name, sha256 = entry?.sha256, sql = entry?.sql
+    if (name !== STAGING_MIGRATIONS[index] || typeof sql !== "string" || !/^[0-9a-f]{64}$/.test(sha256 ?? "")) throw new Error("Ordered staging migration manifest required.")
+    const actual = new Bun.CryptoHasher("sha256").update(sql).digest("hex")
+    if (actual !== sha256) throw new Error("Staging migration bytes do not match their digest.")
+    return Object.freeze({ name, sha256, sql })
+  })
+  return Object.freeze(pinned)
+}
+
+export async function readMigrationManifest(): Promise<StagingMigration[]> {
+  const manifest = await Promise.all(STAGING_MIGRATIONS.map(async name => {
     const sql = await Bun.file(new URL(`./migrations/${name}`, import.meta.url)).text()
     // Normalize checkout newline differences, preserving every SQL token.
     const canonical = sql.replace(/\r\n/g, "\n")
     return { name, sha256: new Bun.CryptoHasher("sha256").update(canonical).digest("hex"), sql: canonical }
   }))
+  return pinStagingMigrationManifest(manifest).map(({name,sha256,sql})=>({name,sha256,sql}))
 }
 
 async function validateExisting(tx: WorkspaceSql, expectedProjectRef: string, manifest: Awaited<ReturnType<typeof readMigrationManifest>>) {
@@ -32,10 +49,10 @@ async function validateExisting(tx: WorkspaceSql, expectedProjectRef: string, ma
 }
 
 /** Explicit operator call. Requires a reviewed synthetic target; never called by HTTP startup. */
-export async function migratePrivateStaging(db: WorkspaceConnection, approval: { expectedProjectRef: string; syntheticTargetConfirmed: true; reuseExistingProject?: boolean }) {
+export async function migratePrivateStagingFromManifest(db: WorkspaceConnection, approval: PrivateStagingMigrationApproval, sourceManifest: StagingMigrationManifest) {
   if (approval.syntheticTargetConfirmed !== true || !/^[a-z]{20}$/.test(approval.expectedProjectRef)) throw new Error("Reviewed synthetic staging target required.")
+  const manifest = pinStagingMigrationManifest(sourceManifest)
   if (approval.expectedProjectRef === EXISTING_PROJECT_REF && (approval.reuseExistingProject !== true || !(await auditLegacyStagingExposure(db)).legacyContainmentVerified)) throw new Error("Confirmed existing project reuse and verified legacy containment required.")
-  const manifest = await readMigrationManifest()
   await db.transaction(async tx => {
     await tx.query("select pg_advisory_xact_lock(630009)")
     const existing = await tx.query<{ present: boolean }>("select exists(select 1 from pg_namespace where nspname='neuvetra') present")
@@ -65,6 +82,10 @@ export async function migratePrivateStaging(db: WorkspaceConnection, approval: {
     await tx.query("insert into neuvetra.staging_target(project_ref,profile) values($1,'neuvetra.private-synthetic-staging.v1')", [approval.expectedProjectRef])
   })
   return { schemaVersion: manifest.length, migrations: manifest.map(({ name, sha256 }) => ({ name, sha256 })) }
+}
+
+export async function migratePrivateStaging(db: WorkspaceConnection, approval: PrivateStagingMigrationApproval) {
+  return migratePrivateStagingFromManifest(db, approval, await readMigrationManifest())
 }
 
 export interface ApprovedStagingRoster {

@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-FRESH-RESTORE-BINDER-01",
+  "role": "software-engineering",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "sha256": "4a7c434537916be019f1f1af80d258d170f92ba7d7d5ef171ca67ae364eb189e",
+      "path": "tools/staging/hosted-setup-fresh-restore-binding.ts"
+    },
+    {
+      "sha256": "79f894173b5fe1d179aa318e05896bcca97eb6c34b195d4cd54c8fb047ce7a91",
+      "path": "tools/staging/hosted-setup-fresh-restore-binding.test.ts"
+    },
+    {
+      "sha256": "3d733b80501ec343f9ffc2f360430f6268ae2eeed0a3226565cffea786e7accd",
+      "path": "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-author.md"
+    }
+  ],
+  "criteria": [
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-author.md"
+      ],
+      "reason": "Actual public pure verifier returns exact AcceptedRestoreBinding for externally pinned dynamic source/restore/derivation chains; no historical archive pins.",
+      "id": "DYNAMIC_CHAIN_AND_RUNNER_BINDING",
+      "status": "pass"
+    },
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-author.md"
+      ],
+      "reason": "New explicit externally pinned stage reviews, identities, cutoff, age, local PG17 observation and external ACL scope required; unissued or legacy review authority refuses.",
+      "id": "FRESHNESS_AND_INDEPENDENT_REVIEW",
+      "status": "pass"
+    },
+    {
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-author.md"
+      ],
+      "reason": "10 synthetic tests/113 expectations and strict TypeScript pass. Native/provider observations are outside this author validation.",
+      "id": "ADVERSARIAL_CHECKS",
+      "status": "pass"
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Author handoff only; independent QA, immutable snapshot packaging and integration pending. This context authored the candidate and cannot independently review it.",
+    "Requested software-engineering gpt-5.6-sol/high; reused follow-up context cannot apply an override, observed settings remain unknown.",
+    "No actual fresh restore or authenticated review was issued. Only new assigned files written; no existing-code/provider/database/Git actions.",
+    "Tests/type checks had no failures. Run-record notes assignment initially failed because the template had no notes property; added explicitly afterward. Historical FAIL evidence remains untouched."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "profile": "neuvetra.hosted-setup.external-acl-pin-observation.v1",
+  "status": "root-read-only-derived-independent-verification-pending",
+  "sourceArchiveSha256": "22280e654a823d3922acfa56ddee1bc9ac0c9c17fa1c29fb672671071c488495",
+  "sourceReceiptSha256": "60c093af17ec31cfea52b5a1b7689b5adb6dd72d06053b2f59f7c269c8ad0819",
+  "sourceSnapshotSha256": "c061e8316581296f795c353feccca537e5b2db6e8796f164a096f34727766667",
+  "sourceStateSha256": "85763f14b6bd15768296e8f9acaf4b03e11c3f6d7a53312398ab831c526aba30",
+  "externalDefaultAclCount": 27,
+  "externalDefaultAclsSha256": "6f3e81b0e82225f8c46850c6753a9ef45ff8fdb7a0b8684b828432ba80fb0d97",
+  "privateReadScriptSha256": "41999f2313373bbc845ae7ba1ed93d517c52a85230314dfbfcaa54a3b146b714",
+  "archiveUnsealedInMemory": true,
+  "rawAclRowsWritten": false,
+  "hostedReadOrMutation": false,
+  "upgradeAuthorized": false
+}

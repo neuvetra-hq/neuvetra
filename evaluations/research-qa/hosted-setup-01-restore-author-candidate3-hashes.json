@@ -1,0 +1,34 @@
+[
+  {
+    "path": "tools/staging/hosted-setup-restore-core.ts",
+    "sha256": "3add141768b2bde620627148bba5311c8689f19cf078ad8b23fe51417d92fc6b"
+  },
+  {
+    "path": "tools/staging/hosted-setup-backup.ts",
+    "sha256": "4ceeddd0f8e1021e5f65492b30ee08dc21fab409b5b01f8e40cbf26c5f74e66f"
+  },
+  {
+    "path": "tools/staging/hosted-setup-restore-io.ts",
+    "sha256": "6eb5f90da057e302bbc8ad91c81933e748ce8705b699bed53838aba5d451da71"
+  },
+  {
+    "path": "tools/staging/hosted-setup-restore.ts",
+    "sha256": "abf30e15c57b865e43563c8ad4c0a8f6bc79167804493f3fe8338997ed3271f0"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-restore-author-candidate3.test.ts",
+    "sha256": "9bf27c6f6a8d6d54362b5504e71c3560dbdb81190737013a55672a509ef7577e"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-restore-author-candidate3-native.ts",
+    "sha256": "52bbcb2ff049466ffc8e671e2500722812c1d1afca57ca7c7d242c0787be5859"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-restore-author-candidate3.md",
+    "sha256": "2e27d2d644e757437e7ad50614e388c1636215f6528744454814494b6ae6de4a"
+  },
+  {
+    "path": "tools/staging/m78-inventory.ts",
+    "sha256": "ea93686812910082438bf8ecfd9ef8756dddd6048897d369a494e0fdd700f40a"
+  }
+]

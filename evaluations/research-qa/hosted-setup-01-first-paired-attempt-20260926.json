@@ -1,0 +1,30 @@
+{
+  "profile": "neuvetra.hosted-setup.paired-attempt-diagnostic.v1",
+  "observedUtc": "2026-09-26T08:34:19Z",
+  "targetProjectRef": "icockcoguyadhryzydvl",
+  "attempt": {
+    "startedUtc": "2026-09-26T08:30:20Z",
+    "result": "refused_before_archive",
+    "reservationFile": "hosted-setup-20260926T083020471Z-5115b877.snapshot.dpapi.attempt.json",
+    "reservationSha256": "ba092ae66e94f0451a235b9b79c6da58cb6ae803e930ac9e8426202be4d63386",
+    "encryptedArchivePresent": false,
+    "pairedReceiptPresent": false,
+    "retryOfThisReservationAllowed": false
+  },
+  "readOnlyDiagnosis": {
+    "operatorCanSetRestrictedRuntimeRole": false,
+    "operatorCanReadMigrationReceipts": true,
+    "applicationTableCount": 127,
+    "unsupportedRelationCount": 0,
+    "companyCount": 1,
+    "memberCount": 4,
+    "runtimeProbeOutcome": "POSTGRES_42501",
+    "nextRepair": "Import the exported source snapshot through the existing restricted runtime connection and run tenant probes there; independently re-review before a new paired backup attempt."
+  },
+  "postAttemptReadiness": {
+    "status": "ready",
+    "schemaVersion": 22,
+    "legacyContainmentVerified": true
+  },
+  "limits": "The attempt and diagnostics did not execute a schema/data write. Readiness is not an independent row-preservation comparison. The earlier unpaired encrypted application backup remains diagnostic, not a paired restore gate."
+}

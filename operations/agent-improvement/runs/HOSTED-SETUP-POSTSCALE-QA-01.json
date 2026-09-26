@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-POSTSCALE-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-postscale-independent-review1.md", "sha256": "df340c53c2a1df82f31f9240dd97f4938dfdd361f8748a6c5bc9b5c0810ce77c"}
+  ],
+  "source_artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-postscale-independent-review1.md", "sha256": "df340c53c2a1df82f31f9240dd97f4938dfdd361f8748a6c5bc9b5c0810ce77c"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-EXACT-LOCAL-REVIEW",
+      "status": "pass",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-postscale-independent-review1.md"],
+      "reason": "Independent reviewer matched exact author candidate hashes, reran 21 tests/114 assertions and strict TypeScript, and exercised 109 independent cases (105 expected-outcome checks plus four explicitly diagnostic accepted-input observations). No candidate source edits or provider/Git/live operations."
+    },
+    {
+      "id": "AC-02-PHASE-ORDER-INTEGRATION",
+      "status": "fail",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-postscale-independent-review1.md", "operations/hosted-setup/upgrade-runbook.md"],
+      "reason": "POST-F01 P2: the sole combined public verifier requires resumed evidence before producing any result and cannot supply the stopped-state verification required before migration. Bounded retrospective semantics pass; actual stop-migrate-review-resume integration acceptance fails."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 1,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-6-astra", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assessment": {
+    "candidate_author_execution_context": "/root/artifact_runner",
+    "independent_of_candidate_author": true,
+    "first_candidate_verdict": "fail",
+    "finding_ids": ["POST-F01"],
+    "reviewed_candidate_artifacts": [
+      {"path": "tools/staging/hosted-setup-postscale.ts", "sha256": "7c8065493651e39851135d4a14bf9e9d50bb8b7b502add443a50ee4cde1becd9"},
+      {"path": "tools/staging/hosted-setup-postscale.test.ts", "sha256": "43e9ea37a99be8adab4d483840407fa966eb3088c7a24a79ceafc8746f936a72"}
+    ]
+  },
+  "routing_note": "This follow-up could not override or independently observe actual compute settings. Review/outcome remain pending coordinator inspection and immutable snapshot of this QA report; they do not erase the report's first candidate FAIL. Root owns administrative closure."
+}

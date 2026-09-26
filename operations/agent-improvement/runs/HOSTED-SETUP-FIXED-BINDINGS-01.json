@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-FIXED-BINDINGS-01",
+  "role": "software-engineering",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "832f72553d074e67268095030042cf13a29e04d7c62985422a851b78a71d88ea",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-fixed-artifact-bindings-author-20260926.md",
+      "sha256": "9b7a5c0efe86f34abcbfa33cee021bd6536796cb42b7da1e5279359d0fc3da8f"
+    }
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-bindings.ts", "sha256": "1a05c80af013f462b71b17c13804f78a3bf2b738ffb00c17b2e6d85ed4051549"},
+    {"path": "tools/staging/hosted-setup-artifact-bindings.test.ts", "sha256": "a0b06fc85b2e88575a0b04ef0c2f5746f43c4b68f9144a0960465fd0844defe1"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-private-binding-composition",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/hosted-setup-artifact-bindings.test.ts",
+        "evaluations/research-qa/hosted-setup-fixed-artifact-bindings-author-20260926.md"
+      ],
+      "reason": "Focused synthetic tests and strict TypeScript verify exact payload copying, verified publication/current-head binding, private restore evidence files, dynamic stopped-image review, fixed sequence fence and dedicated-client configuration."
+    },
+    {
+      "id": "AC-02-fresh-phase-observations",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/hosted-setup-artifact-bindings.ts",
+        "tools/staging/hosted-setup-artifact-bindings.test.ts",
+        "evaluations/research-qa/hosted-setup-fixed-artifact-bindings-author-20260926.md"
+      ],
+      "reason": "The observer requires the exact three runner phases and performs two fresh fixed Railway captures per phase with chronology, replay, image and stopped-configuration checks; missing authenticated transport refuses."
+    },
+    {
+      "id": "AC-03-restore-transport-envelope",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/hosted-setup-artifact-bindings.test.ts",
+        "evaluations/research-qa/hosted-setup-fixed-artifact-bindings-author-20260926.md"
+      ],
+      "reason": "All restore evidence uses externally pinned private file references. A 9,466,390-byte archive stays out of the sub-8-MiB payload and evidence under artifact/checkout roots refuses."
+    },
+    {
+      "id": "AC-04-uncertain-commit-resolution",
+      "status": "pending",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-fixed-artifact-bindings-author-20260926.md"
+      ],
+      "reason": "Reconciliation intentionally refuses because no authenticated original backend/session resolution producer exists. A serialized payload assertion cannot satisfy this criterion."
+    },
+    {
+      "id": "AC-05-independent-review",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Independent QA of the frozen candidate has not yet completed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "applied_lessons": ["L02", "L04", "L06"],
+  "routing_note": "Registered critical software-engineering route gpt-5.6-sol/high was requested. This existing-context follow-up exposed no runtime override or observation, so observed settings remain unknown. Independent QA and authenticated original-transaction resolution remain pending.",
+  "notes": [
+    "No provider, database, credential, deployment, scale, stop, migration, Git or publication mutation occurred.",
+    "The first passing implementation embedded restore bytes; coordinator evidence proved the historical archive exceeded the worker envelope. The unfrozen candidate was repaired to use private external files and the exact size became a regression.",
+    "Trusted-host review/head/policy hashes establish integrity relative to operator inputs, not cryptographic reviewer identity.",
+    "The prompt_sha256 field contains SHA-256 of the dispatched task identifier because the runtime did not expose a canonical serialized prompt envelope."
+  ]
+}

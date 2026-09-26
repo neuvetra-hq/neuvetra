@@ -1,0 +1,37 @@
+{
+  "observedAtUtc": "2026-09-26T12:59:26Z",
+  "method": "read-only Railway dashboard accessibility view in existing signed-in in-app browser",
+  "observer": "root coordinator",
+  "scope": "point-in-time visual observation, not authenticated API inventory or a stop receipt",
+  "projectId": "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+  "environmentId": "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+  "environmentLabel": "production",
+  "siteWeb": {
+    "serviceId": "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+    "domain": "www.neuvetra.ai",
+    "dashboardState": "Online",
+    "activeDeploymentId": "40546ef7-9004-4486-a471-370aaa305c80",
+    "deployedCommit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+    "deploymentStatus": "successful",
+    "region": "us-east4-eqdc4a",
+    "replicasShown": 1,
+    "healthcheckPath": "/ready"
+  },
+  "siteApi": {
+    "serviceId": "95487338-d03b-4d80-a07a-ab0a76482aea",
+    "domain": "api.neuvetra.ai",
+    "dashboardState": "Online",
+    "replicasShown": 1,
+    "visibleDeploymentDescription": "five-month-old streaming chat backend"
+  },
+  "repositoryContext": [
+    "Dockerfile.staging builds site-web plus workspace API into Site-Web and runs apps/site-api/src/staging/server.ts",
+    "apps/site-api/CLAUDE.md identifies api.neuvetra.ai as the separate retained chat backend"
+  ],
+  "limitations": [
+    "The dashboard view is a point-in-time UI signal and may be stale by execution.",
+    "It does not enumerate all deployments, hidden replicas, pending changes, direct database writers, or current database schema.",
+    "The separate Site-API service's database access was not independently traced in the provider configuration."
+  ],
+  "actionsTaken": "read-only navigation; no provider mutation"
+}

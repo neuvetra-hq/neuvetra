@@ -1,0 +1,18 @@
+{
+  "profile": "neuvetra.hosted-setup.actual-fingerprint-independent-review2-provenance.v1",
+  "reviewerExecutionContext": "Codex CLI ephemeral session 01a0dd43-28c3-7b80-9ce8-f11558e21531",
+  "dispatchFallback": "collaboration follow-up and fresh-spawn rejected by runtime thread limit",
+  "modelObserved": "gpt-6-astra",
+  "reasoningEffortObserved": "high",
+  "sandboxObserved": "read-only",
+  "reviewerAuthorshipOfReviewedFiles": false,
+  "promptSha256": "625ec7a576e13fa12eda7b16a3bcb7e60c78435765ae65ecc0d2a779e1666601",
+  "correctedObservationSha256": "ac65c1ffc256092f42746c2ebc8dd30dd042e64ba34d453d9e0370495080eebc",
+  "exactVerdictSha256": "1539d64122f457f65fe5a2774dbe3c76511611505ba93f6f13f4fb29e7e49164",
+  "verdict": "pass-historical-local-fingerprint-only",
+  "firstFailPreserved": true,
+  "hostedStateCurrentnessVerified": false,
+  "liveWriteGateVerified": false,
+  "providerRecoveryVerified": false,
+  "hostedUpgradeAuthorized": false
+}

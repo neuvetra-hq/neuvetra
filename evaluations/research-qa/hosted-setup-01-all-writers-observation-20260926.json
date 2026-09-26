@@ -1,0 +1,34 @@
+{
+  "profile": "neuvetra.hosted-setup.all-writers-observation.v1",
+  "observedUtc": "2026-09-26T10:06:45.583Z",
+  "status": "read-only-design-input-not-a-held-gate",
+  "projectRef": "icockcoguyadhryzydvl",
+  "schemaVersion": 22,
+  "loginRolesWithDirectNeuvetraTableWrite": ["postgres", "supabase_admin"],
+  "loginRolesWithNeuvetraRoutineExecute": {
+    "neuvetra_runtime": 66,
+    "postgres": 212,
+    "supabase_admin": 212
+  },
+  "otherObservedLoginRolesWithZeroDirectNeuvetraTableWriteAndZeroNeuvetraRoutineExecute": [
+    "authenticator", "pgbouncer", "supabase_auth_admin", "supabase_etl_admin",
+    "supabase_read_only_user", "supabase_replication_admin", "supabase_storage_admin"
+  ],
+  "sessionsAtObservation": {
+    "authenticator": 1,
+    "neuvetra_runtime": 1,
+    "pgbouncer": 2,
+    "supabase_admin": 4,
+    "supabase_auth_admin": 1
+  },
+  "queryScript": ".tmp/hosted-setup-all-writers.ts",
+  "readOnly": true,
+  "hostedMutation": false,
+  "writeGateHeld": false,
+  "limitations": [
+    "This is one read-only privilege/session snapshot while the old application is live.",
+    "Provider and privileged operator sessions can still write; this snapshot does not establish their intent or a global database write lock.",
+    "Role membership and privileged access require explicit review in any later stop-gate design.",
+    "The runtime role can execute 66 neuvetra routines despite having no direct neuvetra table write privilege."
+  ]
+}

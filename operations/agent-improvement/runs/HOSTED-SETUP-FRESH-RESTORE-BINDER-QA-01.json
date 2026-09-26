@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-FRESH-RESTORE-BINDER-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent.test.ts",
+      "sha256": "def86f23c1f48acea1ce1539b2b9760e9e0befb3f79c083105fc0f06ee5cb6f6"
+    },
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent-review.md",
+      "sha256": "953addbb0de7f9ca37987fdd32185aca965ed58bea1891f891ad37eceb2c027e"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent.test.ts",
+      "sha256": "def86f23c1f48acea1ce1539b2b9760e9e0befb3f79c083105fc0f06ee5cb6f6"
+    },
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent-review.md",
+      "sha256": "953addbb0de7f9ca37987fdd32185aca965ed58bea1891f891ad37eceb2c027e"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-FROZEN-CANDIDATE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent-review.md"
+      ],
+      "reason": "All three supplied candidate/author hashes matched before testing and QA made no candidate edits."
+    },
+    {
+      "id": "AC-02-ACTUAL-DYNAMIC-RESTORE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent.test.ts",
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent-review.md"
+      ],
+      "reason": "A new DPAPI archive, real PostgreSQL 17.11 dump/restore, preservation capture and coherent fingerprint produced a dynamic accepted binding; the stopped fixture had no listener."
+    },
+    {
+      "id": "AC-03-PRESERVATION-FRESHNESS-IDENTITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent.test.ts",
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent-review.md"
+      ],
+      "reason": "Only the documented external default-ACL normalization was admitted; application drift, stale time, operator-as-reviewer policy and a re-pinned self-review envelope were refused."
+    },
+    {
+      "id": "AC-04-TRUST-BOUNDARY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-independent-review.md"
+      ],
+      "reason": "The report preserves that identity and origin are not authenticated by the pure function; production policy/review issuance, current hosted observation, live preflight and execution authorization remain separate."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assessment": {
+    "candidate_author_execution_context": "/root/compose_qa",
+    "independent_of_candidate_author": true,
+    "first_candidate_verdict": "pass",
+    "finding_ids": [],
+    "material_findings_open": 0,
+    "reviewed_candidate_artifacts": [
+      {
+        "path": "tools/staging/hosted-setup-fresh-restore-binding.ts",
+        "sha256": "4a7c434537916be019f1f1af80d258d170f92ba7d7d5ef171ca67ae364eb189e"
+      },
+      {
+        "path": "tools/staging/hosted-setup-fresh-restore-binding.test.ts",
+        "sha256": "79f894173b5fe1d179aa318e05896bcca97eb6c34b195d4cd54c8fb047ce7a91"
+      },
+      {
+        "path": "evaluations/research-qa/hosted-setup-01-fresh-restore-binding-author.md",
+        "sha256": "3d733b80501ec343f9ffc2f360430f6268ae2eeed0a3226565cffea786e7accd"
+      }
+    ]
+  },
+  "routing_note": "This follow-up could not override or independently observe actual compute settings. The candidate verdict is a bounded independent PASS. Coordinator inspection and immutable snapshot/administrative closure of this QA report remain pending; this does not change the operational trust limitations in the report."
+}

@@ -1,0 +1,31 @@
+{
+  "profile": "neuvetra.hosted-setup.bridge-deploy-attempt.v1",
+  "status": "attempt_reserved_before_provider_call",
+  "createdUtc": "2026-09-26T15:38:06Z",
+  "target": {
+    "projectId": "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+    "environmentId": "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+    "serviceId": "f43abcf9-72f0-4034-828a-8d83ca26b0db"
+  },
+  "exactCommitSha": "d2f0ca16f02bb99801b68a7925f34016f3ba51bb",
+  "priorDeploymentId": "40546ef7-9004-4486-a471-370aaa305c80",
+  "priorCommitSha": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "priorImageDigest": "sha256:6793d504795b3ecaace5fb59b309fa9b25f2323de98eac0bc23804264f2a2f23",
+  "priorConfigurationEtag": "7838eb61097efd28630c30eb7f5e97457655a4dbcfc4b787027996ad92a4dda0",
+  "preflight": {
+    "exactRemoteHead": true,
+    "sevenExactHeadChecksGreen": true,
+    "connectedRepository": "neuvetra-hq/neuvetra",
+    "dockerfile": "Dockerfile.staging",
+    "healthcheckPath": "/ready",
+    "automaticDeploymentsEnabled": false,
+    "stagedPatchEmpty": true,
+    "oneRunningReplica": true,
+    "schemaVersion": 22,
+    "legacyContainmentVerified": true,
+    "documentedExactCommitMutationPresent": true
+  },
+  "providerResponseDeploymentId": null,
+  "noAutomaticRetry": true,
+  "databaseOrScaleMutationAuthorized": false
+}

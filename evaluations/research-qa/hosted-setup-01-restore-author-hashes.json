@@ -1,0 +1,30 @@
+[
+  {
+    "path": "tools/staging/hosted-setup-restore-core.ts",
+    "sha256": "590eef1afa6baaa1f583750155d38d92103807f61c472ae921072c5448702b6e"
+  },
+  {
+    "path": "tools/staging/hosted-setup-restore-io.ts",
+    "sha256": "6eb5f90da057e302bbc8ad91c81933e748ce8705b699bed53838aba5d451da71"
+  },
+  {
+    "path": "tools/staging/hosted-setup-restore.ts",
+    "sha256": "abf30e15c57b865e43563c8ad4c0a8f6bc79167804493f3fe8338997ed3271f0"
+  },
+  {
+    "path": "tools/staging/hosted-setup-backup.ts",
+    "sha256": "24fdd727af8caa4ae0ccbe33b5a5d13e36322178becc0357f2cb50fcab5c219c"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-restore-author.test.ts",
+    "sha256": "8f88c88d54b487aca3514922b792bd2116b9cc1daaaba87257e893d375934c0a"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-restore-author-native.ts",
+    "sha256": "e61edfe95689482003cc2792a5ee2cb2f7c6917e6023bddef116f9f8987d982b"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-restore-author.md",
+    "sha256": "5f5e7fd21be51e55c192ff2fb79a2eb7999a323b3e3596212f216c2832ed9f24"
+  }
+]

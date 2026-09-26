@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-MATERIALIZE-REPAIR-01",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-materialize.ts", "sha256": "7f1c644e4b3520c51e585f283d52d2e3200ea5840e1723a1a841a1a6be42db3d"},
+    {"path": "tools/staging/hosted-setup-artifact-materialize.test.ts", "sha256": "5860472b5acaa2e829c3e52b9c705085ae34382f115db35b95fe7429be224336"},
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-materialize-repair1-author.md", "sha256": "f481b4af0846e6d64ea916c416ff5f6bd8d9aa8d191e9d585aeb931242d40add"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-materialize-repair1-author.md"],
+      "reason": "Author public-boundary tests accept both reported cutoff values and exact 16 MiB, and preserve malformed, above-limit and aggregate refusals. Independent re-review pending."
+    },
+    {
+      "id": "AC-02",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-materialize-independent-review.md"],
+      "reason": "Independent QA must close preserved MAT-F01 against the repaired exact bytes."
+    }
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "fail", "material_findings_open": 1, "rework_cycles": 1, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-5.6-sol", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_task": "HOSTED-SETUP-ARTIFACT-MATERIALIZE-01",
+  "applied_lessons": ["L04"],
+  "routing_note": "Critical software-engineering registry settings requested. Follow-up dispatch cannot override the already running context; actual model/effort unknown. Original FAIL remains preserved; no hosted authority is created."
+}

@@ -1,0 +1,39 @@
+{
+  "profile": "neuvetra.hosted-setup.writer-inventory-observation.v1",
+  "recordedUtc": "2026-09-26T09:50:32Z",
+  "status": "read-only-design-input-not-a-held-gate",
+  "projectRef": "icockcoguyadhryzydvl",
+  "schemaVersion": 22,
+  "siteWeb": {
+    "projectId": "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+    "environmentId": "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+    "serviceId": "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+    "deploymentId": "40546ef7-9004-4486-a471-370aaa305c80",
+    "deployedCommit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+    "status": "SUCCESS",
+    "stopped": false,
+    "region": "us-east4-eqdc4a",
+    "replicas": 1
+  },
+  "directNeuvetraTableWritePrivileges": {
+    "anon": 0,
+    "authenticated": 0,
+    "neuvetra_runtime": 0
+  },
+  "neuvetraRoutineExecuteCounts": {
+    "anon": 0,
+    "authenticated": 0,
+    "neuvetra_runtime": 66
+  },
+  "runtimeRole": {
+    "canLogin": true,
+    "connectionLimit": -1
+  },
+  "runtimeSessionsAtObservation": 1,
+  "runtimeActiveSessionsAtObservation": 0,
+  "limitations": [
+    "This is a single read-only snapshot while the application remains live; it is not evidence of continuous write quiescence.",
+    "Provider and privileged operator sessions were present; their activities and other credentials are not excluded by these counts.",
+    "A reviewed, continuously held gate and fresh live fingerprint comparison are required before schema-23 execution."
+  ]
+}

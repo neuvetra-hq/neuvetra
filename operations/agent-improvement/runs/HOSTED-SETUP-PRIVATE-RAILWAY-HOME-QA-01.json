@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-PRIVATE-RAILWAY-HOME-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "sha256": "06e807864335e57e354991e3b69e0d84fbcb3358303c023ee69ff32bc51e0f44",
+      "path": "evaluations/research-qa/hosted-setup-01-private-railway-home-independent-review.md"
+    }
+  ],
+  "criteria": [
+    {
+      "reason": "Eight source-path adversaries refused before journal/home; synthetic credential stdout/stderr not forwarded. Trusted-host and inherited ACL bounds explicit.",
+      "id": "SOURCE_PATH_AND_SECRET_BOUNDARY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-private-railway-home-independent-review.md"
+      ]
+    },
+    {
+      "reason": "Nine ordinary lifecycle paths removed copied home; one direct worker/no retry, timeout and sibling isolation verified. Parent death and cleanup-denial not tested.",
+      "id": "EXIT_CLEANUP_AND_DEADLINE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-private-railway-home-independent-review.md"
+      ]
+    },
+    {
+      "reason": "Actual pinned CLI collector authenticated in reviewed supervisor-created home against exact target; deliberate refusal before adapter, no provider/DB mutation.",
+      "id": "REAL_READONLY_AUTH",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-private-railway-home-independent-review.md"
+      ]
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded PASS delivered; QA artifact awaits coordinator review and immutable packaging. No self-review or milestone closure.",
+    "Registry dispatch temporarily unavailable due unrelated in-progress publisher validation; requested critical route recorded, inherited actual settings unknown.",
+    "Initial independent3 pass/1 harness cleanup failure/139; native exact-junction cleanup and targeted1 pass/17. Candidate6 pass/47 and strict TS pass. Preserve harness failures.",
+    "Candidate bytes untouched. Only new review/run and disposable local fixtures; one real authenticated read-only collector, no provider mutation/DB/Git.",
+    "Windows ACL confidentiality, supervisor death cleanup, child process tree termination and hosted upgrade authority are outside acceptance."
+  ]
+}

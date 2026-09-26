@@ -1,0 +1,33 @@
+{
+  "profile": "neuvetra.hosted-setup.bridge-active-observation.v1",
+  "recordedUtc": "2026-09-26T15:46:18Z",
+  "observationWindowUtc": "2026-09-26 15:44-15:46 UTC",
+  "provider": "Railway authenticated CLI and API; exact service ID selected",
+  "projectId": "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+  "environmentId": "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+  "serviceId": "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+  "deploymentId": "8946ec8e-3dba-484c-8f84-80fa71d8da5f",
+  "commitSha": "d2f0ca16f02bb99801b68a7925f34016f3ba51bb",
+  "imageDigest": "sha256:b227c13eb069960fee6e26839997324fe59c343d9dd078792384dab0fce03c6d",
+  "deploymentStatus": "SUCCESS",
+  "oneRunningInstance": true,
+  "statusAndInventoryImageMatch": true,
+  "completeTerminalInventory": true,
+  "soleSuccessDeployment": true,
+  "noInFlightDeployments": true,
+  "automaticDeploymentsEnabled": false,
+  "stagedPatchEmpty": true,
+  "region": "us-east4-eqdc4a",
+  "replicas": 1,
+  "configurationEtag": "7838eb61097efd28630c30eb7f5e97457655a4dbcfc4b787027996ad92a4dda0",
+  "ready": {
+    "status": "ready",
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 22,
+    "legacyContainmentVerified": true
+  },
+  "publicLandingPageHttp200": true,
+  "schema23MigrationPerformed": false,
+  "maintenanceStopPerformed": false,
+  "pointInTimeOnly": true
+}

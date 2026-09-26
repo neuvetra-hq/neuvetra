@@ -49,6 +49,9 @@ bun.lock      -text
 package-lock.json -text
 
 # Evaluation receipts and journals are hashed evidence; preserve recorded bytes.
+tools/staging/hosted-setup* -text whitespace=cr-at-eol
+evaluations/research-qa/hosted-setup* -text whitespace=cr-at-eol
+operations/agent-improvement/runs/HOSTED-SETUP-* -text whitespace=cr-at-eol
 evaluations/research-qa/runs/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 evaluations/research-qa/runs/*.jsonl -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 operations/website-evaluation-allocation-*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

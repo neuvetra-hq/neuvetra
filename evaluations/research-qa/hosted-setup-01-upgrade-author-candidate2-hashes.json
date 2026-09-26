@@ -1,0 +1,18 @@
+[
+  {
+    "path": "tools/staging/hosted-setup-upgrade.ts",
+    "sha256": "2eb3445b725a7c6547486ccac8ed1e6e1b52730b26ebe13fa99dcf1d5a6e9e2c"
+  },
+  {
+    "path": "tools/staging/hosted-setup-upgrade.test.ts",
+    "sha256": "c4073fcb2d5e08e1c08ed14a4736fc492ea7bc55cc5ddf4ef738a201ec0940da"
+  },
+  {
+    "path": "operations/hosted-setup/upgrade-runbook.md",
+    "sha256": "1ec86c3cb387142b2c4c6a9a236eb6e8b98ec570622a721a273d8c0ff11da17c"
+  },
+  {
+    "path": "evaluations/research-qa/hosted-setup-01-upgrade-author-candidate2.md",
+    "sha256": "29284e0220ce4cdbd7ad8cc37933822ebaa4e719d9a350b2a6bbd6f2481e4109"
+  }
+]

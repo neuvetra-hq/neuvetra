@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-POSTSCALE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-postscale.ts", "sha256": "7c8065493651e39851135d4a14bf9e9d50bb8b7b502add443a50ee4cde1becd9"},
+    {"path": "tools/staging/hosted-setup-postscale.test.ts", "sha256": "43e9ea37a99be8adab4d483840407fa966eb3088c7a24a79ceafc8746f936a72"},
+    {"path": "evaluations/research-qa/hosted-setup-01-postscale-author-20260926.md", "sha256": "f738941121d9827d88c91c2ab4f5644f6b587cd4a3deae2259ff385fdc16d74c"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-postscale-author-20260926.md", "tools/staging/hosted-setup-postscale.ts"],
+      "reason": "Pure candidate binds two stopped and two resumed raw observations to one exact new reviewed deployment image, complete terminal inventory, exact region, clean staging, disabled auto deploy and changed configuration version. Independent QA and a new live bridge binding remain pending."
+    },
+    {
+      "id": "AC-02",
+      "status": "pending",
+      "evidence": ["tools/staging/hosted-setup-postscale.test.ts"],
+      "reason": "Eleven synthetic adversarial tests and strict TypeScript pass; combined deployment-binding and post-scale suites pass 21 tests with 114 assertions. No authenticated live captures or scale operation were performed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Critical software-engineering route requested in fresh context; actual model and effort were not independently observable. Additive pure verifier and synthetic tests only. Root owns authenticated captures and any future scaling wrapper; independent QA is required before use."
+}

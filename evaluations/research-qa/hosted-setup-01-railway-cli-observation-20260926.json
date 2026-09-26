@@ -1,0 +1,64 @@
+{
+  "profile": "neuvetra.hosted-setup.railway-cli-read-only-observation.v1",
+  "observedUtc": "2026-09-26T13:34:23.9318213Z",
+  "readOnly": true,
+  "provider": "Railway",
+  "cliVersion": "5.62.1",
+  "cliBinarySha256": "f9351033614c86882332a5c82e1856b21792b176ebf84a9417dfd1362c425177",
+  "projectId": "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+  "environmentId": "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+  "environmentName": "production",
+  "serviceId": "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+  "serviceName": "Site-Web",
+  "activeDeploymentCount": 1,
+  "activeDeploymentId": "40546ef7-9004-4486-a471-370aaa305c80",
+  "activeDeploymentStatus": "SUCCESS",
+  "activeDeploymentCommit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "sourceBranch": "main",
+  "sourceRepo": "neuvetra-hq/neuvetra",
+  "sourceAndRouteObservedByUtc": "2026-09-26T13:35:21Z",
+  "sourceDockerfile": "Dockerfile.staging",
+  "sourceRootDirectory": "/",
+  "customDomains": ["www.neuvetra.ai"],
+  "regionReplicaConfig": {
+    "us-east4-eqdc4a": {
+      "numReplicas": 1
+    }
+  },
+  "activeInstanceStatuses": [
+    "RUNNING"
+  ],
+  "serviceConfigUpdatedAt": "2026-09-15T13:47:47.946Z",
+  "autoDeployEnabled": false,
+  "unmergedChangesCount": null,
+  "stagedChangeReadOnlyObservation": {
+    "observedByUtc": "2026-09-26T13:46:00Z",
+    "stagedPatchId": "<empty>",
+    "stagedPatchStatus": "STAGED",
+    "stagedPatchPropertyCount": 0,
+    "environmentConfigEtag": "7838eb61097efd28630c30eb7f5e97457655a4dbcfc4b787027996ad92a4dda0",
+    "unmergedChangesCount": null,
+    "pendingChangesInferredAsZero": false
+  },
+  "recentDeploymentsChecked": 20,
+  "recentDeploymentStatusCounts": {"SUCCESS": 1, "REMOVED": 19},
+  "inFlightRecentDeploymentsObserved": 0,
+  "publicReadyReadOnlyObservation": {
+    "observedByUtc": "2026-09-26T13:38:34Z",
+    "url": "https://www.neuvetra.ai/ready",
+    "httpStatus": 200,
+    "status": "ready",
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 22,
+    "legacyContainmentVerified": true
+  },
+  "separateSiteApi": {
+    "serviceId": "95487338-d03b-4d80-a07a-ab0a76482aea",
+    "deploymentId": "337e422a-e239-400a-88b9-1fbb8ac521ff",
+    "commit": "de2a8c819da9a5f2e4d63833df6979fd04a404b4",
+    "dockerfile": "/apps/api/Dockerfile",
+    "customDomains": ["api.neuvetra.ai"]
+  },
+  "stopObserved": false,
+  "hostedDatabaseCurrentnessObserved": false
+}

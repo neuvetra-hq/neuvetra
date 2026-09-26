@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-REPAIR-02",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-repair2-author.md", "sha256": "8acdc8a900ce32a4ea5ec3a8f4aa620172a8d02e12090e7b700b77967d5f07d7"}
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-publisher.ts", "sha256": "17f2f324b965ab84f2b562de96ba91fb9385fce5560bc4c7194bd292604ccf7a"},
+    {"path": "tools/staging/hosted-setup-artifact-publisher.test.ts", "sha256": "9f44b49c119c1505291cd849990fb63e0c9cb08618abdd705c192915ec1c995d"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-publisher.ts", "tools/staging/hosted-setup-artifact-publisher.test.ts", "evaluations/research-qa/hosted-setup-01-artifact-publisher-repair2-author.md"],
+      "reason": "Author candidate recursively hashes every reachable raw tree, parses and preserves verified parent-child entries, and reads selected blobs only by verified mapped OID with reconstructed blob identity."
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-publisher.test.ts", "evaluations/research-qa/hosted-setup-01-artifact-publisher-repair2-author.md"],
+      "reason": "QA2 nested-tree substitution at two depths and direct loose commit/blob substitutions refuse; replacement refs retain original bytes, pg 8.23 optional-peer closure passes, and real materializer/verifier composition remains green."
+    },
+    {
+      "id": "AC-03",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md"],
+      "reason": "Both prior FAIL reports are preserved. Targeted independent review of the exact repair-2 hashes is required before acceptance or publication."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md"],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 1,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_task": "HOSTED-SETUP-ARTIFACT-PUBLISHER-01",
+  "applied_lessons": ["L04"],
+  "routing_note": "Critical software-engineering registry settings requested; actual model and effort remain unknown in the inherited follow-up context. QA1 and QA2 FAIL evidence is preserved. Offline source/test repair and disposable synthetic fixtures only; no shared Git, provider, database, live publication, launch authority, or production authorization."
+}

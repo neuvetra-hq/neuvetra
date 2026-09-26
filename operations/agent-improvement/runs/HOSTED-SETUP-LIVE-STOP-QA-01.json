@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-LIVE-STOP-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-live-stop-independent-review1.md",
+      "sha256": "5eb6d00949c5c7cc631a54227c7c882ca679613a49fdc6bf1b346cc79ed020f5"
+    }
+  ],
+  "criteria": [
+    {
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review1.md"
+      ],
+      "id": "EXACT_CAPABILITY_AND_EXECUTABLE",
+      "reason": "LIVE-STOP-F01/F02 P1: binding replacement accepts different image; getter hashes pinned CLI but selects unverified path for intercepted native scale."
+    },
+    {
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review1.md"
+      ],
+      "id": "RECEIPT_AND_PHASE_CHRONOLOGY",
+      "reason": "LIVE-STOP-F03/F04 P2: existing receipt still permits scale; old stopped captures predating preflight accepted."
+    },
+    {
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review1.md"
+      ],
+      "id": "POSITIVE_CONTROLS_AND_FAILURE_SEMANTICS",
+      "reason": "Authentic ordinary stop, fixed argv/no-shell, token exclusion, invalid response uncertainty, no retry/capability replay, zero/null synthetic shapes and scoped strict TS pass."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 4,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Original bounded FAIL, four findings preserved; candidate source/test unchanged. QA artifact awaits coordinator review and immutable packaging.",
+    "Registry dispatch temporarily blocked by unrelated publisher hash; requested critical gpt-6-astra/high, observed settings unknown.",
+    "Initial vacuous passes invalidated by failed positive control; temporary Windows module identity normalized, original source then produced4 failures plus passing controls.",
+    "Candidate2/15; main independent4 pass4 fail56; appended zero/null shape1 pass6; strict TS passed.",
+    "Only temporary synthetic fixtures/new report/run; node execFile intercepted for all native transport tests. No real provider scale, DB, credentials, Git or source edits."
+  ]
+}

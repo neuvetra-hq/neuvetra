@@ -1,0 +1,25 @@
+{
+  "profile": "neuvetra.hosted-setup.actual-fingerprint-observation.v2",
+  "status": "root-observed-local-derivation-independent-corrected-review-pending",
+  "operatorScriptSha256": "d471eba861388b8b23f00631fd8b33a56fdda78df7ebbbfdb504223213450954",
+  "candidateDerivationSha256": "c771648829ccf84d0136530534940e8215f8b865f1ec5e2b742eb608f070fb5b",
+  "candidateIndependentComponentReviewSha256": "de5c52bbd56481e1202cba1b0cd63ef7de85bb4eb67e2eef177bde745b64de33",
+  "resultSha256": "e75c9a68fe2a57614a4562f84534ff442ee807fc5aa93d0b2c7b5bfde0a58495",
+  "expectedDatabaseFingerprintSha256": "871eb2c6d307566b5442f8a4f5ab9ad39a61da229de6e91095176e92b3d48446",
+  "sourceExternalDefaultAclsSha256": "6f3e81b0e82225f8c46850c6753a9ef45ff8fdb7a0b8684b828432ba80fb0d97",
+  "localClonePort": 55479,
+  "localCloneStoppedAfterRun": true,
+  "localCloneListenerAfterRun": false,
+  "hostedReadOrMutation": false,
+  "upgradeAuthorized": false,
+  "correction": {
+    "priorObservationSha256": "c9d02e5804309288ce2d0feaec9300e6ab509038ea7862955f484977d2e94744",
+    "firstIndependentReview": "evaluations/research-qa/hosted-setup-01-actual-fingerprint-independent-review1.md",
+    "reason": "The first observation copied an incomplete 55-character SHA-256 for the private operator script. The script and derivation result bytes are unchanged."
+  },
+  "limits": [
+    "Independent acceptance of this corrected actual-result chain is still pending.",
+    "This historical fingerprint does not establish that the hosted database is still current.",
+    "No application stop/write gate, schema-23 migration or deployment has occurred."
+  ]
+}

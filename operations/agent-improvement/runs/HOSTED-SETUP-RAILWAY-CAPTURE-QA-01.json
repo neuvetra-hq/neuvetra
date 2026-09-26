@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-RAILWAY-CAPTURE-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-railway-capture-independent-review.md",
+      "sha256": "13c590ab1a4148326e480d678b2c20511a8b9bdee9d61c5f8ba1e1272ae4214b"
+    },
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-railway-capture-independent-review2.md",
+      "sha256": "105bd02d158268aa26fc53daa2bec843b2d63371b2d96f3df2f6d642b25fcd69"
+    }
+  ],
+  "criteria": [
+    {
+      "reason": "Independent after-version and after-status replacement probes refuse before the changed executable runs; original CAPTURE-F01 FAIL preserved.",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-railway-capture-independent-review2.md"
+      ],
+      "status": "pass",
+      "id": "REPAIRED_ACQUISITION_PINS"
+    },
+    {
+      "reason": "Actual collector outputs compose through binder; absent/wrong project ownership, raw GraphQL errors, missing commit and missing active inventory refuse. Exact service filtering verified with unrelated first service.",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-railway-capture-independent-review2.md"
+      ],
+      "status": "pass",
+      "id": "NO_PROJECT_ROOT_SCOPE_AND_RAW_CAPTURE"
+    },
+    {
+      "reason": "19 synthetic tests/141 expectations and focused strict TypeScript pass on frozen repaired bytes. Source/runtime review confirms readonly argv and no shell; final hashes unchanged.",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-railway-capture-independent-review2.md"
+      ],
+      "status": "pass",
+      "id": "FOCUSED_CHECKS_AND_NO_DRIFT"
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Technical review delivered bounded repaired PASS; original candidate FAIL CAPTURE-F01 remains preserved in the first report. Source changed during original review and was explicitly frozen/re-reviewed rather than silently accepted.",
+    "This is the QA deliverable run; root review and immutable snapshot closure remain pending, so no self-review or completed-record claim is made. Candidate had one material repair after first FAIL; QA report itself is awaiting first independent review.",
+    "Requested critical registered route gpt-6-astra/high; existing independent context reused, actual model/effort unknown. Author was /root; reviewer authored none of candidate code/tests.",
+    "Only two new review reports, this QA run and temporary synthetic probe were written. No provider/live/database/Git action or candidate changes by reviewer. Coordinator owns final packaging."
+  ]
+}

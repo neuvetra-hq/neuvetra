@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-01",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-publisher.ts", "sha256": "02f2ab413ccb8900b9d921d329d86968acd3de46f31d6fb1950b05434f7d04b0"},
+    {"path": "tools/staging/hosted-setup-artifact-publisher.test.ts", "sha256": "5ee8f874c9a36822702d74bea942562babee5d5804f34bddfe7ddd73fdc614b1"},
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-author.md", "sha256": "2ab6d4b91cdf40a2e06117688378203dc4c529ae787cc0b1218d646a4f80f09f"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": ["tools/staging/hosted-setup-artifact-publisher.ts", "evaluations/research-qa/hosted-setup-01-artifact-publisher-author.md"],
+      "reason": "Offline candidate reads fixed source closure and 23 migrations only from an exact clean reviewed Git commit, creates verifier-compatible regular-file archives, and binds separately pinned PR, executable, runtime, supervisor and config evidence. Independent QA remains pending."
+    },
+    {
+      "id": "AC-02",
+      "status": "pending",
+      "evidence": ["tools/staging/hosted-setup-artifact-publisher.test.ts"],
+      "reason": "Six synthetic publisher tests and the 33-test combined publisher/materializer/verifier suite pass; dirty source, stale evidence, missing closure bytes and path aliases fail closed. No real publication was attempted because the shared source closure is not yet a clean reviewed commit."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Critical software-engineering route requested through follow-up; actual model and effort were not independently observable. Additive offline publisher and synthetic tests only. No provider, database, live launch, production authorization, or shared-repository Git write."
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-REPAIR2-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [{"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md", "sha256": "d796cfd6c83e5d2d631d7985e490364ead6f18f9ccae9033336a2a0dc2e62dbf"}],
+  "source_artifacts": [{"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md", "sha256": "d796cfd6c83e5d2d631d7985e490364ead6f18f9ccae9033336a2a0dc2e62dbf"}],
+  "criteria": [
+    {"id": "AC-01-PRESERVED-EXACT-REVIEW", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md"], "reason": "Assigned source/test/author pins matched. QA1/QA2 FAIL unchanged. Eleven delivered tests/54 assertions and strict TypeScript pass; 16 independent cases preserve 15 expected outcomes and new PUB-F04."},
+    {"id": "AC-02-ORIGINAL-SOURCE-AND-PEER-FINDINGS", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md"], "reason": "PUB-F03 exact nested corruption now refuses tree identity before publication. Replacement refs preserve original bytes, optional peer positives materialize and negative metadata/required peer controls refuse."},
+    {"id": "AC-03-SIBLING-AND-PARSER-IDENTITY", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md"], "reason": "Distinct sibling basenames retain their respective content/OIDs and materialize. Duplicate names, slash names, unsupported mode, truncated OID and invalid UTF-8 fail closed at documented boundaries."},
+    {"id": "AC-04-PUBLISHER-MATERIALIZER-COMPATIBILITY", "status": "fail", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md"], "reason": "PUB-F04 P2: publisher succeeds for a clean exact commit containing A/one.ts and a/two.ts directory-prefix aliases; real materializer refuses Case alias archive path refused. No source substitution or authority bypass claimed."}
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "pending", "material_findings_open": 1, "rework_cycles": null, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-6-astra", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assessment": {
+    "candidate_author_execution_context": "/root/artifact_runner",
+    "independent_of_candidate_author": true,
+    "original_candidate_first_verdict": "fail",
+    "repair2_candidate_verdict": "fail",
+    "repaired_findings": ["PUB-F01", "PUB-F02", "PUB-F03"],
+    "open_finding_ids": ["PUB-F04"],
+    "reviewed_candidate_artifacts": [
+      {"path": "tools/staging/hosted-setup-artifact-publisher.ts", "sha256": "17f2f324b965ab84f2b562de96ba91fb9385fce5560bc4c7194bd292604ccf7a"},
+      {"path": "tools/staging/hosted-setup-artifact-publisher.test.ts", "sha256": "9f44b49c119c1505291cd849990fb63e0c9cb08618abdd705c192915ec1c995d"}
+    ]
+  },
+  "routing_note": "Requested critical qa-lead route refreshed; actual inherited setting unobserved. Earlier consumer authorship disclosed; integration invocation is not consumer reacceptance. Coordinator snapshot and administrative closure pending. No candidate/shared Git/provider/DB mutation or real publication."
+}

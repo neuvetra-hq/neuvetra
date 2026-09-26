@@ -1,0 +1,19 @@
+{
+  "profile": "neuvetra.hosted-setup.gate-capability-observation.v1",
+  "observedUtc": "2026-09-26T10:39:32.570Z",
+  "status": "read-only-capability-input-not-a-held-gate",
+  "projectRef": "icockcoguyadhryzydvl",
+  "operatorRole": "postgres",
+  "operatorCanCreateRole": true,
+  "operatorSuperuser": false,
+  "runtimeLogin": true,
+  "runtimeConnectionLimit": -1,
+  "operatorHasRuntimeAdminGrant": true,
+  "readOnly": true,
+  "hostedMutation": false,
+  "limitations": [
+    "No ALTER ROLE or session termination was attempted; this does not prove a held gate.",
+    "Existing runtime sessions and provider/admin writers require separate handling and review.",
+    "A runtime connection limit does not by itself prove the application deployment stopped."
+  ]
+}

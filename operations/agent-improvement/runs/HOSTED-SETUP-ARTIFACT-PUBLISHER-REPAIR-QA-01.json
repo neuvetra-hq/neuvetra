@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-REPAIR-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md", "sha256": "0f9977a48fe3166159015bcada3ceea37396ff7db9d0db79e670dfdb0bbaa6e8"}
+  ],
+  "source_artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md", "sha256": "0f9977a48fe3166159015bcada3ceea37396ff7db9d0db79e670dfdb0bbaa6e8"}
+  ],
+  "criteria": [
+    {"id": "AC-01-PRESERVED-EXACT-REVIEW", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md"], "reason": "Exact assigned repair hashes matched. Original FAIL unchanged. Nine delivered tests/40 assertions and strict TypeScript pass; independent fixture/probe and initial harness failures preserved."},
+    {"id": "AC-02-ORIGINAL-REPLACEMENT-REF-MECHANISM", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md"], "reason": "Commit/blob/tree replacement refs cannot substitute bytes; original-byte outputs materialize. Original replaced-checkout case now refuses."},
+    {"id": "AC-03-OPTIONAL-PEER", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md"], "reason": "Absent explicitly optional pg-native accepted; false/string optional and required dependency overlap refuse. Delivered actual pg8.23 prepared closure test passes without install/scripts."},
+    {"id": "AC-04-REVIEWED-COMMIT-SOURCE-INTEGRITY", "status": "fail", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md"], "reason": "PUB-F03 P1: substituted nested-tree loose-object payload under original OID yields unreviewed worker under pinned original HEAD; publisher and materializer/verifier accept while independent raw hashing and Git fsck detect corruption."}
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "pending", "material_findings_open": 1, "rework_cycles": null, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-6-astra", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assessment": {
+    "candidate_author_execution_context": "/root/artifact_runner",
+    "independent_of_candidate_author": true,
+    "original_candidate_first_verdict": "fail",
+    "repaired_candidate_verdict": "fail",
+    "repaired_original_findings": ["PUB-F01 replacement-ref mechanism", "PUB-F02"],
+    "open_finding_ids": ["PUB-F03"],
+    "reviewed_candidate_artifacts": [
+      {"path": "tools/staging/hosted-setup-artifact-publisher.ts", "sha256": "44a0e4d55cffa07d0a30a1b1a9f39e4b9abc2df1e67ad303242d28622fa62ad9"},
+      {"path": "tools/staging/hosted-setup-artifact-publisher.test.ts", "sha256": "85ea9d13b9379bb93c300cd1a1139165176374eaa6a1213ae916af88c473de2e"}
+    ]
+  },
+  "routing_note": "Registered critical qa-lead route refreshed; follow-up exposes no supported override or actual setting. Earlier consumer authorship is disclosed; integration invocation is not independent consumer reacceptance. Coordinator snapshot/inspection and run closure remain pending; no candidate/provider/DB/shared Git mutation or real publication."
+}

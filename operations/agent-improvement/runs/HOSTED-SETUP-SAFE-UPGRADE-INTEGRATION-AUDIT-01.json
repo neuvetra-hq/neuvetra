@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-SAFE-UPGRADE-INTEGRATION-AUDIT-01",
+  "role": "cto",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "bb2dbdcd3eeb163577ae3eb8d6ce42de1c369472e26f4df46da78f41279c36f5",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-safe-upgrade-integration-audit-20260926.md",
+      "sha256": "74355125871a8b49f1940e84b5a111b92baf54cbe999d19341b1818f7e3b0a44"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-safe-upgrade-integration-audit-20260926.md"
+      ],
+      "reason": "Traced clean publication, fresh restore, exact stop, one transaction, uncertain outcome, independent postcommit and same-image resume against current exact hashes and existing verdicts."
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": [
+        "tools/staging/hosted-setup-artifact-publisher.test.ts",
+        "tools/staging/hosted-setup-artifact-bindings.test.ts",
+        "tools/staging/hosted-setup-artifact-supervisor.test.ts",
+        "tools/staging/hosted-setup-artifact-worker.test.ts",
+        "tools/staging/hosted-setup-transactional-upgrade.test.ts",
+        "tools/staging/hosted-setup-transaction-compose.test.ts",
+        "tools/staging/hosted-setup-live-stop.test.ts",
+        "tools/staging/hosted-setup-postscale.test.ts",
+        "tools/staging/hosted-setup-postscale-repair2-independent.test.ts",
+        "evaluations/research-qa/hosted-setup-01-safe-upgrade-integration-audit-20260926.md"
+      ],
+      "reason": "Ran current synthetic artifact-chain, native PostgreSQL 17 transaction composition and stop/resume boundary tests without live provider or database access."
+    },
+    {
+      "id": "AC-03",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-safe-upgrade-integration-audit-20260926.md"
+      ],
+      "reason": "Distinguished readiness to proceed toward clean PR publication from the exact unresolved live-upgrade wiring and evidence gates."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 2,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "lessons_applied": ["L02", "L04"],
+  "routing_note": "Critical CTO route selected from the registry for a live schema and availability boundary. The follow-up runtime did not expose model or effort, so observed settings remain unknown. Audit author also authored the current fixed-bindings repair; that component's separate independent PASS is cited and this report does not replace it."
+}

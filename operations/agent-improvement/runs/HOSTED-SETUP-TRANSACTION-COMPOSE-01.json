@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-TRANSACTION-COMPOSE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Compose one-shot client and transaction runner on native PostgreSQL."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Assignment was already dispatched before this continuity record. No retrospective workflow-controller reservation is claimed; follow-up dispatch settings were not independently observable."
+}
