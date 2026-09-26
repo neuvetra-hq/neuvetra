@@ -6,6 +6,7 @@ import {DEPLOYMENT_TARGET as T,DEPLOYMENT_REVIEW_PROFILE,createHostedSetupDeploy
  deploymentBindingSha256,deploymentCaptureSha256,verifyHostedSetupDeploymentBinding,
  type DeploymentCapture,type DeploymentBindingPolicy} from './hosted-setup-deployment-binding'
 import {HOSTED_SETUP_LIVE_STOP_PROFILE,stopHostedSetupExactImage,type LiveStopRuntime} from './hosted-setup-live-stop'
+import {hostedSetupStoppedVerificationSha256} from './hosted-setup-postscale'
 import {RAILWAY_CAPTURE_PROFILE} from './hosted-setup-railway-capture'
 
 const IMAGE={deploymentId:'33333333-3333-4333-8333-333333333333',deployedCommit:'b'.repeat(40),imageDigest:'sha256:'+'c'.repeat(64)}
@@ -50,8 +51,12 @@ test('exact-image stop consumes fresh reviewed capability once and persists stop
  expect(result.imageDigest).toBe(IMAGE.imageDigest)
  expect(result.stoppedConfigurationVersion).toBe('e'.repeat(64))
  expect(scaleCalls).toBe(1)
- expect(JSON.parse(await readFile(receiptPath,'utf8')).stoppedConfigurationVersion).toBe('e'.repeat(64))
- expect(await readFile(journalPath,'utf8')).toContain('receipt_synced_pending_finalization')
+ const receiptBytes=await readFile(receiptPath,'utf8'),journal=await readFile(journalPath,'utf8')
+ expect(deploymentBindingSha256(receiptBytes)).toBe(hostedSetupStoppedVerificationSha256(result))
+ expect(receiptBytes.endsWith('\n')).toBe(false)
+ expect(JSON.parse(receiptBytes).stoppedConfigurationVersion).toBe('e'.repeat(64))
+ expect(journal).toContain('receipt_synced_pending_finalization')
+ expect(journal).toContain(`"receiptSha256":"${hostedSetupStoppedVerificationSha256(result)}"`)
  await expect(stopHostedSetupExactImage(input,runtime)).rejects.toThrow()
  expect(scaleCalls).toBe(1)
 })

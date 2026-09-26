@@ -1,11 +1,12 @@
 import {describe,expect,test} from 'bun:test'
-import {mkdir,mkdtemp,writeFile} from 'node:fs/promises'
+import {mkdir,mkdtemp,readFile,writeFile} from 'node:fs/promises'
 import {tmpdir} from 'node:os'
 import {join,resolve} from 'node:path'
 import type {FixedBindingContext} from './hosted-setup-artifact-worker'
 import {ARTIFACT_PROFILE,ARTIFACT_SOURCE_PROFILE,PUBLICATION_PROFILE} from './hosted-setup-artifact-source'
 import {FRESH_RESTORE_POLICY_PROFILE} from './hosted-setup-fresh-restore-binding'
-import {DEPLOYMENT_BINDING_PROFILE,DEPLOYMENT_REVIEW_PROFILE,DEPLOYMENT_TARGET,createHostedSetupDeploymentReceipt,deploymentCaptureSha256} from './hosted-setup-deployment-binding'
+import {DEPLOYMENT_BINDING_PROFILE,DEPLOYMENT_REVIEW_PROFILE,DEPLOYMENT_TARGET,createHostedSetupDeploymentReceipt,deploymentCaptureSha256,verifyHostedSetupDeploymentBinding} from './hosted-setup-deployment-binding'
+import {HOSTED_SETUP_LIVE_STOP_PROFILE,stopHostedSetupExactImage,type LiveStopRuntime} from './hosted-setup-live-stop'
 import {verifyHostedSetupStopped} from './hosted-setup-postscale'
 import {RAILWAY_CAPTURE_PROFILE} from './hosted-setup-railway-capture'
 import {HOSTED_SETUP_PROFILE,HOSTED_SETUP_PROJECT,canonical,sha256,type PinnedArtifact} from './hosted-setup-upgrade'
@@ -43,7 +44,7 @@ function validMaintenance(value:any,clock:number){
  value.trustedPins.deploymentPolicySha256=sha256(canonical(deploymentPolicy));value.trustedPins.stopReviewSha256=stopReview.sha256
 }
 
-async function fixture(changes?:(value:any)=>void,archiveSize=7){
+async function fixture(changes?:(value:any)=>void|Promise<void>,archiveSize=7){
  const clock=now(),historical=headEvidence(clock-2000,clock+120000),current=headEvidence(clock-100,clock+120000),review=reviewEvidence(clock-1500,clock+120000)
  const publication:any={profile:PUBLICATION_PROFILE,trustBoundary:'trusted-operator-host',reviewedProductHead:HEAD,repository:'neuvetra-hq/neuvetra',pullRequest:6,operatorId:OPERATOR,independentReviewerId:ARTIFACT_REVIEWER,materialFindingsOpen:0,observedAtMs:clock-1800,expiresAtMs:clock+120000,checks:[{name:'required',head:HEAD,conclusion:'success'}],publisherEvidence:{profile:'neuvetra.hosted-setup.offline-artifact-publisher.v1',sourceRead:'exact-clean-git-commit',gitSha256:'1'.repeat(64),headEvidenceSha256:historical.sha256,checksEvidenceSha256:'2'.repeat(64),reviewEvidenceSha256:review.sha256},sourceFiles:[],dependencyFiles:[],migrations:[],migrationManifestSha256:'3'.repeat(64),artifact:{}}
  const publicationBytes=JSON.stringify(publication),root=await mkdtemp(join(tmpdir(),'hosted-artifact-bindings-')),artifactRoot=join(root,'artifact'),evidenceRoot=join(root,'private-evidence'),publicationPath=join(artifactRoot,'publication.json');await mkdir(artifactRoot,{recursive:true});await mkdir(evidenceRoot,{recursive:true});await writeFile(publicationPath,publicationBytes)
@@ -54,10 +55,20 @@ async function fixture(changes?:(value:any)=>void,archiveSize=7){
  const stopReceipt=jpin({profile:'candidate-stop'}),stopReview=jpin({profile:'candidate-stop-review'})
  const first=capture(new Date(clock-1400).toISOString(),new Date(clock-1300).toISOString()),second=capture(new Date(clock-1200).toISOString(),new Date(clock-1100).toISOString())
  const payload:any={profile:FIXED_ARTIFACT_BINDINGS_PAYLOAD_PROFILE,attemptId:'11111111-1111-4111-8111-111111111111',database:{connectionString:`postgresql://postgres:${encodeURIComponent('secret')}@db.${HOSTED_SETUP_PROJECT}.supabase.co:5432/postgres`,caPem:'-----BEGIN CERTIFICATE-----\nMIIB\n-----END CERTIFICATE-----'},trustedPins:{freshRestorePolicySha256:sha256(canonical(policy)),deploymentPolicySha256:sha256(canonical(deploymentPolicy)),currentHeadEvidenceSha256:current.sha256,stopReviewSha256:stopReview.sha256},restore:{evidence,policy},publication:{review,headEvidence:historical,currentHeadEvidence:current},maintenance:{deploymentReceipt,deploymentReview,deploymentPolicy,stoppedCaptures:[first,second],stoppedPolicy:{nowUtc:new Date(clock-1000).toISOString(),beforeStopConfigurationVersion:null,expectedStoppedConfigurationVersion:null},stopReceipt,stopReview,railwayCaptureInput:{profile:RAILWAY_CAPTURE_PROFILE,executablePath:resolve(root,'missing-railway.exe'),workingDirectory:root,timeoutMs:1000}}}
- changes?.(payload)
+ await changes?.(payload)
  const inspection:any={profile:ARTIFACT_PROFILE,trustBoundary:'trusted-operator-host',claim:'verified-at-rest-artifact-and-private-sql-only',reviewedProductHead:HEAD,publicationSha256:sha256(publicationBytes),executionArtifactSha256:'b'.repeat(64),migrationManifestSha256:'3'.repeat(64),sourceRoot:root,dependencyRoot:root,runtimeExecutable:resolve(root,'bun.exe'),operatorId:OPERATOR,independentReviewerId:ARTIFACT_REVIEWER,launchAuthorized:false}
  const context:any={profile:'neuvetra.hosted-setup.fixed-artifact-worker.v1',mode:'upgrade',paths:{publication:publicationPath,sourceArchive:resolve(artifactRoot,'source.tar'),dependencyArchive:resolve(artifactRoot,'deps.tar'),sourceRoot:resolve(artifactRoot,'source'),dependencyRoot:resolve(artifactRoot,'dependencies'),runtimeExecutable:resolve(artifactRoot,'bun.exe'),supervisor:resolve(artifactRoot,'supervisor.ts'),config:resolve(artifactRoot,'bunfig.toml')},policy:{publicationSha256:inspection.publicationSha256,reviewedProductHead:HEAD,operatorId:OPERATOR,independentReviewerId:ARTIFACT_REVIEWER,requiredChecks:['required'],activeCheckoutRoots:[resolve(root,'checkout')]},transactionJournalPath:resolve(root,'transaction.jsonl'),payload,deadlineMs:300000,inspection}
  return{context:context as FixedBindingContext,payload,publicationArtifact:pin(publicationBytes),review,current,stopReceipt,stopReview,first,second}
+}
+
+async function fixedReader(context:FixedBindingContext){
+ const bindings=new URL('./hosted-setup-artifact-bindings.ts',import.meta.url).href
+ const script=`const {prepareHostedSetupArtifactUpgrade}=await import(${JSON.stringify(bindings)});try{const context=JSON.parse(await Bun.stdin.text()),prepared=await prepareHostedSetupArtifactUpgrade(context),stop=prepared.dependencies.verifyReviewedMaintenanceStop(prepared.input.stopReceipt,prepared.input.stopReview);let replay='';try{prepared.dependencies.verifyReviewedMaintenanceStop(prepared.input.stopReceipt,prepared.input.stopReview)}catch(error){replay=String(error)}console.log(JSON.stringify({accepted:true,stopReceiptSha256:stop.stopReceiptSha256,replay}))}catch(error){console.log(JSON.stringify({accepted:false,error:String(error)}))}`
+ const child=Bun.spawn([process.execPath,'--no-env-file','--no-install','--eval',script],{stdin:'pipe',stdout:'pipe',stderr:'pipe',windowsHide:true})
+ await child.stdin.write(JSON.stringify(context));await child.stdin.end()
+ const [stdout,stderr,code]=await Promise.all([new Response(child.stdout).text(),new Response(child.stderr).text(),child.exited])
+ expect(code).toBe(0);expect(stderr).toBe('')
+ return JSON.parse(stdout) as {accepted:boolean;stopReceiptSha256?:string;replay?:string;error?:string}
 }
 
 describe('fixed hosted setup artifact bindings',()=>{
@@ -152,6 +163,33 @@ describe('fixed hosted setup artifact bindings',()=>{
   expect(stop).toMatchObject({...DEPLOYMENT_TARGET,...IMAGE,replicas:0,availabilityStopObserved:true,databaseWritersExcluded:false,configurationVersion:'d'.repeat(64),independentReviewerId:STOP_REVIEWER})
   await expect(prepared.dependencies.observeMaintenanceStopped(stop,'under_lock_before_migration')).rejects.toThrow('MAINTENANCE_PHASE_REFUSED')
   await expect(prepared.dependencies.observeMaintenanceStopped(stop,'before_transaction')).rejects.toThrow()
+ })
+
+ test('consumes the exact durable live-stop receipt and refuses newline tamper and replay',async()=>{
+  const clock=Date.now();let durableReceipt=''
+  const f=await fixture(async value=>{
+   validMaintenance(value,clock)
+   const maintenance=value.maintenance,binding=verifyHostedSetupDeploymentBinding(maintenance.deploymentReceipt.bytes,maintenance.deploymentReview.bytes,maintenance.deploymentPolicy,new Date(clock-5900).toISOString())
+   const before=[providerCapture(clock,-5800,1,'c'.repeat(64)),providerCapture(clock,-5600,1,'c'.repeat(64))] as const
+   const captures=[...before,...maintenance.stoppedCaptures],times=[-5400,-5300,-5200,-4300];let time=0
+   const runtime:LiveStopRuntime={capture:async()=>captures.shift()!,scale:async()=>JSON.stringify({regions:{[DEPLOYMENT_TARGET.region]:null}}),now:()=>new Date(clock+times[time++]!).toISOString()}
+   const root=maintenance.railwayCaptureInput.workingDirectory,journalPath=join(root,'writer-reader-stop.jsonl'),receiptPath=join(root,'writer-reader-stop.json')
+   const result=await stopHostedSetupExactImage({profile:HOSTED_SETUP_LIVE_STOP_PROFILE,binding,railway:maintenance.railwayCaptureInput,journalPath,receiptPath},runtime)
+   durableReceipt=await readFile(receiptPath,'utf8')
+   expect(durableReceipt).toBe(canonical(result));expect(durableReceipt.endsWith('\n')).toBe(false)
+   maintenance.stopReceipt=pin(durableReceipt)
+   maintenance.stopReview=jpin({profile:'neuvetra.hosted-setup.maintenance-stop-review.v2',verdict:'accepted',stopReceiptSha256:maintenance.stopReceipt.sha256,deploymentReceiptSha256:maintenance.deploymentReceipt.sha256,deploymentReviewSha256:maintenance.deploymentReview.sha256,operatorId:OPERATOR,independentReviewerId:STOP_REVIEWER,reviewedUtc:new Date(clock-4000).toISOString(),materialFindingsOpen:0,availabilityStopObserved:true,databaseWritersExcluded:false,migrationAuthorized:false})
+   value.trustedPins.stopReviewSha256=maintenance.stopReview.sha256
+  })
+  const accepted=await fixedReader(f.context)
+  expect(accepted).toMatchObject({accepted:true,stopReceiptSha256:sha256(durableReceipt)})
+  expect(accepted.replay).toContain('MAINTENANCE_BINDING_REPLAY')
+
+  const tampered=structuredClone(f.context) as any
+  tampered.payload.maintenance.stopReceipt={bytes:durableReceipt+'\n',sha256:sha256(durableReceipt+'\n')}
+  const refused=await fixedReader(tampered)
+  expect(refused.accepted).toBe(false)
+  expect(refused.error).toContain('STOP_RECEIPT_NONCANONICAL')
  })
 
  test('reconciliation refuses without an authenticated original-session resolution producer',async()=>{

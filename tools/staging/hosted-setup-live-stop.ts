@@ -17,6 +17,11 @@ export const HOSTED_SETUP_LIVE_STOP_PROFILE='neuvetra.hosted-setup.live-stop.v1'
 const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),'../..')
 const SHA=/^[a-f0-9]{64}$/
 function check(value:unknown,code:string):asserts value{if(!value)throw Error('HS_LIVE_STOP_'+code)}
+function canonical(value:unknown):string{
+ if(value===null||typeof value!=='object'){const encoded=JSON.stringify(value);check(encoded!==undefined,'RECEIPT_SERIALIZATION_REFUSED');return encoded}
+ if(Array.isArray(value))return '['+value.map(canonical).join(',')+']'
+ return '{'+Object.entries(value).sort(([a],[b])=>a<b?-1:a>b?1:0).map(([key,item])=>JSON.stringify(key)+':'+canonical(item)).join(',')+'}'
+}
 function outside(root:string,path:string){const child=relative(root,path);return child==='..'||child.startsWith('..'+sep)||isAbsolute(child)}
 async function privateNew(path:string){
  check(typeof path==='string'&&isAbsolute(path)&&outside(ROOT,path),'PRIVATE_PATH_REQUIRED')
@@ -126,8 +131,8 @@ export async function stopHostedSetupExactImage(input:LiveStopInput,runtime:Live
   const stopped=await pair(selected,railway)
   check(nowUtc(stopped[0].startedUtc)>=scaleCompleted&&nowUtc(stopped[0].startedUtc)>nowUtc(before[1].completedUtc),'STOPPED_CHRONOLOGY_REFUSED')
   const receipt=verifyHostedSetupStopped(binding,stopped,{nowUtc:selected.now(),beforeStopConfigurationVersion:beforeVersion,expectedStoppedConfigurationVersion:null})
-  const receiptSha256=hostedSetupStoppedVerificationSha256(receipt)
-  await receiptFile.writeFile(JSON.stringify(receipt)+'\n');await receiptFile.sync()
+  const receiptBytes=canonical(receipt),receiptSha256=hostedSetupStoppedVerificationSha256(receipt)
+  await receiptFile.writeFile(receiptBytes);await receiptFile.sync()
   await receiptFile.close();receiptFile=undefined
   // The receipt is not an accepted stop if final journal closure later fails.
   await append('receipt_synced_pending_finalization',{receiptSha256,stoppedCaptureSha256:receipt.stoppedCaptureSha256})
