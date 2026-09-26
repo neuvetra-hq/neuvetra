@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "READY-FIX-READINESS",
+  "role": "software-engineering",
+  "execution_context": "/root/readiness",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-FIX-READINESS-20260926.json",
+      "sha256": "cd7efffd9afa1118cbec2ce2495d8128d73a3eb8f9b5f5a49e83f6fb33eee1d1"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/convergence",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "prototypes/company-onboarding/feedback-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-FIX-READINESS-20260926.json",
+        "sha256": "cd7efffd9afa1118cbec2ce2495d8128d73a3eb8f9b5f5a49e83f6fb33eee1d1"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/readiness-core.js",
+      "sha256": "70cf559921bd31ae859474245f7a9bbf6432d4e46ba350dcf5e55beec2c22cc2"
+    },
+    {
+      "path": "prototypes/company-onboarding/readiness-ui.js",
+      "sha256": "1398f5441421b0276e201373fadf2267e4349b293982392b9fbd1b51a1b0616b"
+    },
+    {
+      "path": "prototypes/company-onboarding/readiness.css",
+      "sha256": "ce90955ef4783148fdebd1198085e170d6850c3095c41a43aa6b6af8cde5cf36"
+    },
+    {
+      "path": "prototypes/company-onboarding/readiness.html",
+      "sha256": "2fe8eb949003556dc2e4c415ea900cbe2089f0326193c02cdccabf0133a3f5f4"
+    },
+    {
+      "path": "prototypes/company-onboarding/readiness-core.test.cjs",
+      "sha256": "f2249f79407a1d2c2f119282a8f98693eb06e54d7c132338f82be87a04857d14"
+    },
+    {
+      "path": "prototypes/company-onboarding/qa-readiness.cjs",
+      "sha256": "c698b58c416c9ae507d45223109b25d763da6d4fd8cea1b975ed7f2c4bd1764f"
+    },
+    {
+      "path": "prototypes/company-onboarding/qa-readiness.py",
+      "sha256": "f7cb26962d707cf3cd49fc75677699a741c9e6f2c0fe7ff9f8b9f5a6e77b7ae5"
+    },
+    {
+      "path": "prototypes/company-onboarding/READINESS.md",
+      "sha256": "a58ccd482a099c3d59e0e33b24202ef605c40fb4071b21caf388b5c2212d437e"
+    },
+    {
+      "path": "prototypes/company-onboarding/READINESS-DOMAIN.md",
+      "sha256": "493246b76a711dfd91cfd990039cfc52d5402d3c7c3aa3cf93145af31ff01b4c"
+    }
+  ]
+}

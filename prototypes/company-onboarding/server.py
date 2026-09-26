@@ -27,6 +27,7 @@ MAX_EVIDENCE_TOTAL = 50 * 1024 * 1024
 MAX_UPLOAD_BODY = 7 * 1024 * 1024
 COOKIE = 'neuvetra_local_session'
 EMPTY_PLAN = {'schemaVersion': 1, 'catalogVersion': 'uninitialized', 'items': {}, 'custom': [], 'screening': {}}
+UNIT_ALIASES = {'therms': 'therm', 'gal': 'US gallon', 'gallons': 'US gallon'}
 
 
 def encoded(value):
@@ -168,11 +169,38 @@ def validate_item(item):
         if field in item and (type(item[field]) is not list or any(type(row) is not dict for row in item[field])):
             raise ValueError('Records and evidence must be lists of objects.')
     for record in item.get('records', []):
-        string_fields(record, ('id', 'recordType', 'unit', 'quality', 'periodStart', 'periodEnd', 'reference', 'notes'))
+        string_fields(record, ('id', 'recordType', 'unit', 'unitOriginal', 'quantityOriginal', 'quality', 'periodStart', 'periodEnd', 'reference', 'notes'))
         string_list(record, 'evidenceIds')
         quantity = record.get('quantity')
-        if quantity is not None and (type(quantity) is not str or (quantity != '' and not re.fullmatch(r'[0-9]+(?:\.[0-9]+)?', quantity.strip()))):
+        if quantity is not None and type(quantity) is not str:
             raise ValueError('Quantity must be a nonnegative decimal string or unknown.')
+        if quantity in (None, ''):
+            record.pop('quantityOriginal', None)
+        if type(quantity) is str and quantity != '':
+            trimmed = quantity.strip()
+            plain = re.fullmatch(r'[0-9]+(?:\.[0-9]+)?', trimmed)
+            grouped = re.fullmatch(r'[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?', trimmed)
+            if not plain and not grouped:
+                raise ValueError('Quantity must be a nonnegative decimal; commas may only separate thousands.')
+            canonical = trimmed.replace(',', '')
+            if canonical != quantity:
+                record['quantityOriginal'] = quantity
+                record['quantity'] = canonical
+            elif 'quantityOriginal' in record:
+                original = record['quantityOriginal'].strip()
+                original_plain = re.fullmatch(r'[0-9]+(?:\.[0-9]+)?', original)
+                original_grouped = re.fullmatch(r'[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?', original)
+                if (not original_plain and not original_grouped) or original.replace(',', '') != canonical:
+                    del record['quantityOriginal']
+            quantity = canonical
+        unit = record.get('unit')
+        if type(unit) is str:
+            canonical_unit = UNIT_ALIASES.get(unit.strip().lower(), unit.strip())
+            if canonical_unit != unit:
+                record['unitOriginal'] = unit
+                record['unit'] = canonical_unit
+            elif 'unitOriginal' in record and UNIT_ALIASES.get(record['unitOriginal'].strip().lower(), record['unitOriginal'].strip()) != canonical_unit:
+                del record['unitOriginal']
         if quantity not in (None, '') and any(not record.get(key, '').strip() for key in ('recordType', 'unit')):
             raise ValueError('Entered quantities require a record type and unit.')
         if 'quality' in record and record['quality'] not in ('actual', 'estimated', 'unknown'):
@@ -371,18 +399,34 @@ class Store:
         digest, now = hashlib.sha256(content).hexdigest(), timestamp()
         with self.connect() as db:
             db.execute('BEGIN IMMEDIATE')
-            total = db.execute('SELECT COALESCE(SUM(size),0) FROM evidence').fetchone()[0]
+            existing = db.execute('SELECT * FROM evidence WHERE workspace_id=? AND sha256=? ORDER BY created_at,id LIMIT 1', ('local-workspace', digest)).fetchone()
+            if existing is not None:
+                return self.evidence_metadata(existing) | {'duplicate': True}
+            total = db.execute('SELECT COALESCE(SUM(size),0) FROM evidence WHERE workspace_id=?', ('local-workspace',)).fetchone()[0]
             if total + len(content) > MAX_EVIDENCE_TOTAL:
                 raise EvidenceFull()
             db.execute('INSERT INTO evidence VALUES (?,?,?,?,?,?,?,?)', (evidence_id, 'local-workspace', name, mime, len(content), digest, content, now))
-        return {'id': evidence_id, 'name': name, 'mime': mime, 'size': len(content), 'sha256': digest, 'createdAt': now}
+        return {'id': evidence_id, 'name': name, 'mime': mime, 'size': len(content), 'sha256': digest, 'createdAt': now, 'duplicate': False}
+
+    @staticmethod
+    def evidence_metadata(row):
+        return {'id': row['id'], 'name': row['name'], 'mime': row['mime'], 'size': row['size'], 'sha256': row['sha256'], 'createdAt': row['created_at']}
+
+    def list_evidence(self):
+        with self.connect() as db:
+            workspace = db.execute('SELECT plan_json FROM workspace WHERE id=?', ('local-workspace',)).fetchone()
+            plan = json.loads(workspace['plan_json'])
+            linked = set(evidence_references(plan))
+            linked.update(metadata['id'] for metadata in evidence_metadata(plan))
+            rows = db.execute('SELECT * FROM evidence WHERE workspace_id=? ORDER BY created_at,id', ('local-workspace',)).fetchall()
+            return {'evidence': [self.evidence_metadata(row) | {'linked': row['id'] in linked} for row in rows]}
 
     def read_evidence(self, evidence_id):
         with self.connect() as db:
             row = db.execute('SELECT * FROM evidence WHERE id=? AND workspace_id=?', (evidence_id, 'local-workspace')).fetchone()
             if row is None:
                 return None
-            return {'id': row['id'], 'name': row['name'], 'mime': row['mime'], 'size': row['size'], 'sha256': row['sha256'], 'createdAt': row['created_at'], 'contentBase64': base64.b64encode(row['content']).decode('ascii')}
+            return self.evidence_metadata(row) | {'contentBase64': base64.b64encode(row['content']).decode('ascii')}
 
 
 class UnknownEvidence(ValueError):
@@ -518,6 +562,12 @@ class Handler(BaseHTTPRequestHandler):
             except (sqlite3.Error, ValueError):
                 self.error(503, 'Local storage is unavailable. Try again later.')
             return
+        if path == '/api/evidence':
+            try:
+                self.respond(200, self.server.store.list_evidence(), head=head)
+            except (sqlite3.Error, ValueError):
+                self.error(503, 'Local storage is unavailable.')
+            return
         if path == '/api/readiness' or path.startswith('/api/readiness/'):
             try:
                 if path == '/api/readiness':
@@ -639,7 +689,8 @@ class Handler(BaseHTTPRequestHandler):
             self.error(408, 'Request body timed out.')
             return
         try:
-            self.respond(201, self.server.store.add_evidence(name, mime, content))
+            result = self.server.store.add_evidence(name, mime, content)
+            self.respond(200 if result['duplicate'] else 201, result)
         except EvidenceFull:
             self.error(413, 'This local workspace has reached its 50 MiB evidence limit.')
         except (sqlite3.Error, ValueError, OSError):

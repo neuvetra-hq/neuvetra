@@ -29,7 +29,7 @@ function onboarding(overrides = {}) {
 test('exports the same pure API for CommonJS', () => {
   assert.equal(PlanCore.SCHEMA_VERSION, 1);
   assert.deepEqual(PlanCore.SOURCE_FAMILY_IDS, ['stationary', 'generator', 'mobile', 'fugitive', 'process']);
-  for (const name of ['createPlan', 'onboardingFingerprint', 'reconcilePlan', 'derive', 'validateRecord', 'escapeHtml']) assert.equal(typeof PlanCore[name], 'function');
+  for (const name of ['createPlan', 'onboardingFingerprint', 'reconcilePlan', 'derive', 'validateRecord', 'normalizeQuantity', 'normalizeUnit', 'normalizeRecord', 'escapeHtml']) assert.equal(typeof PlanCore[name], 'function');
 });
 
 test('publishes PlanCore as a browser global when CommonJS is absent', () => {
@@ -120,7 +120,7 @@ test('No rationale can be supplied without changing the authoritative onboarding
   assert.equal(result.issues.some((issue) => issue.includes('Fuel burned in fixed equipment') && issue.includes('no rationale')), false);
 });
 
-test('reconciliation preserves work, invalidates completion and clears obsolete checks', () => {
+test('reconciliation preserves local edits without self-invalidating and clears obsolete checks', () => {
   const first = onboarding({ sources: [{ answer: 'Yes', names: 'Boiler A', location: 'loc-1' }, ...Array.from({ length: 4 }, () => ({ answer: 'No' }))] });
   let plan = PlanCore.createPlan(first, catalog);
   plan.items['scope1:stationary'] = {
@@ -133,7 +133,7 @@ test('reconciliation preserves work, invalidates completion and clears obsolete 
     records: [{ id: 'r1', quantity: '0' }]
   };
   plan = PlanCore.reconcilePlan(first, plan, catalog);
-  assert.equal(plan.items['scope1:stationary'].needsReview, true);
+  assert.equal(plan.items['scope1:stationary'].needsReview, false);
   assert.deepEqual(plan.items['scope1:stationary'].checks, { 'stationary-1': true, 'boiler-1': true });
   plan.items['scope1:stationary'].needsReview = false;
   plan.items['scope1:stationary'].status = 'complete';
@@ -191,15 +191,15 @@ test('explicit company-wide location coverage is complete without fabricating a 
   assert.deepEqual(result.plan.items['scope2:electricity'].locationIds, ['loc-1']);
 });
 
-test('location-mode changes invalidate a completed item while preserving entered records', () => {
+test('location-mode changes are local edits and preserve completed records without self-invalidation', () => {
   const input = onboarding({ sources: [{ answer: 'Yes', names: 'Ovens', location: 'loc-1' }, ...Array.from({ length: 4 }, () => ({ answer: 'No' }))] });
   let plan = PlanCore.createPlan(input, catalog);
   plan.items['scope1:stationary'].status = 'complete';
   plan.items['scope1:stationary'].records = [{ id: 'r1', quantity: '1' }];
   plan.items['scope1:stationary'].locationMode = 'company-wide';
   plan = PlanCore.reconcilePlan(input, plan, catalog);
-  assert.equal(plan.items['scope1:stationary'].status, 'in-progress');
-  assert.equal(plan.items['scope1:stationary'].needsReview, true);
+  assert.equal(plan.items['scope1:stationary'].status, 'complete');
+  assert.equal(plan.items['scope1:stationary'].needsReview, false);
   assert.deepEqual(plan.items['scope1:stationary'].records, [{ id: 'r1', quantity: '1' }]);
 });
 
@@ -238,6 +238,110 @@ test('record validation accepts string zero and missing quantity but rejects uns
   assert.equal(PlanCore.validateRecord({ ...base, periodStart: '2025-02-30' }, input).some((error) => error.includes('valid YYYY-MM-DD')), true);
   assert.equal(PlanCore.validateRecord({ ...base, periodStart: '2025-03-01', periodEnd: '2025-02-01' }, input).some((error) => error.includes('on or after')), true);
   assert.equal(PlanCore.validateRecord({ ...base, periodStart: '2024-12-31' }, input).some((error) => error.includes('within the reporting period')), true);
+});
+
+test('normalization accepts grouped quantities and common unit aliases while retaining original text', () => {
+  const input = onboarding();
+  const base = { id: 'r', quantity: '1,234.50', unit: 'gallons', periodStart: '2025-01-01', periodEnd: '2025-12-31', reference: '', quality: 'actual', notes: '', recordType: 'Fuel' };
+  assert.deepEqual(PlanCore.validateRecord(base, input), []);
+  assert.deepEqual(PlanCore.normalizeQuantity('12,345.60'), { original: '12,345.60', canonical: '12345.60', valid: true });
+  assert.equal(PlanCore.normalizeQuantity('12,34').valid, false);
+  assert.deepEqual(PlanCore.normalizeUnit('therms'), { original: 'therms', canonical: 'therm', changed: true });
+  assert.deepEqual(PlanCore.normalizeUnit(' gal '), { original: ' gal ', canonical: 'US gallon', changed: true });
+  const normalized = PlanCore.normalizeRecord(base);
+  assert.equal(normalized.quantity, '1234.50');
+  assert.equal(normalized.quantityOriginal, '1,234.50');
+  assert.equal(normalized.unit, 'US gallon');
+  assert.equal(normalized.unitOriginal, 'gallons');
+  assert.equal(base.quantity, '1,234.50');
+  assert.equal(base.unit, 'gallons');
+  const edited = PlanCore.normalizeRecord({ ...normalized, quantity: '2000', unit: 'kWh' });
+  assert.equal(edited.quantity, '2000');
+  assert.equal(Object.hasOwn(edited, 'quantityOriginal'), false);
+  assert.equal(edited.unit, 'kWh');
+  assert.equal(Object.hasOwn(edited, 'unitOriginal'), false);
+});
+
+test('only upstream onboarding, screening and catalog changes invalidate reviewed items', () => {
+  const input = onboarding({ sources: [{ answer: 'Yes', names: 'Boiler A', location: 'loc-1' }, ...Array.from({ length: 4 }, () => ({ answer: 'No' }))] });
+  let plan = PlanCore.createPlan(input, catalog);
+  const id = 'scope1:stationary';
+  plan.items[id].status = 'complete';
+  plan.items[id].needsReview = false;
+  plan.items[id].subtypeId = 'boiler';
+  plan.items[id].locationMode = 'company-wide';
+  plan.items[id].locationIds = ['loc-2'];
+  plan = PlanCore.reconcilePlan(input, plan, catalog);
+  assert.equal(plan.items[id].needsReview, false);
+  const moved = onboarding({ sources: input.sources, locations: [{ ...input.locations[0], name: 'Renamed Main' }, input.locations[1]] });
+  const afterLocationChange = PlanCore.reconcilePlan(moved, plan, catalog);
+  assert.equal(afterLocationChange.items[id].needsReview, true);
+
+  plan = PlanCore.createPlan(input, catalog);
+  plan.items[id].status = 'complete';
+  const revisedCatalog = structuredClone(catalog);
+  revisedCatalog.version = catalog.version + '-revised';
+  assert.equal(PlanCore.reconcilePlan(input, plan, revisedCatalog).items[id].needsReview, true);
+
+  plan = PlanCore.createPlan(input, catalog);
+  plan.screening.electricity.answer = 'Yes';
+  plan = PlanCore.reconcilePlan(input, plan, catalog);
+  plan.items['scope2:electricity'].status = 'complete';
+  plan.items['scope2:electricity'].needsReview = false;
+  plan.screening.electricity.notes = 'New upstream screening detail';
+  assert.equal(PlanCore.reconcilePlan(input, plan, catalog).items['scope2:electricity'].needsReview, true);
+});
+
+test('legacy fingerprints migrate quietly unless saved onboarding changed', () => {
+  const input = onboarding({ sources: [{ answer: 'Yes', names: 'Boiler A', location: 'loc-1' }, ...Array.from({ length: 4 }, () => ({ answer: 'No' }))] });
+  const plan = PlanCore.createPlan(input, catalog);
+  const item = plan.items['scope1:stationary'];
+  item.inputFingerprint = 'item-legacy01';
+  item.status = 'complete';
+  item.records = [{ id: 'r1', quantity: '1' }];
+  const migrated = PlanCore.reconcilePlan(input, plan, catalog);
+  assert.equal(migrated.items['scope1:stationary'].needsReview, false);
+  assert.match(migrated.items['scope1:stationary'].inputFingerprint, /^upstream-item-/);
+
+  const changed = onboarding({ sources: [{ answer: 'Yes', names: 'Boiler B', location: 'loc-1' }, ...Array.from({ length: 4 }, () => ({ answer: 'No' }))] });
+  const stale = structuredClone(plan);
+  const reconciled = PlanCore.reconcilePlan(changed, stale, catalog);
+  assert.equal(reconciled.items['scope1:stationary'].needsReview, true);
+  assert.equal(reconciled.items['scope1:stationary'].status, 'in-progress');
+});
+
+test('Scope 3 defaults distinguish company-wide categories from site-specific leased assets and franchises', () => {
+  const input = onboarding();
+  const plan = PlanCore.createPlan(input, catalog);
+  for (const id of ['category-1', 'category-7', 'category-15']) plan.screening[id].answer = 'Yes';
+  for (const id of ['category-8', 'category-13', 'category-14']) plan.screening[id].answer = 'Yes';
+  const result = PlanCore.derive(input, plan, catalog);
+  for (const id of ['category-1', 'category-7', 'category-15']) {
+    const item = result.items.find((entry) => entry.id === 'scope3:' + id);
+    assert.equal(item.locationMode, 'company-wide');
+    assert.equal(item.unassigned, false);
+  }
+  for (const id of ['category-8', 'category-13', 'category-14']) {
+    const item = result.items.find((entry) => entry.id === 'scope3:' + id);
+    assert.equal(item.locationMode, 'sites');
+    assert.equal(item.unassigned, true);
+  }
+});
+
+test('legacy empty Scope 3 site defaults migrate without overriding assigned sites or unknown coverage', () => {
+  const input = onboarding();
+  const plan = PlanCore.createPlan(input, catalog);
+  plan.screening['category-1'] = { answer: 'Yes', locationMode: 'sites', locationIds: [] };
+  plan.screening['category-2'] = { answer: 'Yes', locationMode: 'sites', locationIds: ['loc-1'] };
+  plan.screening['category-3'] = { answer: 'Yes', locationMode: 'unknown', locationIds: [] };
+  const result = PlanCore.derive(input, plan, catalog);
+  const item = id => result.items.find(entry => entry.id === 'scope3:' + id);
+  assert.equal(item('category-1').locationMode, 'company-wide');
+  assert.equal(item('category-1').unassigned, false);
+  assert.equal(item('category-2').locationMode, 'sites');
+  assert.deepEqual(item('category-2').locationIds, ['loc-1']);
+  assert.equal(item('category-3').locationMode, 'unknown');
+  assert.equal(item('category-3').unassigned, true);
 });
 
 test('derive issues retain unanswered screening, method, record, boundary and review gaps', () => {

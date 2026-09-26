@@ -19,9 +19,9 @@ const LOCATION_FIELDS={
  to:['Active through — coverage end date',10,'Choose a date within the reporting period, on or after coverage starts.'],
  opened:['Original site opening date',10,'Optional historical fact. This may be before 2025; it is not the reporting coverage start.'],
 };
-function locationEntities(){return [...new Set(['Reporting company',get('company.legal'),...data.entities.map(e=>e.name)].filter(Boolean))];}
+function locationEntities(){return [...new Set(['Reporting company',...data.entities.map(e=>e.name).filter(n=>n!==get('company.legal'))].filter(Boolean))];}
 function ensureLocationIds(){
-  let changed=false;data.locations.forEach(l=>{if(!l.id){l.id='loc-'+crypto.randomUUID();changed=true;}});
+  let changed=false;data.locations.forEach(l=>{if(l.entity===get('company.legal')&&l.entity){l.originalEntity=l.entity;l.entity='Reporting company';changed=true;}if(!l.id){l.id='loc-'+crypto.randomUUID();changed=true;}});
   data.sources.forEach(source=>{const matches=data.locations.filter(l=>l.name&&l.name===source.location);if(matches.length===1){source.location=matches[0].id;changed=true;}});return changed;
 }
 function locationChoiceLabel(l,i){return `${l.name||'Location '+(i+1)}${l.locality?' · '+l.locality:l.country?' · '+l.country:''}`;}
@@ -35,7 +35,7 @@ function locationInput(i,key,options=null,type='text',optional=false){
  const dateAttrs=['from','to'].includes(key)?` min="${bounds.min||'2025-01-01'}" ${bounds.max?`max="${bounds.max}"`:''} ${bounds.error?'disabled':''}`:'';
  const attrs=`id="${id}" data-path="${path}" aria-describedby="${id}-help ${id}-error" ${required?'aria-required="true"':''} ${error?'aria-invalid="true"':''} maxlength="${limit}"${dateAttrs}`;
  let input;
- if(options){const stale=value&&!options.includes(value)?`<option value="${esc(value)}" selected>Previous answer: ${esc(value)} — review</option>`:'';input=`<select ${attrs}><option value="">Select an answer</option>${stale}${options.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select>`;}
+ if(options){const stale=value&&!options.includes(value)?`<option value="${esc(value)}" selected>Previous answer: ${esc(value)} — review</option>`:'';input=`<select ${attrs}><option value="">Select an answer</option>${stale}${options.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(key==='entity'&&v==='Reporting company'?(get('company.legal')||'Reporting company'):v)}</option>`).join('')}</select>`;}
  else input=type==='textarea'?`<textarea ${attrs}>${esc(value)}</textarea>`:`<input ${attrs} type="${type}" value="${esc(value)}">`;
  return `<div class="field ${['locality','purpose','operator','reason'].includes(key)?'full':''}"><label for="${id}">${label}${optional?' <span class="optional">(optional)</span>':' <span aria-hidden="true" class="required-marker">*</span>'}</label>${input}<small id="${id}-help">${help}</small><span class="field-error" id="${id}-error">${esc(error)}</span></div>`;
 }

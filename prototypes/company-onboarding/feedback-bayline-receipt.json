@@ -1,0 +1,84 @@
+{
+  "observedAt": "2026-09-26T03:19:13.151540+00:00",
+  "fixture": "feedback-bayline-fixture.py",
+  "origin": "http://127.0.0.1:4331",
+  "company": "Bayline Plumbing & Mechanical, Inc.",
+  "revision": 7,
+  "summary": {
+    "activityCount": 10,
+    "needsInput": 9,
+    "factsCollected": 1,
+    "methodReviewsComplete": 0,
+    "unsupported": 0,
+    "excluded": 14
+  },
+  "evidenceRows": 1,
+  "readinessSnapshots": 1,
+  "stationaryNeedsReview": false,
+  "mobileNeedsReview": false,
+  "stationaryRecord": {
+    "id": "3e506949-f2ca-43cc-872c-9a95bd0b46d0",
+    "recordType": "Natural gas",
+    "quantity": "4210",
+    "unit": "therm",
+    "periodStart": "2025-01-01",
+    "periodEnd": "2025-12-31",
+    "quality": "actual",
+    "reference": "Synthetic gas account BAY-GAS-01, annual statement",
+    "notes": "",
+    "evidenceIds": [
+      "ev_711a54aa701f7b06b2781f4bbd5e226f"
+    ],
+    "quantityOriginal": "4,210"
+  },
+  "mobileRecords": [
+    {
+      "id": "6c1bebe9-6981-4527-afce-627c0955ddbc",
+      "recordType": "Gasoline",
+      "quantity": "12500",
+      "unit": "US gallon",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-12-31",
+      "quality": "actual",
+      "reference": "12 gasoline vans, fuel-card annual report",
+      "notes": "",
+      "evidenceIds": [],
+      "quantityOriginal": "12,500"
+    },
+    {
+      "id": "3c471474-013e-409e-a436-9547b698460c",
+      "recordType": "Diesel",
+      "quantity": "2100",
+      "unit": "US gallon",
+      "periodStart": "2025-01-01",
+      "periodEnd": "2025-12-31",
+      "quality": "actual",
+      "reference": "2 diesel pickups, separate fuel-card annual report",
+      "notes": "",
+      "evidenceIds": [],
+      "quantityOriginal": "2,100"
+    }
+  ],
+  "scope3FalseLocationFindings": [],
+  "browserChecks": [
+    "Subtype acceptedUnits select visible",
+    "Comma quantity saved with original retained",
+    "No false review flag on first stationary/mobile edits",
+    "Selected unuploaded file blocks Save activity",
+    "Orphan upload recovered after close/reopen and server restart",
+    "Recovered evidence linked to record and saved",
+    "Duplicate upload existing-copy message and one row",
+    "Placeholder n/a remains fact-missing and methodReviewsComplete zero",
+    "Inc. rendered with one period",
+    "Location selector shows one Bayline reporting-company choice",
+    "Five priority actions and full list collapsed",
+    "Saved readiness review visible in history"
+  ],
+  "mobile": {
+    "requestedWidth": 390,
+    "observedCssWidth": 355,
+    "documentScrollWidth": 341,
+    "horizontalOverflow": false
+  },
+  "download": "In-app browser download event timed out; native file download not independently confirmed in this turn. Server snapshot and archived-byte replay passed."
+}

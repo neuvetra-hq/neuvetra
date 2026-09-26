@@ -191,11 +191,18 @@ class LocalServerTests(unittest.TestCase):
         status, _, metadata = self.upload(content, 'note.txt', 'text/plain')
         self.assertEqual(status, 201)
         self.assertNotIn('contentBase64', metadata)
+        self.assertFalse(metadata['duplicate'])
         self.assertEqual(metadata['sha256'], hashlib.sha256(content).hexdigest())
+        listed = self.request('GET', '/api/evidence', headers=self.headers())[2]['evidence']
+        self.assertEqual(len(listed), 1)
+        self.assertFalse(listed[0]['linked'])
+        self.assertNotIn('contentBase64', listed[0])
+        self.assertEqual(self.request('GET', '/api/evidence')[0], 403)
         path = '/api/evidence/' + metadata['id']
         self.assertEqual(self.request('GET', path)[0], 403)
         value = self.value(); value['plan']['items']['one']['evidenceIds'] = [metadata['id']]
         self.assertEqual(self.put(value)[0], 200)
+        self.assertTrue(self.request('GET', '/api/evidence', headers=self.headers())[2]['evidence'][0]['linked'])
         self.stop(); self.start()
         status, _, stored = self.request('GET', path, headers=self.headers())
         self.assertEqual(status, 200)
@@ -248,7 +255,7 @@ class LocalServerTests(unittest.TestCase):
 
     def test_record_decimal_dates_and_incomplete_safe_drafts(self):
         invalid = [
-            {'quantity': -1}, {'quantity': '1e2'}, {'quantity': '-1'}, {'quantity': '1,000'},
+            {'quantity': -1}, {'quantity': '1e2'}, {'quantity': '-1'}, {'quantity': '12,34'},
             {'quantity': '2', 'recordType': 'Fuel'}, {'quantity': '2', 'unit': 'gal'},
             {'quantity': []}, {'periodStart': '2025-02-29'}, {'periodStart': '2025-1-01'},
             {'periodStart': '2025-05-01', 'periodEnd': '2025-04-01'}, {'quality': 'approved'},
@@ -265,6 +272,16 @@ class LocalServerTests(unittest.TestCase):
         value['plan']['custom'] = [{'id': 'custom-1', 'title': 'Unusual source', 'scope': 'unknown', 'locationIds': []}]
         value['plan']['screening'] = {'energy': {'answer': 'Not sure', 'reason': '', 'locationIds': []}}
         self.assertEqual(self.put(value)[0], 200)
+
+        grouped = self.value(1)
+        grouped['plan']['items']['one']['records'] = [{'quantity': '1,234.50', 'unit': 'gallons', 'recordType': 'Fuel'}]
+        status, _, saved = self.put(grouped)
+        self.assertEqual(status, 200)
+        record = saved['plan']['items']['one']['records'][0]
+        self.assertEqual(record['quantity'], '1234.50')
+        self.assertEqual(record['quantityOriginal'], '1,234.50')
+        self.assertEqual(record['unit'], 'US gallon')
+        self.assertEqual(record['unitOriginal'], 'gallons')
 
     def test_evidence_metadata_is_bound_to_stored_original(self):
         status, _, metadata = self.upload()
@@ -286,6 +303,31 @@ class LocalServerTests(unittest.TestCase):
         self.assertEqual(self.upload()[0], 413)
         with closing(sqlite3.connect(self.db)) as db, db:
             self.assertEqual(db.execute('SELECT SUM(size) FROM evidence').fetchone()[0], MAX_EVIDENCE_TOTAL)
+
+    def test_duplicate_evidence_upload_is_atomic_and_does_not_consume_quota(self):
+        content = b'unique duplicate fixture\n'
+        with ThreadPoolExecutor(max_workers=2) as workers:
+            results = list(workers.map(lambda _: self.upload(content, 'same.txt', 'text/plain'), range(2)))
+        self.assertEqual(sorted(result[0] for result in results), [200, 201])
+        payloads = [result[2] for result in results]
+        self.assertEqual(len({payload['id'] for payload in payloads}), 1)
+        self.assertEqual(sorted(payload['duplicate'] for payload in payloads), [False, True])
+        with closing(sqlite3.connect(self.db)) as db:
+            self.assertEqual(db.execute('SELECT count(*),SUM(size) FROM evidence').fetchone(), (1, len(content)))
+
+        with closing(sqlite3.connect(self.db)) as db, db:
+            fixture_count = (MAX_EVIDENCE_TOTAL - len(content)) // MAX_FILE
+            for number in range(fixture_count):
+                fixture = bytes([number + 1]) * MAX_FILE
+                db.execute('INSERT INTO evidence VALUES (?,?,?,?,?,?,?,?)', ('dupe-quota-' + str(number), 'local-workspace', 'fixture.txt', 'text/plain', MAX_FILE, hashlib.sha256(fixture).hexdigest(), fixture, 'fixture-' + str(number)))
+            remainder = MAX_EVIDENCE_TOTAL - len(content) - fixture_count * MAX_FILE
+            fixture = b'quota-remnant-' + b'x' * (remainder - len(b'quota-remnant-'))
+            db.execute('INSERT INTO evidence VALUES (?,?,?,?,?,?,?,?)', ('dupe-quota-remnant', 'local-workspace', 'fixture.txt', 'text/plain', len(fixture), hashlib.sha256(fixture).hexdigest(), fixture, 'fixture-remnant'))
+            self.assertEqual(db.execute('SELECT SUM(size) FROM evidence').fetchone()[0], MAX_EVIDENCE_TOTAL)
+        status, _, duplicate = self.upload(content, 'renamed.txt', 'text/plain')
+        self.assertEqual(status, 200)
+        self.assertTrue(duplicate['duplicate'])
+        self.assertEqual(duplicate['name'], 'same.txt')
 
 
     def test_readiness_server_computed_immutable_and_restart(self):

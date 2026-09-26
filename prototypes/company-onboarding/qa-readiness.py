@@ -1,5 +1,5 @@
 """Independent readiness boundary review; synthetic temporary servers only."""
-import hashlib, json, sqlite3, unittest
+import hashlib, json, shutil, sqlite3, subprocess, tempfile, unittest
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from pathlib import Path
@@ -44,6 +44,12 @@ class ReadinessBoundaryQA(unittest.TestCase):
         self.assertEqual(hashlib.sha256(artifacts['catalogUtf8'].encode('utf-8')).hexdigest(),first['catalogSha256'])
         engine=''.join(artifacts['engineFiles'][n] for n in ('readiness-core.js','plan-core.js','readiness-cli.cjs')).encode('utf-8')
         self.assertEqual(hashlib.sha256(engine).hexdigest(),first['engineSha256'])
+        with tempfile.TemporaryDirectory() as replay_dir:
+            replay_root=Path(replay_dir)
+            for name,source in artifacts['engineFiles'].items():(replay_root/name).write_text(source,encoding='utf-8')
+            replay_input={**first['inputs'],'catalog':json.loads(artifacts['catalogUtf8']),'methods':json.loads(artifacts['methodsUtf8'])}
+            replay=subprocess.run([shutil.which('node'),str(replay_root/'readiness-cli.cjs')],input=encoded(replay_input),capture_output=True,check=True,timeout=15)
+            self.assertEqual(json.loads(replay.stdout),first['result'])
         self.assertEqual(self.save(1)[2],first)
         v['expectedRevision']=1;v['onboarding']['company']['legal']='Second QA Company'
         self.assertEqual(self.put(v)[0],200);self.assertEqual(self.save(1)[0],409)

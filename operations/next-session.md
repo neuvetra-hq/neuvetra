@@ -1,3 +1,9 @@
+# September 26: readiness feedback repair independently accepted; publication next
+
+The board authorized all nine bugs and A-F concerns from the linked Bayline review. All eleven focused test commands passed, and independent product QA plus separate convergence review accepted the bounded changes. Collection now guides units, preserves originals, recovers uploads and prevents duplicate quota/self-review flags. Readiness separates structured customer facts from reviewer approvals and shows five prioritized actions. F is resolved as a concrete hosted migration/cutover decision with an offline validator; no hosted migration occurred.
+
+Publication to the same rolling PR6 and exact remote check verification are next. The board will ask another AI to review before dependent feature work. See prototypes/company-onboarding/FEEDBACK-HANDOFF.md for all feedback dispositions, test evidence and browser limits. Native download was not confirmed by the app browser tool; saved snapshot integrity/replay passed. Existing hosted milestones and port4319/Acme data were not changed. No persistent worker or new paid service was created. Earlier sections remain historical.
+
 # September 25: CI correction independently accepted; remote verification next
 
 Candidate4 passes focused independent review: official signed PostgreSQL repository setup, client17 selection/version guards and real native restore retained. Shared exports removed; accepted runtime code unchanged. All current and embedded review bytes verified with explicit UTF8. Prior reported C3 embedding mismatch was a root decoding measurement error; separate correction receipt preserves that history. The board-authorized continuation is accepted; publish to rolling PR6 and require all six exact-head checks. Earlier local C2 acceptance remains bounded; no hosted beta access, real invitations or method release. Full Scope1 remains incomplete. Earlier sections are historical.

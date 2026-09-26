@@ -11,6 +11,15 @@
   const VALID_QUALITIES = new Set(['actual', 'estimated', 'unknown']);
   const VALID_LOCATION_MODES = new Set(['sites', 'company-wide', 'unknown']);
   const SOURCE_LOCATION_SENTINELS = new Set(['', 'Not sure', 'Multiple locations — describe below']);
+  const UNIT_ALIASES = Object.freeze({
+    therms: 'therm',
+    gal: 'US gallon',
+    gallons: 'US gallon'
+  });
+  const COMPANY_WIDE_SCOPE3 = new Set([
+    'category-1', 'category-2', 'category-3', 'category-4', 'category-5', 'category-6',
+    'category-7', 'category-9', 'category-10', 'category-11', 'category-12', 'category-15'
+  ]);
   const FALLBACK_FAMILIES = {
     stationary: {
       title: 'Heating & process equipment',
@@ -176,13 +185,19 @@
     ['2', '3'].forEach(function (scope) {
       scopeCatalog(catalog, scope).forEach(function (entry) {
         const current = asObject(next[entry.id]);
+        const locationIds = asArray(current.locationIds).map(text).filter(Boolean);
+        const migrateCompanyWideDefault = scope === '3' && COMPANY_WIDE_SCOPE3.has(entry.id) && current.locationMode === 'sites' && locationIds.length === 0;
         next[entry.id] = {
           ...current,
           answer: normalizeAnswer(current.answer),
           reason: text(current.reason),
           notes: text(current.notes),
-          locationIds: asArray(current.locationIds).map(text).filter(Boolean),
-          locationMode: VALID_LOCATION_MODES.has(current.locationMode) ? current.locationMode : 'sites'
+          locationIds: locationIds,
+          locationMode: migrateCompanyWideDefault
+            ? 'company-wide'
+            : VALID_LOCATION_MODES.has(current.locationMode)
+            ? current.locationMode
+            : scope === '3' && COMPANY_WIDE_SCOPE3.has(entry.id) ? 'company-wide' : 'sites'
         };
       });
     });
@@ -321,13 +336,8 @@
     return templates;
   }
 
-  function itemFingerprint(onboarding, template, state) {
+  function itemFingerprint(onboarding, template, state, catalog) {
     const input = asObject(onboarding);
-    const locationMap = locationsById(input);
-    const selectedLocations = (state.locationMode === 'company-wide' ? [] : asArray(state.locationIds)).map(function (id) {
-      return locationMap.has(id) ? locationMap.get(id) : { id: id, missing: true };
-    });
-    const checklist = mergedChecklist(template.catalog, state.subtypeId);
     return fingerprint({
       contextKey: contextKey(input),
       boundary: asObject(input.boundary),
@@ -335,19 +345,9 @@
       changes: asArray(input.changes),
       source: template.source,
       screening: template.screeningId ? asObject(asObject(asObject(state._plan).screening)[template.screeningId]) : null,
-      locations: selectedLocations,
-      catalog: {
-        title: template.catalog.title,
-        description: template.catalog.description,
-        checklist: checklist,
-        records: template.catalog.records,
-        subtypes: template.catalog.subtypes,
-        sourceIds: template.catalog.sourceIds
-      },
-      subtypeId: state.subtypeId,
-      locationMode: state.locationMode,
-      custom: template.custom || null
-    }, 'item');
+      locations: asArray(input.locations),
+      catalog: asObject(catalog)
+    }, 'upstream-item');
   }
 
   function reconcileInternal(onboarding, plan, catalog) {
@@ -370,7 +370,7 @@
       const seed = Object.keys(prior).length ? prior : customSeed;
       const state = baseState(template.id, seed, template.seedLocationIds, template.seedLocationMode);
       state._plan = next;
-      const currentFingerprint = itemFingerprint(input, template, state);
+      const currentFingerprint = itemFingerprint(input, template, state, catalog);
       delete state._plan;
 
       const validChecks = new Set(mergedChecklist(template.catalog, state.subtypeId).map(function (check) {
@@ -380,13 +380,18 @@
       Object.keys(state.checks).forEach(function (id) {
         if (validChecks.has(id)) filteredChecks[id] = state.checks[id];
       });
-      const removedChecks = Object.keys(filteredChecks).length !== Object.keys(state.checks).length;
       state.checks = filteredChecks;
 
       const hasWork = state.status !== 'not-started' || state.notes !== '' || state.records.length > 0 || Object.keys(state.checks).length > 0;
-      const changed = Boolean(state.inputFingerprint && state.inputFingerprint !== currentFingerprint);
+      const hasCurrentFingerprint = state.inputFingerprint.startsWith('upstream-item-');
+      const migratingLegacyFingerprint = state.inputFingerprint.startsWith('item-');
+      const legacyUpstreamChanged = migratingLegacyFingerprint && (
+        Boolean(previous.onboardingFingerprint && previous.onboardingFingerprint !== next.onboardingFingerprint) ||
+        Boolean(previous.catalogVersion && previous.catalogVersion !== next.catalogVersion)
+      );
+      const changed = Boolean((hasCurrentFingerprint && state.inputFingerprint !== currentFingerprint) || legacyUpstreamChanged);
       const unversionedWork = !state.inputFingerprint && hasWork;
-      if (changed || unversionedWork || removedChecks) {
+      if (changed || unversionedWork) {
         state.needsReview = true;
         if (state.status === 'complete') state.status = 'in-progress';
       }
@@ -622,8 +627,8 @@
     const errors = [];
     const quantity = value.quantity;
     if (quantity != null && quantity !== '') {
-      if (typeof quantity !== 'string' || !/^\d+(?:\.\d+)?$/.test(quantity.trim())) {
-        errors.push('Quantity must be a nonnegative decimal string without signs or exponent notation.');
+      if (!normalizeQuantity(quantity).valid) {
+        errors.push('Quantity must be a nonnegative decimal. Use commas only as thousands separators, such as 1,234.50.');
       }
     }
     if (!text(value.recordType).trim()) errors.push('Record type is required.');
@@ -650,6 +655,38 @@
     return errors;
   }
 
+  function normalizeQuantity(value) {
+    if (value == null || value === '') return { original: value, canonical: value, valid: true };
+    if (typeof value !== 'string') return { original: value, canonical: value, valid: false };
+    const original = value;
+    const trimmed = value.trim();
+    const plain = /^\d+(?:\.\d+)?$/.test(trimmed);
+    const grouped = /^\d{1,3}(?:,\d{3})+(?:\.\d+)?$/.test(trimmed);
+    return { original: original, canonical: plain || grouped ? trimmed.replace(/,/g, '') : trimmed, valid: plain || grouped };
+  }
+
+  function normalizeUnit(value) {
+    const original = text(value);
+    const trimmed = original.trim();
+    const canonical = UNIT_ALIASES[trimmed.toLowerCase()] || trimmed;
+    return { original: original, canonical: canonical, changed: canonical !== original };
+  }
+
+  function normalizeRecord(record) {
+    const normalized = clone(asObject(record)) || {};
+    const quantity = normalizeQuantity(normalized.quantity);
+    const unit = normalizeUnit(normalized.unit);
+    if (quantity.valid) {
+      if (quantity.canonical !== quantity.original) normalized.quantityOriginal = quantity.original;
+      else if (Object.prototype.hasOwnProperty.call(normalized, 'quantityOriginal') && normalizeQuantity(normalized.quantityOriginal).canonical !== quantity.canonical) delete normalized.quantityOriginal;
+      normalized.quantity = quantity.canonical;
+    }
+    if (unit.canonical !== unit.original) normalized.unitOriginal = unit.original;
+    else if (Object.prototype.hasOwnProperty.call(normalized, 'unitOriginal') && normalizeUnit(normalized.unitOriginal).canonical !== unit.canonical) delete normalized.unitOriginal;
+    normalized.unit = unit.canonical;
+    return normalized;
+  }
+
   function escapeHtml(value) {
     return text(value).replace(/[&<>"']/g, function (character) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
@@ -666,6 +703,9 @@
     reconcile: reconcilePlan,
     derive: derive,
     validateRecord: validateRecord,
+    normalizeQuantity: normalizeQuantity,
+    normalizeUnit: normalizeUnit,
+    normalizeRecord: normalizeRecord,
     escapeHtml: escapeHtml
   });
 });

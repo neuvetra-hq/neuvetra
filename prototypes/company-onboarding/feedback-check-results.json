@@ -1,0 +1,112 @@
+[
+  {
+    "command": [
+      "node",
+      "check.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.14,
+    "output": "Bounded state checks passed.\nFirst-page coverage, conditional validation, Unicode, whitespace, unknowns, lengths and legacy-choice checks passed.\nOfficial NAICS membership/search, Zod names, markup rejection, numeric signs/types, and sector-code consistency checks passed.\n"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "plan-core.test.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.16,
+    "output": "\u2714 exports the same pure API for CommonJS (0.8306ms)\n\u2714 publishes PlanCore as a browser global when CommonJS is absent (0.8362ms)\n\u2714 accepts the delivered collection catalog contract (2.31ms)\n\u2714 plumbing company derives only answered and open fixed families without industry inference (3.8401ms)\n\u2714 welding and bakery labels do not create stereotyped source answers (1.4055ms)\n\u2714 unknown source answers and all Scope 2 and 3 screenings stay visible without creating inventory items (4.4149ms)\n\u2714 Scope 2 and 3 Yes and Not sure answers create inventory and clarification items (1.3389ms)\n\u2714 all No answers remain explicit and a Scope 2 or 3 No requires rationale (0.9333ms)\n\u2714 No rationale can be supplied without changing the authoritative onboarding answer (1.0003ms)\n\u2714 reconciliation preserves local edits without self-invalidating and clears obsolete checks (2.1657ms)\n\u2714 removed locations remain orphaned and multiple-location notes are never guessed (2.965ms)\n\u2714 an explicit empty location selection stays empty instead of restoring onboarding defaults (1.6141ms)\n\u2714 explicit company-wide location coverage is complete without fabricating a site link (1.3522ms)\n\u2714 location-mode changes are local edits and preserve completed records without self-invalidation (1.105ms)\n\u2714 custom items preserve an explicit unclassified path (1.6558ms)\n\u2714 context keys are deterministic and cross-context reconciliation starts fresh (0.9347ms)\n\u2714 record validation accepts string zero and missing quantity but rejects unsafe numeric forms and dates (0.436ms)\n\u2714 normalization accepts grouped quantities and common unit aliases while retaining original text (0.2663ms)\n\u2714 only upstream onboarding, screening and catalog changes invalidate reviewed items (4.4443ms)\n\u2714 legacy fingerprints migrate quietly unless saved onboarding changed (1.717ms)\n\u2714 Scope 3 defaults distinguish company-wide categories from site-specific leased assets and franchises (2.9705ms)\n\u2714 legacy empty Scope 3 site defaults migrate without overriding assigned sites or unknown coverage (1.5979ms)\n\u2714 derive issues retain unanswered screening, method, record, boundary and review gaps (4.8568ms)\n\u2714 inputs are not mutated and malicious display text has an explicit escape boundary (1.2447ms)\n\u2139 tests 24\n\u2139 suites 0\n\u2139 pass 24\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 105.6913\n"
+  },
+  {
+    "command": [
+      "node",
+      "qa-core.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.07,
+    "output": "PASS unknown remains clarification; No remains excluded\nPASS four purchased energy + every fifteen value-chain category\nPASS No without explanation remains issue\nPASS removed location retained as orphan, no reassignment\nPASS explicit unassigned selection stays empty\nPASS period change does not reuse activity records\nPASS company change does not reuse activity records\nPASS explicit zero and unknown distinct, invalid dates refused\nPASS malicious text escaped\nPASS catalog source links resolve to https primary domains\n"
+  },
+  {
+    "command": [
+      "python",
+      "-B",
+      "-m",
+      "unittest",
+      "test_server",
+      "-v"
+    ],
+    "exitCode": 0,
+    "seconds": 6.95,
+    "output": "test_concurrent_compare_and_swap_has_one_winner (test_server.LocalServerTests.test_concurrent_compare_and_swap_has_one_winner) ... ok\ntest_duplicate_evidence_upload_is_atomic_and_does_not_consume_quota (test_server.LocalServerTests.test_duplicate_evidence_upload_is_atomic_and_does_not_consume_quota) ... ok\ntest_evidence_allowlist_signatures_and_size (test_server.LocalServerTests.test_evidence_allowlist_signatures_and_size) ... ok\ntest_evidence_metadata_is_bound_to_stored_original (test_server.LocalServerTests.test_evidence_metadata_is_bound_to_stored_original) ... ok\ntest_evidence_quota_transaction (test_server.LocalServerTests.test_evidence_quota_transaction) ... ok\ntest_evidence_roundtrip_hash_immutability_and_restart (test_server.LocalServerTests.test_evidence_roundtrip_hash_immutability_and_restart) ... ok\ntest_malformed_duplicate_nonfinite_and_large_json (test_server.LocalServerTests.test_malformed_duplicate_nonfinite_and_large_json) ... ok\ntest_missing_or_malformed_evidence_reference_rejected (test_server.LocalServerTests.test_missing_or_malformed_evidence_reference_rejected) ... ok\ntest_nested_ui_shapes_rejected_without_creating_revision (test_server.LocalServerTests.test_nested_ui_shapes_rejected_without_creating_revision) ... ok\ntest_origin_host_header_and_session_protection (test_server.LocalServerTests.test_origin_host_header_and_session_protection) ... ok\ntest_readiness_cas_race_and_legacy_migration (test_server.LocalServerTests.test_readiness_cas_race_and_legacy_migration) ... ok\ntest_readiness_detail_shapes (test_server.LocalServerTests.test_readiness_detail_shapes) ... ok\ntest_readiness_server_computed_immutable_and_restart (test_server.LocalServerTests.test_readiness_server_computed_immutable_and_restart) ... ok\ntest_record_decimal_dates_and_incomplete_safe_drafts (test_server.LocalServerTests.test_record_decimal_dates_and_incomplete_safe_drafts) ... ok\ntest_restart_persists_exact_workspace_history_and_null (test_server.LocalServerTests.test_restart_persists_exact_workspace_history_and_null) ... ok\ntest_shape_bounds_and_reserved_keys (test_server.LocalServerTests.test_shape_bounds_and_reserved_keys) ... ok\ntest_static_allowlist_traversal_and_source_protection (test_server.LocalServerTests.test_static_allowlist_traversal_and_source_protection) ... ok\ntest_two_servers_share_cookie_jar_without_session_collision (test_server.LocalServerTests.test_two_servers_share_cookie_jar_without_session_collision) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 6.853s\n\nOK\n"
+  },
+  {
+    "command": [
+      "python",
+      "-B",
+      "qa-http.py"
+    ],
+    "exitCode": 0,
+    "seconds": 2.42,
+    "output": "test_all_plan_assets_resolve (__main__.IndependentHTTP.test_all_plan_assets_resolve) ... ok\ntest_duplicate_save_compare_and_swap (__main__.IndependentHTTP.test_duplicate_save_compare_and_swap) ... ok\ntest_evidence_limits_and_active_content (__main__.IndependentHTTP.test_evidence_limits_and_active_content) ... ok\ntest_evidence_original_and_link_integrity (__main__.IndependentHTTP.test_evidence_original_and_link_integrity) ... ok\ntest_host_origin_session_and_static_paths (__main__.IndependentHTTP.test_host_origin_session_and_static_paths) ... ok\ntest_initial_empty_and_exact_roundtrip_restart (__main__.IndependentHTTP.test_initial_empty_and_exact_roundtrip_restart) ... ok\ntest_static_symlink_escape (__main__.IndependentHTTP.test_static_symlink_escape) ... skipped 'OS did not allow symlink creation: 1314'\ntest_ui_breaking_nested_shapes_rejected (__main__.IndependentHTTP.test_ui_breaking_nested_shapes_rejected) ... ok\ntest_unknown_keys_reserved_keys_and_bad_nested_container (__main__.IndependentHTTP.test_unknown_keys_reserved_keys_and_bad_nested_container) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 2.335s\n\nOK (skipped=1)\n"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "readiness-core.test.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.14,
+    "output": "\u2714 customer facts never become reviewer or calculation approval (8.7217ms)\n\u2714 structured factual fields reject filler and invalid option values (2.2564ms)\n\u2714 distinct full-year gasoline and diesel records require review without false blocking (2.0786ms)\n\u2714 mixed gasoline and diesel requires per-record fuel labels (1.7588ms)\n\u2714 vehicle model years accept mixed lists and ranges but retain unknown as a gap (3.7143ms)\n\u2714 refrigerant charge quantity and unit are structured and unknown remains a gap (3.9563ms)\n\u2714 exact duplicates remain blocking and reporting gaps stay visible (1.627ms)\n\u2714 zero remains explicit while missing remains blocked (2.4945ms)\n\u2714 company-wide Scope 3 migrates legacy empty site mode while site-specific category does not (2.9061ms)\n\u2714 justified No exclusions do not increase the activity action count (1.9188ms)\n\u2714 evaluation is deterministic and does not mutate saved inputs (3.5784ms)\n\u2714 delivered registry resolves every catalog mapping and remains unreleased (3.1935ms)\n\u2714 missing subtype and unsupported activity remain visible input states (3.6284ms)\n\u2139 tests 13\n\u2139 suites 0\n\u2139 pass 13\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 98.7381\n"
+  },
+  {
+    "command": [
+      "node",
+      "qa-readiness.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.08,
+    "output": "\u2714 actual registry exposes customer facts and keeps reviewer release pending (8.5131ms)\n\u2714 forged method and factor prose is not evaluated or exposed as customer facts (2.0034ms)\n\u2714 unknown custom activity never inherits a common method silently (2.4933ms)\n\u2714 candidate units and structured factual options control input progress (1.7008ms)\n\u2714 nonidentical overlaps are review findings while exact duplicates block (3.1063ms)\n\u2714 all No produces exclusions without inflating activity actions or emissions (1.9116ms)\n\u2714 Scope 3 unit policy remains blocked after customer facts are populated (2.9285ms)\n\u2139 tests 7\n\u2139 suites 0\n\u2139 pass 7\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 25.7839\n"
+  },
+  {
+    "command": [
+      "python",
+      "-B",
+      "qa-readiness.py"
+    ],
+    "exitCode": 0,
+    "seconds": 2.28,
+    "output": "test_api_protections (__main__.ReadinessBoundaryQA.test_api_protections) ... ok\ntest_client_forgery (__main__.ReadinessBoundaryQA.test_client_forgery) ... ok\ntest_concurrent_snapshot_idempotency (__main__.ReadinessBoundaryQA.test_concurrent_snapshot_idempotency) ... ok\ntest_details_shape_unknown_keys_and_preservation (__main__.ReadinessBoundaryQA.test_details_shape_unknown_keys_and_preservation) ... ok\ntest_lineage_history_conflict_restart_immutability (__main__.ReadinessBoundaryQA.test_lineage_history_conflict_restart_immutability) ... ok\ntest_unknowns_never_ready (__main__.ReadinessBoundaryQA.test_unknowns_never_ready) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 2.179s\n\nOK\n"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "convergence-export.test.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.11,
+    "output": "\u2714 builds a deterministic candidate-only handoff with exact hosted dispositions (2.5263ms)\n\u2714 preserves null, explicit zero and unmapped source data in the embedded snapshot (0.2053ms)\n\u2714 deduplicates identical evidence metadata and rejects conflicting metadata (0.6083ms)\n\u2714 fails closed on a changed snapshot or tampered target-company field (0.7278ms)\n\u2714 keeps evidence without metadata explicitly unresolved (0.2623ms)\n\u2139 tests 5\n\u2139 suites 0\n\u2139 pass 5\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 62.2804\n"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "feedback-qa-core.test.cjs"
+    ],
+    "exitCode": 0,
+    "seconds": 0.12,
+    "output": "\u2714 accepted-unit aliases normalize while retaining the exact original entry (1.7186ms)\n\u2714 local subtype and location edits do not self-invalidate, but upstream facts do (3.597ms)\n\u2714 overlapping distinct source records are review-only while exact duplicates block (5.8256ms)\n\u2714 customer factual fields reject placeholders and never release a method (2.8028ms)\n\u2714 company-wide Scope 3 categories have no false site-allocation finding (3.1192ms)\n\u2714 justified exclusions remain separate from active activity counts (0.8258ms)\n\u2714 next-action presentation caps five findings, groups them, and collapses full findings (0.9704ms)\n\u2714 company punctuation is sentence-safe and user-facing readiness copy avoids revision jargon (0.6244ms)\n\u2714 legacy reporting-company values converge to one canonical option without data loss (0.9948ms)\n\u2714 file selection, in-flight upload and orphan recovery have explicit UI guards (0.4519ms)\n\u2139 tests 10\n\u2139 suites 0\n\u2139 pass 10\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 76.1492\n"
+  },
+  {
+    "command": [
+      "python",
+      "-B",
+      "feedback-qa-server.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.19,
+    "output": "test_duplicate_hash_reuses_one_row_atomically (__main__.FeedbackServerIndependentTests.test_duplicate_hash_reuses_one_row_atomically) ... ok\ntest_duplicate_is_reused_before_quota_and_unique_file_is_refused (__main__.FeedbackServerIndependentTests.test_duplicate_is_reused_before_quota_and_unique_file_is_refused) ... ok\ntest_server_normalizes_grouped_quantity_and_unit_alias_with_originals (__main__.FeedbackServerIndependentTests.test_server_normalizes_grouped_quantity_and_unit_alias_with_originals) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.102s\n\nOK\n"
+  }
+]

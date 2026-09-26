@@ -28,6 +28,9 @@ jobs:
       - run: node check.cjs
       - run: node --test plan-core.test.cjs
       - run: node qa-core.cjs
+      - run: node --test convergence-export.test.cjs
+      - run: node --test feedback-qa-core.test.cjs
+      - run: python -B feedback-qa-server.py
       - run: python -B -m unittest test_server -v
       - run: python -B qa-http.py
       - run: node --test readiness-core.test.cjs
