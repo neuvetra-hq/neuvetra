@@ -17,7 +17,7 @@ import { createSourceWorksheetReportRoutes } from "../workspace/m66-report-route
 import { createElectricitySourceRoutes } from "../workspace/m66-source-routes"
 import { createWorksheetReportRoutes } from "../workspace/m65-routes"
 import { createWorksheetRoutes } from "../workspace/m64-routes"
-import { HostedWorkspaceDatabase, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
+import { EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
 import { createRateLimiter } from "../lib/rate-limit"
@@ -123,8 +123,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const worksheetRoutes = createWorksheetRoutes({ database, validateUser, origin: config.origin })
   const databaseReadiness = async () => {
     const receipt = await database.checkReadiness()
-    if (receipt.profile !== STAGING_PROFILE || receipt.schemaVersion !== 23) throw new Error("Staging database unavailable.")
-    if (config.projectRef === "icockcoguyadhryzydvl" && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
+    const existingProject = config.projectRef === EXISTING_PROJECT_REF
+    const current = receipt.schemaVersion === STAGING_SCHEMA_VERSION
+    const bridged = existingProject && config.reuseExistingProject && receipt.legacyContainmentVerified === true && receipt.schemaVersion === STAGING_SCHEMA_BRIDGE_VERSION
+    if (receipt.profile !== STAGING_PROFILE || (!current && !bridged)) throw new Error("Staging database unavailable.")
+    if (existingProject && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
   const readiness = async () => { const receipt = await databaseReadiness(); await checkAssets(); return receipt }
@@ -144,7 +147,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       const origin = request.headers.get("origin")
       if ((origin && origin !== config.origin) || (!isGet && origin !== config.origin)) return json(403, { error: "Forbidden." })
       if (!admission.check("staging").allowed) return json(429, { error: "Request limit reached." })
-      if (config.projectRef === "icockcoguyadhryzydvl") await databaseReadiness()
+      const requestReadiness = config.projectRef === EXISTING_PROJECT_REF ? await databaseReadiness() : undefined
       if (url.pathname === "/workspace-api/config" && isGet) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
       const token = extractBearerToken(request.headers)
       if (!token || token.length > 8192) return json(401, { error: "Authentication required." })
@@ -162,7 +165,13 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
-      if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) return companySetupRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
+        // The schema-22 bridge may serve reviewed legacy routes, but must never
+        // dispatch setup SQL until the explicit schema-23 maintenance step lands.
+        const receipt = requestReadiness ?? await databaseReadiness()
+        if (receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { error: "Company setup is unavailable." })
+        return companySetupRoutes(forwarded)
+      }
       if (url.pathname.includes("/scope1-beta-setup")) return scope1BetaRoutes(forwarded)
       if (url.pathname.includes('/process-screen') || url.pathname.includes('/scope1-inventory')) return scope1Routes(forwarded)
       if (url.pathname.includes("/stationary-natural-gas")) return stationaryGasRoutes(forwarded)

@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
-import { HostedWorkspaceDatabase, createPostgresConnection, validateHostedTarget } from "./hosted"
+import { HostedWorkspaceDatabase, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
 import { loadStagingDatabaseCa, validateDatabaseCaPem } from "./staging-tls"
-import { auditLegacyStagingExposure, planLegacyStagingContainment } from "./staging-audit"
+import { auditLegacyStagingExposure, EXISTING_PROJECT_REF, planLegacyStagingContainment } from "./staging-audit"
 import { migratePrivateStaging, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
 import { M57_WARNINGS, M58_WARNINGS, M61_LIMITATION_ACKNOWLEDGMENTS, type WorkspaceConnection } from "./workspace"
 
@@ -19,6 +19,19 @@ test("hosted target binding refuses wrong projects, privileged users and connect
   expect(() => validateHostedTarget(options)).not.toThrow()
   expect(() => validateHostedTarget({ ...options, connectionString: `postgresql://neuvetra_runtime.${REF}:test@aws-0-us-west-1.pooler.supabase.com:6543/postgres` })).not.toThrow()
   for (const value of [options.connectionString.replace(REF, "z".repeat(20)), options.connectionString.replace("neuvetra_runtime", "postgres"), `${options.connectionString}?sslmode=disable`, options.connectionString.replace("supabase.co", "supabase.co.attacker.test"), options.connectionString.replace("/postgres", "/customer")]) expect(() => validateHostedTarget({ ...options, connectionString: value })).toThrow()
+})
+
+test("schema 22 readiness bridge is exact and limited to confirmed existing-project reuse", () => {
+  const manifest = Array.from({ length: 23 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
+  const schema22 = manifest.slice(0, 22)
+  const existing = { expectedProjectRef: "icockcoguyadhryzydvl", reuseExistingProject: true }
+  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(23)
+  expect(validateHostedSchemaReceipts(schema22, manifest, existing)).toBe(22)
+  expect(() => validateHostedSchemaReceipts(schema22, manifest, options)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema22, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema22.slice(0, 21), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema22.map((receipt, index) => index === 21 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema22, schema22, existing)).toThrow("Staging schema receipt mismatch.")
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {
@@ -44,12 +57,15 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
   let runtime: WorkspaceConnection
   let database: HostedWorkspaceDatabase
   let another: HostedWorkspaceDatabase
+  let readinessVersions: number[] = []
+  let setupTables: Array<string | null> = []
+  const nativeRef = EXISTING_PROJECT_REF
   const owner = crypto.randomUUID(), admin = crypto.randomUUID(), member = crypto.randomUUID(), outsider = crypto.randomUUID(), uninvited = crypto.randomUUID()
   const company = crypto.randomUUID(), otherCompany = crypto.randomUUID()
-  const roster = { expectedProjectRef: REF, workspaceId: company, ownerUserId: owner, members: [{ userId: admin, role: "admin" as const }, { userId: member, role: "member" as const }] }
+  const roster = { expectedProjectRef: nativeRef, workspaceId: company, ownerUserId: owner, members: [{ userId: admin, role: "admin" as const }, { userId: member, role: "member" as const }] }
   // Test-only bypass of provider URL validation, while exercising actual restricted-session readiness.
   // Hosted startup itself is tested separately against an isolated provider before release.
-  const construct = (connection: WorkspaceConnection) => new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(connection, REF)
+  const construct = (connection: WorkspaceConnection) => new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string, reuse: boolean) => HostedWorkspaceDatabase)(connection, nativeRef, true)
   const runtimeUrl = () => { const url = new URL(testUrl!); url.username = "neuvetra_runtime"; return url.toString() }
   const scoped = <T>(actor: string, sql: string, params: unknown[] = []) => runtime.transaction(async tx => {
     await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [actor])
@@ -61,20 +77,40 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     await operator.exec(`do $$ begin if not exists(select 1 from pg_roles where rolname='authenticated') then create role authenticated nologin; end if; if not exists(select 1 from pg_roles where rolname='anon') then create role anon nologin; end if; end $$;
       create schema if not exists auth; create table if not exists auth.users(id uuid primary key);
       create or replace function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;`)
-    await migratePrivateStaging(operator, { expectedProjectRef: REF, syntheticTargetConfirmed: true })
+    const manifest = await readMigrationManifest()
+    for (const migration of manifest.slice(0, 22)) await operator.exec(migration.sql)
+    // Reproduce the existing synthetic project's already-reviewed application
+    // containment; a stock PostgreSQL cluster grants PUBLIC schema usage.
+    await operator.exec("revoke all on schema public from public,anon,authenticated")
+    await operator.exec(`create table neuvetra.schema_migrations(name text primary key,sha256 text not null check(sha256 ~ '^[0-9a-f]{64}$'),applied_at timestamptz not null default now());
+      create table neuvetra.staging_target(singleton boolean primary key default true check(singleton),project_ref text not null,profile text not null);
+      alter table neuvetra.schema_migrations enable row level security; alter table neuvetra.schema_migrations force row level security;
+      alter table neuvetra.staging_target enable row level security; alter table neuvetra.staging_target force row level security;
+      create policy m63_receipts_read on neuvetra.schema_migrations for select to neuvetra_runtime using(true);
+      create policy m63_target_read on neuvetra.staging_target for select to neuvetra_runtime using(true);
+      grant select on neuvetra.schema_migrations,neuvetra.staging_target to neuvetra_runtime;`)
+    for (const migration of manifest.slice(0, 22)) await operator.query("insert into neuvetra.schema_migrations(name,sha256) values($1,$2)", [migration.name, migration.sha256])
+    await operator.query("insert into neuvetra.staging_target(project_ref,profile) values($1,'neuvetra.private-synthetic-staging.v1')", [nativeRef])
     await operator.exec("alter role neuvetra_runtime login")
-    for (const id of [owner, admin, member, outsider, uninvited]) await operator.query("insert into auth.users(id) values($1)", [id])
-    await provisionStagingRoster(operator, roster)
-    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: otherCompany, ownerUserId: outsider, members: [] })
     runtime = createPostgresConnection(runtimeUrl(), { tls: false, maxConnections: 2 })
     database = construct(runtime)
+    readinessVersions.push((await database.checkReadiness()).schemaVersion)
+    setupTables.push((await operator.query<{ name: string | null }>("select to_regclass('neuvetra.company_setup_versions')::text name")).rows[0]?.name ?? null)
+    await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true, reuseExistingProject: true })
+    readinessVersions.push((await database.checkReadiness()).schemaVersion)
+    setupTables.push((await operator.query<{ name: string | null }>("select to_regclass('neuvetra.company_setup_versions')::text name")).rows[0]?.name ?? null)
+    for (const id of [owner, admin, member, outsider, uninvited]) await operator.query("insert into auth.users(id) values($1)", [id])
+    await provisionStagingRoster(operator, roster)
+    await provisionStagingRoster(operator, { expectedProjectRef: nativeRef, workspaceId: otherCompany, ownerUserId: outsider, members: [] })
     another = construct(createPostgresConnection(runtimeUrl(), { tls: false, maxConnections: 2 }))
   }, 30000)
   afterAll(async () => { await database?.close(); await another?.close(); await operator?.close() })
 
   test("checks exact migration receipts, restricted role and no ordinary-start migrations", async () => {
-    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 23 })
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: REF, syntheticTargetConfirmed: true })).migrations).toHaveLength(23)
+    expect(readinessVersions).toEqual([22, 23])
+    expect(setupTables).toEqual([null, "neuvetra.company_setup_versions"])
+    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 23, legacyContainmentVerified: true })
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true, reuseExistingProject: true })).migrations).toHaveLength(23)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
     expect((await readMigrationManifest()).every(m => /^[0-9a-f]{64}$/.test(m.sha256))).toBe(true)
@@ -191,10 +227,10 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
       const visible = await (i % 3 ? database : another).findWorkspace(actor, company)
       expect(visible?.id ?? null).toBe(actor === owner ? company : null)
     }))
-    await expect(runtime.transaction(async tx => {
+    expect(await rejectionMessage(runtime.transaction(async tx => {
       await tx.query("select set_config('request.jwt.claim.sub',$1,true)", [owner])
       throw new Error("injected rollback")
-    })).rejects.toThrow("injected rollback")
+    }))).toContain("injected rollback")
     for (let i = 0; i < 4; i++) expect((await runtime.query<{ id: string | null }>("select nullif(current_setting('request.jwt.claim.sub',true),'') id")).rows[0]?.id ?? null).toBeNull()
     expect(await database.findWorkspace(outsider, company)).toBeNull()
   })
