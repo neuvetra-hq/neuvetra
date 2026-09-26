@@ -421,3 +421,4 @@ evaluations/research-qa/m80-beta-access-independent-20260925-review4-first-resul
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3-PREFREEZE1.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3.json -text whitespace=cr-at-eol
 operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW3.json -text whitespace=cr-at-eol
+prototypes/company-onboarding/readiness-review.md -text whitespace=cr-at-eol
