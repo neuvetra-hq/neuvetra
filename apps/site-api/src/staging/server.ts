@@ -17,7 +17,7 @@ import { createSourceWorksheetReportRoutes } from "../workspace/m66-report-route
 import { createElectricitySourceRoutes } from "../workspace/m66-source-routes"
 import { createWorksheetReportRoutes } from "../workspace/m65-routes"
 import { createWorksheetRoutes } from "../workspace/m64-routes"
-import { EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
+import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
 import { createRateLimiter } from "../lib/rate-limit"
@@ -25,10 +25,13 @@ import { createWorkspaceRoutes } from "../workspace/routes"
 import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
 import { createCompanySetupRoutes } from "../workspace/company-setup-routes"
+import { createCollectionRoutes, type CollectionEvidenceStorage } from "../workspace/collection-routes"
+import { createSupabaseCollectionEvidenceStorage } from "../workspace/collection-storage"
 import { readStagingConfig, STAGING_PROFILE, type StagingConfig } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
 
 const MAX_BODY_BYTES = 300_000
+const COLLECTION_EVIDENCE_UPLOAD = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/collection\/evidence$/i
 const LEGACY_CALIFORNIA_ROUTE = /^\/workspace\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/(?:electricity-worksheet|source-electricity-worksheet|annual-electricity-worksheet|annual-electricity-evidence|fugitive-sources|fugitive-population)(?:\/|$)/i
 type Access = { workspace: CompanyWorkspaceRecord; role: "owner" | "admin" | "member"; evidenceId: string | null }
 export type StagingDatabase = WorkspaceDatabase & {
@@ -51,14 +54,15 @@ export interface StagingOverrides {
   validateUser?: (token: string) => Promise<AuthenticatedUser | null>
   verifyAssets?: () => Promise<void>
   serveAsset?: (pathname: string) => Promise<Response | null>
+  collectionEvidenceStorage?: CollectionEvidenceStorage
   log?: (event: StagingLog) => void
 }
 
 function json(status: number, value: unknown) { return Response.json(value, { status }) }
 
-async function boundedRequest(request: Request, url: URL): Promise<Request> {
+async function boundedRequest(request: Request, url: URL, maxBytes = MAX_BODY_BYTES): Promise<Request> {
   const claimed = request.headers.get("content-length")
-  if (claimed && (!/^\d+$/.test(claimed) || Number(claimed) > MAX_BODY_BYTES)) throw new Error("Request too large.")
+  if (claimed && (!/^\d+$/.test(claimed) || Number(claimed) > maxBytes)) throw new Error("Request too large.")
   if (!request.body) return new Request(url, request)
   const reader = request.body.getReader()
   const chunks: Uint8Array[] = []
@@ -68,7 +72,7 @@ async function boundedRequest(request: Request, url: URL): Promise<Request> {
       const { done, value } = await reader.read()
       if (done) break
       total += value.byteLength
-      if (total > MAX_BODY_BYTES) { await reader.cancel(); throw new Error("Request too large.") }
+      if (total > maxBytes) { await reader.cancel(); throw new Error("Request too large.") }
       chunks.push(value)
     }
   } finally { reader.releaseLock() }
@@ -89,6 +93,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   })()
   const checkAssets = overrides.verifyAssets ?? (() => verifyStagingAssets(config.webRoot))
   const serveAsset = overrides.serveAsset ?? ((pathname: string) => serveStagingAsset(config.webRoot, pathname))
+  const evidenceStorage = overrides.collectionEvidenceStorage ?? createSupabaseCollectionEvidenceStorage({
+    url: config.supabaseUrl,
+    anonKey: config.supabaseAnonKey,
+    fetch: ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, { ...init, signal: AbortSignal.timeout(15_000) })) as typeof fetch,
+  })
   const log = overrides.log ?? ((event: StagingLog) => console.info(JSON.stringify(event)))
   const admission = createRateLimiter({ max: 360, windowMs: 60_000, maxBuckets: 1 })
   const actors = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 100 })
@@ -112,6 +121,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const scope1Routes=createM78Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),mobile:createM74Authority(),diesel:createM76DieselAuthority(),fugitive:createM77Authority()},policy:M78_REVIEWED_POLICY})
   const scope1BetaRoutes=createM80BetaRoutes({database,validateUser,origin:config.origin})
   const companySetupRoutes=createCompanySetupRoutes({database,validateUser,origin:config.origin})
+  const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -164,13 +174,20 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       }
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
-      try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
+      const evidenceUpload = request.method === "POST" && COLLECTION_EVIDENCE_UPLOAD.test(url.pathname)
+      try {
+        // Evidence is the only larger request class. Its route consumes the
+        // stream with its own 10 MiB bound; ordinary workspace requests retain
+        // the 300 kB buffered cap.
+        forwarded = evidenceUpload ? new Request(url, request) : await boundedRequest(request, url)
+      } catch { return json(413, { error: "Request too large." }) }
       const legacyCalifornia = LEGACY_CALIFORNIA_ROUTE.exec(url.pathname)
       if (legacyCalifornia) {
         const geography = await database.findCompanyGeography(user.id, legacyCalifornia[1]!)
         if (geography?.countryCode !== "US" || geography.stateCode !== "CA") return json(404, { error: "Not found." })
       }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
         // The schema-22 bridge may serve reviewed legacy routes, but must never
         // dispatch setup SQL until the explicit schema-23 maintenance step lands.
@@ -225,7 +242,7 @@ if (import.meta.main) {
   try {
     const config = readStagingConfig()
     const app = await createStagingServer(config)
-    const server = Bun.serve({ hostname: "0.0.0.0", port: config.port, maxRequestBodySize: MAX_BODY_BYTES, idleTimeout: 30, fetch: app.fetch })
+    const server = Bun.serve({ hostname: "0.0.0.0", port: config.port, maxRequestBodySize: COLLECTION_EVIDENCE_MAX_BYTES, idleTimeout: 30, fetch: app.fetch })
     const shutdown = async () => { await server.stop(); await app.close(); process.exit(0) }
     process.once("SIGINT", shutdown)
     process.once("SIGTERM", shutdown)
