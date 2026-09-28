@@ -34,9 +34,10 @@ describe('candidate 0027 collection database boundary',()=>{
   let db:PGlite
   async function asUser<T>(actor:string,operation:(tx:WorkspaceSql)=>Promise<T>){return db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[actor]);await tx.exec('set local role neuvetra_runtime');return operation({query:async<R>(sql:string,args:unknown[]=[])=>({rows:(await tx.query<R>(sql,args)).rows}),exec:async(sql:string)=>{await tx.exec(sql)}})})}
   async function asStorageUser<T=Record<string,unknown>>(actor:string,sql:string,args:unknown[]=[]){return db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[actor]);await tx.exec('set local role authenticated');return (await tx.query<T>(sql,args)).rows})}
+  async function asStorageAnon<T=Record<string,unknown>>(sql:string,args:unknown[]=[]){return db.transaction(async tx=>{await tx.exec('set local role anon');return (await tx.query<T>(sql,args)).rows})}
   beforeAll(async()=>{
     db=new PGlite()
-    await db.exec(`create role authenticated; create schema auth; create table auth.users(id uuid primary key);
+    await db.exec(`create role authenticated; create role anon; create schema auth; create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;`)
     for(const migration of await readMigrationManifest())await db.exec(migration.sql)
@@ -44,12 +45,12 @@ describe('candidate 0027 collection database boundary',()=>{
       create table storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit bigint,allowed_mime_types text[]);
       create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null references storage.buckets(id),name text not null,unique(bucket_id,name));
       alter table storage.objects enable row level security;
-      grant usage on schema storage to authenticated; grant select,insert,update,delete on storage.objects to authenticated;
+      grant usage on schema storage to authenticated,anon; grant select,insert,update,delete on storage.objects to authenticated,anon;
       insert into storage.buckets values('unrelated-private','unrelated-private',false,1024,array['text/plain']::text[]);
-      create policy synthetic_broad_storage_read on storage.objects for select to authenticated using(true);
-      create policy synthetic_broad_storage_insert on storage.objects for insert to authenticated with check(true);
-      create policy synthetic_broad_storage_update on storage.objects for update to authenticated using(true) with check(true);
-      create policy synthetic_broad_storage_delete on storage.objects for delete to authenticated using(true);`)
+      create policy synthetic_broad_storage_read on storage.objects for select to public using(true);
+      create policy synthetic_broad_storage_insert on storage.objects for insert to public with check(true);
+      create policy synthetic_broad_storage_update on storage.objects for update to public using(true) with check(true);
+      create policy synthetic_broad_storage_delete on storage.objects for delete to public using(true);`)
     const candidate=await Bun.file(new URL('./migrations/0027_collection.sql',import.meta.url)).text();await db.exec(candidate)
     await db.query('insert into auth.users(id) values($1),($2),($3)',[owner,member,otherOwner])
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic Collection A','US','CA',$2),($3,'Synthetic Collection B','US','CA',$4)",[company,owner,otherCompany,otherOwner])
@@ -90,6 +91,7 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(firstReplay).toEqual(first)
     expect(await asUser(owner,tx=>findDownloadableCollectionEvidence(tx,company,evidence))).toBeNull()
     expect(await asStorageUser(owner,'select name from storage.objects where bucket_id=$1',['neuvetra-private-company-evidence'])).toEqual([])
+    expect(await asStorageAnon('select name from storage.objects where bucket_id=$1',['neuvetra-private-company-evidence'])).toEqual([])
     const sameKeyInput={...firstInput,uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),originalName:'same-bytes-retry.pdf'}
     await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,sameKeyInput))
     const sameKeyDuplicate=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,sameKeyInput))
@@ -108,6 +110,7 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.query("select neuvetra.record_collection_evidence_quarantine($1,$2,'clean','synthetic-scanner-v1','Synthetic fixture accepted.')",[company,evidence])
     expect(await asUser(member,tx=>findDownloadableCollectionEvidence(tx,company,evidence))).toMatchObject({bucket:'neuvetra-private-company-evidence',objectKey:firstInput.objectKey,sha256:sha})
     expect(await asStorageUser(member,'select name from storage.objects where bucket_id=$1 order by name',['neuvetra-private-company-evidence'])).toEqual([{name:firstInput.objectKey}])
+    expect(await asStorageAnon('select name from storage.objects where bucket_id=$1',['neuvetra-private-company-evidence'])).toEqual([])
     expect(await asUser(otherOwner,tx=>findDownloadableCollectionEvidence(tx,otherCompany,evidence))).toBeNull()
   })
 
@@ -119,23 +122,39 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(await rejectionMessage(asStorageUser(otherOwner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',memberInput.objectKey]))).not.toBe('')
     const failed={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'failed-registration.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'c'.repeat(64)}
     const concurrent={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'concurrent-reservation.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'d'.repeat(64)}
+    const outage={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'outage.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'e'.repeat(64)}
+    const attached={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'attached.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'f'.repeat(64)}
     const reservations=await Promise.all([asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,concurrent)),asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,concurrent))])
     expect(reservations.map(item=>item.uploadId)).toEqual([concurrent.uploadId,concurrent.uploadId])
-    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,failed));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',failed.objectKey])
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,failed));expect(await rejectionMessage(asStorageAnon('insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',failed.objectKey]))).not.toBe('');await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',failed.objectKey])
     const recovery=await asUser(owner,tx=>markCollectionEvidenceRegistrationFailed(tx,owner,company,failed.uploadId)),replay=await asUser(owner,tx=>markCollectionEvidenceRegistrationFailed(tx,owner,company,failed.uploadId))
     expect(replay).toEqual(recovery);expect((await db.query<{object_key:string;reason:string;status:string}>('select object_key,reason,status from neuvetra.collection_evidence_orphan_recovery where id=$1',[recovery.recoveryId])).rows[0]).toEqual({object_key:failed.objectKey,reason:'registration_failed',status:'pending'})
     expect(await asStorageUser(owner,'select name from storage.objects where name=$1',[failed.objectKey])).toEqual([])
     await asStorageUser(member,"insert into storage.objects(bucket_id,name) values('unrelated-private','unrelated-object')")
     expect(await asStorageUser(member,"select name from storage.objects where bucket_id='unrelated-private'")).toEqual([{name:'unrelated-object'}])
+    await asStorageAnon("insert into storage.objects(bucket_id,name) values('unrelated-private','anon-object')")
+    expect(await asStorageAnon("update storage.objects set name='anon-object-updated' where bucket_id='unrelated-private' and name='anon-object' returning name")).toEqual([{name:'anon-object-updated'}])
+    expect(await asStorageAnon("delete from storage.objects where bucket_id='unrelated-private' and name='anon-object-updated' returning name")).toEqual([{name:'anon-object-updated'}])
     await asStorageUser(owner,'delete from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])
     expect((await db.query<{present:boolean}>('select exists(select 1 from storage.objects where bucket_id=$1 and name=$2) present',['neuvetra-private-company-evidence',failed.objectKey])).rows[0]?.present).toBe(true)
     await asStorageUser(owner,'update storage.objects set name=$1 where bucket_id=$2 and name=$3',[`${company}/original/${crypto.randomUUID()}`,'neuvetra-private-company-evidence',failed.objectKey])
     expect((await db.query<{name:string}>('select name from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])).rows).toEqual([{name:failed.objectKey}])
+    expect(await asStorageAnon('delete from storage.objects where bucket_id=$1 and name=$2 returning name',['neuvetra-private-company-evidence',failed.objectKey])).toEqual([])
+    expect(await asStorageAnon('update storage.objects set name=$1 where bucket_id=$2 and name=$3 returning name',[`${company}/original/${crypto.randomUUID()}`,'neuvetra-private-company-evidence',failed.objectKey])).toEqual([])
     expect(await rejectionMessage(asUser(owner,tx=>tx.query('select neuvetra.resolve_collection_evidence_orphan($1,$2,$3,$4)',[company,recovery.recoveryId,'recovered','removed by synthetic operator'])))).not.toBe('')
     expect(await rejectionMessage(db.query('select neuvetra.resolve_collection_evidence_orphan($1,$2,$3,$4)',[company,recovery.recoveryId,'recovered','removed by synthetic operator']))).toContain('must be removed')
     await db.query('delete from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])
     await db.query('select neuvetra.resolve_collection_evidence_orphan($1,$2,$3,$4)',[company,recovery.recoveryId,'recovered','removed by synthetic operator'])
     expect((await db.query<{status:string;recovery_note:string}>('select status,recovery_note from neuvetra.collection_evidence_orphan_recovery where id=$1',[recovery.recoveryId])).rows[0]).toEqual({status:'recovered',recovery_note:'removed by synthetic operator'})
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,outage));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',outage.objectKey])
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,attached));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',attached.objectKey]);await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,attached))
+    expect(await rejectionMessage(asUser(owner,tx=>tx.query('select neuvetra.reconcile_collection_evidence_orphan($1,$2)',[company,outage.uploadId])))).not.toBe('')
+    expect(await rejectionMessage(db.query('select neuvetra.reconcile_collection_evidence_orphan($1,$2)',[otherCompany,outage.uploadId]))).toContain('intent required')
+    expect(await rejectionMessage(db.query('select neuvetra.reconcile_collection_evidence_orphan($1,$2)',[company,concurrent.uploadId]))).toContain('object not found')
+    expect(await rejectionMessage(db.query('select neuvetra.reconcile_collection_evidence_orphan($1,$2)',[company,attached.uploadId]))).toContain('already attached')
+    const reconciled=(await db.query<{id:string}>('select neuvetra.reconcile_collection_evidence_orphan($1,$2) id',[company,outage.uploadId])).rows[0]!.id
+    expect((await db.query<{id:string}>('select neuvetra.reconcile_collection_evidence_orphan($1,$2) id',[company,outage.uploadId])).rows[0]!.id).toBe(reconciled)
+    expect((await db.query<{upload_id:string;object_key:string;reason:string;status:string}>('select upload_id,object_key,reason,status from neuvetra.collection_evidence_orphan_recovery where id=$1',[reconciled])).rows[0]).toEqual({upload_id:outage.uploadId,object_key:outage.objectKey,reason:'registration_failed',status:'pending'})
   })
 
   test('stores immutable versions, exact quantities, nullable refrigerant answers and tenant-isolated reads',async()=>{

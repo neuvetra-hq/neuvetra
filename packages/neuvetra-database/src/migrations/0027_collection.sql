@@ -203,7 +203,7 @@ declare actor uuid:=auth.uid(); target_company uuid:=neuvetra.collection_storage
     and exists(select 1 from neuvetra.collection_evidence_upload_intents i where i.company_id=target_company and i.object_key=object_name and i.created_by=actor);
 end $$;
 revoke all on function neuvetra.collection_storage_can_upload(text,text) from public,authenticated,neuvetra_runtime;
-grant execute on function neuvetra.collection_storage_can_upload(text,text) to authenticated;
+grant execute on function neuvetra.collection_storage_can_upload(text,text) to public;
 
 create function neuvetra.collection_storage_can_read(bucket text,object_name text) returns boolean language plpgsql stable security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
 declare target_company uuid:=neuvetra.collection_storage_company_id(object_name); begin
@@ -212,7 +212,7 @@ declare target_company uuid:=neuvetra.collection_storage_company_id(object_name)
       and (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.created_at desc,q.id desc limit 1)='clean');
 end $$;
 revoke all on function neuvetra.collection_storage_can_read(text,text) from public,authenticated,neuvetra_runtime;
-grant execute on function neuvetra.collection_storage_can_read(text,text) to authenticated;
+grant execute on function neuvetra.collection_storage_can_read(text,text) to public;
 
 do $$ begin
   if to_regclass('storage.buckets') is null or to_regclass('storage.objects') is null then raise exception 'Supabase Storage baseline required' using errcode='55000'; end if;
@@ -222,11 +222,11 @@ do $$ begin
 end $$;
 -- Restrictive guards keep these checks effective even if another permissive Storage policy is broader.
 create policy neuvetra_collection_upload_allow on storage.objects as permissive for insert to authenticated with check(neuvetra.collection_storage_can_upload(bucket_id,name));
-create policy neuvetra_collection_upload_guard on storage.objects as restrictive for insert to authenticated with check(bucket_id<>'neuvetra-private-company-evidence' or neuvetra.collection_storage_can_upload(bucket_id,name));
+create policy neuvetra_collection_upload_guard on storage.objects as restrictive for insert to public with check(case when bucket_id='neuvetra-private-company-evidence' then neuvetra.collection_storage_can_upload(bucket_id,name) else true end);
 create policy neuvetra_collection_clean_read_allow on storage.objects as permissive for select to authenticated using(neuvetra.collection_storage_can_read(bucket_id,name));
-create policy neuvetra_collection_clean_read_guard on storage.objects as restrictive for select to authenticated using(bucket_id<>'neuvetra-private-company-evidence' or neuvetra.collection_storage_can_read(bucket_id,name));
-create policy neuvetra_collection_no_direct_update on storage.objects as restrictive for update to authenticated using(bucket_id<>'neuvetra-private-company-evidence') with check(bucket_id<>'neuvetra-private-company-evidence');
-create policy neuvetra_collection_no_direct_delete on storage.objects as restrictive for delete to authenticated using(bucket_id<>'neuvetra-private-company-evidence');
+create policy neuvetra_collection_clean_read_guard on storage.objects as restrictive for select to public using(case when bucket_id='neuvetra-private-company-evidence' then neuvetra.collection_storage_can_read(bucket_id,name) else true end);
+create policy neuvetra_collection_no_direct_update on storage.objects as restrictive for update to public using(bucket_id<>'neuvetra-private-company-evidence') with check(bucket_id<>'neuvetra-private-company-evidence');
+create policy neuvetra_collection_no_direct_delete on storage.objects as restrictive for delete to public using(bucket_id<>'neuvetra-private-company-evidence');
 
 create function neuvetra.collection_assert_decimal(value text) returns void language plpgsql immutable set search_path=pg_catalog,neuvetra,pg_temp as $$ begin
   if value !~ '^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$' then raise exception 'invalid collection decimal' using errcode='22023'; end if;
@@ -397,6 +397,24 @@ declare actor uuid:=auth.uid(); intent neuvetra.collection_evidence_upload_inten
 end $$;
 revoke all on function neuvetra.mark_collection_evidence_registration_failed(uuid,uuid) from public,authenticated,neuvetra_runtime;
 grant execute on function neuvetra.mark_collection_evidence_registration_failed(uuid,uuid) to neuvetra_runtime;
+
+-- Operator-only reconciliation for the narrow outage window where Storage put
+-- committed but the application's best-effort recovery receipt could not.
+create function neuvetra.reconcile_collection_evidence_orphan(target_company uuid,requested_upload_id uuid) returns uuid language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
+declare intent neuvetra.collection_evidence_upload_intents%rowtype; recovery_id uuid; begin
+  perform id from neuvetra.companies where id=target_company for update;
+  select * into intent from neuvetra.collection_evidence_upload_intents where id=requested_upload_id and company_id=target_company for update;
+  if not found then raise exception 'committed evidence upload intent required' using errcode='23503'; end if;
+  if exists(select 1 from neuvetra.collection_evidence_uploads u where u.company_id=target_company and (u.id=requested_upload_id or u.uploaded_object_key=intent.object_key))
+    or exists(select 1 from neuvetra.collection_evidence_objects o where o.company_id=target_company and o.storage_key=intent.object_key)
+    then raise exception 'evidence upload is already attached' using errcode='23505'; end if;
+  if not exists(select 1 from storage.objects where bucket_id='neuvetra-private-company-evidence' and name=intent.object_key) then raise exception 'orphan storage object not found' using errcode='P0002'; end if;
+  select id into recovery_id from neuvetra.collection_evidence_orphan_recovery where company_id=target_company and object_key=intent.object_key;
+  if found then return recovery_id; end if;
+  insert into neuvetra.collection_evidence_orphan_recovery(id,company_id,upload_id,object_key,reason,status) values(gen_random_uuid(),target_company,requested_upload_id,intent.object_key,'registration_failed','pending') returning id into recovery_id;
+  return recovery_id;
+end $$;
+revoke all on function neuvetra.reconcile_collection_evidence_orphan(uuid,uuid) from public,authenticated,neuvetra_runtime;
 
 -- Trusted operator-only recovery receipt. Application roles cannot delete or mark Storage objects recovered.
 create function neuvetra.resolve_collection_evidence_orphan(target_company uuid,target_recovery uuid,outcome text,note text) returns void language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
