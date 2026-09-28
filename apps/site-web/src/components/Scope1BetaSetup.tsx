@@ -2,19 +2,15 @@ import { useEffect, useRef, useState, type RefObject } from "react"
 import type { M80ValidatedSetup } from "../../../../packages/neuvetra-database/src/m80-contract"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import {
-  M80ApiError,
   M80_LOCATION_LABELS,
   M80_SOURCE_LABELS,
   cloneM80Setup,
-  createM80SaveAttempt,
   loadM80Foundation,
   loadM80Version,
-  saveM80Foundation,
   type M80BetaSetupVersion,
   type M80FoundationView,
-  type M80SaveAttempt,
 } from "@/lib/m80-beta-api"
-import { m80LoadIsCurrent, m80SetupPermissions, prioritizeM80Eligibility } from "@/lib/m80-beta-ui-state"
+import { m80LoadIsCurrent, prioritizeM80Eligibility } from "@/lib/m80-beta-ui-state"
 
 type Step = "boundary" | "locations" | "sources" | "evidence" | "eligibility" | "history"
 
@@ -42,19 +38,12 @@ const blockerLabels: Record<string, string> = {
 const humanBlocker = (code: string) => blockerLabels[code] ?? `${words(code)}.`
 const factLabels: Record<string, string> = { activity_data_kind: "activity-data type", activity_unit: "activity unit", equipment_kind: "equipment type", fuel_or_gas: "fuel or gas" }
 const humanFact = (code: string) => code.startsWith("gas_group_") ? `${code.slice(10)} gas group` : code.startsWith("process_category_") ? `${words(code.slice(17))} process category` : factLabels[code] ?? words(code)
-const factOptions = {
-  fuelOrGas: ["fossil_natural_gas", "fossil_distillate_no2", "fossil_diesel", "gasoline", "propane_lpg", "renewable_diesel", "other_fuel", "HFC-134a", "HFC-227ea", "R-410A", "other_gas", "not_applicable", "unknown"],
-  equipmentKind: ["stationary_other", "emergency_generator", "medium_heavy_on_road_2007_2022", "vehicle_other", "non_road_equipment", "refrigeration", "fixed_hvac", "fire_suppression", "industrial_process", "other", "unknown"],
-  activityDataKind: ["annual_hhv_energy", "metered_gallons", "gallons_and_actual_miles", "service_refill_mass", "screen_only", "unknown"],
-  activityUnit: ["MMBtu_HHV", "US_gallon", "US_gallon_and_vehicle_mile", "kg_named_gas_or_blend", "not_applicable", "unknown"],
-} as const
 
 export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null> }) {
   const [step, setStep] = useState<Step>("boundary")
   const [foundation, setFoundation] = useState<M80FoundationView | null>(null)
   const [draft, setDraft] = useState<M80ValidatedSetup | null>(null)
   const [historical, setHistorical] = useState<M80BetaSetupVersion | null>(null)
-  const [editing, setEditing] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(false)
   const [message, setMessage] = useState(workspaceId ? "Loading the synthetic setup…" : "Choose an admitted synthetic workspace to continue.")
@@ -62,14 +51,11 @@ export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: Hos
   const authorityRef = useRef(actor)
   const tokenRef = useRef(actor.accessToken)
   const tokenActorRef = useRef(actor)
-  const pendingAttempt = useRef<M80SaveAttempt | null>(null)
-  const [retryAvailable, setRetryAvailable] = useState(false)
   const [loadEpoch, setLoadEpoch] = useState(0)
   const contextKey = `${actor.userId}\u0000${workspaceId ?? ""}\u0000${actor.role}`
   const [loadedContext, setLoadedContext] = useState<string | null>(null)
   const [loadedActor, setLoadedActor] = useState<HostedWorkspaceActor | null>(null)
   const currentActor = (): HostedWorkspaceActor => ({ accessToken: actor.accessToken, userId: actor.userId, role: actor.role, onUnauthorized: actor.onUnauthorized, signal: controllerRef.current.signal })
-  const { canManage, canEdit } = m80SetupPermissions(foundation, editing, !!draft)
 
   useEffect(() => { authorityRef.current = actor }, [actor])
 
@@ -78,18 +64,16 @@ export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: Hos
     const requestContext = `${actor.userId}\u0000${workspaceId ?? ""}\u0000${actor.role}`
     controllerRef.current.abort()
     controllerRef.current = next
-    pendingAttempt.current = null
     queueMicrotask(() => {
       if (next.signal.aborted) return
-      setFoundation(null); setDraft(null); setLoadedContext(null); setLoadedActor(null); setHistorical(null); setEditing(false); setError(false); setRetryAvailable(false)
+      setFoundation(null); setDraft(null); setLoadedContext(null); setLoadedActor(null); setHistorical(null); setError(false)
       setBusy(!!workspaceId); setMessage(workspaceId ? "Loading the synthetic setup…" : "Choose an admitted synthetic workspace to continue.")
     })
     if (!workspaceId) return () => next.abort()
     const clearExpiredSession = () => queueMicrotask(() => {
       if (authorityRef.current !== actor) return
       controllerRef.current.abort()
-      pendingAttempt.current = null
-      setFoundation(null); setDraft(null); setLoadedContext(null); setLoadedActor(null); setHistorical(null); setEditing(false); setRetryAvailable(false); setBusy(false); setError(true)
+      setFoundation(null); setDraft(null); setLoadedContext(null); setLoadedActor(null); setHistorical(null); setBusy(false); setError(true)
       setMessage("This signed-in session is no longer active.")
     })
     if (actor.signal?.aborted) { next.abort(); clearExpiredSession(); return () => next.abort() }
@@ -102,8 +86,7 @@ export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: Hos
       setDraft(cloneM80Setup(value.setup))
       setLoadedContext(requestContext)
       setLoadedActor(actor)
-      setEditing(value.currentVersion === null)
-      setMessage(value.currentVersion ? `Saved synthetic setup version ${value.currentVersion.revision} loaded.` : "The admitted synthetic rehearsal is ready for its first save.")
+      setMessage(value.currentVersion ? `Saved legacy synthetic setup version ${value.currentVersion.revision} loaded.` : "No legacy synthetic setup version is available.")
     }).catch(reason => {
       if (next.signal.aborted) return
       setError(true)
@@ -126,68 +109,23 @@ export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: Hos
       if (authorityRef.current !== actor) return
       setBusy(false)
       if (!foundation || loadedActor !== actor) { setLoadEpoch(value => value + 1); return }
-      if (pendingAttempt.current) {
-        setRetryAvailable(true)
-        setMessage("Session refreshed. Retry will use the same save request with current access.")
-      } else {
-        setMessage("Session refreshed. Unsaved changes and correction state were preserved.")
-      }
+      setMessage("Session refreshed. The legacy fixture remains read-only.")
     })
   }, [actor, actor.accessToken, foundation, loadedActor])
 
-  function change(mutator: (next: M80ValidatedSetup) => void) {
-    if (!canEdit) return
-    pendingAttempt.current = null
-    setRetryAvailable(false)
-    setDraft(current => {
-      if (!current) return current
-      const next = cloneM80Setup(current)
-      mutator(next)
-      return next
-    })
-    setError(false)
-    setMessage("Unsaved synthetic changes. Eligibility will be checked by the server when saved.")
-  }
-
   async function refresh() {
     if (!workspaceId || busy) return
-    pendingAttempt.current = null
-    setRetryAvailable(false)
     setBusy(true); setError(false); setMessage("Refreshing the saved setup…")
     const requestActor = currentActor()
     try {
       const value = await loadM80Foundation(workspaceId, requestActor)
-      setFoundation(value); setDraft(cloneM80Setup(value.setup)); setEditing(value.currentVersion === null); setHistorical(null)
+      setFoundation(value); setDraft(cloneM80Setup(value.setup)); setHistorical(null)
       setLoadedContext(contextKey)
       setLoadedActor(actor)
-      setMessage(value.currentVersion ? `Saved synthetic setup version ${value.currentVersion.revision} loaded.` : "No setup version has been saved yet.")
+      setMessage(value.currentVersion ? `Saved legacy synthetic setup version ${value.currentVersion.revision} loaded.` : "No legacy synthetic setup version is available.")
     } catch (reason) {
       if (requestActor.signal?.aborted) return
       setError(true); setMessage(reason instanceof Error ? reason.message : "The Scope 1 setup is unavailable.")
-    } finally { if (!requestActor.signal?.aborted) setBusy(false) }
-  }
-
-  async function save() {
-    if (!workspaceId || !foundation || !draft || !canEdit || busy) return
-    const retrying = pendingAttempt.current !== null
-    const attempt = pendingAttempt.current ?? createM80SaveAttempt(foundation, draft)
-    pendingAttempt.current = attempt
-    setBusy(true); setError(false); setMessage(retrying ? "Retrying the exact save…" : "Saving the exact synthetic setup…")
-    const requestActor = currentActor()
-    try {
-      const result = await saveM80Foundation(workspaceId, attempt, requestActor)
-      pendingAttempt.current = null
-      setRetryAvailable(false)
-      setFoundation(result.foundation); setDraft(cloneM80Setup(result.foundation.setup)); setEditing(false); setHistorical(result.savedVersion)
-      setMessage(result.replayed ? `The earlier save was confirmed as version ${result.savedVersion.revision}.` : `Synthetic setup version ${result.savedVersion.revision} saved. All calculation profiles remain held.`)
-    } catch (reason) {
-      if (requestActor.signal?.aborted) return
-      setError(true)
-      if (reason instanceof M80ApiError && reason.conflict) {
-        pendingAttempt.current = null
-        setRetryAvailable(false)
-        setMessage("The saved setup changed in another session. Refresh before making another correction.")
-      } else { setRetryAvailable(true); setMessage(`${reason instanceof Error ? reason.message : "The setup could not be saved."} Retry uses the same save request.`) }
     } finally { if (!requestActor.signal?.aborted) setBusy(false) }
   }
 
@@ -208,7 +146,7 @@ export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: Hos
     setStep(nextStep)
     if (nextStep !== "history" && historical) {
       setHistorical(null)
-      setMessage(foundation?.currentVersion ? `Showing current synthetic setup version ${foundation.currentVersion.revision}.` : "Showing the unsaved synthetic setup proposal.")
+      setMessage(foundation?.currentVersion ? `Showing current legacy synthetic setup version ${foundation.currentVersion.revision}.` : "Showing the legacy synthetic setup.")
     }
   }
 
@@ -222,26 +160,25 @@ export function Scope1BetaSetup({ actor, workspaceId, headingRef }: { actor: Hos
   return <section className="worksheet scope1-beta">
     <p className="worksheet-eyebrow">Scope 1 beta setup · Private synthetic rehearsal only</p>
     <h1 ref={headingRef} tabIndex={-1}>Scope 1 setup</h1>
-    <p>Screen the proposed company boundary, every fixed source and its evidence needs before any calculation can be considered.</p>
+    <p>This historical Scope 1 fixture is read-only. Use <strong>Company setup</strong>, the current primary workspace flow, to record company facts and corrections.</p>
     <div className="worksheet-context"><span>2025 proposed year</span><span>Operational control proposed</span><span>Inventory incomplete</span><span>No calculations or exports</span></div>
     <p role={error ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
-    <div className="worksheet-report-actions"><button type="button" disabled={busy} onClick={() => void refresh()}>Refresh saved setup</button>{canManage && foundation.currentVersion && !editing && <button type="button" disabled={busy} onClick={() => { pendingAttempt.current = null; setDraft(cloneM80Setup(foundation.setup)); setEditing(true); setHistorical(null); setMessage("Editing a correction. Saved versions remain unchanged.") }}>Make a correction</button>}{editing && foundation.currentVersion && <button type="button" disabled={busy} onClick={() => { pendingAttempt.current = null; setDraft(cloneM80Setup(foundation.setup)); setEditing(false); setMessage("Unsaved correction discarded.") }}>Cancel correction</button>}</div>
-    {!canManage && <p className="scope1-beta-readonly">Read-only access. An authorized workspace manager can save setup versions.</p>}
+    <div className="worksheet-report-actions"><button type="button" disabled={busy} onClick={() => void refresh()}>Refresh legacy setup</button></div>
+    <p className="scope1-beta-readonly">Read-only historical fixture. It cannot be corrected or saved from this panel.</p>
     <nav className="worksheet-nav scope1-beta-steps" aria-label="Scope 1 setup steps">{(Object.keys(stepLabels) as Step[]).map(id => <button type="button" key={id} aria-pressed={step === id} onClick={() => chooseStep(id)}>{stepLabels[id]}</button>)}</nav>
 
-    {step === "boundary" && <article className="worksheet-card worksheet-form"><h2>Synthetic Scope 1 foundation company</h2><p>This fixed fictional company is proposed for calendar year 2025. Saving records a rehearsal proposal; it does not confirm the legal boundary.</p><fieldset disabled={!canEdit || busy}><label>Consolidation approach<select value={draft.consolidationApproach} disabled><option value="operational_control_proposed">Operational control — proposed</option></select></label><label>Joint ventures<select value={draft.boundaryProposal.jointVentureState} onChange={event => change(next => { next.boundaryProposal.jointVentureState = event.target.value as typeof next.boundaryProposal.jointVentureState })}><option value="unknown">Unknown</option><option value="none_proposed">None proposed</option></select></label><label>Ownership changes<select value={draft.boundaryProposal.ownershipChangeState} onChange={event => change(next => { next.boundaryProposal.ownershipChangeState = event.target.value as typeof next.boundaryProposal.ownershipChangeState })}><option value="unknown">Unknown</option><option value="none_proposed">None proposed</option></select></label></fieldset></article>}
+    {step === "boundary" && <article className="worksheet-card"><h2>Synthetic Scope 1 foundation company</h2><p>Calendar year 2025 · operational control proposed.</p><p>Joint ventures: {words(draft.boundaryProposal.jointVentureState)}. Ownership changes: {words(draft.boundaryProposal.ownershipChangeState)}.</p></article>}
 
-    {step === "locations" && <><h2>Proposed locations</h2><p>Both fictional locations stay in the census even when control or inclusion is unresolved.</p>{draft.locations.map((location, index) => <article className="worksheet-card worksheet-form" key={location.locationId}><h2>{M80_LOCATION_LABELS.get(location.locationId) ?? `Synthetic location ${index + 1}`}</h2><p>{location.regionCode === "CA" ? "California, United States — proposed" : location.regionCode === "other_us" ? "Other U.S. region — proposed" : "Region unknown"}</p><fieldset disabled={!canEdit || busy}><label>Operational control<select value={location.controlState} onChange={event => change(next => { next.locations[index]!.controlState = event.target.value as typeof location.controlState })}><option value="unknown">Unknown</option><option value="operational_control_proposed">Controlled — proposed</option><option value="not_controlled_proposed">Not controlled — proposed</option></select></label><label>Active period<select value={location.activePeriodState} onChange={event => change(next => { next.locations[index]!.activePeriodState = event.target.value as typeof location.activePeriodState })}><option value="unknown">Unknown</option><option value="full_2025_proposed">Full year — proposed</option><option value="partial_or_changed">Partial year or changed</option></select></label><label>Boundary inclusion<select value={location.inclusionState} onChange={event => change(next => { next.locations[index]!.inclusionState = event.target.value as typeof location.inclusionState })}><option value="unknown">Unknown</option><option value="included_proposed">Included — proposed</option><option value="excluded_proposed">Excluded — proposed</option></select></label></fieldset></article>)}</>}
+    {step === "locations" && <><h2>Recorded locations</h2><p>Both fictional locations remain in this historical census.</p>{draft.locations.map((location, index) => <article className="worksheet-card" key={location.locationId}><h2>{M80_LOCATION_LABELS.get(location.locationId) ?? `Synthetic location ${index + 1}`}</h2><p>{location.regionCode === "CA" ? "California, United States" : location.regionCode === "other_us" ? "Other U.S. region" : "Region unknown"}</p><p>Control: {words(location.controlState)} · Period: {words(location.activePeriodState)} · Inclusion: {words(location.inclusionState)}.</p></article>)}</>}
 
-    {step === "sources" && <><h2>Complete source census</h2><p>All 14 fixed fictional sources remain visible. Unknown values remain blockers and are never treated as zero.</p><div className="scope1-beta-source-list">{draft.sources.map((source, index) => <details className="worksheet-card" key={source.sourceId} open={index === 0 || source.processScreen !== null}><summary>{M80_SOURCE_LABELS.get(source.sourceId) ?? `Synthetic source ${index + 1}`} · {words(source.category)}</summary><div className="worksheet-form"><fieldset disabled={!canEdit || busy}><label>Fuel, gas or material<select value={source.knownFacts.fuelOrGas} onChange={event => change(next => { next.sources[index]!.knownFacts.fuelOrGas = event.target.value as typeof source.knownFacts.fuelOrGas })}>{factOptions.fuelOrGas.map(value => <option value={value} key={value}>{words(value)}</option>)}</select></label><label>Equipment type<select value={source.knownFacts.equipmentKind} onChange={event => change(next => { next.sources[index]!.knownFacts.equipmentKind = event.target.value as typeof source.knownFacts.equipmentKind })}>{factOptions.equipmentKind.map(value => <option value={value} key={value}>{words(value)}</option>)}</select></label><label>Activity-data type<select value={source.knownFacts.activityDataKind} onChange={event => change(next => { next.sources[index]!.knownFacts.activityDataKind = event.target.value as typeof source.knownFacts.activityDataKind })}>{factOptions.activityDataKind.map(value => <option value={value} key={value}>{words(value)}</option>)}</select></label><label>Activity unit<select value={source.knownFacts.activityUnit} onChange={event => change(next => { next.sources[index]!.knownFacts.activityUnit = event.target.value as typeof source.knownFacts.activityUnit })}>{factOptions.activityUnit.map(value => <option value={value} key={value}>{words(value)}</option>)}</select></label>{source.processScreen && <><h3>Seven process categories</h3><div className="scope1-beta-screen-grid">{source.processScreen.categories.map((row, rowIndex) => <label key={row.category}>{words(row.category)}<select value={row.state} onChange={event => change(next => { next.sources[index]!.processScreen!.categories[rowIndex]!.state = event.target.value as typeof row.state })}><option value="unknown">Unknown</option><option value="indicated">Indicated</option><option value="not_applicable_pending_review">Not applicable — pending review</option></select></label>)}</div><h3>Seven required gas groups</h3><div className="scope1-beta-screen-grid">{source.processScreen.gasGroups.map((row, rowIndex) => <label key={row.gasGroup}>{row.gasGroup}<select value={row.state} onChange={event => change(next => { next.sources[index]!.processScreen!.gasGroups[rowIndex]!.state = event.target.value as typeof row.state })}><option value="unknown">Unknown</option><option value="indicated">Indicated</option><option value="not_applicable_pending_review">Not applicable — pending review</option></select></label>)}</div></>}</fieldset><p>{evidenceBySource.get(source.sourceId)?.length ?? 0} evidence requirement{evidenceBySource.get(source.sourceId)?.length === 1 ? "" : "s"} retained.</p></div></details>)}</div></>}
+    {step === "sources" && <><h2>Historical source census</h2><p>All 14 fixed fictional sources remain visible. Unknown values remain blockers and are never treated as zero.</p><div className="scope1-beta-source-list">{draft.sources.map((source, index) => <details className="worksheet-card" key={source.sourceId} open={index === 0 || source.processScreen !== null}><summary>{M80_SOURCE_LABELS.get(source.sourceId) ?? `Synthetic source ${index + 1}`} · {words(source.category)}</summary><p>Fuel or gas: {words(source.knownFacts.fuelOrGas)} · Equipment: {words(source.knownFacts.equipmentKind)} · Activity data: {words(source.knownFacts.activityDataKind)} · Unit: {words(source.knownFacts.activityUnit)}.</p>{source.processScreen && <><p>Process categories: {source.processScreen.categories.map(row => `${words(row.category)} (${words(row.state)})`).join(", ")}.</p><p>Gas groups: {source.processScreen.gasGroups.map(row => `${row.gasGroup} (${words(row.state)})`).join(", ")}.</p></>}<p>{evidenceBySource.get(source.sourceId)?.length ?? 0} evidence requirement{evidenceBySource.get(source.sourceId)?.length === 1 ? "" : "s"} retained.</p></details>)}</div></>}
 
-    {step === "evidence" && <><h2>Evidence metadata requirements</h2><p>These 19 rows record only a requirement, 2025 coverage, and a fictional reference state. No document, person, issuer, URL or free text is accepted.</p><div className="scope1-beta-evidence">{draft.evidenceRequirements.map((requirement, index) => <article className="worksheet-card worksheet-form" key={requirement.requirementId}><h2>{words(requirement.requirementType)}</h2><p>{M80_SOURCE_LABELS.get(requirement.sourceId)} · Calendar 2025 proposed</p><fieldset disabled={!canEdit || busy}><label>Requirement state<select value={requirement.state} onChange={event => change(next => { next.evidenceRequirements[index]!.state = event.target.value as typeof requirement.state })}><option value="unknown">Unknown</option><option value="missing">Missing</option><option value="synthetic_fixture_reference">Fictional fixture reference present</option></select></label></fieldset></article>)}</div></>}
+    {step === "evidence" && <><h2>Historical evidence metadata requirements</h2><p>These rows record only a requirement, 2025 coverage, and a fictional reference state.</p><div className="scope1-beta-evidence">{draft.evidenceRequirements.map(requirement => <article className="worksheet-card" key={requirement.requirementId}><h2>{words(requirement.requirementType)}</h2><p>{M80_SOURCE_LABELS.get(requirement.sourceId)} · Calendar 2025 · {words(requirement.state)}</p></article>)}</div></>}
 
     {step === "eligibility" && <><h2>Prioritized blockers</h2><p>This is the server's assessment of the saved setup. None of the four method profiles is released, so no source can calculate or contribute to a subtotal.</p><div className="scope1-beta-summary"><strong>{foundation.eligibility.results.filter(result => result.state === "missing_facts").length}</strong><span>missing facts</span><strong>{foundation.eligibility.results.filter(result => result.state === "unsupported").length}</strong><span>unsupported</span><strong>{foundation.eligibility.results.filter(result => result.state === "held_candidate").length}</strong><span>held candidates</span><strong>0</strong><span>released and supported</span></div><ol className="scope1-beta-blockers">{ranked.map(result => <li key={result.sourceId}><strong>{M80_SOURCE_LABELS.get(result.sourceId)}</strong><span className={`scope1-beta-state state-${result.state}`}>{words(result.state)}</span>{result.blockerCodes.length > 0 && <ul>{result.blockerCodes.map(code => <li key={code}>{humanBlocker(code)}</li>)}</ul>}{result.requiredFactCodes.length > 0 && <p>Needed facts: {result.requiredFactCodes.map(humanFact).join(", ")}.</p>}</li>)}</ol></>}
 
     {step === "history" && <><h2>Immutable saved history</h2>{foundation.history.length === 0 ? <p>No setup version has been saved yet.</p> : <><label className="coverage-version">View saved version<select value={historical?.id ?? foundation.currentVersion?.id ?? ""} disabled={busy} onChange={event => void openVersion(event.target.value)}>{foundation.history.map(version => <option value={version.id} key={version.id}>Version {version.revision} · {version.createdAt.slice(0, 10)}</option>)}</select></label><article className="worksheet-card"><h2>Version {historical?.revision ?? foundation.currentVersion?.revision}</h2><p>{shown.locations.length} locations · {shown.sources.length} sources · {shown.evidenceRequirements.length} evidence requirements.</p><p>{shown.evidenceRequirements.filter(item => item.state === "synthetic_fixture_reference").length} fictional references present; {shown.evidenceRequirements.filter(item => item.state !== "synthetic_fixture_reference").length} requirements missing or unknown.</p><p>This version remains incomplete and has no released calculation method.</p></article></>}</>}
 
-    {canEdit && <section className="worksheet-card scope1-beta-save"><h2>{foundation.currentVersion ? `Save correction as version ${foundation.currentVersion.revision + 1}` : "Save the first setup version"}</h2><p>Saving appends a version and asks the server to recompute blockers. It does not release methods, calculate emissions, or approve the company boundary.</p><button type="button" disabled={busy} onClick={() => void save()}>{retryAvailable ? "Retry exact save" : foundation.currentVersion ? "Save synthetic correction" : "Save synthetic setup"}</button></section>}
     <p className="worksheet-footnote">Synthetic rehearsal data only. Real company data, documents, invitations, calculations, reports and assurance conclusions are outside this setup.</p>
   </section>
 }

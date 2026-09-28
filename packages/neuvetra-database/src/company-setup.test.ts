@@ -3,7 +3,8 @@ import { PGlite } from '@electric-sql/pglite'
 import { readMigrationManifest } from './staging-migrations'
 import { createSyntheticCompanySetup } from './company-setup-fixture'
 import { readCompanySetup, readCompanySetupVersion, saveCompanySetup, type CompanySetupSaveInput } from './company-setup'
-import type { WorkspaceSql } from './workspace'
+import { type WorkspaceConnection, type WorkspaceSql } from './workspace'
+import { HostedWorkspaceDatabase } from './hosted'
 import { saveM80Foundation } from './m80'
 import { createM80FixtureSetup, M80_FIXTURE_SHA256 } from './m80-fixture'
 import { M80_FIXTURE_PROFILE, M80_FIXTURE_VERSION } from './m80-contract'
@@ -99,5 +100,19 @@ describe('general hosted company setup database boundary', () => {
     await db.query('update neuvetra.staging_access set active=false where user_id=$1',[outsider])
     expect(await asUser(outsider,tx=>readCompanySetup(tx,otherCompany))).toBeNull()
     await expect(asUser(outsider,tx=>saveCompanySetup(tx,outsider,otherCompany,input))).rejects.toMatchObject({code:'42501'})
+  })
+  test('member-scoped geography reads a new NY company without a legacy facility and hides it from outsiders',async()=>{
+    const nyOwner=crypto.randomUUID(),nyCompany=crypto.randomUUID()
+    await db.query('insert into auth.users(id) values($1)',[nyOwner])
+    await db.query("select neuvetra.provision_company_setup_workspace($1,$2,'Synthetic New York','US','NY',true)",[nyCompany,nyOwner])
+    const runtime:WorkspaceConnection={
+      query:(sql,params)=>db.query(sql,params),exec:sql=>db.exec(sql),close:async()=>{},
+      transaction:<T>(operation:(tx:WorkspaceSql)=>Promise<T>)=>db.transaction(async tx=>{await tx.exec('set local role neuvetra_runtime');return operation(tx as WorkspaceSql)}),
+    }
+    const client=new (HostedWorkspaceDatabase as unknown as new(connection:WorkspaceConnection,ref:string)=>HostedWorkspaceDatabase)(runtime,'abcdefghijklmnopqrst')
+    expect(await client.findCompanyGeography(nyOwner,nyCompany)).toEqual({countryCode:'US',stateCode:'NY'})
+    expect(await client.findCompanyGeography(owner,company)).toEqual({countryCode:'US',stateCode:'CA'})
+    expect(await client.findCompanyGeography(owner,nyCompany)).toBeNull()
+    expect(await client.findCompanyGeography(nyOwner,company)).toBeNull()
   })
 })

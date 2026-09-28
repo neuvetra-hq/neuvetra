@@ -29,6 +29,7 @@ import { readStagingConfig, STAGING_PROFILE, type StagingConfig } from "./config
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
 
 const MAX_BODY_BYTES = 300_000
+const LEGACY_CALIFORNIA_ROUTE = /^\/workspace\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/(?:electricity-worksheet|source-electricity-worksheet|annual-electricity-worksheet|annual-electricity-evidence|fugitive-sources|fugitive-population)(?:\/|$)/i
 type Access = { workspace: CompanyWorkspaceRecord; role: "owner" | "admin" | "member"; evidenceId: string | null }
 export type StagingDatabase = WorkspaceDatabase & {
   hasStagingAccess(userId: string): Promise<boolean>
@@ -164,6 +165,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       url.pathname = url.pathname.slice("/workspace-api".length)
       let forwarded: Request
       try { forwarded = await boundedRequest(request, url) } catch { return json(413, { error: "Request too large." }) }
+      const legacyCalifornia = LEGACY_CALIFORNIA_ROUTE.exec(url.pathname)
+      if (legacyCalifornia) {
+        const geography = await database.findCompanyGeography(user.id, legacyCalifornia[1]!)
+        if (geography?.countryCode !== "US" || geography.stateCode !== "CA") return json(404, { error: "Not found." })
+      }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
         // The schema-22 bridge may serve reviewed legacy routes, but must never

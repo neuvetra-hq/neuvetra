@@ -412,6 +412,18 @@ export class WorkspaceDatabase {
     })
   }
 
+  /** Read only the company geography visible to this member; new companies need no legacy facility. */
+  async findCompanyGeography(userId: string, companyId: string): Promise<{ countryCode: string; stateCode: string } | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<{ country_code: string; state_code: string }>(
+        "select country_code, state_code from neuvetra.companies where id = $1 and neuvetra.is_company_member(id)",
+        [companyId],
+      )
+      const row = result.rows[0]
+      return row ? { countryCode: row.country_code, stateCode: row.state_code } : null
+    })
+  }
+
   async findSyntheticWorkspaceForUser(userId: string): Promise<CompanyWorkspaceRecord | null> {
     return this.asUser(userId, async (tx) => {
       const result = await tx.query<WorkspaceRow>(WORKSPACE_QUERY.replace("where c.id = $1", "where c.created_by = $1 and c.name = 'Synthetic Acme, Inc.'"), [userId])

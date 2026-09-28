@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { DevelopmentWorkspaceDatabase, createM80FixtureSetup } from "@neuvetra/database"
+import { DevelopmentWorkspaceDatabase } from "@neuvetra/database"
 import { createStagingServer, type StagingDatabase, type StagingLog } from "./server"
 import { readStagingConfig, STAGING_PROFILE } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
@@ -159,22 +159,60 @@ describe("M63 private staging boundary", () => {
     expect(mutation.status).toBe(403)
   })
 
-  test("mounts the M80 current, history and save routes behind staging authentication", async () => {
+  test("California-only legacy paths refuse non-California geography before reaching old calculators", async () => {
+    const f = await fixture()
+    const root = `/workspace-api/workspace/${f.workspace.id}`
+    const california = await f.request(`${root}/electricity-worksheet`, "test-owner-session")
+    expect(california.status).toBe(200)
+    expect(await f.db.findCompanyGeography(OWNER, f.workspace.id)).toEqual({ countryCode: "US", stateCode: "CA" })
+
+    const lookup = f.db.findCompanyGeography.bind(f.db)
+    const checked: string[] = []
+    f.db.findCompanyGeography = async (userId, companyId) => {
+      checked.push(companyId)
+      return companyId === f.workspace.id ? { countryCode: "US", stateCode: "NY" } : lookup(userId, companyId)
+    }
+    const paths = [
+      "/electricity-worksheet", "/electricity-worksheet/corrections", "/electricity-worksheet/reviews",
+      `/electricity-worksheet/reports/${crypto.randomUUID()}/download`,
+      "/source-electricity-worksheet", "/source-electricity-worksheet/sources",
+      `/source-electricity-worksheet/sources/${crypto.randomUUID()}/download`,
+      `/source-electricity-worksheet/reports/${crypto.randomUUID()}/download`,
+      "/annual-electricity-worksheet", `/annual-electricity-worksheet/reports/${crypto.randomUUID()}/download`,
+      "/annual-electricity-evidence", `/annual-electricity-evidence/reports/${crypto.randomUUID()}/download`,
+      "/fugitive-sources", `/fugitive-sources/${crypto.randomUUID()}/versions`,
+      "/fugitive-population", `/fugitive-population/${crypto.randomUUID()}/reports/${crypto.randomUUID()}/download`,
+    ]
+    for (const suffix of paths) {
+      const response = await f.request(root + suffix, "test-owner-session")
+      expect(response.status).toBe(404)
+      expect(await response.json()).toEqual({ error: "Not found." })
+    }
+    for (const suffix of ["/electricity-worksheet", "/annual-electricity-evidence", "/fugitive-population"]) {
+      const response = await f.request(root + suffix, "test-owner-session", { method: "POST", body: "{}" })
+      expect(response.status).toBe(404)
+      expect(await response.json()).toEqual({ error: "Not found." })
+    }
+    expect(checked).toEqual(Array(paths.length + 3).fill(f.workspace.id))
+    expect((await f.request(`${root}/electricity-worksheet`, "test-outsider-session")).status).toBe(404)
+  })
+
+  test("mounts M80 current and history reads but refuses writes behind staging authentication", async () => {
     const f = await fixture()
     const versionId = "88888888-8888-4888-8888-888888888888"
     const view = { profile: "m80-scope1-beta-foundation-runtime-v1", syntheticOnly: true, canManage: true, fixtureAdmission: {}, releaseRegistry: [], currentVersion: null, history: [], setup: {}, eligibility: {} } as any
     const version = { id: versionId } as any
     ;(f.db as any).findM80Foundation = async (userId: string, companyId: string) => userId === OWNER && companyId === f.workspace.id ? view : null
     ;(f.db as any).findM80FoundationVersion = async (userId: string, companyId: string, id: string) => userId === OWNER && companyId === f.workspace.id && id === versionId ? version : null
-    ;(f.db as any).saveM80Foundation = async () => ({ foundation: view, savedVersion: version, replayed: false })
+    ;(f.db as any).saveM80Foundation = async () => { throw new Error("M80 write route reached the database") }
     const current = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session")
     expect(current.status).toBe(200)
     expect((await current.json()).syntheticOnly).toBe(true)
     const history = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup/versions/${versionId}`, "test-owner-session")
     expect(history.status).toBe(200)
-    const save = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session", { method: "POST", body: JSON.stringify({ idempotencyKey: "89999999-9999-4999-8999-999999999999", expectedRevision: 0, expectedVersionId: null, expectedVersionSha256: null, correctionReason: null, setup: createM80FixtureSetup(f.workspace.id) }) })
-    expect(save.status).toBe(201)
-    expect((await save.json()).savedVersion.id).toBe(versionId)
+    const refused = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session", { method: "POST", body: "{}" })
+    expect(refused.status).toBe(405)
+    expect(await refused.json()).toEqual({ error: "Method not allowed." })
   })
 
   test("readiness fails closed and errors/logs contain no credentials, personal metadata or body", async () => {

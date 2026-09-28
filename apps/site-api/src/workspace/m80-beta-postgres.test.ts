@@ -94,43 +94,45 @@ pg("M80 actual PostgreSQL and HTTP boundary", () => {
     expect(JSON.stringify(ownerView)).not.toMatch(/calculation|subtotal|invite|documentBytes|released_supported/)
   })
 
-  test("appends, replays and retrieves immutable history through the actual route", async () => {
+  test("refuses legacy route writes while preserving current and historical reads", async () => {
     const route = routeFor(database)
     const initial = input(null)
-    const created = await route(post(owner, initial))
-    expect(created.status).toBe(201)
-    const first = await created.json() as any
-    expect(first.savedVersion.revision).toBe(1)
-    const replay = await route(post(owner, initial))
-    expect(replay.status).toBe(200)
-    expect((await replay.json() as any).savedVersion.id).toBe(first.savedVersion.id)
+    const seeded = await database.saveM80Foundation(owner, company, initial)
+    const before = await operator.query<{versions:string;heads:string;requests:string;audit:string}>(`select
+      (select count(*)::text from neuvetra.scope1_beta_setup_versions where company_id=$1) versions,
+      (select count(*)::text from neuvetra.scope1_beta_setup_heads where company_id=$1) heads,
+      (select count(*)::text from neuvetra.scope1_beta_requests where company_id=$1) requests,
+      (select count(*)::text from neuvetra.scope1_beta_audit where company_id=$1) audit`, [company])
+    expect((await route(post(owner, initial))).status).toBe(405)
+    expect((await route(post(member, input(seeded.foundation.currentVersion)))).status).toBe(405)
+    const after = await operator.query<{versions:string;heads:string;requests:string;audit:string}>(`select
+      (select count(*)::text from neuvetra.scope1_beta_setup_versions where company_id=$1) versions,
+      (select count(*)::text from neuvetra.scope1_beta_setup_heads where company_id=$1) heads,
+      (select count(*)::text from neuvetra.scope1_beta_requests where company_id=$1) requests,
+      (select count(*)::text from neuvetra.scope1_beta_audit where company_id=$1) audit`, [company])
+    expect(after.rows).toEqual(before.rows)
     const current = await route(get(member))
     expect(current.status).toBe(200)
     expect((await current.json() as any).canManage).toBe(false)
-    const detail = await route(get(member, `/versions/${first.savedVersion.id}`))
+    const detail = await route(get(member, `/versions/${seeded.savedVersion.id}`))
     expect(detail.status).toBe(200)
-    expect((await detail.json() as any).versionSha256).toBe(first.savedVersion.versionSha256)
-    expect((await route(post(member, input(first.foundation.currentVersion)))).status).toBe(403)
+    expect((await detail.json() as any).versionSha256).toBe(seeded.savedVersion.versionSha256)
   })
 
   test("preserves predecessor bytes, rejects stale writes and old-key replay returns the original record", async () => {
-    const route = routeFor(database)
     const before = await database.findM80Foundation(owner, company)
     const correctionSetup = structuredClone(before!.setup) as any
     delete correctionSetup.fixture
     for (const source of correctionSetup.sources) delete source.sourceIdentitySha256
     correctionSetup.evidenceRequirements[0].state = "synthetic_fixture_reference"
     const correction = input(before!.currentVersion, crypto.randomUUID(), correctionSetup)
-    const saved = await route(post(admin, correction))
-    expect(saved.status).toBe(201)
-    const result = await saved.json() as any
+    const result = await database.saveM80Foundation(admin, company, correction)
     expect(result.foundation.history).toHaveLength(2)
-    const stale = await route(post(owner, input(before!.currentVersion, crypto.randomUUID(), correctionSetup)))
-    expect(stale.status).toBe(409)
-    const replay = await route(post(admin, correction))
-    expect(replay.status).toBe(200)
-    expect((await replay.json() as any).savedVersion.id).toBe(result.savedVersion.id)
-    const old = await route(get(member, `/versions/${before!.currentVersion!.id}`))
+    await expect(database.saveM80Foundation(owner, company, input(before!.currentVersion, crypto.randomUUID(), correctionSetup))).rejects.toMatchObject({ code: "23505" })
+    const replay = await database.saveM80Foundation(admin, company, correction)
+    expect(replay.replayed).toBe(true)
+    expect(replay.savedVersion.id).toBe(result.savedVersion.id)
+    const old = await routeFor(database)(get(member, `/versions/${before!.currentVersion!.id}`))
     expect((await old.json() as any).setup.evidenceRequirements[0].state).toBe("missing")
   })
 
