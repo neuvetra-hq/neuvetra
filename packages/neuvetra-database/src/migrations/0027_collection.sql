@@ -37,13 +37,14 @@ create table neuvetra.collection_evidence_upload_intents (
   request_sha256 text not null check(request_sha256 ~ '^[0-9a-f]{64}$'),
   created_by uuid not null references auth.users(id),
   created_at timestamptz not null default clock_timestamp(),
-  unique(id,company_id), unique(company_id,object_key),
+  unique(id,company_id),
   check(object_key like company_id::text||'/original/%' and position(chr(92) in object_key)=0),
   check(length(btrim(original_name)) between 1 and 255),
   check(media_type in('application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')),
   check(byte_length between 1 and 10485760),
   check(sha256 ~ '^[0-9a-f]{64}$')
 );
+create index collection_evidence_upload_intents_object_idx on neuvetra.collection_evidence_upload_intents(company_id,object_key);
 create table neuvetra.collection_evidence_uploads (
   id uuid primary key,
   company_id uuid not null references neuvetra.companies(id),
@@ -293,9 +294,11 @@ declare actor uuid:=auth.uid(); a jsonb; old neuvetra.collection_activity_reques
   if coalesce(request->>'idempotencyKey','')!~'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' or coalesce(request->>'expectedRevision','')!~'^[0-9]{1,4}$' or jsonb_typeof(request->'expectedVersionId') not in('string','null') or jsonb_typeof(request->'correctionReason') not in('string','null') or octet_length(request::text)>150000 then raise exception 'invalid collection request' using errcode='22023'; end if;
   a:=request->'activity'; perform neuvetra.collection_assert_activity(a);
   fingerprint:=neuvetra.m67_hash(jsonb_build_object('operation','save_collection_activity','companyId',target_company,'recordId',target_record,'actorId',actor,'request',request-'idempotencyKey'));
+  -- Serialize before looking up the receipt: a concurrent exact replay may have
+  -- been waiting on this company lock and must observe the committed request.
+  perform id from neuvetra.companies where id=target_company for update;
   select * into old from neuvetra.collection_activity_requests where company_id=target_company and idempotency_key=(request->>'idempotencyKey')::uuid;
   if found then if old.actor_id<>actor or old.request_sha256<>fingerprint or old.record_id<>target_record then raise exception 'collection idempotency conflict' using errcode='23505'; end if; record_id:=old.record_id; version_id:=old.version_id; replayed:=true; return next; return; end if;
-  perform id from neuvetra.companies where id=target_company for update;
   select * into rec from neuvetra.collection_activity_records where id=target_record and company_id=target_company;
   if not found then
     if request->>'expectedRevision'<>'0' or request->'expectedVersionId'<>'null'::jsonb or request->'correctionReason'<>'null'::jsonb then raise exception 'invalid first collection version' using errcode='22023'; end if;
@@ -337,9 +340,11 @@ declare actor uuid:=auth.uid(); prior neuvetra.collection_evidence_upload_intent
   if actor is null or not neuvetra.has_staging_access() or not neuvetra.can_manage_company(target_company) then raise exception 'collection evidence unavailable' using errcode='42501'; end if;
   if object_key not like target_company::text||'/original/%' or neuvetra.collection_storage_company_id(object_key) is distinct from target_company or length(btrim(original_name)) not between 1 and 255 or media_type not in('application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') or byte_length not between 1 and 10485760 or content_sha256 !~ '^[0-9a-f]{64}$' then raise exception 'invalid collection evidence metadata' using errcode='22023'; end if;
   fingerprint:=neuvetra.m67_hash(jsonb_build_object('companyId',target_company,'evidenceId',proposed_evidence_id,'objectKey',object_key,'originalName',original_name,'mediaType',media_type,'byteLength',byte_length,'sha256',content_sha256));
+  -- Serialize before looking up the receipt so simultaneous reservations with
+  -- the same upload id converge on the first committed intent.
+  perform id from neuvetra.companies where id=target_company for update;
   select * into prior from neuvetra.collection_evidence_upload_intents where id=requested_upload_id and company_id=target_company;
   if found then if prior.created_by<>actor or prior.request_sha256<>fingerprint then raise exception 'evidence upload intent conflict' using errcode='23505'; end if; return prior.id; end if;
-  perform id from neuvetra.companies where id=target_company for update;
   insert into neuvetra.collection_evidence_upload_intents(id,company_id,proposed_evidence_id,object_key,original_name,media_type,byte_length,sha256,request_sha256,created_by) values(requested_upload_id,target_company,proposed_evidence_id,object_key,original_name,media_type,byte_length,content_sha256,fingerprint,actor);
   return requested_upload_id;
 end $$;
@@ -353,6 +358,9 @@ declare actor uuid:=auth.uid(); existing neuvetra.collection_evidence_objects%ro
   if actor is null or not neuvetra.has_staging_access() or not neuvetra.can_manage_company(target_company) then raise exception 'collection evidence unavailable' using errcode='42501'; end if;
   if object_key not like target_company::text||'/original/%' or object_key like '%..%' or position(chr(92) in object_key)>0 or length(object_key)>500 or length(btrim(original_name)) not between 1 and 255 or media_type not in('application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') or byte_length not between 1 and 10485760 or content_sha256 !~ '^[0-9a-f]{64}$' then raise exception 'invalid collection evidence metadata' using errcode='22023'; end if;
   fingerprint:=neuvetra.m67_hash(jsonb_build_object('companyId',target_company,'evidenceId',proposed_evidence_id,'objectKey',object_key,'originalName',original_name,'mediaType',media_type,'byteLength',byte_length,'sha256',content_sha256));
+  -- Use the same company-first lock order as reservation. A concurrent exact
+  -- registration then observes and replays the first committed receipt.
+  perform id from neuvetra.companies where id=target_company for update;
   select * into prior from neuvetra.collection_evidence_uploads where id=requested_upload_id and company_id=target_company;
   if found then
     if prior.created_by<>actor or prior.request_sha256<>fingerprint then raise exception 'evidence upload idempotency conflict' using errcode='23505'; end if;
@@ -361,7 +369,6 @@ declare actor uuid:=auth.uid(); existing neuvetra.collection_evidence_objects%ro
   end if;
   select * into intent from neuvetra.collection_evidence_upload_intents where id=requested_upload_id and company_id=target_company for update;
   if not found or intent.created_by<>actor or intent.request_sha256<>fingerprint then raise exception 'matching evidence upload intent required' using errcode='23503'; end if;
-  perform id from neuvetra.companies where id=target_company for update;
   select * into existing from neuvetra.collection_evidence_objects where company_id=target_company and sha256=content_sha256;
   if found then
     insert into neuvetra.collection_evidence_uploads values(requested_upload_id,target_company,existing.id,object_key,'duplicate_reused',fingerprint,actor,clock_timestamp());
@@ -392,10 +399,13 @@ revoke all on function neuvetra.mark_collection_evidence_registration_failed(uui
 grant execute on function neuvetra.mark_collection_evidence_registration_failed(uuid,uuid) to neuvetra_runtime;
 
 -- Trusted operator-only recovery receipt. Application roles cannot delete or mark Storage objects recovered.
-create function neuvetra.resolve_collection_evidence_orphan(target_company uuid,target_recovery uuid,outcome text,note text) returns void language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$ begin
+create function neuvetra.resolve_collection_evidence_orphan(target_company uuid,target_recovery uuid,outcome text,note text) returns void language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
+declare recovery neuvetra.collection_evidence_orphan_recovery%rowtype; begin
   if outcome not in('recovered','abandoned') or length(btrim(note)) not between 3 and 2000 then raise exception 'invalid orphan recovery receipt' using errcode='22023'; end if;
-  update neuvetra.collection_evidence_orphan_recovery set status=outcome,recovery_note=note,recovered_at=clock_timestamp() where company_id=target_company and id=target_recovery and status='pending';
+  select * into recovery from neuvetra.collection_evidence_orphan_recovery where company_id=target_company and id=target_recovery and status='pending' for update;
   if not found then raise exception 'pending orphan recovery not found' using errcode='P0002'; end if;
+  if outcome='recovered' and exists(select 1 from storage.objects where bucket_id='neuvetra-private-company-evidence' and name=recovery.object_key) then raise exception 'orphan storage object must be removed before recovery is recorded' using errcode='23514'; end if;
+  update neuvetra.collection_evidence_orphan_recovery set status=outcome,recovery_note=note,recovered_at=clock_timestamp() where company_id=target_company and id=target_recovery;
 end $$;
 revoke all on function neuvetra.resolve_collection_evidence_orphan(uuid,uuid,text,text) from public,authenticated,neuvetra_runtime;
 

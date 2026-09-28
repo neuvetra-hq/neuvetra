@@ -85,10 +85,15 @@ describe('candidate 0027 collection database boundary',()=>{
     const firstInput={uploadId:crypto.randomUUID(),evidenceId:evidence,objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'synthetic-bill.pdf',mediaType:'application/pdf' as const,byteLength:1200,sha256:sha}
     expect(await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,firstInput))).toMatchObject({uploadId:firstInput.uploadId,evidenceId:evidence,objectKey:firstInput.objectKey,bucket:'neuvetra-private-company-evidence'})
     await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',firstInput.objectKey])
-    const first=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,firstInput))
+    const [first,firstReplay]=await Promise.all([asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,firstInput)),asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,firstInput))])
     expect(first).toMatchObject({evidenceId:evidence,reused:false,quarantineStatus:'pending',orphanRecoveryRequired:false})
+    expect(firstReplay).toEqual(first)
     expect(await asUser(owner,tx=>findDownloadableCollectionEvidence(tx,company,evidence))).toBeNull()
     expect(await asStorageUser(owner,'select name from storage.objects where bucket_id=$1',['neuvetra-private-company-evidence'])).toEqual([])
+    const sameKeyInput={...firstInput,uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),originalName:'same-bytes-retry.pdf'}
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,sameKeyInput))
+    const sameKeyDuplicate=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,sameKeyInput))
+    expect(sameKeyDuplicate).toMatchObject({evidenceId:evidence,reused:true,quarantineStatus:'pending',orphanRecoveryRequired:false})
     const duplicateInput={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'same-bytes.pdf',mediaType:'application/pdf' as const,byteLength:1200,sha256:sha}
     await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,duplicateInput));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',duplicateInput.objectKey])
     const duplicate=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,duplicateInput))
@@ -113,6 +118,9 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(await rejectionMessage(asUser(member,tx=>reserveCollectionEvidenceUpload(tx,member,company,memberInput)))).not.toBe('')
     expect(await rejectionMessage(asStorageUser(otherOwner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',memberInput.objectKey]))).not.toBe('')
     const failed={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'failed-registration.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'c'.repeat(64)}
+    const concurrent={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'concurrent-reservation.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'d'.repeat(64)}
+    const reservations=await Promise.all([asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,concurrent)),asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,concurrent))])
+    expect(reservations.map(item=>item.uploadId)).toEqual([concurrent.uploadId,concurrent.uploadId])
     await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,failed));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',failed.objectKey])
     const recovery=await asUser(owner,tx=>markCollectionEvidenceRegistrationFailed(tx,owner,company,failed.uploadId)),replay=await asUser(owner,tx=>markCollectionEvidenceRegistrationFailed(tx,owner,company,failed.uploadId))
     expect(replay).toEqual(recovery);expect((await db.query<{object_key:string;reason:string;status:string}>('select object_key,reason,status from neuvetra.collection_evidence_orphan_recovery where id=$1',[recovery.recoveryId])).rows[0]).toEqual({object_key:failed.objectKey,reason:'registration_failed',status:'pending'})
@@ -123,6 +131,11 @@ describe('candidate 0027 collection database boundary',()=>{
     expect((await db.query<{present:boolean}>('select exists(select 1 from storage.objects where bucket_id=$1 and name=$2) present',['neuvetra-private-company-evidence',failed.objectKey])).rows[0]?.present).toBe(true)
     await asStorageUser(owner,'update storage.objects set name=$1 where bucket_id=$2 and name=$3',[`${company}/original/${crypto.randomUUID()}`,'neuvetra-private-company-evidence',failed.objectKey])
     expect((await db.query<{name:string}>('select name from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])).rows).toEqual([{name:failed.objectKey}])
+    expect(await rejectionMessage(asUser(owner,tx=>tx.query('select neuvetra.resolve_collection_evidence_orphan($1,$2,$3,$4)',[company,recovery.recoveryId,'recovered','removed by synthetic operator'])))).not.toBe('')
+    expect(await rejectionMessage(db.query('select neuvetra.resolve_collection_evidence_orphan($1,$2,$3,$4)',[company,recovery.recoveryId,'recovered','removed by synthetic operator']))).toContain('must be removed')
+    await db.query('delete from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])
+    await db.query('select neuvetra.resolve_collection_evidence_orphan($1,$2,$3,$4)',[company,recovery.recoveryId,'recovered','removed by synthetic operator'])
+    expect((await db.query<{status:string;recovery_note:string}>('select status,recovery_note from neuvetra.collection_evidence_orphan_recovery where id=$1',[recovery.recoveryId])).rows[0]).toEqual({status:'recovered',recovery_note:'removed by synthetic operator'})
   })
 
   test('stores immutable versions, exact quantities, nullable refrigerant answers and tenant-isolated reads',async()=>{
