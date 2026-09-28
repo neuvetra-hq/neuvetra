@@ -10,6 +10,7 @@ import {
   type CollectionActivityVersion,
   type CollectionEvidenceMetadata,
   type CollectionEvidenceReceipt,
+  type CollectionEvidenceUploadIntent,
   type CollectionEvidenceUploadInput,
   type GridLossLineage,
 } from './collection-contract'
@@ -94,6 +95,26 @@ export async function registerCollectionEvidence(tx:WorkspaceSql,actorId:string,
   const row=result.rows[0]
   if(!row)throw new Error('Collection evidence registration returned no receipt.')
   return {uploadId:row.upload_id,evidenceId:row.evidence_id,reused:row.reused,quarantineStatus:row.quarantine_status,orphanRecoveryRequired:row.orphan_recovery_required}
+}
+
+/** Must commit before the client uploads bytes so failed registration remains discoverable by exact object key. */
+export async function reserveCollectionEvidenceUpload(tx:WorkspaceSql,actorId:string,companyId:string,input:unknown):Promise<CollectionEvidenceUploadIntent>{
+  if(!UUID.test(actorId)||!UUID.test(companyId))throw new Error('Collection evidence unavailable.')
+  const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
+  if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection evidence unavailable.'),{code:'42501'})
+  const valid:CollectionEvidenceUploadInput=validateCollectionEvidenceUpload(input,companyId)
+  const result=await tx.query<{id:string}>('select neuvetra.reserve_collection_evidence_upload($1,$2,$3,$4,$5,$6,$7,$8) id',[companyId,valid.uploadId,valid.evidenceId,valid.objectKey,valid.originalName,valid.mediaType,valid.byteLength,valid.sha256])
+  if(result.rows[0]?.id!==valid.uploadId)throw new Error('Collection evidence upload intent returned no receipt.')
+  return {uploadId:valid.uploadId,evidenceId:valid.evidenceId,objectKey:valid.objectKey,bucket:COLLECTION_EVIDENCE_BUCKET}
+}
+
+export async function markCollectionEvidenceRegistrationFailed(tx:WorkspaceSql,actorId:string,companyId:string,uploadId:string):Promise<{recoveryId:string}>{
+  if(!UUID.test(actorId)||!UUID.test(companyId)||!UUID.test(uploadId))throw new Error('Collection evidence unavailable.')
+  const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
+  if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection evidence unavailable.'),{code:'42501'})
+  const result=await tx.query<{id:string}>('select neuvetra.mark_collection_evidence_registration_failed($1,$2) id',[companyId,uploadId])
+  if(!UUID.test(result.rows[0]?.id??''))throw new Error('Evidence recovery receipt unavailable.')
+  return {recoveryId:result.rows[0]!.id}
 }
 
 export async function readCollectionEvidence(tx:WorkspaceSql,companyId:string):Promise<CollectionEvidenceMetadata[]>{

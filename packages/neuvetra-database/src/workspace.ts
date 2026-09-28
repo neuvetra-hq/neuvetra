@@ -18,7 +18,7 @@ import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WA
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
 import { M61_PROFILE, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput } from "./m61"
-import {readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,registerCollectionEvidence as storeCollectionEvidence,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
+import {readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,reserveCollectionEvidenceUpload as reserveEvidenceUpload,registerCollectionEvidence as storeCollectionEvidence,markCollectionEvidenceRegistrationFailed as markEvidenceRegistrationFailed,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
 export { M60_PROFILE, M60_MEDIA_TYPE, M60_MAX_REPORT_BYTES, buildDraftInventoryReport, hashReportBytes, type DraftInventoryReportBuild } from "./m60"
@@ -302,7 +302,9 @@ export class WorkspaceDatabase {
   async findCollectionActivityVersion(userId:string,companyId:string,recordId:string,versionId:string){return this.asUser(userId,tx=>readCollectionActivityVersion(tx,companyId,recordId,versionId))}
   async saveCollectionActivity(userId:string,companyId:string,recordId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeCollectionActivity(tx,userId,companyId,recordId,input))}
   async findCollectionEvidence(userId:string,companyId:string){return this.asUser(userId,tx=>readCollectionEvidence(tx,companyId))}
+  async reserveCollectionEvidenceUpload(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>reserveEvidenceUpload(tx,userId,companyId,input))}
   async registerCollectionEvidence(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeCollectionEvidence(tx,userId,companyId,input))}
+  async markCollectionEvidenceRegistrationFailed(userId:string,companyId:string,uploadId:string){return this.asTrustedUser(userId,tx=>markEvidenceRegistrationFailed(tx,userId,companyId,uploadId))}
   async findDownloadableCollectionEvidence(userId:string,companyId:string,evidenceId:string){return this.asUser(userId,tx=>readDownloadableCollectionEvidence(tx,companyId,evidenceId))}
   async findGridLossLineage(userId:string,companyId:string){return this.asUser(userId,tx=>readGridLossLineage(tx,companyId))}
   async createGridLossLineage(userId:string,companyId:string,input:{id:string;electricityRecordId:string;reference:string;notes:string}){return this.asTrustedUser(userId,tx=>storeGridLossLineage(tx,userId,companyId,input))}

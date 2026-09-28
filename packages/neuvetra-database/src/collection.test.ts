@@ -8,7 +8,9 @@ import {
   readCollectionActivities,
   readCollectionEvidence,
   readGridLossLineage,
+  reserveCollectionEvidenceUpload,
   registerCollectionEvidence,
+  markCollectionEvidenceRegistrationFailed,
   saveCollectionActivity,
 } from './collection'
 import { validateCollectionActivity, type CollectionActivity, type CollectionActivitySaveInput, type ElectricityCollectionPayload } from './collection-contract'
@@ -31,12 +33,23 @@ function request(activity:CollectionActivity,previous?:{revision:number;id:strin
 describe('candidate 0027 collection database boundary',()=>{
   let db:PGlite
   async function asUser<T>(actor:string,operation:(tx:WorkspaceSql)=>Promise<T>){return db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[actor]);await tx.exec('set local role neuvetra_runtime');return operation({query:async<R>(sql:string,args:unknown[]=[])=>({rows:(await tx.query<R>(sql,args)).rows}),exec:async(sql:string)=>{await tx.exec(sql)}})})}
+  async function asStorageUser<T=Record<string,unknown>>(actor:string,sql:string,args:unknown[]=[]){return db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[actor]);await tx.exec('set local role authenticated');return (await tx.query<T>(sql,args)).rows})}
   beforeAll(async()=>{
     db=new PGlite()
     await db.exec(`create role authenticated; create schema auth; create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;`)
     for(const migration of await readMigrationManifest())await db.exec(migration.sql)
+    await db.exec(`create schema storage;
+      create table storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit bigint,allowed_mime_types text[]);
+      create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null references storage.buckets(id),name text not null,unique(bucket_id,name));
+      alter table storage.objects enable row level security;
+      grant usage on schema storage to authenticated; grant select,insert,update,delete on storage.objects to authenticated;
+      insert into storage.buckets values('unrelated-private','unrelated-private',false,1024,array['text/plain']::text[]);
+      create policy synthetic_broad_storage_read on storage.objects for select to authenticated using(true);
+      create policy synthetic_broad_storage_insert on storage.objects for insert to authenticated with check(true);
+      create policy synthetic_broad_storage_update on storage.objects for update to authenticated using(true) with check(true);
+      create policy synthetic_broad_storage_delete on storage.objects for delete to authenticated using(true);`)
     const candidate=await Bun.file(new URL('./migrations/0027_collection.sql',import.meta.url)).text();await db.exec(candidate)
     await db.query('insert into auth.users(id) values($1),($2),($3)',[owner,member,otherOwner])
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic Collection A','US','CA',$2),($3,'Synthetic Collection B','US','CA',$4)",[company,owner,otherCompany,otherOwner])
@@ -48,6 +61,7 @@ describe('candidate 0027 collection database boundary',()=>{
   test('keeps 0027 outside the active hosted manifest until 0025 and 0026 are integrated',async()=>{
     expect(STAGING_MIGRATIONS.some(name=>name.includes('0027_collection'))).toBe(false)
     expect(await Bun.file(new URL('./migrations/0027_collection.sql',import.meta.url)).exists()).toBe(true)
+    expect((await db.query('select id,name,public,file_size_limit,allowed_mime_types from storage.buckets where id=$1',['neuvetra-private-company-evidence'])).rows[0]).toEqual({id:'neuvetra-private-company-evidence',name:'neuvetra-private-company-evidence',public:false,file_size_limit:10485760,allowed_mime_types:['application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']})
   })
 
   test('validates calendar, decimal, estimate and instrument rules without coercing unknowns',()=>{
@@ -57,28 +71,58 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(()=>validateCollectionActivity({...gas(),period:{start:'2025-02-30',endExclusive:'2025-03-02'}})).toThrow('real calendar')
     expect(()=>validateCollectionActivity({...gas(),quality:'estimated',estimateBasis:null})).toThrow('estimate basis')
     expect(validateCollectionActivity({...gas(),quantity:{originalValue:'12.3456',originalUnit:'therm',normalizedValue:null,normalizedUnit:null}}).quantity.originalValue).toBe('12.3456')
-    const blankGenerator:CollectionActivity={kind:'distillate_no2',quantity:{originalValue:'',originalUnit:'US_gallon',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{consumption:{basis:'purchases_with_tank_levels',purchasedGallons:'',openingGallons:'unknown',closingGallons:''},statedHhvMmbtuPerGallon:null}}
-    expect(validateCollectionActivity(blankGenerator).payload).toMatchObject({consumption:{purchasedGallons:'',openingGallons:'unknown',closingGallons:''}})
-    const blankTerms={...validateCollectionActivity({kind:'fugitive',quantity:{originalValue:'',originalUnit:'kg',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'',CN:'unknown',PS:'',CD:'',RD:''},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:false,eventChronologyComplete:false}})}
-    expect(blankTerms.payload).toMatchObject({terms:{PN:'',CN:'unknown',PS:'',CD:'',RD:''}})
+    const blankGenerator:CollectionActivity={kind:'distillate_no2',quantity:{originalValue:'',originalUnit:'US_gallon',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{consumption:{basis:'purchases_with_tank_levels',purchasedGallons:'12.3456',openingGallons:'unknown',closingGallons:''},statedHhvMmbtuPerGallon:null}}
+    expect(validateCollectionActivity(blankGenerator).payload).toMatchObject({consumption:{purchasedGallons:'12.3456',openingGallons:'unknown',closingGallons:''}})
+    const blankTerms={...validateCollectionActivity({kind:'fugitive',quantity:{originalValue:'',originalUnit:'kg',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'1.2345',CN:'unknown',PS:'',CD:'',RD:''},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:false,eventChronologyComplete:false}})}
+    expect(blankTerms.payload).toMatchObject({terms:{PN:'1.2345',CN:'unknown',PS:'',CD:'',RD:''}})
     const incomplete=electricity();const instrument=(incomplete.payload as ElectricityCollectionPayload).instruments[0]!;instrument.generationTechnology='natural_gas';instrument.rateLbPerMwh=null;instrument.evidenceReference=null
     expect(validateCollectionActivity(incomplete).payload).toMatchObject({instruments:[{generationTechnology:'natural_gas',rateLbPerMwh:null,evidenceReference:null}]})
+    instrument.rateLbPerMwh={co2:'',ch4:'0.0001',n2o:null}
+    expect(validateCollectionActivity(incomplete).payload).toMatchObject({instruments:[{rateLbPerMwh:{co2:'',ch4:'0.0001',n2o:null}}]})
   })
 
   test('keeps evidence private by company, quarantined, deduplicated and recoverable',async()=>{
-    const first=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,{uploadId:crypto.randomUUID(),evidenceId:evidence,objectKey:`${company}/original/${evidence}`,originalName:'synthetic-bill.pdf',mediaType:'application/pdf',byteLength:1200,sha256:sha}))
+    const firstInput={uploadId:crypto.randomUUID(),evidenceId:evidence,objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'synthetic-bill.pdf',mediaType:'application/pdf' as const,byteLength:1200,sha256:sha}
+    expect(await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,firstInput))).toMatchObject({uploadId:firstInput.uploadId,evidenceId:evidence,objectKey:firstInput.objectKey,bucket:'neuvetra-private-company-evidence'})
+    await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',firstInput.objectKey])
+    const first=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,firstInput))
     expect(first).toMatchObject({evidenceId:evidence,reused:false,quarantineStatus:'pending',orphanRecoveryRequired:false})
     expect(await asUser(owner,tx=>findDownloadableCollectionEvidence(tx,company,evidence))).toBeNull()
-    const duplicate=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,{uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'same-bytes.pdf',mediaType:'application/pdf',byteLength:1200,sha256:sha}))
+    expect(await asStorageUser(owner,'select name from storage.objects where bucket_id=$1',['neuvetra-private-company-evidence'])).toEqual([])
+    const duplicateInput={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'same-bytes.pdf',mediaType:'application/pdf' as const,byteLength:1200,sha256:sha}
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,duplicateInput));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',duplicateInput.objectKey])
+    const duplicate=await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,duplicateInput))
     expect(duplicate).toMatchObject({evidenceId:evidence,reused:true,orphanRecoveryRequired:true})
     expect((await db.query<{status:string}>('select status from neuvetra.collection_evidence_orphan_recovery where company_id=$1',[company])).rows).toEqual([{status:'pending'}])
-    const other=await asUser(otherOwner,tx=>registerCollectionEvidence(tx,otherOwner,otherCompany,{uploadId:crypto.randomUUID(),evidenceId:otherEvidence,objectKey:`${otherCompany}/original/${otherEvidence}`,originalName:'same-bytes.pdf',mediaType:'application/pdf',byteLength:1200,sha256:sha}))
+    const otherInput={uploadId:crypto.randomUUID(),evidenceId:otherEvidence,objectKey:`${otherCompany}/original/${crypto.randomUUID()}`,originalName:'same-bytes.pdf',mediaType:'application/pdf' as const,byteLength:1200,sha256:sha}
+    await asUser(otherOwner,tx=>reserveCollectionEvidenceUpload(tx,otherOwner,otherCompany,otherInput));await asStorageUser(otherOwner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',otherInput.objectKey])
+    const other=await asUser(otherOwner,tx=>registerCollectionEvidence(tx,otherOwner,otherCompany,otherInput))
     expect(other).toMatchObject({evidenceId:otherEvidence,reused:false})
     expect(await asUser(member,tx=>readCollectionEvidence(tx,company))).toHaveLength(1)
     expect(await asUser(member,tx=>readCollectionEvidence(tx,otherCompany))).toEqual([])
     await db.query("select neuvetra.record_collection_evidence_quarantine($1,$2,'clean','synthetic-scanner-v1','Synthetic fixture accepted.')",[company,evidence])
-    expect(await asUser(member,tx=>findDownloadableCollectionEvidence(tx,company,evidence))).toMatchObject({bucket:'neuvetra-private-company-evidence',objectKey:`${company}/original/${evidence}`,sha256:sha})
+    expect(await asUser(member,tx=>findDownloadableCollectionEvidence(tx,company,evidence))).toMatchObject({bucket:'neuvetra-private-company-evidence',objectKey:firstInput.objectKey,sha256:sha})
+    expect(await asStorageUser(member,'select name from storage.objects where bucket_id=$1 order by name',['neuvetra-private-company-evidence'])).toEqual([{name:firstInput.objectKey}])
     expect(await asUser(otherOwner,tx=>findDownloadableCollectionEvidence(tx,otherCompany,evidence))).toBeNull()
+  })
+
+  test('requires upload intent, protects other companies and records post-put registration orphans',async()=>{
+    const unreserved=`${company}/original/${crypto.randomUUID()}`
+    expect(await rejectionMessage(asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',unreserved]))).not.toBe('')
+    const memberInput={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'member.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'b'.repeat(64)}
+    expect(await rejectionMessage(asUser(member,tx=>reserveCollectionEvidenceUpload(tx,member,company,memberInput)))).not.toBe('')
+    expect(await rejectionMessage(asStorageUser(otherOwner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',memberInput.objectKey]))).not.toBe('')
+    const failed={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'failed-registration.pdf',mediaType:'application/pdf' as const,byteLength:100,sha256:'c'.repeat(64)}
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,failed));await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',failed.objectKey])
+    const recovery=await asUser(owner,tx=>markCollectionEvidenceRegistrationFailed(tx,owner,company,failed.uploadId)),replay=await asUser(owner,tx=>markCollectionEvidenceRegistrationFailed(tx,owner,company,failed.uploadId))
+    expect(replay).toEqual(recovery);expect((await db.query<{object_key:string;reason:string;status:string}>('select object_key,reason,status from neuvetra.collection_evidence_orphan_recovery where id=$1',[recovery.recoveryId])).rows[0]).toEqual({object_key:failed.objectKey,reason:'registration_failed',status:'pending'})
+    expect(await asStorageUser(owner,'select name from storage.objects where name=$1',[failed.objectKey])).toEqual([])
+    await asStorageUser(member,"insert into storage.objects(bucket_id,name) values('unrelated-private','unrelated-object')")
+    expect(await asStorageUser(member,"select name from storage.objects where bucket_id='unrelated-private'")).toEqual([{name:'unrelated-object'}])
+    await asStorageUser(owner,'delete from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])
+    expect((await db.query<{present:boolean}>('select exists(select 1 from storage.objects where bucket_id=$1 and name=$2) present',['neuvetra-private-company-evidence',failed.objectKey])).rows[0]?.present).toBe(true)
+    await asStorageUser(owner,'update storage.objects set name=$1 where bucket_id=$2 and name=$3',[`${company}/original/${crypto.randomUUID()}`,'neuvetra-private-company-evidence',failed.objectKey])
+    expect((await db.query<{name:string}>('select name from storage.objects where bucket_id=$1 and name=$2',['neuvetra-private-company-evidence',failed.objectKey])).rows).toEqual([{name:failed.objectKey}])
   })
 
   test('stores immutable versions, exact quantities, nullable refrigerant answers and tenant-isolated reads',async()=>{
@@ -92,6 +136,10 @@ describe('candidate 0027 collection database boundary',()=>{
     expect((await db.query<{inside_boundary:boolean|null;maintains_refrigerant_stock:boolean|null;retrofit_in_period:boolean|null}>('select inside_boundary,maintains_refrigerant_stock,retrofit_in_period from neuvetra.collection_activity_versions where record_id=$1',[fugitiveId])).rows[0]).toEqual({inside_boundary:null,maintains_refrigerant_stock:null,retrofit_in_period:null})
     expect(await asUser(member,tx=>readCollectionActivities(tx,company))).toHaveLength(2)
     expect(await asUser(otherOwner,tx=>readCollectionActivities(tx,company))).toEqual([])
+    const incompleteId=crypto.randomUUID(),incomplete=electricity(),incompletePayload=incomplete.payload as ElectricityCollectionPayload;incomplete.evidenceIds=[];incompletePayload.subregion='';incompletePayload.instruments=[{type:'supplier_specific_rate',mwh:'1.2345',qualityCriteriaMet:true,vintageYear:2025,evidenceReference:null,generationTechnology:'natural_gas',rateLbPerMwh:{co2:'',ch4:'0.0001',n2o:null}}]
+    await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,incompleteId,request(incomplete)))
+    expect((await db.query<{evidence_id:string|null;mwh:string|null;rate_co2_lb_per_mwh:string|null;rate_ch4_lb_per_mwh:string|null}>('select evidence_id,mwh::text,rate_co2_lb_per_mwh::text,rate_ch4_lb_per_mwh::text from neuvetra.collection_electricity_instruments where version_id=(select version_id from neuvetra.collection_activity_heads where record_id=$1)',[incompleteId])).rows[0]).toEqual({evidence_id:null,mwh:null,rate_co2_lb_per_mwh:null,rate_ch4_lb_per_mwh:null})
+    expect((await asUser(member,tx=>readCollectionActivities(tx,company))).find(row=>row.id===incompleteId)?.currentVersion.activity.payload).toMatchObject({subregion:'',instruments:[{mwh:'1.2345',evidenceReference:null,rateLbPerMwh:{co2:'',ch4:'0.0001',n2o:null}}]})
   })
 
   test('converges repeated idempotent writes and rejects a stale competing correction',async()=>{

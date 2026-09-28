@@ -96,6 +96,12 @@ export interface CollectionEvidenceReceipt {
   quarantineStatus: CollectionQuarantineStatus
   orphanRecoveryRequired: boolean
 }
+export interface CollectionEvidenceUploadIntent {
+  uploadId: string
+  evidenceId: string
+  objectKey: string
+  bucket: typeof COLLECTION_EVIDENCE_BUCKET
+}
 export interface CollectionEvidenceMetadata {
   id: string
   companyId: string
@@ -124,7 +130,7 @@ const text = (value: unknown, max: number, allowBlank = true): string => {
   return (value as string).normalize('NFC')
 }
 const decimal = (value: unknown): string => typeof value === 'string' && DECIMAL.test(value) ? value : fail('Collection decimals allow 12 integer digits and 3 fractional digits.')
-const numericInput = (value: unknown): string => value === '' || value === 'unknown' ? value : decimal(value)
+const numericInput = (value: unknown): string => text(value,100)
 const nullableDecimal = (value: unknown): string | null => value === null ? null : decimal(value)
 const uuid = (value: unknown): string => typeof value === 'string' && UUID.test(value) ? value : fail()
 const nullableText = (value: unknown, max: number): string | null => value === null ? null : text(value, max)
@@ -143,7 +149,7 @@ function validateInstrument(value: unknown): CollectionInstrument {
   let rate: CollectionInstrument['rateLbPerMwh'] = null
   if (row.rateLbPerMwh !== null) {
     const r = object(row.rateLbPerMwh, ['co2','ch4','n2o'])
-    rate = { co2: decimal(r.co2), ch4: nullableDecimal(r.ch4), n2o: nullableDecimal(r.n2o) }
+    rate = { co2: numericInput(r.co2), ch4: r.ch4===null?null:numericInput(r.ch4), n2o: r.n2o===null?null:numericInput(r.n2o) }
   }
   return { type, mwh: numericInput(row.mwh), qualityCriteriaMet: row.qualityCriteriaMet as boolean, vintageYear: row.vintageYear as number, evidenceReference: row.evidenceReference===null?null:uuid(row.evidenceReference), generationTechnology: technology, rateLbPerMwh: rate }
 }
