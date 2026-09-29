@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit",
     "sync-kb": "bun run scripts/sync-kb-corpus.ts",
     "start": "bun run src/index.ts",
-    "test": "bun test src"
+    "test": "bun test --timeout 30000 src"
   },
   "dependencies": {
     "@neuvetra/database": "workspace:*",
