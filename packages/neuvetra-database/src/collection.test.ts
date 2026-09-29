@@ -39,6 +39,7 @@ describe('candidate 0027 collection database boundary',()=>{
   async function asUser<T>(actor:string,operation:(tx:WorkspaceSql)=>Promise<T>){return db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[actor]);await tx.exec('set local role neuvetra_runtime');return operation({query:async<R>(sql:string,args:unknown[]=[])=>({rows:(await tx.query<R>(sql,args)).rows}),exec:async(sql:string)=>{await tx.exec(sql)}})})}
   async function asStorageUser<T=Record<string,unknown>>(actor:string,sql:string,args:unknown[]=[]){return db.transaction(async tx=>{await tx.query("select set_config('request.jwt.claim.sub',$1,true)",[actor]);await tx.exec('set local role authenticated');return (await tx.query<T>(sql,args)).rows})}
   async function asStorageAnon<T=Record<string,unknown>>(sql:string,args:unknown[]=[]){return db.transaction(async tx=>{await tx.exec('set local role anon');return (await tx.query<T>(sql,args)).rows})}
+  // Loading the historical schema plus candidate 0027 into PGlite can exceed Bun's default hook timeout on CI.
   beforeAll(async()=>{
     db=new PGlite()
     await db.exec(`create role authenticated; create role anon; create schema auth; create table auth.users(id uuid primary key);
@@ -63,7 +64,7 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,'{}',$3,'unknown',$4)",[setupVersion,company,sha,owner])
     await db.query('insert into neuvetra.company_setup_heads(company_id,version_id,revision) values($1,$2,1)',[company,setupVersion])
     await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Synthetic office','San Francisco','Office','owned','reporting_company','included','','','','period_start','period_end')",[company,setupVersion,locationId])
-  })
+  },30_000)
   afterAll(async()=>{await db.close()})
 
   test('keeps 0027 outside the active hosted manifest until 0025 and 0026 are integrated',async()=>{
