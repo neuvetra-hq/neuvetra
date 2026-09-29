@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-28T23:59:57+00:00",
+  "updated_at": "2026-09-29T05:28:39+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
@@ -8,7 +8,7 @@
     "id": "HOSTED-SETUP-REBUILD",
     "name": "Hosted corporate setup and collection rebuild",
     "status": "in_progress_schema23_live_collection_local_reviewed",
-    "next_gate": "Schema 23 committed on synthetic staging with /ready confirmation; the route repair is pushed to PR6 but not deployed, so hosted two-company isolation remains. The Scope 1/2 collection candidate at local 81985360f passed bounded independent native QA; migration 0027 is unregistered/unapplied hosted and PR6 remote is 87f02a0. Claude methods v4 has A05-A07 accounting findings and is unmerged; Claude's collection/browser review is pending. Correct/re-review methods, verify exact PR head/checks, rehearse fresh hosted backup/restore and additive migrations, deploy, and demonstrate signed-in two-company collection before readiness and draft reports. No real customer invitation or assurance claim.",
+    "next_gate": "Schema 23 committed on synthetic staging with /ready confirmation; the route repair is pushed to PR6 but not deployed, so hosted two-company isolation remains. The Scope 1/2 collection candidate at local 81985360f passed bounded independent native QA; migration 0027 is unregistered/unapplied hosted and PR6 remote is 87f02a0. Claude methods v5 passes bounded accounting review of A05-A07 but has a P1 review-order release-gate defect in unchanged 0024; 0024-0026 remain unmerged and unreleased. Claude's collection/browser review is pending. Correct/re-review methods, verify exact PR head/checks, rehearse fresh hosted backup/restore and additive migrations, deploy, and demonstrate signed-in two-company collection before readiness and draft reports. No real customer invitation or assurance claim. Local verdict: C:/Users/nimab/Neuvetra/notes/reviews/2026-09-29-codex-review-of-claude-methods-v5.md.",
     "evidence": [
       "operations/hosted-setup/decision.md",
       "evaluations/research-qa/hosted-setup-01-independent-review.md",
