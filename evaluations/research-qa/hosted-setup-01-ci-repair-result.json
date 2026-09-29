@@ -1,0 +1,34 @@
+{
+  "status": "pass_bounded_ci_repair",
+  "sourceHashes": {
+    "packages/neuvetra-database/src/hosted.test.ts": "88e70c266e2ec21a04b5f635ff68c0c6f188743763c723dfa7979e052b296e7c",
+    "evaluations/research-qa/m78-integrated-fixture.ts": "341ba6cffabe34c3041bf60154c246407215041c89ea095bdf97ae83419db666",
+    "evaluations/research-qa/m80-ci-schema-regression.test.ts": "31464f32d9bb43b888df931a8ae364543d4bc838710a49fcaa4c0d7b723ac51c",
+    "evaluations/research-qa/m78-get-guard-independent.test.ts": "a5436ddb204cf2ed57bb49946c6ba0af9171fb0ddf4f5d347f0e4f3debd72834",
+    "operations/agent-improvement/runs/HOSTED-SETUP-DATA-01.json": "450d4fe776a14122cfef5c05ebe61de863e70bdd2c014aa6c4fb9b67e1f5cfd8",
+    "operations/agent-improvement/runs/HOSTED-SETUP-UI-01.json": "b9f36220764d61dea2e9e0ee84a1d4ea8b4fd7732641133ef4914247210cf476",
+    ".github/workflows/verify.yml": "bac923566f6d5a811a4fc024db294baeddac50ac0fe5111325637047637acfcc"
+  },
+  "sourceHashesAfter": {
+    "packages/neuvetra-database/src/hosted.test.ts": "88e70c266e2ec21a04b5f635ff68c0c6f188743763c723dfa7979e052b296e7c",
+    "evaluations/research-qa/m78-integrated-fixture.ts": "341ba6cffabe34c3041bf60154c246407215041c89ea095bdf97ae83419db666",
+    "evaluations/research-qa/m80-ci-schema-regression.test.ts": "31464f32d9bb43b888df931a8ae364543d4bc838710a49fcaa4c0d7b723ac51c",
+    "evaluations/research-qa/m78-get-guard-independent.test.ts": "a5436ddb204cf2ed57bb49946c6ba0af9171fb0ddf4f5d347f0e4f3debd72834",
+    "operations/agent-improvement/runs/HOSTED-SETUP-DATA-01.json": "450d4fe776a14122cfef5c05ebe61de863e70bdd2c014aa6c4fb9b67e1f5cfd8",
+    "operations/agent-improvement/runs/HOSTED-SETUP-UI-01.json": "b9f36220764d61dea2e9e0ee84a1d4ea8b4fd7732641133ef4914247210cf476",
+    ".github/workflows/verify.yml": "bac923566f6d5a811a4fc024db294baeddac50ac0fe5111325637047637acfcc"
+  },
+  "checks": [
+    "exact current workflow smoke manifest/config/database/server initialization block executes with asset verification stub; ready/config200 and unauthenticated session401; actual Docker/assets/Python smoke still required remotely",
+    "historical21/22 and current23 shapes accepted; all admitted suffix pins, filenames, order and future length challenged",
+    "new pin independently recomputed from actual normalized migration23 bytes",
+    "extra loopback port/database/query/fragment negatives refused",
+    "three revised expectations reproduced with actual restricted native readiness, idempotent migration manifest23 and reopened connection; old rows unchanged"
+  ],
+  "limitations": [
+    "Full hosted.test.ts historical lifecycle not rerun locally; revised semantics exercised on separate fresh synthetic native fixture",
+    "Full remote CI still required",
+    "Validator accepts historical manifest shapes; actual clone loader requires complete source receipts equal current checkout manifest and does not automatically upgrade older clones"
+  ],
+  "databaseName": "hosted_setup_01_qa_1790408387019"
+}

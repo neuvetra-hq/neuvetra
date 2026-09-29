@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "id": "M80-BETA-ACCESS-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_beta_access_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW4.json",
+      "sha256": "27a2282382b1d386b61b144362dfc523d08919584a6f8056377d943de9f6dedd"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-PLAN",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-matrix.md"
+      ],
+      "reason": "Independent preimplementation attack matrix delivered; no implementation verdict."
+    },
+    {
+      "id": "AC-NATIVE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-review2.json"
+      ],
+      "reason": "Exact Candidate2 independently accepted for bounded local access after new-owner and listener repairs plus remaining native matrix checks."
+    },
+    {
+      "id": "AC-C3-PACKAGING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-candidate4-root-closure-20260925.json"
+      ],
+      "reason": "Exact Candidate4 focused independent correction review accepted; prior failures preserved."
+    },
+    {
+      "id": "AC-C4-CI-REPAIR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-beta-access-independent-20260925-review4.json"
+      ],
+      "reason": "Signed PGDG correction and exact18 bytes independently pass; root remote execution remains separate."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-beta-access-candidate4-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW4.json",
+        "sha256": "27a2282382b1d386b61b144362dfc523d08919584a6f8056377d943de9f6dedd"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 2,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent local synthetic beta access boundary review; no release or customer-readiness approval",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "notes": [
+    "Initial read-only planning complete; native/application/provider work unrun.",
+    "Root owns prospective implementation workflow ticket 36a47115512a48e8aa67c05938f3d605; this review is separate.",
+    "No authorship of implementation under review; root owns Git/provider/shared-status/controller actions.",
+    "Candidate2 accepted design snapshot and both embedded/current source bytes verified. First design failure retained upstream.",
+    "Actual cost and observed compute unknown; no native work authorized until frozen implementation and exact QA targets arrive.",
+    "Root authorized harness preparation with exact future QA database m80_beta_access_qa_20260925a, restore m80_beta_access_restore_qa_20260925a, role m80_beta_access_runtime_qa_20260925a. No connection or creation before frozen manifest. Executable provisional subset prepared; complete native race/catalog/restore challenges remain.",
+    "Candidate1 frozen implementation received and native execution explicitly authorized by root. Source pins verified.",
+    "First a setup failure was QA fixture-hash drift, not product failure. Fresh b independently authorized; a preserved.",
+    "Candidate1 rejected for BETA-ACCESS-F01 and F02. Independent root disposition of this QA report remains pending; task remains in_progress for correction review.",
+    "The synthetic dump is retained diagnostic evidence and excluded from text snapshot/publication recommendation.",
+    "No actual cost basis or observed compute settings; values remain null.",
+    "Root specifically authorized moving the exact synthetic archive to private .superpowers/m80-beta-access-independent-20260925-qa-b-synthetic.dump. Source and destination checks plus equal SHA256 verified; old public path absent. Public relocation receipt exposes only archive hash and locator, no authority rows/token digests. REVIEW1 snapshot remains immutable.",
+    "Candidate2 correction preparation authorized read-only. Root split-owner/Connection-close addendum SHA8162fd5008ea7ad856186b678e39db8552bb5226c7f81b318ed1a88bea5ec5c8 verified. Design cautions and executable legacy/ACL/raw-socket helpers prepared; syntax-only check. No Candidate2 native targets or execution yet. REVIEW1 remains immutable.",
+    "Exact Candidate2 independently passed; F01/F02 closed only for Candidate2. Candidate1 first rejection preserved.",
+    "Root explicitly authorized c source/restore/runtime/owner and narrow c continuation after QA IPv4 mask-format guard failure; no bootstrap or role recreation.",
+    "239 main recorded checks include pins/bootstrap;67 supplemental and27 drift/race checks passed.127 old table row hashes and catalog/role/default comparisons equal;2 exact beta-FK triggers classified.",
+    "All18 source/current embedded UTF8 bytes verified after review. Final default-Windows decoding false comparison resolved with raw bytes; no author source drift.",
+    "Candidate2 archive was written directly to authorized private .superpowers path; public artifacts record hash only.",
+    "Root acceptance of this QA output/publication checks still pending; own run remains in_progress until coordinator disposition. Actual cost remains null.",
+    "Root closed this bounded run after exact independent Candidate2 acceptance. Publication and customer/hosted readiness are separate; first failure preserved.",
+    "Reopened for Candidate3 focused source/CI review after two escaped remote packaging/client-selection failures at3331b62c. Candidate2 local acceptance preserved in history; no native or hosted rerun authorized.",
+    "Candidate3 focused independent rejection CI-C3-F01: signed PostgreSQL apt repository missing. Exact local source graph/index and Candidate2 runtime parity pass. No new DB/package/remote execution. Primary docs verified read-only; next correction/journal authority remains root-owned.",
+    "Candidate4 narrow review explicitly authorized after board extension; no native replay/package installation/provider writes. CI-C3-F01 closed in Candidate4; exact18 current/embedded UTF8 bytes pass. Root disposition remains pending.",
+    "Corrected root-reported C3 encoding issue: explicit UTF8 read proves snapshot unchanged and embedded bytes exact. Root default Windows decoding was measurement error. Initial QA expectation failure and first harness preserved in review4 evidence.",
+    "Author task_version4 is candidate ordinal; continuation journal version1 ticket2677ff1a487b43c18f79ce478d83645f. Root owns metadata clarification.",
+    "Root accepted exact Candidate4 after independent review; remote publication checks remain separate. C3 encoding mismatch was a root default-decoding observation error, corrected in a separate receipt."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks.py",
+      "sha256": "1d9dffe5c9b573248b814423ee6d307506e20096d40b64a038aea7a69fc122ee"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks.json",
+      "sha256": "c77ffd83139a8906be4b1f5691d6ca079ddf3fe59c631e576a6573d2923bbaef"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-checks-first.py",
+      "sha256": "4b587a3bb7ad933f31120000e6d079a915f2d717f33dcb7c042b42de691be302"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4-first-result.txt",
+      "sha256": "5f2a281b8771cbd17085b9ba3430b23380d41efbe8610117aa44f5964ccf043d"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4.md",
+      "sha256": "faa58615f12ff93bce6210c0e01b32bcd1525e17a1c9fe10efdc852d188114a6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4.json",
+      "sha256": "85d1e869fff7b9764777b02a199ccd12dc0adada5217302f060b7b2b0a19b82f"
+    }
+  ],
+  "review_history": [
+    {
+      "phase": "candidate2_root_accepted",
+      "review": {
+        "reviewer_execution_context": "/root",
+        "independent": true,
+        "verdict": "pass",
+        "evidence": [
+          "evaluations/research-qa/m80-beta-access-root-closure-20260925.json"
+        ],
+        "reviewed_artifacts": [
+          {
+            "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json",
+            "sha256": "e20994992f11ad50eda20d06e83dc4c35060631894558e70166b7b8f14c31a4a"
+          }
+        ]
+      },
+      "outcome": {
+        "status": "complete",
+        "first_review": "fail",
+        "material_findings_open": 0,
+        "rework_cycles": 1,
+        "escaped_defects": null,
+        "repeated_findings": []
+      }
+    },
+    {
+      "phase": "candidate3_independent_rejection_preserved",
+      "review_artifact": {
+        "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3.json",
+        "sha256": "e0a6747f9c8a42483550e1df6be9ffcc07548511313fea505d87722139eeb24c"
+      },
+      "outcome": {
+        "status": "in_progress",
+        "first_review": "fail",
+        "material_findings_open": 1,
+        "rework_cycles": 1,
+        "escaped_defects": 2,
+        "repeated_findings": []
+      }
+    }
+  ]
+}

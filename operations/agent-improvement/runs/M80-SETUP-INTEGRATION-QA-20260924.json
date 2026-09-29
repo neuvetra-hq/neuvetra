@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "id": "M80-SETUP-INTEGRATION-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-DELIVERABLE.json",
+      "sha256": "2ee9bb717bd9279bc30384a058c1df7a757f954f8a6c8edf8b51d2a9842770f5"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_CANDIDATES",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-integration-independent-20260924.json",
+        "evaluations/research-qa/m80-setup-integration-independent-20260924.json"
+      ],
+      "reason": "11 UI and13 runtime files raw/text exact."
+    },
+    {
+      "id": "STRICT_DECODER",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-integration-independent-20260924.json",
+        "evaluations/research-qa/m80-setup-integration-independent-20260924-decoder-matrix.json"
+      ],
+      "reason": "544 invalid variants refused and603 legitimate corrections accepted."
+    },
+    {
+      "id": "NATIVE_CLIENT_API",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-integration-independent-20260924.json",
+        "evaluations/research-qa/m80-setup-integration-independent-20260924-native-candidate2.json"
+      ],
+      "reason": "Actual client/socket/adapter/native database,9groups and closed connections."
+    },
+    {
+      "id": "LIFECYCLE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-integration-independent-20260924.json",
+        "evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle-candidate2.test.ts"
+      ],
+      "reason": "Actual component hook/event tests preserve token-refresh edits/retry and reject stale authority."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-setup-integration-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-DELIVERABLE.json",
+        "sha256": "2ee9bb717bd9279bc30384a058c1df7a757f954f8a6c8edf8b51d2a9842770f5"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent strict client and actual device-local mounted API integration challenge. L01/L02/L04. No browser/provider/hosted actions. UI candidate1 versus accepted runtime candidate2. Requested Astra/high; observed unknown. Root reviews deliverable.",
+    "Candidate1 F01/F02 and supplementalF03 failures retained in three immutable snapshots. Candidate2 independent8tests/90assertions passes. Root acceptance pending; own run remains in_progress.",
+    "Root accepted exact integration QA deliverable after source-hash verification and separate actual browser recheck; all hosted/customer limits retained."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924.json",
+      "sha256": "12463e4dd656d8a64b88bad37f6b768f5c5b23a9ef182934b5c5c88b87af6380"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924.md",
+      "sha256": "f647d2e477e6367450420c71dead7a492c78d89ab4856848f78c8634f466dc1a"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts",
+      "sha256": "c0032de1b2434adefdf382d723a7b268e1220b23d1e96971b60111b170be88e5"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-decoder-matrix.json",
+      "sha256": "d896d1b84e0e665fe84ca8839ab395e93fd97d92ecf76571737aaa7c2d0ac93b"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts",
+      "sha256": "fe9b69fa294c97bd206ece5bcaba764493180b905c965870e05a7f7fbc7a9835"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-valid-matrix.json",
+      "sha256": "cf2ceb18950236da852a420b38987df61bc165ffe2af105fef148fba3accac92"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle-candidate2.test.ts",
+      "sha256": "8ab929624ca3f8ce42e947aa821d34d58e11adc9739b6f395004a7f82c58b31e"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-native-candidate2.test.ts",
+      "sha256": "87f9ed57000ecd2f0784948c40fb99e0fd9afa90ad210a828076c88338a341a3"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-native-candidate2.json",
+      "sha256": "54fa20ed4e9587e82c54ad4004bdc72d8c639a50524e3eb6bf304f26ab3741a0"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-independent-20260924-fixture.json",
+      "sha256": "98d62eb4648bddd4450f3fbed4c65d47a4c4df351d5664cdddb6135110db3fed"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-SETUP-INTEGRATION-QA-20260924",
+  "observed_at": "2026-09-24T22:18:13.944585+00:00",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "independent_from_authors": true,
+  "verdict": "pass_local_synthetic_setup_integration_only",
+  "ui_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json",
+    "sha256": "5f7464b29e64b773aabd2a67732dfbecc34f48fd79cd7c349e76a30939ed73e7",
+    "files_exact_before_and_after": 11
+  },
+  "runtime_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+    "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b",
+    "files_exact_before_and_after": 13
+  },
+  "first_review": "fail",
+  "rework_cycles": 1,
+  "findings": [
+    {
+      "id": "F01",
+      "status": "closed",
+      "summary": "Exact scalar types, fixture source location identity and classification semantics now enforced.",
+      "validation": "544 independent negative variants refused; 603 legitimate fact/evidence/process corrections accepted."
+    },
+    {
+      "id": "F02",
+      "status": "closed",
+      "summary": "Summary hashes and full head binding now verified; noncanonical calendar dates and impossible predecessor structure refused.",
+      "validation": "Actual persisted two-version response corruptions plus independently rehashed invalid versions refused."
+    },
+    {
+      "id": "F03",
+      "status": "closed",
+      "summary": "Same-authority token refresh cancels prior requests while preserving correction draft and exact retry. Actor/workspace/role/signal changes still invalidate state.",
+      "validation": "Actual component TSX executed with injected hooks/events; five lifecycle tests cover token refresh, pending save, initial load, stale context replies, unmount and actor abort."
+    }
+  ],
+  "material_findings_open": 0,
+  "verification": {
+    "tests_passed": 8,
+    "tests_failed": 0,
+    "assertions": 90,
+    "files": 4,
+    "observed_test_duration_seconds": 1.92,
+    "decoder_negative_variants": 544,
+    "decoder_positive_controls": 3,
+    "valid_correction_variants": 603,
+    "native_check_groups": 9,
+    "native_target": "m80_setup_qa_1790288187701",
+    "native_client_sha256": "c69162732fd29efd459e6bcac9f59134e63f52398bb7bf54e477000556c5af05",
+    "command": "bun test evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle-candidate2.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-native-candidate2.test.ts"
+  },
+  "boundaries_exercised": [
+    "Actual browser API client to device-local HTTP socket, actual createStagingServer mount, HostedWorkspaceDatabase and native PostgreSQL schema22.",
+    "Read-only member despite forged owner client role; owner writable despite member client role; actual role revocation denies cached-manager save.",
+    "Lost response after persisted save followed by identical retry returns original version; correction, immutable history, stale CAS and replay after successor.",
+    "Swapped tenant/version/actor/request response binding rejected.",
+    "Abort before fetch and during successful response body prevents load/save/history delivery; duplicate JSON keys and oversized responses refused.",
+    "Every setup and eligibility string leaf wrapped as array; all14 location swaps; classification state/profile/blocker/fact corruption; history creator/time/id/revision/hash corruption.",
+    "Actual component hook/event harness: same-authority refresh preserves draft and exact request bytes, adopts current token and cancels old requests; pending save unlocks retry, pending first load restarts; late actor/workspace/signal/unmount reply ignored; signal abort clears prior authorized form."
+  ],
+  "retained_failures": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-FIRST-REVIEW.json",
+      "sha256": "d6a6e5690b14ff38d90af5faacc5f87b2772f7013428c96201dbe6c7407b30b0"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-FIRST-SUPPLEMENT.json",
+      "sha256": "db5fd0811f7cafafe3dd76489b9a0e229529ac3f4dc032bd1ee1b44c4ca9e5fa"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-LIFECYCLE-FIRST-REVIEW.json",
+      "sha256": "4e481553912266bc1942a5dfffb8e14201a543006c4631885231a68b0acd1f6b"
+    }
+  ],
+  "lifecycle_cleanup": {
+    "servers_and_connections_closed": true,
+    "retained_qa_clones": [
+      "m80_setup_qa_1790287311429",
+      "m80_setup_qa_1790288187701"
+    ],
+    "cluster_owner": "/root/m80_foundation_runtime",
+    "cluster_left_running_for_coordinator": true,
+    "baseline_database_or_retained_original_dumps_mutated": false
+  },
+  "limits": [
+    "Authentication uses a synthetic token-to-user map; real Supabase authentication/session provider untested here.",
+    "Static assets stubbed; React component test uses injected hooks/events, not browser DOM or actual React reconciliation. Root owns separate browser demonstration.",
+    "Legitimate classification variants use accepted pure validation/classification as authority; this is held-only metadata, not numerical accounting QA or method release.",
+    "No hosted provider, deployment, Git action, real data, source release, invitations, calculation, customer beta or assurance acceptance.",
+    "Root metadata preparatory review found stale UI-repair description and root corrected it; final metadata exact-byte review is separate.",
+    "QA deliverable requires separate root acceptance; this reviewer does not accept its own evidence authorship."
+  ]
+}

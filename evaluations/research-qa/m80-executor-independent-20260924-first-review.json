@@ -1,0 +1,45 @@
+{
+  "task_id": "M80-EXECUTOR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate3_executor_transport",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE3.json",
+    "sha256": "8b7374b7945050574bace9458f210bbefaec10bb459df4dd809d9d65cdde1a24"
+  },
+  "material_findings_open": 2,
+  "findings": [
+    {
+      "id": "EXECUTOR-F01",
+      "severity": "high",
+      "summary": "Missing mutation acknowledgement can be treated as success using a historical same-commit deployment.",
+      "attribution": "Author self-audit disclosed first; QA independently reproduced with exact frozen C3 provider adapter.",
+      "repair": "Bind authoritative later status to exact durable acknowledgement deployment ID; missing identity stays uncertain."
+    },
+    {
+      "id": "EXECUTOR-F02",
+      "severity": "high",
+      "summary": "An ordinary uncertain migration observation/outcome cannot later reconcile to success.",
+      "attribution": "Independent migration continuation of root pending-observation concern.",
+      "reproduction": "One migration transport throws timeout, observer unavailable, uncertain observation+outcome retained. Reconcile with retained receipts throws already exists without new observation, even if current state would prove commit.",
+      "repair": "Allow bounded observer-only reconciliation with durable new observation/outcome records; preserve uncertain originals and never replay transport."
+    }
+  ],
+  "evidence": [
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate3-uncertainty.json",
+    "evaluations/research-qa/m80-executor-independent-20260924-candidate3-loaders.json"
+  ],
+  "unaffected_checks": {
+    "actual_local_source_receipt_bytes": 3224598,
+    "actual_preparation_bytes": 123878,
+    "outer_snapshot_bytes": 3042301,
+    "artifact_paths_checked": 123,
+    "total_with_review_and_outer_snapshot": 125,
+    "nested_mutation_cases": 8,
+    "parser_bound_and_duplicate_cases": 7
+  },
+  "limits": [
+    "No hosted/provider/network/credential/database/Git action.",
+    "During author C4 edits, C3 loader regression substituted only changed executor source/test from frozen C3 outer snapshot; all remaining nested source files read actual current bytes. Actual-current full closure must be rerun at successor freeze.",
+    "Fresh-process entrypoint integration not yet accepted; current reproductions use new journal instance and synthetic injected transport."
+  ]
+}

@@ -1,0 +1,3 @@
+const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
+const types={'.html':'text/html','.css':'text/css','.js':'text/javascript','.woff2':'font/woff2'};
+http.createServer((req,res)=>{const name=new URL(req.url,'http://localhost').pathname;const file=path.join(__dirname,name==='/'?'index.html':name);if(!file.startsWith(__dirname+path.sep)){res.writeHead(403).end();return;}fs.readFile(file,(e,buf)=>{res.writeHead(e?404:200,{'Content-Type':types[path.extname(file)]||'text/plain','Cache-Control':'no-store'});res.end(e?'Not found':buf);});}).listen(Number(process.argv[2]||4318),'127.0.0.1',()=>console.log('Neuvetra preview: http://127.0.0.1:'+Number(process.argv[2]||4318)));

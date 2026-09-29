@@ -1,0 +1,42 @@
+{
+  "origin": "http://127.0.0.1:4333",
+  "fixture": "synthetic Bayline; records entered through UI",
+  "positive": {
+    "activity": "Cars, vans or pickup trucks",
+    "records": [
+      {
+        "recordType": "Fuel purchased",
+        "fuelType": "gasoline",
+        "quantity": "12500",
+        "reference": "Unleaded — 12 Transit vans"
+      },
+      {
+        "recordType": "Fuel purchased",
+        "fuelType": "diesel",
+        "quantity": "2100",
+        "reference": "ULSD — 2 pickups"
+      }
+    ],
+    "unit": "US gallon",
+    "period": [
+      "2025-01-01",
+      "2025-12-31"
+    ],
+    "profile": "Gasoline and diesel",
+    "result": "No fuel linkage or duplicate blocker; unrelated customer facts and reviewer requirements remain"
+  },
+  "negative": {
+    "change": "Second record fuel -> Unknown",
+    "result": "Select the fuel for this record and profile matching gap shown",
+    "restored": "Diesel saved successfully"
+  },
+  "persistence": "Selectors and source references retained on re-opening saved records",
+  "restart": {
+    "workspace_exactly_preserved": true,
+    "revision": 6,
+    "record_fuels": [
+      "gasoline",
+      "diesel"
+    ]
+  }
+}

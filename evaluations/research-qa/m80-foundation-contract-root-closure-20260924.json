@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-24T19:11:13.333991+00:00",
+  "reviewer": "/root",
+  "verdict": "pass_offline_contract_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json",
+    "sha256": "631e5859f642ae312eb97387d504c22696effd9a6639efff30ed92a35bae2a15"
+  },
+  "qa_deliverable": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json",
+    "sha256": "72fe88f54930de1039f6a7d002d1cce97fb8be0fbbe72d4d0e30560a66add36b"
+  },
+  "checks": [
+    "All five current implementation files and three QA deliverables match frozen bytes/text",
+    "Independent failure and repair history retained",
+    "Root reproduced independent suite: 14 passed, 354 assertions"
+  ],
+  "limits": [
+    "No runtime, tenant-authentication, database, API, UI or hosted acceptance",
+    "All four profiles held; no source/domain release, real data, calculations or beta readiness"
+  ]
+}

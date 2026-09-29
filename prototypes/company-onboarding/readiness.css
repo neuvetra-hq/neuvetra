@@ -1,0 +1,24 @@
+.readiness-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:24px 0}
+.readiness-summary article{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px}
+.readiness-summary strong{display:block;font-size:34px;line-height:1.2;margin:10px 0;color:var(--green)}
+.readiness-summary p{margin:0;color:var(--muted);font-size:14px}
+.readiness-banner{background:#17251c;border:1px solid #c5e6c830;border-radius:12px;padding:24px;margin:22px 0}
+.readiness-banner h2{margin-top:0}.readiness-banner p{max-width:780px}
+.readiness-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:23px;margin:14px 0}
+.readiness-card h3{font-size:21px;margin:10px 0}.readiness-card .cardhead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.readiness-card ul{margin:12px 0 18px;padding-left:22px}.readiness-card li{margin:8px 0;color:#bdc8bf;line-height:1.55}
+.readiness-card details{border-top:1px solid var(--line);padding-top:12px}.readiness-card summary{cursor:pointer;color:var(--green);font-weight:500}
+.readiness-card .toolbar{flex-wrap:wrap}.method-caption{font-size:14px;color:var(--muted)}
+.status-chip{display:inline-block;padding:6px 10px;border-radius:6px;background:#342d20;color:#e0c493;font-size:12px;white-space:nowrap}
+.status-chip.candidate{background:#223629;color:var(--green)}.status-chip.unsupported{background:#32282a;color:#e0b9bc}
+.history-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}
+.history-row small{display:block;margin-top:5px;color:var(--muted)}.hash{font-family:monospace;font-size:12px;overflow-wrap:anywhere}
+.historic-note{border-left:4px solid #ac8654;padding:14px;background:#342d20;margin:14px 0}
+.readiness-actions{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}.readiness-actions button:disabled{opacity:.55;cursor:wait}
+.issue-list{padding-left:22px;line-height:1.65}.readiness-empty{padding:24px;background:var(--panel);border-radius:10px}
+.field small{font-size:13px;line-height:1.5;color:var(--muted);font-weight:400}.field select,.field input{width:100%;box-sizing:border-box;margin-top:7px}
+.readiness-card h3,.readiness-card p{overflow-wrap:anywhere}.next-actions{border-color:#c5e6c840}
+.action-group{padding:12px 0;border-top:1px solid var(--line)}.action-group:first-of-type{border-top:0}.action-group h3{font-size:17px;margin-bottom:6px}.action-group ul{margin-top:6px}
+.activity-findings{margin:12px 0}.activity-findings summary{color:#bdc8bf}
+.activity-register{margin:24px 0}.activity-register>summary{cursor:pointer;color:var(--green);font-size:18px;font-weight:600;padding:16px 0}.activity-register[open]>summary{border-bottom:1px solid var(--line);margin-bottom:16px}
+@media(max-width:750px){.readiness-summary{grid-template-columns:1fr}.readiness-summary article{padding:16px}.readiness-summary strong{font-size:27px}.readiness-card .cardhead{flex-direction:column}.history-row{align-items:flex-start;flex-direction:column}}

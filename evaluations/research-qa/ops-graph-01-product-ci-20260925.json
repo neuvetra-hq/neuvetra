@@ -1,0 +1,40 @@
+{
+  "profile": "neuvetra.ops-graph-01.publication-ci.v1",
+  "head": "1ae0074f662394f66172b6b80aab9a0a1414773e",
+  "observed_at": "2026-09-25T05:30:08.246604+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+  "checks": [
+    {
+      "conclusion": "success",
+      "name": "Offline research catalog tests",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "GHG calculation specifications and engine",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "name": "Role routing and evidence records",
+      "status": "completed"
+    }
+  ],
+  "private_receipt_sha256": "a0f2235262386aeaf2356d26e0b66e1a4a6047a8ecc7fcd606509d032055cdc1",
+  "scope": "Local workflow tooling publication; no customer readiness or autonomous provider execution claim."
+}

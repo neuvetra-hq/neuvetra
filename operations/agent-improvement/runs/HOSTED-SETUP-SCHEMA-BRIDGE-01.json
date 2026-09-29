@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-SCHEMA-BRIDGE-01",
+  "role": "software-engineering",
+  "execution_context": "/root/schema_bridge",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Allow the exact synthetic existing-project schema-22 runtime to pass readiness before an availability stop, while withholding general setup until schema 23 and preserving tenant controls."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Critical registry setting requested through fresh-context dispatch. Actual runtime model and effort were not independently observable. Scope is limited to schema-readiness bridge; independent review is required before publication or deployment."
+}

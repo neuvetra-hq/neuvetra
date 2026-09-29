@@ -38,7 +38,12 @@ async function fixture() {
       if (!allowed) return null
       return { workspace: allowed, role: userId === OWNER ? "owner" as const : userId === ADMIN ? "admin" as const : "member" as const, evidenceId }
     },
-    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 21 } },
+    async findStagingMembershipForUser(userId: string) {
+      const allowed = invited.has(userId) ? await db.findWorkspace(userId, workspace.id) : null
+      if (!allowed) return null
+      return { companyId: allowed.id, role: userId === OWNER ? "owner" as const : userId === ADMIN ? "admin" as const : "member" as const, evidenceId }
+    },
+    async checkReadiness() { if (!healthy) throw new Error("sensitive-driver-value"); return { profile: STAGING_PROFILE, schemaVersion: 23 } },
   }) as StagingDatabase
   const app = await createStagingServer(readStagingConfig(environment), {
     database, validateUser: async (token) => token === "broken-session" ? Promise.reject(new Error("sensitive-auth-value")) : users[token] ? { id: users[token]!, phone: null, email: "private@example.invalid", fullName: "Private fixture" } : null,
@@ -51,13 +56,42 @@ async function fixture() {
 }
 
 describe("M63 private staging boundary", () => {
-  test("M78 runtime refuses schema20 and unknown schema22 before serving", async () => {
-    for (const schemaVersion of [20,22]) {
+  test("nonexisting-project runtime refuses schema22 and unknown schema24 before serving", async () => {
+    for (const schemaVersion of [22,24]) {
       let closed=false
       const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion}),close:async()=>{closed=true}} as unknown as StagingDatabase
       await expect(createStagingServer(readStagingConfig(environment),{database,validateUser:async()=>null,verifyAssets:async()=>{}})).rejects.toThrow("Private staging dependencies are unavailable.")
       expect(closed).toBe(true)
     }
+  })
+
+  test("existing-project schema22 bridge serves readiness and old session paths but keeps general setup closed", async () => {
+    const company = "80000000-0000-4000-8000-000000000901"
+    let schemaVersion = 22, setupReads = 0
+    const database = {
+      checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion, legacyContainmentVerified: true }),
+      close: async () => {},
+      hasStagingAccess: async () => true,
+      findStagingMembershipForUser: async () => ({ companyId: company, role: "owner" as const, evidenceId: null }),
+      findCompanySetup: async () => { setupReads++; return null },
+    } as unknown as StagingDatabase
+    const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
+    const app = await createStagingServer(config, { database, validateUser: async token => token === "ok" ? { id: OWNER, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, log: () => {} })
+    cleanup = app.close
+    const request = (pathname: string, token?: string) => app.fetch(new Request(`${ORIGIN}${pathname}`, { headers: token ? { authorization: `Bearer ${token}` } : undefined }))
+    const ready = await request("/ready")
+    expect(ready.status).toBe(200)
+    expect(await ready.json()).toMatchObject({ status: "ready", schemaVersion: 22, legacyContainmentVerified: true })
+    expect((await request("/workspace-api/config")).status).toBe(200)
+    expect((await request("/workspace-api/session", "ok")).status).toBe(200)
+    expect((await request(`/workspace-api/workspace/${company}/setup`)).status).toBe(401)
+    const blocked = await request(`/workspace-api/workspace/${company}/setup`, "ok")
+    expect(blocked.status).toBe(503)
+    expect(await blocked.json()).toEqual({ error: "Company setup is unavailable." })
+    expect(setupReads).toBe(0)
+    schemaVersion = 23
+    expect((await request(`/workspace-api/workspace/${company}/setup`, "ok")).status).toBe(404)
+    expect(setupReads).toBe(1)
   })
   test("configuration refuses demo mode, privileged key/login and mismatched targets without displaying secrets", () => {
     expect(readStagingConfig(environment).profile).toBe(STAGING_PROFILE)
@@ -77,12 +111,12 @@ describe("M63 private staging boundary", () => {
 
   test("explicit existing-project reuse still requires verified database containment at startup", async () => {
     let closed = false
-    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 21 }), close: async () => { closed = true } } as unknown as StagingDatabase
+    const database = { checkReadiness: async () => ({ profile: STAGING_PROFILE, schemaVersion: 23 }), close: async () => { closed = true } } as unknown as StagingDatabase
     const config = readStagingConfig({ ...environment, NEUVETRA_STAGING_PROJECT_REF: "icockcoguyadhryzydvl", NEUVETRA_STAGING_REUSE_EXISTING: "confirmed", SUPABASE_URL: "https://icockcoguyadhryzydvl.supabase.co", DATABASE_URL: environment.DATABASE_URL.replace(REF, "icockcoguyadhryzydvl") })
     await expect(createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {} })).rejects.toThrow("Private staging dependencies are unavailable.")
     expect(closed).toBe(true)
     let contained = true
-    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 21, legacyContainmentVerified: contained })
+    database.checkReadiness = async () => ({ profile: STAGING_PROFILE, schemaVersion: 23, legacyContainmentVerified: contained })
     const app = await createStagingServer(config, { database, validateUser: async () => null, verifyAssets: async () => {}, log: () => {} })
     cleanup = app.close
     expect((await app.fetch(new Request(`${ORIGIN}/workspace-api/config`))).status).toBe(200)
@@ -123,6 +157,62 @@ describe("M63 private staging boundary", () => {
     expect((await (await f.request("/workspace-api/session", "test-admin-session")).json()).access.evidenceId).toBe(evidence.id)
     const mutation = await f.request(`/workspace-api/workspace/${f.workspace.id}/bills`, "test-member-session", { method: "POST", body: form })
     expect(mutation.status).toBe(403)
+  })
+
+  test("California-only legacy paths refuse non-California geography before reaching old calculators", async () => {
+    const f = await fixture()
+    const root = `/workspace-api/workspace/${f.workspace.id}`
+    const california = await f.request(`${root}/electricity-worksheet`, "test-owner-session")
+    expect(california.status).toBe(200)
+    expect(await f.db.findCompanyGeography(OWNER, f.workspace.id)).toEqual({ countryCode: "US", stateCode: "CA" })
+
+    const lookup = f.db.findCompanyGeography.bind(f.db)
+    const checked: string[] = []
+    f.db.findCompanyGeography = async (userId, companyId) => {
+      checked.push(companyId)
+      return companyId === f.workspace.id ? { countryCode: "US", stateCode: "NY" } : lookup(userId, companyId)
+    }
+    const paths = [
+      "/electricity-worksheet", "/electricity-worksheet/corrections", "/electricity-worksheet/reviews",
+      `/electricity-worksheet/reports/${crypto.randomUUID()}/download`,
+      "/source-electricity-worksheet", "/source-electricity-worksheet/sources",
+      `/source-electricity-worksheet/sources/${crypto.randomUUID()}/download`,
+      `/source-electricity-worksheet/reports/${crypto.randomUUID()}/download`,
+      "/annual-electricity-worksheet", `/annual-electricity-worksheet/reports/${crypto.randomUUID()}/download`,
+      "/annual-electricity-evidence", `/annual-electricity-evidence/reports/${crypto.randomUUID()}/download`,
+      "/fugitive-sources", `/fugitive-sources/${crypto.randomUUID()}/versions`,
+      "/fugitive-population", `/fugitive-population/${crypto.randomUUID()}/reports/${crypto.randomUUID()}/download`,
+    ]
+    for (const suffix of paths) {
+      const response = await f.request(root + suffix, "test-owner-session")
+      expect(response.status).toBe(404)
+      expect(await response.json()).toEqual({ error: "Not found." })
+    }
+    for (const suffix of ["/electricity-worksheet", "/annual-electricity-evidence", "/fugitive-population"]) {
+      const response = await f.request(root + suffix, "test-owner-session", { method: "POST", body: "{}" })
+      expect(response.status).toBe(404)
+      expect(await response.json()).toEqual({ error: "Not found." })
+    }
+    expect(checked).toEqual(Array(paths.length + 3).fill(f.workspace.id))
+    expect((await f.request(`${root}/electricity-worksheet`, "test-outsider-session")).status).toBe(404)
+  })
+
+  test("mounts M80 current and history reads but refuses writes behind staging authentication", async () => {
+    const f = await fixture()
+    const versionId = "88888888-8888-4888-8888-888888888888"
+    const view = { profile: "m80-scope1-beta-foundation-runtime-v1", syntheticOnly: true, canManage: true, fixtureAdmission: {}, releaseRegistry: [], currentVersion: null, history: [], setup: {}, eligibility: {} } as any
+    const version = { id: versionId } as any
+    ;(f.db as any).findM80Foundation = async (userId: string, companyId: string) => userId === OWNER && companyId === f.workspace.id ? view : null
+    ;(f.db as any).findM80FoundationVersion = async (userId: string, companyId: string, id: string) => userId === OWNER && companyId === f.workspace.id && id === versionId ? version : null
+    ;(f.db as any).saveM80Foundation = async () => { throw new Error("M80 write route reached the database") }
+    const current = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session")
+    expect(current.status).toBe(200)
+    expect((await current.json()).syntheticOnly).toBe(true)
+    const history = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup/versions/${versionId}`, "test-owner-session")
+    expect(history.status).toBe(200)
+    const refused = await f.request(`/workspace-api/workspace/${f.workspace.id}/scope1-beta-setup`, "test-owner-session", { method: "POST", body: "{}" })
+    expect(refused.status).toBe(405)
+    expect(await refused.json()).toEqual({ error: "Method not allowed." })
   })
 
   test("readiness fails closed and errors/logs contain no credentials, personal metadata or body", async () => {

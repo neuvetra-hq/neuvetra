@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-HOSTED-EXECUTOR-PREP-20260924",
+  "candidate": 8,
+  "author": "/root/m80_foundation_runtime",
+  "observed_at": "2026-09-25T01:15:00.000Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "accepted_preparation": {
+    "snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+      "sha256": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a"
+    },
+    "review": {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-review.json",
+      "sha256": "166af7ea85c0c3d937840741add18f7a7165c18497e6b9a37b4c2b50dc8213f2"
+    },
+    "qa_bundle": {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE6-DELIVERABLE.json",
+      "sha256": "ec0dc09ac5132a1149fdb1a7d071161d9a6eaf754248075e52de19e6a3515d41"
+    }
+  },
+  "candidate7_failed_review": {
+    "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE7-REVIEW.json",
+    "sha256": "d6423be184321298ba2e4ed7fc02c338b9a23f048e0dca547db120720fc6391e",
+    "findings": [
+      "EXECUTOR-F06 deployment observer-only reconciliation refused a healthy runtime client before provider observation",
+      "EXECUTOR-F07 historical preparation chronology could not be assembled truthfully"
+    ]
+  },
+  "repair": {
+    "preparation": "Imports accepted v2 preparation and once-only validators and pins the exact Candidate6 source snapshot.",
+    "source_closure": "Recursively validates both artifacts-format and files-format nested reviewed snapshots, including current Candidate6 source bytes and historical Backup Candidate3 closure.",
+    "deployment_reconciliation": "After a durable exact deployment acknowledgement, observer-only reconciliation permits runtime sessions and authorized application content changes while retaining exact schema22 receipt, staging target, acknowledged deployment ID, reviewed commit, provider success and readiness checks.",
+    "pre_mutation": "Execute mode still requires zero runtime sessions and exact fresh gate application-state SHA for migration, admission and deployment. Migration/admission reconciliation remains quiesced.",
+    "no_replay": "No side effect is repeated; deterministic operation, source, attempt, acknowledgement, pending-observation, observation and outcome journals remain unchanged."
+  },
+  "candidate_files": [
+    { "path": ".superpowers/m80-foundation-executor.ts", "sha256": "388cf83c682337cc70e1441ac5fce1fba75c07f57825848ef04fa92bf9c6cddf" },
+    { "path": ".superpowers/m80-foundation-executor.test.ts", "sha256": "0fbe4da63ac0fa755683f5a4bbb03fd603ee553a5195a38a93656ea0de625f76" },
+    { "path": ".superpowers/m80-executor-private.ps1", "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3" },
+    { "path": "docs/research/m80-foundation-executor-preparation-20260924.md", "sha256": "a7811e18f2c01ab7b678c09e76f437e4c6e8a05940a4ed1faeb72eddee510585" }
+  ],
+  "checks": [
+    { "name": "combined v2 preparation and executor author tests", "result": "pass", "tests": 30, "assertions": 119 },
+    { "name": "executor tests", "result": "pass", "tests": 18, "assertions": 61 },
+    { "name": "targeted TypeScript compile with dependency declarations skipped", "result": "pass" },
+    { "name": "Bun executor bundle", "result": "pass", "bundle_kib": 214.59 },
+    { "name": "PowerShell7 parser", "result": "pass" },
+    { "name": "actual retained local schema21 source receipt replay", "result": "pass", "bytes": 3224598, "tables": 120, "migration_receipts": 21, "application_state_sha256": "12bfd793aba2ae3332b141bbe36e7de7a213c3f3291f70ca4c7d6f3ee32b56dc" }
+  ],
+  "limitations": [
+    "No hosted database, provider, credential, ENV export, network, migration, admission, deployment, Git, backup or restore action was performed.",
+    "Candidate8 is not accepted until independent QA verifies its exact frozen bytes and two-process BUILDING-to-SUCCESS path with a live runtime session.",
+    "Root remains the sole eventual hosted operator and must supply current plan, gate, intent, backup, rehearsal and predecessor receipts."
+  ]
+}

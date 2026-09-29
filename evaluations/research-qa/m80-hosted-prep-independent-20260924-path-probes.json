@@ -1,0 +1,10 @@
+{
+  "boundary": "Frozen actual prepare CLI executed with virtual fs and fixed clock. No actual output filesystem mutation.",
+  "acceptedTraversalOutput": true,
+  "requestedPath": ".superpowers/m80-foundation-hosted-unused/../../evaluations/research-qa/m80-hosted-prep-independent-20260924-ESCAPE.json",
+  "resolvedWrites": [
+    "evaluations/research-qa/m80-hosted-prep-independent-20260924-ESCAPE.json"
+  ],
+  "leftRequiredSuperpowersDirectory": true,
+  "actualPinReads": 13
+}

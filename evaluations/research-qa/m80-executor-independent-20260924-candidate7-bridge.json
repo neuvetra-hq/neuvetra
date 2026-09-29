@@ -1,0 +1,20 @@
+{
+  "boundary": "Actual pwsh child, only owned synthetic malformed inputs; inspected refusal before Bun executor child start; no real export/credentials/network",
+  "cases": [
+    {
+      "name": "missing-field",
+      "exitCode": 1,
+      "genericRefusalOnly": true
+    },
+    {
+      "name": "duplicate-field",
+      "exitCode": 1,
+      "genericRefusalOnly": true
+    },
+    {
+      "name": "foreign-host",
+      "exitCode": 1,
+      "genericRefusalOnly": true
+    }
+  ]
+}

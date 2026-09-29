@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-REPAIR-03",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-repair3-author.md", "sha256": "083f2ffe077cfa76929ead62ccf49944de7d20f33d2cdf840d48727e0a05a3e8"}
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-publisher.ts", "sha256": "22a1b40a03ae8981d30586757f08abeea1441502bebd94144e063b9fb1e28dbf"},
+    {"path": "tools/staging/hosted-setup-artifact-publisher.test.ts", "sha256": "5012e505cb783c47af91cf379a12975a74af259de1ebe943cd35593bc262d691"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-publisher.ts", "tools/staging/hosted-setup-artifact-publisher.test.ts"],
+      "reason": "Author candidate applies materializer-equivalent per-prefix case and file/directory collision checks to source and dependency archives before any output creation."
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-artifact-publisher.test.ts", "evaluations/research-qa/hosted-setup-01-artifact-publisher-repair3-author.md"],
+      "reason": "Exact clean QA3 sibling aliases and a clean file/directory alias refuse with no outputs; distinct sibling directories with repeated basenames publish and pass the real materializer. Prior object and dependency regressions remain green."
+    },
+    {
+      "id": "AC-03",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md"],
+      "reason": "QA1, QA2 and QA3 FAIL reports remain preserved. Targeted independent review of the exact repair-3 hashes is required before artifact publication."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review2.md", "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review3.md"],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 1,
+    "rework_cycles": 3,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_task": "HOSTED-SETUP-ARTIFACT-PUBLISHER-01",
+  "applied_lessons": ["L04"],
+  "routing_note": "Critical software-engineering registry settings requested; actual model and effort remain unknown in the inherited follow-up context. QA1/QA2/QA3 FAIL evidence is preserved. Offline source/test repair and disposable synthetic fixtures only; no shared Git, provider, database, live publication, launch authority or production authorization."
+}

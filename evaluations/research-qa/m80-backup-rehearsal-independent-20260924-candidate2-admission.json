@@ -1,0 +1,157 @@
+{
+  "boundary": "Exact frozen private functions; actual accepted prep bundle and 109 source/toolchain pins; synthetic virtual review and admission files only; no DB/network/credentials",
+  "closureCount": 109,
+  "helperSha256": "c88d2fb688c29cf70ec24e4c9652205c0cf9e3362e06cc92bd2ffff6e741f4d0",
+  "results": [
+    {
+      "name": "closed_positive",
+      "accepted": true,
+      "error": ""
+    },
+    {
+      "name": "reviewer_null",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "reviewer_\"\"",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "reviewer_\"/root\"",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "reviewer_\"/root/m80_setup_ui\"",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "reviewer_[]",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "reviewer_{}",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "reviewer_[\"/root/m80_foundation_runtime_qa\"]",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "verdict_\"pass\"",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "verdict_\"fail\"",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "verdict_null",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "verdict_[\"pass_m80_backup_transport_only\"]",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "unrelated_pass_strings",
+      "accepted": false,
+      "error": "Error: Closed backup helper independent review required."
+    },
+    {
+      "name": "missing_closure_pin",
+      "accepted": false,
+      "error": "Error: Backup review source pins do not cover the frozen candidate."
+    },
+    {
+      "name": "reordered_closure",
+      "accepted": false,
+      "error": "Error: Backup review source pins do not cover the frozen candidate."
+    },
+    {
+      "name": "changed_closure_hash",
+      "accepted": false,
+      "error": "Error: Backup review source pins do not cover the frozen candidate."
+    },
+    {
+      "name": "wrong_preparation_review",
+      "accepted": false,
+      "error": "Error: Backup review preparation pins changed."
+    },
+    {
+      "name": "wrong_snapshot_path",
+      "accepted": false,
+      "error": "Error: Backup review source snapshot changed."
+    },
+    {
+      "name": "findings_string_zero",
+      "accepted": false,
+      "error": "Error: Backup helper independent review verdict changed."
+    },
+    {
+      "name": "review_unknown_field",
+      "accepted": false,
+      "error": "Error: Closed backup helper independent review required."
+    },
+    {
+      "name": "admission_sourceSchemaVersion",
+      "accepted": false,
+      "error": "Error: Backup admission identity changed."
+    },
+    {
+      "name": "admission_migrationReceiptCount",
+      "accepted": false,
+      "error": "Error: Backup admission identity changed."
+    },
+    {
+      "name": "admission_observedNonReceiptTableCount",
+      "accepted": false,
+      "error": "Error: Backup admission does not match current schema 21 state."
+    },
+    {
+      "name": "admission_syntheticDataOnlyVerified",
+      "accepted": false,
+      "error": "Error: Backup admission identity changed."
+    },
+    {
+      "name": "admission_rootBackupExecutionAccepted",
+      "accepted": false,
+      "error": "Error: Backup admission identity changed."
+    },
+    {
+      "name": "admission_operatorId",
+      "accepted": false,
+      "error": "Error: Backup admission identity changed."
+    },
+    {
+      "name": "admission_backupHelperSha256",
+      "accepted": false,
+      "error": "Error: Backup admission identity changed."
+    },
+    {
+      "name": "admission_applicationStateSha256",
+      "accepted": false,
+      "error": "Error: Backup admission does not match current schema 21 state."
+    },
+    {
+      "name": "admission_observedAt",
+      "accepted": false,
+      "error": "Error: Fresh backup admission required."
+    },
+    {
+      "name": "admission_unknown_field",
+      "accepted": false,
+      "error": "Error: Closed backup admission required."
+    }
+  ]
+}

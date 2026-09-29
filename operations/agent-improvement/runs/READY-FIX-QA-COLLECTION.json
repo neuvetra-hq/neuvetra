@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "READY-FIX-QA-COLLECTION",
+  "role": "qa-lead",
+  "execution_context": "/root/convergence",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-FIX-QA-COLLECTION-20260926.json",
+      "sha256": "ecaa971075498662b89f729c54b37a25e48405b723a2ba678158a7843a423ee4"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "prototypes/company-onboarding/feedback-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-FIX-QA-COLLECTION-20260926.json",
+        "sha256": "ecaa971075498662b89f729c54b37a25e48405b723a2ba678158a7843a423ee4"
+      }
+    ],
+    "scope": "Root checks QA artifact/report consistency; product source acceptance is supplied by non-author QA, not root self-review."
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_exception": "Fresh qa-lead dispatch requested astra/high twice; runtime rejected agent thread limit. Existing non-author convergence context reused at inherited requested sol/high. Independent of collection/readiness authors; not reviewer of own convergence artifact.",
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/feedback-independent-review.md",
+      "sha256": "5a10643a9ab8f8c7c07149c2ed31367ce73112d751217d3751d1791a179120d5"
+    },
+    {
+      "path": "prototypes/company-onboarding/feedback-qa-core.test.cjs",
+      "sha256": "3540ccc2bea29ad6830f500993b1161a6421e305dbd03ff4a3cf9ef4980b4bf3"
+    },
+    {
+      "path": "prototypes/company-onboarding/feedback-qa-server.py",
+      "sha256": "8be50d6a93b175e4fe9aa1c99f820175df21bc931c1404404b7f9a5b29cd20be"
+    }
+  ]
+}

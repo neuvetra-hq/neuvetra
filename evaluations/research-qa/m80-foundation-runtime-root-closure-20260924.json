@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-24T21:58:04.973968+00:00",
+  "reviewer": "/root",
+  "verdict": "pass_local_synthetic_runtime_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+    "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+  },
+  "qa_deliverable": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-DELIVERABLE.json",
+    "sha256": "ccf5f428a1963bd8432eaae45097ce4ab30a366720ff82dfa170aa2cdf5ede34"
+  },
+  "checks": [
+    "Root verified raw hashes of all 13 implementation files and 11 QA deliverables against immutable snapshots.",
+    "Root inspected independent evidence: actual native database and mounted server, 2 tests and 322 assertions; synthetic authentication stubs explicitly disclosed.",
+    "Candidate 1 F01 failure and Candidate 2 repair retained; zero open material runtime findings.",
+    "Existing 120 non-receipt tables and 21 old migration receipt rows preserved, with expected schema22 foreign-key trigger additions explicitly distinguished."
+  ],
+  "limits": [
+    "Root did not rerun the native suite; this accepts the separate reviewer evidence and exact source binding.",
+    "UI integration and hosted migration/deployment remain pending.",
+    "No real authentication-provider acceptance, customer data, source or method release, calculations, invitations, beta readiness or assurance."
+  ]
+}

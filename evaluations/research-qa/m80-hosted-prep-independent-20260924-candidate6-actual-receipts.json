@@ -1,0 +1,25 @@
+{
+  "boundary": "Actual independent native three receipts plus immutable actual backup receipt; other preparation evidence synthetic; exact Candidate6 v2 builder accepted all four; truthful chronology synthetic baseline one minute before actual backup; no additional DB/network action",
+  "normalizedPositive": true,
+  "rejection": "",
+  "checks": [
+    {
+      "name": "restore-receipt",
+      "sha256": "c63a39b61b8b1f177ff673a8e8549b1ac646b523e61662d284c5dbb9f00ce9b0",
+      "completedAt": "2026-09-25T00:07:53.502Z",
+      "onlyTimestampDiff": true
+    },
+    {
+      "name": "preservation-receipt",
+      "sha256": "92e25d243a0af4e471372f0b3f21521b6542055e2457df732ceb42e604f71456",
+      "completedAt": "2026-09-25T00:07:53.502Z",
+      "onlyTimestampDiff": true
+    },
+    {
+      "name": "migration-rehearsal-receipt",
+      "sha256": "b760ec9310b332eed53bf15dede1d9028a996a317d893b7eb1d843dfa93fc536",
+      "completedAt": "2026-09-25T00:07:53.502Z",
+      "onlyTimestampDiff": true
+    }
+  ]
+}

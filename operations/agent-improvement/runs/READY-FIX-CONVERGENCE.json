@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "READY-FIX-CONVERGENCE",
+  "role": "cto",
+  "execution_context": "/root/convergence",
+  "prompt_sha256": "1368166de5ee8c4d399f3d3b4b26e94a92c99de2fd2ad6389fdf7b78f8a054f1",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-FIX-CONVERGENCE-20260926.json",
+      "sha256": "cd6bcc0c9e6781cbb2aaa617917eb209594692f106c02960216d7c58383ee547"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-convergence-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/collection_backend",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "prototypes/company-onboarding/feedback-convergence-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-FIX-CONVERGENCE-20260926.json",
+        "sha256": "cd6bcc0c9e6781cbb2aaa617917eb209594692f106c02960216d7c58383ee547"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/CONVERGENCE.md",
+      "sha256": "f2ea1de8ebb2379561c91555368e8977fd46cb02e7c1cdaa7c8bb4da256930e2"
+    },
+    {
+      "path": "prototypes/company-onboarding/convergence-export.cjs",
+      "sha256": "7d58a0d9735ebf593257d8a97b92809683bf58b8238b9e3445547d4f116e7350"
+    },
+    {
+      "path": "prototypes/company-onboarding/convergence-export.test.cjs",
+      "sha256": "22b332fad0cdc5044520c7e8851440a18b1e9ad2ce8c3777a799ec984395294d"
+    }
+  ]
+}

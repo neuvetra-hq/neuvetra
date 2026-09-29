@@ -1,0 +1,66 @@
+{
+  "base": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+  "exact_snapshot_pins": {
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE1.json": "e312e20124a2a5e0977bb54bc15cf56234c1eba15fa53f82f81975fb931a05e1",
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE2.json": "3dd4e1b8ba6f84b176c7ec34823a4f40ea1886425af0a19a1cd94e2d7c11a82c",
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE3.json": "4819c802c75ecb639d6eb7966baaa9579d05a15c06668943b882380af0fb90d6",
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE4.json": "96c98c56965fb31a39b1bc151b07f31c268a7cfa48b56fc172672a36c4c77af7",
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe",
+    "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74",
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a",
+    "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json": "1e62195be433c6a5ed3cc5a68ab789845b093107a0e41ea4f37c324d0c5b1481",
+    "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json": "e82ada0e952e803daba15b7463cddef52503b80d98d9e4b083806d73c2a9bbfe"
+  },
+  "private_source_bytes_preserved": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-once.ts",
+      "sha256": "2fc7a23e263451c0734ff36e7c0418d40146abf38754bccc5a71a9018388fefc"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation.test.ts",
+      "sha256": "366aa5a3b85d1b264369bfac563455f08485eb73509b04171fd8be7d2d499ce6"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare.ts",
+      "sha256": "3b3d7a6785fa5cad30dabc20b93ed1d8947466dd9fb1eaae7782ca35d30968bb"
+    },
+    {
+      "path": ".superpowers/m80-executor-private.ps1",
+      "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor.test.ts",
+      "sha256": "6773a52a3cd45a9c8ac8de6cabc42be5f698eca6b68d59a71ef57d7ec1e075e9"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor.ts",
+      "sha256": "4cf676a7f93e664800205146afcb45621d6018d1e821c7bcf7c2c5d7a48f18fb"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
+      "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts",
+      "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
+      "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
+    },
+    {
+      "path": ".superpowers/m80-stage-bundle-compose.ts",
+      "sha256": "0969b8417e88ca261acb365bfe8c5e1ce9de08b324f47172cbd8bfafdf1837c3"
+    }
+  ],
+  "repaired_clean_validation": {
+    "valid": true,
+    "roles": 11,
+    "runs": 259
+  },
+  "private_helpers_absent_from_clean_tree": true,
+  "composer_v3_exact_three_substitutions_after_line_ending_normalization": true,
+  "publisher_exact_six_substitutions_after_line_ending_normalization": true,
+  "both_python_ast_parse": "pass",
+  "checkout_limitation": "Historical unpinned files may be CRLF-expanded by archive/checkout; exact pinned run and snapshot bytes were independently checked. Broad archive raw-byte equivalence is not claimed."
+}

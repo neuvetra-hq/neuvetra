@@ -1,0 +1,29 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_sanitized_readonly_evidence_only",
+  "source": {
+    "path": "evaluations/research-qa/m80-hosted-readonly-preflight-20260924.json",
+    "sha256": "f876be764b56430c1cbbe2b3d70a40c7a02b8bf58dd186dbdfb986650c3873fa"
+  },
+  "private_receipt_hash_and_public_counts_match": true,
+  "private_company_and_manager_identifiers_excluded": true,
+  "actual_provided_account_confirmed_existing_owner": true,
+  "identity_lookup_read_only": true,
+  "no_hosted_mutation": true,
+  "live_browser_read_only": {
+    "signed_in": true,
+    "corporate_version": 9,
+    "entities": 2,
+    "facilities": 3,
+    "discovered_sources": 10,
+    "workflow_findings": 0,
+    "release_findings": 11,
+    "candidate_kg_co2e": "126850.1763",
+    "data_changed": false
+  },
+  "limits": [
+    "Pre-stop observation does not prove write quiescence or migration success.",
+    "Private identity query receipt and email remain excluded from publication.",
+    "Browser retained values are synthetic and methods remain held."
+  ]
+}

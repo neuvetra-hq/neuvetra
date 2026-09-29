@@ -1,0 +1,20 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_metadata_portability_repair_only",
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-publication-portability-independent-20260924-review.json",
+    "sha256": "77c1aaae059149380e2208fe51f3b9215997010c7c1fe7f60e0195659642e575"
+  },
+  "qa_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-PUBLICATION-PORTABILITY-QA-20260924-DELIVERABLE.json",
+    "sha256": "ed1eb1607f38d2e2bf0f7781efe10ecbfe992fb89d232583e43c3d08ee9bcc91"
+  },
+  "verified_current_embedded_artifacts": 10,
+  "clean_checkout_validation": "259 runs passed independently",
+  "no_app_runtime_or_hosted_changes": true,
+  "escaped_publication_defect_preserved": true,
+  "limits": [
+    "Exact corrective manifest and fresh remote checks still required.",
+    "Earlier publication journals and failed source records remain immutable."
+  ]
+}

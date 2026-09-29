@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-24T19:12:09.463079+00:00",
+  "reviewer": "/root",
+  "independent_of_author": true,
+  "verdict": "pass_decision_preparation_only",
+  "reviewed_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M79-BETA-RELEASE-PACKET-20260924-CANDIDATE1.json",
+    "sha256": "5e6c97cde6c2f6b11e631f0828f4d4b65a9438da670fedebd3120c3ef857450f"
+  },
+  "checks": [
+    "Two packet files match frozen raw hashes and newline-normalized snapshot text",
+    "All cited evidence pins match",
+    "Four profiles and twelve method/activity/factor rows match accepted inventory, with deliberate omission of literal R410A composition text; whole-blend value, locator and treatment preserved",
+    "Seven retained originals match hashes and sizes",
+    "Per-source narrow acts distinguish numeric facts and independent implementation from copied expression",
+    "All decisions unset, no company/recipients selected, no effective release",
+    "Natural-gas subset is proposed and does not waive company completeness or security"
+  ],
+  "limitations": [
+    "Root review is not qualified human accounting/legal/source-use approval",
+    "No fresh remote law/rights review or arithmetic rerun",
+    "Named human accounting reviewer and rights/release decision owners remain unassigned"
+  ]
+}

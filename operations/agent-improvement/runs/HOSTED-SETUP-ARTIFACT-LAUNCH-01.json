@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-LAUNCH-01",
+  "role": "security-reliability",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Implement a versioned exact-artifact launch boundary."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Assignment was already dispatched before this continuity record. No retrospective workflow-controller reservation is claimed; follow-up dispatch settings were not independently observable."
+}

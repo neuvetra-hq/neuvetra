@@ -1,0 +1,27 @@
+{
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+    "sha256": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a"
+  },
+  "v2_current_and_embedded": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
+      "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
+      "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts",
+      "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead"
+    },
+    {
+      "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md",
+      "sha256": "cd0a92cf133694b643c6c4888888232cd32b17eb8438f23b7815139dc3f8f01d"
+    }
+  ],
+  "v1_current_preserved": 4,
+  "backup_c3_current_preserved": 110,
+  "backup_c3_snapshot_sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+}

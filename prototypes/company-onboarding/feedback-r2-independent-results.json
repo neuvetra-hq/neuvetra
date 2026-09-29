@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "taskId": "READY-FIX-R2-QA",
+  "checkedAt": "2026-09-26T04:08:23Z",
+  "baselineHead": "01193622318d3fbdb728ef90b5ce40df732293dc",
+  "verdict": "pass",
+  "reviewer": {
+    "executionContext": "/root/convergence",
+    "authorship": "Did not author the R2 product implementation. This reused context authored earlier convergence material and an earlier version of feedback-qa-core.test.cjs, so that harness is supporting evidence rather than the sole independent basis.",
+    "requestedModel": "gpt-5.6-sol",
+    "requestedEffort": "high",
+    "observedModel": null,
+    "observedEffort": null
+  },
+  "reviewedArtifacts": [
+    {"path": ".github/workflows/inventory-plan.yml", "sha256": "9abc0151e682ed2f5d7ee7957342a5b5dc57a6eaa7100f99f4aaec8fb6843e50"},
+    {"path": "prototypes/company-onboarding/app.js", "sha256": "476b6cecec4d13d46f1b67aa1f5ba9fc120b680e1149b3f57c6a17a182582a49"},
+    {"path": "prototypes/company-onboarding/setup-page-load.test.cjs", "sha256": "fb3c127b71f6a16450fea4facc2b64bb488e313c7877e471d7d20838ba0f78dc"},
+    {"path": "prototypes/company-onboarding/plan-core.js", "sha256": "15214ab51a3e41c7b9e18d1d808b8d36a65d9a8648dec748b148c9545d9df97d"},
+    {"path": "prototypes/company-onboarding/plan-core.test.cjs", "sha256": "00fe748227e5288e2bc155773ac4d2d815ee1803cb9c62618868afb2b533e9b5"},
+    {"path": "prototypes/company-onboarding/plan-ui.js", "sha256": "79407f5b38ac015ffdd8707cad093bd1f2bde5953196e163616753db57b81364"},
+    {"path": "prototypes/company-onboarding/readiness-core.js", "sha256": "7a32336c83549e20112b112ee97f9f3a1d2eead6c2443a38b233ea043354ec19"},
+    {"path": "prototypes/company-onboarding/readiness-core.test.cjs", "sha256": "d50ae88ff72723373d8d0d462b33c90558d5aee233b87e42bff6cc155d3d736e"},
+    {"path": "prototypes/company-onboarding/readiness-ui.js", "sha256": "86f4b6112373b708f19ad0fb81db3f76aed72303a42fea2b903b2e6cd346818c"},
+    {"path": "prototypes/company-onboarding/server.py", "sha256": "8dafed4af7083748d3935d5571e3ab5f87e3dca689c9472be6639094efca8331"},
+    {"path": "prototypes/company-onboarding/test_server.py", "sha256": "3d49e7007e58264d328237ff1447109f90f3e356a616062c5d07b7c9d88542f4"},
+    {"path": "prototypes/company-onboarding/feedback-qa-core.test.cjs", "sha256": "6ad7d65646de82a33e017d9eff585aa045d2d0c8cf87481faba28af792fb284d"},
+    {"path": "prototypes/company-onboarding/qa-readiness.cjs", "sha256": "a0ccfd75c3cf53b02ee1d21d7f6d4eb988c574dfce9ec6b9ff422ba573e04993"}
+  ],
+  "boundAuthorReceipt": {
+    "path": "prototypes/company-onboarding/feedback-r2-check-results.json",
+    "sha256": "850a0127c9171b16d85b2f49d55ddcf1208c0080d814db796cdbec4e0f51eb36",
+    "attributionChecked": true
+  },
+  "finalChecks": [
+    {"command": "node check.cjs", "exitCode": 0, "result": "3 validation groups passed"},
+    {"command": "node --test setup-page-load.test.cjs", "exitCode": 0, "result": "1 passed"},
+    {"command": "node --test plan-core.test.cjs", "exitCode": 0, "result": "25 passed"},
+    {"command": "node qa-core.cjs", "exitCode": 0, "result": "10 passed"},
+    {"command": "node --test convergence-export.test.cjs", "exitCode": 0, "result": "5 passed"},
+    {"command": "node --test feedback-qa-core.test.cjs", "exitCode": 0, "result": "10 passed"},
+    {"command": "python -B -W error::ResourceWarning feedback-qa-server.py", "exitCode": 0, "result": "3 passed"},
+    {"command": "python -B -W error::ResourceWarning -m unittest test_server -v", "exitCode": 0, "result": "19 passed"},
+    {"command": "python -B qa-http.py", "exitCode": 0, "result": "8 passed, 1 skipped because Windows denied symlink creation"},
+    {"command": "node --test readiness-core.test.cjs", "exitCode": 0, "result": "15 passed"},
+    {"command": "node qa-readiness.cjs", "exitCode": 0, "result": "7 passed"},
+    {"command": "python -B -W error::ResourceWarning qa-readiness.py", "exitCode": 0, "result": "6 passed"},
+    {"command": "JavaScript and Python syntax checks", "exitCode": 0, "result": "clean"},
+    {"command": "git diff --check", "exitCode": 0, "result": "clean"},
+    {"command": "numeric byte scan for CR in 13 reviewed text files", "exitCode": 0, "result": "LF only; escaped PNG and text-validator CR/LF literals preserved"}
+  ],
+  "criteria": [
+    {"id": "returning-setup-load", "status": "pass", "evidence": "Actual index.html script order in one VM, nonempty rendered steps and questions, synthetic legacy legal-name migration, and saved location edit persistence."},
+    {"id": "structured-record-fuel", "status": "pass", "evidence": "UI selector, narrow legacy migration, explicit unknown preservation, server enum roundtrip and invalid-value rejection."},
+    {"id": "fuel-overlap-and-duplicates", "status": "pass", "evidence": "Otherwise-identical gasoline and diesel records are distinct and review-only; same-fuel exact duplicates remain blocking; vague reference prose is not inferred."},
+    {"id": "minor-ui-feedback", "status": "pass", "evidence": "Sentence-case labels, Pacific/UTC boundary date test, and stored-but-unlinked close status."},
+    {"id": "source-fidelity", "status": "pass", "evidence": "LF-only scan, syntax checks, PNG signature acceptance/rejection, text control-byte rejection, and full workflow rerun."}
+  ],
+  "firstFindingsPreserved": [
+    "Pre-fix composed reproduction reached locations.js:24 ReferenceError: get is not defined from app.js:11 after two incomplete harness stubs were corrected.",
+    "The first server integration rerun failed 1 != 0 because the new fuel test had been inserted inside another test; the author restored the displaced assertions and the final 19 tests passed.",
+    "The first local-date test could not distinguish UTC from local time; it was replaced with a real America/Los_Angeles day-boundary check.",
+    "The first receipt overstated coordinator browser evidence as covering legacy migration; the corrected receipt attributes legacy migration only to the composed automated test."
+  ],
+  "browserEvidenceBoundary": {
+    "coordinatorReported": "On an isolated synthetic port 4333, the pre-fix blank returning setup and exact console error were reproduced; the fixed canonical saved draft rendered seven steps, persisted a location edit, and mixed gasoline/diesel positive and explicit-unknown negative paths behaved as expected.",
+    "automatedOnly": "Legacy legal-name location migration was exercised by setup-page-load.test.cjs, not by the coordinator's browser fixture.",
+    "reviewerPortsUsed": []
+  },
+  "limitations": [
+    "The Windows symlink escape case did not run because the OS denied symlink creation; Claude's Linux run previously reported that case passing.",
+    "The browser observations belong to the coordinator and Claude verification packet, not this reviewer.",
+    "This is a local synthetic prototype verdict. It does not approve methods, factors, accounting conclusions, legal compliance, assurance, hosted migration, release, or real-customer readiness."
+  ]
+}

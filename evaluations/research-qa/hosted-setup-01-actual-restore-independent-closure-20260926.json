@@ -1,0 +1,19 @@
+{
+  "profile": "neuvetra.hosted-setup.actual-restore-independent-closure.v1",
+  "correctedObservationSha256": "166c578f9909234ed7c127c7c9a957dcb2a726b46cea4ff1bfefd09e7f633f1a",
+  "originalObservationSha256": "d01338ebb2996c024205f6ba767d047ab6e810ea20bb132e537db96c8ca3c5c6",
+  "correctedObservationOnlyIntendedChanges": true,
+  "pinsRechecked": 25,
+  "sourceMigrationRows": 22,
+  "companies": 1,
+  "actorCompanyCounts": [
+    0,
+    1,
+    1,
+    1,
+    1
+  ],
+  "correctedStopSha256": "aff47e9f382273932d5fdcc4e88434a8df2cc53eaf7087d98f8fcd8d4eec48df",
+  "independentResultSha256": "8a3a1fcfe33204e72a8629814ce5cc4b95bf3367d683fd0ec7ca533c0b9cd4b6",
+  "status": "bounded-pass"
+}

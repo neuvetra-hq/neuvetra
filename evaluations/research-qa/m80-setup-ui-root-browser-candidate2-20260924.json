@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "reviewer": "/root",
+  "implementation_author": "/root/m80_setup_ui",
+  "verdict": "pass_local_mock_browser_only",
+  "candidate_snapshot": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json",
+  "candidate_snapshot_sha256": "5f7464b29e64b773aabd2a67732dfbecc34f48fd79cd7c349e76a30939ed73e7",
+  "source_binding": "Root verified all11 frozen product/preview artifact raw hashes before browser recheck.",
+  "environment": "Actual component and app CSS; local disposable in-memory mock API; CUA browser. No hosted or database-browser acceptance.",
+  "checks": [
+    "First save under Save fails once displayed an error and Retry exact save. Retry succeeded as version1 without a local fabricated success.",
+    "Save conflict displayed explicit other-session conflict and instruction to refresh. Switching back to manager and making a valid correction saved version2.",
+    "Selecting historical version1 displayed its summary; leaving Saved history for Company and year explicitly changed status to Showing current synthetic setup version2.",
+    "Expiring the mock session during correction immediately removed all setup fields, save/correction controls and history; only the inactive-session message remained.",
+    "View-only member could not edit boundary inputs or save despite its client admin role.",
+    "During delayed load, switching from saved workspaceA to unsaved workspaceB and member actor retained B read-only state with no saved history; old A version2 state did not return."
+  ],
+  "prior_unaffected_visual_evidence": "evaluations/research-qa/m80-setup-ui-root-browser-20260924.json",
+  "limits": [
+    "Same-authority token refresh is independently tested by the actual-component injected-hook harness; this browser preview has no token-refresh control.",
+    "Native client/API integration, release publication and hosted migration/deployment are separate evidence gates.",
+    "All methods remain held. No real company data, source release, calculations, invitations, customer readiness or assurance claim."
+  ]
+}

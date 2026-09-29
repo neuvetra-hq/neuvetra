@@ -1,0 +1,51 @@
+{
+  "task_id": "M80-BACKUP-REHEARSAL-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_backup_transport_only",
+  "canonical_review": {
+    "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json",
+    "sha256": "991317f91a9ec71f6ed862298224a1e131de7a93839483d09b22bf340d5f9196"
+  },
+  "material_findings_open": 0,
+  "history": {
+    "candidate1": "Failed four findings retained in FIRST-REVIEW snapshot; source closure, typed reviewer, fresh archive restore and four-held field repaired.",
+    "candidate2": "Failed BACKUP-F05 actual receipt timestamps rejected by accepted prepC5; preserved in CANDIDATE2-REVIEW snapshot.",
+    "candidate3": "Only common final timestamp plus successor review/snapshot paths and author report changed; exact all110 source artifacts match."
+  },
+  "checks": {
+    "source_artifacts": 110,
+    "source_closure_pins": 109,
+    "external_tool_hashes": 3,
+    "admission_cases": 30,
+    "session_cases": 4,
+    "receipt_cases": 15,
+    "input_hash_refusals_before_decryption": 2,
+    "author_actual_receipts_accepted_by_preparationC5": true,
+    "independent_fresh_native_restore": true,
+    "independent_actual_four_receipts_accepted_by_preparationC5": true
+  },
+  "native_evidence": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-native.json",
+  "native_contract_evidence": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-native-contract.json",
+  "native_scope": {
+    "database": "m80_backup_foundation_1790294868379",
+    "source": "Immutable device-local synthetic hosted-shape encrypted archive and exact receipt supplied by author, bytes reverified before/after.",
+    "observed_non_receipt_count": 120,
+    "content_and_metadata_exact": true,
+    "source21_to_target22": true,
+    "release_records_exact_four_held": true,
+    "six_new_tables_forced_rls": true,
+    "runtime_control": "Held registry SELECT succeeds; direct DELETE WHERE FALSE on release registry denied; no operator fixture admission. Earlier accepted runtime QA separately covers all six exact grants.",
+    "all_connections_closed": true,
+    "clone_retained": true
+  },
+  "attempt_history": [
+    "Restricted process failed private child before database creation; retained as restricted-attempt evidence.",
+    "Same local-only native runner passed under explicitly authorized user-context execution required by DPAPI."
+  ],
+  "limits": [
+    "No hosted connection, credential export, provider action, real backup, deployment, operator admission, source release or Git mutation performed.",
+    "This is backup transport acceptance only. Actual fresh hosted archive, post-stop schema21/quiescence checks and its exact local successor rehearsal still required before migration intent.",
+    "Preflight reports active runtime sessions; strict inspection requires zero. Mocked session tests establish control behavior, not current hosted state.",
+    "DPAPI remains bound to this Windows user/machine. Sync/round-trip behavior verified; physical power-loss guarantees not tested."
+  ]
+}

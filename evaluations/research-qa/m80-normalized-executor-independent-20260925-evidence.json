@@ -1,0 +1,64 @@
+{
+  "source_snapshots": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json",
+      "sha256": "f690767d4b3ce0d19a6024be2822582f70378be23e53d46afa07d65838bd27cf"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-INPUT-COMPOSER-20260925-CANDIDATE1.json",
+      "sha256": "7816c1d235562898926661e69dfe4cfedeebee46ac06d0868ec1cbad1bafa815"
+    }
+  ],
+  "author_suite_reproduced": {
+    "tests": 23,
+    "assertions": 84,
+    "pass": true
+  },
+  "independent_new_tests": {
+    "tests": 5,
+    "assertions": 37,
+    "pass": true
+  },
+  "process_checks": {
+    "scenarios": 20,
+    "processes": 32,
+    "evidence": {
+      "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process.json",
+      "sha256": "8f4b61f86cb6809d5e9f0ac4e86141be95327eacfd004a38bc56bafcd2f0cd3b"
+    },
+    "close_last_all": true,
+    "external_transports_injected": true
+  },
+  "closure_and_loaders": {
+    "actual_current_source_files": 174,
+    "outer_artifacts": 30,
+    "outer_bytes": 3653171,
+    "virtual_source_mutations_refused": 13,
+    "parser_boundary_cases": 7,
+    "actual_retained_local_source_receipt_bytes": 3224598,
+    "evidence": {
+      "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-loaders.json",
+      "sha256": "c298fff04f1d415b8cb45ce40dfddd012d67fbbd8a6916df90200b3ffe0b95bc"
+    }
+  },
+  "composer": {
+    "validation_cases": 25,
+    "mocked_main_outputs": 6,
+    "real_prep_consumer_accepts_emitted_synthetic_input": true,
+    "evidence": {
+      "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-composer-checks.json",
+      "sha256": "b5bb36921b2f957ccde17019885a2d154431a10dee31fed58318e6715971f0e9"
+    }
+  },
+  "harness_history": {
+    "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-harness-history.json",
+    "sha256": "f553af3a974e26d506d8ca4d366c54044a8a6edeb31b2d83a98e2a08ff385681"
+  },
+  "boundary": [
+    "No actual provider, credential, ENV, database, archived restore/unseal or Git action.",
+    "32 real Bun subprocesses execute exact frozen private-entry text with injected DB/provider transports, actual exclusive file writes/sync, controlled synthetic clock.",
+    "Actual 3.224MB retained source receipt is read-only local synthetic evidence; no capture or DB connection.",
+    "Real bridge refusal child used nonexistent synthetic export path and emitted only bounded refusal.",
+    "Source acceptance does not approve any hosted stage."
+  ]
+}

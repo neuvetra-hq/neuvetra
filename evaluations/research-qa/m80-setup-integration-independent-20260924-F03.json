@@ -1,0 +1,12 @@
+{
+  "task_id": "M80-SETUP-INTEGRATION-QA-20260924",
+  "finding": "F03",
+  "severity": "medium",
+  "verdict": "fail_same_authority_refresh_preservation",
+  "component_sha256": "166cab4d31057b484c381eba67e8a962fc76de479ed07668504cd4bf3f306ed5",
+  "trigger": "Make correction; change joint venture value; parent keeps same actor identity/role/workspace/signal and refreshes accessToken.",
+  "observed": "Effect reloads saved foundation; edited value and editing mode lost. Pending retry is also cleared by same effect (static observation).",
+  "cause": "Access token included in effect dependency/context identity despite parent same-authority object preservation contract.",
+  "boundary": "Actual transpiled TSX hooks/events with injected hook scheduler and deferred transport; no DOM/reconciler/browser claim. 6 assertions; final intended preservation assertion fails.",
+  "positive_control": "Before refresh, actual onChange updates rendered select; cleanup aborts prior request."
+}

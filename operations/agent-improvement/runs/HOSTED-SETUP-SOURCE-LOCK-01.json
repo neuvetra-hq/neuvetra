@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-SOURCE-LOCK-01",
+  "role": "security-reliability",
+  "execution_context": "/root/convergence",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {"path": "tools/staging/hosted-setup-source-lock.ts", "sha256": "b52b9f1d5347976b9bcb226917b40186e08a825dc2e4b78f1efe4a951053a20c"},
+    {"path": "tools/staging/hosted-setup-source-lock.test.ts", "sha256": "0fe36ace2fe71398ca79d9400c164a94fddd9472f9af7ff6da036c1f41500ce2"},
+    {"path": "packages/neuvetra-database/src/staging-migrations.ts", "sha256": "d575922e6465a5324d8ded85f9f197a692deb53e2f988abb549eb2c0727bf7cc"},
+    {"path": "evaluations/research-qa/hosted-setup-01-source-lock-repair4-author.md", "sha256": "17c143d7a2db1c380c7011cb375914d8b33c1062a05245167d0decc555232dec"}
+  ],
+  "criteria": [
+    {
+      "id": "SL-01",
+      "status": "pending",
+      "evidence": ["tools/staging/hosted-setup-source-lock.ts", "evaluations/research-qa/hosted-setup-01-source-lock-repair4-author.md"],
+      "reason": "Bind exact reviewed executable source closure and normalized schema-23 SQL."
+    },
+    {
+      "id": "SL-02",
+      "status": "pending",
+      "evidence": ["packages/neuvetra-database/src/staging-migrations.ts", "tools/staging/hosted-setup-source-lock.test.ts"],
+      "reason": "Execute pinned in-memory migration bytes once and reject source drift or callback misuse."
+    },
+    {
+      "id": "SL-03",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-source-lock-independent-review5.md", "evaluations/research-qa/hosted-setup-01-upgrade-input-independent-review3.md"],
+      "reason": "Pass focused adversarial checks and independent review before hosted use."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "New-spawn and first completed-agent follow-up were rejected by the runtime thread limit. This assignment used the existing completed /root/convergence context. The requested model and effort were not independently observable. No workflow-controller ticket was created before this already-started assignment; no retrospective dispatch claim is made."
+}

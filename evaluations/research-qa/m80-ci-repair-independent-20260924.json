@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-CI-REPAIR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_bounded_offline_ci_repair_only",
+  "observed_at": "2026-09-24T22:57:20.477078+00:00",
+  "inputs": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-SCHEMA-REPAIR-20260924-CANDIDATE2.json",
+      "sha256": "50d656d9beda2d1c6d014e558e2b4efb1529c5c670f3591d0577c82c466b87d4"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-PACKAGING-20260924-CANDIDATE1.json",
+      "sha256": "ced1b1604916ef49eb67c1b3c25f357159727bc7810050fdb203a8b1105e7259"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-REPAIR-STATUS-20260924-CANDIDATE2.json",
+      "sha256": "2adc3c6fa91f2cc1edd4e4f14b129db88f62320dacaadcb576863fcb4a2b0a19"
+    }
+  ],
+  "first_review": "pass",
+  "material_findings_open": 0,
+  "evidence": {
+    "tests_passed": 98,
+    "assertions": 1167,
+    "native_skipped": 1,
+    "groups": [
+      {
+        "scope": "actual fixture mocked connections + author guards",
+        "passed": 4,
+        "assertions": 76,
+        "skipped": 1
+      },
+      {
+        "scope": "12 current behavioral suites",
+        "passed": 84,
+        "assertions": 890
+      },
+      {
+        "scope": "10 current GET cases",
+        "passed": 10,
+        "assertions": 201
+      }
+    ],
+    "novel_challenges": "14 prior-receipt differences (including early migration mutations, reordered, missing/extra receipts) refused before occupied query or clone; exact positive closes source before one clone; occupied target refused; 11 extra manifest/URL negative cases. Actual fixture transpiled with only connection/manifest dependencies injected; no DB connected.",
+    "audit": "evaluations/research-qa/m80-ci-repair-independent-20260924-audit.json"
+  },
+  "conclusions": [
+    "All 20 prior suites retained: 12 current and 8 at exact 540c71dbea6057f35a8b44074a71ceb9cf6bd6c3. The three GET files are byte-equivalent in current/historical contexts and every one of 13 named tests has exactly one assignment: 10 current and 3 historical.",
+    "Native job unchanged except new schema regression test; actual product/API/native lifecycle commands still run against current checkout. Closed hosted operator code and its safeguards unchanged.",
+    "Fixture supports manifest lengths 21/22 with pinned final migrations and requires all receipt names/hashes equal current local manifest before cloning. Current checkout has 22 entries; schema21 baseline is conservatively rejected here until paired with a matching historical manifest.",
+    "Docker diff adds one contract to web and exactly six inputs to runtime/filter. All 63 transitive local TypeScript modules reachable from M80 runtime inputs are in declared runtime COPY set. No broader context exception, environment, user or entrypoint change.",
+    "Frozen status Candidate2 matches all five current files; current claims reconcile recorded 8ab first-CI failure, board flow approval, repair activity, synthetic limits and unchanged hosted schema21. Status Candidate1 live mismatch was only line endings, root preserved it and issued Candidate2."
+  ],
+  "limits": [
+    "No actual Docker engine/container execution; packaging acceptance is offline source/declared-input review. Author separately reproduced reduced-copy builds.",
+    "No native PostgreSQL execution in this CI task; one test explicitly skipped without opt-in. Earlier runtime/integration acceptance is historical evidence.",
+    "Historical eight suites/three pin checks not executed locally in this review; exact ref, file presence and unchanged GET test text verified read-only.",
+    "Require all six checks at actual newly published head before claiming CI readiness. Remote first publication escaped packaging/schema assumptions; those failures remain preserved.",
+    "No network/provider/hosted/Git mutation or replay performed. This review does not accept hosted-prep Candidate2 or authorize execution."
+  ],
+  "compute": {
+    "requested_model": "gpt-6-astra",
+    "requested_effort": "high",
+    "observed_model": null,
+    "observed_effort": null
+  }
+}

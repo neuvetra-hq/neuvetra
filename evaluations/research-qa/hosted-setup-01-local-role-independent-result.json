@@ -1,0 +1,17 @@
+{
+  "status": "fail_ambiguous_start_leaves_server",
+  "sourceHashes": {
+    "tools/staging/hosted-setup-local-roles.ts": "dbf498ddaecfa95cdbd7d0dad4974814c324cc3843cc46b487acc1ad4f5b8976",
+    "tools/staging/hosted-setup-local-roles.test.ts": "6b507e1a6771390032d159cceb75c202676cafaba23d2e5c425bac8824ae70b9",
+    "evaluations/research-qa/hosted-setup-01-local-role-bootstrap-author.md": "a62b1167b798ae73df4c1f2b314627659572dafdbe5eaa1306a1021e9a915d1f"
+  },
+  "outcomes": [
+    "remote/wrong target,outside path,tool/state/snapshot/receipt pin and occupied socket refused before journal",
+    "native17.11 exact16roles/22memberships,no passwords,pinned stop,wrong stop pin and both replay refusals",
+    "Injected nonzero launcher completion after actual successful start; serverStillListening=true"
+  ],
+  "port55479Free": true,
+  "syntheticRecoveryRoot": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-independent-M1aMYW",
+  "providerAccess": false,
+  "actualArchiveRead": false
+}

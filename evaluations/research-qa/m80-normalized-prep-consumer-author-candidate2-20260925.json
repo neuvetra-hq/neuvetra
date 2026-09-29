@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-NORMALIZED-PREP-CONSUMER-20260925",
+  "candidate": 2,
+  "status": "candidate_pending_independent_review_and_dependency_acceptance",
+  "observed_at": "2026-09-25T03:28:00.000Z",
+  "scope": "Narrow self-review exclusion repair to the additive offline preparation and durable-intent consumer. No database, provider, network, credential, Git, hosted action, or execution authority was used.",
+  "supersedes": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json",
+    "sha256": "3e5f7c5b046fcaee56c07b13218908a3ad735f8d188734d764b738b7d5886482",
+    "verdict": "failed_root_source_review_preserved",
+    "finding": "Candidate1 changed the typed implementation author to /root/m80_setup_ui but did not add that author to the independentReviewerId exclusion set."
+  },
+  "repair": [
+    "Rejects /root, the historical runtime author /root/m80_foundation_runtime, and the actual v3 implementation author /root/m80_setup_ui as execution-gate reviewers.",
+    "Adds regression coverage that supplies otherwise internally consistent security-review bytes for each implementation author and proves both are refused at the independent-review boundary.",
+    "Leaves preparation profiles, normalized proof semantics, raw-state recomputation, operation scope, durable paths, gate/intent/outcome profiles and all other Candidate1 behavior unchanged."
+  ],
+  "dependency": {
+    "status": "frozen_candidate2_pending_independent_acceptance",
+    "snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+      "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+    },
+    "core": {
+      "path": ".superpowers/m80-backup-v2-core.ts",
+      "sha256": "5580afe97449038a4d5a693e2fe7fa2c5aa0f38595a68af32354bc064d9af36e"
+    }
+  },
+  "source_artifacts": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v3.ts",
+      "sha256": "73ae4824f2536bba7aacac06c92df4882db414e6bcdc8e15dcdb2b38750e39e0"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v3.ts",
+      "sha256": "4b1d3f96e68142584f2c0377ff4a46c9ecfd8ddf3582e5f63beadae607012f79"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v3.test.ts",
+      "sha256": "24b99ad2e18b0802b5d7f9552e9a736c7f55e8ceb82ef309099fbc7ec7a3ea77"
+    }
+  ],
+  "validation": {
+    "focused_tests": "13 pass, 0 fail, 71 assertions",
+    "targeted_typescript": "pass",
+    "bundle_check": "two Bun entrypoints bundled successfully",
+    "hosted_actions": 0,
+    "database_actions": 0,
+    "network_actions": 0
+  },
+  "limitations": [
+    "This is an author repair candidate, not independent acceptance or execution authorization.",
+    "The root finding is preserved as Candidate1 failure history and still requires independent reproduction.",
+    "The pinned Backup V2 Candidate2 dependency remained pending independent acceptance at candidate freeze.",
+    "The composer integration check is separate and resumes only against this repaired frozen candidate."
+  ]
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "field": "observedTarget.observedAt",
+    "accepted": true
+  },
+  {
+    "field": "publication.headObservedAt",
+    "accepted": true
+  },
+  {
+    "field": "publication.checksObservedAt",
+    "accepted": true
+  },
+  {
+    "field": "backup.completedAt",
+    "accepted": true
+  },
+  {
+    "field": "rehearsal.completedAt",
+    "accepted": true
+  },
+  {
+    "field": "admission.verifiedAt",
+    "accepted": true
+  },
+  {
+    "field": "admission.managerRole",
+    "accepted": true
+  }
+]

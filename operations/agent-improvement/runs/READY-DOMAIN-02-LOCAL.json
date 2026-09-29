@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "id": "READY-DOMAIN-02",
+  "role": "accounting-validation",
+  "execution_context": "/root/readiness_sources",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-DOMAIN-02-LOCAL.json",
+      "sha256": "080486813da5fbd26a4535f1980349ef5b669b2a30191abc84c01e9c1c85ffb5"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "LOCAL-01",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/readiness-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/readiness_review",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "prototypes/company-onboarding/readiness-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-DOMAIN-02-LOCAL.json",
+        "sha256": "080486813da5fbd26a4535f1980349ef5b669b2a30191abc84c01e9c1c85ffb5"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/READINESS-DOMAIN.md",
+      "sha256": "1e0110004545095878e67e89c74141c990de189fae36843fa13f813cb15d1f9a"
+    },
+    {
+      "path": "prototypes/company-onboarding/data/readiness-methods.json",
+      "sha256": "36591b40fe53430e85079ab3692a85f97189c111bdb1c2fe2be4dbeba7da793b"
+    }
+  ],
+  "parent_outcome": "READY-01 local stage; production blocked",
+  "scope": "Bounded local scope only. See operations/inventory-readiness/acceptance.md",
+  "routing_exception": "Registry override authentication failed; actual dispatch inherited settings, observed unknown. Requested field records intended policy route, not applied model."
+}

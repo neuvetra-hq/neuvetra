@@ -1,0 +1,46 @@
+{
+  "task_id": "M80-EXECUTOR-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate4_current_schema22_gate_binding",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE4.json",
+    "sha256": "607e3a1d9a26a66ac4d0bfd83678b18e7efba654435ff9960b12429368815456"
+  },
+  "material_findings_open": 1,
+  "findings": [
+    {
+      "id": "EXECUTOR-F03",
+      "severity": "high",
+      "attribution": "Root identified, author disclosed before independent reproduction.",
+      "summary": "Admission/deployment Execute schema22 database preflight never captures or compares current application state with the reviewed gate.",
+      "evidence": "evaluations/research-qa/m80-executor-independent-20260924-candidate4-gate-state.json",
+      "repair": "Capture current schema22 state and compare exact reviewed gate hash before new Execute side effect. Observer-only reconciliation must remain capable of seeing committed state."
+    }
+  ],
+  "repaired_prior_findings": [
+    "F01 exact acknowledgement persisted and later provider ID bound",
+    "F02 unavailable observers retain pending receipts and allow fresh observer-only reconciliation"
+  ],
+  "checks": {
+    "author_tests": 12,
+    "author_assertions": 45,
+    "all18_source_hashes_match_before_author_successor_edits": true,
+    "current_closure_files_including_review_and_snapshot": 125,
+    "actual_source_receipt_bytes": 3224598,
+    "nested_mutation_cases": 8,
+    "parser_cases": 7,
+    "separate_real_processes": 8,
+    "restart_scenarios": [
+      "migration unavailable then success",
+      "crash before observation then success",
+      "crash after observation then outcome",
+      "BUILDING then SUCCESS with retained exact provider ack"
+    ]
+  },
+  "boundaries": [
+    "Actual frozen private executor entrypoint branches, journal exclusive write/fsync, provider adapter and core stage functions; synthetic DB/provider bindings, no network/credentials.",
+    "Fixture timestamps shifted consistently to test-run time; mocked schema capture/delta checks do not substitute for actual hosted verification.",
+    "QA process harness syntax and fixture-time errors were repaired before successful checks; first debug directories retained.",
+    "Final acceptance held for Candidate5."
+  ]
+}

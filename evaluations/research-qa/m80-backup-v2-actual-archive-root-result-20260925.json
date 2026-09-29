@@ -1,0 +1,61 @@
+{
+  "reviewer": "/root",
+  "status": "actual_archived_backup_local_rehearsal_pass_pending_independent_review",
+  "completed_at": "2026-09-25T03:28:55.482Z",
+  "accepted_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+    "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+  },
+  "independent_source_review_sha256": "f480bfbcc296d38d1752593c6e13ab786cad8b483caf9fd0df1fda8e50af983b",
+  "archive_sha256": "cad84e68dac90cb703814f9ff10bb116c615ebe13c860f54d630910ece8483fd",
+  "backup_receipt_sha256": "d0d235e14266b87d19a92fc410574ae91196529521521e816fec713518a9e0ae",
+  "restored_nonreceipt_tables": 120,
+  "restored_old_migration_receipts": 21,
+  "content_sha256": "65d68c06c843da60841902a8fe0d3b8c9ff9131d1dc8edaad3a05035545f25c7",
+  "source_raw_metadata_sha256": "b0634e3d1d79ce44a45d605ab019531393d7581118e7205ffa03b9f77e52d101",
+  "restored_raw_metadata_sha256": "f16a2d7532e7fe46a83f29670668703bbb6f2e8690d4e45280150fdf1444c229",
+  "normalized_metadata_sha256": "20991c3220306ba11d34fbbe60325f9a6a1c3db008369c404c33c1c6b38c87d0",
+  "raw_metadata_hashes_equal": false,
+  "application_metadata_equivalent": true,
+  "external_schema_default_acl_rows_excluded": 27,
+  "internal_trigger_rows_each": 998,
+  "internal_trigger_multiplicity_exact": true,
+  "raw_local_schema21_to22_preservation_passed": true,
+  "runtime_select_only_verified": true,
+  "runtime_direct_writes_denied": true,
+  "four_release_records_held": true,
+  "admission_not_executed": true,
+  "all_connections_closed": true,
+  "private_receipt_pins": [
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-journal.jsonl",
+      "sha256": "ce2c626c1b7cf7898941dbb538d9a05117799c372e1b573df339af4abe4cd32e"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-migration-receipt.json",
+      "sha256": "66f4af179eceda7f669f6296e7fbe398fd0f919491928e581a9ca2375b9d58dd"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-normalization-proof.json",
+      "sha256": "a1b74f91c1992a6b5d60e5bce237a98bb3e3b0d8ca9df19f3336becb7f363e08"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-preservation-receipt.json",
+      "sha256": "6b2523796170744dbda146a4cb4a9fe2ba453b8485e88d50669eacc518ed11f6"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-restore-receipt.json",
+      "sha256": "2efc0b22a2cdb4381243c63f1a4a5c1a1d847b29d7650eba3c0c063b7151cb46"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal-1790306929913/m80-backup-v2-result.json",
+      "sha256": "732a717d2ddc880e6f6216895c31fd4e76ff3a255261a51347c94396f166f5b0"
+    }
+  ],
+  "hosted_action": false,
+  "limits": [
+    "Actual archived application backup was restored only into a new local disposable database. No hosted migration or new deployment occurred.",
+    "Original failed rehearsal and consumed provider/backup/recovery attempts remain preserved.",
+    "This old backup is diagnostic evidence, not a fresh recovered-target upgrade gate. Fresh maintenance evidence and accepted consumers remain required."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root",
+  "source_author": "/root",
+  "independent_source_reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "accepted_independent_recovered_target_transport_review_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORT-QA-20260925-DELIVERABLE.json",
+    "sha256": "d2c8f34c04bc7c7d9d31bb29365a3d972eba4eaba721d6060d2f8f6e618d9ebe"
+  },
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORTS-20260925-CANDIDATE2.json",
+    "sha256": "4ca9f69ea372741fd597820ddb9013270d398ceb7c7a2bbde06d91ff9191f56d"
+  },
+  "verified_current_and_embedded_artifacts": 13,
+  "failed_candidate_preserved": true,
+  "live_action": false,
+  "limits": [
+    "Executor-v2 acceptance, actual fresh evidence and independent stage gates remain required.",
+    "Original stop/recovery journals consumed. No schema22 rollback; global migration-intent refusal unchanged."
+  ]
+}

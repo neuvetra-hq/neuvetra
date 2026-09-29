@@ -1,0 +1,20 @@
+{
+  "profile": "neuvetra.m80.recovered-staging-readonly-check.v1",
+  "observed_at": "2026-09-25T03:48:23.859793+00:00",
+  "read_only": true,
+  "deployment_id": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee",
+  "commit": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+  "image": "sha256:ff5fc867ba683f04571ea641db6208ba5d463756b076715e4252ed50dba5de4c",
+  "status": "SUCCESS",
+  "active_deployments": 1,
+  "automatic_deployments_enabled": false,
+  "http_status": 200,
+  "readiness": {
+    "legacyContainmentVerified": true,
+    "profile": "neuvetra.private-synthetic-staging.v1",
+    "schemaVersion": 21,
+    "status": "ready"
+  },
+  "private_receipt_sha256": "ff92fbb9c654c86fd9cca19b4f3bb409d3f0d32ccf78db9a5680754e1155586e",
+  "limits": "Progress observation only; not fresh execution gate evidence. No hosted mutation."
+}

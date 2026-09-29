@@ -1,0 +1,24 @@
+{
+  "candidate": "frozen Candidate1",
+  "checks": [
+    "stale target",
+    "backup mismatch",
+    "count mismatch",
+    "wrong migration",
+    "duplicate checks",
+    "unknown field",
+    "null permission",
+    "expired",
+    "self review",
+    "wrong stage",
+    "wrong current schema",
+    "wrong app state",
+    "missing maintenance",
+    "unknown blocks nextstage",
+    "definitive_failure blocks nextstage",
+    "equivalent scope deterministic across head/time; distinct stage",
+    "actual simultaneous exclusive output and byte-preserving replay refusal"
+  ],
+  "retainedSyntheticOutput": "C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\evaluations\\research-qa\\m80-hosted-prep-independent-20260924-sandbox\\concurrent-1790289697641.json",
+  "scope": "Offline pure validation and own QA sandbox only; no real journal/helper output or provider activity"
+}

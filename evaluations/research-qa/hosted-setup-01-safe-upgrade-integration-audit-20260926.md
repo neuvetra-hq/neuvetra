@@ -1,0 +1,53 @@
+# Hosted setup safe-upgrade integration audit
+
+Task HOSTED-SETUP-SAFE-UPGRADE-INTEGRATION-AUDIT-01, 2026-09-26 UTC. Bounded CTO integration audit by `/root/collection_backend`. This reviewer authored the latest fixed-bindings repair, so this is not independent QA of that component; the exact repaired bindings were separately accepted by `/root/compose_qa` in `hosted-setup-01-fixed-bindings-independent-review2.md`. Requested registry critical CTO route was gpt-6-astra/high because this path can affect a live schema and service availability. The follow-up runtime did not expose actual model or effort, so observed settings remain unknown.
+
+**Verdict: proceed toward a clean rolling-PR publication. Do not begin the live stop yet.** The artifact-to-worker and one-transaction mechanics pass locally. For the ordinary successful board-brief path, the remaining hard prerequisites after publication are a fresh current backup/restore evidence chain and independent acceptance of the current exact-stop repair. Independent postcommit observation and same-image resume remain mandatory hold points during execution, but the existing pure verifier plus exact operator steps can satisfy them; this audit found no concrete failure that requires a new monolithic launcher.
+
+Uncertain-COMMIT reconciliation is a separate contingency limit. The current path fails closed and requires the service to remain stopped for manual investigation if acknowledgement is ambiguous. Its missing authenticated original-session resolution producer prevents automatic reconciliation, but it is not treated here as a blocker to a separately reviewed one-shot attempt whose accepted recovery policy is “stop, preserve evidence, investigate, never retry.”
+
+No provider or database mutation, secret access, deployment, Git mutation, or live service action occurred in this audit.
+
+## Sequence audit
+
+| Board sequence phase | Current evidence | Audit disposition |
+|---|---|---|
+| Clean exact publication | Publisher source `22a1b40a03ae8981d30586757f08abeea1441502bebd94144e063b9fb1e28dbf` and test `5012e505cb783c47af91cf379a12975a74af259de1ebe943cd35593bc262d691` have an independent PASS in report `76028ad0368406d282a6baceb174909569dea36b5944d25365d9630014dbb169`. | **Proceed to publication preparation.** The working tree is currently dirty/untracked and detached at `d2f0ca16f02bb99801b68a7925f34016f3ba51bb`; the publisher correctly refuses such a checkout. Root must make the reviewed rolling-PR commit, push it, obtain required exact-head checks and independent review, then generate and verify a fresh publication from that clean head. |
+| Fresh paired backup and actual restore | The historical 9,466,390-byte paired archive was actually restored and independently checked, but its review explicitly says it is historical and cannot establish current hosted state. The fresh restore binder `4a7c434537916be019f1f1af80d258d170f92ba7d7d5ef171ca67ae364eb189e` has independent report `953addbb0de7f9ca37987fdd32185aca965ed58bea1891f891ad37eceb2c027e`. Fixed bindings read large evidence by private absolute path with pinned hash and length. | **Hard precondition BACKUP-01.** After the final publication head is fixed, take a new hosted paired backup, restore that exact archive to a fresh PostgreSQL 17 target, independently review the restore/fingerprint evidence, and pass those fresh file-backed pins to the worker. The historical archive cannot be reused as currentness evidence. |
+| Exact same-image stop | Current repair-2 source `334c357cd645b88a8bf3007895474315998a4ec123bcec0a558a47565b96e706` and test `01933364602abc12b9177f873724e613e8acf4e161dc11e6dfcff676615af2c4` pass their 7-test synthetic suite. Candidate 1 and repair 1 independent FAILs are preserved; repair 2 has only author report `6f1942f1f5e4fcf6c0a7d9c4ac8a54c7418c2970797066f7bb5c24fe4fc13763`. | **Hard precondition STOP-01.** Independent QA must replay LIVE-STOP-F01 through F05 against the current repair-2 bytes before any scale-to-zero. Synthetic author tests do not authorize a provider mutation. |
+| One supervised process / one physical transaction | Fixed bindings `cbe42173cd354559901fea9821c7314751c20b2e0febd895d7cb13fa27955514`, supervisor `fa7535278a12b7664e322ee5b0d10cd8d1a9537925eb5811eb4e2de77a132448`, worker `1b13adb2e63fdfcc2adf298ce7653b93d7fff94ce75ab665bc0d8c6f388ea765`, runner `93eb9c31c16862f875449079a740880f6f02310a897121a7701c1a16f52fe203`, composer `5b096a18f4c69d4aa3781b6d3a359378a1df69f0761b49f00721255252696174`, and dedicated client `6305d5600551226d41b0c1597b67de20e988488705b38416434c55f36d712869` have the cited independent component/integration PASS reports. | **No concrete mechanics blocker.** Local native PostgreSQL 17 composition proves one backend, commit/rollback/timeout behavior, schema-23 marker/preservation, replay refusal and zero final sessions/locks. For live use, an operator must assemble the exact private payload from the accepted publication, restore and stop artifacts and invoke the fixed supervisor once. The absence of a monolithic launcher is not treated as a blocker because the accepted fixed supervisor is the execution boundary and no failure of a precise operator invocation was demonstrated. |
+| Uncertain commit | The runner has a read-only marker reconciliation function and requires proof that the original transaction resolved. Fixed bindings deliberately make `prepareHostedSetupArtifactReconciliation` throw `ORIGINAL_TRANSACTION_RESOLUTION_PRODUCER_REQUIRED`. | **Fail-closed contingency RECOVERY-01, not an ordinary-path blocker.** If COMMIT acknowledgement is ambiguous, keep Site-Web stopped, preserve all journals and provider/database observations, do not retry, and obtain an independent decision. Automatic marker reconciliation is unavailable until an authenticated producer proves that the original backend transaction resolved. The board must accept this manual stop-and-investigate recovery posture before the one-shot attempt. |
+| Independent postcommit check | The runner verifies the allowed schema delta inside the transaction and writes `hosted_setup_schema23_commit_resolved` only after the transaction call returns. This is commit-acknowledgement evidence, not the runbook's separate read-only postcommit observation. | **Mandatory execution hold point POSTCOMMIT-01.** While the service remains at zero, an independent operator/reviewer must make a fresh read-only observation of schema 23, the unique marker and legacy preservation, and bind acceptance to the exact journal, publication, restore, stop and image. This can be an exact operator procedure and evidence artifact; no new product launcher is required by the evidence observed here. |
+| Same-image resume | Pure verifier `hosted-setup-postscale.ts` hash `fb7eac353228528f58fffb83d5ec3d49bf5365a3c99b1a59e4259c716b612b96` has independent PASS report `1d04fbb8d088996707104a96b9efac00e9e4678f77552755a6626d5bd01eb34b`. It verifies fresh captures and chronology but grants no mutation or provider authority. | **Mandatory execution hold point RESUME-01.** Only after POSTCOMMIT-01 acceptance, the operator may scale the exact stopped deployment/image to one, collect two fresh authenticated captures, and pass the accepted stop receipt plus postcommit review time into the verifier. This requires an exact reviewed operator step and preserved output, not necessarily a new source launcher. If identity, chronology, configuration version or fresh capture verification fails, remain stopped. |
+
+The current runbook remains marked “preparation only,” which is accurate, but several detailed gate notes still say publisher/bindings/native composition or postscale repairs are absent. Those statements are superseded by the exact reports above. Reconcile the operator checklist to the final published hashes and the accepted manual contingency posture before the live stop.
+
+## Focused execution evidence
+
+All commands ran in the shared worktree on Bun 1.3.12 with synthetic/private temporary fixtures only.
+
+1. Artifact chain:
+   `bun test tools/staging/hosted-setup-artifact-publisher.test.ts tools/staging/hosted-setup-artifact-bindings.test.ts tools/staging/hosted-setup-artifact-supervisor.test.ts tools/staging/hosted-setup-artifact-worker.test.ts --timeout 30000`
+   Result: **29 passed, 0 failed, 152 assertions** in 56.59 seconds.
+
+2. Native transaction composition:
+   `bun test tools/staging/hosted-setup-transactional-upgrade.test.ts tools/staging/hosted-setup-transaction-compose.test.ts --timeout 60000`
+   Result: **18 passed, 0 failed, 162 assertions** in 38.61 seconds. Native PostgreSQL **17.11**, dynamic loopback port 59454. The emitted local-only receipt recorded marker present after commit, marker absent after rollback and forced timeout, replay refused before transaction, and final compose sessions/locks both zero. Approval evidence remained `synthetic-mock-only`; `launchAuthorized:false`.
+
+3. Stop/resume boundaries:
+   `bun test tools/staging/hosted-setup-live-stop.test.ts tools/staging/hosted-setup-postscale.test.ts tools/staging/hosted-setup-postscale-repair2-independent.test.ts --timeout 30000`
+   Result: **31 passed, 0 failed, 157 assertions**. This confirms the current local repairs still behave as authored; it does not replace missing independent review of live-stop repair 2 or establish live provider state.
+
+## Exact review anchors
+
+- Artifact publisher independent PASS: `76028ad0368406d282a6baceb174909569dea36b5944d25365d9630014dbb169`
+- Fixed-bindings independent repair PASS: `e386a2bbcef5cdc91bfd9a38165a3c1bb41f40ab16b162cc958eddae62ee7308`
+- Private Railway HOME supervisor PASS: `06e807864335e57e354991e3b69e0d84fbcb3358303c023ee69ff32bc51e0f44`
+- Current runner/composer dynamic-maintenance PASS: `7e987d39eaab599f68cd6b81f7e6d85a2fbb1fa9ead8c8eaee2307c5693f0e84`
+- Fresh restore binder PASS: `953addbb0de7f9ca37987fdd32185aca965ed58bea1891f891ad37eceb2c027e`
+- Postscale verifier repair PASS: `1d04fbb8d088996707104a96b9efac00e9e4678f77552755a6626d5bd01eb34b`
+- Current live-stop repair-2 author report only: `6f1942f1f5e4fcf6c0a7d9c4ac8a54c7418c2970797066f7bb5c24fe4fc13763`
+
+## Decision
+
+Root can proceed with clean rolling-PR publication and fresh exact-artifact review. The ordinary one-shot path becomes eligible for a separately authorized execution after STOP-01 and BACKUP-01 pass, the operator checklist is rebound to the final hashes, and the board accepts the fail-closed RECOVERY-01 posture. During that run, POSTCOMMIT-01 must pass before RESUME-01; any uncertainty or failed observation leaves the service stopped.

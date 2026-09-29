@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_exact29_public_evidence_review_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-RECOVERY-PUBLICATION-QA-20260925-DELIVERABLE.json",
+    "sha256": "31c30358d7832177b5c78ea0a60b55d92ed9af6e1c096881a3c7cce780439c62"
+  },
+  "verified_proposed_files": 29,
+  "verified_embedded_artifacts": 1,
+  "clean_overlay_validator": {
+    "report_sha256": "f8ffd9c6412e5adf024b6f52ca3a13c99912cdbc28532347d51f47edec9b3a93",
+    "valid": true,
+    "runs": 262,
+    "scope": "proposal29 plus three shared files as pinned in that receipt"
+  },
+  "limits": [
+    "Final manifest/shared metadata requires separate independent review.",
+    "Repair and migration unaccepted; failed restore remains open.",
+    "Proposal stale23 annotations corrected to actual29 by independent review."
+  ]
+}

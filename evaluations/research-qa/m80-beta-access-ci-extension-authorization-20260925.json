@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-25T13:34:35.075662+00:00",
+  "board_instruction": "lets fix it",
+  "authorization": "One additional bounded CI correction and independent review, followed by publication and exact remote checks.",
+  "original_workflow": "M80-BETA-ACCESS-20260925",
+  "original_state": "Version3 independently rejected; no active tickets; original30 planning allowance fully encumbered, actual cost unknown.",
+  "continuation_workflow": "M80-BETA-ACCESS-CI-EXTENSION-20260925",
+  "continuation_reason": "Explicit board-authorized extension after diagnosed rejection; original journal and all failures remain intact, no unresolved attempt replay or database edits.",
+  "planning_allowance_usd": 10,
+  "actual_cost_usd": null,
+  "scope": [
+    "Signed official PGDG package source before client17 installation; retained dump/restore version checks and actual native test",
+    "Correct future snapshot UTF8 byte preservation; do not alter runtime source or overwrite prior snapshots",
+    "Independent review then same PR6 publication and exact checks"
+  ],
+  "excluded": [
+    "Hosted deployment",
+    "Local package installation",
+    "Native rehearsal replay",
+    "Real invitations or customer data",
+    "Method release"
+  ]
+}

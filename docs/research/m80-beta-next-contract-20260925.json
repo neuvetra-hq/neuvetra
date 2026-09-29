@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "taskId": "M80-BETA-NEXT-CONTRACT-20260925",
+  "status": "design_candidate_pending_independent_review",
+  "headInspected": "ecb5b9d3a9bf1d1cc1c7477f4b5e110908e08d49",
+  "implementationStatus": "not_implemented",
+  "hostedActionsAuthorized": false,
+  "realInvitationsAuthorized": false,
+  "customerReady": false,
+  "releaseEligible": false,
+  "scope2": "deferred",
+  "nextIncrement": "Separate beta access HTTP/native PostgreSQL redemption, own-workspace read, operator revocation and tombstone rehearsal",
+  "localSafety": {
+    "host": "127.0.0.1",
+    "port": 55472,
+    "database": "fresh task-named wholly synthetic fixture database; implementation must freeze exact name",
+    "runtimeRole": "one new task-named restricted role; implementation must freeze exact name",
+    "existingRoleChanges": false,
+    "actualBackupClonesAllowed": false,
+    "privateEnvReadAllowed": false,
+    "providerCallsAllowed": false
+  },
+  "requestContracts": {
+    "POST /beta-api/invitations/redeem": {
+      "exactKeys": [
+        "token",
+        "requestId"
+      ],
+      "token": "64 lowercase hex chars representing 32 random bytes",
+      "bodyLimitBytes": 2048,
+      "identity": "Supabase getUser confirmed email plus current DB auth.users match; request identity fields rejected",
+      "success": [
+        200,
+        201
+      ]
+    },
+    "GET /beta-api/session": "only actor active admitted memberships",
+    "GET /beta-api/workspaces/:companyId": "own active admitted workspace summary, otherwise generic 404"
+  },
+  "databaseAuthority": {
+    "schema": "neuvetra_beta",
+    "separateMigrationReceipts": true,
+    "existingStagingSchemaVersion": 22,
+    "modifyExistingStagingHelpers": false,
+    "modifyStagingAccess": false,
+    "modifyLegacyMemberships": false,
+    "newRuntimeEntrypoints": [
+      "redeem_invitation(text,uuid,text)",
+      "read_session()",
+      "read_workspace(uuid)"
+    ],
+    "issuanceRevocation": "operator-only, no runtime grants",
+    "localDefinerOwner": "existing fixture owner, actual privileges recorded; hosted least privilege pending"
+  },
+  "acceptanceMap": [
+    {
+      "id": "AC-01",
+      "criterion": "Actual code boundary and remaining beta checklist",
+      "status": "design_present",
+      "plannedImplementationPath": "apps/site-api/src/staging/server.ts; packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "requiredEvidence": "Independent root/security design review",
+      "executionResult": null
+    },
+    {
+      "id": "AC-02",
+      "criterion": "Functional beta HTTP/native DB scope without staging widening",
+      "status": "design_present",
+      "plannedImplementationPath": "apps/site-api/src/beta-access/server.ts; packages/neuvetra-database/src/beta-access.ts",
+      "requiredEvidence": "Redeem, read own workspace, restart/revisit; unchanged old helper/migration hashes",
+      "executionResult": null
+    },
+    {
+      "id": "AC-03",
+      "criterion": "DB verified-email authority, tokens and transactional failure",
+      "status": "design_present",
+      "plannedImplementationPath": "packages/neuvetra-database/src/beta-access-migrations/0001_access.sql",
+      "requiredEvidence": "Fresh auth.users identity, 256-bit token, expiry, concurrent winner, rollback every intermediate write and lost-response retry; successful same-key receipt recovery before/after original token expiry; different-key consumed-token denial; identical retry after revocation/tombstone denies without recreation",
+      "executionResult": null
+    },
+    {
+      "id": "AC-04",
+      "criterion": "Tenant denial and disable/revocation/tombstone",
+      "status": "design_present",
+      "plannedImplementationPath": "apps/site-api/src/beta-access/postgres.test.ts",
+      "requiredEvidence": "Two tenants; same denial; no staging access; no replay reactivation; direct SQL restricted login",
+      "executionResult": null
+    },
+    {
+      "id": "AC-05",
+      "criterion": "Local safety and later release/deploy gates",
+      "status": "design_present",
+      "plannedImplementationPath": "tools/beta-access/local-rehearsal.ts",
+      "requiredEvidence": "Fresh task-named synthetic database only; no private backup clone, provider or existing-role mutation",
+      "executionResult": null
+    },
+    {
+      "id": "AC-06",
+      "criterion": "Independent design acceptance",
+      "status": "pending",
+      "plannedImplementationPath": null,
+      "requiredEvidence": "Root/security review of frozen snapshot",
+      "executionResult": null
+    }
+  ],
+  "betaChecklist": [
+    {
+      "area": "eligibility_onboarding",
+      "status": "synthetic_foundation_only",
+      "remaining": "Real company/boundary/census via beta-authorized API"
+    },
+    {
+      "area": "invitation_tenant",
+      "status": "next_local_increment",
+      "remaining": "Native transactional HTTP proof; hosted Auth/tenant review"
+    },
+    {
+      "area": "real_evidence",
+      "status": "pending",
+      "remaining": "Storage/quarantine/provenance/confirmation/retrieval/retention"
+    },
+    {
+      "area": "calculations_drafts",
+      "status": "held",
+      "remaining": "Human source-use/domain/release decisions, released-profile trace and immutable draft"
+    },
+    {
+      "area": "feedback_support",
+      "status": "pending",
+      "remaining": "Receipt/triage/privacy/support ownership"
+    },
+    {
+      "area": "recovery_e2e",
+      "status": "synthetic_setup_evidence_only",
+      "remaining": "Two beta tenants through released-profile evidence/draft/export/feedback/recovery"
+    }
+  ],
+  "blockingDecisions": [
+    "Exact human domain/source-use/release-owner decisions already in M79 packet",
+    "Hosted provider/data and function-owner/security boundary before deployment",
+    "Named companies/recipients/message and processing authority before send",
+    "Support/privacy ownership before invitation readiness"
+  ],
+  "workflow": {
+    "ticket": "d5d45523b6f34fa7b8b0e81773a31c36",
+    "dependencyVersions": {},
+    "reservationUsd": 5,
+    "reservationMeaning": "local planning allowance, not actual subscription charge or paid-call authorization",
+    "actualCostUsd": null,
+    "controllerOwner": "root"
+  },
+  "checksActuallyPerformed": [
+    "Read current source and accepted plans",
+    "Verified local HEAD",
+    "Created compact design and machine acceptance map",
+    "Parsed generated JSON and hashed frozen source artifacts"
+  ],
+  "unrun": [
+    "Application/native tests",
+    "Hosted/provider/auth verification",
+    "Independent acceptance"
+  ],
+  "notes": [
+    "No source/app/DB changes or external actions",
+    "Proposed implementation paths do not claim existing files",
+    "Existing setup/held methods remain separate from access admission"
+  ],
+  "candidate": 2,
+  "firstReview": {
+    "verdict": "fail",
+    "reviewer": "/root",
+    "finding": "F01: Pending invitation check preceding successful receipt lookup contradicted identical retry after consumption.",
+    "reworkCycles": 1,
+    "disposition": "candidate2_repaired_pending_independent_rereview"
+  },
+  "redemptionBranchOrder": [
+    "Validate authenticated actor and current verified database identity; acquire actor/admission/invitation locks",
+    "Look up actor/request success receipt before pending-state or expiry checks",
+    "Existing receipt: different input 409; equal input returns original only with matching verified identity, exact active membership generation and active non-tombstoned admission; original token expiry does not block recovery",
+    "No receipt: require pending matching token/recipient/role/admission and expiry later than database time after locks; consumed token with different request returns generic404",
+    "Atomically insert membership, consume invitation and append receipt/audit; rollback all on failure"
+  ],
+  "receiptExpiryPolicy": "Original token expiry after successful redemption does not block same-actor/same-request/same-input receipt recovery while identity, membership generation and admission remain authorized. Session access already exists. New redemption still enforces expiry."
+}

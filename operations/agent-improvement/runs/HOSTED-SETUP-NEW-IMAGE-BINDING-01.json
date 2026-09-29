@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-NEW-IMAGE-BINDING-01",
+  "role": "security-reliability",
+  "execution_context": "/root/deployment_binding",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-deployment-binding.ts", "sha256": "6e078f7e64f5fd64c568ff7fec5f292994b23cd2c28ed669da3732458c3b8e9a"},
+    {"path": "tools/staging/hosted-setup-deployment-binding.test.ts", "sha256": "dc8d9a244d511a04c34af5c0c185d39ccf1f4f770534abc48c833b8cc421f081"}
+  ],
+  "criteria": [
+    {"id": "AC-01", "status": "pending", "evidence": ["evaluations/research-qa/hosted-setup-deployment-binding-author-20260926.md"], "reason": "Local exact image and raw provider inventory candidate passes focused author checks; independent QA and v2 live-path integration remain pending."},
+    {"id": "AC-02", "status": "pending", "evidence": ["tools/staging/hosted-setup-deployment-binding.test.ts"], "reason": "10 synthetic tests and 67 assertions pass, including stale/mismatch/shape and serialized capability replay; no cross-process replay claim."}
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "pending", "material_findings_open": 0, "rework_cycles": null, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-6-astra", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Requested critical security-reliability route; actual settings unobserved. Owns only two additive binder files, author report and this run record. No provider operation, Git push, credentials or customer data. Root owns shared ledgers and integration."
+}

@@ -1,0 +1,64 @@
+{
+  "task_id": "M80-RESTORE-NORMALIZATION-V2-QA-20260925",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_backup_v2_candidate1_source_review",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+    "sha256": "8683a123dc91ff85d788d683f97575d27fe6f24efe55254a569bec681e936fe4"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-backup-v2-core.ts",
+      "sha256": "777eeb3390704caba5518aa76bfd0448db11789035c68efe463cf814a651a55c"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-core.test.ts",
+      "sha256": "1d7fbe2895b59739f54d0df2a21a74a19a60b6658b503dcaa213305c81d425f6"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal.ts",
+      "sha256": "98ab0444d8ca6c63bff4105ea10a66f6fdc3440795108466f4dac8c080c65a8b"
+    },
+    {
+      "path": "docs/research/m80-restore-normalization-v2-20260925.md",
+      "sha256": "abb8fb5d717de9632ac19018d49345e6605fb4a581e08a61e3eab233a7b26157"
+    }
+  ],
+  "evidence": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate1-evidence.json",
+    "sha256": "9d746a24b99b45bb98a4d705d337c737b75d56518954fe978b2fd96344beec8e"
+  },
+  "material_findings_open": 2,
+  "findings": [
+    {
+      "id": "V2-F01",
+      "severity": "high",
+      "path": ".superpowers/m80-backup-v2-rehearsal.ts",
+      "function": "verifyRuntimeBoundary",
+      "summary": "Any INSERT error is accepted as direct-write denial. The deliberately invalid row can fail by foreign-key constraints; a broken connection also becomes runtimeDirectWritesDenied:true.",
+      "reproduced": "Exact frozen function accepts23503 andECONNRESET, as well as42501.",
+      "required_repair": "Assert all six tables effective SELECT-only privileges and denied sequence privileges; probe a non-mutating valid SQL statement and require permission-denied SQLSTATE42501. Unexpected transport/constraint errors must fail the rehearsal."
+    },
+    {
+      "id": "V2-F02",
+      "severity": "medium",
+      "path": ".superpowers/m80-backup-v2-core.ts",
+      "function": "assertM80BackupV2ExactRestore",
+      "summary": "The standalone proof generator recomputes normalized hashes but copies unchecked raw metadata/application hashes into its success proof.",
+      "reproduced": "Four source/restored raw-hash substitutions were accepted and echoed.",
+      "boundary": "The actual hosted entry validates source raw hashes with accepted validateApplicationSnapshot and captures restored state directly. No actual archive-path bypass is claimed.",
+      "required_repair": "Validate raw content, metadata and application-state hashes against captured fields on both sides before proof generation, and add negative standalone tests."
+    }
+  ],
+  "accepted_unaffected_evidence": [
+    "Actual fresh synthetic clone successfully restored/migrated and independently verified six-table privilege/RLS boundary.",
+    "50 additional controls and real exclusive-writer collision pass on frozenC1.",
+    "Author two prior assertion failures and all failed/accepted C3 records remain preserved."
+  ],
+  "limits": [
+    "Candidate1 is not accepted despite its successful synthetic rehearsal. No transport pass receipt or gate is issued.",
+    "No actual hosted archive or DPAPI unseal was performed during this task.",
+    "Actual source/receipt/provenance consumer integration remains a separate acceptance gate.",
+    "Current author files are under successor repair; this first review binds only frozenCandidate1."
+  ]
+}

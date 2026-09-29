@@ -1,0 +1,56 @@
+{
+  "profile": "neuvetra.m80.hosted-checkpoint-publication.v1",
+  "head": "ecb5b9d3a9bf1d1cc1c7477f4b5e110908e08d49",
+  "remote_verified": true,
+  "remote_verification": "git ls-remote exact branch matched after successful push",
+  "ci": {
+    "checks": [
+      {
+        "conclusion": "success",
+        "name": "Typecheck, lint, unit tests and web builds",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Offline research catalog tests",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Dedicated staging image and offline runtime smoke",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Native PostgreSQL worksheet and tenant regression",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "GHG calculation specifications and engine",
+        "status": "completed"
+      },
+      {
+        "conclusion": "success",
+        "name": "Role routing and evidence records",
+        "status": "completed"
+      }
+    ],
+    "observed_at": "2026-09-25T06:03:17.110977+00:00",
+    "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+    "pr_head": "ecb5b9d3a9bf1d1cc1c7477f4b5e110908e08d49",
+    "sha": "ecb5b9d3a9bf1d1cc1c7477f4b5e110908e08d49",
+    "state": "open"
+  },
+  "publication_manifest_sha256": "2a449c7f67dc7c41625b4a7722037ff65175fda97f28522b5439bf51414436da",
+  "independent_review_sha256": "68bc364d270d22462ac4d074033fbb59e04b570c11ed202823f098cc914f08d2",
+  "published_files": 40,
+  "deployed_app": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "schema": 22,
+  "live_browser_result": "save v1, correction v2, historical summary and reload persistence passed",
+  "board_feedback": "pending live demonstration feedback",
+  "customer_ready": false,
+  "held_method_profiles": 4,
+  "no_additional_deployment": true,
+  "note": "Successor observation to the frozen checkpoint documents publication-pending state; no old receipt rewritten."
+}

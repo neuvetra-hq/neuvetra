@@ -1,0 +1,144 @@
+{
+  "candidate": 4,
+  "exact_current_embedded_files": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "sha256": "012ca24cf50abce76ea502e73bc476161c76774b569bc93534ee032da53d1888",
+      "bytes": 28272,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/beta-access-contract.ts",
+      "sha256": "8c5388a8f7932d6c266251a46b08056777ecc9dfc03fe44c055e26893200a929",
+      "bytes": 1713,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/beta-access.ts",
+      "sha256": "1c40182448540965c7a484b82d7df538e9f4a9a43cfc659f50e0cc1b1d419bf6",
+      "bytes": 13155,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/beta-access-migrations.ts",
+      "sha256": "954fcd1e7b388976b9d2e81a39ad922de474295726efd8a0ce882bce4421313c",
+      "bytes": 12098,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/beta-access-migrations/0001_access.sql",
+      "sha256": "03481674d8e4c17a3c6a8fe9024d92889ca1cc7ead61e0f29c73b44da0393091",
+      "bytes": 21197,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "packages/neuvetra-database/src/index.ts",
+      "sha256": "7f7a96f2fd015ee11a94ed56d5948745f6743c82ac0ba21aa5d06a74e629ad53",
+      "bytes": 680,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/auth.ts",
+      "sha256": "6ac82fb77db098022439a9842fa93b7976dd2b6e46223cf6df4104dbf40bf73e",
+      "bytes": 804,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/auth.test.ts",
+      "sha256": "f289953d6ca02215b199b53950c71c6fcd8469dc8a5aaed7001bb878a9e28768",
+      "bytes": 1191,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/config.ts",
+      "sha256": "5a3b0ee11d6cab777915ce22a8044bbef94755edfb15d1b129ed0140fc310894",
+      "bytes": 2015,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/listener.ts",
+      "sha256": "1f32325371dc9d80cda22ee4b983529454cb8de8132412665931714692538dfd",
+      "bytes": 6833,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/listener.test.ts",
+      "sha256": "c4a16f7c80759c03f58546d72a04202a7b976460bb06e380b4e604dd67ff2aef",
+      "bytes": 2440,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/routes.ts",
+      "sha256": "a95872bb9d7ae467c6b6aa3a2be37c2b715e45264b226f239f29684419107c6a",
+      "bytes": 4389,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/server.ts",
+      "sha256": "ca1d8ebc679e181b7644b86b1010b6106e81863dd26ac6c9a83157241c62dd21",
+      "bytes": 4656,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/server.test.ts",
+      "sha256": "ed233e498e6be74a3bf10ec74f8f8b80b19a91b699dd62a63e8f664a5b7a8134",
+      "bytes": 4835,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "apps/site-api/src/beta-access/postgres.test.ts",
+      "sha256": "c932ead05b9bd20d029720543cb3e046ee94ac7b2003dfdb61ea6d7fb91baed0",
+      "bytes": 633,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "tools/beta-access/ci-prerequisites.ts",
+      "sha256": "5f5fbb5305cb820ae4c13cc8ebae0d1ab49414843dd3a601671eec8b8384e036",
+      "bytes": 1403,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "tools/beta-access/local-rehearsal.ts",
+      "sha256": "adef448fdde284564ec0baab123657f95043b75c81d5cc3c7cfb0129e23baef4",
+      "bytes": 48362,
+      "current_embedded_exact": true
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-author-20260925.json",
+      "sha256": "b94a39f4f570211651a3d39b65ca16615e446f78566aa6b5de87c14b7de0f675",
+      "bytes": 17827,
+      "current_embedded_exact": true
+    }
+  ],
+  "changed_declared_files_from_candidate3": [
+    ".github/workflows/verify.yml",
+    "evaluations/research-qa/m80-beta-access-author-20260925.json"
+  ],
+  "changed_declared_files_from_candidate2": [
+    ".github/workflows/verify.yml",
+    "packages/neuvetra-database/src/index.ts",
+    "evaluations/research-qa/m80-beta-access-author-20260925.json"
+  ],
+  "yaml_parsed": true,
+  "workflow_only_adds_signed_pgdg_provisioning": true,
+  "checks": [
+    "actual Ubuntu codename required",
+    "official HTTPS key and repository with scoped Signed-By",
+    "repository created before apt update/install",
+    "client17 PATH and both major17 guards retained",
+    "unchanged next native step and real restore harness",
+    "server17 retained",
+    "all runtime SQL listener bytes preserved from C2",
+    "shared index preserves reviewed pre-access hash"
+  ],
+  "candidate3_embedding_correction": {
+    "path": "tools/beta-access/local-rehearsal.ts",
+    "declared_current_sha256": "adef448fdde284564ec0baab123657f95043b75c81d5cc3c7cfb0129e23baef4",
+    "candidate3_embedded_sha256": "adef448fdde284564ec0baab123657f95043b75c81d5cc3c7cfb0129e23baef4",
+    "candidate4_embedded_sha256": "adef448fdde284564ec0baab123657f95043b75c81d5cc3c7cfb0129e23baef4",
+    "candidate3_bytes": 48362,
+    "candidate4_bytes": 48362
+  },
+  "new_native_or_package_execution": false,
+  "remote_ci_execution": false
+}

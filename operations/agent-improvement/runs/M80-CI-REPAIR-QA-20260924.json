@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "id": "M80-CI-REPAIR-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-REPAIR-QA-20260924-DELIVERABLE.json",
+      "sha256": "20d7d24d90379bd7baee66ef7eee2b625d0495bb35272dd6366582a99ffabd44"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CI_SUITE_PRESERVATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-repair-independent-20260924.json"
+      ],
+      "reason": "All prior suites retained in reviewed current or exact historical context."
+    },
+    {
+      "id": "LOCAL_FIXTURE_ADMISSION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-repair-independent-20260924.json"
+      ],
+      "reason": "Exact supported manifests/receipts before cloning and unchanged local target limits."
+    },
+    {
+      "id": "IMAGE_PACKAGING",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-repair-independent-20260924.json"
+      ],
+      "reason": "Review forthcoming two-file Docker packaging supplement."
+    },
+    {
+      "id": "CURRENT_STATUS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-repair-independent-20260924.json"
+      ],
+      "reason": "Frozen current status matches bounded evidence."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-ci-repair-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-CI-REPAIR-QA-20260924-DELIVERABLE.json",
+        "sha256": "20d7d24d90379bd7baee66ef7eee2b625d0495bb35272dd6366582a99ffabd44"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent root CI repair plus UI-author Docker supplement review, no source authorship. Requested Astra/high observed unknown. Escaped CI failures retained; exact-head remoteCI separate. No Git mutation/provider/hosted action."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-ci-repair-independent-20260924.json",
+      "sha256": "7e07a9c9bb9db5b123a7f7c406008e60b06d8be8ebe47632b27e5de3743632dd"
+    },
+    {
+      "path": "evaluations/research-qa/m80-ci-repair-independent-20260924-audit.json",
+      "sha256": "b4b84763ec64061410f3e527ebd225555c0575dddf6037610eb094fb567c8479"
+    },
+    {
+      "path": "evaluations/research-qa/m80-ci-repair-independent-20260924.test.ts",
+      "sha256": "71e5060241824cfc6be92a323c987a0aea73e7aa6eb19ec271237eaefd65c2e8"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-SETUP-PUBLICATION-METADATA-QA-20260924",
+  "observed_at": "2026-09-24T22:26:03.907627+00:00",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_publication_metadata_and_test_supplement_only",
+  "first_review": "fail",
+  "rework_cycles": 1,
+  "material_findings_open": 0,
+  "reviewed_files": [
+    {
+      "path": "operations/status.json",
+      "sha256": "73a479c332e679f9d11ee95a4a5c3e40a5b90188cb8e159b82e86cbe7f9b8186"
+    },
+    {
+      "path": "operations/board-report.md",
+      "sha256": "f3cb665068da0e5ca89ff0d3469d4e19b9e56ecbb2a219ad5fdc6daeb0f7ad82"
+    },
+    {
+      "path": "operations/next-session.md",
+      "sha256": "fc09cdc6c3b6eca9f902f266399f6e19c5f302c889d0467db309fa9794a0c8d7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-root-closure-20260924.json",
+      "sha256": "953cdda7f40b808be09f05aef2bc1b8ac271136f980774bb07c9d20aaa79aac6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-integration-root-closure-20260924.json",
+      "sha256": "d51ff69547e89f403dd5a05eb5bdaaa21a4ad5b0018ac8ead760e1e62d82819b"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-ui-root-browser-20260924.json",
+      "sha256": "c0d0da2b1d8df10b1494de731dc87042ccae3d4b864826e4221cd5f4a30853b8"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json",
+      "sha256": "ccd95d62750bdcd3e2298d354884023a3de0a50cfb3b24555cc84b74887321a5"
+    },
+    {
+      "path": "evaluations/research-qa/m80-navigation-hosted-20260924.json",
+      "sha256": "48140fc15e2a7dc2337c3c3990dd3ed9b047a32ef70816c4317ac184116b3fda"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.test.ts",
+      "sha256": "33f0dae5658d65ef75070b586dc30b22d1ca513017db106610b6ce28eace05cb"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-CI-READINESS-SUPPLEMENT-20260924.json",
+      "sha256": "ff541bb156d8901c77fe3e9bd373fed433efaa9c74258b720d6ace687546abcc"
+    }
+  ],
+  "checks": [
+    "All10 pinned files match current raw SHA256, including8 coordinator status/closure/browser/navigation records and2 test-supplement files.",
+    "META-F01 repaired: current session_handoff.current/next and runtime.last_session_work now distinguish deployed540c/schema21 navigation, locally accepted setup and pending publication/hosted schema22.",
+    "Leading board/next and free_scope1_beta current claims match local runtime2tests/322assertions and UI integration8tests/90assertions,544 negatives and603 legitimate variants.",
+    "All6 nested closure artifact SHA references resolve exactly. Prior failedCandidate1/rework histories remain explicit.",
+    "Browser receipts are explicitly mock API; native auth map remains synthetic; actual provider session and database-backed browser remain pending. No customer/method/source/numerical release claimed.",
+    "Current active task list is a dated handoff; metadata reviewer dispatched, completed UI author removed, hosted-prep security review scheduled separately after metadata. Spawn-limit fallback disclosed.",
+    "Navigation live identity agrees with dated existing navigation provider/browser receipt. No new hosted observation or mutation by reviewer."
+  ],
+  "test_supplement": {
+    "file": "packages/neuvetra-database/src/hosted.test.ts",
+    "sha256": "33f0dae5658d65ef75070b586dc30b22d1ca513017db106610b6ce28eace05cb",
+    "exact_change": "One occurrence toMatchObject({schemaVersion:21}) becomes toMatchObject({schemaVersion:22}) after migratePrivateStaging and pool replacement. Exact normalized-text replacement from accepted runtimeCandidate2; no other difference.",
+    "snapshot": "operations/agent-improvement/snapshots/M80-SETUP-CI-READINESS-SUPPLEMENT-20260924.json",
+    "snapshot_sha256": "ff541bb156d8901c77fe3e9bd373fed433efaa9c74258b720d6ace687546abcc",
+    "other_12_runtime_artifacts_exact": true,
+    "supplement_text_exact": true,
+    "command": "bun test packages/neuvetra-database/src/hosted.test.ts",
+    "tests_passed": 2,
+    "assertions": 16,
+    "skipped": 9,
+    "full_native_regression": "Not executed in this supplement review; opt-in named DB suite is skipped by default and must run in exact-head CI. Prior independent native fresh schema22 readiness already passed.",
+    "scope": "Test expectation only; accepted production migration/adapter/API bytes unchanged."
+  },
+  "first_review_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-FIRST-REVIEW.json",
+    "sha256": "4ab49cf4734f56548d1464526d60c77905fbdeafb5b84ed850ed337901fe514f"
+  },
+  "limits": [
+    "This verifies metadata consistency and one test-only correction. It does not independently accept this reviewer\u2019s own QA authorship; root separately accepted that deliverable.",
+    "Historical board/next sections are dated evidence, not current orders. No broader rewrite required.",
+    "No new Git/provider/browser/hosted actions, deployment, backup, migration or customer data. Exact-head CI and publication outcome remain separate.",
+    "Root must accept this review deliverable; own run remains pending review."
+  ]
+}

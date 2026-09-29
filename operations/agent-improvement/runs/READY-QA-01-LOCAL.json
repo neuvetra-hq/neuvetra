@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "READY-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/readiness_review",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-QA-01-LOCAL.json",
+      "sha256": "8a4a7a0b1071a47bf5e693da2a0921a0f244515b2612f25b4d939e28dd766722"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "LOCAL-01",
+      "status": "pass",
+      "evidence": [
+        "operations/inventory-readiness/verification.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "operations/inventory-readiness/verification.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-QA-01-LOCAL.json",
+        "sha256": "8a4a7a0b1071a47bf5e693da2a0921a0f244515b2612f25b4d939e28dd766722"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/readiness-review.md",
+      "sha256": "d1f800718801276d73db117dbc35290025f97b95dd2697eb4b5f4ece32043d24"
+    },
+    {
+      "path": "prototypes/company-onboarding/qa-readiness.py",
+      "sha256": "604fa22c4bcd5f3e2f8f5d9f571451d475f26261b1dd5386d962e16051c772be"
+    },
+    {
+      "path": "prototypes/company-onboarding/qa-readiness.cjs",
+      "sha256": "ea1b61b13cf9156fd46e540fbc6a99c0b1f7de8e6060c959e15d4616dbd0560b"
+    }
+  ],
+  "parent_outcome": "READY-01 local stage; production blocked",
+  "scope": "Bounded local scope only. See operations/inventory-readiness/acceptance.md",
+  "routing_exception": "Registry override authentication failed; actual dispatch inherited settings, observed unknown. Requested field records intended policy route, not applied model."
+}

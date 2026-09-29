@@ -1,0 +1,22 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_normalized_preparation_candidate1",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json",
+    "sha256": "3e5f7c5b046fcaee56c07b13218908a3ad735f8d188734d764b738b7d5886482"
+  },
+  "finding": {
+    "id": "NORMALIZED-PREP-F01",
+    "summary": "Current implementation author can supply internally consistent self-reviewed stage evidence and seal an intent.",
+    "root_finding": {
+      "path": "evaluations/research-qa/m80-normalized-prep-root-candidate1-finding-20260925.json",
+      "sha256": "e4d8e722680f7d2a050e3f2828320eba151280996bb1c8c1306a32f89f492be8"
+    },
+    "independent_reproduction": {
+      "path": "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-author-probe.json",
+      "sha256": "0bf0ab1d657fabdf1e543b9e4d16321c062c9af0eb0bf8803a1001525c5a0c2e"
+    },
+    "disposition": "Confirmed against frozen C1 function source, import paths relocated only. C2 targeted recheck separately closes finding."
+  },
+  "limits": "Synthetic in-memory objects only; no actual gate created."
+}

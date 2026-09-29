@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root",
+  "verdict": "pass_exact_byte_preservation_only",
+  "review": "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-attributes.json",
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-ATTRIBUTES-SUPPLEMENT.json",
+    "sha256": "514e1afafa43402fb74e7ecf9bcf83d426f9a24275b82697d334f384d4f6f914"
+  },
+  "checks": [
+    "Root verified exact attribute and independent review/snapshot hashes.",
+    "35 exact-path rules preserve existing CRLF bytes; prior attribute policy reconstructed by independent reviewer; no globs or production content changes."
+  ],
+  "limits": [
+    "Publication and staged-byte verification still pending."
+  ]
+}

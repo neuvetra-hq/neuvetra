@@ -1,0 +1,45 @@
+{
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate3_nested_predecessor_chronology",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE3.json",
+    "sha256": "4819c802c75ecb639d6eb7966baaa9579d05a15c06668943b882380af0fb90d6"
+  },
+  "checks": {
+    "author": {
+      "tests": 10,
+      "assertions": 46
+    },
+    "independent": {
+      "tests": 7,
+      "assertions": 88
+    },
+    "actual_receipt_files": 8,
+    "actual_file_pins_checked": 11,
+    "candidate_pins": "All four live files matched snapshot before extracting frozen QA copies."
+  },
+  "finding": {
+    "id": "F01-C3",
+    "severity": "medium",
+    "recurrence_of": "F01 stage chronology",
+    "evidence": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate3-nested-gate.json",
+    "detail": "While sealing deployment, historic admission gate.reviewedAt and targetReobservedAt are not compared with migration outcome.recordedAt. Rehashed and typed-consistent admission gate/target22:11:59.999, admission intent22:12 and migration outcome22:12 still authorize deployment. Current successor gate checks are correct; retained admission gate misses that same prerequisite condition.",
+    "repair": "During deployment predecessor validation, require admission gate review/target times >= migration outcome recordedAt in addition to admission intent time. Preserve Candidate3 and freeze narrow repair."
+  },
+  "repaired": [
+    "Unknown/failure promotion denied at migration and admission even after fresh outcome hashes.",
+    "Direct successor and early intent chronology deny; nested array sequences/table lists deny.",
+    "Eight real local receipt bodies loaded and eleven actual file hashes verified; contradictory preservation body denied first by hash, then by semantics after rehash.",
+    "Provider-stop assertions and exact six new-table row counts reject18 malformed cases.",
+    "Cross-plan/target swaps, all receipt contradictions, stale scalar shapes, traversal, deterministic operation scope checks pass."
+  ],
+  "documentation": "Runbook now explicitly identifies mock/authstub integration as local contract acceptance and real-Auth setup verification as postdeployment gate; no circular live acceptance assertion.",
+  "limits": [
+    "Offline validators/journals only. No executor, provider, hosted DB or authenticated setup verified here.",
+    "No real .superpowers durable intents/outcomes written. Eight synthetic receipts retained in own sandbox.",
+    "Canonical hash/content consistency does not authenticate collectors or reviewers; source authority and live observation remain external prerequisites.",
+    "First Candidate1/2 failures unchanged."
+  ],
+  "observed_at": "2026-09-24T23:18:41.356875+00:00"
+}

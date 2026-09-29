@@ -1,0 +1,84 @@
+{
+  "profile": "neuvetra.m80.foundation-backup-v2-independent-review.v1",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_backup_v2_transport_only",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+    "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-backup-v2-core.ts",
+      "sha256": "5580afe97449038a4d5a693e2fe7fa2c5aa0f38595a68af32354bc064d9af36e"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-core.test.ts",
+      "sha256": "1524c86d790fdfb4cf93fe07553473c1245645db665550594c77c0409a78f2a7"
+    },
+    {
+      "path": ".superpowers/m80-backup-v2-rehearsal.ts",
+      "sha256": "abcfb2cc929ccbd1d0431d9d61a3df36a54934b607f01bdf757445c652872b4a"
+    },
+    {
+      "path": "docs/research/m80-restore-normalization-v2-20260925.md",
+      "sha256": "e1d095263d13beef8eb3d708f48a6116ef7c8e49402502d10766ef255bfbdac7"
+    }
+  ],
+  "historical_backup_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+    "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+  },
+  "dependency_pins": [
+    {
+      "path": ".superpowers/m80-backup-core.ts",
+      "sha256": "01e88cafc1eb9f1613589d09e3dcfc20ba7c45f93c5321959fdd72cf371aaa2f"
+    },
+    {
+      "path": ".superpowers/m80-backup-local-rehearsal.ts",
+      "sha256": "ecce35bd3f96e642511e6630db30618b65455a7f0468d24ae9f29af44aa9d4ee"
+    },
+    {
+      "path": ".superpowers/m80-backup-seal.ps1",
+      "sha256": "85358f1512a092b885ac5db00bc3f4afb698cbbc38836aed9a73715fb3c55f23"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+      "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+    },
+    {
+      "path": "evaluations/research-qa/m80-restore-normalization-independent-20260925-review.json",
+      "sha256": "03a86604d440ae53d2841b4a4bd606b863c6974eb83c9cf1f21893282a041697"
+    },
+    {
+      "path": "evaluations/research-qa/m80-v2-integration-boundary-independent-20260925.md",
+      "sha256": "2ff91bf1edae62c9466b36226e8cefe10184a1accc2acc52a7bec4627f95a010"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+      "sha256": "8683a123dc91ff85d788d683f97575d27fe6f24efe55254a569bec681e936fe4"
+    },
+    {
+      "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate1-review.json",
+      "sha256": "3c5d09e5e1bc214f938cc089a09abab547e4e8eccb5deda55a6e4d89a5474f1f"
+    }
+  ],
+  "first_review": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate1-review.json",
+    "sha256": "3c5d09e5e1bc214f938cc089a09abab547e4e8eccb5deda55a6e4d89a5474f1f"
+  },
+  "material_findings_open": 0,
+  "closed_findings": [
+    "V2-F01",
+    "V2-F02"
+  ],
+  "evidence": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-evidence.json",
+    "sha256": "953fd2a24cab29a750315a70573e768896c48b446486e2441ff87cd90e59429c"
+  },
+  "limits": [
+    "Synthetic local source has zero external default ACLs. An additional in-memory 27-row fixture with duplicated triggers passes truthful raw-different/normalized-equal comparison; this is not actual archived hosted evidence.",
+    "Original C1 failure and two earlier author assertion-failure clones/journals remain retained.",
+    "No hosted action, credential, ENV export, provider, Git mutation, or actual archived-backup unseal occurred.",
+    "ACTUAL-RESTORE-F01 remains open. No actual archive or consumer integration accepted and no stage gate issued."
+  ]
+}

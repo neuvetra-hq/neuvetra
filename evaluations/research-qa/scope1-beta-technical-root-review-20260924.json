@@ -1,0 +1,21 @@
+{
+  "status": "pass_for_technical_plan_only",
+  "author": "/root/scope1_beta_technical",
+  "reviewer": "/root",
+  "independent": true,
+  "candidate": 3,
+  "material_findings_open": 0,
+  "reviewed_snapshot": "operations/agent-improvement/snapshots/SCOPE1-BETA-TECHNICAL-20260924-CANDIDATE3.json",
+  "reviewed_snapshot_sha256": "f45a5e7a40d5da1e1a59e2f92de03e9acc1e3d2ff35577d884d8786c0413a4d0",
+  "checks": [
+    "Exact snapshot bytes match current technical contract.",
+    "Current M78 candidate and four held profiles remain isolated from future release.",
+    "Real-data heuristic replaced by closed schema and exact synthetic fixture admission.",
+    "Old object preservation permits only explicitly reviewed new schema grants.",
+    "No first-slice export promised; migration22 requires collision check and independent implementation review."
+  ],
+  "limits": [
+    "Design acceptance only; no source/domain release, migration execution, realdata, deployment or invitation acceptance.",
+    "Independent security review of implementation required."
+  ]
+}

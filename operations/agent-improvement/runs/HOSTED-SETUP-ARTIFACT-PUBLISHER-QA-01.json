@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md", "sha256": "ec9f86ebcc2ab68a3ba3784c63ce3f3626907d4c6f38977f95fb7288cad94c7f"}
+  ],
+  "source_artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md", "sha256": "ec9f86ebcc2ab68a3ba3784c63ce3f3626907d4c6f38977f95fb7288cad94c7f"}
+  ],
+  "criteria": [
+    {"id": "AC-01-EXACT-REVIEW", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md"], "reason": "Matched frozen author hashes before and after testing; delivered six tests/24 assertions and strict TS passed. Sixteen independent public-boundary cases preserve two findings and fourteen expected outcomes. Root authorized fresh disposable Git fixture probes only; no shared Git/provider/database action."},
+    {"id": "AC-02-REVIEWED-COMMIT-IDENTITY", "status": "fail", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md"], "reason": "PUB-F01 P1: Git replacement refs substitute worker source under unchanged reviewed HEAD and clean status; publisher and real materializer/verifier accept the misbound bytes."},
+    {"id": "AC-03-PG-CLOSURE-COMPATIBILITY", "status": "fail", "evidence": ["evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review1.md"], "reason": "PUB-F02 P2: absent pg-native peer marked optional by pg8.23-style metadata is treated as mandatory, blocking the intended pure-JavaScript dependency closure."}
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "pending", "material_findings_open": 2, "rework_cycles": null, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-6-astra", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assessment": {
+    "candidate_author_execution_context": "/root/artifact_runner",
+    "independent_of_candidate_author": true,
+    "first_candidate_verdict": "fail",
+    "finding_ids": ["PUB-F01", "PUB-F02"],
+    "reviewed_candidate_artifacts": [
+      {"path": "tools/staging/hosted-setup-artifact-publisher.ts", "sha256": "02f2ab413ccb8900b9d921d329d86968acd3de46f31d6fb1950b05434f7d04b0"},
+      {"path": "tools/staging/hosted-setup-artifact-publisher.test.ts", "sha256": "5ee8f874c9a36822702d74bea942562babee5d5804f34bddfe7ddd73fdc614b1"}
+    ]
+  },
+  "routing_note": "Follow-up could not override or independently observe actual compute. This QA execution did not author publisher candidate files, but did author earlier consumers; their invocation is an integration check, not a new independent consumer acceptance. Coordinator inspection and immutable snapshot of this review remain pending administrative closure; candidate first FAIL is preserved separately."
+}

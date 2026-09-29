@@ -1,0 +1,14 @@
+{
+  "profile": "neuvetra.hosted-setup.restore-preflight-refusal.v1",
+  "dateUtc": "2026-09-26",
+  "status": "local-restore-not-started",
+  "code": "HS_RECOVERY_TOOL_PIN_REQUIRED",
+  "cause": "Root's local invocation supplied a 62-character pg_ctl SHA-256 literal; the pinned helper refused it before its durable reservation.",
+  "attemptDataDir": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted_setup_roles_1790414779393_3b387569",
+  "attemptJournalExistedAfter": false,
+  "attemptDataDirExistedAfter": false,
+  "localDatabaseCreated": false,
+  "hostedDatabaseChanged": false,
+  "pairedArchiveChanged": false,
+  "nextAction": "Use a new local attempt path with the exact verified 64-character pg_ctl pin."
+}

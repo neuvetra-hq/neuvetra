@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "M80-HANDOFF-PLAN-QA-20260924",
+  "role": "qa-lead",
+  "execution_context": "/root/merge_integration_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HANDOFF-PLAN-QA-20260924-DELIVERABLE.json",
+      "sha256": "5d771bfd4d2796cac3eefd0e1eebbf98c9c4b0d8179a6fde90fec90bf9c821c8"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_MERGE_AND_BETA_HANDOFF",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-handoff-merge-independent-20260924.json",
+        "evaluations/research-qa/m80-handoff-merge-independent-20260924.md",
+        "operations/agent-improvement/snapshots/M80-HANDOFF-PLAN-QA-20260924-CANDIDATE2.json"
+      ],
+      "reason": "Six exact-head checks and merge corroborated; normalized candidate2 preserves truthful interim beta boundaries."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-handoff-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HANDOFF-PLAN-QA-20260924-DELIVERABLE.json",
+        "sha256": "5d771bfd4d2796cac3eefd0e1eebbf98c9c4b0d8179a6fde90fec90bf9c821c8"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-handoff-merge-independent-20260924.md",
+      "sha256": "9fa2d1e81ac1b983d70c2c52543fa245261f72585bbb197e7f669c128fd41738"
+    },
+    {
+      "path": "evaluations/research-qa/m80-handoff-merge-independent-20260924.json",
+      "sha256": "9cc4fabbbca91fc1921ff952710f7f0e0188b2646cc63ebcf76d941ccde2456f"
+    }
+  ],
+  "routing_notes": "Initial dispatch rejected by runtime agent limit before task started; existing independent context reused after CPO completion freed capacity.",
+  "notes": [
+    "Root inspected independent result, corroborated snapshot and all five current source hashes, and closed documentation review."
+  ]
+}

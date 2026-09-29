@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "id": "M79-BETA-RELEASE-PACKET-20260924",
+  "role": "accounting-validation",
+  "execution_context": "/root/m79_beta_release_packet",
+  "prompt_sha256": "3b3a733efb0344a328dd838e088cd0d4abdfc903cd4f7b52d46d851c5a4d0f36",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-BETA-RELEASE-PACKET-20260924-CANDIDATE1.json",
+      "sha256": "5e6c97cde6c2f6b11e631f0828f4d4b65a9438da670fedebd3120c3ef857450f"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-profile-source-row-map",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-beta-release-decision-packet-20260924.json",
+        "operations/agent-improvement/snapshots/M79-BETA-RELEASE-PACKET-20260924-CANDIDATE1.json",
+        "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json"
+      ],
+      "reason": "Author verified four profiles/twelve distinct rows/seven original hashes and bytes, exact method identities and row values/units/locators against accepted inventory; independent root review pending."
+    },
+    {
+      "id": "AC-02-concrete-acts-owners-decisions",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-beta-release-decision-packet-20260924.md",
+        "docs/research/m79-beta-release-decision-packet-20260924.json",
+        "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json"
+      ],
+      "reason": "A1-A4 define exact numerical, independent-implementation, derived-output and link acts; seven source decisions and four profile questions plus shared policy/release gates name functional owners while preserving unassigned human identities."
+    },
+    {
+      "id": "AC-03-holds-subset-and-boundaries",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m79-beta-release-decision-packet-20260924.md",
+        "docs/research/m79-beta-release-decision-packet-20260924.json",
+        "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json"
+      ],
+      "reason": "All decision states await review; all release flags false and dates null. Natural-gas subset retains five source decisions, qualified domain, independent numerics, tenant/document/security/recovery and realdata/invitation gates; no current-law/legal approval claim."
+    },
+    {
+      "id": "AC-04-independent-packet-review",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json"
+      ],
+      "reason": "Root to challenge exact frozen packet; internal review is not qualified professional domain/legal approval."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m79-beta-release-packet-root-review-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M79-BETA-RELEASE-PACKET-20260924-CANDIDATE1.json",
+        "sha256": "5e6c97cde6c2f6b11e631f0828f4d4b65a9438da670fedebd3120c3ef857450f"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Concrete narrow free Scope 1 beta source/method release decisions for later authorized review",
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M79-PRIMARY-RIGHTS-EVIDENCE-01-CANDIDATE3.json",
+      "sha256": "e9028738cba18c51feb100c57b232b88367b3f261df66ea1477e078d6e68be28"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M79-NUMERICAL-COMPATIBILITY-01-CANDIDATE1.json",
+      "sha256": "2ca05e1fe65f3376035343ee5fc09350f80fe747b58c001524b104e87f74f090"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/SCOPE1-FREE-BETA-PLAN-20260924-CANDIDATE2.json",
+      "sha256": "52417d77684bb88375a07aea211db85bf08affe50876e3a3db1018001f356f36"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/SCOPE1-BETA-TECHNICAL-20260924-CANDIDATE3.json",
+      "sha256": "f45a5e7a40d5da1e1a59e2f92de03e9acc1e3d2ff35577d884d8786c0413a4d0"
+    },
+    {
+      "path": "docs/research/m79-method-source-inventory.json",
+      "sha256": "d5f50b6e2d49b1ce027affe08ccfe422174b59df60c408b544212f232b9a8022"
+    },
+    {
+      "path": "docs/research/m79-numerical-compatibility.md",
+      "sha256": "84e189333b1c36d3dbfec041e8cb74a5182955877a27c94736df29fd7c3daafc"
+    },
+    {
+      "path": "docs/research/m79-primary-rights-evidence.json",
+      "sha256": "dcae2c639d7189a820c049ff74febd4284bbe1d4cfe09a96f0099b5182cbdfe5"
+    },
+    {
+      "path": "evaluations/research-qa/m79-inventory-independent-review.md",
+      "sha256": "8c251a82339395e889f4a83543f56824d87817f2f932560c64d88c6c86cb5285"
+    },
+    {
+      "path": "evaluations/research-qa/m79-inventory-root-acceptance.md",
+      "sha256": "a22819337d187eea3c7d5bd332175d6503ff65c7a6a4276bd5963c24ade1ec50"
+    },
+    {
+      "path": "evaluations/research-qa/m79-numerical-independent-review.md",
+      "sha256": "b80afc4c7e4b787b33f4bfc439d6a738b22a5e69cf6637f1d1e20b3645d4c142"
+    },
+    {
+      "path": "evaluations/research-qa/m79-numerical-root-acceptance.md",
+      "sha256": "3ef0fedcf1f43c3869f7ece4cc562fa32c5ee9e404c0271378c87a58d4a39443"
+    },
+    {
+      "path": "evaluations/research-qa/m79-rights-independent-review.md",
+      "sha256": "6d416c892dc3fcd475512fd8693a2cb103ca66932e26f3b97fe9f9f3db20a271"
+    },
+    {
+      "path": "evaluations/research-qa/m79-rights-root-targeted-review.md",
+      "sha256": "87c934fc972be65e4cdaf3473a8c6343c8ad9e48f4b0bffb64b98357f764a218"
+    },
+    {
+      "path": "docs/research/scope1-free-beta-m80-plan-20260924.md",
+      "sha256": "32c198d3bb341b22d91aac5dca1a7c4837fdc45f661db45578449a8e63c3c3cb"
+    },
+    {
+      "path": "docs/research/scope1-free-beta-technical-20260924.md",
+      "sha256": "e7c26892a60df40b431c5d73ad5236c7deb802b7898fa80f5ca3ceaed2a469e8"
+    },
+    {
+      "path": "evaluations/research-qa/scope1-free-beta-plan-root-review-20260924.json",
+      "sha256": "4977854d5ff3373443bdd4faf870aa390021612eaa316a980a78efdba5e0bac0"
+    },
+    {
+      "path": "evaluations/research-qa/scope1-beta-technical-root-review-20260924.json",
+      "sha256": "0691e04cc7e7474904ec3da99d5480d9d00f09f375fe1270181e5f5b472a2579"
+    }
+  ],
+  "applicable_lessons": [
+    "L02"
+  ],
+  "notes": [
+    "No prior authorship of the accepted M79 inventory/numerical/rights dossiers or CPO/CTO plans. Packet author cannot approve this packet independently.",
+    "Requested Astra/high as dispatched; observed runtime settings unavailable. All resource and cost metrics remain null.",
+    "Seven retained-original SHA/byte lengths and accepted snapshot/current dossier/plan identity checked locally. No remote/source-law refresh or new numerical run.",
+    "Only assigned packet and own run/snapshot written. No Git/shared ledger/app/provider/customer/source upload/paid call/M78 replay.",
+    "Own-record structural validation uses tools/agent_ops.py validate_run; root owns full repository validation and closure."
+  ]
+}

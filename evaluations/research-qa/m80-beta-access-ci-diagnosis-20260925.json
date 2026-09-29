@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-25T08:24:12.866618+00:00",
+  "status": "diagnosis_confirmed_independent_disposition_pending",
+  "candidate3_snapshot_sha256": "77aba791a6b48e1306138a1bb62cddb16ee99ab4ee4531802921ffbe07a51f7c",
+  "finding": "Installed PostgreSQL16 package does not prove PGDG remains configured; runner build removes PGDG source and key. Candidate3 does not configure that source before installing client17.",
+  "primary_evidence": [
+    {
+      "url": "https://raw.githubusercontent.com/actions/runner-images/main/images/ubuntu/scripts/build/install-postgresql.sh",
+      "support": "Runner installer removes pgdg.list and postgresql.gpg after installation."
+    },
+    {
+      "url": "https://www.postgresql.org/download/linux/ubuntu/",
+      "support": "Configure a signed PostgreSQL Apt repository for versions not included in Ubuntu; install versioned client package."
+    }
+  ],
+  "proposed_correction": "Add explicit HTTPS PGDG signing key and Signed-By source for the runner codename, then install client17 and preserve version gates and actual native restore. CI-only; no local package installation.",
+  "workflow": {
+    "id": "M80-BETA-ACCESS-20260925",
+    "version": 3,
+    "active_tickets": 0,
+    "planning_ceiling_usd": 30,
+    "encumbered_usd": 30,
+    "actual_cost_usd": null,
+    "extension": "board_decision_pending",
+    "original_journal": "preserve_no_reset_or_direct_edit"
+  },
+  "hosted_mutation": false,
+  "source_changes_after_frozen_candidate3": false
+}

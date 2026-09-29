@@ -1,0 +1,103 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_m80_executor_transport_only",
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
+    "sha256": "1e62195be433c6a5ed3cc5a68ab789845b093107a0e41ea4f37c324d0c5b1481"
+  },
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-foundation-executor.ts",
+      "sha256": "4cf676a7f93e664800205146afcb45621d6018d1e821c7bcf7c2c5d7a48f18fb"
+    },
+    {
+      "path": ".superpowers/m80-foundation-executor.test.ts",
+      "sha256": "6773a52a3cd45a9c8ac8de6cabc42be5f698eca6b68d59a71ef57d7ec1e075e9"
+    },
+    {
+      "path": ".superpowers/m80-executor-private.ps1",
+      "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3"
+    },
+    {
+      "path": "docs/research/m80-foundation-executor-preparation-20260924.md",
+      "sha256": "76a8ba62f971e36d05e39262350727d53b4b5bd66ca7e38895c801e5573460c8"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
+      "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
+      "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
+    },
+    {
+      "path": ".superpowers/m80-backup-core.ts",
+      "sha256": "01e88cafc1eb9f1613589d09e3dcfc20ba7c45f93c5321959fdd72cf371aaa2f"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+      "sha256": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-review.json",
+      "sha256": "166af7ea85c0c3d937840741add18f7a7165c18497e6b9a37b4c2b50dc8213f2"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE6-DELIVERABLE.json",
+      "sha256": "ec0dc09ac5132a1149fdb1a7d071161d9a6eaf754248075e52de19e6a3515d41"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+      "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+    },
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json",
+      "sha256": "991317f91a9ec71f6ed862298224a1e131de7a93839483d09b22bf340d5f9196"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "47b3f28d7af9bcd6b57cb71d9377ea5f735ab5647c592723306e13f2d6df6eeb"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "8541837f85d78aae412c507f3c40d9fa2ccfdf47b54ccf509f9a3811915ce326"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "c4fafae30771701cab3030d65443e6afae560cdce3742285ab14a2b4f3f58201"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m71-validation.ts",
+      "sha256": "44add799b85939bc0825a0e1fe095e41104faea13796d5ee1b58227660b0b7ec"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80-validation.ts",
+      "sha256": "f2bb6546a71a8c52b0627f48809af2b76d21cb1b6085623fc0929123fe616919"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80-contract.ts",
+      "sha256": "da21a85786c9d692619c6055860239bde9683e34e86dc1ce01b879619d0e4321"
+    },
+    {
+      "path": "packages/neuvetra-database/src/m80-fixture.ts",
+      "sha256": "a5510624d56542bddf563f4a723f9ce99f9d27793155e7456369460dc4f18b30"
+    },
+    {
+      "path": "tools/staging/m73-common.ts",
+      "sha256": "a47f8904fab503272173e3db8f39144f52d3b3d4eb14da03784349ac88466ab7"
+    },
+    {
+      "path": "tools/staging/m78-inventory.ts",
+      "sha256": "ea93686812910082438bf8ecfd9ef8756dddd6048897d369a494e0fdd700f40a"
+    },
+    {
+      "path": "evaluations/research-qa/m80-executor-author-candidate9-20260924.json",
+      "sha256": "92d2f2f530377bb314ac7f0dd484eb6267fe49a2771ffa85751b2eb96d39b000"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE8-REVIEW.json",
+      "sha256": "1c265f55432b8814595be79c82368b9a96d52c8ca0f9c25c6572a5741a079cb6"
+    }
+  ],
+  "material_findings_open": 0
+}

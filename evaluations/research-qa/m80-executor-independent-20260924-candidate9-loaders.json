@@ -1,0 +1,87 @@
+{
+  "boundary": "Real frozen source validator, actual delivered snapshot/nested source reads; mutations virtual only; no network/DB",
+  "currentOverrides": [],
+  "nativeSourceBytes": 3224598,
+  "nativeSourceSha256": "512d0368b714ab68bb2c0563cde3716716ff217847184174573f1838cb28a604",
+  "outerBytes": 3336487,
+  "outerArtifacts": 23,
+  "actualClosureCount": 159,
+  "acceptedPreparationBytes": 109954,
+  "results": [
+    {
+      "leaf": "tools/staging/m78-inventory.ts",
+      "rejected": true
+    },
+    {
+      "leaf": "tools/staging/m73-common.ts",
+      "rejected": true
+    },
+    {
+      "leaf": "packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+      "rejected": true
+    },
+    {
+      "leaf": "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+      "rejected": true
+    },
+    {
+      "leaf": "tools/cloud/fixtures/supabase-prod-ca-2021.crt",
+      "rejected": true
+    },
+    {
+      "leaf": "bun.lock",
+      "rejected": true
+    },
+    {
+      "leaf": ".superpowers/m80-backup-private.ps1",
+      "rejected": true
+    },
+    {
+      "leaf": ".superpowers/m80-foundation-hosted-once.ts",
+      "rejected": true
+    },
+    {
+      "leaf": ".superpowers/m80-foundation-hosted-once-v2.ts",
+      "rejected": true
+    },
+    {
+      "leaf": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
+      "rejected": true
+    },
+    {
+      "name": "ordinary_exact_bound",
+      "bytes": 1000000,
+      "rejected": false
+    },
+    {
+      "name": "ordinary_over_bound",
+      "bytes": 1000001,
+      "rejected": true
+    },
+    {
+      "name": "source_exact_bound",
+      "bytes": 4000000,
+      "rejected": false
+    },
+    {
+      "name": "source_over_bound",
+      "bytes": 4000001,
+      "rejected": true
+    },
+    {
+      "name": "duplicate_top",
+      "bytes": 13,
+      "rejected": true
+    },
+    {
+      "name": "duplicate_escaped",
+      "bytes": 18,
+      "rejected": true
+    },
+    {
+      "name": "duplicate_nested",
+      "bytes": 21,
+      "rejected": true
+    }
+  ]
+}

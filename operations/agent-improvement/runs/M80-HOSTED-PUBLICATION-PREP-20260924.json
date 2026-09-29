@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "id": "M80-HOSTED-PUBLICATION-PREP-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_setup_ui",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-hosted-publication-inventory-20260924.json",
+      "sha256": "7e7e814f485bf981be7c053739692bb8ce5c08d75c961f85aecb105183a59c31"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE1.json",
+      "sha256": "6996d3c333bc3eab169b0ab192ceb26d6ff622f02e7a9465b4fb822525aedd92"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE2.json",
+      "sha256": "8b4a352bab9c4f5f7a2c37199d01de28ab6875fd1a738e2dda614086d40a5871"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json",
+      "sha256": "639092a272f49cd1313973602f687f376e713a59d3114d64243f759ad59fa115"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-reviewed-public-paths",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-publication-inventory-20260924.json",
+        "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json"
+      ],
+      "reason": "Candidate3 retains the independently root-rehashed 149-file base and separately enumerates 57 additions: 8 accepted stage-collector files, 2 root-accepted sanitized preflight metadata files, and 47 failed non-executable executor-history files."
+    },
+    {
+      "id": "AC-02-private-and-unaccepted-exclusions",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-publication-inventory-20260924.json",
+        "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json"
+      ],
+      "reason": "Candidate7, mutable executor runs/documentation, raw private sources, identity and credential receipts, UUID-shaped process receipt directories, dumps, temporary files, unrelated M78 work and shared metadata remain excluded."
+    },
+    {
+      "id": "AC-03-byte-and-size-risks",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-publication-inventory-20260924.json",
+        "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json"
+      ],
+      "reason": "All 206 current rows have exact hashes and sizes. Candidate3 additions require no new CRLF rules; six added failed executor snapshots exceed the conservative one MiB review threshold and are flagged."
+    },
+    {
+      "id": "AC-04-independent-review",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json",
+        "evaluations/research-qa/m80-hosted-publication-inventory-root-review-20260924.json"
+      ],
+      "reason": "Root independently verified all206 component/history paths and exact bytes/sizes, original failed metadata history, private exclusions and advisory oversize disposition. Final integrated publication remains a separate pending gate."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-hosted-publication-inventory-root-review-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "evaluations/research-qa/m80-hosted-publication-inventory-20260924.json",
+        "sha256": "7e7e814f485bf981be7c053739692bb8ce5c08d75c961f85aecb105183a59c31"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE1.json",
+        "sha256": "6996d3c333bc3eab169b0ab192ceb26d6ff622f02e7a9465b4fb822525aedd92"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE2.json",
+        "sha256": "8b4a352bab9c4f5f7a2c37199d01de28ab6875fd1a738e2dda614086d40a5871"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json",
+        "sha256": "639092a272f49cd1313973602f687f376e713a59d3114d64243f759ad59fa115"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 0,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 reviewed hosted preparation, backup, stop and recovery public publication candidate",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "notes": [
+    "This task is read-only with respect to Git, provider, network, credentials and hosted execution.",
+    "Candidate1 is preserved as the failed zero-byte-summary attempt; Candidate2 preserved the corrected 149-file base. Candidate3 adds component and historical evidence without changing either prior snapshot.",
+    "Stage collector Candidate1 and QA/root closure are accepted for read-only component evidence only.",
+    "Sanitized readonly preflight and root review are accepted public metadata; private identity lookup, email and raw receipts remain excluded.",
+    "Executor Candidates1-6 are explicitly failed and non-executable history. Candidate7 and all current pending review material remain excluded.",
+    "Integrated hosted readiness is false: preparation Candidate5 chronology and Candidate7 post-deployment runtime sessions are open blockers.",
+    "Root added the original nine exact CRLF rules separately; Candidate3 additions contain no CRLF bytes and need no new rules.",
+    "Candidate3 does not claim a new independent review or publication.",
+    "Root independently verified all206 current component/history bytes and sizes; accepted bounded inventory only. Integrated release and final publication remain pending."
+  ]
+}

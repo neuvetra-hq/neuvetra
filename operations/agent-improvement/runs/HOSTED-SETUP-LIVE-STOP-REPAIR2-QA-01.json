@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-LIVE-STOP-REPAIR2-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "sha256": "e9602beda71c40c1957cb6cc1aa05c1f4cd97dd1f917f514388b06dad3f73f44",
+      "path": "evaluations/research-qa/hosted-setup-01-live-stop-independent-review3.md"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "PRODUCTION_HELPER_F01_TO_F05",
+      "reason": "Independent12/79 demonstrates repaired immutable identity, exclusivity, chronology and finalization uncertainty; actual default transport intercepted, no provider action.",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review3.md"
+      ]
+    },
+    {
+      "id": "CANDIDATE_TEST_ISOLATION",
+      "reason": "New LIVE-STOP-F06 P2: candidate leaves fs/promises mock installed; follow-on open/close of prior fixture journal throws synthetic error.7 pass1 fail42.",
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review3.md"
+      ]
+    },
+    {
+      "id": "FOCUSED_REGRESSION_AND_TYPES",
+      "reason": "Candidate7/41, combined26/145 and strict TS pass; combined order has live-stop last and does not negate isolation failure.",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review3.md"
+      ]
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 1,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded production-source behavior PASS, frozen source-and-test package FAIL because of concrete test-only F06. Prior QA1/QA2 FAIL reports untouched.",
+    "Independent reviewer did not author candidate. Registered critical request gpt-6-astra/high; observed follow-up settings unknown.",
+    "Literal old probe11 pass1 stale event-name failure78; only a new probe copy updated renamed event assertion;12/79 pass. F05 passes original fault input.",
+    "No live provider/DB/Git/source actions. Native command execution intercepted; actual filesystem mock leakage reproduced in follow-on test.",
+    "QA artifact awaits coordinator review/immutable packaging, no self-review or live stop/migration authority."
+  ]
+}

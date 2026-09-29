@@ -1,0 +1,2065 @@
+{
+  "boundary": "Actual separate Bun processes executing exact frozen private entry extracted with injected synthetic DB/provider; actual filesystem wx/write/sync/close; no network/credentials. Deployment reconciliation runs with one live runtime session and content recapture forbidden.",
+  "durable_order_asserted": true,
+  "cases": [
+    {
+      "scenario": "migration_success_execute",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-migration_success_execute-1790307909063603000",
+      "results": [
+        {
+          "scenario": "migration_success_execute",
+          "phase": "execute",
+          "pid": 41856,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_success_execute",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-admission_success_execute-1790307909198283500",
+      "results": [
+        {
+          "scenario": "admission_success_execute",
+          "phase": "execute",
+          "pid": 2348,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "admission-mutation"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_success_execute",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_success_execute-1790307909337174400",
+      "results": [
+        {
+          "scenario": "deployment_success_execute",
+          "phase": "execute",
+          "pid": 42300,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "readiness"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "migration_pending",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-migration_pending-1790307909478322200",
+      "results": [
+        {
+          "scenario": "migration_pending",
+          "phase": "execute",
+          "pid": 40240,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "migration_pending",
+          "phase": "reconcile",
+          "pid": 42064,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "migration_crash_observation",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-migration_crash_observation-1790307909754306500",
+      "results": [
+        {
+          "scenario": "migration_crash_observation",
+          "phase": "execute",
+          "pid": 32188,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: synthetic crash before observation",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "migration_crash_observation",
+          "phase": "reconcile",
+          "pid": 10844,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "migration_crash_outcome",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-migration_crash_outcome-1790307910027219000",
+      "results": [
+        {
+          "scenario": "migration_crash_outcome",
+          "phase": "execute",
+          "pid": 6756,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: synthetic crash after observation",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "migration_crash_outcome",
+          "phase": "reconcile",
+          "pid": 42720,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_live_success",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_live_success-1790307910309328400",
+      "results": [
+        {
+          "scenario": "deployment_live_success",
+          "phase": "execute",
+          "pid": 40384,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_live_success",
+          "phase": "reconcile",
+          "pid": 2236,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+            },
+            {
+              "event": "readiness"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_pending",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-admission_pending-1790307910585919400",
+      "results": [
+        {
+          "scenario": "admission_pending",
+          "phase": "execute",
+          "pid": 42208,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "admission-mutation"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "admission_pending",
+          "phase": "reconcile",
+          "pid": 40412,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_gate_mismatch",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-admission_gate_mismatch-1790307910860653500",
+      "results": [
+        {
+          "scenario": "admission_gate_mismatch",
+          "phase": "execute",
+          "pid": 40888,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Current schema-22 application state differs from the fresh reviewed gate.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_gate_mismatch",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_gate_mismatch-1790307910985918100",
+      "results": [
+        {
+          "scenario": "deployment_gate_mismatch",
+          "phase": "execute",
+          "pid": 41080,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Current schema-22 application state differs from the fresh reviewed gate.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "migration_live_execute",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-migration_live_execute-1790307911114662400",
+      "results": [
+        {
+          "scenario": "migration_live_execute",
+          "phase": "execute",
+          "pid": 27660,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Active application database sessions refuse execution.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_live_execute",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-admission_live_execute-1790307911239281100",
+      "results": [
+        {
+          "scenario": "admission_live_execute",
+          "phase": "execute",
+          "pid": 31220,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Active application database sessions refuse execution.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_live_execute",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_live_execute-1790307911379341700",
+      "results": [
+        {
+          "scenario": "deployment_live_execute",
+          "phase": "execute",
+          "pid": 13916,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Active application database sessions refuse execution.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_live_reconcile",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-admission_live_reconcile-1790307911505602000",
+      "results": [
+        {
+          "scenario": "admission_live_reconcile",
+          "phase": "execute",
+          "pid": 3796,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "admission-mutation"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "admission_live_reconcile",
+          "phase": "reconcile",
+          "pid": 18644,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Active application database sessions refuse execution.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_reject_receipt",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_reject_receipt-1790307911781696000",
+      "results": [
+        {
+          "scenario": "deployment_reject_receipt",
+          "phase": "execute",
+          "pid": 40344,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_reject_receipt",
+          "phase": "reconcile",
+          "pid": 42896,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "Error: Exact hosted schema-22 target required.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_reject_target",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_reject_target-1790307912061536300",
+      "results": [
+        {
+          "scenario": "deployment_reject_target",
+          "phase": "execute",
+          "pid": 8324,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_reject_target",
+          "phase": "reconcile",
+          "pid": 40084,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "Error: Exact hosted schema-22 target required.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_reject_provider_id",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_reject_provider_id-1790307912359850600",
+      "results": [
+        {
+          "scenario": "deployment_reject_provider_id",
+          "phase": "execute",
+          "pid": 12392,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_reject_provider_id",
+          "phase": "reconcile",
+          "pid": 23652,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_reject_commit",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_reject_commit-1790307912651193600",
+      "results": [
+        {
+          "scenario": "deployment_reject_commit",
+          "phase": "execute",
+          "pid": 41080,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_reject_commit",
+          "phase": "reconcile",
+          "pid": 42064,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_reject_readiness",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_reject_readiness-1790307912928830600",
+      "results": [
+        {
+          "scenario": "deployment_reject_readiness",
+          "phase": "execute",
+          "pid": 40840,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_reject_readiness",
+          "phase": "reconcile",
+          "pid": 41644,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+            },
+            {
+              "event": "readiness"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221230000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_reject_provider_status",
+      "directory": "evaluations/research-qa/m80-normalized-executor-independent-20260925-process-deployment_reject_provider_status-1790307913227690000",
+      "results": [
+        {
+          "scenario": "deployment_reject_provider_status",
+          "phase": "execute",
+          "pid": 8616,
+          "closed": true,
+          "applicationStateSha256": "d4a4d0210fd07d2052f2a5b4b1d7f0e7c86fb9a9351701fb247d1ef07670f274",
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260924221200000.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_reject_provider_status",
+          "phase": "reconcile",
+          "pid": 6792,
+          "closed": true,
+          "applicationStateSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "error": "",
+          "outcomeStatus": "verified_failure_do_not_retry",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

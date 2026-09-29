@@ -1,0 +1,93 @@
+{
+  "boundary": "Exact frozen preflight/inspect and receipt validator functions; synthetic DB and writer bindings; no actual DB/network/credential action",
+  "results": [
+    {
+      "mode": "preflight",
+      "sessions": 0,
+      "accepted": true,
+      "closed": true,
+      "readOnly": true,
+      "receiptWritten": true
+    },
+    {
+      "mode": "preflight",
+      "sessions": 3,
+      "accepted": true,
+      "closed": true,
+      "readOnly": true,
+      "receiptWritten": true
+    },
+    {
+      "mode": "inspect",
+      "sessions": 0,
+      "accepted": true,
+      "closed": true,
+      "readOnly": true,
+      "receiptWritten": true
+    },
+    {
+      "mode": "inspect",
+      "sessions": 3,
+      "accepted": false,
+      "closed": true,
+      "readOnly": true,
+      "receiptWritten": false
+    },
+    {
+      "case": "receipt_completedAt",
+      "rejected": true
+    },
+    {
+      "case": "receipt_completedAt",
+      "rejected": true
+    },
+    {
+      "case": "receipt_completedAt",
+      "rejected": true
+    },
+    {
+      "case": "receipt_sourceSchemaVersion",
+      "rejected": true
+    },
+    {
+      "case": "receipt_projectRef",
+      "rejected": true
+    },
+    {
+      "case": "receipt_applicationOnly",
+      "rejected": true
+    },
+    {
+      "case": "receipt_syntheticDataOnly",
+      "rejected": true
+    },
+    {
+      "case": "receipt_providerRecoveryExcluded",
+      "rejected": true
+    },
+    {
+      "case": "receipt_encryptedArchiveSha256",
+      "rejected": true
+    },
+    {
+      "case": "receipt_snapshotSha256",
+      "rejected": true
+    },
+    {
+      "case": "receipt_customDumpSha256",
+      "rejected": true
+    },
+    {
+      "case": "receipt_sourceApplicationStateSha256",
+      "rejected": true
+    },
+    {
+      "case": "receipt_extra",
+      "rejected": true
+    },
+    {
+      "case": "foreign_snapshot_source",
+      "rejected": true
+    }
+  ]
+}

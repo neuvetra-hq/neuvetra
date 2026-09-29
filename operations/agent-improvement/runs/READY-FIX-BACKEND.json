@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "id": "READY-FIX-BACKEND",
+  "role": "software-engineering",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/READY-FIX-BACKEND-20260926.json",
+      "sha256": "6c9c163b604f4bba77676b30a9299a2ed6137f7d3eaf184e42f70986a4c5413c"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "NORMALIZATION",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "UPSTREAM-INVALIDATION",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "EVIDENCE-RECOVERY",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "DUPLICATE-UPLOAD",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    },
+    {
+      "id": "SCOPE3-COVERAGE-DEFAULT",
+      "status": "pass",
+      "evidence": [
+        "prototypes/company-onboarding/feedback-independent-review.md"
+      ],
+      "reason": null
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/convergence",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "prototypes/company-onboarding/feedback-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/READY-FIX-BACKEND-20260926.json",
+        "sha256": "6c9c163b604f4bba77676b30a9299a2ed6137f7d3eaf184e42f70986a4c5413c"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "prototypes/company-onboarding/plan-core.js",
+      "sha256": "4dff95651931624944d2afcc14523a1cc18da29c160e9d0e64abcb16ab0b7421"
+    },
+    {
+      "path": "prototypes/company-onboarding/plan-core.test.cjs",
+      "sha256": "94eb387ac752a9d32fb5635f7eadc03658022ba1e4b7f92483aa5474fc7e1d16"
+    },
+    {
+      "path": "prototypes/company-onboarding/server.py",
+      "sha256": "c3cf018b2eee59b5df8659a268adcfecf8efd8373e795ad525da7295e03900c7"
+    },
+    {
+      "path": "prototypes/company-onboarding/test_server.py",
+      "sha256": "129c1a86507d3b7a637cbf76181cd38cf71cc41ed32fdc7b162cea2a867c4a92"
+    }
+  ],
+  "parent_outcome": "Board-authorized feedback repair for inventory collection and readiness UX",
+  "scope": "Backend collection-plan normalization, invalidation, evidence recovery, duplicate uploads, and Scope 3 location defaults; no Git, publication, live database, or port 4319 actions.",
+  "routing_exception": "Critical software-engineering route requested gpt-5.6-sol/high; actual model and effort were not observable."
+}

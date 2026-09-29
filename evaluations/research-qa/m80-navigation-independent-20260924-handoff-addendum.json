@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-SCOPE1-NAV-QA-20260924",
+  "reviewer": "/root/merge_integration_qa",
+  "verdict": "pass_text_addendum_only",
+  "material_findings_open": 0,
+  "observed_at": "2026-09-24T17:23:57.450291+00:00",
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-HANDOFF-ADDENDUM1.json",
+    "sha256": "3bac54656df637446e503675f97e89ee275c9d4eb4dff5fa2cdcf9a76f778beb"
+  },
+  "source_artifacts": [
+    {
+      "path": "operations/board-report.md",
+      "sha256": "bd13cdb68fdbb17a91b238bba968bffcf422431d18e9514caf8205c0ccafaec7"
+    },
+    {
+      "path": "operations/next-session.md",
+      "sha256": "03f99d499658e023cbb66673f43523e8720cf5e4365736955126152e036cf0a7"
+    },
+    {
+      "path": "operations/status.json",
+      "sha256": "21e5c65ad8be0d3cf0e5368ecf1d805e5d06bd083789fd19c5d0de5f4cadea61"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-navigation-independent-20260924.json",
+      "sha256": "ca39c91ddf57b1e23f8be7de0765eb712e52a1c6e650b3ce748fa41ffc40ccf1"
+    },
+    {
+      "path": "evaluations/research-qa/m80-navigation-local-validation-20260924.json",
+      "sha256": "e0ede778afa45f1a4a4c8086a4691a0b4f4275a1a793de99acd191b7cef8f959"
+    },
+    {
+      "path": "evaluations/research-qa/scope1-free-beta-plan-root-review-20260924.json",
+      "sha256": "4977854d5ff3373443bdd4faf870aa390021612eaa316a980a78efdba5e0bac0"
+    },
+    {
+      "path": "evaluations/research-qa/scope1-beta-technical-root-review-20260924.json",
+      "sha256": "0691e04cc7e7474904ec3da99d5480d9d00f09f375fe1270181e5f5b472a2579"
+    }
+  ],
+  "checks": {
+    "all_three_LF": true,
+    "prior_board_handoff_text_preserved": true,
+    "immutable_app_qa_unchanged": true,
+    "reviewed_app_source_unchanged": true,
+    "root_local_build_lint_receipt_matches": true,
+    "CPO_candidate2_and_CTO_candidate3_acceptances_bound": true,
+    "foundation_planned_not_implemented": true,
+    "all_four_profiles_held_in_next_contract": true,
+    "no_real_beta_or_live_claim": true,
+    "no_outreach_invitation_replay": true,
+    "scope2_deferred": true,
+    "publication_receipt_explicitly_conditional": true
+  },
+  "limits": [
+    "Exact current-record text review only; no app tests or live operations repeated.",
+    "Planning acceptance is not domain release, foundation implementation or beta readiness.",
+    "Root owns staged/committed-byte verification, successor PR and exact-head checks."
+  ],
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    }
+  }
+}

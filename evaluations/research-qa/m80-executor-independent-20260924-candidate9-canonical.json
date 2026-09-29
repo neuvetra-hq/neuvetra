@@ -1,0 +1,8 @@
+{
+  "review": {
+    "path": "evaluations/research-qa/m80-executor-independent-20260924-candidate9-review.json",
+    "sha256": "b589b0ab127cb537c91f9c80e584382255a45cf537a1703104ee4df4f31174a2"
+  },
+  "acceptedByExactExecutor": true,
+  "verdict": "pass_m80_executor_transport_only"
+}

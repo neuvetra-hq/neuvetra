@@ -1,0 +1,19 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_exact108_publication_review_and_verified_publication_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925-DELIVERABLE.json",
+    "sha256": "ef21633c401af9c205decadc32d339c2125733782583607f715d32f90686becd"
+  },
+  "qa_review": {
+    "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-review.json",
+    "sha256": "cb1cbbafc8a99f4248b0e8ac4f794444f6b8408b2d43262d14f8112c3079a39d"
+  },
+  "head": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "remote": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "manifest_sha256": "1e1ae6f1f8b4958dd38f5be99bc784ccfe868e3be708cd5f39b4d905e1961c7f",
+  "initial_portability_and_stale_status_findings_preserved": true,
+  "ci": "pending_at_closure",
+  "hosted_action": false,
+  "limits": "Publication only. Fresh backup, actual stage gates and live demo remain required; full Scope1/customer readiness incomplete."
+}

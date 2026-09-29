@@ -1,0 +1,37 @@
+{
+  "name": "m80_setup_qa_1790287311429",
+  "sourceClientSha256": "e7817123df7bb50a7462ca71072418501b24c0ddb87e92424a35f1b5daa144df",
+  "sourceClientSha256After": "e7817123df7bb50a7462ca71072418501b24c0ddb87e92424a35f1b5daa144df",
+  "checks": [
+    "actual read plus server permission overrides untrusted client role",
+    "uncertain save then same exact attempt replays one persisted version",
+    "single correction retains history and stale CAS refuses",
+    "old replay binds original saved version while exposing later head",
+    "tenant and request bindings reject swapped responses",
+    "role revocation defeats cached authority and triggers unauthorized handler",
+    "abort during pending successful body prevents stale load/save/history delivery",
+    "pre-aborted actor sends no request and response byte/duplicate-key limits refuse",
+    "history decoder independent corruption probes recorded"
+  ],
+  "decoderFindings": [
+    {
+      "name": "history createdBy modified without version hash",
+      "accepted": true
+    },
+    {
+      "name": "history createdAt modified without version hash",
+      "accepted": true
+    },
+    {
+      "name": "history payloadSha256 modified without version hash",
+      "accepted": true
+    },
+    {
+      "name": "current summary creator differs from current version",
+      "accepted": true
+    }
+  ],
+  "connectionsClosed": true,
+  "clusterOwner": "/root/m80_foundation_runtime",
+  "authBoundary": "synthetic token map; actual native adapter and mounted HTTP server; provider authentication untested"
+}

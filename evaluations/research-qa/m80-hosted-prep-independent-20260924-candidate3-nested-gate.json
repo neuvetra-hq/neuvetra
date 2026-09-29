@@ -1,0 +1,10 @@
+{
+  "candidate": "4819c802c75ecb639d6eb7966baaa9579d05a15c06668943b882380af0fb90d6",
+  "migrationRecordedAt": "2026-09-24T22:12:00.000Z",
+  "admissionIntentAt": "2026-09-24T22:12:00.000Z",
+  "admissionGateReviewedAt": "2026-09-24T22:11:59.999Z",
+  "admissionTargetObservedAt": "2026-09-24T22:11:59.999Z",
+  "result": {
+    "accepted": "deployment"
+  }
+}

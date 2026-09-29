@@ -1,0 +1,13 @@
+{
+  "database": "m80_qa_foundation_1790279672164",
+  "storedRow": {
+    "company_id": "1701fdb0-98a4-4e6f-8194-8b768ef9590a",
+    "created_by": "755be842-ce34-451f-af49-5bc30678bea9",
+    "reporting_year": 2025,
+    "payload_sha256": "5b626d6debc6ac1adf369fcdeeb3a51bd7669689a926efcd262dcd8db994253f",
+    "version_sha256": "f24c91897e1e4882142c1c6c8112988f80a334adbaa1673ef46401526e3e235f"
+  },
+  "adapterError": "Stored M80 version integrity check failed.",
+  "heldOnly": true,
+  "realData": false
+}

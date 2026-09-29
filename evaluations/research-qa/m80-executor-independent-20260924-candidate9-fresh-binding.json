@@ -1,0 +1,37 @@
+{
+  "boundary": "Exact frozen C9 with synthetic provider/journal only; acknowledgement persistence failure injected",
+  "results": [
+    {
+      "kind": "exact_positive",
+      "status": "verified_success",
+      "error": "",
+      "calls": 1,
+      "observations": 1,
+      "retainedRecords": 4
+    },
+    {
+      "kind": "foreign_id",
+      "status": "",
+      "error": "Error: Deployment success is not bound to the acknowledged deployment ID and chronology.",
+      "calls": 1,
+      "observations": 1,
+      "retainedRecords": 2
+    },
+    {
+      "kind": "pre_ack_observation",
+      "status": "",
+      "error": "Error: Deployment success is not bound to the acknowledged deployment ID and chronology.",
+      "calls": 1,
+      "observations": 1,
+      "retainedRecords": 2
+    },
+    {
+      "kind": "ack_write_failure",
+      "status": "uncertain_do_not_retry",
+      "error": "",
+      "calls": 1,
+      "observations": 0,
+      "retainedRecords": 4
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "profile": "neuvetra.m80.actual-migration-independent-review.v1",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_original_plan_migration_stage_only",
+  "reviewedAt": "2026-09-25T05:28:20.119Z",
+  "expiresAt": "2026-09-25T05:39:02.883Z",
+  "plan": {
+    "path": ".superpowers/m80-foundation-hosted-live002-plan.json",
+    "sha256": "5934bb3eeb4093ed68caa644fa6b0c3b44fc70ec8cb9dd466de7cd7efdf9c285"
+  },
+  "gate": {
+    "path": ".superpowers/m80-foundation-hosted-live002-migration-qa-resumed-001-gate.json",
+    "sha256": "68935197acf1467407f0fa9d129ef73185e336420cb22455db99750a2c21b6bd"
+  },
+  "security": {
+    "path": ".superpowers/m80-foundation-hosted-live002-migration-qa-resumed-001-security.json",
+    "sha256": "7fa100772af6d20c90e4209a724fa844d9d31455efddb01c5ef9140cb9068a22"
+  },
+  "target": {
+    "path": ".superpowers/m80-foundation-hosted-live002-migration-qa-resumed-001-target.json",
+    "sha256": "390b182ba1f37bdfa59b842ba2345f3049c01225bf1b62cd99d8501d7862c99a"
+  },
+  "rawEvidence": [
+    {
+      "path": ".superpowers/m80-provider-observation-recovered21-stopped-resumed-001.json",
+      "sha256": "79a6af24969f38f4c65919edd09bb11c87ae4808b3546978aee2388e1fffb08f"
+    },
+    {
+      "path": ".superpowers/m80-stage-observation-normalized-migration-resumed-001.json",
+      "sha256": "44d83cf8017bbd5a623b81025ebd6f24fca1df12ac5bb2388e470632ae74be2f"
+    },
+    {
+      "path": ".superpowers/m80-backup-hosted-preflight-resumed-001.json",
+      "sha256": "81056f224a83e10ed1cf6833f08e6be2755d0804f7cd27a07f5f506513a6812c"
+    },
+    {
+      "path": ".superpowers/m80-ci-observation-original-plan-resumed-001.json",
+      "sha256": "d36dc89b26c616cd8b7428ac299585007d03dfa034dc0fe8a96043810c1864c3"
+    },
+    {
+      "path": "evaluations/research-qa/ops-graph-01-product-integration-20260925.json",
+      "sha256": "6441487b78b4e0aef0d87d963badfc71c89cc0941a078e3b71659943fad3c9af"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-actual-upgrade-independent-20260925-plan-check.json",
+      "sha256": "163a9379950706584351c27914dbe260d18fc204d922e545d9fdf058fe0dc26d"
+    }
+  ],
+  "originalAppCommit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "newOpsCommit": "1ae0074f662394f66172b6b80aab9a0a1414773e",
+  "rawDatabaseObservationTimeUsed": "2026-09-25T05:24:03.351Z",
+  "rawProviderObservationTime": "2026-09-25T05:24:02.883003+00:00",
+  "oldBaselineBackupAndRehearsalTimesUnchanged": true,
+  "onceV3GateAndInMemoryIntentValidationPassed": true,
+  "actualIntentWritten": false,
+  "rootSoleExecutor": true,
+  "additionalRootCondition": "Root must separately observe all six successful CI checks on new ops-only head before execution; this gate targets original75d8 app and expires at earliest raw evidence window. Do not execute if expiry passed.",
+  "limits": "Migration only. Admission/deployment require actual predecessor success and new fresh stage reviews. No provider/DB/Git/archive-unseal actions by QA."
+}

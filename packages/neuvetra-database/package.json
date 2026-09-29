@@ -13,9 +13,11 @@
   "devDependencies": {
     "@electric-sql/pglite": "^0.3.14",
     "@types/bun": "latest",
+    "@types/pg": "8.15.5",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "pg": "8.23.0",
     "postgres": "3.4.9"
   }
 }

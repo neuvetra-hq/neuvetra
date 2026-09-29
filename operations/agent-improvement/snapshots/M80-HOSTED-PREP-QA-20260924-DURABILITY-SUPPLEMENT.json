@@ -1,0 +1,11 @@
+{
+  "profile": "neuvetra.reviewed-text-snapshot.v1",
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-durability-boundary.json",
+      "sha256": "354260e8230d9b008435575e86d6d8e36299c8b6a23bddc551c8d7e026e88d93",
+      "text": "{\n  \"task_id\": \"M80-HOSTED-PREP-QA-20260924\",\n  \"reviewer\": \"/root/m80_foundation_runtime_qa\",\n  \"verdict\": \"pass_offline_validation_and_exclusive_creation_only\",\n  \"supplements\": \"evaluations/research-qa/m80-hosted-prep-independent-20260924.json\",\n  \"candidate_sha256\": \"96c98c56965fb31a39b1bc151b07f31c268a7cfa48b56fc172672a36c4c77af7\",\n  \"boundary\": \"Candidate4 writer uses awaited writeFile with wx but no explicit file sync. Exclusive creation and retained exact bytes were tested; power-loss persistence was not established. Any reference to durable journals in the offline acceptance must be read with this limitation.\",\n  \"execution_requirement\": \"Before any side effect, actual executor must persist an exclusive intent and explicitly sync it through a reviewed writer, or use a separate independently reviewed synced pre-action journal. Candidate4 unsynced writer alone is insufficient for crash-durable at-most-once execution. Stop/provider/executor acceptance remains separate.\",\n  \"scope\": \"No claim of full power-loss resilience can be obtained from mocked sync-call tests alone; those can establish required call ordering/mechanism. Filesystem and host durability assumptions must remain explicit.\",\n  \"root_origin\": \"Root identified missing explicit sync after Candidate4 offline result; QA confirms static writer source. First final report preserved unchanged with this separate narrower supplement.\",\n  \"observed_at\": \"2026-09-24T23:24:55.273374+00:00\"\n}\n"
+    }
+  ]
+}

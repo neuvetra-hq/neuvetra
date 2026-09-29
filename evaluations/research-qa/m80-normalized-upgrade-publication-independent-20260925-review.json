@@ -1,0 +1,72 @@
+{
+  "profile": "neuvetra.m80.normalized-upgrade-publication-independent-review.v1",
+  "task_id": "M80-NORMALIZED-UPGRADE-PUBLICATION-QA-20260925",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact_normalized_upgrade_publication_manifest_only",
+  "manifest": {
+    "path": ".superpowers/m80-normalized-upgrade-publication-manifest.json",
+    "sha256": "1e1ae6f1f8b4958dd38f5be99bc784ccfe868e3be708cd5f39b4d905e1961c7f"
+  },
+  "base_commit": "d6d590aa0b46df0521127ef114d27deb101b0561",
+  "file_count": 108,
+  "total_bytes": 9519514,
+  "publisher": {
+    "path": ".superpowers/m80-publish-normalized-upgrade.py",
+    "sha256": "903e71a94b14569a33c848ab3c0fef0342498962140b2ba0edd5f9d4b16ca959"
+  },
+  "first_review": {
+    "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-first-review.json",
+    "sha256": "d160fca3b420b8e063ae296817a71bea7d09f3237de0c8b523377eeb8bbba5f6"
+  },
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-checks.py",
+      "sha256": "54fc95f89736a4e5d5c132655b8be8b40b59e3ea0444ccccec39f0eb05d47061"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-checks.json",
+      "sha256": "bf85cf0c8ffbe2f5813525b14821f4139174c042be60b3ca226c852fc4433ef9"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-publisher.test.py",
+      "sha256": "6cc76a00f2253ac82e2d5c0b47c416575f761fb077476cf6332064d287d1a958"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-upgrade-publication-independent-20260925-publisher-checks.json",
+      "sha256": "777b09a4978accaab55a4b3352568cd64da4d370e85c01d3f0448498fb6021db"
+    }
+  ],
+  "checks": {
+    "all_current_manifest_bytes_exact": true,
+    "clean_checkout_overlay_exact": true,
+    "independent_clean_validator_runs": 271,
+    "embedded_entries_exact": 148,
+    "historical_current_source_differences": 9,
+    "historical_difference_classification": "Only superseded Candidate1 artifacts. Exact embedded hash/text retained; excluded from current acceptance authority. Executor C1 differs only report dependency acceptance metadata.",
+    "private_active_criteria_references": 0,
+    "named_private_owner_value_hits": 0,
+    "credential_pattern_hits": 0,
+    "new_attribute_rules_exact_paths": 3,
+    "mock_publisher_cases": 10,
+    "only_revision2_manifest_path_change": "operations/status.json",
+    "current_claims_reconciled": true
+  },
+  "source_scope": "Only reviewed evidence, public immutable source snapshots, QA tests and task records plus current root status/board/handoff and exact attributes; no application/runtime/workflow/config source delta outside these reviewed contents.",
+  "limits": [
+    "This permits only the exact reviewed source/evidence publication. It is not a hosted upgrade gate, backup freshness approval, recovery completion proof, method release or customer readiness.",
+    "Root must reassert this receipt, manifest and publisher raw hashes immediately before one invocation; publisher independently checks local/remote base, clean index, every current/staged/committed byte and exact path set.",
+    "The first publication attempt reserves synced exclusive intent/pathspec markers. On any subsequent failure inspect and preserve those markers; do not rerun. No whitespace waiver is granted.",
+    "Six remote checks for the newly published head remain required. Git/provider state was not queried by QA; root isolated-index108-blob/whitespace receipt is corroboration only.",
+    "Existing recovered-target recovery transport acknowledgement does not itself prove dynamic successor readiness; the author-reported successor-observer integration remains a separate operational preparation item.",
+    "Privacy scan covers named owner values and credential patterns, together with bounded source review; it is not a universal data-loss-prevention guarantee.",
+    "Historical date-stamped sections and failed candidates remain historical; all methods held and full corporate Scope1/customer beta incomplete."
+  ],
+  "material_findings_open_for_publication": 0,
+  "actions_by_qa": {
+    "git": false,
+    "provider": false,
+    "network": false,
+    "credentials": false,
+    "database": false
+  }
+}

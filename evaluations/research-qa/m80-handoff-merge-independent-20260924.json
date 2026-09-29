@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-HANDOFF-PLAN-QA-20260924",
+  "reviewer": "/root/merge_integration_qa",
+  "verdict": "pass",
+  "material_findings_open": 0,
+  "observed_at": "2026-09-24T17:08:50.638633+00:00",
+  "review_arrangement": "Existing QA context reused after initial dispatch rejected runtime agent limit before task start; candidate files authored by root. Earlier integration review is antecedent evidence, not a new self-review.",
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    }
+  },
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-HANDOFF-PLAN-QA-20260924-CANDIDATE2.json",
+    "sha256": "ca5a8072bc84ab2c2fcf9ac5be7db6f6b46718caa7c5f50ca2f219dda231de6c"
+  },
+  "source_artifacts": [
+    {
+      "path": "operations/board-report.md",
+      "sha256": "3afb8107fa892e03a79921deff153b507532507501eb6c9f37cc8f039123415d"
+    },
+    {
+      "path": "operations/next-session.md",
+      "sha256": "fe5b3d6f6a2aef680dc4012c31b1e7a8cd63e946551758613a23c433b0aaf188"
+    },
+    {
+      "path": "operations/status.json",
+      "sha256": "25ee8160ee6beade74af0ba4b57c738cd5b2005a98a8db17743c69d9b5f44fbe"
+    },
+    {
+      "path": "evaluations/research-qa/m78-pr5-merge-20260924.json",
+      "sha256": "e1f32890d1b2c048b08d289320809c980c53122212b6204b3591fabbcf16739c"
+    },
+    {
+      "path": "docs/research/m80-beta-ux-observation-2026-09-24.md",
+      "sha256": "bc68c26b4e84adab5b321f2f0a46c0b612298030304d06c8efcd712e0091c818"
+    }
+  ],
+  "normalization": {
+    "previous_snapshot": "operations/agent-improvement/snapshots/M80-HANDOFF-PLAN-QA-20260924-CANDIDATE1.json",
+    "previous_sha256": "70369f92d534503d4f345e3d3d699cb8486114ec39675a9562212ebafba4e2e3",
+    "four_root_files_only_crlf_to_lf": true,
+    "ux_observation_exact_copy_preserved": true,
+    "candidate1_acceptance_claimed": false
+  },
+  "verified": {
+    "head": "11ba5bdb5a3bb57be60872800bad2e79cfed5cf3",
+    "required_checks": 6,
+    "all_successful": true,
+    "merge_commit": "e10012bc2b083283f99498ecb79c05d5536bbf52",
+    "local_head": "e10012bc2b083283f99498ecb79c05d5536bbf52",
+    "merge_second_parent": "11ba5bdb5a3bb57be60872800bad2e79cfed5cf3",
+    "stored_main_head": "e10012bc2b083283f99498ecb79c05d5536bbf52",
+    "historical_notes_preserved": true,
+    "m78_active_assignments_closed": true,
+    "beta_interim_free": true,
+    "company_profiles_selected": false,
+    "outreach_authorized": false,
+    "invitations_authorized": false,
+    "scope2_deferred": true,
+    "customer_scope1_complete": false,
+    "deployment_performed_by_merge": false
+  },
+  "limitations": [
+    "Retained coordinator remote receipts inspected; no new remote request.",
+    "UX source copy and bounded claims reviewed; no fresh browser or numerical verification.",
+    "CPO plan, CTO work and active UI implementation outside scope.",
+    "Publication must preserve final candidate bytes."
+  ],
+  "actions": {
+    "git_read_only": true,
+    "git_mutations": 0,
+    "host_calls": 0,
+    "app_tests": 0,
+    "paid_calls": 0,
+    "credential_reads": 0
+  },
+  "next_owner": "Root reviews and closes handoff, then publishes exact candidate2 bytes."
+}

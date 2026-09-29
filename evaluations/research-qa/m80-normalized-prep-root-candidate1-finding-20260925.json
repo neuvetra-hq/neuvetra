@@ -1,0 +1,13 @@
+{
+  "reviewer": "/root",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json",
+    "sha256": "3e5f7c5b046fcaee56c07b13218908a3ad735f8d188734d764b738b7d5886482"
+  },
+  "finding": "PREP-V3-ROOT-F01",
+  "status": "open",
+  "basis": "Static exact frozen source inspection; independent executable reproduction pending.",
+  "summary": "Declared preparation author changed to /root/m80_setup_ui but reviewer exclusion still names only the previous runtime author. New preparation author is not excluded by the gate condition.",
+  "required_repair": "Reject actual preparation author while retaining runtime-author/root exclusions; add self-review regression.",
+  "execution_authorized": false
+}

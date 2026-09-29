@@ -1,0 +1,142 @@
+{
+  "verdict": "pass",
+  "sourceHashes": {
+    "tools/staging/hosted-setup-local-roles.ts": "adf320e64c2aaae9182624e73dcab39897f4ec40799e0875d962570ab1e423d2",
+    "tools/staging/hosted-setup-local-roles.test.ts": "b3d3b8c660789c7041c2cf250ab114da066fe1d3a7752aa83a166908a538d23d",
+    "evaluations/research-qa/hosted-setup-01-local-role-bootstrap-author-candidate3.md": "38db55c33c80937284ae58b5383dd3393f77a5e8e6cf05f7eacd3352c35abc26"
+  },
+  "results": [
+    {
+      "case": "ambiguous_start_cleanup_confirmed",
+      "receipt": {
+        "profile": "neuvetra.hosted-setup.local-roles-failure.v1",
+        "status": "local-pg17-bootstrap-failed-cleanup-confirmed",
+        "host": "127.0.0.1",
+        "port": 55479,
+        "dataDir": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414671369_00000001",
+        "journalPath": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\1-journal.json",
+        "causeCode": "HS_RECOVERY_CLUSTER_START_LAUNCHER_FAILED",
+        "connectionCloseConfirmed": null,
+        "stopExitCode": 0,
+        "statusExitCode": 3,
+        "portListening": false,
+        "confirmedStopped": true,
+        "clusterDataRetained": true,
+        "replayAllowed": false
+      }
+    },
+    {
+      "case": "ambiguous_start_cleanup_unconfirmed",
+      "receipt": {
+        "profile": "neuvetra.hosted-setup.local-roles-failure.v1",
+        "status": "local-pg17-bootstrap-failed-cleanup-unconfirmed-do-not-retry",
+        "host": "127.0.0.1",
+        "port": 55479,
+        "dataDir": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414673601_00000002",
+        "journalPath": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\2-journal.json",
+        "causeCode": "HS_RECOVERY_CLUSTER_START_LAUNCHER_FAILED",
+        "connectionCloseConfirmed": null,
+        "stopExitCode": 1,
+        "statusExitCode": 1,
+        "portListening": true,
+        "confirmedStopped": false,
+        "clusterDataRetained": true,
+        "replayAllowed": false
+      }
+    },
+    {
+      "case": "explicit_stop_close_rejected",
+      "receipt": {
+        "profile": "neuvetra.hosted-setup.local-roles-stop.v1",
+        "status": "local-pg17-cluster-stopped",
+        "host": "127.0.0.1",
+        "port": 55479,
+        "journalSha256": "5dbd6cc4da69815fd41f52b1a473a222dd05d24820ff7e970fde601dffaa02f2",
+        "resultSha256": "a7dc51003bb93cee0a3b31dd23d06c0a6479c52e1b02c0aa8703936dbe107d79",
+        "connectionCloseConfirmed": false,
+        "stopExitCode": 0,
+        "statusExitCode": 3,
+        "portListening": false,
+        "confirmedStopped": true,
+        "clusterDataRetained": true,
+        "replayAllowed": false
+      }
+    },
+    {
+      "case": "bootstrap_close_rejected",
+      "receipt": {
+        "profile": "neuvetra.hosted-setup.local-roles-failure.v1",
+        "status": "local-pg17-bootstrap-failed-cleanup-confirmed",
+        "host": "127.0.0.1",
+        "port": 55479,
+        "dataDir": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414678094_00000004",
+        "journalPath": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\4-journal.json",
+        "causeCode": "HS_RECOVERY_CONNECTION_CLOSE_FAILED",
+        "connectionCloseConfirmed": false,
+        "stopExitCode": 0,
+        "statusExitCode": 3,
+        "portListening": false,
+        "confirmedStopped": true,
+        "clusterDataRetained": true,
+        "replayAllowed": false
+      }
+    }
+  ],
+  "controlCommands": [
+    [
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\pgsql\\bin\\pg_ctl.exe",
+      "-D",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414671369_00000001",
+      "-l",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\1.log",
+      "-o",
+      "-h 127.0.0.1 -p 55479",
+      "-w",
+      "start"
+    ],
+    [
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\pgsql\\bin\\pg_ctl.exe",
+      "-D",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414671369_00000001",
+      "-m",
+      "fast",
+      "-w",
+      "stop"
+    ],
+    [
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\pgsql\\bin\\pg_ctl.exe",
+      "-D",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414671369_00000001",
+      "status"
+    ],
+    [
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\pgsql\\bin\\pg_ctl.exe",
+      "-D",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414673601_00000002",
+      "-l",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\2.log",
+      "-o",
+      "-h 127.0.0.1 -p 55479",
+      "-w",
+      "start"
+    ],
+    [
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\pgsql\\bin\\pg_ctl.exe",
+      "-D",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414673601_00000002",
+      "-m",
+      "fast",
+      "-w",
+      "stop"
+    ],
+    [
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\pgsql\\bin\\pg_ctl.exe",
+      "-D",
+      "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-role-candidate3-qa-MoUjr1\\hosted_setup_roles_1790414673601_00000002",
+      "status"
+    ]
+  ],
+  "port55479Free": true,
+  "providerAccess": false,
+  "actualArchiveRead": false
+}

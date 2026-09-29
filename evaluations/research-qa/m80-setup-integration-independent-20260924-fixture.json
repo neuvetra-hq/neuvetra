@@ -1,0 +1,1423 @@
+{
+  "profile": "m80-scope1-beta-foundation-runtime-v1",
+  "syntheticOnly": true,
+  "canManage": true,
+  "fixtureAdmission": {
+    "companyId": "c59c6515-cb0c-4bc5-942e-0b8bf796f5cb",
+    "fixtureProfileId": "m80-synthetic-scope1-foundation-v1",
+    "fixtureVersion": 1,
+    "fixtureSha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1",
+    "active": true
+  },
+  "releaseRegistry": [
+    {
+      "profileId": "controlled_on_road_fossil_diesel_medium_heavy_2007_2022",
+      "status": "held_candidate",
+      "methodId": "mobile-diesel-combustion",
+      "methodVersion": "m74-development-v1",
+      "methodSha256": "7598384902729e8a6708beb359e7564f500ad85c0d3ad38f094ee580a05c0497",
+      "engineSha256": "1dc0bb7249d91e854004a8cadd34068be3fc03ecdd6e10b4cf297d375d7f52a6",
+      "factorIdentitySha256": "416931c40b347f1e22e9d4019ca1c28bd27ce40d7c16a3beeac3dadbbb783187",
+      "gwpIdentitySha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7",
+      "sourceArtifactIds": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_mobile_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ]
+    },
+    {
+      "profileId": "stable_serviced_fugitive_equipment",
+      "status": "held_candidate",
+      "methodId": "m77-stable-serviced-equipment-2025-candidate-v1",
+      "methodVersion": null,
+      "methodSha256": "acbfed90deaf7c164fe889b87732a998396ace265c92973ba3f79c6a71c038af",
+      "engineSha256": "3c81c8d1b4ee6b2435765013d0578021556b70d35f16e4512ebecf1c873f25b4",
+      "factorIdentitySha256": "80a514d4596fc214ea3086941b37377f9e939f7541e40590fa4ee243deb1e24d",
+      "gwpIdentitySha256": "80a514d4596fc214ea3086941b37377f9e939f7541e40590fa4ee243deb1e24d",
+      "sourceArtifactIds": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_fugitive_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ]
+    },
+    {
+      "profileId": "stationary_fossil_distillate_no2_emergency_generator_default_hhv",
+      "status": "held_candidate",
+      "methodId": "m76.stationary-distillate-no2.ca2025.ar5.default-hhv.v1",
+      "methodVersion": "m76-development-v1",
+      "methodSha256": "8924b6c99a7b2b1525f2f2ef641978bbdfc5c7116c40a9fc828e418e56a4a722",
+      "engineSha256": "60de93b901185527affd1eae73d400582cc9d041ecd13bb5668c9041374f6266",
+      "factorIdentitySha256": "7f2a655ff2fc3a214f8f076aeaf7acebc25a50f89801985f255157a3ab3a85d0",
+      "gwpIdentitySha256": "c151f9b90b23eba7ee9d36dd57a851ecf7a6f200c915579819b683d2b3b3c1c7",
+      "sourceArtifactIds": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_stationary_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ]
+    },
+    {
+      "profileId": "stationary_natural_gas_hhv_mmbtu",
+      "status": "held_candidate",
+      "methodId": "stationary-natural-gas-combustion",
+      "methodVersion": "m73-development-v1",
+      "methodSha256": "a596ea0d377f33ac34e1333852c313c855c2a18ac08006525a78bbfb7cce9898",
+      "engineSha256": "e1b91d4fa6afa1126eeb642769c458d0b0b747c12ad5ee172543afb9246eaa14",
+      "factorIdentitySha256": "80da7b01f57c852a1bca9a6f80a23636baef02091cd26880a7395c8331f5a20f",
+      "gwpIdentitySha256": "d87fb6c54a170e1dff70327bf475774febb3681a754cb8abec9c4c31efa3b908",
+      "sourceArtifactIds": [
+        "epa_hub_2025_xlsx",
+        "epa_hub_2025_pdf",
+        "epa_stationary_guidance_2023_pdf",
+        "ghg_protocol_required_gases_gwp_2013_pdf",
+        "ghg_protocol_corporate_standard_pdf"
+      ]
+    }
+  ],
+  "currentVersion": {
+    "id": "5fd660f9-ade1-41b6-a42b-4e88cec490a7",
+    "companyId": "c59c6515-cb0c-4bc5-942e-0b8bf796f5cb",
+    "reportingYear": 2025,
+    "revision": 2,
+    "previousVersionId": "a8ff6a9e-d1f0-4832-b670-029d82bc0ced",
+    "previousVersionSha256": "94d38fc44a96f2573f6128d6ddffa255c58bfdc5bb26ba652173d618542c28f7",
+    "setup": {
+      "companyId": "c59c6515-cb0c-4bc5-942e-0b8bf796f5cb",
+      "dataClassification": "synthetic_rehearsal",
+      "reportingPeriod": {
+        "start": "2025-01-01",
+        "endExclusive": "2026-01-01"
+      },
+      "consolidationApproach": "operational_control_proposed",
+      "boundaryProposal": {
+        "jointVentureState": "unknown",
+        "reportingYearState": "calendar_2025_proposed",
+        "ownershipChangeState": "none_proposed"
+      },
+      "entities": [
+        {
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "ownershipState": "wholly_owned_proposed",
+          "controlState": "operational_control_proposed",
+          "activePeriodState": "full_2025_proposed",
+          "inclusionState": "included_proposed"
+        }
+      ],
+      "locations": [
+        {
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "countryCode": "US",
+          "regionCode": "CA",
+          "controlState": "operational_control_proposed",
+          "activePeriodState": "full_2025_proposed",
+          "inclusionState": "included_proposed"
+        },
+        {
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "countryCode": "US",
+          "regionCode": "CA",
+          "controlState": "operational_control_proposed",
+          "activePeriodState": "full_2025_proposed",
+          "inclusionState": "included_proposed"
+        }
+      ],
+      "sources": [
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001001",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "stationary_combustion",
+          "subtype": "natural_gas",
+          "knownFacts": {
+            "fuelOrGas": "fossil_natural_gas",
+            "equipmentKind": "stationary_other",
+            "activityDataKind": "annual_hhv_energy",
+            "activityUnit": "MMBtu_HHV"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002001",
+            "80000000-0000-4000-8000-000000002002"
+          ],
+          "sourceIdentitySha256": "eaba061b17daf18ef95b8398781221bf9539eef99019bec8cae69af0c373040f"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001002",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "stationary_combustion",
+          "subtype": "distillate_no2",
+          "knownFacts": {
+            "fuelOrGas": "fossil_distillate_no2",
+            "equipmentKind": "emergency_generator",
+            "activityDataKind": "metered_gallons",
+            "activityUnit": "US_gallon"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002003"
+          ],
+          "sourceIdentitySha256": "ae7447e27b9a17a1328426d457f2cbd399337c1430bcb6770f9ccf9394f000cf"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001003",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "mobile_combustion",
+          "subtype": "on_road_vehicle",
+          "knownFacts": {
+            "fuelOrGas": "fossil_diesel",
+            "equipmentKind": "medium_heavy_on_road_2007_2022",
+            "activityDataKind": "gallons_and_actual_miles",
+            "activityUnit": "US_gallon_and_vehicle_mile"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002004",
+            "80000000-0000-4000-8000-000000002005"
+          ],
+          "sourceIdentitySha256": "f2ed90361f0bef91ca92ce196622ee5962f29ac30d42ba57b96317188bef5a37"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001004",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "fugitive",
+          "subtype": "refrigeration",
+          "knownFacts": {
+            "fuelOrGas": "HFC-134a",
+            "equipmentKind": "refrigeration",
+            "activityDataKind": "service_refill_mass",
+            "activityUnit": "kg_named_gas_or_blend"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002006",
+            "80000000-0000-4000-8000-000000002007"
+          ],
+          "sourceIdentitySha256": "7a6df5e6a17c4473fcaaf552131bd2b38b0ce8057c58cb78986eb560cafacd9d"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001005",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "fugitive",
+          "subtype": "fixed_hvac",
+          "knownFacts": {
+            "fuelOrGas": "R-410A",
+            "equipmentKind": "fixed_hvac",
+            "activityDataKind": "service_refill_mass",
+            "activityUnit": "kg_named_gas_or_blend"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002008",
+            "80000000-0000-4000-8000-000000002009"
+          ],
+          "sourceIdentitySha256": "91a4e1743591221a5490589166aef71191be3df91874f74f5f71ca714576787b"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001006",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "fugitive",
+          "subtype": "fire_suppression",
+          "knownFacts": {
+            "fuelOrGas": "HFC-227ea",
+            "equipmentKind": "fire_suppression",
+            "activityDataKind": "service_refill_mass",
+            "activityUnit": "kg_named_gas_or_blend"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002010",
+            "80000000-0000-4000-8000-000000002011"
+          ],
+          "sourceIdentitySha256": "d0fa1bf63c640f94a6dde7c5d929c25c8f483d11738de1f4d777d750cff06786"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001007",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "fugitive",
+          "subtype": "refrigeration",
+          "knownFacts": {
+            "fuelOrGas": "other_gas",
+            "equipmentKind": "refrigeration",
+            "activityDataKind": "service_refill_mass",
+            "activityUnit": "kg_named_gas_or_blend"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002012"
+          ],
+          "sourceIdentitySha256": "38a544dccc26219685c81d6ad894c6b7e8e35f19a433552ef43c61a0cc140e68"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001008",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "fugitive",
+          "subtype": "fire_suppression",
+          "knownFacts": {
+            "fuelOrGas": "other_gas",
+            "equipmentKind": "fire_suppression",
+            "activityDataKind": "service_refill_mass",
+            "activityUnit": "kg_named_gas_or_blend"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002013"
+          ],
+          "sourceIdentitySha256": "a50dfa0aaf318d462265f4f6f654cc0fab5a6f904ae4d1ac558eea05f75af143"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001009",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "stationary_combustion",
+          "subtype": "other_stationary_fuel",
+          "knownFacts": {
+            "fuelOrGas": "other_fuel",
+            "equipmentKind": "stationary_other",
+            "activityDataKind": "metered_gallons",
+            "activityUnit": "US_gallon"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002014"
+          ],
+          "sourceIdentitySha256": "9e06174ed25c4319f9e4cff0088f9338f2402d4399a218bc38ac18d6749c7ffc"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001010",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "mobile_combustion",
+          "subtype": "on_road_vehicle",
+          "knownFacts": {
+            "fuelOrGas": "gasoline",
+            "equipmentKind": "vehicle_other",
+            "activityDataKind": "gallons_and_actual_miles",
+            "activityUnit": "US_gallon_and_vehicle_mile"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002015"
+          ],
+          "sourceIdentitySha256": "cd641a48f0e1d011c0154e6c200af2b0af15212fc1bfad4a13ef8448035d181f"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001011",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "mobile_combustion",
+          "subtype": "non_road_equipment",
+          "knownFacts": {
+            "fuelOrGas": "fossil_diesel",
+            "equipmentKind": "non_road_equipment",
+            "activityDataKind": "metered_gallons",
+            "activityUnit": "US_gallon"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002016"
+          ],
+          "sourceIdentitySha256": "a230ecd36d2a2efb44e7c525507a76d6b33d92257c1db4f82d48edb02bf71387"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001012",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "process_emissions",
+          "subtype": "process_screen",
+          "knownFacts": {
+            "fuelOrGas": "not_applicable",
+            "equipmentKind": "industrial_process",
+            "activityDataKind": "screen_only",
+            "activityUnit": "not_applicable"
+          },
+          "processScreen": {
+            "categories": [
+              {
+                "category": "agricultural_biological",
+                "state": "unknown"
+              },
+              {
+                "category": "chemical_production",
+                "state": "unknown"
+              },
+              {
+                "category": "metal_production",
+                "state": "unknown"
+              },
+              {
+                "category": "mineral_products",
+                "state": "unknown"
+              },
+              {
+                "category": "oil_and_gas",
+                "state": "unknown"
+              },
+              {
+                "category": "other_direct_process",
+                "state": "unknown"
+              },
+              {
+                "category": "waste_treatment",
+                "state": "unknown"
+              }
+            ],
+            "gasGroups": [
+              {
+                "gasGroup": "CH4",
+                "state": "unknown"
+              },
+              {
+                "gasGroup": "CO2",
+                "state": "unknown"
+              },
+              {
+                "gasGroup": "HFCs",
+                "state": "unknown"
+              },
+              {
+                "gasGroup": "N2O",
+                "state": "unknown"
+              },
+              {
+                "gasGroup": "NF3",
+                "state": "unknown"
+              },
+              {
+                "gasGroup": "PFCs",
+                "state": "unknown"
+              },
+              {
+                "gasGroup": "SF6",
+                "state": "unknown"
+              }
+            ]
+          },
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002017"
+          ],
+          "sourceIdentitySha256": "ed7f1467128c732d5636cf7df86f10fb3a190a5f8a3f06d59e06b862c835a90c"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001013",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000101",
+          "category": "direct_gas_release",
+          "subtype": "direct_gas",
+          "knownFacts": {
+            "fuelOrGas": "other_gas",
+            "equipmentKind": "other",
+            "activityDataKind": "screen_only",
+            "activityUnit": "not_applicable"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002018"
+          ],
+          "sourceIdentitySha256": "5c7d359d407e8eef497aad68cb0664993923d940e98d0f98d23518f132baa489"
+        },
+        {
+          "sourceId": "80000000-0000-4000-8000-000000001014",
+          "entityId": "80000000-0000-4000-8000-000000000001",
+          "locationId": "80000000-0000-4000-8000-000000000102",
+          "category": "other_direct_scope1",
+          "subtype": "other_direct",
+          "knownFacts": {
+            "fuelOrGas": "unknown",
+            "equipmentKind": "unknown",
+            "activityDataKind": "unknown",
+            "activityUnit": "unknown"
+          },
+          "processScreen": null,
+          "evidenceRequirementIds": [
+            "80000000-0000-4000-8000-000000002019"
+          ],
+          "sourceIdentitySha256": "7e5ed9490901650161073829706ccd80375453e347a600d785196fe5f64c5ae8"
+        }
+      ],
+      "evidenceRequirements": [
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002001",
+          "sourceId": "80000000-0000-4000-8000-000000001001",
+          "requirementType": "fuel_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-STATIONARY-GAS-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002002",
+          "sourceId": "80000000-0000-4000-8000-000000001001",
+          "requirementType": "meter_summary",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-STATIONARY-GAS-02"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002003",
+          "sourceId": "80000000-0000-4000-8000-000000001002",
+          "requirementType": "fuel_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-STATIONARY-DIESEL-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002004",
+          "sourceId": "80000000-0000-4000-8000-000000001003",
+          "requirementType": "vehicle_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-MOBILE-DIESEL-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002005",
+          "sourceId": "80000000-0000-4000-8000-000000001003",
+          "requirementType": "mileage_evidence",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-MOBILE-DIESEL-02"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002006",
+          "sourceId": "80000000-0000-4000-8000-000000001004",
+          "requirementType": "equipment_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-HFC134A-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002007",
+          "sourceId": "80000000-0000-4000-8000-000000001004",
+          "requirementType": "service_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-HFC134A-02"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002008",
+          "sourceId": "80000000-0000-4000-8000-000000001005",
+          "requirementType": "equipment_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-R410A-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002009",
+          "sourceId": "80000000-0000-4000-8000-000000001005",
+          "requirementType": "service_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-R410A-02"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002010",
+          "sourceId": "80000000-0000-4000-8000-000000001006",
+          "requirementType": "equipment_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-HFC227EA-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002011",
+          "sourceId": "80000000-0000-4000-8000-000000001006",
+          "requirementType": "service_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-HFC227EA-02"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002012",
+          "sourceId": "80000000-0000-4000-8000-000000001007",
+          "requirementType": "equipment_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-OTHER-REFRIGERANT-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002013",
+          "sourceId": "80000000-0000-4000-8000-000000001008",
+          "requirementType": "equipment_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-OTHER-FIRE-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002014",
+          "sourceId": "80000000-0000-4000-8000-000000001009",
+          "requirementType": "fuel_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-OTHER-STATIONARY-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002015",
+          "sourceId": "80000000-0000-4000-8000-000000001010",
+          "requirementType": "vehicle_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-GASOLINE-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002016",
+          "sourceId": "80000000-0000-4000-8000-000000001011",
+          "requirementType": "equipment_register",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-NONROAD-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002017",
+          "sourceId": "80000000-0000-4000-8000-000000001012",
+          "requirementType": "process_screen_attestation",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-PROCESS-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002018",
+          "sourceId": "80000000-0000-4000-8000-000000001013",
+          "requirementType": "direct_release_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "missing",
+          "fixtureReferenceKey": "M80-EVIDENCE-DIRECT-GAS-01"
+        },
+        {
+          "requirementId": "80000000-0000-4000-8000-000000002019",
+          "sourceId": "80000000-0000-4000-8000-000000001014",
+          "requirementType": "source_census_record",
+          "coveragePeriod": "calendar_2025_proposed",
+          "state": "unknown",
+          "fixtureReferenceKey": "M80-EVIDENCE-UNCLASSIFIED-01"
+        }
+      ],
+      "completeness": "incomplete",
+      "fixture": {
+        "profileId": "m80-synthetic-scope1-foundation-v1",
+        "version": 1,
+        "sha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1"
+      }
+    },
+    "payloadSha256": "f4a9fd7499e7df1fdc3882e0ab5b54fd4ddada801160dc10728542b51921b555",
+    "versionSha256": "068c4d9e1ae90fd22ec67adc1bfd5b8d18ab102af740a7a52fe17866f3c3e459",
+    "createdBy": "5b84c148-1d88-470a-ae36-157dd3388712",
+    "createdAt": "2026-09-24T22:01:52.209Z"
+  },
+  "history": [
+    {
+      "id": "a8ff6a9e-d1f0-4832-b670-029d82bc0ced",
+      "companyId": "c59c6515-cb0c-4bc5-942e-0b8bf796f5cb",
+      "reportingYear": 2025,
+      "revision": 1,
+      "previousVersionId": null,
+      "previousVersionSha256": null,
+      "payloadSha256": "eae7a795b26a8176ac6e47b7348f16dadabe8662cd6a06b90f616812ebcfb5c1",
+      "versionSha256": "94d38fc44a96f2573f6128d6ddffa255c58bfdc5bb26ba652173d618542c28f7",
+      "createdBy": "5b84c148-1d88-470a-ae36-157dd3388712",
+      "createdAt": "2026-09-24T22:01:52.138Z"
+    },
+    {
+      "id": "5fd660f9-ade1-41b6-a42b-4e88cec490a7",
+      "companyId": "c59c6515-cb0c-4bc5-942e-0b8bf796f5cb",
+      "reportingYear": 2025,
+      "revision": 2,
+      "previousVersionId": "a8ff6a9e-d1f0-4832-b670-029d82bc0ced",
+      "previousVersionSha256": "94d38fc44a96f2573f6128d6ddffa255c58bfdc5bb26ba652173d618542c28f7",
+      "payloadSha256": "f4a9fd7499e7df1fdc3882e0ab5b54fd4ddada801160dc10728542b51921b555",
+      "versionSha256": "068c4d9e1ae90fd22ec67adc1bfd5b8d18ab102af740a7a52fe17866f3c3e459",
+      "createdBy": "5b84c148-1d88-470a-ae36-157dd3388712",
+      "createdAt": "2026-09-24T22:01:52.209Z"
+    }
+  ],
+  "setup": {
+    "companyId": "c59c6515-cb0c-4bc5-942e-0b8bf796f5cb",
+    "dataClassification": "synthetic_rehearsal",
+    "reportingPeriod": {
+      "start": "2025-01-01",
+      "endExclusive": "2026-01-01"
+    },
+    "consolidationApproach": "operational_control_proposed",
+    "boundaryProposal": {
+      "jointVentureState": "unknown",
+      "reportingYearState": "calendar_2025_proposed",
+      "ownershipChangeState": "none_proposed"
+    },
+    "entities": [
+      {
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "ownershipState": "wholly_owned_proposed",
+        "controlState": "operational_control_proposed",
+        "activePeriodState": "full_2025_proposed",
+        "inclusionState": "included_proposed"
+      }
+    ],
+    "locations": [
+      {
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "countryCode": "US",
+        "regionCode": "CA",
+        "controlState": "operational_control_proposed",
+        "activePeriodState": "full_2025_proposed",
+        "inclusionState": "included_proposed"
+      },
+      {
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "countryCode": "US",
+        "regionCode": "CA",
+        "controlState": "operational_control_proposed",
+        "activePeriodState": "full_2025_proposed",
+        "inclusionState": "included_proposed"
+      }
+    ],
+    "sources": [
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001001",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "stationary_combustion",
+        "subtype": "natural_gas",
+        "knownFacts": {
+          "fuelOrGas": "fossil_natural_gas",
+          "equipmentKind": "stationary_other",
+          "activityDataKind": "annual_hhv_energy",
+          "activityUnit": "MMBtu_HHV"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002001",
+          "80000000-0000-4000-8000-000000002002"
+        ],
+        "sourceIdentitySha256": "eaba061b17daf18ef95b8398781221bf9539eef99019bec8cae69af0c373040f"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001002",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "stationary_combustion",
+        "subtype": "distillate_no2",
+        "knownFacts": {
+          "fuelOrGas": "fossil_distillate_no2",
+          "equipmentKind": "emergency_generator",
+          "activityDataKind": "metered_gallons",
+          "activityUnit": "US_gallon"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002003"
+        ],
+        "sourceIdentitySha256": "ae7447e27b9a17a1328426d457f2cbd399337c1430bcb6770f9ccf9394f000cf"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001003",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "mobile_combustion",
+        "subtype": "on_road_vehicle",
+        "knownFacts": {
+          "fuelOrGas": "fossil_diesel",
+          "equipmentKind": "medium_heavy_on_road_2007_2022",
+          "activityDataKind": "gallons_and_actual_miles",
+          "activityUnit": "US_gallon_and_vehicle_mile"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002004",
+          "80000000-0000-4000-8000-000000002005"
+        ],
+        "sourceIdentitySha256": "f2ed90361f0bef91ca92ce196622ee5962f29ac30d42ba57b96317188bef5a37"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001004",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "fugitive",
+        "subtype": "refrigeration",
+        "knownFacts": {
+          "fuelOrGas": "HFC-134a",
+          "equipmentKind": "refrigeration",
+          "activityDataKind": "service_refill_mass",
+          "activityUnit": "kg_named_gas_or_blend"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002006",
+          "80000000-0000-4000-8000-000000002007"
+        ],
+        "sourceIdentitySha256": "7a6df5e6a17c4473fcaaf552131bd2b38b0ce8057c58cb78986eb560cafacd9d"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001005",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "fugitive",
+        "subtype": "fixed_hvac",
+        "knownFacts": {
+          "fuelOrGas": "R-410A",
+          "equipmentKind": "fixed_hvac",
+          "activityDataKind": "service_refill_mass",
+          "activityUnit": "kg_named_gas_or_blend"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002008",
+          "80000000-0000-4000-8000-000000002009"
+        ],
+        "sourceIdentitySha256": "91a4e1743591221a5490589166aef71191be3df91874f74f5f71ca714576787b"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001006",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "fugitive",
+        "subtype": "fire_suppression",
+        "knownFacts": {
+          "fuelOrGas": "HFC-227ea",
+          "equipmentKind": "fire_suppression",
+          "activityDataKind": "service_refill_mass",
+          "activityUnit": "kg_named_gas_or_blend"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002010",
+          "80000000-0000-4000-8000-000000002011"
+        ],
+        "sourceIdentitySha256": "d0fa1bf63c640f94a6dde7c5d929c25c8f483d11738de1f4d777d750cff06786"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001007",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "fugitive",
+        "subtype": "refrigeration",
+        "knownFacts": {
+          "fuelOrGas": "other_gas",
+          "equipmentKind": "refrigeration",
+          "activityDataKind": "service_refill_mass",
+          "activityUnit": "kg_named_gas_or_blend"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002012"
+        ],
+        "sourceIdentitySha256": "38a544dccc26219685c81d6ad894c6b7e8e35f19a433552ef43c61a0cc140e68"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001008",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "fugitive",
+        "subtype": "fire_suppression",
+        "knownFacts": {
+          "fuelOrGas": "other_gas",
+          "equipmentKind": "fire_suppression",
+          "activityDataKind": "service_refill_mass",
+          "activityUnit": "kg_named_gas_or_blend"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002013"
+        ],
+        "sourceIdentitySha256": "a50dfa0aaf318d462265f4f6f654cc0fab5a6f904ae4d1ac558eea05f75af143"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001009",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "stationary_combustion",
+        "subtype": "other_stationary_fuel",
+        "knownFacts": {
+          "fuelOrGas": "other_fuel",
+          "equipmentKind": "stationary_other",
+          "activityDataKind": "metered_gallons",
+          "activityUnit": "US_gallon"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002014"
+        ],
+        "sourceIdentitySha256": "9e06174ed25c4319f9e4cff0088f9338f2402d4399a218bc38ac18d6749c7ffc"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001010",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "mobile_combustion",
+        "subtype": "on_road_vehicle",
+        "knownFacts": {
+          "fuelOrGas": "gasoline",
+          "equipmentKind": "vehicle_other",
+          "activityDataKind": "gallons_and_actual_miles",
+          "activityUnit": "US_gallon_and_vehicle_mile"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002015"
+        ],
+        "sourceIdentitySha256": "cd641a48f0e1d011c0154e6c200af2b0af15212fc1bfad4a13ef8448035d181f"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001011",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "mobile_combustion",
+        "subtype": "non_road_equipment",
+        "knownFacts": {
+          "fuelOrGas": "fossil_diesel",
+          "equipmentKind": "non_road_equipment",
+          "activityDataKind": "metered_gallons",
+          "activityUnit": "US_gallon"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002016"
+        ],
+        "sourceIdentitySha256": "a230ecd36d2a2efb44e7c525507a76d6b33d92257c1db4f82d48edb02bf71387"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001012",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "process_emissions",
+        "subtype": "process_screen",
+        "knownFacts": {
+          "fuelOrGas": "not_applicable",
+          "equipmentKind": "industrial_process",
+          "activityDataKind": "screen_only",
+          "activityUnit": "not_applicable"
+        },
+        "processScreen": {
+          "categories": [
+            {
+              "category": "agricultural_biological",
+              "state": "unknown"
+            },
+            {
+              "category": "chemical_production",
+              "state": "unknown"
+            },
+            {
+              "category": "metal_production",
+              "state": "unknown"
+            },
+            {
+              "category": "mineral_products",
+              "state": "unknown"
+            },
+            {
+              "category": "oil_and_gas",
+              "state": "unknown"
+            },
+            {
+              "category": "other_direct_process",
+              "state": "unknown"
+            },
+            {
+              "category": "waste_treatment",
+              "state": "unknown"
+            }
+          ],
+          "gasGroups": [
+            {
+              "gasGroup": "CH4",
+              "state": "unknown"
+            },
+            {
+              "gasGroup": "CO2",
+              "state": "unknown"
+            },
+            {
+              "gasGroup": "HFCs",
+              "state": "unknown"
+            },
+            {
+              "gasGroup": "N2O",
+              "state": "unknown"
+            },
+            {
+              "gasGroup": "NF3",
+              "state": "unknown"
+            },
+            {
+              "gasGroup": "PFCs",
+              "state": "unknown"
+            },
+            {
+              "gasGroup": "SF6",
+              "state": "unknown"
+            }
+          ]
+        },
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002017"
+        ],
+        "sourceIdentitySha256": "ed7f1467128c732d5636cf7df86f10fb3a190a5f8a3f06d59e06b862c835a90c"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001013",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000101",
+        "category": "direct_gas_release",
+        "subtype": "direct_gas",
+        "knownFacts": {
+          "fuelOrGas": "other_gas",
+          "equipmentKind": "other",
+          "activityDataKind": "screen_only",
+          "activityUnit": "not_applicable"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002018"
+        ],
+        "sourceIdentitySha256": "5c7d359d407e8eef497aad68cb0664993923d940e98d0f98d23518f132baa489"
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001014",
+        "entityId": "80000000-0000-4000-8000-000000000001",
+        "locationId": "80000000-0000-4000-8000-000000000102",
+        "category": "other_direct_scope1",
+        "subtype": "other_direct",
+        "knownFacts": {
+          "fuelOrGas": "unknown",
+          "equipmentKind": "unknown",
+          "activityDataKind": "unknown",
+          "activityUnit": "unknown"
+        },
+        "processScreen": null,
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002019"
+        ],
+        "sourceIdentitySha256": "7e5ed9490901650161073829706ccd80375453e347a600d785196fe5f64c5ae8"
+      }
+    ],
+    "evidenceRequirements": [
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002001",
+        "sourceId": "80000000-0000-4000-8000-000000001001",
+        "requirementType": "fuel_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-STATIONARY-GAS-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002002",
+        "sourceId": "80000000-0000-4000-8000-000000001001",
+        "requirementType": "meter_summary",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-STATIONARY-GAS-02"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002003",
+        "sourceId": "80000000-0000-4000-8000-000000001002",
+        "requirementType": "fuel_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-STATIONARY-DIESEL-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002004",
+        "sourceId": "80000000-0000-4000-8000-000000001003",
+        "requirementType": "vehicle_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-MOBILE-DIESEL-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002005",
+        "sourceId": "80000000-0000-4000-8000-000000001003",
+        "requirementType": "mileage_evidence",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-MOBILE-DIESEL-02"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002006",
+        "sourceId": "80000000-0000-4000-8000-000000001004",
+        "requirementType": "equipment_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-HFC134A-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002007",
+        "sourceId": "80000000-0000-4000-8000-000000001004",
+        "requirementType": "service_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-HFC134A-02"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002008",
+        "sourceId": "80000000-0000-4000-8000-000000001005",
+        "requirementType": "equipment_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-R410A-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002009",
+        "sourceId": "80000000-0000-4000-8000-000000001005",
+        "requirementType": "service_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-R410A-02"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002010",
+        "sourceId": "80000000-0000-4000-8000-000000001006",
+        "requirementType": "equipment_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-HFC227EA-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002011",
+        "sourceId": "80000000-0000-4000-8000-000000001006",
+        "requirementType": "service_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-HFC227EA-02"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002012",
+        "sourceId": "80000000-0000-4000-8000-000000001007",
+        "requirementType": "equipment_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-OTHER-REFRIGERANT-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002013",
+        "sourceId": "80000000-0000-4000-8000-000000001008",
+        "requirementType": "equipment_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-OTHER-FIRE-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002014",
+        "sourceId": "80000000-0000-4000-8000-000000001009",
+        "requirementType": "fuel_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-OTHER-STATIONARY-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002015",
+        "sourceId": "80000000-0000-4000-8000-000000001010",
+        "requirementType": "vehicle_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-GASOLINE-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002016",
+        "sourceId": "80000000-0000-4000-8000-000000001011",
+        "requirementType": "equipment_register",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-NONROAD-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002017",
+        "sourceId": "80000000-0000-4000-8000-000000001012",
+        "requirementType": "process_screen_attestation",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-PROCESS-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002018",
+        "sourceId": "80000000-0000-4000-8000-000000001013",
+        "requirementType": "direct_release_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "missing",
+        "fixtureReferenceKey": "M80-EVIDENCE-DIRECT-GAS-01"
+      },
+      {
+        "requirementId": "80000000-0000-4000-8000-000000002019",
+        "sourceId": "80000000-0000-4000-8000-000000001014",
+        "requirementType": "source_census_record",
+        "coveragePeriod": "calendar_2025_proposed",
+        "state": "unknown",
+        "fixtureReferenceKey": "M80-EVIDENCE-UNCLASSIFIED-01"
+      }
+    ],
+    "completeness": "incomplete",
+    "fixture": {
+      "profileId": "m80-synthetic-scope1-foundation-v1",
+      "version": 1,
+      "sha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1"
+    }
+  },
+  "eligibility": {
+    "profile": "m80-synthetic-scope1-foundation-v1",
+    "fixtureSha256": "2c6a9f78cded2a209bf536969e4ea389baa7fe1633c8ef63fad0c22826f77dc1",
+    "dataClassification": "synthetic_rehearsal",
+    "completeness": "incomplete",
+    "releasedSupportedCount": 0,
+    "results": [
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001001",
+        "sourceIdentitySha256": "eaba061b17daf18ef95b8398781221bf9539eef99019bec8cae69af0c373040f",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002001",
+          "80000000-0000-4000-8000-000000002002"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001002",
+        "sourceIdentitySha256": "ae7447e27b9a17a1328426d457f2cbd399337c1430bcb6770f9ccf9394f000cf",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002003"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001003",
+        "sourceIdentitySha256": "f2ed90361f0bef91ca92ce196622ee5962f29ac30d42ba57b96317188bef5a37",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002004",
+          "80000000-0000-4000-8000-000000002005"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001004",
+        "sourceIdentitySha256": "7a6df5e6a17c4473fcaaf552131bd2b38b0ce8057c58cb78986eb560cafacd9d",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002006",
+          "80000000-0000-4000-8000-000000002007"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001005",
+        "sourceIdentitySha256": "91a4e1743591221a5490589166aef71191be3df91874f74f5f71ca714576787b",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002008",
+          "80000000-0000-4000-8000-000000002009"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001006",
+        "sourceIdentitySha256": "d0fa1bf63c640f94a6dde7c5d929c25c8f483d11738de1f4d777d750cff06786",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002010",
+          "80000000-0000-4000-8000-000000002011"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001007",
+        "sourceIdentitySha256": "38a544dccc26219685c81d6ad894c6b7e8e35f19a433552ef43c61a0cc140e68",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002012"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001008",
+        "sourceIdentitySha256": "a50dfa0aaf318d462265f4f6f654cc0fab5a6f904ae4d1ac558eea05f75af143",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002013"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001009",
+        "sourceIdentitySha256": "9e06174ed25c4319f9e4cff0088f9338f2402d4399a218bc38ac18d6749c7ffc",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002014"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001010",
+        "sourceIdentitySha256": "cd641a48f0e1d011c0154e6c200af2b0af15212fc1bfad4a13ef8448035d181f",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002015"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001011",
+        "sourceIdentitySha256": "a230ecd36d2a2efb44e7c525507a76d6b33d92257c1db4f82d48edb02bf71387",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002016"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001012",
+        "sourceIdentitySha256": "ed7f1467128c732d5636cf7df86f10fb3a190a5f8a3f06d59e06b862c835a90c",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "process_screen_unknowns_preserved",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state",
+          "gas_group_CH4",
+          "gas_group_CO2",
+          "gas_group_HFCs",
+          "gas_group_N2O",
+          "gas_group_NF3",
+          "gas_group_PFCs",
+          "gas_group_SF6",
+          "process_category_agricultural_biological",
+          "process_category_chemical_production",
+          "process_category_metal_production",
+          "process_category_mineral_products",
+          "process_category_oil_and_gas",
+          "process_category_other_direct_process",
+          "process_category_waste_treatment"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002017"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001013",
+        "sourceIdentitySha256": "5c7d359d407e8eef497aad68cb0664993923d940e98d0f98d23518f132baa489",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_missing",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "boundary_joint_venture_state"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002018"
+        ]
+      },
+      {
+        "sourceId": "80000000-0000-4000-8000-000000001014",
+        "sourceIdentitySha256": "7e5ed9490901650161073829706ccd80375453e347a600d785196fe5f64c5ae8",
+        "state": "missing_facts",
+        "candidateProfileId": null,
+        "blockerCodes": [
+          "evidence_state_unknown",
+          "source_facts_missing"
+        ],
+        "requiredFactCodes": [
+          "activity_data_kind",
+          "activity_unit",
+          "boundary_joint_venture_state",
+          "equipment_kind",
+          "fuel_or_gas"
+        ],
+        "evidenceRequirementIds": [
+          "80000000-0000-4000-8000-000000002019"
+        ]
+      }
+    ]
+  }
+}

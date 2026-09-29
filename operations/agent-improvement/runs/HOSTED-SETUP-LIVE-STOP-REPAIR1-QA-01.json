@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-LIVE-STOP-REPAIR1-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "sha256": "1e88363b82c4652e33a3de8838d7883967f1aedf9c3d5d4a36cf925693b94275",
+      "path": "evaluations/research-qa/hosted-setup-01-live-stop-independent-review2.md"
+    }
+  ],
+  "criteria": [
+    {
+      "reason": "Four original exploits now refused with genuine positive controls; immutable binding/path/runtime, pre-reserved receipt and cross-phase clocks verified.",
+      "id": "ORIGINAL_F01_TO_F04",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review2.md"
+      ]
+    },
+    {
+      "reason": "New LIVE-STOP-F05 P2: receipt/journal close fault exposes raw error instead of fixed uncertainty; receipt fault skips journal close.",
+      "id": "FINALIZATION_UNCERTAINTY",
+      "status": "fail",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review2.md"
+      ]
+    },
+    {
+      "reason": "Candidate6/29 and independent pre-finalization11/78 passed; strict TS passed. Finalization fault separately fails0/1/1 and remains preserved.",
+      "id": "FOCUSED_CHECKS",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review2.md"
+      ]
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 1,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent repair1 FAIL; original Candidate1 FAIL untouched. Four prior findings fixed; new F05 remains open.",
+    "Reviewer did not author candidate; requested registered critical gpt-6-astra/high, observed follow-up setting unknown.",
+    "Literal old probe5 pass4 fail18 used outdated two-clock and no-reservation expectations; only new probe copy adapted, final pre-fault11 pass78.",
+    "No live CLI scale/provider/DB/Git/source edit. Actual local file handles used for injected finalization faults; test cleanup closed all native handles.",
+    "QA artifact awaits coordinator review/immutable packaging; no self-review or release authority."
+  ]
+}

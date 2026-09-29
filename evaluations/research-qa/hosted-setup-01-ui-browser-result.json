@@ -1,0 +1,63 @@
+{
+  "sourceHashes": {
+    "apps/site-web/src/components/CompanySetup.tsx": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5",
+    "apps/site-web/src/components/StagingWorkspace.tsx": "a94bbc7414893234651a19ef9f06f0d9f7de6b76c1454c97714710b85006cf16",
+    "apps/site-web/src/lib/company-setup-api.ts": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d",
+    "apps/site-web/src/staging.css": "4c6bb85629f06a71529994fe0761234088c23bfd820456fbb3c8fc80714039b2",
+    "Dockerfile.staging": "4d765902a5a2f9d8edf825c85cd646fbd2c5ad97a871020965ad9cf26af71830",
+    "Dockerfile.staging.dockerignore": "3beabfc8d734bc6a78a9fee6fcbab539d3a6d8715724e75f797b6538b3fe1ada",
+    "apps/site-api/src/staging/server.ts": "c7e2c0701c2e8398b907a907200edb12eaac70890aaded6dcfde567985ca53b0",
+    "apps/site-api/src/workspace/company-setup-routes.ts": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc",
+    "packages/neuvetra-database/src/company-setup-contract.ts": "93cc5fe6b8af6416354b2d461800bcaf108a386200d75b3f7838172e4e505d74"
+  },
+  "sourceHashesAfter": {
+    "apps/site-web/src/components/CompanySetup.tsx": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5",
+    "apps/site-web/src/components/StagingWorkspace.tsx": "a94bbc7414893234651a19ef9f06f0d9f7de6b76c1454c97714710b85006cf16",
+    "apps/site-web/src/lib/company-setup-api.ts": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d",
+    "apps/site-web/src/staging.css": "4c6bb85629f06a71529994fe0761234088c23bfd820456fbb3c8fc80714039b2",
+    "Dockerfile.staging": "4d765902a5a2f9d8edf825c85cd646fbd2c5ad97a871020965ad9cf26af71830",
+    "Dockerfile.staging.dockerignore": "3beabfc8d734bc6a78a9fee6fcbab539d3a6d8715724e75f797b6538b3fe1ada",
+    "apps/site-api/src/staging/server.ts": "c7e2c0701c2e8398b907a907200edb12eaac70890aaded6dcfde567985ca53b0",
+    "apps/site-api/src/workspace/company-setup-routes.ts": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc",
+    "packages/neuvetra-database/src/company-setup-contract.ts": "93cc5fe6b8af6416354b2d461800bcaf108a386200d75b3f7838172e4e505d74"
+  },
+  "checks": [
+    {
+      "name": "all seven sections and first save",
+      "pass": true
+    },
+    {
+      "name": "seven-section fields preserve inclusive end, explicit zero, NV geography and no/n-a/unknown",
+      "pass": true
+    },
+    {
+      "name": "returning saved setup mounts",
+      "pass": true
+    },
+    {
+      "name": "UI-F02 edit during pending save",
+      "pass": true,
+      "navigationEnabled": false,
+      "editableDuringSave": false,
+      "actual": "Synthetic first correction",
+      "expected": "Edits disabled or subsequent unsaved changes preserved"
+    },
+    {
+      "name": "UI-F03 old replay must not combine newer head with older draft",
+      "pass": true,
+      "actual": "Synthetic newer server correction",
+      "headRevision": 4,
+      "expected": "Latest draft shown, or explicit old-version read-only state"
+    },
+    {
+      "name": "company switch initializes empty company without prior facts",
+      "pass": true
+    },
+    {
+      "name": "signout unmount removes prior company form",
+      "pass": true
+    }
+  ],
+  "pageErrors": [],
+  "limitations": "Actual React/Chrome with mocked API responses; no provider identity or native DB in this UI race harness"
+}

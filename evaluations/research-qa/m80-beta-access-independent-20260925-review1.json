@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-QA-20260925",
+  "reviewer": "/root/m80_beta_access_qa",
+  "independent": true,
+  "verdict": "fail",
+  "candidate": 1,
+  "candidate_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json",
+    "sha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5"
+  },
+  "report": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review1.md",
+    "sha256": "97a8e3e596d4753a9b82d2fd917b6c26b3de6c71718351f038a279c3be7080d9"
+  },
+  "findings": [
+    {
+      "id": "BETA-ACCESS-F01",
+      "severity": "P2",
+      "status": "open",
+      "summary": "Future owner-created function receives default PUBLIC EXECUTE; existing current runtime function boundary remains exactly three."
+    },
+    {
+      "id": "BETA-ACCESS-F02",
+      "severity": "P2",
+      "status": "open",
+      "summary": "After oversized streamed request, next request gets listener400 without application headers or log; failed closed but outside exact contract."
+    }
+  ],
+  "first_review": "fail",
+  "material_findings_open": 2,
+  "actual_cost_usd": null,
+  "observed_compute": {
+    "model": null,
+    "effort": null
+  },
+  "native_targets": {
+    "failed_qa_setup": "m80_beta_access_qa_20260925a",
+    "review": "m80_beta_access_qa_20260925b",
+    "restore": "m80_beta_access_restore_qa_20260925b",
+    "runtime_role": "m80_beta_access_runtime_qa_20260925b"
+  },
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-result-1790320333506.json",
+      "sha256": "207b459ccc1b77ac08d8ef79fe16348676aa9a04320fdf997a88b96418e73f41"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-result-1790320443548.json",
+      "sha256": "40a9ca0df0ac73ef277bcfee57c64a9fe31791bfb52ab3f07f0ea91311c21e40"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-supplement-result-1790320635187.json",
+      "sha256": "196840f66e543c8b9cc692443dd41a212aff2107a1690cd89b9cf7a55892f6c1"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-origin-result-1790320736176.json",
+      "sha256": "ace0fd13b016c52d7fe69c3a9a48963db8c73d63a3d1da5467a73aa74e8c8d6d"
+    }
+  ],
+  "pending": [
+    "Full legacy catalog/row/role before-after parity",
+    "Ordered concurrent revoke/admission-disable races",
+    "All pool-slot/identity-switch variations",
+    "Auth timeout and banned-provider outcomes",
+    "Malicious search_path shadowing"
+  ],
+  "scope": "Local synthetic only; no accounting/source/hosted/customer readiness acceptance"
+}

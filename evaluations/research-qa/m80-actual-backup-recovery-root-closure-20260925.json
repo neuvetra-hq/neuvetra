@@ -1,0 +1,18 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_independent_failure_containment_review_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-ACTUAL-BACKUP-RECOVERY-QA-20260924-DELIVERABLE.json",
+    "sha256": "d5b572e593788c6217304c346d9daff332543ba7641c00df09da801225774c2e"
+  },
+  "verified_current_and_embedded_artifacts": 2,
+  "verified_retained_evidence_pins": 15,
+  "open_finding": "ACTUAL-RESTORE-F01",
+  "restore_pass": false,
+  "migration_authorized_by_this_review": false,
+  "limits": [
+    "Root collected provider and browser observations; independent QA verified their retained bindings and chronology.",
+    "Actual rehearsal remains failed. Recovery is the prior schema21 application. Original attempts are consumed.",
+    "Author diagnosis and proposed normalization require separate independent review."
+  ]
+}

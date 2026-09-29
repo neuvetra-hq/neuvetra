@@ -1,0 +1,34 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_independent_executor_v2_candidate2_and_composer_v4_source_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-QA-20260925-DELIVERABLE.json",
+    "sha256": "159bf2bf1e85e8c3439360df3ac6bd189686e620eb1dba0f4ab69b03230776d3"
+  },
+  "executor_review": {
+    "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-review.json",
+    "sha256": "9fa7c2c588d26f2596a61d92854d031a77a11a9015b63232b8a7c29105a50361"
+  },
+  "composer_review": {
+    "path": "evaluations/research-qa/m80-normalized-executor-independent-20260925-composer-review.json",
+    "sha256": "9b8a01fa918d798083918d1999f5b4a58d1696c7f9cdb9e1ab0e5ab76a03262e"
+  },
+  "executor_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE2.json",
+    "sha256": "f690767d4b3ce0d19a6024be2822582f70378be23e53d46afa07d65838bd27cf"
+  },
+  "composer_candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-INPUT-COMPOSER-20260925-CANDIDATE1.json",
+    "sha256": "7816c1d235562898926661e69dfe4cfedeebee46ac06d0868ec1cbad1bafa815"
+  },
+  "current_and_embedded_qa_files": 18,
+  "current_and_embedded_executor_outer_files": 30,
+  "current_and_embedded_composer_files": 2,
+  "checks": "Independent 23 tests84assertions,32 process runs20 scenarios,174 recursive sources,13 mutation7parser cases,5 tests37assertions and25 composer source cases.",
+  "hosted_action": false,
+  "limits": [
+    "Fresh recovered-target backup, exact publication and six CI checks, and independent actual stage gates still required.",
+    "Composer uses normal Python without optimization, with exact source hash checked before invocation.",
+    "Full Scope1/customer beta incomplete and four methods held."
+  ]
+}

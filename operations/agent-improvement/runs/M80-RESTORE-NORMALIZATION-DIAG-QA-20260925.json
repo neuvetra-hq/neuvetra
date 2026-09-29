@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "M80-RESTORE-NORMALIZATION-DIAG-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-DIAG-QA-20260925-DELIVERABLE.json",
+      "sha256": "60b1df4738da2edbd4e55a91f9a9bfc69d7959a27b1f7082a371f9687c17420d"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-independent-actual-scope",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-restore-normalization-independent-20260925-evidence.json",
+        "evaluations/research-qa/m80-restore-normalization-independent-20260925-review.json"
+      ],
+      "reason": "Actual archive/local clone independently compared under read-only transaction; external ACL scope and exact trigger multiset proved."
+    },
+    {
+      "id": "AC-02-constrained-proposal",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-restore-normalization-independent-20260925-review.json",
+        "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-DIAG-QA-20260925-DELIVERABLE.json"
+      ],
+      "reason": "17 positive/negative controls and official PostgreSQL semantics support proposal while retaining global/application protections and open prior failure."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-restore-normalization-diagnosis-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-DIAG-QA-20260925-DELIVERABLE.json",
+        "sha256": "60b1df4738da2edbd4e55a91f9a9bfc69d7959a27b1f7082a371f9687c17420d"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Diagnose failed actual restore without weakening preservation or replay boundaries",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Requested Astra/high; observed execution settings unavailable. Bounded independent diagnosis only; root acceptance pending.",
+    "Root accepted diagnosis delivery only. Repair and upgrade remain unaccepted; original restore failure stays open."
+  ]
+}

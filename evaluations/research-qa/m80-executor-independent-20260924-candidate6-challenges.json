@@ -1,0 +1,113 @@
+{
+  "boundary": "Exact frozen C5 core with synthetic injected transports/journals only; no network/DB",
+  "results": [
+    {
+      "case": "wrong_attempt",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "wrong_intent",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "wrong_scope",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "wrong_project",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "wrong_environment",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "wrong_service",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "wrong_commit",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "invalid_id",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Exact provider deployment acknowledgement required."
+    },
+    {
+      "case": "wrong_stage",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement changed or is not bound to this exact attempt."
+    },
+    {
+      "case": "predates_attempt",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement is outside its exact attempt and verification chronology."
+    },
+    {
+      "case": "unknown_key",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: provider acknowledgement must contain only exact reviewed fields."
+    },
+    {
+      "case": "future_ack",
+      "rejected": true,
+      "observed": 0,
+      "error": "Error: Provider acknowledgement is outside its exact attempt and verification chronology."
+    },
+    {
+      "case": "marker_failure_migration",
+      "failures": 2,
+      "calls": 0,
+      "observes": 0
+    },
+    {
+      "case": "marker_failure_admission",
+      "failures": 2,
+      "calls": 0,
+      "observes": 0
+    },
+    {
+      "case": "marker_failure_deployment",
+      "failures": 2,
+      "calls": 0,
+      "observes": 0
+    },
+    {
+      "case": "pending_collision_then_success",
+      "collision": "Error: already exists",
+      "transport": 1,
+      "observerCalls": 3,
+      "status": "verified_success"
+    },
+    {
+      "case": "foreign_same_commit_id",
+      "rejected": true,
+      "error": "Error: Acknowledged deployment is not observable yet."
+    },
+    {
+      "case": "old_terminal_unknown_retained_blocked",
+      "error": "Error: already exists",
+      "oldCalls": 1,
+      "oldObservations": 0
+    }
+  ]
+}

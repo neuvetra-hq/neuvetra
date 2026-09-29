@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "id": "M80-BACKUP-REHEARSAL-PREP-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_setup_ui",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-prep-author-20260924.json",
+      "sha256": "4a4952ba1cf81c4475a443dd8221ead3eb98cc0554a38d93b8dfd566fe1bb0c4"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE1.json",
+      "sha256": "7561242ae3b26e7595d4afdcb4287f2d400721efb17385a639ee84cf25c44257"
+    },
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-prep-author-candidate2-20260924.json",
+      "sha256": "54247e785f46cdfdab490bef444a47e366b61f4dced83f263492563c3e40df88"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE2.json",
+      "sha256": "41ea2b5b3bdc9d11a9b523bc6bc1af76537350dca2feeb77aacda3cab719e37c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate2-review.json",
+      "sha256": "c2c0dcd245b7fa18510607a65496b9da6e1712c71352418d88ca4cd40a256c5f"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-CANDIDATE2-REVIEW.json",
+      "sha256": "881b6b326d14059a78bea4dec7806948a8fed579d0272b832ec34bf8facb1f7c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-prep-author-candidate3-20260924.json",
+      "sha256": "15edb0c97cc44456f2dbff4b2ea5cf671029bb8ecfdf70d70c3f386297c9a4a8"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+      "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-schema21-snapshot",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-rehearsal-prep-author-20260924.json#successful_rehearsal"
+      ],
+      "reason": "The read-only schema 21 source, exact 21 migration receipts, derived table list, snapshot-consistent custom dump and application-state hashes were captured and rebound after the dump."
+    },
+    {
+      "id": "AC-02-fresh-local-restore-preservation",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-rehearsal-prep-author-20260924.json#attempts",
+        "evaluations/research-qa/m80-backup-rehearsal-prep-author-20260924.json#successful_rehearsal"
+      ],
+      "reason": "The encrypted snapshot restored into a fresh disposable database and old content, receipts, ACL/RLS, schema ACL, catalog objects, functions, roles, memberships and default ACL projections matched exactly. Failed clones were retained and not reused."
+    },
+    {
+      "id": "AC-03-schema22-bounded-delta",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-rehearsal-prep-author-20260924.json#successful_rehearsal/schema22"
+      ],
+      "reason": "The fresh restore migrated to schema 22 with the exact six new tables, exact four HELD registry rows, old state preservation, forced RLS, runtime select-only access, direct-write denial and zero operator admissions."
+    },
+    {
+      "id": "AC-04-independent-review-before-hosted-use",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-rehearsal-root-closure-20260924.json"
+      ],
+      "reason": "Exact Candidate3 and independent canonical transport review accepted by root; no hosted action occurred."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-backup-rehearsal-root-closure-20260924.json",
+      "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "evaluations/research-qa/m80-backup-rehearsal-prep-author-20260924.json",
+        "sha256": "4a4952ba1cf81c4475a443dd8221ead3eb98cc0554a38d93b8dfd566fe1bb0c4"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE1.json",
+        "sha256": "7561242ae3b26e7595d4afdcb4287f2d400721efb17385a639ee84cf25c44257"
+      },
+      {
+        "path": "evaluations/research-qa/m80-backup-rehearsal-prep-author-candidate2-20260924.json",
+        "sha256": "54247e785f46cdfdab490bef444a47e366b61f4dced83f263492563c3e40df88"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE2.json",
+        "sha256": "41ea2b5b3bdc9d11a9b523bc6bc1af76537350dca2feeb77aacda3cab719e37c"
+      },
+      {
+        "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate2-review.json",
+        "sha256": "c2c0dcd245b7fa18510607a65496b9da6e1712c71352418d88ca4cd40a256c5f"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-CANDIDATE2-REVIEW.json",
+        "sha256": "881b6b326d14059a78bea4dec7806948a8fed579d0272b832ec34bf8facb1f7c"
+      },
+      {
+        "path": "evaluations/research-qa/m80-backup-rehearsal-prep-author-candidate3-20260924.json",
+        "sha256": "15edb0c97cc44456f2dbff4b2ea5cf671029bb8ecfdf70d70c3f386297c9a4a8"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+        "sha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 staging schema 21 backup and schema 22 restore rehearsal preparation",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "notes": [
+    "No hosted provider, network, credential, ENV or Git action is authorized in this task.",
+    "Only fresh m80_backup_* local databases may be created; the running PostgreSQL cluster and existing databases must remain available and unchanged.",
+    "Candidate 1 author checks passed but independent review found material transport and closure gaps; the failure is preserved in the Candidate 2 author report.",
+    "Candidate 2 author checks passed after rework cycle 1, but independent review found that the three receipt completion times did not satisfy accepted preparation Candidate5.",
+    "Candidate 3 author checks passed after rework cycle 2, including actual receipt compatibility with Candidate5. Exact independent review remains required before hosted execution."
+  ]
+}

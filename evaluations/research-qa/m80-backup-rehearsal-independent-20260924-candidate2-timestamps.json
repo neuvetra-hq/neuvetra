@@ -1,0 +1,25 @@
+{
+  "boundary": "Actual author-generated three private receipts loaded only for hashing/comparison; other preparation evidence synthetic; no DB/network/archive data read",
+  "normalizedPositive": true,
+  "rejection": "Error: Evidence content contradicts hosted preparation input: evaluations/research-qa/m80-hosted-restore.json",
+  "checks": [
+    {
+      "name": "restore-receipt",
+      "sha256": "c446bcb8b1a0485e3899302e73aaaa7ed0b16862bf6344e16941a63ebf9e9af0",
+      "completedAt": "2026-09-24T23:47:54.412Z",
+      "onlyTimestampDiff": true
+    },
+    {
+      "name": "preservation-receipt",
+      "sha256": "e75e50b132e9c1dc214a83e611455b7119a78eb0b3d892da935e35646d3e55ef",
+      "completedAt": "2026-09-24T23:47:54.412Z",
+      "onlyTimestampDiff": true
+    },
+    {
+      "name": "migration-rehearsal-receipt",
+      "sha256": "6233b9456c88a91afccf9721464e0bde32cd270b456c4337fe68af41590bc6d8",
+      "completedAt": "2026-09-24T23:47:57.327Z",
+      "onlyTimestampDiff": true
+    }
+  ]
+}

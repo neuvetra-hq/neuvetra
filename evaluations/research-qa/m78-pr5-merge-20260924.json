@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-24T16:58:21.591519+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/5",
+  "reviewed_head": "11ba5bdb5a3bb57be60872800bad2e79cfed5cf3",
+  "merged": true,
+  "merge_commit": "e10012bc2b083283f99498ecb79c05d5536bbf52",
+  "main_head": "e10012bc2b083283f99498ecb79c05d5536bbf52",
+  "checks": [
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "checks_observed_at": "2026-09-24T16:57:43.192741+00:00",
+  "independent_review": "evaluations/research-qa/m78-merge-integration-20260924-result.json",
+  "independent_review_sha256": "18351ac7e43fd5162c8a53960dd1534d0b9b5f4a9234e4d3bde904a057a2ff07",
+  "deployment_performed": false,
+  "customer_scope1_complete": false
+}

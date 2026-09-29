@@ -1,0 +1,25 @@
+{
+  "task_id": "M80-SETUP-INTEGRATION-QA-20260924",
+  "verdict": "fail_ui_candidate1",
+  "ui_snapshot_sha256": "6944d220e356b76c2ddfc7f36f10ebce1e96128b632ba3301e4a38aae726d684",
+  "runtime_snapshot_sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b",
+  "findings": [
+    {
+      "id": "F01",
+      "severity": "medium",
+      "summary": "Strict client decoder accepts enum arrays, changed fixture source location, and fabricated classification semantics.",
+      "evidence": "evaluations/research-qa/m80-setup-integration-independent-20260924-first-probes.json"
+    },
+    {
+      "id": "F02",
+      "severity": "medium",
+      "summary": "History summary creator, timestamp and payload hash are not verified against version hash; current summary may contradict currentVersion.",
+      "evidence": "evaluations/research-qa/m80-setup-integration-independent-20260924-native.json"
+    }
+  ],
+  "native_passed_groups": 9,
+  "native_assertions": 43,
+  "native_limits": "Synthetic token validator and static assets stubbed; actual UI API client, mounted HTTP server, HostedWorkspaceDatabase and native PostgreSQL exercised. No React DOM or browser or provider verification by this reviewer.",
+  "exactness": "All7 product files and runtime13 files exactly matched snapshots. Private preview vite config differs; root supplied separate preview repair receipt.",
+  "lifecycle": "Request adapters reject pre-abort and abort after successful response headers during delayed body for load/save/history. Parent component keys actor/workspace and aborts effect cleanup. No rendered React lifecycle execution yet."
+}

@@ -1,0 +1,525 @@
+{
+  "task": "M80-BETA-ACCESS-QA-20260925",
+  "verdict": "fail_preserved",
+  "phase": "Q08_http_parser_and_limits",
+  "checks": [
+    {
+      "id": "freeze.snapshot",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.files",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze..github/workflows/verify.yml",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-contract.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/beta-access-migrations/0001_access.sql",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.packages/neuvetra-database/src/index.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/auth.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/config.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/routes.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/server.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.apps/site-api/src/beta-access/postgres.test.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/ci-prerequisites.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.tools/beta-access/local-rehearsal.ts",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.path",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.evaluations/research-qa/m80-beta-access-author-20260925.json",
+      "result": "pass"
+    },
+    {
+      "id": "freeze.required_boundaries",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.22_migrations",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0019_stationary_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/hosted.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/workspace.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.baseline_pin.packages/neuvetra-database/src/staging-migrations.ts",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0001_company_workspace.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0002_synthetic_bill_intake.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0003_synthetic_bill_calculation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0004_inventory_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0005_annual_electricity_register.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0006_inventory_evidence_pack.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0007_inventory_draft_report.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0008_inventory_draft_report_review.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0009_private_staging.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.exact_role_removal",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0010_manual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0011_worksheet_reports.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0012_source_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0013_annual_electricity_worksheet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0014_annual_electricity_evidence.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0015_corporate_coverage.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0016_stationary_natural_gas.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0017_mobile_diesel.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0018_controlled_fleet.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0019_stationary_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0020_fugitive_sources.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0021_scope1_inventory.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.no_global_roles.0022_scope1_beta_foundation.sql",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.targets_absent",
+      "result": "pass"
+    },
+    {
+      "id": "bootstrap.existing_roles",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.first201",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.expired_restart_replay",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.no_mutation",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.consumed_different_key",
+      "result": "pass"
+    },
+    {
+      "id": "Q02.same_key_other_input",
+      "result": "pass"
+    },
+    {
+      "id": "Q01.confirmation_changed_after_provider",
+      "result": "pass"
+    },
+    {
+      "id": "Q01.no_partial_effects",
+      "result": "pass"
+    },
+    {
+      "id": "Q01.current_email_mismatch",
+      "result": "pass"
+    },
+    {
+      "id": "Q04.same_key_race",
+      "result": "pass"
+    },
+    {
+      "id": "Q04.same_immutable_receipt",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.memberships",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.memberships",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.invitations",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.invitations",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.requests",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.requests",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.failure.audit",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.rollback.audit",
+      "result": "pass"
+    },
+    {
+      "id": "Q05.token_still_usable",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.generation_replay_denied",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.revocation_replay_denied",
+      "result": "pass"
+    },
+    {
+      "id": "Q06.cross_tenant",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.tombstone_other_member",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.tombstone_issue_refused",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.hash_tamper_read",
+      "result": "pass"
+    },
+    {
+      "id": "Q03.hash_tamper_replay",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.invitation_authority",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.auth_users",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.direct_insert",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.old_helper",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.schema_create",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.denied.set_owner",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.only_three_entrypoints",
+      "result": "pass"
+    },
+    {
+      "id": "Q07.force_rls",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.escaped_duplicate",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.stream_bytes.2048",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.failure_headers.2048",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.stream_bytes.2049",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.failure_headers.2049",
+      "result": "pass"
+    },
+    {
+      "id": "Q08.origin",
+      "result": "fail"
+    }
+  ],
+  "nativeTargets": {
+    "database": "m80_beta_access_qa_20260925b",
+    "restore": "m80_beta_access_restore_qa_20260925b",
+    "role": "m80_beta_access_runtime_qa_20260925b"
+  },
+  "identityProvider": "mocked_getUser_response",
+  "frozenSnapshot": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json",
+  "frozenSha256": "5385252e78342ddf3152060c5b6d12e16023f6f911e12f4a5325f8d1a3686cd5",
+  "actualCostUsd": null,
+  "limitations": [
+    "Provisional prepared subset; Q04 ordered expiry/revocation races, Q09 complete catalog parity and Q10 native restore require additional review checks.",
+    "No provider or customer-readiness verdict."
+  ],
+  "errorCode": null
+}

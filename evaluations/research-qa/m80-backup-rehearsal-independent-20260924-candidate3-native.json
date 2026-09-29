@@ -1,0 +1,45 @@
+{
+  "boundary": "Actual immutable local synthetic archive -> DPAPI unseal -> fresh loopback-only database -> schema22 migration/RLS check; no hosted or credential input",
+  "sourceSnapshotSha256": "d29eb944ce0db89d30258ff514c8c3226b518bf59fd669d7e09b2040b8c8431d",
+  "archiveSha256": "0ee2cd11ae2fb065449234e70681a9ea5450065696436abf2c9c1b0ba2cd8681",
+  "backupReceiptSha256": "1a55a0696c982a39d0b55b3258d41fbc93da4da09c41a372a3136e780b781327",
+  "inputHashNegatives": 2,
+  "outputDirectory": "C:\\Users\\nimab\\.codex\\worktrees\\4441\\Neuvetra\\.superpowers\\m80-backup-hosted-rehearsal-1790294868379",
+  "database": "m80_backup_foundation_1790294868379",
+  "receiptHashes": {
+    "restore": "c63a39b61b8b1f177ff673a8e8549b1ac646b523e61662d284c5dbb9f00ce9b0",
+    "preservation": "92e25d243a0af4e471372f0b3f21521b6542055e2457df732ceb42e604f71456",
+    "migration": "b760ec9310b332eed53bf15dede1d9028a996a317d893b7eb1d843dfa93fc536"
+  },
+  "sourceBackupReceiptSha256": "1a55a0696c982a39d0b55b3258d41fbc93da4da09c41a372a3136e780b781327",
+  "resultSha256": "2d563474c28ed85321cc16cc5c2181155c92ff85de9026bf44832a4fe5bd8065",
+  "commonCompletedAt": "2026-09-25T00:07:53.502Z",
+  "receiptPins": [
+    {
+      "name": "restore",
+      "sha256": "c63a39b61b8b1f177ff673a8e8549b1ac646b523e61662d284c5dbb9f00ce9b0",
+      "completedAt": "2026-09-25T00:07:53.502Z"
+    },
+    {
+      "name": "preservation",
+      "sha256": "92e25d243a0af4e471372f0b3f21521b6542055e2457df732ceb42e604f71456",
+      "completedAt": "2026-09-25T00:07:53.502Z"
+    },
+    {
+      "name": "migration-rehearsal",
+      "sha256": "b760ec9310b332eed53bf15dede1d9028a996a317d893b7eb1d843dfa93fc536",
+      "completedAt": "2026-09-25T00:07:53.502Z"
+    }
+  ],
+  "derivedNonReceiptTableCount": 120,
+  "oldContentExact": true,
+  "oldMetadataExact": true,
+  "releaseRecordsExactFourHeld": true,
+  "forcedRlsVerified": true,
+  "runtimeSelectOnlyVerified": true,
+  "runtimeDirectWritesDenied": true,
+  "operatorAdmissionNotExecuted": true,
+  "allConnectionsClosed": true,
+  "sourceInputsPreserved": true,
+  "cloneRetainedForEvidence": true
+}

@@ -1,0 +1,19 @@
+{
+  "reviewer": "/root",
+  "verdict": "pass_local_evidence_intake_design_only",
+  "snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-EVIDENCE-BOUNDARY-CONTRACT-20260925-CANDIDATE2.json",
+    "sha256": "3982ec958a8807c2794d08f7a69b53cde8de269d66b9656350c8b8d176029fd0"
+  },
+  "review_arrangement": "Independent root review of CTO authored design; no implementation tested",
+  "checks": [
+    "Actual legacy full-buffered synthetic PDF path correctly distinguished from general evidence handling",
+    "Streaming quarantine, exact object-version provenance, tenant and generation authority, quotas and orphan recovery specified",
+    "Synthetic fixture verification cannot be promoted to malware or structural validation clean",
+    "Deletion/tombstones fence downloads and scanner completion; restore requires reconciliation",
+    "Separate actual storage, encryption, scanner, privacy/retention and support-owner gates remain required"
+  ],
+  "material_findings_open": 0,
+  "cosmetic_revision": "Original encoding artifacts preserved in first snapshot; Candidate2 uses ASCII controls",
+  "limits": "Access implementation still under development; no real data, hosted provider configuration, method release, implementation or customer readiness acceptance"
+}

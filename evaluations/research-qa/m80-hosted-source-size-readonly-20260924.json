@@ -1,0 +1,16 @@
+{
+  "profile": "neuvetra.m80.actual-readonly-source-size.v1",
+  "operator": "/root",
+  "observed_at": "2026-09-25T01:12:07.329Z",
+  "serialized_source_bytes": 3230270,
+  "reviewed_restart_limit_bytes": 4000000,
+  "actual_duplicate_key_protected_loader_passed": true,
+  "same_application_state_as_prior_readonly_preflight": true,
+  "source_receipt_sha256": "5af851dce2a7b2ac996abfb0b6e199c41e0df76953ce992b4b641b6c4dcc1dcb",
+  "read_only": true,
+  "full_state_persisted": false,
+  "no_hosted_mutation": true,
+  "limits": [
+    "Pre-stop observation only. Actual executor captures and validates a fresh attempt-bound source before migration."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "profile": "neuvetra.hosted-setup.fingerprint-independent-regression.v1",
+  "nativeVersion": "17.11",
+  "dynamicPort": 63050,
+  "port55479Used": false,
+  "policyChangedBetweenSnapshots": true,
+  "accepted": true,
+  "outsiderRows": 1,
+  "baselineFingerprint": "ed60b721143c09306608d05707a1386287da8b39d7bffab2937d3ce9402a6a8e",
+  "changedFingerprint": "1a2f31b6f2ed9f4ad033f3c034fa1e43c0a234e05c988c7495fb0326fd7ed616",
+  "tenantControlsVerified": true,
+  "applicationCatalogEquivalent": true,
+  "sourceCurrentnessObserved": false,
+  "hostedAccess": false,
+  "actualArchiveUsed": false
+}

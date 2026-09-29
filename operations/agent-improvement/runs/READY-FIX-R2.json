@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "id": "READY-FIX-R2",
+  "role": "software-engineering",
+  "execution_context": "/root/collection_backend",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {"path": "operations/agent-improvement/snapshots/READY-FIX-R2-20260926.json", "sha256": "dd09a6e4b4598509bdf1d7c7416f91265e13cfb1a3b88e09f969bb7855790cfa"}
+  ],
+  "criteria": [
+    {"id": "SETUP-PAGE-STARTUP", "status": "pass", "evidence": ["prototypes/company-onboarding/setup-page-load.test.cjs"], "reason": null},
+    {"id": "STRUCTURED-RECORD-FUEL", "status": "pass", "evidence": ["prototypes/company-onboarding/readiness-core.test.cjs", "prototypes/company-onboarding/plan-core.test.cjs", "prototypes/company-onboarding/test_server.py"], "reason": null},
+    {"id": "MINOR-UX-FEEDBACK", "status": "pass", "evidence": ["prototypes/company-onboarding/feedback-qa-core.test.cjs"], "reason": null},
+    {"id": "WORKFLOW-REGRESSION", "status": "pass", "evidence": [".github/workflows/inventory-plan.yml", "prototypes/company-onboarding/feedback-r2-check-results.json"], "reason": null}
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/convergence",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": ["prototypes/company-onboarding/feedback-r2-independent-review.md", "prototypes/company-onboarding/feedback-r2-independent-results.json", "prototypes/company-onboarding/feedback-r2-setup-browser-verification.json", "prototypes/company-onboarding/feedback-r2-fuel-browser-verification.json"],
+    "reviewed_artifacts": [
+      {"path": "operations/agent-improvement/snapshots/READY-FIX-R2-20260926.json", "sha256": "dd09a6e4b4598509bdf1d7c7416f91265e13cfb1a3b88e09f969bb7855790cfa"}
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 3,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {"path": ".github/workflows/inventory-plan.yml", "sha256": "9abc0151e682ed2f5d7ee7957342a5b5dc57a6eaa7100f99f4aaec8fb6843e50"},
+    {"path": "prototypes/company-onboarding/app.js", "sha256": "476b6cecec4d13d46f1b67aa1f5ba9fc120b680e1149b3f57c6a17a182582a49"},
+    {"path": "prototypes/company-onboarding/feedback-qa-core.test.cjs", "sha256": "6ad7d65646de82a33e017d9eff585aa045d2d0c8cf87481faba28af792fb284d"},
+    {"path": "prototypes/company-onboarding/feedback-r2-check-results.json", "sha256": "850a0127c9171b16d85b2f49d55ddcf1208c0080d814db796cdbec4e0f51eb36"},
+    {"path": "prototypes/company-onboarding/plan-core.js", "sha256": "15214ab51a3e41c7b9e18d1d808b8d36a65d9a8648dec748b148c9545d9df97d"},
+    {"path": "prototypes/company-onboarding/plan-core.test.cjs", "sha256": "00fe748227e5288e2bc155773ac4d2d815ee1803cb9c62618868afb2b533e9b5"},
+    {"path": "prototypes/company-onboarding/plan-ui.js", "sha256": "79407f5b38ac015ffdd8707cad093bd1f2bde5953196e163616753db57b81364"},
+    {"path": "prototypes/company-onboarding/qa-readiness.cjs", "sha256": "a0ccfd75c3cf53b02ee1d21d7f6d4eb988c574dfce9ec6b9ff422ba573e04993"},
+    {"path": "prototypes/company-onboarding/readiness-core.js", "sha256": "7a32336c83549e20112b112ee97f9f3a1d2eead6c2443a38b233ea043354ec19"},
+    {"path": "prototypes/company-onboarding/readiness-core.test.cjs", "sha256": "d50ae88ff72723373d8d0d462b33c90558d5aee233b87e42bff6cc155d3d736e"},
+    {"path": "prototypes/company-onboarding/readiness-ui.js", "sha256": "86f4b6112373b708f19ad0fb81db3f76aed72303a42fea2b903b2e6cd346818c"},
+    {"path": "prototypes/company-onboarding/server.py", "sha256": "8dafed4af7083748d3935d5571e3ab5f87e3dca689c9472be6639094efca8331"},
+    {"path": "prototypes/company-onboarding/setup-page-load.test.cjs", "sha256": "fb3c127b71f6a16450fea4facc2b64bb488e313c7877e471d7d20838ba0f78dc"},
+    {"path": "prototypes/company-onboarding/test_server.py", "sha256": "3d49e7007e58264d328237ff1447109f90f3e356a616062c5d07b7c9d88542f4"}
+  ],
+  "parent_outcome": "Board-authorized second readiness feedback repair",
+  "scope": "Setup returning-user startup, structured per-record fuel linkage, narrow legacy migration, readiness validation, and three bounded UI concerns; no Git, publication, real-company data, or fixed live-port actions.",
+  "routing_exception": "Critical software-engineering route requested gpt-5.6-sol/high; actual model and effort were not observable."
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "M80-BACKUP-REHEARSAL-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-FIRST-REVIEW.json",
+      "sha256": "5678589b2999c1c82419042ca025e7cf7544141d117a04c6e869efe260d7cea2"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-CANDIDATE2-REVIEW.json",
+      "sha256": "881b6b326d14059a78bea4dec7806948a8fed579d0272b832ec34bf8facb1f7c"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-DELIVERABLE.json",
+      "sha256": "b4a552220cd529b01b9e86a474e0d73aa1827d697dd0563c3437b90813423fd0"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BACKUP_CLOSURE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-admission.json",
+        "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-canonical.json"
+      ],
+      "reason": "Exact 110 artifact bytes and 109 closure pins/toolchain hashes match; closed named review/admission checks refuse29 negatives and accept actual delivered canonical receipt."
+    },
+    {
+      "id": "ARCHIVE_RESTORE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-native.json",
+        "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-native-contract.json"
+      ],
+      "reason": "Fresh local synthetic DPAPI restore preserves exact prior data/metadata, schema22 held4/RLS/runtime boundary passes; all4 actual receipts accepted by preparationC5."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-backup-rehearsal-root-closure-20260924.json",
+      "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-FIRST-REVIEW.json",
+        "sha256": "5678589b2999c1c82419042ca025e7cf7544141d117a04c6e869efe260d7cea2"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-CANDIDATE2-REVIEW.json",
+        "sha256": "881b6b326d14059a78bea4dec7806948a8fed579d0272b832ec34bf8facb1f7c"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-QA-20260924-DELIVERABLE.json",
+        "sha256": "b4a552220cd529b01b9e86a474e0d73aa1827d697dd0563c3437b90813423fd0"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 2,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Root-directed independent offline backup/rehearsal transport review, no hosted/credential/provider action. Own QA files/run/snapshots only.",
+    "Candidate1 and Candidate2 failures preserved. Candidate3 passes transport-only, no hosted action. Restricted child failure retained; authorized user-context local native retry passed. Fresh clone retained, connections closed. Root acceptance of QA pending."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-first-review.json",
+      "sha256": "3ad99577b0dccf3ba7fe63f37dc777a9168408e7993b84b1bb4228baa2cfdba9"
+    },
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-probes.ts",
+      "sha256": "f656de000558b33989b36f485c6a7bfe949dc5b3afbf7944e34aa2b565d50a37"
+    },
+    {
+      "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-probes.json",
+      "sha256": "c6c4d356399a109bf61c3630b2fb0cd127487d65037d37a68b61b2d1816df5ed"
+    }
+  ]
+}

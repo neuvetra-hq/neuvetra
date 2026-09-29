@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-FOUNDATION-HOSTED-PREP-20260924",
+  "candidate": 6,
+  "author": "/root/m80_foundation_runtime",
+  "observed_at": "2026-09-25T01:00:00.000Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "historical_candidate5": {
+    "snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+      "sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe"
+    },
+    "review": {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE5-DELIVERABLE.json",
+      "sha256": "f18ac74a288edb9d435c83a4e95a38f16d0eda61a9df15a7f09e532b719e7e74"
+    },
+    "status": "accepted historical closure preserved byte-for-byte; not current executable preparation authority"
+  },
+  "repair": {
+    "finding": "EXECUTOR-F07: Candidate5 required a healthy SUCCESS/schema21 target timestamp after a stopped-source backup and later restore rehearsal, which cannot be observed truthfully.",
+    "behavior": "Additive v2 records a labeled healthy pre-stop baseline, requires the matching backup within fifteen minutes, requires rehearsal after backup, and retains a fresh stopped per-stage gate before every mutation.",
+    "no_replay": "The v1 operation-scope payload and deterministic intent/outcome paths are unchanged; tests compare v1 and v2 lock paths for the same target.",
+    "historical_files_changed": false,
+    "backup_candidate3_changed": false
+  },
+  "candidate_files": [
+    { "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts", "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5" },
+    { "path": ".superpowers/m80-foundation-hosted-once-v2.ts", "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74" },
+    { "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts", "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead" },
+    { "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md", "sha256": "cd0a92cf133694b643c6c4888888232cd32b17eb8438f23b7815139dc3f8f01d" }
+  ],
+  "preserved_v1_hashes": [
+    { "path": ".superpowers/m80-foundation-hosted-prepare.ts", "sha256": "3b3d7a6785fa5cad30dabc20b93ed1d8947466dd9fb1eaae7782ca35d30968bb" },
+    { "path": ".superpowers/m80-foundation-hosted-once.ts", "sha256": "2fc7a23e263451c0734ff36e7c0418d40146abf38754bccc5a71a9018388fefc" },
+    { "path": ".superpowers/m80-foundation-hosted-preparation.test.ts", "sha256": "366aa5a3b85d1b264369bfac563455f08485eb73509b04171fd8be7d2d499ce6" },
+    { "path": "docs/research/m80-foundation-hosted-preparation-20260924.md", "sha256": "304232758316a82e346957a8f313108e2b0cb636f7ae716cec62b1764047615b" }
+  ],
+  "checks": [
+    { "name": "v2 preparation and once-only regression suite", "result": "pass", "tests": 12, "assertions": 58 },
+    { "name": "targeted TypeScript compile", "result": "pass" },
+    { "name": "v1 and v2 operation scope and migration intent path equality", "result": "pass" },
+    { "name": "baseline before backup and rehearsal chronology negatives", "result": "pass" }
+  ],
+  "limitations": [
+    "No hosted, provider, credential, database, deployment, admission, Git, or network action was performed.",
+    "Candidate6 is not accepted until independent QA verifies the exact frozen bytes.",
+    "Actual current baseline, backup, rehearsal, publication, admission and stopped stage-gate receipts remain required."
+  ]
+}

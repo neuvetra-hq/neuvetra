@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "id": "M80-CI-PACKAGING-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_setup_ui",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-PACKAGING-20260924-CANDIDATE1.json",
+      "sha256": "ced1b1604916ef49eb67c1b3c25f357159727bc7810050fdb203a8b1105e7259"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-remote-failure-preserved",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-packaging-author-20260924.json"
+      ],
+      "reason": "The exact failed merge SHA, published head, Docker command, retained log hash and primary TS2307 diagnostics are recorded without changing the historical CI log."
+    },
+    {
+      "id": "AC-02-complete-bounded-packaging-repair",
+      "status": "pass",
+      "evidence": [
+        "Dockerfile.staging",
+        "Dockerfile.staging.dockerignore",
+        "evaluations/research-qa/m80-ci-packaging-author-20260924.json"
+      ],
+      "reason": "The web stage receives the self-contained M80 contract. The runtime image receives the M80 route, four-module database closure and migration 0022, and the deny-by-default build context admits those exact six source paths."
+    },
+    {
+      "id": "AC-03-smallest-meaningful-local-checks",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-packaging-author-20260924.json",
+        "operations/agent-improvement/snapshots/M80-CI-PACKAGING-20260924-CANDIDATE1.json"
+      ],
+      "reason": "The staging web build, full server import, asset verifier, diff check and disposable reconstruction of both declared Docker COPY trees pass. No accepted product source changed."
+    },
+    {
+      "id": "AC-04-independent-review-and-remote-image",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-ci-repair-independent-20260924.json",
+        "evaluations/research-qa/m80-setup-ci-success-20260924.json"
+      ],
+      "reason": "Separate offline QA passed and all six exact-head remote checks including actual Linux Docker build/runtime and native PostgreSQL passed at7f68f450."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-ci-repair-independent-20260924.json",
+      "evaluations/research-qa/m80-ci-repair-root-closure-20260924.json",
+      "evaluations/research-qa/m80-setup-ci-success-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-CI-PACKAGING-20260924-CANDIDATE1.json",
+        "sha256": "ced1b1604916ef49eb67c1b3c25f357159727bc7810050fdb203a8b1105e7259"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 Scope 1 beta CI packaging repair",
+  "applicable_lessons": [
+    "L01",
+    "L04"
+  ],
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json",
+      "sha256": "5f7464b29e64b773aabd2a67732dfbecc34f48fd79cd7c349e76a30939ed73e7"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+      "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+    }
+  ],
+  "notes": [
+    "This is one escaped container-packaging defect discovered by the first remote build after accepted UI/runtime integration; prior M80 first-review history is unchanged.",
+    "Docker tooling is unavailable on the author host. Local reduced-tree checks establish source coverage but do not replace an actual Linux Docker build or final image startup.",
+    "The separately owned stale M78 schema and pin failures are outside this candidate.",
+    "No product source, shared status metadata, Git/provider state, hosted environment or historical lock changed."
+  ]
+}

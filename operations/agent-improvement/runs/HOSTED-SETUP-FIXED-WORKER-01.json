@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-FIXED-WORKER-01",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-fixed-worker-author.md", "sha256": "e4b9590eeccc7c5a68de214363d911ca63f2c50c67e620ad95d30a73c95e55ac"}
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-artifact-worker.ts", "sha256": "1b13adb2e63fdfcc2adf298ce7653b93d7fff94ce75ab665bc0d8c6f388ea765"},
+    {"path": "tools/staging/hosted-setup-artifact-supervisor.ts", "sha256": "258faea55ed095d79d3f6680830763945d9f5fb88abf3123d456fb5f3837d009"},
+    {"path": "tools/staging/hosted-setup-artifact-worker.test.ts", "sha256": "0804a4b249ac11147555114123a02f79a34cb26457a51da3ba1a21814e76f890"},
+    {"path": "tools/staging/hosted-setup-artifact-supervisor.test.ts", "sha256": "6a458f5df1686ada80a02009a2b2edb5742d094bf231b6e217af284fb7a45c5f"}
+  ],
+  "criteria": [
+    {"id": "AC-01", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-fixed-worker-author.md"], "reason": "Author synthetic public-path tests demonstrate fixed fresh process, private inputs, one worker-managed adapter/transaction, fail-closed bindings, separate reconciliation and deadline uncertainty; strict API types pass."},
+    {"id": "AC-02", "status": "pending", "evidence": ["evaluations/research-qa/hosted-setup-01-fixed-worker-author.md"], "reason": "Independent review of exact process-boundary bytes remains pending. Native final composition and authentic evidence/provider bindings remain explicitly outside author completion claims."}
+  ],
+  "review": {"reviewer_execution_context": null, "independent": false, "verdict": "pending", "evidence": [], "reviewed_artifacts": []},
+  "outcome": {"status": "in_progress", "first_review": "pending", "material_findings_open": 0, "rework_cycles": null, "escaped_defects": null, "repeated_findings": []},
+  "compute": {"requested": {"model": "gpt-5.6-sol", "effort": "high"}, "observed": {"model": null, "effort": null}, "observation_evidence": []},
+  "metrics": {"elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null},
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "applied_lessons": ["L04", "L06"],
+  "routing_note": "Registered critical software-engineering route requested. Follow-up cannot override this existing context; observed settings remain unknown. Root owns absent fixed evidence/provider bindings; launchAuthorized stays false."
+}

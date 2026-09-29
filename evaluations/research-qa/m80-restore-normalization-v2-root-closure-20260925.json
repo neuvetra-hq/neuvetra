@@ -1,0 +1,30 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_independent_backup_v2_candidate2_transport_review_only",
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-QA-20260925-CANDIDATE2-DELIVERABLE.json",
+    "sha256": "576b3d9f2988ef1658bd885345c993f5bb2ba2fbc2ec1db716dd73c5a67339d5"
+  },
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+    "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+  },
+  "source_review": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-review.json",
+    "sha256": "f480bfbcc296d38d1752593c6e13ab786cad8b483caf9fd0df1fda8e50af983b"
+  },
+  "verified_candidate_artifacts": 4,
+  "verified_dependency_pins": 8,
+  "verified_original_c3_artifacts": 110,
+  "closed_source_findings": [
+    "V2-F01",
+    "V2-F02"
+  ],
+  "actual_archived_backup_rehearsal": "pending",
+  "actual_restore_finding": "ACTUAL-RESTORE-F01 remains open until new actual archive rehearsal independently reviewed",
+  "hosted_action": false,
+  "limits": [
+    "New local clone only is the next action. Original failed clone/journal/archive remain immutable.",
+    "Preparation/executor consumers and actual future stage gates not accepted by this closure."
+  ]
+}

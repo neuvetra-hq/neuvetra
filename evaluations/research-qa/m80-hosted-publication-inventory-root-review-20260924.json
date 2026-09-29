@@ -1,0 +1,24 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_component_and_failed_history_inventory_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json",
+    "sha256": "639092a272f49cd1313973602f687f376e713a59d3114d64243f759ad59fa115"
+  },
+  "inventory": {
+    "path": "evaluations/research-qa/m80-hosted-publication-inventory-20260924.json",
+    "sha256": "7e7e814f485bf981be7c053739692bb8ce5c08d75c961f85aecb105183a59c31"
+  },
+  "independently_rehashed_files": 206,
+  "independently_summed_bytes": 26232479,
+  "metadata_candidate1_failure_preserved": true,
+  "integrated_readiness": false,
+  "ready_to_stage_final_publication": false,
+  "oversized_snapshot_disposition": "Accepted as bounded full-source review evidence: exact text/hash verification plus separately recorded independent source review; failed candidates are historical non-executable evidence. Advisory one-MiB threshold is not a publication size prohibition.",
+  "remaining": [
+    "Reviewed versioned preparation and executor successor",
+    "Root shared metadata and final Git manifest review",
+    "Exact staged-byte validation and remote checks"
+  ],
+  "no_hosted_action": true
+}

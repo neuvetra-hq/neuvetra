@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-09-25T13:43:03.237047+00:00",
+  "verdict": "accepted_bounded_ci_correction",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE4.json",
+    "sha256": "63bc8ca34e40c62be20d2e068580305d2911c9b6e1c6794799008e0c377f6959"
+  },
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review4.json",
+    "sha256": "85d1e869fff7b9764777b02a199ccd12dc0adada5217302f060b7b2b0a19b82f"
+  },
+  "qa_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW4.json",
+    "sha256": "27a2282382b1d386b61b144362dfc523d08919584a6f8056377d943de9f6dedd"
+  },
+  "verified_current_and_embedded_counts": {
+    "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE4.json": 18,
+    "operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW4.json": 6
+  },
+  "first_publication": "3331b62c four checks passed, two failed; retained",
+  "source_delta_from_c2": [
+    ".github/workflows/verify.yml",
+    "packages/neuvetra-database/src/index.ts"
+  ],
+  "candidate2_local_native_acceptance_preserved": true,
+  "candidate3_encoding_diagnosis": "Root default-decoding measurement error; immutable snapshot passes explicit UTF8 verification. See encoding-observation-correction receipt.",
+  "workflow": "Original version3 rejected; separately board-authorized one-attempt continuation accepted. Actual costs unknown.",
+  "publication": "pending_exact_remote_checks",
+  "new_hosted_deployment": false,
+  "customer_ready": false,
+  "all_four_methods_held": true
+}

@@ -1,0 +1,9 @@
+{
+  "status": "moved_to_private",
+  "archive_locator": ".superpowers/m80-beta-access-independent-20260925-qa-b-synthetic.dump",
+  "archive_sha256": "3379952618e31531e5791490c6cd82870cb800b9a60816abf484c997e621bc17",
+  "old_public_path_absent": true,
+  "exact_bytes_preserved": true,
+  "authority_rows_or_tokens_exported": false,
+  "publication_allowed": false
+}

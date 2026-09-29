@@ -1,0 +1,736 @@
+{
+  "boundary": "Separate real Bun processes; frozen private entrypoint and actual executor/journal sync; synthetic DB/provider only; fixture timestamps shifted together to current run; no network/credentials",
+  "cases": [
+    {
+      "scenario": "migration_pending",
+      "directory": "evaluations/research-qa/m80-executor-independent-20260924-process-c5-migration_pending-1790296348144407800",
+      "results": [
+        {
+          "scenario": "migration_pending",
+          "phase": "execute",
+          "pid": 40156,
+          "closed": true,
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260925003206936.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260925003206936.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260925003206936.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-pending-20260925003206936.json"
+            }
+          ]
+        },
+        {
+          "scenario": "migration_pending",
+          "phase": "reconcile",
+          "pid": 41588,
+          "closed": true,
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "migration_crash_observation",
+      "directory": "evaluations/research-qa/m80-executor-independent-20260924-process-c5-migration_crash_observation-1790296348413598200",
+      "results": [
+        {
+          "scenario": "migration_crash_observation",
+          "phase": "execute",
+          "pid": 40388,
+          "closed": true,
+          "error": "Error: Fresh post-intent authoritative observation required.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "assert-delta"
+            }
+          ]
+        },
+        {
+          "scenario": "migration_crash_observation",
+          "phase": "reconcile",
+          "pid": 16528,
+          "closed": true,
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "migration_crash_outcome",
+      "directory": "evaluations/research-qa/m80-executor-independent-20260924-process-c5-migration_crash_outcome-1790296348682330100",
+      "results": [
+        {
+          "scenario": "migration_crash_outcome",
+          "phase": "execute",
+          "pid": 21740,
+          "closed": true,
+          "error": "Error: Fresh post-intent authoritative observation required.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "schema21-preflight"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-source.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-attempt.json"
+            },
+            {
+              "event": "migration-mutation"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 2
+            },
+            {
+              "event": "assert-delta"
+            }
+          ]
+        },
+        {
+          "scenario": "migration_crash_outcome",
+          "phase": "reconcile",
+          "pid": 41772,
+          "closed": true,
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "assert-delta"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-migration-outcome.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "deployment_building",
+      "directory": "evaluations/research-qa/m80-executor-independent-20260924-process-c5-deployment_building-1790296348949283500",
+      "results": [
+        {
+          "scenario": "deployment_building",
+          "phase": "execute",
+          "pid": 25028,
+          "closed": true,
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-attempt.json"
+            },
+            {
+              "event": "provider-mutation"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-ack.json"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": null
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260925003206936.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260925003206936.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260925003206936.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-pending-20260925003206936.json"
+            }
+          ]
+        },
+        {
+          "scenario": "deployment_building",
+          "phase": "reconcile",
+          "pid": 2044,
+          "closed": true,
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "provider-observe",
+              "retainedId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+            },
+            {
+              "event": "readiness"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-deployment-outcome.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_pending",
+      "directory": "evaluations/research-qa/m80-executor-independent-20260924-process-c5-admission_pending-1790296349217398200",
+      "results": [
+        {
+          "scenario": "admission_pending",
+          "phase": "execute",
+          "pid": 34728,
+          "closed": true,
+          "error": "Error: Authoritative observation remains pending; side effect was not retried.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-attempt.json"
+            },
+            {
+              "event": "admission-mutation"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260925003206936.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260925003206936.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260925003206936.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-pending-20260925003206936.json"
+            }
+          ]
+        },
+        {
+          "scenario": "admission_pending",
+          "phase": "reconcile",
+          "pid": 41020,
+          "closed": true,
+          "error": "",
+          "outcomeStatus": "verified_success",
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-close"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-observation.json"
+            },
+            {
+              "event": "write-start",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "synced",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "closed-file",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            },
+            {
+              "event": "write-complete",
+              "path": "m80-foundation-executor-f5e575f005016c07b62ef0f6d37d4f70e5c63659b4e3a1e3d0b7f778febf18f3-admission-outcome.json"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scenario": "admission_gate_mismatch",
+      "directory": "evaluations/research-qa/m80-executor-independent-20260924-process-c5-admission_gate_mismatch-1790296349502339200",
+      "results": [
+        {
+          "scenario": "admission_gate_mismatch",
+          "phase": "execute",
+          "pid": 41744,
+          "closed": true,
+          "error": "Error: Current schema-22 application state differs from the fresh reviewed gate.",
+          "outcomeStatus": null,
+          "events": [
+            {
+              "event": "read-only"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "db-query"
+            },
+            {
+              "event": "capture",
+              "captures": 1
+            },
+            {
+              "event": "db-close"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

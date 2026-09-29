@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-POSTSCALE-REPAIR-01",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {"path": "evaluations/research-qa/hosted-setup-01-postscale-repair1-author.md", "sha256": "5f6795908b017232cc2977d6f451c114fa663ecc62e5103d2b92dff323d3858f"}
+  ],
+  "source_artifacts": [
+    {"path": "tools/staging/hosted-setup-postscale.ts", "sha256": "5f86f48655b7df926f89be258a084815157b3d9d739dcbe470c4f6f15aa0ccd8"},
+    {"path": "tools/staging/hosted-setup-postscale.test.ts", "sha256": "f2342b924070041731a2bf20496f9735db70022d7e49d5033d9d58186be491ec"}
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": ["tools/staging/hosted-setup-postscale.ts", "evaluations/research-qa/hosted-setup-01-postscale-repair1-author.md"],
+      "reason": "Author candidate exposes a stopped-only pre-migration verifier and a separately fresh post-review resume verifier bound to the exact accepted stopped receipt and deployment image, with explicit false authority fields."
+    },
+    {
+      "id": "AC-02",
+      "status": "pending",
+      "evidence": ["evaluations/research-qa/hosted-setup-01-postscale-independent-review1.md", "tools/staging/hosted-setup-postscale.test.ts"],
+      "reason": "Author tests reproduce POST-F01 and pass the repaired boundary, but independent targeted re-review must close the preserved first FAIL against these exact bytes."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 1,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_task": "HOSTED-SETUP-POSTSCALE-01",
+  "applied_lessons": ["L04"],
+  "routing_note": "Critical software-engineering registry settings requested. Follow-up dispatch cannot override the existing context, so actual model and effort remain unknown. Original POST-F01 FAIL is preserved; no provider mutation, migration authority, launch authority or live evidence is created."
+}

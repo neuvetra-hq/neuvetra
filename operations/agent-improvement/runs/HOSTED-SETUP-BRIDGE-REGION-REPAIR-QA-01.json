@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-BRIDGE-REGION-REPAIR-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/hosted-setup-01-bridge-region-repair-independent-review.md",
+      "sha256": "146f0d0252961ab6a0ddfa61bb40f7db25b518b6282ad57a003019c6abf0a65e"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BOUNDED_INDEPENDENT_REVIEW",
+      "reason": "Original refusal reproduced at exact old hash; unchanged actual pair accepted by exact repair; 14 tests/99 assertions and strict TS pass with independent adversarial cases.",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-bridge-region-repair-independent-review.md"
+      ]
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent reviewer did not author candidate. Requested critical route recorded; existing-context actual model/effort unknown.",
+    "QA artifact awaits coordinator review/immutable snapshot packaging; no self-review or milestone completion claimed.",
+    "Only read-only provider/ready acquisition, private temporary probes/captures and new reports/run records. No source/provider/DB/Git mutation.",
+    "Original failure preserved separately; repair acceptance does not authorize maintenance. GitHub exact-head/checks are root-supplied context only."
+  ]
+}

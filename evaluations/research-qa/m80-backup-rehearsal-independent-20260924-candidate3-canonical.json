@@ -1,0 +1,9 @@
+{
+  "status": "pass",
+  "actualCanonicalReview": {
+    "path": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-candidate3-review.json",
+    "sha256": "991317f91a9ec71f6ed862298224a1e131de7a93839483d09b22bf340d5f9196"
+  },
+  "actualFrozenPrivateValidatorAccepted": true,
+  "boundary": "Actual canonical review and accepted preparation files; exact frozen private validator; read-only no DB/network"
+}

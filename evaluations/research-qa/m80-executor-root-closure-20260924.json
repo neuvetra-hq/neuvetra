@@ -1,0 +1,26 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_executor_transport_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
+    "sha256": "1e62195be433c6a5ed3cc5a68ab789845b093107a0e41ea4f37c324d0c5b1481"
+  },
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-executor-independent-20260924-candidate9-review.json",
+    "sha256": "b589b0ab127cb537c91f9c80e584382255a45cf537a1703104ee4df4f31174a2"
+  },
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE9-DELIVERABLE.json",
+    "sha256": "b697abf1fb197aa977879335dd87842ccf751b7fd2724fdbfd82546010d391c4"
+  },
+  "current_and_embedded_artifacts_verified": 42,
+  "independent_process_runs": 32,
+  "independent_scenarios": 20,
+  "material_findings_open": 0,
+  "historical_failures_preserved": true,
+  "no_live_action_performed": true,
+  "limits": [
+    "Actual hosted plan and each stopped stage require fresh independent evidence review.",
+    "No migration, admission, deployment or complete Scope1 claim."
+  ]
+}

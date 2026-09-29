@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "M80-SCOPE1-NAV-QA-20260924",
+  "role": "qa-lead",
+  "execution_context": "/root/merge_integration_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-DELIVERABLE.json",
+      "sha256": "b13b5883e01e0764e2ff66093c771e84b6171aaf21c73d92af863adb58066764"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "EXACT_NAVIGATION_AND_PRESERVED_BEHAVIOR",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-navigation-independent-20260924.json",
+        "evaluations/research-qa/m80-navigation-independent-20260924.md",
+        "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-CANDIDATE1.json"
+      ],
+      "reason": "Exact source comparison plus independent all13 keyboard and responsive preview checks pass for navigation scope."
+    },
+    {
+      "id": "CURRENT_HANDOFF_ADDENDUM",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-navigation-independent-20260924-handoff-addendum.json",
+        "evaluations/research-qa/m80-navigation-independent-20260924-handoff-addendum.md",
+        "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-HANDOFF-ADDENDUM1.json"
+      ],
+      "reason": "Current three-file text accurately binds navigation/planning acceptance while preserving pending publication, foundation and beta gates."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-navigation-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-QA-20260924-DELIVERABLE.json",
+        "sha256": "b13b5883e01e0764e2ff66093c771e84b6171aaf21c73d92af863adb58066764"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-navigation-independent-20260924.json",
+      "sha256": "ca39c91ddf57b1e23f8be7de0765eb712e52a1c6e650b3ce748fa41ffc40ccf1"
+    },
+    {
+      "path": "evaluations/research-qa/m80-navigation-independent-20260924-handoff-addendum.json",
+      "sha256": "4f12dd100f5604b6182626bb0498f3d006337a07b9403aaec0e7b02d72ddb922"
+    },
+    {
+      "path": "evaluations/research-qa/m80-navigation-independent-20260924.md",
+      "sha256": "31f91180c94daef5d32def1e4e95441bfa2f37f347daaa2c99c04ff7d0c51bf7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-navigation-independent-20260924-handoff-addendum.md",
+      "sha256": "9b25fd77eba34e10a33c207894dabb1bf5e7180e34bf03121284f3d02d4ccfc5"
+    }
+  ],
+  "routing_notes": "Reused independent QA context; actual inherited settings unknown.",
+  "notes": [
+    "Root accepted QA authored result/report and text addendum; candidate review remains independent QA, with prior snapshots unchanged."
+  ]
+}

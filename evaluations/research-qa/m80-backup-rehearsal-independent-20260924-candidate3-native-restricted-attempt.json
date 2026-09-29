@@ -1,0 +1,6 @@
+{
+  "status": "failed_before_database_creation",
+  "message": "Private child process failed.",
+  "boundary": "Default restricted process could not complete private DPAPI unseal child; helper unseals before creating output directory or database. No diagnostic secret/dump output read.",
+  "next_step": "Same authorized local synthetic restore with user-context child execution; no hosted target or credential export."
+}

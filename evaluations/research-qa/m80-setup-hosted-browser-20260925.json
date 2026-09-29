@@ -1,0 +1,29 @@
+{
+  "profile": "neuvetra.m80.hosted-browser-observation.v1",
+  "observed_date_utc": "2026-09-25",
+  "observer": "/root",
+  "review_arrangement": "Root operated the browser; independent QA reviews this evidence separately, not an independently repeated browser run.",
+  "url": "https://www.neuvetra.ai/",
+  "deployed_commit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+  "deployment_id": "40546ef7-9004-4486-a471-370aaa305c80",
+  "data": "Existing authorized private synthetic company only; no customer data or documents",
+  "observations": [
+    "Existing signed-in session resolved after initial authentication loading; private staging access verified.",
+    "First Save synthetic setup action confirmed: Synthetic setup version 1 saved. All calculation profiles remain held.",
+    "Make a correction changed Joint ventures from None proposed to Unknown; Save synthetic correction confirmed version 2 saved.",
+    "Saved history listed versions 1 and 2. Selecting version 1 confirmed it loaded and displayed the version 1 summary.",
+    "Changing from history to Company and year returned to current version 2, explicitly labeled current; the history summary does not expose all historical field values.",
+    "Full page reload resolved authentication and loaded saved version 2 with Joint ventures Unknown and Ownership changes None proposed.",
+    "Blockers displayed 14 missing facts, zero released and supported sources, and Boundary Joint Venture State as needed for each source.",
+    "History after reload retained both versions and displayed 2 locations, 14 sources, 19 evidence requirements, zero fictional references and 19 requirements missing or unknown.",
+    "Page visibly retained Inventory incomplete, No calculations or exports, synthetic-only limitations and all four method profiles unreleased.",
+    "Visual screenshot inspected on saved history; page left on version 2 history for the board."
+  ],
+  "result": "pass_bounded_save_correction_history_reload_demonstration",
+  "limits": [
+    "No independent browser replay claimed",
+    "Historical field-level immutability rests on separate runtime tests, not the summary-only history UI",
+    "No customer readiness, source approval, method release, calculation or assurance acceptance",
+    "Board feedback on this live demonstration remains pending"
+  ]
+}

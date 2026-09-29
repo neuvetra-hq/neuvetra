@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "candidate": 4,
+  "candidate_sha256": "63bc8ca34e40c62be20d2e068580305d2911c9b6e1c6794799008e0c377f6959",
+  "clarifications": [
+    "Author workflow.task_version4 refers to candidate ordinal; actual continuation workflow ci-correction task version is1, ticket2677ff1a487b43c18f79ce478d83645f.",
+    "Historical native review bullets in author evidence are superseded by focused C4 review: native runtime bytes unchanged and C2 acceptance preserved; no native replay authorized.",
+    "Root verified all18 current and embedded UTF8 bytes exactly; snapshot corrects C3 embedding mismatch.",
+    "No source changed after final freeze."
+  ],
+  "original_journal_preserved": true
+}

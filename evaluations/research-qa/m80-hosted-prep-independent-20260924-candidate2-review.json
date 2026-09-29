@@ -1,0 +1,60 @@
+{
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate2_offline_preparation",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE2.json",
+    "sha256": "3dd4e1b8ba6f84b176c7ec34823a4f40ea1886425af0a19a1cd94e2d7c11a82c"
+  },
+  "candidate_integrity": "Frozen helper copies independently equal exact embedded Candidate2 texts, except declared relative import/repo-root path adjustments. Author live files may now differ while repairing Candidate3.",
+  "checks": {
+    "author_suite": {
+      "pass": 8,
+      "assertions": 37
+    },
+    "independent_unaffected_controls": {
+      "pass": 2,
+      "assertions": 44
+    },
+    "harness_initial_failure": "Own structuredClone mutation preserved shared pin aliases; changed harness to JSON roundtrip to model CLI parsing. Not a product finding."
+  },
+  "findings": [
+    {
+      "id": "F01-C2a",
+      "severity": "high",
+      "recurrence_of": "F01",
+      "title": "Failure or uncertainty observation promoted to successful predecessor",
+      "evidence": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate2-probes.json",
+      "detail": "Actual unknown/definitive_failure observations with empty authoritativeState permit admission after changing outcome.status and nextActionAllowed and recomputing hashes. Derive predecessor success from actual observation, never outcome status alone."
+    },
+    {
+      "id": "F01-C2b",
+      "severity": "high",
+      "recurrence_of": "F01 chronology",
+      "title": "Successor event precedes prerequisite completion",
+      "evidence": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate2-additional.json",
+      "detail": "Admission created22:11/observed22:11:30 with migration recorded22:12 permits deployment. Require successor intent after all prerequisite outcome times and coherent per-stage gate chronology."
+    },
+    {
+      "id": "F02-C2",
+      "severity": "medium",
+      "recurrence_of": "F02 scalar validation",
+      "title": "Nested lists pass exact sequence/table checks through coercion",
+      "evidence": "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate2-additional.json",
+      "detail": "Singleton nested arrays accepted for expectedNewTables and sequence. Check exact string element types and structural equality."
+    }
+  ],
+  "repaired_boundaries": [
+    "Eight contradictory typed receipt bodies refuse.",
+    "Seven timestamp/role scalar arrays refuse.",
+    "Wrong predecessor pins, cross-plan chain and target swaps refuse.",
+    "Traversal variants refuse; changed head retains deterministic operation path."
+  ],
+  "runbook_followup": "Root requested explicit separation of local mock/authstub integration and existing live sign-in from pending postdeployment real-auth setup acceptance. Current docs do not demonstrate live integration.",
+  "limits": [
+    "Synthetic in-memory probes; no real .superpowers journal, DB, hosted, Git or network mutation.",
+    "Receipt content/hash consistency does not prove independent provider authenticity; trusted collection remains separate.",
+    "Candidate1 and Candidate2 failures preserved; Candidate3 review pending."
+  ],
+  "observed_at": "2026-09-24T23:03:12.001441+00:00"
+}

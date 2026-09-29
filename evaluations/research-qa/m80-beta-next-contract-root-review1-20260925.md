@@ -1,0 +1,3 @@
+# First contract review: targeted correction required
+
+Reviewer /root, independent of design author. BETA-CONTRACT-F01: steps 3 and 4 require pending invitation status before successful same-key retry, conflicting with consumed-token receipt replay. Specify existing-receipt branch before pending-status/expiry admission checks. Only exact still-active membership generation and active untombstoned admission may replay; foreign or changed input cannot grant access. Define post-success expiry policy explicitly. Other separate-boundary and synthetic local constraints are appropriate. Candidate not yet accepted.

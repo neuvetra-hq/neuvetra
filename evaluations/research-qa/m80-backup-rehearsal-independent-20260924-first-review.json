@@ -1,0 +1,55 @@
+{
+  "task_id": "M80-BACKUP-REHEARSAL-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_candidate1_backup_rehearsal_transport",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE1.json",
+    "sha256": "7561242ae3b26e7595d4afdcb4287f2d400721efb17385a639ee84cf25c44257"
+  },
+  "findings": [
+    {
+      "id": "BACKUP-F01",
+      "severity": "high",
+      "title": "Incomplete source closure",
+      "detail": "helperPins binds four wrappers only; imported m78-inventory, m73-common, operator/TLS/database helpers, migrations and relevant runtime dependency closure can change without backupHelperSha256 changing. Bind actual full local-import/tool/data closure in immutable candidate and review."
+    },
+    {
+      "id": "BACKUP-F02",
+      "severity": "high",
+      "title": "Latent independent review bypass",
+      "detail": "Candidate1 null preparation pin refuses. Isolated evaluation enabling only that pin demonstrates verdict fail/reviewer null accepted if unrelated nested values contain preparation hash, helper hash and string pass. Replace recursive deepContains with closed typed independent-review schema, exact reviewer and accepted preparation binding.",
+      "evidence": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-probes.json"
+    },
+    {
+      "id": "BACKUP-F03",
+      "severity": "high",
+      "title": "No usable fresh hosted archive rehearsal pipeline",
+      "detail": "Hosted backup is disabled by null preparation pin; exported runLocalRehearsal always backs fixed retained local DB and restores its own newly generated archive. It cannot rehearse the newly collected hosted archive/backup receipt chain required before migration. Provide explicit guarded archive+receipt local restore mode and re-review configured Candidate5 binding."
+    },
+    {
+      "id": "BACKUP-F04",
+      "severity": "medium",
+      "title": "Generated rehearsal receipt rejected by accepted preparation",
+      "detail": "Actual frozen receipt constructor omits releaseRecordsExactFourHeld:true. Feeding its otherwise matching synthetic output into accepted Candidate5 plan builder refuses typed evidence.",
+      "evidence": "evaluations/research-qa/m80-backup-rehearsal-independent-20260924-probes.json"
+    }
+  ],
+  "checks": [
+    "Exact frozen private validateAdmission evaluated with virtual synthetic inputs: current null pin refuses; latent malformed review bypass proven only after isolated enabled constant.",
+    "Exact frozen migration receipt expression evaluated; accepted preparation rejects it for missing held-seed field.",
+    "Read-only review of private bridge, DPAPI archive writer, snapshot consistency, source/restore target restrictions and retained author attempt history."
+  ],
+  "unaffected": [
+    "Private bridge reads only DATABASE_URL field, checks exact host/port/database/user, sends URL through child stdin and suppresses child stderr. It was not executed with any export.",
+    "Archive uses current-user DPAPI, CreateNew, Flush(true), and decrypt/hash roundtrip. QA did not exercise device cryptography or infer broad recovery portability.",
+    "Snapshot uses repeatable-read/read-only transaction plus exported snapshot passed to pg_dump; restore targets fresh loopback database and never drops an existing target.",
+    "Local reported native rehearsal evidence remains author evidence; QA did not replay DB or read/decrypt private archives."
+  ],
+  "limits": [
+    "No credentials/export/provider/network/hosted/DB operations performed.",
+    "No transport pass receipt issued; stop must remain blocked on this dependency.",
+    "Frozen snapshot source is review authority; author may now edit live source for Candidate2.",
+    "New typed receipt must satisfy both helper admission and root stop dependency schemas without circular review hashes."
+  ],
+  "observed_at": "2026-09-24T23:39:20.566118+00:00"
+}

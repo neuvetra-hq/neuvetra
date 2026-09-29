@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "M80-SETUP-UI-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_setup_ui",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE1.json",
+      "sha256": "6944d220e356b76c2ddfc7f36f10ebce1e96128b632ba3301e4a38aae726d684"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-PREVIEW-REPAIR1.json",
+      "sha256": "72e18f626928ced9066a3b9a60388c691a6ad529b55511b6297b9324bd982d8e"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json",
+      "sha256": "5f7464b29e64b773aabd2a67732dfbecc34f48fd79cd7c349e76a30939ed73e7"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-strict-browser-trust-boundary",
+      "status": "pass",
+      "evidence": ["apps/site-web/src/lib/m80-beta-api.ts", "apps/site-web/src/lib/m80-beta-api.test.ts"],
+      "reason": "Candidate 2 accepts only exact JSON scalar types, the fixed source-to-location identity, recomputed held-only classification, canonical version dates and structurally valid hash-linked history; save replies bind predecessor, payload, history membership and createdBy to the captured actor."
+    },
+    {
+      "id": "AC-02-focused-synthetic-setup-flow",
+      "status": "pass",
+      "evidence": ["apps/site-web/src/components/Scope1BetaSetup.tsx", "apps/site-web/src/staging.css"],
+      "reason": "The readable staged flow exposes the proposed 2025 boundary, two locations, all 14 sources, seven process categories, seven gas groups, 19 evidence metadata requirements, separate blocker counts, save/correction and history while keeping calculation profiles held."
+    },
+    {
+      "id": "AC-03-authority-retry-and-lifecycle",
+      "status": "pass",
+      "evidence": ["apps/site-web/src/components/Scope1BetaSetup.tsx", "apps/site-web/src/components/Scope1BetaSetup.test.tsx", "apps/site-web/src/lib/m80-beta-api.test.ts"],
+      "reason": "The component uses server-derived canManage, preserves one idempotency key for retry, reports conflicts, cancels old requests while preserving draft/retry on verified same-authority token refresh, clears on actor-signal expiry and suppresses stale actor, workspace, signal and unmount replies."
+    },
+    {
+      "id": "AC-04-preserved-navigation-and-bounded-scope",
+      "status": "pass",
+      "evidence": ["apps/site-web/src/components/StagingWorkspace.tsx", "apps/site-web/src/components/Scope1BetaSetup.tsx"],
+      "reason": "Scope 1 setup is the primary entry while all prior navigation remains reachable; the new flow accepts no real documents, people, free text, invitations, calculations or exports and displays no hashes or identifiers."
+    },
+    {
+      "id": "AC-05-author-validation-and-preview",
+      "status": "pass",
+      "evidence": ["evaluations/research-qa/m80-setup-ui-author-candidate2-20260924.json", "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json"],
+      "reason": "Twenty-one focused tests with 50 assertions, typecheck, scoped lint, staging build and mock-server bundle passed; the frozen snapshot embeds the private mock harness, and root browser evidence verifies retry, conflict, history, member, abort and delayed-switch behavior."
+    },
+    {
+      "id": "AC-06-independent-review",
+      "status": "pass",
+      "evidence": ["evaluations/research-qa/m80-setup-integration-independent-20260924.json", "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json", "evaluations/research-qa/m80-setup-integration-root-closure-20260924.json"],
+      "reason": "Independent integration QA closed F01-F03 with 8 tests, 90 assertions, 544 refused corruptions, 603 accepted legal variants, five actual-component lifecycle tests and nine native groups; root browser recheck and combined exact-byte closure passed with zero open material findings."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/m80_foundation_runtime_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": ["evaluations/research-qa/m80-setup-integration-independent-20260924.json", "evaluations/research-qa/m80-setup-ui-root-browser-candidate2-20260924.json", "evaluations/research-qa/m80-setup-integration-root-closure-20260924.json"],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE1.json",
+        "sha256": "6944d220e356b76c2ddfc7f36f10ebce1e96128b632ba3301e4a38aae726d684"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-PREVIEW-REPAIR1.json",
+        "sha256": "72e18f626928ced9066a3b9a60388c691a6ad529b55511b6297b9324bd982d8e"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json",
+        "sha256": "5f7464b29e64b773aabd2a67732dfbecc34f48fd79cd7c349e76a30939ed73e7"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {"model": "gpt-5.6-sol", "effort": "high"},
+    "observed": {"model": null, "effort": null},
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 free Scope 1 beta synthetic setup UI",
+  "applicable_lessons": ["L01", "L02", "L04"],
+  "source_artifacts": [
+    {
+      "path": "docs/research/scope1-free-beta-technical-20260924.md",
+      "sha256": "e7c26892a60df40b431c5d73ad5236c7deb802b7898fa80f5ca3ceaed2a469e8"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-20260924-CANDIDATE2.json",
+      "sha256": "40c4ac822ef2d045457ade7dd63d471813178c8f3a585425be58eb81013de59b"
+    }
+  ],
+  "notes": [
+    "Requested model and effort are recorded separately from unavailable observed settings.",
+    "Candidate 1 and its author report remain preserved. Independent first review failed on exact scalar/source/classification integrity, history metadata/hash binding and token-refresh lifecycle; Candidate 2 closed F01-F03 in one rework cycle.",
+    "Candidate 2 passed independent local synthetic UI/runtime integration, root mock-browser review and combined exact-byte closure.",
+    "The private preview source is embedded in immutable snapshots; criterion evidence uses public tracked reports and snapshots.",
+    "No hosted provider, real authentication, real data, release promotion, calculation, customer beta or assurance acceptance is claimed."
+  ]
+}

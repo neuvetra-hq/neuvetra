@@ -18,6 +18,7 @@ import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WA
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
 import { M61_PROFILE, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput } from "./m61"
+import {readCollectionContext,readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,reserveCollectionEvidenceUpload as reserveEvidenceUpload,registerCollectionEvidence as storeCollectionEvidence,markCollectionEvidenceRegistrationFailed as markEvidenceRegistrationFailed,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
 export { M60_PROFILE, M60_MEDIA_TYPE, M60_MAX_REPORT_BYTES, buildDraftInventoryReport, hashReportBytes, type DraftInventoryReportBuild } from "./m60"
@@ -297,9 +298,26 @@ export interface WorkspaceConnection extends WorkspaceSql {
 }
 
 export class WorkspaceDatabase {
+  async findCollectionContext(userId:string,companyId:string){return this.asUser(userId,tx=>readCollectionContext(tx,companyId))}
+  async findCollectionActivities(userId:string,companyId:string){return this.asUser(userId,tx=>readCollectionActivities(tx,companyId))}
+  async findCollectionActivityVersion(userId:string,companyId:string,recordId:string,versionId:string){return this.asUser(userId,tx=>readCollectionActivityVersion(tx,companyId,recordId,versionId))}
+  async saveCollectionActivity(userId:string,companyId:string,recordId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeCollectionActivity(tx,userId,companyId,recordId,input))}
+  async findCollectionEvidence(userId:string,companyId:string){return this.asUser(userId,tx=>readCollectionEvidence(tx,companyId))}
+  async reserveCollectionEvidenceUpload(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>reserveEvidenceUpload(tx,userId,companyId,input))}
+  async registerCollectionEvidence(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeCollectionEvidence(tx,userId,companyId,input))}
+  async markCollectionEvidenceRegistrationFailed(userId:string,companyId:string,uploadId:string){return this.asTrustedUser(userId,tx=>markEvidenceRegistrationFailed(tx,userId,companyId,uploadId))}
+  async findDownloadableCollectionEvidence(userId:string,companyId:string,evidenceId:string){return this.asUser(userId,tx=>readDownloadableCollectionEvidence(tx,companyId,evidenceId))}
+  async findGridLossLineage(userId:string,companyId:string){return this.asUser(userId,tx=>readGridLossLineage(tx,companyId))}
+  async createGridLossLineage(userId:string,companyId:string,input:{id:string;electricityRecordId:string;reference:string;notes:string}){return this.asTrustedUser(userId,tx=>storeGridLossLineage(tx,userId,companyId,input))}
+  async findCompanySetup(userId:string,companyId:string){return this.asUser(userId,tx=>readCompanySetup(tx,companyId))}
+  async findCompanySetupVersion(userId:string,companyId:string,versionId:string){return this.asUser(userId,tx=>readCompanySetupVersion(tx,companyId,versionId))}
+  async saveCompanySetup(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>saveCompanySetup(tx,userId,companyId,input))}
   protected constructor(protected readonly db: WorkspaceConnection) {}
 
   async findFugitive(userId:string,companyId:string,authority:M77Authority){return this.asUser(userId,tx=>readFugitive(tx,companyId,authority))}
+  async findM80Foundation(userId:string,companyId:string){return this.asUser(userId,tx=>readM80Foundation(tx,companyId))}
+  async findM80FoundationVersion(userId:string,companyId:string,versionId:string){return this.asUser(userId,tx=>readM80FoundationVersion(tx,companyId,versionId))}
+  async saveM80Foundation(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>saveM80Foundation(tx,userId,companyId,input))}
   async findScope1(userId:string,companyId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1(tx,companyId,authorities,policy))}
   async findScope1Version(userId:string,companyId:string,streamId:string,versionId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Version(tx,companyId,streamId,versionId,authorities,policy))}
   async findScope1Report(userId:string,companyId:string,streamId:string,reportId:string,authorities:M78Authorities,policy:M78Policy|null){return this.asUser(userId,tx=>readScope1Report(tx,companyId,streamId,reportId,authorities,policy))}
@@ -403,6 +421,18 @@ export class WorkspaceDatabase {
     return this.asUser(userId, async (tx) => {
       const result = await tx.query<WorkspaceRow>(WORKSPACE_QUERY, [workspaceId])
       return result.rows.length === 1 ? toRecord(result.rows[0]!) : null
+    })
+  }
+
+  /** Read only the company geography visible to this member; new companies need no legacy facility. */
+  async findCompanyGeography(userId: string, companyId: string): Promise<{ countryCode: string; stateCode: string } | null> {
+    return this.asUser(userId, async (tx) => {
+      const result = await tx.query<{ country_code: string; state_code: string }>(
+        "select country_code, state_code from neuvetra.companies where id = $1 and neuvetra.is_company_member(id)",
+        [companyId],
+      )
+      const row = result.rows[0]
+      return row ? { countryCode: row.country_code, stateCode: row.state_code } : null
     })
   }
 
@@ -1149,3 +1179,5 @@ export class DevelopmentWorkspaceDatabase extends WorkspaceDatabase {
 
 }
 import {readScope1,readScope1Version,readScope1Report,saveProcessScreen,saveScope1Inventory,reviewScope1Version,createScope1Report,type M78Authorities,type M78Policy,type M78Family,type M78ProcessSaveInput,type M78InventorySaveInput,type M78ReviewInput,type M78ReportInput} from './m78'
+import {readM80Foundation,readM80FoundationVersion,saveM80Foundation} from './m80'
+import {readCompanySetup,readCompanySetupVersion,saveCompanySetup} from './company-setup'

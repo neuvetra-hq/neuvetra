@@ -1,0 +1,762 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "database": "m80_qa_foundation_1790279672164",
+  "baseline": "m78_author_native_1789620106488",
+  "createdAt": "2026-09-24T19:54:45.957Z",
+  "checks": [
+    {
+      "name": "schema21 baseline and exact additive migration",
+      "passed": true
+    },
+    {
+      "name": "migration second application no-op and occupied receipt refusal",
+      "passed": true
+    },
+    {
+      "name": "dedicated runtime readiness and forced RLS",
+      "passed": true
+    },
+    {
+      "name": "operator-only fixture admission required",
+      "passed": true
+    },
+    {
+      "name": "HTTP bearer, origin, body, methods and active-access gates",
+      "passed": true
+    },
+    {
+      "name": "tenant swap and member cannot save",
+      "passed": true
+    },
+    {
+      "name": "runtime direct table writes denied",
+      "passed": true
+    },
+    {
+      "name": "closed-schema, null-enum and exact-set challenge inputs refused atomically",
+      "passed": true
+    },
+    {
+      "name": "actual SQL entrypoint refuses validator-bypass inputs and actor forgery",
+      "passed": false,
+      "error": "expect(received).toBeDefined()\n\nReceived: undefined\n"
+    }
+  ],
+  "details": {
+    "preservation": {
+      "priorTableCount": 120,
+      "tables": [
+        {
+          "name": "annual_electricity_evidence_audit",
+          "count": "5",
+          "sha256": "c7c2b881bda582a934c3e0f22cf14c9d6958921e59c80ea59c7443855dc4ba33"
+        },
+        {
+          "name": "annual_electricity_evidence_requests",
+          "count": "5",
+          "sha256": "244e3a763aa16e95da7e4fd9b1d979cd32a38d97773f542590af642cdab37ebd"
+        },
+        {
+          "name": "annual_electricity_evidence_reviews",
+          "count": "1",
+          "sha256": "9c2c447a02cb739cd9cd5e8347e2a872ad3f4f37a78627ff740e3dd9b2ed3f9a"
+        },
+        {
+          "name": "annual_electricity_evidence_versions",
+          "count": "4",
+          "sha256": "716880fca468a28746489717ac11877689d279f316c557984b1a579fe5929746"
+        },
+        {
+          "name": "annual_electricity_report_audit",
+          "count": "3",
+          "sha256": "bcf9a82b54b87810e5eb7f07b6c2bc0e27a24178b5551b46c04c64899d9e68ad"
+        },
+        {
+          "name": "annual_electricity_report_requests",
+          "count": "3",
+          "sha256": "9c96979cbaaf5d6f4c0a04b4f2d44522739345c0af61e52ddca925c5c7342424"
+        },
+        {
+          "name": "annual_electricity_reports",
+          "count": "3",
+          "sha256": "be23627a51c33e9474014d1ccf1712d317b89ccff397f82660b2e4ae2e68107d"
+        },
+        {
+          "name": "annual_electricity_worksheet_audit",
+          "count": "5",
+          "sha256": "58d2cc0e5c7572f9c431311c5a8dd8cd5e30d159d7d02093aa0d24bf20f1a5f6"
+        },
+        {
+          "name": "annual_electricity_worksheet_requests",
+          "count": "5",
+          "sha256": "5efa44da68ebbee8f8b05c7d531d81db084d9078941a45590b3fe1b7b4bd37bc"
+        },
+        {
+          "name": "annual_electricity_worksheet_reviews",
+          "count": "1",
+          "sha256": "93bb1998eaba6c72e6b19a15c48cdb6914adc5f6a267b82a81298564f018b2b9"
+        },
+        {
+          "name": "annual_electricity_worksheet_versions",
+          "count": "4",
+          "sha256": "77761317ef555199468c6747b0a23006729bd7908922c1e6ffb5e75731fa1d68"
+        },
+        {
+          "name": "annual_evidence_report_audit",
+          "count": "4",
+          "sha256": "88634914eaaf1aa60d832a578fbaff7892825f5b819b64909c9cfa1f796b20fe"
+        },
+        {
+          "name": "annual_evidence_report_requests",
+          "count": "4",
+          "sha256": "f11f42c14c046866b2acefa801c04f36057bc8d9191705ba0b6f4bc0ebf981b5"
+        },
+        {
+          "name": "annual_evidence_reports",
+          "count": "4",
+          "sha256": "88178fe61bd8cf0ba2e7856f8c609f7181308a11914b04396580400d3c1ad3e0"
+        },
+        {
+          "name": "annual_inventory_audit_log",
+          "count": "4",
+          "sha256": "4aa0607bcc2de7950cbdb76e86344818e7ae859a59009372a8fd54f8ca934837"
+        },
+        {
+          "name": "annual_inventory_review_decisions",
+          "count": "1",
+          "sha256": "4c1ea884d1299838c45390a7c35fd46d34f1d6f45a1eb093180dead251b4bc00"
+        },
+        {
+          "name": "annual_inventory_versions",
+          "count": "1",
+          "sha256": "657dd478ae085e8905ce0fdb340c7d2ddf9a4cb697bd09c67c3e4781950db9c4"
+        },
+        {
+          "name": "annual_source_register_versions",
+          "count": "2",
+          "sha256": "1c69616676d5ddb5efccee2374c04aefb29c935b9f223ff0f7f33af37301f2ec"
+        },
+        {
+          "name": "audit_events",
+          "count": "1",
+          "sha256": "f4a003847753626c8ea9bb4060af205b71930ffad0a727c1e6239c06d075c283"
+        },
+        {
+          "name": "bill_evidence",
+          "count": "1",
+          "sha256": "539a6e65c13335b7477a9bfb2e9ef82b1289efea91e10cfcdcb91ddefe3b697f"
+        },
+        {
+          "name": "bill_summary_cache",
+          "count": "2",
+          "sha256": "767687612bfb59f27c574c1cd3520faec097c9da6ecddfcf163ca3e46bc9ae67"
+        },
+        {
+          "name": "bill_versions",
+          "count": "2",
+          "sha256": "a12185e21e300fc5d1a5fa2631354f0b7728ef711f40b103d6fe814c252d2560"
+        },
+        {
+          "name": "boundary_facilities",
+          "count": "1",
+          "sha256": "416b981868c1f99962cf8c878988fa551b59c6e9ed6979cd4cdf0cd9713cb219"
+        },
+        {
+          "name": "calculation_audit_log",
+          "count": "1",
+          "sha256": "a825d8eceb7575a21d1b45d359bc43b2545d32ff04630a7c3b61cf2ae1b60e47"
+        },
+        {
+          "name": "companies",
+          "count": "1",
+          "sha256": "efeb0c1e4de595125d7a144e0b449da03cbf7c7769e6f420b86c42e4d10735cc"
+        },
+        {
+          "name": "company_members",
+          "count": "4",
+          "sha256": "ad0581dd4f51067cf2d61247f7ff5df619be9ce8df6b10971f374a05fcb9c181"
+        },
+        {
+          "name": "controlled_fleet_audit",
+          "count": "12",
+          "sha256": "29b6cb0c03f45df560674b8cf5e026c05601bd5ba73ab023e6f476ba4c22fd6c"
+        },
+        {
+          "name": "controlled_fleet_heads",
+          "count": "1",
+          "sha256": "a87d6e4fd2b5de1320b749147f61675b17928d8194b5291833ac1dba786143cc"
+        },
+        {
+          "name": "controlled_fleet_reports",
+          "count": "3",
+          "sha256": "34c6707a06f0910a12184f1da2376c7ffbef10c9315a44288f4ee3f97c5d37cb"
+        },
+        {
+          "name": "controlled_fleet_requests",
+          "count": "12",
+          "sha256": "c08b3639937eb923ffa13b0d857c8cbc250e1f7a8e3aa66304a4c1ea8339e469"
+        },
+        {
+          "name": "controlled_fleet_reviews",
+          "count": "4",
+          "sha256": "37d43488784ab808b475251c50228151b5640aaaf9d3d1402310b6238c77df32"
+        },
+        {
+          "name": "controlled_fleet_statements",
+          "count": "2",
+          "sha256": "0a0b468eeb236e243abaf44401c89a29477182ae95cb14636d971ba5d3fc8495"
+        },
+        {
+          "name": "controlled_fleet_versions",
+          "count": "5",
+          "sha256": "87454b060ed776d9842defdfff7c3439ff08956dec55874a4047341945ec00b5"
+        },
+        {
+          "name": "corporate_inventory_audit",
+          "count": "15",
+          "sha256": "4112ee00d2ef03a33f0858f877a1f59999ab2d853a47d8ce4f20b0bdef0f9d04"
+        },
+        {
+          "name": "corporate_inventory_heads",
+          "count": "1",
+          "sha256": "f39332615103bf148373523c56fa94bf17f28b12bcc829e35d77220371b433a1"
+        },
+        {
+          "name": "corporate_inventory_requests",
+          "count": "15",
+          "sha256": "43f12a351fa305e08ecdb200980481e70870d39844252e808b858bb19f16a3cb"
+        },
+        {
+          "name": "corporate_inventory_reviews",
+          "count": "6",
+          "sha256": "4d61c70612675b0b6fd88f07fa48c26a2b99325719e90f15feffd66542aea41b"
+        },
+        {
+          "name": "corporate_inventory_versions",
+          "count": "9",
+          "sha256": "463b17c087ae46426c7fc248794dafad0ad450089b64cea74c0dccc50d9b71ef"
+        },
+        {
+          "name": "electricity_source_audit",
+          "count": "2",
+          "sha256": "525d218b51f8079e455e5f1aa4b2e322ee8b1d9f0405b251c1db43f6207f720f"
+        },
+        {
+          "name": "electricity_source_requests",
+          "count": "3",
+          "sha256": "aeed9ba0905ab0152902cbd22e14baac1988437a7c7798f6762d682e3a80073e"
+        },
+        {
+          "name": "electricity_sources",
+          "count": "2",
+          "sha256": "768f936bc98b83036ab502ebdfd5656ce9bc051f593d7b630a00f73db7f836e5"
+        },
+        {
+          "name": "electricity_worksheet_audit",
+          "count": "6",
+          "sha256": "eb139aa7547828dbd86bc58b3b0d06e33b108d3182424582e9115812301c6dc3"
+        },
+        {
+          "name": "electricity_worksheet_requests",
+          "count": "6",
+          "sha256": "f61e6fcbee55c3d9343870e36ba5ab9ff1122f60371133604d507ca77ae0afe5"
+        },
+        {
+          "name": "electricity_worksheet_reviews",
+          "count": "2",
+          "sha256": "8722a6b8983562e0c341ec07745e5fcd2f0a3d08ac182611f1f9c6fe44cbca56"
+        },
+        {
+          "name": "electricity_worksheet_versions",
+          "count": "4",
+          "sha256": "e731bb0c1f454213be622dd967025be3be2938e48d0ec21327a09e164e987012"
+        },
+        {
+          "name": "evidence_audit_log",
+          "count": "3",
+          "sha256": "1dd9d9bf31a1c4653f581d7d003f3dd1267b6db7e0ecf67b53b76128013ec439"
+        },
+        {
+          "name": "evidence_search_documents",
+          "count": "1",
+          "sha256": "c527601892d0aa631462c2c1b92cbbdcd1c9423aa15468561e684f23a47418d8"
+        },
+        {
+          "name": "extraction_jobs",
+          "count": "1",
+          "sha256": "86b503c308a9cf13510009f8b38696f14ffede072f8868c9bee4a526270bed70"
+        },
+        {
+          "name": "facilities",
+          "count": "1",
+          "sha256": "bfd8c66b7302345cfe39226c4a154fd00cff5bdc98641c70527e8640ed607609"
+        },
+        {
+          "name": "fugitive_audit",
+          "count": "37",
+          "sha256": "c1ba8618b21375ddbe73385f72877210fc73136135bcd3294727b8ec5e946ee5"
+        },
+        {
+          "name": "fugitive_event_reservations",
+          "count": "12",
+          "sha256": "5d5ee551028d444db6da1bfc0a72591d0a900ef35a3f7f3519f13c1b65efd9e7"
+        },
+        {
+          "name": "fugitive_heads",
+          "count": "6",
+          "sha256": "36cb2dffd947e0c2e177314ed705bd2bdf535179314dd311686ce0d8c65fdfa4"
+        },
+        {
+          "name": "fugitive_reports",
+          "count": "8",
+          "sha256": "f7a10740450c1f45bfa7df68af44c7e6b6291e764b6c6eb77ed0ff720427305d"
+        },
+        {
+          "name": "fugitive_requests",
+          "count": "37",
+          "sha256": "4044b7623528480cfb3ac656a6f5728e14d5be9b6bf2aef4a7421016885c7712"
+        },
+        {
+          "name": "fugitive_reviews",
+          "count": "13",
+          "sha256": "69ab6d023a5cc9c76ee8078e4627ef6701aa27794ecd0a8a1e28b13715e25d20"
+        },
+        {
+          "name": "fugitive_statements",
+          "count": "78",
+          "sha256": "82defccd3659ea5793259b05682e54765ad1f5170c16877c05bf14cfd5a55a39"
+        },
+        {
+          "name": "fugitive_versions",
+          "count": "16",
+          "sha256": "cd44db4b1c6c30afbfbd4a79b7f9f58ad7923a2d3b0567d0663c79a3411d6d28"
+        },
+        {
+          "name": "inventory_activity_versions",
+          "count": "1",
+          "sha256": "31c912ab724901f7beff624398cd9be68619483887f260aac046c3de200db385"
+        },
+        {
+          "name": "inventory_calculation_results",
+          "count": "1",
+          "sha256": "d3169810a0b5336a23e15fc04a43bb1ad3e5ef8a170875a9928ba9b1b4d5f5ab"
+        },
+        {
+          "name": "inventory_draft_report_audit_log",
+          "count": "1",
+          "sha256": "6289a170fed1a89340b565ae9fe901f7839c8d9f97d32b4e3d03507935d2e521"
+        },
+        {
+          "name": "inventory_draft_report_review_audit_log",
+          "count": "1",
+          "sha256": "d92bea85913e4fc0c0fa0bc7fd92c9f1f7582b48588d31f143b09a9569874777"
+        },
+        {
+          "name": "inventory_draft_report_review_decisions",
+          "count": "1",
+          "sha256": "3be4693f228f03a0695a6e15b614629d04fdeed9f081d6c28766245bb2bd99b2"
+        },
+        {
+          "name": "inventory_draft_reports",
+          "count": "1",
+          "sha256": "d2088f240f53e9f4b499db8a4c8894500e3f28199df85d30423e18f572bcbca8"
+        },
+        {
+          "name": "inventory_evidence_pack_audit_log",
+          "count": "1",
+          "sha256": "031c29925581a5cb0bd23e77bf61b243f201d14661b40039c97a42f2c97e9c59"
+        },
+        {
+          "name": "inventory_evidence_packs",
+          "count": "1",
+          "sha256": "3c716e3abb545462c9fb4d5f136c8121079052adb03ed948772b7c96342e54c5"
+        },
+        {
+          "name": "inventory_review_audit_log",
+          "count": "2",
+          "sha256": "707465e426e85e9e6a0c8c233a544137b4693c3273100b049133cbc0bd509824"
+        },
+        {
+          "name": "inventory_review_decisions",
+          "count": "1",
+          "sha256": "5b7688ff5691dc9c6e85da680e688f5d7047bc265c54ffc1b6e0d29b553c5da2"
+        },
+        {
+          "name": "inventory_versions",
+          "count": "1",
+          "sha256": "3e18926cba070338933a9c480b610c35fddc4a62dc23a6062596f605e451775d"
+        },
+        {
+          "name": "mobile_diesel_audit",
+          "count": "15",
+          "sha256": "6d2f43668432f04d31f734fdfeea4cb72f73098f4d0a7b5698e72c07a97f7e2d"
+        },
+        {
+          "name": "mobile_diesel_evidence_reservations",
+          "count": "6",
+          "sha256": "2cd804a0655847b9ee7d8da8aeaeaad8640fa70381e2e3f39602316c4a71c188"
+        },
+        {
+          "name": "mobile_diesel_fuel_statements",
+          "count": "7",
+          "sha256": "71f362a3aaa447f974b3fffd2017207a7c9f3874593a9a08fe1b2a76df8da5fe"
+        },
+        {
+          "name": "mobile_diesel_heads",
+          "count": "2",
+          "sha256": "cde4b277a210a9166b33ab2cba2aa6381091fd65efa79e1c5839248b5867a0fa"
+        },
+        {
+          "name": "mobile_diesel_mileage_statements",
+          "count": "7",
+          "sha256": "689319a3b4f71dab092888be1ecc0b3fc4669d9916c235f113a88d8ac8ade5dc"
+        },
+        {
+          "name": "mobile_diesel_reports",
+          "count": "2",
+          "sha256": "0ba2575c194eba5802db4cc038fdd4b87d0a62da261573020c5370881bd7ba95"
+        },
+        {
+          "name": "mobile_diesel_requests",
+          "count": "15",
+          "sha256": "427e31f77b8ec0f8b1c4c727753d9c7ea03638d16ac1dac131731a3d2e788ef0"
+        },
+        {
+          "name": "mobile_diesel_reviews",
+          "count": "6",
+          "sha256": "5b7fb6acf08cb476a65459ba4d729b54c60ccee0d987faa06698471b56e92c0d"
+        },
+        {
+          "name": "mobile_diesel_versions",
+          "count": "7",
+          "sha256": "b56251f154ab98a462578757fb6b6d067974ab4787e72e102b0d76676f56aeb6"
+        },
+        {
+          "name": "reporting_boundaries",
+          "count": "1",
+          "sha256": "4ee4c8a60bad1898f7577a21bf2c44fabfd05a1ad9825b164e07d36b0982bc33"
+        },
+        {
+          "name": "scope1_audit",
+          "count": "14",
+          "sha256": "6bc23bbdce81310d491337ab89396b25438fba0410f2d8300e18247e5752316a"
+        },
+        {
+          "name": "scope1_heads",
+          "count": "2",
+          "sha256": "eb9aaa2865ca6f301598e0dd1434ef71c4087fcfd0b61f2b4e63590929e8b2b2"
+        },
+        {
+          "name": "scope1_process_discoveries",
+          "count": "0",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "scope1_reports",
+          "count": "5",
+          "sha256": "5aa5f506ac6c339aacf143a1f9e4b34404afb015e0cd476376d73064516cb3b5"
+        },
+        {
+          "name": "scope1_requests",
+          "count": "14",
+          "sha256": "6bac7bc6bdecdff9b0f1cc47c02b6afb40392a70f229ca5b122af2a88e66d433"
+        },
+        {
+          "name": "scope1_reviews",
+          "count": "4",
+          "sha256": "5d1be60d12a96bd23a78043f1445e135699ebe72d7dfc8305ba74e20af94f391"
+        },
+        {
+          "name": "scope1_statements",
+          "count": "30",
+          "sha256": "449828a42f8c84d381611894fd2c3697d3b4f01905ac7b6261b67f1f9ae8c6ae"
+        },
+        {
+          "name": "scope1_versions",
+          "count": "5",
+          "sha256": "228559d8422987ddd05f415e28e7f1653e502f4dbbfa49de95264d524c3581d7"
+        },
+        {
+          "name": "source_worksheet_audit",
+          "count": "4",
+          "sha256": "2ec1d0c06178c298e4964e89a1e8d46fddc46fd8d28ab633d2e917d58f7313c8"
+        },
+        {
+          "name": "source_worksheet_report_audit",
+          "count": "3",
+          "sha256": "eb74aff9354c67cc884a81c5d576f64e1543682da086b16c76ee107c7d860eea"
+        },
+        {
+          "name": "source_worksheet_report_requests",
+          "count": "3",
+          "sha256": "7fb209df462fbea18136e6b40256fafd74b765867e4af2b3350771151feacee0"
+        },
+        {
+          "name": "source_worksheet_reports",
+          "count": "3",
+          "sha256": "515c2e2a4b63b0d9e0e35064ce89da1a0ac30dec2278e31da16029bcd80dbb5d"
+        },
+        {
+          "name": "source_worksheet_requests",
+          "count": "4",
+          "sha256": "4f88538a0193065f9a5242d934213c841e39dd5e5fbd2efdb8274bc9a70f4d80"
+        },
+        {
+          "name": "source_worksheet_reviews",
+          "count": "1",
+          "sha256": "7bde67cf23a5312ac0217675cff843cc2a6260c7333734304a44693ed91638ee"
+        },
+        {
+          "name": "source_worksheet_versions",
+          "count": "3",
+          "sha256": "f75ebcddbca739813fa9cab8bc19cc86b495b79090f53d6ad7431383ad4b6062"
+        },
+        {
+          "name": "staging_access",
+          "count": "4",
+          "sha256": "23855d333eed7143c25071ba5f40c0053d81473eb4db180f317cb350dee24402"
+        },
+        {
+          "name": "staging_target",
+          "count": "1",
+          "sha256": "5c610176750f9981a703023d77549877964f4402a2109bcb852aae8c4735c4c0"
+        },
+        {
+          "name": "stationary_diesel_audit",
+          "count": "11",
+          "sha256": "cbc2c3ad83bb8672d71d46b4d8a5895d7cb9b1dfe67aa59e394fa25a622ad8c3"
+        },
+        {
+          "name": "stationary_diesel_evidence_reservations",
+          "count": "3",
+          "sha256": "d209b80c2461076d337f02616c0afbf9e9a415dba95613b2d0daf76e6fc3f391"
+        },
+        {
+          "name": "stationary_diesel_heads",
+          "count": "1",
+          "sha256": "aefde5b049e2c3d61e15b1e93bd21da587e08600c66fb83c97632142bcd76eb2"
+        },
+        {
+          "name": "stationary_diesel_reports",
+          "count": "3",
+          "sha256": "01b08b6a2f7ae2496eefdb8375941768cd97b6e29fcf586ff40a88e252c06f7f"
+        },
+        {
+          "name": "stationary_diesel_requests",
+          "count": "11",
+          "sha256": "8ebc43d66cbe57db2612bd1f1552e4f784ee23ba946d1d9036682759baa68c36"
+        },
+        {
+          "name": "stationary_diesel_reviews",
+          "count": "4",
+          "sha256": "831ab56419df6532d15e918e956cc03f004ab5831ce98d8537f592798a553179"
+        },
+        {
+          "name": "stationary_diesel_statements",
+          "count": "4",
+          "sha256": "e31b4b2c159954cc8378d8779011e6bec21fbe993d80a8cd6d054d74f97e7f74"
+        },
+        {
+          "name": "stationary_diesel_versions",
+          "count": "4",
+          "sha256": "c35b9dab28974e8bc9c41407461fc6474193b877185c493ead62d850e12e806b"
+        },
+        {
+          "name": "stationary_equipment_audit",
+          "count": "15",
+          "sha256": "8f79e509a5664b80e4cef92df2a90d10522c2f2e979a6267c81e9ce98fdb4fc1"
+        },
+        {
+          "name": "stationary_equipment_heads",
+          "count": "1",
+          "sha256": "eb60f7ebf86629bbdf5062a864acb1630b57240c5ba7b0a990e556f2a017d9fc"
+        },
+        {
+          "name": "stationary_equipment_reports",
+          "count": "5",
+          "sha256": "8b168cde2f9cec3ac9dbc45f095b57732fdf58dd58f2fd05093c6e522067ee32"
+        },
+        {
+          "name": "stationary_equipment_requests",
+          "count": "15",
+          "sha256": "bca6bd8f28a57905e91237c70388e82ee0c413fdae7702148205f486c441362b"
+        },
+        {
+          "name": "stationary_equipment_reviews",
+          "count": "4",
+          "sha256": "4c972727c88e3303d880d8726c214b245d162d7dc15da339ddc56e42f67b2481"
+        },
+        {
+          "name": "stationary_equipment_statements",
+          "count": "4",
+          "sha256": "5967b77b4d5e399370bf659d1c5bb4eac06f09419c7cdb196e1d40ce640df000"
+        },
+        {
+          "name": "stationary_equipment_versions",
+          "count": "6",
+          "sha256": "2d7a888dd8e360a06b39018787fd7292afb5e1a50769bd0b2d88bc6a6aa157fe"
+        },
+        {
+          "name": "stationary_gas_audit",
+          "count": "17",
+          "sha256": "93274f58b8ed43a86674266914d46f3d6d6ac54ad336cc8f4b649e4da73a582e"
+        },
+        {
+          "name": "stationary_gas_heads",
+          "count": "2",
+          "sha256": "92b87ffd8d8afe7717d5347ccc0c466202956992bc2cfa0a6c7a450041263bec"
+        },
+        {
+          "name": "stationary_gas_reports",
+          "count": "2",
+          "sha256": "8e3b9ca9cf548cc37accc81591fd03f0834278197253860f87e0067ac4f2d17c"
+        },
+        {
+          "name": "stationary_gas_requests",
+          "count": "17",
+          "sha256": "3d57c567fa3773bce8ca8d80ac68fc18808d2504edb1c68b27368517eb75b4ce"
+        },
+        {
+          "name": "stationary_gas_reviews",
+          "count": "7",
+          "sha256": "e966da8b22e55b2b52a18c84ba6df1e6164d087b50963021249378cd73ca56c0"
+        },
+        {
+          "name": "stationary_gas_statements",
+          "count": "8",
+          "sha256": "d8ec5482d0656c21414152ea4e22f2df800c80c2155001774403d0811691dec8"
+        },
+        {
+          "name": "stationary_gas_versions",
+          "count": "8",
+          "sha256": "b4198ee2da3613a7d8b8af5262942108433f45fb7a58637ce66f538d8f69b20c"
+        },
+        {
+          "name": "worksheet_report_audit",
+          "count": "2",
+          "sha256": "902009bcd5559c92e99f72aa75da9f7ee2ef167efae13f5cf15fd9ed42321b8c"
+        },
+        {
+          "name": "worksheet_report_requests",
+          "count": "5",
+          "sha256": "44c7d1b9278d6abbe0a2f437caccd004f9e4ec735d96afbd0c1b69faa0faddc1"
+        },
+        {
+          "name": "worksheet_reports",
+          "count": "2",
+          "sha256": "47c5b9819b8907f7861cd996ce39965decc5e2baec39f5486e98d70154a047d3"
+        }
+      ],
+      "metadataGroups": [
+        "roles",
+        "memberships",
+        "defaultAcls",
+        "namespaces",
+        "relations",
+        "attributes",
+        "constraints",
+        "policies",
+        "triggers",
+        "indexes",
+        "functions"
+      ],
+      "metadataProof": {
+        "roles": {
+          "rows": 31,
+          "beforeSha256": "377fa91bb4a41277fb1d871c39aabb758445a172701e73b6a7fd32ef8065801a",
+          "afterSha256": "377fa91bb4a41277fb1d871c39aabb758445a172701e73b6a7fd32ef8065801a"
+        },
+        "memberships": {
+          "rows": 22,
+          "beforeSha256": "20aa5de645f312e7898ed8ab85a4a5cee630a20e454d2aae945c9d58dc6c3861",
+          "afterSha256": "20aa5de645f312e7898ed8ab85a4a5cee630a20e454d2aae945c9d58dc6c3861"
+        },
+        "defaultAcls": {
+          "rows": 0,
+          "beforeSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "afterSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        "namespaces": {
+          "rows": 3,
+          "beforeSha256": "02382b87833de95338348c2d3b5d92f49ef8763b18cb739a1aaf82ae46894a66",
+          "afterSha256": "02382b87833de95338348c2d3b5d92f49ef8763b18cb739a1aaf82ae46894a66"
+        },
+        "relations": {
+          "rows": 416,
+          "beforeSha256": "f0e94f622f43a059cb6e0f97200f69eaa9ae7285c9fc85fb3d93a1918363c9f3",
+          "afterSha256": "f0e94f622f43a059cb6e0f97200f69eaa9ae7285c9fc85fb3d93a1918363c9f3"
+        },
+        "attributes": {
+          "rows": 2280,
+          "beforeSha256": "d88124ad8a22ce86c5f7b103b4f936bda507111f0b6a4596da6802da6a5cb1fa",
+          "afterSha256": "d88124ad8a22ce86c5f7b103b4f936bda507111f0b6a4596da6802da6a5cb1fa"
+        },
+        "constraints": {
+          "rows": 772,
+          "beforeSha256": "5583223c1968b7e0f3eaf37e35b6c66a1f31e9134ee44b62a95e2fef4b78c237",
+          "afterSha256": "5583223c1968b7e0f3eaf37e35b6c66a1f31e9134ee44b62a95e2fef4b78c237"
+        },
+        "policies": {
+          "rows": 182,
+          "beforeSha256": "9c87543c2226e6a6f59fde4379758513bd1242945f7fffcc5f3d0f9154bfaeb7",
+          "afterSha256": "9c87543c2226e6a6f59fde4379758513bd1242945f7fffcc5f3d0f9154bfaeb7"
+        },
+        "triggers": {
+          "rows": 1272,
+          "beforeSha256": "a489c4122f7d3cb99049a33dac0101ae86c1d1bc0ea49e947cbf53fadd014f54",
+          "afterSha256": "a489c4122f7d3cb99049a33dac0101ae86c1d1bc0ea49e947cbf53fadd014f54"
+        },
+        "indexes": {
+          "rows": 292,
+          "beforeSha256": "ba70ab561a12951abdf6b684e85e1025bbc8befa758d345db449b09abe70b750",
+          "afterSha256": "ba70ab561a12951abdf6b684e85e1025bbc8befa758d345db449b09abe70b750"
+        },
+        "functions": {
+          "rows": 211,
+          "beforeSha256": "eae67d87dfeebe18e68c319ca8eaa71457d465a95359c561a6da8979334f6cde",
+          "afterSha256": "eae67d87dfeebe18e68c319ca8eaa71457d465a95359c561a6da8979334f6cde"
+        }
+      },
+      "metadataExact": true,
+      "migration": {
+        "name": "0022_scope1_beta_foundation.sql",
+        "sha256": "b8abbea5476ac19f289e7fa0a36ea79c1403772e3753ceaf63968a036c5b2df9"
+      }
+    },
+    "newTables": [
+      {
+        "relname": "scope1_beta_audit",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "scope1_beta_fixture_admissions",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "scope1_beta_release_records",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "scope1_beta_requests",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "scope1_beta_setup_heads",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "scope1_beta_setup_versions",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      }
+    ]
+  },
+  "connectionsClosed": true,
+  "serverStopped": true
+}

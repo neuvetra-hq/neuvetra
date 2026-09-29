@@ -1,0 +1,9 @@
+{
+  "classification": "QA harness parsing defect, not candidate failure",
+  "error": "JSON Parse error: Invalid number",
+  "cause": "Mixed plan byte pins include migration SQL; generic JSON loader was incorrectly used for byte-only validation.",
+  "repair": "Validate all plan pin bytes by SHA without parsing SQL as JSON. Typed receipts and source closure remain separately validated.",
+  "initial_source_sha256": "f294f92d83930f360235654a88955619aed8e4bba2ded8fb6f1b7af3dfc65a0e",
+  "gate_written_before_failure": false,
+  "source_or_hosted_mutation": false
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "M80-SCOPE1-NAV-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_scope1_nav",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json",
+      "sha256": "5c1716f4e7fc45ec4657aa59f01c38940f6cc19a8fdd8477acd3409d811e9316"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json"
+      ],
+      "reason": "The initial state is scope1, rendering Scope1Inventory first."
+    },
+    {
+      "id": "AC-02",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json"
+      ],
+      "reason": "All 13 existing views remain native buttons in labeled primary or secondary navigation."
+    },
+    {
+      "id": "AC-03",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json"
+      ],
+      "reason": "The collapsed disclosure summary identifies the selected secondary view."
+    },
+    {
+      "id": "AC-04",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json"
+      ],
+      "reason": "Existing component conditions, keys, hidden electricity/example mounts, actors, workspace IDs, headings and callback paths are unchanged."
+    },
+    {
+      "id": "AC-05",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-navigation-local-validation-20260924.json"
+      ],
+      "reason": "All focused web checks passed on the frozen candidate; build retained the pre-existing chunk-size warning."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root/merge_integration_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-navigation-independent-20260924.json",
+      "evaluations/research-qa/m80-navigation-local-validation-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json",
+        "sha256": "5c1716f4e7fc45ec4657aa59f01c38940f6cc19a8fdd8477acd3409d811e9316"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Root accepted independent navigation QA after exact snapshot/current source checks; local navigation acceptance only, not deployment or beta readiness.",
+    "Author dev preview failed under sandbox; isolated root and independent reviewer browser previews later verified navigation with inert panels and exact styling."
+  ]
+}

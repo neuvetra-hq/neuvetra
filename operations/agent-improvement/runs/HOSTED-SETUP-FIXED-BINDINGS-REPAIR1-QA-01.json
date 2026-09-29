@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-FIXED-BINDINGS-REPAIR1-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "sha256": "e386a2bbcef5cdc91bfd9a38165a3c1bb41f40ab16b162cc958eddae62ee7308",
+      "path": "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review2.md"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-EXACT-REVIEW",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review2.md"
+      ],
+      "status": "pass",
+      "reason": "Frozen hashes verified and original FAIL preserved; relevant 14-test suite and strict TypeScript pass."
+    },
+    {
+      "id": "AC-02-ARRAY-ACCESSORS",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review2.md"
+      ],
+      "status": "pass",
+      "reason": "Original array accessor and new indexed, hidden, iterator, toJSON and nested array hooks refuse with zero invocation; frozen canonical arrays pass."
+    },
+    {
+      "id": "AC-03-DEFERRED-EXPIRY",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review2.md"
+      ],
+      "status": "pass",
+      "reason": "Review/publication/current-head exact expiry boundaries refuse; expiry during private file loading cannot return accepted product binding; caller mutation cannot revive captured evidence."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "sha256": "e386a2bbcef5cdc91bfd9a38165a3c1bb41f40ab16b162cc958eddae62ee7308",
+      "path": "evaluations/research-qa/hosted-setup-01-fixed-bindings-independent-review2.md"
+    }
+  ],
+  "assessment": {
+    "repair1_candidate_verdict": "pass",
+    "original_candidate_first_verdict": "fail",
+    "candidate_author_execution_context": "/root/collection_backend",
+    "reviewed_candidate_artifacts": [
+      {
+        "sha256": "cbe42173cd354559901fea9821c7314751c20b2e0febd895d7cb13fa27955514",
+        "path": "tools/staging/hosted-setup-artifact-bindings.ts"
+      },
+      {
+        "sha256": "4975c5f0d1b7ddb9e31a2ab1db5ec00891fbf9381d7cb1f63a9711864e693300",
+        "path": "tools/staging/hosted-setup-artifact-bindings.test.ts"
+      }
+    ],
+    "independent_of_candidate_author": true,
+    "repaired_findings": [
+      "FIXED-BIND-F01",
+      "FIXED-BIND-F02"
+    ],
+    "open_finding_ids": []
+  },
+  "routing_note": "Requested critical qa-lead gpt-6-astra/high; observed setting unknown in follow-up context. Independent bindings reviewer, earlier worker/source/materializer authorship disclosed. Coordinator snapshot and administrative closure pending. No provider/database/shared Git or candidate mutation."
+}

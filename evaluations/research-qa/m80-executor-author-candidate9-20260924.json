@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-HOSTED-EXECUTOR-PREP-20260924",
+  "candidate": 9,
+  "author": "/root/m80_foundation_runtime",
+  "observed_at": "2026-09-25T01:30:00.000Z",
+  "verdict": "candidate_ready_for_independent_review",
+  "material_findings_open": 0,
+  "candidate8_failed_review": {
+    "snapshot": {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE8.json",
+      "sha256": "28d73baec7a3058faed5cb4480feec0fa1a95713777647db4e79f6493ba8df9e"
+    },
+    "review": {
+      "path": "operations/agent-improvement/snapshots/M80-EXECUTOR-QA-20260924-CANDIDATE8-REVIEW.json",
+      "sha256": "1c265f55432b8814595be79c82368b9a96d52c8ca0f9c25c6572a5741a079cb6"
+    },
+    "finding": "EXECUTOR-F08: the private entrypoint returned the asynchronous execute/reconcile promise from a try/finally without awaiting it, so the operator database closed before stage work completed."
+  },
+  "repair": {
+    "scope": "Only operator connection lifetime and its regression/documentation changed from Candidate8.",
+    "behavior": "The private entrypoint awaits execute and reconcile within a shared try/finally lifetime guard. The operator connection closes only after the stage resolves or rejects.",
+    "unchanged": "Preparation v2, source closure, journal identities, preflight, migration, admission, provider acknowledgement, observer and no-replay semantics are unchanged."
+  },
+  "candidate_files": [
+    { "path": ".superpowers/m80-foundation-executor.ts", "sha256": "4cf676a7f93e664800205146afcb45621d6018d1e821c7bcf7c2c5d7a48f18fb" },
+    { "path": ".superpowers/m80-foundation-executor.test.ts", "sha256": "6773a52a3cd45a9c8ac8de6cabc42be5f698eca6b68d59a71ef57d7ec1e075e9" },
+    { "path": ".superpowers/m80-executor-private.ps1", "sha256": "28def9e2ea211c072317231625d3840e849a58e5d7d75ffa2677b5ed25e8a6f3" },
+    { "path": "docs/research/m80-foundation-executor-preparation-20260924.md", "sha256": "76a8ba62f971e36d05e39262350727d53b4b5bd66ca7e38895c801e5573460c8" }
+  ],
+  "checks": [
+    { "name": "executor author tests", "result": "pass", "tests": 19, "assertions": 65 },
+    { "name": "close-enforcing async success and failure regression", "result": "pass" },
+    { "name": "targeted TypeScript compile", "result": "pass" },
+    { "name": "Bun executor bundle", "result": "pass", "bundle_kib": 214.78 }
+  ],
+  "limitations": [
+    "No hosted database, provider, credential, ENV export, network, migration, admission, deployment, Git, backup or restore action was performed.",
+    "Candidate9 is not accepted until independent QA repeats exact private execute and reconcile close-order probes.",
+    "Root remains the sole eventual hosted operator."
+  ]
+}

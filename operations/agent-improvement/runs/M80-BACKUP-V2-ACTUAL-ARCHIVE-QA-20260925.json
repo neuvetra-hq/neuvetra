@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "M80-BACKUP-V2-ACTUAL-ARCHIVE-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-V2-ACTUAL-ARCHIVE-QA-20260925-DELIVERABLE.json",
+      "sha256": "caaff91c88e09974d34776568722775e32230471b81b65512ad6d47ee379b13b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-actual-receipt-native-corroboration",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-review.json",
+        "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-evidence.json",
+        "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-native.json"
+      ],
+      "reason": "Exact journal/receipt/source provenance reconciled with read-only local preservation and typed consumer checks."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-backup-v2-actual-archive-root-closure-20260925.json",
+      "evaluations/research-qa/m80-backup-v2-actual-archive-independent-20260925-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-BACKUP-V2-ACTUAL-ARCHIVE-QA-20260925-DELIVERABLE.json",
+        "sha256": "caaff91c88e09974d34776568722775e32230471b81b65512ad6d47ee379b13b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent retained actual archived-backup local rehearsal evidence review",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Root dispatched read-only retained actual receipt and clone review after source acceptance. No actual archive unseal or mutation by QA. Existing failure preserved. Requested Astra/high; observed unknown.",
+    "Root verified exact retained review and receipt pins; accepted independent diagnostic review only. Old failed attempt unchanged; no fresh stage authority."
+  ]
+}

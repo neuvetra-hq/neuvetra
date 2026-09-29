@@ -1,0 +1,56 @@
+{
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE2.json",
+    "sha256": "7e9f265c54720e47af46aab0e4e099d23946d91b1337731db2dc603dd2807daa"
+  },
+  "closure": {
+    "current_and_embedded_candidate_files": 4,
+    "historical_backup_current_and_embedded_files": 110,
+    "additional_source_pins": 8,
+    "all_exact": true
+  },
+  "author_suite_independently_reproduced": {
+    "tests": 10,
+    "assertions": 40,
+    "pass": true
+  },
+  "independent_controls": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-controls.json",
+    "sha256": "cfe0d24c834fa518cb8e05c20e23166a320db378dcb814f6e76bebec65a32f0c"
+  },
+  "targeted_repair_probes": {
+    "path": "evaluations/research-qa/m80-restore-normalization-v2-independent-20260925-candidate2-probes.json",
+    "sha256": "3dcd0124fb0693ded6415f115061990f209a8cc6e45a507c1f97ad54c423cd51"
+  },
+  "synthetic_native": {
+    "database": "m80_backup_foundation_1790306499437",
+    "directory": ".superpowers/m80-backup-v2-rehearsal-1790306499437",
+    "receipts": [
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790306499437/m80-backup-v2-restore-receipt.json",
+        "sha256": "3cbcf2928e44684a75834146705528ae44d2162a3b992bf1a4d0aa9308b7cfd7"
+      },
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790306499437/m80-backup-v2-normalization-proof.json",
+        "sha256": "8611e9f1ed661c4fad5f30df792de78ad70e0a52ad07c08a45ae3eb6e7748805"
+      },
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790306499437/m80-backup-v2-preservation-receipt.json",
+        "sha256": "a2412fefc5340cb255cbff6a2be675913d3d0bb7595b94b63656c9b4e60dcf9f"
+      },
+      {
+        "path": ".superpowers/m80-backup-v2-rehearsal-1790306499437/m80-backup-v2-migration-receipt.json",
+        "sha256": "8af2708d168c3791de39c0476c2ac2330274928c54495743689827619d66f3b6"
+      }
+    ],
+    "completedAt": "2026-09-25T03:21:44.592Z",
+    "retained": true,
+    "connections_closed": true,
+    "hosted_archive_access": false
+  },
+  "limits": [
+    "Synthetic local source has zero external default ACLs. An additional in-memory 27-row fixture with duplicated triggers passes truthful raw-different/normalized-equal comparison; this is not actual archived hosted evidence.",
+    "Original C1 failure and two earlier author assertion-failure clones/journals remain retained.",
+    "No hosted action, credential, ENV export, provider, Git mutation, or actual archived-backup unseal occurred."
+  ]
+}

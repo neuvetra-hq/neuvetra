@@ -1,0 +1,26 @@
+{
+  "uiSnapshotSha256": "6944d220e356b76c2ddfc7f36f10ebce1e96128b632ba3301e4a38aae726d684",
+  "positiveControl": true,
+  "results": [
+    {
+      "name": "boundary enum array",
+      "accepted": false
+    },
+    {
+      "name": "known fact enum array",
+      "accepted": false
+    },
+    {
+      "name": "evidence state array",
+      "accepted": false
+    },
+    {
+      "name": "source location swap",
+      "accepted": false
+    },
+    {
+      "name": "invented classification",
+      "accepted": false
+    }
+  ]
+}

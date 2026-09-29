@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "id": "M80-FOUNDATION-CONTRACT-QA-20260924",
+  "role": "qa-lead",
+  "execution_context": "/root/m80_foundation_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json",
+      "sha256": "72fe88f54930de1039f6a7d002d1cce97fb8be0fbbe72d4d0e30560a66add36b"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "ADMISSION_AND_CLOSED_SCHEMA",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts"
+      ],
+      "reason": "Independent tests 1-5 and 9 exercise actual exported validation/parser boundary; separate trusted argument integrity only."
+    },
+    {
+      "id": "CENSUS_CROSS_REFERENCES_AND_UNKNOWN_RETENTION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts"
+      ],
+      "reason": "Tests 5-10 preserve 14 sources, 19 requirements, 7 categories and 7 gas groups; composed missing-facts regression repairs F01."
+    },
+    {
+      "id": "HELD_ONLY_PROFILE_CLASSIFICATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts"
+      ],
+      "reason": "Tests 6-7 and 11-12 reproduce held candidates, unsupported/missing rows and exact M79 registry identities; zero released-supported output."
+    },
+    {
+      "id": "CANONICAL_IMMUTABILITY_AND_SCOPE",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts"
+      ],
+      "reason": "Tests 13-14, exact snapshot hash/text comparison and static scope inspection; immutable fixtures, independent canonical hash, ordering independence, no mutable alias or release/numeric output."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-foundation-contract-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json",
+        "sha256": "72fe88f54930de1039f6a7d002d1cce97fb8be0fbbe72d4d0e30560a66add36b"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent QA did not author implementation. Pure offline scope; no runtime authorization, migration, hosted or customer readiness claim. Applicable lessons L03 and L04; no child delegation.",
+    "First implementation review failed F01; immutable FIRST-REVIEW snapshot preserves evidence. QA deliverable itself still awaits root review.",
+    "Independent implementation verdict is pass for candidate2 after F01 repair. Own QA deliverable frozen and awaiting root acceptance; outcome remains in_progress and review pending truthfully."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-foundation-contract-independent-20260924.md",
+      "sha256": "c29556d698dff736bc6828837058eb825ca49303d0611aa56dadb91cb8728da7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-contract-independent-20260924.json",
+      "sha256": "19c88e16864f538ccc36eac2a3f518627de5eef996e057052696d94f2b740ae5"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-contract-independent-20260924.test.ts",
+      "sha256": "f79bf6d5ca248af5b84fcd6f1bf37ee4b1fa43df9b9c43b86abc150abc4c6be0"
+    }
+  ]
+}

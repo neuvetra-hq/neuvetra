@@ -1,0 +1,1214 @@
+{
+ "schema": "neuvetra.verified-factor-register.v1",
+ "verifiedBy": "Claude (independent AI review), 2026-09-27",
+ "method": "eGRID rates read programmatically from exact SRL23 cells of the EPA eGRID2023 rev2 workbook with openpyxl (shortest round-trip decimal of each stored value; all published to 3 decimals). All 27 CO2 and CO2e subregion rates equal EPA Power Profiler data (USEPA/power-profiler subregion.json, dataYear 2023). Each published CO2e rate equals CO2 + 28 x CH4 + 265 x N2O within the 3-dp rounding bound (max difference 0.129 lb/MWh), confirming AR5 GWPs. AR5 GWP entries are copied from the verified 2025 Hub register (source hash in sourceSha256). Rates are total output emission rates, which exclude grid losses.",
+ "source": {
+  "publisher": "U.S. EPA",
+  "title": "eGRID2023 data file, revision 2",
+  "edition": "eGRID2023 rev2 (data year 2023), released 2025-06-12; latest EPA edition as of 2026-09-27",
+  "url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+  "sha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6",
+  "bytes": 21213301
+ },
+ "constants": [
+  {
+   "id": "lb_to_kg",
+   "value": "0.45359237",
+   "unit": "kg per lb",
+   "basis": "Exact international avoirdupois pound definition"
+  },
+  {
+   "id": "kwh_to_mwh",
+   "value": "0.001",
+   "unit": "MWh per kWh",
+   "basis": "SI definition"
+  }
+ ],
+ "entries": [
+  {
+   "id": "egrid2023.AKGD.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W3",
+   "value": "899.633",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "W1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)"
+  },
+  {
+   "id": "egrid2023.AKGD.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X3",
+   "value": "0.086",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "X1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)"
+  },
+  {
+   "id": "egrid2023.AKGD.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y3",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "Y1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)"
+  },
+  {
+   "id": "egrid2023.AKMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W4",
+   "value": "520.483",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "W1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)"
+  },
+  {
+   "id": "egrid2023.AKMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X4",
+   "value": "0.026",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "X1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)"
+  },
+  {
+   "id": "egrid2023.AKMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y4",
+   "value": "0.004",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "Y1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)"
+  },
+  {
+   "id": "egrid2023.AZNM.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W5",
+   "value": "703.703",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "W1"
+   ],
+   "label": "WECC Southwest (AZNM)"
+  },
+  {
+   "id": "egrid2023.AZNM.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X5",
+   "value": "0.039",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "X1"
+   ],
+   "label": "WECC Southwest (AZNM)"
+  },
+  {
+   "id": "egrid2023.AZNM.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y5",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "Y1"
+   ],
+   "label": "WECC Southwest (AZNM)"
+  },
+  {
+   "id": "egrid2023.CAMX.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W6",
+   "value": "428.464",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "W1"
+   ],
+   "label": "WECC California (CAMX)"
+  },
+  {
+   "id": "egrid2023.CAMX.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X6",
+   "value": "0.025",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "X1"
+   ],
+   "label": "WECC California (CAMX)"
+  },
+  {
+   "id": "egrid2023.CAMX.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y6",
+   "value": "0.003",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "Y1"
+   ],
+   "label": "WECC California (CAMX)"
+  },
+  {
+   "id": "egrid2023.ERCT.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W7",
+   "value": "733.862",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "W1"
+   ],
+   "label": "ERCOT All (ERCT)"
+  },
+  {
+   "id": "egrid2023.ERCT.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X7",
+   "value": "0.043",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "X1"
+   ],
+   "label": "ERCOT All (ERCT)"
+  },
+  {
+   "id": "egrid2023.ERCT.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y7",
+   "value": "0.006",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "Y1"
+   ],
+   "label": "ERCOT All (ERCT)"
+  },
+  {
+   "id": "egrid2023.FRCC.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W8",
+   "value": "782.262",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "W1"
+   ],
+   "label": "FRCC All (FRCC)"
+  },
+  {
+   "id": "egrid2023.FRCC.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X8",
+   "value": "0.041",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "X1"
+   ],
+   "label": "FRCC All (FRCC)"
+  },
+  {
+   "id": "egrid2023.FRCC.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y8",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "Y1"
+   ],
+   "label": "FRCC All (FRCC)"
+  },
+  {
+   "id": "egrid2023.HIMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W9",
+   "value": "1123.371",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "W1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)"
+  },
+  {
+   "id": "egrid2023.HIMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X9",
+   "value": "0.146",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "X1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)"
+  },
+  {
+   "id": "egrid2023.HIMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y9",
+   "value": "0.022",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "Y1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)"
+  },
+  {
+   "id": "egrid2023.HIOA.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W10",
+   "value": "1489.548",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "W1"
+   ],
+   "label": "HICC Oahu (HIOA)"
+  },
+  {
+   "id": "egrid2023.HIOA.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X10",
+   "value": "0.134",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "X1"
+   ],
+   "label": "HICC Oahu (HIOA)"
+  },
+  {
+   "id": "egrid2023.HIOA.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y10",
+   "value": "0.021",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "Y1"
+   ],
+   "label": "HICC Oahu (HIOA)"
+  },
+  {
+   "id": "egrid2023.MROE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W11",
+   "value": "1397.313",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "W1"
+   ],
+   "label": "MRO East (MROE)"
+  },
+  {
+   "id": "egrid2023.MROE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X11",
+   "value": "0.116",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "X1"
+   ],
+   "label": "MRO East (MROE)"
+  },
+  {
+   "id": "egrid2023.MROE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y11",
+   "value": "0.017",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "Y1"
+   ],
+   "label": "MRO East (MROE)"
+  },
+  {
+   "id": "egrid2023.MROW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W12",
+   "value": "920.13",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "W1"
+   ],
+   "label": "MRO West (MROW)"
+  },
+  {
+   "id": "egrid2023.MROW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X12",
+   "value": "0.097",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "X1"
+   ],
+   "label": "MRO West (MROW)"
+  },
+  {
+   "id": "egrid2023.MROW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y12",
+   "value": "0.014",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "Y1"
+   ],
+   "label": "MRO West (MROW)"
+  },
+  {
+   "id": "egrid2023.NEWE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W13",
+   "value": "539.275",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "W1"
+   ],
+   "label": "NPCC New England (NEWE)"
+  },
+  {
+   "id": "egrid2023.NEWE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X13",
+   "value": "0.063",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "X1"
+   ],
+   "label": "NPCC New England (NEWE)"
+  },
+  {
+   "id": "egrid2023.NEWE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y13",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "Y1"
+   ],
+   "label": "NPCC New England (NEWE)"
+  },
+  {
+   "id": "egrid2023.NWPP.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W14",
+   "value": "631.735",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "W1"
+   ],
+   "label": "WECC Northwest (NWPP)"
+  },
+  {
+   "id": "egrid2023.NWPP.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X14",
+   "value": "0.054",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "X1"
+   ],
+   "label": "WECC Northwest (NWPP)"
+  },
+  {
+   "id": "egrid2023.NWPP.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y14",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "Y1"
+   ],
+   "label": "WECC Northwest (NWPP)"
+  },
+  {
+   "id": "egrid2023.NYCW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W15",
+   "value": "864.469",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "W1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)"
+  },
+  {
+   "id": "egrid2023.NYCW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X15",
+   "value": "0.022",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "X1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)"
+  },
+  {
+   "id": "egrid2023.NYCW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y15",
+   "value": "0.002",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "Y1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)"
+  },
+  {
+   "id": "egrid2023.NYLI.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W16",
+   "value": "1180.672",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "W1"
+   ],
+   "label": "NPCC Long Island (NYLI)"
+  },
+  {
+   "id": "egrid2023.NYLI.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X16",
+   "value": "0.14",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "X1"
+   ],
+   "label": "NPCC Long Island (NYLI)"
+  },
+  {
+   "id": "egrid2023.NYLI.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y16",
+   "value": "0.018",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "Y1"
+   ],
+   "label": "NPCC Long Island (NYLI)"
+  },
+  {
+   "id": "egrid2023.NYUP.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W17",
+   "value": "242.089",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "W1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)"
+  },
+  {
+   "id": "egrid2023.NYUP.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X17",
+   "value": "0.011",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "X1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)"
+  },
+  {
+   "id": "egrid2023.NYUP.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y17",
+   "value": "0.001",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "Y1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)"
+  },
+  {
+   "id": "egrid2023.PRMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W18",
+   "value": "1543.073",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "W1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)"
+  },
+  {
+   "id": "egrid2023.PRMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X18",
+   "value": "0.077",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "X1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)"
+  },
+  {
+   "id": "egrid2023.PRMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y18",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "Y1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)"
+  },
+  {
+   "id": "egrid2023.RFCE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W19",
+   "value": "596.904",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "W1"
+   ],
+   "label": "RFC East (RFCE)"
+  },
+  {
+   "id": "egrid2023.RFCE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X19",
+   "value": "0.036",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "X1"
+   ],
+   "label": "RFC East (RFCE)"
+  },
+  {
+   "id": "egrid2023.RFCE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y19",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "Y1"
+   ],
+   "label": "RFC East (RFCE)"
+  },
+  {
+   "id": "egrid2023.RFCM.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W20",
+   "value": "970.617",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "W1"
+   ],
+   "label": "RFC Michigan (RFCM)"
+  },
+  {
+   "id": "egrid2023.RFCM.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X20",
+   "value": "0.082",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "X1"
+   ],
+   "label": "RFC Michigan (RFCM)"
+  },
+  {
+   "id": "egrid2023.RFCM.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y20",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "Y1"
+   ],
+   "label": "RFC Michigan (RFCM)"
+  },
+  {
+   "id": "egrid2023.RFCW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W21",
+   "value": "911.424",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "W1"
+   ],
+   "label": "RFC West (RFCW)"
+  },
+  {
+   "id": "egrid2023.RFCW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X21",
+   "value": "0.071",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "X1"
+   ],
+   "label": "RFC West (RFCW)"
+  },
+  {
+   "id": "egrid2023.RFCW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y21",
+   "value": "0.01",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "Y1"
+   ],
+   "label": "RFC West (RFCW)"
+  },
+  {
+   "id": "egrid2023.RMPA.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W22",
+   "value": "1036.601",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "W1"
+   ],
+   "label": "WECC Rockies (RMPA)"
+  },
+  {
+   "id": "egrid2023.RMPA.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X22",
+   "value": "0.09",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "X1"
+   ],
+   "label": "WECC Rockies (RMPA)"
+  },
+  {
+   "id": "egrid2023.RMPA.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y22",
+   "value": "0.013",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "Y1"
+   ],
+   "label": "WECC Rockies (RMPA)"
+  },
+  {
+   "id": "egrid2023.SPNO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W23",
+   "value": "861.999",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "W1"
+   ],
+   "label": "SPP North (SPNO)"
+  },
+  {
+   "id": "egrid2023.SPNO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X23",
+   "value": "0.087",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "X1"
+   ],
+   "label": "SPP North (SPNO)"
+  },
+  {
+   "id": "egrid2023.SPNO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y23",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "Y1"
+   ],
+   "label": "SPP North (SPNO)"
+  },
+  {
+   "id": "egrid2023.SPSO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W24",
+   "value": "872.042",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "W1"
+   ],
+   "label": "SPP South (SPSO)"
+  },
+  {
+   "id": "egrid2023.SPSO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X24",
+   "value": "0.054",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "X1"
+   ],
+   "label": "SPP South (SPSO)"
+  },
+  {
+   "id": "egrid2023.SPSO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y24",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "Y1"
+   ],
+   "label": "SPP South (SPSO)"
+  },
+  {
+   "id": "egrid2023.SRMV.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W25",
+   "value": "739.72",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "W1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)"
+  },
+  {
+   "id": "egrid2023.SRMV.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X25",
+   "value": "0.032",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "X1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)"
+  },
+  {
+   "id": "egrid2023.SRMV.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y25",
+   "value": "0.004",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "Y1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)"
+  },
+  {
+   "id": "egrid2023.SRMW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W26",
+   "value": "1239.839",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "W1"
+   ],
+   "label": "SERC Midwest (SRMW)"
+  },
+  {
+   "id": "egrid2023.SRMW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X26",
+   "value": "0.132",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "X1"
+   ],
+   "label": "SERC Midwest (SRMW)"
+  },
+  {
+   "id": "egrid2023.SRMW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y26",
+   "value": "0.019",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "Y1"
+   ],
+   "label": "SERC Midwest (SRMW)"
+  },
+  {
+   "id": "egrid2023.SRSO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W27",
+   "value": "842.329",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "W1"
+   ],
+   "label": "SERC South (SRSO)"
+  },
+  {
+   "id": "egrid2023.SRSO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X27",
+   "value": "0.056",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "X1"
+   ],
+   "label": "SERC South (SRSO)"
+  },
+  {
+   "id": "egrid2023.SRSO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y27",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "Y1"
+   ],
+   "label": "SERC South (SRSO)"
+  },
+  {
+   "id": "egrid2023.SRTV.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W28",
+   "value": "898.079",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "W1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)"
+  },
+  {
+   "id": "egrid2023.SRTV.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X28",
+   "value": "0.079",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "X1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)"
+  },
+  {
+   "id": "egrid2023.SRTV.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y28",
+   "value": "0.011",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "Y1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)"
+  },
+  {
+   "id": "egrid2023.SRVC.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W29",
+   "value": "593.419",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "W1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)"
+  },
+  {
+   "id": "egrid2023.SRVC.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X29",
+   "value": "0.045",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "X1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)"
+  },
+  {
+   "id": "egrid2023.SRVC.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y29",
+   "value": "0.006",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "Y1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)"
+  },
+  {
+   "id": "gwp_ar5.CO2",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E524",
+   "value": "1",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C524",
+    "D524",
+    "E523",
+    "C556"
+   ],
+   "label": "CO2",
+   "gwpSet": "AR5-100",
+   "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+  },
+  {
+   "id": "gwp_ar5.CH4",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E525",
+   "value": "28",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C525",
+    "D525",
+    "E523",
+    "C556"
+   ],
+   "label": "CH4",
+   "gwpSet": "AR5-100",
+   "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+  },
+  {
+   "id": "gwp_ar5.N2O",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E526",
+   "value": "265",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C526",
+    "D526",
+    "E523",
+    "C556"
+   ],
+   "label": "N2O",
+   "gwpSet": "AR5-100",
+   "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+  }
+ ]
+}

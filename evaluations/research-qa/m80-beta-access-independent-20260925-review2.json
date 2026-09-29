@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-QA-20260925",
+  "reviewer": "/root/m80_beta_access_qa",
+  "independent": true,
+  "candidate": 2,
+  "verdict": "pass_bounded_local_synthetic_access",
+  "candidate_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json",
+    "sha256": "1c4e9adfc358fddf20f79ab89747a29989624de456fe8faeab36d6787344e676"
+  },
+  "report": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review2.md",
+    "sha256": "d4885e2b0e566b28ae896ea90519c92bdd19a1ba195840d25b3ca8795dea0033"
+  },
+  "findings": [
+    {
+      "id": "BETA-ACCESS-F01",
+      "status": "resolved_candidate2",
+      "evidence": "New-owner supported creation path returns42501 to restricted runtime; old-owner defaults unchanged."
+    },
+    {
+      "id": "BETA-ACCESS-F02",
+      "status": "resolved_candidate2",
+      "evidence": "Actual listener decorated413/serverEOF then normal403; request/response disconnect lifecycle settles."
+    }
+  ],
+  "material_findings_open": 0,
+  "first_review": "fail",
+  "candidate1_rejection_preserved": true,
+  "actual_cost_usd": null,
+  "observed_compute": {
+    "model": null,
+    "effort": null
+  },
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-result-1790322648589.json",
+      "sha256": "6143972e5d70c02bebbe950b7cf74b0efe8ee17afe2e83d8a713d2ea0943869a"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-result-1790322732930.json",
+      "sha256": "0d3c9666ebc8908745619f2377d43f85c8ab1c5bcc2999278b99cc66ea4c853e"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement-result-1790322971984.json",
+      "sha256": "56c16ebe0cd26ac9650d5fd85dbcd881ee6def9bd6313c41488deec03eecadd6"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-drift-result-1790323103762.json",
+      "sha256": "3e85f594afb6c4bb50a6dd3e3a1691a7c0648ad23a3b3446ccd4969dbda61ced"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-c2-final-pins.json",
+      "sha256": "4fee029f78d8c5a65c568aad07752fb78e53ec3cd58ed6dbcc1e12b33e662ae0"
+    }
+  ],
+  "acceptance_map": [
+    {
+      "criterion": "AC-01",
+      "status": "pass",
+      "scope": "Accepted design and correction addenda reconciled with exact implemented boundary."
+    },
+    {
+      "criterion": "AC-02",
+      "status": "pass",
+      "scope": "Actual HTTP/native access, restart/revisit; existing127 table rows and metadata preserved."
+    },
+    {
+      "criterion": "AC-03",
+      "status": "pass",
+      "scope": "Verified current identity, one-use token, post-expiry retry, native races and four write rollback points."
+    },
+    {
+      "criterion": "AC-04",
+      "status": "pass",
+      "scope": "Tenant/generation/revoke/disable/tombstone/SQL/helper/owner/search-path/pool controls."
+    },
+    {
+      "criterion": "AC-05",
+      "status": "pass",
+      "scope": "New exact synthetic targets; native private archive/restore; no hosted or legacy mutation."
+    },
+    {
+      "criterion": "AC-06",
+      "status": "pass",
+      "scope": "Independent frozen implementation review; root publication/remote checks remain separate."
+    }
+  ],
+  "native_targets": {
+    "source": "m80_beta_access_qa_20260925c",
+    "restore": "m80_beta_access_restore_qa_20260925c",
+    "runtime": "m80_beta_access_runtime_qa_20260925c",
+    "owner": "m80_beta_access_owner_qa_20260925c"
+  },
+  "legacy_preservation": {
+    "tables": 127,
+    "row_hashes_equal": true,
+    "metadata_hashes_equal": true,
+    "new_fk_triggers_classified": 2
+  },
+  "local_only": true,
+  "hosted_authorized": false,
+  "invitation_readiness": false,
+  "customer_ready": false,
+  "source_or_method_release": false,
+  "limitations": [
+    "Identity provider is mocked; real provider binding/behavior/deadlines unverified.",
+    "Backpressure response is bounded synthetic output through actual listener.",
+    "New owner defaults apply only to supported creator path; malicious operator superuser not contained.",
+    "Root owns full-repository/remote/publication checks.",
+    "Four methods remain held; accounting/source/hosted/customer gates separate."
+  ]
+}

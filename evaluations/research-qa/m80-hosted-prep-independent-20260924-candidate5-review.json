@@ -1,0 +1,57 @@
+{
+  "task_id": "M80-HOSTED-PREP-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_offline_preparation_and_synced_exclusive_writer_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+    "sha256": "823d176736a7aa0ed979b677bcb5807de8f3d9ece48e3c631dafda043dc21bbe"
+  },
+  "files": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare.ts",
+      "sha256": "3b3d7a6785fa5cad30dabc20b93ed1d8947466dd9fb1eaae7782ca35d30968bb"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once.ts",
+      "sha256": "2fc7a23e263451c0734ff36e7c0418d40146abf38754bccc5a71a9018388fefc"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation.test.ts",
+      "sha256": "366aa5a3b85d1b264369bfac563455f08485eb73509b04171fd8be7d2d499ce6"
+    },
+    {
+      "path": "docs/research/m80-foundation-hosted-preparation-20260924.md",
+      "sha256": "304232758316a82e346957a8f313108e2b0cb636f7ae716cec62b1764047615b"
+    }
+  ],
+  "material_findings_open": 0,
+  "delta": "Prepare helper byte-identical to Candidate4. Once helper changes only fs import and writeM80HostedEvidenceOnce: exclusive open, awaited write, awaited sync, finally close, reject IO error. Prior gate/chain/path validation code unchanged.",
+  "checks": {
+    "author_reproduced": {
+      "tests": 11,
+      "assertions": 51
+    },
+    "independent_narrow_recheck": {
+      "tests": 3,
+      "assertions": 28
+    },
+    "retained_candidate4_independent_regression": {
+      "tests": 10,
+      "assertions": 114,
+      "historical": true
+    }
+  },
+  "evidence": [
+    "Injected open/write/sync/close failures verify required ordering and rejection, including close after write/sync failure.",
+    "Real isolated temp file with failed sync preserves exact exclusive marker and closes handle. Four later calls all refuse overwrite; four concurrent fresh calls yield one winner.",
+    "Actual frozen CLI with virtual IO opens current and historic gate/security evidence before one exclusive output and refuses replay."
+  ],
+  "durability_disposition": "Satisfies the explicit file-sync mechanism gap identified by root in Candidate4. Original Candidate4 review and durability limitation retained. Candidate5 awaits close before returning; executable caller must await successful completion before transport. This is not a simulated power-loss or hardware durability proof; filesystem/host guarantees remain assumptions.",
+  "limits": [
+    "No live executor, provider stop, backup, migration, admission, deployment or actual hosted authentication accepted/executed.",
+    "The preparation input/output plan uses separate offline handling; the synced writer covers intent/outcome journal evidence.",
+    "Typed pins/receipts establish consistency only, not independent provenance of collectors.",
+    "Provider-stop Candidate1 currently failed separate QA; no executable admission follows from this pass."
+  ],
+  "observed_at": "2026-09-24T23:31:05.136548+00:00"
+}

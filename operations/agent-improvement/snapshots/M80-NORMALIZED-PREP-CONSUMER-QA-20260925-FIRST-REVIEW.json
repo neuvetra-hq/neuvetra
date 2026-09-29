@@ -1,0 +1,14 @@
+{
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-candidate1-review.json",
+      "sha256": "29ea32189ef89d0fc340285505978205542697ab96548a519657164b0492abdf",
+      "text": "{\n  \"reviewer\": \"/root/m80_foundation_runtime_qa\",\n  \"verdict\": \"fail_normalized_preparation_candidate1\",\n  \"candidate\": {\n    \"path\": \"operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json\",\n    \"sha256\": \"3e5f7c5b046fcaee56c07b13218908a3ad735f8d188734d764b738b7d5886482\"\n  },\n  \"finding\": {\n    \"id\": \"NORMALIZED-PREP-F01\",\n    \"summary\": \"Current implementation author can supply internally consistent self-reviewed stage evidence and seal an intent.\",\n    \"root_finding\": {\n      \"path\": \"evaluations/research-qa/m80-normalized-prep-root-candidate1-finding-20260925.json\",\n      \"sha256\": \"e4d8e722680f7d2a050e3f2828320eba151280996bb1c8c1306a32f89f492be8\"\n    },\n    \"independent_reproduction\": {\n      \"path\": \"evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-author-probe.json\",\n      \"sha256\": \"0bf0ab1d657fabdf1e543b9e4d16321c062c9af0eb0bf8803a1001525c5a0c2e\"\n    },\n    \"disposition\": \"Confirmed against frozen C1 function source, import paths relocated only. C2 targeted recheck separately closes finding.\"\n  },\n  \"limits\": \"Synthetic in-memory objects only; no actual gate created.\"\n}\n"
+    },
+    {
+      "path": "evaluations/research-qa/m80-normalized-prep-consumer-independent-20260925-author-probe.json",
+      "sha256": "0bf0ab1d657fabdf1e543b9e4d16321c062c9af0eb0bf8803a1001525c5a0c2e",
+      "text": "{\"outcomes\":[{\"reviewerId\":\"/root/m80_setup_ui\",\"candidate1Accepted\":true,\"candidate2Accepted\":false},{\"reviewerId\":\"/root/m80_foundation_runtime\",\"candidate1Accepted\":false,\"candidate2Accepted\":false},{\"reviewerId\":\"/root\",\"candidate1Accepted\":false,\"candidate2Accepted\":false},{\"reviewerId\":\"/root/m80_foundation_runtime_qa\",\"candidate1Accepted\":true,\"candidate2Accepted\":true}],\"boundary\":\"Only synthetic in-memory gate/intent objects; no actual gate files issued\"}\n"
+    }
+  ]
+}

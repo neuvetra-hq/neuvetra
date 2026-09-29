@@ -1,0 +1,178 @@
+{
+  "private_owner_identifier_match_count": 0,
+  "embedded_text_hashes_checked": 676,
+  "embedded_hash_mismatches": [
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-scalar-probes.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-controls.test.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-probes.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-evidence-probes.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-path-probes.ts"
+    },
+    {
+      "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+      "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-chronology.ts"
+    }
+  ],
+  "credential_pattern_file_count": 0,
+  "connection_url_kinds": {
+    "loopback": 12,
+    "template": 167,
+    "needs_inspection": 26,
+    "invalid_example": 2
+  },
+  "connection_needing_inspection": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE2.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE3.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE1.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE1.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE2.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE2.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE3.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE3.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE4.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE4.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE5.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE5.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE6.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE6.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE7.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE7.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE8.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE8.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
+      "classification": "needs_inspection",
+      "length": 23
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
+      "classification": "needs_inspection",
+      "length": 27
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE1.json",
+      "classification": "needs_inspection",
+      "length": 21
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE2.json",
+      "classification": "needs_inspection",
+      "length": 21
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE3.json",
+      "classification": "needs_inspection",
+      "length": 21
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE4.json",
+      "classification": "needs_inspection",
+      "length": 21
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE5.json",
+      "classification": "needs_inspection",
+      "length": 21
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+      "classification": "needs_inspection",
+      "length": 21
+    }
+  ],
+  "scope": "318 frozen manifest files only; no private values printed or persisted"
+}

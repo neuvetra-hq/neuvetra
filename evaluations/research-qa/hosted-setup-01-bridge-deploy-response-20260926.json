@@ -1,0 +1,13 @@
+{
+  "profile": "neuvetra.hosted-setup.bridge-deploy-response.v1",
+  "attempt": "evaluations/research-qa/hosted-setup-01-bridge-deploy-attempt-20260926.json",
+  "mutation": "serviceInstanceDeployV2",
+  "targetServiceId": "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+  "targetEnvironmentId": "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+  "requestedCommitSha": "d2f0ca16f02bb99801b68a7925f34016f3ba51bb",
+  "returnedDeploymentId": "8946ec8e-3dba-484c-8f84-80fa71d8da5f",
+  "providerCallCompleted": true,
+  "activeImageVerified": false,
+  "readySchema22Verified": false,
+  "noAutomaticRetry": true
+}

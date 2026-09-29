@@ -1,0 +1,11 @@
+{
+  "task_id": "M80-SETUP-UI-20260924-PREVIEW-REPAIR1",
+  "profile": "neuvetra.reviewed-text-snapshot.v1",
+  "artifacts": [
+    {
+      "path": ".superpowers/m80-setup-preview/vite.config.ts",
+      "sha256": "b24c2632fcdc1cbc0f17b5b8fa89a17c8a5194b5b026e25d8f41b1019f5f30b2",
+      "text": "import path from \"node:path\"\nimport { fileURLToPath } from \"node:url\"\nimport base from \"../../apps/site-web/vite.config\"\n\nconst previewDir = path.dirname(fileURLToPath(import.meta.url))\nconst appDir = path.resolve(previewDir, \"../../apps/site-web\")\nconst repositoryDir = path.resolve(appDir, \"../..\")\nconst previewEntry = path.resolve(previewDir, \"main.tsx\").replaceAll(\"\\\\\", \"/\")\nconst previewPlugin = {\n  name: \"m80-setup-preview\",\n  configureServer(server: { middlewares: { use: (handler: (request: { url?: string }, response: { statusCode: number; setHeader: (name: string, value: string) => void; end: (value: string) => void }, next: () => void) => void) => void } }) {\n    server.middlewares.use((request, response, next) => {\n      if (request.url !== \"/m80-preview/\" && request.url !== \"/m80-preview\") return next()\n      response.statusCode = 200\n      response.setHeader(\"content-type\", \"text/html; charset=utf-8\")\n      response.end(`<!doctype html><html lang=\"en\" style=\"background:#0b0c0d\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"robots\" content=\"noindex,nofollow\"><title>M80 Scope 1 setup mock preview</title><script type=\"module\">import RefreshRuntime from \"/@react-refresh\";RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;</script></head><body><div id=\"root\"></div><script type=\"module\" src=\"/@fs/${previewEntry}\"></script></body></html>`)\n    })\n  },\n}\n\nexport default {\n  ...base,\n  root: appDir,\n  plugins: [...(base.plugins ?? []), previewPlugin],\n  server: {\n    ...base.server,\n    host: \"127.0.0.1\",\n    port: 5198,\n    strictPort: true,\n    fs: { strict: true, allow: [repositoryDir] },\n    proxy: { \"/workspace-api\": { target: \"http://127.0.0.1:5199\", rewrite: (value: string) => value.replace(/^\\/workspace-api/, \"\") } },\n  },\n}\n"
+    }
+  ]
+}

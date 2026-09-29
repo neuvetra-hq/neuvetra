@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "id": "M80-PROVIDER-STOP-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-QA-20260924-FIRST-REVIEW.json",
+      "sha256": "fbde6a6208ecaccecd74e5e0b24b4941b01b3e3a4a3c5458d7ed64364f062105"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-QA-20260924-DELIVERABLE.json",
+      "sha256": "99d882a1c2dabd31bc51a27adbf9541e5304ffdc0d84feb5656cad95754f0b27"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "STOP_IDENTITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-provider-stop-independent-20260924.json"
+      ],
+      "reason": "Exact Candidate2 passes offline stop transport checks; all external calls mocked and dependency gates remain."
+    },
+    {
+      "id": "SYNCED_NO_REPLAY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-provider-stop-independent-20260924.json"
+      ],
+      "reason": "Exact Candidate2 passes offline stop transport checks; all external calls mocked and dependency gates remain."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-provider-stop-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-QA-20260924-FIRST-REVIEW.json",
+        "sha256": "fbde6a6208ecaccecd74e5e0b24b4941b01b3e3a4a3c5458d7ed64364f062105"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-PROVIDER-STOP-QA-20260924-DELIVERABLE.json",
+        "sha256": "99d882a1c2dabd31bc51a27adbf9541e5304ffdc0d84feb5656cad95754f0b27"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent root-authored provider-stop transport review. No live/network/Git/provider action; actual calls must be mocked. Requested Astra/high observed unknown.",
+    "Root accepted the independent QA deliverable and exact frozen evidence. Product/helper acceptance remains limited to the stated offline transport/preparation scope; this closes no live operation."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-first-review.json",
+      "sha256": "1706c4fe8248e3d87226e7e16b30e817034efcb4ed43ac84a91165d09e26b33c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-probes.py",
+      "sha256": "24f5118754570129751c87c3eaf37c23dbf6f1055af8d504af715c19c2e06f85"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-probes.json",
+      "sha256": "2cd5a0bfebdc35a687f9147549aad6f671774c5dd2d32e62d118b3a74ecc3008"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-controls.py",
+      "sha256": "e42e9b0a39f78f99db2ff00b520fb9f6a9a8c6e2d7a5b9086b1f3947da1e5239"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-controls.json",
+      "sha256": "597bde66358c9e34b0af1c338f1f358bd296b357c9aeb0ab50855a196208aff7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate1-frozen.py",
+      "sha256": "4afb485ee90d5cbd0e487e828b422520e97e1f8c966932e0059642feb8704508"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate1-fixture.py",
+      "sha256": "7bc800dc3b02d4cc20d5c729c367afb255cbb4420020195c19316b95aebd8c6e"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924.json",
+      "sha256": "6d96983692aae620b9bc0b1b6e18a837fc50345d993a9c7dce98ad5100d01fca"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate2-frozen.py",
+      "sha256": "a555f5d5dfcbb21ae3fe59cc3d4f6f6a803c37b85ab442e31177e329b317d62d"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate2-fixture.py",
+      "sha256": "3899ff6533835c565f532bb3c2cf4e3bfa2b16ac488f0164fd892fa718ba33b0"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate2-controls.py",
+      "sha256": "0d3ec69d0e30b3e888fccc1ab1080de614c7b0b4ad1bb5d6ba148bcba0f2ccf9"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate2-controls.json",
+      "sha256": "4849ea3a1900034cb5b93cb65aa7f756e1596fd07abb332a4feb043e3c3a033f"
+    },
+    {
+      "path": "evaluations/research-qa/m80-provider-stop-independent-20260924-candidate2-negative.py",
+      "sha256": "e543a307aa21b4e46fdbbf9fdf6f2a0364a4d1f1e5a783f1a283f5e13d55d919"
+    }
+  ]
+}

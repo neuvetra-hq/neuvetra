@@ -1,0 +1,31 @@
+{
+  "profile": "neuvetra.m80.actual-hosted-root-closure.v1",
+  "observed_at": "2026-09-25T05:53:05.225194+00:00",
+  "reviewer": "/root",
+  "verdict": "accepted_independent_actual_chain_and_browser_evidence_review",
+  "reviewed_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-DELIVERABLE.json",
+      "sha256": "8c4afeeddc02374ca03f3e0d3a096462b028f977a4890b5323376291dc693391"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-ACTUAL-UPGRADE-REVIEW-20260925-BROWSER-SUPPLEMENT.json",
+      "sha256": "8c547d24bafba49e23d6f31709acc4117b3e5d4a584a4401b81380448701040b"
+    }
+  ],
+  "deployment": {
+    "id": "40546ef7-9004-4486-a471-370aaa305c80",
+    "commit": "75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2",
+    "schema": 22,
+    "status": "SUCCESS"
+  },
+  "root_verified_current_and_embedded_artifacts": 16,
+  "limits": [
+    "Root browser operation separately reviewed; no independent browser replay",
+    "Full historical field immutability not demonstrated by summary-only UI",
+    "Four methods held; customer beta and full Scope1 incomplete",
+    "Board feedback pending; no dependent milestone started",
+    "No replay or schema21 recovery authorized"
+  ],
+  "publication": "final evidence checkpoint pending"
+}

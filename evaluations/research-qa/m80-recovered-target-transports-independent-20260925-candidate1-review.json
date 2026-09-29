@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_recovered_target_transport_candidate1",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORTS-20260925-CANDIDATE1.json",
+    "sha256": "b319c24eff3f57f765052bd244e6093cb5f179a8fb133ecf70ecc89043e58c2d"
+  },
+  "material_findings_open": 1,
+  "finding": {
+    "id": "RECOVERED-TRANSPORT-F01",
+    "summary": "Recovery validate_gate still requires original recovery/stop entrypoints, which are absent from the new exact source closure.",
+    "actual_required_entrypoints": [
+      ".superpowers/m80-provider-recover21.py",
+      ".superpowers/m80-provider-stop.py"
+    ],
+    "result": "Required source entrypoint missing",
+    "required_repair": "Require recovered recovery and stop entrypoint paths matching the actual new imports and snapshot. Preserve original C1 and consumed old journals."
+  },
+  "probe": "Exact frozen validate_gate AST compiled with injected no-action dependency review. New truthful snapshot path set is rejected. No helper main, provider, credential, network, Git or DB action executed.",
+  "attribution": "Root also identified this defect independently before QA verdict."
+}

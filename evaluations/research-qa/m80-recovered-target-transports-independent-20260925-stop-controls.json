@@ -1,0 +1,226 @@
+{
+  "boundary": "Frozen main, real isolated file writes/fsync, all network/provider/process observations and mutation mocked",
+  "cases": [
+    {
+      "outcome": "success",
+      "sync_failure": null,
+      "events": [
+        "sync",
+        "sync",
+        "mutation",
+        "sync"
+      ],
+      "error": null,
+      "observed_read_commands": [
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "deployment",
+          "list",
+          "--project",
+          "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+          "--service",
+          "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+          "--environment",
+          "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+          "--json"
+        ],
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "api",
+          "query { serviceInstanceAutoDeployStatus(environmentId:\"6642d65a-15a2-41e9-b25e-b7b01990aa28\",projectId:\"119f3652-9d84-4d16-983c-1a17c0fd1aaa\",serviceId:\"f43abcf9-72f0-4034-828a-8d83ca26b0db\") { enabled } }",
+          "--compact"
+        ]
+      ],
+      "response": {
+        "next": "Observe provider REMOVED and database quiescence; acknowledgment alone is insufficient.",
+        "observed_at": "2026-09-25T03:19:43.122314+00:00",
+        "request_acknowledged": true,
+        "target": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee",
+        "transport_exit_code": 0
+      }
+    },
+    {
+      "outcome": "timeout",
+      "sync_failure": null,
+      "events": [
+        "sync",
+        "sync",
+        "mutation",
+        "sync"
+      ],
+      "error": "TimeoutExpired",
+      "observed_read_commands": [
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "deployment",
+          "list",
+          "--project",
+          "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+          "--service",
+          "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+          "--environment",
+          "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+          "--json"
+        ],
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "api",
+          "query { serviceInstanceAutoDeployStatus(environmentId:\"6642d65a-15a2-41e9-b25e-b7b01990aa28\",projectId:\"119f3652-9d84-4d16-983c-1a17c0fd1aaa\",serviceId:\"f43abcf9-72f0-4034-828a-8d83ca26b0db\") { enabled } }",
+          "--compact"
+        ]
+      ],
+      "response": {
+        "observed_at": "2026-09-25T03:19:43.137245+00:00",
+        "outcome": "uncertain_do_not_retry",
+        "request_acknowledged": false,
+        "target": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee"
+      }
+    },
+    {
+      "outcome": "malformed",
+      "sync_failure": null,
+      "events": [
+        "sync",
+        "sync",
+        "mutation",
+        "sync"
+      ],
+      "error": "JSONDecodeError",
+      "observed_read_commands": [
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "deployment",
+          "list",
+          "--project",
+          "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+          "--service",
+          "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+          "--environment",
+          "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+          "--json"
+        ],
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "api",
+          "query { serviceInstanceAutoDeployStatus(environmentId:\"6642d65a-15a2-41e9-b25e-b7b01990aa28\",projectId:\"119f3652-9d84-4d16-983c-1a17c0fd1aaa\",serviceId:\"f43abcf9-72f0-4034-828a-8d83ca26b0db\") { enabled } }",
+          "--compact"
+        ]
+      ],
+      "response": {
+        "observed_at": "2026-09-25T03:19:43.152491+00:00",
+        "outcome": "uncertain_do_not_retry",
+        "request_acknowledged": false,
+        "target": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee"
+      }
+    },
+    {
+      "outcome": "refused",
+      "sync_failure": null,
+      "events": [
+        "sync",
+        "sync",
+        "mutation",
+        "sync"
+      ],
+      "error": "RuntimeError",
+      "observed_read_commands": [
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "deployment",
+          "list",
+          "--project",
+          "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+          "--service",
+          "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+          "--environment",
+          "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+          "--json"
+        ],
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "api",
+          "query { serviceInstanceAutoDeployStatus(environmentId:\"6642d65a-15a2-41e9-b25e-b7b01990aa28\",projectId:\"119f3652-9d84-4d16-983c-1a17c0fd1aaa\",serviceId:\"f43abcf9-72f0-4034-828a-8d83ca26b0db\") { enabled } }",
+          "--compact"
+        ]
+      ],
+      "response": {
+        "next": "Observe provider REMOVED and database quiescence; acknowledgment alone is insufficient.",
+        "observed_at": "2026-09-25T03:19:43.167884+00:00",
+        "request_acknowledged": false,
+        "target": "7b7d1c4e-6039-4de5-9bfc-31b84d4b9cee",
+        "transport_exit_code": 0
+      }
+    },
+    {
+      "outcome": "success",
+      "sync_failure": 1,
+      "events": [
+        "sync"
+      ],
+      "error": "OSError",
+      "observed_read_commands": [
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "deployment",
+          "list",
+          "--project",
+          "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+          "--service",
+          "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+          "--environment",
+          "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+          "--json"
+        ],
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "api",
+          "query { serviceInstanceAutoDeployStatus(environmentId:\"6642d65a-15a2-41e9-b25e-b7b01990aa28\",projectId:\"119f3652-9d84-4d16-983c-1a17c0fd1aaa\",serviceId:\"f43abcf9-72f0-4034-828a-8d83ca26b0db\") { enabled } }",
+          "--compact"
+        ]
+      ],
+      "response": null
+    },
+    {
+      "outcome": "success",
+      "sync_failure": 2,
+      "events": [
+        "sync",
+        "sync"
+      ],
+      "error": "OSError",
+      "observed_read_commands": [
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "deployment",
+          "list",
+          "--project",
+          "119f3652-9d84-4d16-983c-1a17c0fd1aaa",
+          "--service",
+          "f43abcf9-72f0-4034-828a-8d83ca26b0db",
+          "--environment",
+          "6642d65a-15a2-41e9-b25e-b7b01990aa28",
+          "--json"
+        ],
+        [
+          "C:/Users/nimab/.bun/bin/bunx.exe",
+          "@railway/cli",
+          "api",
+          "query { serviceInstanceAutoDeployStatus(environmentId:\"6642d65a-15a2-41e9-b25e-b7b01990aa28\",projectId:\"119f3652-9d84-4d16-983c-1a17c0fd1aaa\",serviceId:\"f43abcf9-72f0-4034-828a-8d83ca26b0db\") { enabled } }",
+          "--compact"
+        ]
+      ],
+      "response": null
+    }
+  ]
+}

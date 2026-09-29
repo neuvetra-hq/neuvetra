@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-RUNNER-INTEGRATION-01",
+  "role": "software-engineering",
+  "execution_context": "/root/artifact_runner",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "status": "pending",
+      "evidence": [],
+      "reason": "Bind the one-transaction runner to the versioned exact-artifact identity and private SQL lock without claiming runtime loader attestation or changing the frozen historical source-lock contract."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "routing_note": "Critical registry setting requested in fresh-context dispatch. Actual model/effort were not independently observable. Local source contract only; publication, launcher and live stop are separate gates."
+}

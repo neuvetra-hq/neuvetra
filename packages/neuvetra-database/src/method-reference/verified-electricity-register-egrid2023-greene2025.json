@@ -1,0 +1,2051 @@
+{
+ "schema": "neuvetra.verified-factor-register.v1",
+ "verifiedBy": "Claude (method author, AI), 2026-09-29; independent review by Codex is recorded separately",
+ "method": "eGRID rates read programmatically from exact SRL23 cells of the EPA eGRID2023 rev2 workbook with openpyxl (shortest round-trip decimal of each stored value; all published to 3 decimals). All 27 CO2 and CO2e subregion rates equal EPA Power Profiler data (USEPA/power-profiler subregion.json, dataYear 2023). Each published CO2e rate equals CO2 + 28 x CH4 + 265 x N2O within the 3-dp rounding bound (max difference 0.129 lb/MWh), confirming AR5 GWPs. AR5 GWP entries are copied from the verified 2025 Hub register (source hash in sourceSha256). Rates are total output emission rates, which exclude grid losses. Green-e 2025 Residual Mix (Center for Resource Solutions, 2023 data, released 2026-01-29; applied to 2025 reporting by Neuvetra decision 2026-09-28): Net Generation (MWh) and Voluntary RE (MWh, 12-month vintage) for each of the 27 subregions, read from the original page (valueCell = column letter and row of the published table, header = row 1). Net generation equals eGRID2023 rev2 SRNGENAN rounded to whole MWh (Green-e publishes whole MWh; eGRID reports fractions), and voluntary RE emissions are 0, for all 27. Per-gas residual rate = eGRID rate x gen / (gen - voluntary); with AR5 it reproduces each published adjusted rate within 0.147 lb/MWh (at most 0.047%). The published adjusted rate itself is not loaded because the source labels it CO2 while its values follow eGRID CO2e.",
+ "source": {
+  "publisher": "U.S. EPA",
+  "title": "eGRID2023 data file, revision 2",
+  "edition": "eGRID2023 rev2 (data year 2023), released 2025-06-12; latest EPA edition as of 2026-09-27",
+  "url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+  "sha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6",
+  "bytes": 21213301
+ },
+ "constants": [
+  {
+   "id": "lb_to_kg",
+   "value": "0.45359237",
+   "unit": "kg per lb",
+   "basis": "Exact international avoirdupois pound definition"
+  },
+  {
+   "id": "kwh_to_mwh",
+   "value": "0.001",
+   "unit": "MWh per kWh",
+   "basis": "SI definition"
+  }
+ ],
+ "entries": [
+  {
+   "id": "egrid2023.AKGD.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W3",
+   "value": "899.633",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "W1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKGD.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X3",
+   "value": "0.086",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "X1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKGD.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y3",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "Y1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W4",
+   "value": "520.483",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "W1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X4",
+   "value": "0.026",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "X1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y4",
+   "value": "0.004",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "Y1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AZNM.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W5",
+   "value": "703.703",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "W1"
+   ],
+   "label": "WECC Southwest (AZNM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AZNM.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X5",
+   "value": "0.039",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "X1"
+   ],
+   "label": "WECC Southwest (AZNM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AZNM.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y5",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "Y1"
+   ],
+   "label": "WECC Southwest (AZNM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.CAMX.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W6",
+   "value": "428.464",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "W1"
+   ],
+   "label": "WECC California (CAMX)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.CAMX.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X6",
+   "value": "0.025",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "X1"
+   ],
+   "label": "WECC California (CAMX)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.CAMX.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y6",
+   "value": "0.003",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "Y1"
+   ],
+   "label": "WECC California (CAMX)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.ERCT.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W7",
+   "value": "733.862",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "W1"
+   ],
+   "label": "ERCOT All (ERCT)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.ERCT.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X7",
+   "value": "0.043",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "X1"
+   ],
+   "label": "ERCOT All (ERCT)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.ERCT.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y7",
+   "value": "0.006",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "Y1"
+   ],
+   "label": "ERCOT All (ERCT)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.FRCC.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W8",
+   "value": "782.262",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "W1"
+   ],
+   "label": "FRCC All (FRCC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.FRCC.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X8",
+   "value": "0.041",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "X1"
+   ],
+   "label": "FRCC All (FRCC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.FRCC.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y8",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "Y1"
+   ],
+   "label": "FRCC All (FRCC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W9",
+   "value": "1123.371",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "W1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X9",
+   "value": "0.146",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "X1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y9",
+   "value": "0.022",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "Y1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIOA.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W10",
+   "value": "1489.548",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "W1"
+   ],
+   "label": "HICC Oahu (HIOA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIOA.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X10",
+   "value": "0.134",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "X1"
+   ],
+   "label": "HICC Oahu (HIOA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIOA.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y10",
+   "value": "0.021",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "Y1"
+   ],
+   "label": "HICC Oahu (HIOA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W11",
+   "value": "1397.313",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "W1"
+   ],
+   "label": "MRO East (MROE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X11",
+   "value": "0.116",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "X1"
+   ],
+   "label": "MRO East (MROE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y11",
+   "value": "0.017",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "Y1"
+   ],
+   "label": "MRO East (MROE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W12",
+   "value": "920.13",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "W1"
+   ],
+   "label": "MRO West (MROW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X12",
+   "value": "0.097",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "X1"
+   ],
+   "label": "MRO West (MROW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y12",
+   "value": "0.014",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "Y1"
+   ],
+   "label": "MRO West (MROW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NEWE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W13",
+   "value": "539.275",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "W1"
+   ],
+   "label": "NPCC New England (NEWE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NEWE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X13",
+   "value": "0.063",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "X1"
+   ],
+   "label": "NPCC New England (NEWE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NEWE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y13",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "Y1"
+   ],
+   "label": "NPCC New England (NEWE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NWPP.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W14",
+   "value": "631.735",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "W1"
+   ],
+   "label": "WECC Northwest (NWPP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NWPP.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X14",
+   "value": "0.054",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "X1"
+   ],
+   "label": "WECC Northwest (NWPP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NWPP.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y14",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "Y1"
+   ],
+   "label": "WECC Northwest (NWPP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYCW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W15",
+   "value": "864.469",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "W1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYCW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X15",
+   "value": "0.022",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "X1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYCW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y15",
+   "value": "0.002",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "Y1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYLI.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W16",
+   "value": "1180.672",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "W1"
+   ],
+   "label": "NPCC Long Island (NYLI)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYLI.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X16",
+   "value": "0.14",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "X1"
+   ],
+   "label": "NPCC Long Island (NYLI)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYLI.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y16",
+   "value": "0.018",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "Y1"
+   ],
+   "label": "NPCC Long Island (NYLI)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYUP.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W17",
+   "value": "242.089",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "W1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYUP.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X17",
+   "value": "0.011",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "X1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYUP.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y17",
+   "value": "0.001",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "Y1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.PRMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W18",
+   "value": "1543.073",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "W1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.PRMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X18",
+   "value": "0.077",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "X1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.PRMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y18",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "Y1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W19",
+   "value": "596.904",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "W1"
+   ],
+   "label": "RFC East (RFCE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X19",
+   "value": "0.036",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "X1"
+   ],
+   "label": "RFC East (RFCE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y19",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "Y1"
+   ],
+   "label": "RFC East (RFCE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCM.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W20",
+   "value": "970.617",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "W1"
+   ],
+   "label": "RFC Michigan (RFCM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCM.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X20",
+   "value": "0.082",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "X1"
+   ],
+   "label": "RFC Michigan (RFCM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCM.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y20",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "Y1"
+   ],
+   "label": "RFC Michigan (RFCM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W21",
+   "value": "911.424",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "W1"
+   ],
+   "label": "RFC West (RFCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X21",
+   "value": "0.071",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "X1"
+   ],
+   "label": "RFC West (RFCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y21",
+   "value": "0.01",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "Y1"
+   ],
+   "label": "RFC West (RFCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RMPA.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W22",
+   "value": "1036.601",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "W1"
+   ],
+   "label": "WECC Rockies (RMPA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RMPA.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X22",
+   "value": "0.09",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "X1"
+   ],
+   "label": "WECC Rockies (RMPA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RMPA.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y22",
+   "value": "0.013",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "Y1"
+   ],
+   "label": "WECC Rockies (RMPA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPNO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W23",
+   "value": "861.999",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "W1"
+   ],
+   "label": "SPP North (SPNO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPNO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X23",
+   "value": "0.087",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "X1"
+   ],
+   "label": "SPP North (SPNO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPNO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y23",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "Y1"
+   ],
+   "label": "SPP North (SPNO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPSO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W24",
+   "value": "872.042",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "W1"
+   ],
+   "label": "SPP South (SPSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPSO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X24",
+   "value": "0.054",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "X1"
+   ],
+   "label": "SPP South (SPSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPSO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y24",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "Y1"
+   ],
+   "label": "SPP South (SPSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMV.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W25",
+   "value": "739.72",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "W1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMV.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X25",
+   "value": "0.032",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "X1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMV.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y25",
+   "value": "0.004",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "Y1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W26",
+   "value": "1239.839",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "W1"
+   ],
+   "label": "SERC Midwest (SRMW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X26",
+   "value": "0.132",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "X1"
+   ],
+   "label": "SERC Midwest (SRMW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y26",
+   "value": "0.019",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "Y1"
+   ],
+   "label": "SERC Midwest (SRMW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRSO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W27",
+   "value": "842.329",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "W1"
+   ],
+   "label": "SERC South (SRSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRSO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X27",
+   "value": "0.056",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "X1"
+   ],
+   "label": "SERC South (SRSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRSO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y27",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "Y1"
+   ],
+   "label": "SERC South (SRSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRTV.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W28",
+   "value": "898.079",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "W1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRTV.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X28",
+   "value": "0.079",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "X1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRTV.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y28",
+   "value": "0.011",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "Y1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRVC.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W29",
+   "value": "593.419",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "W1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRVC.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X29",
+   "value": "0.045",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "X1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRVC.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y29",
+   "value": "0.006",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "Y1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "gwp_ar5.CO2",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E524",
+   "value": "1",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C524",
+    "D524",
+    "E523",
+    "C556"
+   ],
+   "label": "CO2",
+   "gwpSet": "AR5-100",
+   "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+  },
+  {
+   "id": "gwp_ar5.CH4",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E525",
+   "value": "28",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C525",
+    "D525",
+    "E523",
+    "C556"
+   ],
+   "label": "CH4",
+   "gwpSet": "AR5-100",
+   "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+  },
+  {
+   "id": "gwp_ar5.N2O",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E526",
+   "value": "265",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C526",
+    "D526",
+    "E523",
+    "C556"
+   ],
+   "label": "N2O",
+   "gwpSet": "AR5-100",
+   "sourceSha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7"
+  },
+  {
+   "id": "residual_mix_green_e_2025.AKGD.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C2",
+   "value": "5096873",
+   "unit": "MWh",
+   "labelCells": [
+    "A2",
+    "C1"
+   ],
+   "label": "AKGD residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.AKGD.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F2",
+   "value": "53120",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A2",
+    "F1"
+   ],
+   "label": "AKGD residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.AKMS.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C3",
+   "value": "1582032",
+   "unit": "MWh",
+   "labelCells": [
+    "A3",
+    "C1"
+   ],
+   "label": "AKMS residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.AKMS.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F3",
+   "value": "30672",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A3",
+    "F1"
+   ],
+   "label": "AKMS residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.AZNM.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C4",
+   "value": "175554660",
+   "unit": "MWh",
+   "labelCells": [
+    "A4",
+    "C1"
+   ],
+   "label": "AZNM residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.AZNM.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F4",
+   "value": "382857",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A4",
+    "F1"
+   ],
+   "label": "AZNM residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.CAMX.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C5",
+   "value": "220986983",
+   "unit": "MWh",
+   "labelCells": [
+    "A5",
+    "C1"
+   ],
+   "label": "CAMX residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.CAMX.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F5",
+   "value": "2155596",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A5",
+    "F1"
+   ],
+   "label": "CAMX residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.ERCT.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C6",
+   "value": "477137386",
+   "unit": "MWh",
+   "labelCells": [
+    "A6",
+    "C1"
+   ],
+   "label": "ERCT residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.ERCT.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F6",
+   "value": "50494590.72",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A6",
+    "F1"
+   ],
+   "label": "ERCT residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.FRCC.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C7",
+   "value": "250055524",
+   "unit": "MWh",
+   "labelCells": [
+    "A7",
+    "C1"
+   ],
+   "label": "FRCC residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.FRCC.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F7",
+   "value": "5134028.79",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A7",
+    "F1"
+   ],
+   "label": "FRCC residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.HIMS.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C8",
+   "value": "2611613",
+   "unit": "MWh",
+   "labelCells": [
+    "A8",
+    "C1"
+   ],
+   "label": "HIMS residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.HIMS.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F8",
+   "value": "0",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A8",
+    "F1"
+   ],
+   "label": "HIMS residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.HIOA.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C9",
+   "value": "6547005",
+   "unit": "MWh",
+   "labelCells": [
+    "A9",
+    "C1"
+   ],
+   "label": "HIOA residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.HIOA.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F9",
+   "value": "0",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A9",
+    "F1"
+   ],
+   "label": "HIOA residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.MROE.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C10",
+   "value": "24520968",
+   "unit": "MWh",
+   "labelCells": [
+    "A10",
+    "C1"
+   ],
+   "label": "MROE residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.MROE.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F10",
+   "value": "8139.43",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A10",
+    "F1"
+   ],
+   "label": "MROE residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.MROW.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C11",
+   "value": "240934539",
+   "unit": "MWh",
+   "labelCells": [
+    "A11",
+    "C1"
+   ],
+   "label": "MROW residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.MROW.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F11",
+   "value": "12646591",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A11",
+    "F1"
+   ],
+   "label": "MROW residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NEWE.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C12",
+   "value": "102716863",
+   "unit": "MWh",
+   "labelCells": [
+    "A12",
+    "C1"
+   ],
+   "label": "NEWE residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NEWE.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F12",
+   "value": "10212",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A12",
+    "F1"
+   ],
+   "label": "NEWE residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NWPP.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C13",
+   "value": "269253053",
+   "unit": "MWh",
+   "labelCells": [
+    "A13",
+    "C1"
+   ],
+   "label": "NWPP residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NWPP.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F13",
+   "value": "8722197.738",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A13",
+    "F1"
+   ],
+   "label": "NWPP residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NYCW.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C14",
+   "value": "34602268",
+   "unit": "MWh",
+   "labelCells": [
+    "A14",
+    "C1"
+   ],
+   "label": "NYCW residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NYCW.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F14",
+   "value": "0",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A14",
+    "F1"
+   ],
+   "label": "NYCW residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NYLI.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C15",
+   "value": "9823462",
+   "unit": "MWh",
+   "labelCells": [
+    "A15",
+    "C1"
+   ],
+   "label": "NYLI residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NYLI.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F15",
+   "value": "0",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A15",
+    "F1"
+   ],
+   "label": "NYLI residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NYUP.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C16",
+   "value": "85283183",
+   "unit": "MWh",
+   "labelCells": [
+    "A16",
+    "C1"
+   ],
+   "label": "NYUP residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.NYUP.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F16",
+   "value": "8465",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A16",
+    "F1"
+   ],
+   "label": "NYUP residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.PRMS.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C17",
+   "value": "17501153",
+   "unit": "MWh",
+   "labelCells": [
+    "A17",
+    "C1"
+   ],
+   "label": "PRMS residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.PRMS.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F17",
+   "value": "0",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A17",
+    "F1"
+   ],
+   "label": "PRMS residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RFCE.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C18",
+   "value": "284874109",
+   "unit": "MWh",
+   "labelCells": [
+    "A18",
+    "C1"
+   ],
+   "label": "RFCE residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RFCE.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F18",
+   "value": "32026",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A18",
+    "F1"
+   ],
+   "label": "RFCE residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RFCM.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C19",
+   "value": "91629482",
+   "unit": "MWh",
+   "labelCells": [
+    "A19",
+    "C1"
+   ],
+   "label": "RFCM residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RFCM.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F19",
+   "value": "1175126",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A19",
+    "F1"
+   ],
+   "label": "RFCM residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RFCW.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C20",
+   "value": "524352082",
+   "unit": "MWh",
+   "labelCells": [
+    "A20",
+    "C1"
+   ],
+   "label": "RFCW residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RFCW.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F20",
+   "value": "988102.721",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A20",
+    "F1"
+   ],
+   "label": "RFCW residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RMPA.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C21",
+   "value": "67674810",
+   "unit": "MWh",
+   "labelCells": [
+    "A21",
+    "C1"
+   ],
+   "label": "RMPA residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.RMPA.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F21",
+   "value": "1480878.99",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A21",
+    "F1"
+   ],
+   "label": "RMPA residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SPNO.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C22",
+   "value": "73458953",
+   "unit": "MWh",
+   "labelCells": [
+    "A22",
+    "C1"
+   ],
+   "label": "SPNO residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SPNO.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F22",
+   "value": "10770053.51",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A22",
+    "F1"
+   ],
+   "label": "SPNO residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SPSO.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C23",
+   "value": "158074960",
+   "unit": "MWh",
+   "labelCells": [
+    "A23",
+    "C1"
+   ],
+   "label": "SPSO residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SPSO.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F23",
+   "value": "22485946.44",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A23",
+    "F1"
+   ],
+   "label": "SPSO residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRMV.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C24",
+   "value": "176359170",
+   "unit": "MWh",
+   "labelCells": [
+    "A24",
+    "C1"
+   ],
+   "label": "SRMV residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRMV.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F24",
+   "value": "761511",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A24",
+    "F1"
+   ],
+   "label": "SRMV residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRMW.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C25",
+   "value": "105391939",
+   "unit": "MWh",
+   "labelCells": [
+    "A25",
+    "C1"
+   ],
+   "label": "SRMW residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRMW.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F25",
+   "value": "3215049",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A25",
+    "F1"
+   ],
+   "label": "SRMW residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRSO.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C26",
+   "value": "256144699",
+   "unit": "MWh",
+   "labelCells": [
+    "A26",
+    "C1"
+   ],
+   "label": "SRSO residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRSO.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F26",
+   "value": "2724815",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A26",
+    "F1"
+   ],
+   "label": "SRSO residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRTV.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C27",
+   "value": "209324308",
+   "unit": "MWh",
+   "labelCells": [
+    "A27",
+    "C1"
+   ],
+   "label": "SRTV residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRTV.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F27",
+   "value": "96019",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A27",
+    "F1"
+   ],
+   "label": "SRTV residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRVC.net_generation_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "C28",
+   "value": "319478861",
+   "unit": "MWh",
+   "labelCells": [
+    "A28",
+    "C1"
+   ],
+   "label": "SRVC residual mix net generation",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  },
+  {
+   "id": "residual_mix_green_e_2025.SRVC.voluntary_re_mwh",
+   "table": "Green-e 2025 Residual Mix Emissions Rates (2023 data), 12-month vintage",
+   "sheet": "resource-solutions.org/2025-residual-mix/ table",
+   "valueCell": "F28",
+   "value": "2952681",
+   "unit": "MWh (Green-e certified voluntary renewable sales, 12-month vintage, removed at zero emissions)",
+   "labelCells": [
+    "A28",
+    "F1"
+   ],
+   "label": "SRVC residual mix voluntary RE",
+   "sourceSha256": "72bae141a88e44fb4a5d30dacd078f6d5c45063df784ce09f3ccbc1d11e799bb"
+  }
+ ]
+}

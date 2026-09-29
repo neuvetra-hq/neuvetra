@@ -1,0 +1,77 @@
+{
+  "task_id": "M80-HOSTED-PREP-C6-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_offline_preparation_and_synced_exclusive_writer_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+    "sha256": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a"
+  },
+  "source_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+    "sha256": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a"
+  },
+  "files": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
+      "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
+      "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts",
+      "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead"
+    },
+    {
+      "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md",
+      "sha256": "cd0a92cf133694b643c6c4888888232cd32b17eb8438f23b7815139dc3f8f01d"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-foundation-hosted-prepare-v2.ts",
+      "sha256": "82e2a01469a4d85cb77a71f53f55275a044952046d23bdf8aaff9f710e7c14b5"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-once-v2.ts",
+      "sha256": "5db678e1332a75c08aa63d9052dedbb15a096266f28dfab9139685f7772daf74"
+    },
+    {
+      "path": ".superpowers/m80-foundation-hosted-preparation-v2.test.ts",
+      "sha256": "452d2f4d8e01db4d68efb9d61d54da9d9a4ae9ca203a81113e6a59c85fb59ead"
+    },
+    {
+      "path": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md",
+      "sha256": "cd0a92cf133694b643c6c4888888232cd32b17eb8438f23b7815139dc3f8f01d"
+    }
+  ],
+  "material_findings_open": 0,
+  "finding_disposition": {
+    "EXECUTOR-F07": "Repaired by versioned input/plan profile and explicitly historical healthy pre-stop baseline <= matching backup <= rehearsal. Baseline-to-backup bounded to fifteen minutes; independently reviewed fresh stopped stage gates unchanged.",
+    "EXECUTOR-F06": "Outside preparation scope; Executor C7 remains failed until successor independently passes."
+  },
+  "delta": "Exact prepare-v2 diff is profile changes, explicit observationPhase and chronology repair. Once-v2 differs from accepted once-v1 only by prepare-v2 import. Historical source files unchanged.",
+  "checks": {
+    "author_tests_reproduced": 12,
+    "author_assertions": 58,
+    "independent_challenges": 28,
+    "actual_immutable_backup_receipts_accepted": 4,
+    "historical_v1_source_pins_unchanged": 4,
+    "backup_c3_artifacts_current_unchanged": 110,
+    "identical_intent_and_outcome_paths_all_three_stages": true
+  },
+  "evidence": [
+    "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-challenges.json",
+    "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-actual-receipts.json",
+    "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-pins.json"
+  ],
+  "limits": [
+    "Offline input/receipt/gate validation and synced exclusive writer only. No hosted/provider/credential/DB/Git action.",
+    "Actual immutable local synthetic backup and native restore receipts consumed unchanged; other preparation evidence is synthetic and not claimed as genuine provider baseline.",
+    "Pins and closed schemas verify consistency, not provenance or truth of externally supplied observations; actual fresh baseline/stop/state/check/security evidence remains required.",
+    "Historical C5 accepted closure remains immutable; its integrated chronology limitation is preserved in failed Executor C7 review.",
+    "File-sync mechanism retained byte-for-byte; no power-loss or hardware guarantee claimed.",
+    "Global run validator at review time was blocked by author-owned M80-HOSTED-EXECUTOR-PREP artifact digest mismatch during successor edits."
+  ]
+}

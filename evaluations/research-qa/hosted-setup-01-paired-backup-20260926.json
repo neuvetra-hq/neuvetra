@@ -1,0 +1,23 @@
+{
+  "profile": "neuvetra.hosted-setup.paired-backup-observation.v1",
+  "recordedUtc": "2026-09-26T09:10:44Z",
+  "status": "paired-application-backup-created-restore-pending",
+  "projectRef": "icockcoguyadhryzydvl",
+  "sourceSchemaVersionBefore": 22,
+  "sourceSchemaVersionAfter": 22,
+  "applicationOnly": true,
+  "syntheticOnly": true,
+  "providerRecoveryExcluded": true,
+  "archivePath": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-20260926T090844493Z-d3471989.snapshot.dpapi",
+  "archiveBytes": 9466390,
+  "archiveSha256": "22280e654a823d3922acfa56ddee1bc9ac0c9c17fa1c29fb672671071c488495",
+  "receiptPath": "C:\\Users\\nimab\\Neuvetra\\m63-runtime\\recovery\\hosted-setup-20260926T090844493Z-d3471989.receipt.json",
+  "receiptBytes": 566,
+  "receiptSha256": "60c093af17ec31cfea52b5a1b7689b5adb6dd72d06053b2f59f7c269c8ad0819",
+  "snapshotSha256": "c061e8316581296f795c353feccca537e5b2db6e8796f164a096f34727766667",
+  "dumpSha256": "4906d34d421cc5752a52c96e74654a974ff04dc92e1d655a2fe52e01ece8c886",
+  "stateSha256": "85763f14b6bd15768296e8f9acaf4b03e11c3f6d7a53312398ab831c526aba30",
+  "restoreStatus": "not-attempted",
+  "migrationAuthorized": false,
+  "priorRefusedAttemptReused": false
+}

@@ -1,0 +1,9 @@
+{
+  "artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-recovered-target-transports-independent-20260925-candidate1-review.json",
+      "sha256": "914fc3fa6e077300f8d50012847861d4b5041392a8a8669b47da8d308cfe04fa",
+      "text": "{\n  \"reviewer\": \"/root/m80_foundation_runtime_qa\",\n  \"verdict\": \"fail_recovered_target_transport_candidate1\",\n  \"candidate\": {\n    \"path\": \"operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORTS-20260925-CANDIDATE1.json\",\n    \"sha256\": \"b319c24eff3f57f765052bd244e6093cb5f179a8fb133ecf70ecc89043e58c2d\"\n  },\n  \"material_findings_open\": 1,\n  \"finding\": {\n    \"id\": \"RECOVERED-TRANSPORT-F01\",\n    \"summary\": \"Recovery validate_gate still requires original recovery/stop entrypoints, which are absent from the new exact source closure.\",\n    \"actual_required_entrypoints\": [\n      \".superpowers/m80-provider-recover21.py\",\n      \".superpowers/m80-provider-stop.py\"\n    ],\n    \"result\": \"Required source entrypoint missing\",\n    \"required_repair\": \"Require recovered recovery and stop entrypoint paths matching the actual new imports and snapshot. Preserve original C1 and consumed old journals.\"\n  },\n  \"probe\": \"Exact frozen validate_gate AST compiled with injected no-action dependency review. New truthful snapshot path set is rejected. No helper main, provider, credential, network, Git or DB action executed.\",\n  \"attribution\": \"Root also identified this defect independently before QA verdict.\"\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "workflow_sha256": "dc6eca3e85cea8c7cdebb77df7731d1badef7fcf447ffe6828f6a99d88e885f3",
+  "yaml_parsed": true,
+  "server17_retained": true,
+  "client17_path_written": true,
+  "pg_dump17_guard": true,
+  "pg_restore17_guard": true,
+  "real_native_next": true,
+  "native_skip_added": false,
+  "explicit_pgdg_setup_present": false,
+  "package_install_executed": false,
+  "finding": "C3 installs PostgreSQL17 package without configuring its source repository; runner build removes PGDG source."
+}

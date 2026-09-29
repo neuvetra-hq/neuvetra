@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-ARTIFACT-PUBLISHER-REPAIR3-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/artifact_launcher",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "sha256": "76028ad0368406d282a6baceb174909569dea36b5944d25365d9630014dbb169",
+      "path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review4.md"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "sha256": "76028ad0368406d282a6baceb174909569dea36b5944d25365d9630014dbb169",
+      "path": "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review4.md"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-EXACT-FROZEN-REVIEW",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review4.md"
+      ],
+      "reason": "Assigned source/test/author pins matched; QA1-QA3 FAIL artifacts unchanged. Focused 14 tests/67 assertions and strict TypeScript pass.",
+      "status": "pass"
+    },
+    {
+      "id": "AC-02-PUB-F04-PREOUTPUT-REFUSAL",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review4.md"
+      ],
+      "reason": "Clean committed case-prefix and file-directory aliases refuse before all three outputs; valid sibling bytes materialize.",
+      "status": "pass"
+    },
+    {
+      "id": "AC-03-PUB-F01-THROUGH-F03-REGRESSION",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-artifact-publisher-independent-review4.md"
+      ],
+      "reason": "Fresh real-Git replacement references preserve original source, corrupted nested tree refuses, optional peer positives materialize and malformed/required cases refuse. 17 independent cases pass.",
+      "status": "pass"
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 0,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "assessment": {
+    "repaired_findings": [
+      "PUB-F01",
+      "PUB-F02",
+      "PUB-F03",
+      "PUB-F04"
+    ],
+    "repair3_candidate_verdict": "pass",
+    "open_finding_ids": [],
+    "candidate_author_execution_context": "/root/artifact_runner",
+    "independent_of_candidate_author": true,
+    "reviewed_candidate_artifacts": [
+      {
+        "sha256": "22a1b40a03ae8981d30586757f08abeea1441502bebd94144e063b9fb1e28dbf",
+        "path": "tools/staging/hosted-setup-artifact-publisher.ts"
+      },
+      {
+        "sha256": "5012e505cb783c47af91cf379a12975a74af259de1ebe943cd35593bc262d691",
+        "path": "tools/staging/hosted-setup-artifact-publisher.test.ts"
+      }
+    ],
+    "original_candidate_first_verdict": "fail"
+  },
+  "routing_note": "Requested critical qa-lead gpt-6-astra/high; inherited setting unobserved. Independent publisher review with earlier consumer authorship disclosed. Coordinator snapshot/administrative closure pending. No candidate/shared Git/provider/database mutation or real publication."
+}

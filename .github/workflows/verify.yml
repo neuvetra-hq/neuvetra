@@ -32,6 +32,19 @@ jobs:
           --health-interval 5s
           --health-timeout 5s
           --health-retries 10
+      beta-postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: supabase_admin
+          POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 55472:5432
+        options: >-
+          --health-cmd "pg_isready -U supabase_admin -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -102,9 +115,34 @@ jobs:
           NEUVETRA_M77_CI_BASELINE: "1"
 
       - name: Independently verify Scope 1 blocked lifecycle and retained downloads
-        run: bun test evaluations/research-qa/m78-ci-native.test.ts
+        run: bun test evaluations/research-qa/m80-ci-schema-regression.test.ts evaluations/research-qa/m78-ci-native.test.ts
         env:
           M78_QA_CI_BASELINE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
+
+      - name: Select PostgreSQL 17 backup and restore clients for beta access
+        run: |
+          . /etc/os-release
+          test -n "${VERSION_CODENAME:-}"
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail --show-error --silent --location \
+            --output /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc \
+            https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          printf '%s\n' \
+            "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" \
+            | sudo tee /etc/apt/sources.list.d/pgdg.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+          /usr/lib/postgresql/17/bin/pg_dump --version | grep -E '^pg_dump \(PostgreSQL\) 17\.'
+          /usr/lib/postgresql/17/bin/pg_restore --version | grep -E '^pg_restore \(PostgreSQL\) 17\.'
+
+      - name: Exercise beta invitation access through native restricted PostgreSQL
+        run: |
+          bun tools/beta-access/ci-prerequisites.ts
+          bun test apps/site-api/src/beta-access/auth.test.ts apps/site-api/src/beta-access/server.test.ts apps/site-api/src/beta-access/listener.test.ts apps/site-api/src/beta-access/postgres.test.ts
+        env:
+          M80_BETA_ACCESS_NATIVE: enabled
+          M80_BETA_ACCESS_CI: enabled
 
       - name: Challenge Scope 1 concurrent writes and post-write rollback
         run: bun test evaluations/research-qa/m78-perf-concurrency.test.ts evaluations/research-qa/m78-perf-independent.test.ts
@@ -138,6 +176,8 @@ jobs:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
       - run: bun run check
+      - name: Independent Scope 1 setup decoder and current read-only lifecycle
+        run: bun test evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts evaluations/research-qa/m80-legacy-readonly-lifecycle.test.ts
       - name: Independent source-linked worksheet decoder and report cases
         run: bun test evaluations/research-qa/m66-independent-frontend.test.ts evaluations/research-qa/m66-independent-renderer.test.ts
       - name: Independent annual worksheet decoder, renderer and print-action cases
@@ -174,7 +214,17 @@ jobs:
           bun install --frozen-lockfile
           bun test tools/staging/m77-operators.test.ts
       - name: Independent Scope 1 browser decoding and recovery admission
-        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-backup.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+        run: bun test evaluations/research-qa/m78-browser-independent.test.ts evaluations/research-qa/m78-capacity-browser.test.ts evaluations/research-qa/m78-hosted-plan-independent.test.ts tools/staging/check-m78-hosted.test.ts evaluations/research-qa/m78-resume-local-upgrade-independent.test.ts evaluations/research-qa/m78-resume-recipe-shapes.test.ts evaluations/research-qa/m78-resume-response-shape-independent.test.ts tools/staging/check-m78-continuation.test.ts tools/staging/m78-continuation-plan.test.ts tools/staging/m78-continuation-source-pins.test.ts evaluations/research-qa/m78-continuation-independent.test.ts evaluations/research-qa/m78-continuation-closure-independent.test.ts
+      - name: Check out frozen schema 21 operator context
+        uses: actions/checkout@v4
+        with:
+          ref: 540c71dbea6057f35a8b44074a71ceb9cf6bd6c3
+          path: .legacy-m78-schema21
+      - name: Preserve closed schema 21 operator and source-pin safeguards
+        working-directory: .legacy-m78-schema21
+        run: |
+          bun install --frozen-lockfile
+          bun test tools/staging/m78-operators.test.ts tools/staging/m78-hosted-database.test.ts evaluations/research-qa/m78-hosted-database-independent.test.ts evaluations/research-qa/m78-hosted-journey-independent.test.ts evaluations/research-qa/m78-application-transfer-independent.test.ts evaluations/research-qa/m78-recipe-rehearsal-independent.test.ts evaluations/research-qa/m78-journey-resolver-independent.test.ts tools/staging/m78-continuation-backup.test.ts
       - name: Check out frozen continuation recovery context
         uses: actions/checkout@v4
         with:
@@ -197,7 +247,12 @@ jobs:
         working-directory: .legacy-m78
         run: bun test tools/staging/check-m78-continuation4.test.ts --test-name-pattern "^exact173 source union"
       - name: Scope 1 GET preservation and finite diagnostic guards
-        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
+        run: bun test evaluations/research-qa/m78-get-local-comparison-independent.test.ts evaluations/research-qa/m78-get-historical-gates.test.ts
+      - name: Current GET behavior independent of historical byte pins
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts --test-name-pattern "metadata,|authentication,|historical candidate1|the finite set|nested calls|historical result|actual frozen|actual evidence"
+      - name: Preserve exact historical GET source closure
+        working-directory: .legacy-m78-schema21
+        run: bun test evaluations/research-qa/m78-continuation4-get-perf-probe.test.ts evaluations/research-qa/m78-get-guard-independent.test.ts evaluations/research-qa/m78-get-local-comparison-independent-actual.test.ts --test-name-pattern "finite SQL templates|candidate4 bytes|current closure is the 172"
       - name: Continuation4 closed baseline evidence guards
         run: bun test evaluations/research-qa/m78-continuation4-baseline-review.test.ts
       - name: Continuation4 lifecycle and passive revisit guards
@@ -222,10 +277,10 @@ jobs:
             import {readStagingConfig,STAGING_PROFILE} from "/app/apps/site-api/src/staging/config.ts";
             import {runEngine} from "/app/apps/site-api/src/calculation/server.ts";
             const {readMigrationManifest}=await import("/app/packages/neuvetra-database/src/staging-migrations.ts");
-            const manifest=await readMigrationManifest();if(manifest.length!==21||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql"||manifest[18].name!=="0019_stationary_sources.sql"||manifest[19].name!=="0020_fugitive_sources.sql"||manifest[20].name!=="0021_scope1_inventory.sql")throw new Error("Incomplete image migration manifest");
+            const manifest=await readMigrationManifest();if(manifest.length!==23||manifest[15].name!=="0016_stationary_natural_gas.sql"||manifest[16].name!=="0017_mobile_diesel.sql"||manifest[17].name!=="0018_controlled_fleet.sql"||manifest[18].name!=="0019_stationary_sources.sql"||manifest[19].name!=="0020_fugitive_sources.sql"||manifest[20].name!=="0021_scope1_inventory.sql"||manifest[21].name!=="0022_scope1_beta_foundation.sql"||manifest[22].name!=="0023_company_setup.sql")throw new Error("Incomplete image migration manifest");
             const ref="abcdefghijklmnopqrst";
             const config=readStagingConfig({NODE_ENV:"test",NEUVETRA_STAGING_ENABLED:"enabled",NEUVETRA_STAGING_PROFILE:STAGING_PROFILE,NEUVETRA_STAGING_PROJECT_REF:ref,NEUVETRA_STAGING_ORIGIN:"http://127.0.0.1:8080",SUPABASE_URL:`https://${ref}.supabase.co`,SUPABASE_ANON_KEY:"sb_publishable_synthetic_fixture_not_a_real_key",DATABASE_URL:`postgres://neuvetra_runtime:fixture@db.${ref}.supabase.co:5432/postgres`});
-            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:21}),close:async()=>{}};
+            const database={checkReadiness:async()=>({profile:STAGING_PROFILE,schemaVersion:23}),close:async()=>{}};
             const app=await createStagingServer(config,{database,validateUser:async()=>null,log:()=>{}});
             const server=Bun.serve({hostname:"127.0.0.1",port:8080,fetch:app.fetch});
             try {
@@ -290,6 +345,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install --disable-pip-version-check pint==0.26 pytest==9.1.1 pyyaml==6.0.3
+      - name: Verify Scope 1, 2 and 3 Python engines
+        working-directory: apps/site-api/src/calculation
+        run: python -m unittest scope1_engine_test scope2_engine_test scope3_engine_test
       - run: bun run test:ghg
       - name: Verify offline fugitive candidate and independent accounting cases
         run: |

@@ -1,0 +1,30 @@
+{
+  "boundary": "Exact frozen C9 reconciliation with synthetic attempt-bound ack and retained observation receipts; fresh journal only; no DB/network",
+  "transports": 1,
+  "results": [
+    {
+      "kind": "exact_positive",
+      "status": "verified_success",
+      "error": "",
+      "observerCalls": 0
+    },
+    {
+      "kind": "foreign_observation_deployment",
+      "status": "",
+      "error": "Error: Deployment success is not bound to the acknowledged deployment ID and chronology.",
+      "observerCalls": 0
+    },
+    {
+      "kind": "observation_before_ack",
+      "status": "",
+      "error": "Error: Deployment success is not bound to the acknowledged deployment ID and chronology.",
+      "observerCalls": 0
+    },
+    {
+      "kind": "missing_ack",
+      "status": "",
+      "error": "Error: Deployment success requires the exact durable provider acknowledgement.",
+      "observerCalls": 0
+    }
+  ]
+}

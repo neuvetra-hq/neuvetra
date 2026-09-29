@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "id": "M80-FOUNDATION-RUNTIME-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-DELIVERABLE.json",
+      "sha256": "ccf5f428a1963bd8432eaae45097ce4ab30a366720ff82dfa170aa2cdf5ede34"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "MIGRATION_PRESERVATION",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279919377.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.json"
+      ],
+      "reason": "Actual native121-table preservation with unchanged old rows and authorization/object metadata."
+    },
+    {
+      "id": "TENANT_AND_AUTHORITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279919377.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.json"
+      ],
+      "reason": "Actual mounted HTTP and native DB tenant/role/admission/revocation/direct-mutation controls."
+    },
+    {
+      "id": "CLOSED_SYNTHETIC_CONTRACT",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279919377.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.json"
+      ],
+      "reason": "45 malformed variants, exact metadata/refusals, held-only output and positive controls."
+    },
+    {
+      "id": "HISTORY_CONCURRENCY_INTEGRITY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279919377.json",
+        "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.json"
+      ],
+      "reason": "Actual persistence/replay/corrections/CAS and registry/audit/request/coordinated-corruption checks."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-foundation-runtime-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-RUNTIME-QA-20260924-DELIVERABLE.json",
+        "sha256": "ccf5f428a1963bd8432eaae45097ce4ab30a366720ff82dfa170aa2cdf5ede34"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent actual PostgreSQL and API QA; author is separate context. Applicable L01, L02, L04. Local synthetic clone only; no hosted action, real data, authentication-provider verification or M78 replay.",
+    "Candidate1 actual native first review failed F01. Immutable FIRST-REVIEW snapshot preserves209assertions and actual persisted unreadability.",
+    "Candidate2 independent implementation verdict passes.2 native tests/322assertions. Own QA deliverable still requires root acceptance; run remains in_progress/review pending.",
+    "Root accepted exact local synthetic runtime QA deliverable; hosted and UI integration remain separate. See root closure evidence."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924.json",
+      "sha256": "3105638a90df144fe3d47fb4177802635dea8ee16d6d44b75d3b360f31f73513"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924.md",
+      "sha256": "34c52266ad9b858bd24a54e3f913af357c929d36fabec518300ee977a5dfbdbc"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924.test.ts",
+      "sha256": "9ea0372efd4a1d7a736c10540e881f8edc5cf418fd8450367ba1bd24cbcd0ba2"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-cases.ts",
+      "sha256": "8571680c79b5ee4d8b4b30ce0f8bac510204ef05e38eb5aea3c02a915bfdb4cd"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-fixture.ts",
+      "sha256": "34301786642d9b8b62400cdb0e620287fe550475a4cfff1df0bb3506a53cfabc"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279919377.json",
+      "sha256": "d481eae01a3bd8955d5362f61ca41d53fc747e1e48cf710819f70d15fccaa7d7"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.test.ts",
+      "sha256": "9ff41f5bf44f02286a132617b432ffa07de1476d1e220571fef25b58146b6006"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-privileges.json",
+      "sha256": "e2f80df398ae3cd751564b1a839c1aa922600a7e8569032452b4318e97b05abf"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-first-review.json",
+      "sha256": "016cd666ff1c0aa954f17f5ea533d2279a2fe7e61d0a0ed9958fdf0950dbbf24"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-F01-reproduction.json",
+      "sha256": "c0cf12bdd5c25267604fff430f36e7799673e70c5c1337d994958a01b602da95"
+    },
+    {
+      "path": "evaluations/research-qa/m80-foundation-runtime-independent-20260924-execution-m80_qa_foundation_1790279672164.json",
+      "sha256": "a7348543e72331a3243cfbcbf3a94465eb0b26b6aa321c91d9220269f8d4af9c"
+    }
+  ]
+}

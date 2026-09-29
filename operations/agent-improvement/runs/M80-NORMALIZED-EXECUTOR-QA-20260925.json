@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "id": "M80-NORMALIZED-EXECUTOR-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-QA-20260925-DELIVERABLE.json",
+      "sha256": "159bf2bf1e85e8c3439360df3ac6bd189686e620eb1dba0f4ab69b03230776d3"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-source-and-independent-lifecycle-boundaries",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-executor-independent-20260925-review.json",
+        "evaluations/research-qa/m80-normalized-executor-independent-20260925-evidence.json"
+      ],
+      "reason": "Exact nested closure and independent subprocess/raw proof/no-replay checks pass."
+    },
+    {
+      "id": "AC-02-root-composer-mapping",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-normalized-executor-independent-20260925-composer-review.json",
+        "evaluations/research-qa/m80-normalized-executor-independent-20260925-composer-checks.json"
+      ],
+      "reason": "Independent source/negative/mock mapping and real consumer compatibility pass."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-normalized-executor-root-closure-20260925.json",
+      "evaluations/research-qa/m80-normalized-executor-independent-20260925-review.json",
+      "evaluations/research-qa/m80-normalized-executor-independent-20260925-composer-review.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-QA-20260925-DELIVERABLE.json",
+        "sha256": "159bf2bf1e85e8c3439360df3ac6bd189686e620eb1dba0f4ab69b03230776d3"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent normalized executor and composer source/security integration review",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Existing independent agent reused by root, inherited requested Astra/high; observed unknown. No author source edits. Source acceptance only. Two test harness failures retained separately from product verdict.",
+    "Root accepted exact bounded independent source review only; no fresh hosted gate. Existing context reused: registry model recommendation is not a newly applied dispatch override; inherited actual settings unknown."
+  ]
+}

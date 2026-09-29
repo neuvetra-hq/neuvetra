@@ -1,0 +1,78 @@
+{
+  "suite_partition": {
+    "original": 20,
+    "current": 12,
+    "historical_at": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+    "historical": 8
+  },
+  "get_partition": [
+    {
+      "name": "finite SQL templates cover the pinned hosted GET call chain and require exact read flags",
+      "current": false
+    },
+    {
+      "name": "metadata, download and snapshot each execute root plus report reads with exact bytes",
+      "current": true
+    },
+    {
+      "name": "authentication, stream, family and read failures preserve refusal ordering without writes",
+      "current": true
+    },
+    {
+      "name": "historical candidate1 result proves structural duplication and exact data preservation",
+      "current": true
+    },
+    {
+      "name": "candidate4 bytes, private enforcement state and source pins are exact",
+      "current": false
+    },
+    {
+      "name": "the finite set is exactly the 20 static read templates in the ten pinned callers",
+      "current": true
+    },
+    {
+      "name": "nested calls, casts, writer forms, arbitrary setters and template mutations are refused",
+      "current": true
+    },
+    {
+      "name": "historical result and baseline route remain exact without retroactive provenance claims",
+      "current": true
+    },
+    {
+      "name": "actual frozen result and portable operator source archive are exactly bound",
+      "current": true
+    },
+    {
+      "name": "current closure is the 172 retained historical pins plus the accepted route",
+      "current": false
+    },
+    {
+      "name": "actual evidence refuses altered count, hash, header and sample ordinal",
+      "current": true
+    },
+    {
+      "name": "actual evidence refuses altered digest, cleanup, closure and write counters",
+      "current": true
+    },
+    {
+      "name": "actual evidence refuses changed direct and optimized structural counts",
+      "current": true
+    }
+  ],
+  "native_job_unchanged_except_added_regression": true,
+  "runtime_m80_inputs": [
+    "apps/site-api/src/workspace/m80-beta-routes.ts",
+    "packages/neuvetra-database/src/m80-contract.ts",
+    "packages/neuvetra-database/src/m80-fixture.ts",
+    "packages/neuvetra-database/src/m80-validation.ts",
+    "packages/neuvetra-database/src/m80.ts",
+    "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql"
+  ],
+  "transitive_ts_modules_checked": 63,
+  "packaging_boundary": "six exact runtime allowlist additions, one contract in web; existing ENV/USER/CMD unchanged",
+  "status_candidate2_exact": true,
+  "limits": [
+    "Static COPY/import traversal is not Docker execution.",
+    "Historical test paths and GET test names verified at exact commit; historical suites not executed in this review."
+  ]
+}

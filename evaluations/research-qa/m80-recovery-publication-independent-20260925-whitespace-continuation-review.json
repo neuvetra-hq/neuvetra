@@ -1,0 +1,51 @@
+{
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_exact_one_eof_warning_existing_recovery_publication_attempt_continuation_only",
+  "manifest": {
+    "path": ".superpowers/m80-recovery-final-publication-manifest.json",
+    "sha256": "0b7d3ae1a402a1bf6814a1b201aaaeb35792a98386a65d2ebf55e49f4d65ad4a"
+  },
+  "prior_review": {
+    "path": "evaluations/research-qa/m80-recovery-publication-independent-20260925-final-manifest-review.json",
+    "sha256": "e9d8ae4582325bbb82bda13b3ec6398618177bd3ab661c37f62f0c0a006d0b99"
+  },
+  "original_intent": {
+    "path": ".superpowers/m80-recovery-evidence-publication-intent.json",
+    "sha256": "471d115088f062de615dd69a8c1b865f79d04ab4adb231f89de19fb2e7e190b4"
+  },
+  "root_observation": {
+    "path": ".superpowers/m80-recovery-publication-whitespace-observation.json",
+    "sha256": "7c266f81642b22af69d6e53de9ec5a3cda9aa771a558b599ff1b9e2707581675"
+  },
+  "independent_readonly_observation": {
+    "head": "7bc6028cf016372f52e82a483b7f61bc49c6331e",
+    "branch": "codex/corporate-mvp",
+    "staged_paths_exact": 36,
+    "every_staged_and_working_blob_matches_manifest": true,
+    "diff_check_exit_code": 2,
+    "exact_stdout": "docs/research/m80-hosted-backup-restore-metadata-diagnostic-20260925.md:55: new blank line at EOF.\n",
+    "exact_stderr": ""
+  },
+  "exception": {
+    "path": "docs/research/m80-hosted-backup-restore-metadata-diagnostic-20260925.md",
+    "sha256": "e2049c3be423e2d39994347e81c1970e28baef6eec73234db037df056e0b76b8",
+    "line": 55,
+    "warning": "new blank line at EOF",
+    "reason": "One terminal blank line in the already frozen reviewed diagnostic; preserving it changes no content claim or executable behavior."
+  },
+  "material_findings_open": 0,
+  "continuation_requirements": [
+    "Root must immediately reverify this review, exact original intent, manifest and prior review hashes, base/branch, and absence of completed publication/continuation before any mutation.",
+    "Continue the original reserved attempt only through a separately bound once-only continuation marker, exclusively written and synced before commit. Never rerun the original publication command or replace original intent.",
+    "Reverify exactly36 staged paths and all36 raw staged hashes against manifest, and require precisely exit2 plus this exact stdout and empty stderr. Any other warning or byte/path change refuses.",
+    "Commit once, verify exact parent and committed36 bytes/path delta; push exact head, verify remote equality and exclusively record publication with checks pending.",
+    "On uncertainty retain all markers and inspect authoritative local/remote state; never automatically repeat commit/push.",
+    "No file/index/attribute or general whitespace-policy changes are part of this exception.",
+    "No repair acceptance or hosted/migration gate follows; exact-head remote checks remain required."
+  ],
+  "limits": [
+    "Independent QA performed read-only Git inspection only; no file/index/commit mutation or network/provider action.",
+    "No as-yet unreviewed continuation script is accepted by this warning exception.",
+    "This receipt is outside the frozen36-file manifest to avoid a self-hash cycle."
+  ]
+}

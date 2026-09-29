@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "SCOPE1-FREE-BETA-PLAN-20260924",
+  "role": "cpo",
+  "execution_context": "/root/scope1_beta_plan",
+  "prompt_sha256": "fe5237292aafa6fe307801d3d9d07414110d11dc6ecd7812ee52ed77feacb2e6",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/SCOPE1-FREE-BETA-PLAN-20260924-CANDIDATE2.json",
+      "sha256": "52417d77684bb88375a07aea211db85bf08affe50876e3a3db1018001f356f36"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "M80-PLAN-AC01",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-m80-plan-20260924.md"
+      ],
+      "reason": "Defines an invitation-only free Scope 1 drafting beta for two or three board-selected known companies, with calendar-2025 eligibility intake and no assumed company, industry cohort or recipient authorization."
+    },
+    {
+      "id": "M80-PLAN-AC02",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-m80-plan-20260924.md"
+      ],
+      "reason": "Makes exact M79 source, numerical, domain, intended-use, release and runtime gates prerequisites for every displayed number while keeping user-supplied evidence separate from Neuvetra-owned numerical QA."
+    },
+    {
+      "id": "M80-PLAN-AC03",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-m80-plan-20260924.md"
+      ],
+      "reason": "Specifies observable acceptance for truthful landing claims, invitations and sign-in, secure tenant/company setup, real-document handling, supported intake, deterministic calculations, draft reporting, feedback/support and a two-tenant end-to-end recovery rehearsal."
+    },
+    {
+      "id": "M80-PLAN-AC04",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-m80-plan-20260924.md"
+      ],
+      "reason": "Uses the coordinator's read-only website findings to require Scope 1-focused onboarding/navigation, eligibility intake, a released-source chooser, contextual units/evidence, prioritized actionable findings and persistent beta/draft truth."
+    },
+    {
+      "id": "M80-PLAN-AC05",
+      "status": "pass",
+      "evidence": [
+        "docs/research/scope1-free-beta-m80-plan-20260924.md"
+      ],
+      "reason": "Provides a merge-dependent critical path with one writer per workstream, exact qualified/external blockers and explicit separation among invitation readiness, actual invitations, customer-complete Scope 1, paid launch, complete corporate MVP and assurance."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/scope1-free-beta-plan-root-review-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/SCOPE1-FREE-BETA-PLAN-20260924-CANDIDATE2.json",
+        "sha256": "52417d77684bb88375a07aea211db85bf08affe50876e3a3db1018001f356f36"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "source_artifacts": [
+    {
+      "path": "docs/research/scope1-free-beta-m80-plan-20260924.md",
+      "sha256": "32c198d3bb341b22d91aac5dca1a7c4837fdc45f661db45578449a8e63c3c3cb"
+    }
+  ],
+  "lessons_applied": [
+    "L01",
+    "L02",
+    "L04",
+    "L07",
+    "L08"
+  ],
+  "notes": [
+    "CPO planning only. No application, Git, host, provider, customer, invitation, paid call, model-default or shared-ledger mutation occurred.",
+    "The accepted M78 integration prerequisite was satisfied when root confirmed PR5 merged on 2026-09-24 at e10012bc. That merge does not itself authorize M80 implementation or release. Root remains integration and shared-record owner.",
+    "The coordinator supplied a read-only September 24 UI observation; this plan uses the copied evidence file without claiming that the observation itself is product acceptance.",
+    "Candidate1 is preserved unchanged. Independent first review failed on one material clarity error: it mislabeled the 104 corporate-coverage findings as Scope 1 register findings and did not keep the observed 0 Scope 1 workflow, 11 Scope 1 release and 82 wider-corporate-gap counts separate.",
+    "Candidate2 makes only targeted corrections: it binds the scoped UI counts to the coordinator observation, labels the fixed 2025/control envelope as a proposed initial product envelope rather than a board-selected customer fact, permits an unsupported-year eligibility outcome and records the satisfied M78 merge prerequisite.",
+    "Candidate2 awaits targeted independent root re-review before integration. Author criteria are not an independent acceptance verdict.",
+    "Requested Sol/medium; observed model and effort are unavailable and retained as unknown.",
+    "Root independently re-reviewed candidate2 exact snapshot and accepted product planning; first-review fail and one rework preserved."
+  ]
+}

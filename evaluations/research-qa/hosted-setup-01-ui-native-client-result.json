@@ -1,0 +1,23 @@
+{
+  "sourceHashes": {
+    "apps/site-web/src/lib/company-setup-api.ts": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d",
+    "packages/neuvetra-database/src/company-setup.ts": "15bca16b06af477dece8ce007c2299c0d4a643397a7826c6a8005e027b328d72",
+    "packages/neuvetra-database/src/company-setup-contract.ts": "93cc5fe6b8af6416354b2d461800bcaf108a386200d75b3f7838172e4e505d74",
+    "packages/neuvetra-database/src/hosted.ts": "3bd3398fe582d2cf74e6868ab7fdfcd0f7158fb1e96dce5c5b59069ed1c59e04",
+    "apps/site-api/src/staging/server.ts": "c7e2c0701c2e8398b907a907200edb12eaac70890aaded6dcfde567985ca53b0"
+  },
+  "sourceHashesAfter": {
+    "apps/site-web/src/lib/company-setup-api.ts": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d",
+    "packages/neuvetra-database/src/company-setup.ts": "15bca16b06af477dece8ce007c2299c0d4a643397a7826c6a8005e027b328d72",
+    "packages/neuvetra-database/src/company-setup-contract.ts": "93cc5fe6b8af6416354b2d461800bcaf108a386200d75b3f7838172e4e505d74",
+    "packages/neuvetra-database/src/hosted.ts": "3bd3398fe582d2cf74e6868ab7fdfcd0f7158fb1e96dce5c5b59069ed1c59e04",
+    "apps/site-api/src/staging/server.ts": "c7e2c0701c2e8398b907a907200edb12eaac70890aaded6dcfde567985ca53b0"
+  },
+  "databaseName": "hosted_setup_01_qa_1790408387796",
+  "checks": [
+    "empty company load and exact save decoded",
+    "correction and historical decoder parity",
+    "actual SQL old replay with newer foundation decoded",
+    "actual cross-company client request denied"
+  ]
+}

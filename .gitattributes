@@ -49,6 +49,9 @@ bun.lock      -text
 package-lock.json -text
 
 # Evaluation receipts and journals are hashed evidence; preserve recorded bytes.
+tools/staging/hosted-setup* -text whitespace=cr-at-eol
+evaluations/research-qa/hosted-setup* -text whitespace=cr-at-eol
+operations/agent-improvement/runs/HOSTED-SETUP-* -text whitespace=cr-at-eol
 evaluations/research-qa/runs/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 evaluations/research-qa/runs/*.jsonl -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 operations/website-evaluation-allocation-*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
@@ -316,3 +319,109 @@ operations/agent-improvement/build-usage-events.jsonl -text whitespace=cr-at-eol
 operations/agent-improvement/build-operations-continuation.md -text whitespace=cr-at-eol
 operations/agent-improvement/build-pilot-output/OPS-PILOT-01-A-summary.json -text whitespace=cr-at-eol
 operations/agent-improvement/integration-manifest-2026-09-24.json -text whitespace=cr-at-eol
+
+# Preserve reviewed evidence with intentional trailing blank lines.
+operations/agent-improvement/snapshots/M80-SCOPE1-NAV-20260924-CANDIDATE1.json whitespace=-blank-at-eof
+operations/update-pause-20260924.md whitespace=-blank-at-eof
+
+# Preserve frozen M80 independent review raw-byte identities.
+evaluations/research-qa/m80-foundation-contract-independent-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-foundation-contract-independent-20260924.md -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-QA-20260924-FIRST-REVIEW.json -text whitespace=cr-at-eol
+
+# Preserve the two frozen M80 foundation candidate trailing newlines.
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE1.json whitespace=-blank-at-eof
+operations/agent-improvement/snapshots/M80-FOUNDATION-CONTRACT-20260924-CANDIDATE2.json whitespace=-blank-at-eof
+
+# Preserve exact reviewed M80 setup evidence and metadata bytes.
+evaluations/research-qa/m80-setup-integration-independent-20260924-F03.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-candidate1-api.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-extra-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-first-review.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle-candidate2.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-native-candidate2.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-native.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-integration-independent-20260924.md -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-first-review.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-workflow.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-setup-publication-metadata-independent-20260924.md -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-FOUNDATION-RUNTIME-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-SETUP-CI-WORKFLOW-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-SETUP-INTEGRATION-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-SETUP-PUBLICATION-METADATA-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-CI-WORKFLOW-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-CI-WORKFLOW-SUPPLEMENT-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-FIRST-REVIEW.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-FIRST-SUPPLEMENT.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-INTEGRATION-QA-20260924-LIFECYCLE-FIRST-REVIEW.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-PUBLICATION-METADATA-QA-20260924-FIRST-REVIEW.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-SETUP-UI-20260924-PREVIEW-REPAIR1.json -text whitespace=cr-at-eol
+operations/board-report.md -text whitespace=cr-at-eol
+operations/next-session.md -text whitespace=cr-at-eol
+operations/status.json -text whitespace=cr-at-eol
+# Preserve byte-pinned M80 hosted preparation review evidence.
+evaluations/research-qa/m80-hosted-prep-independent-20260924-chronology.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-controls.test.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-evidence-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-path-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-probes.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-prep-independent-20260924-scalar-probes.ts -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BACKUP-REHEARSAL-PREP-20260924-CANDIDATE1.json -text whitespace=cr-at-eol
+# Preserve exact accepted supplemental review evidence.
+evaluations/research-qa/m80-coordinator-helpers-root-closure-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-executor-root-closure-20260924.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-publication-inventory-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-COORDINATOR-HELPERS-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-EXECUTOR-QA-20260924.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-HOSTED-PUBLICATION-PREP-20260924-CANDIDATE3.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-NORMALIZED-COMPOSER-INTEGRATION-CHECK-20260925-DELIVERABLE.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json -text whitespace=cr-at-eol
+evaluations/research-qa/ops-graph-01-product-integration-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/ops-graph-01-product-ci-20260925.json -text whitespace=cr-at-eol
+
+# Preserve exact Scope 1 beta access and review evidence.
+docs/research/m80-evidence-boundary-root-review-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-archive-relocation.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-baseline-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review1.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-next-contract-root-review1-20260925.md -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-next-contract-root-review2-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-evidence-boundary-root-review-20260925.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-hosted-checkpoint-publication-success-20260925.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-BETA-NEXT-CONTRACT-20260925.json -text whitespace=cr-at-eol
+operations/agent-improvement/runs/M80-EVIDENCE-BOUNDARY-CONTRACT-20260925.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW1.json -text whitespace=cr-at-eol
+operations/feedback/2026-09-25-scope1-continue.md -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-checks.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-final-pins.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-native-first.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-native.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-c2-supplement.ts -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2-PREFREEZE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE2.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW2.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review3-ci.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review3.json -text whitespace=cr-at-eol
+evaluations/research-qa/m80-beta-access-independent-20260925-review4-first-result.txt -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3-PREFREEZE1.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3.json -text whitespace=cr-at-eol
+operations/agent-improvement/snapshots/M80-BETA-ACCESS-QA-20260925-REVIEW3.json -text whitespace=cr-at-eol
+prototypes/company-onboarding/readiness-review.md -text whitespace=cr-at-eol

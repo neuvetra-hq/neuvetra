@@ -1,0 +1,32 @@
+{
+  "task_id": "M80-ACTUAL-BACKUP-RECOVERY-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_failure_containment_and_recorded_schema21_recovery_review_only",
+  "evidence": {
+    "path": "evaluations/research-qa/m80-actual-backup-recovery-independent-20260924-evidence.json",
+    "sha256": "a26edaf89f00b07013f8ad2295645b266b596acdb873e74755cb34720197dbb6"
+  },
+  "restore_verdict": "fail_metadata_preservation",
+  "upgrade_authorized": false,
+  "findings": [
+    {
+      "id": "ACTUAL-RESTORE-F01",
+      "status": "open",
+      "summary": "Application records hash exactly, but default ACL and internal-trigger metadata differ after fresh restore. The actual rehearsal fails the accepted exact-preservation requirement.",
+      "impact": "No migration, admission or schema22 deployment gate may be approved from this failed rehearsal. Diagnosis and independently reviewed narrow repair remain required."
+    }
+  ],
+  "observed_result": "Independent local read-only archive/clone comparison reproduced the metadata failure. Retained records show one reserved stop attempt, one completed encrypted backup and one reserved schema21 recovery attempt with separate later SUCCESS/readiness evidence.",
+  "no_replay": [
+    "Original stop, backup and recovery journals remain consumed; never delete or replace markers or automatically replay original commands.",
+    "The recovered deployment has a new identity. Future maintenance requires freshly reviewed target/versioned helpers and a new explicit operation with retained old journals.",
+    "Fresh evidence must be collected again; old15-minute observations and failed rehearsal do not grant a later stage gate."
+  ],
+  "limits": [
+    "Provider observations and signed-in browser demonstration were collected by root; QA checked retained artifact bindings and chronology, not a new live provider/browser session.",
+    "Record absence establishes no local M80 migration intent in the accepted naming scope; it is not proof of every possible external action. Root reports no migration/admission/deployment22, consistent with retained schema21 inspection and recovery readiness.",
+    "Exact application-content hash covers the captured application scope; it does not establish permission/trigger equivalence or a full provider/account backup.",
+    "No credential or ENV access, hosted/provider/network/Git action, mutation of the failed local clone, or approval/gate creation by QA.",
+    "Durable journals show one recorded attempt each; QA did not independently audit all provider-side request logs."
+  ]
+}

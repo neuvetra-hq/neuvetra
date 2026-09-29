@@ -1,0 +1,106 @@
+{
+  "status": "prepared_not_executed",
+  "purpose": "Exact baseline source dependency pins; no native database inspected",
+  "files": [
+    {
+      "path": "packages/neuvetra-database/src/migrations/0001_company_workspace.sql",
+      "sha256": "cc596137d3011d400d3b253ebb52994bafe47f716c22601c4a316de259d7d739"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0002_synthetic_bill_intake.sql",
+      "sha256": "8c6b46209410d5611b1462ba694047dd4eb06dccf9de55fe65cee1d5bb9c6321"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0003_synthetic_bill_calculation.sql",
+      "sha256": "5be4da91ceb3611e77cba8bb669685e22571a789e6d44c973e945c094daf6ef6"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0004_inventory_review.sql",
+      "sha256": "da81e7753714cef177c0c2cde5584bf921f42fbcd456f90ceee6065323eb6213"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0005_annual_electricity_register.sql",
+      "sha256": "3f288d293c93132c422505f8daf7fc6e52eac8e33128a248cd4e9ba5cb946b35"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0006_inventory_evidence_pack.sql",
+      "sha256": "2b786ee7c90b6cd65e398b0c8422d9e76f851a789a5318a7715039e123249dfd"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0007_inventory_draft_report.sql",
+      "sha256": "d8ff4e057d735405ce7763659df2c3241e4e9408bc31dac7f7a07e445bd72a81"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0008_inventory_draft_report_review.sql",
+      "sha256": "c5e81967a5dcb08055d452816a1e687b204c59c6396014190897f965abc4a1cc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0009_private_staging.sql",
+      "sha256": "10a0be42649a86fbf2f0e2ab826e6d856dfbe591a1090dc39b3d4872dc191e3f"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0010_manual_electricity_worksheet.sql",
+      "sha256": "97e292bcd4a9b5307d36326d429abf608783b231220c0305d386eb85cca2ca52"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0011_worksheet_reports.sql",
+      "sha256": "a597d9b479321f308efa8de880a814c2ebd8dc29afa43fbff10a41a07ff66a99"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0012_source_electricity_worksheet.sql",
+      "sha256": "1e1cc0742cdb3f6f48301202923a1405b2aa21a02010cf8d5233cfef8a5d1a26"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0013_annual_electricity_worksheet.sql",
+      "sha256": "6ff7c3d21766d5e07a9f922ea92a0c59e7f34a685104d640d09dccf9872eb763"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0014_annual_electricity_evidence.sql",
+      "sha256": "81686f3c62f8130a60dbbc096ae758eb6d56ecd80df3d533621a1990ae33d425"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0015_corporate_coverage.sql",
+      "sha256": "2766561decde3ea64bf56f30b1b67a9144318e14b6efecaa71e05e8ae6351d19"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0016_stationary_natural_gas.sql",
+      "sha256": "aa4968c63087f353b5bf80d64bced67270bc5ad17f715393b40313bb57f7f732"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0017_mobile_diesel.sql",
+      "sha256": "4486f83e2f2f6e5cb8db5991575a74f540b891eefd1ff65317801545c5b6c071"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0018_controlled_fleet.sql",
+      "sha256": "76c8a17a46d96b40ed98213ceb3cf79caf564c5a639583197bd0adaf1c8a98f3"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0019_stationary_sources.sql",
+      "sha256": "ed08001bb2df201133734d1db36b2739046ac0af82e45d8054dcf8f9ad5485f8"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0020_fugitive_sources.sql",
+      "sha256": "11d0b4667b28849c4d3e8c449344c23d5db2c29ef0ce14229d46a39291d932bc"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0021_scope1_inventory.sql",
+      "sha256": "546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736"
+    },
+    {
+      "path": "packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql",
+      "sha256": "0ee148b366e803e8cf28187393f9e5a6f19b29f5bb54578e359db7cbcd795e35"
+    },
+    {
+      "path": "packages/neuvetra-database/src/hosted.ts",
+      "sha256": "c4fafae30771701cab3030d65443e6afae560cdce3742285ab14a2b4f3f58201"
+    },
+    {
+      "path": "packages/neuvetra-database/src/workspace.ts",
+      "sha256": "8541837f85d78aae412c507f3c40d9fa2ccfdf47b54ccf509f9a3811915ce326"
+    },
+    {
+      "path": "packages/neuvetra-database/src/staging-migrations.ts",
+      "sha256": "47b3f28d7af9bcd6b57cb71d9377ea5f735ab5647c592723306e13f2d6df6eeb"
+    }
+  ]
+}

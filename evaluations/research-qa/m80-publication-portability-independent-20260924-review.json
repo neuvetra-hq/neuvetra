@@ -1,0 +1,59 @@
+{
+  "task_id": "M80-PUBLICATION-PORTABILITY-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "pass_publication_record_portability_repair_and_additive_helpers_only",
+  "failed_published_head": "ec02446b3b529db68e2d2d7b2cfc50b0aaaaadcd",
+  "source_pins": [
+    {
+      "path": "operations/agent-improvement/runs/M80-FOUNDATION-HOSTED-PREP-20260924.json",
+      "sha256": "36aa4e9859b43914480daeca70d2a12eeba45f10c901540c28b7e0b79d5a07aa"
+    },
+    {
+      "path": "operations/agent-improvement/runs/M80-HOSTED-EXECUTOR-PREP-20260924.json",
+      "sha256": "2928b52c16eba5b7613d5a008ef786ddd6953ac9a1dca4012a8707b8ba4f014b"
+    },
+    {
+      "path": "operations/agent-improvement/runs/M80-STAGE-BUNDLE-COMPOSE-20260924.json",
+      "sha256": "4b98a61be804bbd0d73ebbe8e2637b0d3d65da790ea40045c8f231af3c263d63"
+    },
+    {
+      "path": "evaluations/research-qa/m80-setup-ci-success-20260924.json",
+      "sha256": "1ed58c25a426910401ada622c32039b205b25be6e8a5bafc689eeb94c3ac9b4f"
+    },
+    {
+      "path": "evaluations/research-qa/m80-publication-portability-repair-20260924.json",
+      "sha256": "936d5e5e1fd952eb3925b6dfb8145a78fb9a0c37f76d0c1c8283c581bb125e4b"
+    },
+    {
+      "path": "evaluations/research-qa/m80-hosted-upgrade-first-ci-20260924.json",
+      "sha256": "bdb45be63a6b57fe64b566dfdb76b76b9d2d21f8b9403dae239f19ad94809257"
+    },
+    {
+      "path": ".superpowers/m80-compose-hosted-input-v3.py",
+      "sha256": "c6288c9ca10f5e0852bcc4ee1770a8d9a9d6cb9b9c522459ec681787dcc835a0"
+    },
+    {
+      "path": ".superpowers/m80-publish-hosted-portability.py",
+      "sha256": "4038a49a7d82881bf56a376234cd9b4bb233a2db596750fe39298a42920a15a9"
+    }
+  ],
+  "checks": {
+    "path": "evaluations/research-qa/m80-publication-portability-independent-20260924-checks.json",
+    "sha256": "a0a9d92a5f0639638f50ff28c485d650c4fef57febdc8301dd6db8214b08da15"
+  },
+  "material_findings_open": 0,
+  "conclusion": "Three active run records now reference exact public immutable snapshots instead of ignored helper paths. Each records one escaped portability defect and preserves original first-review history. The missing public CI success receipt restores the fourth clean-checkout dependency. Composer v3 and the correction publisher retain accepted control logic with exact named substitutions and LF normalization.",
+  "validation": {
+    "valid": true,
+    "roles": 11,
+    "runs": 259
+  },
+  "boundaries": [
+    "No product, runtime, migration, backup, executor or prior snapshot bytes changed by this repair.",
+    "Both additive helpers were statically inspected and parsed, not executed. Accepted predecessor behavior is reused only after exact substitution equivalence.",
+    "The forthcoming changed-files-only manifest requires separate exact-file/hash acceptance and root immediate hash assertions; all six successful corrective exact-head remote checks remain required before maintenance.",
+    "Publisher retains new exclusive fsynced attempt/receipt names; it cannot reuse or replace original publication journals. It does not embed independent manifest approval, so root caller must verify exact manifest/review/source hashes before normal non-optimized Python invocation.",
+    "Remote failure observation is attributed to root; QA independently reproduced the repaired local clean-checkout result.",
+    "Continuation helper review661 was emitted after root continuation began and is later static corroboration, not a retroactive pre-invocation assertion. Actual caller pin checks are root-reported."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root",
+  "observed_at": "2026-09-24T22:58:32.606822+00:00",
+  "verdict": "accept_reviewed_ci_repair_for_publication",
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-ci-repair-independent-20260924.json",
+    "sha256": "7e07a9c9bb9db5b123a7f7c406008e60b06d8be8ebe47632b27e5de3743632dd"
+  },
+  "review_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-CI-REPAIR-QA-20260924-DELIVERABLE.json",
+    "sha256": "20d7d24d90379bd7baee66ef7eee2b625d0495bb35272dd6366582a99ffabd44"
+  },
+  "candidate_inputs": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-SCHEMA-REPAIR-20260924-CANDIDATE2.json",
+      "sha256": "50d656d9beda2d1c6d014e558e2b4efb1529c5c670f3591d0577c82c466b87d4"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-PACKAGING-20260924-CANDIDATE1.json",
+      "sha256": "ced1b1604916ef49eb67c1b3c25f357159727bc7810050fdb203a8b1105e7259"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-CI-REPAIR-STATUS-20260924-CANDIDATE2.json",
+      "sha256": "2adc3c6fa91f2cc1edd4e4f14b129db88f62320dacaadcb576863fcb4a2b0a19"
+    }
+  ],
+  "root_observations": [
+    "Verified exact candidate and independent review source bytes.",
+    "Read novel fixture corruption probes and complete suite/COPY partition audit.",
+    "Root reproduced84 current suites/890assertions,10GETbehavior/201assertions,2local guards/18assertions with1native skip,2portable/14assertions,25downstream/104assertions.",
+    "Board approved local synthetic setup flow; live540c/schema21 unchanged."
+  ],
+  "limits": [
+    "Offline repair acceptance only. Actual Linux Docker/native and all six exact-head checks remain required.",
+    "Hosted preparation/executor, migration and deployment remain separate and unaccepted."
+  ]
+}

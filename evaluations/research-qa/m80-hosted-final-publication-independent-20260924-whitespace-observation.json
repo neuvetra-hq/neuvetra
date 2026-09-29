@@ -1,0 +1,13 @@
+{
+  "head": "7f68f4509074f817e5b584c6f8bcb29d1d32392e",
+  "branch": "codex/corporate-mvp",
+  "manifest_sha256": "816c15c27f40ee0a49b0a2d0fa341283f0b4dd4e76089a07b582fde95ea41ffc",
+  "review_sha256": "9aa811c9fedebae723340c4702cd2df558087ed5cade3380c7b550dc6c5c174c",
+  "existing_intent_sha256": "2f9a3bf617d051d14f435ea4cb5622355c432578af6459cc918409637030cba6",
+  "staged_exact_paths": 318,
+  "staged_blob_sha256_matches": 318,
+  "publication_receipt_absent": true,
+  "diff_check_exit_code": 2,
+  "exact_diff_check_stdout": "docs/research/m80-foundation-hosted-preparation-v2-addendum-20260924.md:3: trailing whitespace.\n+Date: 2026-09-24  \nevaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts:142: new blank line at EOF.\n",
+  "boundary": "Read-only local Git inspection only; no index/commit/ref/network mutation."
+}

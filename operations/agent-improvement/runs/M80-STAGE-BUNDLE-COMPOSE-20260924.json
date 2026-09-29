@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "id": "M80-STAGE-BUNDLE-COMPOSE-20260924",
+  "role": "software-engineering",
+  "execution_context": "/root/m80_foundation_runtime",
+  "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
+  "artifacts": [
+    {
+      "path": "docs/research/m80-stage-bundle-compose-20260924.md",
+      "sha256": "a875e4911893ad8bff4cc2db6796572cc5e28b4d3c61a18ad1693f976e6ba443"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json",
+      "sha256": "e82ada0e952e803daba15b7463cddef52503b80d98d9e4b083806d73c2a9bbfe"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-read-only-input-validation",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json",
+        "docs/research/m80-stage-bundle-compose-20260924.md"
+      ],
+      "reason": "The helper reads explicit paths, computes exact byte pins, opens typed plan, gate, plan evidence and predecessor chains, reconstructs the sealed intent, and validates the accepted executor review and recursive source closure before output."
+    },
+    {
+      "id": "AC-02-deterministic-exclusive-secret-free-output",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json"
+      ],
+      "reason": "Only the operation-scope and stage-derived .superpowers bundle path is permitted; the accepted synced exclusive writer refuses an existing path. The helper contains no credential, database, provider, network or Git transport."
+    },
+    {
+      "id": "AC-03-bounded-author-checks",
+      "status": "pass",
+      "evidence": [
+        "docs/research/m80-stage-bundle-compose-20260924.md",
+        "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json"
+      ],
+      "reason": "The write-free self-check accepted a complete deployment chain and refused a foreign predecessor outcome; targeted TypeScript compilation and Bun bundling passed."
+    },
+    {
+      "id": "AC-04-independent-review",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-stage-bundle-compose-independent-20260924-review.json",
+        "evaluations/research-qa/m80-stage-bundle-compose-root-closure-20260924.json"
+      ],
+      "reason": "Separate independent offline review and root exact-source acceptance passed."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-stage-bundle-compose-independent-20260924-review.json",
+      "evaluations/research-qa/m80-stage-bundle-compose-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "docs/research/m80-stage-bundle-compose-20260924.md",
+        "sha256": "a875e4911893ad8bff4cc2db6796572cc5e28b4d3c61a18ad1693f976e6ba443"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json",
+        "sha256": "e82ada0e952e803daba15b7463cddef52503b80d98d9e4b083806d73c2a9bbfe"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": 1,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-sol",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "M80 synthetic Scope 1 beta hosted stage bundle composition",
+  "applicable_lessons": [
+    "L02",
+    "L04",
+    "L05"
+  ],
+  "source_artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-EXECUTOR-PREP-20260924-CANDIDATE9.json",
+      "sha256": "1e62195be433c6a5ed3cc5a68ab789845b093107a0e41ea4f37c324d0c5b1481"
+    },
+    {
+      "path": "evaluations/research-qa/m80-executor-independent-20260924-candidate9-review.json",
+      "sha256": "b589b0ab127cb537c91f9c80e584382255a45cf537a1703104ee4df4f31174a2"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-FOUNDATION-HOSTED-PREP-20260924-CANDIDATE6.json",
+      "sha256": "ad834aee260dd732988b00b6d0f6e9ea4df64bdc1544064c0e87e8cc819a3c0a"
+    }
+  ],
+  "notes": [
+    "Requested model and effort are inherited from the registered software-engineering route. Observed model and effort remain unavailable and are recorded separately.",
+    "Candidate 1 is offline and secret-free. No credential read, network, provider, database, hosted, Git, plan, gate, review, intent or predecessor evidence creation occurred.",
+    "The accepted executor run remains closed and unchanged. This bounded run records only the optional bundle-composition convenience helper and its sanitized reproducibility artifacts.",
+    "Published ec02446b exposed nonportable private evidence references in CI. Active run links now use already-reviewed public immutable snapshots containing the exact private source bytes. Historical published run remains in Git; no accepted source or snapshot changed. Escaped portability defect recorded separately from implementation acceptance."
+  ]
+}

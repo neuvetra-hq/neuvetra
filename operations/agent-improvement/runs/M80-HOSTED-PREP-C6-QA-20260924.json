@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "M80-HOSTED-PREP-C6-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE6-DELIVERABLE.json",
+      "sha256": "ec0dc09ac5132a1149fdb1a7d071161d9a6eaf754248075e52de19e6a3515d41"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "V2_CHRONOLOGY",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-hosted-prep-independent-20260924-candidate6-review.json"
+      ],
+      "reason": "Exact additive C6 chronology, actual prior native receipts, current historical closure and all-stage identical no-replay paths pass independent offline challenge."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-hosted-prep-v2-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CANDIDATE6-DELIVERABLE.json",
+        "sha256": "ec0dc09ac5132a1149fdb1a7d071161d9a6eaf754248075e52de19e6a3515d41"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Bounded independent Prep C6 supplement; prior closed C5 run and failed executor C7 review unchanged. Offline only.",
+    "Root verified exact C6 and QA embedded/current bytes; accepted bounded v2 preparation only. Historical C5 sources and closure preserved."
+  ],
+  "source_artifacts": []
+}

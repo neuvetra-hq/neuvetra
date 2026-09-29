@@ -1,0 +1,72 @@
+{
+  "manifest": {
+    "path": ".superpowers/m80-normalized-upgrade-publication-manifest.json",
+    "sha256": "1e1ae6f1f8b4958dd38f5be99bc784ccfe868e3be708cd5f39b4d905e1961c7f"
+  },
+  "file_count": 108,
+  "total_bytes": 9519514,
+  "file_or_overlay_mismatches": [],
+  "embedded_entries_checked": 148,
+  "embedded_hash_mismatches": [],
+  "historical_embedded_current_differences": [
+    [
+      "operations/agent-improvement/snapshots/M80-NORMALIZED-EXECUTOR-CONSUMER-20260925-CANDIDATE1.json",
+      "docs/research/m80-normalized-executor-consumer-20260925.md"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json",
+      ".superpowers/m80-foundation-hosted-once-v3.ts"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json",
+      ".superpowers/m80-foundation-hosted-preparation-v3.test.ts"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORTS-20260925-CANDIDATE1.json",
+      ".superpowers/m80-provider-recover21-recovered.py"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORTS-20260925-CANDIDATE1.json",
+      "docs/research/m80-recovered-target-transports-20260925.md"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+      ".superpowers/m80-backup-v2-core.ts"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+      ".superpowers/m80-backup-v2-core.test.ts"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+      ".superpowers/m80-backup-v2-rehearsal.ts"
+    ],
+    [
+      "operations/agent-improvement/snapshots/M80-RESTORE-NORMALIZATION-V2-20260925-CANDIDATE1.json",
+      "docs/research/m80-restore-normalization-v2-20260925.md"
+    ]
+  ],
+  "private_active_criterion_references": [],
+  "private_owner_value_hits": [],
+  "credential_pattern_candidate_paths": [],
+  "crlf_files": [
+    "operations/agent-improvement/snapshots/M80-NORMALIZED-COMPOSER-INTEGRATION-CHECK-20260925-DELIVERABLE.json",
+    "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json",
+    "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json",
+    "operations/board-report.md",
+    "operations/next-session.md"
+  ],
+  "missing_crlf_exact_rules": [],
+  "attribute_additions": [
+    "operations/agent-improvement/snapshots/M80-NORMALIZED-COMPOSER-INTEGRATION-CHECK-20260925-DELIVERABLE.json -text whitespace=cr-at-eol",
+    "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE1.json -text whitespace=cr-at-eol",
+    "operations/agent-improvement/snapshots/M80-NORMALIZED-PREP-CONSUMER-20260925-CANDIDATE2.json -text whitespace=cr-at-eol"
+  ],
+  "existing_run_changed_fields": {},
+  "clean_validation": {
+    "exit_code": 0,
+    "stdout": "{\n  \"valid\": true,\n  \"roles\": 11,\n  \"runs\": 271\n}\n",
+    "stderr": ""
+  },
+  "no_git_provider_credentials_or_db_calls": true
+}

@@ -1,0 +1,47 @@
+{
+  "observed_at": "2026-09-24T23:05:34.127363+00:00",
+  "pr": "https://github.com/neuvetra-hq/neuvetra/pull/6",
+  "sha": "7f68f4509074f817e5b584c6f8bcb29d1d32392e",
+  "pr_head": "7f68f4509074f817e5b584c6f8bcb29d1d32392e",
+  "draft": true,
+  "state": "open",
+  "checks": [
+    {
+      "name": "Native PostgreSQL worksheet and tenant regression",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GHG calculation specifications and engine",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Offline research catalog tests",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Dedicated staging image and offline runtime smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Typecheck, lint, unit tests and web builds",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Role routing and evidence records",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "status": "pending",
+  "status_count": 0,
+  "verdict": "six_exact_head_checks_passed",
+  "legacy_combined_status_note": "No legacy status contexts exist; six check-runs above are the required result.",
+  "hosted_deployment": false,
+  "live_application": "540c71dbea6057f35a8b44074a71ceb9cf6bd6c3",
+  "live_schema_last_observed": 21
+}

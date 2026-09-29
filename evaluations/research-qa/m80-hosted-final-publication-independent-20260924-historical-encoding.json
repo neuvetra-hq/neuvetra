@@ -1,0 +1,66 @@
+[
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-scalar-probes.ts",
+    "declared_raw_sha256": "de4961fa7b612468d8cfb7f1d57830b99cb5b3718ab34ef952ac227ba4d064d9",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-CONTROLS-AND-SCALARS.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-controls.test.ts",
+    "declared_raw_sha256": "92e5ee1579a5caa620c5f488c499e0b6897925573baf0741fd3b8fa5ca5015cd",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-fixture.ts",
+    "declared_raw_sha256": "559689df886a152ff74e2ad472fdb2d5fff742b62272c68682bc06605bca948c",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-probes.ts",
+    "declared_raw_sha256": "e7b39fb9e7fb0255cb978503b6f2e9898cce78c9640f8e2f422562027daf1bec",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-REVIEW.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-evidence-probes.ts",
+    "declared_raw_sha256": "6531d75d2adcdc078639c0010d1f4076c553e2f2eaa91ca14ebb5df2048da273",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-cli-probes.ts",
+    "declared_raw_sha256": "d82c034b563b593ef04e3673d9377545d215a3870698533bcbb487745fa9124f",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-path-probes.ts",
+    "declared_raw_sha256": "4b93265affbbf5df9bc3c921ea6f0d5631e1b9bdbb5bbc2b4b70d45ebdf69b5f",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  },
+  {
+    "container": "operations/agent-improvement/snapshots/M80-HOSTED-PREP-QA-20260924-FIRST-SUPPLEMENT.json",
+    "embedded_path": "evaluations/research-qa/m80-hosted-prep-independent-20260924-chronology.ts",
+    "declared_raw_sha256": "3ab78bb7a8a970577abc6783c31eb278fba55a2b3bd87619e30030e2d92c89e7",
+    "raw_source_bytes_match": true,
+    "embedded_equals_lf_normalized_raw": true,
+    "current_acceptance_authority": false
+  }
+]

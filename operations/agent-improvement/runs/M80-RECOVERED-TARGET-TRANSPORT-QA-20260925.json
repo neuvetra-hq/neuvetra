@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "M80-RECOVERED-TARGET-TRANSPORT-QA-20260925",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORT-QA-20260925-FIRST-REVIEW.json",
+      "sha256": "263f93efb15b1a0c88c5c331aea3cbb8df71c6a636c13cd00a2263efd33e6db0"
+    },
+    {
+      "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORT-QA-20260925-DELIVERABLE.json",
+      "sha256": "d2c8f34c04bc7c7d9d31bb29365a3d972eba4eaba721d6060d2f8f6e618d9ebe"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01-exact-source-and-independent-negative-controls",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-recovered-target-transports-independent-20260925-review.json",
+        "evaluations/research-qa/m80-recovered-target-transports-independent-20260925-checks.json"
+      ],
+      "reason": "Exact frozen candidate and corrected entrypoint closure challenged with isolated transport regressions."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-recovered-target-transports-root-closure-20260925.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORT-QA-20260925-FIRST-REVIEW.json",
+        "sha256": "263f93efb15b1a0c88c5c331aea3cbb8df71c6a636c13cd00a2263efd33e6db0"
+      },
+      {
+        "path": "operations/agent-improvement/snapshots/M80-RECOVERED-TARGET-TRANSPORT-QA-20260925-DELIVERABLE.json",
+        "sha256": "d2c8f34c04bc7c7d9d31bb29365a3d972eba4eaba721d6060d2f8f6e618d9ebe"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "parent_outcome": "Independent bounded recovered-target transport source review",
+  "applicable_lessons": [
+    "L02",
+    "L04"
+  ],
+  "notes": [
+    "Independent reviewer is not transport author; requested Astra/high, observed settings unknown. Existing agent reused at root dispatch. C1 refusal retained, C2 targeted recheck passes. No stage approval.",
+    "Root accepted QA delivery; independent source review by QA remains release basis. C1 failure preserved, no actual gate or operation accepted."
+  ]
+}

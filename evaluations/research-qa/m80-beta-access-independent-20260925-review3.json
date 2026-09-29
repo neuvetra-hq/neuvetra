@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "task_id": "M80-BETA-ACCESS-QA-20260925",
+  "candidate": 3,
+  "reviewer": "/root/m80_beta_access_qa",
+  "independent": true,
+  "verdict": "fail",
+  "material_findings_open": 1,
+  "candidate_snapshot": {
+    "path": "operations/agent-improvement/snapshots/M80-BETA-ACCESS-IMPLEMENTATION-20260925-CANDIDATE3.json",
+    "sha256": "77aba791a6b48e1306138a1bb62cddb16ee99ab4ee4531802921ffbe07a51f7c"
+  },
+  "author_evidence_sha256": "c2be6bb9b39a5da28de3a5048b5f3c573d65ccbad3a781b06e746aa054e5d7b4",
+  "report": {
+    "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3.md",
+    "sha256": "e1633b02bb13264e4d45ab93759bd65a6aed02b0c19a65cec602b63e72b71c06"
+  },
+  "changed_files": [
+    ".github/workflows/verify.yml",
+    "packages/neuvetra-database/src/index.ts",
+    "evaluations/research-qa/m80-beta-access-author-20260925.json"
+  ],
+  "runtime_sql_listener_candidate2_parity": true,
+  "index_matches_ecb5b9d3": true,
+  "findings": [
+    {
+      "id": "CI-C3-F01",
+      "priority": 2,
+      "status": "open",
+      "summary": "PostgreSQL17 CI package installation lacks signed repository setup or proven existing package availability.",
+      "evidence_kind": "Frozen workflow plus primary upstream configuration; new Linux execution not performed."
+    }
+  ],
+  "passed": [
+    "Exact18 current/embedded bytes",
+    "Only2 source deltas plus updated author evidence",
+    "Index exact pre-access base",
+    "98-file source import graph without beta edges;66 database files copied and allowed by Docker context",
+    "Local index/staging in-memory bundles",
+    "YAML/server17/client version guards/PATH/real native restore retained"
+  ],
+  "evidence": [
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3-graph.json",
+      "sha256": "61564ea4b5a96a5ae4a481a83763dff017bed317ba60cb3f95b6cf05325bb73e"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3-ci.json",
+      "sha256": "6a9b40396a0be2ff1d260da49389e3bccf101b41b6663f1e4d6d36e84c099e4c"
+    },
+    {
+      "path": "evaluations/research-qa/m80-beta-access-independent-20260925-review3-checks.ts",
+      "sha256": "85c448e8682ca03377fc1d017fe4ffdf0e1e6754da34a5b99f43989cc4fcce6b"
+    }
+  ],
+  "primary_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/actions/runner-images/main/images/ubuntu/scripts/build/install-postgresql.sh",
+      "support": "Lines10-30 create then remove PGDG repository and key."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/actions/runner-images/main/images/ubuntu/Ubuntu2404-Readme.md",
+      "support": "PostgreSQL16.15 in documented Ubuntu24.04 runner inventory."
+    },
+    {
+      "url": "https://www.postgresql.org/download/linux/ubuntu/",
+      "support": "Configure official signed PGDG repository for supported major not supplied by distribution."
+    }
+  ],
+  "candidate2_local_acceptance_preserved": true,
+  "escaped_remote_defects_preserved": 2,
+  "new_native_rehearsal": false,
+  "local_package_install": false,
+  "remote_ci_executed": false,
+  "actual_cost_usd": null
+}

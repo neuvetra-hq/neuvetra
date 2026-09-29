@@ -1,0 +1,8 @@
+{
+  "boundary": "Exact frozen C4 private preflight function; synthetic DB only",
+  "attribution": "Root identified, author disclosed before independent reproduction",
+  "stage": "admission",
+  "currentApplicationStateCaptureCalls": 0,
+  "admittedDespiteUnobservedGateState": true,
+  "conclusion": "C4 schema22 preflight checks receipt count/final migration/target but never captures or compares live application state against gate.currentApplicationStateSha256."
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "case": "nested_expected_table_arrays",
+    "accepted": [
+      [
+        "scope1_beta_audit"
+      ],
+      [
+        "scope1_beta_fixture_admissions"
+      ],
+      [
+        "scope1_beta_release_records"
+      ],
+      [
+        "scope1_beta_requests"
+      ],
+      [
+        "scope1_beta_setup_heads"
+      ],
+      [
+        "scope1_beta_setup_versions"
+      ]
+    ]
+  },
+  {
+    "case": "nested_sequence_arrays",
+    "accepted": [
+      [
+        "migration"
+      ],
+      [
+        "admission"
+      ],
+      [
+        "deployment"
+      ]
+    ]
+  },
+  {
+    "case": "admission_before_migration",
+    "migrationRecorded": "2026-09-24T22:12:00.000Z",
+    "admissionCreated": "2026-09-24T22:11:00.000Z",
+    "admissionObserved": "2026-09-24T22:11:30.000Z",
+    "accepted": "deployment"
+  }
+]

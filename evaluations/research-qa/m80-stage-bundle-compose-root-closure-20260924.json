@@ -1,0 +1,23 @@
+{
+  "reviewer": "/root",
+  "verdict": "accepted_offline_stage_bundle_composer_only",
+  "candidate": {
+    "path": "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-20260924-CANDIDATE1.json",
+    "sha256": "e82ada0e952e803daba15b7463cddef52503b80d98d9e4b083806d73c2a9bbfe"
+  },
+  "qa_bundle": {
+    "path": "operations/agent-improvement/snapshots/M80-STAGE-BUNDLE-COMPOSE-QA-20260924-DELIVERABLE.json",
+    "sha256": "90b5c71defb0893672f40b882ad3bbce99aa16aec267bc86756657e6a91b855a"
+  },
+  "independent_review": {
+    "path": "evaluations/research-qa/m80-stage-bundle-compose-independent-20260924-review.json",
+    "sha256": "2ed3522d1b79ba7d1896308f26aad9c320250d7a747b59d71bd4c205242cccc7"
+  },
+  "verified_current_and_embedded_artifacts": 5,
+  "independent_cases": 21,
+  "no_live_action": true,
+  "limits": [
+    "Actual sealed stage intent and fresh independent gate remain required.",
+    "No actual stage bundle generated during acceptance."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "boundary": "Actual pinned PowerShell child; only new synthetic malformed input files; all refuse before Bun/database child creation by inspected control flow; no real export or credentials",
+  "cases": [
+    {
+      "name": "missing-field",
+      "exitCode": 1,
+      "genericRefusalOnly": true,
+      "outputAbsent": true
+    },
+    {
+      "name": "duplicate-field",
+      "exitCode": 1,
+      "genericRefusalOnly": true,
+      "outputAbsent": true
+    },
+    {
+      "name": "foreign-host",
+      "exitCode": 1,
+      "genericRefusalOnly": true,
+      "outputAbsent": true
+    }
+  ]
+}

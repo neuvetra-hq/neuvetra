@@ -1,0 +1,21 @@
+# Hosted setup fingerprint derivation Candidate 2 — independent targeted review
+
+2026-09-26. **PASS for the repaired local synthetic derivation component only.** Reviewer: `/root`, separate from the `/root/hosted_upgrade` author. A fresh QA-agent dispatch was rejected by the runtime thread limit, so this is a coordinator-led independent review of the author's frozen files, not a claimed Head-of-QA agent run or an accepted hosted upgrade. The Candidate 1 P1 FAIL and reproducer remain in `hosted-setup-01-fingerprint-independent-review.md`.
+
+The old implementation captured preservation and the upgrade catalog in separate transactions. A real concurrent `ALTER POLICY` then leaked one outsider row while the derivation returned a changed expected fingerprint and affirmative tenant-control claims. Candidate 2 opens one outer repeatable-read, read-only transaction before the fingerprint, tenant/restore capture and clone-identity read. Its transaction-bound adapter executes the nested fingerprint reads on that same transaction. It restores `row_security=on` before the restricted actor probes. The outer transaction closes before the derivation returns. Static inspection found no remaining second database transaction in the default path. Dependency seams accept only the outer transaction's `WorkspaceSql`; a caller can still lie through a malicious injected seam, so a future operator must use the reviewed default implementation.
+
+I adapted the frozen independent suite to Candidate 2's transaction-scoped interface in a new file, leaving the original failing test/result untouched. The first adapted native run stopped at an assertion for the previous view-refusal wording: the fingerprint now rejects the unsupported view first. I changed only that expected message, then reran. The final independent PostgreSQL 17 run passed **11 tests, 44 expectations**; the non-native run passed **10 tests, 29 expectations** with one expected native skip. The author's native suite was independently rerun and passed **7 tests, 39 expectations**. The private actual-fingerprint script was syntax-checked but not executed.
+
+The independent real-writer regression observed the policy writer waiting on a PostgreSQL `Lock` while the shared transaction was open. The derived fingerprint stayed equal to the pristine baseline (`ed60b721143c09306608d05707a1386287da8b39d7bffab2937d3ce9402a6a8e`). After the writer committed, the outsider could read one row, and a fresh derivation refused with `HS_RECOVERY_TENANT_PROBE_FAILED`. The test also challenged external ACL reordering/duplication and re-pinning, role and default-ACL drift, sequence called-bit drift, precise row digest drift, wrong clone identity and non-loopback address. Its fresh fixture used dynamic port 59349, not the retained actual clone port 55479; a separate listener check found no listener on 59349 after cleanup.
+
+Exact reviewed SHA-256:
+
+| File | SHA-256 |
+| --- | --- |
+| `tools/staging/hosted-setup-fingerprint-derivation.ts` | `c771648829ccf84d0136530534940e8215f8b865f1ec5e2b742eb608f070fb5b` |
+| `tools/staging/hosted-setup-fingerprint-derivation.test.ts` | `7e3add3959b2a727066768d0751cf5ae926388e5be2eaba782a72d749cad0ec3` |
+| `evaluations/research-qa/hosted-setup-01-fingerprint-derivation-author-candidate2.md` | `8b461ecb397ec842fca3eec2aabe0753e3deee2ec4d5d3c13c412f77ffb4eb2a` |
+| `evaluations/research-qa/hosted-setup-01-fingerprint-independent-candidate2.test.ts` | `be99bed01ad3a55150b58a4ca35896999cfcb7de2586b1138fb1023473e38e6f` |
+| `evaluations/research-qa/hosted-setup-01-fingerprint-independent-candidate2-result.json` | `ececd66ebb9e706c9c90f2825b0e5f73803438fca4fdc5b9880c6a2bcfc17449` |
+
+This pass does **not** establish that the retained actual clone still matches the accepted restore, that the historical source remains current on hosted staging, or that a continuously held write gate exists. PostgreSQL sequences are not ordinary MVCC data; the actual local clone must remain quiet during derivation and the live preflight must occur under the later reviewed gate. The encrypted archive and actual clone were not accessed by this review. Provider Auth/storage recovery, schema 23 migration, deployment and two-company admission remain outside this verdict.

@@ -1,0 +1,58 @@
+{
+  "database": "m80_qa_foundation_1790279919377",
+  "functions": [
+    {
+      "proname": "m80_assert_setup",
+      "prosecdef": false,
+      "proconfig": [
+        "search_path=pg_catalog, neuvetra, pg_temp"
+      ],
+      "owner": "supabase_admin",
+      "runtime": false,
+      "authenticated": false,
+      "anon": false
+    },
+    {
+      "proname": "save_scope1_beta_setup",
+      "prosecdef": true,
+      "proconfig": [
+        "search_path=pg_catalog, neuvetra, pg_temp"
+      ],
+      "owner": "supabase_admin",
+      "runtime": true,
+      "authenticated": false,
+      "anon": false
+    }
+  ],
+  "updates": [
+    {
+      "table": "scope1_beta_release_records",
+      "updateRefused": true
+    },
+    {
+      "table": "scope1_beta_fixture_admissions",
+      "updateRefused": true
+    },
+    {
+      "table": "scope1_beta_setup_heads",
+      "updateRefused": true
+    },
+    {
+      "table": "scope1_beta_setup_versions",
+      "updateRefused": true
+    },
+    {
+      "table": "scope1_beta_requests",
+      "updateRefused": true
+    },
+    {
+      "table": "scope1_beta_audit",
+      "updateRefused": true
+    }
+  ],
+  "sequenceUseRefused": true,
+  "duplicateAndExpiredRegistryRefused": true,
+  "registryRestored": true,
+  "actualPostgres": true,
+  "syntheticOnly": true
+}

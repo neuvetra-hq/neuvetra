@@ -1,0 +1,73 @@
+{
+  "task_id": "M80-COORDINATOR-HELPERS-QA-20260924",
+  "reviewer": "/root/m80_foundation_runtime_qa",
+  "verdict": "fail_static_helper_review",
+  "source_pins": [
+    {
+      "path": ".superpowers/m80-publish-hosted-reviewed.py",
+      "sha256": "14d7b932dab50e3b7664d12865abda4249a29d6fdd3239ed1ae983e4c070a483"
+    },
+    {
+      "path": ".superpowers/m80-provider-observe-readonly.py",
+      "sha256": "8fa3005c233857c6c208ce5b374be852cca50275a321d5cb1f5fb12f1709b227"
+    },
+    {
+      "path": ".superpowers/m80-compose-hosted-input.py",
+      "sha256": "381c248eaf733d5157fb0997cdc43248baf3869dbfc699a342e537187d51bcc5"
+    }
+  ],
+  "material_findings_open": 3,
+  "method": "Read exact source, parse Python AST without importing/executing helpers, compare generated receipt structures with accepted Prep C6 and Backup C3 collectors. No mocked or real helper execution.",
+  "findings": [
+    {
+      "id": "COORD-F01",
+      "severity": "high",
+      "path": ".superpowers/m80-compose-hosted-input.py",
+      "line": 29,
+      "summary": "Composer creates integration acceptance without checking the accepted integration evidence.",
+      "evidence": "The generated receipt sets verdict pass and both runtimeIntegrationAccepted/uiIntegrationAccepted true. No runtime/UI/integration review or root acceptance receipt is loaded; provenance lists only supplied observation/CI/backup/rehearsal/owner files. Accepted v2 validator expects precisely these generated booleans, so body consistency cannot supply missing approval provenance.",
+      "repair": "Require exact accepted runtime/UI/integration review and closure pins, verify their candidate and scope, and bind the output head to actual reviewed publication provenance before generating derived integration receipt."
+    },
+    {
+      "id": "COORD-F02",
+      "severity": "high",
+      "path": ".superpowers/m80-compose-hosted-input.py",
+      "line": 25,
+      "summary": "Composer promotes incompletely validated source observations into stronger schema/identity/synthetic/permission assertions.",
+      "evidence": "Source profiles are unchecked. DB source schema/readOnly/synthetic flags, provider project/autodeploy/readiness profile and exact environment/service, and owner verification booleans are not all validated before hardcoding schema21/paused/synthetic/membership claims. CI only checks six successful rows, not exact names/PR6/freshness. Output sidecar hashes prove which bytes were supplied, not that the derived assertions follow from them.",
+      "repair": "Validate exact known receipt profiles, fixed target identity, exact schema and immutable accepted collector pins, required true flags and canonical fresh timestamps; validate exact six unique required names and reviewed PR/head. Preserve genuine timestamps and reject contradictory input before exclusive output writes.",
+      "downstream_boundary": "Accepted v2 validator independently refuses malformed check names/stale timestamps and mismatching backup/rehearsal bodies. It cannot recover source facts or approval evidence omitted by composition."
+    },
+    {
+      "id": "COORD-F03",
+      "severity": "medium",
+      "path": ".superpowers/m80-provider-observe-readonly.py",
+      "line": 4,
+      "summary": "Observer executes the stop-helper dependency before checking its reviewed hash.",
+      "evidence": "spec.loader.exec_module(s) runs on line4; digest assertion runs on line5 using the already-loaded module. A changed dependency is executed before refusal.",
+      "repair": "Hash the dependency bytes with local standard-library code and compare the accepted digest before importing it."
+    }
+  ],
+  "publication_disposition": {
+    "verdict": "pending_exact_manifest_review",
+    "manifest_present_at_review": false,
+    "safe_mechanics_observed": [
+      "Fixed base and branch, empty initial index, workspace-relative non-private paths, exact file hash verification.",
+      "Exclusive fsynced intent and pathspec precede staging; exact staged set and staged bytes checked.",
+      "Commit parent/content checks and remote-head equality; receipt explicitly records required checks pending."
+    ],
+    "remaining_authority_boundary": "The current helper only checks bytes of manifest.reviews; an empty list or arbitrary review file is not rejected. It does not verify review verdict/reviewer or bind reviewed file set to the manifest. Publication requires a separately accepted exact manifest with verified execution-time hash, or a concrete canonical manifest-review check in the helper. No inventory acceptance is issued here.",
+    "ci_boundary": "Publishing records checks pending. Six fresh exact-head checks remain a separate gate before maintenance."
+  },
+  "receipt_compatibility_observed": [
+    "Generated target/admission receipts omit their own pins when written, matching v2 expected receipt structure.",
+    "Backup receipt fields copied except profile/projectRef match accepted Backup C3 body shape; v2 later checks exact content.",
+    "Restore/preservation/migration completion equality and actual backup receipt hash checked.",
+    "DB input shape must be Backup C3 preflight/inspection with applicationStateSha256 plus table inventory; accepted stage collector uses currentApplicationStateSha256 and omits table-name list, so it is not interchangeable."
+  ],
+  "limits": [
+    "Static review only; no helper import/run, subprocess, network, credentials, Git, provider, DB or actual publication.",
+    "No signed-in IDs, private receipt contents or secrets copied into this report.",
+    "Final publication manifest absent; final inventory and exact reviewed manifest digest remain unreviewed."
+  ]
+}

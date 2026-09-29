@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-SETUP-LIVE-STOP-REPAIR3-QA-01",
+  "role": "qa-lead",
+  "execution_context": "/root/compose_qa",
+  "prompt_sha256": "0b947520b2f109b5ffbfe2724cb4ea68ef5372150dacf67c34efa0e6bb48bd94",
+  "artifacts": [
+    {
+      "sha256": "36b11383bd2574d5cf621fa1774dff4727532b2b5306a3aa89614442ff7e0e94",
+      "path": "evaluations/research-qa/hosted-setup-01-live-stop-independent-review4.md"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "F06_MODULE_RESTORATION",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review4.md"
+      ],
+      "status": "fail",
+      "reason": "Unchanged independent follow-on probe observes replaced fs.open and synthetic failure closing previous faulted journal;8 pass1 fail43."
+    },
+    {
+      "id": "UNCHANGED_SOURCE_AND_CHECKS",
+      "evidence": [
+        "evaluations/research-qa/hosted-setup-01-live-stop-independent-review4.md"
+      ],
+      "status": "pass",
+      "reason": "Source hash unchanged, prior F01-F05 bounded PASS carries forward; combined38/201 and strict TS pass without disproving F06."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": null,
+    "independent": false,
+    "verdict": "pending",
+    "evidence": [],
+    "reviewed_artifacts": []
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "pending",
+    "material_findings_open": 1,
+    "rework_cycles": null,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Repeat F06 FAIL preserved; QA1-QA3 untouched. QA artifact review/packaging pending; no self-review.",
+    "No source authorship/edits or live provider/DB/Git action. Actual follow-up compute unknown.",
+    "mock.restore() presence did not restore module replacement in observed Bun1.3.12; same prior journal remains affected."
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "id": "M80-SETUP-CI-WORKFLOW-QA-20260924",
+  "role": "security-reliability",
+  "execution_context": "/root/m80_foundation_runtime_qa",
+  "prompt_sha256": "3b3c1d31d5e5e35bf90ad971d4511a7693b7f14d12f2eb7ac0ed4723cc0b79d3",
+  "artifacts": [
+    {
+      "path": "operations/agent-improvement/snapshots/M80-SETUP-CI-WORKFLOW-QA-20260924-DELIVERABLE.json",
+      "sha256": "cba59f2c9245b7fa05ab31d7794e4e09a6bdf71aee32f9df6d7d2ddf7b0c7745"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "BOUNDED_CI_DIFF",
+      "status": "pass",
+      "evidence": [
+        "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-workflow.json"
+      ],
+      "reason": "Exact4part transform from committed workflow; seven offline tests46assertions pass."
+    }
+  ],
+  "review": {
+    "reviewer_execution_context": "/root",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/m80-setup-publication-root-closure-20260924.json"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/M80-SETUP-CI-WORKFLOW-QA-20260924-DELIVERABLE.json",
+        "sha256": "cba59f2c9245b7fa05ab31d7794e4e09a6bdf71aee32f9df6d7d2ddf7b0c7745"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "complete",
+    "first_review": "pass",
+    "material_findings_open": 0,
+    "rework_cycles": 0,
+    "escaped_defects": null,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
+  "metrics_evidence": [],
+  "pilot_eligible": false,
+  "notes": [
+    "Independent root-authored CI workflow supplement review. Requested Astra/high observed unknown. No Git writes or provider/native actions. Root acceptance pending."
+  ],
+  "source_artifacts": [
+    {
+      "path": "evaluations/research-qa/m80-setup-publication-metadata-independent-20260924-workflow.json",
+      "sha256": "0f62c6d3046d60838b34bff8cabfb2232ec4c6fc0c03ff30ecee1cf00bee0109"
+    }
+  ]
+}

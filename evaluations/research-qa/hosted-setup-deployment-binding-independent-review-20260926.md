@@ -1,0 +1,15 @@
+# New bridge deployment binding: independent local review
+
+2026-09-26. **Bounded PASS for the offline exact-image evidence binder.** This is a separate coordinator-led review: the author was `/root/deployment_binding`, while the agent runtime rejected a further QA dispatch at its thread limit. The reviewer did not write the binder. This verdict does not accept the existing stop helper, a live deployment, or a scale operation.
+
+| Frozen input | SHA-256 |
+| --- | --- |
+| `tools/staging/hosted-setup-deployment-binding.ts` | `6e078f7e64f5fd64c568ff7fec5f292994b23cd2c28ed669da3732458c3b8e9a` |
+| `tools/staging/hosted-setup-deployment-binding.test.ts` | `dc8d9a244d511a04c34af5c0c185d39ccf1f4f770534abc48c833b8cc421f081` |
+| `hosted-setup-deployment-binding-author-20260926.md` | `e176c2b5230b5c85cd5ae4fcd84abd0490d5ee2f1f5b1bb013a3bc8c0f40f001` |
+
+On Windows/Bun 1.3.12, I independently reran the focused suite: **10 passed, 0 failed, 67 expectations**. Strict TypeScript passed. A separate public-interface probe at `C:/Users/nimab/AppData/Local/Temp/hosted-deployment-binding-root-probe.ts` passed three independently constructed cases: one active new image plus a historically **REMOVED** deployment is accepted; a second **SUCCESS** deployment is refused; omission of the active image digest is refused. The source and tests were read and their SHA-256 bytes rechecked after execution. A read-only authenticated Railway CLI status observation on the unchanged Site-Web target still showed the old deployment `40546ef7-9004-4486-a471-370aaa305c80` and commit `75d8ec4b16054a1bbfc1a51ddaec99000ee1efe2`; both CLI latest and active metadata included a syntactically valid image digest. That observation tested a provider response field, not the new-image binder against live raw capture pairs.
+
+The binder requires two consistent serialized provider captures, an exact new deployment/commit/image, disabled automatic deployment, one running replica in the fixed region, an empty staged patch, a complete terminal deployment inventory and exact configuration/runtime identity. Receipt and separate review bytes, plus the original capture hashes, are pinned outside the receipt; old or changed captures refuse. A process-local capability is consumed on use or refusal. The code keeps `mutationAuthorized:false` and does not call Railway.
+
+**Limits:** Raw JSON and its hashes do not authenticate Railway. The eventual collector must obtain both CLI and API bytes through an authenticated, reviewed channel and preserve them privately. The `WeakMap`/seen-receipt controls do not prevent a new process from replaying a receipt; an exclusive durable stop journal remains required. The provider has no atomic compare-and-scale guarantee, so state can change after the final read. The current maintenance-stop/CLI adapter and transaction runner still pin the **old** deployment and omit the new image digest; this review grants them no v2 approval. No new bridge image, post-scale observation, fresh backup, migration, same-image resume, hosted browser journey or two-company test was performed.

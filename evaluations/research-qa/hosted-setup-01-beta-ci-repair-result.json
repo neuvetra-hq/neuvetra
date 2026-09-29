@@ -1,0 +1,23 @@
+{
+  "verdict": "pass_bounded_local",
+  "sourceHashes": {
+    "packages/neuvetra-database/src/beta-access-migrations.ts": "d87576c3864c12e7e3127dddef2ba2ae9a10fa004868719e6c305c7bfedd1f60",
+    "tools/beta-access/local-rehearsal.ts": "dba6d09cd703bd85becc68f6e1c130269afd0529ea9a056883697ddadc445b67"
+  },
+  "sourceHashesAfter": {
+    "packages/neuvetra-database/src/beta-access-migrations.ts": "d87576c3864c12e7e3127dddef2ba2ae9a10fa004868719e6c305c7bfedd1f60",
+    "tools/beta-access/local-rehearsal.ts": "dba6d09cd703bd85becc68f6e1c130269afd0529ea9a056883697ddadc445b67"
+  },
+  "checks": [
+    "Actual current23 manifest yields exact22 baseline without migration23",
+    "Exact helper source rejects missing21/22 and changed21/22 names or SHA pins; later appended migrations do not enter historical baseline",
+    "Actual installer with transaction test double rejects schema23,short,reordered or altered receipts before DDL, including changed first migration; valid22 reaches role validation",
+    "Rehearsal source applies only selected expected baseline"
+  ],
+  "limitations": [
+    "Manifest selector is tested through actual import and injected exact source for negatives",
+    "Installer refusal uses a transaction test double, not native installation",
+    "Full beta rehearsal on historical port55472 not run; remote native CI remains required",
+    "No provider or Git actions"
+  ]
+}
