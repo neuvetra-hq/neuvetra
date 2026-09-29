@@ -100,9 +100,9 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   const [status, setStatus] = useState<JourneyStatus | null>(null)
   const [statusError, setStatusError] = useState<string | null>(null)
   const [statusVersion, setStatusVersion] = useState(0)
-  const [statusFresh, setStatusFresh] = useState(false)
   const [askOpen, setAskOpen] = useState(false)
   const [openRecordId, setOpenRecordId] = useState<string | null>(() => parseViewHash(window.location.hash).recordId)
+  const [missingRecordNotice, setMissingRecordNotice] = useState(false)
   const canManage = staging.actor.role === "owner" || staging.actor.role === "admin"
   const mainRef = useRef<HTMLElement>(null)
   const current = useRef({ panel, openRecordId, collectionDirty, setupDirty })
@@ -112,10 +112,15 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     if (from === "setup" && current.current.setupDirty && !window.confirm("Discard unsaved company setup changes? Setup is saved from its last section, 07 Review.")) return false
     return true
   }
+  function refreshStatus() {
+    setStatus(null); setStatusError(null)
+    setStatusVersion(value => value + 1)
+  }
   function show(target: WorkspacePanel, recordId: string | null) {
     setCollectionDirty(false); setSetupDirty(false)
     setPanel(target); setOpenRecordId(recordId)
-    setStatusFresh(false); setStatusVersion(value => value + 1)
+    setMissingRecordNotice(false)
+    refreshStatus()
   }
   function navigate(target: WorkspacePanel, recordId: string | null = null) {
     if (target === panel && recordId === openRecordId) return false
@@ -140,8 +145,8 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     return () => window.removeEventListener("popstate", onPop)
   }, [])
   const closeAsk = useCallback(() => setAskOpen(false), [])
-  const onCollectionDirty = useCallback((dirty: boolean) => { setCollectionDirty(dirty); if (!dirty) setStatusVersion(value => value + 1) }, [])
-  const onSetupDirty = useCallback((dirty: boolean) => { setSetupDirty(dirty); if (!dirty) setStatusVersion(value => value + 1) }, [])
+  const onCollectionDirty = useCallback((dirty: boolean) => { setCollectionDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
+  const onSetupDirty = useCallback((dirty: boolean) => { setSetupDirty(dirty); if (!dirty) { setStatus(null); setStatusError(null); setStatusVersion(value => value + 1) } }, [])
   useEffect(() => {
     if (!setupDirty) return
     const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = "" }
@@ -151,7 +156,20 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   useEffect(() => {
     if (!staging.workspaceId) return
     const controller = new AbortController()
-    loadJourneyStatus(staging.workspaceId, { ...staging.actor, signal: controller.signal }).then(value => { setStatus(value); setStatusError(null); setStatusFresh(true) }, cause => { if (!controller.signal.aborted) setStatusError(cause instanceof Error ? cause.message : "Your progress couldn’t be loaded.") })
+    loadJourneyStatus(staging.workspaceId, { ...staging.actor, signal: controller.signal }).then(value => {
+      if (controller.signal.aborted) return
+      const shown = current.current
+      if (shown.panel === "collection" && shown.openRecordId && !value.collection.records.some(row => row.id === shown.openRecordId)) {
+        setOpenRecordId(null)
+        setMissingRecordNotice(true)
+        window.history.replaceState(null, "", viewHash("collection", null))
+      }
+      setStatus(value); setStatusError(null)
+    }, cause => {
+      if (controller.signal.aborted) return
+      setStatus(null)
+      setStatusError(cause instanceof Error ? cause.message : "Your progress couldn’t be loaded.")
+    })
     return () => controller.abort()
   }, [staging.workspaceId, staging.actor, statusVersion])
   // The first screen after sign-in renders before progress loads. Once it has loaded, put focus on the page heading if
@@ -171,9 +189,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
       document.title = "Neuvetra — Greenhouse-gas reporting (private beta)"
     }
   }, [])
-  // A record address that no longer matches a saved record (withdrawn elsewhere, another company, mistyped).
-  const missingRecord = panel === "collection" && openRecordId !== null && statusFresh && status !== null && !status.collection.records.some(row => row.id === openRecordId)
-  useEffect(() => { if (missingRecord) window.history.replaceState(null, "", viewHash("collection", null)) }, [missingRecord])
+  // A record address that no longer matches a saved record is cleared with the address when progress loads.
   const heldRecord = panel === "collection" && openRecordId !== null && status ? status.collection.records.find(row => row.id === openRecordId && row.state === "held_period") ?? null : null
   const coverage: Coverage = statusError ? { state: "unavailable" } : status ? { state: "ready", setupOpen: status.setup.missing, gaps: status.gaps } : { state: "loading" }
   useEffect(() => {
@@ -202,13 +218,13 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     <main id="workspace-main" className="nv-main" tabIndex={-1} ref={mainRef}><div className="nv-page">
     {!canManage && journeyViews.includes(panel) && <div className="nv-notice nv-notice--info" style={{ marginTop: 0 }}><Icon name="info" /><p>You have view access. An owner or admin of your company can make changes.</p></div>}
     {secondaryPanel && <button type="button" className="nv-link" style={{ marginBottom: 12 }} onClick={() => navigate("archive")}>← Earlier workspace views</button>}
-    {panel === "home" && <JourneyHome status={status} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={() => setStatusVersion(value => value + 1)} onFix={openRecord} />}
-    {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={() => setStatusVersion(value => value + 1)} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} />}
+    {panel === "home" && <JourneyHome status={status} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={refreshStatus} onFix={openRecord} />}
+    {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={refreshStatus} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} />}
     {panel === "archive" && <EarlierViews headingRef={headingRef} onOpen={id => navigate(id as WorkspacePanel)} groups={[
       { title: "Earlier registers and source worksheets", views: [...sourceAndRegisterPanels, "legacy-setup" as const].map(id => ({ id, label: panelLabels[id as keyof typeof panelLabels], description: panelDescriptions[id] ?? "" })) },
       { title: "Electricity and examples", views: continuityPanels.filter(id => id !== "legacy-setup").map(id => ({ id, label: panelLabels[id as keyof typeof panelLabels], description: panelDescriptions[id] ?? "" })) },
     ]} />}
-    {panel === "collection" && missingRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
+    {panel === "collection" && missingRecordNotice && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
     {heldRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><div><p><strong>Held pending correction.</strong> {heldRecord.reasons[0]}</p>{canManage && <p><button type="button" className="nv-link" onClick={() => navigate("setup")}>Open company setup</button></p>}</div></div>}
     {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty}
       intro={canManage ? <PanelGuide kind="setup" defaultOpen={status ? !status.setup.saved : false} onAsk={() => setAskOpen(true)} /> : null} />}
