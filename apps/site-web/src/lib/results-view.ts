@@ -27,3 +27,14 @@ export function rowReasons(row: ResultRow): string[] {
   if (row.outcome === "unavailable") codes.push("engine_unavailable")
   return [...new Set(codes.map(code => code === "engine_unavailable" ? "The calculation service was unavailable for this record. Try again shortly." : reasonText(code)))]
 }
+
+/** A record needs attention when it is held, not calculated, or only partly calculated. Shared by results and overview. */
+export const needsWork = (row: ResultRow) => { const tone = rowStatus(row).tone; return tone === "warn" || tone === "danger" || row.scope1?.status === "partial" }
+/** The dataset a register factor comes from, from its key prefix. */
+export function factorSource(key: string): string {
+  const prefix = key.split(".")[0]
+  if (prefix === "egrid2023") return "EPA eGRID2023 rev2"
+  if (prefix === "residual_mix_green_e_2025") return "Green-e 2025 residual mix"
+  if (prefix === "gwp_ar5") return "EPA Hub 2025, IPCC AR5 GWP"
+  return "EPA GHG Emission Factors Hub 2025"
+}

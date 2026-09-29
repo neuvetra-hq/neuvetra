@@ -16,12 +16,13 @@ export interface Scope2Basis { status: "complete" | "provisional" | "input_neede
 export interface Scope2Result {
   methodVersionId: string; gwpSetId: string; status: Scope2Basis["status"]; findings: string[]; estimates: string[]
   activity: { mwh: string; instrumentMwh: string | null; subregion: string }
-  locationBased: Scope2Basis; marketBased: Scope2Basis & { residualMix: { mwh: string; sources: string[] } | null }
+  locationBased: Scope2Basis; marketBased: Scope2Basis & { residualMix: { mwh: string; method: string; sources: string[] } | null }
   factorsUsed: FactorUsed[]; resultSha256: string
 }
 export interface ResultRow {
   recordId: string; versionId: string; revision: number; kind: string; scope: 1 | 2; sourceId: string; locationId: string; locationName: string | null
   period: { start: string; endExclusive: string }; quantity: { value: string; unit: string }; quality: string; estimateBasis: string | null; evidenceCount: number
+  evidence: Array<{ id: string; name: string | null; sha256: string | null; status: string }>
   plan: { action: "calculate" | "hold"; status: "withdrawn" | "excluded" | "input_needed" | null; reasons: string[]; notes: string[] }
   outcome: "calculated" | "held" | "refused" | "unavailable"; refusalCode: string | null
   scope1: Scope1Result | null; scope2: Scope2Result | null
@@ -45,7 +46,7 @@ const total = (value: unknown) => record(value) && typeof value.display === "str
 export function decodeResults(value: unknown, companyId: string): ResultsResponse {
   if (!record(value) || value.profile !== RESULTS_PROFILE || value.syntheticOnly !== true || value.companyId !== companyId || typeof value.label !== "string" || !Array.isArray(value.records) || !record(value.counts)) throw new Error("The results response was not recognized.")
   for (const row of value.records) {
-    if (!record(row) || !UUID.test(String(row.recordId)) || ![1, 2].includes(row.scope as number) || !record(row.plan) || !Array.isArray(row.plan.reasons) || !["calculated", "held", "refused", "unavailable"].includes(String(row.outcome))) throw new Error("The results response was not recognized.")
+    if (!record(row) || !UUID.test(String(row.recordId)) || ![1, 2].includes(row.scope as number) || !record(row.plan) || !Array.isArray(row.plan.reasons) || !Array.isArray(row.evidence) || !["calculated", "held", "refused", "unavailable"].includes(String(row.outcome))) throw new Error("The results response was not recognized.")
     if (row.outcome === "calculated" && !row.scope1 && !row.scope2) throw new Error("The results response was not recognized.")
     const s1 = row.scope1 as Record<string, unknown> | null
     if (s1 && (!record(s1) || (s1.total !== null && !total(s1.total)) || !Array.isArray(s1.factorsUsed))) throw new Error("The results response was not recognized.")
@@ -73,16 +74,31 @@ export async function loadResults(companyId: string, actor: HostedWorkspaceActor
   return decodeResults(await response.json(), companyId)
 }
 
-/** A CSV of every record and its draft result. Values are the engine's exact display strings. */
-export function resultsCsv(results: ResultsResponse, labels: { kind: (kind: string) => string; reason: (code: string) => string }): string {
-  const header = ["Scope", "Activity", "Site", "Source ID", "Period start", "Period end (exclusive)", "Quantity", "Unit", "Data quality", "Status", "kg CO2e (location-based for Scope 2)", "Scope 2 market-based kg CO2e", "Method", "GWP set", "Notes"]
+/** A CSV of every record and its draft result. Figures are the engine's exact display strings; nothing is re-summed. */
+export function resultsCsv(results: ResultsResponse, labels: { kind: (kind: string) => string; reason: (code: string) => string; status: (row: ResultRow) => string; boundary: (code: string) => string; period: (start: string | null | undefined, end: string | null | undefined) => string }): string {
   const escape = (value: string) => /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value
+  const counted1 = new Set(results.scope1?.includedResults ?? [])
+  const counted2 = new Set([...(results.scope2?.locationBasedIncluded ?? [])])
+  const setup = results.setup
+  const meta = [
+    `# ${results.label}`,
+    `# Company: ${setup?.legalName || "not set"}`,
+    `# Reporting period: ${labels.period(setup?.period.start, setup?.period.endExclusive)}`,
+    `# Boundary approach: ${labels.boundary(setup?.boundaryApproach ?? "unknown")}`,
+    `# Generated: ${results.generatedAt}`,
+    "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes are in a subtotal.",
+  ]
+  const header = ["Scope", "Activity", "Site", "Source ID", "Period start", "Period end (exclusive)", "Quantity", "Unit", "Data quality", "Status", "Status code", "Counted in subtotal", "Scope 1 kg CO2e", "Scope 2 location-based kg CO2e", "Scope 2 market-based kg CO2e", "Method", "GWP set", "Evidence files", "Notes"]
   const lines = results.records.map(row => {
     const s1 = row.scope1, s2 = row.scope2
-    const status = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status ?? row.outcome
-    const notes = [...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason).join(" ")
-    return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, row.period.endExclusive, row.quantity.value, row.quantity.unit, row.quality, status,
-      s1?.total?.display ?? s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", s1?.methodVersionId ?? s2?.methodVersionId ?? "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", notes].map(escape).join(",")
+    const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status ?? row.outcome
+    const counted = s1 ? counted1.has(s1.resultSha256) : s2 ? counted2.has(s2.resultSha256) : false
+    const notes = [...new Set([...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
+    const files = row.evidence.map(file => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""}`).join("; ")
+    return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, row.period.endExclusive, row.quantity.value, row.quantity.unit, row.quality, labels.status(row), code, counted ? "Yes" : "No",
+      s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", s1?.methodVersionId ?? s2?.methodVersionId ?? "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")
   })
-  return [`# ${results.label}`, `# Generated ${results.generatedAt}`, header.join(","), ...lines].join("\n") + "\n"
+  const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", "Engine aggregate of rows marked Yes"].map(escape).join(",")
+  const totals = [subtotal("Scope 1", results.scope1?.knownSourceSubtotal.display), subtotal("Scope 2 location-based", results.scope2?.locationBasedSubtotal.display), subtotal("Scope 2 market-based", results.scope2?.marketBasedSubtotal.display)]
+  return [...meta, header.join(","), ...lines, ...totals].join("\n") + "\n"
 }

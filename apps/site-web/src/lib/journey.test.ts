@@ -4,7 +4,7 @@ import { describe, expect, test } from "bun:test"
 import { HELP_ENTRIES, isProgressQuestion, matchQuestion } from "./help-content"
 import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS } from "./plain-language"
 import { decodeResults, resultsCsv, RESULTS_PROFILE } from "./results-api"
-import { computeJourneyStatus, progressAnswer, recordState, setupMissing } from "./journey-status"
+import { computeJourneyStatus, coverageGaps, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
 import { rowStatus } from "./results-view"
 
 const company = "29200000-0000-4000-8000-000000000001"
@@ -18,8 +18,16 @@ describe("Ask Neuvetra help matching", () => {
     expect(matchQuestion("how do I enter refrigerant top ups")?.entry.id).toBe("refrigerant")
     expect(matchQuestion("what does CO2e mean")?.entry.id).toBe("co2e")
   })
+  test("near-miss questions reach the right entry, not a keyword neighbour", () => {
+    expect(matchQuestion("how do I add a gas bill")?.entry.id).toBe("add-record")
+    expect(matchQuestion("is this report audit ready")?.entry.id).toBe("draft")
+    expect(matchQuestion("can I upload a spreadsheet of all my bills")?.entry.id).toBe("import")
+    expect(matchQuestion("why do you need the heat content")?.entry.id).toBe("heat-content")
+  })
   test("declines instead of guessing when nothing matches", () => {
     expect(matchQuestion("what is the weather tomorrow")).toBeNull()
+    expect(matchQuestion("how much does neuvetra cost")).toBeNull()
+    expect(matchQuestion("the report")).toBeNull()
     expect(matchQuestion("")).toBeNull()
   })
   test("routes progress questions to the user's own data", () => {
@@ -62,7 +70,7 @@ describe("plain-language display", () => {
 })
 
 const s1 = (status: string, display: string | null) => ({ methodVersionId: "scope1.stationary.natural_gas.v2", gwpSetId: "AR5-100", status, gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: display ? { unrounded: display, display, unit: "kg CO2e", rounding: "half_even_4dp" } : null, resultSha256: "a".repeat(64) })
-const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, plan: { action: "calculate", status: null, reasons: [], notes: [] }, outcome: "calculated", refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
+const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, outcome: "calculated", refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
 const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: "Draft", syntheticOnly: true, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, unavailable: 0 }, warnings: [] })
 
 describe("draft results decoding", () => {
@@ -79,9 +87,11 @@ describe("draft results decoding", () => {
     expect(rowStatus(row({ scope1: s1("partial", "10.0000") }) as never).label).toBe("Partial calculation")
   })
   test("the CSV carries the engine's exact figures and a draft header", () => {
-    const csv = resultsCsv(decodeResults(response([row({})]), company), { kind: kind => kind, reason: code => code })
+    const csv = resultsCsv(decodeResults({ ...response([row({})]), scope1: { knownSourceSubtotal: { unrounded: "53.1180", display: "53.1180", unit: "kg CO2e", rounding: "half_even_4dp_once" }, includedResults: ["a".repeat(64)], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 1, complete: true } }, company), { kind: kind => kind, reason: code => code, status: () => "Calculated", boundary: code => code, period: () => "Jan 1 – Dec 31, 2025" })
     expect(csv.startsWith("# Draft")).toBe(true)
-    expect(csv).toContain(",53.1180,")
+    expect(csv).toContain("# Reporting period: Jan 1 – Dec 31, 2025")
+    expect(csv).toContain(",Calculated,complete,Yes,53.1180,")
+    expect(csv).toContain("Subtotal,Scope 1,")
   })
 })
 
@@ -92,6 +102,15 @@ describe("journey progress", () => {
     expect(status.progress.setup).toBe("not_started")
     expect(setupMissing(null)).toEqual(["Save your company setup"])
     expect(progressAnswer(status)[0]).toMatch(/Set up your company/)
+  })
+  test("setup answers without matching records are gaps, never complete", () => {
+    const office = "29400000-0000-4000-8000-000000000001"
+    const view = { currentVersion: { setup: { screening: [{ id: "s3", category: "Road & off-road vehicles", state: "yes" }, { id: "s4", category: "Cooling & fire suppression", state: "no" }], locations: [{ id: office, name: "Office", inclusion: "included" }] } } } as never
+    const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual" }
+    const gaps = coverageGaps(view, [gas])
+    expect(gaps.map(gap => gap.id)).toEqual(["screen-s3", `electricity-${office}`])
+    expect(coverageGaps(view, [gas, { ...gas, id: "v", kind: "vehicle" }, { ...gas, id: "e", kind: "electricity" }])).toEqual([])
+    expect(coverageGaps(view, [gas, { ...gas, id: "v", kind: "vehicle", state: "withdrawn" }, { ...gas, id: "e", kind: "electricity" }]).map(gap => gap.id)).toEqual(["screen-s3"])
   })
   test("record states follow the reviewed readiness findings", () => {
     expect(recordState([])).toBe("ready")

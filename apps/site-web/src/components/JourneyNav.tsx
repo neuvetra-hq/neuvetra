@@ -8,7 +8,7 @@ function plural(count: number, word: string) { return `${count} ${word}${count =
 /** The app's primary navigation: the three-step journey, the overview and the earlier views. */
 export function JourneyNav({ current, onNavigate, status, onAsk }: { current: JourneyView; onNavigate: (view: JourneyView) => void; status: JourneyStatus | null; onAsk: () => void }) {
   const setupMeta = !status ? "" : !status.setup.saved ? "Not started" : status.setup.missing.length ? `${plural(status.setup.missing.length, "item")} to finish` : `Saved · version ${status.setup.revision}`
-  const collectionMeta = !status ? "" : !status.collection.active ? "No records yet" : status.collection.attention ? `${plural(status.collection.active, "record")} · ${status.collection.attention} input needed` : plural(status.collection.active, "record")
+  const collectionMeta = !status ? "" : !status.collection.active ? "No records yet" : status.collection.attention ? `${plural(status.collection.active, "record")} · ${status.collection.attention} input needed` : status.gaps.length ? `${plural(status.collection.active, "record")} · ${plural(status.gaps.length, "possible gap")}` : plural(status.collection.active, "record")
   const resultsMeta = !status ? "" : status.collection.ready ? "Draft ready to review" : "Add records first"
   const items: Array<{ view: JourneyView; step: string | null; title: string; meta: string; done: boolean }> = [
     { view: "home", step: null, title: "Overview", meta: status ? status.next.title : "", done: false },
