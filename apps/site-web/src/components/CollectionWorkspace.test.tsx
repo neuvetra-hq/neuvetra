@@ -116,6 +116,7 @@ describe("collection form accounting boundaries", () => {
     const activity = base()
     const version = { id: versionId, recordId, companyId, revision: 1, previousVersionId: null, correctionReason: null, activity, payloadSha256: "a".repeat(64), createdBy: actorId, createdAt: "2026-09-29T12:00:00.000Z" }
     const { activity: _activity, ...summary } = version
+    void _activity
     const record = { id: recordId, companyId, kind: activity.kind, currentVersion: version, history: [summary] }
     const input = { idempotencyKey: "55555555-5555-4555-8555-555555555555", expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity }
     const list = spyOn(collectionApi, "listCollectionActivities").mockRejectedValue(new Error("full-list read must not run after save"))
