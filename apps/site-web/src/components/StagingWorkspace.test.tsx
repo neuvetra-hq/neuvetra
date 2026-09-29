@@ -102,3 +102,15 @@ test("a missing record link clears the editor ID when it replaces the address", 
   expect(app.child("CollectionWorkspace").props.openRecordId).toBeNull()
   expect(app.text()).toContain("That record wasn’t found")
 })
+
+test("a linked record outside the reporting period keeps its address and uses the neutral hold label", async () => {
+  const app = harness(`#/activity/${recordId}`)
+  await app.settle()
+  const loaded = status()
+  loaded.collection.records.push({ id: recordId, kind: "natural_gas", label: "Natural gas", sourceId: "GAS-1", locationId: recordId, site: "Office", state: "held_period", reasons: ["This record belongs to another reporting year."], evidenceCount: 0, quality: "actual" })
+  app.loads[0]!.resolve(loaded)
+  await app.settle()
+  expect(app.location.hash).toBe(`#/activity/${recordId}`)
+  expect(app.child("CollectionWorkspace").props.openRecordId).toBe(recordId)
+  expect(app.text()).toContain("Outside the reporting period.")
+})
