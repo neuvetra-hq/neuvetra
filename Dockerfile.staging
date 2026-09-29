@@ -107,7 +107,7 @@ COPY apps/site-api/src/workspace/company-setup-routes.ts ./apps/site-api/src/wor
 COPY packages/neuvetra-database/src/migrations/0023_company_setup.sql ./packages/neuvetra-database/src/migrations/
 # Collection and reviewed method sources are copied as inert files; the hosted
 # migration manifest and method release state remain separate operational gates.
-COPY apps/site-api/src/workspace/collection-routes.ts apps/site-api/src/workspace/collection-storage.ts apps/site-api/src/workspace/collection-zip.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/workspace/collection-routes.ts apps/site-api/src/workspace/collection-storage.ts apps/site-api/src/workspace/collection-zip.ts apps/site-api/src/workspace/collection-results-routes.ts ./apps/site-api/src/workspace/
 COPY apps/site-api/src/calculation/method-engine-runner.ts apps/site-api/src/calculation/scope1-authority.ts apps/site-api/src/calculation/scope2-authority.ts apps/site-api/src/calculation/scope3-authority.ts ./apps/site-api/src/calculation/
 COPY apps/site-api/src/calculation/scope1_engine.py apps/site-api/src/calculation/scope2_engine.py apps/site-api/src/calculation/scope3_engine.py ./apps/site-api/src/calculation/
 COPY packages/neuvetra-database/src/collection.ts packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/method-reference.ts ./packages/neuvetra-database/src/
