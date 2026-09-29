@@ -440,3 +440,8 @@
   body:not(:has(.nv-report)) .nv-sidenav, body:not(:has(.nv-report)) .nv-topbar, body:not(:has(.nv-report)) .setup-actions { display: none !important; }
   body:not(:has(.nv-report)) .nv-layout { display: block !important; }
 }
+
+/* Page frame for the workspace screens when they render without the journey layout */
+.nv-app .nv-shell { max-width: 1120px; margin: 0 auto; padding: 20px 28px 48px; }
+.nv-app .nv-shell:focus { outline: none; }
+@media (max-width: 720px) { .nv-app .nv-shell { padding: 14px 16px 40px; } }
