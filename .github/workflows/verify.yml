@@ -176,8 +176,8 @@ jobs:
           bun-version: 1.3.12
       - run: bun install --frozen-lockfile
       - run: bun run check
-      - name: Independent Scope 1 setup decoder and session lifecycle
-        run: bun test evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-lifecycle-candidate2.test.ts
+      - name: Independent Scope 1 setup decoder and current read-only lifecycle
+        run: bun test evaluations/research-qa/m80-setup-integration-independent-20260924-decoder.test.ts evaluations/research-qa/m80-setup-integration-independent-20260924-valid.test.ts evaluations/research-qa/m80-legacy-readonly-lifecycle.test.ts
       - name: Independent source-linked worksheet decoder and report cases
         run: bun test evaluations/research-qa/m66-independent-frontend.test.ts evaluations/research-qa/m66-independent-renderer.test.ts
       - name: Independent annual worksheet decoder, renderer and print-action cases
