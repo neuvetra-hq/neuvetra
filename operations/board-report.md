@@ -1,4 +1,12 @@
-# September 26: local upgrade path reviewed; fresh hosted recovery gate next
+# September 28: schema 23 live; collection candidate passes bounded local QA
+
+Schema 23 committed on synthetic staging with the service up, and `/ready` confirmed it. The fresh paired backup/restore and independent receipt are recorded in `C:\Users\nimab\Neuvetra\notes\reviews\2026-09-27-schema23-handoff.md`. The California-only legacy route repair is committed and pushed to rolling PR #6 at `87f02a098a04dc77d4c7233e617deb84f2173b25`, but that code has not been deployed; hosted two-company isolation is pending.
+
+The Scope 1/2 collection candidate is committed locally at `81985360f` (remote PR #6 is still `87f02a0`). It captures versioned activity and private pending evidence, with an operator-only orphan recovery path. Independent native PostgreSQL, two-company and adversarial Storage-policy QA passed after preserved duplicate, retry and anonymous-policy failures. Candidate migration 0027 is unregistered and unapplied to hosted storage/database; no scanner, browser acceptance, ZIP picker or calculation/report integration is live. The local handoff and exact limits are in `C:\Users\nimab\Neuvetra\notes\reviews\2026-09-28-collection-increment-handoff.md`.
+
+Claude's combined methods v4 remains isolated and unmerged. Technical security QA passed, but independent accounting review found A05–A07, including a primary-source CO2/CO2e contradiction that blocks a final market-based result. See `C:\Users\nimab\Neuvetra\notes\reviews\2026-09-28-codex-review-of-claude-methods-v4.md`. Next: corrected methods package and re-review; Claude's review of the collection candidate; then controlled migration/deployment and hosted two-company demonstration before readiness and draft reports. No real-customer invitation or assurance claim is supported.
+
+# September 26: local upgrade path reviewed; fresh hosted recovery gate next (historical)
 
 The bridge image remains active on schema 22 and the hosted service has not been stopped or migrated. Independent review now passes the repaired artifact publisher, fixed evidence bindings, stopped/resume verifier and exact-image stop helper, with all earlier failures preserved. A bounded integration audit found no concrete blocker in the ordinary one-transaction path; native PostgreSQL tests passed. This closes the local code-review loop, not the live evidence gate.
 

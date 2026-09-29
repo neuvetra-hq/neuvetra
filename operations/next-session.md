@@ -1,4 +1,10 @@
-# September 26: current hosted setup rebuild gate — local code reviews passed, fresh hosted backup next
+# September 28: current gate — collection local QA passed; methods and hosted integration pending
+
+The board-approved schema-23 transaction committed with the service up; `/ready` confirmed schema 23. The route P2-1/P2-2 repair is pushed to PR #6 at `87f02a098a04dc77d4c7233e617deb84f2173b25` but remains undeployed, so the independent **hosted** two-company isolation test is still pending. The collection model/API/UI is a **local** reviewed candidate at `81985360f`; independent native PostgreSQL and Storage-policy QA passed, but migration 0027 is not registered or applied to hosted staging. The collection handoff is `C:\Users\nimab\Neuvetra\notes\reviews\2026-09-28-collection-increment-handoff.md`.
+
+Claude methods v4 did not pass accounting review (A05–A07), despite targeted technical security PASS. Do not merge 0024–0026 or release engines on that package. The source original and exact findings are in `C:\Users\nimab\Neuvetra\notes\reviews\2026-09-28-codex-review-of-claude-methods-v4.md`. Claude must reissue corrected hashes, and Claude's independent collection code/browser review is also pending. After both review gates clear, register/rehearse migrations 0024–0027 with fresh hosted backup/restore and preservation receipt, verify exact PR head/checks, deploy, and run the signed-in two-company collection journey. Then proceed to readiness and draft Scope 1/2 reports. Keep unknowns unresolved; no real customer data or invitations.
+
+# September 26: current hosted setup rebuild gate — local code reviews passed, fresh hosted backup next (historical)
 
 The board's local hosted-rebuild brief remains active. The bridge image on rolling PR #6 at `d2f0ca16f02bb99801b68a7925f34016f3ba51bb` is still the observed schema-22 Site-Web deployment; there has been no stop, schema-23 migration or second-company admission. The latest read-only provider observations are point-in-time and must be refreshed before action. Repaired publisher, fixed bindings, postscale verifier and live-stop helper now have bounded independent PASS decisions, with original FAILs preserved. Local integration audit found no concrete blocker in the ordinary one-transaction path. These reviewed changes are not yet published or deployed.
 

@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-26T16:59:18+00:00",
+  "updated_at": "2026-09-28T23:59:57+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "HOSTED-SETUP-REBUILD",
     "name": "Hosted corporate setup and collection rebuild",
-    "status": "in_progress_increment_1_bridge_active_schema22",
-    "next_gate": "The schema-22 bridge is active at the previously observed exact Site-Web deployment; no live stop, schema-23 migration or new-company admission occurred. Bounded independent reviews now pass the repaired artifact publisher, fixed bindings, postscale verifier and exact-image stop helper; prior failures are preserved. Native one-transaction integration has no concrete ordinary-path blocker. Publish this exact local code to rolling PR6 and verify its remote head/checks, deploy the reviewed image and re-observe the target. Then make a fresh paired hosted backup, restore it on fresh PostgreSQL 17 and independently accept preservation before stop. Postcommit independent observation and same-image resume are mandatory. Ambiguous COMMIT is fail-closed without automatic retry. Signed-in setup/two-company demo and local board handoff remain; collection/readiness wait for board feedback.",
+    "status": "in_progress_schema23_live_collection_local_reviewed",
+    "next_gate": "Schema 23 committed on synthetic staging with /ready confirmation; the route repair is pushed to PR6 but not deployed, so hosted two-company isolation remains. The Scope 1/2 collection candidate at local 81985360f passed bounded independent native QA; migration 0027 is unregistered/unapplied hosted and PR6 remote is 87f02a0. Claude methods v4 has A05-A07 accounting findings and is unmerged; Claude's collection/browser review is pending. Correct/re-review methods, verify exact PR head/checks, rehearse fresh hosted backup/restore and additive migrations, deploy, and demonstrate signed-in two-company collection before readiness and draft reports. No real customer invitation or assurance claim.",
     "evidence": [
       "operations/hosted-setup/decision.md",
       "evaluations/research-qa/hosted-setup-01-independent-review.md",
