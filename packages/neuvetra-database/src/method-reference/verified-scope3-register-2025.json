@@ -1,0 +1,4571 @@
+{
+ "schema": "neuvetra.verified-factor-register.v1",
+ "verifiedBy": "Claude (independent AI review), 2026-09-28",
+ "method": "Hub Tables 8-10 read programmatically from exact cells of the January 2025 workbook (shortest round-trip decimal of each stored value); each value rounded to the printed decimals equals the same-edition Hub PDF. Table 9 waste factors are metric tons CO2e per short ton computed by EPA with AR4 GWPs and cannot be split by gas. One cell (Asphalt Concrete, recycled, D490) stores 0.0035205384954666674 while EPA prints 0.004; the stored value is used. eGRID2023 rev2 subregion rates are identical to the verified Scope 2 register; grid gross loss values are read from sheet GGL23.",
+ "source": {
+  "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+  "title": "GHG Emission Factors Hub",
+  "edition": "Last Modified: January 15, 2025",
+  "url": "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+  "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+  "bytes": 1014275
+ },
+ "constants": [
+  {
+   "id": "g_to_kg",
+   "value": "0.001",
+   "unit": "kg per g",
+   "basis": "SI definition"
+  },
+  {
+   "id": "km_per_mile",
+   "value": "1.609344",
+   "unit": "km per international mile",
+   "basis": "Exact: international mile = 1,609.344 m (international yard and pound agreement, 1959)"
+  },
+  {
+   "id": "kwh_to_mwh",
+   "value": "0.001",
+   "unit": "MWh per kWh",
+   "basis": "SI definition"
+  },
+  {
+   "id": "lb_to_kg",
+   "value": "0.45359237",
+   "unit": "kg per lb",
+   "basis": "Exact international avoirdupois pound definition"
+  },
+  {
+   "id": "lb_per_short_ton",
+   "value": "2000",
+   "unit": "lb per short ton",
+   "basis": "Definition; stated in the Hub Table 9 notes"
+  },
+  {
+   "id": "metric_ton_to_kg",
+   "value": "1000",
+   "unit": "kg per metric ton",
+   "basis": "SI definition"
+  }
+ ],
+ "entries": [
+  {
+   "id": "transport.medium_and_heavy_duty_truck.vehicle_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D422",
+   "value": "1.298",
+   "unit": "kg CO2 per vehicle-mile",
+   "labelCells": [
+    "C422",
+    "D421",
+    "G422"
+   ],
+   "label": "Medium- and Heavy-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "transport.medium_and_heavy_duty_truck.vehicle_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E422",
+   "value": "0.0115",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C422",
+    "E421",
+    "G422"
+   ],
+   "label": "Medium- and Heavy-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "transport.medium_and_heavy_duty_truck.vehicle_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F422",
+   "value": "0.0376",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "C422",
+    "F421",
+    "G422"
+   ],
+   "label": "Medium- and Heavy-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "transport.passenger_car.vehicle_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D423",
+   "value": "0.297",
+   "unit": "kg CO2 per vehicle-mile",
+   "labelCells": [
+    "C423",
+    "D421",
+    "G423"
+   ],
+   "label": "Passenger Car (vehicle-mile)"
+  },
+  {
+   "id": "transport.passenger_car.vehicle_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E423",
+   "value": "0.0059",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C423",
+    "E421",
+    "G423"
+   ],
+   "label": "Passenger Car (vehicle-mile)"
+  },
+  {
+   "id": "transport.passenger_car.vehicle_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F423",
+   "value": "0.0053",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "C423",
+    "F421",
+    "G423"
+   ],
+   "label": "Passenger Car (vehicle-mile)"
+  },
+  {
+   "id": "transport.light_duty_truck.vehicle_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D424",
+   "value": "0.394",
+   "unit": "kg CO2 per vehicle-mile",
+   "labelCells": [
+    "C424",
+    "D421",
+    "G424"
+   ],
+   "label": "Light-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "transport.light_duty_truck.vehicle_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E424",
+   "value": "0.0109",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C424",
+    "E421",
+    "G424"
+   ],
+   "label": "Light-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "transport.light_duty_truck.vehicle_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F424",
+   "value": "0.0088",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "C424",
+    "F421",
+    "G424"
+   ],
+   "label": "Light-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "transport.medium_and_heavy_duty_truck.short_ton_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D425",
+   "value": "0.186",
+   "unit": "kg CO2 per short ton-mile",
+   "labelCells": [
+    "C425",
+    "D421",
+    "G425"
+   ],
+   "label": "Medium- and Heavy-Duty Truck (short ton-mile)"
+  },
+  {
+   "id": "transport.medium_and_heavy_duty_truck.short_ton_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E425",
+   "value": "0.0016",
+   "unit": "g CH4 per short ton-mile",
+   "labelCells": [
+    "C425",
+    "E421",
+    "G425"
+   ],
+   "label": "Medium- and Heavy-Duty Truck (short ton-mile)"
+  },
+  {
+   "id": "transport.medium_and_heavy_duty_truck.short_ton_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F425",
+   "value": "0.0054",
+   "unit": "g N2O per short ton-mile",
+   "labelCells": [
+    "C425",
+    "F421",
+    "G425"
+   ],
+   "label": "Medium- and Heavy-Duty Truck (short ton-mile)"
+  },
+  {
+   "id": "transport.rail.short_ton_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D426",
+   "value": "0.021",
+   "unit": "kg CO2 per short ton-mile",
+   "labelCells": [
+    "C426",
+    "D421",
+    "G426"
+   ],
+   "label": "Rail (short ton-mile)"
+  },
+  {
+   "id": "transport.rail.short_ton_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E426",
+   "value": "0.0016",
+   "unit": "g CH4 per short ton-mile",
+   "labelCells": [
+    "C426",
+    "E421",
+    "G426"
+   ],
+   "label": "Rail (short ton-mile)"
+  },
+  {
+   "id": "transport.rail.short_ton_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F426",
+   "value": "0.0005",
+   "unit": "g N2O per short ton-mile",
+   "labelCells": [
+    "C426",
+    "F421",
+    "G426"
+   ],
+   "label": "Rail (short ton-mile)"
+  },
+  {
+   "id": "transport.waterborne_craft.short_ton_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D427",
+   "value": "0.077",
+   "unit": "kg CO2 per short ton-mile",
+   "labelCells": [
+    "C427",
+    "D421",
+    "G427"
+   ],
+   "label": "Waterborne Craft (short ton-mile)"
+  },
+  {
+   "id": "transport.waterborne_craft.short_ton_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E427",
+   "value": "0.031",
+   "unit": "g CH4 per short ton-mile",
+   "labelCells": [
+    "C427",
+    "E421",
+    "G427"
+   ],
+   "label": "Waterborne Craft (short ton-mile)"
+  },
+  {
+   "id": "transport.waterborne_craft.short_ton_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F427",
+   "value": "0.002",
+   "unit": "g N2O per short ton-mile",
+   "labelCells": [
+    "C427",
+    "F421",
+    "G427"
+   ],
+   "label": "Waterborne Craft (short ton-mile)"
+  },
+  {
+   "id": "transport.aircraft.short_ton_mile.co2",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D428",
+   "value": "1.086",
+   "unit": "kg CO2 per short ton-mile",
+   "labelCells": [
+    "C428",
+    "D421",
+    "G428"
+   ],
+   "label": "Aircraft (short ton-mile)"
+  },
+  {
+   "id": "transport.aircraft.short_ton_mile.ch4",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E428",
+   "value": "0",
+   "unit": "g CH4 per short ton-mile",
+   "labelCells": [
+    "C428",
+    "E421",
+    "G428"
+   ],
+   "label": "Aircraft (short ton-mile)"
+  },
+  {
+   "id": "transport.aircraft.short_ton_mile.n2o",
+   "table": "Table 8 Scope 3 Category 4 and 9 transportation",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F428",
+   "value": "0.0334",
+   "unit": "g N2O per short ton-mile",
+   "labelCells": [
+    "C428",
+    "F421",
+    "G428"
+   ],
+   "label": "Aircraft (short ton-mile)"
+  },
+  {
+   "id": "travel.passenger_car.vehicle_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D504",
+   "value": "0.297",
+   "unit": "kg CO2 per vehicle-mile",
+   "labelCells": [
+    "C504",
+    "D503",
+    "G504"
+   ],
+   "label": "Passenger Car (vehicle-mile)"
+  },
+  {
+   "id": "travel.passenger_car.vehicle_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E504",
+   "value": "0.0059",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C504",
+    "E503",
+    "G504"
+   ],
+   "label": "Passenger Car (vehicle-mile)"
+  },
+  {
+   "id": "travel.passenger_car.vehicle_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F504",
+   "value": "0.0053",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "C504",
+    "F503",
+    "G504"
+   ],
+   "label": "Passenger Car (vehicle-mile)"
+  },
+  {
+   "id": "travel.light_duty_truck.vehicle_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D505",
+   "value": "0.394",
+   "unit": "kg CO2 per vehicle-mile",
+   "labelCells": [
+    "C505",
+    "D503",
+    "G505"
+   ],
+   "label": "Light-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "travel.light_duty_truck.vehicle_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E505",
+   "value": "0.0109",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C505",
+    "E503",
+    "G505"
+   ],
+   "label": "Light-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "travel.light_duty_truck.vehicle_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F505",
+   "value": "0.0088",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "C505",
+    "F503",
+    "G505"
+   ],
+   "label": "Light-Duty Truck (vehicle-mile)"
+  },
+  {
+   "id": "travel.motorcycle.vehicle_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D506",
+   "value": "0.368",
+   "unit": "kg CO2 per vehicle-mile",
+   "labelCells": [
+    "C506",
+    "D503",
+    "G506"
+   ],
+   "label": "Motorcycle (vehicle-mile)"
+  },
+  {
+   "id": "travel.motorcycle.vehicle_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E506",
+   "value": "0.0888",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C506",
+    "E503",
+    "G506"
+   ],
+   "label": "Motorcycle (vehicle-mile)"
+  },
+  {
+   "id": "travel.motorcycle.vehicle_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F506",
+   "value": "0.0188",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "C506",
+    "F503",
+    "G506"
+   ],
+   "label": "Motorcycle (vehicle-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_northeast_corridor.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D507",
+   "value": "0.023",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C507",
+    "D503",
+    "G507"
+   ],
+   "label": "Intercity Rail - Northeast Corridor (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_northeast_corridor.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E507",
+   "value": "0.001",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C507",
+    "E503",
+    "G507"
+   ],
+   "label": "Intercity Rail - Northeast Corridor (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_northeast_corridor.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F507",
+   "value": "0.0001",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C507",
+    "F503",
+    "G507"
+   ],
+   "label": "Intercity Rail - Northeast Corridor (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_other_routes.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D508",
+   "value": "0.149",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C508",
+    "D503",
+    "G508"
+   ],
+   "label": "Intercity Rail - Other Routes (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_other_routes.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E508",
+   "value": "0.012",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C508",
+    "E503",
+    "G508"
+   ],
+   "label": "Intercity Rail - Other Routes (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_other_routes.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F508",
+   "value": "0.004",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C508",
+    "F503",
+    "G508"
+   ],
+   "label": "Intercity Rail - Other Routes (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_national_average.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D509",
+   "value": "0.096",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C509",
+    "D503",
+    "G509"
+   ],
+   "label": "Intercity Rail - National Average (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_national_average.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E509",
+   "value": "0.008",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C509",
+    "E503",
+    "G509"
+   ],
+   "label": "Intercity Rail - National Average (passenger-mile)"
+  },
+  {
+   "id": "travel.intercity_rail_national_average.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F509",
+   "value": "0.002",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C509",
+    "F503",
+    "G509"
+   ],
+   "label": "Intercity Rail - National Average (passenger-mile)"
+  },
+  {
+   "id": "travel.commuter_rail.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D510",
+   "value": "0.133",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C510",
+    "D503",
+    "G510"
+   ],
+   "label": "Commuter Rail (passenger-mile)"
+  },
+  {
+   "id": "travel.commuter_rail.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E510",
+   "value": "0.0105",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C510",
+    "E503",
+    "G510"
+   ],
+   "label": "Commuter Rail (passenger-mile)"
+  },
+  {
+   "id": "travel.commuter_rail.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F510",
+   "value": "0.0026",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C510",
+    "F503",
+    "G510"
+   ],
+   "label": "Commuter Rail (passenger-mile)"
+  },
+  {
+   "id": "travel.transit_rail_i_e_subway_tram.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D511",
+   "value": "0.093",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C511",
+    "D503",
+    "G511"
+   ],
+   "label": "Transit Rail (i.e. Subway, Tram) (passenger-mile)"
+  },
+  {
+   "id": "travel.transit_rail_i_e_subway_tram.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E511",
+   "value": "0.0075",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C511",
+    "E503",
+    "G511"
+   ],
+   "label": "Transit Rail (i.e. Subway, Tram) (passenger-mile)"
+  },
+  {
+   "id": "travel.transit_rail_i_e_subway_tram.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F511",
+   "value": "0.001",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C511",
+    "F503",
+    "G511"
+   ],
+   "label": "Transit Rail (i.e. Subway, Tram) (passenger-mile)"
+  },
+  {
+   "id": "travel.bus.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D512",
+   "value": "0.066",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C512",
+    "D503",
+    "G512"
+   ],
+   "label": "Bus (passenger-mile)"
+  },
+  {
+   "id": "travel.bus.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E512",
+   "value": "0.0046",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C512",
+    "E503",
+    "G512"
+   ],
+   "label": "Bus (passenger-mile)"
+  },
+  {
+   "id": "travel.bus.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F512",
+   "value": "0.0019",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C512",
+    "F503",
+    "G512"
+   ],
+   "label": "Bus (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_short_haul_300_miles.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D513",
+   "value": "0.207",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C513",
+    "D503",
+    "G513"
+   ],
+   "label": "Air Travel - Short Haul (< 300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_short_haul_300_miles.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E513",
+   "value": "0.0064",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C513",
+    "E503",
+    "G513"
+   ],
+   "label": "Air Travel - Short Haul (< 300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_short_haul_300_miles.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F513",
+   "value": "0.0066",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C513",
+    "F503",
+    "G513"
+   ],
+   "label": "Air Travel - Short Haul (< 300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_medium_haul_300_miles_2300_miles.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D514",
+   "value": "0.129",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C514",
+    "D503",
+    "G514"
+   ],
+   "label": "Air Travel - Medium Haul (>= 300 miles, < 2300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_medium_haul_300_miles_2300_miles.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E514",
+   "value": "0.0006",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C514",
+    "E503",
+    "G514"
+   ],
+   "label": "Air Travel - Medium Haul (>= 300 miles, < 2300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_medium_haul_300_miles_2300_miles.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F514",
+   "value": "0.0041",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C514",
+    "F503",
+    "G514"
+   ],
+   "label": "Air Travel - Medium Haul (>= 300 miles, < 2300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_long_haul_2300_miles.passenger_mile.co2",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D515",
+   "value": "0.163",
+   "unit": "kg CO2 per passenger-mile",
+   "labelCells": [
+    "C515",
+    "D503",
+    "G515"
+   ],
+   "label": "Air Travel - Long Haul (>= 2300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_long_haul_2300_miles.passenger_mile.ch4",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E515",
+   "value": "0.0006",
+   "unit": "g CH4 per passenger-mile",
+   "labelCells": [
+    "C515",
+    "E503",
+    "G515"
+   ],
+   "label": "Air Travel - Long Haul (>= 2300 miles) (passenger-mile)"
+  },
+  {
+   "id": "travel.air_travel_long_haul_2300_miles.passenger_mile.n2o",
+   "table": "Table 10 Scope 3 Category 6 and 7 travel and commuting",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F515",
+   "value": "0.0052",
+   "unit": "g N2O per passenger-mile",
+   "labelCells": [
+    "C515",
+    "F503",
+    "G515"
+   ],
+   "label": "Air Travel - Long Haul (>= 2300 miles) (passenger-mile)"
+  },
+  {
+   "id": "waste.aluminum_cans.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D436",
+   "value": "0.06",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C436",
+    "D435"
+   ],
+   "label": "Aluminum Cans, recycled"
+  },
+  {
+   "id": "waste.aluminum_cans.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E436",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C436",
+    "E435"
+   ],
+   "label": "Aluminum Cans, landfilled"
+  },
+  {
+   "id": "waste.aluminum_cans.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F436",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C436",
+    "F435"
+   ],
+   "label": "Aluminum Cans, combusted"
+  },
+  {
+   "id": "waste.aluminum_ingot.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D437",
+   "value": "0.04",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C437",
+    "D435"
+   ],
+   "label": "Aluminum Ingot, recycled"
+  },
+  {
+   "id": "waste.aluminum_ingot.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E437",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C437",
+    "E435"
+   ],
+   "label": "Aluminum Ingot, landfilled"
+  },
+  {
+   "id": "waste.aluminum_ingot.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F437",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C437",
+    "F435"
+   ],
+   "label": "Aluminum Ingot, combusted"
+  },
+  {
+   "id": "waste.steel_cans.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D438",
+   "value": "0.32",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C438",
+    "D435"
+   ],
+   "label": "Steel Cans, recycled"
+  },
+  {
+   "id": "waste.steel_cans.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E438",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C438",
+    "E435"
+   ],
+   "label": "Steel Cans, landfilled"
+  },
+  {
+   "id": "waste.steel_cans.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F438",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C438",
+    "F435"
+   ],
+   "label": "Steel Cans, combusted"
+  },
+  {
+   "id": "waste.copper_wire.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D439",
+   "value": "0.18",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C439",
+    "D435"
+   ],
+   "label": "Copper Wire, recycled"
+  },
+  {
+   "id": "waste.copper_wire.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E439",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C439",
+    "E435"
+   ],
+   "label": "Copper Wire, landfilled"
+  },
+  {
+   "id": "waste.copper_wire.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F439",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C439",
+    "F435"
+   ],
+   "label": "Copper Wire, combusted"
+  },
+  {
+   "id": "waste.glass.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D440",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C440",
+    "D435"
+   ],
+   "label": "Glass, recycled"
+  },
+  {
+   "id": "waste.glass.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E440",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C440",
+    "E435"
+   ],
+   "label": "Glass, landfilled"
+  },
+  {
+   "id": "waste.glass.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F440",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C440",
+    "F435"
+   ],
+   "label": "Glass, combusted"
+  },
+  {
+   "id": "waste.hdpe.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D441",
+   "value": "0.21",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C441",
+    "D435"
+   ],
+   "label": "HDPE, recycled"
+  },
+  {
+   "id": "waste.hdpe.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E441",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C441",
+    "E435"
+   ],
+   "label": "HDPE, landfilled"
+  },
+  {
+   "id": "waste.hdpe.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F441",
+   "value": "2.8",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C441",
+    "F435"
+   ],
+   "label": "HDPE, combusted"
+  },
+  {
+   "id": "waste.ldpe.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E442",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C442",
+    "E435"
+   ],
+   "label": "LDPE, landfilled"
+  },
+  {
+   "id": "waste.ldpe.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F442",
+   "value": "2.8",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C442",
+    "F435"
+   ],
+   "label": "LDPE, combusted"
+  },
+  {
+   "id": "waste.pet.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D443",
+   "value": "0.23",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C443",
+    "D435"
+   ],
+   "label": "PET, recycled"
+  },
+  {
+   "id": "waste.pet.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E443",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C443",
+    "E435"
+   ],
+   "label": "PET, landfilled"
+  },
+  {
+   "id": "waste.pet.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F443",
+   "value": "2.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C443",
+    "F435"
+   ],
+   "label": "PET, combusted"
+  },
+  {
+   "id": "waste.lldpe.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E444",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C444",
+    "E435"
+   ],
+   "label": "LLDPE, landfilled"
+  },
+  {
+   "id": "waste.lldpe.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F444",
+   "value": "2.8",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C444",
+    "F435"
+   ],
+   "label": "LLDPE, combusted"
+  },
+  {
+   "id": "waste.pp.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D445",
+   "value": "0.2",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C445",
+    "D435"
+   ],
+   "label": "PP, recycled"
+  },
+  {
+   "id": "waste.pp.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E445",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C445",
+    "E435"
+   ],
+   "label": "PP, landfilled"
+  },
+  {
+   "id": "waste.pp.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F445",
+   "value": "2.8",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C445",
+    "F435"
+   ],
+   "label": "PP, combusted"
+  },
+  {
+   "id": "waste.ps.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E446",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C446",
+    "E435"
+   ],
+   "label": "PS, landfilled"
+  },
+  {
+   "id": "waste.ps.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F446",
+   "value": "3.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C446",
+    "F435"
+   ],
+   "label": "PS, combusted"
+  },
+  {
+   "id": "waste.pvc.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E447",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C447",
+    "E435"
+   ],
+   "label": "PVC, landfilled"
+  },
+  {
+   "id": "waste.pvc.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F447",
+   "value": "1.26",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C447",
+    "F435"
+   ],
+   "label": "PVC, combusted"
+  },
+  {
+   "id": "waste.pla.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E448",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C448",
+    "E435"
+   ],
+   "label": "PLA, landfilled"
+  },
+  {
+   "id": "waste.pla.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F448",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C448",
+    "F435"
+   ],
+   "label": "PLA, combusted"
+  },
+  {
+   "id": "waste.pla.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G448",
+   "value": "0.13",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C448",
+    "G435"
+   ],
+   "label": "PLA, composted"
+  },
+  {
+   "id": "waste.corrugated_containers.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D449",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C449",
+    "D435"
+   ],
+   "label": "Corrugated Containers, recycled"
+  },
+  {
+   "id": "waste.corrugated_containers.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E449",
+   "value": "1",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C449",
+    "E435"
+   ],
+   "label": "Corrugated Containers, landfilled"
+  },
+  {
+   "id": "waste.corrugated_containers.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F449",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C449",
+    "F435"
+   ],
+   "label": "Corrugated Containers, combusted"
+  },
+  {
+   "id": "waste.magazines_third_class_mail.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D450",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C450",
+    "D435"
+   ],
+   "label": "Magazines/Third-class mail, recycled"
+  },
+  {
+   "id": "waste.magazines_third_class_mail.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E450",
+   "value": "0.46",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C450",
+    "E435"
+   ],
+   "label": "Magazines/Third-class mail, landfilled"
+  },
+  {
+   "id": "waste.magazines_third_class_mail.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F450",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C450",
+    "F435"
+   ],
+   "label": "Magazines/Third-class mail, combusted"
+  },
+  {
+   "id": "waste.newspaper.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D451",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C451",
+    "D435"
+   ],
+   "label": "Newspaper, recycled"
+  },
+  {
+   "id": "waste.newspaper.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E451",
+   "value": "0.39",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C451",
+    "E435"
+   ],
+   "label": "Newspaper, landfilled"
+  },
+  {
+   "id": "waste.newspaper.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F451",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C451",
+    "F435"
+   ],
+   "label": "Newspaper, combusted"
+  },
+  {
+   "id": "waste.office_paper.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D452",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C452",
+    "D435"
+   ],
+   "label": "Office Paper, recycled"
+  },
+  {
+   "id": "waste.office_paper.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E452",
+   "value": "1.41",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C452",
+    "E435"
+   ],
+   "label": "Office Paper, landfilled"
+  },
+  {
+   "id": "waste.office_paper.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F452",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C452",
+    "F435"
+   ],
+   "label": "Office Paper, combusted"
+  },
+  {
+   "id": "waste.phonebooks.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D453",
+   "value": "0.04",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C453",
+    "D435"
+   ],
+   "label": "Phonebooks, recycled"
+  },
+  {
+   "id": "waste.phonebooks.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E453",
+   "value": "0.39",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C453",
+    "E435"
+   ],
+   "label": "Phonebooks, landfilled"
+  },
+  {
+   "id": "waste.phonebooks.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F453",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C453",
+    "F435"
+   ],
+   "label": "Phonebooks, combusted"
+  },
+  {
+   "id": "waste.textbooks.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D454",
+   "value": "0.04",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C454",
+    "D435"
+   ],
+   "label": "Textbooks, recycled"
+  },
+  {
+   "id": "waste.textbooks.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E454",
+   "value": "1.41",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C454",
+    "E435"
+   ],
+   "label": "Textbooks, landfilled"
+  },
+  {
+   "id": "waste.textbooks.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F454",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C454",
+    "F435"
+   ],
+   "label": "Textbooks, combusted"
+  },
+  {
+   "id": "waste.dimensional_lumber.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E455",
+   "value": "0.17",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C455",
+    "E435"
+   ],
+   "label": "Dimensional Lumber, landfilled"
+  },
+  {
+   "id": "waste.dimensional_lumber.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F455",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C455",
+    "F435"
+   ],
+   "label": "Dimensional Lumber, combusted"
+  },
+  {
+   "id": "waste.medium_density_fiberboard.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E456",
+   "value": "0.07",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C456",
+    "E435"
+   ],
+   "label": "Medium-density Fiberboard, landfilled"
+  },
+  {
+   "id": "waste.medium_density_fiberboard.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F456",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C456",
+    "F435"
+   ],
+   "label": "Medium-density Fiberboard, combusted"
+  },
+  {
+   "id": "waste.food_waste_non_meat.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E457",
+   "value": "0.67",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C457",
+    "E435"
+   ],
+   "label": "Food Waste (non-meat), landfilled"
+  },
+  {
+   "id": "waste.food_waste_non_meat.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F457",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C457",
+    "F435"
+   ],
+   "label": "Food Waste (non-meat), combusted"
+  },
+  {
+   "id": "waste.food_waste_non_meat.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G457",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C457",
+    "G435"
+   ],
+   "label": "Food Waste (non-meat), composted"
+  },
+  {
+   "id": "waste.food_waste_non_meat.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H457",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C457",
+    "H435"
+   ],
+   "label": "Food Waste (non-meat), anaerobic digestion dry"
+  },
+  {
+   "id": "waste.food_waste_non_meat.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I457",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C457",
+    "I435"
+   ],
+   "label": "Food Waste (non-meat), anaerobic digestion wet"
+  },
+  {
+   "id": "waste.food_waste_meat_only.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E458",
+   "value": "0.69",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C458",
+    "E435"
+   ],
+   "label": "Food Waste (meat only), landfilled"
+  },
+  {
+   "id": "waste.food_waste_meat_only.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F458",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C458",
+    "F435"
+   ],
+   "label": "Food Waste (meat only), combusted"
+  },
+  {
+   "id": "waste.food_waste_meat_only.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G458",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C458",
+    "G435"
+   ],
+   "label": "Food Waste (meat only), composted"
+  },
+  {
+   "id": "waste.food_waste_meat_only.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H458",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C458",
+    "H435"
+   ],
+   "label": "Food Waste (meat only), anaerobic digestion dry"
+  },
+  {
+   "id": "waste.food_waste_meat_only.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I458",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C458",
+    "I435"
+   ],
+   "label": "Food Waste (meat only), anaerobic digestion wet"
+  },
+  {
+   "id": "waste.beef.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E459",
+   "value": "0.64",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C459",
+    "E435"
+   ],
+   "label": "Beef, landfilled"
+  },
+  {
+   "id": "waste.beef.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F459",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C459",
+    "F435"
+   ],
+   "label": "Beef, combusted"
+  },
+  {
+   "id": "waste.beef.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G459",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C459",
+    "G435"
+   ],
+   "label": "Beef, composted"
+  },
+  {
+   "id": "waste.beef.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H459",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C459",
+    "H435"
+   ],
+   "label": "Beef, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.beef.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I459",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C459",
+    "I435"
+   ],
+   "label": "Beef, anaerobic digestion wet"
+  },
+  {
+   "id": "waste.poultry.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E460",
+   "value": "0.73",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C460",
+    "E435"
+   ],
+   "label": "Poultry, landfilled"
+  },
+  {
+   "id": "waste.poultry.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F460",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C460",
+    "F435"
+   ],
+   "label": "Poultry, combusted"
+  },
+  {
+   "id": "waste.poultry.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G460",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C460",
+    "G435"
+   ],
+   "label": "Poultry, composted"
+  },
+  {
+   "id": "waste.poultry.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H460",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C460",
+    "H435"
+   ],
+   "label": "Poultry, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.poultry.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I460",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C460",
+    "I435"
+   ],
+   "label": "Poultry, anaerobic digestion wet"
+  },
+  {
+   "id": "waste.grains.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E461",
+   "value": "2.06",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C461",
+    "E435"
+   ],
+   "label": "Grains, landfilled"
+  },
+  {
+   "id": "waste.grains.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F461",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C461",
+    "F435"
+   ],
+   "label": "Grains, combusted"
+  },
+  {
+   "id": "waste.grains.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G461",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C461",
+    "G435"
+   ],
+   "label": "Grains, composted"
+  },
+  {
+   "id": "waste.grains.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H461",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C461",
+    "H435"
+   ],
+   "label": "Grains, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.grains.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I461",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C461",
+    "I435"
+   ],
+   "label": "Grains, anaerobic digestion wet"
+  },
+  {
+   "id": "waste.bread.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E462",
+   "value": "1.49",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C462",
+    "E435"
+   ],
+   "label": "Bread, landfilled"
+  },
+  {
+   "id": "waste.bread.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F462",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C462",
+    "F435"
+   ],
+   "label": "Bread, combusted"
+  },
+  {
+   "id": "waste.bread.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G462",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C462",
+    "G435"
+   ],
+   "label": "Bread, composted"
+  },
+  {
+   "id": "waste.bread.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H462",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C462",
+    "H435"
+   ],
+   "label": "Bread, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.bread.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I462",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C462",
+    "I435"
+   ],
+   "label": "Bread, anaerobic digestion wet"
+  },
+  {
+   "id": "waste.fruits_and_vegetables.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E463",
+   "value": "0.28",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C463",
+    "E435"
+   ],
+   "label": "Fruits and Vegetables, landfilled"
+  },
+  {
+   "id": "waste.fruits_and_vegetables.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F463",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C463",
+    "F435"
+   ],
+   "label": "Fruits and Vegetables, combusted"
+  },
+  {
+   "id": "waste.fruits_and_vegetables.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G463",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C463",
+    "G435"
+   ],
+   "label": "Fruits and Vegetables, composted"
+  },
+  {
+   "id": "waste.fruits_and_vegetables.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H463",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C463",
+    "H435"
+   ],
+   "label": "Fruits and Vegetables, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.fruits_and_vegetables.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I463",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C463",
+    "I435"
+   ],
+   "label": "Fruits and Vegetables, anaerobic digestion wet"
+  },
+  {
+   "id": "waste.dairy_products.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E464",
+   "value": "0.72",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C464",
+    "E435"
+   ],
+   "label": "Dairy Products, landfilled"
+  },
+  {
+   "id": "waste.dairy_products.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F464",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C464",
+    "F435"
+   ],
+   "label": "Dairy Products, combusted"
+  },
+  {
+   "id": "waste.dairy_products.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G464",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C464",
+    "G435"
+   ],
+   "label": "Dairy Products, composted"
+  },
+  {
+   "id": "waste.dairy_products.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H464",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C464",
+    "H435"
+   ],
+   "label": "Dairy Products, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.dairy_products.anaerobic_digestion_wet",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "I464",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C464",
+    "I435"
+   ],
+   "label": "Dairy Products, anaerobic digestion wet"
+  },
+  {
+   "id": "waste.yard_trimmings.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E465",
+   "value": "0.36",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C465",
+    "E435"
+   ],
+   "label": "Yard Trimmings, landfilled"
+  },
+  {
+   "id": "waste.yard_trimmings.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F465",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C465",
+    "F435"
+   ],
+   "label": "Yard Trimmings, combusted"
+  },
+  {
+   "id": "waste.yard_trimmings.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G465",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C465",
+    "G435"
+   ],
+   "label": "Yard Trimmings, composted"
+  },
+  {
+   "id": "waste.yard_trimmings.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H465",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C465",
+    "H435"
+   ],
+   "label": "Yard Trimmings, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.grass.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E466",
+   "value": "0.28",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C466",
+    "E435"
+   ],
+   "label": "Grass, landfilled"
+  },
+  {
+   "id": "waste.grass.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F466",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C466",
+    "F435"
+   ],
+   "label": "Grass, combusted"
+  },
+  {
+   "id": "waste.grass.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G466",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C466",
+    "G435"
+   ],
+   "label": "Grass, composted"
+  },
+  {
+   "id": "waste.grass.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H466",
+   "value": "0.09",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C466",
+    "H435"
+   ],
+   "label": "Grass, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.leaves.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E467",
+   "value": "0.28",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C467",
+    "E435"
+   ],
+   "label": "Leaves, landfilled"
+  },
+  {
+   "id": "waste.leaves.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F467",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C467",
+    "F435"
+   ],
+   "label": "Leaves, combusted"
+  },
+  {
+   "id": "waste.leaves.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G467",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C467",
+    "G435"
+   ],
+   "label": "Leaves, composted"
+  },
+  {
+   "id": "waste.leaves.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H467",
+   "value": "0.12",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C467",
+    "H435"
+   ],
+   "label": "Leaves, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.branches.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E468",
+   "value": "0.58",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C468",
+    "E435"
+   ],
+   "label": "Branches, landfilled"
+  },
+  {
+   "id": "waste.branches.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F468",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C468",
+    "F435"
+   ],
+   "label": "Branches, combusted"
+  },
+  {
+   "id": "waste.branches.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G468",
+   "value": "0.14",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C468",
+    "G435"
+   ],
+   "label": "Branches, composted"
+  },
+  {
+   "id": "waste.branches.anaerobic_digestion_dry",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "H468",
+   "value": "0.15",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C468",
+    "H435"
+   ],
+   "label": "Branches, anaerobic digestion dry"
+  },
+  {
+   "id": "waste.mixed_paper_general.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D469",
+   "value": "0.07",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C469",
+    "D435"
+   ],
+   "label": "Mixed Paper (general), recycled"
+  },
+  {
+   "id": "waste.mixed_paper_general.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E469",
+   "value": "0.89",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C469",
+    "E435"
+   ],
+   "label": "Mixed Paper (general), landfilled"
+  },
+  {
+   "id": "waste.mixed_paper_general.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F469",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C469",
+    "F435"
+   ],
+   "label": "Mixed Paper (general), combusted"
+  },
+  {
+   "id": "waste.mixed_paper_primarily_residential.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D470",
+   "value": "0.07",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C470",
+    "D435"
+   ],
+   "label": "Mixed Paper (primarily residential), recycled"
+  },
+  {
+   "id": "waste.mixed_paper_primarily_residential.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E470",
+   "value": "0.86",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C470",
+    "E435"
+   ],
+   "label": "Mixed Paper (primarily residential), landfilled"
+  },
+  {
+   "id": "waste.mixed_paper_primarily_residential.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F470",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C470",
+    "F435"
+   ],
+   "label": "Mixed Paper (primarily residential), combusted"
+  },
+  {
+   "id": "waste.mixed_paper_primarily_from_offices.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D471",
+   "value": "0.03",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C471",
+    "D435"
+   ],
+   "label": "Mixed Paper (primarily from offices), recycled"
+  },
+  {
+   "id": "waste.mixed_paper_primarily_from_offices.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E471",
+   "value": "0.84",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C471",
+    "E435"
+   ],
+   "label": "Mixed Paper (primarily from offices), landfilled"
+  },
+  {
+   "id": "waste.mixed_paper_primarily_from_offices.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F471",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C471",
+    "F435"
+   ],
+   "label": "Mixed Paper (primarily from offices), combusted"
+  },
+  {
+   "id": "waste.mixed_metals.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D472",
+   "value": "0.23",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C472",
+    "D435"
+   ],
+   "label": "Mixed Metals, recycled"
+  },
+  {
+   "id": "waste.mixed_metals.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E472",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C472",
+    "E435"
+   ],
+   "label": "Mixed Metals, landfilled"
+  },
+  {
+   "id": "waste.mixed_metals.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F472",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C472",
+    "F435"
+   ],
+   "label": "Mixed Metals, combusted"
+  },
+  {
+   "id": "waste.mixed_plastics.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D473",
+   "value": "0.22",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C473",
+    "D435"
+   ],
+   "label": "Mixed Plastics, recycled"
+  },
+  {
+   "id": "waste.mixed_plastics.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E473",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C473",
+    "E435"
+   ],
+   "label": "Mixed Plastics, landfilled"
+  },
+  {
+   "id": "waste.mixed_plastics.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F473",
+   "value": "2.34",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C473",
+    "F435"
+   ],
+   "label": "Mixed Plastics, combusted"
+  },
+  {
+   "id": "waste.mixed_recyclables.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D474",
+   "value": "0.09",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C474",
+    "D435"
+   ],
+   "label": "Mixed Recyclables, recycled"
+  },
+  {
+   "id": "waste.mixed_recyclables.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E474",
+   "value": "0.75",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C474",
+    "E435"
+   ],
+   "label": "Mixed Recyclables, landfilled"
+  },
+  {
+   "id": "waste.mixed_recyclables.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F474",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C474",
+    "F435"
+   ],
+   "label": "Mixed Recyclables, combusted"
+  },
+  {
+   "id": "waste.food_waste.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E475",
+   "value": "0.68",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C475",
+    "E435"
+   ],
+   "label": "Food Waste, landfilled"
+  },
+  {
+   "id": "waste.food_waste.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F475",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C475",
+    "F435"
+   ],
+   "label": "Food Waste, combusted"
+  },
+  {
+   "id": "waste.food_waste.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G475",
+   "value": "0.11",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C475",
+    "G435"
+   ],
+   "label": "Food Waste, composted"
+  },
+  {
+   "id": "waste.mixed_organics.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E476",
+   "value": "0.54",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C476",
+    "E435"
+   ],
+   "label": "Mixed Organics, landfilled"
+  },
+  {
+   "id": "waste.mixed_organics.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F476",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C476",
+    "F435"
+   ],
+   "label": "Mixed Organics, combusted"
+  },
+  {
+   "id": "waste.mixed_organics.composted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G476",
+   "value": "0.13",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C476",
+    "G435"
+   ],
+   "label": "Mixed Organics, composted"
+  },
+  {
+   "id": "waste.mixed_msw.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E477",
+   "value": "0.58",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C477",
+    "E435"
+   ],
+   "label": "Mixed MSW, landfilled"
+  },
+  {
+   "id": "waste.mixed_msw.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F477",
+   "value": "0.43",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C477",
+    "F435"
+   ],
+   "label": "Mixed MSW, combusted"
+  },
+  {
+   "id": "waste.carpet.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E478",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C478",
+    "E435"
+   ],
+   "label": "Carpet, landfilled"
+  },
+  {
+   "id": "waste.carpet.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F478",
+   "value": "1.68",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C478",
+    "F435"
+   ],
+   "label": "Carpet, combusted"
+  },
+  {
+   "id": "waste.desktop_cpus.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D479",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C479",
+    "D435"
+   ],
+   "label": "Desktop CPUs, recycled"
+  },
+  {
+   "id": "waste.desktop_cpus.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E479",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C479",
+    "E435"
+   ],
+   "label": "Desktop CPUs, landfilled"
+  },
+  {
+   "id": "waste.desktop_cpus.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F479",
+   "value": "0.4",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C479",
+    "F435"
+   ],
+   "label": "Desktop CPUs, combusted"
+  },
+  {
+   "id": "waste.portable_electronic_devices.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D480",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C480",
+    "D435"
+   ],
+   "label": "Portable Electronic Devices, recycled"
+  },
+  {
+   "id": "waste.portable_electronic_devices.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E480",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C480",
+    "E435"
+   ],
+   "label": "Portable Electronic Devices, landfilled"
+  },
+  {
+   "id": "waste.portable_electronic_devices.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F480",
+   "value": "0.89",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C480",
+    "F435"
+   ],
+   "label": "Portable Electronic Devices, combusted"
+  },
+  {
+   "id": "waste.flat_panel_displays.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D481",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C481",
+    "D435"
+   ],
+   "label": "Flat-panel Displays, recycled"
+  },
+  {
+   "id": "waste.flat_panel_displays.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E481",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C481",
+    "E435"
+   ],
+   "label": "Flat-panel Displays, landfilled"
+  },
+  {
+   "id": "waste.flat_panel_displays.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F481",
+   "value": "0.74",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C481",
+    "F435"
+   ],
+   "label": "Flat-panel Displays, combusted"
+  },
+  {
+   "id": "waste.crt_displays.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E482",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C482",
+    "E435"
+   ],
+   "label": "CRT Displays, landfilled"
+  },
+  {
+   "id": "waste.crt_displays.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F482",
+   "value": "0.64",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C482",
+    "F435"
+   ],
+   "label": "CRT Displays, combusted"
+  },
+  {
+   "id": "waste.electronic_peripherals.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D483",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C483",
+    "D435"
+   ],
+   "label": "Electronic Peripherals, recycled"
+  },
+  {
+   "id": "waste.electronic_peripherals.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E483",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C483",
+    "E435"
+   ],
+   "label": "Electronic Peripherals, landfilled"
+  },
+  {
+   "id": "waste.electronic_peripherals.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F483",
+   "value": "2.23",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C483",
+    "F435"
+   ],
+   "label": "Electronic Peripherals, combusted"
+  },
+  {
+   "id": "waste.hard_copy_devices.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D484",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C484",
+    "D435"
+   ],
+   "label": "Hard-copy Devices, recycled"
+  },
+  {
+   "id": "waste.hard_copy_devices.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E484",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C484",
+    "E435"
+   ],
+   "label": "Hard-copy Devices, landfilled"
+  },
+  {
+   "id": "waste.hard_copy_devices.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F484",
+   "value": "1.92",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C484",
+    "F435"
+   ],
+   "label": "Hard-copy Devices, combusted"
+  },
+  {
+   "id": "waste.mixed_electronics.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D485",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C485",
+    "D435"
+   ],
+   "label": "Mixed Electronics, recycled"
+  },
+  {
+   "id": "waste.mixed_electronics.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E485",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C485",
+    "E435"
+   ],
+   "label": "Mixed Electronics, landfilled"
+  },
+  {
+   "id": "waste.mixed_electronics.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F485",
+   "value": "0.96",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C485",
+    "F435"
+   ],
+   "label": "Mixed Electronics, combusted"
+  },
+  {
+   "id": "waste.clay_bricks.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E486",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C486",
+    "E435"
+   ],
+   "label": "Clay Bricks, landfilled"
+  },
+  {
+   "id": "waste.concrete.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D487",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C487",
+    "D435"
+   ],
+   "label": "Concrete, recycled"
+  },
+  {
+   "id": "waste.concrete.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E487",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C487",
+    "E435"
+   ],
+   "label": "Concrete, landfilled"
+  },
+  {
+   "id": "waste.fly_ash.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D488",
+   "value": "0.01",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C488",
+    "D435"
+   ],
+   "label": "Fly Ash, recycled"
+  },
+  {
+   "id": "waste.fly_ash.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E488",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C488",
+    "E435"
+   ],
+   "label": "Fly Ash, landfilled"
+  },
+  {
+   "id": "waste.tires.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D489",
+   "value": "0.1",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C489",
+    "D435"
+   ],
+   "label": "Tires, recycled"
+  },
+  {
+   "id": "waste.tires.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E489",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C489",
+    "E435"
+   ],
+   "label": "Tires, landfilled"
+  },
+  {
+   "id": "waste.tires.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F489",
+   "value": "2.21",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C489",
+    "F435"
+   ],
+   "label": "Tires, combusted"
+  },
+  {
+   "id": "waste.asphalt_concrete.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D490",
+   "value": "0.0035205384954666674",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C490",
+    "D435"
+   ],
+   "label": "Asphalt Concrete, recycled"
+  },
+  {
+   "id": "waste.asphalt_concrete.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E490",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C490",
+    "E435"
+   ],
+   "label": "Asphalt Concrete, landfilled"
+  },
+  {
+   "id": "waste.asphalt_shingles.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D491",
+   "value": "0.03",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C491",
+    "D435"
+   ],
+   "label": "Asphalt Shingles, recycled"
+  },
+  {
+   "id": "waste.asphalt_shingles.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E491",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C491",
+    "E435"
+   ],
+   "label": "Asphalt Shingles, landfilled"
+  },
+  {
+   "id": "waste.asphalt_shingles.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F491",
+   "value": "0.7",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C491",
+    "F435"
+   ],
+   "label": "Asphalt Shingles, combusted"
+  },
+  {
+   "id": "waste.drywall.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E492",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C492",
+    "E435"
+   ],
+   "label": "Drywall, landfilled"
+  },
+  {
+   "id": "waste.fiberglass_insulation.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D493",
+   "value": "0.05",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C493",
+    "D435"
+   ],
+   "label": "Fiberglass Insulation, recycled"
+  },
+  {
+   "id": "waste.fiberglass_insulation.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E493",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C493",
+    "E435"
+   ],
+   "label": "Fiberglass Insulation, landfilled"
+  },
+  {
+   "id": "waste.structural_steel.recycled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D494",
+   "value": "0.04",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C494",
+    "D435"
+   ],
+   "label": "Structural Steel, recycled"
+  },
+  {
+   "id": "waste.structural_steel.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E494",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C494",
+    "E435"
+   ],
+   "label": "Structural Steel, landfilled"
+  },
+  {
+   "id": "waste.vinyl_flooring.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E495",
+   "value": "0.02",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C495",
+    "E435"
+   ],
+   "label": "Vinyl Flooring, landfilled"
+  },
+  {
+   "id": "waste.vinyl_flooring.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F495",
+   "value": "0.29",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C495",
+    "F435"
+   ],
+   "label": "Vinyl Flooring, combusted"
+  },
+  {
+   "id": "waste.wood_flooring.landfilled",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E496",
+   "value": "0.18",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C496",
+    "E435"
+   ],
+   "label": "Wood Flooring, landfilled"
+  },
+  {
+   "id": "waste.wood_flooring.combusted",
+   "table": "Table 9 Scope 3 Category 5 and 12 waste",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F496",
+   "value": "0.08",
+   "unit": "metric ton CO2e (AR4 GWP) per short ton",
+   "labelCells": [
+    "C496",
+    "F435"
+   ],
+   "label": "Wood Flooring, combusted"
+  },
+  {
+   "id": "gwp_ar5.CO2",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E524",
+   "value": "1",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C524",
+    "E523"
+   ],
+   "label": "CO2",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.CH4",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E525",
+   "value": "28",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C525",
+    "E523"
+   ],
+   "label": "CH4",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.N2O",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E526",
+   "value": "265",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C526",
+    "E523"
+   ],
+   "label": "N2O",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "egrid2023.AKGD.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W3",
+   "value": "899.633",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "W1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKGD.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X3",
+   "value": "0.086",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "X1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKGD.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y3",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B3",
+    "C3",
+    "Y1"
+   ],
+   "label": "ASCC Alaska Grid (AKGD)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W4",
+   "value": "520.483",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "W1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X4",
+   "value": "0.026",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "X1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AKMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y4",
+   "value": "0.004",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B4",
+    "C4",
+    "Y1"
+   ],
+   "label": "ASCC Miscellaneous (AKMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AZNM.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W5",
+   "value": "703.703",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "W1"
+   ],
+   "label": "WECC Southwest (AZNM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AZNM.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X5",
+   "value": "0.039",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "X1"
+   ],
+   "label": "WECC Southwest (AZNM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.AZNM.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y5",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B5",
+    "C5",
+    "Y1"
+   ],
+   "label": "WECC Southwest (AZNM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.CAMX.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W6",
+   "value": "428.464",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "W1"
+   ],
+   "label": "WECC California (CAMX)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.CAMX.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X6",
+   "value": "0.025",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "X1"
+   ],
+   "label": "WECC California (CAMX)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.CAMX.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y6",
+   "value": "0.003",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B6",
+    "C6",
+    "Y1"
+   ],
+   "label": "WECC California (CAMX)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.ERCT.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W7",
+   "value": "733.862",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "W1"
+   ],
+   "label": "ERCOT All (ERCT)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.ERCT.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X7",
+   "value": "0.043",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "X1"
+   ],
+   "label": "ERCOT All (ERCT)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.ERCT.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y7",
+   "value": "0.006",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B7",
+    "C7",
+    "Y1"
+   ],
+   "label": "ERCOT All (ERCT)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.FRCC.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W8",
+   "value": "782.262",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "W1"
+   ],
+   "label": "FRCC All (FRCC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.FRCC.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X8",
+   "value": "0.041",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "X1"
+   ],
+   "label": "FRCC All (FRCC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.FRCC.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y8",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B8",
+    "C8",
+    "Y1"
+   ],
+   "label": "FRCC All (FRCC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W9",
+   "value": "1123.371",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "W1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X9",
+   "value": "0.146",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "X1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y9",
+   "value": "0.022",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B9",
+    "C9",
+    "Y1"
+   ],
+   "label": "HICC Miscellaneous (HIMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIOA.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W10",
+   "value": "1489.548",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "W1"
+   ],
+   "label": "HICC Oahu (HIOA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIOA.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X10",
+   "value": "0.134",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "X1"
+   ],
+   "label": "HICC Oahu (HIOA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.HIOA.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y10",
+   "value": "0.021",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B10",
+    "C10",
+    "Y1"
+   ],
+   "label": "HICC Oahu (HIOA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W11",
+   "value": "1397.313",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "W1"
+   ],
+   "label": "MRO East (MROE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X11",
+   "value": "0.116",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "X1"
+   ],
+   "label": "MRO East (MROE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y11",
+   "value": "0.017",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B11",
+    "C11",
+    "Y1"
+   ],
+   "label": "MRO East (MROE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W12",
+   "value": "920.13",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "W1"
+   ],
+   "label": "MRO West (MROW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X12",
+   "value": "0.097",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "X1"
+   ],
+   "label": "MRO West (MROW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.MROW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y12",
+   "value": "0.014",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B12",
+    "C12",
+    "Y1"
+   ],
+   "label": "MRO West (MROW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NEWE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W13",
+   "value": "539.275",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "W1"
+   ],
+   "label": "NPCC New England (NEWE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NEWE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X13",
+   "value": "0.063",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "X1"
+   ],
+   "label": "NPCC New England (NEWE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NEWE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y13",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B13",
+    "C13",
+    "Y1"
+   ],
+   "label": "NPCC New England (NEWE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NWPP.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W14",
+   "value": "631.735",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "W1"
+   ],
+   "label": "WECC Northwest (NWPP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NWPP.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X14",
+   "value": "0.054",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "X1"
+   ],
+   "label": "WECC Northwest (NWPP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NWPP.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y14",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B14",
+    "C14",
+    "Y1"
+   ],
+   "label": "WECC Northwest (NWPP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYCW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W15",
+   "value": "864.469",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "W1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYCW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X15",
+   "value": "0.022",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "X1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYCW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y15",
+   "value": "0.002",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B15",
+    "C15",
+    "Y1"
+   ],
+   "label": "NPCC NYC/Westchester (NYCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYLI.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W16",
+   "value": "1180.672",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "W1"
+   ],
+   "label": "NPCC Long Island (NYLI)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYLI.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X16",
+   "value": "0.14",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "X1"
+   ],
+   "label": "NPCC Long Island (NYLI)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYLI.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y16",
+   "value": "0.018",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B16",
+    "C16",
+    "Y1"
+   ],
+   "label": "NPCC Long Island (NYLI)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYUP.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W17",
+   "value": "242.089",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "W1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYUP.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X17",
+   "value": "0.011",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "X1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.NYUP.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y17",
+   "value": "0.001",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B17",
+    "C17",
+    "Y1"
+   ],
+   "label": "NPCC Upstate NY (NYUP)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.PRMS.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W18",
+   "value": "1543.073",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "W1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.PRMS.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X18",
+   "value": "0.077",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "X1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.PRMS.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y18",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B18",
+    "C18",
+    "Y1"
+   ],
+   "label": "Puerto Rico Miscellaneous (PRMS)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCE.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W19",
+   "value": "596.904",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "W1"
+   ],
+   "label": "RFC East (RFCE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCE.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X19",
+   "value": "0.036",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "X1"
+   ],
+   "label": "RFC East (RFCE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCE.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y19",
+   "value": "0.005",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B19",
+    "C19",
+    "Y1"
+   ],
+   "label": "RFC East (RFCE)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCM.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W20",
+   "value": "970.617",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "W1"
+   ],
+   "label": "RFC Michigan (RFCM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCM.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X20",
+   "value": "0.082",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "X1"
+   ],
+   "label": "RFC Michigan (RFCM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCM.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y20",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B20",
+    "C20",
+    "Y1"
+   ],
+   "label": "RFC Michigan (RFCM)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W21",
+   "value": "911.424",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "W1"
+   ],
+   "label": "RFC West (RFCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X21",
+   "value": "0.071",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "X1"
+   ],
+   "label": "RFC West (RFCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RFCW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y21",
+   "value": "0.01",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B21",
+    "C21",
+    "Y1"
+   ],
+   "label": "RFC West (RFCW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RMPA.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W22",
+   "value": "1036.601",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "W1"
+   ],
+   "label": "WECC Rockies (RMPA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RMPA.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X22",
+   "value": "0.09",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "X1"
+   ],
+   "label": "WECC Rockies (RMPA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.RMPA.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y22",
+   "value": "0.013",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B22",
+    "C22",
+    "Y1"
+   ],
+   "label": "WECC Rockies (RMPA)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPNO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W23",
+   "value": "861.999",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "W1"
+   ],
+   "label": "SPP North (SPNO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPNO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X23",
+   "value": "0.087",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "X1"
+   ],
+   "label": "SPP North (SPNO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPNO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y23",
+   "value": "0.012",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B23",
+    "C23",
+    "Y1"
+   ],
+   "label": "SPP North (SPNO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPSO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W24",
+   "value": "872.042",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "W1"
+   ],
+   "label": "SPP South (SPSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPSO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X24",
+   "value": "0.054",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "X1"
+   ],
+   "label": "SPP South (SPSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SPSO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y24",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B24",
+    "C24",
+    "Y1"
+   ],
+   "label": "SPP South (SPSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMV.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W25",
+   "value": "739.72",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "W1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMV.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X25",
+   "value": "0.032",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "X1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMV.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y25",
+   "value": "0.004",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B25",
+    "C25",
+    "Y1"
+   ],
+   "label": "SERC Mississippi Valley (SRMV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMW.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W26",
+   "value": "1239.839",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "W1"
+   ],
+   "label": "SERC Midwest (SRMW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMW.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X26",
+   "value": "0.132",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "X1"
+   ],
+   "label": "SERC Midwest (SRMW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRMW.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y26",
+   "value": "0.019",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B26",
+    "C26",
+    "Y1"
+   ],
+   "label": "SERC Midwest (SRMW)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRSO.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W27",
+   "value": "842.329",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "W1"
+   ],
+   "label": "SERC South (SRSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRSO.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X27",
+   "value": "0.056",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "X1"
+   ],
+   "label": "SERC South (SRSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRSO.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y27",
+   "value": "0.008",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B27",
+    "C27",
+    "Y1"
+   ],
+   "label": "SERC South (SRSO)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRTV.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W28",
+   "value": "898.079",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "W1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRTV.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X28",
+   "value": "0.079",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "X1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRTV.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y28",
+   "value": "0.011",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B28",
+    "C28",
+    "Y1"
+   ],
+   "label": "SERC Tennessee Valley (SRTV)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRVC.co2",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "W29",
+   "value": "593.419",
+   "unit": "lb CO2 per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "W1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRVC.ch4",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "X29",
+   "value": "0.045",
+   "unit": "lb CH4 per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "X1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023.SRVC.n2o",
+   "table": "SRL23 eGRID subregion annual total output emission rates",
+   "sheet": "SRL23",
+   "valueCell": "Y29",
+   "value": "0.006",
+   "unit": "lb N2O per MWh",
+   "labelCells": [
+    "B29",
+    "C29",
+    "Y1"
+   ],
+   "label": "SERC Virginia/Carolina (SRVC)",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023_ggl.alaska",
+   "table": "GGL23 eGRID grid gross loss by interconnect",
+   "sheet": "GGL23",
+   "valueCell": "F3",
+   "value": "0.041",
+   "unit": "fraction of generation lost in transmission and distribution",
+   "labelCells": [
+    "B3",
+    "F1"
+   ],
+   "label": "Alaska grid gross loss",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023_ggl.ercot",
+   "table": "GGL23 eGRID grid gross loss by interconnect",
+   "sheet": "GGL23",
+   "valueCell": "F4",
+   "value": "0.042",
+   "unit": "fraction of generation lost in transmission and distribution",
+   "labelCells": [
+    "B4",
+    "F1"
+   ],
+   "label": "ERCOT grid gross loss",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023_ggl.eastern",
+   "table": "GGL23 eGRID grid gross loss by interconnect",
+   "sheet": "GGL23",
+   "valueCell": "F5",
+   "value": "0.042",
+   "unit": "fraction of generation lost in transmission and distribution",
+   "labelCells": [
+    "B5",
+    "F1"
+   ],
+   "label": "Eastern grid gross loss",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023_ggl.hawaii",
+   "table": "GGL23 eGRID grid gross loss by interconnect",
+   "sheet": "GGL23",
+   "valueCell": "F6",
+   "value": "0.044",
+   "unit": "fraction of generation lost in transmission and distribution",
+   "labelCells": [
+    "B6",
+    "F1"
+   ],
+   "label": "Hawaii grid gross loss",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023_ggl.western",
+   "table": "GGL23 eGRID grid gross loss by interconnect",
+   "sheet": "GGL23",
+   "valueCell": "F7",
+   "value": "0.041",
+   "unit": "fraction of generation lost in transmission and distribution",
+   "labelCells": [
+    "B7",
+    "F1"
+   ],
+   "label": "Western grid gross loss",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  },
+  {
+   "id": "egrid2023_ggl.u_s",
+   "table": "GGL23 eGRID grid gross loss by interconnect",
+   "sheet": "GGL23",
+   "valueCell": "F8",
+   "value": "0.042",
+   "unit": "fraction of generation lost in transmission and distribution",
+   "labelCells": [
+    "B8",
+    "F1"
+   ],
+   "label": "U.S. grid gross loss",
+   "sourceSha256": "895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6"
+  }
+ ]
+}

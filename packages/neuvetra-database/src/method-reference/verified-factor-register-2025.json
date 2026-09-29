@@ -1,0 +1,4384 @@
+{
+ "schema": "neuvetra.verified-factor-register.v1",
+ "verifiedBy": "Claude (independent AI review), 2026-09-26",
+ "method": "Values read programmatically from the exact workbook cells with openpyxl; spot-checked against the same-edition PDF; not transcribed by hand.",
+ "source": {
+  "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+  "title": "GHG Emission Factors Hub",
+  "edition": "Last Modified: January 15, 2025",
+  "url": "https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx",
+  "sha256": "43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7",
+  "bytes": 1014275,
+  "currencyCheck": "EPA hub page (updated 2026-01-12, checked 2026-09-26) lists the January 2025 edition as the latest; no 2026 edition."
+ },
+ "constants": [
+  {
+   "id": "therm_to_mmbtu",
+   "value": "0.1",
+   "unit": "MMBtu per therm",
+   "basis": "Definition: 1 therm = 100,000 Btu; EPA stationary combustion guidance (Dec 2023) worked example uses 0.1 MMBtu/therm",
+   "sourceSha256": "9e9899f728932125543d85f97f71f11d4928580e7ca17ae9858f4c34d0a9c124"
+  },
+  {
+   "id": "lb_to_kg",
+   "value": "0.45359237",
+   "unit": "kg per lb",
+   "basis": "Exact international avoirdupois pound definition"
+  },
+  {
+   "id": "g_to_kg",
+   "value": "0.001",
+   "unit": "kg per g",
+   "basis": "SI definition"
+  }
+ ],
+ "entries": [
+  {
+   "id": "stationary.Natural Gas.hhv",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D38",
+   "value": "0.001026",
+   "unit": "MMBtu HHV per scf",
+   "labelCells": [
+    "C38",
+    "D36"
+   ],
+   "label": "Natural Gas"
+  },
+  {
+   "id": "stationary.Natural Gas.co2",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E38",
+   "value": "53.06",
+   "unit": "kg CO2 per MMBtu HHV",
+   "labelCells": [
+    "C38",
+    "E36"
+   ],
+   "label": "Natural Gas"
+  },
+  {
+   "id": "stationary.Natural Gas.ch4",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F38",
+   "value": "1",
+   "unit": "g CH4 per MMBtu HHV",
+   "labelCells": [
+    "C38",
+    "F36"
+   ],
+   "label": "Natural Gas"
+  },
+  {
+   "id": "stationary.Natural Gas.n2o",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G38",
+   "value": "0.1",
+   "unit": "g N2O per MMBtu HHV",
+   "labelCells": [
+    "C38",
+    "G36"
+   ],
+   "label": "Natural Gas"
+  },
+  {
+   "id": "stationary.Distillate Fuel Oil No. 2.hhv",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D55",
+   "value": "0.138",
+   "unit": "MMBtu HHV per gallon",
+   "labelCells": [
+    "C55",
+    "D47"
+   ],
+   "label": "Distillate Fuel Oil No. 2"
+  },
+  {
+   "id": "stationary.Distillate Fuel Oil No. 2.co2",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E55",
+   "value": "73.96",
+   "unit": "kg CO2 per MMBtu HHV",
+   "labelCells": [
+    "C55",
+    "E47"
+   ],
+   "label": "Distillate Fuel Oil No. 2"
+  },
+  {
+   "id": "stationary.Distillate Fuel Oil No. 2.ch4",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F55",
+   "value": "3",
+   "unit": "g CH4 per MMBtu HHV",
+   "labelCells": [
+    "C55",
+    "F47"
+   ],
+   "label": "Distillate Fuel Oil No. 2"
+  },
+  {
+   "id": "stationary.Distillate Fuel Oil No. 2.n2o",
+   "table": "Table 1 Stationary Combustion",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G55",
+   "value": "0.6",
+   "unit": "g N2O per MMBtu HHV",
+   "labelCells": [
+    "C55",
+    "G47"
+   ],
+   "label": "Distillate Fuel Oil No. 2"
+  },
+  {
+   "id": "mobile_co2.Diesel Fuel",
+   "table": "Table 2 Mobile Combustion CO2",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D107",
+   "value": "10.21",
+   "unit": "kg CO2 per US gallon",
+   "labelCells": [
+    "C107",
+    "D103",
+    "E107"
+   ],
+   "label": "Diesel Fuel"
+  },
+  {
+   "id": "mobile_co2.Motor Gasoline",
+   "table": "Table 2 Mobile Combustion CO2",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D112",
+   "value": "8.78",
+   "unit": "kg CO2 per US gallon",
+   "labelCells": [
+    "C112",
+    "D103",
+    "E112"
+   ],
+   "label": "Motor Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1973-1974.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E127",
+   "value": "0.1696",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C127",
+    "D127",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1973-1974",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1973-1974",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1973-1974.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F127",
+   "value": "0.0197",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D127",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1973-1974",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1973-1974",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1975.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E128",
+   "value": "0.1423",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D128",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1975",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1975",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1975.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F128",
+   "value": "0.0443",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D128",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1975",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1975",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1976-1977.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E129",
+   "value": "0.1406",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D129",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1976-1977",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1976-1977",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1976-1977.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F129",
+   "value": "0.0458",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D129",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1976-1977",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1976-1977",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1978-1979.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E130",
+   "value": "0.1389",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D130",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1978-1979",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1978-1979",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1978-1979.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F130",
+   "value": "0.0473",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D130",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1978-1979",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1978-1979",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1980.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E131",
+   "value": "0.1326",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D131",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1980",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1980",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1980.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F131",
+   "value": "0.0499",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D131",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1980",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1980",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1981.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E132",
+   "value": "0.0802",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D132",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1981",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1981",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1981.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F132",
+   "value": "0.0626",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D132",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1981",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1981",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1982.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E133",
+   "value": "0.0795",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D133",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1982",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1982",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1982.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F133",
+   "value": "0.0627",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D133",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1982",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1982",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1983.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E134",
+   "value": "0.0782",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D134",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1983",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1983",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1983.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F134",
+   "value": "0.063",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D134",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1983",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1983",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1984-1993.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E135",
+   "value": "0.0704",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D135",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1984-1993",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1984-1993",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1984-1993.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F135",
+   "value": "0.0647",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D135",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1984-1993",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1984-1993",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1994.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E136",
+   "value": "0.0617",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D136",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1994",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1994",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1994.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F136",
+   "value": "0.0603",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D136",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1994",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1994",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1995.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E137",
+   "value": "0.0531",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D137",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1995",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1995.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F137",
+   "value": "0.056",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D137",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1995",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1996.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E138",
+   "value": "0.0434",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D138",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1996",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1996",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1996.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F138",
+   "value": "0.0503",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D138",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1996",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1996",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1997.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E139",
+   "value": "0.0337",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D139",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1997",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1997",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1997.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F139",
+   "value": "0.0446",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D139",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1997",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1997",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1998.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E140",
+   "value": "0.024",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D140",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1998",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1998",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1998.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F140",
+   "value": "0.0389",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D140",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1998",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1998",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1999.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E141",
+   "value": "0.0215",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D141",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1999",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1999",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.1999.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F141",
+   "value": "0.0355",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D141",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 1999",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "1999",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2000.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E142",
+   "value": "0.0175",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D142",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2000",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2000",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2000.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F142",
+   "value": "0.0304",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D142",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2000",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2000",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2001.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E143",
+   "value": "0.0105",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D143",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2001",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2001",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2001.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F143",
+   "value": "0.0212",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D143",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2001",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2001",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2002.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E144",
+   "value": "0.0102",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D144",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2002",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2002",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2002.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F144",
+   "value": "0.0207",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D144",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2002",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2002",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2003.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E145",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D145",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2003",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2003",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2003.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F145",
+   "value": "0.0181",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D145",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2003",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2003",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2004.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E146",
+   "value": "0.0078",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D146",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2004",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2004",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2004.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F146",
+   "value": "0.0085",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D146",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2004",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2004",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2005.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E147",
+   "value": "0.0075",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D147",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2005",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2005.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F147",
+   "value": "0.0067",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D147",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2005",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2006.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E148",
+   "value": "0.0076",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D148",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2006",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2006",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2006.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F148",
+   "value": "0.0075",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D148",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2006",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2006",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2007.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E149",
+   "value": "0.0072",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D149",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2007",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2007",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2007.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F149",
+   "value": "0.0052",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D149",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2007",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2007",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2008.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E150",
+   "value": "0.0072",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D150",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2008",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2008",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2008.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F150",
+   "value": "0.0049",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D150",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2008",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2008",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2009.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E151",
+   "value": "0.0071",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D151",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2009",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2009",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2009.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F151",
+   "value": "0.0046",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D151",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2009",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2009",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2010.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E152",
+   "value": "0.0071",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D152",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2010",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2010",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2010.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F152",
+   "value": "0.0046",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D152",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2010",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2010",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2011.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E153",
+   "value": "0.0071",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D153",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2011",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2011",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2011.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F153",
+   "value": "0.0046",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D153",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2011",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2011",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2012.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E154",
+   "value": "0.0071",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D154",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2012",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2012",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2012.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F154",
+   "value": "0.0046",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D154",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2012",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2012",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2013.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E155",
+   "value": "0.0071",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D155",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2013",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2013",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2013.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F155",
+   "value": "0.0046",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D155",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2013",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2013",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2014.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E156",
+   "value": "0.0071",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D156",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2014",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2014",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2014.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F156",
+   "value": "0.0046",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D156",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2014",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2014",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2015.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E157",
+   "value": "0.0068",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D157",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2015",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2015",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2015.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F157",
+   "value": "0.0042",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D157",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2015",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2015",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2016.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E158",
+   "value": "0.0065",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D158",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2016",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2016",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2016.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F158",
+   "value": "0.0038",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D158",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2016",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2016",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2017.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E159",
+   "value": "0.0054",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D159",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2017",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2017",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2017.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F159",
+   "value": "0.0018",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D159",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2017",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2017",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2018.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E160",
+   "value": "0.0052",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D160",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2018",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2018",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2018.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F160",
+   "value": "0.0016",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D160",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2018",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2018",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2019.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E161",
+   "value": "0.0051",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D161",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2019",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2019",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2019.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F161",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D161",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2019",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2019",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2020.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E162",
+   "value": "0.005",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D162",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2020",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2020",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2020.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F162",
+   "value": "0.0014",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D162",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2020",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2020",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2021.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E163",
+   "value": "0.0051",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D163",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2021",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2021",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2021.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F163",
+   "value": "0.0014",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D163",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2021",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2021",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2022.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E164",
+   "value": "0.005",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D164",
+    "E126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2022",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Passenger Cars.2022.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F164",
+   "value": "0.0014",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D164",
+    "F126"
+   ],
+   "label": "Gasoline Passenger Cars MY 2022",
+   "vehicleType": "Gasoline Passenger Cars",
+   "modelYear": "2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1973-1974.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E165",
+   "value": "0.1908",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C165",
+    "D165",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1973-1974",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1973-1974",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1973-1974.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F165",
+   "value": "0.0218",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D165",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1973-1974",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1973-1974",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1975.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E166",
+   "value": "0.1634",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D166",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1975",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1975",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1975.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F166",
+   "value": "0.0513",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D166",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1975",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1975",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1976.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E167",
+   "value": "0.1594",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D167",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1976",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1976",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1976.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F167",
+   "value": "0.0555",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D167",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1976",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1976",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1977-1978.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E168",
+   "value": "0.1614",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D168",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1977-1978",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1977-1978",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1977-1978.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F168",
+   "value": "0.0534",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D168",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1977-1978",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1977-1978",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1979-1980.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E169",
+   "value": "0.1594",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D169",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1979-1980",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1979-1980",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1979-1980.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F169",
+   "value": "0.0555",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D169",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1979-1980",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1979-1980",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1981.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E170",
+   "value": "0.1479",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D170",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1981",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1981",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1981.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F170",
+   "value": "0.066",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D170",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1981",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1981",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1982.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E171",
+   "value": "0.1442",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D171",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1982",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1982",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1982.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F171",
+   "value": "0.0681",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D171",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1982",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1982",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1983.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E172",
+   "value": "0.1368",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D172",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1983",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1983",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1983.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F172",
+   "value": "0.0722",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D172",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1983",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1983",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1984.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E173",
+   "value": "0.1294",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D173",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1984",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1984",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1984.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F173",
+   "value": "0.0764",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D173",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1984",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1984",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1985.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E174",
+   "value": "0.122",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D174",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1985",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1985",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1985.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F174",
+   "value": "0.0806",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D174",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1985",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1985",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1986.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E175",
+   "value": "0.1146",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D175",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1986",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1986",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1986.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F175",
+   "value": "0.0848",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D175",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1986",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1986",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1987-1993.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E176",
+   "value": "0.0813",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D176",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1987-1993",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1987-1993",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1987-1993.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F176",
+   "value": "0.1035",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D176",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1987-1993",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1987-1993",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1994.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E177",
+   "value": "0.0646",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D177",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1994",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1994",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1994.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F177",
+   "value": "0.0982",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D177",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1994",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1994",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1995.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E178",
+   "value": "0.0517",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D178",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1995",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1995.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F178",
+   "value": "0.0908",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D178",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1995",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1996.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E179",
+   "value": "0.0452",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D179",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1996",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1996",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1996.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F179",
+   "value": "0.0871",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D179",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1996",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1996",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1997.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E180",
+   "value": "0.0452",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D180",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1997",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1997",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1997.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F180",
+   "value": "0.0871",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D180",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1997",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1997",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1998.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E181",
+   "value": "0.0412",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D181",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1998",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1998",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1998.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F181",
+   "value": "0.0787",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D181",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1998",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1998",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1999.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E182",
+   "value": "0.0333",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D182",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1999",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1999",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.1999.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F182",
+   "value": "0.0618",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D182",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 1999",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "1999",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2000.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E183",
+   "value": "0.034",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D183",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2000",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2000",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2000.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F183",
+   "value": "0.0631",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D183",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2000",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2000",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2001.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E184",
+   "value": "0.0221",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D184",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2001",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2001",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2001.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F184",
+   "value": "0.0379",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D184",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2001",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2001",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2002.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E185",
+   "value": "0.0242",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D185",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2002",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2002",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2002.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F185",
+   "value": "0.0424",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D185",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2002",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2002",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2003.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E186",
+   "value": "0.0221",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D186",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2003",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2003",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2003.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F186",
+   "value": "0.0373",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D186",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2003",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2003",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2004.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E187",
+   "value": "0.0115",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D187",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2004",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2004",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2004.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F187",
+   "value": "0.0088",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D187",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2004",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2004",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2005.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E188",
+   "value": "0.0105",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D188",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2005",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2005.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F188",
+   "value": "0.0064",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D188",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2005",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2006.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E189",
+   "value": "0.0108",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D189",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2006",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2006",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2006.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F189",
+   "value": "0.008",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D189",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2006",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2006",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2007.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E190",
+   "value": "0.0103",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D190",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2007",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2007",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2007.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F190",
+   "value": "0.0061",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D190",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2007",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2007",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2008.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E191",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D191",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2008",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2008",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2008.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F191",
+   "value": "0.0036",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D191",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2008",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2008",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2009.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E192",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D192",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2009",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2009",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2009.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F192",
+   "value": "0.0036",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D192",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2009",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2009",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2010.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E193",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D193",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2010",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2010",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2010.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F193",
+   "value": "0.0035",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D193",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2010",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2010",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2011.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E194",
+   "value": "0.0096",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D194",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2011",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2011",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2011.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F194",
+   "value": "0.0034",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D194",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2011",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2011",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2012.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E195",
+   "value": "0.0096",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D195",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2012",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2012",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2012.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F195",
+   "value": "0.0033",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D195",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2012",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2012",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2013.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E196",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D196",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2013",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2013",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2013.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F196",
+   "value": "0.0035",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D196",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2013",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2013",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2014.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E197",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D197",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2014",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2014",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2014.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F197",
+   "value": "0.0033",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D197",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2014",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2014",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2015.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E198",
+   "value": "0.0094",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D198",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2015",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2015",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2015.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F198",
+   "value": "0.0031",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D198",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2015",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2015",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2016.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E199",
+   "value": "0.0091",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D199",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2016",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2016",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2016.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F199",
+   "value": "0.0029",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D199",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2016",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2016",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2017.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E200",
+   "value": "0.0084",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D200",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2017",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2017",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2017.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F200",
+   "value": "0.0018",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D200",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2017",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2017",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2018.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E201",
+   "value": "0.0081",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D201",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2018",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2018",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2018.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F201",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D201",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2018",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2018",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2019.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E202",
+   "value": "0.008",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D202",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2019",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2019",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2019.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F202",
+   "value": "0.0013",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D202",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2019",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2019",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2020.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E203",
+   "value": "0.0079",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D203",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2020",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2020",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2020.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F203",
+   "value": "0.0012",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D203",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2020",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2020",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2021.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E204",
+   "value": "0.0079",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D204",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2021",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2021",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2021.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F204",
+   "value": "0.0012",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D204",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2021",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2021",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2022.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E205",
+   "value": "0.0079",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D205",
+    "E126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2022",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Light-Duty Trucks.2022.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F205",
+   "value": "0.0012",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D205",
+    "F126"
+   ],
+   "label": "Gasoline Light-Duty Trucks MY 2022",
+   "vehicleType": "Gasoline Light-Duty Trucks",
+   "modelYear": "2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.≤1980.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E206",
+   "value": "0.4604",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C206",
+    "D206",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY ≤1980",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "≤1980",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.≤1980.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F206",
+   "value": "0.0497",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D206",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY ≤1980",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "≤1980",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1981-1984.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E207",
+   "value": "0.4492",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D207",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1981-1984",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1981-1984",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1981-1984.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F207",
+   "value": "0.0538",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D207",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1981-1984",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1981-1984",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1985-1986.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E208",
+   "value": "0.409",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D208",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1985-1986",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1985-1986",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1985-1986.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F208",
+   "value": "0.0515",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D208",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1985-1986",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1985-1986",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1987.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E209",
+   "value": "0.3675",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D209",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1987",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1987",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1987.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F209",
+   "value": "0.0849",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D209",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1987",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1987",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1988-1989.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E210",
+   "value": "0.3492",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D210",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1988-1989",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1988-1989",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1988-1989.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F210",
+   "value": "0.0933",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D210",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1988-1989",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1988-1989",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1990-1995.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E211",
+   "value": "0.3246",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D211",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1990-1995",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1990-1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1990-1995.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F211",
+   "value": "0.1142",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D211",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1990-1995",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1990-1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1996.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E212",
+   "value": "0.1278",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D212",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1996",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1996",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1996.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F212",
+   "value": "0.168",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D212",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1996",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1996",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1997.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E213",
+   "value": "0.0924",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D213",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1997",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1997",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1997.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F213",
+   "value": "0.1726",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D213",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1997",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1997",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1998.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E214",
+   "value": "0.0655",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D214",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1998",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1998",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1998.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F214",
+   "value": "0.175",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D214",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1998",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1998",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1999.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E215",
+   "value": "0.0648",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D215",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1999",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1999",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.1999.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F215",
+   "value": "0.1724",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D215",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 1999",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "1999",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2000.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E216",
+   "value": "0.063",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D216",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2000",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2000",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2000.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F216",
+   "value": "0.166",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D216",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2000",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2000",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2001.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E217",
+   "value": "0.0577",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D217",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2001",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2001",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2001.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F217",
+   "value": "0.1468",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D217",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2001",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2001",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2002.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E218",
+   "value": "0.0634",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D218",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2002",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2002",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2002.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F218",
+   "value": "0.1673",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D218",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2002",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2002",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2003.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E219",
+   "value": "0.0602",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D219",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2003",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2003",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2003.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F219",
+   "value": "0.1553",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D219",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2003",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2003",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2004.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E220",
+   "value": "0.0298",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D220",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2004",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2004",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2004.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F220",
+   "value": "0.0164",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D220",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2004",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2004",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2005.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E221",
+   "value": "0.0297",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D221",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2005",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2005.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F221",
+   "value": "0.0083",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D221",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2005",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2006.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E222",
+   "value": "0.0299",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D222",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2006",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2006",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2006.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F222",
+   "value": "0.0241",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D222",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2006",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2006",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2007.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E223",
+   "value": "0.0322",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D223",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2007",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2007",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2007.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F223",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D223",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2007",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2007",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2008.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E224",
+   "value": "0.034",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D224",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2008",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2008",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2008.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F224",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D224",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2008",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2008",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2009.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E225",
+   "value": "0.0339",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D225",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2009",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2009",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2009.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F225",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D225",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2009",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2009",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2010.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E226",
+   "value": "0.032",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D226",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2010",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2010",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2010.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F226",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D226",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2010",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2010",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2011.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E227",
+   "value": "0.0304",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D227",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2011",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2011",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2011.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F227",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D227",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2011",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2011",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2012.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E228",
+   "value": "0.0313",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D228",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2012",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2012",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2012.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F228",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D228",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2012",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2012",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2013.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E229",
+   "value": "0.0313",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D229",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2013",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2013",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2013.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F229",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D229",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2013",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2013",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2014.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E230",
+   "value": "0.0315",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D230",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2014",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2014",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2014.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F230",
+   "value": "0.0015",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D230",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2014",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2014",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2015.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E231",
+   "value": "0.0332",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D231",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2015",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2015",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2015.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F231",
+   "value": "0.0021",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D231",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2015",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2015",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2016.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E232",
+   "value": "0.0321",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D232",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2016",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2016",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2016.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F232",
+   "value": "0.0061",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D232",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2016",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2016",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2017.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E233",
+   "value": "0.0329",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D233",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2017",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2017",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2017.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F233",
+   "value": "0.0084",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D233",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2017",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2017",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2018.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E234",
+   "value": "0.0326",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D234",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2018",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2018",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2018.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F234",
+   "value": "0.0082",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D234",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2018",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2018",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2019.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E235",
+   "value": "0.033",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D235",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2019",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2019",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2019.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F235",
+   "value": "0.0091",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D235",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2019",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2019",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2020.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E236",
+   "value": "0.0332",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D236",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2020",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2020",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2020.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F236",
+   "value": "0.01",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D236",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2020",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2020",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2021.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E237",
+   "value": "0.0332",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D237",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2021",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2021",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2021.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F237",
+   "value": "0.01",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D237",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2021",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2021",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2022.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E238",
+   "value": "0.0332",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D238",
+    "E126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2022",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Heavy-Duty Vehicles.2022.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F238",
+   "value": "0.01",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D238",
+    "F126"
+   ],
+   "label": "Gasoline Heavy-Duty Vehicles MY 2022",
+   "vehicleType": "Gasoline Heavy-Duty Vehicles",
+   "modelYear": "2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Motorcycles.1960-1995.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E239",
+   "value": "0.009",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C239",
+    "D239",
+    "E126"
+   ],
+   "label": "Gasoline Motorcycles MY 1960-1995",
+   "vehicleType": "Gasoline Motorcycles",
+   "modelYear": "1960-1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Motorcycles.1960-1995.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F239",
+   "value": "0.09",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D239",
+    "F126"
+   ],
+   "label": "Gasoline Motorcycles MY 1960-1995",
+   "vehicleType": "Gasoline Motorcycles",
+   "modelYear": "1960-1995",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Motorcycles.1996-2005.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E240",
+   "value": "0.007",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D240",
+    "E126"
+   ],
+   "label": "Gasoline Motorcycles MY 1996-2005",
+   "vehicleType": "Gasoline Motorcycles",
+   "modelYear": "1996-2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Motorcycles.1996-2005.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F240",
+   "value": "0.067",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D240",
+    "F126"
+   ],
+   "label": "Gasoline Motorcycles MY 1996-2005",
+   "vehicleType": "Gasoline Motorcycles",
+   "modelYear": "1996-2005",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Motorcycles.2006-2022.ch4",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E241",
+   "value": "0.018",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D241",
+    "E126"
+   ],
+   "label": "Gasoline Motorcycles MY 2006-2022",
+   "vehicleType": "Gasoline Motorcycles",
+   "modelYear": "2006-2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_gasoline.Gasoline Motorcycles.2006-2022.n2o",
+   "table": "Table 3 On-Road Gasoline CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F241",
+   "value": "0.066",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "D241",
+    "F126"
+   ],
+   "label": "Gasoline Motorcycles MY 2006-2022",
+   "vehicleType": "Gasoline Motorcycles",
+   "modelYear": "2006-2022",
+   "fuel": "Gasoline"
+  },
+  {
+   "id": "onroad_diesel.Passenger Cars.1960-1982.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F249",
+   "value": "0.0006",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C249",
+    "D249",
+    "E249",
+    "F248"
+   ],
+   "label": "Diesel Passenger Cars MY 1960-1982",
+   "vehicleType": "Passenger Cars",
+   "modelYear": "1960-1982",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Passenger Cars.1960-1982.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G249",
+   "value": "0.0012",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E249",
+    "G248"
+   ],
+   "label": "Diesel Passenger Cars MY 1960-1982",
+   "vehicleType": "Passenger Cars",
+   "modelYear": "1960-1982",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Passenger Cars.1983-2006.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F250",
+   "value": "0.0005",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D249",
+    "E250",
+    "F248"
+   ],
+   "label": "Diesel Passenger Cars MY 1983-2006",
+   "vehicleType": "Passenger Cars",
+   "modelYear": "1983-2006",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Passenger Cars.1983-2006.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G250",
+   "value": "0.001",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E250",
+    "G248"
+   ],
+   "label": "Diesel Passenger Cars MY 1983-2006",
+   "vehicleType": "Passenger Cars",
+   "modelYear": "1983-2006",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Passenger Cars.2007-2022.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F251",
+   "value": "0.0302",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D249",
+    "E251",
+    "F248"
+   ],
+   "label": "Diesel Passenger Cars MY 2007-2022",
+   "vehicleType": "Passenger Cars",
+   "modelYear": "2007-2022",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Passenger Cars.2007-2022.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G251",
+   "value": "0.0192",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E251",
+    "G248"
+   ],
+   "label": "Diesel Passenger Cars MY 2007-2022",
+   "vehicleType": "Passenger Cars",
+   "modelYear": "2007-2022",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Light-Duty Trucks.1960-1982.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F252",
+   "value": "0.0011",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C252",
+    "D249",
+    "E252",
+    "F248"
+   ],
+   "label": "Diesel Light-Duty Trucks MY 1960-1982",
+   "vehicleType": "Light-Duty Trucks",
+   "modelYear": "1960-1982",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Light-Duty Trucks.1960-1982.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G252",
+   "value": "0.0017",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E252",
+    "G248"
+   ],
+   "label": "Diesel Light-Duty Trucks MY 1960-1982",
+   "vehicleType": "Light-Duty Trucks",
+   "modelYear": "1960-1982",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Light-Duty Trucks.1983-2006.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F253",
+   "value": "0.0009",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D249",
+    "E253",
+    "F248"
+   ],
+   "label": "Diesel Light-Duty Trucks MY 1983-2006",
+   "vehicleType": "Light-Duty Trucks",
+   "modelYear": "1983-2006",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Light-Duty Trucks.1983-2006.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G253",
+   "value": "0.0014",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E253",
+    "G248"
+   ],
+   "label": "Diesel Light-Duty Trucks MY 1983-2006",
+   "vehicleType": "Light-Duty Trucks",
+   "modelYear": "1983-2006",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Light-Duty Trucks.2007-2022.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F254",
+   "value": "0.029",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D249",
+    "E254",
+    "F248"
+   ],
+   "label": "Diesel Light-Duty Trucks MY 2007-2022",
+   "vehicleType": "Light-Duty Trucks",
+   "modelYear": "2007-2022",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Light-Duty Trucks.2007-2022.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G254",
+   "value": "0.0214",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E254",
+    "G248"
+   ],
+   "label": "Diesel Light-Duty Trucks MY 2007-2022",
+   "vehicleType": "Light-Duty Trucks",
+   "modelYear": "2007-2022",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Medium- and Heavy-Duty Vehicles.1960-2006.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F255",
+   "value": "0.0051",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "C255",
+    "D249",
+    "E255",
+    "F248"
+   ],
+   "label": "Diesel Medium- and Heavy-Duty Vehicles MY 1960-2006",
+   "vehicleType": "Medium- and Heavy-Duty Vehicles",
+   "modelYear": "1960-2006",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Medium- and Heavy-Duty Vehicles.1960-2006.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G255",
+   "value": "0.0048",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E255",
+    "G248"
+   ],
+   "label": "Diesel Medium- and Heavy-Duty Vehicles MY 1960-2006",
+   "vehicleType": "Medium- and Heavy-Duty Vehicles",
+   "modelYear": "1960-2006",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Medium- and Heavy-Duty Vehicles.2007-2022.ch4",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "F256",
+   "value": "0.0095",
+   "unit": "g CH4 per vehicle-mile",
+   "labelCells": [
+    "carried",
+    "D249",
+    "E256",
+    "F248"
+   ],
+   "label": "Diesel Medium- and Heavy-Duty Vehicles MY 2007-2022",
+   "vehicleType": "Medium- and Heavy-Duty Vehicles",
+   "modelYear": "2007-2022",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "onroad_diesel.Medium- and Heavy-Duty Vehicles.2007-2022.n2o",
+   "table": "Table 4 On-Road Diesel/Alt Fuel CH4/N2O",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "G256",
+   "value": "0.0431",
+   "unit": "g N2O per vehicle-mile",
+   "labelCells": [
+    "E256",
+    "G248"
+   ],
+   "label": "Diesel Medium- and Heavy-Duty Vehicles MY 2007-2022",
+   "vehicleType": "Medium- and Heavy-Duty Vehicles",
+   "modelYear": "2007-2022",
+   "fuel": "Diesel"
+  },
+  {
+   "id": "gwp_ar5.CO2",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E524",
+   "value": "1",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C524",
+    "D524",
+    "E523",
+    "C556"
+   ],
+   "label": "CO2",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.CH4",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E525",
+   "value": "28",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C525",
+    "D525",
+    "E523",
+    "C556"
+   ],
+   "label": "CH4",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.N2O",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E526",
+   "value": "265",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C526",
+    "D526",
+    "E523",
+    "C556"
+   ],
+   "label": "N2O",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.HFC-134a",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E532",
+   "value": "1300",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C532",
+    "D532",
+    "E523",
+    "C556"
+   ],
+   "label": "HFC-134a",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.HFC-227ea",
+   "table": "Table 11 GWP (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "E538",
+   "value": "3350",
+   "unit": "kg CO2e per kg gas",
+   "labelCells": [
+    "C538",
+    "D538",
+    "E523",
+    "C556"
+   ],
+   "label": "HFC-227ea",
+   "gwpSet": "AR5-100"
+  },
+  {
+   "id": "gwp_ar5.R-410A",
+   "table": "Table 12 GWP Blended Refrigerants (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D575",
+   "value": "1924",
+   "unit": "kg CO2e per kg blend",
+   "labelCells": [
+    "C575",
+    "D560",
+    "E575",
+    "C591"
+   ],
+   "label": "R-410A",
+   "gwpSet": "AR5-100",
+   "composition": "50% HFC-32 , 50% HFC-125"
+  },
+  {
+   "id": "gwp_ar5.R-404A",
+   "table": "Table 12 GWP Blended Refrigerants (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D567",
+   "value": "3943",
+   "unit": "kg CO2e per kg blend",
+   "labelCells": [
+    "C567",
+    "D560",
+    "E567",
+    "C591"
+   ],
+   "label": "R-404A",
+   "gwpSet": "AR5-100",
+   "composition": "44% HFC-125 , 4% HFC-134a , 52% HFC-143a"
+  },
+  {
+   "id": "gwp_ar5.R-407C",
+   "table": "Table 12 GWP Blended Refrigerants (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D571",
+   "value": "1624",
+   "unit": "kg CO2e per kg blend",
+   "labelCells": [
+    "C571",
+    "D560",
+    "E571",
+    "C591"
+   ],
+   "label": "R-407C",
+   "gwpSet": "AR5-100",
+   "composition": "23% HFC-32 , 25% HFC-125 , 52% HFC-134a"
+  },
+  {
+   "id": "gwp_ar5.R-507A",
+   "table": "Table 12 GWP Blended Refrigerants (AR5 100-year)",
+   "sheet": "Emission Factors Hub",
+   "valueCell": "D588",
+   "value": "3985",
+   "unit": "kg CO2e per kg blend",
+   "labelCells": [
+    "C588",
+    "D560",
+    "E588",
+    "C591"
+   ],
+   "label": "R-507A",
+   "gwpSet": "AR5-100",
+   "composition": "50% HFC-125 , 50% HFC-143a"
+  }
+ ]
+}
