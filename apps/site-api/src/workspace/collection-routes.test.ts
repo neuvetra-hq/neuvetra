@@ -9,6 +9,10 @@ const RECORD = "00000000-0000-4000-8000-000000000003"
 const VERSION = "00000000-0000-4000-8000-000000000004"
 const EVIDENCE = "00000000-0000-4000-8000-000000000005"
 const LINEAGE = "00000000-0000-4000-8000-000000000006"
+const SETUP = "00000000-0000-4000-8000-000000000009"
+const LOCATION = "00000000-0000-4000-8000-00000000000a"
+const EVIDENCE_BYTES = new TextEncoder().encode("%PDF-1.7\nsynthetic evidence")
+const EVIDENCE_SHA = new Bun.CryptoHasher("sha256").update(EVIDENCE_BYTES).digest("hex")
 
 function activity() {
   return {
@@ -18,6 +22,11 @@ function activity() {
     correctionReason: null,
     activity: {
       kind: "fugitive",
+      locationId: LOCATION,
+      setupVersionId: SETUP,
+      sourceId: "cooling-group-a",
+      state: "active",
+      withdrawalReason: null,
       quantity: { originalValue: "12.5", originalUnit: "kg", normalizedValue: "12.5", normalizedUnit: "kg" },
       quality: "unknown",
       estimateBasis: null,
@@ -41,9 +50,12 @@ function harness() {
   let stored: Uint8Array<ArrayBuffer> = new Uint8Array([1, 2, 3])
   let failPut = false
   let failRegister = false
+  let hasAccess = true
+  let zipLookup: any = { zip: "94105", subregions: ["CAMX"], utilities: [{ subregion: "CAMX", utility: "Pacific Gas and Electric Co", eiaId: "14328", state: "CA", predominantUtility: true }], needsUtilityChoice: false, found: true, source: "EPA Power Profiler zip.csv (eGRID2023)" }
   const current = { id: VERSION, recordId: RECORD, companyId: COMPANY, revision: 1, previousVersionId: null, correctionReason: null, activity: activity().activity, payloadSha256: "a".repeat(64), createdBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" } as any
   const record = { id: RECORD, companyId: COMPANY, kind: "fugitive", currentVersion: current, history: [{ ...current, activity: undefined }] } as any
   const database: CollectionRouteDatabase = {
+    async findCollectionContext(...args) { calls.push({ name: "findContext", args }); return hasAccess ? { companyId: COMPANY, setupVersionId: SETUP, setupRevision: 1, locations: [{ id: LOCATION, name: "Office", inclusion: "included", control: "operational_control" }] } : null },
     async findCollectionActivities(...args) { calls.push({ name: "findActivities", args }); return [record] },
     async findCollectionActivityVersion(...args) { calls.push({ name: "findVersion", args }); return current },
     async saveCollectionActivity(...args) { calls.push({ name: "save", args }); return { record, version: current, replayed: false } },
@@ -59,9 +71,9 @@ function harness() {
     async put(...args) { calls.push({ name: "put", args }); if (failPut) throw new Error("sensitive-storage-marker"); stored = args[3] },
     async get(...args) { calls.push({ name: "get", args }); return stored },
   }
-  const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
+  const route = createCollectionRoutes({ database, evidenceStorage: storage, origin: ORIGIN, lookupZip: async zip => { calls.push({ name: "lookupZip", args: [zip] }); return zipLookup }, validateUser: async token => token === "valid" ? { id: ACTOR, email: "fixture@example.test", phone: null, fullName: null } : null })
   const request = (path: string, init: RequestInit = {}) => route(new Request(`https://api.example.test${path}`, { ...init, headers: { origin: ORIGIN, authorization: "Bearer valid", ...(init.headers ?? {}) } }))
-  return { calls, request, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
+  return { calls, request, setEvidence(value: any[]) { evidence = value }, setDownloadable(value: any) { downloadable = value }, setStored(value: Uint8Array<ArrayBuffer>) { stored = value }, setAccess(value: boolean) { hasAccess = value }, setZipLookup(value: any) { zipLookup = value }, failNextPut() { failPut = true }, failNextRegistration() { failRegister = true } }
 }
 
 describe("collection routes", () => {
@@ -69,7 +81,7 @@ describe("collection routes", () => {
     const h = harness()
     const capability = await h.request(`/workspace/${COMPANY}/collection`)
     expect(capability.status).toBe(200)
-    expect(await capability.json()).toMatchObject({ capabilities: { calculations: false, zipLookup: "unavailable", scope3: { gridLossLineage: true, calculations: false } } })
+    expect(await capability.json()).toMatchObject({ context: { setupVersionId: SETUP, locations: [{ id: LOCATION }] }, capabilities: { calculations: false, zipLookup: "available", scope3: { gridLossLineage: true, calculations: false } } })
     const response = await h.request(`/workspace/${COMPANY}/collection/activities`)
     expect(response.status).toBe(200)
     expect((await response.json() as any).records[0].companyId).toBe(COMPANY)
@@ -105,6 +117,7 @@ describe("collection routes", () => {
     vehicle.activity = {
       ...vehicle.activity,
       kind: "vehicle",
+      sourceId: "fleet-a",
       quantity: { originalValue: "unknown", originalUnit: "US_gallon", normalizedValue: null, normalizedUnit: null },
       payload: { vehicleGroupId: "fleet-a", fuel: "diesel", vehicleType: "heavy_duty", modelYear: 2025, gallons: "unknown", vehicleCount: null, miles: null, fuelEconomy: null },
     } as any
@@ -113,7 +126,8 @@ describe("collection routes", () => {
       ...electricity.activity,
       kind: "electricity",
       quantity: { originalValue: "unknown", originalUnit: "kWh", normalizedValue: null, normalizedUnit: null },
-      payload: { meterOrAccountNumber: "meter-a", utilityName: "Utility", site: "Site", zip: "94105", subregion: "", utilityEiaId: null, instruments: [{ type: "supplier_specific_rate", mwh: "unknown", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: null, generationTechnology: "natural_gas", rateLbPerMwh: null }] },
+      sourceId: "meter-a",
+      payload: { meterOrAccountNumber: "meter-a", utilityName: "Utility", site: "Site", zip: "94105", subregion: "CAMX", utilityEiaId: null, instruments: [{ type: "supplier_specific_rate", mwh: "unknown", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: null, generationTechnology: "natural_gas", rateLbPerMwh: null }] },
     } as any
     for (const input of [sourceDecimal, vehicle, electricity]) {
       const response = await h.request(`/workspace/${COMPANY}/collection/activities/${RECORD}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input) })
@@ -122,7 +136,7 @@ describe("collection routes", () => {
     const saved = h.calls.filter(call => call.name === "save").map(call => (call.args[3] as any).activity)
     expect(saved[0].quantity).toEqual({ originalValue: "12.3456", originalUnit: "kg", normalizedValue: null, normalizedUnit: null })
     expect(saved[1].payload).toMatchObject({ gallons: "unknown", miles: null, fuelEconomy: null })
-    expect(saved[2].payload).toMatchObject({ subregion: "", utilityEiaId: null, instruments: [{ mwh: "unknown", evidenceReference: null, rateLbPerMwh: null }] })
+    expect(saved[2].payload).toMatchObject({ subregion: "CAMX", utilityEiaId: null, instruments: [{ mwh: "unknown", evidenceReference: null, rateLbPerMwh: null }] })
   })
 
   test("creates Scope 3 category 3 lineage only through an electricity record reference", async () => {
@@ -135,21 +149,21 @@ describe("collection routes", () => {
 
   test("hashes an accepted upload, scopes its key, and registers it pending", async () => {
     const h = harness()
-    const bytes = new TextEncoder().encode("synthetic evidence")
+    const bytes = EVIDENCE_BYTES
     const response = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": encodeURIComponent("bill 2025.pdf"), "x-neuvetra-upload-id": EVIDENCE }, body: bytes })
     expect(response.status).toBe(201)
     expect(h.calls.filter(call => ["reserveEvidence", "put", "registerEvidence"].includes(call.name)).map(call => call.name)).toEqual(["reserveEvidence", "put", "registerEvidence"])
     const put = h.calls.find(call => call.name === "put")!
     expect(put.args.slice(0, 3)).toEqual(["valid", COLLECTION_EVIDENCE_BUCKET, `${COMPANY}/original/${EVIDENCE}`])
     const registered = h.calls.find(call => call.name === "registerEvidence")?.args[2] as any
-    expect(registered).toMatchObject({ uploadId: EVIDENCE, evidenceId: EVIDENCE, originalName: "bill 2025.pdf", mediaType: "application/pdf", byteLength: bytes.byteLength, sha256: "48736e58b409ed0241c8d7bed9dc188a59e13002f48e7492850bec15b59147b6" })
+    expect(registered).toMatchObject({ uploadId: EVIDENCE, evidenceId: EVIDENCE, originalName: "bill 2025.pdf", mediaType: "application/pdf", byteLength: bytes.byteLength, sha256: EVIDENCE_SHA })
     expect(h.calls.find(call => call.name === "reserveEvidence")?.args[2]).toEqual(registered)
   })
 
   test("reuses same-company duplicate metadata without uploading another object", async () => {
     const h = harness()
-    const bytes = new TextEncoder().encode("synthetic evidence")
-    h.setEvidence([{ id: RECORD, companyId: COMPANY, bucket: COLLECTION_EVIDENCE_BUCKET, objectKey: `${COMPANY}/original/existing`, originalName: "first.pdf", mediaType: "application/pdf", byteLength: bytes.byteLength, sha256: "48736e58b409ed0241c8d7bed9dc188a59e13002f48e7492850bec15b59147b6", quarantineStatus: "pending", uploadedBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" }])
+    const bytes = EVIDENCE_BYTES
+    h.setEvidence([{ id: RECORD, companyId: COMPANY, bucket: COLLECTION_EVIDENCE_BUCKET, objectKey: `${COMPANY}/original/existing`, originalName: "first.pdf", mediaType: "application/pdf", byteLength: bytes.byteLength, sha256: EVIDENCE_SHA, quarantineStatus: "pending", uploadedBy: ACTOR, createdAt: "2026-09-28T00:00:00.000Z" }])
     const response = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "duplicate.pdf", "x-neuvetra-upload-id": EVIDENCE }, body: bytes })
     expect(response.status).toBe(200)
     expect(h.calls.some(call => call.name === "put")).toBe(false)
@@ -159,7 +173,7 @@ describe("collection routes", () => {
 
   test("fails closed without probing pending bytes when storage upload is unavailable", async () => {
     const h = harness()
-    const bytes = new TextEncoder().encode("synthetic evidence")
+    const bytes = EVIDENCE_BYTES
     h.failNextPut()
     const response = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "retry.pdf", "x-neuvetra-upload-id": EVIDENCE }, body: bytes })
     expect(response.status).toBe(503)
@@ -173,7 +187,7 @@ describe("collection routes", () => {
   test("records orphan recovery after storage succeeds but evidence registration fails", async () => {
     const h = harness()
     h.failNextRegistration()
-    const response = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "orphan.pdf", "x-neuvetra-upload-id": EVIDENCE }, body: new TextEncoder().encode("synthetic evidence") })
+    const response = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "orphan.pdf", "x-neuvetra-upload-id": EVIDENCE }, body: EVIDENCE_BYTES })
     expect(response.status).toBe(503)
     expect(JSON.stringify(await response.json())).not.toContain("sensitive-registration-marker")
     expect(h.calls.filter(call => ["reserveEvidence", "put", "registerEvidence", "markRegistrationFailed"].includes(call.name)).map(call => call.name)).toEqual(["reserveEvidence", "put", "registerEvidence", "markRegistrationFailed"])
@@ -190,6 +204,7 @@ describe("collection routes", () => {
     h.setDownloadable({ bucket: COLLECTION_EVIDENCE_BUCKET, objectKey: `${COMPANY}/original/${EVIDENCE}`, sha256: "039058c6f2c0cb492c533b0a4d14ef77cc0f78abccced5287d84a1a2011cfb81", mediaType: "application/pdf", byteLength: 3 })
     const clean = await h.request(`/workspace/${COMPANY}/collection/evidence/${EVIDENCE}/download`)
     expect(clean.status).toBe(200)
+    expect(clean.headers.get("x-content-type-options")).toBe("nosniff")
     expect(clean.headers.get("x-content-sha256")).toBe("039058c6f2c0cb492c533b0a4d14ef77cc0f78abccced5287d84a1a2011cfb81")
     h.setStored(new Uint8Array([9, 9, 9]))
     const changed = await h.request(`/workspace/${COMPANY}/collection/evidence/${EVIDENCE}/download`)
@@ -203,6 +218,45 @@ describe("collection routes", () => {
     const oversized = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "content-length": String(COLLECTION_EVIDENCE_MAX_BYTES + 1), "x-neuvetra-original-name": "large.pdf" }, body: "x" })
     expect(oversized.status).toBe(413)
     expect(h.calls.some(call => call.name === "put")).toBe(false)
+  })
+
+  test("refuses evidence whose first bytes contradict its declared type", async () => {
+    const h = harness()
+    const spoofed = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "spoofed.pdf" }, body: new TextEncoder().encode("not a PDF") })
+    expect(spoofed.status).toBe(422)
+    expect((await spoofed.json() as any).code).toBe("file_type_mismatch")
+    expect(h.calls.some(call => call.name === "reserveEvidence")).toBe(false)
+  })
+
+  test("returns not found for a foreign company before reading any collection data", async () => {
+    const h = harness()
+    h.setAccess(false)
+    for (const path of ["", "/activities", "/evidence", "/zip-lookup?zip=94105"]) {
+      const response = await h.request(`/workspace/${COMPANY}/collection${path}`)
+      expect(response.status).toBe(404)
+    }
+    expect(h.calls.every(call => call.name === "findContext")).toBe(true)
+  })
+
+  test("validates an electricity ZIP, subregion and utility against the pinned lookup", async () => {
+    const h = harness()
+    const base = activity()
+    base.activity = { ...base.activity, kind: "electricity", sourceId: "meter-a", quantity: { originalValue: "100", originalUnit: "kWh", normalizedValue: "100", normalizedUnit: "kWh" }, payload: { meterOrAccountNumber: "meter-a", utilityName: "Utility", site: "Site", zip: "94105", subregion: "NYUP", utilityEiaId: null, instruments: [] } } as any
+    const route = `/workspace/${COMPANY}/collection/activities/${RECORD}`
+    const post = () => h.request(route, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(base) })
+    expect((await post()).status).toBe(422)
+    ;(base.activity.payload as any).subregion = "CAMX"
+    expect((await post()).status).toBe(201)
+    h.setZipLookup({ zip: "94105", subregions: ["CAMX", "NWPP"], utilities: [{ subregion: "CAMX", utility: "Example utility", eiaId: "123", state: "CA", predominantUtility: true }], needsUtilityChoice: true, found: true, source: "test" })
+    expect((await post()).status).toBe(422)
+    ;(base.activity.payload as any).utilityEiaId = "wrong"
+    expect((await post()).status).toBe(422)
+    ;(base.activity.payload as any).utilityEiaId = "123"
+    expect((await post()).status).toBe(201)
+    expect(h.calls.filter(call => call.name === "save")).toHaveLength(2)
+    const lookup = await h.request(`/workspace/${COMPANY}/collection/zip-lookup?zip=94105`)
+    expect(lookup.status).toBe(200)
+    expect((await lookup.json() as any).lookup.needsUtilityChoice).toBe(true)
   })
 
   test("requires exact origin for writes and authentication for every route", async () => {

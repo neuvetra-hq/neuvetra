@@ -6,6 +6,7 @@ import {
   createGridLossLineage,
   findDownloadableCollectionEvidence,
   readCollectionActivities,
+  readCollectionContext,
   readCollectionEvidence,
   readGridLossLineage,
   reserveCollectionEvidenceUpload,
@@ -20,14 +21,17 @@ const company='27200000-0000-4000-8000-000000000001', otherCompany='27200000-000
 const evidence='27300000-0000-4000-8000-000000000001', otherEvidence='27300000-0000-4000-8000-000000000002'
 const electricityRecord='27400000-0000-4000-8000-000000000001', gasRecord='27400000-0000-4000-8000-000000000002'
 const sha='a'.repeat(64)
+const setupVersion='27500000-0000-4000-8000-000000000001',locationId='27600000-0000-4000-8000-000000000001'
+const linkage={setupVersionId:setupVersion,locationId,sourceId:'SYN-100',state:'active' as const,withdrawalReason:null}
 const rejectionMessage=async(promise:Promise<unknown>)=>promise.then(()=>'',error=>String(error?.message??error))
 
 function electricity():CollectionActivity{return {
+  ...linkage,
   kind:'electricity', quantity:{originalValue:'1200.125',originalUnit:'kWh',normalizedValue:'1200.125',normalizedUnit:'kWh'}, quality:'actual',estimateBasis:null,
   period:{start:'2025-01-01',endExclusive:'2025-02-01'},reference:'Synthetic utility statement 1',notes:'',evidenceIds:[evidence],
   payload:{meterOrAccountNumber:'SYN-100',utilityName:'Synthetic Utility',site:'Synthetic California office',zip:'94105',subregion:'CAMX',utilityEiaId:null,instruments:[{type:'energy_attribute_certificate',mwh:'1.000',qualityCriteriaMet:true,vintageYear:2025,evidenceReference:evidence,generationTechnology:'wind',rateLbPerMwh:null}]}
 }}
-function gas():CollectionActivity{return {kind:'natural_gas',quantity:{originalValue:'12.125',originalUnit:'therm',normalizedValue:'12.125',normalizedUnit:'therm'},quality:'estimated',estimateBasis:'Synthetic allocation from one bill.',period:{start:'2025-01-01',endExclusive:'2025-02-01'},reference:'Synthetic gas statement',notes:'',evidenceIds:[evidence],payload:{heatContent:null}}}
+function gas():CollectionActivity{return {...linkage,kind:'natural_gas',quantity:{originalValue:'12.125',originalUnit:'therm',normalizedValue:'12.125',normalizedUnit:'therm'},quality:'estimated',estimateBasis:'Synthetic allocation from one bill.',period:{start:'2025-01-01',endExclusive:'2025-02-01'},reference:'Synthetic gas statement',notes:'',evidenceIds:[evidence],payload:{heatContent:null}}}
 function request(activity:CollectionActivity,previous?:{revision:number;id:string}):CollectionActivitySaveInput{return {idempotencyKey:crypto.randomUUID(),expectedRevision:previous?.revision??0,expectedVersionId:previous?.id??null,correctionReason:previous?'Corrected synthetic source value.':null,activity}}
 
 describe('candidate 0027 collection database boundary',()=>{
@@ -56,6 +60,9 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic Collection A','US','CA',$2),($3,'Synthetic Collection B','US','CA',$4)",[company,owner,otherCompany,otherOwner])
     await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner'),($1,$3,'member'),($4,$5,'owner')",[company,owner,member,otherCompany,otherOwner])
     await db.query('insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true),($3,$2,true),($4,$5,true)',[owner,company,member,otherOwner,otherCompany])
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,'{}',$3,'unknown',$4)",[setupVersion,company,sha,owner])
+    await db.query('insert into neuvetra.company_setup_heads(company_id,version_id,revision) values($1,$2,1)',[company,setupVersion])
+    await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Synthetic office','San Francisco','Office','owned','reporting_company','included','','','','period_start','period_end')",[company,setupVersion,locationId])
   })
   afterAll(async()=>{await db.close()})
 
@@ -72,9 +79,9 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(()=>validateCollectionActivity({...gas(),period:{start:'2025-02-30',endExclusive:'2025-03-02'}})).toThrow('real calendar')
     expect(()=>validateCollectionActivity({...gas(),quality:'estimated',estimateBasis:null})).toThrow('estimate basis')
     expect(validateCollectionActivity({...gas(),quantity:{originalValue:'12.3456',originalUnit:'therm',normalizedValue:null,normalizedUnit:null}}).quantity.originalValue).toBe('12.3456')
-    const blankGenerator:CollectionActivity={kind:'distillate_no2',quantity:{originalValue:'',originalUnit:'US_gallon',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{consumption:{basis:'purchases_with_tank_levels',purchasedGallons:'12.3456',openingGallons:'unknown',closingGallons:''},statedHhvMmbtuPerGallon:null}}
+    const blankGenerator:CollectionActivity={...linkage,kind:'distillate_no2',quantity:{originalValue:'',originalUnit:'US_gallon',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{consumption:{basis:'purchases_with_tank_levels',purchasedGallons:'12.3456',openingGallons:'unknown',closingGallons:''},statedHhvMmbtuPerGallon:null}}
     expect(validateCollectionActivity(blankGenerator).payload).toMatchObject({consumption:{purchasedGallons:'12.3456',openingGallons:'unknown',closingGallons:''}})
-    const blankTerms={...validateCollectionActivity({kind:'fugitive',quantity:{originalValue:'',originalUnit:'kg',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'1.2345',CN:'unknown',PS:'',CD:'',RD:''},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:false,eventChronologyComplete:false}})}
+    const blankTerms={...validateCollectionActivity({...linkage,kind:'fugitive',quantity:{originalValue:'',originalUnit:'kg',normalizedValue:null,normalizedUnit:null},quality:'unknown',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'',notes:'',evidenceIds:[],payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'1.2345',CN:'unknown',PS:'',CD:'',RD:''},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:false,eventChronologyComplete:false}})}
     expect(blankTerms.payload).toMatchObject({terms:{PN:'1.2345',CN:'unknown',PS:'',CD:'',RD:''}})
     const incomplete=electricity();const instrument=(incomplete.payload as ElectricityCollectionPayload).instruments[0]!;instrument.generationTechnology='natural_gas';instrument.rateLbPerMwh=null;instrument.evidenceReference=null
     expect(validateCollectionActivity(incomplete).payload).toMatchObject({instruments:[{generationTechnology:'natural_gas',rateLbPerMwh:null,evidenceReference:null}]})
@@ -163,7 +170,7 @@ describe('candidate 0027 collection database boundary',()=>{
     const revised=electricity();revised.quantity.originalValue='1201.125';revised.quantity.normalizedValue='1201.125'
     const second=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,electricityRecord,request(revised,{revision:1,id:first.version.id})))
     expect(second.record.history.map(v=>v.revision)).toEqual([1,2]);expect(second.version.previousVersionId).toBe(first.version.id)
-    const fugitiveId=crypto.randomUUID();const fugitive:CollectionActivity={kind:'fugitive',quantity:{originalValue:'2.000',originalUnit:'kg',normalizedValue:'2.000',normalizedUnit:'kg'},quality:'actual',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'Synthetic service log',notes:'unknown answers retained',evidenceIds:[evidence],payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'0',CN:'0',PS:'2.000',CD:'0',RD:'0'},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:true,eventChronologyComplete:true}}
+    const fugitiveId=crypto.randomUUID();const fugitive:CollectionActivity={...linkage,kind:'fugitive',quantity:{originalValue:'2.000',originalUnit:'kg',normalizedValue:'2.000',normalizedUnit:'kg'},quality:'actual',estimateBasis:null,period:{start:'2025-01-01',endExclusive:'2026-01-01'},reference:'Synthetic service log',notes:'unknown answers retained',evidenceIds:[evidence],payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'0',CN:'0',PS:'2.000',CD:'0',RD:'0'},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:true,eventChronologyComplete:true}}
     await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,fugitiveId,request(fugitive)))
     expect((await db.query<{inside_boundary:boolean|null;maintains_refrigerant_stock:boolean|null;retrofit_in_period:boolean|null}>('select inside_boundary,maintains_refrigerant_stock,retrofit_in_period from neuvetra.collection_activity_versions where record_id=$1',[fugitiveId])).rows[0]).toEqual({inside_boundary:null,maintains_refrigerant_stock:null,retrofit_in_period:null})
     expect(await asUser(member,tx=>readCollectionActivities(tx,company))).toHaveLength(2)
@@ -196,5 +203,149 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(await rejectionMessage(asUser(member,tx=>tx.query('delete from neuvetra.collection_activity_versions where company_id=$1',[company])))).not.toBe('')
     const mismatch=asUser(owner,tx=>saveCollectionActivity(tx,member,company,crypto.randomUUID(),request(gas())))
     expect(await rejectionMessage(mismatch)).toContain('unavailable')
+  })
+
+  test('C01 orders tied direct and operator scans by assigned sequence for API and Storage, with rejection terminal',async()=>{
+    const input={uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID(),objectKey:`${company}/original/${crypto.randomUUID()}`,originalName:'tie.pdf',mediaType:'application/pdf' as const,byteLength:50,sha256:'1'.repeat(64)}
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,input))
+    await asStorageUser(owner,'insert into storage.objects(bucket_id,name) values($1,$2)',['neuvetra-private-company-evidence',input.objectKey])
+    await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,input))
+    const tied='2099-09-29T12:00:00Z'
+    const clean='ffffffff-ffff-4fff-8fff-ffffffffffff',rejected='00000000-0000-4000-8000-000000000001'
+    await db.query("insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details,created_at,event_seq) values($1,$2,$3,'clean','deterministic-clean','',$4,9000000000)",[clean,company,input.evidenceId,tied])
+    expect(await asUser(member,tx=>findDownloadableCollectionEvidence(tx,company,input.evidenceId))).not.toBeNull()
+    expect(await asStorageUser(member,'select name from storage.objects where name=$1',[input.objectKey])).toHaveLength(1)
+    await db.query("insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details,created_at,event_seq) values($1,$2,$3,'rejected','deterministic-reject','',$4,-9000000000)",[rejected,company,input.evidenceId,tied])
+    const scans=(await db.query<{status:string;event_seq:number}>('select status,event_seq from neuvetra.collection_evidence_quarantine_events where company_id=$1 and evidence_id=$2 order by event_seq',[company,input.evidenceId])).rows
+    expect(scans.map(s=>s.status)).toEqual(['pending','clean','rejected'])
+    expect(scans.every(s=>Number(s.event_seq)>0&&Number(s.event_seq)<9000000000)).toBe(true)
+    expect(await asUser(member,tx=>findDownloadableCollectionEvidence(tx,company,input.evidenceId))).toBeNull()
+    expect(await asStorageUser(member,'select name from storage.objects where name=$1',[input.objectKey])).toEqual([])
+    expect((await asUser(member,tx=>readCollectionEvidence(tx,company))).find(e=>e.id===input.evidenceId)?.quarantineStatus).toBe('rejected')
+    expect((await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,input))).quarantineStatus).toBe('rejected')
+    const duplicate={...input,uploadId:crypto.randomUUID(),evidenceId:crypto.randomUUID()}
+    await asUser(owner,tx=>reserveCollectionEvidenceUpload(tx,owner,company,duplicate))
+    expect((await asUser(owner,tx=>registerCollectionEvidence(tx,owner,company,duplicate))).quarantineStatus).toBe('rejected')
+    expect(await rejectionMessage(db.query("select neuvetra.record_collection_evidence_quarantine($1,$2,'clean','later','cannot undo reject')",[company,input.evidenceId]))).toContain('terminal')
+    expect(await rejectionMessage(db.query("insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details) values(gen_random_uuid(),$1,$2,'error','later','')",[company,input.evidenceId]))).toContain('terminal')
+    expect(await rejectionMessage(db.query("select neuvetra.record_collection_evidence_quarantine($1,$2,'clean','unknown','')",[company,crypto.randomUUID()]))).toContain('unavailable')
+    expect(await rejectionMessage(db.transaction(async tx=>{await tx.exec('set transaction isolation level repeatable read');await tx.query("select neuvetra.record_collection_evidence_quarantine($1,$2,'rejected','snapshot','')",[company,input.evidenceId])}))).toContain('READ COMMITTED')
+    const linked={...gas(),evidenceIds:[input.evidenceId]}
+    expect(await rejectionMessage(asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(linked))))).toContain('rejected evidence')
+  })
+
+  test('C02/C03 keep withdrawal history and enforce the current tenant setup location and source identity',async()=>{
+    expect(await asUser(otherOwner,tx=>readCollectionContext(tx,company))).toBeNull()
+    expect(await asUser(otherOwner,tx=>readCollectionContext(tx,otherCompany))).toMatchObject({setupVersionId:null,locations:[]})
+    expect(await asUser(member,tx=>readCollectionContext(tx,company))).toMatchObject({setupVersionId:setupVersion,locations:[{id:locationId,inclusion:'included'}]})
+    for(const activity of [{...gas(),locationId:crypto.randomUUID()},{...gas(),setupVersionId:crypto.randomUUID()}]) {
+      expect(await rejectionMessage(asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(activity))))).toContain('setup location')
+    }
+    expect(await rejectionMessage(asUser(otherOwner,tx=>saveCollectionActivity(tx,otherOwner,otherCompany,crypto.randomUUID(),request({...gas(),evidenceIds:[]}))))).toContain('setup location')
+    expect(()=>validateCollectionActivity({...electricity(),sourceId:'wrong meter'})).toThrow('Source identifier')
+    const recordId=crypto.randomUUID(),saved=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,recordId,request(gas())))
+    const withdrawn={...gas(),state:'withdrawn' as const,withdrawalReason:'Duplicate entry identified.'}
+    const result=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,recordId,request(withdrawn,{revision:1,id:saved.version.id})))
+    expect(result.record.history).toHaveLength(2)
+    expect(result.record.currentVersion.activity.state).toBe('withdrawn')
+    expect(()=>validateCollectionActivity({...withdrawn,withdrawalReason:' '})).toThrow('Withdrawal')
+    expect(await rejectionMessage(asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(withdrawn))))).toContain('before withdrawing')
+    const excluded=crypto.randomUUID()
+    await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Excluded warehouse','','Warehouse','leased','landlord','excluded','Outside boundary','','','period_start','period_end')",[company,setupVersion,excluded])
+    const outside=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request({...gas(),locationId:excluded})))
+    expect(outside.version.activity.locationId).toBe(excluded)
+    expect((await asUser(member,tx=>readCollectionContext(tx,company)))?.locations.find(l=>l.id===excluded)?.inclusion).toBe('excluded')
+    // Pin history to its original setup while rejecting new writes against a stale head.
+    await db.exec('begin')
+    try {
+      const newer=crypto.randomUUID()
+      await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,2,$3,'Setup corrected','{}',$4,'unknown',$5)",[newer,company,setupVersion,sha,owner])
+      await db.query('update neuvetra.company_setup_heads set version_id=$1,revision=2 where company_id=$2',[newer,company])
+      await db.query("select set_config('request.jwt.claim.sub',$1,true)",[owner])
+      await db.exec('set local role neuvetra_runtime')
+      expect(await rejectionMessage(db.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,crypto.randomUUID(),JSON.stringify(request(gas()))]))).toContain('setup location')
+    } finally {await db.exec('rollback')}
+    expect((await asUser(member,tx=>readCollectionActivities(tx,company,recordId)))[0]?.currentVersion.activity.setupVersionId).toBe(setupVersion)
+  })
+
+  test('C05 derives fuel display quantities at both boundaries, checks refrigerant units, and C11 preserves old vintages',async()=>{
+    const vehicle:CollectionActivity={...gas(),kind:'vehicle',quantity:{originalValue:'500',originalUnit:'US_gallon',normalizedValue:'500',normalizedUnit:'US_gallon'},payload:{vehicleGroupId:'SYN-100',fuel:'diesel',vehicleType:'light_duty_truck',modelYear:2020,gallons:'50',vehicleCount:null,miles:null,fuelEconomy:null}}
+    expect(validateCollectionActivity(vehicle).quantity.originalValue).toBe('50')
+    const requestInput=request(vehicle),recordId=crypto.randomUUID()
+    await asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,recordId,JSON.stringify(requestInput)]))
+    expect((await asUser(member,tx=>readCollectionActivities(tx,company,recordId)))[0]?.currentVersion.activity.quantity.normalizedValue).toBe('50')
+    const generator:CollectionActivity={...gas(),kind:'distillate_no2',quantity:{originalValue:'500',originalUnit:'US_gallon',normalizedValue:'500',normalizedUnit:'US_gallon'},payload:{consumption:{basis:'purchases_with_tank_levels',purchasedGallons:'50.125',openingGallons:'10.125',closingGallons:'20.5'},statedHhvMmbtuPerGallon:null}}
+    const generated=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(generator)))
+    expect(generated.version.activity.quantity.normalizedValue).toBe('39.750')
+    const directGenerator=crypto.randomUUID()
+    await asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,directGenerator,JSON.stringify(request(generator))]))
+    expect((await asUser(member,tx=>readCollectionActivities(tx,company,directGenerator)))[0]?.currentVersion.activity.quantity.normalizedValue).toBe('39.750')
+    const fugitive:CollectionActivity={...gas(),kind:'fugitive',quantity:{originalValue:'2',originalUnit:'kg',normalizedValue:'2',normalizedUnit:'kg'},payload:{gas:'HFC-134a',unit:'lb',terms:{PN:'0',CN:'0',PS:'2',CD:'0',RD:'0'},insideBoundary:null,maintainsRefrigerantStock:null,retrofitInPeriod:null,contractorRecordsComplete:true,eventChronologyComplete:true}}
+    expect(()=>validateCollectionActivity(fugitive)).toThrow('unit must match')
+    expect(await rejectionMessage(asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,crypto.randomUUID(),JSON.stringify(request(fugitive))])))).toContain('unit must match')
+    for(const [terms,expected] of [
+      [{PN:'10.125',CN:'3.5',PS:'2.125',CD:'4',RD:'1.25'},'11.500'],
+      [{PN:'0',CN:'0',PS:'0',CD:'0',RD:'0'},'0.000'],
+      [{PN:'0',CN:'2',PS:'0',CD:'0',RD:'0'},''],
+      [{PN:'unknown',CN:'0',PS:'2',CD:'0',RD:'0'},''],
+      [{PN:'0',CN:'0',PS:'2.0001',CD:'0',RD:'0'},''],
+    ] as const) {
+      const activity:CollectionActivity={...fugitive,quantity:{originalValue:'999',originalUnit:'lb',normalizedValue:'999',normalizedUnit:'lb'},payload:{...fugitive.payload,terms}}
+      const quantity={originalValue:expected,originalUnit:'lb',normalizedValue:expected||null,normalizedUnit:expected?'lb':null}
+      expect(validateCollectionActivity(activity).quantity).toEqual(quantity)
+      const id=crypto.randomUUID()
+      await asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,id,JSON.stringify(request(activity))]))
+      const saved=(await asUser(member,tx=>readCollectionActivities(tx,company,id)))[0]!.currentVersion.activity
+      expect(saved.quantity).toEqual(quantity)
+      expect(saved.payload).toMatchObject({terms})
+    }
+    const electric=electricity();(electric.payload as ElectricityCollectionPayload).instruments[0]!.vintageYear=2020
+    const vintage=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(electric)))
+    expect(vintage.version.activity).toMatchObject({payload:{instruments:[{vintageYear:2020}]}})
+  })
+  test('N2 preserves up to six stated-HHV decimals through server and direct SQL saves, reads and replay',async()=>{
+    const generator=(statedHhvMmbtuPerGallon:string|null):CollectionActivity=>({...gas(),kind:'distillate_no2',evidenceIds:[],quantity:{originalValue:'50.125',originalUnit:'US_gallon',normalizedValue:'50.125',normalizedUnit:'US_gallon'},payload:{consumption:{basis:'measured',gallons:'50.125'},statedHhvMmbtuPerGallon}})
+    for(const value of [null,'0','1','0.138','0.1386','0.13869','0.138690','999999999999.123456']) {
+      const activity=generator(value),recordId=crypto.randomUUID(),input=request(activity)
+      expect(validateCollectionActivity(activity).payload).toMatchObject({statedHhvMmbtuPerGallon:value})
+      const saved=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,recordId,input))
+      expect(saved.version.activity.payload).toMatchObject({statedHhvMmbtuPerGallon:value})
+      const replay=await asUser(owner,tx=>tx.query<{version_id:string;replayed:boolean}>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,recordId,JSON.stringify(input)]))
+      expect(replay.rows[0]).toMatchObject({version_id:saved.version.id,replayed:true})
+      const directId=crypto.randomUUID()
+      await asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,directId,JSON.stringify(request(activity))]))
+      const read=(await asUser(member,tx=>readCollectionActivities(tx,company,directId)))[0]!
+      expect(read.currentVersion.activity.payload).toMatchObject({statedHhvMmbtuPerGallon:value})
+      // Check stored content itself, not only a claimed digest or a rounded numeric projection.
+      expect((await db.query<{hhv:string|null;quantity:string;revisions:number}>("select payload#>>'{payload,statedHhvMmbtuPerGallon}' hhv,normalized_quantity::text quantity,(select count(*)::integer from neuvetra.collection_activity_versions where record_id=$1) revisions from neuvetra.collection_activity_versions where id=$2",[recordId,saved.version.id])).rows[0]).toEqual({hhv:value,quantity:'50.125',revisions:1})
+    }
+    for(const value of ['0.1386901','1000000000000','01.13869','1e-6','-0.13869','0.13869 ','0.13869\n','','.13869',0.13869]) {
+      const activity={...generator(null),payload:{consumption:{basis:'measured',gallons:'50.125'},statedHhvMmbtuPerGallon:value}}
+      expect(()=>validateCollectionActivity(activity)).toThrow('Stated HHV')
+      const recordId=crypto.randomUUID()
+      expect(await rejectionMessage(asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,recordId,JSON.stringify(request(activity as CollectionActivity))])))).toContain('invalid stated HHV')
+      expect((await db.query('select id from neuvetra.collection_activity_records where id=$1',[recordId])).rows).toEqual([])
+    }
+  })
+
+  test('N2 does not widen quantity or refrigerant-term precision, or rewrite legacy vehicle text',async()=>{
+    const quantity={originalValue:'50.1256',originalUnit:'therm',normalizedValue:'50.1256',normalizedUnit:'therm'}
+    const overPrecise={...gas(),evidenceIds:[],quantity}
+    expect(()=>validateCollectionActivity(overPrecise)).toThrow('3 fractional digits')
+    expect(await rejectionMessage(asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,crypto.randomUUID(),JSON.stringify(request(overPrecise))])))).toContain('invalid collection decimal')
+    const sourceOnly:CollectionActivity={...gas(),kind:'distillate_no2',evidenceIds:[],quantity:{originalValue:'',originalUnit:'US_gallon',normalizedValue:null,normalizedUnit:null},payload:{consumption:{basis:'measured',gallons:'50.1256'},statedHhvMmbtuPerGallon:'0.138690'}}
+    const saved=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(sourceOnly)))
+    expect(saved.version.activity.quantity).toEqual({originalValue:'50.1256',originalUnit:'US_gallon',normalizedValue:null,normalizedUnit:null})
+    const fugitive:CollectionActivity={...gas(),kind:'fugitive',evidenceIds:[],quantity:{originalValue:'',originalUnit:'kg',normalizedValue:null,normalizedUnit:null},payload:{gas:'HFC-134a',unit:'kg',terms:{PN:'0',CN:'0',PS:'2.000001',CD:'0',RD:'0'},insideBoundary:true,maintainsRefrigerantStock:false,retrofitInPeriod:false,contractorRecordsComplete:true,eventChronologyComplete:true}}
+    const fugitiveId=crypto.randomUUID()
+    expect(validateCollectionActivity(fugitive).quantity.normalizedValue).toBeNull()
+    await asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,fugitiveId,JSON.stringify(request(fugitive))]))
+    const reread=(await asUser(member,tx=>readCollectionActivities(tx,company,fugitiveId)))[0]!.currentVersion.activity
+    expect(reread.payload).toMatchObject({terms:{PS:'2.000001'}})
+    expect(reread.quantity.normalizedValue).toBeNull()
+    const legacy:CollectionActivity={...gas(),kind:'vehicle',evidenceIds:[],quantity:{originalValue:'50',originalUnit:'US_gallon',normalizedValue:'50',normalizedUnit:'US_gallon'},payload:{vehicleGroupId:'SYN-100',fuel:'Diesel',vehicleType:'Light-Duty Trucks',modelYear:2020,gallons:'50',vehicleCount:null,miles:null,fuelEconomy:null}}
+    const legacyId=crypto.randomUUID()
+    await asUser(owner,tx=>tx.query('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[company,legacyId,JSON.stringify(request(legacy))]))
+    expect((await asUser(member,tx=>readCollectionActivities(tx,company,legacyId)))[0]!.currentVersion.activity.payload).toMatchObject({fuel:'Diesel',vehicleType:'Light-Duty Trucks'})
   })
 })

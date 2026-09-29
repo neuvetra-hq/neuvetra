@@ -15,6 +15,8 @@ create table neuvetra.collection_evidence_objects (
   unique(id,company_id), unique(company_id,sha256), unique(company_id,storage_key),
   check(storage_key like company_id::text||'/original/%' and storage_key not like '%..%' and position(chr(92) in storage_key)=0)
 );
+create sequence neuvetra.collection_quarantine_event_seq;
+revoke all on sequence neuvetra.collection_quarantine_event_seq from public,authenticated,neuvetra_runtime;
 create table neuvetra.collection_evidence_quarantine_events (
   id uuid primary key,
   company_id uuid not null,
@@ -23,8 +25,22 @@ create table neuvetra.collection_evidence_quarantine_events (
   scanner_reference text not null check(length(scanner_reference) between 1 and 500),
   details text not null check(length(details)<=2000),
   created_at timestamptz not null default clock_timestamp(),
+  event_seq bigint not null unique,
   foreign key(evidence_id,company_id) references neuvetra.collection_evidence_objects(id,company_id)
 );
+create index collection_quarantine_latest_idx on neuvetra.collection_evidence_quarantine_events(company_id,evidence_id,event_seq desc);
+-- Draw the sequence only after obtaining the same per-object transaction lock for every
+-- insertion path, including direct operator inserts. Rejected originals stay rejected.
+create function neuvetra.assign_collection_quarantine_sequence() returns trigger language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$ begin
+  if current_setting('transaction_isolation') <> 'read committed' then raise exception 'quarantine writes require READ COMMITTED' using errcode='25001'; end if;
+  perform pg_advisory_xact_lock(hashtextextended('collection-quarantine:'||new.company_id::text||':'||new.evidence_id::text,0));
+  if not exists(select 1 from neuvetra.collection_evidence_objects where id=new.evidence_id and company_id=new.company_id) then raise exception 'collection evidence unavailable' using errcode='23503'; end if;
+  if new.status<>'rejected' and exists(select 1 from neuvetra.collection_evidence_quarantine_events where company_id=new.company_id and evidence_id=new.evidence_id and status='rejected') then raise exception 'rejected evidence is terminal; use a new original' using errcode='22023'; end if;
+  new.event_seq:=nextval('neuvetra.collection_quarantine_event_seq');
+  return new;
+end $$;
+revoke all on function neuvetra.assign_collection_quarantine_sequence() from public,authenticated,neuvetra_runtime;
+create trigger collection_quarantine_sequence before insert on neuvetra.collection_evidence_quarantine_events for each row execute function neuvetra.assign_collection_quarantine_sequence();
 create table neuvetra.collection_evidence_upload_intents (
   id uuid primary key,
   company_id uuid not null references neuvetra.companies(id),
@@ -90,6 +106,11 @@ create table neuvetra.collection_activity_versions (
   revision integer not null check(revision between 1 and 1000),
   previous_version_id uuid,
   correction_reason text,
+  setup_version_id uuid not null,
+  location_id uuid not null,
+  source_id text not null check(length(btrim(source_id)) between 1 and 120),
+  state text not null check(state in('active','withdrawn')),
+  withdrawal_reason text,
   original_quantity text not null check(length(original_quantity)<=100),
   original_unit text not null check(length(original_unit)<=80),
   normalized_quantity numeric(15,3),
@@ -112,6 +133,8 @@ create table neuvetra.collection_activity_versions (
   unique(id,company_id), unique(record_id,revision),
   foreign key(record_id,company_id) references neuvetra.collection_activity_records(id,company_id),
   foreign key(previous_version_id,company_id) references neuvetra.collection_activity_versions(id,company_id),
+  foreign key(setup_version_id,company_id,location_id) references neuvetra.company_setup_locations(version_id,company_id,id),
+  check((state='active' and withdrawal_reason is null) or (state='withdrawn' and revision>1 and length(btrim(withdrawal_reason)) between 3 and 2000)),
   check((revision=1 and previous_version_id is null and correction_reason is null) or (revision>1 and previous_version_id is not null and length(btrim(correction_reason)) between 3 and 2000)),
   check((normalized_quantity is null)=(normalized_unit is null)),
   check((quality='estimated' and length(btrim(estimate_basis)) between 1 and 2000) or (quality<>'estimated' and estimate_basis is null)),
@@ -128,6 +151,8 @@ create table neuvetra.collection_activity_heads (
   foreign key(record_id,company_id) references neuvetra.collection_activity_records(id,company_id),
   foreign key(version_id,company_id) references neuvetra.collection_activity_versions(id,company_id)
 );
+create index collection_activity_versions_company_record_idx on neuvetra.collection_activity_versions(company_id,record_id,revision);
+create index collection_activity_versions_source_idx on neuvetra.collection_activity_versions(company_id,location_id,source_id,period_start,period_end_exclusive);
 create table neuvetra.collection_activity_requests (
   company_id uuid not null,
   idempotency_key uuid not null,
@@ -154,7 +179,7 @@ create table neuvetra.collection_electricity_instruments (
   instrument_type text not null check(instrument_type in('energy_attribute_certificate','power_purchase_agreement','green_tariff','supplier_specific_rate')),
   mwh numeric(15,3) check(mwh>=0),
   quality_criteria_met boolean not null,
-  vintage_year integer not null check(vintage_year between 2024 and 2026),
+  vintage_year integer not null check(vintage_year between 1000 and 9999),
   evidence_id uuid,
   generation_technology text not null check(generation_technology in('wind','solar_photovoltaic','hydro','nuclear','geothermal','natural_gas','coal','oil','biomass','biogas','landfill_gas','mixed','unknown')),
   rate_co2_lb_per_mwh numeric(15,3),
@@ -209,7 +234,7 @@ create function neuvetra.collection_storage_can_read(bucket text,object_name tex
 declare target_company uuid:=neuvetra.collection_storage_company_id(object_name); begin
   return bucket='neuvetra-private-company-evidence' and target_company is not null and neuvetra.has_staging_access() and neuvetra.is_company_member(target_company)
     and exists(select 1 from neuvetra.collection_evidence_objects o where o.company_id=target_company and o.storage_key=object_name
-      and (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.created_at desc,q.id desc limit 1)='clean');
+      and (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.event_seq desc limit 1)='clean');
 end $$;
 revoke all on function neuvetra.collection_storage_can_read(text,text) from public,authenticated,neuvetra_runtime;
 grant execute on function neuvetra.collection_storage_can_read(text,text) to public;
@@ -239,7 +264,9 @@ revoke all on function neuvetra.collection_assert_numeric_input(jsonb) from publ
 
 create function neuvetra.collection_assert_activity(a jsonb) returns void language plpgsql set search_path=pg_catalog,neuvetra,pg_temp as $$
 declare q jsonb; p jsonb; x jsonb; k text; start_date date; end_date date; begin
-  perform neuvetra.m71_keys(a,'kind,quantity,quality,estimateBasis,period,reference,notes,evidenceIds,payload');
+  perform neuvetra.m71_keys(a,'kind,locationId,setupVersionId,sourceId,state,withdrawalReason,quantity,quality,estimateBasis,period,reference,notes,evidenceIds,payload');
+  if coalesce(a->>'locationId','') !~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' or coalesce(a->>'setupVersionId','') !~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' or jsonb_typeof(a->'sourceId') is distinct from 'string' or length(btrim(a->>'sourceId')) not between 1 and 120 then raise exception 'location and source identifiers required' using errcode='22023'; end if;
+  if a->>'state' not in('active','withdrawn') or jsonb_typeof(a->'withdrawalReason') not in('string','null') or (a->>'state'='active' and a->'withdrawalReason'<>'null'::jsonb) or (a->>'state'='withdrawn' and coalesce(length(btrim(a->>'withdrawalReason')),0) not between 3 and 2000) then raise exception 'invalid withdrawal state or reason' using errcode='22023'; end if;
   if a->>'kind' not in('natural_gas','distillate_no2','vehicle','fugitive','electricity') or jsonb_typeof(a->'reference') is distinct from 'string' or length(a->>'reference')>1000 or jsonb_typeof(a->'notes') is distinct from 'string' or length(a->>'notes')>4000 then raise exception 'invalid collection activity' using errcode='22023'; end if;
   q:=a->'quantity'; perform neuvetra.m71_keys(q,'originalValue,originalUnit,normalizedValue,normalizedUnit');
   if jsonb_typeof(q->'originalValue') is distinct from 'string' or length(q->>'originalValue')>100 or jsonb_typeof(q->'originalUnit') is distinct from 'string' or length(q->>'originalUnit')>80 or jsonb_typeof(q->'normalizedValue') not in('string','null') or jsonb_typeof(q->'normalizedUnit') not in('string','null') or (q->'normalizedValue'='null'::jsonb)<>(q->'normalizedUnit'='null'::jsonb) then raise exception 'invalid collection quantity' using errcode='22023'; end if;
@@ -253,12 +280,16 @@ declare q jsonb; p jsonb; x jsonb; k text; start_date date; end_date date; begin
   if start_date<date '2025-01-01' or end_date>date '2026-01-01' or start_date>=end_date then raise exception 'collection period outside 2025' using errcode='22023'; end if;
   if jsonb_typeof(a->'evidenceIds') is distinct from 'array' or jsonb_array_length(a->'evidenceIds')>20 or exists(select 1 from jsonb_array_elements(a->'evidenceIds') e where jsonb_typeof(e)<>'string' or e#>>'{}' !~ '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$') or (select count(*) from jsonb_array_elements_text(a->'evidenceIds'))<>(select count(distinct e) from jsonb_array_elements_text(a->'evidenceIds') e) then raise exception 'invalid collection evidence list' using errcode='22023'; end if;
   p:=a->'payload';
+  if (a->>'kind'='vehicle' and a->>'sourceId' is distinct from p->>'vehicleGroupId') or (a->>'kind'='electricity' and a->>'sourceId' is distinct from p->>'meterOrAccountNumber') then raise exception 'source identifier must match payload' using errcode='22023'; end if;
+  if a->>'kind'='fugitive' and (q->>'originalUnit' is distinct from p->>'unit' or (q->>'normalizedUnit' is not null and q->>'normalizedUnit' is distinct from p->>'unit')) then raise exception 'refrigerant quantity unit must match terms unit' using errcode='22023'; end if;
   if a->>'kind'='natural_gas' then
     perform neuvetra.m71_keys(p,'heatContent');
     if jsonb_typeof(p->'heatContent') not in('object','null') then raise exception 'invalid heat content' using errcode='22023'; end if;
     if p->'heatContent'<>'null'::jsonb then perform neuvetra.m71_keys(p->'heatContent','value,unit'); perform neuvetra.collection_assert_numeric_input(p#>'{heatContent,value}'); if p#>>'{heatContent,unit}' not in('MMBtu per scf','MMBtu per ccf','MMBtu per mcf','therm per ccf') then raise exception 'invalid heat content unit' using errcode='22023'; end if; end if;
   elsif a->>'kind'='distillate_no2' then
-    perform neuvetra.m71_keys(p,'consumption,statedHhvMmbtuPerGallon'); if jsonb_typeof(p->'statedHhvMmbtuPerGallon') not in('string','null') then raise exception 'invalid stated HHV' using errcode='22023'; end if; if p->'statedHhvMmbtuPerGallon'<>'null'::jsonb then perform neuvetra.collection_assert_decimal(p->>'statedHhvMmbtuPerGallon'); end if;
+    perform neuvetra.m71_keys(p,'consumption,statedHhvMmbtuPerGallon');
+    -- Supplier-stated HHV alone permits six fractional digits; quantities stay at three.
+    if jsonb_typeof(p->'statedHhvMmbtuPerGallon') not in('string','null') or (p->'statedHhvMmbtuPerGallon'<>'null'::jsonb and p->>'statedHhvMmbtuPerGallon' !~ '^(0|[1-9][0-9]{0,11})(\.[0-9]{1,6})?$') then raise exception 'invalid stated HHV' using errcode='22023'; end if;
     if p#>>'{consumption,basis}'='measured' then perform neuvetra.m71_keys(p->'consumption','basis,gallons'); perform neuvetra.collection_assert_numeric_input(p#>'{consumption,gallons}');
     elsif p#>>'{consumption,basis}'='purchases_only' then perform neuvetra.m71_keys(p->'consumption','basis,purchasedGallons'); perform neuvetra.collection_assert_numeric_input(p#>'{consumption,purchasedGallons}');
     elsif p#>>'{consumption,basis}'='purchases_with_tank_levels' then perform neuvetra.m71_keys(p->'consumption','basis,purchasedGallons,openingGallons,closingGallons'); perform neuvetra.collection_assert_numeric_input(p#>'{consumption,purchasedGallons}'); perform neuvetra.collection_assert_numeric_input(p#>'{consumption,openingGallons}'); perform neuvetra.collection_assert_numeric_input(p#>'{consumption,closingGallons}');
@@ -277,13 +308,38 @@ declare q jsonb; p jsonb; x jsonb; k text; start_date date; end_date date; begin
     if coalesce(p->>'zip','')!~'^[0-9]{5}$' or jsonb_typeof(p->'utilityEiaId') not in('string','null') or jsonb_typeof(p->'instruments') is distinct from 'array' or jsonb_array_length(p->'instruments')>100 then raise exception 'invalid electricity activity' using errcode='22023'; end if;
     for x in select value from jsonb_array_elements(p->'instruments') loop
       perform neuvetra.m71_keys(x,'type,mwh,qualityCriteriaMet,vintageYear,evidenceReference,generationTechnology,rateLbPerMwh'); perform neuvetra.collection_assert_numeric_input(x->'mwh');
-      if x->>'type' not in('energy_attribute_certificate','power_purchase_agreement','green_tariff','supplier_specific_rate') or jsonb_typeof(x->'qualityCriteriaMet') is distinct from 'boolean' or coalesce(x->>'vintageYear','')!~'^[0-9]{4}$' or (x->>'vintageYear')::integer not between 2024 and 2026 or jsonb_typeof(x->'evidenceReference') not in('string','null') or (x->'evidenceReference'<>'null'::jsonb and coalesce(x->>'evidenceReference','')!~'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$') or x->>'generationTechnology' not in('wind','solar_photovoltaic','hydro','nuclear','geothermal','natural_gas','coal','oil','biomass','biogas','landfill_gas','mixed','unknown') or jsonb_typeof(x->'rateLbPerMwh') not in('object','null') then raise exception 'invalid electricity instrument' using errcode='22023'; end if;
+      if x->>'type' not in('energy_attribute_certificate','power_purchase_agreement','green_tariff','supplier_specific_rate') or jsonb_typeof(x->'qualityCriteriaMet') is distinct from 'boolean' or coalesce(x->>'vintageYear','')!~'^[0-9]{4}$' or (x->>'vintageYear')::integer not between 1000 and 9999 or jsonb_typeof(x->'evidenceReference') not in('string','null') or (x->'evidenceReference'<>'null'::jsonb and coalesce(x->>'evidenceReference','')!~'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$') or x->>'generationTechnology' not in('wind','solar_photovoltaic','hydro','nuclear','geothermal','natural_gas','coal','oil','biomass','biogas','landfill_gas','mixed','unknown') or jsonb_typeof(x->'rateLbPerMwh') not in('object','null') then raise exception 'invalid electricity instrument' using errcode='22023'; end if;
       if x->'rateLbPerMwh'<>'null'::jsonb then perform neuvetra.m71_keys(x->'rateLbPerMwh','co2,ch4,n2o'); perform neuvetra.collection_assert_numeric_input(x#>'{rateLbPerMwh,co2}'); if x#>'{rateLbPerMwh,ch4}'<>'null'::jsonb then perform neuvetra.collection_assert_numeric_input(x#>'{rateLbPerMwh,ch4}'); end if; if x#>'{rateLbPerMwh,n2o}'<>'null'::jsonb then perform neuvetra.collection_assert_numeric_input(x#>'{rateLbPerMwh,n2o}'); end if; end if;
       if x->'evidenceReference'<>'null'::jsonb and not (a->'evidenceIds' ? (x->>'evidenceReference')) then raise exception 'instrument evidence must be linked' using errcode='22023'; end if;
     end loop;
   end if;
 end $$;
 revoke all on function neuvetra.collection_assert_activity(jsonb) from public,authenticated,neuvetra_runtime;
+
+create function neuvetra.collection_derive_quantity(a jsonb) returns jsonb language plpgsql immutable set search_path=pg_catalog,neuvetra,pg_temp as $$
+declare c jsonb; value text; total numeric; unit text:='US_gallon'; valid_decimal boolean; begin
+  if a->>'kind'='vehicle' then value:=a#>>'{payload,gallons}';
+  elsif a->>'kind'='distillate_no2' then
+    c:=a#>'{payload,consumption}';
+    if c->>'basis'='measured' then value:=c->>'gallons';
+    elsif c->>'basis'='purchases_only' then value:=c->>'purchasedGallons';
+    else
+      if not exists(select 1 from unnest(array[c->>'purchasedGallons',c->>'openingGallons',c->>'closingGallons']) v where coalesce(v,'') !~ '^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$') then
+        total:=(c->>'purchasedGallons')::numeric+(c->>'openingGallons')::numeric-(c->>'closingGallons')::numeric;
+        value:=case when total>=0 then total::numeric(16,3)::text else '' end;
+      else value:=''; end if;
+    end if;
+  elsif a->>'kind'='fugitive' then
+    unit:=a#>>'{payload,unit}'; c:=a#>'{payload,terms}';
+    if not exists(select 1 from unnest(array[c->>'PN',c->>'CN',c->>'PS',c->>'CD',c->>'RD']) v where coalesce(v,'') !~ '^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$') then
+      total:=(c->>'PN')::numeric-(c->>'CN')::numeric+(c->>'PS')::numeric+(c->>'CD')::numeric-(c->>'RD')::numeric;
+      value:=case when total>=0 then total::numeric(16,3)::text else '' end;
+    else value:=''; end if;
+  else return a; end if;
+  valid_decimal:=value ~ '^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$';
+  return jsonb_set(a,'{quantity}',jsonb_build_object('originalValue',value,'originalUnit',unit,'normalizedValue',case when valid_decimal then value end,'normalizedUnit',case when valid_decimal then unit end));
+end $$;
+revoke all on function neuvetra.collection_derive_quantity(jsonb) from public,authenticated,neuvetra_runtime;
 
 create function neuvetra.save_collection_activity(target_company uuid,target_record uuid,request jsonb)
 returns table(record_id uuid,version_id uuid,replayed boolean) language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
@@ -293,12 +349,14 @@ declare actor uuid:=auth.uid(); a jsonb; old neuvetra.collection_activity_reques
   perform neuvetra.m71_keys(request,'idempotencyKey,expectedRevision,expectedVersionId,correctionReason,activity');
   if coalesce(request->>'idempotencyKey','')!~'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' or coalesce(request->>'expectedRevision','')!~'^[0-9]{1,4}$' or jsonb_typeof(request->'expectedVersionId') not in('string','null') or jsonb_typeof(request->'correctionReason') not in('string','null') or octet_length(request::text)>150000 then raise exception 'invalid collection request' using errcode='22023'; end if;
   a:=request->'activity'; perform neuvetra.collection_assert_activity(a);
+  a:=neuvetra.collection_derive_quantity(a); request:=jsonb_set(request,'{activity}',a);
   fingerprint:=neuvetra.m67_hash(jsonb_build_object('operation','save_collection_activity','companyId',target_company,'recordId',target_record,'actorId',actor,'request',request-'idempotencyKey'));
   -- Serialize before looking up the receipt: a concurrent exact replay may have
   -- been waiting on this company lock and must observe the committed request.
   perform id from neuvetra.companies where id=target_company for update;
   select * into old from neuvetra.collection_activity_requests where company_id=target_company and idempotency_key=(request->>'idempotencyKey')::uuid;
   if found then if old.actor_id<>actor or old.request_sha256<>fingerprint or old.record_id<>target_record then raise exception 'collection idempotency conflict' using errcode='23505'; end if; record_id:=old.record_id; version_id:=old.version_id; replayed:=true; return next; return; end if;
+  if not exists(select 1 from neuvetra.company_setup_heads h join neuvetra.company_setup_locations l on l.company_id=h.company_id and l.version_id=h.version_id where h.company_id=target_company and h.version_id=(a->>'setupVersionId')::uuid and l.id=(a->>'locationId')::uuid) then raise exception 'current company setup location required; reload setup' using errcode='23503'; end if;
   select * into rec from neuvetra.collection_activity_records where id=target_record and company_id=target_company;
   if not found then
     if request->>'expectedRevision'<>'0' or request->'expectedVersionId'<>'null'::jsonb or request->'correctionReason'<>'null'::jsonb then raise exception 'invalid first collection version' using errcode='22023'; end if;
@@ -307,10 +365,11 @@ declare actor uuid:=auth.uid(); a jsonb; old neuvetra.collection_activity_reques
   select * into head from neuvetra.collection_activity_heads where record_id=target_record and company_id=target_company for update;
   if (request->>'expectedRevision')::integer<>coalesce(head.revision,0) or request->'expectedVersionId' is distinct from coalesce(to_jsonb(head.version_id::text),'null'::jsonb) then raise exception 'collection changed; reload before saving' using errcode='23505'; end if;
   next_revision:=coalesce(head.revision,0)+1;
+  if next_revision=1 and a->>'state'='withdrawn' then raise exception 'save record before withdrawing it' using errcode='22023'; end if;
   if (next_revision=1 and request->'correctionReason'<>'null'::jsonb) or (next_revision>1 and coalesce(length(btrim(request->>'correctionReason')),0)<3) then raise exception 'collection correction reason required' using errcode='22023'; end if;
-  for evidence in select value from jsonb_array_elements_text(a->'evidenceIds') loop if not exists(select 1 from neuvetra.collection_evidence_objects where company_id=target_company and id=evidence::uuid) then raise exception 'collection evidence unavailable' using errcode='23503'; end if; end loop;
-  insert into neuvetra.collection_activity_versions(id,record_id,company_id,revision,previous_version_id,correction_reason,original_quantity,original_unit,normalized_quantity,normalized_unit,quality,estimate_basis,period_start,period_end_exclusive,reference,notes,inside_boundary,maintains_refrigerant_stock,retrofit_in_period,electricity_zip,utility_eia_id,payload,payload_sha256,created_by)
-  values(new_version,target_record,target_company,next_revision,head.version_id,request->>'correctionReason',a#>>'{quantity,originalValue}',a#>>'{quantity,originalUnit}',(a#>>'{quantity,normalizedValue}')::numeric,a#>>'{quantity,normalizedUnit}',a->>'quality',a->>'estimateBasis',(a#>>'{period,start}')::date,(a#>>'{period,endExclusive}')::date,a->>'reference',a->>'notes',(a#>>'{payload,insideBoundary}')::boolean,(a#>>'{payload,maintainsRefrigerantStock}')::boolean,(a#>>'{payload,retrofitInPeriod}')::boolean,a#>>'{payload,zip}',a#>>'{payload,utilityEiaId}',a,neuvetra.m67_hash(a),actor);
+  for evidence in select value from jsonb_array_elements_text(a->'evidenceIds') loop if not exists(select 1 from neuvetra.collection_evidence_objects where company_id=target_company and id=evidence::uuid) then raise exception 'collection evidence unavailable' using errcode='23503'; end if; if exists(select 1 from neuvetra.collection_evidence_quarantine_events where company_id=target_company and evidence_id=evidence::uuid and status='rejected') then raise exception 'rejected evidence cannot be linked' using errcode='22023'; end if; end loop;
+  insert into neuvetra.collection_activity_versions(id,record_id,company_id,revision,previous_version_id,correction_reason,setup_version_id,location_id,source_id,state,withdrawal_reason,original_quantity,original_unit,normalized_quantity,normalized_unit,quality,estimate_basis,period_start,period_end_exclusive,reference,notes,inside_boundary,maintains_refrigerant_stock,retrofit_in_period,electricity_zip,utility_eia_id,payload,payload_sha256,created_by)
+  values(new_version,target_record,target_company,next_revision,head.version_id,request->>'correctionReason',(a->>'setupVersionId')::uuid,(a->>'locationId')::uuid,a->>'sourceId',a->>'state',a->>'withdrawalReason',a#>>'{quantity,originalValue}',a#>>'{quantity,originalUnit}',(a#>>'{quantity,normalizedValue}')::numeric,a#>>'{quantity,normalizedUnit}',a->>'quality',a->>'estimateBasis',(a#>>'{period,start}')::date,(a#>>'{period,endExclusive}')::date,a->>'reference',a->>'notes',(a#>>'{payload,insideBoundary}')::boolean,(a#>>'{payload,maintainsRefrigerantStock}')::boolean,(a#>>'{payload,retrofitInPeriod}')::boolean,a#>>'{payload,zip}',a#>>'{payload,utilityEiaId}',a,neuvetra.m67_hash(a),actor);
   insert into neuvetra.collection_activity_evidence_links(company_id,version_id,evidence_id) select target_company,new_version,value::uuid from jsonb_array_elements_text(a->'evidenceIds');
   if a->>'kind'='electricity' then
     for instrument,n in select value,ordinality from jsonb_array_elements(a#>'{payload,instruments}') with ordinality loop
@@ -364,7 +423,7 @@ declare actor uuid:=auth.uid(); existing neuvetra.collection_evidence_objects%ro
   select * into prior from neuvetra.collection_evidence_uploads where id=requested_upload_id and company_id=target_company;
   if found then
     if prior.created_by<>actor or prior.request_sha256<>fingerprint then raise exception 'evidence upload idempotency conflict' using errcode='23505'; end if;
-    select q.status into current_status from neuvetra.collection_evidence_quarantine_events q where q.company_id=target_company and q.evidence_id=prior.evidence_id order by q.created_at desc,q.id desc limit 1;
+    select q.status into current_status from neuvetra.collection_evidence_quarantine_events q where q.company_id=target_company and q.evidence_id=prior.evidence_id order by q.event_seq desc limit 1;
     upload_id:=prior.id; evidence_id:=prior.evidence_id; reused:=prior.status='duplicate_reused'; quarantine_status:=current_status; orphan_recovery_required:=exists(select 1 from neuvetra.collection_evidence_orphan_recovery o where o.company_id=target_company and o.upload_id=prior.id and o.status='pending'); return next; return;
   end if;
   select * into intent from neuvetra.collection_evidence_upload_intents where id=requested_upload_id and company_id=target_company for update;
@@ -373,11 +432,11 @@ declare actor uuid:=auth.uid(); existing neuvetra.collection_evidence_objects%ro
   if found then
     insert into neuvetra.collection_evidence_uploads values(requested_upload_id,target_company,existing.id,object_key,'duplicate_reused',fingerprint,actor,clock_timestamp());
     if object_key<>existing.storage_key then insert into neuvetra.collection_evidence_orphan_recovery values(gen_random_uuid(),target_company,requested_upload_id,object_key,'duplicate_object','pending',null,clock_timestamp(),null); orphaned:=true; end if;
-    select q.status into current_status from neuvetra.collection_evidence_quarantine_events q where q.company_id=target_company and q.evidence_id=existing.id order by q.created_at desc,q.id desc limit 1;
+    select q.status into current_status from neuvetra.collection_evidence_quarantine_events q where q.company_id=target_company and q.evidence_id=existing.id order by q.event_seq desc limit 1;
     evidence_id:=existing.id; reused:=true;
   else
     insert into neuvetra.collection_evidence_objects(id,company_id,storage_key,original_name,media_type,byte_length,sha256,uploaded_by) values(proposed_evidence_id,target_company,object_key,original_name,media_type,byte_length,content_sha256,actor);
-    insert into neuvetra.collection_evidence_quarantine_events values(gen_random_uuid(),target_company,proposed_evidence_id,'pending','upload-registration','Awaiting malware and content scan.',clock_timestamp());
+    insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details,created_at) values(gen_random_uuid(),target_company,proposed_evidence_id,'pending','upload-registration','Awaiting malware and content scan.',clock_timestamp());
     insert into neuvetra.collection_evidence_uploads values(requested_upload_id,target_company,proposed_evidence_id,object_key,'attached',fingerprint,actor,clock_timestamp());
     evidence_id:=proposed_evidence_id; reused:=false; current_status:='pending';
   end if;
@@ -431,6 +490,6 @@ revoke all on function neuvetra.resolve_collection_evidence_orphan(uuid,uuid,tex
 create function neuvetra.record_collection_evidence_quarantine(target_company uuid,target_evidence uuid,status text,scanner_reference text,details text) returns uuid language plpgsql set search_path=pg_catalog,neuvetra,pg_temp as $$
 declare event_id uuid:=gen_random_uuid(); begin
   if status not in('clean','rejected','error') or length(scanner_reference) not between 1 and 500 or length(details)>2000 then raise exception 'invalid quarantine event' using errcode='22023'; end if;
-  insert into neuvetra.collection_evidence_quarantine_events values(event_id,target_company,target_evidence,status,scanner_reference,details,clock_timestamp()); return event_id;
+  insert into neuvetra.collection_evidence_quarantine_events(id,company_id,evidence_id,status,scanner_reference,details,created_at) values(event_id,target_company,target_evidence,status,scanner_reference,details,clock_timestamp()); return event_id;
 end $$;
 revoke all on function neuvetra.record_collection_evidence_quarantine(uuid,uuid,text,text,text) from public,authenticated,neuvetra_runtime;

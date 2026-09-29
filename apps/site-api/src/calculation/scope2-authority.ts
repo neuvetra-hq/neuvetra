@@ -25,7 +25,8 @@ export interface Scope2Result {
   profile: string; methodVersionId: string; profileId: string; engineSha256: string; registerSha256: string; gwpSetId: string; input: Scope2Input; inputSha256: string
   /** The worse of the two basis statuses. Location-based and market-based are reported separately (QA F08). */
   status: Scope2Status; findings: string[]; estimates: string[]
-  activity: { mwh: string; instrumentMwh: string; subregion: string; instruments: Array<{ type: string; mwh: string; technology: GenerationTechnology; rateBasis: 'instrument_rate' | 'zero_emission_technology' | 'not_calculated' }> }
+  /** instrumentMwh and an instrument's mwh are null when unknown (engine v3): unknown is never zero. */
+  activity: { mwh: string; instrumentMwh: string | null; subregion: string; instruments: Array<{ type: string; mwh: string | null; technology: GenerationTechnology; rateBasis: 'instrument_rate' | 'zero_emission_technology' | 'not_calculated' | 'not_admissible' }> }
   locationBased: Basis
   /** gases: all market-based emissions per gas (instruments plus residual mix); residualMix: the uncovered part and its inputs. */
   marketBased: Basis & { residualMix: ResidualMixPart | null }

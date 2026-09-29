@@ -34,6 +34,7 @@ COPY packages/neuvetra-database/src/m77-contract.ts packages/neuvetra-database/s
 COPY packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m80-contract.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/company-setup-contract.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/collection-contract.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
@@ -104,6 +105,14 @@ COPY packages/neuvetra-database/src/migrations/0022_scope1_beta_foundation.sql .
 COPY packages/neuvetra-database/src/company-setup.ts packages/neuvetra-database/src/company-setup-contract.ts ./packages/neuvetra-database/src/
 COPY apps/site-api/src/workspace/company-setup-routes.ts ./apps/site-api/src/workspace/
 COPY packages/neuvetra-database/src/migrations/0023_company_setup.sql ./packages/neuvetra-database/src/migrations/
+# Collection and reviewed method sources are copied as inert files; the hosted
+# migration manifest and method release state remain separate operational gates.
+COPY apps/site-api/src/workspace/collection-routes.ts apps/site-api/src/workspace/collection-storage.ts apps/site-api/src/workspace/collection-zip.ts ./apps/site-api/src/workspace/
+COPY apps/site-api/src/calculation/method-engine-runner.ts apps/site-api/src/calculation/scope1-authority.ts apps/site-api/src/calculation/scope2-authority.ts apps/site-api/src/calculation/scope3-authority.ts ./apps/site-api/src/calculation/
+COPY apps/site-api/src/calculation/scope1_engine.py apps/site-api/src/calculation/scope2_engine.py apps/site-api/src/calculation/scope3_engine.py ./apps/site-api/src/calculation/
+COPY packages/neuvetra-database/src/collection.ts packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts packages/neuvetra-database/src/method-reference.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/method-reference/verified-factor-register-2025.json packages/neuvetra-database/src/method-reference/verified-electricity-register-egrid2023.json packages/neuvetra-database/src/method-reference/verified-electricity-register-egrid2023-greene2025.json packages/neuvetra-database/src/method-reference/verified-scope3-register-2025.json packages/neuvetra-database/src/method-reference/egrid2023-zip-subregion-utility.csv ./packages/neuvetra-database/src/method-reference/
+COPY packages/neuvetra-database/src/migrations/0024_method_reference.sql packages/neuvetra-database/src/migrations/0025_scope3_method_reference.sql packages/neuvetra-database/src/migrations/0026_scope2_residual_mix.sql packages/neuvetra-database/src/migrations/0027_collection.sql ./packages/neuvetra-database/src/migrations/
 # Import and hash verification happen without credentials or network calls.
 RUN bun --version && python --version && bun -e 'await import("./apps/site-api/src/staging/server.ts"); const {verifyStagingAssets}=await import("./apps/site-api/src/staging/assets.ts"); await verifyStagingAssets("/app/apps/site-web/dist-staging");'
 USER 10001:10001

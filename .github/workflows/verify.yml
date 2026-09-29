@@ -345,6 +345,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install --disable-pip-version-check pint==0.26 pytest==9.1.1 pyyaml==6.0.3
+      - name: Verify Scope 1, 2 and 3 Python engines
+        working-directory: apps/site-api/src/calculation
+        run: python -m unittest scope1_engine_test scope2_engine_test scope3_engine_test
       - run: bun run test:ghg
       - name: Verify offline fugitive candidate and independent accounting cases
         run: |

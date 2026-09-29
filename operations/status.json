@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-09-29T07:12:47+00:00",
+  "updated_at": "2026-09-29T18:55:25+00:00",
   "mission": "Neuvetra: California and U.S. evidence-backed GHG research and deterministic accounting",
   "board": "user",
   "coordinator_role": "ceo",
   "milestone": {
     "id": "HOSTED-SETUP-REBUILD",
     "name": "Hosted corporate setup and collection rebuild",
-    "status": "in_progress_schema23_live_collection_local_reviewed",
-    "next_gate": "Schema 23 committed on synthetic staging with /ready confirmation; the route repair is pushed to PR6 but not deployed, so hosted two-company isolation remains. The Scope 1/2 collection candidate passed bounded local QA; migration 0027 is unregistered/unapplied hosted and PR6 remote was last verified at 87f02a0. Claude methods v6 passed independent accounting and technical re-review and exact 27 files are locally integrated at 3d4dff1a5; 0024-0026 are unregistered/unapplied hosted and no method is released. Neither local methods nor collection has been pushed. Claude's collection/browser review is pending. After it passes, verify exact PR head/checks, rehearse fresh hosted backup/restore and additive migrations, deploy, and demonstrate signed-in two-company collection before readiness and draft reports. No real customer invitation or assurance claim. Local verdict: C:/Users/nimab/Neuvetra/notes/reviews/2026-09-29-codex-review-of-claude-methods-v6.md.",
+    "status": "checkpoint_merge_authorized_hosted_held",
+    "next_gate": "Board authorized PR6 codex/corporate-mvp to main as a source checkpoint after exact hash verification and every CI job including staging-image passes. Methods v8 independent local QA passed 29/29 hashes and source-required modes; two source-backed suites skip in source-free CI, so method release still requires REQUIRED=1 and verified originals. Claude passed N1-N6 collection on 18+3 exact hashes. N5 is a board-accepted staging residual with a no-second-writer rule. Python Scope 1-3 engine CI step added; 79 tests pass locally. Fresh Railway read-only observation shows Site-Web Git auto-deploy disabled and zero repository triggers. A green CI image is a packaging gate, not deployment. Hosted schema 23 remains; migrations 0024-0027, method release, backup/restore rehearsal, deployment and two-company acceptance remain held until separate board direction. Collection remains in review and methods beta. Local publication receipt: C:/Users/nimab/Neuvetra/notes/reviews/2026-09-29-checkpoint-publication/README.md.",
     "evidence": [
       "operations/hosted-setup/decision.md",
       "evaluations/research-qa/hosted-setup-01-independent-review.md",
@@ -212,13 +212,13 @@
     "concurrency_limit_including_coordinator": 4,
     "persistent_cloud_workers": "not_implemented",
     "role_prompts_are_live_workers": false,
-    "website_preview_state": "Deployment40546ef7 at reviewed75d8ec4b/schema22 verified SUCCESS and ready September25 05:47:51UTC. Signed-in synthetic setup saved v1, corrected v2, loaded history summary and persisted v2 after reload.",
+    "website_preview_state": "Schema 23 live for synthetic staging per September 27 receipt; local collection candidate is not deployed. California-only route repair is pushed but undeployed; hosted two-company acceptance pending. Latest provider state must be rechecked before action.",
     "background_continuation": "No persistent agent workforce or Neuvetra scheduler is configured. Role assignments are finite observed executions.",
-    "last_session_work": "Local invitation/tenant boundary passed independent Candidate2 review and native restore after two preserved findings; publication checks pending. No new hosted deployment."
+    "last_session_work": "Methods v8 exact-byte local PASS; Claude collection N1-N6 exact-byte PASS; N5 accepted as staging residual with no second writer. Source checkpoint authorized; no hosted deployment, migration or method release."
   },
   "session_handoff": {
-    "current": "Reviewed local access committed/pushed at3331b62c; remote head verified. Container smoke failed because shared index exported local-only beta modules absent from image. Candidate3 index-only correction dispatched; C2 local acceptance preserved. Required remote checks not all passing; milestone publication incomplete.",
-    "next": "Publish accepted local access package on PR6 and verify required checks. Next product work connects the reviewed access boundary to the beta journey and evidence intake; held-method/source/domain/release-owner and hosted gates remain.",
+    "current": "Board-authorized PR6 source checkpoint integrates independently passed methods v8 and Claude-reviewed collection N1-N6; 18+3 collection hashes and 29 method hashes match. N5 is accepted for staging with no second writer. Railway Site-Web auto-deploy is off. Hosted remains schema 23; 0024-0027 and methods are held.",
+    "next": "Verify staged/committed hashes, push PR6, require every CI job including staging-image green, then merge with a merge commit and tag the checkpoint. Record merge/tag/CI receipts in local notes. Do not deploy or apply hosted migrations until the board separately directs it.",
     "evidence": [
       "operations/feedback/2026-09-25-scope1-continue.md",
       "evaluations/research-qa/m80-beta-next-contract-root-review2-20260925.json",

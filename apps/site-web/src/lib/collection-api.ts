@@ -2,6 +2,7 @@ import type {
   CollectionActivityRecord,
   CollectionActivitySaveInput,
   CollectionActivityVersion,
+  CollectionContext as DatabaseCollectionContext,
   CollectionEvidenceMetadata,
   CollectionEvidenceReceipt,
   GridLossLineage,
@@ -9,9 +10,26 @@ import type {
 import type { HostedWorkspaceActor } from "./workspace-api"
 
 export type { CollectionActivityRecord, CollectionActivitySaveInput, CollectionActivityVersion, CollectionEvidenceMetadata, CollectionEvidenceReceipt, GridLossLineage }
+export type CollectionContext = DatabaseCollectionContext
+
+export interface CollectionZipUtility {
+  subregion: string
+  utility: string
+  eiaId: string
+  state: string
+  predominantUtility: boolean
+}
+export interface CollectionZipLookup {
+  zip: string
+  subregions: string[]
+  utilities: CollectionZipUtility[]
+  needsUtilityChoice: boolean
+  found: boolean
+  source: string
+}
 
 export class CollectionApiError extends Error {
-  constructor(message: string, readonly status: number) { super(message) }
+  constructor(message: string, readonly status: number, readonly code: string | null = null) { super(message) }
   get conflict() { return this.status === 409 }
 }
 
@@ -39,7 +57,8 @@ async function request(actor: HostedWorkspaceActor, path: string, init?: Request
   if (!response.ok) {
     const value: unknown = await response.json().catch(() => null)
     const error = value && typeof value === "object" && "error" in value && typeof value.error === "string" ? value.error : "Collection is unavailable."
-    throw new CollectionApiError(error, response.status)
+    const code = value && typeof value === "object" && "code" in value && typeof value.code === "string" ? value.code : null
+    throw new CollectionApiError(error, response.status, code)
   }
   return response
 }
@@ -54,6 +73,28 @@ export async function listCollectionActivities(companyId: string, actor: HostedW
   const value = await json<{ profile: string; records: CollectionActivityRecord[] }>(await request(actor, `${companyPath(companyId)}/activities`))
   if (!Array.isArray(value.records)) throw new Error("The collection response was not recognized.")
   return value.records
+}
+
+export async function loadCollectionContext(companyId: string, actor: HostedWorkspaceActor) {
+  const value = await json<{ profile: string; context: CollectionContext }>(await request(actor, companyPath(companyId)))
+  if (!value.context || value.context.companyId !== companyId || !(value.context.setupVersionId === null || UUID.test(value.context.setupVersionId)) || !(value.context.setupRevision === null || Number.isInteger(value.context.setupRevision)) || !Array.isArray(value.context.locations)) throw new Error("The collection context was not recognized.")
+  const locationIds = new Set<string>()
+  for (const location of value.context.locations) {
+    if (!location || !UUID.test(location.id) || locationIds.has(location.id) || typeof location.name !== "string" || !["unknown", "included", "excluded"].includes(location.inclusion) || typeof location.control !== "string") throw new Error("The collection context was not recognized.")
+    locationIds.add(location.id)
+  }
+  return value.context
+}
+
+export async function lookupCollectionZip(companyId: string, zipCode: string, actor: HostedWorkspaceActor) {
+  if (!/^\d{5}$/.test(zipCode)) throw new Error("Enter a five-digit ZIP before lookup.")
+  const value = await json<{ lookup: CollectionZipLookup }>(await request(actor, `${companyPath(companyId)}/zip-lookup?zip=${encodeURIComponent(zipCode)}`))
+  const lookup = value.lookup
+  if (!lookup || lookup.zip !== zipCode || typeof lookup.found !== "boolean" || typeof lookup.needsUtilityChoice !== "boolean" || !Array.isArray(lookup.subregions) || !lookup.subregions.every(item => typeof item === "string") || new Set(lookup.subregions).size !== lookup.subregions.length || !Array.isArray(lookup.utilities) || typeof lookup.source !== "string" || lookup.needsUtilityChoice !== (lookup.subregions.length > 1) || lookup.found !== (lookup.utilities.length > 0)) throw new Error("The ZIP lookup response was not recognized.")
+  for (const utility of lookup.utilities) {
+    if (!utility || typeof utility.subregion !== "string" || typeof utility.utility !== "string" || typeof utility.eiaId !== "string" || typeof utility.state !== "string" || typeof utility.predominantUtility !== "boolean") throw new Error("The ZIP lookup response was not recognized.")
+  }
+  return lookup
 }
 
 export async function saveCollectionActivity(companyId: string, recordId: string, input: CollectionActivitySaveInput, actor: HostedWorkspaceActor) {

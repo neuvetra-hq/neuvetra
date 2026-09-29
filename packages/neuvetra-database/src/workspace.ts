@@ -18,7 +18,7 @@ import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WA
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
 import { M61_PROFILE, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput } from "./m61"
-import {readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,reserveCollectionEvidenceUpload as reserveEvidenceUpload,registerCollectionEvidence as storeCollectionEvidence,markCollectionEvidenceRegistrationFailed as markEvidenceRegistrationFailed,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
+import {readCollectionContext,readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,reserveCollectionEvidenceUpload as reserveEvidenceUpload,registerCollectionEvidence as storeCollectionEvidence,markCollectionEvidenceRegistrationFailed as markEvidenceRegistrationFailed,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
 export { M60_PROFILE, M60_MEDIA_TYPE, M60_MAX_REPORT_BYTES, buildDraftInventoryReport, hashReportBytes, type DraftInventoryReportBuild } from "./m60"
@@ -298,6 +298,7 @@ export interface WorkspaceConnection extends WorkspaceSql {
 }
 
 export class WorkspaceDatabase {
+  async findCollectionContext(userId:string,companyId:string){return this.asUser(userId,tx=>readCollectionContext(tx,companyId))}
   async findCollectionActivities(userId:string,companyId:string){return this.asUser(userId,tx=>readCollectionActivities(tx,companyId))}
   async findCollectionActivityVersion(userId:string,companyId:string,recordId:string,versionId:string){return this.asUser(userId,tx=>readCollectionActivityVersion(tx,companyId,recordId,versionId))}
   async saveCollectionActivity(userId:string,companyId:string,recordId:string,input:unknown){return this.asTrustedUser(userId,tx=>storeCollectionActivity(tx,userId,companyId,recordId,input))}

@@ -17,6 +17,8 @@ grid losses; losses belong to Scope 3 category 3):
   the source labels it CO2 while its values follow eGRID CO2e (review finding A05).
   A subregion with no residual-mix inputs would fall back to the eGRID rate as provisional.
 Location-based and market-based outcomes have separate statuses; one never discards the other.
+v3 (collection review C08): an instrument MWh or stated rate that is blank or not a plain decimal is unknown, so it
+holds only the market-based result as input needed; a wrong JSON type is still refused.
 Unknown is never zero, one half-even rounding to 4 dp kg CO2e, estimates and proxies labelled.
 """
 from __future__ import annotations
@@ -37,7 +39,7 @@ REGISTER_PATH = REFERENCE_DIR / 'verified-electricity-register-egrid2023-greene2
 REGISTER_SHA256 = '4873b8c08dbab395336a2273501724118661cf505ad19fa48a6f625661e3a14d'
 ZIP_PATH = REFERENCE_DIR / 'egrid2023-zip-subregion-utility.csv'
 ZIP_SHA256 = '7c661b453465ed6a0c456e30ea16604e52ab648c106ace1ec4b2e1e39092426e'  # LF copy of upstream 33d33352...
-METHOD_ID = 'scope2.electricity.egrid2023_greene2025.v2'
+METHOD_ID = 'scope2.electricity.egrid2023_greene2025.v3'
 PROFILE_ID = 'scope2.purchased_electricity'
 ENGINE_PROFILE = 'neuvetra.scope2-engine.v2'
 GWP_SET = 'AR5-100'
@@ -186,6 +188,7 @@ def describe() -> dict:
         'admissionRules': ['Metered consumption in kWh or MWh for the reporting period (up to 3 decimals); estimates must be labelled by the collection step',
                            'The site ZIP and eGRID subregion are required; the subregion must be listed for the ZIP, and a ZIP served by more than one subregion needs the utility (EIA id) listed for that subregion',
                            'Location-based and market-based outcomes have separate statuses; an invalid market claim never removes the location-based result',
+                           'An instrument whose MWh or stated rate is blank or not a plain decimal is unknown: it holds only the market-based result as input needed',
                            'Contractual instruments need a quality-criteria attestation, vintage year 2024-2026, evidence and the generation technology; covered MWh cannot exceed consumption',
                            'An instrument of any type counts at zero only for wind, solar PV, hydro or nuclear generation; any other technology needs the instrument\'s stated rate, and a zero CO2 rate for it is review required; bioenergy is not supported (biogenic CO2 and CH4/N2O treatment) and is held as input needed',
                            'Uncovered MWh use the Green-e 2025 residual mix (Center for Resource Solutions, 2023 data, released 2026-01-29; applied to 2025 reporting by Neuvetra decision 2026-09-28) calculated per gas from eGRID rates and Green-e net generation and certified voluntary MWh; Green-e and eGRID are cited on every market-based output',
@@ -272,6 +275,7 @@ def electricity(inp: dict) -> dict:
         grid = {g: factor(f'egrid2023.{sub}.{g}', used) for g in ('co2', 'ch4', 'n2o')}
         location = _gases(mwh, grid, used)
         covered = Decimal(0)
+        covered_known = True  # False once any instrument MWh is unknown: the covered total is then unknown, not a sum
         market = None
         residual = None
         market_status = 'complete'
@@ -285,18 +289,31 @@ def electricity(inp: dict) -> dict:
             if i['type'] not in INSTRUMENT_TYPES or i['generationTechnology'] not in TECHNOLOGIES or not isinstance(i['qualityCriteriaMet'], bool) \
                     or isinstance(i['vintageYear'], bool) or not isinstance(i['vintageYear'], int) or not isinstance(i['evidenceReference'], str) or len(i['evidenceReference']) > 200:
                 raise Refused('invalid_instrument')
-            imwh = quantity(i['mwh'], 'invalid_instrument_mwh')
-            covered += imwh
+            # Collection review C08: a blank or non-decimal MWh or stated rate is unknown, not malformed. It holds only
+            # the market-based result as input needed; a wrong JSON type is still refused.
+            if not isinstance(i['mwh'], str):
+                raise Refused('invalid_instrument_mwh')
+            imwh = Decimal(i['mwh']) if QUANTITY.fullmatch(i['mwh']) else None
             tech = i['generationTechnology']
+            rate_incomplete = False
             if 'rateLbPerMwh' in i:
                 r = i['rateLbPerMwh']
                 require_keys(r, {'co2'}, {'ch4', 'n2o'})
-                parsed = {g: Decimal(r[g]) for g in r if isinstance(r[g], str) and RATE.fullmatch(r[g])}
-                if len(parsed) != len(r):
+                if not all(isinstance(r[g], str) for g in r):
                     raise Refused('invalid_instrument_rate')
+                parsed = {g: Decimal(r[g]) for g in r if RATE.fullmatch(r[g])}
+                rate_incomplete = len(parsed) != len(r)
             else:
                 parsed = None
+            if imwh is not None:
+                covered += imwh
+            else:
+                covered_known = False
             held = []
+            if imwh is None:
+                held.append(('instrument_mwh_required', 'input_needed'))
+            if rate_incomplete:
+                held.append(('instrument_rate_not_numeric', 'input_needed'))
             if i['qualityCriteriaMet'] is not True:
                 held.append(('instrument_quality_criteria_not_met', 'review_required'))
             if i['vintageYear'] not in (2024, 2025, 2026):
@@ -304,13 +321,19 @@ def electricity(inp: dict) -> dict:
             if not i['evidenceReference'].strip():
                 held.append(('instrument_evidence_required', 'input_needed'))
             # v3 accounting review A01: only the four zero-emission technologies may carry a zero CO2 rate.
-            if parsed is not None and tech not in ZERO_EMISSION_TECHNOLOGIES and tech not in BIOENERGY_TECHNOLOGIES and parsed['co2'] == 0:
+            if parsed is not None and 'co2' in parsed and tech not in ZERO_EMISSION_TECHNOLOGIES and tech not in BIOENERGY_TECHNOLOGIES and parsed['co2'] == 0:
                 held.append(('instrument_rate_contradicts_technology', 'review_required'))
             if held:
+                # Report every problem with this instrument at once, including the ones checked later for admissible claims.
+                if tech in BIOENERGY_TECHNOLOGIES:
+                    held.append(('bioenergy_instrument_not_supported', 'input_needed'))
+                elif parsed is None and tech not in ZERO_EMISSION_TECHNOLOGIES:
+                    held.append(('instrument_rate_required', 'input_needed'))
                 for finding, status in held:
                     mkt_findings.append(finding)
                     market_status = worst(market_status, status)
-                basis.append({'type': i['type'], 'mwh': exact(imwh), 'technology': tech, 'rateBasis': 'not_admissible'})
+                basis.append({'type': i['type'], 'mwh': exact(imwh) if imwh is not None else None, 'technology': tech,
+                              'rateBasis': 'not_calculated' if imwh is None or rate_incomplete else 'not_admissible'})
                 continue
             if i['vintageYear'] != 2025:
                 estimates.append('vintage_outside_reporting_year')
@@ -363,7 +386,7 @@ def electricity(inp: dict) -> dict:
             market = remainder if market is None else _add(market, remainder)
     # The market-based remainder and any CH4/N2O fallback use the same subregion, so it cannot be better than location.
     market_status = worst(market_status, location_status)
-    return _result(inp, used, location, market, residual, location_status, market_status, loc_findings, mkt_findings, estimates, mwh, covered, basis)
+    return _result(inp, used, location, market, residual, location_status, market_status, loc_findings, mkt_findings, estimates, mwh, covered if covered_known else None, basis)
 
 
 def _result(inp, used, location, market, residual, location_status, market_status, loc_findings, mkt_findings, estimates, mwh, covered, basis) -> dict:
@@ -379,7 +402,7 @@ def _result(inp, used, location, market, residual, location_status, market_statu
     out = {'profile': ENGINE_PROFILE, 'methodVersionId': METHOD_ID, 'profileId': PROFILE_ID, 'engineSha256': engine_sha256(), 'registerSha256': REGISTER_SHA256,
            'gwpSetId': GWP_SET, 'input': inp, 'inputSha256': digest(inp), 'status': worst(location_status, market_status),
            'findings': sorted(set(loc_findings + mkt_findings)), 'estimates': sorted(set(estimates)),
-           'activity': {'mwh': exact(mwh), 'instrumentMwh': exact(covered), 'subregion': inp['subregion'], 'instruments': basis},
+           'activity': {'mwh': exact(mwh), 'instrumentMwh': exact(covered) if covered is not None else None, 'subregion': inp['subregion'], 'instruments': basis},
            'locationBased': {'status': location_status, 'findings': sorted(set(loc_findings)),
                              'gases': location if shown(location_status) else None, 'total': _total(location) if shown(location_status) else None},
            # gases: all market-based emissions per gas (instruments plus residual mix); residualMix: the uncovered part and its inputs.

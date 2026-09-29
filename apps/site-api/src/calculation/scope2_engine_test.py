@@ -175,9 +175,38 @@ class MarketBased(unittest.TestCase):
     def test_malformed_instruments_are_refused(self):
         for bad in (dict(eac('1'), type='offset'), dict(eac('1'), generationTechnology='fusion'), dict(eac('1'), qualityCriteriaMet='yes'),
                     dict(eac('1'), vintageYear='2025'), dict(eac('1'), vintageYear=True), dict(eac('1'), evidenceReference=None),
-                    {k: v for k, v in eac('1').items() if k != 'generationTechnology'}, eac('1', rateLbPerMwh={'co2': '-1'}), dict(eac('1'), mwh='1.2345')):
+                    {k: v for k, v in eac('1').items() if k != 'generationTechnology'}, dict(eac('1'), mwh=5), dict(eac('1'), mwh=None),
+                    eac('1', rateLbPerMwh={'co2': 900}), eac('1', rateLbPerMwh={'co2': '900', 'ch4': None}), eac('1', rateLbPerMwh=None)):
             with self.assertRaises(e.Refused):
                 calc(quantity='10', unit='MWh', subregion='CAMX', instruments=[bad])
+
+    def test_incomplete_instrument_values_hold_only_market_based(self):
+        # Collection review C08: blank or non-decimal text is unknown, not malformed. Location-based is kept.
+        location = calc(quantity='10', unit='MWh', subregion='CAMX')['locationBased']
+        cases = ((dict(eac('4'), mwh=''), ['instrument_mwh_required']),
+                 (dict(eac('4'), mwh='1.2345'), ['instrument_mwh_required']),
+                 (eac('4', technology='natural_gas', rateLbPerMwh={'co2': '-1'}), ['instrument_rate_not_numeric']),
+                 (eac('4', technology='natural_gas', rateLbPerMwh={'co2': '900', 'n2o': '0,01'}), ['instrument_rate_not_numeric']),
+                 (dict(eac('4', vintage=2023), mwh='', qualityCriteriaMet=False, evidenceReference=''),
+                  ['instrument_evidence_required', 'instrument_mwh_required', 'instrument_quality_criteria_not_met', 'instrument_vintage_not_admissible']))
+        for instrument, findings in cases:
+            r = calc(quantity='10', unit='MWh', subregion='CAMX', instruments=[instrument])
+            self.assertEqual(r['locationBased'], location)
+            m = r['marketBased']
+            self.assertIn(m['status'], ('input_needed', 'review_required'))
+            self.assertEqual((m['findings'], m['gases'], m['total'], m['residualMix']), (findings, None, None, None))
+            self.assertEqual(r['activity']['instruments'][0]['rateBasis'], 'not_calculated')
+            e.recompute(r)
+        blank = calc(quantity='10', unit='MWh', subregion='CAMX', instruments=[dict(eac('4'), mwh='')])
+        # Unknown is never zero: with one MWh unknown, the covered total is unknown too.
+        self.assertEqual((blank['status'], blank['marketBased']['status'], blank['activity']['instrumentMwh'], blank['activity']['instruments'][0]['mwh']), ('input_needed', 'input_needed', None, None))
+        both = calc(quantity='10', unit='MWh', subregion='CAMX', instruments=[eac('4'), dict(eac('4'), mwh='')])
+        self.assertEqual(both['activity']['instrumentMwh'], None)
+        # Every problem with one instrument is reported together, including a missing rate or bioenergy.
+        gas = calc(quantity='10', unit='MWh', subregion='CAMX', instruments=[dict(eac('4', technology='natural_gas'), mwh='')])
+        self.assertEqual(gas['marketBased']['findings'], ['instrument_mwh_required', 'instrument_rate_required'])
+        bio = calc(quantity='10', unit='MWh', subregion='CAMX', instruments=[dict(eac('4', technology='biogas'), qualityCriteriaMet=False)])
+        self.assertEqual(bio['marketBased']['findings'], ['bioenergy_instrument_not_supported', 'instrument_quality_criteria_not_met'])
 
 
 class ZipLookup(unittest.TestCase):

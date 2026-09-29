@@ -29,7 +29,18 @@ export type FugitiveCollectionPayload = { gas: 'HFC-134a' | 'HFC-227ea' | 'R-404
 export type ElectricityCollectionPayload = { meterOrAccountNumber: string; utilityName: string; site: string; zip: string; subregion: string; utilityEiaId: string | null; instruments: CollectionInstrument[] }
 export type CollectionPayload = NaturalGasCollectionPayload | DistillateCollectionPayload | VehicleCollectionPayload | FugitiveCollectionPayload | ElectricityCollectionPayload
 
+export interface CollectionContext {
+  companyId: string
+  setupVersionId: string | null
+  setupRevision: number | null
+  locations: Array<{ id: string; name: string; inclusion: 'unknown' | 'included' | 'excluded'; control: string }>
+}
 interface CollectionActivityCommon {
+  locationId: string
+  setupVersionId: string
+  sourceId: string
+  state: 'active' | 'withdrawn'
+  withdrawalReason: string | null
   quantity: CollectionQuantity
   quality: CollectionQuality
   estimateBasis: string | null
@@ -119,6 +130,7 @@ export interface CollectionEvidenceMetadata {
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const SHA256 = /^[0-9a-f]{64}$/
 const DECIMAL = /^(0|[1-9][0-9]{0,11})(\.[0-9]{1,3})?$/
+const STATED_HHV_DECIMAL = /^(0|[1-9][0-9]{0,11})(\.[0-9]{1,6})?$/
 const DATE = /^\d{4}-\d{2}-\d{2}$/
 const fail = (message = 'Invalid collection record.'): never => { throw new Error(message) }
 const object = (value: unknown, keys: readonly string[]): Record<string, unknown> => {
@@ -132,6 +144,7 @@ const text = (value: unknown, max: number, allowBlank = true): string => {
 const decimal = (value: unknown): string => typeof value === 'string' && DECIMAL.test(value) ? value : fail('Collection decimals allow 12 integer digits and 3 fractional digits.')
 const numericInput = (value: unknown): string => text(value,100)
 const nullableDecimal = (value: unknown): string | null => value === null ? null : decimal(value)
+const nullableStatedHhv = (value: unknown): string | null => value === null ? null : typeof value === 'string' && value === value.trim() && STATED_HHV_DECIMAL.test(value) ? value : fail('Stated HHV allows 12 integer digits and 6 fractional digits.')
 const uuid = (value: unknown): string => typeof value === 'string' && UUID.test(value) ? value : fail()
 const nullableText = (value: unknown, max: number): string | null => value === null ? null : text(value, max)
 const enumeration = <T extends string>(value: unknown, allowed: readonly T[]): T => typeof value === 'string' && allowed.includes(value as T) ? value as T : fail()
@@ -145,7 +158,7 @@ function validateInstrument(value: unknown): CollectionInstrument {
   const row = object(value, ['type','mwh','qualityCriteriaMet','vintageYear','evidenceReference','generationTechnology','rateLbPerMwh'])
   const type = enumeration(row.type, ['energy_attribute_certificate','power_purchase_agreement','green_tariff','supplier_specific_rate'] as const)
   const technology = enumeration(row.generationTechnology, ['wind','solar_photovoltaic','hydro','nuclear','geothermal','natural_gas','coal','oil','biomass','biogas','landfill_gas','mixed','unknown'] as const)
-  if (typeof row.qualityCriteriaMet !== 'boolean' || !Number.isInteger(row.vintageYear) || (row.vintageYear as number) < 2024 || (row.vintageYear as number) > 2026) fail()
+  if (typeof row.qualityCriteriaMet !== 'boolean' || !Number.isInteger(row.vintageYear) || (row.vintageYear as number) < 1000 || (row.vintageYear as number) > 9999) fail()
   let rate: CollectionInstrument['rateLbPerMwh'] = null
   if (row.rateLbPerMwh !== null) {
     const r = object(row.rateLbPerMwh, ['co2','ch4','n2o'])
@@ -170,7 +183,7 @@ function validatePayload(kind: CollectionActivityKind, value: unknown): Collecti
     if (basis === 'measured') { object(c, ['basis','gallons']); consumption = { basis, gallons: numericInput(c.gallons) } }
     else if (basis === 'purchases_only') { object(c, ['basis','purchasedGallons']); consumption = { basis, purchasedGallons: numericInput(c.purchasedGallons) } }
     else { object(c, ['basis','purchasedGallons','openingGallons','closingGallons']); consumption = { basis, purchasedGallons: numericInput(c.purchasedGallons), openingGallons: numericInput(c.openingGallons), closingGallons: numericInput(c.closingGallons) } }
-    return { consumption, statedHhvMmbtuPerGallon: nullableDecimal(p.statedHhvMmbtuPerGallon) }
+    return { consumption, statedHhvMmbtuPerGallon: nullableStatedHhv(p.statedHhvMmbtuPerGallon) }
   }
   if (kind === 'vehicle') {
     const p = object(value, ['vehicleGroupId','fuel','vehicleType','modelYear','gallons','vehicleCount','miles','fuelEconomy'])
@@ -191,8 +204,11 @@ function validatePayload(kind: CollectionActivityKind, value: unknown): Collecti
 }
 
 export function validateCollectionActivity(value: unknown): CollectionActivity {
-  const row = object(value, ['kind','quantity','quality','estimateBasis','period','reference','notes','evidenceIds','payload'])
+  const row = object(value, ['kind','locationId','setupVersionId','sourceId','state','withdrawalReason','quantity','quality','estimateBasis','period','reference','notes','evidenceIds','payload'])
   const kind = enumeration(row.kind, ['natural_gas','distillate_no2','vehicle','fugitive','electricity'] as const)
+  const locationId=uuid(row.locationId), setupVersionId=uuid(row.setupVersionId), sourceId=text(row.sourceId,120,false)
+  const state=enumeration(row.state,['active','withdrawn'] as const), withdrawalReason=nullableText(row.withdrawalReason,2000)
+  if(state==='withdrawn' ? !withdrawalReason || withdrawalReason.trim().length<3 : withdrawalReason!==null)fail('Withdrawal requires a reason.')
   const q = object(row.quantity, ['originalValue','originalUnit','normalizedValue','normalizedUnit'])
   const originalValue = text(q.originalValue,100)
   const normalizedValue = nullableDecimal(q.normalizedValue)
@@ -212,7 +228,11 @@ export function validateCollectionActivity(value: unknown): CollectionActivity {
   const supportedUnits:Record<CollectionActivityKind,readonly string[]>={natural_gas:['therm','MMBtu','scf','ccf','mcf'],distillate_no2:['US_gallon'],vehicle:['US_gallon'],fugitive:['kg','lb'],electricity:['kWh','MWh']}
   if(normalizedUnit!==null&&!supportedUnits[kind].includes(normalizedUnit))fail('Only engine unit tokens may be normalized; unsupported units remain saved with null normalized fields.')
   if(kind==='electricity'&&!(payload as ElectricityCollectionPayload).instruments.every(i=>i.evidenceReference===null||evidenceIds.includes(i.evidenceReference)))fail('Instrument evidence must be linked to the activity version.')
-  return { kind, quantity:{originalValue,originalUnit:text(q.originalUnit,80),normalizedValue,normalizedUnit}, quality, estimateBasis, period:{start,endExclusive}, reference:text(row.reference,1000), notes:text(row.notes,4000), evidenceIds, payload } as CollectionActivity
+  if(kind==='vehicle' && (payload as VehicleCollectionPayload).vehicleGroupId!==sourceId || kind==='electricity' && (payload as ElectricityCollectionPayload).meterOrAccountNumber!==sourceId)fail('Source identifier must match the meter or vehicle group.')
+  const submittedQuantity={originalValue,originalUnit:text(q.originalUnit,80),normalizedValue,normalizedUnit}
+  if(kind==='fugitive' && (submittedQuantity.originalUnit!==(payload as FugitiveCollectionPayload).unit || normalizedUnit!==null && normalizedUnit!==(payload as FugitiveCollectionPayload).unit))fail('Refrigerant quantity unit must match the terms unit.')
+  const quantity=deriveCollectionQuantity(kind,payload,submittedQuantity)
+  return { kind, locationId, setupVersionId, sourceId, state, withdrawalReason, quantity, quality, estimateBasis, period:{start,endExclusive}, reference:text(row.reference,1000), notes:text(row.notes,4000), evidenceIds, payload } as CollectionActivity
 }
 
 export function validateCollectionSaveInput(value: unknown): CollectionActivitySaveInput {
@@ -222,6 +242,7 @@ export function validateCollectionSaveInput(value: unknown): CollectionActivityS
   if (!(row.expectedVersionId === null || typeof row.expectedVersionId === 'string' && UUID.test(row.expectedVersionId))) fail()
   const correctionReason = nullableText(row.correctionReason,2000)
   if ((row.expectedRevision === 0) !== (row.expectedVersionId === null) || (row.expectedRevision === 0 ? correctionReason !== null : !correctionReason?.trim())) fail()
+  if(row.expectedRevision===0 && (row.activity as CollectionActivity)?.state==='withdrawn')fail('Save a record before withdrawing it.')
   return { idempotencyKey:row.idempotencyKey as string, expectedRevision:row.expectedRevision as number, expectedVersionId:row.expectedVersionId as string|null, correctionReason, activity:validateCollectionActivity(row.activity) }
 }
 
@@ -232,4 +253,37 @@ export function validateCollectionEvidenceUpload(value: unknown, companyId: stri
   if (!objectKey.startsWith(`${companyId}/original/`) || objectKey.includes('..') || objectKey.includes('\\')) fail('Evidence object key must stay in its company prefix.')
   if (!Number.isInteger(row.byteLength) || (row.byteLength as number) < 1 || (row.byteLength as number) > COLLECTION_EVIDENCE_MAX_BYTES || typeof row.sha256 !== 'string' || !SHA256.test(row.sha256)) fail()
   return { uploadId:row.uploadId as string, evidenceId:row.evidenceId as string, objectKey, originalName:text(row.originalName,255,false), mediaType:enumeration(row.mediaType,['application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] as const), byteLength:row.byteLength as number, sha256:row.sha256 as string }
+}
+
+/** Derive duplicate display quantities from source inputs using exact decimal arithmetic. */
+export function deriveCollectionQuantity(kind:CollectionActivityKind,payload:CollectionPayload,submitted:CollectionQuantity):CollectionQuantity {
+  let value:string
+  let unit='US_gallon'
+  if(kind==='vehicle')value=(payload as VehicleCollectionPayload).gallons
+  else if(kind==='distillate_no2') {
+    const c=(payload as DistillateCollectionPayload).consumption
+    if(c.basis==='measured')value=c.gallons
+    else if(c.basis==='purchases_only')value=c.purchasedGallons
+    else {
+      const values=[c.purchasedGallons,c.openingGallons,c.closingGallons]
+      if(!values.every(v=>DECIMAL.test(v)))value=''
+      else {
+        const scaled=values.map(v=>{const [whole,fraction='']=v.split('.');return BigInt(whole!)*1000n+BigInt(fraction.padEnd(3,'0'))})
+        const total=scaled[0]!+scaled[1]!-scaled[2]!
+        value=total<0n?'':`${total/1000n}.${String(total%1000n).padStart(3,'0')}`
+      }
+    }
+  } else if(kind==='fugitive') {
+    const p=payload as FugitiveCollectionPayload
+    unit=p.unit
+    const values=[p.terms.PN,p.terms.CN,p.terms.PS,p.terms.CD,p.terms.RD]
+    if(!values.every(v=>DECIMAL.test(v)))value=''
+    else {
+      const scaled=values.map(v=>{const [whole,fraction='']=v.split('.');return BigInt(whole!)*1000n+BigInt(fraction.padEnd(3,'0'))})
+      const total=scaled[0]!-scaled[1]!+scaled[2]!+scaled[3]!-scaled[4]!
+      value=total<0n?'':`${total/1000n}.${String(total%1000n).padStart(3,'0')}`
+    }
+  } else return submitted
+  const normalized=DECIMAL.test(value)
+  return {originalValue:value,originalUnit:unit,normalizedValue:normalized?value:null,normalizedUnit:normalized?unit:null}
 }

@@ -6,6 +6,7 @@ import {
   validateCollectionEvidenceUpload,
   validateCollectionSaveInput,
   type CollectionActivityRecord,
+  type CollectionContext,
   type CollectionActivitySaveInput,
   type CollectionActivityVersion,
   type CollectionEvidenceMetadata,
@@ -28,13 +29,13 @@ function decodeVersion(row: VersionRow): CollectionActivityVersion {
 }
 
 /** Caller supplies a transaction with the server-authenticated JWT subject and runtime role. */
-export async function readCollectionActivities(tx: WorkspaceSql, companyId: string): Promise<CollectionActivityRecord[]> {
+export async function readCollectionActivities(tx: WorkspaceSql, companyId: string, recordId?: string): Promise<CollectionActivityRecord[]> {
   if (!UUID.test(companyId)) return []
   const rows = await tx.query<VersionRow>(`select v.id,v.record_id,v.company_id,r.kind,v.revision,v.previous_version_id,v.correction_reason,v.payload,v.payload_sha256,v.created_by,v.created_at::text,h.version_id head_id,h.revision head_revision
     from neuvetra.collection_activity_versions v
     join neuvetra.collection_activity_records r on r.id=v.record_id and r.company_id=v.company_id
     join neuvetra.collection_activity_heads h on h.record_id=v.record_id and h.company_id=v.company_id
-    where v.company_id=$1 order by v.record_id,v.revision`, [companyId])
+    where v.company_id=$1 and ($2::uuid is null or v.record_id=$2) order by v.record_id,v.revision`, [companyId,recordId??null])
   const grouped = new Map<string, VersionRow[]>()
   for (const row of rows.rows) grouped.set(row.record_id,[...(grouped.get(row.record_id)??[]),row])
   return [...grouped.values()].map(history => {
@@ -62,7 +63,7 @@ export async function saveCollectionActivity(tx:WorkspaceSql,actorId:string,comp
   const receipt=await tx.query<{record_id:string;version_id:string;replayed:boolean}>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[companyId,recordId,JSON.stringify(valid)])
   const row=receipt.rows[0]
   if(!row)throw new Error('Collection activity save returned no receipt.')
-  const record=(await readCollectionActivities(tx,companyId)).find(item=>item.id===row.record_id)
+  const record=(await readCollectionActivities(tx,companyId,row.record_id)).find(item=>item.id===row.record_id)
   const version=record?.history.find(item=>item.id===row.version_id)
   const full=version&&await readCollectionActivityVersion(tx,companyId,row.record_id,row.version_id)
   if(!record||!full)throw new Error('Collection activity save could not be read back.')
@@ -120,7 +121,7 @@ export async function markCollectionEvidenceRegistrationFailed(tx:WorkspaceSql,a
 export async function readCollectionEvidence(tx:WorkspaceSql,companyId:string):Promise<CollectionEvidenceMetadata[]>{
   if(!UUID.test(companyId))return []
   const result=await tx.query<EvidenceRow>(`select o.id,o.company_id,o.storage_bucket,o.storage_key,o.original_name,o.media_type,o.byte_length,o.sha256,o.uploaded_by,o.created_at::text,
-    (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.created_at desc,q.id desc limit 1) quarantine_status
+    (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.event_seq desc limit 1) quarantine_status
     from neuvetra.collection_evidence_objects o where o.company_id=$1 order by o.created_at,o.id`,[companyId])
   return result.rows.map(row=>({id:row.id,companyId:row.company_id,bucket:row.storage_bucket as typeof COLLECTION_EVIDENCE_BUCKET,objectKey:row.storage_key,originalName:row.original_name,mediaType:row.media_type,byteLength:row.byte_length,sha256:row.sha256,quarantineStatus:row.quarantine_status,uploadedBy:row.uploaded_by,createdAt:new Date(row.created_at).toISOString()}))
 }
@@ -129,7 +130,17 @@ export async function readCollectionEvidence(tx:WorkspaceSql,companyId:string):P
 export async function findDownloadableCollectionEvidence(tx:WorkspaceSql,companyId:string,evidenceId:string):Promise<{bucket:typeof COLLECTION_EVIDENCE_BUCKET;objectKey:string;sha256:string;mediaType:string;byteLength:number}|null>{
   if(!UUID.test(companyId)||!UUID.test(evidenceId))return null
   const rows=await tx.query<{storage_bucket:string;storage_key:string;sha256:string;media_type:string;byte_length:number}>(`select o.storage_bucket,o.storage_key,o.sha256,o.media_type,o.byte_length from neuvetra.collection_evidence_objects o
-    where o.company_id=$1 and o.id=$2 and (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.created_at desc,q.id desc limit 1)='clean'`,[companyId,evidenceId])
+    where o.company_id=$1 and o.id=$2 and (select q.status from neuvetra.collection_evidence_quarantine_events q where q.company_id=o.company_id and q.evidence_id=o.id order by q.event_seq desc limit 1)='clean'`,[companyId,evidenceId])
   const row=rows.rows[0]
   return row?{bucket:row.storage_bucket as typeof COLLECTION_EVIDENCE_BUCKET,objectKey:row.storage_key,sha256:row.sha256,mediaType:row.media_type,byteLength:row.byte_length}:null
+}
+
+/** An own company without setup is visible; another tenant is not. */
+export async function readCollectionContext(tx:WorkspaceSql,companyId:string):Promise<CollectionContext|null> {
+  if(!UUID.test(companyId))return null
+  const result=await tx.query<{company_id:string;version_id:string|null;revision:number|null}>(`select c.id company_id,h.version_id,h.revision from neuvetra.companies c left join neuvetra.company_setup_heads h on h.company_id=c.id where c.id=$1 and neuvetra.has_staging_access() and neuvetra.is_company_member(c.id)`,[companyId])
+  const current=result.rows[0]
+  if(!current)return null
+  const locations=current.version_id?await tx.query<{id:string;name:string;inclusion:'unknown'|'included'|'excluded';control:string}>('select id,name,inclusion,control from neuvetra.company_setup_locations where company_id=$1 and version_id=$2 order by name,id',[companyId,current.version_id]):{rows:[]}
+  return {companyId,setupVersionId:current.version_id,setupRevision:current.revision,locations:locations.rows}
 }

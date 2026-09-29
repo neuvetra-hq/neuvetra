@@ -5,16 +5,19 @@ import {
   validateCollectionSaveInput,
   type CollectionActivityRecord,
   type CollectionActivityVersion,
+  type CollectionContext,
   type CollectionEvidenceMetadata,
   type CollectionEvidenceReceipt,
   type CollectionEvidenceUploadIntent,
   type GridLossLineage,
 } from "@neuvetra/database"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
+import { lookupCollectionZip } from "./collection-zip"
+import type { Scope2Lookup } from "../calculation/scope2-authority"
 
 const UUID_SOURCE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const UUID = new RegExp(`^${UUID_SOURCE}$`, "i")
-const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/collection(?:/(activities|grid-losses|evidence)(?:/(${UUID_SOURCE})(?:/(versions|download)(?:/(${UUID_SOURCE}))?)?)?)?$`, "i")
+const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/collection(?:/(activities|grid-losses|evidence|zip-lookup)(?:/(${UUID_SOURCE})(?:/(versions|download)(?:/(${UUID_SOURCE}))?)?)?)?$`, "i")
 const ACCEPTED_MEDIA_TYPES = new Set([
   "application/pdf",
   "image/jpeg",
@@ -24,6 +27,7 @@ const ACCEPTED_MEDIA_TYPES = new Set([
 ])
 
 export interface CollectionRouteDatabase {
+  findCollectionContext(userId: string, companyId: string): Promise<CollectionContext | null>
   findCollectionActivities(userId: string, companyId: string): Promise<CollectionActivityRecord[]>
   findCollectionActivityVersion(userId: string, companyId: string, recordId: string, versionId: string): Promise<CollectionActivityVersion | null>
   saveCollectionActivity(userId: string, companyId: string, recordId: string, input: unknown): Promise<{ record: CollectionActivityRecord; version: CollectionActivityVersion; replayed: boolean }>
@@ -46,6 +50,7 @@ export interface CollectionRouteDeps {
   evidenceStorage: CollectionEvidenceStorage
   validateUser: (token: string) => Promise<AuthenticatedUser | null>
   origin: string
+  lookupZip?: (zip: string) => Promise<Scope2Lookup>
 }
 
 class RequestProblem extends Error {
@@ -57,6 +62,29 @@ const fail = (status: number, error: string, code?: string) => respond(status, {
 
 async function sha256(bytes: Uint8Array<ArrayBuffer>): Promise<string> {
   return [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes.buffer))].map(value => value.toString(16).padStart(2, "0")).join("")
+}
+
+function signatureMatches(bytes: Uint8Array, mediaType: string): boolean {
+  const prefix = (...values: number[]) => values.every((value, index) => bytes[index] === value)
+  if (mediaType === "application/pdf") return prefix(0x25, 0x50, 0x44, 0x46, 0x2d)
+  if (mediaType === "image/jpeg") return prefix(0xff, 0xd8, 0xff)
+  if (mediaType === "image/png") return prefix(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)
+  if (mediaType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") return prefix(0x50, 0x4b, 0x03, 0x04)
+  if (mediaType === "text/csv") {
+    try {
+      const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes)
+      return !/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(text)
+    } catch { return false }
+  }
+  return false
+}
+
+function validateElectricityLookup(activity: ReturnType<typeof validateCollectionSaveInput>["activity"], lookup: Scope2Lookup): void {
+  if (activity.kind !== "electricity") return
+  const payload = activity.payload
+  if (!lookup.found || lookup.zip !== payload.zip || !lookup.subregions.includes(payload.subregion)) throw new RequestProblem(422, "Choose a grid subregion listed for this ZIP.", "zip_subregion_mismatch")
+  if (lookup.needsUtilityChoice && !payload.utilityEiaId) throw new RequestProblem(422, "Choose a utility for this ZIP.", "utility_required")
+  if (payload.utilityEiaId && !lookup.utilities.some(row => row.eiaId === payload.utilityEiaId && row.subregion === payload.subregion)) throw new RequestProblem(422, "Choose a utility listed for this ZIP and subregion.", "utility_mismatch")
 }
 
 async function readBoundedBytes(request: Request): Promise<Uint8Array<ArrayBuffer>> {
@@ -140,9 +168,19 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
     if (!actor) return fail(401, "Authentication required.")
 
     try {
+      const context = await deps.database.findCollectionContext(actor.id, companyId)
+      if (!context) return fail(404, "Collection resource not found.")
       if (!collection) {
         if (request.method !== "GET") return fail(405, "Method not allowed.")
-        return respond(200, { profile: COLLECTION_PROFILE, capabilities: { calculations: false, zipLookup: "unavailable", scope3: { gridLossLineage: true, calculations: false } } })
+        return respond(200, { profile: COLLECTION_PROFILE, context, capabilities: { calculations: false, zipLookup: "available", scope3: { gridLossLineage: true, calculations: false } } })
+      }
+
+      if (collection === "zip-lookup") {
+        if (resourceId || operation || versionId || request.method !== "GET") return fail(405, "Method not allowed.")
+        const params = new URL(request.url).searchParams
+        const zip = params.get("zip")
+        if (params.size !== 1 || !zip || !/^\d{5}$/.test(zip)) throw new RequestProblem(422, "Enter a five-digit ZIP.")
+        return respond(200, { profile: COLLECTION_PROFILE, lookup: await (deps.lookupZip ?? lookupCollectionZip)(zip) })
       }
 
       if (collection === "activities") {
@@ -157,7 +195,12 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         }
         if (operation || versionId || request.method !== "POST") return fail(405, "Method not allowed.")
         const input = await jsonBody(request)
-        try { validateCollectionSaveInput(input) } catch { throw new RequestProblem(422, "Invalid or unsupported collection record.") }
+        let validated: ReturnType<typeof validateCollectionSaveInput>
+        try { validated = validateCollectionSaveInput(input) } catch { throw new RequestProblem(422, "Invalid or unsupported collection record.") }
+        if (validated.activity.kind === "electricity") {
+          const lookup = await (deps.lookupZip ?? lookupCollectionZip)(validated.activity.payload.zip)
+          validateElectricityLookup(validated.activity, lookup)
+        }
         const saved = await deps.database.saveCollectionActivity(actor.id, companyId, resourceId, input)
         return respond(saved.replayed ? 200 : 201, saved)
       }
@@ -180,6 +223,7 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
         const name = originalName(request)
         const id = uploadId(request)
         const bytes = await readBoundedBytes(request)
+        if (!signatureMatches(bytes, mediaType)) throw new RequestProblem(422, "Evidence file does not match its declared type.", "file_type_mismatch")
         const digest = await sha256(bytes)
         const evidence = await deps.database.findCollectionEvidence(actor.id, companyId)
         const duplicate = evidence.find(item => item.sha256 === digest && item.byteLength === bytes.byteLength)
@@ -208,7 +252,7 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
       }
       const bytes = await deps.evidenceStorage.get(token, locator.bucket, locator.objectKey)
       if (bytes.byteLength !== locator.byteLength || await sha256(bytes) !== locator.sha256) return fail(503, "Evidence integrity could not be verified.")
-      return new Response(bytes.buffer, { status: 200, headers: { "cache-control": "no-store", "content-type": locator.mediaType, "content-length": String(bytes.byteLength), "x-content-sha256": locator.sha256, "content-disposition": `attachment; filename="evidence-${resourceId}"` } })
+      return new Response(bytes.buffer, { status: 200, headers: { "cache-control": "no-store", "x-content-type-options": "nosniff", "content-type": locator.mediaType, "content-length": String(bytes.byteLength), "x-content-sha256": locator.sha256, "content-disposition": `attachment; filename="evidence-${resourceId}"` } })
     } catch (error) { return mappedError(error) }
   }
 }

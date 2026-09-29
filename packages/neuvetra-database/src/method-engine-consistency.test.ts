@@ -15,7 +15,11 @@ const DECISION: Record<string, string> = {
   [ELECTRICITY_REGISTER_GREENE2025_SHA256]: '1960499ec1a6872b3eda5d684149e1e59d66a34a57a1eb920993bbc6ef5e5236',
   [SCOPE3_REGISTER_2025_SHA256]: '4ae9f2250963975723e5a5f48786d4d1fb7972a21f37de3302dfd10fda5d1ec2',
 }
+// Needs the verified source originals to load the registers. Skipped, and says so, when they are absent (CI);
+// NEUVETRA_METHOD_SOURCES_REQUIRED=1 (release gates) makes their absence a failure.
 const SOURCES = process.env.NEUVETRA_METHOD_SOURCES_DIR ?? ''
+if (!SOURCES && process.env.NEUVETRA_METHOD_SOURCES_REQUIRED === '1') throw new Error('NEUVETRA_METHOD_SOURCES_REQUIRED=1: set NEUVETRA_METHOD_SOURCES_DIR to the folder holding the verified method source originals.')
+if (!SOURCES) console.warn('SKIPPED: engine and released database values agree. Set NEUVETRA_METHOD_SOURCES_DIR to the verified source originals to run it; required before any method release.')
 const LEGACY: Record<string, string> = {
   'scope1.stationary.natural_gas': '81000000-0000-4000-8000-000000000001',
   'scope1.mobile.onroad_diesel': '81000000-0000-4000-8000-000000000002',
@@ -25,7 +29,7 @@ const LEGACY: Record<string, string> = {
 const user = '24300000-0000-4000-8000-000000000001', company = '24300000-0000-4000-8000-000000000002'
 type Method = { id: string; profileId: string; engineSha256: string; registerSha256: string; factorValues: Record<string, string>; constantValues: Record<string, { value: string; unit: string }>; [k: string]: unknown }
 
-describe('engine and released database values agree', () => {
+describe.skipIf(!SOURCES)('engine and released database values agree', () => {
   let db: PGlite, methods: Method[]
   beforeAll(async () => {
     methods = ENGINES.flatMap(engine => {
@@ -44,7 +48,6 @@ describe('engine and released database values agree', () => {
     await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner')", [company, user])
     await db.query('insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true)', [user, company])
     const operator: WorkspaceSql = { query: async (s, a) => ({ rows: (await db.query(s, a)).rows as never[] }), exec: async s => { await db.exec(s) } }
-    if (!SOURCES) throw new Error('Set NEUVETRA_METHOD_SOURCES_DIR to the folder holding the verified method source originals.')
     for (const register of [await readVerifiedRegister(), await readVerifiedRegister(ELECTRICITY_REGISTER_GREENE2025_URL, ELECTRICITY_REGISTER_GREENE2025_SHA256),
       await readVerifiedRegister(SCOPE3_REGISTER_2025_URL, SCOPE3_REGISTER_2025_SHA256)])
       await loadMethodRegister(operator, register, await readSourceOriginals(SOURCES, citedSourceSha256s(register.text)))
@@ -75,7 +78,7 @@ describe('engine and released database values agree', () => {
     expect(released.find(r => r.methodVersionId === 'scope1.fugitive.material_balance.v2')!.gwp.map(g => g.gas)).toEqual(['HFC-134a', 'HFC-227ea', 'R-404A', 'R-407C', 'R-410A', 'R-507A'])
     expect(released.filter(r => r.scope === 3).map(r => [r.family, r.gwpSetId, r.gwp.length])).toEqual([
       ['fuel_energy_related', 'AR5-100', 3], ['transportation_distribution', 'AR5-100', 3], ['waste', 'AR4-100', 0], ['business_travel', 'AR5-100', 3], ['employee_commuting', 'AR5-100', 3]])
-    expect(released.find(r => r.methodVersionId === 'scope2.electricity.egrid2023_greene2025.v2')?.scope).toBe(2)
+    expect(released.find(r => r.methodVersionId === 'scope2.electricity.egrid2023_greene2025.v3')?.scope).toBe(2)
     expect((await db.query<{ n: number }>('select count(*)::int n from neuvetra.method_releases where supersedes_legacy_record_id is not null')).rows[0]!.n).toBe(4)
   })
 })
