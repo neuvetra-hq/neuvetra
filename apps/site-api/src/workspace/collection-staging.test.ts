@@ -21,6 +21,7 @@ test("staging wrapper raises the body limit only for a collection evidence uploa
     async checkReadiness() { return { profile: STAGING_PROFILE, schemaVersion: 23 } },
     async close() {},
     async hasStagingAccess() { return true },
+    async findCollectionContext(_actor: string, companyId: string) { return { companyId, setupVersionId: null, setupRevision: null, locations: [] } },
     async findCollectionEvidence() { return [] },
     async reserveCollectionEvidenceUpload(_actor: string, _company: string, input: any) { return { uploadId: input.uploadId, evidenceId: input.evidenceId, objectKey: input.objectKey, bucket: COLLECTION_EVIDENCE_BUCKET } },
     async registerCollectionEvidence(_actor: string, _company: string, input: any) { return { uploadId: input.uploadId, evidenceId: input.evidenceId, reused: false, quarantineStatus: "pending", orphanRecoveryRequired: false } },
@@ -42,6 +43,7 @@ test("staging wrapper raises the body limit only for a collection evidence uploa
   })
   try {
     const bytes = new Uint8Array(350_000)
+    bytes.set([0x25, 0x50, 0x44, 0x46, 0x2d]) // PDF signature; the upload route validates declared types.
     const upload = await app.fetch(new Request(`${ORIGIN}/workspace-api/workspace/${COMPANY}/collection/evidence`, {
       method: "POST", headers: { origin: ORIGIN, authorization: "Bearer valid", "content-type": "application/pdf", "x-neuvetra-original-name": "large.pdf", "x-neuvetra-upload-id": UPLOAD }, body: bytes,
     }))
