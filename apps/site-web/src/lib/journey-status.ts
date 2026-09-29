@@ -194,7 +194,7 @@ export function progressAnswer(status: JourneyStatus | null, failed = false): st
   const attention = status.collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
   if (attention.length) lines.push(`Records with input needed: ${attention.slice(0, 4).map(row => `${row.label} · ${row.sourceId} (${row.reasons[0] ?? "more information needed"})`).join("; ")}${attention.length > 4 ? `; and ${attention.length - 4} more` : ""}.`)
   const held = status.collection.records.filter(row => row.state === "held_period")
-  if (held.length) lines.push(`Held pending correction (outside the reporting period): ${held.slice(0, 4).map(row => `${row.label} · ${row.sourceId}`).join("; ")}${held.length > 4 ? `; and ${held.length - 4} more` : ""}. Check the reporting period in Company setup.`)
+  if (held.length) lines.push(`Outside the reporting period (not counted): ${held.slice(0, 4).map(row => `${row.label} · ${row.sourceId}`).join("; ")}${held.length > 4 ? `; and ${held.length - 4} more` : ""}. Check the reporting period in Company setup.`)
   if (status.gaps.length) lines.push(`Possible gaps: ${status.gaps.slice(0, 4).map(gap => gap.title).join("; ")}${status.gaps.length > 4 ? `; and ${status.gaps.length - 4} more` : ""}.`)
   const improve: string[] = []
   if (status.collection.partial) improve.push(`${status.collection.partial} record${status.collection.partial === 1 ? " is" : "s are"} only partly calculated`)

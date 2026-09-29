@@ -85,8 +85,9 @@ describe("plain-language display", () => {
 })
 
 const s1 = (status: string, display: string | null) => ({ methodVersionId: "scope1.stationary.natural_gas.v2", gwpSetId: "AR5-100", status, gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: display ? { unrounded: display, display, unit: "kg CO2e", rounding: "half_even_4dp" } : null, resultSha256: "a".repeat(64) })
-const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, periodCheck: "inside", outcome: "calculated", refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
-const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: "Draft", syntheticOnly: true, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [] })
+const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, periodCheck: "inside", outcome: "calculated", inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
+const methodsUsed = [{ methodVersionId: "scope1.stationary.natural_gas.v2", scope: 1, engineSha256: "6fdcfa3926698250d577df8d456b4d567ec3e9569788f3c96373421276fa36a4", registerSha256: "f5351cd375a54072c03061dc3fab6740bed1cf78e05db9de575dca7f2d5c0c02", releaseStatus: "unreleased_beta" }]
+const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: "Draft", syntheticOnly: true, environment: "synthetic_staging", methods: methodsUsed, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [] })
 
 describe("draft results decoding", () => {
   test("accepts the contract and rejects anything else", () => {
@@ -94,11 +95,11 @@ describe("draft results decoding", () => {
     expect(() => decodeResults({ ...response([]), profile: "other" }, company)).toThrow()
     expect(() => decodeResults(response([]), "29200000-0000-4000-8000-000000000009")).toThrow()
     expect(() => decodeResults(response([row({ scope1: s1("complete", "12,5") })]), company)).toThrow()
-    expect(() => decodeResults(response([row({ scope1: null })]), company)).toThrow()
+    expect(() => decodeResults(response([row({ scope1: null, inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false } })]), company)).toThrow()
   })
-  test("records outside the reporting period are held pending correction and can't arrive calculated", () => {
-    const outside = row({ outcome: "held", scope1: null, periodCheck: "outside" })
-    expect(rowStatus(outside as never).label).toBe("Held pending correction")
+  test("records outside the reporting period are held as outside it and can't arrive calculated", () => {
+    const outside = row({ outcome: "held", scope1: null, periodCheck: "outside", inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false } })
+    expect(rowStatus(outside as never).label).toBe("Outside reporting period")
     expect(rowReasons(outside as never)[0]).toMatch(/outside the reporting period/)
     expect(() => decodeResults(response([row({ periodCheck: "outside" })]), company)).toThrow()
     expect(() => decodeResults(response([row({ periodCheck: undefined })]), company)).toThrow()
@@ -112,7 +113,7 @@ describe("draft results decoding", () => {
     const csv = resultsCsv(decodeResults({ ...response([row({})]), scope1: { knownSourceSubtotal: { unrounded: "53.1180", display: "53.1180", unit: "kg CO2e", rounding: "half_even_4dp_once" }, includedResults: ["a".repeat(64)], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 1, complete: true } }, company), { kind: kind => kind, reason: code => code, status: () => "Calculated", boundary: code => code, period: () => "Jan 1 – Dec 31, 2025" })
     expect(csv.startsWith("# Draft")).toBe(true)
     expect(csv).toContain("# Reporting period: Jan 1 – Dec 31, 2025")
-    expect(csv).toContain(",Calculated,complete,Yes,53.1180,")
+    expect(csv).toContain(",Calculated,complete,Yes,,,53.1180,")
     expect(csv).toContain("Subtotal,Scope 1,")
   })
   test("the CSV carries completeness and coverage lines, and neutralises formula-like text", () => {
@@ -184,7 +185,7 @@ describe("journey progress", () => {
     expect(status.collection.attention).toBe(0); expect(status.collection.held).toBe(1)
     expect(status.next.panel).toBe("setup")
     expect(status.next.title).toBe("Your reporting period doesn’t match 1 record")
-    expect(progressAnswer(status).join(" ")).toContain("Held pending correction")
+    expect(progressAnswer(status).join(" ")).toContain("Outside the reporting period (not counted)")
     expect(progressAnswer(null, true)[0]).toMatch(/couldn’t be loaded/)
   })
   test("record states follow the reviewed readiness findings", () => {

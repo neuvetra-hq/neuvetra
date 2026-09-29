@@ -79,7 +79,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
             {mustFix.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0] ?? RECORD_STATE_LABELS[row.state]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${row.label} · ${row.sourceId}`} onClick={() => onFix(row.id)}>{canManage ? "Fix" : "View"}</button></li>)}
             {mustFix.length > 5 && <li><span className="nv-subtle">and {mustFix.length - 5} more in Activity & evidence</span></li>}
           </ul>
-          {heldRows.length > 0 && <><p className="nv-attn-label nv-attn-label--warn">Held pending correction</p><ul className="nv-list">
+          {heldRows.length > 0 && <><p className="nv-attn-label nv-attn-label--warn">Outside reporting period</p><ul className="nv-list">
             {heldRows.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup for ${row.label} · ${row.sourceId}`} onClick={() => onNavigate("setup")}>{canManage ? "Open setup" : "View setup"}</button></li>)}
             {heldRows.length > 5 && <li><span className="nv-subtle">and {heldRows.length - 5} more</span></li>}
           </ul></>}

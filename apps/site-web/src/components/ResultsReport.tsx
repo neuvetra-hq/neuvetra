@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } from "react"
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type RefObject } from "react"
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
-import { DRAFT_LABEL, loadResults, ResultsApiError, resultsCsv, type EngineGas, type ResultRow, type ResultsResponse } from "@/lib/results-api"
+import { DRAFT_LABEL, loadResults, methodLabel, NotSyntheticResultsError, ResultsApiError, resultsCsv, type EngineGas, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { factorSource, GAS_LABELS, KIND_COLORS, needsWork, rowReasons, rowStatus } from "@/lib/results-view"
+import { factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 
 const rowKg = (row: ResultRow) => row.scope1?.total?.display ?? row.scope2?.locationBased.total?.display ?? null
 const QUALITY = QUALITY_LABELS
@@ -21,7 +21,7 @@ function RowDetail({ row }: { row: ResultRow }) {
   const s1 = row.scope1, s2 = row.scope2
   const factors = s1?.factorsUsed ?? s2?.factorsUsed ?? []
   return <details className="nv-detail"><summary>How this was calculated</summary><dl>
-    <dt>Method</dt><dd>{s1?.methodVersionId ?? s2?.methodVersionId ?? "Not calculated"}</dd>
+    <dt>Method</dt><dd>{s1?.methodVersionId ?? s2?.methodVersionId ? methodLabel((s1?.methodVersionId ?? s2?.methodVersionId)!) : "Not calculated"}</dd>
     {s1 && <><dt>Gases</dt><dd><Gases gases={s1.gases} />{s1.missingGases.length > 0 && <span style={{ display: "block" }}>Missing: {s1.missingGases.map(gas => GAS_LABELS[gas] ?? gas).join(", ")}</span>}</dd></>}
     {s2 && <><dt>Electricity</dt><dd>{groupDigits(s2.activity.mwh)} MWh · eGRID subregion {s2.activity.subregion}</dd>
       <dt>Location-based</dt><dd><Gases gases={s2.locationBased.gases} /></dd>
@@ -64,17 +64,19 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
   const unstated = results.records.filter(row => row.outcome === "calculated" && row.quality === "unknown").length
   const factorRows = new Map<string, { label: string; value: string; unit: string; cell: string }>()
   for (const row of results.records) for (const factor of row.scope1?.factorsUsed ?? row.scope2?.factorsUsed ?? []) factorRows.set(factor.key, factor)
-  const methods = [...new Set(results.records.map(row => row.scope1?.methodVersionId ?? row.scope2?.methodVersionId).filter(Boolean))] as string[]
   const residual = results.records.find(row => row.scope2?.marketBased.residualMix)?.scope2?.marketBased.residualMix
-  const line = (row: ResultRow) => <tr key={row.recordId}><td>{kindLabel(row.kind)}</td><td>{row.locationName ?? "—"}</td><td>{row.sourceId}</td><td>{periodLabel(row.period.start, row.period.endExclusive)}</td><td className="nv-right">{row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "—"}</td><td>{QUALITY[row.quality] ?? row.quality}</td><td>{evidenceText(row)}</td><td>{rowStatus(row).label}</td><td className="nv-right">{rowKg(row) ? groupDigits(rowKg(row)!) : "—"}</td>{row.scope === 2 && <td className="nv-right">{row.scope2?.marketBased.total ? groupDigits(row.scope2.marketBased.total.display) : "—"}</td>}</tr>
+  // A figure that the engine left out of the matching subtotal is marked with † (see the note under the tables).
+  const figure = (value: string | null | undefined, counted: boolean) => value ? `${groupDigits(value)}${counted ? "" : " †"}` : "—"
+  const line = (row: ResultRow) => <tr key={row.recordId}><td>{kindLabel(row.kind)}</td><td>{row.locationName ?? "—"}</td><td>{row.sourceId}</td><td>{periodLabel(row.period.start, row.period.endExclusive)}</td><td className="nv-right">{row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "—"}</td><td>{QUALITY[row.quality] ?? row.quality}</td><td>{evidenceText(row)}</td><td>{rowStatus(row).label}</td><td className="nv-right">{row.scope === 1 ? figure(row.scope1?.total?.display, row.inSubtotal.scope1) : figure(row.scope2?.locationBased.total?.display, row.inSubtotal.scope2LocationBased)}</td>{row.scope === 2 && <td className="nv-right">{figure(row.scope2?.marketBased.total?.display, row.inSubtotal.scope2MarketBased)}</td>}</tr>
+  const uncounted = results.records.some(row => (row.scope1?.total && !row.inSubtotal.scope1) || (row.scope2?.locationBased.total && !row.inSubtotal.scope2LocationBased) || (row.scope2?.marketBased.total && !row.inSubtotal.scope2MarketBased))
   return <article className="nv-report" aria-labelledby="report-title">
     {/* Running footer on every printed page names the company as well as the draft status. */}
-    <style>{`@media print { @page { @bottom-left { content: "DRAFT \\2014  ${cssString(company)} \\2014  Neuvetra beta methods; not externally assured"; } } }`}</style>
+    <style>{`@media print { @page { @bottom-left { content: "DRAFT \\2014  ${cssString(company)} \\2014  synthetic data, unreleased beta methods; not externally assured"; } } }`}</style>
     <div className="nv-report__head">
       <div><p className="nv-report__small" style={{ margin: 0 }}>Greenhouse-gas inventory · Scope 1 and Scope 2</p><h2 id="report-title" className="nv-report__title">{setup?.legalName || "Company"}{setup?.tradingName ? ` (${setup.tradingName})` : ""}</h2></div>
       <span className="nv-report__stamp">DRAFT</span>
     </div>
-    <p style={{ fontWeight: 600, marginTop: 12 }}>{DRAFT_LABEL}. Synthetic data — private beta.</p>
+    <p style={{ fontWeight: 600, marginTop: 12 }}>{DRAFT_LABEL}. Private beta.</p>
     <div className="nv-report__meta">
       <div><small>Reporting period</small>{periodLabel(setup?.period.start, setup?.period.endExclusive)}</div>
       <div><small>Boundary approach</small>{BOUNDARY_LABELS[setup?.boundaryApproach ?? "unknown"] ?? setup?.boundaryApproach}</div>
@@ -92,6 +94,7 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
     {scope1Rows.length ? <div className="nv-report__scroll"><table><thead><tr><th>Activity</th><th>Site</th><th>Source</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">kg CO2e</th></tr></thead><tbody>{scope1Rows.map(line)}</tbody></table></div> : <p>No Scope 1 records.</p>}
     <h3>Scope 2 purchased electricity</h3>
     {scope2Rows.length ? <div className="nv-report__scroll"><table><thead><tr><th>Activity</th><th>Site</th><th>Meter</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">Location-based kg</th><th className="nv-right">Market-based kg</th></tr></thead><tbody>{scope2Rows.map(line)}</tbody></table></div> : <p>No Scope 2 records.</p>}
+    {uncounted && <p className="nv-report__small">† Calculated, but not in that subtotal. The engine includes a figure in a subtotal only when that basis is complete for the record.</p>}
     <h3>Not counted, incomplete and possible gaps</h3>
     {incomplete.length || coverage.state !== "ready" || coverage.setupOpen.length || coverage.gaps.length ? <ul>
       {incomplete.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {rowStatus(row).label}: {rowReasons(row).join(" ")}</li>)}
@@ -103,27 +106,31 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
     {estimated.length ? <ul>{estimated.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {[row.quality === "estimated" ? `Activity data marked Estimated${row.estimateBasis ? ` (${row.estimateBasis})` : ""}.` : "", ...(row.scope1?.estimates ?? []).map(reasonText), ...(row.scope2?.estimates ?? []).map(reasonText)].filter(Boolean).join(" ")}</li>)}</ul> : <p>No records are marked Estimated and no method estimates were applied.</p>}
     {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Unknown”.</p>}
     <h3>Methods and emission factors</h3>
-    <p>Methods: {methods.join(", ") || "none calculated"}. Global warming potentials: IPCC AR5, 100-year (CH4 28, N2O 265). Emission factors: EPA GHG Emission Factors Hub (2025); EPA eGRID2023 rev2; Green-e 2025 residual mix. Figures are rounded once, half-even, to 4 decimal places of kg CO2e.</p>
+    <p>None of these methods is released yet: they are reviewed beta methods, and their figures are drafts for synthetic test data only. Global warming potentials: IPCC AR5, 100-year (CH4 28, N2O 265). Emission factors: EPA GHG Emission Factors Hub (2025); EPA eGRID2023 rev2; Green-e 2025 residual mix. Figures are rounded once, half-even, to 4 decimal places of kg CO2e.</p>
+    {results.methods.length > 0 ? <div className="nv-report__scroll"><table><thead><tr><th>Method version</th><th>Scope</th><th>Release status</th><th>Engine (SHA-256)</th><th>Factor register (SHA-256)</th></tr></thead><tbody>{results.methods.map(item => <tr key={`${item.methodVersionId}-${item.engineSha256}`}><td>{item.methodVersionId}</td><td>{item.scope}</td><td>Unreleased beta (not released)</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.engineSha256.slice(0, 12)}…</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.registerSha256.slice(0, 12)}…</td></tr>)}</tbody></table></div> : <p>No method calculated a figure.</p>}
     {residual && <p>Market-based electricity not covered by certificates or contracts uses the residual mix: {residual.method}. Sources: {residual.sources.join("; ")}.</p>}
     {factorRows.size > 0 && <div className="nv-report__scroll"><table><thead><tr><th>Factor</th><th className="nv-right">Value</th><th>Unit</th><th>Source (cell)</th></tr></thead><tbody>{[...factorRows.entries()].map(([key, factor]) => <tr key={key}><td>{factor.label}</td><td className="nv-right">{groupDigits(factor.value)}</td><td>{factor.unit}</td><td>{factorSource(key)} ({factor.cell})</td></tr>)}</tbody></table></div>}
-    <p className="nv-report__small" style={{ marginTop: 24 }}>This draft was prepared with Neuvetra beta methods from synthetic company data. It has not been reviewed by an independent assurance provider and must not be filed or published as a final inventory.</p>
+    <p className="nv-report__small" style={{ marginTop: 24 }}>This draft was prepared with unreleased Neuvetra beta methods from synthetic company data. It has not been reviewed by an independent assurance provider and must not be filed or published as a final inventory.</p>
   </article>
 }
 
 export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void }) {
-  const [results, setResults] = useState<ResultsResponse | null>(null)
-  const [error, setError] = useState<{ message: string; missingRoute: boolean } | null>(null)
-  const [busy, setBusy] = useState(true)
+  // One reducer owns results, error and busy: a failed load or reload clears earlier figures (Codex review of PR #7).
+  const [{ results, error, busy }, dispatch] = useReducer(resultsReducer, INITIAL_RESULTS_STATE)
   const [showReport, setShowReport] = useState(false)
   const [filter, setFilter] = useState<"all" | "attention">("all")
   const actorRef = useRef(actor)
   useEffect(() => { actorRef.current = actor }, [actor])
   const load = useCallback(async (signal?: AbortSignal) => {
-    if (!workspaceId) { setError({ message: "Choose an admitted synthetic company to continue.", missingRoute: false }); setBusy(false); return }
-    setBusy(true); setError(null)
-    try { const value = await loadResults(workspaceId, { ...actorRef.current, signal }); if (!signal?.aborted) setResults(value) }
-    catch (cause) { if (!signal?.aborted) { const message = cause instanceof Error ? cause.message : "Results are unavailable right now."; setError({ message, missingRoute: cause instanceof ResultsApiError && cause.status === 404 && !/^Results not found/.test(message) }) } }
-    finally { if (!signal?.aborted) setBusy(false) }
+    if (!workspaceId) { dispatch({ type: "no_workspace" }); return }
+    dispatch({ type: "start", workspaceId })
+    try { const value = await loadResults(workspaceId, { ...actorRef.current, signal }); if (!signal?.aborted) dispatch({ type: "success", value }) }
+    catch (cause) {
+      if (signal?.aborted) return
+      const message = cause instanceof Error ? cause.message : "Results are unavailable right now."
+      // A server that isn't the synthetic staging environment is treated like a service that isn't switched on: no numbers.
+      dispatch({ type: "failure", message, missingRoute: cause instanceof NotSyntheticResultsError || (cause instanceof ResultsApiError && cause.status === 404 && !/^Results not found/.test(message)) })
+    }
   }, [workspaceId])
   useEffect(() => { const controller = new AbortController(); queueMicrotask(() => { void load(controller.signal) }); return () => controller.abort() }, [load])
   useEffect(() => { if (!showReport) return; document.getElementById("draft-report")?.scrollIntoView({ behavior: "smooth", block: "start" }) }, [showReport])
@@ -149,8 +156,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     <p className="nv-eyebrow">Step 3 of 3 · Results & report</p>
     <h1 ref={headingRef} tabIndex={-1}>Draft results</h1>
   </>
-  if (busy && !results) return <section aria-busy="true">{header}<p className="nv-lead" role="status">Calculating each record with the reviewed methods…</p><div className="nv-grid-3">{[0, 1, 2].map(i => <div key={i} className="nv-stat" style={{ height: 120, opacity: .5 }} />)}</div></section>
-  if (error && !results) return <section>{header}
+  if (busy && !results) return <section aria-busy="true">{header}<p className="nv-lead" role="status">Calculating each record with the reviewed beta methods (not yet released)…</p><div className="nv-grid-3">{[0, 1, 2].map(i => <div key={i} className="nv-stat" style={{ height: 120, opacity: .5 }} />)}</div></section>
+  if (error) return <section>{header}
     {error.missingRoute ? <div className="nv-notice nv-notice--info" role="status"><Icon name="info" /><div><p><strong>Draft results aren’t switched on in this environment yet.</strong></p><p>Your records are saved. Results appear here once the results service is deployed.</p></div></div>
       : <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p>{error.message}</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={() => void load()}>Try again</button></div></div></div>}
   </section>
@@ -194,7 +201,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
         <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}</div>
       </div>
     </div>
-    <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded to 2 decimals for reading. The kilogram figures are exact engine output.</p>
+    <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded half-even to 2 decimals, the same rule as the engine. The kilogram figures are exact engine output.</p>
 
     {coverage.state === "loading" && <p className="nv-subtle" role="status">Checking these records against your company setup…</p>}
     {coverage.state === "unavailable" && <div className="nv-notice nv-notice--warn" role="alert"><Icon name="alert" /><div><p><strong>Coverage check unavailable.</strong> These records couldn’t be compared with your company setup, so the totals may be incomplete. The report and CSV say so too.</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetryCoverage}>Check again</button></div></div></div>}
@@ -228,8 +235,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
           </div>
           <div className="nv-record-card__side">
             <span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>
-            {kg && <span className="nv-num" style={{ fontWeight: 600 }}>{groupDigits(kg)} kg{row.scope === 2 ? " (location)" : ""}</span>}
-            {row.scope === 2 && row.scope2?.marketBased.total && <span className="nv-num nv-subtle">{groupDigits(row.scope2.marketBased.total.display)} kg (market)</span>}
+            {kg && <span className="nv-num" style={{ fontWeight: 600 }}>{groupDigits(kg)} kg{row.scope === 2 ? " (location)" : ""}{(row.scope === 1 ? row.inSubtotal.scope1 : row.inSubtotal.scope2LocationBased) ? "" : " · not in subtotal"}</span>}
+            {row.scope === 2 && row.scope2?.marketBased.total && <span className="nv-num nv-subtle">{groupDigits(row.scope2.marketBased.total.display)} kg (market){row.inSubtotal.scope2MarketBased ? "" : " · not in subtotal"}</span>}
             {needsWork(row) && row.plan.status !== "withdrawn" && <button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${kindLabel(row.kind)} · ${row.sourceId}`} onClick={() => onFix(row.recordId)}>{canManage ? "Fix" : "View"}</button>}
           </div>
         </div>

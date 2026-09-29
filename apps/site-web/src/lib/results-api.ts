@@ -1,7 +1,11 @@
 import type { HostedWorkspaceActor } from "./workspace-api"
 
 export const RESULTS_PROFILE = "neuvetra.collection-results.v1"
-export const DRAFT_LABEL = "Draft — prepared with Neuvetra beta methods; not externally assured"
+/** Board decision 2026-09-29: draft numbers from unreleased methods are for synthetic test companies only. Matches the server label. */
+export const DRAFT_LABEL = "Draft — synthetic test data calculated with unreleased beta methods; not for reporting and not externally assured"
+/** The only environment whose draft numbers this screen will show. */
+export const RESULTS_ENVIRONMENT = "synthetic_staging"
+export interface MethodUsed { methodVersionId: string; scope: 1 | 2; engineSha256: string; registerSha256: string; releaseStatus: "unreleased_beta" }
 
 export interface EngineTotal { unrounded: string; display: string; unit: "kg CO2e"; rounding: string }
 export interface EngineGas { mass: string; massUnit: string; co2e: string; co2eUnit: "kg CO2e" }
@@ -27,10 +31,15 @@ export interface ResultRow {
   /** Record dates against the setup reporting period; "outside" and "partial" rows are held by the results route. */
   periodCheck: "inside" | "partial" | "outside" | "no_period"
   outcome: "calculated" | "held" | "refused" | "unavailable"; refusalCode: string | null
+  /** From the engines' aggregates: whether this row's figure is in each subtotal. A meter can be in the location-based
+   * subtotal but not the market-based one, so each basis is separate. */
+  inSubtotal: { scope1: boolean; scope2LocationBased: boolean; scope2MarketBased: boolean }
   scope1: Scope1Result | null; scope2: Scope2Result | null
 }
 export interface ResultsResponse {
-  profile: typeof RESULTS_PROFILE; label: string; syntheticOnly: true; generatedAt: string; companyId: string
+  profile: typeof RESULTS_PROFILE; label: string; syntheticOnly: true; environment: typeof RESULTS_ENVIRONMENT; generatedAt: string; companyId: string
+  /** Every method that produced a number, with the engine and register bytes that ran it. None is released yet. */
+  methods: MethodUsed[]
   setup: null | { revision: number; legalName: string; tradingName: string; period: { start: string | null; endExclusive: string | null }; boundaryApproach: string; locations: Array<{ id: string; name: string; inclusion: string }> }
   records: ResultRow[]
   scope1: null | { knownSourceSubtotal: EngineTotal; includedResults: string[]; incompleteResults: Array<{ resultSha256: string; missingGases: string[] }>; notCalculated: Array<{ resultSha256: string; status: string; findings: string[] }>; reportedOutsideScopes: Array<{ gas: string; massKg: string; treatment: string }>; resultCount: number; complete: boolean }
@@ -43,10 +52,21 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 const DECIMAL = /^-?\d+(\.\d+)?$/
 const record = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value)
 const total = (value: unknown) => record(value) && typeof value.display === "string" && DECIMAL.test(value.display) && typeof value.unrounded === "string"
+const SHA256 = /^[0-9a-f]{64}$/
+const method = (value: unknown) => record(value) && typeof value.methodVersionId === "string" && value.methodVersionId.length > 0 && [1, 2].includes(value.scope as number)
+  && typeof value.engineSha256 === "string" && SHA256.test(value.engineSha256) && typeof value.registerSha256 === "string" && SHA256.test(value.registerSha256) && value.releaseStatus === "unreleased_beta"
+const inSubtotal = (value: unknown) => record(value) && typeof value.scope1 === "boolean" && typeof value.scope2LocationBased === "boolean" && typeof value.scope2MarketBased === "boolean"
+
+/** Thrown when a server offers draft numbers outside synthetic staging: the screen shows no numbers then. */
+export class NotSyntheticResultsError extends Error { constructor() { super("Draft results are only shown for synthetic test companies.") } }
 
 /** Rejects anything that is not the draft-results contract, so a malformed response can never show a number. */
 export function decodeResults(value: unknown, companyId: string): ResultsResponse {
-  if (!record(value) || value.profile !== RESULTS_PROFILE || value.syntheticOnly !== true || value.companyId !== companyId || typeof value.label !== "string" || !Array.isArray(value.records) || !record(value.counts)) throw new Error("The results response was not recognized.")
+  if (!record(value) || value.profile !== RESULTS_PROFILE || value.companyId !== companyId || typeof value.label !== "string" || !Array.isArray(value.records) || !record(value.counts)) throw new Error("The results response was not recognized.")
+  // Board option 1: numbers only from the synthetic staging environment, each tied to a named unreleased method.
+  if (value.syntheticOnly !== true || value.environment !== RESULTS_ENVIRONMENT) throw new NotSyntheticResultsError()
+  if (!Array.isArray(value.methods) || !value.methods.every(method)) throw new Error("The results response was not recognized.")
+  const named = new Set((value.methods as Array<{ methodVersionId: string }>).map(item => item.methodVersionId))
   for (const row of value.records) {
     if (!record(row) || !UUID.test(String(row.recordId)) || ![1, 2].includes(row.scope as number) || !record(row.plan) || !Array.isArray(row.plan.reasons) || !Array.isArray(row.evidence) || !["calculated", "held", "refused", "unavailable"].includes(String(row.outcome))) throw new Error("The results response was not recognized.")
     if (row.outcome === "calculated" && !row.scope1 && !row.scope2) throw new Error("The results response was not recognized.")
@@ -56,6 +76,11 @@ export function decodeResults(value: unknown, companyId: string): ResultsRespons
     if (s1 && (!record(s1) || (s1.total !== null && !total(s1.total)) || !Array.isArray(s1.factorsUsed))) throw new Error("The results response was not recognized.")
     const s2 = row.scope2 as Record<string, unknown> | null
     if (s2 && (!record(s2) || !record(s2.locationBased) || !record(s2.marketBased))) throw new Error("The results response was not recognized.")
+    // Every figure must name a listed method, and only a calculated row of the matching scope can be in a subtotal.
+    for (const result of [s1, s2]) if (result && !named.has(String(result.methodVersionId))) throw new Error("The results response was not recognized.")
+    if (!inSubtotal(row.inSubtotal)) throw new Error("The results response was not recognized.")
+    const flags = row.inSubtotal as { scope1: boolean; scope2LocationBased: boolean; scope2MarketBased: boolean }
+    if ((flags.scope1 && !s1) || ((flags.scope2LocationBased || flags.scope2MarketBased) && !s2)) throw new Error("The results response was not recognized.")
   }
   const s1 = value.scope1 as Record<string, unknown> | null
   if (s1 !== null && (!record(s1) || !total(s1.knownSourceSubtotal))) throw new Error("The results response was not recognized.")
@@ -88,11 +113,18 @@ export interface CsvLabels {
   completeness?: { scope1: string; scope2Location: string; scope2Market: string }
 }
 const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ")
+/** The last day covered, from a half-open period end (the day before `endExclusive`). */
+export function lastDayCovered(endExclusive: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(endExclusive)
+  if (!match) return endExclusive
+  const day = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]))); day.setUTCDate(day.getUTCDate() - 1)
+  return day.toISOString().slice(0, 10)
+}
+/** How a method is named wherever a figure is shown. */
+export const methodLabel = (methodVersionId: string) => `${methodVersionId} (unreleased beta)`
 export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string {
   // Quote when needed, and stop spreadsheet apps from treating text such as "=..." as a formula.
   const escape = (raw: string) => { const value = /^[=+\-@\t\r]/.test(raw) && !/^-?\d+(\.\d+)?$/.test(raw) ? `'${raw}` : raw; return /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value }
-  const counted1 = new Set(results.scope1?.includedResults ?? [])
-  const counted2 = new Set([...(results.scope2?.locationBasedIncluded ?? [])])
   const setup = results.setup
   const meta = [
     `# ${results.label}`,
@@ -100,22 +132,25 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     `# Reporting period: ${labels.period(setup?.period.start, setup?.period.endExclusive)}`,
     `# Boundary approach: ${labels.boundary(setup?.boundaryApproach ?? "unknown")}`,
     `# Generated: ${results.generatedAt}`,
-    "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes are in a subtotal.",
+    "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes in the matching \"In … subtotal\" column are in that subtotal.",
+    `# Methods (unreleased beta, not released): ${results.methods.map(item => `${item.methodVersionId} engine ${item.engineSha256.slice(0, 12)} register ${item.registerSha256.slice(0, 12)}`).join("; ") || "none calculated"}`,
     ...(labels.completeness ? [`# Completeness, Scope 1: ${labels.completeness.scope1}`, `# Completeness, Scope 2 location-based: ${labels.completeness.scope2Location}`, `# Completeness, Scope 2 market-based: ${labels.completeness.scope2Market}`] : []),
     ...(labels.coverage ?? []).map(line => `# ${oneLine(line)}`),
   ]
-  const header = ["Scope", "Activity", "Site", "Source ID", "Period start", "Period end (exclusive)", "Quantity", "Unit", "Data quality", "Status", "Status code", "Counted in subtotal", "Scope 1 kg CO2e", "Scope 2 location-based kg CO2e", "Scope 2 market-based kg CO2e", "Method", "GWP set", "Evidence files", "Notes"]
+  const header = ["Scope", "Activity", "Site", "Source ID", "Period start", "Last day covered", "Quantity", "Unit", "Data quality", "Status", "Status code", "In Scope 1 subtotal", "In location-based subtotal", "In market-based subtotal", "Scope 1 kg CO2e", "Scope 2 location-based kg CO2e", "Scope 2 market-based kg CO2e", "Method", "GWP set", "Evidence files", "Notes"]
   const lines = results.records.map(row => {
     const s1 = row.scope1, s2 = row.scope2
     const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status === "withdrawn" || row.plan.status === "excluded" ? row.plan.status : row.periodCheck === "outside" || row.periodCheck === "partial" ? `${row.periodCheck === "partial" ? "partly_" : ""}outside_reporting_period` : row.plan.status ?? row.outcome
-    const counted = s1 ? counted1.has(s1.resultSha256) : s2 ? counted2.has(s2.resultSha256) : false
+    const yes = (flag: boolean, applies: boolean) => applies ? (flag ? "Yes" : "No") : ""
     const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
     const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
     const files = row.evidence.map(file => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""}`).join("; ")
-    return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, row.period.endExclusive, row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code, counted ? "Yes" : "No",
-      s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", s1?.methodVersionId ?? s2?.methodVersionId ?? "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")
+    const methodId = s1?.methodVersionId ?? s2?.methodVersionId
+    return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, lastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code,
+      yes(row.inSubtotal.scope1, row.scope === 1), yes(row.inSubtotal.scope2LocationBased, row.scope === 2), yes(row.inSubtotal.scope2MarketBased, row.scope === 2),
+      s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", methodId ? methodLabel(methodId) : "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")
   })
-  const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", "Engine aggregate of rows marked Yes"].map(escape).join(",")
+  const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", `Engine aggregate of rows marked Yes under "In ${label === "Scope 1" ? "Scope 1" : label === "Scope 2 location-based" ? "location-based" : "market-based"} subtotal"`].map(escape).join(",")
   const totals = [subtotal("Scope 1", results.scope1?.knownSourceSubtotal.display), subtotal("Scope 2 location-based", results.scope2?.locationBasedSubtotal.display), subtotal("Scope 2 market-based", results.scope2?.marketBasedSubtotal.display)]
   return [...meta, header.join(","), ...lines, ...totals].join("\n") + "\n"
 }

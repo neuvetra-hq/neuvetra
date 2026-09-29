@@ -123,11 +123,22 @@ export function groupDigits(value: string): string {
   const grouped = whole!.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
   return `${negative ? "−" : ""}${grouped}${fraction !== undefined ? `.${fraction}` : ""}`
 }
-/** Engine kg CO2e (exact display string) shown as tonnes with two decimals, for headlines only. */
+/** Engine kg CO2e (exact display string) shown as tonnes with two decimals, for headlines only.
+ * Tonnes to 2 decimals from the engine's kg string, in exact decimal arithmetic with the engine's rounding rule
+ * (half-even), so a headline can never differ from the kg figure by a floating-point or half-up step. */
 export function kgToTonnes(kg: string | null | undefined): string {
   if (!kg || !plain(kg)) return "—"
-  const tonnes = Number(kg) / 1000
-  return tonnes.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+  const negative = kg.startsWith("-")
+  const [whole, fraction = ""] = (negative ? kg.slice(1) : kg).split(".")
+  // kg as an integer count of 1e-(digits) kg; 0.01 t = 10 kg.
+  const scale = 10n ** BigInt(fraction.length)
+  const units = BigInt(whole!) * scale + (fraction ? BigInt(fraction) : 0n)
+  const step = 10n * scale
+  let centi = units / step
+  const rest = units % step, half = step / 2n
+  if (rest > half || (rest === half && centi % 2n === 1n)) centi += 1n
+  const text = `${centi / 100n}.${(centi % 100n).toString().padStart(2, "0")}`
+  return groupDigits(`${negative && centi !== 0n ? "-" : ""}${text}`)
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -152,7 +163,7 @@ export function periodLabel(start: string | null | undefined, endExclusive: stri
 /** "held_period": dates outside the setup reporting period (a journey check, not a readiness rule). */
 export type RecordState = "ready" | "partial" | "input_needed" | "review_required" | "held_period" | "excluded" | "memo_only" | "withdrawn"
 export const RECORD_STATE_LABELS: Record<RecordState, string> = {
-  ready: "Ready to calculate", partial: "Partial calculation", input_needed: "Input needed", review_required: "Review required", held_period: "Held pending correction", excluded: "Excluded", memo_only: "Reported separately", withdrawn: "Withdrawn",
+  ready: "Ready to calculate", partial: "Partial calculation", input_needed: "Input needed", review_required: "Review required", held_period: "Outside reporting period", excluded: "Excluded", memo_only: "Reported separately", withdrawn: "Withdrawn",
 }
 export const RECORD_STATE_TONE: Record<RecordState, "ready" | "warn" | "danger" | "muted" | "info"> = {
   ready: "ready", partial: "info", input_needed: "warn", review_required: "warn", held_period: "warn", excluded: "muted", memo_only: "info", withdrawn: "muted",
