@@ -25,10 +25,10 @@ export function PanelGuide({ kind, defaultOpen, onAsk }: { kind: "setup" | "coll
       <ol>
         <li>Upload the bill or log under <strong>Private evidence</strong> at the bottom of this page.</li>
         <li>Under <strong>New activity record</strong>, choose the activity type, then the site and the account, meter or equipment ID.</li>
-        <li>Enter the dates and the amount as a plain number without commas (8450, not 8,450). Use one of the units listed under the unit field — for example therm, MMBtu or ccf for gas, kWh or MWh for electricity.</li>
+        <li>Enter the dates (this beta accepts dates within calendar 2025) and the amount as a plain number without commas (8450, not 8,450). Use one of the units listed under the unit field — for example therm, MMBtu or ccf for gas, kWh or MWh for electricity.</li>
         <li>Tick the uploaded file under “Evidence linked to this version”, then <strong>Save activity</strong>.</li>
       </ol>
-      <p>Missing details are listed under “Input needed”. You can save now and come back — nothing missing is counted as zero. <button type="button" className="nv-link" onClick={onAsk}>Ask about a field</button></p>
+      <p>For an estimate, choose data quality “Estimated” and say how you estimated it — the record can’t be saved without that. Missing details are listed under “Input needed”. You can save now and come back — nothing missing is counted as zero. <button type="button" className="nv-link" onClick={onAsk}>Ask about a field</button></p>
     </div>}
   </details>
 }

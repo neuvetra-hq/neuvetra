@@ -13,7 +13,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
   if (!status) return <section aria-busy={!error}>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>Your reporting workspace</h1>
-    {error ? <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p>{error}</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetry}>Try again</button></div></div></div>
+    {error ? <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p><strong>Your progress couldn’t be loaded.</strong> {error}</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetry}>Try again</button></div></div></div>
       : <p className="nv-lead" role="status">Loading your progress…</p>}
   </section>
   const { setup, collection, evidence, next, progress, gaps, canManage } = status
@@ -23,7 +23,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
     if (progress[key] === "done") return "done"
     return next.panel === key ? "current" : "todo"
   }
-  const mustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
+  const mustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required" || row.state === "held_period")
   const improve: Array<{ key: string; title: string; detail: string }> = []
   if (collection.partial) improve.push({ key: "partial", title: `${plural(collection.partial, "record is", "records are")} only partly calculated`, detail: "For vehicles, add miles driven or fuel economy to include CH4 and N2O." })
   if (collection.noEvidence) improve.push({ key: "evidence", title: `${plural(collection.noEvidence, "record has", "records have")} no evidence linked`, detail: "Attach the bill or log so a reviewer can trace the figure." })
@@ -78,11 +78,11 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
             {mustFix.length > 5 && <li><span className="nv-subtle">and {mustFix.length - 5} more in Activity & evidence</span></li>}
           </ul>
           {gaps.length > 0 && <><p className="nv-attn-label nv-attn-label--info">Possible gaps</p><ul className="nv-list">
-            {gaps.slice(0, 5).map(gap => <li key={gap.id}><span className="nv-list__main"><span className="nv-list__title">{gap.title}</span><br /><span className="nv-subtle">{gap.detail}</span>{gap.note && <><br /><span className="nv-subtle">Your note: {gap.note}</span></>}</span>{canManage && <button type="button" className="nv-btn nv-btn--sm" aria-label={`Add a record: ${gap.title}`} onClick={() => onNavigate("collection")}>Add</button>}</li>)}
+            {gaps.slice(0, 5).map(gap => <li key={gap.id}><span className="nv-list__main"><span className="nv-list__title">{gap.title}</span><br />{canManage && <span className="nv-subtle">{gap.detail}</span>}{gap.note && <>{canManage && <br />}<span className="nv-subtle">Note: {gap.note}</span></>}</span>{canManage && <button type="button" className="nv-btn nv-btn--sm" aria-label={`Add a record: ${gap.title}`} onClick={() => onNavigate("collection")}>Add</button>}</li>)}
             {gaps.length > 5 && <li><span className="nv-subtle">and {gaps.length - 5} more</span></li>}
           </ul></>}
           {(improve.length > 0 || evidence.checking > 0) && <><p className="nv-attn-label">Can be improved</p><ul className="nv-list">
-            {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">{item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${item.key === "partial" ? "See" : canManage ? "Open" : "View"}: ${item.title}`} onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
+            {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span>{canManage && <><br /><span className="nv-subtle">{item.detail}</span></>}</span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${item.key === "partial" ? "See" : canManage ? "Open" : "View"}: ${item.title}`} onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
             {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} with scan pending</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
           </ul></>}
         </>}

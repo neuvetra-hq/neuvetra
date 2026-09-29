@@ -4,8 +4,8 @@ import { describe, expect, test } from "bun:test"
 import { HELP_ENTRIES, isProgressQuestion, matchQuestion } from "./help-content"
 import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS } from "./plain-language"
 import { decodeResults, resultsCsv, RESULTS_PROFILE } from "./results-api"
-import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
-import { rowStatus } from "./results-view"
+import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, periodFit, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
+import { rowReasons, rowStatus } from "./results-view"
 
 const company = "29200000-0000-4000-8000-000000000001"
 const record = "29500000-0000-4000-8000-000000000001"
@@ -28,6 +28,11 @@ describe("Ask Neuvetra help matching", () => {
     expect(matchQuestion("what if the landlord pays the electricity")?.entry.id).toBe("no-electricity")
     expect(matchQuestion("which sites should I include")?.entry.id).toBe("sites")
     expect(matchQuestion("when is limited assurance required")?.entry.id).toBe("sb253")
+    expect(matchQuestion("do I need to report scope 3 in 2027")?.entry.id).toBe("sb253")
+    expect(matchQuestion("how do I close a possible gap")?.entry.id).toBe("incomplete")
+    expect(matchQuestion("what does not sure yet do to my report")?.entry.id).toBe("incomplete")
+    expect(matchQuestion("our generator runs on propane")?.entry.id).toBe("other-fuels")
+    expect(matchQuestion("how do I report generator diesel")?.entry.id).toBe("generator")
   })
   test("declines instead of guessing when nothing matches", () => {
     expect(matchQuestion("what is the weather tomorrow")).toBeNull()
@@ -75,8 +80,8 @@ describe("plain-language display", () => {
 })
 
 const s1 = (status: string, display: string | null) => ({ methodVersionId: "scope1.stationary.natural_gas.v2", gwpSetId: "AR5-100", status, gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: display ? { unrounded: display, display, unit: "kg CO2e", rounding: "half_even_4dp" } : null, resultSha256: "a".repeat(64) })
-const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, outcome: "calculated", refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
-const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: "Draft", syntheticOnly: true, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, unavailable: 0 }, warnings: [] })
+const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, periodCheck: "inside", outcome: "calculated", refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
+const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: "Draft", syntheticOnly: true, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [] })
 
 describe("draft results decoding", () => {
   test("accepts the contract and rejects anything else", () => {
@@ -85,6 +90,13 @@ describe("draft results decoding", () => {
     expect(() => decodeResults(response([]), "29200000-0000-4000-8000-000000000009")).toThrow()
     expect(() => decodeResults(response([row({ scope1: s1("complete", "12,5") })]), company)).toThrow()
     expect(() => decodeResults(response([row({ scope1: null })]), company)).toThrow()
+  })
+  test("records outside the reporting period are held pending correction and can't arrive calculated", () => {
+    const outside = row({ outcome: "held", scope1: null, periodCheck: "outside" })
+    expect(rowStatus(outside as never).label).toBe("Held pending correction")
+    expect(rowReasons(outside as never)[0]).toMatch(/outside the reporting period/)
+    expect(() => decodeResults(response([row({ periodCheck: "outside" })]), company)).toThrow()
+    expect(() => decodeResults(response([row({ periodCheck: undefined })]), company)).toThrow()
   })
   test("held records keep the reviewed labels and never show a number", () => {
     expect(rowStatus(row({ outcome: "held", scope1: null, plan: { action: "hold", status: "input_needed", reasons: ["quantity_not_calculable"], notes: [] } }) as never).label).toBe("Input needed")
@@ -144,11 +156,20 @@ describe("journey progress", () => {
     expect(coverageIssues(coverage, 2)).toEqual({ open: 1, gaps: 1, unchecked: false })
     expect(coverageIssues({ state: "unavailable" }, 1).unchecked).toBe(true)
     expect(coverageLines({ state: "unavailable" })[0]).toMatch(/Coverage check unavailable/)
-    expect(coverageLines(coverage).join(" ")).toContain("Site note: Landlord pays electricity")
+    expect(coverageLines(coverage).join(" ")).toContain("Site note (04 Locations): Landlord pays electricity")
     const status = computeJourneyStatus({ setup: view, context: null, records: [], evidence: [], canManage: false })
     expect(status.progress.setup).toBe("in_progress")
     expect(status.next.action).toBe("View records")
     expect(progressAnswer(status).join(" ")).toContain("still “Not sure yet”")
+  })
+  test("a reporting period outside the beta year is an open answer, and out-of-period records are held", () => {
+    const office = "29400000-0000-4000-8000-000000000001"
+    const setup = { company: { legalName: "Acme" }, reportingPeriod: { start: "2024-01-01", endExclusive: "2025-01-01" }, boundary: { approach: "operational_control" }, screening: [], locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] }
+    const view = { currentVersion: { revision: 1, setup } } as never
+    expect(setupMissing(view).map(item => item.id)).toEqual(["beta-period"])
+    expect(periodFit({ start: "2025-01-01", endExclusive: "2026-01-01" }, setup.reportingPeriod)).toBe("outside")
+    expect(periodFit({ start: "2025-01-01", endExclusive: "2026-01-01" }, { start: "2025-07-01", endExclusive: "2026-07-01" })).toBe("partial")
+    expect(periodFit({ start: "2025-02-01", endExclusive: "2025-03-01" }, { start: "2025-01-01", endExclusive: "2026-01-01" })).toBe("inside")
   })
   test("record states follow the reviewed readiness findings", () => {
     expect(recordState([])).toBe("ready")

@@ -42,7 +42,14 @@ function tone(message: string): "error" | "info" | null {
 
 export function Landing(props: LandingProps) {
   const emailRef = useRef<HTMLInputElement>(null)
-  useEffect(() => { document.title = "Neuvetra — Greenhouse-gas reporting (private beta)" }, [])
+  useEffect(() => {
+    document.title = "Neuvetra — Greenhouse-gas reporting (private beta)"
+    // Back after sign-out can return a workspace address (#/overview); the signed-out page has no views, so drop it.
+    // (A #/ address present when the page loads is kept: it's a deep link that opens after sign-in.)
+    const clearViewHash = () => { if (window.location.hash.startsWith("#/")) window.history.replaceState(null, "", window.location.pathname + window.location.search) }
+    window.addEventListener("popstate", clearViewHash)
+    return () => window.removeEventListener("popstate", clearViewHash)
+  }, [])
   const goToSignIn = () => { document.getElementById("sign-in")?.scrollIntoView({ behavior: "smooth", block: "start" }); window.setTimeout(() => emailRef.current?.focus({ preventScroll: true }), 350) }
   const kind = tone(props.message)
   return <div className="nv-landing">

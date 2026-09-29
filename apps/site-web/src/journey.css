@@ -366,13 +366,13 @@
   @page { margin: 16mm 14mm 18mm;
     @bottom-left { content: "DRAFT — Neuvetra beta methods; not externally assured"; font: 8pt sans-serif; color: #555; }
     @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt sans-serif; color: #555; } }
-  :root { color-scheme: light !important; }
-  html, body, :root, .nv-app, .nv-layout, .nv-main { background: #fff !important; }
+  :root:has(.nv-report) { color-scheme: light !important; }
+  html:has(.nv-report), body:has(.nv-report) { background: #fff !important; }
   .nv-print-only { display: block !important; }
   /* Print only the report: everything that neither is nor contains it is removed from layout (no blank trailing pages),
      and the report's ancestors are flattened to plain blocks. */
-  body *:not(.nv-report):not(.nv-report *):not(:has(.nv-report)) { display: none !important; }
-  body *:has(.nv-report) { display: block !important; position: static !important; margin: 0 !important; padding: 0 !important; border: 0 !important; min-height: 0 !important; height: auto !important; max-width: none !important; overflow: visible !important; box-shadow: none !important; background: #fff !important; }
+  body:has(.nv-report) *:not(.nv-report):not(.nv-report *):not(:has(.nv-report)) { display: none !important; }
+  body:has(.nv-report) *:has(.nv-report) { display: block !important; position: static !important; margin: 0 !important; padding: 0 !important; border: 0 !important; min-height: 0 !important; height: auto !important; max-width: none !important; overflow: visible !important; box-shadow: none !important; background: #fff !important; }
   .nv-report { position: static; width: 100%; margin: 0; padding: 0; border: 0; border-radius: 0; background: #fff; color: #000; }
   .nv-report__scroll { overflow: visible; } .nv-report__scroll table { min-width: 0; }
   .nv-report table { font-size: 8.5pt; } .nv-report th, .nv-report td { padding: 4px 6px; }
@@ -410,7 +410,7 @@
 .nv-guide > summary { display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; font-weight: 500; list-style: none; }
 .nv-guide > summary::-webkit-details-marker { display: none; }
 .nv-guide > summary svg { color: var(--info); }
-.nv-guide > summary::after { content: "Hide"; margin-left: auto; color: var(--muted); font-size: .86rem; font-weight: 400; }
+.nv-guide > summary::after { content: "Hide"; flex: none; margin-left: auto; white-space: nowrap; color: var(--muted); font-size: .86rem; font-weight: 400; }
 .nv-guide:not([open]) > summary::after { content: "Show"; }
 .nv-guide__body { padding: 0 16px 14px 44px; color: var(--muted); }
 .nv-guide__body ol { margin: 0; padding-left: 18px; list-style: decimal; }
@@ -429,3 +429,8 @@
 .nv-inline-note > svg { flex: none; margin-top: 3px; color: var(--info); }
 .nv-inline-note p { margin: 0; }
 .nv-app .worksheet > .nv-guide { margin-top: 4px; }
+
+/* Text links placed inside the owner screens keep the link style (the screens style every button as a pill) */
+.nv-app .worksheet .nv-link { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--accent); font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.nv-app .worksheet .nv-link:hover { color: var(--accent-hi); background: none; }
+.nv-app .worksheet .nv-guide > summary { text-decoration: none; color: var(--text); }

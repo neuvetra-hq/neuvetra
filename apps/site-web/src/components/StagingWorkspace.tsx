@@ -178,7 +178,19 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   useEffect(() => {
     document.title = `${TITLES[panel] ?? panelLabels[panel as keyof typeof panelLabels] ?? "Workspace"} · Neuvetra`
     window.scrollTo({ top: 0 })
-    focusPageHeading(mainRef.current)
+    const main = mainRef.current
+    focusPageHeading(main)
+    // Screens swap their loading heading for the loaded one, which drops focus to the page. Until the person acts,
+    // put focus back on the visible heading whenever that happens.
+    if (!main) return
+    let active = true
+    const observer = new MutationObserver(() => { if (active && (!document.activeElement || document.activeElement === document.body)) focusPageHeading(main) })
+    const stop = () => { active = false; observer.disconnect() }
+    observer.observe(main, { childList: true, subtree: true })
+    const timer = window.setTimeout(stop, 8000)
+    window.addEventListener("pointerdown", stop, { once: true })
+    window.addEventListener("keydown", stop, { once: true })
+    return () => { stop(); window.clearTimeout(timer); window.removeEventListener("pointerdown", stop); window.removeEventListener("keydown", stop) }
   }, [panel])
   const secondaryPanel = sourceAndRegisterPanels.includes(panel) || continuityPanels.includes(panel)
   const navView: JourneyView = secondaryPanel ? "archive" : journeyViews.includes(panel) ? panel as JourneyView : "home"

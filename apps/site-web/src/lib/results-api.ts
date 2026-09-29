@@ -24,6 +24,8 @@ export interface ResultRow {
   period: { start: string; endExclusive: string }; quantity: { value: string; unit: string }; quality: string; estimateBasis: string | null; evidenceCount: number
   evidence: Array<{ id: string; name: string | null; sha256: string | null; status: string }>
   plan: { action: "calculate" | "hold"; status: "withdrawn" | "excluded" | "input_needed" | null; reasons: string[]; notes: string[] }
+  /** Record dates against the setup reporting period; "outside" and "partial" rows are held by the results route. */
+  periodCheck: "inside" | "partial" | "outside" | "no_period"
   outcome: "calculated" | "held" | "refused" | "unavailable"; refusalCode: string | null
   scope1: Scope1Result | null; scope2: Scope2Result | null
 }
@@ -33,7 +35,7 @@ export interface ResultsResponse {
   records: ResultRow[]
   scope1: null | { knownSourceSubtotal: EngineTotal; includedResults: string[]; incompleteResults: Array<{ resultSha256: string; missingGases: string[] }>; notCalculated: Array<{ resultSha256: string; status: string; findings: string[] }>; reportedOutsideScopes: Array<{ gas: string; massKg: string; treatment: string }>; resultCount: number; complete: boolean }
   scope2: null | { resultCount: number; locationBasedSubtotal: EngineTotal; locationBasedIncluded: string[]; locationBasedComplete: boolean; marketBasedSubtotal: EngineTotal; marketBasedIncluded: string[]; marketBasedProvisional: string[]; marketBasedComplete: boolean }
-  counts: { records: number; calculated: number; held: number; withdrawn: number; excluded: number; inputNeeded: number; unavailable: number }
+  counts: { records: number; calculated: number; held: number; withdrawn: number; excluded: number; inputNeeded: number; outsidePeriod: number; unavailable: number }
   warnings: string[]
 }
 
@@ -48,6 +50,8 @@ export function decodeResults(value: unknown, companyId: string): ResultsRespons
   for (const row of value.records) {
     if (!record(row) || !UUID.test(String(row.recordId)) || ![1, 2].includes(row.scope as number) || !record(row.plan) || !Array.isArray(row.plan.reasons) || !Array.isArray(row.evidence) || !["calculated", "held", "refused", "unavailable"].includes(String(row.outcome))) throw new Error("The results response was not recognized.")
     if (row.outcome === "calculated" && !row.scope1 && !row.scope2) throw new Error("The results response was not recognized.")
+    if (!["inside", "partial", "outside", "no_period"].includes(String(row.periodCheck))) throw new Error("The results response was not recognized.")
+    if ((row.periodCheck === "outside" || row.periodCheck === "partial") && row.outcome === "calculated") throw new Error("The results response was not recognized.")
     const s1 = row.scope1 as Record<string, unknown> | null
     if (s1 && (!record(s1) || (s1.total !== null && !total(s1.total)) || !Array.isArray(s1.factorsUsed))) throw new Error("The results response was not recognized.")
     const s2 = row.scope2 as Record<string, unknown> | null
@@ -103,9 +107,9 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
   const header = ["Scope", "Activity", "Site", "Source ID", "Period start", "Period end (exclusive)", "Quantity", "Unit", "Data quality", "Status", "Status code", "Counted in subtotal", "Scope 1 kg CO2e", "Scope 2 location-based kg CO2e", "Scope 2 market-based kg CO2e", "Method", "GWP set", "Evidence files", "Notes"]
   const lines = results.records.map(row => {
     const s1 = row.scope1, s2 = row.scope2
-    const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status ?? row.outcome
+    const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.periodCheck === "outside" || row.periodCheck === "partial" ? `${row.periodCheck === "partial" ? "partly_" : ""}outside_reporting_period` : row.plan.status ?? row.outcome
     const counted = s1 ? counted1.has(s1.resultSha256) : s2 ? counted2.has(s2.resultSha256) : false
-    const notes = [...new Set([...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
+    const notes = [...new Set([...(row.periodCheck === "outside" ? ["outside_reporting_period"] : row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
     const files = row.evidence.map(file => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""}`).join("; ")
     return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, row.period.endExclusive, row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code, counted ? "Yes" : "No",
       s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", s1?.methodVersionId ?? s2?.methodVersionId ?? "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")

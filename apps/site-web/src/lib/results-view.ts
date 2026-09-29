@@ -9,6 +9,7 @@ export const KIND_COLORS: Record<string, string> = { natural_gas: "#b8d997", veh
 /** Status wording follows the reviewed collection labels. */
 export function rowStatus(row: ResultRow): RowStatus {
   if (row.outcome === "refused" || row.outcome === "unavailable") return { label: "Not calculated", tone: "danger" }
+  if (row.outcome === "held" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded" && (row.periodCheck === "outside" || row.periodCheck === "partial")) return { label: "Held pending correction", tone: "warn" }
   if (row.outcome === "held") return row.plan.status === "withdrawn" ? { label: "Withdrawn", tone: "muted" } : row.plan.status === "excluded" ? { label: "Excluded", tone: "muted" } : { label: "Input needed", tone: "warn" }
   const status = row.scope1?.status ?? row.scope2?.locationBased.status
   switch (status) {
@@ -23,7 +24,7 @@ export function rowStatus(row: ResultRow): RowStatus {
 }
 /** Plain reasons for a row, deduplicated; codes are kept for the export. */
 export function rowReasons(row: ResultRow): string[] {
-  const codes = [...row.plan.reasons, ...(row.refusalCode ? [row.refusalCode] : []), ...(row.scope1?.findings ?? []), ...(row.scope1?.estimates ?? []), ...(row.scope2?.findings ?? []), ...(row.scope2?.locationBased.findings ?? []), ...(row.scope2?.marketBased.findings ?? []), ...(row.scope2?.estimates ?? [])]
+  const codes = [...(row.periodCheck === "outside" ? ["outside_reporting_period"] : row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(row.refusalCode ? [row.refusalCode] : []), ...(row.scope1?.findings ?? []), ...(row.scope1?.estimates ?? []), ...(row.scope2?.findings ?? []), ...(row.scope2?.locationBased.findings ?? []), ...(row.scope2?.marketBased.findings ?? []), ...(row.scope2?.estimates ?? [])]
   if (row.outcome === "unavailable") codes.push("engine_unavailable")
   return [...new Set(codes.map(code => code === "engine_unavailable" ? "The calculation service was unavailable for this record. Try again shortly." : reasonText(code)))]
 }

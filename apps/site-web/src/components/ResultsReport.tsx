@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
-import { coverageIssues, coverageLines, type Coverage } from "@/lib/journey-status"
+import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
 import { DRAFT_LABEL, loadResults, ResultsApiError, resultsCsv, type EngineGas, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { factorSource, GAS_LABELS, KIND_COLORS, needsWork, rowReasons, rowStatus } from "@/lib/results-view"
@@ -40,7 +40,7 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
   const note = (complete: boolean, scope: 1 | 2) => {
     const count = held(scope), issues = coverageIssues(coverage, scope)
     const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? `${plural(issues.gaps, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
-    return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps: covers every source company setup lists"
+    return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps — each source type and included site in company setup has at least one record"
   }
   return {
     scope1: results.scope1 ? note(results.scope1.complete, 1) : "No calculated sources",
@@ -96,8 +96,8 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
       {incomplete.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {rowStatus(row).label}: {rowReasons(row).join(" ")}</li>)}
       {coverage.state !== "ready" && <li><strong>Coverage not checked</strong> — these records could not be compared with company setup when this draft was prepared, so expected sources may be missing.</li>}
       {coverage.state === "ready" && coverage.setupOpen.map(item => <li key={item.id}><strong>Open in company setup</strong> — {item.title}. {item.detail}</li>)}
-      {coverage.state === "ready" && coverage.gaps.map(gap => <li key={gap.id}><strong>Possible gap (Scope {gap.scope})</strong> — {gap.title}.{gap.note ? <> Site note: “{gap.note}”</> : null}</li>)}
-    </ul> : <p>None found: every record is counted, company setup has no open answers, and every source it lists has at least one record.</p>}
+      {coverage.state === "ready" && coverage.gaps.map(gap => <li key={gap.id}><strong>Possible gap (Scope {gap.scope})</strong> — {gap.title}.{gap.note ? <> {noteLabel(gap)}: “{gap.note}”</> : null}</li>)}
+    </ul> : <p>None found: every record is counted, company setup has no open answers, and each source type and included site it lists has at least one record. This checks coverage by type and site, not that each bill covers the whole year.</p>}
     <h3>Estimates, partial calculations and data quality</h3>
     {estimated.length ? <ul>{estimated.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {[row.quality === "estimated" ? `Activity data marked Estimated${row.estimateBasis ? ` (${row.estimateBasis})` : ""}.` : "", ...(row.scope1?.estimates ?? []).map(reasonText), ...(row.scope2?.estimates ?? []).map(reasonText)].filter(Boolean).join(" ")}</li>)}</ul> : <p>No records are marked Estimated and no method estimates were applied.</p>}
     {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Unknown”.</p>}
@@ -168,7 +168,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const s1 = results.scope1, s2 = results.scope2
   const scope1Count = s1?.includedResults.length ?? 0
   const scope2Count = s2?.locationBasedIncluded.length ?? 0
-  const warnLine = (held: number, issues: ReturnType<typeof coverageIssues>, noun: string) => [held ? `${plural(held, noun)} not counted yet` : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
+  const warnLine = (held: number, issues: ReturnType<typeof coverageIssues>, noun: string, complete = true) => [held ? `${plural(held, noun)} not counted yet` : "", !complete ? "some results partly calculated" : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
   const incompleteText = (complete: boolean, held: number, open: number) => complete && !held && !open ? "" : " · incomplete"
   return <section aria-busy={busy}>
     {header}
@@ -180,17 +180,17 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 1 · direct</span>
         <span className="nv-stat__value">{s1 ? kgToTonnes(s1.knownSourceSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s1 ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : "No Scope 1 source calculated yet"}{held1 || open1 ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record")}</span> : null}</div>
+        <div className="nv-stat__foot">{s1 ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : "No Scope 1 source calculated yet"}{held1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record", s1?.complete ?? true)}</span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · location-based</span>
         <span className="nv-stat__value">{s2 ? kgToTonnes(s2.locationBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : "No electricity calculated yet"}{held2 || open2 ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter")}</span> : null}</div>
+        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · market-based</span>
         <span className="nv-stat__value">{s2 ? kgToTonnes(s2.marketBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : "No electricity calculated yet"}{held2 || open2 ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter")}</span> : null}</div>
+        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}</div>
       </div>
     </div>
     <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded to 2 decimals for reading. The kilogram figures are exact engine output.</p>
@@ -199,8 +199,8 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     {coverage.state === "unavailable" && <div className="nv-notice nv-notice--warn" role="alert"><Icon name="alert" /><div><p><strong>Coverage check unavailable.</strong> These records couldn’t be compared with your company setup, so the totals may be incomplete. The report and CSV say so too.</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetryCoverage}>Check again</button></div></div></div>}
     {coverage.state === "ready" && (coverage.setupOpen.length > 0 || coverage.gaps.length > 0) && <div className="nv-notice nv-notice--info"><Icon name="info" /><div>
       <p><strong>{[coverage.setupOpen.length ? plural(coverage.setupOpen.length, "open setup answer") : "", coverage.gaps.length ? plural(coverage.gaps.length, "possible gap") : ""].filter(Boolean).join(" and ")}.</strong> Sources may be missing, so these totals are marked incomplete.</p>
-      <ul>{coverage.setupOpen.map(item => <li key={item.id}>{item.title}.</li>)}{coverage.gaps.map(gap => <li key={gap.id}>{gap.title}.{gap.note ? ` Your note: “${gap.note}”` : ""}</li>)}</ul>
-      {canManage && <p>{coverage.setupOpen.length > 0 && <><button type="button" className="nv-link" onClick={() => onNavigate("setup")}>Answer in company setup</button>{coverage.gaps.length > 0 ? " or " : "."}</>}{coverage.gaps.length > 0 && <><button type="button" className="nv-link" onClick={() => onNavigate("collection")}>add records</button>.</>}</p>}
+      <ul>{coverage.setupOpen.map(item => <li key={item.id}>{item.title}.</li>)}{coverage.gaps.map(gap => <li key={gap.id}>{gap.title}.{gap.note ? ` ${noteLabel(gap)}: “${gap.note}”` : ""}</li>)}</ul>
+      {canManage && <p>{coverage.setupOpen.length > 0 && <><button type="button" className="nv-link" onClick={() => onNavigate("setup")}>Answer in company setup</button>{coverage.gaps.length > 0 ? " or " : "."}</>}{coverage.gaps.length > 0 && <><button type="button" className="nv-link" onClick={() => onNavigate("collection")}>{coverage.setupOpen.length ? "add records" : "Add records"}</button>.</>}</p>}
     </div></div>}
 
     {composition.length > 0 && <div className="nv-card nv-card--flat">
@@ -211,7 +211,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
 
     <div className="nv-card">
       <div className="nv-card__head">
-        <div><h2 className="nv-h2">Records</h2><p className="nv-muted">{counts.calculated} calculated · {counts.inputNeeded} input needed · {counts.excluded} excluded · {counts.withdrawn} withdrawn</p></div>
+        <div><h2 className="nv-h2">Records</h2><p className="nv-muted">{counts.calculated} calculated · {counts.inputNeeded} input needed{counts.outsidePeriod ? ` · ${counts.outsidePeriod} outside the reporting period` : ""} · {counts.excluded} excluded · {counts.withdrawn} withdrawn</p></div>
         <div className="nv-segmented" role="group" aria-label="Filter records"><button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All ({results.records.length})</button><button type="button" aria-pressed={filter === "attention"} onClick={() => setFilter("attention")}>Needs attention ({attentionRows.length})</button></div>
       </div>
       {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{plural(attentionRows.length, "record is", "records are")} not fully counted yet.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}

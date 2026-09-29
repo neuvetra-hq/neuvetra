@@ -39,6 +39,8 @@ const REASONS: Record<string, string> = {
   record_withdrawn: "This record was withdrawn, so it is not counted.",
   location_not_in_current_setup: "Its site is no longer in your company setup. Choose a current site.",
   location_excluded_by_company_setup: "Its site is excluded in your company setup, so it is not counted.",
+  outside_reporting_period: "Its dates fall outside the reporting period in company setup, so it is not counted. Correct the record’s dates or the reporting period.",
+  partly_outside_reporting_period: "Its dates are only partly inside the reporting period in company setup, so it is not counted. Split it at the period boundary or correct the reporting period.",
   location_inclusion_unknown: "Company setup hasn’t decided whether this site is included yet.",
   saved_against_earlier_setup_version: "Saved against an earlier company setup version.",
   quantity_not_calculable: "The amount is missing or isn’t a plain number in a supported unit.",
@@ -147,10 +149,11 @@ export function periodLabel(start: string | null | undefined, endExclusive: stri
 }
 
 /** Record states use the reviewed collection wording (CollectionWorkspace readinessLabels); only "Ready to calculate" is new. */
-export type RecordState = "ready" | "partial" | "input_needed" | "review_required" | "excluded" | "memo_only" | "withdrawn"
+/** "held_period": dates outside the setup reporting period (a journey check, not a readiness rule). */
+export type RecordState = "ready" | "partial" | "input_needed" | "review_required" | "held_period" | "excluded" | "memo_only" | "withdrawn"
 export const RECORD_STATE_LABELS: Record<RecordState, string> = {
-  ready: "Ready to calculate", partial: "Partial calculation", input_needed: "Input needed", review_required: "Review required", excluded: "Excluded", memo_only: "Reported separately", withdrawn: "Withdrawn",
+  ready: "Ready to calculate", partial: "Partial calculation", input_needed: "Input needed", review_required: "Review required", held_period: "Held pending correction", excluded: "Excluded", memo_only: "Reported separately", withdrawn: "Withdrawn",
 }
 export const RECORD_STATE_TONE: Record<RecordState, "ready" | "warn" | "danger" | "muted" | "info"> = {
-  ready: "ready", partial: "info", input_needed: "warn", review_required: "warn", excluded: "muted", memo_only: "info", withdrawn: "muted",
+  ready: "ready", partial: "info", input_needed: "warn", review_required: "warn", held_period: "warn", excluded: "muted", memo_only: "info", withdrawn: "muted",
 }
