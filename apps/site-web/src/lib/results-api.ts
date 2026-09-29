@@ -75,8 +75,18 @@ export async function loadResults(companyId: string, actor: HostedWorkspaceActor
 }
 
 /** A CSV of every record and its draft result. Figures are the engine's exact display strings; nothing is re-summed. */
-export function resultsCsv(results: ResultsResponse, labels: { kind: (kind: string) => string; reason: (code: string) => string; status: (row: ResultRow) => string; boundary: (code: string) => string; period: (start: string | null | undefined, end: string | null | undefined) => string }): string {
-  const escape = (value: string) => /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value
+export interface CsvLabels {
+  kind: (kind: string) => string; reason: (code: string) => string; status: (row: ResultRow) => string; boundary: (code: string) => string
+  period: (start: string | null | undefined, end: string | null | undefined) => string
+  quality?: (code: string) => string; unit?: (code: string) => string
+  /** Coverage lines (open setup answers, possible gaps, or "not checked") — the CSV never drops them. */
+  coverage?: string[]
+  completeness?: { scope1: string; scope2Location: string; scope2Market: string }
+}
+const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ")
+export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string {
+  // Quote when needed, and stop spreadsheet apps from treating text such as "=..." as a formula.
+  const escape = (raw: string) => { const value = /^[=+\-@\t\r]/.test(raw) && !/^-?\d+(\.\d+)?$/.test(raw) ? `'${raw}` : raw; return /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value }
   const counted1 = new Set(results.scope1?.includedResults ?? [])
   const counted2 = new Set([...(results.scope2?.locationBasedIncluded ?? [])])
   const setup = results.setup
@@ -87,6 +97,8 @@ export function resultsCsv(results: ResultsResponse, labels: { kind: (kind: stri
     `# Boundary approach: ${labels.boundary(setup?.boundaryApproach ?? "unknown")}`,
     `# Generated: ${results.generatedAt}`,
     "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes are in a subtotal.",
+    ...(labels.completeness ? [`# Completeness, Scope 1: ${labels.completeness.scope1}`, `# Completeness, Scope 2 location-based: ${labels.completeness.scope2Location}`, `# Completeness, Scope 2 market-based: ${labels.completeness.scope2Market}`] : []),
+    ...(labels.coverage ?? []).map(line => `# ${oneLine(line)}`),
   ]
   const header = ["Scope", "Activity", "Site", "Source ID", "Period start", "Period end (exclusive)", "Quantity", "Unit", "Data quality", "Status", "Status code", "Counted in subtotal", "Scope 1 kg CO2e", "Scope 2 location-based kg CO2e", "Scope 2 market-based kg CO2e", "Method", "GWP set", "Evidence files", "Notes"]
   const lines = results.records.map(row => {
@@ -95,7 +107,7 @@ export function resultsCsv(results: ResultsResponse, labels: { kind: (kind: stri
     const counted = s1 ? counted1.has(s1.resultSha256) : s2 ? counted2.has(s2.resultSha256) : false
     const notes = [...new Set([...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
     const files = row.evidence.map(file => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""}`).join("; ")
-    return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, row.period.endExclusive, row.quantity.value, row.quantity.unit, row.quality, labels.status(row), code, counted ? "Yes" : "No",
+    return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, row.period.endExclusive, row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code, counted ? "Yes" : "No",
       s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", s1?.methodVersionId ?? s2?.methodVersionId ?? "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")
   })
   const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", "Engine aggregate of rows marked Yes"].map(escape).join(",")

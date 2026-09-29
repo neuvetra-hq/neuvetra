@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type RefObject } from "react"
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
 import { deriveCollectionQuantity, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, listCollectionEvidence, listGridLossLineages, loadCollectionContext, loadCollectionVersion, lookupCollectionZip, saveCollectionActivity, saveGridLossLineage, uploadCollectionEvidence, type CollectionActivityRecord, type CollectionActivitySaveInput, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionZipLookup, type GridLossLineage } from "@/lib/collection-api"
@@ -259,7 +259,7 @@ function HistoricalActivityDetail({ version, evidence }: { version: CollectionAc
   </div>
 }
 
-export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null }) {
+export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null, intro }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null; intro?: ReactNode }) {
   const [records, setRecords] = useState<CollectionActivityRecord[]>([])
   const [evidence, setEvidence] = useState<CollectionEvidenceMetadata[]>([])
   const [lineages, setLineages] = useState<GridLossLineage[]>([])
@@ -299,7 +299,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       setDraft(current => current.setupVersionId ? current : { ...current, setupVersionId: loadedContext.setupVersionId ?? "" })
       // Opened from the overview or results ("Fix"): show that saved record in the correction form, exactly as "Review or correct" does.
       const requested = openRecordId ? items.find(item => item.id === openRecordId) : undefined
-      if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); requestAnimationFrame(() => document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" })) }
+      if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); requestAnimationFrame(() => { const editor = document.getElementById("collection-record-editor"); editor?.scrollIntoView({ block: "start" }); const heading = editor?.querySelector("h2"); if (heading) { heading.tabIndex = -1; heading.focus({ preventScroll: true }) } }) }
       setMessage("Activity and evidence are collected as drafts. No emissions are counted until a reviewed method is released.")
     }).catch(cause => { if (!controller.signal.aborted) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
@@ -482,6 +482,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     <p>Save source details and private evidence for each activity. Missing answers remain unresolved. Calculations and reports come only from reviewed, released methods.</p>
     <p role={error ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
     {!canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>}
+    {intro}
 
     <div className="worksheet-card"><h2>Saved activities</h2>
       <div className="collection-record-list">{records.length ? records.map(row => {

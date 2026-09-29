@@ -2,13 +2,13 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefObject } fro
 import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
-import type { CoverageGap } from "@/lib/journey-status"
+import { coverageIssues, coverageLines, type Coverage } from "@/lib/journey-status"
 import { DRAFT_LABEL, loadResults, ResultsApiError, resultsCsv, type EngineGas, type ResultRow, type ResultsResponse } from "@/lib/results-api"
-import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, reasonText, shortUnit } from "@/lib/plain-language"
+import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { factorSource, GAS_LABELS, KIND_COLORS, needsWork, rowReasons, rowStatus } from "@/lib/results-view"
 
 const rowKg = (row: ResultRow) => row.scope1?.total?.display ?? row.scope2?.locationBased.total?.display ?? null
-const QUALITY: Record<string, string> = { actual: "Actual", estimated: "Estimated", unknown: "Not stated" }
+const QUALITY = QUALITY_LABELS
 const evidenceText = (row: ResultRow) => row.evidence.length ? row.evidence.map(file => `${file.name ?? "Unnamed file"}${file.sha256 ? ` · ${file.sha256.slice(0, 10)}` : ""}${file.status === "clean" ? "" : ` (${file.status === "pending" ? "scan pending" : file.status})`}`).join("; ") : "None linked"
 const plural = (count: number, one: string, many = `${one}s`) => `${count} ${count === 1 ? one : many}`
 
@@ -34,15 +34,28 @@ function RowDetail({ row }: { row: ResultRow }) {
   </dl></details>
 }
 
-function Report({ results, gaps }: { results: ResultsResponse; gaps: CoverageGap[] }) {
-  const setup = results.setup
-  const heldCount = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && row.outcome !== "calculated" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded").length
-  const gapCount = (scope: 1 | 2) => gaps.filter(gap => gap.scope === scope).length
+/** The completeness wording used by the report and the CSV. Never says "complete" while anything is held, open or unchecked. */
+function completeness(results: ResultsResponse, coverage: Coverage) {
+  const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && row.outcome !== "calculated" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded").length
   const note = (complete: boolean, scope: 1 | 2) => {
-    const held = heldCount(scope), missing = gapCount(scope)
-    const parts = [held ? `${plural(held, "record")} not yet counted` : "", missing ? `${plural(missing, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : ""].filter(Boolean)
-    return parts.length ? `Incomplete — ${parts.join("; ")}` : "Records listed only; no known gaps"
+    const count = held(scope), issues = coverageIssues(coverage, scope)
+    const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? `${plural(issues.gaps, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
+    return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps: covers every source company setup lists"
   }
+  return {
+    scope1: results.scope1 ? note(results.scope1.complete, 1) : "No calculated sources",
+    scope2Location: results.scope2 ? note(results.scope2.locationBasedComplete, 2) : "No calculated meters",
+    scope2Market: results.scope2 ? note(results.scope2.marketBasedComplete, 2) : "No calculated meters",
+  }
+}
+
+/** Escapes text for a CSS string: anything but plain letters, digits and simple punctuation becomes a CSS escape. */
+const cssString = (text: string) => text.replace(/[^A-Za-z0-9 .,&()_-]/gu, char => `\\${char.codePointAt(0)!.toString(16)} `)
+
+function Report({ results, coverage }: { results: ResultsResponse; coverage: Coverage }) {
+  const setup = results.setup
+  const company = (setup?.legalName || "Company").slice(0, 60)
+  const notes = completeness(results, coverage)
   const scope1Rows = results.records.filter(row => row.scope === 1)
   const scope2Rows = results.records.filter(row => row.scope === 2)
   const incomplete = results.records.filter(row => row.outcome !== "calculated" || row.scope1?.status === "partial" || row.scope2?.marketBased.status === "input_needed" || row.scope2?.marketBased.status === "review_required")
@@ -54,6 +67,8 @@ function Report({ results, gaps }: { results: ResultsResponse; gaps: CoverageGap
   const residual = results.records.find(row => row.scope2?.marketBased.residualMix)?.scope2?.marketBased.residualMix
   const line = (row: ResultRow) => <tr key={row.recordId}><td>{kindLabel(row.kind)}</td><td>{row.locationName ?? "—"}</td><td>{row.sourceId}</td><td>{periodLabel(row.period.start, row.period.endExclusive)}</td><td className="nv-right">{row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "—"}</td><td>{QUALITY[row.quality] ?? row.quality}</td><td>{evidenceText(row)}</td><td>{rowStatus(row).label}</td><td className="nv-right">{rowKg(row) ? groupDigits(rowKg(row)!) : "—"}</td>{row.scope === 2 && <td className="nv-right">{row.scope2?.marketBased.total ? groupDigits(row.scope2.marketBased.total.display) : "—"}</td>}</tr>
   return <article className="nv-report" aria-labelledby="report-title">
+    {/* Running footer on every printed page names the company as well as the draft status. */}
+    <style>{`@media print { @page { @bottom-left { content: "DRAFT \\2014  ${cssString(company)} \\2014  Neuvetra beta methods; not externally assured"; } } }`}</style>
     <div className="nv-report__head">
       <div><p className="nv-report__small" style={{ margin: 0 }}>Greenhouse-gas inventory · Scope 1 and Scope 2</p><h2 id="report-title" className="nv-report__title">{setup?.legalName || "Company"}{setup?.tradingName ? ` (${setup.tradingName})` : ""}</h2></div>
       <span className="nv-report__stamp">DRAFT</span>
@@ -66,9 +81,9 @@ function Report({ results, gaps }: { results: ResultsResponse; gaps: CoverageGap
     </div>
     <h3>Summary</h3>
     <div className="nv-report__scroll"><table><thead><tr><th>Scope</th><th>Basis</th><th className="nv-right">kg CO2e</th><th className="nv-right">t CO2e</th><th>Completeness</th></tr></thead><tbody>
-      <tr><td>Scope 1</td><td>Direct emissions</td><td className="nv-right">{results.scope1 ? groupDigits(results.scope1.knownSourceSubtotal.display) : "—"}</td><td className="nv-right">{results.scope1 ? kgToTonnes(results.scope1.knownSourceSubtotal.display) : "—"}</td><td>{results.scope1 ? note(results.scope1.complete, 1) : "No calculated sources"}</td></tr>
-      <tr><td>Scope 2</td><td>Location-based</td><td className="nv-right">{results.scope2 ? groupDigits(results.scope2.locationBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2 ? kgToTonnes(results.scope2.locationBasedSubtotal.display) : "—"}</td><td>{results.scope2 ? note(results.scope2.locationBasedComplete, 2) : "No calculated meters"}</td></tr>
-      <tr><td>Scope 2</td><td>Market-based</td><td className="nv-right">{results.scope2 ? groupDigits(results.scope2.marketBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2 ? kgToTonnes(results.scope2.marketBasedSubtotal.display) : "—"}</td><td>{results.scope2 ? note(results.scope2.marketBasedComplete, 2) : "No calculated meters"}</td></tr>
+      <tr><td>Scope 1</td><td>Direct emissions</td><td className="nv-right">{results.scope1 ? groupDigits(results.scope1.knownSourceSubtotal.display) : "—"}</td><td className="nv-right">{results.scope1 ? kgToTonnes(results.scope1.knownSourceSubtotal.display) : "—"}</td><td>{notes.scope1}</td></tr>
+      <tr><td>Scope 2</td><td>Location-based</td><td className="nv-right">{results.scope2 ? groupDigits(results.scope2.locationBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2 ? kgToTonnes(results.scope2.locationBasedSubtotal.display) : "—"}</td><td>{notes.scope2Location}</td></tr>
+      <tr><td>Scope 2</td><td>Market-based</td><td className="nv-right">{results.scope2 ? groupDigits(results.scope2.marketBasedSubtotal.display) : "—"}</td><td className="nv-right">{results.scope2 ? kgToTonnes(results.scope2.marketBasedSubtotal.display) : "—"}</td><td>{notes.scope2Market}</td></tr>
     </tbody></table></div>
     <p className="nv-report__small">Scope 1 and Scope 2 are reported separately. Each subtotal is the calculation engine’s own aggregate of the calculated records below. Records that are held, excluded or withdrawn, and sources with no records, are listed separately and are not included.</p>
     {results.scope1?.reportedOutsideScopes.length ? <p className="nv-report__small">Reported outside the Scope 1 total: {results.scope1.reportedOutsideScopes.map(item => `${item.gas} ${groupDigits(item.massKg)} kg`).join("; ")}.</p> : null}
@@ -77,13 +92,15 @@ function Report({ results, gaps }: { results: ResultsResponse; gaps: CoverageGap
     <h3>Scope 2 purchased electricity</h3>
     {scope2Rows.length ? <div className="nv-report__scroll"><table><thead><tr><th>Activity</th><th>Site</th><th>Meter</th><th>Period</th><th className="nv-right">Quantity</th><th>Data quality</th><th>Evidence</th><th>Status</th><th className="nv-right">Location-based kg</th><th className="nv-right">Market-based kg</th></tr></thead><tbody>{scope2Rows.map(line)}</tbody></table></div> : <p>No Scope 2 records.</p>}
     <h3>Not counted, incomplete and possible gaps</h3>
-    {incomplete.length || gaps.length ? <ul>
+    {incomplete.length || coverage.state !== "ready" || coverage.setupOpen.length || coverage.gaps.length ? <ul>
       {incomplete.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {rowStatus(row).label}: {rowReasons(row).join(" ")}</li>)}
-      {gaps.map(gap => <li key={gap.id}><strong>Possible gap</strong> — {gap.title}. {gap.detail}</li>)}
-    </ul> : <p>None known.</p>}
+      {coverage.state !== "ready" && <li><strong>Coverage not checked</strong> — these records could not be compared with company setup when this draft was prepared, so expected sources may be missing.</li>}
+      {coverage.state === "ready" && coverage.setupOpen.map(item => <li key={item.id}><strong>Open in company setup</strong> — {item.title}. {item.detail}</li>)}
+      {coverage.state === "ready" && coverage.gaps.map(gap => <li key={gap.id}><strong>Possible gap (Scope {gap.scope})</strong> — {gap.title}.{gap.note ? <> Site note: “{gap.note}”</> : null}</li>)}
+    </ul> : <p>None found: every record is counted, company setup has no open answers, and every source it lists has at least one record.</p>}
     <h3>Estimates, partial calculations and data quality</h3>
     {estimated.length ? <ul>{estimated.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {[row.quality === "estimated" ? `Activity data marked Estimated${row.estimateBasis ? ` (${row.estimateBasis})` : ""}.` : "", ...(row.scope1?.estimates ?? []).map(reasonText), ...(row.scope2?.estimates ?? []).map(reasonText)].filter(Boolean).join(" ")}</li>)}</ul> : <p>No records are marked Estimated and no method estimates were applied.</p>}
-    {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Not stated”.</p>}
+    {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Unknown”.</p>}
     <h3>Methods and emission factors</h3>
     <p>Methods: {methods.join(", ") || "none calculated"}. Global warming potentials: IPCC AR5, 100-year (CH4 28, N2O 265). Emission factors: EPA GHG Emission Factors Hub (2025); EPA eGRID2023 rev2; Green-e 2025 residual mix. Figures are rounded once, half-even, to 4 decimal places of kg CO2e.</p>
     {residual && <p>Market-based electricity not covered by certificates or contracts uses the residual mix: {residual.method}. Sources: {residual.sources.join("; ")}.</p>}
@@ -92,7 +109,7 @@ function Report({ results, gaps }: { results: ResultsResponse; gaps: CoverageGap
   </article>
 }
 
-export function ResultsReport({ actor, workspaceId, headingRef, gaps, canManage, onNavigate, onFix }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; gaps: CoverageGap[]; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void }) {
+export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetryCoverage, canManage, onNavigate, onFix }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; coverage: Coverage; onRetryCoverage: () => void; canManage: boolean; onNavigate: (view: JourneyView) => void; onFix: (recordId: string) => void }) {
   const [results, setResults] = useState<ResultsResponse | null>(null)
   const [error, setError] = useState<{ message: string; missingRoute: boolean } | null>(null)
   const [busy, setBusy] = useState(true)
@@ -120,7 +137,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, gaps, canManage,
 
   function downloadCsv() {
     if (!results) return
-    const blob = new Blob([resultsCsv(results, { kind: kindLabel, reason: reasonText, status: row => rowStatus(row).label, boundary: code => BOUNDARY_LABELS[code] ?? code, period: periodLabel })], { type: "text/csv" })
+    const blob = new Blob([resultsCsv(results, { kind: kindLabel, reason: reasonText, status: row => rowStatus(row).label, boundary: code => BOUNDARY_LABELS[code] ?? code, period: periodLabel, quality: code => QUALITY[code] ?? code, unit: code => shortUnit(code), coverage: coverageLines(coverage), completeness: completeness(results, coverage) })], { type: "text/csv" })
     const url = URL.createObjectURL(blob)
     const link = document.createElement("a"); link.href = url; link.download = `neuvetra-draft-results-${results.generatedAt.slice(0, 10)}.csv`; link.click()
     window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
@@ -143,14 +160,16 @@ export function ResultsReport({ actor, workspaceId, headingRef, gaps, canManage,
   </section>
   const attentionRows = results.records.filter(needsWork)
   const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && row.outcome !== "calculated" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded").length
-  const gapsIn = (scope: 1 | 2) => gaps.filter(gap => gap.scope === scope).length
-  const held1 = heldInScope(1), held2 = heldInScope(2), gaps1 = gapsIn(1), gaps2 = gapsIn(2)
+  const issues1 = coverageIssues(coverage, 1), issues2 = coverageIssues(coverage, 2)
+  const held1 = heldInScope(1), held2 = heldInScope(2)
+  const open1 = issues1.open + issues1.gaps + (issues1.unchecked ? 1 : 0), open2 = issues2.open + issues2.gaps + (issues2.unchecked ? 1 : 0)
   const ordered = [...results.records].sort((a, b) => Number(needsWork(b)) - Number(needsWork(a)) || a.scope - b.scope)
   const visible = filter === "attention" ? attentionRows : ordered
   const s1 = results.scope1, s2 = results.scope2
   const scope1Count = s1?.includedResults.length ?? 0
   const scope2Count = s2?.locationBasedIncluded.length ?? 0
-  const warnLine = (held: number, missing: number, noun: string) => [held ? `${plural(held, noun)} not counted yet` : "", missing ? `${plural(missing, "possible gap")}` : ""].filter(Boolean).join(" · ")
+  const warnLine = (held: number, issues: ReturnType<typeof coverageIssues>, noun: string) => [held ? `${plural(held, noun)} not counted yet` : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
+  const incompleteText = (complete: boolean, held: number, open: number) => complete && !held && !open ? "" : " · incomplete"
   return <section aria-busy={busy}>
     {header}
     <p className="nv-lead">{results.setup?.legalName || "Your company"} · {periodLabel(results.setup?.period.start, results.setup?.period.endExclusive)} · calculated {new Date(results.generatedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</p>
@@ -161,22 +180,28 @@ export function ResultsReport({ actor, workspaceId, headingRef, gaps, canManage,
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 1 · direct</span>
         <span className="nv-stat__value">{s1 ? kgToTonnes(s1.knownSourceSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s1 ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${s1.complete && !held1 && !gaps1 ? "" : " · incomplete"}` : "No Scope 1 source calculated yet"}{held1 || gaps1 ? <span className="nv-stat__warn">{warnLine(held1, gaps1, "record")}</span> : null}</div>
+        <div className="nv-stat__foot">{s1 ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : "No Scope 1 source calculated yet"}{held1 || open1 ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record")}</span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · location-based</span>
         <span className="nv-stat__value">{s2 ? kgToTonnes(s2.locationBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${s2.locationBasedComplete && !held2 && !gaps2 ? "" : " · incomplete"}` : "No electricity calculated yet"}{held2 || gaps2 ? <span className="nv-stat__warn">{warnLine(held2, gaps2, "meter")}</span> : null}</div>
+        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : "No electricity calculated yet"}{held2 || open2 ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter")}</span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · market-based</span>
         <span className="nv-stat__value">{s2 ? kgToTonnes(s2.marketBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${s2.marketBasedComplete && !held2 && !gaps2 ? "" : " · incomplete"}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : "No electricity calculated yet"}{held2 || gaps2 ? <span className="nv-stat__warn">{warnLine(held2, gaps2, "meter")}</span> : null}</div>
+        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : "No electricity calculated yet"}{held2 || open2 ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter")}</span> : null}</div>
       </div>
     </div>
     <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded to 2 decimals for reading. The kilogram figures are exact engine output.</p>
 
-    {gaps.length > 0 && <div className="nv-notice nv-notice--info"><Icon name="info" /><div><p><strong>{plural(gaps.length, "possible gap")} in coverage.</strong> Company setup suggests sources that have no records yet, so the totals may be low.</p><ul>{gaps.map(gap => <li key={gap.id}>{gap.title}.</li>)}</ul>{canManage && <p><button type="button" className="nv-link" onClick={() => onNavigate("collection")}>Add records</button> or <button type="button" className="nv-link" onClick={() => onNavigate("setup")}>review company setup</button>.</p>}</div></div>}
+    {coverage.state === "loading" && <p className="nv-subtle" role="status">Checking these records against your company setup…</p>}
+    {coverage.state === "unavailable" && <div className="nv-notice nv-notice--warn" role="alert"><Icon name="alert" /><div><p><strong>Coverage check unavailable.</strong> These records couldn’t be compared with your company setup, so the totals may be incomplete. The report and CSV say so too.</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={onRetryCoverage}>Check again</button></div></div></div>}
+    {coverage.state === "ready" && (coverage.setupOpen.length > 0 || coverage.gaps.length > 0) && <div className="nv-notice nv-notice--info"><Icon name="info" /><div>
+      <p><strong>{[coverage.setupOpen.length ? plural(coverage.setupOpen.length, "open setup answer") : "", coverage.gaps.length ? plural(coverage.gaps.length, "possible gap") : ""].filter(Boolean).join(" and ")}.</strong> Sources may be missing, so these totals are marked incomplete.</p>
+      <ul>{coverage.setupOpen.map(item => <li key={item.id}>{item.title}.</li>)}{coverage.gaps.map(gap => <li key={gap.id}>{gap.title}.{gap.note ? ` Your note: “${gap.note}”` : ""}</li>)}</ul>
+      {canManage && <p>{coverage.setupOpen.length > 0 && <><button type="button" className="nv-link" onClick={() => onNavigate("setup")}>Answer in company setup</button>{coverage.gaps.length > 0 ? " or " : "."}</>}{coverage.gaps.length > 0 && <><button type="button" className="nv-link" onClick={() => onNavigate("collection")}>add records</button>.</>}</p>}
+    </div></div>}
 
     {composition.length > 0 && <div className="nv-card nv-card--flat">
       <h2 className="nv-h3">Where counted Scope 1 comes from</h2>
@@ -204,7 +229,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, gaps, canManage,
             <span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>
             {kg && <span className="nv-num" style={{ fontWeight: 600 }}>{groupDigits(kg)} kg{row.scope === 2 ? " (location)" : ""}</span>}
             {row.scope === 2 && row.scope2?.marketBased.total && <span className="nv-num nv-subtle">{groupDigits(row.scope2.marketBased.total.display)} kg (market)</span>}
-            {needsWork(row) && row.plan.status !== "withdrawn" && <button type="button" className="nv-btn nv-btn--sm" onClick={() => onFix(row.recordId)}>{canManage ? "Fix" : "View"}</button>}
+            {needsWork(row) && row.plan.status !== "withdrawn" && <button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${kindLabel(row.kind)} · ${row.sourceId}`} onClick={() => onFix(row.recordId)}>{canManage ? "Fix" : "View"}</button>}
           </div>
         </div>
       })}
@@ -220,7 +245,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, gaps, canManage,
       </div>
     </div>
     {/* Always rendered so printing from the browser menu prints the report; shown on screen only when opened. */}
-    <div id="draft-report" className={showReport ? undefined : "nv-print-only"}><Report results={results} gaps={gaps} /></div>
+    <div id="draft-report" className={showReport ? undefined : "nv-print-only"}><Report results={results} coverage={coverage} /></div>
     <p className="nv-subtle">Activity types covered: {ACTIVITY_KINDS.map(kind => kind.label).join(", ")}. Scope 3 is not calculated in this beta.</p>
   </section>
 }

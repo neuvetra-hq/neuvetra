@@ -4,7 +4,7 @@ import { describe, expect, test } from "bun:test"
 import { HELP_ENTRIES, isProgressQuestion, matchQuestion } from "./help-content"
 import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS } from "./plain-language"
 import { decodeResults, resultsCsv, RESULTS_PROFILE } from "./results-api"
-import { computeJourneyStatus, coverageGaps, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
+import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
 import { rowStatus } from "./results-view"
 
 const company = "29200000-0000-4000-8000-000000000001"
@@ -23,6 +23,11 @@ describe("Ask Neuvetra help matching", () => {
     expect(matchQuestion("is this report audit ready")?.entry.id).toBe("draft")
     expect(matchQuestion("can I upload a spreadsheet of all my bills")?.entry.id).toBe("import")
     expect(matchQuestion("why do you need the heat content")?.entry.id).toBe("heat-content")
+    expect(matchQuestion("how do I add a new site")?.entry.id).toBe("add-site")
+    expect(matchQuestion("can I change my reporting year")?.entry.id).toBe("reporting-period")
+    expect(matchQuestion("what if the landlord pays the electricity")?.entry.id).toBe("no-electricity")
+    expect(matchQuestion("which sites should I include")?.entry.id).toBe("sites")
+    expect(matchQuestion("when is limited assurance required")?.entry.id).toBe("sb253")
   })
   test("declines instead of guessing when nothing matches", () => {
     expect(matchQuestion("what is the weather tomorrow")).toBeNull()
@@ -93,6 +98,14 @@ describe("draft results decoding", () => {
     expect(csv).toContain(",Calculated,complete,Yes,53.1180,")
     expect(csv).toContain("Subtotal,Scope 1,")
   })
+  test("the CSV carries completeness and coverage lines, and neutralises formula-like text", () => {
+    const csv = resultsCsv(decodeResults(response([row({ sourceId: "=HYPERLINK(1)" })]), company), { kind: kind => kind, reason: code => code, status: () => "Calculated", boundary: code => code, period: () => "2025", quality: () => "Actual", unit: () => "therms",
+      completeness: { scope1: "Incomplete — 1 setup answer still open", scope2Location: "No calculated meters", scope2Market: "No calculated meters" }, coverage: ["Open in company setup: Answer “Cooling”.\nNext line"] })
+    expect(csv).toContain("# Completeness, Scope 1: Incomplete — 1 setup answer still open")
+    expect(csv).toContain("# Open in company setup: Answer “Cooling”. Next line")
+    expect(csv).toContain(",'=HYPERLINK(1),")
+    expect(csv).toContain(",therms,Actual,")
+  })
 })
 
 describe("journey progress", () => {
@@ -100,17 +113,42 @@ describe("journey progress", () => {
     const status = computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true })
     expect(status.next.panel).toBe("setup")
     expect(status.progress.setup).toBe("not_started")
-    expect(setupMissing(null)).toEqual(["Save your company setup"])
+    expect(setupMissing(null).map(item => item.title)).toEqual(["Save your company setup"])
     expect(progressAnswer(status)[0]).toMatch(/Set up your company/)
   })
   test("setup answers without matching records are gaps, never complete", () => {
     const office = "29400000-0000-4000-8000-000000000001"
-    const view = { currentVersion: { setup: { screening: [{ id: "s3", category: "Road & off-road vehicles", state: "yes" }, { id: "s4", category: "Cooling & fire suppression", state: "no" }], locations: [{ id: office, name: "Office", inclusion: "included" }] } } } as never
+    const view = { currentVersion: { setup: { screening: [{ id: "s3", category: "Road & off-road vehicles", state: "yes", details: "" }, { id: "s4", category: "Cooling & fire suppression", state: "no", details: "" }], locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] } } } as never
     const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual" }
     const gaps = coverageGaps(view, [gas])
     expect(gaps.map(gap => gap.id)).toEqual(["screen-s3", `electricity-${office}`])
+    expect(gaps[0]!.title).toBe("Setup says you have vehicles, but there are no vehicle records yet")
     expect(coverageGaps(view, [gas, { ...gas, id: "v", kind: "vehicle" }, { ...gas, id: "e", kind: "electricity" }])).toEqual([])
     expect(coverageGaps(view, [gas, { ...gas, id: "v", kind: "vehicle", state: "withdrawn" }, { ...gas, id: "e", kind: "electricity" }]).map(gap => gap.id)).toEqual(["screen-s3"])
+  })
+  test("“Not sure yet” answers and undecided sites stay open and are never read as complete", () => {
+    const office = "29400000-0000-4000-8000-000000000001", depot = "29400000-0000-4000-8000-000000000002"
+    const setup = { company: { legalName: "Acme" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" },
+      screening: [{ id: "s4", category: "Cooling & fire suppression", state: "unknown", details: "" }, { id: "s3", category: "Road & off-road vehicles", state: "no", details: "" }],
+      locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "Landlord pays electricity" }, { id: depot, name: "Depot", inclusion: "unknown", operatorDetails: "" }] }
+    const view = { currentVersion: { revision: 1, setup } } as never
+    const open = setupMissing(view)
+    expect(open.map(item => item.id)).toEqual([`site-${depot}`, "screen-s4"])
+    expect(open[1]!.title).toContain("Cooling & fire suppression")
+    expect(open[1]!.scopes).toEqual([1])
+    const gaps = coverageGaps(view, [])
+    expect(gaps.map(gap => gap.id)).toEqual([`electricity-${office}`])
+    expect(gaps[0]!.note).toBe("Landlord pays electricity")
+    const coverage = { state: "ready" as const, setupOpen: open, gaps }
+    expect(coverageIssues(coverage, 1)).toEqual({ open: 2, gaps: 0, unchecked: false })
+    expect(coverageIssues(coverage, 2)).toEqual({ open: 1, gaps: 1, unchecked: false })
+    expect(coverageIssues({ state: "unavailable" }, 1).unchecked).toBe(true)
+    expect(coverageLines({ state: "unavailable" })[0]).toMatch(/Coverage check unavailable/)
+    expect(coverageLines(coverage).join(" ")).toContain("Site note: Landlord pays electricity")
+    const status = computeJourneyStatus({ setup: view, context: null, records: [], evidence: [], canManage: false })
+    expect(status.progress.setup).toBe("in_progress")
+    expect(status.next.action).toBe("View records")
+    expect(progressAnswer(status).join(" ")).toContain("still “Not sure yet”")
   })
   test("record states follow the reviewed readiness findings", () => {
     expect(recordState([])).toBe("ready")

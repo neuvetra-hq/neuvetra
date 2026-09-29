@@ -29,7 +29,6 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
   if (collection.noEvidence) improve.push({ key: "evidence", title: `${plural(collection.noEvidence, "record has", "records have")} no evidence linked`, detail: "Attach the bill or log so a reviewer can trace the figure." })
   if (collection.qualityUnknown) improve.push({ key: "quality", title: `${plural(collection.qualityUnknown, "record has", "records have")} data quality “Unknown”`, detail: "Mark each record as actual or estimated." })
   const nothingFlagged = !setup.missing.length && !mustFix.length && !gaps.length && !improve.length && evidence.checking === 0
-  const primaryLabel = canManage ? next.action : next.panel === "results" ? "View results" : "View"
   return <section>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>{setup.saved ? name : "Welcome to Neuvetra"}</h1>
@@ -42,7 +41,8 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <h2 className="nv-h2">{next.title}</h2>
       <p className="nv-muted" style={{ marginTop: 6 }}>{next.body}</p>
       <div className="nv-actions">
-        <button type="button" className="nv-btn nv-btn--primary" onClick={() => next.recordId ? onFix(next.recordId) : onNavigate(next.panel)}>{primaryLabel}<Icon name="arrow" size={18} /></button>
+        <button type="button" className="nv-btn nv-btn--primary" onClick={() => next.recordId ? onFix(next.recordId) : onNavigate(next.panel)}>{next.action}<Icon name="arrow" size={18} /></button>
+        {next.secondary && <button type="button" className="nv-btn" onClick={() => onNavigate(next.secondary!.panel)}>{next.secondary.action}</button>}
         <button type="button" className="nv-btn nv-btn--ghost" onClick={onAsk}><Icon name="help" size={18} />Ask a question</button>
       </div>
     </div>
@@ -52,7 +52,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <button type="button" className="nv-journey__step" data-state={stepState("setup")} onClick={() => onNavigate("setup")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("setup") === "done" ? <Icon name="check" size={16} /> : 1}</span>
         <span className="nv-journey__title">Company setup</span>
-        <span className="nv-journey__meta">{!setup.saved ? "Not started — about 10 minutes" : setup.missing.length ? `Saved · ${plural(setup.missing.length, "item")} to finish` : `Complete · version ${setup.revision}`}</span>
+        <span className="nv-journey__meta">{!setup.saved ? "Not started — about 10 minutes" : setup.missing.length ? `Saved · ${plural(setup.missing.length, "open answer")}` : `Complete · version ${setup.revision}`}</span>
       </button>
       <button type="button" className="nv-journey__step" data-state={stepState("collection")} onClick={() => onNavigate("collection")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("collection") === "done" ? <Icon name="check" size={16} /> : 2}</span>
@@ -72,16 +72,17 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
         {nothingFlagged ? <p className="nv-muted">{collection.active ? "Nothing is flagged. Review your draft results." : "No records yet — start with the next step above."}</p> : <>
           {(setup.missing.length > 0 || mustFix.length > 0) && <p className="nv-attn-label nv-attn-label--warn">Input needed</p>}
           <ul className="nv-list">
-            {setup.missing.map(item => <li key={item}><span className="nv-list__main"><span className="nv-list__title">{item}</span><br /><span className="nv-subtle">Company setup</span></span><button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate("setup")}>{canManage ? "Open" : "View"}</button></li>)}
-            {mustFix.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0] ?? RECORD_STATE_LABELS[row.state]}</span></span><button type="button" className="nv-btn nv-btn--sm" onClick={() => onFix(row.id)}>{canManage ? "Fix" : "View"}</button></li>)}
+            {setup.missing.slice(0, 6).map(item => <li key={item.id}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">Company setup · {item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup: ${item.title}`} onClick={() => onNavigate("setup")}>{canManage ? "Open" : "View"}</button></li>)}
+            {setup.missing.length > 6 && <li><span className="nv-subtle">and {setup.missing.length - 6} more in Company setup</span></li>}
+            {mustFix.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0] ?? RECORD_STATE_LABELS[row.state]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${row.label} · ${row.sourceId}`} onClick={() => onFix(row.id)}>{canManage ? "Fix" : "View"}</button></li>)}
             {mustFix.length > 5 && <li><span className="nv-subtle">and {mustFix.length - 5} more in Activity & evidence</span></li>}
           </ul>
           {gaps.length > 0 && <><p className="nv-attn-label nv-attn-label--info">Possible gaps</p><ul className="nv-list">
-            {gaps.slice(0, 5).map(gap => <li key={gap.id}><span className="nv-list__main"><span className="nv-list__title">{gap.title}</span><br /><span className="nv-subtle">{gap.detail}</span></span>{canManage && <button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate("collection")}>Add</button>}</li>)}
+            {gaps.slice(0, 5).map(gap => <li key={gap.id}><span className="nv-list__main"><span className="nv-list__title">{gap.title}</span><br /><span className="nv-subtle">{gap.detail}</span>{gap.note && <><br /><span className="nv-subtle">Your note: {gap.note}</span></>}</span>{canManage && <button type="button" className="nv-btn nv-btn--sm" aria-label={`Add a record: ${gap.title}`} onClick={() => onNavigate("collection")}>Add</button>}</li>)}
             {gaps.length > 5 && <li><span className="nv-subtle">and {gaps.length - 5} more</span></li>}
           </ul></>}
           {(improve.length > 0 || evidence.checking > 0) && <><p className="nv-attn-label">Can be improved</p><ul className="nv-list">
-            {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">{item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
+            {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span><br /><span className="nv-subtle">{item.detail}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${item.key === "partial" ? "See" : canManage ? "Open" : "View"}: ${item.title}`} onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
             {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} with scan pending</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
           </ul></>}
         </>}

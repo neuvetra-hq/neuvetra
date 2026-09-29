@@ -20,6 +20,8 @@ export const UNIT_LABELS: Record<string, string> = {
 }
 export const unitLabel = (unit: string) => UNIT_LABELS[unit] ?? unit
 export const shortUnit = (unit: string) => unit === "US_gallon" ? "gal" : unit
+/** One wording for data quality everywhere: overview, Ask, results, report and CSV. */
+export const QUALITY_LABELS: Record<string, string> = { actual: "Actual", estimated: "Estimated", unknown: "Unknown" }
 
 export const VEHICLE_TYPE_LABELS: Record<string, string> = {
   gasoline_passenger_car: "Passenger car", gasoline_light_duty_truck: "Light-duty truck, van or SUV", gasoline_heavy_duty: "Heavy-duty truck", gasoline_motorcycle: "Motorcycle",

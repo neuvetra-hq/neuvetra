@@ -1,4 +1,4 @@
-import { useRef, type FormEvent } from "react"
+import { useEffect, useRef, type FormEvent } from "react"
 import { Icon, type IconName } from "./Icon"
 
 export interface LandingProps {
@@ -25,11 +25,11 @@ const FEATURES: Array<{ icon: IconName; title: string; body: string }> = [
   { icon: "file", title: "Evidence kept with the numbers", body: "Bills and records are fingerprinted on upload, kept private to your company and linked to each activity." },
   { icon: "chart", title: "Scope 2, both ways", body: "Location-based and market-based electricity results side by side, including certificates and green tariffs." },
   { icon: "records", title: "Corrections with a history", body: "Every change is a new version with a reason, so the audit trail stays intact from first entry to final draft." },
-  { icon: "help", title: "Help where you need it", body: "Ask Neuvetra explains every question and flag in plain language, from written, reviewed guidance." },
+  { icon: "help", title: "Help where you need it", body: "Ask Neuvetra answers common questions in plain language from written, reviewed guidance — and says so when it doesn’t have an answer." },
 ]
 const FAQ = [
   { q: "Who is Neuvetra for?", a: "Finance, operations and sustainability teams preparing a Scope 1 and Scope 2 inventory — whether for California’s SB 253, a customer’s supplier request, or their own targets." },
-  { q: "What does SB 253 require?", a: "U.S. companies with more than $1 billion in annual revenue that do business in California must report Scope 1 and Scope 2 emissions each year, with Scope 3 from 2027. CARB’s February 2026 regulation set August 10, 2026 as the first deadline; in June 2026 CARB proposed moving it to November 10, 2026, which still needed final approval when we last checked (29 Sep 2026). Limited assurance applies from 2027. Confirm current dates with CARB or your advisor." },
+  { q: "What does SB 253 require?", a: "U.S. companies with more than $1 billion in annual revenue that do business in California must report Scope 1 and Scope 2 emissions each year. CARB’s February 2026 regulation set August 10, 2026 as the first deadline; in June 2026 CARB proposed moving it to November 10, 2026, which still needed final approval when we last checked (29 Sep 2026). Under CARB’s current rulemaking, reports submitted from 2027 need limited assurance of Scope 1 and 2, and Scope 3 reporting starts in 2027 for specified categories. Confirm current dates with CARB or your advisor." },
   { q: "Which methods and factors do you use?", a: "Scope 1 uses the EPA GHG Emission Factors Hub (2025). Scope 2 uses EPA eGRID2023 for location-based results and the Green-e 2025 residual mix for market-based results. Gases are combined with IPCC AR5 100-year global warming potentials." },
   { q: "Is the output an official filing?", a: "Not yet. During the private beta every report is a draft prepared with beta methods and is not externally assured. It is structured so an independent assurance provider can follow every number." },
   { q: "How is our data protected?", a: "Records and files are scoped to your company — other companies cannot list, open or download them. During the private beta, use synthetic or test data only." },
@@ -42,6 +42,7 @@ function tone(message: string): "error" | "info" | null {
 
 export function Landing(props: LandingProps) {
   const emailRef = useRef<HTMLInputElement>(null)
+  useEffect(() => { document.title = "Neuvetra — Greenhouse-gas reporting (private beta)" }, [])
   const goToSignIn = () => { document.getElementById("sign-in")?.scrollIntoView({ behavior: "smooth", block: "start" }); window.setTimeout(() => emailRef.current?.focus({ preventScroll: true }), 350) }
   const kind = tone(props.message)
   return <div className="nv-landing">

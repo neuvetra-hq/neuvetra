@@ -366,12 +366,16 @@
   @page { margin: 16mm 14mm 18mm;
     @bottom-left { content: "DRAFT — Neuvetra beta methods; not externally assured"; font: 8pt sans-serif; color: #555; }
     @bottom-right { content: "Page " counter(page) " of " counter(pages); font: 8pt sans-serif; color: #555; } }
-  .nv-print-only { display: block !important; }
+  :root { color-scheme: light !important; }
   html, body, :root, .nv-app, .nv-layout, .nv-main { background: #fff !important; }
-  body * { visibility: hidden !important; }
-  .nv-report, .nv-report * { visibility: visible !important; }
-  .nv-report { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; border-radius: 0; background: #fff; color: #000; }
+  .nv-print-only { display: block !important; }
+  /* Print only the report: everything that neither is nor contains it is removed from layout (no blank trailing pages),
+     and the report's ancestors are flattened to plain blocks. */
+  body *:not(.nv-report):not(.nv-report *):not(:has(.nv-report)) { display: none !important; }
+  body *:has(.nv-report) { display: block !important; position: static !important; margin: 0 !important; padding: 0 !important; border: 0 !important; min-height: 0 !important; height: auto !important; max-width: none !important; overflow: visible !important; box-shadow: none !important; background: #fff !important; }
+  .nv-report { position: static; width: 100%; margin: 0; padding: 0; border: 0; border-radius: 0; background: #fff; color: #000; }
   .nv-report__scroll { overflow: visible; } .nv-report__scroll table { min-width: 0; }
+  .nv-report table { font-size: 8.5pt; } .nv-report th, .nv-report td { padding: 4px 6px; }
   .nv-report table { page-break-inside: auto; } .nv-report tr { page-break-inside: avoid; }
 }
 
@@ -416,3 +420,12 @@
 
 /* Caption under the headline stat cards */
 .nv-app .nv-stats-note { margin-top: 10px; }
+
+/* Owner screens: space between the full-width Save and the correction history on 07 Review */
+.nv-app .company-setup fieldset.setup-inputs ~ h3 { margin-top: 28px; }
+
+/* Always-visible note under the activity page heading (explains where draft figures appear) */
+.nv-inline-note { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 16px; padding: 12px 16px; border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface-2); color: var(--muted); }
+.nv-inline-note > svg { flex: none; margin-top: 3px; color: var(--info); }
+.nv-inline-note p { margin: 0; }
+.nv-app .worksheet > .nv-guide { margin-top: 4px; }

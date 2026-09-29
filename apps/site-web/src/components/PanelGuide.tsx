@@ -28,7 +28,7 @@ export function PanelGuide({ kind, defaultOpen, onAsk }: { kind: "setup" | "coll
         <li>Enter the dates and the amount as a plain number without commas (8450, not 8,450). Use one of the units listed under the unit field — for example therm, MMBtu or ccf for gas, kWh or MWh for electricity.</li>
         <li>Tick the uploaded file under “Evidence linked to this version”, then <strong>Save activity</strong>.</li>
       </ol>
-      <p>Missing details are listed under “Input needed”. You can save now and come back — nothing missing is counted as zero. Draft figures appear on Results & report, calculated with Neuvetra’s beta methods; the methods are not yet formally released, so every figure is labeled as a draft. <button type="button" className="nv-link" onClick={onAsk}>Ask about a field</button></p>
+      <p>Missing details are listed under “Input needed”. You can save now and come back — nothing missing is counted as zero. <button type="button" className="nv-link" onClick={onAsk}>Ask about a field</button></p>
     </div>}
   </details>
 }

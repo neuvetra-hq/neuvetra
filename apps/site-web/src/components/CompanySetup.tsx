@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type RefObject } from "react"
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { CompanySetupApiError, loadCompanySetup, loadCompanySetupVersion, saveCompanySetup, type CompanySetup as Setup, type CompanySetupSaveInput, type CompanySetupVersion, type CompanySetupView } from "@/lib/company-setup-api"
 
@@ -31,7 +31,7 @@ const yesNo = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No"]] as con
 const inclusion = [["unknown", "Not sure yet"], ["included", "Propose including"], ["excluded", "Propose excluding — review needed"]] as const
 const screening = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No — explain"], ["not_applicable", "Not applicable — explain"]] as const
 
-export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void }) {
+export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange, intro }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void; intro?: ReactNode }) {
   const [step, setStep] = useState(0)
   const [view, setView] = useState<CompanySetupView | null>(null)
   const [draft, setDraft] = useState<Setup | null>(null)
@@ -120,6 +120,7 @@ export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange }: 
     <p className="worksheet-eyebrow">Company setup · Synthetic staging</p>
     <h1 ref={headingRef} tabIndex={-1}>Your company, in context</h1>
     <p>Start with the business. Gather activity records and evidence in the collection step. This is a proposed boundary for review, not an approved inventory.</p>
+    {intro}
     <nav className="worksheet-nav setup-steps" aria-label="Setup sections">{sections.map((title, index) => <button type="button" key={title} disabled={busy} aria-pressed={step === index} onClick={() => { setStep(index); setHistorical(null) }}>{String(index + 1).padStart(2, "0")} {title}</button>)}</nav>
     <p role={error ? "alert" : "status"} className={error ? "worksheet-error" : "worksheet-status"}>{message}</p>
     {!view.canManage && <p className="scope1-beta-readonly">You can review this setup. An owner or admin must save corrections.</p>}

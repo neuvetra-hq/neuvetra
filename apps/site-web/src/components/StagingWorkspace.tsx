@@ -23,7 +23,7 @@ import { AskNeuvetra } from "./AskNeuvetra"
 import { EarlierViews } from "./EarlierViews"
 import { PanelGuide } from "./PanelGuide"
 import { Icon } from "./Icon"
-import { loadJourneyStatus, type JourneyStatus } from "@/lib/journey-status"
+import { loadJourneyStatus, type Coverage, type JourneyStatus } from "@/lib/journey-status"
 
 type WorkspacePanel = "home" | "results" | "archive" | "setup" | "collection" | "legacy-setup" | "scope1" | "corporate" | "gas" | "generator" | "stationary" | "fugitive" | "mobile" | "fleet" | "evidence" | "annual" | "source" | "worksheet" | "example"
 
@@ -85,6 +85,14 @@ function parseViewHash(hash: string): { panel: WorkspacePanel; recordId: string 
   return { panel: found ? found[0] : "home", recordId: null }
 }
 
+/** Focuses the visible page heading. Hidden worksheet panels share the heading ref, so the ref alone can point at a hidden h1. */
+function focusPageHeading(main: HTMLElement | null) {
+  const heading = [...(main?.querySelectorAll<HTMLElement>("h1") ?? [])].find(item => item.getClientRects().length > 0)
+  if (!heading) return
+  if (!heading.hasAttribute("tabindex")) heading.tabIndex = -1
+  heading.focus({ preventScroll: true })
+}
+
 export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObject<HTMLHeadingElement | null>; staging: { actor: HostedWorkspaceActor; workspaceId: string | null; evidenceId: string | null } }) {
   const [panel, setPanel] = useState<WorkspacePanel>(() => parseViewHash(window.location.hash).panel)
   const [collectionDirty, setCollectionDirty] = useState(false)
@@ -92,9 +100,11 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   const [status, setStatus] = useState<JourneyStatus | null>(null)
   const [statusError, setStatusError] = useState<string | null>(null)
   const [statusVersion, setStatusVersion] = useState(0)
+  const [statusFresh, setStatusFresh] = useState(false)
   const [askOpen, setAskOpen] = useState(false)
   const [openRecordId, setOpenRecordId] = useState<string | null>(() => parseViewHash(window.location.hash).recordId)
   const canManage = staging.actor.role === "owner" || staging.actor.role === "admin"
+  const mainRef = useRef<HTMLElement>(null)
   const current = useRef({ panel, openRecordId, collectionDirty, setupDirty })
   useEffect(() => { current.current = { panel, openRecordId, collectionDirty, setupDirty } })
   function leaveAllowed(from: WorkspacePanel) {
@@ -105,7 +115,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   function show(target: WorkspacePanel, recordId: string | null) {
     setCollectionDirty(false); setSetupDirty(false)
     setPanel(target); setOpenRecordId(recordId)
-    setStatusVersion(value => value + 1)
+    setStatusFresh(false); setStatusVersion(value => value + 1)
   }
   function navigate(target: WorkspacePanel, recordId: string | null = null) {
     if (target === panel && recordId === openRecordId) return false
@@ -119,8 +129,11 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     const onPop = () => {
       const next = parseViewHash(window.location.hash)
       const now = current.current
-      if (next.panel === now.panel && next.recordId === now.openRecordId) return
+      const canonical = viewHash(next.panel, next.recordId)
+      if (next.panel === now.panel && next.recordId === now.openRecordId) { if (window.location.hash !== canonical) window.history.replaceState(null, "", canonical); return }
       if (!leaveAllowed(now.panel)) { window.history.pushState(null, "", viewHash(now.panel, now.openRecordId)); return }
+      // An address that isn't a known view shows the overview under its own address.
+      if (window.location.hash !== canonical) window.history.replaceState(null, "", canonical)
       show(next.panel, next.recordId)
     }
     window.addEventListener("popstate", onPop)
@@ -138,33 +151,58 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   useEffect(() => {
     if (!staging.workspaceId) return
     const controller = new AbortController()
-    loadJourneyStatus(staging.workspaceId, { ...staging.actor, signal: controller.signal }).then(value => { setStatus(value); setStatusError(null) }, cause => { if (!controller.signal.aborted) setStatusError(cause instanceof Error ? cause.message : "Your progress couldn’t be loaded.") })
+    loadJourneyStatus(staging.workspaceId, { ...staging.actor, signal: controller.signal }).then(value => { setStatus(value); setStatusError(null); setStatusFresh(true) }, cause => { if (!controller.signal.aborted) setStatusError(cause instanceof Error ? cause.message : "Your progress couldn’t be loaded.") })
     return () => controller.abort()
   }, [staging.workspaceId, staging.actor, statusVersion])
+  // The first screen after sign-in renders before progress loads. Once it has loaded, put focus on the page heading if
+  // nothing else has it, so keyboard and screen-reader users start at the top of the view.
+  const focusedAfterLoad = useRef(false)
+  useEffect(() => {
+    if (!status || focusedAfterLoad.current) return
+    focusedAfterLoad.current = true
+    if (!document.activeElement || document.activeElement === document.body) focusPageHeading(mainRef.current)
+  }, [status])
+  // Keep the address canonical (an unknown hash becomes the view shown), and leave no workspace address or title behind on sign-out.
+  useEffect(() => {
+    const canonical = viewHash(current.current.panel, current.current.openRecordId)
+    if (window.location.hash !== canonical) window.history.replaceState(null, "", canonical)
+    return () => {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search)
+      document.title = "Neuvetra — Greenhouse-gas reporting (private beta)"
+    }
+  }, [])
+  // A record address that no longer matches a saved record (withdrawn elsewhere, another company, mistyped).
+  const missingRecord = panel === "collection" && openRecordId !== null && statusFresh && status !== null && !status.collection.records.some(row => row.id === openRecordId)
+  useEffect(() => { if (missingRecord) window.history.replaceState(null, "", viewHash("collection", null)) }, [missingRecord])
+  const coverage: Coverage = statusError ? { state: "unavailable" } : status ? { state: "ready", setupOpen: status.setup.missing, gaps: status.gaps } : { state: "loading" }
   useEffect(() => {
     document.title = `${TITLES[panel] ?? panelLabels[panel as keyof typeof panelLabels] ?? "Workspace"} · Neuvetra`
     window.scrollTo({ top: 0 })
-    headingRef.current?.focus({ preventScroll: true })
-  }, [panel, headingRef])
+    focusPageHeading(mainRef.current)
+  }, [panel])
   const secondaryPanel = sourceAndRegisterPanels.includes(panel) || continuityPanels.includes(panel)
   const navView: JourneyView = secondaryPanel ? "archive" : journeyViews.includes(panel) ? panel as JourneyView : "home"
   const helpPanel = panel === "setup" || panel === "collection" || panel === "results" ? panel : "home"
   return <>
   <div className="nv-layout" inert={askOpen || undefined}>
     <JourneyNav current={navView} onNavigate={view => navigate(view)} status={status} onAsk={() => setAskOpen(true)} />
-    <main id="workspace-main" className="nv-main" tabIndex={-1}><div className="nv-page">
+    <main id="workspace-main" className="nv-main" tabIndex={-1} ref={mainRef}><div className="nv-page">
     {!canManage && journeyViews.includes(panel) && <div className="nv-notice nv-notice--info" style={{ marginTop: 0 }}><Icon name="info" /><p>You have view access. An owner or admin of your company can make changes.</p></div>}
     {secondaryPanel && <button type="button" className="nv-link" style={{ marginBottom: 12 }} onClick={() => navigate("archive")}>← Earlier workspace views</button>}
     {panel === "home" && <JourneyHome status={status} error={statusError} headingRef={headingRef} onNavigate={view => navigate(view)} onAsk={() => setAskOpen(true)} onRetry={() => setStatusVersion(value => value + 1)} onFix={openRecord} />}
-    {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} gaps={status?.gaps ?? []} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} />}
+    {panel === "results" && <ResultsReport key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} coverage={coverage} onRetryCoverage={() => setStatusVersion(value => value + 1)} canManage={canManage} onNavigate={view => navigate(view)} onFix={openRecord} />}
     {panel === "archive" && <EarlierViews headingRef={headingRef} onOpen={id => navigate(id as WorkspacePanel)} groups={[
       { title: "Earlier registers and source worksheets", views: [...sourceAndRegisterPanels, "legacy-setup" as const].map(id => ({ id, label: panelLabels[id as keyof typeof panelLabels], description: panelDescriptions[id] ?? "" })) },
       { title: "Electricity and examples", views: continuityPanels.filter(id => id !== "legacy-setup").map(id => ({ id, label: panelLabels[id as keyof typeof panelLabels], description: panelDescriptions[id] ?? "" })) },
     ]} />}
-    {panel === "setup" && canManage && <PanelGuide kind="setup" defaultOpen={status ? !status.setup.saved : false} onAsk={() => setAskOpen(true)} />}
-    {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty} />}
-    {panel === "collection" && canManage && <PanelGuide kind="collection" defaultOpen={status ? !status.collection.active : false} onAsk={() => setAskOpen(true)} />}
-    {panel === "collection" && <CollectionWorkspace key={`${staging.actor.userId}:${staging.workspaceId}:${openRecordId ?? ""}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onCollectionDirty} openRecordId={openRecordId} />}
+    {panel === "collection" && missingRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
+    {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty}
+      intro={canManage ? <PanelGuide kind="setup" defaultOpen={status ? !status.setup.saved : false} onAsk={() => setAskOpen(true)} /> : null} />}
+    {panel === "collection" && <CollectionWorkspace key={`${staging.actor.userId}:${staging.workspaceId}:${openRecordId ?? ""}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onCollectionDirty} openRecordId={openRecordId}
+      intro={<>
+        <div className="nv-inline-note"><Icon name="info" size={18} /><p>Draft figures for these records are on <button type="button" className="nv-link" onClick={() => navigate("results")}>Results & report</button>. They are calculated with Neuvetra’s beta methods, which haven’t been formally released, so every figure is labelled as a draft and nothing here is ready to file.</p></div>
+        {canManage && <PanelGuide kind="collection" defaultOpen={status ? !status.collection.active : false} onAsk={() => setAskOpen(true)} />}
+      </>} />}
     {panel === "legacy-setup" && <Scope1BetaSetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "corporate" && <CorporateCoverageRegister key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
     {panel === "scope1" && <Scope1Inventory actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} />}
