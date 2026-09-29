@@ -15,7 +15,7 @@ export function PanelGuide({ kind, defaultOpen, onAsk }: { kind: "setup" | "coll
     <summary><Icon name="info" size={18} />{summary}</summary>
     {kind === "setup" ? <div className="nv-guide__body">
       <ol>
-        <li>Your legal name, country and the reporting year (usually January 1 – December 31).</li>
+        <li>Your legal name, country and the reporting year. In this beta, activity can only be dated in calendar 2025, so use January 1 – December 31, 2025.</li>
         <li>Your boundary approach — most companies use operational control.</li>
         <li>Every site you used during the year, including leased space, and who runs its equipment.</li>
         <li>Yes/no answers about the kinds of sources you have: heating, generators, vehicles, cooling.</li>
@@ -28,7 +28,7 @@ export function PanelGuide({ kind, defaultOpen, onAsk }: { kind: "setup" | "coll
         <li>Enter the dates (this beta accepts dates within calendar 2025) and the amount as a plain number without commas (8450, not 8,450). Use one of the units listed under the unit field — for example therm, MMBtu or ccf for gas, kWh or MWh for electricity.</li>
         <li>Tick the uploaded file under “Evidence linked to this version”, then <strong>Save activity</strong>.</li>
       </ol>
-      <p>For an estimate, choose data quality “Estimated” and say how you estimated it — the record can’t be saved without that. Missing details are listed under “Input needed”. You can save now and come back — nothing missing is counted as zero. <button type="button" className="nv-link" onClick={onAsk}>Ask about a field</button></p>
+      <p>For an estimate, choose data quality “Estimated” and say how you estimated it — the record can’t be saved without that. If company setup changed since a record was saved, choose its site again before saving. Missing details are listed under “Input needed”. You can save now and come back — nothing missing is counted as zero. <button type="button" className="nv-link" onClick={onAsk}>Ask about a field</button></p>
     </div>}
   </details>
 }

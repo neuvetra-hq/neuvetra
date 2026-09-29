@@ -15,7 +15,7 @@ export interface CoverageGap { id: string; scope: 1 | 2; title: string; detail: 
 export interface JourneyStatus {
   canManage: boolean
   setup: { saved: boolean; revision: number | null; legalName: string; period: { start: string | null; endExclusive: string | null }; boundary: string; sites: { total: number; included: number; excluded: number; undecided: number }; missing: SetupOpenItem[] }
-  collection: { total: number; active: number; ready: number; attention: number; partial: number; withdrawn: number; excluded: number; noEvidence: number; qualityUnknown: number; byKind: Record<string, number>; records: JourneyRecord[] }
+  collection: { total: number; active: number; ready: number; attention: number; held: number; partial: number; withdrawn: number; excluded: number; noEvidence: number; qualityUnknown: number; olderSetup: number; byKind: Record<string, number>; records: JourneyRecord[] }
   gaps: CoverageGap[]
   evidence: { total: number; checking: number; cleared: number; rejected: number }
   next: { panel: JourneyPanel; title: string; body: string; action: string; recordId?: string; secondary?: { panel: JourneyPanel; action: string } }
@@ -107,7 +107,10 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     // Same check as the results route: a record not wholly inside the reporting period is held, never counted.
     const fit = periodFit(activity.period, period)
     if ((fit === "outside" || fit === "partial") && state !== "withdrawn" && state !== "excluded") {
-      reasons.unshift(fit === "outside" ? `Its dates fall outside the reporting period (${periodLabel(period!.start, period!.endExclusive)}). Correct the record’s dates or the reporting period.` : `Its dates are only partly inside the reporting period (${periodLabel(period!.start, period!.endExclusive)}). Split it at the period boundary or correct the reporting period.`)
+      const dates = periodLabel(activity.period.start, activity.period.endExclusive), reporting = periodLabel(period!.start, period!.endExclusive)
+      reasons.unshift(fit === "outside"
+        ? `Its dates (${dates}) fall outside the reporting period in company setup (${reporting}). Change the reporting period in Company setup (02 Reporting period), or correct the record if its dates are wrong.`
+        : `Its dates (${dates}) are only partly inside the reporting period in company setup (${reporting}). Change the reporting period in Company setup (02 Reporting period), or save the bill as separate records that each sit inside the period.`)
       if (state !== "input_needed") state = "held_period"
     }
     return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality }
@@ -115,9 +118,13 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const byKind: Record<string, number> = {}
   for (const row of records) if (row.state !== "withdrawn") byKind[row.kind] = (byKind[row.kind] ?? 0) + 1
   const active = records.filter(row => row.state !== "withdrawn")
-  const attentionRows = active.filter(row => row.state === "input_needed" || row.state === "review_required" || row.state === "held_period")
+  const attentionRows = active.filter(row => row.state === "input_needed" || row.state === "review_required")
+  const heldRows = active.filter(row => row.state === "held_period")
   const counted = active.filter(row => row.state !== "excluded")
-  const collection = { total: records.length, active: active.length, ready: active.filter(row => row.state === "ready" || row.state === "partial" || row.state === "memo_only").length, attention: attentionRows.length, partial: active.filter(row => row.state === "partial").length, withdrawn: records.length - active.length, excluded: active.filter(row => row.state === "excluded").length, noEvidence: counted.filter(row => row.evidenceCount === 0).length, qualityUnknown: counted.filter(row => row.quality === "unknown").length, byKind, records }
+  // Records saved against an earlier setup version must have their site chosen again when next edited (owner rule).
+  const currentSetupVersion = input.context?.setupVersionId ?? null
+  const olderSetup = currentSetupVersion ? input.records.filter(row => row.currentVersion.activity.state !== "withdrawn" && row.currentVersion.activity.setupVersionId && row.currentVersion.activity.setupVersionId !== currentSetupVersion).length : 0
+  const collection = { total: records.length, active: active.length, ready: active.filter(row => row.state === "ready" || row.state === "partial" || row.state === "memo_only").length, attention: attentionRows.length, held: heldRows.length, olderSetup, partial: active.filter(row => row.state === "partial").length, withdrawn: records.length - active.length, excluded: active.filter(row => row.state === "excluded").length, noEvidence: counted.filter(row => row.evidenceCount === 0).length, qualityUnknown: counted.filter(row => row.quality === "unknown").length, byKind, records }
   const gaps = coverageGaps(input.setup, records)
   const evidence = { total: input.evidence.length, checking: input.evidence.filter(file => file.quarantineStatus === "pending" || file.quarantineStatus === "error").length, cleared: input.evidence.filter(file => file.quarantineStatus === "clean").length, rejected: input.evidence.filter(file => file.quarantineStatus === "rejected").length }
   const manage = input.canManage
@@ -131,6 +138,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     ? { panel: "collection", title: "Add your first activity record", body: "Start with a gas or electricity bill for one site. Each record takes a couple of minutes, and you can attach the bill as you go.", action: "Add activity" }
     : { panel: "collection", title: "No activity records yet", body: "Draft results appear once an owner or admin adds activity records.", action: "View records" }
   else if (attentionRows.length) next = { panel: "collection", title: manage ? `Finish ${plural(attentionRows.length, "record")} that need${attentionRows.length === 1 ? "s" : ""} input` : `${plural(attentionRows.length, "record")} need${attentionRows.length === 1 ? "s" : ""} input`, body: `${attentionRows[0]!.label} · ${attentionRows[0]!.sourceId}: ${attentionRows[0]!.reasons[0] ?? "More information is needed."}`, action: manage ? "Fix records" : "View records", recordId: attentionRows[0]!.id }
+  else if (heldRows.length) next = { panel: "setup", title: `Your reporting period doesn’t match ${plural(heldRows.length, "record")}`, body: `${heldRows[0]!.label} · ${heldRows[0]!.sourceId}: ${heldRows[0]!.reasons[0]} Held records aren’t counted.`, action: manage ? "Open company setup" : "View company setup", secondary: { panel: "results", action: "View draft results" } }
   else if (openSetup.length) next = { panel: "setup", title: manage ? `Finish company setup: ${plural(openSetup.length, "open answer")}` : `Company setup has ${plural(openSetup.length, "open answer")}`, body: `${openSetup[0]!.title}. ${openSetup[0]!.detail}`, action: manage ? "Open company setup" : "View company setup", secondary: { panel: "results", action: "View draft results" } }
   else next = { panel: "results", title: "Review your draft results", body: gaps.length
     ? `${plural(gaps.length, "possible gap")} ${gaps.length === 1 ? "is" : "are"} listed with the results and in the report. Add the missing records, or note why a source doesn’t apply.`
@@ -141,7 +149,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
     collection, gaps, evidence, next,
     progress: {
       setup: !setupVersion ? "not_started" : missing.length ? "in_progress" : "done",
-      collection: !active.length ? "not_started" : attentionRows.length || gaps.length || collection.partial ? "in_progress" : "done",
+      collection: !active.length ? "not_started" : attentionRows.length || heldRows.length || gaps.length || collection.partial ? "in_progress" : "done",
       results: collection.ready ? "ready" : "waiting",
     },
   }
@@ -179,18 +187,20 @@ export async function loadJourneyStatus(workspaceId: string, actor: HostedWorksp
 }
 
 /** Answers the user's progress question from their own saved data, never from a model. */
-export function progressAnswer(status: JourneyStatus | null): string[] {
-  if (!status) return ["I can’t see your progress yet — it’s still loading. Try again in a moment."]
+export function progressAnswer(status: JourneyStatus | null, failed = false): string[] {
+  if (!status) return [failed ? "Your progress couldn’t be loaded, so I can’t answer from your records right now. Try again from the Overview." : "I can’t see your progress yet — it’s still loading. Try again in a moment."]
   const lines = [`Next step: ${status.next.title}. ${status.next.body}`]
   if (status.setup.missing.length) lines.push(`Company setup still needs: ${status.setup.missing.map(item => item.title).join("; ")}.`)
-  const attention = status.collection.records.filter(row => row.state === "input_needed" || row.state === "review_required" || row.state === "held_period")
+  const attention = status.collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
   if (attention.length) lines.push(`Records with input needed: ${attention.slice(0, 4).map(row => `${row.label} · ${row.sourceId} (${row.reasons[0] ?? "more information needed"})`).join("; ")}${attention.length > 4 ? `; and ${attention.length - 4} more` : ""}.`)
+  const held = status.collection.records.filter(row => row.state === "held_period")
+  if (held.length) lines.push(`Held pending correction (outside the reporting period): ${held.slice(0, 4).map(row => `${row.label} · ${row.sourceId}`).join("; ")}${held.length > 4 ? `; and ${held.length - 4} more` : ""}. Check the reporting period in Company setup.`)
   if (status.gaps.length) lines.push(`Possible gaps: ${status.gaps.slice(0, 4).map(gap => gap.title).join("; ")}${status.gaps.length > 4 ? `; and ${status.gaps.length - 4} more` : ""}.`)
   const improve: string[] = []
   if (status.collection.partial) improve.push(`${status.collection.partial} record${status.collection.partial === 1 ? " is" : "s are"} only partly calculated`)
   if (status.collection.noEvidence) improve.push(`${status.collection.noEvidence} record${status.collection.noEvidence === 1 ? " has" : "s have"} no evidence linked`)
   if (status.collection.qualityUnknown) improve.push(`${status.collection.qualityUnknown} record${status.collection.qualityUnknown === 1 ? " has" : "s have"} data quality “Unknown”`)
   if (improve.length) lines.push(`Can be improved: ${improve.join("; ")}.`)
-  if (!status.setup.missing.length && !attention.length && !status.gaps.length && !improve.length) lines.push("Nothing else is flagged. Open Results & report to review the draft — it is still a draft until an independent reviewer checks it.")
+  if (!status.setup.missing.length && !attention.length && !held.length && !status.gaps.length && !improve.length) lines.push("Nothing else is flagged. Open Results & report to review the draft — it is still a draft until an independent reviewer checks it.")
   return lines
 }

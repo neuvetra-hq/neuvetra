@@ -23,12 +23,14 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
     if (progress[key] === "done") return "done"
     return next.panel === key ? "current" : "todo"
   }
-  const mustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required" || row.state === "held_period")
+  const mustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
+  const heldRows = collection.records.filter(row => row.state === "held_period")
   const improve: Array<{ key: string; title: string; detail: string }> = []
   if (collection.partial) improve.push({ key: "partial", title: `${plural(collection.partial, "record is", "records are")} only partly calculated`, detail: "For vehicles, add miles driven or fuel economy to include CH4 and N2O." })
   if (collection.noEvidence) improve.push({ key: "evidence", title: `${plural(collection.noEvidence, "record has", "records have")} no evidence linked`, detail: "Attach the bill or log so a reviewer can trace the figure." })
+  if (collection.olderSetup && canManage) improve.push({ key: "older-setup", title: `${plural(collection.olderSetup, "record was", "records were")} saved before your latest company-setup change`, detail: "When you next edit one, choose its site again before saving — the form asks for a current site." })
   if (collection.qualityUnknown) improve.push({ key: "quality", title: `${plural(collection.qualityUnknown, "record has", "records have")} data quality “Unknown”`, detail: "Mark each record as actual or estimated." })
-  const nothingFlagged = !setup.missing.length && !mustFix.length && !gaps.length && !improve.length && evidence.checking === 0
+  const nothingFlagged = !setup.missing.length && !mustFix.length && !heldRows.length && !gaps.length && !improve.length && evidence.checking === 0
   return <section>
     <p className="nv-eyebrow">Overview</p>
     <h1 ref={headingRef} tabIndex={-1}>{setup.saved ? name : "Welcome to Neuvetra"}</h1>
@@ -57,12 +59,12 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <button type="button" className="nv-journey__step" data-state={stepState("collection")} onClick={() => onNavigate("collection")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("collection") === "done" ? <Icon name="check" size={16} /> : 2}</span>
         <span className="nv-journey__title">Activity & evidence</span>
-        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), mustFix.length ? `${mustFix.length} input needed` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !mustFix.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
+        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), mustFix.length ? `${mustFix.length} input needed` : "", heldRows.length ? `${heldRows.length} held — outside the reporting period` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !mustFix.length && !heldRows.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
       </button>
       <button type="button" className="nv-journey__step" data-state={stepState("results")} onClick={() => onNavigate("results")}>
         <span className="nv-journey__num" aria-hidden="true">3</span>
         <span className="nv-journey__title">Results & report</span>
-        <span className="nv-journey__meta">{collection.ready ? `${plural(collection.ready, "record")} can be calculated` : "Available once a record is complete"}</span>
+        <span className="nv-journey__meta">{collection.ready ? `${plural(collection.ready, "record")} can be calculated` : collection.active ? "No record can be calculated yet" : "Available once a record is complete"}</span>
       </button>
     </div>
 
@@ -77,6 +79,10 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
             {mustFix.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0] ?? RECORD_STATE_LABELS[row.state]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Fix" : "View"} ${row.label} · ${row.sourceId}`} onClick={() => onFix(row.id)}>{canManage ? "Fix" : "View"}</button></li>)}
             {mustFix.length > 5 && <li><span className="nv-subtle">and {mustFix.length - 5} more in Activity & evidence</span></li>}
           </ul>
+          {heldRows.length > 0 && <><p className="nv-attn-label nv-attn-label--warn">Held pending correction</p><ul className="nv-list">
+            {heldRows.slice(0, 5).map(row => <li key={row.id}><span className="nv-list__main"><span className="nv-list__title">{row.label} · {row.sourceId}</span><br /><span className="nv-subtle">{row.reasons[0]}</span></span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${canManage ? "Open" : "View"} company setup for ${row.label} · ${row.sourceId}`} onClick={() => onNavigate("setup")}>{canManage ? "Open setup" : "View setup"}</button></li>)}
+            {heldRows.length > 5 && <li><span className="nv-subtle">and {heldRows.length - 5} more</span></li>}
+          </ul></>}
           {gaps.length > 0 && <><p className="nv-attn-label nv-attn-label--info">Possible gaps</p><ul className="nv-list">
             {gaps.slice(0, 5).map(gap => <li key={gap.id}><span className="nv-list__main"><span className="nv-list__title">{gap.title}</span><br />{canManage && <span className="nv-subtle">{gap.detail}</span>}{gap.note && <>{canManage && <br />}<span className="nv-subtle">Note: {gap.note}</span></>}</span>{canManage && <button type="button" className="nv-btn nv-btn--sm" aria-label={`Add a record: ${gap.title}`} onClick={() => onNavigate("collection")}>Add</button>}</li>)}
             {gaps.length > 5 && <li><span className="nv-subtle">and {gaps.length - 5} more</span></li>}

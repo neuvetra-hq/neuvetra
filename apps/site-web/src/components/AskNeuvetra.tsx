@@ -6,7 +6,7 @@ import { progressAnswer, type JourneyStatus } from "@/lib/journey-status"
 
 interface Message { id: number; from: "user" | "bot"; text: string[]; matched?: string; source?: string; link?: HelpLink; followUps?: string[] }
 
-export function AskNeuvetra({ open, onClose, panel, status, onNavigate }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; onNavigate: (view: JourneyView) => void }) {
+export function AskNeuvetra({ open, onClose, panel, status, statusFailed = false, onNavigate }: { open: boolean; onClose: () => void; panel: HelpPanel; status: JourneyStatus | null; statusFailed?: boolean; onNavigate: (view: JourneyView) => void }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [query, setQuery] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
@@ -39,7 +39,7 @@ export function AskNeuvetra({ open, onClose, panel, status, onNavigate }: { open
     if (!question) return
     const user: Message = { id: ++counter.current, from: "user", text: [question] }
     let reply: Message
-    if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(status), source: "Your saved company setup and records", link: status ? { label: status.next.action, panel: status.next.panel as HelpPanel } : undefined }
+    if (isProgressQuestion(question) || /left for me/i.test(question)) reply = { id: ++counter.current, from: "bot", text: progressAnswer(status, statusFailed), source: "Your saved company setup and records", link: status ? { label: status.next.action, panel: status.next.panel as HelpPanel } : undefined }
     else {
       const match = matchQuestion(question, panel)
       reply = match

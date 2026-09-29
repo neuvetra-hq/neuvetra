@@ -24,7 +24,8 @@ export function rowStatus(row: ResultRow): RowStatus {
 }
 /** Plain reasons for a row, deduplicated; codes are kept for the export. */
 export function rowReasons(row: ResultRow): string[] {
-  const codes = [...(row.periodCheck === "outside" ? ["outside_reporting_period"] : row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(row.refusalCode ? [row.refusalCode] : []), ...(row.scope1?.findings ?? []), ...(row.scope1?.estimates ?? []), ...(row.scope2?.findings ?? []), ...(row.scope2?.locationBased.findings ?? []), ...(row.scope2?.marketBased.findings ?? []), ...(row.scope2?.estimates ?? [])]
+  const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
+  const codes = [...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(row.refusalCode ? [row.refusalCode] : []), ...(row.scope1?.findings ?? []), ...(row.scope1?.estimates ?? []), ...(row.scope2?.findings ?? []), ...(row.scope2?.locationBased.findings ?? []), ...(row.scope2?.marketBased.findings ?? []), ...(row.scope2?.estimates ?? [])]
   if (row.outcome === "unavailable") codes.push("engine_unavailable")
   return [...new Set(codes.map(code => code === "engine_unavailable" ? "The calculation service was unavailable for this record. Try again shortly." : reasonText(code)))]
 }

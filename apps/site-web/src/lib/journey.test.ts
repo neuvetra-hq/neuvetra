@@ -33,6 +33,11 @@ describe("Ask Neuvetra help matching", () => {
     expect(matchQuestion("what does not sure yet do to my report")?.entry.id).toBe("incomplete")
     expect(matchQuestion("our generator runs on propane")?.entry.id).toBe("other-fuels")
     expect(matchQuestion("how do I report generator diesel")?.entry.id).toBe("generator")
+    expect(matchQuestion("why are my records held pending correction")?.entry.id).toBe("held")
+    expect(matchQuestion("why does my file say scan pending")?.entry.id).toBe("evidence")
+    expect(matchQuestion("why can't I save my record")?.entry.id).toBe("save-fails")
+    expect(matchQuestion("why can't I edit anything")?.entry.id).toBe("who-edit")
+    expect(matchQuestion("how do I split a bill across two periods")?.entry.id).toBe("reporting-period")
   })
   test("declines instead of guessing when nothing matches", () => {
     expect(matchQuestion("what is the weather tomorrow")).toBeNull()
@@ -170,6 +175,17 @@ describe("journey progress", () => {
     expect(periodFit({ start: "2025-01-01", endExclusive: "2026-01-01" }, setup.reportingPeriod)).toBe("outside")
     expect(periodFit({ start: "2025-01-01", endExclusive: "2026-01-01" }, { start: "2025-07-01", endExclusive: "2026-07-01" })).toBe("partial")
     expect(periodFit({ start: "2025-02-01", endExclusive: "2025-03-01" }, { start: "2025-01-01", endExclusive: "2026-01-01" })).toBe("inside")
+    const context = { companyId: "c", setupVersionId: null, setupRevision: null, locations: [{ id: office, name: "Office", inclusion: "included" }] }
+    const gas = { id: "29500000-0000-4000-8000-000000000009", kind: "natural_gas", currentVersion: { activity: { kind: "natural_gas", state: "active", sourceId: "G", locationId: office, setupVersionId: "s", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { originalValue: "10", originalUnit: "therm", normalizedValue: "10", normalizedUnit: "therm" }, quality: "actual", estimateBasis: null, evidenceIds: [], payload: { heatContent: null } } } }
+    const status = computeJourneyStatus({ setup: view, context: context as never, records: [gas] as never, evidence: [], canManage: true })
+    const held = status.collection.records[0]!
+    expect(held.state).toBe("held_period")
+    expect(held.reasons[0]).toContain("Change the reporting period")
+    expect(status.collection.attention).toBe(0); expect(status.collection.held).toBe(1)
+    expect(status.next.panel).toBe("setup")
+    expect(status.next.title).toBe("Your reporting period doesn’t match 1 record")
+    expect(progressAnswer(status).join(" ")).toContain("Held pending correction")
+    expect(progressAnswer(null, true)[0]).toMatch(/couldn’t be loaded/)
   })
   test("record states follow the reviewed readiness findings", () => {
     expect(recordState([])).toBe("ready")

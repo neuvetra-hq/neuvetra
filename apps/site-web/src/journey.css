@@ -434,3 +434,9 @@
 .nv-app .worksheet .nv-link { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--accent); font: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .nv-app .worksheet .nv-link:hover { color: var(--accent-hi); background: none; }
 .nv-app .worksheet .nv-guide > summary { text-decoration: none; color: var(--text); }
+
+/* Printing a view other than the report: drop navigation and sticky bars so the page content prints cleanly */
+@media print {
+  body:not(:has(.nv-report)) .nv-sidenav, body:not(:has(.nv-report)) .nv-topbar, body:not(:has(.nv-report)) .setup-actions { display: none !important; }
+  body:not(:has(.nv-report)) .nv-layout { display: block !important; }
+}

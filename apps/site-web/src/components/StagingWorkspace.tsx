@@ -174,6 +174,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   // A record address that no longer matches a saved record (withdrawn elsewhere, another company, mistyped).
   const missingRecord = panel === "collection" && openRecordId !== null && statusFresh && status !== null && !status.collection.records.some(row => row.id === openRecordId)
   useEffect(() => { if (missingRecord) window.history.replaceState(null, "", viewHash("collection", null)) }, [missingRecord])
+  const heldRecord = panel === "collection" && openRecordId !== null && status ? status.collection.records.find(row => row.id === openRecordId && row.state === "held_period") ?? null : null
   const coverage: Coverage = statusError ? { state: "unavailable" } : status ? { state: "ready", setupOpen: status.setup.missing, gaps: status.gaps } : { state: "loading" }
   useEffect(() => {
     document.title = `${TITLES[panel] ?? panelLabels[panel as keyof typeof panelLabels] ?? "Workspace"} · Neuvetra`
@@ -208,6 +209,7 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
       { title: "Electricity and examples", views: continuityPanels.filter(id => id !== "legacy-setup").map(id => ({ id, label: panelLabels[id as keyof typeof panelLabels], description: panelDescriptions[id] ?? "" })) },
     ]} />}
     {panel === "collection" && missingRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><p>That record wasn’t found. It may have been withdrawn or belong to another company, so the activity page is shown instead.</p></div>}
+    {heldRecord && <div className="nv-notice nv-notice--warn" role="status" style={{ marginTop: 0 }}><Icon name="alert" /><div><p><strong>Held pending correction.</strong> {heldRecord.reasons[0]}</p>{canManage && <p><button type="button" className="nv-link" onClick={() => navigate("setup")}>Open company setup</button></p>}</div></div>}
     {panel === "setup" && <CompanySetup key={`${staging.actor.userId}:${staging.workspaceId}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onSetupDirty}
       intro={canManage ? <PanelGuide kind="setup" defaultOpen={status ? !status.setup.saved : false} onAsk={() => setAskOpen(true)} /> : null} />}
     {panel === "collection" && <CollectionWorkspace key={`${staging.actor.userId}:${staging.workspaceId}:${openRecordId ?? ""}`} actor={staging.actor} workspaceId={staging.workspaceId} headingRef={headingRef} onDirtyChange={onCollectionDirty} openRecordId={openRecordId}
@@ -231,6 +233,6 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
     <div hidden={panel !== "example"}><CompanyWorkspaceDemo headingRef={headingRef} staging={staging} /></div>
     </div></main>
   </div>
-  <AskNeuvetra open={askOpen} onClose={closeAsk} panel={helpPanel} status={status} onNavigate={view => navigate(view)} />
+  <AskNeuvetra open={askOpen} onClose={closeAsk} panel={helpPanel} status={status} statusFailed={Boolean(statusError) && !status} onNavigate={view => navigate(view)} />
   </>
 }

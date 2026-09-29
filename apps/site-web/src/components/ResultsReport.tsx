@@ -42,10 +42,11 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
     const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? `${plural(issues.gaps, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
     return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps — each source type and included site in company setup has at least one record"
   }
+  const none = (scope: 1 | 2) => { const text = note(true, scope); return text.startsWith("Incomplete — ") ? `Not calculated — ${text.slice("Incomplete — ".length)}` : scope === 1 ? "No Scope 1 records" : "No electricity records" }
   return {
-    scope1: results.scope1 ? note(results.scope1.complete, 1) : "No calculated sources",
-    scope2Location: results.scope2 ? note(results.scope2.locationBasedComplete, 2) : "No calculated meters",
-    scope2Market: results.scope2 ? note(results.scope2.marketBasedComplete, 2) : "No calculated meters",
+    scope1: results.scope1 ? note(results.scope1.complete, 1) : none(1),
+    scope2Location: results.scope2 ? note(results.scope2.locationBasedComplete, 2) : none(2),
+    scope2Market: results.scope2 ? note(results.scope2.marketBasedComplete, 2) : none(2),
   }
 }
 
