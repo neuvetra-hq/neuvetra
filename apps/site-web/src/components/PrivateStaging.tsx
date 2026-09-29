@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react"
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 import { StagingWorkspace } from "./StagingWorkspace"
+import { Landing } from "./Landing"
+import { Icon } from "./Icon"
 import { decodeStagingAccess, decodeStagingConfig } from "@/lib/staging-session"
 
 import { createStagingAuthorization, type ActiveStagingSession } from "@/lib/staging-authorization"
@@ -85,11 +87,27 @@ export function PrivateStaging() {
     finally { setBusy(false) }
   }
 
-  return <main className="staging-shell">
-    <header className="staging-header"><a href="/" aria-label="Neuvetra private staging home">Neuvetra</a><span>Private staging</span>{signedIn && <button type="button" disabled={busy} onClick={() => void signOut()}>Sign out</button>}</header>
-    <p className="staging-notice">Synthetic company records only. This is a private testing environment, not a customer inventory, filing or assurance service.</p>
-    <p role="status" aria-live="polite">{message}</p>
-    {!active && !signedIn && <section className="staging-signin"><h1>Welcome back</h1><p>Use the account approved for this private staging environment.</p><form onSubmit={event => void signIn(event)}><label>Email<input type="email" autoComplete="username" required value={email} onChange={event => setEmail(event.target.value)} /></label><button type="button" disabled={!client || busy} onClick={() => void sendSignInLink()}>Email me a sign-in link</button><label>Password<input type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label><button type="submit" disabled={!client || busy}>{busy ? "Signing in…" : "Sign in with password"}</button></form><p>Access is by invitation. There is no public registration.</p></section>}
-    {active && <StagingWorkspace key={`${active.session.user.id}:${active.epoch}`} headingRef={headingRef} staging={{ actor: active.actor, workspaceId: active.access.access.workspaceId, evidenceId: active.access.access.evidenceId }} />}
-  </main>
+  const accessProblem = /unavailable|inactive|changed|could not/i.test(message)
+  // One polite live region in every state announces sign-in and access changes.
+  const live = <p className="nv-sr" role="status" aria-live="polite">{message}</p>
+  if (active) return <div className="nv-app">
+    {live}
+    <a className="nv-skip" href="#workspace-main">Skip to content</a>
+    <header className="nv-topbar">
+      <a className="nv-brand" href="/" aria-label="Neuvetra workspace home"><span className="nv-brand__mark" aria-hidden="true" />Neuvetra</a>
+      <span className="nv-badge nv-badge--hide-sm">Private beta · synthetic data</span>
+      <div className="nv-topbar__actions">
+        <span className="nv-topbar__user" title={active.session.user.email ?? undefined}>{active.session.user.email}</span>
+        <button type="button" className="nv-btn nv-btn--ghost nv-btn--sm" disabled={busy} onClick={() => void signOut()}>Sign out</button>
+      </div>
+    </header>
+    <StagingWorkspace key={`${active.session.user.id}:${active.epoch}`} headingRef={headingRef} staging={{ actor: active.actor, workspaceId: active.access.access.workspaceId, evidenceId: active.access.access.evidenceId }} />
+  </div>
+  if (signedIn) return <div className="nv-access">{live}<div className="nv-access__card">
+    {accessProblem ? <Icon name="alert" size={32} className="nv-access__icon" /> : <div className="nv-spinner" aria-hidden="true" />}
+    <h1 className="nv-h2">{accessProblem ? "We couldn’t open your workspace" : "Opening your workspace…"}</h1>
+    <p className="nv-muted">{accessProblem ? message : "Checking your invitation and company access."}</p>
+    <button type="button" className="nv-btn" disabled={busy} onClick={() => void signOut()}>Sign out</button>
+  </div></div>
+  return <div>{live}<Landing ready={Boolean(client)} busy={busy} message={message} email={email} password={password} onEmail={setEmail} onPassword={setPassword} onSignIn={event => void signIn(event)} onSendLink={() => void sendSignInLink()} /></div>
 }

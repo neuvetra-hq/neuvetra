@@ -26,6 +26,9 @@ import { createWorkspaceStore } from "../workspace/service"
 import { createM80BetaRoutes } from "../workspace/m80-beta-routes"
 import { createCompanySetupRoutes } from "../workspace/company-setup-routes"
 import { createCollectionRoutes, type CollectionEvidenceStorage } from "../workspace/collection-routes"
+import { createCollectionResultsRoutes, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsEngines } from "../workspace/collection-results-routes"
+import { createScope1Engine } from "../calculation/scope1-authority"
+import { createScope2Engine } from "../calculation/scope2-authority"
 import { createSupabaseCollectionEvidenceStorage } from "../workspace/collection-storage"
 import { readStagingConfig, STAGING_PROFILE, type StagingConfig } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
@@ -55,6 +58,7 @@ export interface StagingOverrides {
   verifyAssets?: () => Promise<void>
   serveAsset?: (pathname: string) => Promise<Response | null>
   collectionEvidenceStorage?: CollectionEvidenceStorage
+  resultsEngines?: CollectionResultsEngines
   log?: (event: StagingLog) => void
 }
 
@@ -122,6 +126,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const scope1BetaRoutes=createM80BetaRoutes({database,validateUser,origin:config.origin})
   const companySetupRoutes=createCompanySetupRoutes({database,validateUser,origin:config.origin})
   const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage})
+  // Board 2026-09-29: draft numbers from unreleased methods only in this private synthetic staging server (profile checked above).
+  const resultsRoutes=createCollectionResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engines:overrides.resultsEngines ?? { scope1: createScope1Engine({ expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256 }), scope2: createScope2Engine({ expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256 }) }})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -187,6 +193,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
         if (geography?.countryCode !== "US" || geography.stateCode !== "CA") return json(404, { error: "Not found." })
       }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/results$/i.test(url.pathname)) return resultsRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
         // The schema-22 bridge may serve reviewed legacy routes, but must never

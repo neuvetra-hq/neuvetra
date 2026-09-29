@@ -225,6 +225,7 @@ apps/site-web/src/m71-local-preview.tsx
 !apps/site-api/src/workspace/collection-routes.ts
 !apps/site-api/src/workspace/collection-storage.ts
 !apps/site-api/src/workspace/collection-zip.ts
+!apps/site-api/src/workspace/collection-results-routes.ts
 !apps/site-api/src/calculation/method-engine-runner.ts
 !apps/site-api/src/calculation/scope1-authority.ts
 !apps/site-api/src/calculation/scope2-authority.ts
