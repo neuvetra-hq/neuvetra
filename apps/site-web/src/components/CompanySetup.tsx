@@ -31,7 +31,7 @@ const yesNo = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No"]] as con
 const inclusion = [["unknown", "Not sure yet"], ["included", "Propose including"], ["excluded", "Propose excluding — review needed"]] as const
 const screening = [["unknown", "Not sure yet"], ["yes", "Yes"], ["no", "No — explain"], ["not_applicable", "Not applicable — explain"]] as const
 
-export function CompanySetup({ actor, workspaceId, headingRef }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null> }) {
+export function CompanySetup({ actor, workspaceId, headingRef, onDirtyChange }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange?: (dirty: boolean) => void }) {
   const [step, setStep] = useState(0)
   const [view, setView] = useState<CompanySetupView | null>(null)
   const [draft, setDraft] = useState<Setup | null>(null)
@@ -45,6 +45,8 @@ export function CompanySetup({ actor, workspaceId, headingRef }: { actor: Hosted
   const pending = useRef<CompanySetupSaveInput | null>(null)
   const actorRef = useRef(actor)
   useEffect(() => { actorRef.current = actor }, [actor])
+  // Lets the workspace navigation warn before unsaved setup changes are discarded (same pattern as collection).
+  useEffect(() => { onDirtyChange?.(dirty) }, [dirty, onDirtyChange])
 
   useEffect(() => {
     if (!workspaceId) { queueMicrotask(() => { setError(true); setMessage("Choose an admitted synthetic company to continue.") }); return }

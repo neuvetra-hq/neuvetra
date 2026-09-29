@@ -1,0 +1,96 @@
+// Ask Neuvetra: reviewed help content only. No model is called and nothing is generated. A question is matched to the
+// closest written answer; when nothing matches well, the assistant says so instead of guessing.
+export type HelpPanel = "home" | "setup" | "collection" | "results"
+export interface HelpLink { label: string; panel: HelpPanel }
+export interface HelpEntry { id: string; question: string; keywords: string[]; answer: string[]; link?: HelpLink; source?: string; panels?: HelpPanel[] }
+
+export const HELP_REVIEWED_ON = "29 Sep 2026"
+
+export const HELP_ENTRIES: HelpEntry[] = [
+  { id: "what-is-neuvetra", question: "What does Neuvetra do?", keywords: ["neuvetra", "what", "do", "product", "how", "work", "about", "use"], panels: ["home"],
+    answer: ["Neuvetra helps a company prepare a traceable greenhouse-gas inventory. You describe the company and its sites, add activity data such as fuel and electricity use with the supporting documents, and Neuvetra calculates emissions with reviewed methods.", "Every number in the draft report links back to the record, the evidence and the emission factor it came from, so an assurance provider can follow it."] },
+  { id: "steps", question: "What do I need to do, step by step?", keywords: ["steps", "start", "begin", "next", "order", "process", "journey", "first", "todo"], panels: ["home"],
+    answer: ["1. Company setup: legal name, reporting year, boundary approach and your sites.", "2. Activity & evidence: one record per bill, meter, vehicle group, generator or cooling system, with the document attached.", "3. Results & report: review the draft figures, fix anything flagged, then print or download the draft report."], link: { label: "Go to the overview", panel: "home" } },
+  { id: "scopes", question: "What are Scope 1, Scope 2 and Scope 3?", keywords: ["scope", "scopes", "1", "2", "3", "direct", "indirect", "difference"],
+    answer: ["Scope 1 is direct emissions from sources the company owns or controls — burning natural gas or diesel, running company vehicles, and refrigerant leaks.", "Scope 2 is indirect emissions from the electricity (or steam, heat and cooling) the company buys.", "Scope 3 is everything else in the value chain, such as purchased goods and business travel. In this beta Neuvetra calculates Scope 1 and purchased-electricity Scope 2; Scope 3 is not calculated yet."], source: "GHG Protocol Corporate Standard" },
+  { id: "sb253", question: "What is California SB 253 and does it apply to us?", keywords: ["sb", "253", "sb253", "california", "law", "carb", "deadline", "required", "apply", "revenue", "billion", "regulation", "due"],
+    answer: ["SB 253 (the Climate Corporate Data Accountability Act) requires U.S. companies with more than $1 billion in annual revenue that do business in California to report Scope 1 and Scope 2 emissions each year, with Scope 3 added from 2027.", "As of late September 2026, CARB’s regulation sets November 10, 2026 as the first Scope 1 and 2 reporting deadline, with limited assurance required from 2027. CARB can change these dates, so confirm them with CARB or your advisor.", "Companies below the threshold often prepare the same inventory for customers who ask their suppliers for emissions data."], source: "California Air Resources Board (CARB)" },
+  { id: "location-market", question: "What is the difference between location-based and market-based Scope 2?", keywords: ["location", "market", "based", "scope", "2", "difference", "dual", "residual", "mix", "rec", "certificate"], panels: ["collection", "results"],
+    answer: ["Location-based uses the average emission rate of the grid region where the electricity is used (EPA eGRID). It shows the physical grid you draw from.", "Market-based reflects the electricity you chose to buy: certificates, power purchase agreements, green tariffs or supplier-specific rates. Any electricity not covered by those uses the Green-e residual mix. Both figures are reported side by side."], source: "GHG Protocol Scope 2 Guidance; EPA eGRID2023; Green-e 2025 residual mix" },
+  { id: "zip", question: "Why do you ask for the ZIP code of an electricity meter?", keywords: ["zip", "code", "egrid", "subregion", "grid", "region", "utility", "lookup", "meter"], panels: ["collection"],
+    answer: ["The ZIP code and utility tell Neuvetra which EPA eGRID subregion supplies the meter. Each subregion has its own emission rate, so the same kWh can have very different emissions in California and in the Midwest.", "Use “Look up ZIP and utility” and pick the utility named on the bill if the ZIP is served by more than one."], source: "EPA Power Profiler ZIP lookup (eGRID2023)" },
+  { id: "heat-content", question: "Why do you need the heat content from my gas bill?", keywords: ["heat", "content", "ccf", "scf", "mcf", "cubic", "feet", "volume", "therm", "btu", "gas", "bill"], panels: ["collection"],
+    answer: ["Emission factors for natural gas are per unit of energy (MMBtu or therms). If your bill shows volume (ccf, scf or mcf), the heat content printed on the bill converts it to energy. Neuvetra never assumes a conversion, because it varies by utility and month.", "If your bill already shows therms or MMBtu, no heat content is needed."] },
+  { id: "evidence", question: "What counts as evidence, and why is my file “being checked”?", keywords: ["evidence", "upload", "file", "document", "pdf", "bill", "invoice", "scan", "quarantine", "pending", "checked", "cleared", "attach"], panels: ["collection"],
+    answer: ["Evidence is the original document behind a number: a utility bill, fuel card statement, delivery ticket, contractor service record or certificate. PDF, JPG, PNG, CSV and XLSX files up to 10 MB are accepted.", "Every upload is fingerprinted and kept private to your company. It is checked before it can be downloaded again; until then it shows as “Being checked”. You can link it to records straight away."] },
+  { id: "unknown-zero", question: "What happens if I leave something blank or don’t know it?", keywords: ["blank", "unknown", "dont", "know", "missing", "zero", "empty", "skip", "later", "partial"],
+    answer: ["Leave it blank or choose “Not sure yet”. Neuvetra saves what you have and marks the record as needing input. Unknown is never treated as zero, so a missing value can’t quietly lower your total.", "The overview and the results page list everything still needed."] },
+  { id: "estimate", question: "Can I use an estimate if I don’t have the actual figure?", keywords: ["estimate", "estimated", "approximate", "guess", "actual", "quality", "proxy"], panels: ["collection"],
+    answer: ["Yes. Set data quality to “Estimated” and describe how you estimated it (for example, “December prorated from November”). The estimate is flagged in the results and the report so a reviewer can see it."] },
+  { id: "held", question: "Why is a record “Needs input” or not counted?", keywords: ["held", "needs", "input", "not", "counted", "why", "hold", "excluded", "withdrawn", "flagged", "calculated", "review"], panels: ["collection", "results"],
+    answer: ["A record is only calculated when everything the method needs is present and valid. Otherwise it is held with a plain reason, such as a missing amount, a site that’s excluded in company setup, or a unit the method doesn’t support.", "Open the record from the results page with “Fix”, correct it, and save. The results update the next time you open them."], link: { label: "Open results", panel: "results" } },
+  { id: "how-calculated", question: "How are the emissions calculated?", keywords: ["calculate", "calculated", "calculation", "method", "formula", "factor", "factors", "emission", "epa", "how", "math"], panels: ["results"],
+    answer: ["Each record is multiplied by a published emission factor and converted to CO2-equivalent: activity × emission factor × global warming potential.", "Scope 1 uses the EPA GHG Emission Factors Hub (2025). Scope 2 uses EPA eGRID2023 for location-based and the Green-e 2025 residual mix for market-based. Gases are combined with IPCC AR5 100-year global warming potentials (CH4 28, N2O 265).", "Each result lists the exact factors used, and figures are rounded once, at the end, to 4 decimal places of kg."], source: "EPA GHG Emission Factors Hub 2025; EPA eGRID2023; IPCC AR5" },
+  { id: "co2e", question: "What does CO2e mean?", keywords: ["co2e", "equivalent", "carbon", "dioxide", "gwp", "global", "warming", "potential", "tonnes", "tons", "kg"], panels: ["results"],
+    answer: ["CO2e (carbon dioxide equivalent) puts different greenhouse gases on one scale. Each gas is multiplied by its global warming potential: over 100 years, 1 kg of methane (CH4) warms like 28 kg of CO2, and 1 kg of nitrous oxide (N2O) like 265 kg.", "Results show kilograms with full precision and metric tonnes (1 t = 1,000 kg) for headlines."], source: "IPCC AR5" },
+  { id: "refrigerant", question: "How do I fill in the refrigerant amounts?", keywords: ["refrigerant", "refrigerants", "hvac", "leak", "top", "up", "recharge", "pn", "cn", "ps", "cd", "rd", "r-410a", "suppression", "material", "balance"], panels: ["collection"],
+    answer: ["Use your HVAC contractor’s service records for the year, one gas per record. The EPA simplified material balance uses five amounts: refrigerant bought to charge new equipment, the full charge of that new equipment, refrigerant added during servicing, the full charge of equipment retired, and refrigerant recovered from it.", "Most offices only have servicing top-ups: enter that amount and 0 for the others. Enter 0 only when something did not happen — never for “don’t know”."], source: "EPA Simplified GHG Emissions Calculator guidance" },
+  { id: "vehicles", question: "Why do you ask for miles or fuel economy for vehicles?", keywords: ["vehicle", "vehicles", "fleet", "miles", "mileage", "mpg", "fuel", "economy", "odometer", "van", "truck", "car"], panels: ["collection"],
+    answer: ["CO2 comes from the gallons of fuel. Methane and nitrous oxide depend on distance and the vehicle type and model year, so Neuvetra needs miles driven (odometer or trip log) or, if you don’t have miles, the fuel economy.", "Without either, CO2 is still calculated and the record is marked as partly calculable."] },
+  { id: "generator", question: "How do I report generator diesel if I only have delivery tickets?", keywords: ["generator", "diesel", "fuel", "oil", "tank", "delivery", "purchases", "gallons", "backup"], panels: ["collection"],
+    answer: ["Fuel burned = fuel delivered + tank level at the start − tank level at the end. Enter the purchases with the opening and closing tank readings. Purchases alone aren’t enough, because fuel may still be sitting in the tank."] },
+  { id: "boundary", question: "What is operational control vs financial control?", keywords: ["boundary", "operational", "financial", "control", "equity", "share", "consolidation", "approach", "organizational"], panels: ["setup"],
+    answer: ["Your boundary approach decides which operations you count. Under operational control you report 100% of emissions from operations you run and set the policies for — the most common choice. Financial control counts operations whose financial and operating policies you direct for economic benefit. Equity share counts your ownership percentage of each operation.", "Pick one and apply it to every site. If you’re unsure, choose “Not sure yet” and note the question."], source: "GHG Protocol Corporate Standard, chapter 3" },
+  { id: "sites", question: "Which sites should I include?", keywords: ["site", "sites", "location", "locations", "include", "exclude", "leased", "landlord", "warehouse", "office"], panels: ["setup"],
+    answer: ["List every site in the reporting year — offices, warehouses, depots, stores — including leased ones. For each, say who controls the equipment. Under operational control, include sites where your company runs the equipment; a site where the landlord runs everything is usually excluded, with the reason written down.", "Activity records can only be added for sites saved in company setup."] },
+  { id: "source-id", question: "What is a source ID?", keywords: ["source", "id", "identifier", "account", "number", "meter", "name"], panels: ["collection"],
+    answer: ["A short name that stays the same for the same source every time: the gas account number, the meter number, a fleet group name like “VANS-SAC”, or the generator’s asset tag. It lets Neuvetra spot duplicates and follow a source across months."] },
+  { id: "corrections", question: "Can I change a record after saving it?", keywords: ["change", "edit", "correct", "correction", "update", "fix", "mistake", "delete", "remove", "withdraw", "history", "version"],
+    answer: ["Yes. Open the record, make the change and give a short reason. Neuvetra saves a new version and keeps the earlier ones in the correction history, so the audit trail stays intact.", "To remove a record, withdraw it with a reason; it stays in the history but isn’t counted."] },
+  { id: "draft", question: "What does “Draft — not externally assured” mean?", keywords: ["draft", "assured", "assurance", "audit", "auditor", "verified", "official", "final", "beta"], panels: ["results"],
+    answer: ["The report is a draft prepared with Neuvetra’s beta methods. It hasn’t been checked by an independent assurance provider, so it shouldn’t be filed or published as final.", "It is built to make that review easier: every figure shows its record, evidence, factor and method version."] },
+  { id: "report", question: "How do I get the report?", keywords: ["report", "download", "print", "pdf", "export", "csv", "share", "get", "results"], panels: ["results"],
+    answer: ["Open Results & report. “Print or save as PDF” opens the draft report in a print-ready layout; “Download CSV” gives every record and its result for a spreadsheet."], link: { label: "Open results", panel: "results" } },
+  { id: "who-edit", question: "Why can’t I edit anything?", keywords: ["edit", "cant", "cannot", "read", "only", "permission", "access", "owner", "admin", "member", "role", "disabled"],
+    answer: ["Only company owners and admins can save changes or upload evidence. Members can view everything. Ask an owner to change your role if you need to edit."] },
+  { id: "privacy", question: "Who can see our data?", keywords: ["privacy", "private", "secure", "security", "see", "data", "confidential", "share", "access"],
+    answer: ["Records and files are scoped to your company; other companies can’t list, open or download them, even with a guessed link. During this private beta, use synthetic or test data only."] },
+  { id: "scope3", question: "Do you calculate Scope 3?", keywords: ["scope", "3", "value", "chain", "supplier", "travel", "commuting", "purchased", "goods", "grid", "loss"],
+    answer: ["Not yet. You can link an electricity record to its grid-loss source for later Scope 3 category 3 work, but no Scope 3 amount is calculated in this beta."] },
+]
+
+const STOP = new Set(["a", "an", "the", "is", "are", "do", "does", "i", "we", "my", "our", "to", "of", "for", "in", "on", "and", "or", "it", "this", "that", "what", "how", "why", "can", "you", "me", "be", "with", "if", "should", "about", "which", "your"])
+export function tokens(text: string): string[] {
+  return text.toLowerCase().replace(/[’']/g, "").replace(/sb\s*253/g, "sb253").split(/[^a-z0-9-]+/).filter(word => word && !STOP.has(word))
+}
+
+export interface HelpMatch { entry: HelpEntry; score: number }
+/** Score every entry by keyword and question-word overlap. Returns the best match, or null when nothing is close. */
+export function matchQuestion(query: string, panel?: HelpPanel): HelpMatch | null {
+  const words = tokens(query)
+  if (!words.length) return null
+  let best: HelpMatch | null = null
+  for (const entry of HELP_ENTRIES) {
+    const keywords = new Set(entry.keywords.map(word => word.toLowerCase()))
+    const questionWords = new Set(tokens(entry.question))
+    let score = 0
+    for (const word of words) {
+      if (keywords.has(word)) score += 2
+      else if ([...keywords].some(keyword => keyword.length > 3 && (word.startsWith(keyword) || keyword.startsWith(word)))) score += 1
+      if (questionWords.has(word)) score += 1
+    }
+    score = score / Math.sqrt(words.length + 1)
+    if (panel && entry.panels?.includes(panel)) score += 0.15
+    if (!best || score > best.score) best = { entry, score }
+  }
+  return best && best.score >= 1.2 ? best : null
+}
+
+export function suggestedQuestions(panel: HelpPanel): HelpEntry[] {
+  const preferred = HELP_ENTRIES.filter(entry => entry.panels?.includes(panel))
+  const general = HELP_ENTRIES.filter(entry => !entry.panels)
+  return [...preferred, ...general].slice(0, 4)
+}
+
+/** Questions about the user's own progress are answered from their saved data, not from written help. */
+export const isProgressQuestion = (query: string) => /\b(what('?s| is)? (missing|left|next)|next step|what should i do|what do i do|to do|todo|progress|status|am i done|finished|complete)\b/i.test(query)

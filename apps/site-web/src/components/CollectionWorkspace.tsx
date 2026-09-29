@@ -259,7 +259,7 @@ function HistoricalActivityDetail({ version, evidence }: { version: CollectionAc
   </div>
 }
 
-export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void }) {
+export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null }) {
   const [records, setRecords] = useState<CollectionActivityRecord[]>([])
   const [evidence, setEvidence] = useState<CollectionEvidenceMetadata[]>([])
   const [lineages, setLineages] = useState<GridLossLineage[]>([])
@@ -297,11 +297,14 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       if (controller.signal.aborted) return
       setRecords(items); setEvidence(files); setLineages(grid); setContext(loadedContext)
       setDraft(current => current.setupVersionId ? current : { ...current, setupVersionId: loadedContext.setupVersionId ?? "" })
+      // Opened from the overview or results ("Fix"): show that saved record in the correction form, exactly as "Review or correct" does.
+      const requested = openRecordId ? items.find(item => item.id === openRecordId) : undefined
+      if (requested) { setRecordId(requested.id); setDraft(structuredClone(requested.currentVersion.activity) as CollectionDraft); requestAnimationFrame(() => document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" })) }
       setMessage("Activity and evidence are collected as drafts. No emissions are counted until a reviewed method is released.")
     }).catch(cause => { if (!controller.signal.aborted) { setError(true); setMessage(cause instanceof Error ? cause.message : "Collection is unavailable.") } })
       .finally(() => { if (!controller.signal.aborted) setBusy(false) })
     return () => controller.abort()
-  }, [actor.userId, workspaceId])
+  }, [actor.userId, workspaceId, openRecordId])
 
   function edit(change: (next: CollectionDraft) => void) {
     if (!canManage || busy) return
@@ -496,7 +499,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       <button type="button" disabled={busy} onClick={() => void refresh()}>Reload saved records</button>
     </div>
 
-    <div className="worksheet-card worksheet-form"><h2>{selected ? `Correct saved ${kinds.find(([id]) => id === selected.kind)?.[1]}` : "New activity record"}</h2>
+    <div className="worksheet-card worksheet-form" id="collection-record-editor"><h2>{selected ? `Correct saved ${kinds.find(([id]) => id === selected.kind)?.[1]}` : "New activity record"}</h2>
       {selected && <button type="button" disabled={busy || !canManage} onClick={startNewRecord}>Start a new record</button>}
       <div className="worksheet-nav" aria-label="Activity types">{kinds.map(([kind, label]) => <button type="button" key={kind} aria-pressed={draft.kind === kind} disabled={busy || Boolean(selected)} onClick={() => switchKind(kind)}>{label}</button>)}</div>
       {selected && <p>Activity type is fixed while correcting this record. Use “Start a new record” to collect another activity.</p>}

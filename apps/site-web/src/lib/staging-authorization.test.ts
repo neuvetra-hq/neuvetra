@@ -18,11 +18,11 @@ function harness(){
  const Workspace=()=>null
  const h=(type:unknown,props:Record<string,any>|null,...children:any[]):Node=>({type,props:props??{},children})
  const client={auth:{onAuthStateChange(callback:typeof authCallback){authCallback=callback;return {data:{subscription:{unsubscribe(){unsubscribed=true}}}}},getSession:async()=>({data:{session:session()}}),signOut:async()=>({error:null}),signInWithPassword:async()=>({error:null}),signInWithOtp:async()=>({error:null}),stopAutoRefresh(){stopped=true}}}
- const factory=new Function("useEffect","useRef","useState","createClient","StagingWorkspace","decodeStagingAccess","decodeStagingConfig","createStagingAuthorization","fetch","window","h",script)
+ const factory=new Function("useEffect","useRef","useState","createClient","StagingWorkspace","decodeStagingAccess","decodeStagingConfig","createStagingAuthorization","fetch","window","h","Landing","Icon",script)
  const component=factory((effect:()=>()=>void)=>{cursor++;if(first)cleanups.push(effect())},(value:unknown)=>{const i=cursor++;return slots[i]??(slots[i]={current:value})},(value:unknown)=>{const i=cursor++;if(!(i in slots))slots[i]=value;return [slots[i],(next:any)=>{slots[i]=typeof next==="function"?next(slots[i]):next}]},()=>client,Workspace,decodeStagingAccess,decodeStagingConfig,createStagingAuthorization,async(path:string,init:RequestInit)=>{
   if(path.endsWith("/config"))return Response.json({profile:STAGING_PROFILE,supabaseUrl:"https://abcdefghijklmnopqrst.supabase.co",anonKey:"sb_publishable_abcdefghijklmnopqrst"})
   const token=new Headers(init.headers).get("authorization")!;requests.push({token,signal:init.signal as AbortSignal});return verification(token)
- },{setInterval(fn:()=>void){listeners.set("interval",fn);return 1},clearInterval(){listeners.delete("interval")},addEventListener(name:string,fn:()=>void){listeners.set(name,fn)},removeEventListener(name:string){listeners.delete(name)},location:{origin:"https://synthetic.invalid"}},h)
+ },{setInterval(fn:()=>void){listeners.set("interval",fn);return 1},clearInterval(){listeners.delete("interval")},addEventListener(name:string,fn:()=>void){listeners.set(name,fn)},removeEventListener(name:string){listeners.delete(name)},location:{origin:"https://synthetic.invalid"}},h,()=>null,()=>null)
  function render(){cursor=0;tree=component();first=false;return tree}
  const flatten=(node:any):Node[]=>node&&typeof node==="object"&&"type" in node?[node,...node.children.flat(Infinity).flatMap(flatten)]:[]
  const nodes=()=>flatten(tree)
