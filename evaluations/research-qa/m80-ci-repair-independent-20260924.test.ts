@@ -18,12 +18,13 @@ async function probe(receipts:unknown[],occupied=false){
  let error='';try{await api.createM78QaFixture(baseline,'m78_qa_independent')}catch(e){error=String(e)}
  return {events,error,api}
 }
-test('actual fixture refuses any prior receipt difference before the clone statement',async()=>{
- const manifest=await readMigrationManifest(),good=manifest.map(({name,sha256})=>({name,sha256}))
- const bad:any[][]=[good.slice(0,21),[...good,{name:'0023_unknown.sql',sha256:'0'.repeat(64)}],[...good].reverse(),[]]
- for(const index of [0,9,19,20,21])for(const field of ['name','sha256']){const rows=structuredClone(good);(rows[index] as any)[field]='altered';bad.push(rows)}
- for(const rows of bad){const result=await probe(rows);expect(result.error).toContain('exact reviewed manifest');expect(result.events.some(v=>v.startsWith('create database'))).toBe(false);expect(result.events).not.toContain('occupied')}
- const success=await probe(good);expect(success.error).toContain('QA_STOP_AFTER_CLONE');expect(success.events.filter(v=>v.startsWith('create database'))).toEqual(['create database m78_qa_independent template m63_integration']);expect(success.events.indexOf('close:/m63_integration')).toBeLessThan(success.events.indexOf('occupied'))
+test('actual fixture clones only exact historical prefixes or current manifest before the clone statement',async()=>{
+ const manifest=await readMigrationManifest(),good=manifest.slice(0,23).map(({name,sha256})=>({name,sha256})),current=manifest.map(({name,sha256})=>({name,sha256}))
+ const bad:any[][]=[good.slice(0,20),[...good,{name:'0024_unknown.sql',sha256:'0'.repeat(64)}],[...good].reverse(),current.slice(0,24),current.slice(0,25),current.slice(0,26),[]]
+ for(const index of [0,9,19,20,21,22])for(const field of ['name','sha256']){const rows=structuredClone(good);(rows[index] as any)[field]='altered';bad.push(rows)}
+ for(const index of [23,26])for(const field of ['name','sha256']){const rows=structuredClone(current);(rows[index] as any)[field]='altered';bad.push(rows)}
+ for(const rows of bad){const result=await probe(rows);expect(result.error).toMatch(/(?:[Ee]xact reviewed|Unreviewed)/);expect(result.events.some(v=>v.startsWith('create database'))).toBe(false);expect(result.events).not.toContain('occupied')}
+ for(const rows of [good.slice(0,21),good.slice(0,22),good,current]){const success=await probe(rows);expect(success.error).toContain('QA_STOP_AFTER_CLONE');expect(success.events.filter(v=>v.startsWith('create database'))).toEqual(['create database m78_qa_independent template m63_integration']);expect(success.events.indexOf('close:/m63_integration')).toBeLessThan(success.events.indexOf('occupied'))}
  const occupied=await probe(good,true);expect(occupied.error).toContain('Occupied QA database');expect(occupied.events.some(v=>v.startsWith('create database'))).toBe(false)
 })
 test('current manifest gate and local target gate retain narrow refusals',async()=>{

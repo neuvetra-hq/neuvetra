@@ -142,13 +142,21 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     const receipt = await database.checkReadiness()
     const existingProject = config.projectRef === EXISTING_PROJECT_REF
     const current = receipt.schemaVersion === STAGING_SCHEMA_VERSION
-    const bridged = existingProject && config.reuseExistingProject && receipt.legacyContainmentVerified === true && receipt.schemaVersion === STAGING_SCHEMA_BRIDGE_VERSION
-    if (receipt.profile !== STAGING_PROFILE || (!current && !bridged)) throw new Error("Staging database unavailable.")
+    const upgrading = existingProject && config.reuseExistingProject && receipt.legacyContainmentVerified === true
+      && receipt.schemaVersion >= STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion < STAGING_SCHEMA_VERSION
+    if (receipt.profile !== STAGING_PROFILE || (!current && !upgrading)) throw new Error("Staging database unavailable.")
     if (existingProject && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
-  const readiness = async () => { const receipt = await databaseReadiness(); await checkAssets(); return receipt }
-  try { await readiness() } catch { await database.close(); throw new Error("Private staging dependencies are unavailable.") }
+  const readiness = async () => {
+    const receipt = await databaseReadiness()
+    if (receipt.schemaVersion !== STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion !== STAGING_SCHEMA_VERSION) throw new Error("Staging database is upgrading.")
+    await checkAssets()
+    return receipt
+  }
+  // A process restart at an exact 24–26 prefix must start, but never report
+  // ready or dispatch workspace API requests until all four steps commit.
+  try { await databaseReadiness(); await checkAssets() } catch { await database.close(); throw new Error("Private staging dependencies are unavailable.") }
 
   const routeName = (pathname: string): StagingLog["route"] => pathname === "/health" ? "health" : pathname === "/ready" ? "ready" : pathname === "/workspace-api/config" ? "config" : pathname === "/workspace-api/session" ? "session" : pathname.startsWith("/workspace-api/workspace") ? "workspace" : pathname === "/" || pathname === "/workspace" || pathname.startsWith("/assets/") ? "asset" : "unknown"
 
@@ -165,6 +173,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       if ((origin && origin !== config.origin) || (!isGet && origin !== config.origin)) return json(403, { error: "Forbidden." })
       if (!admission.check("staging").allowed) return json(429, { error: "Request limit reached." })
       const requestReadiness = config.projectRef === EXISTING_PROJECT_REF ? await databaseReadiness() : undefined
+      if (requestReadiness && requestReadiness.schemaVersion > STAGING_SCHEMA_BRIDGE_VERSION && requestReadiness.schemaVersion < STAGING_SCHEMA_VERSION) return json(503, { error: "Staging database is upgrading." })
       if (url.pathname === "/workspace-api/config" && isGet) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
       const token = extractBearerToken(request.headers)
       if (!token || token.length > 8192) return json(401, { error: "Authentication required." })
@@ -179,6 +188,13 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
         return json(200, { profile: STAGING_PROFILE, user: { id: user.id }, access: { role: access.role, workspaceId: access.companyId, evidenceId: access.evidenceId } })
       }
       url.pathname = url.pathname.slice("/workspace-api".length)
+      // The existing-project bridge may serve schema-23 setup and legacy routes,
+      // but never dispatch collection or draft-results SQL before all four
+      // reviewed migrations have committed.
+      if (/^\/workspace\/[0-9a-f-]+\/(?:collection(?:\/|$)|results$)/i.test(url.pathname)) {
+        const receipt = requestReadiness ?? await databaseReadiness()
+        if (receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { code: "collection_unavailable", error: "Activity and evidence is not available yet." })
+      }
       let forwarded: Request
       const evidenceUpload = request.method === "POST" && COLLECTION_EVIDENCE_UPLOAD.test(url.pathname)
       try {
@@ -196,10 +212,9 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       if (/^\/workspace\/[0-9a-f-]+\/results$/i.test(url.pathname)) return resultsRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
-        // The schema-22 bridge may serve reviewed legacy routes, but must never
-        // dispatch setup SQL until the explicit schema-23 maintenance step lands.
+        // Company setup exists in both the schema-23 bridge and schema 27.
         const receipt = requestReadiness ?? await databaseReadiness()
-        if (receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { error: "Company setup is unavailable." })
+        if (receipt.schemaVersion !== STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { error: "Company setup is unavailable." })
         return companySetupRoutes(forwarded)
       }
       if (url.pathname.includes("/scope1-beta-setup")) return scope1BetaRoutes(forwarded)

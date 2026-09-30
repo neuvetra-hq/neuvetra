@@ -20,7 +20,8 @@
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/config/**"]
     },
     "test": {
-      "cache": false
+      "cache": false,
+      "passThroughEnv": ["NEUVETRA_PYTHON"]
     },
     "test:e2e": {
       "dependsOn": ["^build"],

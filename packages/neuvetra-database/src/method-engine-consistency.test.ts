@@ -41,7 +41,7 @@ describe.skipIf(!SOURCES)('engine and released database values agree', () => {
     db = new PGlite()
     await db.exec(`create role authenticated; create schema auth; create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;`)
-    for (const m of await readMigrationManifest()) await db.exec(m.sql)
+    for (const m of (await readMigrationManifest()).slice(0, 23)) await db.exec(m.sql)
     for (const m of [METHOD_REFERENCE_MIGRATION, SCOPE3_METHOD_MIGRATION, RESIDUAL_MIX_METHOD_MIGRATION]) await db.exec(await Bun.file(new URL(`./migrations/${m}`, import.meta.url)).text())
     await db.query('insert into auth.users values($1)', [user])
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic C','US','CA',$2)", [company, user])

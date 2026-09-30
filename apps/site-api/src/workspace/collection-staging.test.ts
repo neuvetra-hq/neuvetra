@@ -18,7 +18,7 @@ test("staging wrapper raises the body limit only for a collection evidence uploa
   })
   let uploaded = 0
   const database = {
-    async checkReadiness() { return { profile: STAGING_PROFILE, schemaVersion: 23 } },
+    async checkReadiness() { return { profile: STAGING_PROFILE, schemaVersion: 27 } },
     async close() {},
     async hasStagingAccess() { return true },
     async findCollectionContext(_actor: string, companyId: string) { return { companyId, setupVersionId: null, setupRevision: null, locations: [] } },

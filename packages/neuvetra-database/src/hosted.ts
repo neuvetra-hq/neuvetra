@@ -5,9 +5,9 @@ import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audi
 import { readMigrationManifest } from "./staging-migrations"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 23
+export const STAGING_SCHEMA_VERSION = 27
 /** Temporary image-activation bridge for the pinned existing synthetic project; never migrates. */
-export const STAGING_SCHEMA_BRIDGE_VERSION = 22
+export const STAGING_SCHEMA_BRIDGE_VERSION = 23
 export interface HostedWorkspaceOptions {
   connectionString: string
   expectedProjectRef: string
@@ -167,10 +167,13 @@ export function validateHostedSchemaReceipts(
   options: Pick<HostedWorkspaceOptions, "expectedProjectRef" | "reuseExistingProject">,
 ): number {
   const current = receipts.length === STAGING_SCHEMA_VERSION
-  const existingProjectBridge = options.expectedProjectRef === EXISTING_PROJECT_REF
+  // Exact intermediate prefixes let the process survive a restart between
+  // operator migration commits; HTTP readiness stays unavailable until 27.
+  const existingProjectUpgrade = options.expectedProjectRef === EXISTING_PROJECT_REF
     && options.reuseExistingProject === true
-    && receipts.length === STAGING_SCHEMA_BRIDGE_VERSION
-  if (manifest.length !== STAGING_SCHEMA_VERSION || (!current && !existingProjectBridge)
+    && receipts.length >= STAGING_SCHEMA_BRIDGE_VERSION
+    && receipts.length < STAGING_SCHEMA_VERSION
+  if (manifest.length !== STAGING_SCHEMA_VERSION || (!current && !existingProjectUpgrade)
     || receipts.some((receipt, index) => receipt.name !== manifest[index]?.name || receipt.sha256 !== manifest[index]?.sha256)) {
     throw new Error("Staging schema receipt mismatch.")
   }
