@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
-import { HostedWorkspaceDatabase, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
+import { HostedWorkspaceDatabase, STAGING_SCHEMA_VERSION, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
 import { loadStagingDatabaseCa, validateDatabaseCaPem } from "./staging-tls"
 import { auditLegacyStagingExposure, planLegacyStagingContainment } from "./staging-audit"
 import { migratePrivateStaging, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
@@ -117,9 +117,9 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
   afterAll(async () => { await database?.close(); await another?.close(); await operator?.close() })
 
   test("checks exact migration receipts, restricted role and no ordinary-start migrations", async () => {
-    expect(readinessVersions).toEqual([27])
+    expect(readinessVersions).toEqual([STAGING_SCHEMA_VERSION])
     expect(setupTables).toEqual([null, "neuvetra.company_setup_versions"])
-    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 27 })
+    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: STAGING_SCHEMA_VERSION })
     expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })).migrations).toHaveLength(27)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
@@ -304,7 +304,7 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     const decision = await database.reviewDraftInventoryReport(admin, company, annual.id, report.id, reviewInput)
     await another.close()
     another = construct(createPostgresConnection(runtimeUrl(), { tls:false,maxConnections:2 }))
-    expect(await another.checkReadiness()).toMatchObject({schemaVersion:23})
+    expect(await another.checkReadiness()).toMatchObject({schemaVersion:STAGING_SCHEMA_VERSION})
     expect(await another.findDraftInventoryReportReview(member,company,annual.id,report.id)).toEqual(decision)
     expect((await another.findDraftInventoryReport(member,company,annual.id))?.reportSha256).toBe(report.reportSha256)
     expect((await another.findAnnualEvidencePack(member,company,annual.id))?.archiveSha256).toBe(pack.archiveSha256)
