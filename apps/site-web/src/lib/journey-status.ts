@@ -3,7 +3,7 @@ import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMet
 import { listCollectionActivities, listCollectionEvidence, loadCollectionContext } from "./collection-api"
 import { loadCompanySetup } from "./company-setup-api"
 import type { HostedWorkspaceActor } from "./workspace-api"
-import { collectionReadinessFindings, locationReadinessFindings, type CollectionReadinessFinding } from "@/components/CollectionWorkspace"
+import { recordReadiness, type CollectionReadinessFinding } from "@/components/CollectionWorkspace"
 import { kindLabel, periodLabel, type RecordState } from "./plain-language"
 
 export type JourneyPanel = "home" | "setup" | "collection" | "results"
@@ -101,7 +101,7 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const period = setup?.reportingPeriod ?? null
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
-    const findings = [...collectionReadinessFindings(activity, input.evidence), ...locationReadinessFindings(activity, input.context)]
+    const findings = recordReadiness(activity, input.context, input.evidence)
     let state = recordState(findings)
     const reasons = findings.map(finding => finding.reason)
     // Same check as the results route: a record not wholly inside the reporting period is held, never counted.

@@ -34,7 +34,7 @@ COPY packages/neuvetra-database/src/m77-contract.ts packages/neuvetra-database/s
 COPY packages/neuvetra-database/src/m78-contract.ts packages/neuvetra-database/src/m78-validation.ts packages/neuvetra-database/src/m78-reconciliation.ts packages/neuvetra-database/src/m78-policy.ts packages/neuvetra-database/src/m78-report.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/m80-contract.ts ./packages/neuvetra-database/src/
 COPY packages/neuvetra-database/src/company-setup-contract.ts ./packages/neuvetra-database/src/
-COPY packages/neuvetra-database/src/collection-contract.ts ./packages/neuvetra-database/src/
+COPY packages/neuvetra-database/src/collection-contract.ts packages/neuvetra-database/src/collection-engine-input.ts ./packages/neuvetra-database/src/
 # Full web typechecking resolves this reviewed catalog; it is not a runtime corpus.
 COPY data/research/answer-units/scope2-website.epa-acquisition.v1.json ./data/research/answer-units/
 COPY output/pdf/neuvetra-m55-synthetic-electricity-bill.pdf output/pdf/neuvetra-m66-synthetic-electricity-bill-b.pdf ./output/pdf/
