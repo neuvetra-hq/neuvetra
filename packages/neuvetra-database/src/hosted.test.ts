@@ -21,17 +21,20 @@ test("hosted target binding refuses wrong projects, privileged users and connect
   for (const value of [options.connectionString.replace(REF, "z".repeat(20)), options.connectionString.replace("neuvetra_runtime", "postgres"), `${options.connectionString}?sslmode=disable`, options.connectionString.replace("supabase.co", "supabase.co.attacker.test"), options.connectionString.replace("/postgres", "/customer")]) expect(() => validateHostedTarget({ ...options, connectionString: value })).toThrow()
 })
 
-test("schema 22 readiness bridge is exact and limited to confirmed existing-project reuse", () => {
-  const manifest = Array.from({ length: 23 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
-  const schema22 = manifest.slice(0, 22)
+test("schema 23 readiness bridge is exact and limited to confirmed existing-project reuse", () => {
+  const manifest = Array.from({ length: 27 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
+  const schema23 = manifest.slice(0, 23)
   const existing = { expectedProjectRef: "icockcoguyadhryzydvl", reuseExistingProject: true }
-  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(23)
-  expect(validateHostedSchemaReceipts(schema22, manifest, existing)).toBe(22)
-  expect(() => validateHostedSchemaReceipts(schema22, manifest, options)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema22, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema22.slice(0, 21), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema22.map((receipt, index) => index === 21 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema22, schema22, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(27)
+  expect(validateHostedSchemaReceipts(schema23, manifest, existing)).toBe(23)
+  expect(() => validateHostedSchemaReceipts(schema23, manifest, options)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema23, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
+  for (const length of [24, 25, 26]) expect(validateHostedSchemaReceipts(manifest.slice(0, length), manifest, existing)).toBe(length)
+  expect(() => validateHostedSchemaReceipts(manifest.slice(0, 22), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0028_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  for (const length of [24, 25, 26]) expect(() => validateHostedSchemaReceipts(manifest.slice(0, length).map((receipt, index) => index === length - 1 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema23.map((receipt, index) => index === 22 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema23, schema23, existing)).toThrow("Staging schema receipt mismatch.")
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {
@@ -79,6 +82,11 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     await operator.exec(`do $$ begin if not exists(select 1 from pg_roles where rolname='authenticated') then create role authenticated nologin; end if; if not exists(select 1 from pg_roles where rolname='anon') then create role anon nologin; end if; end $$;
       create schema if not exists auth; create table if not exists auth.users(id uuid primary key);
       create or replace function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;`)
+    await operator.exec(`create schema if not exists storage;
+      create table if not exists storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit bigint,allowed_mime_types text[]);
+      create table if not exists storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null references storage.buckets(id),name text not null,unique(bucket_id,name));
+      alter table storage.objects enable row level security;
+      grant usage on schema storage to authenticated,anon; grant select,insert,update,delete on storage.objects to authenticated,anon;`)
     const manifest = await readMigrationManifest()
     for (const migration of manifest.slice(0, 22)) await operator.exec(migration.sql)
     // Reproduce the existing synthetic project's already-reviewed application
@@ -109,10 +117,10 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
   afterAll(async () => { await database?.close(); await another?.close(); await operator?.close() })
 
   test("checks exact migration receipts, restricted role and no ordinary-start migrations", async () => {
-    expect(readinessVersions).toEqual([23])
+    expect(readinessVersions).toEqual([27])
     expect(setupTables).toEqual([null, "neuvetra.company_setup_versions"])
-    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 23 })
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })).migrations).toHaveLength(23)
+    expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: 27 })
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })).migrations).toHaveLength(27)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
     expect((await readMigrationManifest()).every(m => /^[0-9a-f]{64}$/.test(m.sha256))).toBe(true)

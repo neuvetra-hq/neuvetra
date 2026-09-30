@@ -49,8 +49,8 @@ describe.skipIf(!SOURCES)('method reference store (migration 0024)', () => {
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;`)
     const migrations = await readMigrationManifest()
-    expect(migrations).toHaveLength(23)
-    for (const m of migrations) await db.exec(m.sql)
+    expect(migrations).toHaveLength(27)
+    for (const m of migrations.slice(0, 23)) await db.exec(m.sql)
     await db.query('insert into auth.users values($1),($2)', [admitted, outsider])
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic A','US','CA',$2)", [company, admitted])
     await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner')", [company, admitted])
