@@ -10,7 +10,7 @@ import {m78Hash} from '../../packages/neuvetra-database/src/m78'
 import {M78_PERIOD,type M78Register} from '../../packages/neuvetra-database/src/m78-contract'
 
 export const M78_QA_MIGRATION='546673470c33da80dc1e0b377646fa09b921e1231535da7c1af43ec866d48736'
-// Current CI clones schema23; historical local schema21 and schema22 fixtures remain supported.
+// CI clones the exact current manifest; historical local schema21–23 fixtures remain supported.
 // This test-only admission never applies SQL or changes closed hosted operator gates.
 export function validateM78QaManifest(manifest:ReadonlyArray<{name:string;sha256:string}>){
  if(![21,22,23].includes(manifest.length)||manifest[20]?.name!=='0021_scope1_inventory.sql'||manifest[20]?.sha256!==M78_QA_MIGRATION)throw Error('Exact reviewed Scope 1 QA manifest required.')
@@ -25,7 +25,8 @@ export async function createM78QaFixture(raw:string,name:string){
  const adminUrl=new URL(raw);adminUrl.pathname='/postgres';const admin=createPostgresConnection(adminUrl.toString(),{tls:false,maxConnections:1}),source=createPostgresConnection(raw,{tls:false,maxConnections:1});let operator:WorkspaceConnection|undefined,runtime:WorkspaceConnection|undefined
  try{
   const receipts=(await source.query<{name:string;sha256:string}>('select name,sha256 from neuvetra.schema_migrations order by name')).rows
-  validateM78QaManifest(receipts)
+  validateM78QaManifest(manifest.slice(0,23))
+  if(receipts.length!==manifest.length)validateM78QaManifest(receipts)
   if(JSON.stringify(receipts)!==JSON.stringify(manifest.slice(0,receipts.length).map(({name,sha256})=>({name,sha256}))))throw Error('Baseline must already contain the exact reviewed manifest prefix; QA never applies SQL.')
   await source.close() // PostgreSQL template must have no active source connection.
   if((await admin.query('select 1 from pg_database where datname=$1',[name])).rows.length)throw Error('Occupied QA database refused.')
