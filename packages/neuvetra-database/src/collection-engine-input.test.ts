@@ -11,6 +11,9 @@ function engine(file: string, payload: unknown) {
   const p = Bun.spawnSync([process.env.NEUVETRA_PYTHON ?? 'python3', CALC(file)], { stdin: new TextEncoder().encode(JSON.stringify(payload)), env })
   return JSON.parse(p.stdout.toString()) as { status: string; code?: string; result?: Record<string, any>; lookup?: unknown }
 }
+// Each engine call is a fresh Python process (the scope 2 engine re-verifies its register and ZIP table every time), so a
+// test that runs several can pass Bun's 5-second default on a loaded or Windows machine. A timeout is not an accounting result.
+const ENGINE_TEST_TIMEOUT_MS = 60_000, ENGINE_FUZZ_TIMEOUT_MS = 300_000
 const run = (call: CollectionEngineCall) => call.engine === 'scope1' ? engine('scope1_engine.py', { action: 'calculate', request: call.request }) : engine('scope2_engine.py', { action: 'calculate', input: call.input })
 
 const company = '71000000-0000-4000-8000-000000000001', setup = '71000000-0000-4000-8000-000000000002'
@@ -59,7 +62,7 @@ describe('collection -> engine input (methods v7, C08)', () => {
     // Anything else would have been refused by the engine, so the adapter holds it.
     expect(engine('scope1_engine.py', { action: 'calculate', request: { kind: 'vehicle', input: { period: year, fuel: 'Diesel', vehicleType: 'diesel_light_duty_truck', modelYear: 2020, gallons: '1' } } }).code).toBe('unsupported_fuel')
     expect(engine('scope1_engine.py', { action: 'calculate', request: { kind: 'vehicle', input: { period: year, fuel: 'diesel', vehicleType: 'diesel_light_duty_truck', modelYear: 2020, gallons: '1', miles: { value: '1', basis: 'estimate' } } } }).code).toBe('invalid_miles_basis')
-  })
+  }, ENGINE_TEST_TIMEOUT_MS)
 
   test('stored shapes that the engines refused directly are translated, not refused', () => {
     // The v6 engine-shape probe cases (collection review C08), now through the adapter.
@@ -69,7 +72,7 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(statuses).toEqual(Array(cases.length).fill('ok'))
     const noEvidence = run(planCollectionCalculation(electricity([instrument({ evidenceReference: null })], {}, []), context, evidence).call!).result!
     expect([noEvidence.locationBased.status, noEvidence.marketBased.status, noEvidence.marketBased.findings]).toEqual(['complete', 'input_needed', ['instrument_evidence_required']])
-  })
+  }, ENGINE_TEST_TIMEOUT_MS)
 
   test('a blank instrument MWh keeps the location-based result (engine v3)', () => {
     const r = run(planCollectionCalculation(electricity([instrument({ mwh: '' })]), context, evidence).call!).result!
@@ -77,7 +80,7 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(r.locationBased.total).not.toBeNull()
     const typo = run(planCollectionCalculation(electricity([instrument({ generationTechnology: 'natural_gas', rateLbPerMwh: { co2: '9,00', ch4: null, n2o: null } })]), context, evidence).call!).result!
     expect([typo.locationBased.status, typo.marketBased.findings]).toEqual(['complete', ['instrument_rate_not_numeric']])
-  })
+  }, ENGINE_TEST_TIMEOUT_MS)
 
   test('holds with a named reason instead of sending what the engine would refuse', () => {
     const held = (v: CollectionActivityVersion) => { const p = planCollectionCalculation(v, context, evidence); expect(p.call).toBeNull(); return [p.status, p.reasons] }
@@ -99,7 +102,7 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(held(refrigerant({ terms: { PN: '', CN: '0', PS: '1', CD: '0', RD: 'n/a' } }))).toEqual(['input_needed', ['term_PN_not_numeric', 'term_RD_not_numeric']])
     expect(held(electricity([], { subregion: 'CAMXX' }))).toEqual(['input_needed', ['subregion_not_an_egrid_subregion']])
     expect(held(version({ ...electricity().activity, quantity: q('10,000', 'kWh') } as unknown as Record<string, unknown>))).toEqual(['input_needed', ['quantity_not_calculable']])
-  })
+  }, ENGINE_TEST_TIMEOUT_MS)
 
   test('withdrawn records and excluded or undecided locations are never calculated', () => {
     const withdrawn = gas('10', 'therm', null, { state: 'withdrawn', withdrawalReason: 'Entered twice.' })
@@ -117,7 +120,7 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(run(rejectedPlan.call!).result!.marketBased.findings).toEqual(['instrument_evidence_required'])
     const pendingPlan = planCollectionCalculation(electricity([instrument({ evidenceReference: pending })], {}, [pending]), context, evidence)
     expect([pendingPlan.notes, run(pendingPlan.call!).result!.marketBased.status]).toEqual([['instrument_1_evidence_pending_scan'], 'complete'])
-  })
+  }, ENGINE_TEST_TIMEOUT_MS)
 
   test('the translation drops only collection-only fields and never changes a value', () => {
     const plan = planCollectionCalculation(electricity([instrument({ generationTechnology: 'natural_gas', rateLbPerMwh: { co2: '900.5', ch4: '0.02', n2o: null } })], { zip: '07401', subregion: 'RFCE', utilityEiaId: '15477' }), context, evidence)
@@ -127,7 +130,7 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(planCollectionCalculation(gas('12.5', 'therm', { value: '0.1', unit: 'MMBtu per ccf' }), context, evidence)).toMatchObject({ notes: ['heat_content_not_used_for_energy_unit'], call: { request: { input: { quantity: '12.5', unit: 'therm' } } } })
     expect((planCollectionCalculation(vehicle({ vehicleCount: 3, miles: { value: '1200', basis: 'odometer' } }), context, evidence).call as { request: { input: unknown } }).request.input)
       .toEqual({ period: year, fuel: 'diesel', vehicleType: 'diesel_light_duty_truck', modelYear: 2020, gallons: '100', vehicleCount: 3, miles: { value: '1200', basis: 'odometer' } })
-  })
+  }, ENGINE_TEST_TIMEOUT_MS)
 
   test('fuzz: 400 contract-valid records with junk, blanks and nulls are never refused by an engine', () => {
     const texts = ['', 'unknown', '1,234.5', '12.3456', '-1', '0', '7', '100.125', ' 5', 'n/a']
@@ -160,5 +163,5 @@ describe('collection -> engine input (methods v7, C08)', () => {
     // The new edges were reached: early gasoline years both sent (no miles or mpg) and held, and refrigerant answers decided before blank terms.
     expect([earlyGasolineSent > 0, earlyGasolineHeld > 0, blankTermsSent > 0]).toEqual([true, true, true])
     console.log(`fuzz: ${calculated} calculated, ${held} held; early gasoline ${earlyGasolineSent} sent / ${earlyGasolineHeld} held; refrigerant with non-decimal terms sent ${blankTermsSent}`)
-  }, 120000)
+  }, ENGINE_FUZZ_TIMEOUT_MS)
 })
