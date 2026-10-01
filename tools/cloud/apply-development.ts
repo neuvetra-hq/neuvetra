@@ -3,7 +3,7 @@ import { readFile, writeFile, stat } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { PROJECT_REF, certificateAuthority, connectionOptions, extractDatabaseUrl, installedDriver, initializeClient, INVENTORY_QUERIES } from './database-inventory'
 
-export const MIGRATION_SHA256 = '5e136e3c859375a427b410d9ea680821e07f5e315610a0fa10ff0e6cfd6ab5fa'
+export const MIGRATION_SHA256 = 'f4a620013b9d61503137c7551030975bc9fcd0737714a3eabc5d4f30d23e2a84'
 export const CA_SHA256 = '700723581420dd1ac98fd7e9ac529f0ef210eadcaf87fc868a3ad7d114c2f3b7'
 export const SCHEMA = 'neuvetra_research_dev'
 const MIGRATION_URL = new URL('../../infra/cloud/001-neuvetra-research-dev.sql', import.meta.url)

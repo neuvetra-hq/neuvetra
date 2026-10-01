@@ -1,13 +1,4 @@
--- Revision 2, 1 Oct 2026 (HOSTED-STORAGE-01; board decision of that day):
--- research-dev Storage objects are readable only by service_role. Revision 1
--- gave signed-in users two Storage SELECT policies that query research tables;
--- once the legacy containment revoked those tables, every signed-in Storage read
--- failed, in every bucket. Revision 1's exact bytes are kept as
--- infra/cloud/history/001-neuvetra-research-dev.v1.sql. A project that already
--- ran revision 1 applies infra/cloud/004-research-dev-storage-read-fence.sql
--- instead of rerunning this file (this file refuses an existing schema).
---
--- Synthetic CLOUD-DB-01 slice only. For a new project; it aborts if the schema exists.
+-- PROPOSED, NOT APPLIED. Synthetic CLOUD-DB-01 slice only.
 -- First verify the connection target with the read-only inventory helper.
 -- Caller must explicitly SET neuvetra.target_project_ref = 'icockcoguyadhryzydvl'.
 -- That acknowledgement is not independent proof of the server's project identity.
@@ -223,13 +214,12 @@ GRANT EXECUTE ON FUNCTION neuvetra_research_dev.activate_research_build(uuid, uu
 
 -- Only the new bucket is affected by these additive Storage policies. The
 -- coordinator creates/verifies it PRIVATE via the Storage API, never public.
--- Research-dev objects are read through service_role only. Storage policies for
--- anon/authenticated must never query application tables: PostgreSQL checks
--- those tables' privileges for every Storage query, whatever its bucket.
+CREATE POLICY neuvetra_research_dev_member_download ON storage.objects FOR SELECT TO authenticated
+USING (bucket_id = 'neuvetra-research-dev' AND EXISTS (SELECT 1 FROM neuvetra_research_dev.research_objects o WHERE o.bucket = bucket_id AND o.object_key = name));
 CREATE POLICY neuvetra_research_dev_anon_read_fence ON storage.objects AS RESTRICTIVE FOR SELECT TO anon
 USING (bucket_id <> 'neuvetra-research-dev');
 CREATE POLICY neuvetra_research_dev_read_fence ON storage.objects AS RESTRICTIVE FOR SELECT TO authenticated
-USING (bucket_id <> 'neuvetra-research-dev');
+USING (bucket_id <> 'neuvetra-research-dev' OR EXISTS (SELECT 1 FROM neuvetra_research_dev.research_objects o WHERE o.bucket = bucket_id AND o.object_key = name));
 CREATE POLICY neuvetra_research_dev_insert_fence ON storage.objects AS RESTRICTIVE FOR INSERT TO anon, authenticated WITH CHECK (bucket_id <> 'neuvetra-research-dev');
 CREATE POLICY neuvetra_research_dev_update_fence ON storage.objects AS RESTRICTIVE FOR UPDATE TO anon, authenticated USING (bucket_id <> 'neuvetra-research-dev') WITH CHECK (bucket_id <> 'neuvetra-research-dev');
 CREATE POLICY neuvetra_research_dev_delete_fence ON storage.objects AS RESTRICTIVE FOR DELETE TO anon, authenticated USING (bucket_id <> 'neuvetra-research-dev');
