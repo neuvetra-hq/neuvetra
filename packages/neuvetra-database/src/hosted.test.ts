@@ -165,6 +165,27 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     expect(checked).toBe(true)
   })
 
+  test("only the reviewed collection Storage policy guards pass the legacy function audit", async () => {
+    const audit = await auditLegacyStagingExposure(operator)
+    expect(audit.legacyContainmentVerified).toBe(true)
+    expect(audit.callableFunctions.map(row => `${row.role}:${row.signature}`)).toEqual([
+      "anon:neuvetra.collection_storage_can_read(text,text)",
+      "anon:neuvetra.collection_storage_can_upload(text,text)",
+      "authenticated:neuvetra.collection_storage_can_read(text,text)",
+      "authenticated:neuvetra.collection_storage_can_upload(text,text)",
+    ])
+    expect(await rejectionMessage(operator.transaction(async tx => {
+      await tx.exec("create function neuvetra.unreviewed_storage_guard() returns boolean language sql security definer as $$ select true $$")
+      expect((await auditLegacyStagingExposure(tx)).legacyContainmentVerified).toBe(false)
+      throw new Error("rollback unreviewed guard")
+    }))).toContain("rollback unreviewed guard")
+    expect(await rejectionMessage(operator.transaction(async tx => {
+      await tx.exec("alter function neuvetra.collection_storage_can_read(text,text) security invoker")
+      expect((await auditLegacyStagingExposure(tx)).legacyContainmentVerified).toBe(false)
+      throw new Error("rollback changed guard")
+    }))).toContain("rollback changed guard")
+  })
+
   test("provider defaults remain explicit only behind denied schemas and inherited access never passes", async () => {
     let checked=false
     expect(await rejectionMessage(operator.transaction(async tx=>{
