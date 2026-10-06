@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
 import { deriveCollectionQuantity, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
+import { reasonText } from "@/lib/plain-language"
 import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, listCollectionEvidence, listGridLossLineages, loadCollectionContext, loadCollectionVersion, lookupCollectionZip, saveCollectionActivity, saveGridLossLineage, uploadCollectionEvidence, type CollectionActivityRecord, type CollectionActivitySaveInput, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionZipLookup, type GridLossLineage } from "@/lib/collection-api"
 
 const kinds: readonly [CollectionActivityKind, string][] = [
@@ -76,6 +78,15 @@ function decimalReason(value: string, label: string): string | null {
   if (!DECIMAL.test(value)) return `${label} must be a plain decimal with no more than 12 digits before the point and 3 after it.`
   return null
 }
+const FACTOR_TEXT = /^(0|[1-9][0-9]{0,11})(\.[0-9]{1,6})?$/
+const RATE_TEXT = /^(0|[1-9][0-9]{0,5})(\.[0-9]{1,6})?$/
+const BIOENERGY_TECHNOLOGIES = new Set<CollectionInstrument["generationTechnology"]>(["biomass", "biogas", "landfill_gas"])
+function rateReason(value: string, label: string): string | null {
+  if (!value || value.toLowerCase() === "unknown") return `${label} is missing.`
+  if (thousandsSeparatorSuggestion(value)) return `${label} uses thousands separators. Confirm the plain-decimal suggestion before calculation.`
+  if (!RATE_TEXT.test(value)) return `${label} must be a plain decimal with no more than 6 digits before the point and 6 after it.`
+  return null
+}
 function scaledDecimal(value: string): bigint | null {
   if (!DECIMAL.test(value)) return null
   const [whole, fraction = ""] = value.split(".")
@@ -104,11 +115,17 @@ export function collectionReadinessFindings(activity: CollectionActivity, eviden
     if (file?.quarantineStatus === "rejected") add("input_needed", `Linked evidence “${file.originalName}” was rejected and must be unlinked before saving another version.`)
   }
   const quantityReason = decimalReason(activity.quantity.originalValue, "Quantity")
-  if (activity.kind !== "fugitive" && quantityReason) add("input_needed", quantityReason)
+  // Tank-level fuel is checked field by field below; its derived quantity is blank when the balance is negative.
+  const tankLevels = activity.kind === "distillate_no2" && "consumption" in activity.payload && activity.payload.consumption.basis === "purchases_with_tank_levels"
+  if (activity.kind !== "fugitive" && !tankLevels && quantityReason) add("input_needed", quantityReason)
   if (activity.kind !== "fugitive" && !supportedUnits[activity.kind].includes(activity.quantity.originalUnit)) add("input_needed", `Unit “${activity.quantity.originalUnit || "blank"}” is not supported for this activity.`)
   const p = activity.payload
   if (activity.kind === "natural_gas" && "heatContent" in p && VOLUMETRIC_GAS_UNITS.has(activity.quantity.originalUnit)) {
-    const heatReason = decimalReason(p.heatContent?.value ?? "", "Bill heat content")
+    // Heat content is a conversion factor: up to 6 decimal places (0.1037 MMBtu per ccf is typical), never zero, as the engine takes it.
+    const heat = p.heatContent?.value ?? ""
+    const heatReason = !heat || heat.toLowerCase() === "unknown" || thousandsSeparatorSuggestion(heat) ? decimalReason(heat, "Bill heat content")
+      : !FACTOR_TEXT.test(heat) ? "Bill heat content must be a plain decimal with no more than 12 digits before the point and 6 after it."
+      : Number(heat) === 0 ? "Bill heat content must be greater than zero." : null
     if (heatReason) add("input_needed", heatReason)
   }
   if (activity.kind === "distillate_no2" && "consumption" in p) {
@@ -118,12 +135,15 @@ export function collectionReadinessFindings(activity: CollectionActivity, eviden
         const issue = decimalReason(value, label)
         if (issue) add("input_needed", issue)
       }
+      const [bought, opening, closing] = [p.consumption.purchasedGallons, p.consumption.openingGallons, p.consumption.closingGallons].map(scaledDecimal)
+      if (bought != null && opening != null && closing != null && bought + opening - closing < 0n)
+        add("review_required", "Purchases plus the opening tank level are less than the closing tank level, so the fuel used would be negative. Check the tank readings.")
     }
   }
   if (activity.kind === "vehicle" && "fuelEconomy" in p) {
-    if (!vehicleFuels.includes(p.fuel as typeof vehicleFuels[number])) add("input_needed", `Vehicle fuel “${p.fuel || "blank"}” is a legacy or unsupported value. Choose gasoline or diesel before calculation.`)
+    if (!vehicleFuels.includes(p.fuel as typeof vehicleFuels[number])) add("input_needed", p.fuel ? `Vehicle fuel “${p.fuel}” is a legacy or unsupported value. Choose gasoline or diesel before calculation.` : "Choose the vehicle fuel (gasoline or diesel).")
     const allowedVehicleTypes = vehicleFuels.includes(p.fuel as typeof vehicleFuels[number]) ? vehicleTypesByFuel[p.fuel as typeof vehicleFuels[number]] : []
-    if (!allowedVehicleTypes.includes(p.vehicleType as never)) add("input_needed", `Vehicle type “${p.vehicleType || "blank"}” is a legacy, unsupported, or incompatible value. Choose a vehicle type for the selected fuel before calculation.`)
+    if (!allowedVehicleTypes.includes(p.vehicleType as never)) add("input_needed", p.vehicleType ? `Vehicle type “${p.vehicleType}” is a legacy, unsupported, or incompatible value. Choose a vehicle type for the selected fuel before calculation.` : "Choose a vehicle type for the selected fuel.")
     if (!Number.isInteger(p.modelYear) || p.modelYear < 1960 || p.modelYear > 2030) add("input_needed", "Model year must be covered by the released vehicle method (1960–2030).")
     if (p.miles && p.fuelEconomy) add("input_needed", "Use recorded miles or fuel economy, not both.")
     else if (p.miles) {
@@ -169,23 +189,98 @@ export function collectionReadinessFindings(activity: CollectionActivity, eviden
       if (!instrument.evidenceReference) add("input_needed", `${prefix} supporting evidence is missing.`)
       else {
         const file = evidence.find(item => item.id === instrument.evidenceReference)
+        if (!file) add("input_needed", `${prefix} evidence file isn’t available to this company.`)
         if (file?.quarantineStatus === "pending") add("input_needed", `${prefix} evidence scan is pending.`)
         if (file?.quarantineStatus === "rejected") add("input_needed", `${prefix} evidence was rejected and must be removed.`)
         if (file?.quarantineStatus === "error") add("input_needed", `${prefix} evidence scan has an error.`)
       }
-      if (["biomass", "biogas", "landfill_gas", "unknown"].includes(instrument.generationTechnology)) add("input_needed", `${prefix} generation technology needs more input.`)
-      if (!ZERO_TECHNOLOGIES.has(instrument.generationTechnology) && !instrument.rateLbPerMwh) add("input_needed", `${prefix} needs a stated rate for this technology.`)
+      // The engine's rules (scope2 v3): bioenergy claims aren't supported; any other non-zero technology needs a stated
+      // rate, and only zero-emission technologies may state a zero CO2 rate. Rates allow 6 digits either side of the point.
+      const bioenergy = BIOENERGY_TECHNOLOGIES.has(instrument.generationTechnology)
+      if (bioenergy) add("input_needed", `${prefix}: ${instrument.generationTechnology.replace(/_/g, " ")} certificates aren’t supported in this beta.`)
+      else if (!ZERO_TECHNOLOGIES.has(instrument.generationTechnology) && !instrument.rateLbPerMwh) add("input_needed", `${prefix} needs a stated rate for this technology.`)
       if (instrument.rateLbPerMwh) {
         for (const [gas, value] of [["CO2", instrument.rateLbPerMwh.co2], ["CH4", instrument.rateLbPerMwh.ch4], ["N2O", instrument.rateLbPerMwh.n2o]] as const) {
           if (value !== null) {
-            const issue = decimalReason(value, `${prefix} ${gas} rate`)
+            const issue = rateReason(value, `${prefix} ${gas} rate`)
             if (issue) add("input_needed", issue)
           }
         }
+        if (!bioenergy && !ZERO_TECHNOLOGIES.has(instrument.generationTechnology) && RATE_TEXT.test(instrument.rateLbPerMwh.co2) && Number(instrument.rateLbPerMwh.co2) === 0)
+          add("review_required", `${prefix} states a zero CO2 rate, which only wind, solar, hydro and nuclear supply can have.`)
       }
     })
+    // Certificates may not cover more than the meter used (engine: instrument_mwh_exceed_consumption).
+    const used = scaledDecimal(activity.quantity.originalValue)
+    const covered = p.instruments.map(instrument => scaledDecimal(instrument.mwh)).reduce<bigint>((sum, value) => sum + (value ?? 0n), 0n)
+    const unit = activity.quantity.originalUnit
+    if (used !== null && (unit === "MWh" || unit === "kWh") && (unit === "MWh" ? covered > used : covered * 1000n > used))
+      add("review_required", "Market-based instruments cover more MWh than the meter used.")
   }
   return findings.filter((finding, index) => findings.findIndex(candidate => candidate.status === finding.status && candidate.reason === finding.reason) === index)
+}
+
+/**
+ * Adapter reason codes and the screen finding that already explains each one in the screen's own words. An adapter
+ * reason is left out only while a blocking screen finding matching it is shown; every other reason is shown as written
+ * in plain-language.ts, so no adapter hold can go unexplained.
+ */
+const SCREEN_EXPLAINS: Readonly<Record<string, RegExp>> = {
+  record_withdrawn: /^Withdrawn: /, location_not_in_current_setup: /^(A company-setup location is required|Held: the saved location is no longer present)/,
+  location_excluded_by_company_setup: /\(location_excluded_by_company_setup\)/, location_inclusion_unknown: /\(location_inclusion_unknown\)/,
+  quantity_not_calculable: /^(Quantity |Unit “)/, gallons_not_numeric: /^Quantity /, heat_content_not_numeric: /^Bill heat content /,
+  purchased_gallons_not_numeric: /^Purchased gallons /, opening_gallons_not_numeric: /^Opening tank level /, closing_gallons_not_numeric: /^Closing tank level /,
+  fuel_not_an_engine_token: /^(Vehicle fuel “|Choose the vehicle fuel)/, vehicle_type_not_an_engine_token: /^(Vehicle type “|Choose a vehicle type)/,
+  model_year_not_covered: /^Model year must be covered/, miles_and_fuel_economy_both_given: /^Use recorded miles or fuel economy, not both/,
+  miles_not_numeric: /^Miles driven /, miles_basis_not_an_engine_token: /^Miles source /, mpg_not_numeric: /^Fuel economy /, mpg_source_not_an_engine_token: /^Fuel-economy source /,
+  term_PN_not_numeric: /^PN amount /, term_CN_not_numeric: /^CN amount /, term_PS_not_numeric: /^PS amount /, term_CD_not_numeric: /^CD amount /, term_RD_not_numeric: /^RD amount /,
+  zip_not_valid: /^A five-digit ZIP is required/, subregion_not_an_egrid_subregion: /^A verified eGRID subregion is required/,
+}
+const BLOCKING: ReadonlySet<CollectionReadinessFinding["status"]> = new Set(["input_needed", "excluded", "withdrawn"])
+const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
+
+/**
+ * Readiness shown on the Activity screen, the Overview and Ask, reconciled with the calculation adapter that decides what
+ * the engines receive (Claude review N8). The screen's own rules give the wording; the adapter decides the outcome:
+ * - adapter holds: every adapter reason is shown (in the screen's words where it has them), at least one finding blocks,
+ *   and nothing is called partly calculated (N7: a held record isn't partly calculated);
+ * - adapter calculates: an instrument problem only holds the market-based result (engine v3), so it is shown as partial;
+ *   a pending instrument scan and a rejected record-level file don't stop the engines, so they are shown for review.
+ *   Holds only the engines decide (purchases-only fuel, refrigerant answers, a negative balance) stay as the screen says.
+ * Without a company context the screen's own rules are returned unchanged.
+ */
+export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = []): CollectionReadinessFinding[] {
+  const screen = [...collectionReadinessFindings(activity, evidence), ...locationReadinessFindings(activity, context)]
+  if (!context) return screen
+  let plan: ReturnType<typeof planCollectionCalculation>
+  try {
+    plan = planCollectionCalculation({ id: DRAFT_ID, recordId: DRAFT_ID, companyId: context.companyId, revision: 0, previousVersionId: null, correctionReason: null, activity, payloadSha256: "0".repeat(64), createdBy: DRAFT_ID, createdAt: "1970-01-01T00:00:00.000Z" }, context, evidence)
+  } catch { return screen }
+  const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
+  if (plan.action === "hold") {
+    const status = (plan.status ?? "input_needed") as CollectionReadinessFinding["status"]
+    const kept = screen.filter(finding => finding.status !== "partial")
+    const explained = (code: string) => { const pattern = SCREEN_EXPLAINS[code]; return !!pattern && kept.some(finding => BLOCKING.has(finding.status) && pattern.test(finding.reason)) }
+    return unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) }))])
+  }
+  return unique(screen.map((finding): CollectionReadinessFinding => {
+    if (finding.status === "partial") return finding
+    // The engines calculate these; the finding is something to check, not a hold.
+    if (finding.reason.startsWith("Linked evidence “")) return { status: "review_required", reason: finding.reason }
+    if (!finding.reason.startsWith("Market-based instrument")) return finding
+    if (finding.reason.endsWith(" evidence scan is pending.")) return { status: "review_required", reason: `${finding.reason.slice(0, -1)}; the market-based figure uses this file until the scan finishes.` }
+    return { status: "partial", reason: `Market-based result held — ${finding.reason}` }
+  }))
+}
+
+/** A saved vehicle record whose fuel or vehicle type is a legacy value (not blank, not a FIELDS token, or not a pair). A new record's blank choices are not legacy (N7). */
+export function legacyVehicleValues(saved: CollectionActivity | null): { fuel: string; vehicleType: string } | null {
+  if (saved?.kind !== "vehicle" || !("vehicleType" in saved.payload)) return null
+  const { fuel, vehicleType } = saved.payload
+  if (!fuel && !vehicleType) return null
+  const fuelOk = vehicleFuels.includes(fuel as typeof vehicleFuels[number])
+  const typeOk = !vehicleType || (fuelOk ? (vehicleTypesByFuel[fuel as typeof vehicleFuels[number]] as readonly string[]).includes(vehicleType) : vehicleTypes.includes(vehicleType as typeof vehicleTypes[number]))
+  return (fuel && !fuelOk) || !typeOk ? { fuel, vehicleType } : null
 }
 
 export function notCalculableReasons(activity: CollectionActivity, evidence: CollectionEvidenceMetadata[] = []): string[] {
@@ -286,6 +381,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     return () => window.removeEventListener("beforeunload", warn)
   }, [dirty])
   const selected = records.find(item => item.id === recordId) ?? null
+  const legacy = legacyVehicleValues(selected?.currentVersion.activity ?? null)
   const canManage = actor.role === "owner" || actor.role === "admin"
 
   useEffect(() => {
@@ -460,7 +556,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
 
   const p = draft.payload
-  const draftFindings = [...collectionReadinessFindings(draft, evidence), ...locationReadinessFindings(draft, context)]
+  const draftFindings = recordReadiness(draft, context, evidence)
   const separatorSuggestion = thousandsSeparatorSuggestion(draft.quantity.originalValue)
   const duplicateRows = records.filter(row => {
     if (row.id === selected?.id || row.kind !== draft.kind) return false
@@ -487,7 +583,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     <div className="worksheet-card"><h2>Saved activities</h2>
       <div className="collection-record-list">{records.length ? records.map(row => {
         const activity = row.currentVersion.activity as CollectionDraft
-        const readiness = [...collectionReadinessFindings(activity, evidence), ...locationReadinessFindings(activity, context)]
+        const readiness = recordReadiness(activity, context, evidence)
         return <div key={row.id} className="setup-subcard">
           <strong>{kinds.find(([id]) => id === row.kind)?.[1] ?? row.kind}</strong> · version {row.currentVersion.revision} {activity.state === "withdrawn" && <span className="collection-status-badge">Withdrawn</span>}
           <p>{activity.period.start} to {inclusivePeriodEnd(activity.period.endExclusive)} (last day covered) · {activity.kind === "fugitive" ? "Derived net release" : "Quantity"}: {activity.quantity.originalValue || "unknown"} {activity.quantity.originalUnit}</p>
@@ -542,7 +638,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
           <Select label="Miles source / basis" value={p.miles?.basis ?? ""} options={[["", "Choose a miles source"], ["odometer", "Odometer"], ["trip_log", "Trip log"]]} onChange={value => edit(next => { (next.payload as typeof p).miles = value ? { value: p.miles?.value ?? "", basis: value } : null })} />
           <Field label="Fuel economy (mpg), if miles unavailable" value={p.fuelEconomy?.mpg ?? ""} onChange={value => edit(next => { (next.payload as typeof p).fuelEconomy = value ? { mpg: value, source: p.fuelEconomy?.source ?? "" } : null; if (value) (next.payload as typeof p).miles = null })} />
           <Select label="MPG source" value={p.fuelEconomy?.source ?? ""} options={[["", "Choose an MPG source"], ["vehicle_record", "Vehicle record"], ["fleet_record", "Fleet record"], ["fueleconomy_gov", "fueleconomy.gov"]]} onChange={value => edit(next => { (next.payload as typeof p).fuelEconomy = value ? { mpg: p.fuelEconomy?.mpg ?? "", source: value } : null })} />
-        </div>{(!vehicleFuels.includes(p.fuel as typeof vehicleFuels[number]) || !vehicleTypes.includes(p.vehicleType as typeof vehicleTypes[number]) || !vehicleTypesByFuel[p.fuel as keyof typeof vehicleTypesByFuel]?.includes(p.vehicleType as never)) && <p className="collection-legacy-hold">Held pending correction: saved fuel “{p.fuel || "blank"}” and vehicle type “{p.vehicleType || "blank"}” are preserved. Choose the matching FIELDS v6 tokens before saving a correction.</p>}</div>}
+        </div>{legacy && <p className="collection-legacy-hold">Held pending correction: saved fuel “{legacy.fuel || "blank"}” and vehicle type “{legacy.vehicleType || "blank"}” are preserved. Choose the matching FIELDS v6 tokens before saving a correction.</p>}</div>}
         {draft.kind === "fugitive" && "terms" in p && <div className="setup-subcard"><h3>One refrigerant per equipment or group</h3><p>The saved quantity is the derived net refrigerant release: (PN − CN) + PS + (CD − RD). The five entered terms remain unchanged.</p><div className="setup-grid">
           <Select label="Refrigerant or fire-suppression gas" value={p.gas} options={gases.map(gas => [gas, gas])} onChange={value => edit(next => { (next.payload as typeof p).gas = value as typeof p.gas })} />
           <Select label="Unit for all five terms" value={p.unit} options={[["kg", "kg"], ["lb", "lb"]]} onChange={value => edit(next => { (next.payload as typeof p).unit = value as typeof p.unit; next.quantity.originalUnit = value })} />
