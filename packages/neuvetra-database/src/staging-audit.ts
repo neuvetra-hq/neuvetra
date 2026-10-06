@@ -9,6 +9,16 @@ export const SUPABASE_MANAGED_SCHEMAS = [
 export const REVIEWED_APPLICATION_SCHEMAS = ["public","frontdesk","site","terrascope","neuvetra_research_dev","neuvetra","drizzle"] as const
 interface DefaultGrant { schema_name:string|null;owner:string;object_type:string;role:string;privilege:string }
 const isContainedProviderDefault = (row:DefaultGrant) => row.owner==="supabase_admin" && row.schema_name==="public" && ["r","f","S"].includes(row.object_type)
+// 0027's Storage RLS policies call these two security-definer guards. Their
+// EXECUTE grant is deliberately PUBLIC so the restrictive policies can run for
+// every Storage role. The separate schema-usage check must still deny direct
+// access to neuvetra for anon and authenticated, and all other functions block.
+const reviewedStoragePolicyGuards = new Set([
+  "neuvetra.collection_storage_can_read(text,text)",
+  "neuvetra.collection_storage_can_upload(text,text)",
+])
+const isReviewedStoragePolicyGuard = (row:LegacyExposureAudit["callableFunctions"][number]) =>
+  row.schema_name === "neuvetra" && row.security_definer && reviewedStoragePolicyGuards.has(row.signature)
 interface SchemaInventory { schema_name: string; owner: string }
 export interface LegacyExposureAudit {
   legacyContainmentVerified: boolean
@@ -59,6 +69,7 @@ export async function auditLegacyStagingExposure(db: WorkspaceSql): Promise<Lega
   const functions = await db.query<LegacyExposureAudit["callableFunctions"][number]>(`select n.nspname schema_name,r.rolname role,p.oid::regprocedure::text signature,p.prosecdef security_definer
     from pg_proc p join pg_namespace n on n.oid=p.pronamespace cross join pg_roles r
     where n.nspname=any($1::text[]) and r.rolname in ('anon','authenticated') and has_function_privilege(r.oid,p.oid,'EXECUTE') order by n.nspname,role,signature`,[applicationSchemas])
+  const blockingCallableFunctions = functions.rows.filter(row => !isReviewedStoragePolicyGuard(row))
   const defaults = await db.query<LegacyExposureAudit["defaultGrants"][number]>(`select n.nspname schema_name,pg_get_userbyid(d.defaclrole) owner,d.defaclobjtype::text object_type,
     case when a.grantee=0 then 'PUBLIC' else pg_get_userbyid(a.grantee) end role,a.privilege_type privilege
     from pg_default_acl d left join pg_namespace n on n.oid=d.defaclnamespace cross join lateral aclexplode(d.defaclacl) a
@@ -69,7 +80,7 @@ export async function auditLegacyStagingExposure(db: WorkspaceSql): Promise<Lega
   const blockingDefaultGrants=defaults.rows.filter(row=>!isContainedProviderDefault(row))
   return {
     legacyContainmentVerified: unreviewedApplicationSchemas.length===0 && roles.rows.length===2 && roles.rows.every(r=>!r.allowed) && schemas.rows.every(r=>!r.allowed&&!r.create_allowed)
-      && tables.rows.length===0 && columns.rows.length===0 && sequences.rows.length===0 && functions.rows.length===0 && blockingDefaultGrants.length===0,
+      && tables.rows.length===0 && columns.rows.length===0 && sequences.rows.length===0 && blockingCallableFunctions.length===0 && blockingDefaultGrants.length===0,
     scope:"all-application-schemas",applicationSchemas,unreviewedApplicationSchemas,managedSchemas,
     providerDefaultPolicy:"supabase-admin-public-defaults-behind-denied-schema-v1",deferredProviderDefaultGrants,blockingDefaultGrants,endpointRolesPresent:roles.rows.length===2,
     databaseCreate:roles.rows,schemaUsage:schemas.rows,tableGrants:tables.rows,columnGrants:columns.rows,sequenceGrants:sequences.rows,

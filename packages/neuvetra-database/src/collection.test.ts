@@ -45,7 +45,7 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.exec(`create role authenticated; create role anon; create schema auth; create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
       grant usage on schema auth to authenticated; grant execute on function auth.uid() to authenticated;`)
-    for(const migration of await readMigrationManifest())await db.exec(migration.sql)
+    for(const migration of (await readMigrationManifest()).slice(0, 26))await db.exec(migration.sql)
     await db.exec(`create schema storage;
       create table storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit bigint,allowed_mime_types text[]);
       create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null references storage.buckets(id),name text not null,unique(bucket_id,name));
@@ -67,8 +67,8 @@ describe('candidate 0027 collection database boundary',()=>{
   },30_000)
   afterAll(async()=>{await db.close()})
 
-  test('keeps 0027 outside the active hosted manifest until 0025 and 0026 are integrated',async()=>{
-    expect(STAGING_MIGRATIONS.some(name=>name.includes('0027_collection'))).toBe(false)
+  test('pins 0027 after the method migrations and creates the private bucket',async()=>{
+    expect(STAGING_MIGRATIONS.slice(23)).toEqual(['0024_method_reference.sql','0025_scope3_method_reference.sql','0026_scope2_residual_mix.sql','0027_collection.sql'])
     expect(await Bun.file(new URL('./migrations/0027_collection.sql',import.meta.url)).exists()).toBe(true)
     expect((await db.query('select id,name,public,file_size_limit,allowed_mime_types from storage.buckets where id=$1',['neuvetra-private-company-evidence'])).rows[0]).toEqual({id:'neuvetra-private-company-evidence',name:'neuvetra-private-company-evidence',public:false,file_size_limit:10485760,allowed_mime_types:['application/pdf','image/jpeg','image/png','text/csv','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']})
   })

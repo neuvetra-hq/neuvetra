@@ -14,6 +14,10 @@ export const STAGING_MIGRATIONS = [
   "0021_scope1_inventory.sql",
   "0022_scope1_beta_foundation.sql",
   "0023_company_setup.sql",
+  "0024_method_reference.sql",
+  "0025_scope3_method_reference.sql",
+  "0026_scope2_residual_mix.sql",
+  "0027_collection.sql",
 ] as const
 
 export interface StagingMigration { name: string; sha256: string; sql: string }
@@ -58,7 +62,7 @@ export async function migratePrivateStagingFromManifest(db: WorkspaceConnection,
     const existing = await tx.query<{ present: boolean }>("select exists(select 1 from pg_namespace where nspname='neuvetra') present")
     if (existing.rows[0]?.present) {
       const receipts = await tx.query<{ name: string; sha256: string }>("select name,sha256 from neuvetra.schema_migrations order by name")
-      if (receipts.rows.length !== 9 && receipts.rows.length !== 10 && receipts.rows.length !== 11 && receipts.rows.length !== 12 && receipts.rows.length !== 13 && receipts.rows.length !== 14 && receipts.rows.length !== 15 && receipts.rows.length !== 16 && receipts.rows.length !== 17 && receipts.rows.length !== 18 && receipts.rows.length !== 19 && receipts.rows.length !== 20 && receipts.rows.length !== 21 && receipts.rows.length !== 22 && receipts.rows.length !== manifest.length) throw new Error("Unknown staging migration baseline.")
+      if (receipts.rows.length < 9 || receipts.rows.length > manifest.length) throw new Error("Unknown staging migration baseline.")
       await validateExisting(tx, approval.expectedProjectRef, manifest.slice(0,receipts.rows.length))
       for (const migration of manifest.slice(receipts.rows.length)) {
         await tx.exec(migration.sql)

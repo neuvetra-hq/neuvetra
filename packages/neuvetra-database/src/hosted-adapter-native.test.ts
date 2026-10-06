@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
-import { createPostgresConnection, HostedWorkspaceDatabase } from "./hosted"
+import { createPostgresConnection, HostedWorkspaceDatabase, STAGING_SCHEMA_VERSION } from "./hosted"
 import { migratePrivateStaging, provisionStagingRoster } from "./staging-migrations"
 import { createSyntheticCompanySetup } from "./company-setup-fixture"
 import { saveCompanySetup } from "./company-setup"
@@ -31,6 +31,11 @@ native("shared pg adapter actual PG17/RLS lifecycle", () => {
     await operator.exec(`create role authenticated nologin; create role anon nologin;
       create schema auth; create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;`)
+    await operator.exec(`create schema if not exists storage;
+      create table if not exists storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit bigint,allowed_mime_types text[]);
+      create table if not exists storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null references storage.buckets(id),name text not null,unique(bucket_id,name));
+      alter table storage.objects enable row level security;
+      grant usage on schema storage to authenticated,anon; grant select,insert,update,delete on storage.objects to authenticated,anon;`)
     await migratePrivateStaging(operator, { expectedProjectRef: ref, syntheticTargetConfirmed: true })
     await operator.exec("alter role neuvetra_runtime login")
     const url = new URL(urlText!); url.username = "neuvetra_runtime"; runtimeUrl = url.toString()
@@ -46,7 +51,7 @@ native("shared pg adapter actual PG17/RLS lifecycle", () => {
       const runtime = createPostgresConnection(runtimeUrl, { tls: false, maxConnections })
       const db = construct(runtime)
       try {
-        expect((await db.checkReadiness()).schemaVersion).toBe(23)
+        expect((await db.checkReadiness()).schemaVersion).toBe(STAGING_SCHEMA_VERSION)
         const saves = await Promise.all(actors.map((actor,i) => db.saveCompanySetup(actor,companies[i]!,request())))
         expect(saves.map(x => x.savedVersion.revision)).toEqual([1,1])
         await Promise.all(Array.from({length: 36}, async (_, n) => {
