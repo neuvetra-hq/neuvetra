@@ -1,8 +1,8 @@
-// Results & report: board option 1 (synthetic only, unreleased methods named), per-basis subtotal membership,
-// half-even tonnes and the loading state after a failed reload. Claude, 2026-09-30.
+// Results & report: board option 1 (synthetic only, methods named with their release status), per-basis subtotal
+// membership, half-even tonnes and the loading state after a failed reload. Claude, 2026-09-30; release status MR2.
 import { describe, expect, test } from "bun:test"
 import { kgToTonnes } from "./plain-language"
-import { decodeResults, DRAFT_LABEL, lastDayCovered, methodLabel, NotSyntheticResultsError, resultsCsv, RESULTS_PROFILE, type ResultsResponse } from "./results-api"
+import { decodeResults, DRAFT_LABEL, lastDayCovered, methodLabel, NotSyntheticResultsError, RELEASED_LABEL, releaseState, resultsCsv, RESULTS_PROFILE, type MethodUsed, type ResultsResponse } from "./results-api"
 import { INITIAL_RESULTS_STATE, needsWork, resultsReducer, rowStatus } from "./results-view"
 
 const company = "29200000-0000-4000-8000-000000000001", other = "29200000-0000-4000-8000-000000000002"
@@ -14,33 +14,78 @@ const basis = (status: string, display: string | null) => ({ status, findings: [
 const gas = { recordId: id(1), versionId: id(11), revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: id(21), locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" },
   quantity: { value: "100", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, periodCheck: "inside", outcome: "calculated",
   inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, refusalCode: null, scope2: null,
-  scope1: { methodVersionId: "scope1.stationary.natural_gas.v2", gwpSetId: "AR5-100", status: "complete", gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: total("531.1450"), resultSha256: "a".repeat(64) } }
+  scope1: { methodVersionId: "scope1.stationary.natural_gas.v2", engineSha256: ENGINE1, registerSha256: REGISTER, gwpSetId: "AR5-100", status: "complete", gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: total("531.1450"), resultSha256: "a".repeat(64) } }
 // A meter whose instrument MWh is unknown: in the location-based subtotal, not the market-based one.
 const meter = { ...gas, recordId: id(2), versionId: id(12), kind: "electricity", scope: 2, sourceId: "M-BLANK", quantity: { value: "10000", unit: "kWh" }, period: { start: "2025-01-01", endExclusive: "2025-02-01" },
   inSubtotal: { scope1: false, scope2LocationBased: true, scope2MarketBased: false }, scope1: null,
-  scope2: { methodVersionId: "scope2.electricity.egrid2023_greene2025.v3", gwpSetId: "AR5-100", status: "review_required", findings: [], estimates: [], activity: { mwh: "10", instrumentMwh: null, subregion: "CAMX" },
+  scope2: { methodVersionId: "scope2.electricity.egrid2023_greene2025.v3", engineSha256: ENGINE2, registerSha256: REGISTER2, gwpSetId: "AR5-100", status: "review_required", findings: [], estimates: [], activity: { mwh: "10", instrumentMwh: null, subregion: "CAMX" },
     locationBased: basis("complete", "1950.2612"), marketBased: { ...basis("input_needed", null), residualMix: null }, factorsUsed: [], resultSha256: "b".repeat(64) } }
 const methods = [
-  { methodVersionId: "scope1.stationary.natural_gas.v2", scope: 1, engineSha256: ENGINE1, registerSha256: REGISTER, releaseStatus: "unreleased_beta" },
-  { methodVersionId: "scope2.electricity.egrid2023_greene2025.v3", scope: 2, engineSha256: ENGINE2, registerSha256: REGISTER2, releaseStatus: "unreleased_beta" }]
+  { methodVersionId: "scope1.stationary.natural_gas.v2", scope: 1, engineSha256: ENGINE1, registerSha256: REGISTER, releaseStatus: "unreleased_beta", releaseId: null, releaseLabel: null },
+  { methodVersionId: "scope2.electricity.egrid2023_greene2025.v3", scope: 2, engineSha256: ENGINE2, registerSha256: REGISTER2, releaseStatus: "unreleased_beta", releaseId: null, releaseLabel: null }]
+const METHOD_RELEASE_LABEL = "Draft — prepared with Neuvetra beta methods; not externally assured"
+const released = (m: typeof methods[number], n: number) => ({ ...m, releaseStatus: "released_beta", releaseId: id(90 + n), releaseLabel: METHOD_RELEASE_LABEL })
 const response = (extra: Record<string, unknown> = {}) => ({ profile: RESULTS_PROFILE, label: DRAFT_LABEL, syntheticOnly: true, environment: "synthetic_staging", methods, generatedAt: "2026-09-30T00:00:00.000Z", companyId: company,
   setup: null, records: [gas, meter], counts: { records: 2, calculated: 2, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [],
   scope1: { knownSourceSubtotal: total("531.1450"), includedResults: ["a".repeat(64)], incompleteResults: [], notCalculated: [], reportedOutsideScopes: [], resultCount: 1, complete: true },
   scope2: { resultCount: 1, locationBasedSubtotal: total("1950.2612"), locationBasedIncluded: ["b".repeat(64)], locationBasedComplete: true, marketBasedSubtotal: total("0.0000"), marketBasedIncluded: [], marketBasedProvisional: [], marketBasedComplete: false }, ...extra })
 const labels = { kind: (kind: string) => kind, reason: (code: string) => code, status: () => "Calculated", boundary: (code: string) => code, period: () => "2025" }
 
-describe("board option 1: synthetic companies only, unreleased methods named", () => {
+describe("board option 1: synthetic companies only, methods named with their release status", () => {
   test("numbers are refused unless the server says synthetic staging", () => {
     expect(decodeResults(response(), company).environment).toBe("synthetic_staging")
     for (const extra of [{ environment: "production" }, { environment: undefined }, { syntheticOnly: false }])
       expect(() => decodeResults(response(extra), company)).toThrow(NotSyntheticResultsError)
   })
-  test("every figure must name a listed, unreleased method", () => {
+  test("every figure must name a listed method with a well-formed release status", () => {
     expect(() => decodeResults(response({ methods: undefined }), company)).toThrow(/not recognized/)
     expect(() => decodeResults(response({ methods: [{ ...methods[0], releaseStatus: "released" }, methods[1]] }), company)).toThrow(/not recognized/)
     expect(() => decodeResults(response({ methods: [{ ...methods[0], engineSha256: "short" }, methods[1]] }), company)).toThrow(/not recognized/)
     expect(() => decodeResults(response({ methods: [methods[1]] }), company)).toThrow(/not recognized/)
-    expect(methodLabel("scope1.stationary.natural_gas.v2")).toBe("scope1.stationary.natural_gas.v2 (unreleased beta)")
+    // A released method must name its release; an unreleased one must name none.
+    expect(() => decodeResults(response({ methods: [{ ...released(methods[0]!, 1), releaseId: null }, methods[1]] }), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(response({ methods: [{ ...released(methods[0]!, 1), releaseId: "not-a-uuid" }, methods[1]] }), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(response({ methods: [{ ...released(methods[0]!, 1), releaseLabel: "" }, methods[1]] }), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(response({ methods: [{ ...methods[0], releaseId: id(91) }, methods[1]] }), company)).toThrow(/not recognized/)
+    expect(methodLabel(gas.scope1, methods as MethodUsed[])).toBe("scope1.stationary.natural_gas.v2 (unreleased beta)")
+  })
+  test("the label must match the release status: released only when every method is released", () => {
+    const all = [released(methods[0]!, 1), released(methods[1]!, 2)], mixed = [released(methods[0]!, 1), methods[1]]
+    expect(decodeResults(response({ methods: all, label: RELEASED_LABEL }), company).label).toBe(RELEASED_LABEL)
+    expect(decodeResults(response({ methods: mixed }), company).label).toBe(DRAFT_LABEL)
+    expect(() => decodeResults(response({ methods: all }), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(response({ methods: mixed, label: RELEASED_LABEL }), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(response({ label: RELEASED_LABEL }), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(response({ label: "Draft" }), company)).toThrow(/not recognized/)
+    // No figure at all: never the released label.
+    expect(() => decodeResults(response({ methods: [], records: [], label: RELEASED_LABEL }), company)).toThrow(/not recognized/)
+    expect([releaseState(all as MethodUsed[]), releaseState(mixed as MethodUsed[]), releaseState(methods as MethodUsed[]), releaseState([])]).toEqual(["released", "mixed", "unreleased", "none"])
+    expect(methodLabel(gas.scope1, mixed as MethodUsed[])).toBe("scope1.stationary.natural_gas.v2 (released beta)")
+    expect(methodLabel(meter.scope2, mixed as MethodUsed[])).toBe("scope2.electricity.egrid2023_greene2025.v3 (unreleased beta)")
+    // A run not listed, or the same version from other engine bytes, is never called released.
+    expect(methodLabel({ ...gas.scope1, methodVersionId: "scope1.mobile.onroad_diesel.v2" }, all as MethodUsed[])).toBe("scope1.mobile.onroad_diesel.v2 (unreleased beta)")
+    expect(methodLabel({ ...gas.scope1, engineSha256: "c".repeat(64) }, all as MethodUsed[])).toBe("scope1.stationary.natural_gas.v2 (unreleased beta)")
+  })
+  test("each figure must come from exactly one listed run of its own scope (Codex MR2 F1)", () => {
+    const all = [released(methods[0]!, 1), released(methods[1]!, 2)]
+    const releasedResponse = (extra: Record<string, unknown>) => response({ methods: all, label: RELEASED_LABEL, ...extra })
+    expect(decodeResults(releasedResponse({}), company).label).toBe(RELEASED_LABEL)
+    // Codex's probe: an all-released method list with a Scope 1 result from other engine and register bytes.
+    const swapped = { ...gas, scope1: { ...gas.scope1, engineSha256: "c".repeat(64), registerSha256: "d".repeat(64) } }
+    const mutations: Array<[string, unknown[], unknown[]?]> = [
+      ["result engine differs", [swapped, meter]],
+      ["result engine only differs", [{ ...gas, scope1: { ...gas.scope1, engineSha256: "c".repeat(64) } }, meter]],
+      ["result register only differs", [{ ...gas, scope1: { ...gas.scope1, registerSha256: "d".repeat(64) } }, meter]],
+      ["result engine missing", [{ ...gas, scope1: { ...gas.scope1, engineSha256: undefined } }, meter]],
+      ["result engine malformed", [{ ...gas, scope1: { ...gas.scope1, engineSha256: "C".repeat(64) } }, meter]],
+      ["result names another listed version", [{ ...gas, scope1: { ...gas.scope1, methodVersionId: "scope2.electricity.egrid2023_greene2025.v3", engineSha256: ENGINE2, registerSha256: REGISTER2 } }, meter]],
+      ["Scope 1 result in a Scope 2 row", [{ ...gas, scope: 2 }, meter]],
+      ["Scope 2 result in a Scope 1 row", [gas, { ...meter, scope: 1, inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false } }]],
+      ["listed run with the wrong scope", [gas, meter], [{ ...all[0]!, scope: 2 }, all[1]!]],
+      ["duplicate listed run", [gas, meter], [all[0]!, all[0]!, all[1]!]],
+    ]
+    for (const [label, records, listed] of mutations)
+      expect([label, (() => { try { decodeResults(releasedResponse({ records, ...(listed ? { methods: listed } : {}) }), company); return "accepted" } catch (e) { return (e as Error).message } })()]).toEqual([label, "The results response was not recognized."])
   })
   test("subtotal flags are required and can't claim a figure that isn't there", () => {
     expect(() => decodeResults(response({ records: [{ ...gas, inSubtotal: undefined }] }), company)).toThrow(/not recognized/)
@@ -63,8 +108,16 @@ describe("CSV", () => {
     expect(header).toContain("Last day covered"); expect(header).not.toContain("Period end (exclusive)")
     expect(cells("M-BLANK")["Last day covered"]).toBe("2025-01-31"); expect(cells("GAS-1")["Last day covered"]).toBe("2025-12-31")
     expect(cells("GAS-1").Method).toBe("scope1.stationary.natural_gas.v2 (unreleased beta)")
-    expect(csv).toContain(`# Methods (unreleased beta, not released): scope1.stationary.natural_gas.v2 engine ${ENGINE1.slice(0, 12)} register ${REGISTER.slice(0, 12)}`)
+    expect(csv).toContain(`# Methods: scope1.stationary.natural_gas.v2 (unreleased beta, not released) engine ${ENGINE1.slice(0, 12)} register ${REGISTER.slice(0, 12)}`)
     expect(csv.startsWith(`# ${DRAFT_LABEL}`)).toBe(true)
+  })
+  test("released methods are named with their release in the CSV", () => {
+    const releasedCsv = resultsCsv(decodeResults(response({ methods: [released(methods[0]!, 1), released(methods[1]!, 2)], label: RELEASED_LABEL }), company), labels)
+    expect(releasedCsv.startsWith(`# ${RELEASED_LABEL}`)).toBe(true)
+    expect(releasedCsv).toContain(`# Methods: scope1.stationary.natural_gas.v2 (released beta, release ${id(91)}) engine ${ENGINE1.slice(0, 12)}`)
+    const lines = releasedCsv.split("\n"), header = lines.find(line => line.startsWith("Scope,"))!.split(",")
+    const gasLine = lines.find(line => line.includes(",GAS-1,"))!.split(",")
+    expect(gasLine[header.indexOf("Method")]).toBe("scope1.stationary.natural_gas.v2 (released beta)")
     expect(lastDayCovered("2024-03-01")).toBe("2024-02-29")
   })
 })
