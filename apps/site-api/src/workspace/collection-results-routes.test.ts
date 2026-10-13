@@ -1,10 +1,13 @@
 // Claude UX journey (2026-09-29): the draft results route plans every saved record with the reviewed v7 adapter and
 // sends only calculable ones to the pinned engines. Runs the real Scope 1 / Scope 2 engines.
+// MR2 (2026-09-30): each method's release status comes from the 0024 release store and the running engine; the
+// database-backed release cases are in collection-results-release.test.ts.
 import { describe, expect, test } from "bun:test"
 import { validateCollectionActivity, type CollectionActivityRecord, type CollectionContext, type CollectionEvidenceMetadata, type CompanySetupView } from "@neuvetra/database"
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
-import { buildCollectionResults, checkPeriod, createCollectionResultsRoutes, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsResponse } from "./collection-results-routes"
+import type { ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
+import { buildCollectionResults, checkPeriod, classifyMethodRelease, createCollectionResultsRoutes, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsResponse, type EngineMethodFacts, type ReleaseEvidence, type ReleaseProblem } from "./collection-results-routes"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
 const engines = {
@@ -68,10 +71,11 @@ describe("draft results (Claude UX journey)", () => {
     // with the engine and register bytes that ran it.
     expect([result.syntheticOnly, result.environment]).toEqual([true, DRAFT_RESULTS_ENVIRONMENT])
     expect(result.label).toContain("unreleased beta methods")
-    expect(result.methods.map(m => [m.methodVersionId, m.scope, m.engineSha256, m.releaseStatus])).toEqual([
-      ["scope1.mobile.onroad_diesel.v2", 1, REVIEWED_SCOPE1_ENGINE_SHA256, "unreleased_beta"],
-      ["scope1.stationary.natural_gas.v2", 1, REVIEWED_SCOPE1_ENGINE_SHA256, "unreleased_beta"],
-      ["scope2.electricity.egrid2023_greene2025.v3", 2, REVIEWED_SCOPE2_ENGINE_SHA256, "unreleased_beta"]])
+    expect(result.methods.map(m => [m.methodVersionId, m.scope, m.engineSha256, m.releaseStatus, m.releaseId, m.releaseLabel])).toEqual([
+      ["scope1.mobile.onroad_diesel.v2", 1, REVIEWED_SCOPE1_ENGINE_SHA256, "unreleased_beta", null, null],
+      ["scope1.stationary.natural_gas.v2", 1, REVIEWED_SCOPE1_ENGINE_SHA256, "unreleased_beta", null, null],
+      ["scope2.electricity.egrid2023_greene2025.v3", 2, REVIEWED_SCOPE2_ENGINE_SHA256, "unreleased_beta", null, null]])
+    expect(result.warnings).toEqual([])
     expect(result.methods.every(m => /^[0-9a-f]{64}$/.test(m.registerSha256))).toBe(true)
     // Subtotal membership per basis comes from the engine aggregates; held rows are in none.
     expect(row(gasOffice.id).inSubtotal).toEqual({ scope1: true, scope2LocationBased: false, scope2MarketBased: false })
@@ -91,7 +95,7 @@ describe("draft results (Claude UX journey)", () => {
   }, 60_000)
 
   test("the route refuses to exist outside synthetic staging", () => {
-    const database = { findCollectionContext: async () => null, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => null } as CollectionResultsDatabase
+    const database = { findCollectionContext: async () => null, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => null, findCurrentMethodReleases: async () => [] } as CollectionResultsDatabase
     for (const environment of ["production", "staging", "", undefined])
       expect(() => createCollectionResultsRoutes({ database, engines, origin: "https://www.neuvetra.ai", validateUser: async () => null, environment: environment as never })).toThrow(/synthetic staging/)
   })
@@ -127,6 +131,7 @@ describe("draft results (Claude UX journey)", () => {
       findCollectionActivities: async (user, id) => user === owner && id === company ? [gasOffice] : [],
       findCollectionEvidence: async () => [],
       findCompanySetup: async (user, id) => user === owner && id === company ? setupView : null,
+      findCurrentMethodReleases: async () => [],
     }
     const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async token => token === "owner" ? { id: owner, phone: null, email: null, fullName: null } : token === "stranger" ? { id: stranger, phone: null, email: null, fullName: null } : null })
     const get = (path: string, token?: string, origin?: string) => routes(new Request(`https://www.neuvetra.ai${path}`, { headers: { ...(token ? { authorization: `Bearer ${token}` } : {}), ...(origin ? { origin } : {}) } }))
@@ -142,13 +147,76 @@ describe("draft results (Claude UX journey)", () => {
     const body = await ok.json() as CollectionResultsResponse
     expect(body.records).toHaveLength(1)
     expect(body.records[0]!.scope1?.status).toBe("complete")
+    // No release exists: the method is unreleased, without a warning.
+    expect([body.label, body.methods.map(m => m.releaseStatus), body.warnings]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta"], []])
   }, 60_000)
 
   test("a record from another company is never calculated", async () => {
     const foreign = record({ kind: "natural_gas", sourceId: "GAS-X", quantity: q("10", "therm"), payload: { heatContent: null } }, other)
-    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [foreign], findCollectionEvidence: async () => [], findCompanySetup: async () => null }
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [foreign], findCollectionEvidence: async () => [], findCompanySetup: async () => null, findCurrentMethodReleases: async () => [] }
     const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
     const response = await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
     expect(response.status).toBe(404)
   })
+
+  test("release status: released only for the exact release, engine and values; every other case is unreleased", () => {
+    const method = { methodVersionId: "scope1.stationary.natural_gas.v2", engineSha256: "a".repeat(64), registerSha256: "b".repeat(64) }
+    const release: ReleasedMethod = { releaseId: "74000000-0000-4000-8000-000000000001", profileId: "scope1.stationary.natural_gas", methodVersionId: method.methodVersionId, scope: 1, family: "stationary_combustion",
+      engineSha256: method.engineSha256, registerSha256: method.registerSha256, gwpSetId: "AR5-100", outputLabel: "Draft — prepared with Neuvetra beta methods; not externally assured",
+      factors: [{ key: "stationary.Natural Gas.co2", value: "53.06", unit: "kg CO2 per MMBtu HHV", cell: "E38", label: "Natural Gas", table: "Table 1" }], gwp: [], constants: [{ id: "therm_to_mmbtu", value: "0.1", unit: "MMBtu per therm" }] }
+    const facts: EngineMethodFacts = { engineSha256: method.engineSha256, registerSha256: method.registerSha256, factorValues: { "stationary.Natural Gas.co2": "53.060" }, constantValues: { therm_to_mmbtu: { value: "0.1", unit: "MMBtu per therm" } } }
+    const evidence = (change: Partial<ReleaseEvidence> = {}): ReleaseEvidence => ({ current: [release], engines: new Map([[method.methodVersionId, facts]]), ...change })
+    expect(classifyMethodRelease(method, evidence())).toEqual({ releaseStatus: "released_beta", releaseId: release.releaseId, releaseLabel: release.outputLabel, problem: null })
+    const cases: Array<[string, ReleaseEvidence | null, ReleaseProblem | null]> = [
+      ["no check made", null, null],
+      ["no release of this version", evidence({ current: [] }), null],
+      ["release lookup failed", evidence({ current: null }), "release_lookup_unavailable"],
+      ["released for another engine", evidence({ current: [{ ...release, engineSha256: "c".repeat(64) }] }), "engine_differs_from_release"],
+      ["released for another register", evidence({ current: [{ ...release, registerSha256: "c".repeat(64) }] }), "engine_differs_from_release"],
+      ["engine description unavailable", evidence({ engines: null }), "engine_description_unavailable"],
+      ["engine describes other bytes", evidence({ engines: new Map([[method.methodVersionId, { ...facts, engineSha256: "c".repeat(64) }]]) }), "engine_differs_from_release"],
+      ["engine factor value differs", evidence({ engines: new Map([[method.methodVersionId, { ...facts, factorValues: { "stationary.Natural Gas.co2": "53.07" } }]]) }), "engine_values_differ_from_release"],
+      ["engine has an extra factor", evidence({ engines: new Map([[method.methodVersionId, { ...facts, factorValues: { ...facts.factorValues, extra: "1" } }]]) }), "engine_values_differ_from_release"],
+      ["engine constant unit differs", evidence({ engines: new Map([[method.methodVersionId, { ...facts, constantValues: { therm_to_mmbtu: { value: "0.1", unit: "MMBtu" } } }]]) }), "engine_values_differ_from_release"],
+    ]
+    for (const [label, input, problem] of cases) expect([label, classifyMethodRelease(method, input)]).toEqual([label, { releaseStatus: "unreleased_beta", releaseId: null, releaseLabel: null, problem }])
+  })
+
+  test("the released label needs every method released; a mixed or failed check keeps the unreleased label and warns", async () => {
+    const describe = async () => { const facts = new Map<string, EngineMethodFacts>(); for (const d of [await engines.scope1.describe(), await engines.scope2.describe()]) for (const m of d.methods) facts.set(m.id, { engineSha256: d.engineSha256, registerSha256: d.registerSha256, factorValues: m.factorValues, constantValues: m.constantValues }); return facts }
+    const facts = await describe()
+    const released = (id: string): ReleasedMethod => { const f = facts.get(id)!; return { releaseId: `74000000-0000-4000-8000-${String(id.length).padStart(12, "0")}`, profileId: id, methodVersionId: id, scope: id.startsWith("scope2") ? 2 : 1, family: "f", engineSha256: f.engineSha256, registerSha256: f.registerSha256, gwpSetId: "AR5-100", outputLabel: "Draft — prepared with Neuvetra beta methods; not externally assured",
+      factors: Object.entries(f.factorValues).map(([key, value]) => ({ key, value, unit: "u", cell: "A1", label: key, table: "t" })), gwp: [], constants: Object.entries(f.constantValues).map(([id, c]) => ({ id, value: c.value, unit: c.unit })) } }
+    const ids = ["scope1.stationary.natural_gas.v2", "scope2.electricity.egrid2023_greene2025.v3"]
+    const run = (releases: ReleaseEvidence) => buildCollectionResults({ companyId: company, context, records: [gasOffice, power], evidence, setup: null, engines, releases })
+    const all = await run({ current: ids.map(released), engines: facts })
+    expect([all.label, all.methods.map(m => m.releaseStatus), all.warnings]).toEqual([RELEASED_DRAFT_RESULTS_LABEL, ["released_beta", "released_beta"], []])
+    expect(all.methods.every(m => m.releaseLabel === "Draft — prepared with Neuvetra beta methods; not externally assured" && m.releaseId !== null)).toBe(true)
+    const mixed = await run({ current: [released(ids[0]!)], engines: facts })
+    expect([mixed.label, mixed.methods.map(m => m.releaseStatus), mixed.warnings]).toEqual([DRAFT_RESULTS_LABEL, ["released_beta", "unreleased_beta"], []])
+    const failed = await run({ current: null, engines: facts })
+    expect([failed.label, failed.methods.map(m => m.releaseStatus), failed.warnings]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta", "unreleased_beta"], ["Method release status could not be checked, so every method is shown as unreleased."]])
+    // Nothing calculated: never the released label.
+    const none = await buildCollectionResults({ companyId: company, context, records: [gasBlank], evidence, setup: null, engines, releases: { current: ids.map(released), engines: facts } })
+    expect([none.label, none.methods]).toEqual([DRAFT_RESULTS_LABEL, []])
+  }, 60_000)
+
+  test("the route reads releases per request, describes the engines once, and a failed lookup never blocks results", async () => {
+    let describeCalls = 0, lookups = 0
+    const counted = { scope1: { ...engines.scope1, calculate: engines.scope1.calculate, aggregate: engines.scope1.aggregate, describe: async () => { describeCalls++; return engines.scope1.describe() } }, scope2: { ...engines.scope2, calculate: engines.scope2.calculate, aggregate: engines.scope2.aggregate, describe: async () => { describeCalls++; return engines.scope2.describe() } } }
+    const facts = await engines.scope1.describe(), gas = facts.methods.find(m => m.id === "scope1.stationary.natural_gas.v2")!
+    const release: ReleasedMethod = { releaseId: "74000000-0000-4000-8000-000000000009", profileId: "scope1.stationary.natural_gas", methodVersionId: gas.id, scope: 1, family: "stationary_combustion", engineSha256: facts.engineSha256, registerSha256: facts.registerSha256, gwpSetId: "AR5-100", outputLabel: "Draft — prepared with Neuvetra beta methods; not externally assured",
+      factors: Object.entries(gas.factorValues).map(([key, value]) => ({ key, value, unit: "u", cell: "A1", label: key, table: "t" })), gwp: [], constants: Object.entries(gas.constantValues).map(([id, c]) => ({ id, value: c.value, unit: c.unit })) }
+    let fail = false
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gasOffice], findCollectionEvidence: async () => [], findCompanySetup: async () => null,
+      findCurrentMethodReleases: async () => { lookups++; if (fail) throw new Error("lookup failed"); return [release] } }
+    const routes = createCollectionResultsRoutes({ database, engines: counted, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+    const get = async () => (await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))).json() as Promise<CollectionResultsResponse>
+    const first = await get(), second = await get()
+    for (const body of [first, second]) expect([body.label, body.methods.map(m => [m.methodVersionId, m.releaseStatus, m.releaseId])]).toEqual([RELEASED_DRAFT_RESULTS_LABEL, [[gas.id, "released_beta", release.releaseId]]])
+    expect([lookups, describeCalls]).toEqual([2, 2])
+    fail = true
+    const third = await get()
+    expect([third.label, third.methods.map(m => m.releaseStatus), third.warnings, third.records[0]!.scope1?.status]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta"], ["Method release status could not be checked, so every method is shown as unreleased."], "complete"])
+  }, 60_000)
 })

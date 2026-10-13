@@ -18,6 +18,7 @@ import { M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WA
 import { buildInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackReceipt, type M59AuditEvent } from "./m59"
 import { buildDraftInventoryReport, hashReportBytes } from "./m60"
 import { M61_PROFILE, hashDraftReportDecisionSnapshot, validateDraftReportReviewInput, type DraftReportReviewInput } from "./m61"
+import { readCurrentReleasedMethods } from './method-reference'
 import {readCollectionContext,readCollectionActivities,readCollectionActivityVersion,saveCollectionActivity as storeCollectionActivity,readCollectionEvidence,reserveCollectionEvidenceUpload as reserveEvidenceUpload,registerCollectionEvidence as storeCollectionEvidence,markCollectionEvidenceRegistrationFailed as markEvidenceRegistrationFailed,findDownloadableCollectionEvidence as readDownloadableCollectionEvidence,readGridLossLineage,createGridLossLineage as storeGridLossLineage} from './collection'
 export { M58_FACTOR, M58_FIXTURE_BYTES, M58_FIXTURE_SHA256, M58_REPORTED, M58_TOTALS, M58_WARNINGS, type AnnualInventory, type AnnualPeriod, type AnnualRegister } from "./m58"
 export { M59_PROFILE, M59_ENTRY_COUNT, M59_ENTRY_NAMES, M59_MAX_ARCHIVE_BYTES, buildInventoryEvidenceArchive, inspectInventoryEvidenceArchive, verifyInventoryEvidenceArchive, type EvidencePackBuild, type EvidencePackExpectation, type EvidencePackInputs, type EvidencePackReceipt } from "./m59"
@@ -311,6 +312,8 @@ export class WorkspaceDatabase {
   async createGridLossLineage(userId:string,companyId:string,input:{id:string;electricityRecordId:string;reference:string;notes:string}){return this.asTrustedUser(userId,tx=>storeGridLossLineage(tx,userId,companyId,input))}
   async findCompanySetup(userId:string,companyId:string){return this.asUser(userId,tx=>readCompanySetup(tx,companyId))}
   async findCompanySetupVersion(userId:string,companyId:string,versionId:string){return this.asUser(userId,tx=>readCompanySetupVersion(tx,companyId,versionId))}
+  /** Current method releases (0024) for the Results route. Read with asTrustedUser, as the connection's own role: the release store grants no read to `authenticated`. On hosted both helpers run as neuvetra_runtime behind the staging-access gate, and the store's row-level security admits only a user with staging access. */
+  async findCurrentMethodReleases(userId:string){return this.asTrustedUser(userId,tx=>readCurrentReleasedMethods(tx))}
   async saveCompanySetup(userId:string,companyId:string,input:unknown){return this.asTrustedUser(userId,tx=>saveCompanySetup(tx,userId,companyId,input))}
   protected constructor(protected readonly db: WorkspaceConnection) {}
 

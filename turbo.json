@@ -21,7 +21,7 @@
     },
     "test": {
       "cache": false,
-      "passThroughEnv": ["NEUVETRA_PYTHON"]
+      "passThroughEnv": ["NEUVETRA_PYTHON", "NEUVETRA_METHOD_SOURCES_DIR", "NEUVETRA_METHOD_SOURCES_REQUIRED"]
     },
     "test:e2e": {
       "dependsOn": ["^build"],

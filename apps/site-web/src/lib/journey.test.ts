@@ -3,7 +3,7 @@
 import { describe, expect, test } from "bun:test"
 import { HELP_ENTRIES, isProgressQuestion, matchQuestion } from "./help-content"
 import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS } from "./plain-language"
-import { decodeResults, resultsCsv, RESULTS_PROFILE } from "./results-api"
+import { decodeResults, DRAFT_LABEL, resultsCsv, RESULTS_PROFILE } from "./results-api"
 import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, periodFit, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
 import { rowReasons, rowStatus } from "./results-view"
 
@@ -84,10 +84,10 @@ describe("plain-language display", () => {
   })
 })
 
-const s1 = (status: string, display: string | null) => ({ methodVersionId: "scope1.stationary.natural_gas.v2", gwpSetId: "AR5-100", status, gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: display ? { unrounded: display, display, unit: "kg CO2e", rounding: "half_even_4dp" } : null, resultSha256: "a".repeat(64) })
+const s1 = (status: string, display: string | null) => ({ methodVersionId: "scope1.stationary.natural_gas.v2", engineSha256: "6fdcfa3926698250d577df8d456b4d567ec3e9569788f3c96373421276fa36a4", registerSha256: "f5351cd375a54072c03061dc3fab6740bed1cf78e05db9de575dca7f2d5c0c02", gwpSetId: "AR5-100", status, gases: {}, missingGases: [], estimates: [], findings: [], memo: null, factorsUsed: [], total: display ? { unrounded: display, display, unit: "kg CO2e", rounding: "half_even_4dp" } : null, resultSha256: "a".repeat(64) })
 const row = (extra: Record<string, unknown>) => ({ recordId: record, versionId: record, revision: 1, kind: "natural_gas", scope: 1, sourceId: "GAS-1", locationId: record, locationName: "Office", period: { start: "2025-01-01", endExclusive: "2026-01-01" }, quantity: { value: "10", unit: "therm" }, quality: "actual", estimateBasis: null, evidenceCount: 0, evidence: [], plan: { action: "calculate", status: null, reasons: [], notes: [] }, periodCheck: "inside", outcome: "calculated", inSubtotal: { scope1: true, scope2LocationBased: false, scope2MarketBased: false }, refusalCode: null, scope1: s1("complete", "53.1180"), scope2: null, ...extra })
-const methodsUsed = [{ methodVersionId: "scope1.stationary.natural_gas.v2", scope: 1, engineSha256: "6fdcfa3926698250d577df8d456b4d567ec3e9569788f3c96373421276fa36a4", registerSha256: "f5351cd375a54072c03061dc3fab6740bed1cf78e05db9de575dca7f2d5c0c02", releaseStatus: "unreleased_beta" }]
-const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: "Draft", syntheticOnly: true, environment: "synthetic_staging", methods: methodsUsed, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [] })
+const methodsUsed = [{ methodVersionId: "scope1.stationary.natural_gas.v2", scope: 1, engineSha256: "6fdcfa3926698250d577df8d456b4d567ec3e9569788f3c96373421276fa36a4", registerSha256: "f5351cd375a54072c03061dc3fab6740bed1cf78e05db9de575dca7f2d5c0c02", releaseStatus: "unreleased_beta", releaseId: null, releaseLabel: null }]
+const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: DRAFT_LABEL, syntheticOnly: true, environment: "synthetic_staging", methods: methodsUsed, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [] })
 
 describe("draft results decoding", () => {
   test("accepts the contract and rejects anything else", () => {

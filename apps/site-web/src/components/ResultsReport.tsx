@@ -3,7 +3,7 @@ import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
-import { DRAFT_LABEL, loadResults, methodLabel, NotSyntheticResultsError, ResultsApiError, resultsCsv, type EngineGas, type ResultRow, type ResultsResponse } from "@/lib/results-api"
+import { loadResults, methodLabel, NotSyntheticResultsError, releaseState, ResultsApiError, resultsCsv, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 
@@ -17,11 +17,11 @@ function Gases({ gases }: { gases: Record<string, EngineGas> | null }) {
   return <>{Object.entries(gases).map(([gas, value]) => <span key={gas} style={{ display: "block" }}>{GAS_LABELS[gas] ?? gas}: {groupDigits(value.mass)} {value.massUnit} → {groupDigits(value.co2e)} kg CO2e</span>)}</>
 }
 
-function RowDetail({ row }: { row: ResultRow }) {
+function RowDetail({ row, methods }: { row: ResultRow; methods: MethodUsed[] }) {
   const s1 = row.scope1, s2 = row.scope2
   const factors = s1?.factorsUsed ?? s2?.factorsUsed ?? []
   return <details className="nv-detail"><summary>How this was calculated</summary><dl>
-    <dt>Method</dt><dd>{s1?.methodVersionId ?? s2?.methodVersionId ? methodLabel((s1?.methodVersionId ?? s2?.methodVersionId)!) : "Not calculated"}</dd>
+    <dt>Method</dt><dd>{s1 ?? s2 ? methodLabel((s1 ?? s2)!, methods) : "Not calculated"}</dd>
     {s1 && <><dt>Gases</dt><dd><Gases gases={s1.gases} />{s1.missingGases.length > 0 && <span style={{ display: "block" }}>Missing: {s1.missingGases.map(gas => GAS_LABELS[gas] ?? gas).join(", ")}</span>}</dd></>}
     {s2 && <><dt>Electricity</dt><dd>{groupDigits(s2.activity.mwh)} MWh · eGRID subregion {s2.activity.subregion}</dd>
       <dt>Location-based</dt><dd><Gases gases={s2.locationBased.gases} /></dd>
@@ -50,6 +50,13 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
   }
 }
 
+/** How the report describes the methods behind its figures (MR2): released only when every one is released_beta. */
+function methodsNote(state: ReturnType<typeof releaseState>): { summary: string; closing: string; footer: string } {
+  if (state === "released") return { summary: "Every method behind these figures is a released Neuvetra beta method: released after an independent method review and integrated QA, and checked by the server against the calculation engine that ran. The figures are still drafts for synthetic test data only.", closing: "This draft was prepared with released Neuvetra beta methods from synthetic company data.", footer: "synthetic data, Neuvetra beta methods; not externally assured" }
+  if (state === "mixed") return { summary: "Some methods behind these figures are released Neuvetra beta methods and some are not yet released; the table below shows which. The figures are drafts for synthetic test data only.", closing: "This draft was prepared with Neuvetra beta methods, not all of them released, from synthetic company data.", footer: "synthetic data, beta methods not all released; not externally assured" }
+  return { summary: "None of these methods is released yet: they are reviewed beta methods, and their figures are drafts for synthetic test data only.", closing: "This draft was prepared with unreleased Neuvetra beta methods from synthetic company data.", footer: "synthetic data, unreleased beta methods; not externally assured" }
+}
+
 /** Escapes text for a CSS string: anything but plain letters, digits and simple punctuation becomes a CSS escape. */
 const cssString = (text: string) => text.replace(/[^A-Za-z0-9 .,&()_-]/gu, char => `\\${char.codePointAt(0)!.toString(16)} `)
 
@@ -57,6 +64,7 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
   const setup = results.setup
   const company = (setup?.legalName || "Company").slice(0, 60)
   const notes = completeness(results, coverage)
+  const methodsText = methodsNote(releaseState(results.methods))
   const scope1Rows = results.records.filter(row => row.scope === 1)
   const scope2Rows = results.records.filter(row => row.scope === 2)
   const incomplete = results.records.filter(row => row.outcome !== "calculated" || row.scope1?.status === "partial" || row.scope2?.marketBased.status === "input_needed" || row.scope2?.marketBased.status === "review_required")
@@ -71,12 +79,12 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
   const uncounted = results.records.some(row => (row.scope1?.total && !row.inSubtotal.scope1) || (row.scope2?.locationBased.total && !row.inSubtotal.scope2LocationBased) || (row.scope2?.marketBased.total && !row.inSubtotal.scope2MarketBased))
   return <article className="nv-report" aria-labelledby="report-title">
     {/* Running footer on every printed page names the company as well as the draft status. */}
-    <style>{`@media print { @page { @bottom-left { content: "DRAFT \\2014  ${cssString(company)} \\2014  synthetic data, unreleased beta methods; not externally assured"; } } }`}</style>
+    <style>{`@media print { @page { @bottom-left { content: "DRAFT \\2014  ${cssString(company)} \\2014  ${methodsText.footer}"; } } }`}</style>
     <div className="nv-report__head">
       <div><p className="nv-report__small" style={{ margin: 0 }}>Greenhouse-gas inventory · Scope 1 and Scope 2</p><h2 id="report-title" className="nv-report__title">{setup?.legalName || "Company"}{setup?.tradingName ? ` (${setup.tradingName})` : ""}</h2></div>
       <span className="nv-report__stamp">DRAFT</span>
     </div>
-    <p style={{ fontWeight: 600, marginTop: 12 }}>{DRAFT_LABEL}. Private beta.</p>
+    <p style={{ fontWeight: 600, marginTop: 12 }}>{results.label}. Private beta.</p>
     <div className="nv-report__meta">
       <div><small>Reporting period</small>{periodLabel(setup?.period.start, setup?.period.endExclusive)}</div>
       <div><small>Boundary approach</small>{BOUNDARY_LABELS[setup?.boundaryApproach ?? "unknown"] ?? setup?.boundaryApproach}</div>
@@ -106,11 +114,11 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
     {estimated.length ? <ul>{estimated.map(row => <li key={row.recordId}><strong>{kindLabel(row.kind)} · {row.sourceId}</strong> — {[row.quality === "estimated" ? `Activity data marked Estimated${row.estimateBasis ? ` (${row.estimateBasis})` : ""}.` : "", ...(row.scope1?.estimates ?? []).map(reasonText), ...(row.scope2?.estimates ?? []).map(reasonText)].filter(Boolean).join(" ")}</li>)}</ul> : <p>No records are marked Estimated and no method estimates were applied.</p>}
     {unstated > 0 && <p>{plural(unstated, "calculated record has", "calculated records have")} data quality “Unknown”.</p>}
     <h3>Methods and emission factors</h3>
-    <p>None of these methods is released yet: they are reviewed beta methods, and their figures are drafts for synthetic test data only. Global warming potentials: IPCC AR5, 100-year (CH4 28, N2O 265). Emission factors: EPA GHG Emission Factors Hub (2025); EPA eGRID2023 rev2; Green-e 2025 residual mix. Figures are rounded once, half-even, to 4 decimal places of kg CO2e.</p>
-    {results.methods.length > 0 ? <div className="nv-report__scroll"><table><thead><tr><th>Method version</th><th>Scope</th><th>Release status</th><th>Engine (SHA-256)</th><th>Factor register (SHA-256)</th></tr></thead><tbody>{results.methods.map(item => <tr key={`${item.methodVersionId}-${item.engineSha256}`}><td>{item.methodVersionId}</td><td>{item.scope}</td><td>Unreleased beta (not released)</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.engineSha256.slice(0, 12)}…</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.registerSha256.slice(0, 12)}…</td></tr>)}</tbody></table></div> : <p>No method calculated a figure.</p>}
+    <p>{methodsText.summary} Global warming potentials: IPCC AR5, 100-year (CH4 28, N2O 265). Emission factors: EPA GHG Emission Factors Hub (2025); EPA eGRID2023 rev2; Green-e 2025 residual mix. Figures are rounded once, half-even, to 4 decimal places of kg CO2e.</p>
+    {results.methods.length > 0 ? <div className="nv-report__scroll"><table><thead><tr><th>Method version</th><th>Scope</th><th>Release status</th><th>Engine (SHA-256)</th><th>Factor register (SHA-256)</th></tr></thead><tbody>{results.methods.map(item => <tr key={`${item.methodVersionId}-${item.engineSha256}`}><td>{item.methodVersionId}</td><td>{item.scope}</td><td>{item.releaseStatus === "released_beta" ? "Released beta" : "Unreleased beta (not released)"}</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.engineSha256.slice(0, 12)}…</td><td className="nv-subtle" style={{ fontFamily: "monospace" }}>{item.registerSha256.slice(0, 12)}…</td></tr>)}</tbody></table></div> : <p>No method calculated a figure.</p>}
     {residual && <p>Market-based electricity not covered by certificates or contracts uses the residual mix: {residual.method}. Sources: {residual.sources.join("; ")}.</p>}
     {factorRows.size > 0 && <div className="nv-report__scroll"><table><thead><tr><th>Factor</th><th className="nv-right">Value</th><th>Unit</th><th>Source (cell)</th></tr></thead><tbody>{[...factorRows.entries()].map(([key, factor]) => <tr key={key}><td>{factor.label}</td><td className="nv-right">{groupDigits(factor.value)}</td><td>{factor.unit}</td><td>{factorSource(key)} ({factor.cell})</td></tr>)}</tbody></table></div>}
-    <p className="nv-report__small" style={{ marginTop: 24 }}>This draft was prepared with unreleased Neuvetra beta methods from synthetic company data. It has not been reviewed by an independent assurance provider and must not be filed or published as a final inventory.</p>
+    <p className="nv-report__small" style={{ marginTop: 24 }}>{methodsText.closing} It has not been reviewed by an independent assurance provider and must not be filed or published as a final inventory.</p>
   </article>
 }
 
@@ -156,7 +164,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     <p className="nv-eyebrow">Step 3 of 3 · Results & report</p>
     <h1 ref={headingRef} tabIndex={-1}>Draft results</h1>
   </>
-  if (busy && !results) return <section aria-busy="true">{header}<p className="nv-lead" role="status">Calculating each record with the reviewed beta methods (not yet released)…</p><div className="nv-grid-3">{[0, 1, 2].map(i => <div key={i} className="nv-stat" style={{ height: 120, opacity: .5 }} />)}</div></section>
+  if (busy && !results) return <section aria-busy="true">{header}<p className="nv-lead" role="status">Calculating each record with Neuvetra’s beta methods…</p><div className="nv-grid-3">{[0, 1, 2].map(i => <div key={i} className="nv-stat" style={{ height: 120, opacity: .5 }} />)}</div></section>
   if (error) return <section>{header}
     {error.missingRoute ? <div className="nv-notice nv-notice--info" role="status"><Icon name="info" /><div><p><strong>Draft results aren’t switched on in this environment yet.</strong></p><p>Your records are saved. Results appear here once the results service is deployed.</p></div></div>
       : <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p>{error.message}</p><div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={() => void load()}>Try again</button></div></div></div>}
@@ -181,7 +189,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   return <section aria-busy={busy}>
     {header}
     <p className="nv-lead">{results.setup?.legalName || "Your company"} · {periodLabel(results.setup?.period.start, results.setup?.period.endExclusive)} · calculated {new Date(results.generatedAt).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })}</p>
-    <div className="nv-notice nv-notice--warn"><Icon name="info" /><p><strong>{DRAFT_LABEL}.</strong> Use it to review your data, not to file.</p></div>
+    <div className="nv-notice nv-notice--warn"><Icon name="info" /><p><strong>{results.label}.</strong> Use it to review your data, not to file.</p></div>
     {results.warnings.map(warning => <div key={warning} className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><p>{warning}</p></div>)}
 
     <div className="nv-grid-3" style={{ marginTop: 18 }}>
@@ -231,7 +239,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
             <div className="nv-record-card__title">{kindLabel(row.kind)} · {row.sourceId}</div>
             <div className="nv-record-card__meta">{row.locationName ?? "Unknown site"} · {periodLabel(row.period.start, row.period.endExclusive)} · {row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "amount missing"}{row.outcome === "calculated" && !row.evidence.length ? " · no evidence linked" : ""}</div>
             {reasons.slice(0, 3).map(reason => <div key={reason} className="nv-record-card__reason" style={{ color: status.tone === "warn" || status.tone === "danger" ? undefined : "var(--muted)" }}>{reason}</div>)}
-            {row.outcome === "calculated" && <RowDetail row={row} />}
+            {row.outcome === "calculated" && <RowDetail row={row} methods={results.methods} />}
           </div>
           <div className="nv-record-card__side">
             <span className={`nv-chip nv-chip--${status.tone}`}>{status.label}</span>
