@@ -3,13 +3,14 @@ import { Icon } from "./Icon"
 import type { JourneyView } from "./JourneyNav"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
-import { loadResults, methodLabel, NotSyntheticResultsError, releaseState, ResultsApiError, resultsCsv, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
+import { EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
 import { factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 
 const rowKg = (row: ResultRow) => row.scope1?.total?.display ?? row.scope2?.locationBased.total?.display ?? null
 const QUALITY = QUALITY_LABELS
-const evidenceText = (row: ResultRow) => row.evidence.length ? row.evidence.map(file => `${file.name ?? "Unnamed file"}${file.sha256 ? ` · ${file.sha256.slice(0, 10)}` : ""}${file.status === "clean" ? "" : ` (${file.status === "pending" ? "scan pending" : file.status})`}`).join("; ") : "None linked"
+// Every file names its scan state, including "cleared" (MR3): the screen, print and CSV use the same wording.
+const evidenceText = (row: ResultRow) => row.evidence.length ? row.evidence.map(file => `${file.name ?? "Unnamed file"}${file.sha256 ? ` · ${file.sha256.slice(0, 10)}` : ""} (${EVIDENCE_STATUS_TEXT[file.status]})`).join("; ") : "None linked"
 const plural = (count: number, one: string, many = `${one}s`) => `${count} ${count === 1 ? one : many}`
 
 function Gases({ gases }: { gases: Record<string, EngineGas> | null }) {
@@ -237,7 +238,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
           <span className="nv-record-card__icon" aria-hidden="true"><Icon name={kindIcon(row.kind)} /></span>
           <div style={{ minWidth: 0 }}>
             <div className="nv-record-card__title">{kindLabel(row.kind)} · {row.sourceId}</div>
-            <div className="nv-record-card__meta">{row.locationName ?? "Unknown site"} · {periodLabel(row.period.start, row.period.endExclusive)} · {row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "amount missing"}{row.outcome === "calculated" && !row.evidence.length ? " · no evidence linked" : ""}</div>
+            <div className="nv-record-card__meta">{row.locationName ?? "Unknown site"} · {periodLabel(row.period.start, row.period.endExclusive)} · {row.quantity.value ? `${groupDigits(row.quantity.value)} ${shortUnit(row.quantity.unit)}` : "amount missing"}{row.outcome === "calculated" ? !row.evidence.length ? " · no evidence linked" : unclearedEvidence(row).length ? ` · ${plural(unclearedEvidence(row).length, "evidence file")} not cleared` : "" : ""}</div>
             {reasons.slice(0, 3).map(reason => <div key={reason} className="nv-record-card__reason" style={{ color: status.tone === "warn" || status.tone === "danger" ? undefined : "var(--muted)" }}>{reason}</div>)}
             {row.outcome === "calculated" && <RowDetail row={row} methods={results.methods} />}
           </div>
