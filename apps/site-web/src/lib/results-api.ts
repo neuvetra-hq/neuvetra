@@ -28,10 +28,31 @@ export interface Scope2Result extends MethodRun {
   locationBased: Scope2Basis; marketBased: Scope2Basis & { residualMix: { mwh: string; method: string; sources: string[] } | null }
   factorsUsed: FactorUsed[]; resultSha256: string
 }
+/** A linked file's current scan state. "missing": the file is not among the company's evidence. Only "clean" is cleared. */
+export type EvidenceStatus = "clean" | "pending" | "error" | "rejected" | "missing"
+export interface EvidenceFile { id: string; name: string | null; sha256: string | null; status: EvidenceStatus }
+/**
+ * How a file's scan state is named wherever a file is listed: screen, print and CSV (MR3; Request B case A6). Only a
+ * clean scan is "cleared"; no other state is ever presented as cleared or as supporting evidence. Evidence status
+ * never changes a number: calculation eligibility and evidence sufficiency are separate.
+ */
+export const EVIDENCE_STATUS_TEXT: Record<EvidenceStatus, string> = {
+  clean: "cleared",
+  pending: "scan pending, not cleared",
+  error: "scan failed, not cleared",
+  rejected: "rejected, not supporting evidence",
+  missing: "file not found, not supporting evidence",
+}
+const EVIDENCE_STATUSES = Object.keys(EVIDENCE_STATUS_TEXT)
+/** Linked files that have not cleared the scan. */
+export const unclearedEvidence = (row: Pick<ResultRow, "evidence">): EvidenceFile[] => row.evidence.filter(file => file.status !== "clean")
+/** One linked file for the CSV: name (or id), short SHA-256 and scan state. */
+export const evidenceFileText = (file: EvidenceFile): string => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""} [${EVIDENCE_STATUS_TEXT[file.status]}]`
+
 export interface ResultRow {
   recordId: string; versionId: string; revision: number; kind: string; scope: 1 | 2; sourceId: string; locationId: string; locationName: string | null
   period: { start: string; endExclusive: string }; quantity: { value: string; unit: string }; quality: string; estimateBasis: string | null; evidenceCount: number
-  evidence: Array<{ id: string; name: string | null; sha256: string | null; status: string }>
+  evidence: EvidenceFile[]
   plan: { action: "calculate" | "hold"; status: "withdrawn" | "excluded" | "input_needed" | null; reasons: string[]; notes: string[] }
   /** Record dates against the setup reporting period; "outside" and "partial" rows are held by the results route. */
   periodCheck: "inside" | "partial" | "outside" | "no_period"
@@ -65,6 +86,8 @@ const method = (value: unknown) => record(value) && typeof value.methodVersionId
     : value.releaseStatus === "unreleased_beta" && value.releaseId === null && value.releaseLabel === null)
 /** One key per method run: version, engine and register. */
 const runKey = (run: MethodRun) => `${run.methodVersionId}\u0000${run.engineSha256}\u0000${run.registerSha256}`
+const evidenceFile = (value: unknown) => record(value) && typeof value.id === "string" && UUID.test(value.id) && (value.name === null || typeof value.name === "string")
+  && (value.sha256 === null || (typeof value.sha256 === "string" && SHA256.test(value.sha256))) && typeof value.status === "string" && EVIDENCE_STATUSES.includes(value.status)
 const inSubtotal = (value: unknown) => record(value) && typeof value.scope1 === "boolean" && typeof value.scope2LocationBased === "boolean" && typeof value.scope2MarketBased === "boolean"
 
 /** Thrown when a server offers draft numbers outside synthetic staging: the screen shows no numbers then. */
@@ -88,6 +111,10 @@ export function decodeResults(value: unknown, companyId: string): ResultsRespons
   for (const row of value.records) {
     if (!record(row) || !UUID.test(String(row.recordId)) || ![1, 2].includes(row.scope as number) || !record(row.plan) || !Array.isArray(row.plan.reasons) || !Array.isArray(row.evidence) || !["calculated", "held", "refused", "unavailable"].includes(String(row.outcome))) throw new Error("The results response was not recognized.")
     if (row.outcome === "calculated" && !row.scope1 && !row.scope2) throw new Error("The results response was not recognized.")
+    // Every linked file, once, with a known scan state (MR3): an unknown state could otherwise be shown as if cleared.
+    // UUIDs are compared case-insensitively, so one file can't appear twice with different states (Codex MR3 F1).
+    const files = row.evidence as unknown[]
+    if (row.evidenceCount !== files.length || !files.every(evidenceFile) || new Set(files.map(file => (file as EvidenceFile).id.toLowerCase())).size !== files.length) throw new Error("The results response was not recognized.")
     if (!["inside", "partial", "outside", "no_period"].includes(String(row.periodCheck))) throw new Error("The results response was not recognized.")
     if ((row.periodCheck === "outside" || row.periodCheck === "partial") && row.outcome === "calculated") throw new Error("The results response was not recognized.")
     const s1 = row.scope1 as Record<string, unknown> | null
@@ -165,6 +192,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     `# Boundary approach: ${labels.boundary(setup?.boundaryApproach ?? "unknown")}`,
     `# Generated: ${results.generatedAt}`,
     "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes in the matching \"In … subtotal\" column are in that subtotal.",
+    "# Evidence: each file shows its scan state in brackets. Only [cleared] files have passed the scan; pending, failed, rejected or missing files do not support a figure. Evidence state does not change any figure.",
     `# Methods: ${results.methods.map(item => `${item.methodVersionId} (${item.releaseStatus === "released_beta" ? `released beta, release ${item.releaseId}` : "unreleased beta, not released"}) engine ${item.engineSha256.slice(0, 12)} register ${item.registerSha256.slice(0, 12)}`).join("; ") || "none calculated"}`,
     ...(labels.completeness ? [`# Completeness, Scope 1: ${labels.completeness.scope1}`, `# Completeness, Scope 2 location-based: ${labels.completeness.scope2Location}`, `# Completeness, Scope 2 market-based: ${labels.completeness.scope2Market}`] : []),
     ...(labels.coverage ?? []).map(line => `# ${oneLine(line)}`),
@@ -176,7 +204,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     const yes = (flag: boolean, applies: boolean) => applies ? (flag ? "Yes" : "No") : ""
     const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
     const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
-    const files = row.evidence.map(file => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""}`).join("; ")
+    const files = row.evidence.map(evidenceFileText).join("; ")
     const run = s1 ?? s2
     return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, lastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code,
       yes(row.inSubtotal.scope1, row.scope === 1), yes(row.inSubtotal.scope2LocationBased, row.scope === 2), yes(row.inSubtotal.scope2MarketBased, row.scope === 2),

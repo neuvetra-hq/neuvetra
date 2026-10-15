@@ -7,7 +7,7 @@ import { validateCollectionActivity, type CollectionActivityRecord, type Collect
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
 import type { ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
-import { buildCollectionResults, checkPeriod, classifyMethodRelease, createCollectionResultsRoutes, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsResponse, type EngineMethodFacts, type ReleaseEvidence, type ReleaseProblem } from "./collection-results-routes"
+import { buildCollectionResults, checkPeriod, classifyMethodRelease, createCollectionResultsRoutes, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsResponse, type EngineMethodFacts, type ReleaseEvidence, type ReleaseProblem, type ResultsReleaseCheckLog, LOGGABLE_ERROR_CLASSES } from "./collection-results-routes"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
 const engines = {
@@ -104,6 +104,24 @@ describe("draft results (Claude UX journey)", () => {
     const linked = record({ kind: "natural_gas", sourceId: "GAS-9", quantity: q("10", "therm"), payload: { heatContent: null }, evidenceIds: [billId] })
     const result = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [bill], setup: null, engines })
     expect(result.records[0]!.evidence).toEqual([{ id: billId, name: "gas-bill.pdf", sha256: "d".repeat(64), status: "pending" }])
+  }, 60_000)
+
+  test("a linked file that is not among the company's evidence is reported as missing, and evidence state never changes a figure (MR3)", async () => {
+    const unknownId = "72000000-0000-4000-8000-0000000000e9"
+    const linked = record({ kind: "natural_gas", sourceId: "GAS-8", quantity: q("10", "therm"), payload: { heatContent: null }, evidenceIds: [billId, unknownId] })
+    const unlinked = record({ kind: "natural_gas", sourceId: "GAS-8", quantity: q("10", "therm"), payload: { heatContent: null } })
+    // One at a time: the engines admit two concurrent processes in total.
+    const withFiles = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [bill], setup: null, engines })
+    const without = await buildCollectionResults({ companyId: company, context, records: [unlinked], evidence: [], setup: null, engines })
+    const cleared = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [{ ...bill, quarantineStatus: "clean" }], setup: null, engines })
+    expect(without.records[0]!.outcome).toBe("calculated")
+    expect(withFiles.records[0]!.evidence.map(file => [file.id, file.status])).toEqual([[billId, "pending"], [unknownId, "missing"]])
+    expect(withFiles.records[0]!.evidenceCount).toBe(2)
+    for (const result of [withFiles, cleared]) {
+      expect(result.records[0]!.outcome).toBe(without.records[0]!.outcome)
+      expect(result.records[0]!.scope1?.total).toEqual(without.records[0]!.scope1?.total)
+      expect(result.scope1?.knownSourceSubtotal).toEqual(without.scope1?.knownSourceSubtotal)
+    }
   }, 60_000)
 
   test("records outside the setup reporting period are held, never totalled under that period", async () => {
@@ -218,5 +236,55 @@ describe("draft results (Claude UX journey)", () => {
     fail = true
     const third = await get()
     expect([third.label, third.methods.map(m => m.releaseStatus), third.warnings, third.records[0]!.scope1?.status]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta"], ["Method release status could not be checked, so every method is shown as unreleased."], "complete"])
+  }, 60_000)
+
+  test("a release check that cannot run is logged with only its stage and an error code, and logging never blocks results (MR3)", async () => {
+    const secret = "postgres://neuvetra_runtime:not-a-real-password@db.example.invalid:5432/postgres"
+    const facts = await engines.scope1.describe(), gas = facts.methods.find(m => m.id === "scope1.stationary.natural_gas.v2")!
+    const release: ReleasedMethod = { releaseId: "74000000-0000-4000-8000-000000000019", profileId: "scope1.stationary.natural_gas", methodVersionId: gas.id, scope: 1, family: "stationary_combustion", engineSha256: facts.engineSha256, registerSha256: facts.registerSha256, gwpSetId: "AR5-100", outputLabel: "Draft — prepared with Neuvetra beta methods; not externally assured",
+      factors: Object.entries(gas.factorValues).map(([key, value]) => ({ key, value, unit: "u", cell: "A1", label: key, table: "t" })), gwp: [], constants: Object.entries(gas.constantValues).map(([id, c]) => ({ id, value: c.value, unit: c.unit })) }
+    let mode: "lookup" | "describe" | "ok" = "lookup", throwingLogger = false
+    const failing = { scope1: { ...engines.scope1, calculate: engines.scope1.calculate, aggregate: engines.scope1.aggregate, describe: async () => { if (mode === "describe") throw new Error(secret); return engines.scope1.describe() } }, scope2: engines.scope2 }
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gasOffice], findCollectionEvidence: async () => [], findCompanySetup: async () => null,
+      findCurrentMethodReleases: async () => { if (mode === "lookup") throw Object.assign(new Error(secret), { code: "42501" }); return [release] } }
+    const logs: ResultsReleaseCheckLog[] = []
+    const routes = createCollectionResultsRoutes({ database, engines: failing, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }),
+      log: event => { if (throwingLogger) throw new Error("log sink down"); logs.push(event) } })
+    const get = async () => { const response = await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } })); return [response.status, await response.json()] as [number, CollectionResultsResponse] }
+    const [lookupStatus, lookupBody] = await get()
+    mode = "describe"
+    const [describeStatus, describeBody] = await get()
+    expect([lookupStatus, describeStatus]).toEqual([200, 200])
+    expect(logs).toEqual([{ event: "results_release_check_unavailable", stage: "release_lookup", errorCode: "42501" }, { event: "results_release_check_unavailable", stage: "engine_description", errorCode: "Error" }])
+    for (const text of [secret, owner, company, "not-a-real-password"]) expect(JSON.stringify(logs)).not.toContain(text)
+    expect([lookupBody.warnings, describeBody.warnings]).toEqual([["Method release status could not be checked, so every method is shown as unreleased."], ["A released method could not be checked against the running engine, so it is shown as unreleased."]])
+    // A logger that throws changes nothing for the user.
+    throwingLogger = true; mode = "lookup"
+    const [status, body] = await get()
+    expect([status, body.label, body.records[0]!.scope1?.status]).toEqual([200, DRAFT_RESULTS_LABEL, "complete"])
+    // A successful check logs nothing.
+    throwingLogger = false; mode = "ok"; logs.length = 0
+    const [okStatus, okBody] = await get()
+    expect([okStatus, okBody.label, logs]).toEqual([200, RELEASED_DRAFT_RESULTS_LABEL, []])
+  }, 60_000)
+
+  test("the log names only an SQLSTATE or a known error class; any other name or thrown value is \"other\" (Codex MR3 F2)", async () => {
+    const thrown: unknown[] = [
+      { name: "SyntheticCustomerPrivateToken", message: "omitted" },                 // Codex's reproduction
+      Object.assign(new Error("x"), { name: "AcmeCorpJaneDoe" }),                    // any alphabetic custom name
+      Object.assign(new Error("x"), { name: "Error ", code: "jane@example.invalid" }), // near-miss name, non-SQLSTATE code
+      { code: "42P01", name: "AcmeCorp" },                                            // SQLSTATE wins, name ignored
+      new TypeError("x"), new RangeError("x"), Object.assign(new Error("x"), { name: "PostgresError" }),
+      "a thrown string", null, undefined, 7, { code: "abcde" }, { code: "4250" }, { code: "425011" },
+    ]
+    const logs: ResultsReleaseCheckLog[] = []
+    let next = 0
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => null,
+      findCurrentMethodReleases: async () => { throw thrown[next++] } }
+    const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }), log: event => logs.push(event) })
+    for (const _ of thrown) expect((await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))).status).toBe(200)
+    expect(logs.map(event => event.errorCode)).toEqual(["other", "other", "other", "42P01", "TypeError", "RangeError", "PostgresError", "other", "other", "other", "other", "other", "other", "other"])
+    expect(logs.every(event => event.stage === "release_lookup" && (/^([0-9A-Z]{5}|other)$/.test(event.errorCode) || LOGGABLE_ERROR_CLASSES.has(event.errorCode)))).toBe(true)
+    for (const text of ["SyntheticCustomerPrivateToken", "AcmeCorp", "JaneDoe", "jane@", "omitted", "thrown string"]) expect(JSON.stringify(logs)).not.toContain(text)
   }, 60_000)
 })
