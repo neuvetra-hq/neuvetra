@@ -5,7 +5,7 @@ import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { coverageIssues, coverageLines, noteLabel, type Coverage } from "@/lib/journey-status"
 import { EVIDENCE_STATUS_TEXT, loadResults, methodLabel, NotSyntheticResultsError, releaseState, ResultsApiError, resultsCsv, unclearedEvidence, type EngineGas, type MethodUsed, type ResultRow, type ResultsResponse } from "@/lib/results-api"
 import { ACTIVITY_KINDS, BOUNDARY_LABELS, groupDigits, kgToTonnes, kindIcon, kindLabel, periodLabel, QUALITY_LABELS, reasonText, shortUnit } from "@/lib/plain-language"
-import { factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
+import { engineHold, factorSource, GAS_LABELS, INITIAL_RESULTS_STATE, KIND_COLORS, needsWork, notYetCounted, resultsReducer, rowReasons, rowStatus } from "@/lib/results-view"
 
 const rowKg = (row: ResultRow) => row.scope1?.total?.display ?? row.scope2?.locationBased.total?.display ?? null
 const QUALITY = QUALITY_LABELS
@@ -37,7 +37,8 @@ function RowDetail({ row, methods }: { row: ResultRow; methods: MethodUsed[] }) 
 
 /** The completeness wording used by the report and the CSV. Never says "complete" while anything is held, open or unchecked. */
 function completeness(results: ResultsResponse, coverage: Coverage) {
-  const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && row.outcome !== "calculated" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded").length
+  // Held by the adapter, the period check or the engine (B02): a record the engine held is not counted either.
+  const held = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const note = (complete: boolean, scope: 1 | 2) => {
     const count = held(scope), issues = coverageIssues(coverage, scope)
     const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? `${plural(issues.gaps, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
@@ -68,9 +69,10 @@ function Report({ results, coverage }: { results: ResultsResponse; coverage: Cov
   const methodsText = methodsNote(releaseState(results.methods))
   const scope1Rows = results.records.filter(row => row.scope === 1)
   const scope2Rows = results.records.filter(row => row.scope === 2)
-  const incomplete = results.records.filter(row => row.outcome !== "calculated" || row.scope1?.status === "partial" || row.scope2?.marketBased.status === "input_needed" || row.scope2?.marketBased.status === "review_required")
+  // Every record outside its subtotal is listed with its reasons, including the engine's own holds (B02).
+  const incomplete = results.records.filter(row => row.outcome !== "calculated" || engineHold(row) !== null || row.scope1?.status === "partial" || row.scope2?.marketBased.status === "input_needed" || row.scope2?.marketBased.status === "review_required")
   const estimated = results.records.filter(row => row.quality === "estimated" || (row.scope1?.estimates.length ?? 0) > 0 || (row.scope2?.estimates.length ?? 0) > 0)
-  const unstated = results.records.filter(row => row.outcome === "calculated" && row.quality === "unknown").length
+  const unstated = results.records.filter(row => row.outcome === "calculated" && engineHold(row) === null && row.quality === "unknown").length
   const factorRows = new Map<string, { label: string; value: string; unit: string; cell: string }>()
   for (const row of results.records) for (const factor of row.scope1?.factorsUsed ?? row.scope2?.factorsUsed ?? []) factorRows.set(factor.key, factor)
   const residual = results.records.find(row => row.scope2?.marketBased.residualMix)?.scope2?.marketBased.residualMix
@@ -176,7 +178,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     <div className="nv-empty" style={{ marginTop: 16 }}><Icon name="records" size={28} /><p className="nv-h3" style={{ marginTop: 10 }}>No activity records yet</p><p>{canManage ? "Add a gas bill, an electricity bill or fleet fuel, and your draft results appear here." : "Draft results appear here once an owner or admin adds activity records."}</p>{canManage && <button type="button" className="nv-btn nv-btn--primary" onClick={() => onNavigate("collection")}>Add activity</button>}</div>
   </section>
   const attentionRows = results.records.filter(needsWork)
-  const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && row.outcome !== "calculated" && row.plan.status !== "withdrawn" && row.plan.status !== "excluded").length
+  const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const issues1 = coverageIssues(coverage, 1), issues2 = coverageIssues(coverage, 2)
   const held1 = heldInScope(1), held2 = heldInScope(2)
   const open1 = issues1.open + issues1.gaps + (issues1.unchecked ? 1 : 0), open2 = issues2.open + issues2.gaps + (issues2.unchecked ? 1 : 0)
