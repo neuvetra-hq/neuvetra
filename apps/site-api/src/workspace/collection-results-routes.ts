@@ -93,6 +93,9 @@ const RELEASE_WARNINGS: Record<ReleaseProblem, string> = {
   engine_values_differ_from_release: "A released method's values do not match the running engine, so its results are shown as unreleased.",
 }
 
+/** A linked file's current scan state as Results reports it. */
+export type EvidenceStatus = CollectionEvidenceMetadata["quarantineStatus"] | "missing"
+
 export interface CollectionResultRow {
   recordId: string
   versionId: string
@@ -107,8 +110,12 @@ export interface CollectionResultRow {
   quality: string
   estimateBasis: string | null
   evidenceCount: number
-  /** The files linked to this record version, for the evidence column. Status is the current scan state. */
-  evidence: Array<{ id: string; name: string | null; sha256: string | null; status: string }>
+  /**
+   * The files linked to this record version, for the evidence column. Status is the current scan state; "missing" when
+   * the file is not among the company's evidence. Only "clean" is cleared (MR3): every other state is shown as not
+   * cleared and never as supporting evidence. Evidence status does not change any number.
+   */
+  evidence: Array<{ id: string; name: string | null; sha256: string | null; status: EvidenceStatus }>
   plan: Pick<CollectionCalculationPlan, "action" | "status" | "reasons" | "notes">
   /** The record's dates against the setup reporting period. "outside" and "partial" records are held, never calculated. */
   periodCheck: PeriodCheck
@@ -258,6 +265,24 @@ export async function buildCollectionResults(input: {
   }
 }
 
+/**
+ * One line when the release status check could not run (MR3). Carries only the stage and a database error code or
+ * error class, never a message, token, user, company or connection detail.
+ */
+export interface ResultsReleaseCheckLog { event: "results_release_check_unavailable"; stage: "release_lookup" | "engine_description"; errorCode: string }
+/**
+ * The only error class names the log may carry (Codex MR3 F2). A name is caller-controlled text, so any other name,
+ * however harmless it looks, is reported as "other" rather than forwarded.
+ */
+export const LOGGABLE_ERROR_CLASSES: ReadonlySet<string> = new Set(["Error", "TypeError", "RangeError", "SyntaxError", "ReferenceError", "AbortError", "TimeoutError", "PostgresError"])
+const errorCode = (error: unknown): string => {
+  // A PostgreSQL SQLSTATE: five characters, digits and uppercase letters.
+  const code = (error as { code?: unknown } | null)?.code
+  if (typeof code === "string" && /^[0-9A-Z]{5}$/.test(code)) return code
+  const name = (error as { name?: unknown } | null)?.name
+  return typeof name === "string" && LOGGABLE_ERROR_CLASSES.has(name) ? name : "other"
+}
+
 /** The staging wrapper also authenticates, rate-limits and bounds the request. Keep this route safe when used alone. */
 export function createCollectionResultsRoutes(deps: {
   database: CollectionResultsDatabase
@@ -266,10 +291,16 @@ export function createCollectionResultsRoutes(deps: {
   origin: string
   /** Must be exactly "synthetic_staging": draft numbers from unreleased methods are for synthetic test companies only. */
   environment: typeof DRAFT_RESULTS_ENVIRONMENT
+  /** Where release-check failures are reported; defaults to one JSON line on stderr. A failing logger is ignored. */
+  log?: (event: ResultsReleaseCheckLog) => void
 }) {
   if (deps.environment !== DRAFT_RESULTS_ENVIRONMENT) throw new Error("Draft results are only available in the private synthetic staging environment; admitting a real company needs its own board decision.")
   // One results run per company at a time (shared by its members): the engines admit two concurrent processes in total.
   const running = new Map<string, Promise<CollectionResultsResponse>>()
+  const report = (stage: ResultsReleaseCheckLog["stage"]) => (error: unknown): null => {
+    try { (deps.log ?? (event => console.warn(JSON.stringify(event))))({ event: "results_release_check_unavailable", stage, errorCode: errorCode(error) }) } catch { /* logging never blocks results */ }
+    return null
+  }
   // The engines' own descriptions, read once per process and only once a release exists. Engine bytes are pinned (each
   // call re-hashes them), and every method is still compared with the hash of the result that actually ran.
   let described: Promise<Map<string, EngineMethodFacts>> | null = null
@@ -303,11 +334,11 @@ export function createCollectionResultsRoutes(deps: {
             deps.database.findCollectionEvidence(actor.id, companyId),
             deps.database.findCompanySetup(actor.id, companyId),
             // A failed release lookup never blocks draft results: every method is then shown as unreleased, with a warning.
-            deps.database.findCurrentMethodReleases(actor.id).catch(() => null),
+            deps.database.findCurrentMethodReleases(actor.id).catch(report("release_lookup")),
           ])
           if (records.length > MAX_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
           if (records.some(record => record.companyId.toLowerCase() !== companyId)) throw Object.assign(new Error("Company mismatch."), { code: "42501" })
-          const facts = current && current.length ? await describeEngines().catch(() => null) : new Map<string, EngineMethodFacts>()
+          const facts = current && current.length ? await describeEngines().catch(report("engine_description")) : new Map<string, EngineMethodFacts>()
           return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts } })
         })().finally(() => running.delete(key))
         running.set(key, job)

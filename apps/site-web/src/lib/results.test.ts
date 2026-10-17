@@ -2,7 +2,7 @@
 // membership, half-even tonnes and the loading state after a failed reload. Claude, 2026-09-30; release status MR2.
 import { describe, expect, test } from "bun:test"
 import { kgToTonnes } from "./plain-language"
-import { decodeResults, DRAFT_LABEL, lastDayCovered, methodLabel, NotSyntheticResultsError, RELEASED_LABEL, releaseState, resultsCsv, RESULTS_PROFILE, type MethodUsed, type ResultsResponse } from "./results-api"
+import { decodeResults, DRAFT_LABEL, EVIDENCE_STATUS_TEXT, lastDayCovered, methodLabel, NotSyntheticResultsError, RELEASED_LABEL, releaseState, resultsCsv, RESULTS_PROFILE, unclearedEvidence, type MethodUsed, type ResultsResponse } from "./results-api"
 import { INITIAL_RESULTS_STATE, needsWork, resultsReducer, rowStatus } from "./results-view"
 
 const company = "29200000-0000-4000-8000-000000000001", other = "29200000-0000-4000-8000-000000000002"
@@ -150,5 +150,47 @@ describe("loading state (Codex review of PR #7)", () => {
   })
   test("records outside the reporting period are labelled as such", () => {
     expect(rowStatus({ ...gas, outcome: "held", scope1: null, periodCheck: "partial", inSubtotal: { scope1: false, scope2LocationBased: false, scope2MarketBased: false } } as never).label).toBe("Outside reporting period")
+  })
+})
+
+// MR3 (Request B case A6): a linked file is presented as cleared only when its scan is clean, everywhere it is listed.
+describe("evidence scan state (MR3)", () => {
+  const file = (n: number, status: string, extra: Record<string, unknown> = {}) => ({ id: id(70 + n), name: `bill-${n}.pdf`, sha256: String(n).repeat(64).slice(0, 64), status, ...extra })
+  const withFiles = (files: unknown[], count = files.length) => response({ records: [{ ...gas, evidenceCount: count, evidence: files }, meter] })
+  test("every known scan state is accepted, and the row keeps each file's own state", () => {
+    const files = ["clean", "pending", "error", "rejected", "missing"].map((status, n) => file(n + 1, status))
+    expect(decodeResults(withFiles(files), company).records[0]!.evidence.map(item => item.status)).toEqual(["clean", "pending", "error", "rejected", "missing"])
+  })
+  test("an unknown or malformed file entry is refused rather than shown", () => {
+    for (const bad of [
+      [file(1, "quarantined")], [file(1, "CLEAN")], [file(1, "")], [file(1, "clean", { id: "not-a-uuid" })], [file(1, "clean", { sha256: "abc" })],
+      [file(1, "clean", { name: 7 })], [file(1, "clean"), file(1, "pending")], ["bill.pdf"], [null],
+    ]) expect(() => decodeResults(withFiles(bad), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(withFiles([file(1, "clean")], 2), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(withFiles([], 1), company)).toThrow(/not recognized/)
+  })
+  test("the same file can't appear twice by changing the case of its UUID (Codex MR3 F1)", () => {
+    const lower = { id: "abcdef12-1234-4321-8765-123456789abc", name: "bill.pdf", sha256: "a".repeat(64), status: "pending" }
+    const upper = { ...lower, id: lower.id.toUpperCase(), status: "clean" }
+    expect(() => decodeResults(withFiles([lower, upper]), company)).toThrow(/not recognized/)
+    expect(() => decodeResults(withFiles([upper, { ...lower, id: "ABCDEF12-1234-4321-8765-123456789abc" }]), company)).toThrow(/not recognized/)
+    // One file with an uppercase UUID is still valid, and keeps its own state.
+    expect(decodeResults(withFiles([upper]), company).records[0]!.evidence.map(item => [item.id, item.status])).toEqual([[upper.id, "clean"]])
+  })
+  test("only a clean scan is called cleared; every other state says it is not cleared or not supporting", () => {
+    expect(EVIDENCE_STATUS_TEXT.clean).toBe("cleared")
+    for (const status of ["pending", "error", "rejected", "missing"] as const) expect(EVIDENCE_STATUS_TEXT[status]).toMatch(/^(?!cleared).*(not cleared|not supporting evidence)$/)
+    const decoded = decodeResults(withFiles([file(1, "clean"), file(2, "pending"), file(3, "missing")]), company)
+    expect(unclearedEvidence(decoded.records[0]!).map(item => item.status)).toEqual(["pending", "missing"])
+  })
+  test("the CSV names each file's scan state and explains it, without changing any figure", () => {
+    const plain = resultsCsv(decodeResults(withFiles([]), company), labels)
+    const csv = resultsCsv(decodeResults(withFiles([file(1, "clean"), file(2, "pending")]), company), labels)
+    expect(csv).toContain("# Evidence: each file shows its scan state in brackets. Only [cleared] files have passed the scan")
+    const gasLine = csv.split("\n").find(line => line.startsWith("1,natural_gas"))!
+    expect(gasLine).toContain(`bill-1.pdf (sha256 ${"1".repeat(12)}) [cleared]; bill-2.pdf (sha256 ${"2".repeat(12)}) [scan pending, not cleared]`)
+    // Same figures and subtotals with or without linked files.
+    const figures = (text: string) => text.split("\n").filter(line => !line.startsWith("#")).map(line => line.split(",").slice(14, 17).join(","))
+    expect(figures(csv)).toEqual(figures(plain))
   })
 })
