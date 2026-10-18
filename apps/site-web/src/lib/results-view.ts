@@ -33,6 +33,20 @@ export function rowReasons(row: ResultRow): string[] {
   return [...new Set(codes.map(code => code === "engine_unavailable" ? "The calculation service was unavailable for this record. Try again shortly." : reasonText(code)))]
 }
 
+/**
+ * The calculation engine's own hold on a record it was given (B02, Request B): input needed or review required (no
+ * figure, in no subtotal) or excluded (outside the declared boundary). The route outcome is still "calculated" because
+ * the engine ran, so counts and lists ask the engine, not the outcome. Electricity follows its location-based basis; a
+ * market-based-only hold is a partial calculation instead.
+ */
+export function engineHold(row: ResultRow): "input_needed" | "review_required" | "excluded" | null {
+  if (row.outcome !== "calculated") return null
+  const status = row.scope1 ? row.scope1.status : row.scope2 ? row.scope2.locationBased.status : null
+  return status === "input_needed" || status === "review_required" || status === "excluded" ? status : null
+}
+/** Not yet counted (B02): held by the adapter, the period check or the engine, and neither withdrawn nor excluded. */
+export const notYetCounted = (row: ResultRow) => row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
+  && (row.outcome !== "calculated" || engineHold(row) === "input_needed" || engineHold(row) === "review_required")
 /** A record needs attention when it is held, not calculated, or only partly calculated. Shared by results and overview. */
 export const needsWork = (row: ResultRow) => { const tone = rowStatus(row).tone; return tone === "warn" || tone === "danger" || row.scope1?.status === "partial" || rowStatus(row).label === "Partial calculation" }
 /** The dataset a register factor comes from, from its key prefix. */

@@ -7,7 +7,7 @@ import { validateCollectionActivity, type CollectionActivityRecord, type Collect
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
 import type { ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
-import { buildCollectionResults, checkPeriod, classifyMethodRelease, createCollectionResultsRoutes, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsResponse, type EngineMethodFacts, type ReleaseEvidence, type ReleaseProblem, type ResultsReleaseCheckLog, LOGGABLE_ERROR_CLASSES } from "./collection-results-routes"
+import { buildCollectionResults, checkPeriod, classifyMethodRelease, createCollectionResultsRoutes, DRAFT_RESULTS_ENVIRONMENT, DRAFT_RESULTS_LABEL, RELEASED_DRAFT_RESULTS_LABEL, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsDatabase, type CollectionResultsResponse, type EngineMethodFacts, type ReleaseEvidence, type ReleaseProblem, type ResultsReleaseCheckLog, LOGGABLE_ERROR_CLASSES, resultCounts, type CollectionResultRow } from "./collection-results-routes"
 
 const python = process.env.NEUVETRA_PYTHON ?? "python3"
 const engines = {
@@ -237,6 +237,42 @@ describe("draft results (Claude UX journey)", () => {
     const third = await get()
     expect([third.label, third.methods.map(m => m.releaseStatus), third.warnings, third.records[0]!.scope1?.status]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta"], ["Method release status could not be checked, so every method is shown as unreleased."], "complete"])
   }, 60_000)
+
+  test("record counts: an engine hold counts as input needed or excluded, and an excluded record is not also outside the period (B02)", async () => {
+    const records = [
+      record({ kind: "natural_gas", sourceId: "GAS-CCF", quantity: q("1000", "ccf"), payload: { heatContent: null } }),
+      record({ kind: "distillate_no2", sourceId: "GEN-1", quantity: q("", "US_gallon"), payload: { consumption: { basis: "purchases_only", purchasedGallons: "500" }, statedHhvMmbtuPerGallon: null } }),
+      record({ kind: "fugitive", sourceId: "TENANT-RTU", quantity: q("", "kg"), payload: { gas: "R-410A", unit: "kg", terms: { PN: "0", CN: "0", PS: "2", CD: "0", RD: "0" }, insideBoundary: false, maintainsRefrigerantStock: false, retrofitInPeriod: false, contractorRecordsComplete: true, eventChronologyComplete: true } }),
+      gasOffice,
+    ]
+    const held = await buildCollectionResults({ companyId: company, context, records, evidence: [], setup: null, engines })
+    expect(Object.fromEntries(held.records.map(row => [row.sourceId, [row.outcome, row.scope1?.status]]))).toEqual({ "GAS-CCF": ["calculated", "input_needed"], "GEN-1": ["calculated", "input_needed"], "TENANT-RTU": ["calculated", "excluded"], "GAS-1": ["calculated", "complete"] })
+    expect({ calculated: held.counts.calculated, inputNeeded: held.counts.inputNeeded, excluded: held.counts.excluded }).toEqual({ calculated: 1, inputNeeded: 2, excluded: 1 })
+    // A record at an excluded location, dated outside the period: one excluded record, not also one outside the period.
+    const current = setupView.currentVersion!
+    const period2024 = { ...setupView, currentVersion: { ...current, setup: { ...current.setup, reportingPeriod: { ...current.setup.reportingPeriod, start: "2024-01-01", endExclusive: "2025-01-01" } } } } as typeof setupView
+    const excludedSite = record({ kind: "natural_gas", sourceId: "GAS-W", locationId: warehouse, quantity: q("10", "therm"), payload: { heatContent: null } })
+    const outside = await buildCollectionResults({ companyId: company, context, records: [excludedSite, gasOffice], evidence: [], setup: period2024, engines })
+    expect(Object.fromEntries(outside.records.map(row => [row.sourceId, [row.plan.status, row.periodCheck]]))).toEqual({ "GAS-W": ["excluded", "outside"], "GAS-1": [null, "outside"] })
+    expect([outside.counts.excluded, outside.counts.outsidePeriod]).toEqual([1, 1])
+  }, 60_000)
+
+  // Request B (14 October 2026) actual hosted captures, bound by SHA-256. Run with NEUVETRA_REQUEST_B_CAPTURES set to the
+  // folder holding them (notes\reviews\2026-10-14-request-b-integrated-qa); skipped without it, never fetched.
+  const captures = process.env.NEUVETRA_REQUEST_B_CAPTURES
+  test.skipIf(!captures)("Request B captures: the engine-held generator and refrigerant records count as input needed, not calculated (B02)", async () => {
+    const bound = { "company-a-results-api.json": "c769faa06e62ddfeac905828fb24d7408c719c3a14157d8370d08b4251b44f33", "company-b-results-api.json": "ceabb84edc1e8a93a81dddcd1ead793289ee61e257e5187e5aa62dca22047b03" }
+    for (const [name, sha256] of Object.entries(bound)) {
+      const bytes = await Bun.file(`${captures}/${name}`).bytes()
+      expect(new Bun.CryptoHasher("sha256").update(bytes).digest("hex")).toBe(sha256)
+      const capture = JSON.parse(new TextDecoder().decode(bytes)) as CollectionResultsResponse
+      // What the fixed MR2 image served: the three engine holds counted as calculated.
+      expect(capture.counts).toEqual({ records: 21, calculated: 20, held: 1, withdrawn: 0, excluded: 0, inputNeeded: 1, outsidePeriod: 0, unavailable: 0 })
+      const engineHeld = capture.records.filter(row => row.outcome === "calculated" && (row.scope1?.status === "input_needed" || row.scope1?.status === "review_required")).map(row => row.sourceId).sort()
+      expect(engineHeld).toEqual(["RB-20261014-generator-purchases-only", "RB-20261014-refrigerant-stock", "RB-20261014-refrigerant-unknown"])
+      expect(resultCounts(capture.records as CollectionResultRow[])).toEqual({ records: 21, calculated: 17, held: 1, withdrawn: 0, excluded: 0, inputNeeded: 4, outsidePeriod: 0, unavailable: 0 })
+    }
+  })
 
   test("a release check that cannot run is logged with only its stage and an error code, and logging never blocks results (MR3)", async () => {
     const secret = "postgres://neuvetra_runtime:not-a-real-password@db.example.invalid:5432/postgres"

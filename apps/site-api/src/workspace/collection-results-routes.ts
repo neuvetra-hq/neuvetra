@@ -241,16 +241,7 @@ export async function buildCollectionResults(input: {
   const listed = [...methods.values()]
   const allReleased = listed.length > 0 && listed.every(item => item.releaseStatus === "released_beta")
   const current = input.setup?.currentVersion ?? null
-  const counts = {
-    records: rows.length,
-    calculated: rows.filter(row => row.outcome === "calculated").length,
-    held: rows.filter(row => row.outcome === "held").length,
-    withdrawn: rows.filter(row => row.plan.status === "withdrawn").length,
-    excluded: rows.filter(row => row.plan.status === "excluded").length,
-    inputNeeded: rows.filter(row => row.plan.status === "input_needed").length,
-    outsidePeriod: rows.filter(row => row.plan.status !== "withdrawn" && (row.periodCheck === "outside" || row.periodCheck === "partial")).length,
-    unavailable: rows.filter(row => row.outcome === "unavailable" || row.outcome === "refused").length,
-  }
+  const counts = resultCounts(rows)
   return {
     profile: COLLECTION_RESULTS_PROFILE, label: allReleased ? RELEASED_DRAFT_RESULTS_LABEL : DRAFT_RESULTS_LABEL, syntheticOnly: true, environment: DRAFT_RESULTS_ENVIRONMENT,
     methods: listed.sort((a, b) => a.methodVersionId.localeCompare(b.methodVersionId) || a.engineSha256.localeCompare(b.engineSha256)),
@@ -262,6 +253,29 @@ export async function buildCollectionResults(input: {
       locations: current.setup.locations.map(location => ({ id: location.id, name: location.name, inclusion: location.inclusion })),
     } : null,
     records: rows, scope1, scope2, counts, warnings: [...new Set(warnings)],
+  }
+}
+
+/**
+ * The Results header counts (B02, Request B). A record the engine itself held (input needed, excluded, review required)
+ * was sent but produced no number, so it counts with the holds, not as calculated; and an excluded record is counted
+ * once, as excluded, not also as outside the period. Review required counts as input needed: both need the company.
+ */
+export function resultCounts(rows: CollectionResultRow[]): CollectionResultsResponse["counts"] {
+  const engineHold = (row: CollectionResultRow): "input_needed" | "excluded" | "review_required" | null => {
+    if (row.outcome !== "calculated") return null
+    const status = row.scope1 ? row.scope1.status : row.scope2 ? row.scope2.locationBased.status : null
+    return status === "input_needed" || status === "excluded" || status === "review_required" ? status : null
+  }
+  return {
+    records: rows.length,
+    calculated: rows.filter(row => row.outcome === "calculated" && engineHold(row) === null).length,
+    held: rows.filter(row => row.outcome === "held").length,
+    withdrawn: rows.filter(row => row.plan.status === "withdrawn").length,
+    excluded: rows.filter(row => row.plan.status === "excluded" || engineHold(row) === "excluded").length,
+    inputNeeded: rows.filter(row => row.plan.status === "input_needed" || engineHold(row) === "input_needed" || engineHold(row) === "review_required").length,
+    outsidePeriod: rows.filter(row => row.plan.status !== "withdrawn" && row.plan.status !== "excluded" && (row.periodCheck === "outside" || row.periodCheck === "partial")).length,
+    unavailable: rows.filter(row => row.outcome === "unavailable" || row.outcome === "refused").length,
   }
 }
 
