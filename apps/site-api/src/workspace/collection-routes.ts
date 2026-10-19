@@ -122,7 +122,7 @@ function originalName(request: Request): string {
 
 function uploadId(request: Request): string {
   const supplied = request.headers.get("x-neuvetra-upload-id")
-  if (supplied && !UUID.test(supplied)) throw new RequestProblem(422, "Evidence upload ID is invalid.")
+  if (supplied !== null && !UUID.test(supplied)) throw new RequestProblem(422, "Evidence upload ID is invalid.")
   return supplied?.toLowerCase() ?? crypto.randomUUID()
 }
 
@@ -136,7 +136,7 @@ function validateGridLoss(value: unknown, id: string) {
   const row = value as Record<string, unknown>
   if (Object.keys(row).sort().join("|") !== "electricityRecordId|notes|reference") throw new RequestProblem(422, "Invalid grid-loss lineage.")
   if (!UUID.test(String(row.electricityRecordId ?? "")) || typeof row.reference !== "string" || row.reference.length > 1000 || typeof row.notes !== "string" || row.notes.length > 4000) throw new RequestProblem(422, "Invalid grid-loss lineage.")
-  return { id, electricityRecordId: row.electricityRecordId as string, reference: row.reference, notes: row.notes }
+  return { id, electricityRecordId: (row.electricityRecordId as string).toLowerCase(), reference: row.reference, notes: row.notes }
 }
 
 function mappedError(error: unknown): Response {
@@ -247,8 +247,9 @@ export function createCollectionRoutes(deps: CollectionRouteDeps) {
       if (operation !== "download" || versionId || request.method !== "GET") return fail(405, "Method not allowed.")
       const locator = await deps.database.findDownloadableCollectionEvidence(actor.id, companyId, resourceId)
       if (!locator) {
-        const exists = (await deps.database.findCollectionEvidence(actor.id, companyId)).some(item => item.id === resourceId)
-        return exists ? fail(423, "Evidence is not available until quarantine review passes.", "quarantine_pending") : fail(404, "Collection evidence not found.")
+        const item = (await deps.database.findCollectionEvidence(actor.id, companyId)).find(item => item.id === resourceId)
+        if (!item) return fail(404, "Collection evidence not found.")
+        return item.quarantineStatus === "rejected" ? fail(410, "Evidence was rejected by quarantine review and cannot be downloaded.", "quarantine_rejected") : fail(423, "Evidence is not available until quarantine review passes.", "quarantine_pending")
       }
       const bytes = await deps.evidenceStorage.get(token, locator.bucket, locator.objectKey)
       if (bytes.byteLength !== locator.byteLength || await sha256(bytes) !== locator.sha256) return fail(503, "Evidence integrity could not be verified.")

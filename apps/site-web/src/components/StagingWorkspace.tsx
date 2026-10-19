@@ -132,6 +132,9 @@ export function StagingWorkspace({ headingRef, staging }: { headingRef: RefObjec
   function openRecord(recordId: string) { navigate("collection", recordId) }
   useEffect(() => {
     const onPop = () => {
+      // BF1: an in-page link such as "Skip to content" (#workspace-main) fires popstate but is not a view address; treating
+      // it as one sent the user to the Overview (and could prompt to discard unsaved changes).
+      if (/^#[^/]/.test(window.location.hash)) return
       const next = parseViewHash(window.location.hash)
       const now = current.current
       const canonical = viewHash(next.panel, next.recordId)

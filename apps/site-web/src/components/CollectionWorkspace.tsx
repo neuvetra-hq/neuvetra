@@ -354,6 +354,26 @@ function HistoricalActivityDetail({ version, evidence }: { version: CollectionAc
   </div>
 }
 
+/** The activity exactly as save() sends it: trimmed identifiers, derived quantities, identity normalization. */
+function prepareActivityForSave(draft: CollectionActivity): CollectionActivity {
+  const copy = structuredClone(draft)
+  copy.sourceId = copy.sourceId.trim()
+  // BF1: the meter or vehicle-group ID is the source ID. Keep them identical after trimming, or the contract refuses the
+  // save ("Source identifier must match…") and retrying can never succeed.
+  if (copy.kind === "vehicle") copy.payload.vehicleGroupId = copy.sourceId
+  if (copy.kind === "electricity") copy.payload.meterOrAccountNumber = copy.sourceId
+  copy.withdrawalReason = copy.state === "withdrawn" ? copy.withdrawalReason?.trim() ?? null : null
+  if (copy.kind === "vehicle" && !copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.gallons
+  if (copy.kind === "distillate_no2" && !copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.consumption.basis === "measured" ? copy.payload.consumption.gallons : copy.payload.consumption.purchasedGallons
+  if (copy.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(copy.quantity.originalUnit)) copy.payload.heatContent = null
+  const quantity = copy.quantity
+  if (DECIMAL.test(quantity.originalValue) && supportedUnits[copy.kind].includes(quantity.originalUnit)) {
+    quantity.normalizedValue = quantity.originalValue; quantity.normalizedUnit = quantity.originalUnit
+  } else { quantity.normalizedValue = null; quantity.normalizedUnit = null }
+  copy.quantity = deriveCollectionQuantity(copy.kind, copy.payload, copy.quantity)
+  return copy
+}
+
 export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyChange, openRecordId = null, intro }: { actor: HostedWorkspaceActor; workspaceId: string | null; headingRef: RefObject<HTMLHeadingElement | null>; onDirtyChange: (dirty: boolean) => void; openRecordId?: string | null; intro?: ReactNode }) {
   const [records, setRecords] = useState<CollectionActivityRecord[]>([])
   const [evidence, setEvidence] = useState<CollectionEvidenceMetadata[]>([])
@@ -443,17 +463,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) { setError(true); setMessage("Choose the verified utility serving this electricity meter before saving."); return }
     const rejectedEvidence = new Set(evidence.filter(file => file.quarantineStatus === "rejected").map(file => file.id))
     if (draft.evidenceIds.some(id => rejectedEvidence.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejectedEvidence.has(instrument.evidenceReference))) { setError(true); setMessage("Remove rejected evidence before saving this version."); return }
-    const copy = structuredClone(draft)
-    copy.sourceId = copy.sourceId.trim()
-    copy.withdrawalReason = copy.state === "withdrawn" ? copy.withdrawalReason?.trim() ?? null : null
-    if (copy.kind === "vehicle" && !copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.gallons
-    if (copy.kind === "distillate_no2" && !copy.quantity.originalValue) copy.quantity.originalValue = copy.payload.consumption.basis === "measured" ? copy.payload.consumption.gallons : copy.payload.consumption.purchasedGallons
-    if (copy.kind === "natural_gas" && !VOLUMETRIC_GAS_UNITS.has(copy.quantity.originalUnit)) copy.payload.heatContent = null
-    const quantity = copy.quantity
-    if (DECIMAL.test(quantity.originalValue) && supportedUnits[copy.kind].includes(quantity.originalUnit)) {
-      quantity.normalizedValue = quantity.originalValue; quantity.normalizedUnit = quantity.originalUnit
-    } else { quantity.normalizedValue = null; quantity.normalizedUnit = null }
-    copy.quantity = deriveCollectionQuantity(copy.kind, copy.payload, copy.quantity)
+    const copy = prepareActivityForSave(draft)
     const correctionReason = selected ? copy.state === "withdrawn" ? `Withdrawn: ${copy.withdrawalReason}` : reason.trim() : null
     const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: selected?.currentVersion.revision ?? 0, expectedVersionId: selected?.currentVersion.id ?? null, correctionReason, activity: copy }
     pending.current = input; setBusy(true); setError(false); setMessage("Saving and verifying this activity…")
@@ -520,9 +530,12 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     setBusy(true); setError(false); setMessage("Uploading private evidence…")
     try {
       const result = await uploadCollectionEvidence(workspaceId, file, uploadId, actorRef.current)
-      setEvidence(await listCollectionEvidence(workspaceId, actorRef.current))
+      // BF1: the receipt confirms the upload. A failed list refresh afterwards must not be reported as an unconfirmed upload.
       pendingUpload.current = null
-      setMessage(`Evidence received (${result.receipt.reused ? "existing original reused" : "new original"}). It remains quarantined until independently cleared.`)
+      const received = `Evidence received (${result.receipt.reused ? "existing original reused" : "new original"}). It remains quarantined until independently cleared.`
+      setMessage(received)
+      try { setEvidence(await listCollectionEvidence(workspaceId, actorRef.current)) }
+      catch { setError(true); setMessage(`${received} The evidence list could not be refreshed; reload this page to see it.`) }
     } catch (cause) {
       setError(true)
       if (isDefiniteUploadFailure(cause)) {

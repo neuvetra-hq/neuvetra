@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test"
 import { extractBearerToken, validateUserFromToken } from "./auth"
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { AuthApiError, AuthRetryableFetchError, type SupabaseClient } from "@supabase/supabase-js"
 
 describe("extractBearerToken()", () => {
   test("returns the token when Authorization header is present and well-formed", () => {
@@ -117,5 +117,19 @@ describe("validateUserFromToken()", () => {
     await validateUserFromToken("the-exact-token", client)
 
     expect(getUserImpl).toHaveBeenCalledWith("the-exact-token")
+  })
+})
+
+// BF1: supabase-js returns (does not throw) network, timeout, 5xx and 429 failures. Staging asks for those to throw so the
+// server answers 503 and the browser keeps its session and drafts, instead of reading an outage as "signed out" (401).
+describe("validateUserFromToken() when the auth provider is unavailable (BF1)", () => {
+  const client = (error: unknown) => ({ auth: { getUser: async () => ({ data: { user: null }, error }) } }) as unknown as SupabaseClient
+  const outages = [new AuthRetryableFetchError("fetch failed", 0), new AuthApiError("upstream", 503, "unexpected_failure"), new AuthApiError("rate limited", 429, "over_request_rate_limit")]
+  test("throws on an outage when asked, so staging can answer 503", async () => {
+    for (const error of outages) await expect(validateUserFromToken("token", client(error), { throwWhenUnavailable: true })).rejects.toThrow("Authentication provider unavailable.")
+  })
+  test("a token the provider rejects is still signed out, and the default (legacy chat) behaviour is unchanged", async () => {
+    expect(await validateUserFromToken("token", client(new AuthApiError("invalid JWT", 403, "bad_jwt")), { throwWhenUnavailable: true })).toBeNull()
+    for (const error of outages) expect(await validateUserFromToken("token", client(error))).toBeNull()
   })
 })

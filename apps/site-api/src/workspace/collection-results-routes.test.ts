@@ -274,6 +274,28 @@ describe("draft results (Claude UX journey)", () => {
     }
   })
 
+  test("a request sent after a save never joins an earlier run; requests that arrive during a run share one follow-up run (BF1)", async () => {
+    let records: CollectionActivityRecord[] = [], reads = 0
+    let release!: () => void
+    const gate = new Promise<void>(resolve => { release = resolve })
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionEvidence: async () => [], findCompanySetup: async () => null, findCurrentMethodReleases: async () => [],
+      findCollectionActivities: async () => { reads++; const snapshot = records; if (reads === 1) await gate; return snapshot } }
+    const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+    const get = () => routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } })).then(response => response.json() as Promise<CollectionResultsResponse>)
+    const first = get()                      // starts a run that reads the collection before the save
+    while (reads === 0) await Bun.sleep(1)
+    records = [gasOffice]                     // the user saves a record
+    const second = get(), third = get()       // both sent after the save, while the first run is still going
+    await Bun.sleep(20)
+    expect(reads).toBe(1)                     // the follow-up run waits: one run per company at a time
+    release()
+    const [a, b, c] = await Promise.all([first, second, third])
+    expect([a.records.length, b.records.length, c.records.length]).toEqual([0, 1, 1])
+    expect(reads).toBe(2)                     // the two later requests shared one follow-up run
+    expect(await get().then(r => r.records.length)).toBe(1)
+    expect(reads).toBe(3)                     // and nothing stays queued afterwards
+  }, 60_000)
+
   test("a release check that cannot run is logged with only its stage and an error code, and logging never blocks results (MR3)", async () => {
     const secret = "postgres://neuvetra_runtime:not-a-real-password@db.example.invalid:5432/postgres"
     const facts = await engines.scope1.describe(), gas = facts.methods.find(m => m.id === "scope1.stationary.natural_gas.v2")!

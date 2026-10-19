@@ -310,7 +310,25 @@ export function createCollectionResultsRoutes(deps: {
 }) {
   if (deps.environment !== DRAFT_RESULTS_ENVIRONMENT) throw new Error("Draft results are only available in the private synthetic staging environment; admitting a real company needs its own board decision.")
   // One results run per company at a time (shared by its members): the engines admit two concurrent processes in total.
-  const running = new Map<string, Promise<CollectionResultsResponse>>()
+  // A request that arrives while a run is in progress waits for one follow-up run, shared by every request that arrived
+  // after that run began, so it always reflects saves made before it was sent (BF1: it used to join the earlier run and
+  // could return results that missed the user's last save). At most one run per company computes at a time.
+  type Slot = { current: Promise<CollectionResultsResponse>; next: Promise<CollectionResultsResponse> | null }
+  const running = new Map<string, Slot>()
+  const schedule = (key: string, compute: () => Promise<CollectionResultsResponse>): Promise<CollectionResultsResponse> => {
+    const slot = running.get(key)
+    if (slot) return slot.next ??= slot.current.then(compute, compute)
+    const entry: Slot = { current: compute(), next: null }
+    const settle = (): void => {
+      if (running.get(key) !== entry) return
+      if (!entry.next) { running.delete(key); return }
+      entry.current = entry.next; entry.next = null
+      entry.current.then(settle, settle)
+    }
+    running.set(key, entry)
+    entry.current.then(settle, settle)
+    return entry.current
+  }
   const report = (stage: ResultsReleaseCheckLog["stage"]) => (error: unknown): null => {
     try { (deps.log ?? (event => console.warn(JSON.stringify(event))))({ event: "results_release_check_unavailable", stage, errorCode: errorCode(error) }) } catch { /* logging never blocks results */ }
     return null
@@ -339,24 +357,19 @@ export function createCollectionResultsRoutes(deps: {
     try {
       const context = await deps.database.findCollectionContext(actor.id, companyId)
       if (!context || context.companyId.toLowerCase() !== companyId) return respond(404, { error: "Results not found." })
-      const key = companyId
-      let job = running.get(key)
-      if (!job) {
-        job = (async () => {
-          const [records, evidence, setup, current] = await Promise.all([
-            deps.database.findCollectionActivities(actor.id, companyId),
-            deps.database.findCollectionEvidence(actor.id, companyId),
-            deps.database.findCompanySetup(actor.id, companyId),
-            // A failed release lookup never blocks draft results: every method is then shown as unreleased, with a warning.
-            deps.database.findCurrentMethodReleases(actor.id).catch(report("release_lookup")),
-          ])
-          if (records.length > MAX_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
-          if (records.some(record => record.companyId.toLowerCase() !== companyId)) throw Object.assign(new Error("Company mismatch."), { code: "42501" })
-          const facts = current && current.length ? await describeEngines().catch(report("engine_description")) : new Map<string, EngineMethodFacts>()
-          return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts } })
-        })().finally(() => running.delete(key))
-        running.set(key, job)
-      }
+      const job = schedule(companyId, async () => {
+        const [records, evidence, setup, current] = await Promise.all([
+          deps.database.findCollectionActivities(actor.id, companyId),
+          deps.database.findCollectionEvidence(actor.id, companyId),
+          deps.database.findCompanySetup(actor.id, companyId),
+          // A failed release lookup never blocks draft results: every method is then shown as unreleased, with a warning.
+          deps.database.findCurrentMethodReleases(actor.id).catch(report("release_lookup")),
+        ])
+        if (records.length > MAX_RECORDS) throw Object.assign(new Error("Too many records."), { code: "54000" })
+        if (records.some(record => record.companyId.toLowerCase() !== companyId)) throw Object.assign(new Error("Company mismatch."), { code: "42501" })
+        const facts = current && current.length ? await describeEngines().catch(report("engine_description")) : new Map<string, EngineMethodFacts>()
+        return buildCollectionResults({ companyId, context, records, evidence, setup, engines: deps.engines, releases: { current, engines: facts } })
+      })
       return respond(200, await job)
     } catch (error) {
       const code = (error as { code?: string }).code

@@ -57,6 +57,8 @@ export interface CollectionCalculationPlan {
 }
 
 const decimal = (value: string) => QUANTITY.test(value)
+/** Normalization is identity: only a plain decimal in an engine unit is normalized, so the pair must equal the bill's. */
+const billed = (q: CollectionActivity['quantity']) => q.normalizedValue !== null && q.normalizedValue === q.originalValue && q.normalizedUnit === q.originalUnit && decimal(q.normalizedValue)
 
 export function planCollectionCalculation(version: CollectionActivityVersion, context: CollectionContext, evidence: CollectionEvidenceMetadata[]): CollectionCalculationPlan {
   const a = version.activity
@@ -80,10 +82,10 @@ export function planCollectionCalculation(version: CollectionActivityVersion, co
 
   if (a.kind === 'natural_gas') {
     const q = a.quantity
-    need(q.normalizedValue !== null && q.normalizedUnit !== null && decimal(q.normalizedValue), 'quantity_not_calculable')
+    need(billed(q), 'quantity_not_calculable')
     const input: Record<string, unknown> = { period, quantity: q.normalizedValue, unit: q.normalizedUnit }
     const heat = a.payload.heatContent
-    if (q.normalizedUnit && VOLUME_UNITS.includes(q.normalizedUnit)) {
+    if (VOLUME_UNITS.includes(q.originalUnit)) { // the bill's unit, so a quantity still held keeps its heat content checked
       if (heat) {
         need(FACTOR_TEXT.test(heat.value) && Number(heat.value) !== 0, 'heat_content_not_numeric')
         input.heatContent = { value: heat.value, unit: heat.unit }
@@ -145,7 +147,7 @@ export function planCollectionCalculation(version: CollectionActivityVersion, co
   // electricity
   const p = a.payload
   const q = a.quantity
-  need(q.normalizedValue !== null && (q.normalizedUnit === 'kWh' || q.normalizedUnit === 'MWh') && decimal(q.normalizedValue), 'quantity_not_calculable')
+  need(billed(q) && (q.normalizedUnit === 'kWh' || q.normalizedUnit === 'MWh'), 'quantity_not_calculable')
   need(/^[0-9]{5}$/.test(p.zip), 'zip_not_valid')
   need((ENGINE_SUBREGIONS as readonly string[]).includes(p.subregion), 'subregion_not_an_egrid_subregion')
   const input: Record<string, unknown> = { period, quantity: q.normalizedValue, unit: q.normalizedUnit, zip: p.zip, subregion: p.subregion }

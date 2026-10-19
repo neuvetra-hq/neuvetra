@@ -183,7 +183,7 @@ export function methodLabel(run: MethodRun, methods: MethodUsed[]): string {
 }
 export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string {
   // Quote when needed, and stop spreadsheet apps from treating text such as "=..." as a formula.
-  const escape = (raw: string) => { const value = /^[=+\-@\t\r]/.test(raw) && !/^-?\d+(\.\d+)?$/.test(raw) ? `'${raw}` : raw; return /[",\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value }
+  const escape = (raw: string) => { const value = /^[=+\-@\t\r]/.test(raw) && !/^-?\d+(\.\d+)?$/.test(raw) ? `'${raw}` : raw; return /[",\r\n]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value }
   const setup = results.setup
   const meta = [
     `# ${results.label}`,
@@ -203,7 +203,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status === "withdrawn" || row.plan.status === "excluded" ? row.plan.status : row.periodCheck === "outside" || row.periodCheck === "partial" ? `${row.periodCheck === "partial" ? "partly_" : ""}outside_reporting_period` : row.plan.status ?? row.outcome
     const yes = (flag: boolean, applies: boolean) => applies ? (flag ? "Yes" : "No") : ""
     const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
-    const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
+    const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
     const files = row.evidence.map(evidenceFileText).join("; ")
     const run = s1 ?? s2
     return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, lastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code,
@@ -212,5 +212,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
   })
   const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", `Engine aggregate of rows marked Yes under "In ${label === "Scope 1" ? "Scope 1" : label === "Scope 2 location-based" ? "location-based" : "market-based"} subtotal"`].map(escape).join(",")
   const totals = [subtotal("Scope 1", results.scope1?.knownSourceSubtotal.display), subtotal("Scope 2 location-based", results.scope2?.locationBasedSubtotal.display), subtotal("Scope 2 market-based", results.scope2?.marketBasedSubtotal.display)]
-  return [...meta, header.join(","), ...lines, ...totals].join("\n") + "\n"
+  // BF1: header lines carry user text (legal name, site names, notes) and commas ("Jan 1 – Dec 31, 2025"), so each is one
+  // escaped cell; unescaped, a comma started a new cell that a spreadsheet could run as a formula.
+  return [...meta.map(escape), header.join(","), ...lines, ...totals].join("\n") + "\n"
 }

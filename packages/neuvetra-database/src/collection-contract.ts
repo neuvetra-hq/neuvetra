@@ -187,10 +187,10 @@ function validatePayload(kind: CollectionActivityKind, value: unknown): Collecti
   }
   if (kind === 'vehicle') {
     const p = object(value, ['vehicleGroupId','fuel','vehicleType','modelYear','gallons','vehicleCount','miles','fuelEconomy'])
-    if (!Number.isInteger(p.modelYear) || (p.modelYear as number) < 1900 || (p.modelYear as number) > 2026 || !(p.vehicleCount === null || Number.isInteger(p.vehicleCount) && (p.vehicleCount as number) > 0)) fail()
+    if (!Number.isInteger(p.modelYear) || (p.modelYear as number) < 1900 || (p.modelYear as number) > 2026 || !(p.vehicleCount === null || Number.isSafeInteger(p.vehicleCount) && (p.vehicleCount as number) > 0)) fail()
     const miles = p.miles === null ? null : object(p.miles, ['value','basis'])
     const economy = p.fuelEconomy === null ? null : object(p.fuelEconomy, ['mpg','source'])
-    return { vehicleGroupId:text(p.vehicleGroupId,120,false), fuel: text(p.fuel,80,false), vehicleType: text(p.vehicleType,120,false), modelYear:p.modelYear as number, gallons:numericInput(p.gallons), vehicleCount:p.vehicleCount as number|null, miles:miles?{value:numericInput(miles.value),basis:text(miles.basis,500,false)}:null, fuelEconomy:economy?{mpg:numericInput(economy.mpg),source:text(economy.source,500,false)}:null }
+    return { vehicleGroupId:text(p.vehicleGroupId,120,false), fuel: text(p.fuel,80,false), vehicleType: text(p.vehicleType,120,false), modelYear:p.modelYear as number, gallons:numericInput(p.gallons), vehicleCount:p.vehicleCount as number|null, miles:miles?{value:numericInput(miles.value),basis:text(miles.basis,500)}:null, fuelEconomy:economy?{mpg:numericInput(economy.mpg),source:text(economy.source,500)}:null }
   }
   if (kind === 'fugitive') {
     const p = object(value, ['gas','unit','terms','insideBoundary','maintainsRefrigerantStock','retrofitInPeriod','contractorRecordsComplete','eventChronologyComplete'])

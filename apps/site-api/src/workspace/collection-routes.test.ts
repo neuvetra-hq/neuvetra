@@ -267,3 +267,30 @@ describe("collection routes", () => {
     expect(unauthorized.status).toBe(401)
   })
 })
+
+describe("BF1 collection route fixes", () => {
+  test("an uppercase electricity record ID in grid-loss lineage is saved in canonical lowercase form", async () => {
+    const h = harness()
+    const record = "00000000-0000-4000-8000-0000000000ab"
+    const response = await h.request(`/workspace/${COMPANY}/collection/grid-losses/${LINEAGE}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ electricityRecordId: record.toUpperCase(), reference: "r", notes: "" }) })
+    expect(response.status).toBe(201)
+    expect((h.calls.find(call => call.name === "createLineage")?.args[2] as any).electricityRecordId).toBe(record)
+  })
+
+  test("an empty upload ID header is refused as invalid before the body is read or anything is reserved", async () => {
+    const h = harness()
+    const response = await h.request(`/workspace/${COMPANY}/collection/evidence`, { method: "POST", headers: { "content-type": "application/pdf", "x-neuvetra-original-name": "bill.pdf", "x-neuvetra-upload-id": "" }, body: EVIDENCE_BYTES })
+    expect([response.status, ((await response.json()) as any).error]).toEqual([422, "Evidence upload ID is invalid."])
+    expect(h.calls.some(call => ["reserveEvidence", "put", "registerEvidence"].includes(call.name))).toBe(false)
+  })
+
+  test("rejected evidence is reported as rejected (final), not as waiting for review", async () => {
+    const h = harness()
+    h.setEvidence([{ id: EVIDENCE, quarantineStatus: "rejected" }])
+    const rejected = await h.request(`/workspace/${COMPANY}/collection/evidence/${EVIDENCE}/download`)
+    expect([rejected.status, ((await rejected.json()) as any).code]).toEqual([410, "quarantine_rejected"])
+    h.setEvidence([{ id: EVIDENCE, quarantineStatus: "pending" }])
+    expect((await h.request(`/workspace/${COMPANY}/collection/evidence/${EVIDENCE}/download`)).status).toBe(423)
+    expect(h.calls.some(call => call.name === "get")).toBe(false)
+  })
+})

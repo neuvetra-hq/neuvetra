@@ -1,4 +1,5 @@
 import path from "node:path"
+import { validateHostedTarget } from "@neuvetra/database"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
 
@@ -43,6 +44,8 @@ export function readStagingConfig(environment: Record<string, string | undefined
   const direct = database.hostname === `db.${projectRef}.supabase.co` && database.username === "neuvetra_runtime"
   const pooler = /^[a-z0-9-]+\.pooler\.supabase\.com$/.test(database.hostname) && database.username === `neuvetra_runtime.${projectRef}`
   if (!["postgres:", "postgresql:"].includes(database.protocol) || (!direct && !pooler) || !database.password || database.pathname !== "/postgres" || database.hash || database.search || (database.port && database.port !== "5432" && !(pooler && database.port === "6543"))) invalid()
+  // The hosted adapter re-validates this target at startup; refuse here anything it would refuse there.
+  try { validateHostedTarget({ connectionString: database.toString(), expectedProjectRef: projectRef, reuseExistingProject }) } catch { invalid() }
   const port = Number(environment.PORT ?? "3000")
   if (!Number.isInteger(port) || port < 1 || port > 65535) invalid()
   const databaseCaPem = environment.NEUVETRA_STAGING_DB_CA_PEM
