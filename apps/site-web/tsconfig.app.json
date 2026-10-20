@@ -13,6 +13,7 @@
     "src"
   ],
   "exclude": [
+    "src/components/component-harness.ts",
     "src/**/*.test.ts",
     "src/**/*.test.tsx"
   ]
