@@ -93,7 +93,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const auth = overrides.validateUser ?? (() => {
     const boundedFetch = ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, { ...init, signal: AbortSignal.timeout(5_000) })) as typeof fetch
     const client = createClient(config.supabaseUrl, config.supabaseAnonKey, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }, global: { fetch: boundedFetch } })
-    return (token: string) => validateUserFromToken(token, client)
+    return (token: string) => validateUserFromToken(token, client, { throwWhenUnavailable: true })
   })()
   const checkAssets = overrides.verifyAssets ?? (() => verifyStagingAssets(config.webRoot))
   const serveAsset = overrides.serveAsset ?? ((pathname: string) => serveStagingAsset(config.webRoot, pathname))
@@ -104,6 +104,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   })
   const log = overrides.log ?? ((event: StagingLog) => console.info(JSON.stringify(event)))
   const admission = createRateLimiter({ max: 360, windowMs: 60_000, maxBuckets: 1 })
+  const configAdmission = createRateLimiter({ max: 360, windowMs: 60_000, maxBuckets: 1 })
   const actors = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 100 })
   const validateUser = async (token: string) => {
     const user = await auth(token)
@@ -171,12 +172,15 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     if (url.pathname.startsWith("/workspace-api/")) {
       const origin = request.headers.get("origin")
       if ((origin && origin !== config.origin) || (!isGet && origin !== config.origin)) return json(403, { error: "Forbidden." })
-      if (!admission.check("staging").allowed) return json(429, { error: "Request limit reached." })
+      const publicConfig = url.pathname === "/workspace-api/config" && isGet
+      const token = extractBearerToken(request.headers)
+      // A request that cannot authenticate never spends the shared admission budget.
+      if (!publicConfig && (!token || token.length > 8192)) return json(401, { error: "Authentication required." })
+      if (!(publicConfig ? configAdmission : admission).check("staging").allowed) return json(429, { error: "Request limit reached." })
       const requestReadiness = config.projectRef === EXISTING_PROJECT_REF ? await databaseReadiness() : undefined
       if (requestReadiness && requestReadiness.schemaVersion > STAGING_SCHEMA_BRIDGE_VERSION && requestReadiness.schemaVersion < STAGING_SCHEMA_VERSION) return json(503, { error: "Staging database is upgrading." })
-      if (url.pathname === "/workspace-api/config" && isGet) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
-      const token = extractBearerToken(request.headers)
-      if (!token || token.length > 8192) return json(401, { error: "Authentication required." })
+      if (publicConfig) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
+      if (!token) return json(401, { error: "Authentication required." })
       let user: AuthenticatedUser | null
       try { user = await auth(token) } catch { return json(503, { error: "Authentication is unavailable." }) }
       if (!user) return json(401, { error: "Authentication required." })

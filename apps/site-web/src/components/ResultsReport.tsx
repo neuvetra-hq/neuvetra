@@ -44,7 +44,9 @@ function completeness(results: ResultsResponse, coverage: Coverage) {
     const parts = [count ? `${plural(count, "record")} not yet counted` : "", issues.open ? `${plural(issues.open, "setup answer")} still open` : "", issues.gaps ? `${plural(issues.gaps, "expected source")} with no records` : "", !complete ? "some results only partly calculated" : "", issues.unchecked ? "coverage not checked against company setup" : ""].filter(Boolean)
     return parts.length ? `Incomplete — ${parts.join("; ")}` : "No known gaps — each source type and included site in company setup has at least one record"
   }
-  const none = (scope: 1 | 2) => { const text = note(true, scope); return text.startsWith("Incomplete — ") ? `Not calculated — ${text.slice("Incomplete — ".length)}` : scope === 1 ? "No Scope 1 records" : "No electricity records" }
+  // BF1: no subtotal while a record was calculated means the engine's subtotal couldn't be verified, not that there are no records.
+  const unverified = "Incomplete — the subtotal could not be verified; per-record results are listed"
+  const none = (scope: 1 | 2) => { if (results.records.some(row => row.scope === scope && row.outcome === "calculated")) return unverified; const text = note(true, scope); return text.startsWith("Incomplete — ") ? `Not calculated — ${text.slice("Incomplete — ".length)}` : scope === 1 ? "No Scope 1 records" : "No electricity records" }
   return {
     scope1: results.scope1 ? note(results.scope1.complete, 1) : none(1),
     scope2Location: results.scope2 ? note(results.scope2.locationBasedComplete, 2) : none(2),
@@ -185,6 +187,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
   const ordered = [...results.records].sort((a, b) => Number(needsWork(b)) - Number(needsWork(a)) || a.scope - b.scope)
   const visible = filter === "attention" ? attentionRows : ordered
   const s1 = results.scope1, s2 = results.scope2
+  const calculatedIn = (scope: 1 | 2) => results.records.some(row => row.scope === scope && row.outcome === "calculated")
   const scope1Count = s1?.includedResults.length ?? 0
   const scope2Count = s2?.locationBasedIncluded.length ?? 0
   const warnLine = (held: number, issues: ReturnType<typeof coverageIssues>, noun: string, complete = true) => [held ? `${plural(held, noun)} not counted yet` : "", !complete ? "some results partly calculated" : "", issues.open ? `${plural(issues.open, "setup answer")} open` : "", issues.gaps ? plural(issues.gaps, "possible gap") : "", issues.unchecked ? "coverage not checked" : ""].filter(Boolean).join(" · ")
@@ -199,17 +202,17 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 1 · direct</span>
         <span className="nv-stat__value">{s1 ? kgToTonnes(s1.knownSourceSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s1 ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : "No Scope 1 source calculated yet"}{held1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record", s1?.complete ?? true)}</span> : null}</div>
+        <div className="nv-stat__foot">{s1 ? `${groupDigits(s1.knownSourceSubtotal.display)} kg · ${plural(scope1Count, "source")} counted${incompleteText(s1.complete, held1, open1)}` : calculatedIn(1) ? "Subtotal could not be verified; per-record results are listed below" : "No Scope 1 source calculated yet"}{held1 || open1 || (s1 && !s1.complete) ? <span className="nv-stat__warn">{warnLine(held1, issues1, "record", s1?.complete ?? true)}</span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · location-based</span>
         <span className="nv-stat__value">{s2 ? kgToTonnes(s2.locationBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}</div>
+        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.locationBasedSubtotal.display)} kg · ${plural(scope2Count, "meter")} counted${incompleteText(s2.locationBasedComplete, held2, open2)}` : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.locationBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.locationBasedComplete ?? true)}</span> : null}</div>
       </div>
       <div className="nv-stat">
         <span className="nv-stat__label">Scope 2 · market-based</span>
         <span className="nv-stat__value">{s2 ? kgToTonnes(s2.marketBasedSubtotal.display) : "—"}<span className="nv-stat__unit">t CO2e</span></span>
-        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}</div>
+        <div className="nv-stat__foot">{s2 ? `${groupDigits(s2.marketBasedSubtotal.display)} kg${incompleteText(s2.marketBasedComplete, held2, open2)}${s2.marketBasedProvisional.length ? " · provisional" : ""}` : calculatedIn(2) ? "Subtotal could not be verified; per-record results are listed below" : "No electricity calculated yet"}{held2 || open2 || (s2 && !s2.marketBasedComplete) ? <span className="nv-stat__warn">{warnLine(held2, issues2, "meter", s2?.marketBasedComplete ?? true)}</span> : null}</div>
       </div>
     </div>
     <p className="nv-subtle nv-stats-note">Headline figures are metric tonnes (1 t = 1,000 kg), rounded half-even to 2 decimals, the same rule as the engine. The kilogram figures are exact engine output.</p>

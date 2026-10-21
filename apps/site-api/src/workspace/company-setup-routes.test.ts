@@ -58,3 +58,15 @@ describe("general company setup route", () => {
     expect(revoked.status).toBe(404)
   })
 })
+
+test("BF1: an uppercase company or version ID reaches the same setup as its lowercase form", async () => {
+  const company = "80000000-0000-4000-8000-0000000abc01", versionId = "80000000-0000-4000-8000-0000000abc02"
+  const seen: string[] = []
+  const app = route(database({
+    findCompanySetup: async (_actor, id) => { seen.push(id); return id === company ? view : null },
+    findCompanySetupVersion: async (_actor, id, v) => { seen.push(`${id}/${v}`); return id === company && v === versionId ? version : null },
+  }))
+  expect((await app(request(`/workspace/${company.toUpperCase()}/setup`))).status).toBe(200)
+  expect((await app(request(`/workspace/${company.toUpperCase()}/setup/versions/${versionId.toUpperCase()}`))).status).toBe(200)
+  expect(seen).toEqual([company, `${company}/${versionId}`])
+})

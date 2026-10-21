@@ -165,3 +165,40 @@ describe('collection -> engine input (methods v7, C08)', () => {
     console.log(`fuzz: ${calculated} calculated, ${held} held; early gasoline ${earlyGasolineSent} sent / ${earlyGasolineHeld} held; refrigerant with non-decimal terms sent ${blankTermsSent}`)
   }, ENGINE_FUZZ_TIMEOUT_MS)
 })
+
+// BF1: the engine is given the billed figure only. Normalization is identity (a plain decimal in an engine unit), so a
+// normalized pair that differs from the bill (e.g. 10000 kWh billed, "10000 MWh" normalized) is held, never calculated.
+describe('BF1 adapter fixes', () => {
+  const plan = (v: CollectionActivityVersion) => planCollectionCalculation(v, context, evidence)
+  const forged = (quantity: Record<string, string>, extra: Record<string, unknown>) => version({ quantity, ...extra })
+  const meter = { kind: 'electricity', sourceId: 'M-1', payload: { meterOrAccountNumber: 'M-1', utilityName: 'Synthetic', site: 'Office', zip: '94105', subregion: 'CAMX', utilityEiaId: null, instruments: [] } }
+  test('a normalized quantity that differs from the billed one is held, never calculated', () => {
+    for (const [quantity, extra] of [
+      [{ originalValue: '10000', originalUnit: 'kWh', normalizedValue: '10000', normalizedUnit: 'MWh' }, meter],
+      [{ originalValue: '10', originalUnit: 'MWh', normalizedValue: '10000', normalizedUnit: 'MWh' }, meter],
+      [{ originalValue: '1000', originalUnit: 'therm', normalizedValue: '1000', normalizedUnit: 'MMBtu' }, { kind: 'natural_gas', sourceId: 'GAS-1', payload: { heatContent: null } }],
+    ] as const) {
+      const p = plan(forged(quantity, extra))
+      expect([p.action, p.reasons]).toEqual(['hold', ['quantity_not_calculable']])
+    }
+    // As the screen saves it (identical pairs), the same records still calculate.
+    expect(plan(version({ ...meter, quantity: q('10000', 'kWh') })).action).toBe('calculate')
+    expect(plan(gas('1000', 'therm')).action).toBe('calculate')
+  })
+  test('whether gas is volumetric comes from the bill unit, so a held ccf quantity keeps its heat content checked', () => {
+    const p = plan(gas('1,234.5', 'ccf', { value: '1.037', unit: 'therm per ccf' }))
+    expect([p.reasons, p.notes]).toEqual([['quantity_not_calculable'], []])
+    expect(plan(gas('1,234.5', 'ccf', { value: 'about 1', unit: 'therm per ccf' })).reasons).toEqual(['quantity_not_calculable', 'heat_content_not_numeric'])
+    expect(plan(gas('100', 'therm', { value: '1.037', unit: 'therm per ccf' })).notes).toEqual(['heat_content_not_used_for_energy_unit'])
+  })
+  test('miles typed before their source can be saved, and are held with a named reason', () => {
+    const v = vehicle({ miles: { value: '1000', basis: '' } })
+    expect([plan(v).action, plan(v).reasons]).toEqual(['hold', ['miles_basis_not_an_engine_token']])
+    expect(plan(vehicle({ fuelEconomy: { mpg: '20', source: '' } })).action).toBe('hold')
+  })
+  test('a vehicle count beyond the safe integer range is refused at the contract, not after the save', () => {
+    expect(() => vehicle({ vehicleCount: 1e21 })).toThrow()
+    expect(() => vehicle({ vehicleCount: Number.MAX_SAFE_INTEGER + 1 })).toThrow()
+    expect(vehicle({ vehicleCount: 12 }).activity.kind).toBe('vehicle')
+  })
+})

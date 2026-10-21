@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js"
+import { isAuthRetryableFetchError, type SupabaseClient } from "@supabase/supabase-js"
 
 export interface AuthenticatedUser {
   id: string
@@ -35,8 +35,13 @@ export function extractBearerToken(headers: Headers): string | null {
 export async function validateUserFromToken(
   token: string,
   supabase: SupabaseClient,
+  options: { throwWhenUnavailable?: boolean } = {},
 ): Promise<AuthenticatedUser | null> {
   const { data, error } = await supabase.auth.getUser(token)
+  if (error && options.throwWhenUnavailable) {
+    const status = (error as { status?: unknown }).status
+    if (isAuthRetryableFetchError(error) || status === 429 || (typeof status === "number" && status >= 500)) throw new Error("Authentication provider unavailable.")
+  }
   if (error || !data.user) return null
   const user = data.user
   return {

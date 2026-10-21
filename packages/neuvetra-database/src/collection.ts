@@ -19,6 +19,15 @@ export * from './collection-contract'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const digest = (value: unknown) => new Bun.CryptoHasher('sha256').update(m71CanonicalJson(value)).digest('hex')
+/**
+ * BF1: hold the actor's staging-access and manager-membership rows (FOR SHARE) until commit, as company setup does
+ * (0023), so a revocation or downgrade cannot commit while this user's collection write is in flight. Uses the existing
+ * runtime-granted neuvetra.m71_lock, which takes the same locks in the same order.
+ */
+async function holdManagerAuthorization(tx: WorkspaceSql, companyId: string, message: string): Promise<void> {
+  const locked = await tx.query<{ allowed: boolean }>('select neuvetra.m71_lock($1,true) allowed', [companyId])
+  if (locked.rows[0]?.allowed !== true) throw Object.assign(new Error(message), { code: '42501' })
+}
 type VersionRow = { id:string; record_id:string; company_id:string; kind:CollectionActivityRecord['kind']; revision:number; previous_version_id:string|null; correction_reason:string|null; payload:unknown; payload_sha256:string; created_by:string; created_at:string; head_id:string; head_revision:number }
 type EvidenceRow = { id:string; company_id:string; storage_bucket:string; storage_key:string; original_name:string; media_type:CollectionEvidenceMetadata['mediaType']; byte_length:number; sha256:string; quarantine_status:CollectionEvidenceMetadata['quarantineStatus']; uploaded_by:string; created_at:string }
 
@@ -59,6 +68,7 @@ export async function saveCollectionActivity(tx:WorkspaceSql,actorId:string,comp
   if(!UUID.test(actorId)||!UUID.test(companyId)||!UUID.test(recordId))throw new Error('Collection activity unavailable.')
   const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
   if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection activity unavailable.'),{code:'42501'})
+  await holdManagerAuthorization(tx,companyId,'Collection activity unavailable.')
   const valid:CollectionActivitySaveInput=validateCollectionSaveInput(input)
   const receipt=await tx.query<{record_id:string;version_id:string;replayed:boolean}>('select * from neuvetra.save_collection_activity($1,$2,$3::text::jsonb)',[companyId,recordId,JSON.stringify(valid)])
   const row=receipt.rows[0]
@@ -74,6 +84,7 @@ export async function createGridLossLineage(tx:WorkspaceSql,actorId:string,compa
   if(!UUID.test(actorId)||!UUID.test(companyId)||!UUID.test(input?.id)||!UUID.test(input?.electricityRecordId)||typeof input.reference!=='string'||input.reference.length>1000||typeof input.notes!=='string'||input.notes.length>4000)throw new Error('Invalid grid-loss lineage.')
   const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
   if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Grid-loss lineage unavailable.'),{code:'42501'})
+  await holdManagerAuthorization(tx,companyId,'Grid-loss lineage unavailable.')
   await tx.query('select neuvetra.create_collection_grid_loss_lineage($1,$2,$3,$4,$5)',[companyId,input.id,input.electricityRecordId,input.reference,input.notes])
   const rows=await readGridLossLineage(tx,companyId)
   const saved=rows.find(row=>row.id===input.id)
@@ -91,6 +102,7 @@ export async function registerCollectionEvidence(tx:WorkspaceSql,actorId:string,
   if(!UUID.test(actorId)||!UUID.test(companyId))throw new Error('Collection evidence unavailable.')
   const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
   if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection evidence unavailable.'),{code:'42501'})
+  await holdManagerAuthorization(tx,companyId,'Collection evidence unavailable.')
   const valid:CollectionEvidenceUploadInput=validateCollectionEvidenceUpload(input,companyId)
   const result=await tx.query<{upload_id:string;evidence_id:string;reused:boolean;quarantine_status:CollectionEvidenceReceipt['quarantineStatus'];orphan_recovery_required:boolean}>('select * from neuvetra.register_collection_evidence($1,$2,$3,$4,$5,$6,$7,$8)',[companyId,valid.uploadId,valid.evidenceId,valid.objectKey,valid.originalName,valid.mediaType,valid.byteLength,valid.sha256])
   const row=result.rows[0]
@@ -103,6 +115,7 @@ export async function reserveCollectionEvidenceUpload(tx:WorkspaceSql,actorId:st
   if(!UUID.test(actorId)||!UUID.test(companyId))throw new Error('Collection evidence unavailable.')
   const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
   if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection evidence unavailable.'),{code:'42501'})
+  await holdManagerAuthorization(tx,companyId,'Collection evidence unavailable.')
   const valid:CollectionEvidenceUploadInput=validateCollectionEvidenceUpload(input,companyId)
   const result=await tx.query<{id:string}>('select neuvetra.reserve_collection_evidence_upload($1,$2,$3,$4,$5,$6,$7,$8) id',[companyId,valid.uploadId,valid.evidenceId,valid.objectKey,valid.originalName,valid.mediaType,valid.byteLength,valid.sha256])
   if(result.rows[0]?.id!==valid.uploadId)throw new Error('Collection evidence upload intent returned no receipt.')
@@ -113,6 +126,7 @@ export async function markCollectionEvidenceRegistrationFailed(tx:WorkspaceSql,a
   if(!UUID.test(actorId)||!UUID.test(companyId)||!UUID.test(uploadId))throw new Error('Collection evidence unavailable.')
   const actor=await tx.query<{id:string}>('select neuvetra.current_user_id() id')
   if(actor.rows[0]?.id!==actorId)throw Object.assign(new Error('Collection evidence unavailable.'),{code:'42501'})
+  await holdManagerAuthorization(tx,companyId,'Collection evidence unavailable.')
   const result=await tx.query<{id:string}>('select neuvetra.mark_collection_evidence_registration_failed($1,$2) id',[companyId,uploadId])
   if(!UUID.test(result.rows[0]?.id??''))throw new Error('Evidence recovery receipt unavailable.')
   return {recoveryId:result.rows[0]!.id}

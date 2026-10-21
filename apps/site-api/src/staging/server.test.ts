@@ -281,3 +281,28 @@ describe("M63 private staging boundary", () => {
     await verifyStagingAssets(root)
   })
 })
+
+describe("BF1 staging boundary fixes", () => {
+  test("requests without a token never use up the shared admission budget, so invited users are not locked out", async () => {
+    const { request } = await fixture()
+    for (let i = 0; i < 400; i++) expect((await request("/workspace-api/session")).status).toBe(401)
+    // The public config endpoint has its own budget: exhausting it doesn't touch the authenticated one either.
+    for (let i = 0; i < 360; i++) expect((await request("/workspace-api/config")).status).toBe(200)
+    expect((await request("/workspace-api/config")).status).toBe(429)
+    expect((await request("/workspace-api/session", "test-owner-session")).status).toBe(200)
+  })
+
+  test("an auth provider failure is 503 (retry), never 401 (signed out)", async () => {
+    const { request } = await fixture()
+    const response = await request("/workspace-api/session", "broken-session")
+    expect([response.status, await response.json()]).toEqual([503, { error: "Authentication is unavailable." }])
+  })
+
+  test("configuration refuses pooler targets the hosted adapter would refuse at startup", () => {
+    for (const url of [
+      `postgres://neuvetra_runtime.${REF}:synthetic-password@aws-0-us-west-1.pooler.supabase.com/postgres`,
+      `postgres://neuvetra_runtime.${REF}:synthetic-password@us-west-1.pooler.supabase.com:6543/postgres`,
+    ]) expect(() => readStagingConfig({ ...environment, DATABASE_URL: url })).toThrow()
+    expect(() => readStagingConfig({ ...environment, DATABASE_URL: `postgres://neuvetra_runtime.${REF}:synthetic-password@aws-0-us-west-1.pooler.supabase.com:6543/postgres` })).not.toThrow()
+  })
+})

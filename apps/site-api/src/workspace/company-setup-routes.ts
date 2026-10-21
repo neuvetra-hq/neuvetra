@@ -21,8 +21,8 @@ export function createCompanySetupRoutes(deps: {
     const respond = (status: number, body: unknown) => Response.json(body, { status, headers: { "cache-control": "no-store" } })
     const match = ROUTE.exec(new URL(request.url).pathname)
     if (!match) return respond(404, NOT_FOUND)
-    const companyId = match[1]!
-    const versionId = match[2] ?? null
+    const companyId = match[1]!.toLowerCase()
+    const versionId = match[2]?.toLowerCase() ?? null
     const origin = request.headers.get("origin")
     if ((origin && origin !== deps.origin) || (request.method !== "GET" && origin !== deps.origin)) return respond(403, { error: "Forbidden." })
     if (request.method !== "GET" && request.method !== "POST") return respond(405, { error: "Method not allowed." })
