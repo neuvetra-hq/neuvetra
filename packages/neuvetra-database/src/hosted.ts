@@ -2,12 +2,18 @@ import { Pool, types, type PoolClient, type QueryResult } from "pg"
 import { validateDatabaseCaPem } from "./staging-tls"
 import { WorkspaceDatabase, type WorkspaceConnection, type WorkspaceSql, type CompanyWorkspaceRecord, type SyntheticWorkspaceInput } from "./workspace"
 import { auditLegacyStagingExposure, EXISTING_PROJECT_REF } from "./staging-audit"
-import { readMigrationManifest } from "./staging-migrations"
+import { readMigrationManifest, type StagingMigration } from "./staging-migrations"
 
 export const STAGING_PROFILE = "neuvetra.private-synthetic-staging.v1" as const
-export const STAGING_SCHEMA_VERSION = 27
-/** Temporary image-activation bridge for the pinned existing synthetic project; never migrates. */
-export const STAGING_SCHEMA_BRIDGE_VERSION = 23
+export const STAGING_SCHEMA_VERSION = 28
+/**
+ * Temporary image-activation bridge for the pinned existing synthetic project; never migrates.
+ * Schema 28 adds only the database ZIP check (0028), so the schema-28 image serves the existing
+ * project at exactly 27 until the operator applies 0028, and at 28 afterwards.
+ */
+export const STAGING_SCHEMA_BRIDGE_VERSION = 27
+/** First schema with the collection tables and draft results (0027). */
+export const STAGING_COLLECTION_SCHEMA_VERSION = 27
 export interface HostedWorkspaceOptions {
   connectionString: string
   expectedProjectRef: string
@@ -167,8 +173,8 @@ export function validateHostedSchemaReceipts(
   options: Pick<HostedWorkspaceOptions, "expectedProjectRef" | "reuseExistingProject">,
 ): number {
   const current = receipts.length === STAGING_SCHEMA_VERSION
-  // Exact intermediate prefixes let the process survive a restart between
-  // operator migration commits; HTTP readiness stays unavailable until 27.
+  // The exact bridge prefix (27) lets the schema-28 image start and serve the
+  // existing project before the operator applies 0028.
   const existingProjectUpgrade = options.expectedProjectRef === EXISTING_PROJECT_REF
     && options.reuseExistingProject === true
     && receipts.length >= STAGING_SCHEMA_BRIDGE_VERSION
@@ -185,6 +191,10 @@ function requireSubject(userId: string) {
 }
 
 export class HostedWorkspaceDatabase extends WorkspaceDatabase {
+  // Readiness runs on every staging API request. The image's migration files
+  // never change while the process runs, so read and hash them once (0028
+  // alone is 3 MB); a failed read is not kept and is retried next time.
+  private migrationManifest?: Promise<StagingMigration[]>
   private constructor(db: WorkspaceConnection, private readonly expectedProjectRef: string, private readonly reuseExistingProject = false) { super(db) }
 
   static async create(options: HostedWorkspaceOptions): Promise<HostedWorkspaceDatabase> {
@@ -198,7 +208,7 @@ export class HostedWorkspaceDatabase extends WorkspaceDatabase {
     if (this.expectedProjectRef === EXISTING_PROJECT_REF) {
       if (!this.reuseExistingProject || !(await auditLegacyStagingExposure(this.db)).legacyContainmentVerified) throw new Error("Legacy project containment is not verified.")
     }
-    const manifest = await readMigrationManifest()
+    const manifest = await (this.migrationManifest ??= readMigrationManifest().catch(error => { this.migrationManifest = undefined; throw error }))
     const schemaVersion = await this.db.transaction(async tx => {
       const role = await tx.query<{ safe: boolean }>(`select
         current_user='neuvetra_runtime' and session_user='neuvetra_runtime'

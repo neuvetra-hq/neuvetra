@@ -17,7 +17,7 @@ import { createSourceWorksheetReportRoutes } from "../workspace/m66-report-route
 import { createElectricitySourceRoutes } from "../workspace/m66-source-routes"
 import { createWorksheetReportRoutes } from "../workspace/m65-routes"
 import { createWorksheetRoutes } from "../workspace/m64-routes"
-import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
+import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_COLLECTION_SCHEMA_VERSION, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
 import { createRateLimiter } from "../lib/rate-limit"
@@ -155,8 +155,8 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     await checkAssets()
     return receipt
   }
-  // A process restart at an exact 24–26 prefix must start, but never report
-  // ready or dispatch workspace API requests until all four steps commit.
+  // The schema-28 image starts and reports ready at the exact bridge (27) and at
+  // 28; any other prefix refuses to start.
   try { await databaseReadiness(); await checkAssets() } catch { await database.close(); throw new Error("Private staging dependencies are unavailable.") }
 
   const routeName = (pathname: string): StagingLog["route"] => pathname === "/health" ? "health" : pathname === "/ready" ? "ready" : pathname === "/workspace-api/config" ? "config" : pathname === "/workspace-api/session" ? "session" : pathname.startsWith("/workspace-api/workspace") ? "workspace" : pathname === "/" || pathname === "/workspace" || pathname.startsWith("/assets/") ? "asset" : "unknown"
@@ -192,12 +192,12 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
         return json(200, { profile: STAGING_PROFILE, user: { id: user.id }, access: { role: access.role, workspaceId: access.companyId, evidenceId: access.evidenceId } })
       }
       url.pathname = url.pathname.slice("/workspace-api".length)
-      // The existing-project bridge may serve schema-23 setup and legacy routes,
-      // but never dispatch collection or draft-results SQL before all four
-      // reviewed migrations have committed.
+      // Collection and draft-results SQL exist from schema 27 (0027). 0028 only
+      // adds the database ZIP check, so both stay available at the bridge (27)
+      // and at 28; the route's own ZIP check applies at both.
       if (/^\/workspace\/[0-9a-f-]+\/(?:collection(?:\/|$)|results$)/i.test(url.pathname)) {
         const receipt = requestReadiness ?? await databaseReadiness()
-        if (receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { code: "collection_unavailable", error: "Activity and evidence is not available yet." })
+        if (receipt.schemaVersion < STAGING_COLLECTION_SCHEMA_VERSION) return json(503, { code: "collection_unavailable", error: "Activity and evidence is not available yet." })
       }
       let forwarded: Request
       const evidenceUpload = request.method === "POST" && COLLECTION_EVIDENCE_UPLOAD.test(url.pathname)
@@ -216,7 +216,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       if (/^\/workspace\/[0-9a-f-]+\/results$/i.test(url.pathname)) return resultsRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
-        // Company setup exists in both the schema-23 bridge and schema 27.
+        // Company setup exists at the bridge (27) and at 28.
         const receipt = requestReadiness ?? await databaseReadiness()
         if (receipt.schemaVersion !== STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { error: "Company setup is unavailable." })
         return companySetupRoutes(forwarded)

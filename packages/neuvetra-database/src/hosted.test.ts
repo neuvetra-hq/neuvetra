@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test"
 import { fileURLToPath } from "node:url"
-import { HostedWorkspaceDatabase, STAGING_SCHEMA_VERSION, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
+import { HostedWorkspaceDatabase, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, createPostgresConnection, validateHostedSchemaReceipts, validateHostedTarget } from "./hosted"
 import { loadStagingDatabaseCa, validateDatabaseCaPem } from "./staging-tls"
 import { auditLegacyStagingExposure, planLegacyStagingContainment } from "./staging-audit"
 import { migratePrivateStaging, provisionStagingRoster, readMigrationManifest, revokeStagingAccess } from "./staging-migrations"
@@ -21,20 +21,33 @@ test("hosted target binding refuses wrong projects, privileged users and connect
   for (const value of [options.connectionString.replace(REF, "z".repeat(20)), options.connectionString.replace("neuvetra_runtime", "postgres"), `${options.connectionString}?sslmode=disable`, options.connectionString.replace("supabase.co", "supabase.co.attacker.test"), options.connectionString.replace("/postgres", "/customer")]) expect(() => validateHostedTarget({ ...options, connectionString: value })).toThrow()
 })
 
-test("schema 23 readiness bridge is exact and limited to confirmed existing-project reuse", () => {
-  const manifest = Array.from({ length: 27 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
-  const schema23 = manifest.slice(0, 23)
+test("schema 27 readiness bridge is exact and limited to confirmed existing-project reuse", () => {
+  const manifest = Array.from({ length: 28 }, (_, index) => ({ name: `${String(index + 1).padStart(4, "0")}_migration.sql`, sha256: String(index + 1).padStart(64, "0") }))
+  const schema27 = manifest.slice(0, 27)
   const existing = { expectedProjectRef: "icockcoguyadhryzydvl", reuseExistingProject: true }
-  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(27)
-  expect(validateHostedSchemaReceipts(schema23, manifest, existing)).toBe(23)
-  expect(() => validateHostedSchemaReceipts(schema23, manifest, options)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema23, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
-  for (const length of [24, 25, 26]) expect(validateHostedSchemaReceipts(manifest.slice(0, length), manifest, existing)).toBe(length)
-  expect(() => validateHostedSchemaReceipts(manifest.slice(0, 22), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0028_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  for (const length of [24, 25, 26]) expect(() => validateHostedSchemaReceipts(manifest.slice(0, length).map((receipt, index) => index === length - 1 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema23.map((receipt, index) => index === 22 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
-  expect(() => validateHostedSchemaReceipts(schema23, schema23, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(STAGING_SCHEMA_VERSION).toBe(28)
+  expect(STAGING_SCHEMA_BRIDGE_VERSION).toBe(27)
+  expect(validateHostedSchemaReceipts(manifest, manifest, options)).toBe(28)
+  expect(validateHostedSchemaReceipts(manifest, manifest, existing)).toBe(28)
+  expect(validateHostedSchemaReceipts(schema27, manifest, existing)).toBe(27)
+  expect(() => validateHostedSchemaReceipts(schema27, manifest, options)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema27, manifest, { ...existing, reuseExistingProject: false })).toThrow("Staging schema receipt mismatch.")
+  // The old schema-23 bridge and its 24–26 steps are closed: hosted is already at 27.
+  for (const length of [22, 23, 24, 25, 26]) expect(() => validateHostedSchemaReceipts(manifest.slice(0, length), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts([...manifest, { name: "0029_unknown.sql", sha256: "f".repeat(64) }], manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema27.map((receipt, index) => index === 26 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(manifest.map((receipt, index) => index === 27 ? { ...receipt, sha256: "f".repeat(64) } : receipt), manifest, existing)).toThrow("Staging schema receipt mismatch.")
+  expect(() => validateHostedSchemaReceipts(schema27, schema27, existing)).toThrow("Staging schema receipt mismatch.")
+})
+
+test("the image manifest is 0001–0028, ending with the reviewed 0027 and 0028 bytes", async () => {
+  const manifest = await readMigrationManifest()
+  expect(manifest).toHaveLength(STAGING_SCHEMA_VERSION)
+  expect(manifest.slice(26).map(({ name, sha256 }) => ({ name, sha256 }))).toEqual([
+    { name: "0027_collection.sql", sha256: "1a0f64c82c9b771f318c06ede468276395f6642bf13fdb86e9146eabfbf7d59e" },
+    { name: "0028_collection_zip_check.sql", sha256: "5ae7da9aef3b0d9f5fe4cd679a200722d0603fd201597df67897eec57b212917" },
+  ])
+  expect(new TextEncoder().encode(manifest[27]!.sql).byteLength).toBe(3155532)
 })
 
 test("explicit database CA accepts certificates only and never disables TLS verification", async () => {
@@ -120,7 +133,7 @@ pg("M63 actual PostgreSQL runtime boundary", () => {
     expect(readinessVersions).toEqual([STAGING_SCHEMA_VERSION])
     expect(setupTables).toEqual([null, "neuvetra.company_setup_versions"])
     expect(await database.checkReadiness()).toEqual({ profile: "neuvetra.private-synthetic-staging.v1", schemaVersion: STAGING_SCHEMA_VERSION })
-    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })).migrations).toHaveLength(27)
+    expect((await migratePrivateStaging(operator, { expectedProjectRef: nativeRef, syntheticTargetConfirmed: true })).migrations).toHaveLength(STAGING_SCHEMA_VERSION)
     expect(await construct(operator).checkReadiness().then(() => "unexpected success", error => error.message)).toBe("Unsafe staging runtime role.")
     expect(await rejectionMessage(migratePrivateStaging(operator, { expectedProjectRef: "z".repeat(20), syntheticTargetConfirmed: true }))).toContain("baseline")
     expect((await readMigrationManifest()).every(m => /^[0-9a-f]{64}$/.test(m.sha256))).toBe(true)
