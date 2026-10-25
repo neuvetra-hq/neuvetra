@@ -47,6 +47,7 @@ function render(results: ResultsResponse, coverage: Coverage = READY) {
     notCounted: listAfter("Not counted, incomplete and possible gaps"),
     printed: text(article),
     warnings: nodes.filter(node => node.props.className === "nv-stat__warn").map(text),
+    banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated/.test(line)) ?? null,
     csv,
   }
 }
@@ -125,6 +126,12 @@ describe("B02: records the engine held are counted and explained everywhere", ()
     // Memo-only R-22 stays outside the total and is not called uncounted; partial figures stay in their subtotal.
     expect(view.printed).toContain("Reported outside the Scope 1 total: HCFC-22 2.041165665 kg.")
     expect(view.notCounted.some(line => line.includes("RTU-R22"))).toBe(false)
+  })
+
+  // BF2 (Request B closure P3): the banner used to say "7 records are not fully counted" beside "4 input needed" in the
+  // header. It now names the two kinds separately, matching the header (partly calculated records are calculated).
+  test("BF2: the attention banner separates records not counted yet from records only partly calculated", () => {
+    expect(render(synthetic).banner).toBe("4 records aren’t counted yet and 2 records are only partly calculated. Fix them to complete your totals.")
   })
 
   test("engineHold and notYetCounted follow the engine, not the route outcome", () => {

@@ -28,25 +28,26 @@ export interface Scope2Result extends MethodRun {
   locationBased: Scope2Basis; marketBased: Scope2Basis & { residualMix: { mwh: string; method: string; sources: string[] } | null }
   factorsUsed: FactorUsed[]; resultSha256: string
 }
-/** A linked file's current scan state. "missing": the file is not among the company's evidence. Only "clean" is cleared. */
+/** A linked file's current quarantine-review state. "missing": the file is not among the company's evidence. Only "clean" is cleared. */
 export type EvidenceStatus = "clean" | "pending" | "error" | "rejected" | "missing"
 export interface EvidenceFile { id: string; name: string | null; sha256: string | null; status: EvidenceStatus }
 /**
- * How a file's scan state is named wherever a file is listed: screen, print and CSV (MR3; Request B case A6). Only a
- * clean scan is "cleared"; no other state is ever presented as cleared or as supporting evidence. Evidence status
- * never changes a number: calculation eligibility and evidence sufficiency are separate.
+ * How a file's quarantine-review state is named wherever a file is listed: screen, print and CSV (MR3; Request B case
+ * A6). Only a file that passed quarantine review is "cleared"; no other state is ever presented as cleared or as
+ * supporting evidence. Evidence status never changes a number: calculation eligibility and evidence sufficiency are
+ * separate. BF2: the review is called a quarantine review, not a scan; in this beta it is an operator check.
  */
 export const EVIDENCE_STATUS_TEXT: Record<EvidenceStatus, string> = {
   clean: "cleared",
-  pending: "scan pending, not cleared",
-  error: "scan failed, not cleared",
+  pending: "quarantine review pending, not cleared",
+  error: "quarantine review failed, not cleared",
   rejected: "rejected, not supporting evidence",
   missing: "file not found, not supporting evidence",
 }
 const EVIDENCE_STATUSES = Object.keys(EVIDENCE_STATUS_TEXT)
-/** Linked files that have not cleared the scan. */
+/** Linked files that have not passed quarantine review. */
 export const unclearedEvidence = (row: Pick<ResultRow, "evidence">): EvidenceFile[] => row.evidence.filter(file => file.status !== "clean")
-/** One linked file for the CSV: name (or id), short SHA-256 and scan state. */
+/** One linked file for the CSV: name (or id), short SHA-256 and quarantine-review state. */
 export const evidenceFileText = (file: EvidenceFile): string => `${file.name ?? file.id}${file.sha256 ? ` (sha256 ${file.sha256.slice(0, 12)})` : ""} [${EVIDENCE_STATUS_TEXT[file.status]}]`
 
 export interface ResultRow {
@@ -192,7 +193,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     `# Boundary approach: ${labels.boundary(setup?.boundaryApproach ?? "unknown")}`,
     `# Generated: ${results.generatedAt}`,
     "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes in the matching \"In … subtotal\" column are in that subtotal.",
-    "# Evidence: each file shows its scan state in brackets. Only [cleared] files have passed the scan; pending, failed, rejected or missing files do not support a figure. Evidence state does not change any figure.",
+    "# Evidence: each file shows its quarantine-review state in brackets. Only [cleared] files have passed quarantine review (in this beta, an operator check, not a malware scan); pending, failed, rejected or missing files do not support a figure. Evidence state does not change any figure.",
     `# Methods: ${results.methods.map(item => `${item.methodVersionId} (${item.releaseStatus === "released_beta" ? `released beta, release ${item.releaseId}` : "unreleased beta, not released"}) engine ${item.engineSha256.slice(0, 12)} register ${item.registerSha256.slice(0, 12)}`).join("; ") || "none calculated"}`,
     ...(labels.completeness ? [`# Completeness, Scope 1: ${labels.completeness.scope1}`, `# Completeness, Scope 2 location-based: ${labels.completeness.scope2Location}`, `# Completeness, Scope 2 market-based: ${labels.completeness.scope2Market}`] : []),
     ...(labels.coverage ?? []).map(line => `# ${oneLine(line)}`),

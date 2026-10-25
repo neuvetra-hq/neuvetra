@@ -156,5 +156,10 @@ export async function readCollectionContext(tx:WorkspaceSql,companyId:string):Pr
   const current=result.rows[0]
   if(!current)return null
   const locations=current.version_id?await tx.query<{id:string;name:string;inclusion:'unknown'|'included'|'excluded';control:string}>('select id,name,inclusion,control from neuvetra.company_setup_locations where company_id=$1 and version_id=$2 order by name,id',[companyId,current.version_id]):{rows:[]}
-  return {companyId,setupVersionId:current.version_id,setupRevision:current.revision,locations:locations.rows}
+  // BF2: versions with the current version's exact saved content, so an identical restore is not "an earlier setup".
+  const same=current.version_id?await tx.query<{id:string}>(`select v.id from neuvetra.company_setup_versions v join neuvetra.company_setup_versions c on c.company_id=v.company_id and c.payload_sha256=v.payload_sha256
+    where c.company_id=$1 and c.id=$2 order by v.revision desc`,[companyId,current.version_id]):{rows:[]}
+  const sameContentSetupVersionIds=same.rows.map(row=>row.id)
+  if(current.version_id&&!sameContentSetupVersionIds.includes(current.version_id))throw new Error('Current company setup version unavailable.')
+  return {companyId,setupVersionId:current.version_id,setupRevision:current.revision,locations:locations.rows,sameContentSetupVersionIds}
 }

@@ -34,6 +34,22 @@ describe("collection context and ZIP browser boundary", () => {
     expect(lookup.utilities[0]?.eiaId).toBe("123")
   })
 
+  test("BF2: accepts the same-content setup versions only as UUIDs that include the current version", async () => {
+    const earlier = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
+    const respond = (context: Record<string, unknown>) => { globalThis.fetch = (async () => Response.json({ context: { companyId, setupVersionId, setupRevision: 3, locations: [], ...context } })) as typeof fetch }
+    respond({ sameContentSetupVersionIds: [setupVersionId, earlier] })
+    expect((await loadCollectionContext(companyId, actor)).sameContentSetupVersionIds).toEqual([setupVersionId, earlier])
+    respond({})
+    expect((await loadCollectionContext(companyId, actor)).sameContentSetupVersionIds).toBeUndefined()
+    respond({ setupVersionId: null, setupRevision: null, sameContentSetupVersionIds: [] })
+    expect((await loadCollectionContext(companyId, actor)).sameContentSetupVersionIds).toEqual([])
+    for (const bad of [{ sameContentSetupVersionIds: [earlier] }, { sameContentSetupVersionIds: [setupVersionId, "not-a-uuid"] }, { sameContentSetupVersionIds: [setupVersionId, setupVersionId] },
+      { sameContentSetupVersionIds: setupVersionId }, { sameContentSetupVersionIds: null }, { setupVersionId: null, setupRevision: null, sameContentSetupVersionIds: [earlier] }]) {
+      respond(bad)
+      await expect(loadCollectionContext(companyId, actor)).rejects.toThrow("not recognized")
+    }
+  })
+
   test("rejects malformed context and lookup responses", async () => {
     globalThis.fetch = (async () => Response.json({ context: { companyId, setupVersionId: "wrong", setupRevision: 2, locations: [] } })) as typeof fetch
     await expect(loadCollectionContext(companyId, actor)).rejects.toThrow("not recognized")

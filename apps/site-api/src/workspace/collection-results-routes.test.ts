@@ -257,6 +257,22 @@ describe("draft results (Claude UX journey)", () => {
     expect([outside.counts.excluded, outside.counts.outsidePeriod]).toEqual([1, 1])
   }, 60_000)
 
+  // BF2 (Request B closure P3): in the 2024 state the header listed 22 items for 21 records, because a record that needed
+  // input and was outside the period counted twice. Each record now counts in exactly one header category.
+  test("BF2: header counts never add up to more than the records; outside the period wins over input needed", async () => {
+    const unknownGas = record({ kind: "natural_gas", sourceId: "GAS-UNKNOWN", quantity: q("unknown", "therm"), payload: { heatContent: null } })
+    const generator = record({ kind: "distillate_no2", sourceId: "GEN-1", quantity: q("", "US_gallon"), payload: { consumption: { basis: "purchases_only", purchasedGallons: "500" }, statedHhvMmbtuPerGallon: null } })
+    const current = setupView.currentVersion!
+    const period = (start: string, endExclusive: string) => ({ ...setupView, currentVersion: { ...current, setup: { ...current.setup, reportingPeriod: { ...current.setup.reportingPeriod, start, endExclusive } } } }) as typeof setupView
+    const header = (counts: CollectionResultsResponse["counts"]) => counts.calculated + counts.inputNeeded + counts.outsidePeriod + counts.excluded + counts.withdrawn + counts.unavailable
+    const inYear = await buildCollectionResults({ companyId: company, context, records: [unknownGas, generator, gasOffice], evidence: [], setup: period("2025-01-01", "2026-01-01"), engines })
+    expect(inYear.counts).toMatchObject({ records: 3, calculated: 1, inputNeeded: 2, outsidePeriod: 0 })
+    const prior = await buildCollectionResults({ companyId: company, context, records: [unknownGas, generator, gasOffice], evidence: [], setup: period("2024-01-01", "2025-01-01"), engines })
+    expect(prior.records.find(row => row.sourceId === "GAS-UNKNOWN")!.plan.status).toBe("input_needed")
+    expect(prior.counts).toMatchObject({ records: 3, calculated: 0, inputNeeded: 0, outsidePeriod: 3 })
+    for (const result of [inYear, prior]) expect(header(result.counts)).toBe(result.counts.records)
+  }, 60_000)
+
   // Request B (14 October 2026) actual hosted captures, bound by SHA-256. Run with NEUVETRA_REQUEST_B_CAPTURES set to the
   // folder holding them (notes\reviews\2026-10-14-request-b-integrated-qa); skipped without it, never fetched.
   const captures = process.env.NEUVETRA_REQUEST_B_CAPTURES

@@ -1,4 +1,5 @@
 import type { CompanySetupView } from "../../../../packages/neuvetra-database/src/company-setup-contract"
+import { savedAgainstCurrentSetup } from "../../../../packages/neuvetra-database/src/collection-contract"
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "./collection-api"
 import { listCollectionActivities, listCollectionEvidence, loadCollectionContext } from "./collection-api"
 import { loadCompanySetup } from "./company-setup-api"
@@ -102,7 +103,9 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
     const findings = recordReadiness(activity, input.context, input.evidence)
-    let state = recordState(findings)
+    // BF2: a file still in quarantine review is waiting, not something to fix: the engines calculate the record, so it
+    // doesn't make the record need input (Results counts it as calculated). Pending files are listed separately.
+    let state = recordState(findings.filter(finding => !finding.waitingOnEvidence))
     const reasons = findings.map(finding => finding.reason)
     // Same check as the results route: a record not wholly inside the reporting period is held, never counted.
     const fit = periodFit(activity.period, period)
@@ -111,7 +114,8 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
       reasons.unshift(fit === "outside"
         ? `Its dates (${dates}) fall outside the reporting period in company setup (${reporting}). Change the reporting period in Company setup (02 Reporting period), or correct the record if its dates are wrong.`
         : `Its dates (${dates}) are only partly inside the reporting period in company setup (${reporting}). Change the reporting period in Company setup (02 Reporting period), or save the bill as separate records that each sit inside the period.`)
-      if (state !== "input_needed") state = "held_period"
+      // BF2: outside the period takes precedence, as on the Results screen and in its counts: fix the period first.
+      state = "held_period"
     }
     return { id: row.id, kind: row.kind, label: kindLabel(row.kind), sourceId: activity.sourceId, locationId: activity.locationId, site: siteName(activity.locationId), state, reasons, evidenceCount: activity.evidenceIds.length, quality: activity.quality }
   })
@@ -122,8 +126,9 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const heldRows = active.filter(row => row.state === "held_period")
   const counted = active.filter(row => row.state !== "excluded")
   // Records saved against an earlier setup version must have their site chosen again when next edited (owner rule).
-  const currentSetupVersion = input.context?.setupVersionId ?? null
-  const olderSetup = currentSetupVersion ? input.records.filter(row => row.currentVersion.activity.state !== "withdrawn" && row.currentVersion.activity.setupVersionId && row.currentVersion.activity.setupVersionId !== currentSetupVersion).length : 0
+  // BF2: setup content is compared, not version IDs, so an identical restore doesn't flag every record.
+  const context = input.context
+  const olderSetup = context?.setupVersionId ? input.records.filter(row => row.currentVersion.activity.state !== "withdrawn" && row.currentVersion.activity.setupVersionId && !savedAgainstCurrentSetup(row.currentVersion.activity.setupVersionId, context)).length : 0
   const collection = { total: records.length, active: active.length, ready: active.filter(row => row.state === "ready" || row.state === "partial" || row.state === "memo_only").length, attention: attentionRows.length, held: heldRows.length, olderSetup, partial: active.filter(row => row.state === "partial").length, withdrawn: records.length - active.length, excluded: active.filter(row => row.state === "excluded").length, noEvidence: counted.filter(row => row.evidenceCount === 0).length, qualityUnknown: counted.filter(row => row.quality === "unknown").length, byKind, records }
   const gaps = coverageGaps(input.setup, records)
   const evidence = { total: input.evidence.length, checking: input.evidence.filter(file => file.quarantineStatus === "pending" || file.quarantineStatus === "error").length, cleared: input.evidence.filter(file => file.quarantineStatus === "clean").length, rejected: input.evidence.filter(file => file.quarantineStatus === "rejected").length }

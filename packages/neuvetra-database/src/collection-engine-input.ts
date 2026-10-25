@@ -12,7 +12,7 @@
  * Scope 2 instrument MWh and rates are sent as entered: engine v3 holds only the market-based result when they are
  * incomplete, so the location-based result is kept.
  */
-import type { CollectionActivity, CollectionActivityVersion, CollectionContext, CollectionEvidenceMetadata, CollectionInstrument } from './collection-contract'
+import { savedAgainstCurrentSetup, type CollectionActivity, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionInstrument } from './collection-contract'
 
 export const COLLECTION_ENGINE_INPUT_PROFILE = 'neuvetra.collection-engine-input.v1' as const
 
@@ -72,7 +72,8 @@ export function planCollectionCalculation(version: CollectionActivityVersion, co
   if (a.state === 'withdrawn') return hold('withdrawn', ['record_withdrawn'])
   const location = context.locations.find(l => l.id === a.locationId)
   if (!location) return hold('input_needed', ['location_not_in_current_setup'])
-  if (a.setupVersionId !== context.setupVersionId) notes.push('saved_against_earlier_setup_version')
+  // BF2: setup content is compared, not version IDs, so a record saved before an identical restore isn't flagged.
+  if (!savedAgainstCurrentSetup(a.setupVersionId, context)) notes.push('saved_against_earlier_setup_version')
   if (location.inclusion === 'excluded') return hold('excluded', ['location_excluded_by_company_setup'], notes)
   if (location.inclusion !== 'included') return hold('input_needed', ['location_inclusion_unknown'], notes)
 

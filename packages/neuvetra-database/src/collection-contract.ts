@@ -34,6 +34,31 @@ export interface CollectionContext {
   setupVersionId: string | null
   setupRevision: number | null
   locations: Array<{ id: string; name: string; inclusion: 'unknown' | 'included' | 'excluded'; control: string }>
+  /**
+   * BF2: every setup version whose saved content (payload SHA-256) equals the current version's, the current one included.
+   * A version restored byte for byte, for example after a temporary period change, is the same setup. Absent (an older
+   * server): only `setupVersionId` itself counts as current.
+   */
+  sameContentSetupVersionIds?: string[]
+}
+
+/**
+ * BF2: whether a record was saved against the current company setup. Setup content is compared, not version IDs, so a
+ * record saved before an identical restore is not flagged as saved against an earlier setup.
+ */
+export function savedAgainstCurrentSetup(setupVersionId: string, context: Pick<CollectionContext, 'setupVersionId' | 'sameContentSetupVersionIds'>): boolean {
+  if (context.setupVersionId === null) return false
+  return setupVersionId === context.setupVersionId || (context.sameContentSetupVersionIds ?? []).includes(setupVersionId)
+}
+
+/**
+ * BF2: a record saved against a setup version with the current content, at a site the current setup still has, is saved
+ * again against the current version (the database accepts only the current one); the site doesn't have to be chosen again.
+ */
+export function withCurrentSetupVersion<T extends { setupVersionId: string; locationId: string }>(activity: T, context: Pick<CollectionContext, 'setupVersionId' | 'sameContentSetupVersionIds' | 'locations'> | null): T {
+  if (!context?.setupVersionId || activity.setupVersionId === context.setupVersionId) return activity
+  if (!savedAgainstCurrentSetup(activity.setupVersionId, context) || !context.locations.some(location => location.id === activity.locationId)) return activity
+  return { ...activity, setupVersionId: context.setupVersionId }
 }
 interface CollectionActivityCommon {
   locationId: string
