@@ -18,6 +18,7 @@ export const STAGING_MIGRATIONS = [
   "0025_scope3_method_reference.sql",
   "0026_scope2_residual_mix.sql",
   "0027_collection.sql",
+  "0028_collection_zip_check.sql",
 ] as const
 
 export interface StagingMigration { name: string; sha256: string; sql: string }
