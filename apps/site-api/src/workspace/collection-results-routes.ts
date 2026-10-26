@@ -33,9 +33,10 @@ export const RELEASED_DRAFT_RESULTS_LABEL = "Draft — synthetic test data prepa
 /** The only environment in which draft numbers may be produced. */
 export const DRAFT_RESULTS_ENVIRONMENT = "synthetic_staging" as const
 export type MethodReleaseStatus = "released_beta" | "unreleased_beta"
-/** Reviewed engine bytes (methods v6 Scope 1, v7 Scope 2 v3). A changed engine must be re-reviewed before these move. */
+/** Reviewed engine bytes (methods v6 Scope 1; Scope 2 v3 with the S3R3-ACCT-N01 precision fix of 26 October 2026, which
+ *  replaced 8d259406…). A changed engine must be re-reviewed before these move. */
 export const REVIEWED_SCOPE1_ENGINE_SHA256 = "6fdcfa3926698250d577df8d456b4d567ec3e9569788f3c96373421276fa36a4"
-export const REVIEWED_SCOPE2_ENGINE_SHA256 = "8d259406feb989372592269c0daef156733ebe67a2b12b87a39e897642a8c320"
+export const REVIEWED_SCOPE2_ENGINE_SHA256 = "56f1245df2e5eac10adbbd7f553f2fa63ba64135b6153b5edc1025cf0e3e8dbb"
 
 const UUID_SOURCE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 const ROUTE = new RegExp(`^/workspace/(${UUID_SOURCE})/results$`, "i")

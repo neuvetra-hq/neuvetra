@@ -262,6 +262,51 @@ class Aggregate(unittest.TestCase):
         self.assertEqual((a['locationBasedComplete'], a['marketBasedComplete'], a['resultCount']), (False, False, 0))
 
 
+class ContextIndependence(unittest.TestCase):
+    """S3R3-ACCT-N01 (26 October 2026): every accepted result is the same whatever Decimal context calls the engine, and
+    the aggregate (which recomputes every result in precision 96) accepts it. Every subregion, both units, ordinary,
+    smallest, longest and maximum quantities, with no instrument, a zero-emission certificate and a supplier rate."""
+    QUANTITIES = ('17.125', '0.001', '123456789.987', '999999999999.999')
+
+    def requests(self):
+        zips = {}
+        for z, rows in sorted(e.data()['zips'].items()):
+            subs = {r['subregion'] for r in rows}
+            if len(subs) == 1:
+                zips.setdefault(next(iter(subs)), z)
+        supplier = dict(type='supplier_specific_rate', mwh='0.001', qualityCriteriaMet=True, vintageYear=2025, evidenceReference='Supplier letter 2025',
+                        generationTechnology='mixed', rateLbPerMwh={'co2': '812.345678', 'ch4': '0.061', 'n2o': '0.0085'})
+        for sub in sorted(e.data()['subregions']):
+            for unit in ('kWh', 'MWh'):
+                for q in self.QUANTITIES:
+                    for instruments in ([], [eac('0.001')], [supplier]):
+                        yield {'period': P, 'quantity': q, 'unit': unit, 'subregion': sub, 'zip': zips.get(sub, '94105'), 'instruments': instruments}
+
+    def test_results_do_not_depend_on_the_callers_context_and_always_aggregate(self):
+        from decimal import localcontext
+        shown = 0
+        for inp in self.requests():
+            plain = e.electricity(inp)
+            for prec in (12, 200):
+                with localcontext() as ctx:
+                    ctx.prec = prec
+                    self.assertEqual(e.canonical(e.electricity(inp)), e.canonical(plain), (prec, inp))
+            e.aggregate([plain])
+            shown += plain['locationBased']['total'] is not None
+        self.assertGreater(shown, 300)
+
+    def test_the_reported_case(self):
+        # Codex's sample (S3R3-ACCT-N01): RFCW, ZIP 15222, 257,870,974,956.001 kWh. Location-based CO2e is exact: each gas
+        # is MWh x lb/MWh x 0.45359237 x GWP, with no rounding before the total.
+        mwh = F('257870974956.001') / 1000
+        expected = sum(mwh * V[f'egrid2023.RFCW.{g}'] * LB * gwp for g, gwp in GWP.items())
+        r = calc(quantity='257870974956.001', unit='kWh', subregion='RFCW', zip='15222')
+        self.assertEqual(F(r['locationBased']['total']['unrounded']), expected)
+        a = e.aggregate([r, calc(quantity='257870974.956', unit='MWh', subregion='RFCW', zip='15222')])
+        self.assertEqual(F(a['locationBasedSubtotal']['unrounded']), expected + sum(F('257870974.956') * V[f'egrid2023.RFCW.{g}'] * LB * gwp for g, gwp in GWP.items()))
+        self.assertTrue(a['locationBasedComplete'])
+
+
 class DataIntegrity(unittest.TestCase):
     def test_describe_matches_register_and_all_27_subregions(self):
         reg = REG
