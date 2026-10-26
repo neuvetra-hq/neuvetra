@@ -2,7 +2,7 @@
 // accepted, or is held here with a named reason. Nothing is refused, rounded or invented. Runs the real engines.
 import { describe, expect, test } from 'bun:test'
 import { fileURLToPath } from 'node:url'
-import { validateCollectionActivity, type CollectionActivity, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata } from './collection-contract'
+import { savedAgainstCurrentSetup, validateCollectionActivity, type CollectionActivity, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata } from './collection-contract'
 import { ENGINE_FIRST_FACTOR_YEAR, ENGINE_MILES_BASES, ENGINE_MPG_SOURCES, ENGINE_SUBREGIONS, ENGINE_VEHICLE_TYPES, planCollectionCalculation, type CollectionEngineCall } from './collection-engine-input'
 
 const CALC = (f: string) => fileURLToPath(new URL(`../../../apps/site-api/src/calculation/${f}`, import.meta.url))
@@ -112,6 +112,21 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(planCollectionCalculation(gas('10', 'therm', null, { locationId: crypto.randomUUID() }), context, evidence)).toMatchObject({ action: 'hold', status: 'input_needed', reasons: ['location_not_in_current_setup'] })
     expect(planCollectionCalculation(gas('10', 'therm'), { ...context, setupVersionId: crypto.randomUUID() }, evidence).notes).toEqual(['saved_against_earlier_setup_version'])
     expect(() => planCollectionCalculation(gas('10', 'therm'), { ...context, companyId: crypto.randomUUID() }, evidence)).toThrow('another company')
+  })
+
+  // BF2 (Request B closure P3): a setup restored byte for byte is the same setup, so its records carry no older-setup note.
+  test('BF2: setup content is compared, not version IDs', () => {
+    const restoredHead = crypto.randomUUID(), changed = crypto.randomUUID()
+    const restored = { ...context, setupVersionId: restoredHead, sameContentSetupVersionIds: [restoredHead, setup] }
+    expect(planCollectionCalculation(gas('10', 'therm'), restored, evidence).notes).toEqual([])
+    expect(planCollectionCalculation(gas('10', 'therm', null, { setupVersionId: changed }), restored, evidence).notes).toEqual(['saved_against_earlier_setup_version'])
+    // Without the list (an older server), only the version ID counts, as before.
+    expect(planCollectionCalculation(gas('10', 'therm'), { ...context, setupVersionId: restoredHead }, evidence).notes).toEqual(['saved_against_earlier_setup_version'])
+    expect(savedAgainstCurrentSetup(setup, restored)).toBe(true)
+    expect(savedAgainstCurrentSetup(changed, restored)).toBe(false)
+    expect(savedAgainstCurrentSetup(setup, { setupVersionId: null, sameContentSetupVersionIds: [setup] })).toBe(false)
+    // The calculation itself is unchanged: the same engine call with or without the note.
+    expect(planCollectionCalculation(gas('10', 'therm'), restored, evidence).call).toEqual(planCollectionCalculation(gas('10', 'therm'), { ...context, setupVersionId: restoredHead }, evidence).call)
   })
 
   test('instrument evidence: rejected or errored files do not count; pending is noted', () => {

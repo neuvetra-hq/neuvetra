@@ -149,7 +149,7 @@ describe("fuzz: 1,000 saved records and drafts", () => {
       } else {
         calculated++
         expect(shown.filter(finding => finding.reason.startsWith("Market-based instrument") && finding.status !== "review_required")).toEqual([])
-        expect(shown.filter(finding => finding.reason.startsWith("Market-based instrument")).every(finding => finding.reason.includes("evidence scan is pending; the market-based figure uses this file"))).toBe(true)
+        expect(shown.filter(finding => finding.reason.startsWith("Market-based instrument")).every(finding => finding.reason.includes("evidence is waiting for quarantine review; the market-based figure uses this file") && finding.waitingOnEvidence === true)).toBe(true)
         downgraded += shown.filter(finding => finding.reason.startsWith("Market-based result held — ")).length
       }
     }

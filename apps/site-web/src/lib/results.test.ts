@@ -186,11 +186,21 @@ describe("evidence scan state (MR3)", () => {
   test("the CSV names each file's scan state and explains it, without changing any figure", () => {
     const plain = resultsCsv(decodeResults(withFiles([]), company), labels)
     const csv = resultsCsv(decodeResults(withFiles([file(1, "clean"), file(2, "pending")]), company), labels)
-    expect(csv).toContain("# Evidence: each file shows its scan state in brackets. Only [cleared] files have passed the scan")
+    expect(csv).toContain("# Evidence: each file shows its quarantine-review state in brackets. Only [cleared] files have passed quarantine review (in this beta, an operator check, not a malware scan)")
     const gasLine = csv.split("\n").find(line => line.startsWith("1,natural_gas"))!
-    expect(gasLine).toContain(`bill-1.pdf (sha256 ${"1".repeat(12)}) [cleared]; bill-2.pdf (sha256 ${"2".repeat(12)}) [scan pending, not cleared]`)
+    expect(gasLine).toContain(`bill-1.pdf (sha256 ${"1".repeat(12)}) [cleared]; bill-2.pdf (sha256 ${"2".repeat(12)}) [quarantine review pending, not cleared]`)
     // Same figures and subtotals with or without linked files.
     const figures = (text: string) => text.split("\n").filter(line => !line.startsWith("#")).map(line => line.split(",").slice(14, 17).join(","))
     expect(figures(csv)).toEqual(figures(plain))
+  })
+  // BF2 (Request B closure P3): in this beta a file is cleared by an operator's quarantine review, not a malware scan, so no
+  // label or CSV line says a file was scanned.
+  test("BF2: evidence states say quarantine review, never that a file was scanned", () => {
+    expect(Object.values(EVIDENCE_STATUS_TEXT).filter(text => /scan/i.test(text))).toEqual([])
+    expect(EVIDENCE_STATUS_TEXT.pending).toBe("quarantine review pending, not cleared")
+    expect(EVIDENCE_STATUS_TEXT.error).toBe("quarantine review failed, not cleared")
+    const csv = resultsCsv(decodeResults(withFiles([file(1, "clean"), file(2, "pending"), file(3, "error")]), company), labels)
+    expect(csv.split("\n").filter(line => /scan/i.test(line))).toEqual([csv.split("\n").find(line => line.includes("# Evidence:"))!])
+    expect(csv).toContain("not a malware scan")
   })
 })

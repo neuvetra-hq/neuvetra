@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
-import { deriveCollectionQuantity, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { deriveCollectionQuantity, savedAgainstCurrentSetup, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
@@ -62,8 +62,9 @@ export async function saveAndVerifyCollectionActivity(companyId: string, recordI
   return result
 }
 
-export function requiresCurrentLocationReselection(activity: CollectionActivity, context: CollectionContext): boolean {
-  return activity.setupVersionId !== context.setupVersionId || !context.locations.some(location => location.id === activity.locationId)
+export function requiresCurrentLocationReselection(activity: Pick<CollectionActivity, "setupVersionId" | "locationId">, context: CollectionContext): boolean {
+  // BF2: a setup version with the current version's exact content is the current setup; its sites are unchanged.
+  return !savedAgainstCurrentSetup(activity.setupVersionId, context) || !context.locations.some(location => location.id === activity.locationId)
 }
 
 export function thousandsSeparatorSuggestion(value: string): string | null {
@@ -93,7 +94,8 @@ function scaledDecimal(value: string): bigint | null {
   return BigInt(whole!) * 1000n + BigInt(fraction.padEnd(3, "0"))
 }
 
-export type CollectionReadinessFinding = { status: "input_needed" | "partial" | "review_required" | "excluded" | "memo_only" | "withdrawn"; reason: string }
+/** `waitingOnEvidence` (BF2): only waiting for a file's quarantine review; the engines still calculate the record. */
+export type CollectionReadinessFinding = { status: "input_needed" | "partial" | "review_required" | "excluded" | "memo_only" | "withdrawn"; reason: string; waitingOnEvidence?: true }
 export function locationReadinessFindings(activity: CollectionActivity, context: CollectionContext | null): CollectionReadinessFinding[] {
   if (!context || !activity.locationId) return []
   const location = context.locations.find(item => item.id === activity.locationId)
@@ -190,9 +192,9 @@ export function collectionReadinessFindings(activity: CollectionActivity, eviden
       else {
         const file = evidence.find(item => item.id === instrument.evidenceReference)
         if (!file) add("input_needed", `${prefix} evidence file isn’t available to this company.`)
-        if (file?.quarantineStatus === "pending") add("input_needed", `${prefix} evidence scan is pending.`)
+        if (file?.quarantineStatus === "pending") add("input_needed", `${prefix} evidence is waiting for quarantine review.`)
         if (file?.quarantineStatus === "rejected") add("input_needed", `${prefix} evidence was rejected and must be removed.`)
-        if (file?.quarantineStatus === "error") add("input_needed", `${prefix} evidence scan has an error.`)
+        if (file?.quarantineStatus === "error") add("input_needed", `${prefix} evidence quarantine review failed.`)
       }
       // The engine's rules (scope2 v3): bioenergy claims aren't supported; any other non-zero technology needs a stated
       // rate, and only zero-emission technologies may state a zero CO2 rate. Rates allow 6 digits either side of the point.
@@ -245,7 +247,8 @@ const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
  * - adapter holds: every adapter reason is shown (in the screen's words where it has them), at least one finding blocks,
  *   and nothing is called partly calculated (N7: a held record isn't partly calculated);
  * - adapter calculates: an instrument problem only holds the market-based result (engine v3), so it is shown as partial;
- *   a pending instrument scan and a rejected record-level file don't stop the engines, so they are shown for review.
+ *   an instrument file waiting for quarantine review and a rejected record-level file don't stop the engines, so they
+ *   are shown for review (the waiting file is marked waitingOnEvidence, BF2).
  *   Holds only the engines decide (purchases-only fuel, refrigerant answers, a negative balance) stay as the screen says.
  * Without a company context the screen's own rules are returned unchanged.
  */
@@ -268,7 +271,7 @@ export function recordReadiness(activity: CollectionActivity, context: Collectio
     // The engines calculate these; the finding is something to check, not a hold.
     if (finding.reason.startsWith("Linked evidence “")) return { status: "review_required", reason: finding.reason }
     if (!finding.reason.startsWith("Market-based instrument")) return finding
-    if (finding.reason.endsWith(" evidence scan is pending.")) return { status: "review_required", reason: `${finding.reason.slice(0, -1)}; the market-based figure uses this file until the scan finishes.` }
+    if (finding.reason.endsWith(" evidence is waiting for quarantine review.")) return { status: "review_required", reason: `${finding.reason.slice(0, -1)}; the market-based figure uses this file until the review finishes.`, waitingOnEvidence: true }
     return { status: "partial", reason: `Market-based result held — ${finding.reason}` }
   }))
 }
@@ -463,7 +466,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     if (draft.kind === "electricity" && !draft.payload.utilityName.trim()) { setError(true); setMessage("Choose the verified utility serving this electricity meter before saving."); return }
     const rejectedEvidence = new Set(evidence.filter(file => file.quarantineStatus === "rejected").map(file => file.id))
     if (draft.evidenceIds.some(id => rejectedEvidence.has(id)) || draft.kind === "electricity" && draft.payload.instruments.some(instrument => instrument.evidenceReference !== null && rejectedEvidence.has(instrument.evidenceReference))) { setError(true); setMessage("Remove rejected evidence before saving this version."); return }
-    const copy = prepareActivityForSave(draft)
+    const copy = prepareActivityForSave(withCurrentSetupVersion(draft, context))
     const correctionReason = selected ? copy.state === "withdrawn" ? `Withdrawn: ${copy.withdrawalReason}` : reason.trim() : null
     const input = pending.current ?? { idempotencyKey: crypto.randomUUID(), expectedRevision: selected?.currentVersion.revision ?? 0, expectedVersionId: selected?.currentVersion.id ?? null, correctionReason, activity: copy }
     pending.current = input; setBusy(true); setError(false); setMessage("Saving and verifying this activity…")
@@ -476,16 +479,25 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       setError(true)
       if (cause instanceof CollectionApiError && cause.conflict) { pending.current = null; setMessage("This record changed elsewhere. Reload before correcting it.") }
       else if (cause instanceof CollectionApiError && cause.status === 422) {
-        let staleContext: CollectionContext | null = null
-        try {
-          const latestContext = await loadCollectionContext(workspaceId, actorRef.current)
-          if (requiresCurrentLocationReselection(input.activity, latestContext)) staleContext = latestContext
-        } catch { /* Preserve the original save refusal when current setup cannot be checked. */ }
-        if (staleContext) {
-          setContext(staleContext)
-          setDraft(current => ({ ...current, setupVersionId: staleContext!.setupVersionId ?? "", locationId: "" }))
+        let latestContext: CollectionContext | null = null
+        try { latestContext = await loadCollectionContext(workspaceId, actorRef.current) }
+        catch { /* Preserve the original save refusal when current setup cannot be checked. */ }
+        // BF2-QA-01: advancing to the current setup and choosing a location again are separate decisions. The refusal is
+        // definite (422), so a request made against an older setup version is retired either way.
+        if (latestContext && requiresCurrentLocationReselection(input.activity, latestContext)) {
+          const next = latestContext
+          setContext(next)
+          setDraft(current => ({ ...current, setupVersionId: next.setupVersionId ?? "", locationId: "" }))
           pending.current = null
           setMessage("Company setup changed. Select a current location before retrying this save.")
+        } else if (latestContext?.setupVersionId && input.activity.setupVersionId !== latestContext.setupVersionId) {
+          // The setup was restored with identical content: keep the location and every unsaved edit, move the draft to the
+          // current setup version and start a new request on the next save.
+          const next = latestContext
+          setContext(next)
+          setDraft(current => ({ ...current, setupVersionId: next.setupVersionId ?? current.setupVersionId }))
+          pending.current = null
+          setMessage("Company setup was saved again with the same content. Your edits and location are kept; save again to save against the current setup.")
         } else setMessage(`${cause.message} Retry keeps the same save request.`)
       } else setMessage(`${cause instanceof Error ? cause.message : "Activity could not be saved."} Retry keeps the same save request.`)
     } finally { setBusy(false) }
@@ -582,9 +594,9 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     : draft.kind === "fugitive" ? "Equipment or group ID"
     : "Electricity meter or account ID"
   const evidenceLabel = (file: CollectionEvidenceMetadata) => file.quarantineStatus === "clean" ? `${file.originalName} · cleared`
-    : file.quarantineStatus === "pending" ? `${file.originalName} · scan pending (not cleared)`
+    : file.quarantineStatus === "pending" ? `${file.originalName} · quarantine review pending (not cleared)`
     : file.quarantineStatus === "rejected" ? `${file.originalName} · rejected (remove before saving)`
-    : `${file.originalName} · scan error (not cleared)`
+    : `${file.originalName} · quarantine review failed (not cleared)`
   return <section className="worksheet collection-workspace" aria-busy={busy}>
     <p className="worksheet-eyebrow">Activity collection · Synthetic staging</p>
     <h1 ref={headingRef} tabIndex={-1}>Collect Scope 1 and 2 activity</h1>

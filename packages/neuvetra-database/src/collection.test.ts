@@ -235,6 +235,26 @@ describe('candidate 0027 collection database boundary',()=>{
     expect(await rejectionMessage(asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request(linked))))).toContain('rejected evidence')
   })
 
+  test('BF2: the context lists every setup version with the current saved content, so an identical restore is the same setup',async()=>{
+    const restored='27200000-0000-4000-8000-000000000003',restoreOwner='27100000-0000-4000-8000-000000000004',[r1,r2,r3]=['27500000-0000-4000-8000-0000000000b1','27500000-0000-4000-8000-0000000000b2','27500000-0000-4000-8000-0000000000b3']
+    await db.query('insert into auth.users(id) values($1)',[restoreOwner])
+    await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic restore','US','CA',$2)",[restored,restoreOwner])
+    await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner')",[restored,restoreOwner])
+    await db.query('insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true)',[restoreOwner,restored])
+    // Revision 2 changes the content; revision 3 restores revision 1's content byte for byte (Request B G01).
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,'{}',$3,'unknown',$4)",[r1,restored,'c'.repeat(64),restoreOwner])
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,2,$3,'Period moved to 2024.','{}',$4,'unknown',$5)",[r2,restored,r1,'d'.repeat(64),restoreOwner])
+    await db.query('insert into neuvetra.company_setup_heads(company_id,version_id,revision) values($1,$2,2)',[restored,r2])
+    expect(await asUser(restoreOwner,tx=>readCollectionContext(tx,restored))).toMatchObject({setupVersionId:r2,sameContentSetupVersionIds:[r2]})
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,3,$3,'Period restored to 2025.','{}',$4,'unknown',$5)",[r3,restored,r2,'c'.repeat(64),restoreOwner])
+    await db.query('update neuvetra.company_setup_heads set version_id=$2,revision=3 where company_id=$1',[restored,r3])
+    expect(await asUser(restoreOwner,tx=>readCollectionContext(tx,restored))).toMatchObject({setupVersionId:r3,sameContentSetupVersionIds:[r3,r1]})
+    // Another tenant's versions are never listed, and a company without setup lists none.
+    expect(await asUser(member,tx=>readCollectionContext(tx,restored))).toBeNull()
+    expect((await asUser(member,tx=>readCollectionContext(tx,company)))?.sameContentSetupVersionIds).toEqual([setupVersion])
+    expect((await asUser(otherOwner,tx=>readCollectionContext(tx,otherCompany)))?.sameContentSetupVersionIds).toEqual([])
+  })
+
   test('C02/C03 keep withdrawal history and enforce the current tenant setup location and source identity',async()=>{
     expect(await asUser(otherOwner,tx=>readCollectionContext(tx,company))).toBeNull()
     expect(await asUser(otherOwner,tx=>readCollectionContext(tx,otherCompany))).toMatchObject({setupVersionId:null,locations:[]})

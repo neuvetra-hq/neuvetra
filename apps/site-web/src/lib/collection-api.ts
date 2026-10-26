@@ -78,6 +78,10 @@ export async function listCollectionActivities(companyId: string, actor: HostedW
 export async function loadCollectionContext(companyId: string, actor: HostedWorkspaceActor) {
   const value = await json<{ profile: string; context: CollectionContext }>(await request(actor, companyPath(companyId)))
   if (!value.context || value.context.companyId !== companyId || !(value.context.setupVersionId === null || UUID.test(value.context.setupVersionId)) || !(value.context.setupRevision === null || Number.isInteger(value.context.setupRevision)) || !Array.isArray(value.context.locations)) throw new Error("The collection context was not recognized.")
+  // BF2: optional (older servers omit it); when sent, it lists UUIDs and includes the current version.
+  const same = value.context.sameContentSetupVersionIds
+  if (same !== undefined && (!Array.isArray(same) || !same.every(id => typeof id === "string" && UUID.test(id)) || new Set(same).size !== same.length
+    || (value.context.setupVersionId === null ? same.length !== 0 : !same.includes(value.context.setupVersionId)))) throw new Error("The collection context was not recognized.")
   const locationIds = new Set<string>()
   for (const location of value.context.locations) {
     if (!location || !UUID.test(location.id) || locationIds.has(location.id) || typeof location.name !== "string" || !["unknown", "included", "excluded"].includes(location.inclusion) || typeof location.control !== "string") throw new Error("The collection context was not recognized.")

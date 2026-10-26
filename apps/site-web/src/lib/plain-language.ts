@@ -107,6 +107,9 @@ const REASONS: Record<string, string> = {
 export function reasonText(code: string): string {
   if (REASONS[code]) return REASONS[code]!
   const [base, detail] = code.split(":")
+  // BF2: the adapter's code keeps its name; the text says quarantine review, not scan.
+  const waiting = /^instrument_(\d+)_evidence_pending_scan$/.exec(code)
+  if (waiting) return `Market-based instrument ${waiting[1]} evidence is waiting for quarantine review; the market-based figure uses it until the review finishes.`
   if (base === "model_year_proxy") return `Model year is newer than the latest published factors; used the ${detail?.replace(/_/g, " ") ?? "latest"} band.`
   if (base === "miles_estimated_from_fuel_economy") return `Miles were estimated from fuel economy (${detail?.replace(/_/g, " ") ?? "stated source"}).`
   if (REASONS[base!]) return REASONS[base!]!

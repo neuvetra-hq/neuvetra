@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // BF1 (Claude, 14 October 2026): regressions that drive the real components (same technique as StagingWorkspace.test.tsx).
 import { expect, test } from "bun:test"
-import { deriveCollectionQuantity, validateCollectionSaveInput } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { deriveCollectionQuantity, savedAgainstCurrentSetup, validateCollectionSaveInput, withCurrentSetupVersion } from "../../../../packages/neuvetra-database/src/collection-contract"
 import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { reasonText } from "@/lib/plain-language"
 import { CollectionApiError } from "@/lib/collection-api"
@@ -19,7 +19,7 @@ const context = { companyId: W, setupVersionId: SETUP, setupRevision: 1, locatio
 async function workspace() {
   const saved: any[] = []
   const api = {
-    deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError,
+    deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError, savedAgainstCurrentSetup, withCurrentSetupVersion,
     listCollectionActivities: async () => [], listCollectionEvidence: async () => [], listGridLossLineages: async () => [], loadCollectionContext: async () => context,
     // The server validates exactly like this (collection-routes.ts: validateCollectionSaveInput, else 422).
     saveCollectionActivity: async (_c: string, _r: string, input: any) => { saved.push(input); validateCollectionSaveInput(input); throw new CollectionApiError("stop after capture", 500) },
@@ -49,7 +49,7 @@ test.each([["VAN-1"], ["VAN-1 "]])("a vehicle record with source ID %p is accept
 test("an upload the server confirmed is not reported as unconfirmed when the follow-up list fails", async () => {
   let lists = 0
   const make = await loadComponent("./CollectionWorkspace.tsx", "CollectionWorkspace", {
-    deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError,
+    deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError, savedAgainstCurrentSetup, withCurrentSetupVersion,
     listCollectionActivities: async () => [], listGridLossLineages: async () => [], loadCollectionContext: async () => context,
     listCollectionEvidence: async () => { if (lists++ > 0) throw new CollectionApiError("Collection is unavailable.", 503); return [] },
     uploadCollectionEvidence: async () => ({ receipt: { reused: false } }),

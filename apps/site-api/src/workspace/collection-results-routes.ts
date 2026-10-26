@@ -260,6 +260,9 @@ export async function buildCollectionResults(input: {
  * The Results header counts (B02, Request B). A record the engine itself held (input needed, excluded, review required)
  * was sent but produced no number, so it counts with the holds, not as calculated; and an excluded record is counted
  * once, as excluded, not also as outside the period. Review required counts as input needed: both need the company.
+ * BF2: a record outside the reporting period is counted once, as outside the period, not also as input needed, so
+ * calculated, input needed, outside the period, excluded, withdrawn and unavailable never add up to more than the records.
+ * `held` (not sent to an engine) is a separate view of the same records, not one of those categories.
  */
 export function resultCounts(rows: CollectionResultRow[]): CollectionResultsResponse["counts"] {
   const engineHold = (row: CollectionResultRow): "input_needed" | "excluded" | "review_required" | null => {
@@ -267,14 +270,15 @@ export function resultCounts(rows: CollectionResultRow[]): CollectionResultsResp
     const status = row.scope1 ? row.scope1.status : row.scope2 ? row.scope2.locationBased.status : null
     return status === "input_needed" || status === "excluded" || status === "review_required" ? status : null
   }
+  const periodHeld = (row: CollectionResultRow) => row.plan.status !== "withdrawn" && row.plan.status !== "excluded" && (row.periodCheck === "outside" || row.periodCheck === "partial")
   return {
     records: rows.length,
     calculated: rows.filter(row => row.outcome === "calculated" && engineHold(row) === null).length,
     held: rows.filter(row => row.outcome === "held").length,
     withdrawn: rows.filter(row => row.plan.status === "withdrawn").length,
     excluded: rows.filter(row => row.plan.status === "excluded" || engineHold(row) === "excluded").length,
-    inputNeeded: rows.filter(row => row.plan.status === "input_needed" || engineHold(row) === "input_needed" || engineHold(row) === "review_required").length,
-    outsidePeriod: rows.filter(row => row.plan.status !== "withdrawn" && row.plan.status !== "excluded" && (row.periodCheck === "outside" || row.periodCheck === "partial")).length,
+    inputNeeded: rows.filter(row => !periodHeld(row) && (row.plan.status === "input_needed" || engineHold(row) === "input_needed" || engineHold(row) === "review_required")).length,
+    outsidePeriod: rows.filter(periodHeld).length,
     unavailable: rows.filter(row => row.outcome === "unavailable" || row.outcome === "refused").length,
   }
 }

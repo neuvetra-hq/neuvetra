@@ -89,7 +89,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
           </ul></>}
           {(improve.length > 0 || evidence.checking > 0) && <><p className="nv-attn-label">Can be improved</p><ul className="nv-list">
             {improve.map(item => <li key={item.key}><span className="nv-list__main"><span className="nv-list__title">{item.title}</span>{canManage && <><br /><span className="nv-subtle">{item.detail}</span></>}</span><button type="button" className="nv-btn nv-btn--sm" aria-label={`${item.key === "partial" ? "See" : canManage ? "Open" : "View"}: ${item.title}`} onClick={() => onNavigate(item.key === "partial" ? "results" : "collection")}>{item.key === "partial" ? "See" : canManage ? "Open" : "View"}</button></li>)}
-            {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} with scan pending</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
+            {evidence.checking > 0 && <li><span className="nv-list__main"><span className="nv-list__title">{plural(evidence.checking, "file")} waiting for quarantine review</span><br /><span className="nv-subtle">You can keep working; files can be downloaded once cleared.</span></span></li>}
           </ul></>}
         </>}
       </div>
@@ -100,7 +100,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
             <span className="nv-list__main" style={{ display: "flex", gap: 10, alignItems: "center" }}><Icon name={kindIcon(kind.kind)} size={18} /><span>{kind.label}</span></span>
             <span className="nv-num nv-muted">{collection.byKind[kind.kind]}</span>
           </li>)}</ul>}
-        <p className="nv-subtle" style={{ marginBottom: 0 }}>{plural(evidence.total, "evidence file")} · {evidence.cleared} cleared{evidence.checking ? ` · ${evidence.checking} scan pending` : ""}{evidence.rejected ? ` · ${evidence.rejected} rejected` : ""}</p>
+        <p className="nv-subtle" style={{ marginBottom: 0 }}>{plural(evidence.total, "evidence file")} · {evidence.cleared} cleared{evidence.checking ? ` · ${evidence.checking} in quarantine review` : ""}{evidence.rejected ? ` · ${evidence.rejected} rejected` : ""}</p>
         {canManage && <div className="nv-actions" style={{ marginTop: 12 }}><button type="button" className="nv-btn nv-btn--sm" onClick={() => onNavigate("collection")}><Icon name="plus" size={16} />Add activity</button></div>}
       </div>
     </div>

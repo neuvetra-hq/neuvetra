@@ -180,6 +180,9 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
     <div className="nv-empty" style={{ marginTop: 16 }}><Icon name="records" size={28} /><p className="nv-h3" style={{ marginTop: 10 }}>No activity records yet</p><p>{canManage ? "Add a gas bill, an electricity bill or fleet fuel, and your draft results appear here." : "Draft results appear here once an owner or admin adds activity records."}</p>{canManage && <button type="button" className="nv-btn nv-btn--primary" onClick={() => onNavigate("collection")}>Add activity</button>}</div>
   </section>
   const attentionRows = results.records.filter(needsWork)
+  // BF2: the banner names the two kinds separately, so it agrees with the header (which counts partly calculated records
+  // as calculated): records not counted yet, and records only partly calculated.
+  const notCountedRows = attentionRows.filter(notYetCounted).length, partlyRows = attentionRows.length - notCountedRows
   const heldInScope = (scope: 1 | 2) => results.records.filter(row => row.scope === scope && notYetCounted(row)).length
   const issues1 = coverageIssues(coverage, 1), issues2 = coverageIssues(coverage, 2)
   const held1 = heldInScope(1), held2 = heldInScope(2)
@@ -236,7 +239,7 @@ export function ResultsReport({ actor, workspaceId, headingRef, coverage, onRetr
         <div><h2 className="nv-h2">Records</h2><p className="nv-muted">{counts.calculated} calculated · {counts.inputNeeded} input needed{counts.outsidePeriod ? ` · ${counts.outsidePeriod} outside the reporting period` : ""} · {counts.excluded} excluded · {counts.withdrawn} withdrawn</p></div>
         <div className="nv-segmented" role="group" aria-label="Filter records"><button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All ({results.records.length})</button><button type="button" aria-pressed={filter === "attention"} onClick={() => setFilter("attention")}>Needs attention ({attentionRows.length})</button></div>
       </div>
-      {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{plural(attentionRows.length, "record is", "records are")} not fully counted yet.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}
+      {attentionRows.length > 0 && filter === "all" && <div className="nv-notice nv-notice--warn"><Icon name="alert" /><p>{[notCountedRows ? `${plural(notCountedRows, "record isn’t", "records aren’t")} counted yet` : "", partlyRows ? `${plural(partlyRows, "record is", "records are")} only partly calculated` : ""].filter(Boolean).join(" and ")}.{canManage ? ` Fix ${attentionRows.length === 1 ? "it" : "them"} to complete your totals.` : ""}</p></div>}
       {visible.length === 0 ? <p className="nv-muted">No record needs attention.</p> : visible.map(row => {
         const status = rowStatus(row), reasons = rowReasons(row), kg = rowKg(row)
         return <div className="nv-record-card" key={row.recordId}>
