@@ -220,8 +220,12 @@ def _gases(mwh: Decimal, rates: dict, used: dict) -> dict:
 
 
 def _total(gases: dict) -> dict:
-    t = sum((Decimal(g['co2e']) for g in gases.values()), Decimal(0))
-    return {'unrounded': exact(t), 'display': display(t), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp'}
+    # S3R3-ACCT-N01 (26 October 2026): the total is summed and rounded in the engine's own precision-96 context, so a
+    # result is identical whichever Decimal context calls the calculator; aggregate recomputes inside precision 96.
+    with localcontext() as ctx:
+        ctx.prec = 96
+        t = sum((Decimal(g['co2e']) for g in gases.values()), Decimal(0))
+        return {'unrounded': exact(t), 'display': display(t), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp'}
 
 
 def _add(a: dict, b: dict) -> dict:
@@ -397,8 +401,7 @@ def _result(inp, used, location, market, residual, location_status, market_statu
         estimates = [x for x in estimates if x != 'residual_mix_unavailable_location_rate_provisional']
     market_total = None
     if shown(market_status):
-        t = sum((Decimal(g['co2e']) for g in (market or {}).values()), Decimal(0))
-        market_total = {'unrounded': exact(t), 'display': display(t), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp'}
+        market_total = _total(market or {})
     out = {'profile': ENGINE_PROFILE, 'methodVersionId': METHOD_ID, 'profileId': PROFILE_ID, 'engineSha256': engine_sha256(), 'registerSha256': REGISTER_SHA256,
            'gwpSetId': GWP_SET, 'input': inp, 'inputSha256': digest(inp), 'status': worst(location_status, market_status),
            'findings': sorted(set(loc_findings + mkt_findings)), 'estimates': sorted(set(estimates)),
@@ -450,7 +453,11 @@ def aggregate(results: list) -> dict:
                     provisional.append(r['resultSha256'])
             else:
                 not_mkt.append({'resultSha256': r['resultSha256'], 'status': mb['status'], 'findings': mb['findings']})
-    total = lambda v: {'unrounded': exact(v), 'display': display(v), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp_once'}
+    def total(v: Decimal) -> dict:
+        # S3R3-ACCT-N01: rounding for display also runs in precision 96, not in the caller's context.
+        with localcontext() as ctx:
+            ctx.prec = 96
+            return {'unrounded': exact(v), 'display': display(v), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp_once'}
     out = {'profile': ENGINE_PROFILE + '.aggregate', 'engineSha256': engine_sha256(), 'registerSha256': REGISTER_SHA256, 'resultCount': len(results),
            'locationBasedSubtotal': total(loc), 'locationBasedIncluded': sorted(included_loc), 'locationBasedNotCalculated': not_loc,
            'locationBasedComplete': bool(results) and not not_loc,
