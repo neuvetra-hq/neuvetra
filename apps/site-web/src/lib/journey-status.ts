@@ -1,5 +1,6 @@
 import type { CompanySetupView } from "../../../../packages/neuvetra-database/src/company-setup-contract"
 import { savedAgainstCurrentSetup } from "../../../../packages/neuvetra-database/src/collection-contract"
+import { instrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata } from "./collection-api"
 import { listCollectionActivities, listCollectionEvidence, loadCollectionContext } from "./collection-api"
 import { loadCompanySetup } from "./company-setup-api"
@@ -64,9 +65,9 @@ export function setupMissing(view: CompanySetupView | null): SetupOpenItem[] {
   if (setup.boundary.approach === "unknown") missing.push({ id: "boundary", title: "Choose a boundary approach", detail: "03 Entities & boundary. It decides which sites and sources belong in the inventory.", scopes: [1, 2] })
   if (!setup.locations.length) missing.push({ id: "sites", title: "Add at least one site", detail: "04 Locations.", scopes: [1, 2] })
   for (const location of setup.locations) if (location.inclusion === "unknown") missing.push({ id: `site-${location.id}`, title: `Decide whether ${location.name || "an unnamed site"} is included`, detail: "04 Locations. Its records aren’t counted until the site is included.", scopes: [1, 2] })
-  for (const row of setup.screening) if (row.state === "unknown") {
+  for (const row of setup.screening) if (row.state === "unknown" && (row.scope === 1 || row.scope === 2)) {
     const family = FAMILY_KINDS[row.category]
-    missing.push({ id: `screen-${row.id}`, title: `Answer “${row.category}” — still “Not sure yet”`, detail: `06 Source activities. Until it’s answered, ${family ? family.noun : "these sources"} may be missing from Scope 1.`, scopes: [1] })
+    missing.push({ id: `screen-${row.id}`, title: `Answer “${row.category}” — still “Not sure yet”`, detail: `06 Source activities. Until it’s answered, ${family ? family.noun : "these sources"} may be missing from Scope ${row.scope}.`, scopes: [row.scope] })
   }
   return missing
 }
@@ -78,12 +79,12 @@ export function coverageGaps(view: CompanySetupView | null, records: JourneyReco
   const counted = records.filter(row => row.state !== "withdrawn" && row.state !== "excluded")
   const gaps: CoverageGap[] = []
   for (const row of setup.screening) {
-    if (row.state !== "yes") continue
-    const family = FAMILY_KINDS[row.category]
-    if (!family) continue
+    if (row.state !== "yes" || (row.scope !== 1 && row.scope !== 2)) continue
+    const family = row.scope === 1 ? FAMILY_KINDS[row.category] : ["Purchased electricity", "purchased_electricity", "electricity"].includes(row.category)
+      ? { kind: "electricity", noun: "purchased electricity", records: "electricity records" } : undefined
     const note = (row.details ?? "").trim() || null
-    if (family.kind === null) gaps.push({ id: `screen-${row.id}`, scope: 1, title: `Setup says you have ${family.noun}`, detail: "These aren’t calculated in this beta. Describe them in 06 Source activities so the reviewer can see them.", note, noteFrom: "source" })
-    else if (!counted.some(record => record.kind === family.kind)) gaps.push({ id: `screen-${row.id}`, scope: 1, title: `Setup says you have ${family.noun}, but there are no ${family.records} yet`, detail: "Add a record, or change the setup answer if it doesn’t apply.", note, noteFrom: "source" })
+    if (!family || family.kind === null) gaps.push({ id: `screen-${row.id}`, scope: row.scope, title: `Setup says you have ${family?.noun ?? row.category}`, detail: "These aren’t calculated in this beta. Describe them in 06 Source activities so the reviewer can see them.", note, noteFrom: "source" })
+    else if (!counted.some(record => record.kind === family.kind && (!row.locationId || record.locationId === row.locationId))) gaps.push({ id: `screen-${row.id}`, scope: row.scope, title: `Setup says you have ${family.noun}, but there are no ${family.records} yet`, detail: "Add a record, or change the setup answer if it doesn’t apply.", note, noteFrom: "source" })
   }
   for (const location of setup.locations) {
     if (location.inclusion !== "included") continue
@@ -100,12 +101,15 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const missing = setupMissing(input.setup)
   const siteName = (id: string) => input.context?.locations.find(location => location.id === id)?.name ?? "Unknown site"
   const period = setup?.reportingPeriod ?? null
+  // A-01: certificate claims are counted across the company, as Results counts them.
+  const claims = input.context ? instrumentEvidenceClaims(input.records.map(row => row.currentVersion.activity), input.context, input.evidence) : undefined
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
-    const findings = recordReadiness(activity, input.context, input.evidence)
-    // BF2: a file still in quarantine review is waiting, not something to fix: the engines calculate the record, so it
-    // doesn't make the record need input (Results counts it as calculated). Pending files are listed separately.
-    let state = recordState(findings.filter(finding => !finding.waitingOnEvidence))
+    const findings = recordReadiness(activity, input.context, input.evidence, claims)
+    // BF2: a file still in quarantine review is waiting, not something to fix, so it never makes the record need input
+    // (Results counts it as calculated). A-03: its market-based result is held meanwhile, so the record is partial.
+    // Pending files are listed separately.
+    let state = recordState(findings)
     const reasons = findings.map(finding => finding.reason)
     // Same check as the results route: a record not wholly inside the reporting period is held, never counted.
     const fit = periodFit(activity.period, period)

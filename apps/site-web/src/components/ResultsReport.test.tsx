@@ -46,6 +46,8 @@ function render(results: ResultsResponse, coverage: Coverage = READY) {
     completeness: completeness(results, coverage) as { scope1: string; scope2Location: string; scope2Market: string },
     notCounted: listAfter("Not counted, incomplete and possible gaps"),
     printed: text(article),
+    totals: nodes.filter(node => node.props.className === "nv-stat__value").map(text),
+    totalNotes: nodes.filter(node => node.props.className === "nv-stat__foot").map(text),
     warnings: nodes.filter(node => node.props.className === "nv-stat__warn").map(text),
     banner: nodes.filter(node => node.props.className === "nv-notice nv-notice--warn").map(text).find(line => / counted yet| partly calculated/.test(line)) ?? null,
     csv,
@@ -99,6 +101,25 @@ const synthetic = {
 const reason = plainLanguage.reasonText
 
 describe("B02: records the engine held are counted and explained everywhere", () => {
+  test("empty aggregate membership is unavailable, while a genuinely calculated zero remains zero", () => {
+    const empty = render(synthetic)
+    expect(empty.totals[2]).toBe("—t CO2e")
+    expect(empty.totalNotes[2]).toContain("No market-based results calculated")
+    expect(empty.csv.split("\n").find(line => line.startsWith("Subtotal,Scope 2 market-based,"))).not.toContain("0.0000")
+    expect(empty.printed).toContain("Market-based——")
+    const validZero = structuredClone(synthetic)
+    validZero.scope2!.marketBasedIncluded = ["f".repeat(64)]
+    validZero.scope2!.marketBasedComplete = true
+    const zero = render(validZero)
+    expect(zero.totals[2]).toBe("0.00t CO2e")
+    expect(zero.csv.split("\n").find(line => line.startsWith("Subtotal,Scope 2 market-based,"))).toContain("0.0000")
+    validZero.scope2!.marketBasedComplete = false
+    expect(render(validZero).totals[2]).toBe("0.00t CO2e")
+    const allHeld = structuredClone(synthetic)
+    allHeld.scope1!.includedResults = []
+    allHeld.scope2!.locationBasedIncluded = []
+    expect(render(allHeld).totals).toEqual(["—t CO2e", "—t CO2e", "—t CO2e"])
+  })
   test("summary, Results card, printed list and CSV count the engine's holds and give their reasons", () => {
     const view = render(synthetic)
     // Four records are not yet counted: one held before the engine, two input needed and one review required by it.

@@ -17,8 +17,8 @@ const engines = {
 const company = "72000000-0000-4000-8000-000000000001", other = "72000000-0000-4000-8000-000000000009", setup = "72000000-0000-4000-8000-000000000002"
 const office = "72000000-0000-4000-8000-000000000003", warehouse = "72000000-0000-4000-8000-000000000004"
 const owner = "72000000-0000-4000-8000-0000000000a1", stranger = "72000000-0000-4000-8000-0000000000a2"
-const context: CollectionContext = { companyId: company, setupVersionId: setup, setupRevision: 1, locations: [
-  { id: office, name: "Office", inclusion: "included", control: "reporting_company" },
+const context: CollectionContext = { boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, companyId: company, setupVersionId: setup, setupRevision: 1, locations: [
+  { id: office, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, entity: null, start: null, endExclusive: null, startMode: "period_start", endMode: "period_end" },
   { id: warehouse, name: "Warehouse", inclusion: "excluded", control: "landlord" }] }
 const year = { start: "2025-01-01", endExclusive: "2026-01-01" }
 const common = { locationId: office, setupVersionId: setup, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, reference: "Synthetic", notes: "", evidenceIds: [] as string[], period: year }
@@ -44,6 +44,33 @@ const billId = "72000000-0000-4000-8000-0000000000e1"
 const bill: CollectionEvidenceMetadata = { id: billId, companyId: company, bucket: "neuvetra-private-company-evidence", objectKey: `${company}/original/${billId}`, originalName: "gas-bill.pdf", mediaType: "application/pdf", byteLength: 100, sha256: "d".repeat(64), quarantineStatus: "pending", uploadedBy: owner, createdAt: "2025-06-01T00:00:00.000Z" }
 
 describe("draft results (Claude UX journey)", () => {
+  test("a setup save between the context and report reads returns a retryable error before any calculation", async () => {
+    const newer = "72000000-0000-4000-8000-0000000000b2"
+    let currentContext = context, calculations = 0
+    const currentSetup = { ...setupView, currentVersion: { ...setupView.currentVersion!, id: newer, revision: 2 } }
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => currentContext, findCollectionActivities: async () => [gasOffice],
+      findCollectionEvidence: async () => [], findCompanySetup: async () => currentSetup, findCurrentMethodReleases: async () => [] }
+    const checkedEngines = { ...engines, scope1: { ...engines.scope1, calculate: async (...args: Parameters<typeof engines.scope1.calculate>) => { calculations++; return engines.scope1.calculate(...args) } } }
+    const route = createCollectionResultsRoutes({ database, engines: checkedEngines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+    const request = () => route(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
+    const raced = await request()
+    expect(raced.status).toBe(503)
+    expect(await raced.json()).toEqual({ error: "Company setup changed while preparing results. Reload and try again." })
+    expect(calculations).toBe(0)
+    currentContext = { ...context, setupVersionId: newer, setupRevision: 2, locations: context.locations.map(location => ({ ...location, inclusion: "excluded" })) }
+    const fresh = await request()
+    expect(fresh.status).toBe(200)
+    expect(await fresh.json()).toMatchObject({ counts: { excluded: 1, calculated: 0 }, scope1: null })
+    expect(calculations).toBe(0)
+  })
+  test("the public builder requires consistent company/version/revision and explicitly allows an empty no-setup state", async () => {
+    for (const inconsistent of [null, { ...setupView, currentVersion: null },
+      { ...setupView, currentVersion: { ...setupView.currentVersion!, revision: 2 } },
+      { ...setupView, currentVersion: { ...setupView.currentVersion!, companyId: other } }])
+      await expect(buildCollectionResults({ companyId: company, context, records: [gasOffice], evidence, setup: inconsistent, engines })).rejects.toMatchObject({ code: "SETUP_CHANGED" })
+    const empty = await buildCollectionResults({ companyId: company, context: { companyId: company, setupVersionId: null, setupRevision: null, locations: [] }, records: [], evidence: [], setup: null, engines })
+    expect(empty).toMatchObject({ setup: null, counts: { records: 0 }, scope1: null, scope2: null })
+  })
   test("calculates only what the reviewed adapter admits and keeps every hold visible", async () => {
     const result = await buildCollectionResults({ companyId: company, context, records: [gasOffice, gasWarehouse, gasBlank, vans, power, withdrawn], evidence, setup: setupView, engines, now: () => new Date("2026-09-29T00:00:00Z") })
     expect(result.label).toBe(DRAFT_RESULTS_LABEL)
@@ -87,22 +114,53 @@ describe("draft results (Claude UX journey)", () => {
   test("a meter can be in the location-based subtotal but not the market-based one", async () => {
     const certificate = { type: "energy_attribute_certificate", mwh: "", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: billId, generationTechnology: "wind", rateLbPerMwh: null }
     const blankMwh = record({ kind: "electricity", sourceId: "M-2", evidenceIds: [billId], quantity: q("10000", "kWh"), payload: { meterOrAccountNumber: "M-2", utilityName: "Synthetic", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: null, instruments: [certificate] } })
-    const result = await buildCollectionResults({ companyId: company, context, records: [power, blankMwh], evidence: [{ ...bill, quarantineStatus: "clean" }], setup: null, engines })
+    const result = await buildCollectionResults({ companyId: company, context, records: [power, blankMwh], evidence: [{ ...bill, quarantineStatus: "clean" }], setup: setupView, engines })
     const row = result.records.find(item => item.recordId === blankMwh.id)!
     expect(row.scope2?.marketBased.status).toBe("input_needed")
     expect(row.inSubtotal).toEqual({ scope1: false, scope2LocationBased: true, scope2MarketBased: false })
     expect(result.scope2?.marketBasedComplete).toBe(false)
   }, 60_000)
 
+  // A-01/A-03 (26 October 2026): a certificate counts for one market-based claim, and only once its file has cleared review.
+  test("A-01/A-03: a shared or uncleared certificate holds market-based only; location-based and Scope 1 are unchanged", async () => {
+    const certId = "72000000-0000-4000-8000-0000000000f1", otherCertId = "72000000-0000-4000-8000-0000000000f2", copyId = "72000000-0000-4000-8000-0000000000f3"
+    const certFile = (id: string, sha: string, quarantineStatus: CollectionEvidenceMetadata["quarantineStatus"] = "clean"): CollectionEvidenceMetadata => ({ ...bill, id, objectKey: `${company}/original/${id}`, originalName: `${id.slice(-2)}.pdf`, sha256: sha.repeat(64), quarantineStatus })
+    const meter = (sourceId: string, cert: string) => record({ kind: "electricity", sourceId, evidenceIds: [cert], quantity: q("100000", "kWh"), payload: { meterOrAccountNumber: sourceId, utilityName: "Synthetic", site: "Office", zip: "94105", subregion: "CAMX", utilityEiaId: null,
+      instruments: [{ type: "energy_attribute_certificate", mwh: "40", qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: cert, generationTechnology: "wind", rateLbPerMwh: null }] } })
+    const a = meter("M-A", certId), b = meter("M-B", certId), c = meter("M-C", otherCertId), copy = meter("M-D", copyId)
+    const files = [certFile(certId, "1"), certFile(otherCertId, "2"), certFile(copyId, "1")]
+    const run = (records: CollectionActivityRecord[], evidenceFiles = files) => buildCollectionResults({ companyId: company, context, records: [gasOffice, ...records], evidence: evidenceFiles, setup: setupView, engines })
+    const separate = await run([a, c])
+    const shared = await run([a, b])
+    const sameBytes = await run([a, copy])
+    const waiting = await run([a, c], [certFile(certId, "1", "pending"), certFile(otherCertId, "2")])
+    const row = (result: CollectionResultsResponse, id: string) => result.records.find(item => item.recordId === id)!
+    // Separate certificates: both count (the existing behaviour).
+    for (const id of [a.id, c.id]) expect([row(separate, id).plan.notes, row(separate, id).scope2!.marketBased.status, row(separate, id).inSubtotal.scope2MarketBased]).toEqual([[], "complete", true])
+    // One file on two meters, or the same bytes uploaded twice: neither claim counts.
+    for (const [result, ids] of [[shared, [a.id, b.id]], [sameBytes, [a.id, copy.id]]] as const) {
+      for (const id of ids) {
+        const r = row(result, id)
+        expect([r.outcome, r.plan.notes, r.scope2!.marketBased.status, r.scope2!.marketBased.findings, r.inSubtotal]).toEqual(["calculated", ["instrument_1_evidence_shared"], "input_needed", ["instrument_evidence_required"], { scope1: false, scope2LocationBased: true, scope2MarketBased: false }])
+        expect(r.scope2!.locationBased.total).toEqual(row(separate, a.id).scope2!.locationBased.total)
+      }
+      expect([result.scope2!.marketBasedComplete, result.scope2!.locationBasedSubtotal, result.scope1!.knownSourceSubtotal]).toEqual([false, separate.scope2!.locationBasedSubtotal, separate.scope1!.knownSourceSubtotal])
+    }
+    // A file waiting for quarantine review holds that meter's market-based result until it clears.
+    expect([row(waiting, a.id).plan.notes, row(waiting, a.id).scope2!.marketBased.status, row(waiting, a.id).inSubtotal.scope2MarketBased]).toEqual([["instrument_1_evidence_pending_scan"], "input_needed", false])
+    expect(row(waiting, c.id).scope2!.marketBased.total).toEqual(row(separate, c.id).scope2!.marketBased.total)
+    expect(waiting.scope2!.locationBasedSubtotal).toEqual(separate.scope2!.locationBasedSubtotal)
+  }, 120_000)
+
   test("the route refuses to exist outside synthetic staging", () => {
-    const database = { findCollectionContext: async () => null, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => null, findCurrentMethodReleases: async () => [] } as CollectionResultsDatabase
+    const database = { findCollectionContext: async () => null, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] } as CollectionResultsDatabase
     for (const environment of ["production", "staging", "", undefined])
       expect(() => createCollectionResultsRoutes({ database, engines, origin: "https://www.neuvetra.ai", validateUser: async () => null, environment: environment as never })).toThrow(/synthetic staging/)
   })
 
   test("each row names its linked evidence and scan state", async () => {
     const linked = record({ kind: "natural_gas", sourceId: "GAS-9", quantity: q("10", "therm"), payload: { heatContent: null }, evidenceIds: [billId] })
-    const result = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [bill], setup: null, engines })
+    const result = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [bill], setup: setupView, engines })
     expect(result.records[0]!.evidence).toEqual([{ id: billId, name: "gas-bill.pdf", sha256: "d".repeat(64), status: "pending" }])
   }, 60_000)
 
@@ -111,9 +169,9 @@ describe("draft results (Claude UX journey)", () => {
     const linked = record({ kind: "natural_gas", sourceId: "GAS-8", quantity: q("10", "therm"), payload: { heatContent: null }, evidenceIds: [billId, unknownId] })
     const unlinked = record({ kind: "natural_gas", sourceId: "GAS-8", quantity: q("10", "therm"), payload: { heatContent: null } })
     // One at a time: the engines admit two concurrent processes in total.
-    const withFiles = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [bill], setup: null, engines })
-    const without = await buildCollectionResults({ companyId: company, context, records: [unlinked], evidence: [], setup: null, engines })
-    const cleared = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [{ ...bill, quarantineStatus: "clean" }], setup: null, engines })
+    const withFiles = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [bill], setup: setupView, engines })
+    const without = await buildCollectionResults({ companyId: company, context, records: [unlinked], evidence: [], setup: setupView, engines })
+    const cleared = await buildCollectionResults({ companyId: company, context, records: [linked], evidence: [{ ...bill, quarantineStatus: "clean" }], setup: setupView, engines })
     expect(without.records[0]!.outcome).toBe("calculated")
     expect(withFiles.records[0]!.evidence.map(file => [file.id, file.status])).toEqual([[billId, "pending"], [unknownId, "missing"]])
     expect(withFiles.records[0]!.evidenceCount).toBe(2)
@@ -139,7 +197,7 @@ describe("draft results (Claude UX journey)", () => {
   })
 
   test("an empty collection returns no subtotal rather than zero", async () => {
-    const result = await buildCollectionResults({ companyId: company, context, records: [], evidence, setup: null, engines })
+    const result = await buildCollectionResults({ companyId: company, context, records: [], evidence, setup: setupView, engines })
     expect(result.scope1).toBeNull(); expect(result.scope2).toBeNull(); expect(result.counts.records).toBe(0)
   })
 
@@ -171,7 +229,7 @@ describe("draft results (Claude UX journey)", () => {
 
   test("a record from another company is never calculated", async () => {
     const foreign = record({ kind: "natural_gas", sourceId: "GAS-X", quantity: q("10", "therm"), payload: { heatContent: null } }, other)
-    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [foreign], findCollectionEvidence: async () => [], findCompanySetup: async () => null, findCurrentMethodReleases: async () => [] }
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [foreign], findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] }
     const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
     const response = await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
     expect(response.status).toBe(404)
@@ -206,7 +264,7 @@ describe("draft results (Claude UX journey)", () => {
     const released = (id: string): ReleasedMethod => { const f = facts.get(id)!; return { releaseId: `74000000-0000-4000-8000-${String(id.length).padStart(12, "0")}`, profileId: id, methodVersionId: id, scope: id.startsWith("scope2") ? 2 : 1, family: "f", engineSha256: f.engineSha256, registerSha256: f.registerSha256, gwpSetId: "AR5-100", outputLabel: "Draft — prepared with Neuvetra beta methods; not externally assured",
       factors: Object.entries(f.factorValues).map(([key, value]) => ({ key, value, unit: "u", cell: "A1", label: key, table: "t" })), gwp: [], constants: Object.entries(f.constantValues).map(([id, c]) => ({ id, value: c.value, unit: c.unit })) } }
     const ids = ["scope1.stationary.natural_gas.v2", "scope2.electricity.egrid2023_greene2025.v3"]
-    const run = (releases: ReleaseEvidence) => buildCollectionResults({ companyId: company, context, records: [gasOffice, power], evidence, setup: null, engines, releases })
+    const run = (releases: ReleaseEvidence) => buildCollectionResults({ companyId: company, context, records: [gasOffice, power], evidence, setup: setupView, engines, releases })
     const all = await run({ current: ids.map(released), engines: facts })
     expect([all.label, all.methods.map(m => m.releaseStatus), all.warnings]).toEqual([RELEASED_DRAFT_RESULTS_LABEL, ["released_beta", "released_beta"], []])
     expect(all.methods.every(m => m.releaseLabel === "Draft — prepared with Neuvetra beta methods; not externally assured" && m.releaseId !== null)).toBe(true)
@@ -215,7 +273,7 @@ describe("draft results (Claude UX journey)", () => {
     const failed = await run({ current: null, engines: facts })
     expect([failed.label, failed.methods.map(m => m.releaseStatus), failed.warnings]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta", "unreleased_beta"], ["Method release status could not be checked, so every method is shown as unreleased."]])
     // Nothing calculated: never the released label.
-    const none = await buildCollectionResults({ companyId: company, context, records: [gasBlank], evidence, setup: null, engines, releases: { current: ids.map(released), engines: facts } })
+    const none = await buildCollectionResults({ companyId: company, context, records: [gasBlank], evidence, setup: setupView, engines, releases: { current: ids.map(released), engines: facts } })
     expect([none.label, none.methods]).toEqual([DRAFT_RESULTS_LABEL, []])
   }, 60_000)
 
@@ -226,7 +284,7 @@ describe("draft results (Claude UX journey)", () => {
     const release: ReleasedMethod = { releaseId: "74000000-0000-4000-8000-000000000009", profileId: "scope1.stationary.natural_gas", methodVersionId: gas.id, scope: 1, family: "stationary_combustion", engineSha256: facts.engineSha256, registerSha256: facts.registerSha256, gwpSetId: "AR5-100", outputLabel: "Draft — prepared with Neuvetra beta methods; not externally assured",
       factors: Object.entries(gas.factorValues).map(([key, value]) => ({ key, value, unit: "u", cell: "A1", label: key, table: "t" })), gwp: [], constants: Object.entries(gas.constantValues).map(([id, c]) => ({ id, value: c.value, unit: c.unit })) }
     let fail = false
-    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gasOffice], findCollectionEvidence: async () => [], findCompanySetup: async () => null,
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gasOffice], findCollectionEvidence: async () => [], findCompanySetup: async () => setupView,
       findCurrentMethodReleases: async () => { lookups++; if (fail) throw new Error("lookup failed"); return [release] } }
     const routes = createCollectionResultsRoutes({ database, engines: counted, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
     const get = async () => (await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))).json() as Promise<CollectionResultsResponse>
@@ -245,7 +303,7 @@ describe("draft results (Claude UX journey)", () => {
       record({ kind: "fugitive", sourceId: "TENANT-RTU", quantity: q("", "kg"), payload: { gas: "R-410A", unit: "kg", terms: { PN: "0", CN: "0", PS: "2", CD: "0", RD: "0" }, insideBoundary: false, maintainsRefrigerantStock: false, retrofitInPeriod: false, contractorRecordsComplete: true, eventChronologyComplete: true } }),
       gasOffice,
     ]
-    const held = await buildCollectionResults({ companyId: company, context, records, evidence: [], setup: null, engines })
+    const held = await buildCollectionResults({ companyId: company, context, records, evidence: [], setup: setupView, engines })
     expect(Object.fromEntries(held.records.map(row => [row.sourceId, [row.outcome, row.scope1?.status]]))).toEqual({ "GAS-CCF": ["calculated", "input_needed"], "GEN-1": ["calculated", "input_needed"], "TENANT-RTU": ["calculated", "excluded"], "GAS-1": ["calculated", "complete"] })
     expect({ calculated: held.counts.calculated, inputNeeded: held.counts.inputNeeded, excluded: held.counts.excluded }).toEqual({ calculated: 1, inputNeeded: 2, excluded: 1 })
     // A record at an excluded location, dated outside the period: one excluded record, not also one outside the period.
@@ -294,7 +352,7 @@ describe("draft results (Claude UX journey)", () => {
     let records: CollectionActivityRecord[] = [], reads = 0
     let release!: () => void
     const gate = new Promise<void>(resolve => { release = resolve })
-    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionEvidence: async () => [], findCompanySetup: async () => null, findCurrentMethodReleases: async () => [],
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [],
       findCollectionActivities: async () => { reads++; const snapshot = records; if (reads === 1) await gate; return snapshot } }
     const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
     const get = () => routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } })).then(response => response.json() as Promise<CollectionResultsResponse>)
@@ -319,7 +377,7 @@ describe("draft results (Claude UX journey)", () => {
       factors: Object.entries(gas.factorValues).map(([key, value]) => ({ key, value, unit: "u", cell: "A1", label: key, table: "t" })), gwp: [], constants: Object.entries(gas.constantValues).map(([id, c]) => ({ id, value: c.value, unit: c.unit })) }
     let mode: "lookup" | "describe" | "ok" = "lookup", throwingLogger = false
     const failing = { scope1: { ...engines.scope1, calculate: engines.scope1.calculate, aggregate: engines.scope1.aggregate, describe: async () => { if (mode === "describe") throw new Error(secret); return engines.scope1.describe() } }, scope2: engines.scope2 }
-    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gasOffice], findCollectionEvidence: async () => [], findCompanySetup: async () => null,
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gasOffice], findCollectionEvidence: async () => [], findCompanySetup: async () => setupView,
       findCurrentMethodReleases: async () => { if (mode === "lookup") throw Object.assign(new Error(secret), { code: "42501" }); return [release] } }
     const logs: ResultsReleaseCheckLog[] = []
     const routes = createCollectionResultsRoutes({ database, engines: failing, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }),
@@ -353,7 +411,7 @@ describe("draft results (Claude UX journey)", () => {
     ]
     const logs: ResultsReleaseCheckLog[] = []
     let next = 0
-    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => null,
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [], findCollectionEvidence: async () => [], findCompanySetup: async () => setupView,
       findCurrentMethodReleases: async () => { throw thrown[next++] } }
     const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }), log: event => logs.push(event) })
     for (const _ of thrown) expect((await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))).status).toBe(200)

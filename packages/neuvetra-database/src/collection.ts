@@ -1,5 +1,6 @@
 import type { WorkspaceSql } from './workspace'
 import { m71CanonicalJson } from './m71-validation'
+import { readCompanySetupVersion } from './company-setup'
 import {
   COLLECTION_EVIDENCE_BUCKET,
   validateCollectionActivity,
@@ -155,11 +156,20 @@ export async function readCollectionContext(tx:WorkspaceSql,companyId:string):Pr
   const result=await tx.query<{company_id:string;version_id:string|null;revision:number|null}>(`select c.id company_id,h.version_id,h.revision from neuvetra.companies c left join neuvetra.company_setup_heads h on h.company_id=c.id where c.id=$1 and neuvetra.has_staging_access() and neuvetra.is_company_member(c.id)`,[companyId])
   const current=result.rows[0]
   if(!current)return null
-  const locations=current.version_id?await tx.query<{id:string;name:string;inclusion:'unknown'|'included'|'excluded';control:string}>('select id,name,inclusion,control from neuvetra.company_setup_locations where company_id=$1 and version_id=$2 order by name,id',[companyId,current.version_id]):{rows:[]}
+  const version=current.version_id?await readCompanySetupVersion(tx,companyId,current.version_id):null
+  if(current.version_id&&!version)throw new Error('Current company setup version unavailable.')
+  const setup=version?.setup
+  const locations=(setup?.locations??[]).map(location=>{
+    const entity=setup?.entities.find(item=>item.id===location.entityId)
+    const {id,name,inclusion,control,entityId,start,endExclusive,startMode,endMode}=location
+    return {id,name,inclusion,control,entityId,start,endExclusive,startMode,endMode,
+      entity:entity?{id:entity.id,inclusion:entity.inclusion,control:entity.control,ownershipPercent:entity.ownershipPercent}:null}
+  }).sort((a,b)=>a.name.localeCompare(b.name)||a.id.localeCompare(b.id))
   // BF2: versions with the current version's exact saved content, so an identical restore is not "an earlier setup".
   const same=current.version_id?await tx.query<{id:string}>(`select v.id from neuvetra.company_setup_versions v join neuvetra.company_setup_versions c on c.company_id=v.company_id and c.payload_sha256=v.payload_sha256
     where c.company_id=$1 and c.id=$2 order by v.revision desc`,[companyId,current.version_id]):{rows:[]}
   const sameContentSetupVersionIds=same.rows.map(row=>row.id)
   if(current.version_id&&!sameContentSetupVersionIds.includes(current.version_id))throw new Error('Current company setup version unavailable.')
-  return {companyId,setupVersionId:current.version_id,setupRevision:current.revision,locations:locations.rows,sameContentSetupVersionIds}
+  return {companyId,setupVersionId:current.version_id,setupRevision:current.revision,locations,sameContentSetupVersionIds,
+    ...(setup?{boundaryApproach:setup.boundary.approach,reportingPeriod:{start:setup.reportingPeriod.start,endExclusive:setup.reportingPeriod.endExclusive}}:{})}
 }

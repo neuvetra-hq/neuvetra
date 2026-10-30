@@ -4,11 +4,12 @@
 type Node = { type: unknown; props: Record<string, any>; children: any[] }
 
 export async function loadComponent(file: string, name: string, injected: Record<string, unknown>) {
+  const { instrumentEvidenceClaims } = await import("../../../../packages/neuvetra-database/src/collection-engine-input")
   const source = await Bun.file(new URL(file, import.meta.url)).text()
   const body = source.replace(/^import [\s\S]*?from "[^"]+"\n/gm, "").replace(/^export (function|const|async function)/gm, "$1").replace(/^export type .*\n/gm, "")
   const script = new Bun.Transpiler({ loader: "tsx", tsconfig: { compilerOptions: { jsx: "react", jsxFactory: "h", jsxFragmentFactory: "Fragment" } } }).transformSync(body) + `\nreturn ${name}`
   return (hooks: Record<string, unknown>) => {
-    const all = { ...injected, ...hooks }
+    const all = { instrumentEvidenceClaims, ...injected, ...hooks }
     return new Function(...Object.keys(all), script)(...Object.values(all)) as (props: unknown) => Node
   }
 }

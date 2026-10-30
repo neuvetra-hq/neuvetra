@@ -1,5 +1,5 @@
 import type { CollectionActivityRecord, CollectionContext, CollectionEvidenceMetadata, CompanySetupView } from "@neuvetra/database"
-import { planCollectionCalculation, type CollectionCalculationPlan } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { instrumentEvidenceClaims, planCollectionCalculation, type CollectionCalculationPlan } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import { assertEngineMatchesRelease, type ReleasedMethod } from "../../../../packages/neuvetra-database/src/method-reference"
 import { extractBearerToken, type AuthenticatedUser } from "../lib/auth"
 import { EngineRefusal } from "../calculation/method-engine-runner"
@@ -33,9 +33,10 @@ export const RELEASED_DRAFT_RESULTS_LABEL = "Draft — synthetic test data prepa
 /** The only environment in which draft numbers may be produced. */
 export const DRAFT_RESULTS_ENVIRONMENT = "synthetic_staging" as const
 export type MethodReleaseStatus = "released_beta" | "unreleased_beta"
-/** Reviewed engine bytes (methods v6 Scope 1; Scope 2 v3 with the S3R3-ACCT-N01 precision fix of 26 October 2026, which
- *  replaced 8d259406…). A changed engine must be re-reviewed before these move. */
-export const REVIEWED_SCOPE1_ENGINE_SHA256 = "6fdcfa3926698250d577df8d456b4d567ec3e9569788f3c96373421276fa36a4"
+/** Reviewed engine bytes (methods v6 Scope 1 with the A-04 precision fix of 26 October 2026, which replaced 6fdcfa39…;
+ *  Scope 2 v3 with the S3R3-ACCT-N01 precision fix of 26 October 2026, which replaced 8d259406…). A changed engine must
+ *  be re-reviewed before these move. */
+export const REVIEWED_SCOPE1_ENGINE_SHA256 = "5dcbdb5b3e7615b44c0f76a8c4a3bfd8131640fa6bde1bbcb99a4db0756faed1"
 export const REVIEWED_SCOPE2_ENGINE_SHA256 = "56f1245df2e5eac10adbbd7f553f2fa63ba64135b6153b5edc1025cf0e3e8dbb"
 
 const UUID_SOURCE = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
@@ -114,7 +115,8 @@ export interface CollectionResultRow {
   /**
    * The files linked to this record version, for the evidence column. Status is the current scan state; "missing" when
    * the file is not among the company's evidence. Only "clean" is cleared (MR3): every other state is shown as not
-   * cleared and never as supporting evidence. Evidence status does not change any number.
+   * cleared and never as supporting evidence. Evidence status changes no number, except that a market-based certificate
+   * counts only once its file is clean and only for one claim (A-01/A-03; the plan notes say which).
    */
   evidence: Array<{ id: string; name: string | null; sha256: string | null; status: EvidenceStatus }>
   plan: Pick<CollectionCalculationPlan, "action" | "status" | "reasons" | "notes">
@@ -179,17 +181,24 @@ export async function buildCollectionResults(input: {
   now?: () => Date
 }): Promise<CollectionResultsResponse> {
   const { context, records, evidence, engines } = input
+  // Context and setup are read separately: an intervening save must not mix old boundary decisions with a new report header.
+  const setupVersion = input.setup?.currentVersion ?? null
+  if (context.companyId !== input.companyId || context.setupVersionId !== (setupVersion?.id ?? null)
+    || context.setupRevision !== (setupVersion?.revision ?? null) || (setupVersion && setupVersion.companyId !== input.companyId))
+    throw Object.assign(new Error("Company setup changed while preparing results."), { code: "SETUP_CHANGED" })
   const locations = new Map(context.locations.map(location => [location.id, location]))
   const rows: CollectionResultRow[] = []
   const scope1Results: Scope1Result[] = []
   const scope2Results: Scope2Result[] = []
   const warnings: string[] = []
   const reportingPeriod = input.setup?.currentVersion?.setup.reportingPeriod ?? null
+  // A-01: a certificate file counts for one market-based claim only, across the whole company.
+  const claims = instrumentEvidenceClaims(records.map(record => record.currentVersion.activity), context, evidence)
   const ordered = [...records].sort((left, right) => left.kind.localeCompare(right.kind) || left.currentVersion.activity.period.start.localeCompare(right.currentVersion.activity.period.start) || left.id.localeCompare(right.id))
   for (const record of ordered) {
     const version = record.currentVersion
     const activity = version.activity
-    const plan = planCollectionCalculation(version, context, evidence)
+    const plan = planCollectionCalculation(version, context, evidence, claims)
     const row: CollectionResultRow = {
       recordId: record.id, versionId: version.id, revision: version.revision, kind: record.kind, scope: record.kind === "electricity" ? 2 : 1,
       sourceId: activity.sourceId, locationId: activity.locationId, locationName: locations.get(activity.locationId)?.name ?? null,
@@ -380,6 +389,7 @@ export function createCollectionResultsRoutes(deps: {
       const code = (error as { code?: string }).code
       if (code === "42501") return respond(404, { error: "Results not found." })
       if (code === "54000") return respond(422, { error: "Too many records to calculate in one draft." })
+      if (code === "SETUP_CHANGED") return respond(503, { error: "Company setup changed while preparing results. Reload and try again." })
       return respond(503, { error: "Results could not be prepared. Try again shortly." })
     }
   }

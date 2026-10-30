@@ -1,3 +1,5 @@
+import type { CompanySetup } from './company-setup-contract'
+
 export const COLLECTION_PROFILE = 'neuvetra.collection.v1' as const
 export const COLLECTION_EVIDENCE_BUCKET = 'neuvetra-private-company-evidence' as const
 export const COLLECTION_EVIDENCE_MAX_BYTES = 10 * 1024 * 1024
@@ -33,7 +35,12 @@ export interface CollectionContext {
   companyId: string
   setupVersionId: string | null
   setupRevision: number | null
-  locations: Array<{ id: string; name: string; inclusion: 'unknown' | 'included' | 'excluded'; control: string }>
+  /** Older servers omit boundary metadata; calculations then hold until it is available. */
+  boundaryApproach?: CompanySetup['boundary']['approach']
+  reportingPeriod?: Pick<CompanySetup['reportingPeriod'], 'start' | 'endExclusive'>
+  locations: Array<{ id: string; name: string; inclusion: 'unknown' | 'included' | 'excluded'; control: string;
+    entityId?: string | null; entity?: Pick<CompanySetup['entities'][number], 'id' | 'inclusion' | 'control' | 'ownershipPercent'> | null;
+    start?: string | null; endExclusive?: string | null; startMode?: 'unknown' | 'period_start' | 'specific'; endMode?: 'unknown' | 'period_end' | 'specific' }>
   /**
    * BF2: every setup version whose saved content (payload SHA-256) equals the current version's, the current one included.
    * A version restored byte for byte, for example after a temporary period change, is the same setup. Absent (an older

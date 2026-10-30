@@ -1,5 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 import { PGlite } from '@electric-sql/pglite'
+import { createSyntheticCompanySetup } from './company-setup-fixture'
+import { m71CanonicalJson } from './m71-validation'
 import { readMigrationManifest, STAGING_MIGRATIONS } from './staging-migrations'
 import type { WorkspaceSql } from './workspace'
 import {
@@ -23,6 +25,9 @@ const electricityRecord='27400000-0000-4000-8000-000000000001', gasRecord='27400
 const sha='a'.repeat(64)
 const setupVersion='27500000-0000-4000-8000-000000000001',locationId='27600000-0000-4000-8000-000000000001'
 const linkage={setupVersionId:setupVersion,locationId,sourceId:'SYN-100',state:'active' as const,withdrawalReason:null}
+const setupPayload=createSyntheticCompanySetup()
+setupPayload.locations=[{...setupPayload.locations[0]!,id:locationId,entityId:null,name:'Synthetic office',inclusion:'included',control:'reporting_company',startMode:'period_start',endMode:'period_end'}]
+const setupHash=(payload:unknown)=>new Bun.CryptoHasher('sha256').update(m71CanonicalJson(payload)).digest('hex')
 const rejectionMessage=async(promise:Promise<unknown>)=>promise.then(()=>'',error=>String(error?.message??error))
 
 function electricity():CollectionActivity{return {
@@ -61,7 +66,7 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic Collection A','US','CA',$2),($3,'Synthetic Collection B','US','CA',$4)",[company,owner,otherCompany,otherOwner])
     await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner'),($1,$3,'member'),($4,$5,'owner')",[company,owner,member,otherCompany,otherOwner])
     await db.query('insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true),($3,$2,true),($4,$5,true)',[owner,company,member,otherOwner,otherCompany])
-    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,'{}',$3,'unknown',$4)",[setupVersion,company,sha,owner])
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,$5::jsonb,$3,'unknown',$4)",[setupVersion,company,setupHash(setupPayload),owner,JSON.stringify(setupPayload)])
     await db.query('insert into neuvetra.company_setup_heads(company_id,version_id,revision) values($1,$2,1)',[company,setupVersion])
     await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Synthetic office','San Francisco','Office','owned','reporting_company','included','','','','period_start','period_end')",[company,setupVersion,locationId])
   },30_000)
@@ -241,12 +246,13 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.query("insert into neuvetra.companies(id,name,country_code,state_code,created_by) values($1,'Synthetic restore','US','CA',$2)",[restored,restoreOwner])
     await db.query("insert into neuvetra.company_members(company_id,user_id,role) values($1,$2,'owner')",[restored,restoreOwner])
     await db.query('insert into neuvetra.staging_access(user_id,company_id,active) values($1,$2,true)',[restoreOwner,restored])
+    const original={...setupPayload,locations:[]}, changed={...original,reportingPeriod:{...original.reportingPeriod,start:'2024-01-01'}}
     // Revision 2 changes the content; revision 3 restores revision 1's content byte for byte (Request B G01).
-    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,'{}',$3,'unknown',$4)",[r1,restored,'c'.repeat(64),restoreOwner])
-    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,2,$3,'Period moved to 2024.','{}',$4,'unknown',$5)",[r2,restored,r1,'d'.repeat(64),restoreOwner])
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,payload,payload_sha256,boundary_approach,created_by) values($1,$2,1,$5::jsonb,$3,'unknown',$4)",[r1,restored,setupHash(original),restoreOwner,JSON.stringify(original)])
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,2,$3,'Period moved to 2024.',$6::jsonb,$4,'unknown',$5)",[r2,restored,r1,setupHash(changed),restoreOwner,JSON.stringify(changed)])
     await db.query('insert into neuvetra.company_setup_heads(company_id,version_id,revision) values($1,$2,2)',[restored,r2])
     expect(await asUser(restoreOwner,tx=>readCollectionContext(tx,restored))).toMatchObject({setupVersionId:r2,sameContentSetupVersionIds:[r2]})
-    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,3,$3,'Period restored to 2025.','{}',$4,'unknown',$5)",[r3,restored,r2,'c'.repeat(64),restoreOwner])
+    await db.query("insert into neuvetra.company_setup_versions(id,company_id,revision,previous_version_id,correction_reason,payload,payload_sha256,boundary_approach,created_by) values($1,$2,3,$3,'Period restored to 2025.',$6::jsonb,$4,'unknown',$5)",[r3,restored,r2,setupHash(original),restoreOwner,JSON.stringify(original)])
     await db.query('update neuvetra.company_setup_heads set version_id=$2,revision=3 where company_id=$1',[restored,r3])
     expect(await asUser(restoreOwner,tx=>readCollectionContext(tx,restored))).toMatchObject({setupVersionId:r3,sameContentSetupVersionIds:[r3,r1]})
     // Another tenant's versions are never listed, and a company without setup lists none.
@@ -275,7 +281,8 @@ describe('candidate 0027 collection database boundary',()=>{
     await db.query("insert into neuvetra.company_setup_locations(company_id,version_id,id,name,locality,purpose,occupancy,control,inclusion,reason,other_entity,operator_details,start_mode,end_mode) values($1,$2,$3,'Excluded warehouse','','Warehouse','leased','landlord','excluded','Outside boundary','','','period_start','period_end')",[company,setupVersion,excluded])
     const outside=await asUser(owner,tx=>saveCollectionActivity(tx,owner,company,crypto.randomUUID(),request({...gas(),locationId:excluded})))
     expect(outside.version.activity.locationId).toBe(excluded)
-    expect((await asUser(member,tx=>readCollectionContext(tx,company)))?.locations.find(l=>l.id===excluded)?.inclusion).toBe('excluded')
+    // A raw projection-only insertion is not part of the integrity-checked saved setup payload.
+    expect((await asUser(member,tx=>readCollectionContext(tx,company)))?.locations.find(l=>l.id===excluded)).toBeUndefined()
     // Pin history to its original setup while rejecting new writes against a stale head.
     await db.exec('begin')
     try {

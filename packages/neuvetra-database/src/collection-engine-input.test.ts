@@ -3,7 +3,7 @@
 import { describe, expect, test } from 'bun:test'
 import { fileURLToPath } from 'node:url'
 import { savedAgainstCurrentSetup, validateCollectionActivity, type CollectionActivity, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata } from './collection-contract'
-import { ENGINE_FIRST_FACTOR_YEAR, ENGINE_MILES_BASES, ENGINE_MPG_SOURCES, ENGINE_SUBREGIONS, ENGINE_VEHICLE_TYPES, planCollectionCalculation, type CollectionEngineCall } from './collection-engine-input'
+import { ENGINE_FIRST_FACTOR_YEAR, ENGINE_MILES_BASES, ENGINE_MPG_SOURCES, ENGINE_SUBREGIONS, ENGINE_VEHICLE_TYPES, instrumentEvidenceClaims, planCollectionCalculation, type CollectionEngineCall } from './collection-engine-input'
 
 const CALC = (f: string) => fileURLToPath(new URL(`../../../apps/site-api/src/calculation/${f}`, import.meta.url))
 const env = { ...process.env, PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' }
@@ -19,12 +19,12 @@ const run = (call: CollectionEngineCall) => call.engine === 'scope1' ? engine('s
 const company = '71000000-0000-4000-8000-000000000001', setup = '71000000-0000-4000-8000-000000000002'
 const office = '71000000-0000-4000-8000-000000000003', warehouse = '71000000-0000-4000-8000-000000000004', undecided = '71000000-0000-4000-8000-000000000005'
 const clean = '71000000-0000-4000-8000-0000000000c1', pending = '71000000-0000-4000-8000-0000000000c2', rejected = '71000000-0000-4000-8000-0000000000c3'
-const context: CollectionContext = { companyId: company, setupVersionId: setup, setupRevision: 1, locations: [
-  { id: office, name: 'Office', inclusion: 'included', control: 'reporting_company' },
+const context: CollectionContext = { boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, companyId: company, setupVersionId: setup, setupRevision: 1, locations: [
+  { id: office, name: 'Office', inclusion: 'included', control: 'reporting_company', entityId: null, entity: null, start: null, endExclusive: null, startMode: "period_start", endMode: "period_end" },
   { id: warehouse, name: 'Warehouse', inclusion: 'excluded', control: 'landlord' },
   { id: undecided, name: 'Depot', inclusion: 'unknown', control: 'unknown' }] }
-const file = (id: string, quarantineStatus: CollectionEvidenceMetadata['quarantineStatus']): CollectionEvidenceMetadata => ({ id, companyId: company, bucket: 'neuvetra-private-company-evidence',
-  objectKey: `${company}/original/${id}`, originalName: 'bill.pdf', mediaType: 'application/pdf', byteLength: 100, sha256: 'a'.repeat(64), quarantineStatus, uploadedBy: company, createdAt: '2025-06-01T00:00:00.000Z' })
+const file = (id: string, quarantineStatus: CollectionEvidenceMetadata['quarantineStatus'], sha256 = 'a'.repeat(64)): CollectionEvidenceMetadata => ({ id, companyId: company, bucket: 'neuvetra-private-company-evidence',
+  objectKey: `${company}/original/${id}`, originalName: 'bill.pdf', mediaType: 'application/pdf', byteLength: 100, sha256, quarantineStatus, uploadedBy: company, createdAt: '2025-06-01T00:00:00.000Z' })
 const evidence = [file(clean, 'clean'), file(pending, 'pending'), file(rejected, 'rejected')]
 
 const common = { locationId: office, setupVersionId: setup, state: 'active', withdrawalReason: null, quality: 'actual', estimateBasis: null, reference: 'Synthetic source', notes: '', evidenceIds: [] as string[] }
@@ -43,6 +43,59 @@ const refrigerant = (p: Record<string, unknown>) => version({ kind: 'fugitive', 
 const instrument = (extra: Record<string, unknown> = {}) => ({ type: 'energy_attribute_certificate', mwh: '1', qualityCriteriaMet: true, vintageYear: 2025, evidenceReference: clean, generationTechnology: 'wind', rateLbPerMwh: null, ...extra })
 const electricity = (instruments: Record<string, unknown>[] = [], extra: Record<string, unknown> = {}, evidenceIds: string[] = [clean]) => version({ kind: 'electricity', sourceId: 'M-1', quantity: q('10000', 'kWh'), evidenceIds,
   period: { start: '2025-01-01', endExclusive: '2025-02-01' }, payload: { meterOrAccountNumber: 'M-1', utilityName: 'Synthetic', site: 'Office', zip: '94105', subregion: 'CAMX', utilityEiaId: null, instruments, ...extra } })
+
+describe('corporate boundary admission', () => {
+  const linked = (): CollectionContext => ({ ...structuredClone(context), locations: [{ ...context.locations[0]!, entityId: company,
+    entity: { id: company, inclusion: 'included', control: 'operational_control', ownershipPercent: '50' } }] })
+  test('direct-company and minority-owned controlled operations calculate without ownership scaling', () => {
+    for (const current of [context, linked()]) {
+      const plan = planCollectionCalculation(gas('100', 'therm'), current, evidence)
+      expect(plan.action).toBe('calculate')
+      expect(plan.call?.engine === 'scope1' && plan.call.request.input.quantity).toBe('100')
+    }
+    const financial = linked(); financial.boundaryApproach = 'financial_control'; financial.locations[0]!.entity!.control = 'financial_control'
+    expect(planCollectionCalculation(gas('100', 'therm'), financial, evidence).action).toBe('calculate')
+  })
+  test('entity exclusions, unresolved control and unsupported equity allocation do not enter totals', () => {
+    const cases: Array<[(c: CollectionContext) => void, string, string]> = [
+      [c => { c.locations[0]!.entity!.inclusion = 'excluded' }, 'excluded', 'entity_excluded_by_company_setup'],
+      [c => { c.locations[0]!.entity!.inclusion = 'unknown' }, 'input_needed', 'entity_inclusion_unknown'],
+      [c => { c.locations[0]!.entity = null }, 'input_needed', 'location_entity_unresolved'],
+      [c => { c.locations[0]!.entity!.control = 'none' }, 'excluded', 'entity_outside_control_boundary'],
+      [c => { c.locations[0]!.entity!.control = 'financial_control' }, 'input_needed', 'entity_control_unresolved'],
+      [c => { c.boundaryApproach = 'equity_share' }, 'input_needed', 'equity_share_not_supported'],
+      [c => { c.boundaryApproach = 'unknown' }, 'input_needed', 'boundary_approach_unknown'],
+      [c => { c.locations[0]!.entityId = null; c.locations[0]!.entity = null; c.locations[0]!.control = 'related_entity' }, 'input_needed', 'location_control_unresolved'],
+      [c => { delete c.locations[0]!.entityId }, 'input_needed', 'boundary_metadata_unavailable'],
+    ]
+    for (const [change, status, reason] of cases) {
+      const current = linked(); change(current)
+      expect(planCollectionCalculation(gas('100', 'therm'), current, evidence)).toMatchObject({ action: 'hold', status, reasons: [reason], call: null })
+    }
+  })
+  test('coverage modes and exact half-open boundaries are honored without prorating', () => {
+    const current = linked(), location = current.locations[0]!
+    location.startMode = 'specific'; location.start = '2025-07-01'
+    location.endMode = 'specific'; location.endExclusive = '2025-10-01'
+    const row = (start: string, endExclusive: string) => gas('100', 'therm', null, { period: { start, endExclusive } })
+    expect(planCollectionCalculation(row('2025-07-01', '2025-10-01'), current, evidence).action).toBe('calculate')
+    for (const [start, end] of [['2025-01-01', '2025-02-01'], ['2025-06-30', '2025-08-01'], ['2025-09-01', '2025-10-02']])
+      expect(planCollectionCalculation(row(start!, end!), current, evidence).reasons).toEqual(['activity_outside_location_coverage'])
+    location.start = null
+    expect(planCollectionCalculation(row('2025-07-01', '2025-10-01'), current, evidence).reasons).toEqual(['location_coverage_unknown'])
+    location.startMode = 'period_start'; location.endMode = 'period_end'; location.endExclusive = null
+    expect(planCollectionCalculation(gas('100', 'therm'), current, evidence).action).toBe('calculate')
+    location.startMode = 'unknown'
+    expect(planCollectionCalculation(gas('100', 'therm'), current, evidence).reasons).toEqual(['location_coverage_unknown'])
+  })
+  test('a boundary-held instrument cannot invalidate an otherwise unique in-period certificate', () => {
+    const current = linked(), good = electricity([instrument()]), outside = structuredClone(good)
+    outside.activity.period = { start: '2024-01-01', endExclusive: '2025-01-01' }
+    const claims = instrumentEvidenceClaims([good.activity, outside.activity], current, evidence)
+    expect([...claims.values()]).toEqual([1])
+    expect(planCollectionCalculation(good, current, evidence, claims).notes).not.toContain('instrument_1_evidence_shared')
+  })
+})
 
 describe('collection -> engine input (methods v7, C08)', () => {
   test('token lists equal what the engines accept', () => {
@@ -129,12 +182,51 @@ describe('collection -> engine input (methods v7, C08)', () => {
     expect(planCollectionCalculation(gas('10', 'therm'), restored, evidence).call).toEqual(planCollectionCalculation(gas('10', 'therm'), { ...context, setupVersionId: restoredHead }, evidence).call)
   })
 
-  test('instrument evidence: rejected or errored files do not count; pending is noted', () => {
+  test('instrument evidence: rejected or errored files do not count; a file waiting for quarantine review does not count yet (A-03)', () => {
     const rejectedPlan = planCollectionCalculation(electricity([instrument({ evidenceReference: rejected })], {}, [rejected]), context, evidence)
     expect(rejectedPlan.notes).toEqual(['instrument_1_evidence_not_usable'])
     expect(run(rejectedPlan.call!).result!.marketBased.findings).toEqual(['instrument_evidence_required'])
+    // A-03 (26 October 2026): BF2 counted a pending file while it waited; now the market-based result is held until the
+    // review clears it. The location-based result is exactly the cleared record's.
     const pendingPlan = planCollectionCalculation(electricity([instrument({ evidenceReference: pending })], {}, [pending]), context, evidence)
-    expect([pendingPlan.notes, run(pendingPlan.call!).result!.marketBased.status]).toEqual([['instrument_1_evidence_pending_scan'], 'complete'])
+    const held = run(pendingPlan.call!).result!, cleared = run(planCollectionCalculation(electricity([instrument()]), context, evidence).call!).result!
+    expect([pendingPlan.notes, held.marketBased.status, held.marketBased.findings, held.marketBased.total]).toEqual([['instrument_1_evidence_pending_scan'], 'input_needed', ['instrument_evidence_required'], null])
+    expect([held.locationBased.status, held.locationBased.total]).toEqual(['complete', cleared.locationBased.total])
+    expect([cleared.marketBased.status, cleared.marketBased.total]).toEqual(['complete', expect.anything()])
+  }, ENGINE_TEST_TIMEOUT_MS)
+
+  // A-01 (26 October 2026): before, one certificate file attached to several meters lowered market-based emissions once per
+  // meter. Each file now supports one claim; a file behind two or more claims counts for none of them.
+  test('A-01: a certificate file supports one market-based claim across the company', () => {
+    const certA = '71000000-0000-4000-8000-0000000000a1', certB = '71000000-0000-4000-8000-0000000000a2', certACopy = '71000000-0000-4000-8000-0000000000a3', certPending = '71000000-0000-4000-8000-0000000000a4'
+    const files = [...evidence, file(certA, 'clean', '1'.repeat(64)), file(certB, 'clean', '2'.repeat(64)), file(certACopy, 'clean', '1'.repeat(64)), file(certPending, 'pending', '3'.repeat(64))]
+    const meter = (ref: string, extra: Record<string, unknown> = {}, more: Record<string, unknown>[] = []) => electricity([instrument({ evidenceReference: ref }), ...more], extra, [...new Set([ref, ...more.map(i => i.evidenceReference as string)])])
+    const plan = (v: CollectionActivityVersion, all: CollectionActivityVersion[]) => planCollectionCalculation(v, context, files, instrumentEvidenceClaims(all.map(x => x.activity), context, files))
+    // One file on two meters: neither claim counts; each location-based result is unchanged.
+    const m1 = meter(certA), m2 = meter(certA)
+    for (const v of [m1, m2]) {
+      const p = plan(v, [m1, m2]), r = run(p.call!).result!
+      expect([p.action, p.notes, r.marketBased.status, r.marketBased.findings, r.locationBased.status]).toEqual(['calculate', ['instrument_1_evidence_shared'], 'input_needed', ['instrument_evidence_required'], 'complete'])
+      expect(r.locationBased.total).toEqual(run(planCollectionCalculation(v, context, files).call!).result!.locationBased.total)
+    }
+    // Different certificates: both count, exactly as without the check.
+    const m3 = meter(certB)
+    expect(plan(m1, [m1, m3]).call).toEqual(planCollectionCalculation(m1, context, files).call)
+    expect(run(plan(m3, [m1, m3]).call!).result!.marketBased.status).toBe('complete')
+    // The same bytes uploaded twice are still one certificate.
+    const m4 = meter(certACopy)
+    expect(plan(m1, [m1, m4]).notes).toEqual(['instrument_1_evidence_shared'])
+    // Twice in one record is also two claims.
+    expect(plan(meter(certA, {}, [instrument({ evidenceReference: certA, mwh: '2' })]), [meter(certA, {}, [instrument({ evidenceReference: certA, mwh: '2' })])]).notes).toEqual(['instrument_1_evidence_shared', 'instrument_2_evidence_shared'])
+    // Not claims: a withdrawn record, a record at an excluded or undecided location, a rejected file.
+    for (const other of [meter(certA, {}, []), meter(certA)].map((v, i) => i === 0 ? version({ ...v.activity, state: 'withdrawn', withdrawalReason: 'Duplicate bill' }) : version({ ...v.activity, locationId: warehouse })))
+      expect(plan(m1, [m1, other]).notes).toEqual([])
+    expect(plan(m1, [m1, version({ ...meter(certA).activity, locationId: undecided })]).notes).toEqual([])
+    expect(instrumentEvidenceClaims([meter(rejected).activity, meter(rejected).activity], context, files)).toEqual(new Map())
+    // A shared file that is also waiting for review gives both reasons.
+    expect(plan(meter(certPending), [meter(certPending), meter(certPending)]).notes).toEqual(['instrument_1_evidence_pending_scan', 'instrument_1_evidence_shared'])
+    // Without the company's claims (a single record on its own) nothing is treated as shared.
+    expect(planCollectionCalculation(m1, context, files).notes).toEqual([])
   }, ENGINE_TEST_TIMEOUT_MS)
 
   test('the translation drops only collection-only fields and never changes a value', () => {
@@ -206,6 +298,35 @@ describe('BF1 adapter fixes', () => {
     expect(plan(gas('1,234.5', 'ccf', { value: 'about 1', unit: 'therm per ccf' })).reasons).toEqual(['quantity_not_calculable', 'heat_content_not_numeric'])
     expect(plan(gas('100', 'therm', { value: '1.037', unit: 'therm per ccf' })).notes).toEqual(['heat_content_not_used_for_energy_unit'])
   })
+  // A-02 (26 October 2026; metered-volume band widened in package 3 r2): a stated heat content far from the EPA Hub default is held.
+  test('A-02: an implausible stated heat content is held, not calculated tenfold', () => {
+    // The reported case: a therm-per-ccf figure entered as MMBtu per ccf. Before, the engine calculated it ten times too high.
+    const slip = gas('1000', 'ccf', { value: '1.037', unit: 'MMBtu per ccf' }), right = gas('1000', 'ccf', { value: '1.037', unit: 'therm per ccf' })
+    expect([plan(slip).action, plan(slip).reasons]).toEqual(['hold', ['heat_content_outside_plausible_range']])
+    const ok = run(plan(right).call!).result!, tenfold = run({ engine: 'scope1', request: { kind: 'natural_gas', input: { period: year, quantity: '1000', unit: 'ccf', heatContent: { value: '1.037', unit: 'MMBtu per ccf' } } } }).result!
+    expect(Number(tenfold.total.display) / Number(ok.total.display)).toBeCloseTo(10, 6)
+    // Inclusive bounds: ±15% of 0.001026 MMBtu per scf at standard conditions; half to double it per ccf or mcf (metered).
+    // [unit, lowest accepted, just under, highest accepted, just over] at the six fractional digits a stated value may have.
+    const bounds = [['MMBtu per scf', '0.000873', '0.000872', '0.001179', '0.00118'], ['MMBtu per ccf', '0.0513', '0.051299', '0.2052', '0.205201'],
+      ['MMBtu per mcf', '0.513', '0.512999', '2.052', '2.052001'], ['therm per ccf', '0.513', '0.512999', '2.052', '2.052001']] as const
+    for (const [unit, low, under, high, over] of bounds) {
+      for (const value of [low, high]) expect([unit, value, plan(gas('1000', 'ccf', { value, unit })).action]).toEqual([unit, value, 'calculate'])
+      for (const value of [under, over]) expect([unit, value, plan(gas('1000', 'ccf', { value, unit })).reasons]).toEqual([unit, value, ['heat_content_outside_plausible_range']])
+    }
+    expect(plan(gas('1000', 'mcf', { value: '1.036', unit: 'MMBtu per mcf' })).action).toBe('calculate') // EIA 2025 U.S. average
+    // Package 3 r2: correct bills from high elevation (the utility's elevation factor is in the printed heat content) and
+    // from delivery above standard pressure calculate; every tenfold slip, either way, is still held.
+    const correct: Array<[string, string]> = [['0.888', 'therm per ccf'], ['0.842', 'therm per ccf'], ['0.809', 'therm per ccf'], ['0.766', 'therm per ccf'], ['0.083', 'MMBtu per ccf'], ['0.83', 'MMBtu per mcf'], ['1.39', 'therm per ccf']]
+    for (const [value, unit] of correct) expect([value, unit, plan(gas('1000', unit === 'MMBtu per mcf' ? 'mcf' : 'ccf', { value, unit })).action]).toEqual([value, unit, 'calculate'])
+    const slips: Array<[string, string]> = [['1.037', 'MMBtu per ccf'], ['0.01037', 'MMBtu per ccf'], ['10.37', 'therm per ccf'], ['0.1037', 'therm per ccf'], ['0.1026', 'MMBtu per mcf'], ['10.26', 'MMBtu per mcf']]
+    for (const [value, unit] of slips) expect([value, unit, plan(gas('1000', unit === 'MMBtu per mcf' ? 'mcf' : 'ccf', { value, unit })).reasons]).toEqual([value, unit, ['heat_content_outside_plausible_range']])
+    // An energy unit doesn't use the heat content, so it is never held for it.
+    expect(plan(gas('100', 'therm', { value: '1.037', unit: 'MMBtu per ccf' })).action).toBe('calculate')
+    // Distillate: 0.138 MMBtu per gallon ±15%. Blank still means the default.
+    for (const hhv of ['0.1173', '0.138', '0.1587']) expect([hhv, plan(generator({ basis: 'measured', gallons: '100' }, hhv)).action]).toEqual([hhv, 'calculate'])
+    for (const hhv of ['0.117299', '0.158701', '5.825', '138000', '999999999999.999999']) expect([hhv, plan(generator({ basis: 'measured', gallons: '100' }, hhv)).reasons]).toEqual([hhv, ['stated_hhv_outside_plausible_range']])
+    expect(plan(generator({ basis: 'measured', gallons: '100' })).action).toBe('calculate')
+  }, ENGINE_TEST_TIMEOUT_MS)
   test('miles typed before their source can be saved, and are held with a named reason', () => {
     const v = vehicle({ miles: { value: '1000', basis: '' } })
     expect([plan(v).action, plan(v).reasons]).toEqual(['hold', ['miles_basis_not_an_engine_token']])

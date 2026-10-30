@@ -10,6 +10,21 @@ const originalFetch = globalThis.fetch
 afterEach(() => { globalThis.fetch = originalFetch })
 
 describe("collection context and ZIP browser boundary", () => {
+  test("preserves boundary metadata and rejects malformed supplied boundary fields", async () => {
+    const location = { id: locationId, name: "Direct company office", inclusion: "included", control: "reporting_company", entityId: null, entity: null,
+      start: null, endExclusive: null, startMode: "period_start", endMode: "period_end" }
+    const context = { companyId, setupVersionId, setupRevision: 2, boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, locations: [location] }
+    const respond = (body: unknown) => { globalThis.fetch = (async () => Response.json({ context: body })) as typeof fetch }
+    respond(context)
+    expect(await loadCollectionContext(companyId, actor)).toEqual(context)
+    for (const bad of [{ ...context, boundaryApproach: "guess" }, { ...context, reportingPeriod: null },
+      { ...context, locations: [{ ...location, startMode: "calendar_year" }] },
+      { ...context, locations: [{ ...location, entityId: locationId, entity: { id: companyId, inclusion: "included", control: "operational_control", ownershipPercent: "50" } }] },
+      { ...context, locations: [{ ...location, entityId: locationId, entity: { id: locationId, inclusion: "included", control: "operational_control", ownershipPercent: "150" } }] }]) {
+      respond(bad)
+      await expect(loadCollectionContext(companyId, actor)).rejects.toThrow("not recognized")
+    }
+  })
   test("loads tenant-scoped company setup locations", async () => {
     let requested = ""
     globalThis.fetch = (async (input, init) => {
