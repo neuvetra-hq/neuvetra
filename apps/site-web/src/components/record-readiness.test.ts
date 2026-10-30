@@ -10,8 +10,8 @@ import { collectionReadinessFindings, legacyVehicleValues, locationReadinessFind
 const company = "73000000-0000-4000-8000-000000000001", setup = "73000000-0000-4000-8000-000000000002"
 const office = "73000000-0000-4000-8000-000000000003", warehouse = "73000000-0000-4000-8000-000000000004", undecided = "73000000-0000-4000-8000-000000000005", removed = "73000000-0000-4000-8000-000000000006"
 const clean = "73000000-0000-4000-8000-0000000000c1", pending = "73000000-0000-4000-8000-0000000000c2", rejected = "73000000-0000-4000-8000-0000000000c3"
-const context: CollectionContext = { companyId: company, setupVersionId: setup, setupRevision: 1, locations: [
-  { id: office, name: "Office", inclusion: "included", control: "reporting_company" },
+const context: CollectionContext = { boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, companyId: company, setupVersionId: setup, setupRevision: 1, locations: [
+  { id: office, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, entity: null, start: null, endExclusive: null, startMode: "period_start", endMode: "period_end" },
   { id: warehouse, name: "Warehouse", inclusion: "excluded", control: "landlord" },
   { id: undecided, name: "Depot", inclusion: "unknown", control: "unknown" }] }
 const file = (id: string, quarantineStatus: CollectionEvidenceMetadata["quarantineStatus"]): CollectionEvidenceMetadata => ({ id, companyId: company, bucket: "neuvetra-private-company-evidence",
@@ -223,4 +223,25 @@ describe.skipIf(!PYTHON)("the screen agrees with the engines", () => {
     }
     console.log(`readiness vs scope 1 engine: ${JSON.stringify(tally)}`)
   }, ENGINE_TEST_TIMEOUT_MS)
+})
+
+// A-02 (26 October 2026): the record screen says why an implausible stated heat content is held, before saving.
+describe("A-02: implausible heat content is caught on the record screen", () => {
+  test("unresolved corporate and location coverage is blocking and explained", () => {
+    const equity = { ...context, boundaryApproach: "equity_share" as const }
+    expect(recordReadiness(gas("100", "therm"), equity, evidence)).toContainEqual({ status: "input_needed", reason: reasonText("equity_share_not_supported") })
+    const partial = { ...context, locations: [{ ...context.locations[0]!, startMode: "specific" as const, start: "2025-07-01" }] }
+    expect(recordReadiness(gas("100", "therm"), partial, evidence)).toContainEqual({ status: "input_needed", reason: reasonText("activity_outside_location_coverage") })
+  })
+  test("the tenfold therm/MMBtu slip and a per-barrel distillate value are blocking, in plain words", () => {
+    const slip = recordReadiness(gas("1000", "ccf", { value: "1.037", unit: "MMBtu per ccf" }), context, evidence)
+    expect(slip).toEqual([{ status: "input_needed", reason: reasonText("heat_content_outside_plausible_range") }])
+    expect(reasonText("heat_content_outside_plausible_range")).toContain("ten times too high")
+    expect(recordReadiness(gas("1000", "ccf", { value: "1.037", unit: "therm per ccf" }), context, evidence)).toEqual([])
+    // Package 3 r2: a correct high-elevation bill (Lake Tahoe, about 0.84 therms per ccf) is not held.
+    expect(recordReadiness(gas("1000", "ccf", { value: "0.842", unit: "therm per ccf" }), context, evidence)).toEqual([])
+    expect(reasonText("heat_content_outside_plausible_range")).toContain("high elevation")
+    expect(recordReadiness(generator({ basis: "measured", gallons: "100" }, "5.825"), context, evidence)).toEqual([{ status: "input_needed", reason: reasonText("stated_hhv_outside_plausible_range") }])
+    expect(recordReadiness(generator({ basis: "measured", gallons: "100" }, "0.138"), context, evidence)).toEqual([])
+  })
 })

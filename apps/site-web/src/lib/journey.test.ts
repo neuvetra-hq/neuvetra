@@ -90,6 +90,24 @@ const methodsUsed = [{ methodVersionId: "scope1.stationary.natural_gas.v2", scop
 const response = (records: unknown[]) => ({ profile: RESULTS_PROFILE, label: DRAFT_LABEL, syntheticOnly: true, environment: "synthetic_staging", methods: methodsUsed, generatedAt: "2026-09-29T00:00:00.000Z", companyId: company, setup: null, records, scope1: null, scope2: null, counts: { records: records.length, calculated: 1, held: 0, withdrawn: 0, excluded: 0, inputNeeded: 0, outsidePeriod: 0, unavailable: 0 }, warnings: [] })
 
 describe("draft results decoding", () => {
+  test("aggregate membership and completeness have strict shapes, while repeated valid result hashes remain valid", () => {
+    const hash = "a".repeat(64), subtotal = { unrounded: "0", display: "0.0000" }
+    const aggregate = { knownSourceSubtotal: subtotal, includedResults: [hash, hash], complete: true }
+    const duplicateResults = { ...response([row({}), row({ recordId: "29500000-0000-4000-8000-000000000002" })]), scope1: aggregate }
+    expect(decodeResults(duplicateResults, company).scope1?.includedResults).toEqual([hash, hash])
+    for (const invalid of [undefined, null, "not-an-array", [1], ["bad-hash"]])
+      expect(() => decodeResults({ ...duplicateResults, scope1: { ...aggregate, includedResults: invalid } }, company)).toThrow("not recognized")
+    for (const invalid of [undefined, null, "true", 1])
+      expect(() => decodeResults({ ...duplicateResults, scope1: { ...aggregate, complete: invalid } }, company)).toThrow("not recognized")
+    const scope2 = { locationBasedSubtotal: subtotal, marketBasedSubtotal: subtotal, locationBasedIncluded: [], marketBasedIncluded: [], marketBasedProvisional: [], locationBasedComplete: false, marketBasedComplete: false }
+    expect(decodeResults({ ...response([]), scope2 }, company).scope2?.marketBasedIncluded).toEqual([])
+    for (const field of ["locationBasedIncluded", "marketBasedIncluded", "marketBasedProvisional"])
+      for (const invalid of [undefined, "not-an-array", ["bad-hash"]])
+        expect(() => decodeResults({ ...response([]), scope2: { ...scope2, [field]: invalid } }, company)).toThrow("not recognized")
+    for (const field of ["locationBasedComplete", "marketBasedComplete"])
+      for (const invalid of [undefined, "false", 0])
+        expect(() => decodeResults({ ...response([]), scope2: { ...scope2, [field]: invalid } }, company)).toThrow("not recognized")
+  })
   test("accepts the contract and rejects anything else", () => {
     expect(decodeResults(response([row({})]), company).records).toHaveLength(1)
     expect(() => decodeResults({ ...response([]), profile: "other" }, company)).toThrow()
@@ -127,6 +145,16 @@ describe("draft results decoding", () => {
 })
 
 describe("journey progress", () => {
+  test("Scope 2 screening uncertainties and unsupported purchased heat stay in Scope 2 coverage", () => {
+    const setup = { company: { legalName: "Synthetic" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" }, locations: [],
+      screening: [{ id: "steam", scope: 2, category: "purchased_steam", state: "unknown", details: "Meter allocation unresolved" },
+        { id: "heat", scope: 2, category: "purchased_heat", state: "yes", details: "Supplier heat bill" },
+        { id: "custom", scope: 1, category: "custom_process", state: "yes", details: "Unmapped source" }] }
+    const view = { currentVersion: { setup } } as never
+    expect(setupMissing(view).find(item => item.id === "screen-steam")).toMatchObject({ scopes: [2] })
+    expect(setupMissing(view).find(item => item.id === "screen-steam")?.detail).toContain("Scope 2")
+    expect(coverageGaps(view, [])).toMatchObject([{ id: "screen-heat", scope: 2 }, { id: "screen-custom", scope: 1 }])
+  })
   test("an empty workspace starts with company setup", () => {
     const status = computeJourneyStatus({ setup: null, context: null, records: [], evidence: [], canManage: true })
     expect(status.next.panel).toBe("setup")
@@ -136,7 +164,7 @@ describe("journey progress", () => {
   })
   test("setup answers without matching records are gaps, never complete", () => {
     const office = "29400000-0000-4000-8000-000000000001"
-    const view = { currentVersion: { setup: { screening: [{ id: "s3", category: "Road & off-road vehicles", state: "yes", details: "" }, { id: "s4", category: "Cooling & fire suppression", state: "no", details: "" }], locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] } } } as never
+    const view = { currentVersion: { setup: { screening: [{ id: "s3", scope: 1, category: "Road & off-road vehicles", state: "yes", details: "" }, { id: "s4", scope: 1, category: "Cooling & fire suppression", state: "no", details: "" }], locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] } } } as never
     const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual" }
     const gaps = coverageGaps(view, [gas])
     expect(gaps.map(gap => gap.id)).toEqual(["screen-s3", `electricity-${office}`])
@@ -147,7 +175,7 @@ describe("journey progress", () => {
   test("“Not sure yet” answers and undecided sites stay open and are never read as complete", () => {
     const office = "29400000-0000-4000-8000-000000000001", depot = "29400000-0000-4000-8000-000000000002"
     const setup = { company: { legalName: "Acme" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" },
-      screening: [{ id: "s4", category: "Cooling & fire suppression", state: "unknown", details: "" }, { id: "s3", category: "Road & off-road vehicles", state: "no", details: "" }],
+      screening: [{ id: "s4", scope: 1, category: "Cooling & fire suppression", state: "unknown", details: "" }, { id: "s3", scope: 1, category: "Road & off-road vehicles", state: "no", details: "" }],
       locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "Landlord pays electricity" }, { id: depot, name: "Depot", inclusion: "unknown", operatorDetails: "" }] }
     const view = { currentVersion: { revision: 1, setup } } as never
     const open = setupMissing(view)

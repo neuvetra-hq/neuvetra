@@ -9,8 +9,8 @@ const company = "b2000000-0000-4000-8000-000000000001", office = "b2000000-0000-
 const v1 = "b2000000-0000-4000-8000-0000000000a1", v2 = "b2000000-0000-4000-8000-0000000000a2", v3 = "b2000000-0000-4000-8000-0000000000a3"
 const pending = "b2000000-0000-4000-8000-0000000000c2"
 // Revision 3 restored revision 1's content byte for byte; revision 2 differed.
-const context: CollectionContext = { companyId: company, setupVersionId: v3, setupRevision: 3, sameContentSetupVersionIds: [v3, v1],
-  locations: [{ id: office, name: "Office", inclusion: "included", control: "reporting_company" }] }
+const context: CollectionContext = { boundaryApproach: "operational_control", reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, companyId: company, setupVersionId: v3, setupRevision: 3, sameContentSetupVersionIds: [v3, v1],
+  locations: [{ id: office, name: "Office", inclusion: "included", control: "reporting_company", entityId: null, entity: null, start: null, endExclusive: null, startMode: "period_start", endMode: "period_end" }] }
 const evidence: CollectionEvidenceMetadata[] = [{ id: pending, companyId: company, bucket: "neuvetra-private-company-evidence", objectKey: `${company}/original/${pending}`,
   originalName: "certificate.pdf", mediaType: "application/pdf", byteLength: 100, sha256: "a".repeat(64), quarantineStatus: "pending", uploadedBy: company, createdAt: "2025-06-01T00:00:00.000Z" }]
 const year = { start: "2025-01-01", endExclusive: "2026-01-01" }
@@ -48,11 +48,14 @@ describe("BF2: setup content, not version IDs", () => {
 })
 
 describe("BF2: the counters agree with Results", () => {
-  test("a market-based file waiting for quarantine review is shown for review on the record but doesn't make it need input", () => {
+  // A-03 (26 October 2026): the waiting file no longer counts meanwhile, so the record's market-based result is held (partial),
+  // but it is still nothing to fix: it never makes the record need input.
+  test("a market-based file waiting for quarantine review holds the market-based result but doesn't make the record need input", () => {
     const findings = recordReadiness(meter(), context, evidence)
-    expect(findings).toEqual([{ status: "review_required", reason: "Market-based instrument 1 evidence is waiting for quarantine review; the market-based figure uses this file until the review finishes.", waitingOnEvidence: true }])
+    expect(findings).toEqual([{ status: "partial", reason: "Market-based result held — Market-based instrument 1 evidence is waiting for quarantine review; it counts once the review clears the file.", waitingOnEvidence: true }])
     const journey = status([meter(), refrigerantStock(), gas()])
-    expect(journey.collection.records.map(row => row.state)).toEqual(["ready", "review_required", "ready"])
+    expect(journey.collection.records.map(row => row.state)).toEqual(["partial", "review_required", "ready"])
+    expect(journey.collection.partial).toBe(1)
     expect(journey.collection.attention).toBe(1)
     expect(journey.evidence.checking).toBe(1)
     expect(journey.next.title).toBe("Finish 1 record that needs input")

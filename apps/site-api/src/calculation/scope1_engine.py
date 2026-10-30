@@ -246,8 +246,18 @@ def _gas(mass_kg: Decimal, unit: str, co2e: Decimal) -> dict:
     return {'mass': exact(mass_kg), 'massUnit': unit, 'co2e': exact(co2e), 'co2eUnit': 'kg CO2e'}
 
 
+def _total(gases: dict) -> dict:
+    # A-04 (Claude, 26 October 2026): the total is summed and rounded in the engine's own precision-96 context, as every
+    # calculation is, so a result is the same whatever precision the calling context has, and aggregate (which
+    # recomputes inside precision 96) reproduces it. Before, the sum and the display rounding ran at the caller's
+    # precision (28 for the CLI): a total needing more digits was rounded differently or raised InvalidOperation.
+    with localcontext() as ctx:
+        ctx.prec = 96
+        total = sum((Decimal(g['co2e']) for g in gases.values()), Decimal(0))
+        return {'unrounded': exact(total), 'display': display(total), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp'}
+
+
 def _result(method_id: str, inp: dict, used: dict, gases: dict, *, status: str, estimates=(), missing=(), findings=(), memo=None, activity=None) -> dict:
-    total = sum((Decimal(g['co2e']) for g in gases.values()), Decimal(0))
     factors = sorted(({'key': k, 'value': e['value'], 'unit': e['unit'], 'cell': e['valueCell'], 'label': e['label']}
                       for k, e in used.items() if not k.startswith('constant:')), key=lambda f: f['key'])
     constants = sorted(({'id': k.split(':', 1)[1], 'value': c['value'], 'unit': c['unit']} for k, c in used.items() if k.startswith('constant:')), key=lambda c: c['id'])
@@ -255,7 +265,7 @@ def _result(method_id: str, inp: dict, used: dict, gases: dict, *, status: str, 
            'registerSha256': REGISTER_SHA256, 'gwpSetId': GWP_SET, 'input': inp, 'inputSha256': digest(inp), 'status': status,
            'activity': activity or {}, 'gases': gases, 'missingGases': sorted(missing), 'estimates': sorted(estimates), 'findings': sorted(findings),
            'memo': memo, 'factorsUsed': factors, 'constantsUsed': constants,
-           'total': None if status in ('input_needed', 'excluded', 'review_required') or not gases else {'unrounded': exact(total), 'display': display(total), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp'}}
+           'total': None if status in ('input_needed', 'excluded', 'review_required') or not gases else _total(gases)}
     return dict(out, resultSha256=digest(out))
 
 
@@ -516,8 +526,10 @@ def aggregate(results: list) -> dict:
                 memo.append(r['memo'])
             else:
                 not_calculated.append({'resultSha256': r['resultSha256'], 'status': r['status'], 'findings': r['findings']})
+        # A-04: rounded once, in the same precision-96 context as the sum.
+        subtotal = {'unrounded': exact(total), 'display': display(total), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp_once'}
     out = {'profile': ENGINE_PROFILE + '.aggregate', 'engineSha256': engine_sha256(), 'registerSha256': REGISTER_SHA256,
-           'knownSourceSubtotal': {'unrounded': exact(total), 'display': display(total), 'unit': 'kg CO2e', 'rounding': 'half_even_4dp_once'},
+           'knownSourceSubtotal': subtotal,
            'includedResults': sorted(included), 'incompleteResults': incomplete, 'notCalculated': not_calculated, 'reportedOutsideScopes': memo,
            'resultCount': len(results), 'complete': bool(results) and not incomplete and not not_calculated}
     return dict(out, aggregateSha256=digest(out))

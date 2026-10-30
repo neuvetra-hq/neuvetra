@@ -83,9 +83,21 @@ export async function loadCollectionContext(companyId: string, actor: HostedWork
   if (same !== undefined && (!Array.isArray(same) || !same.every(id => typeof id === "string" && UUID.test(id)) || new Set(same).size !== same.length
     || (value.context.setupVersionId === null ? same.length !== 0 : !same.includes(value.context.setupVersionId)))) throw new Error("The collection context was not recognized.")
   const locationIds = new Set<string>()
+  const date = (value: unknown) => value === null || typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+  if (value.context.boundaryApproach !== undefined && !["unknown", "operational_control", "financial_control", "equity_share"].includes(value.context.boundaryApproach)) throw new Error("The collection context was not recognized.")
+  const period = value.context.reportingPeriod
+  if (period !== undefined && (!period || !date(period.start) || !date(period.endExclusive))) throw new Error("The collection context was not recognized.")
   for (const location of value.context.locations) {
     if (!location || !UUID.test(location.id) || locationIds.has(location.id) || typeof location.name !== "string" || !["unknown", "included", "excluded"].includes(location.inclusion) || typeof location.control !== "string") throw new Error("The collection context was not recognized.")
     locationIds.add(location.id)
+    if ((location.entityId !== undefined && location.entityId !== null && !UUID.test(location.entityId))
+      || (location.start !== undefined && !date(location.start)) || (location.endExclusive !== undefined && !date(location.endExclusive))
+      || (location.startMode !== undefined && !["unknown", "period_start", "specific"].includes(location.startMode))
+      || (location.endMode !== undefined && !["unknown", "period_end", "specific"].includes(location.endMode))) throw new Error("The collection context was not recognized.")
+    const entity = location.entity
+    if (entity !== undefined && entity !== null && (!UUID.test(entity.id) || entity.id !== location.entityId || !["included", "excluded", "unknown"].includes(entity.inclusion)
+      || !["unknown", "operational_control", "financial_control", "none"].includes(entity.control)
+      || !(entity.ownershipPercent === null || typeof entity.ownershipPercent === "string" && /^(?:100(?:\.0+)?|(?:[0-9]|[1-9][0-9])(?:\.[0-9]+)?)$/.test(entity.ownershipPercent)))) throw new Error("The collection context was not recognized.")
   }
   return value.context
 }

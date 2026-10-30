@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react"
 import { deriveCollectionQuantity, savedAgainstCurrentSetup, withCurrentSetupVersion, type CollectionActivity, type CollectionActivityKind, type CollectionInstrument, type CollectionPayload } from "../../../../packages/neuvetra-database/src/collection-contract"
-import { planCollectionCalculation } from "../../../../packages/neuvetra-database/src/collection-engine-input"
+import { instrumentEvidenceClaims, planCollectionCalculation, type InstrumentEvidenceClaims } from "../../../../packages/neuvetra-database/src/collection-engine-input"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
 import { CollectionApiError, downloadCollectionEvidence, listCollectionActivities, listCollectionEvidence, listGridLossLineages, loadCollectionContext, loadCollectionVersion, lookupCollectionZip, saveCollectionActivity, saveGridLossLineage, uploadCollectionEvidence, type CollectionActivityRecord, type CollectionActivitySaveInput, type CollectionActivityVersion, type CollectionContext, type CollectionEvidenceMetadata, type CollectionZipLookup, type GridLossLineage } from "@/lib/collection-api"
@@ -94,7 +94,8 @@ function scaledDecimal(value: string): bigint | null {
   return BigInt(whole!) * 1000n + BigInt(fraction.padEnd(3, "0"))
 }
 
-/** `waitingOnEvidence` (BF2): only waiting for a file's quarantine review; the engines still calculate the record. */
+/** `waitingOnEvidence` (BF2): only waiting for a file's quarantine review, nothing to fix. Since A-03 the market-based
+ *  result is held meanwhile (shown as partial); the location-based result still calculates. */
 export type CollectionReadinessFinding = { status: "input_needed" | "partial" | "review_required" | "excluded" | "memo_only" | "withdrawn"; reason: string; waitingOnEvidence?: true }
 export function locationReadinessFindings(activity: CollectionActivity, context: CollectionContext | null): CollectionReadinessFinding[] {
   if (!context || !activity.locationId) return []
@@ -247,17 +248,16 @@ const DRAFT_ID = "00000000-0000-4000-8000-000000000000"
  * - adapter holds: every adapter reason is shown (in the screen's words where it has them), at least one finding blocks,
  *   and nothing is called partly calculated (N7: a held record isn't partly calculated);
  * - adapter calculates: an instrument problem only holds the market-based result (engine v3), so it is shown as partial;
- *   an instrument file waiting for quarantine review and a rejected record-level file don't stop the engines, so they
- *   are shown for review (the waiting file is marked waitingOnEvidence, BF2).
+ *   a pending or shared instrument file holds market-based only; a rejected record-level file stays a review finding.
  *   Holds only the engines decide (purchases-only fuel, refrigerant answers, a negative balance) stay as the screen says.
  * Without a company context the screen's own rules are returned unchanged.
  */
-export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = []): CollectionReadinessFinding[] {
+export function recordReadiness(activity: CollectionActivity, context: CollectionContext | null, evidence: CollectionEvidenceMetadata[] = [], claims?: InstrumentEvidenceClaims): CollectionReadinessFinding[] {
   const screen = [...collectionReadinessFindings(activity, evidence), ...locationReadinessFindings(activity, context)]
   if (!context) return screen
   let plan: ReturnType<typeof planCollectionCalculation>
   try {
-    plan = planCollectionCalculation({ id: DRAFT_ID, recordId: DRAFT_ID, companyId: context.companyId, revision: 0, previousVersionId: null, correctionReason: null, activity, payloadSha256: "0".repeat(64), createdBy: DRAFT_ID, createdAt: "1970-01-01T00:00:00.000Z" }, context, evidence)
+    plan = planCollectionCalculation({ id: DRAFT_ID, recordId: DRAFT_ID, companyId: context.companyId, revision: 0, previousVersionId: null, correctionReason: null, activity, payloadSha256: "0".repeat(64), createdBy: DRAFT_ID, createdAt: "1970-01-01T00:00:00.000Z" }, context, evidence, claims)
   } catch { return screen }
   const unique = (items: CollectionReadinessFinding[]) => items.filter((item, index) => items.findIndex(other => other.status === item.status && other.reason === item.reason) === index)
   if (plan.action === "hold") {
@@ -266,14 +266,15 @@ export function recordReadiness(activity: CollectionActivity, context: Collectio
     const explained = (code: string) => { const pattern = SCREEN_EXPLAINS[code]; return !!pattern && kept.some(finding => BLOCKING.has(finding.status) && pattern.test(finding.reason)) }
     return unique([...kept, ...plan.reasons.filter(code => !explained(code)).map(code => ({ status, reason: reasonText(code) }))])
   }
-  return unique(screen.map((finding): CollectionReadinessFinding => {
+  const shared = (plan.notes ?? []).filter(note => /^instrument_\d+_evidence_shared$/.test(note)).map((note): CollectionReadinessFinding => ({ status: "partial", reason: `Market-based result held — ${reasonText(note)}` }))
+  return unique([...screen.map((finding): CollectionReadinessFinding => {
     if (finding.status === "partial") return finding
     // The engines calculate these; the finding is something to check, not a hold.
     if (finding.reason.startsWith("Linked evidence “")) return { status: "review_required", reason: finding.reason }
     if (!finding.reason.startsWith("Market-based instrument")) return finding
-    if (finding.reason.endsWith(" evidence is waiting for quarantine review.")) return { status: "review_required", reason: `${finding.reason.slice(0, -1)}; the market-based figure uses this file until the review finishes.`, waitingOnEvidence: true }
+    if (finding.reason.endsWith(" evidence is waiting for quarantine review.")) return { status: "partial", reason: `Market-based result held — ${finding.reason.slice(0, -1)}; it counts once the review clears the file.`, waitingOnEvidence: true }
     return { status: "partial", reason: `Market-based result held — ${finding.reason}` }
-  }))
+  }), ...shared])
 }
 
 /** A saved vehicle record whose fuel or vehicle type is a legacy value (not blank, not a FIELDS token, or not a pair). A new record's blank choices are not legacy (N7). */
@@ -581,7 +582,10 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
   }
 
   const p = draft.payload
-  const draftFindings = recordReadiness(draft, context, evidence)
+  // A-01: claims across the company, with the draft in place of the record it edits.
+  const savedClaims = context ? instrumentEvidenceClaims(records.map(row => row.currentVersion.activity), context, evidence) : undefined
+  const draftClaims = context ? instrumentEvidenceClaims([...records.filter(row => row.id !== selected?.id).map(row => row.currentVersion.activity), draft], context, evidence) : undefined
+  const draftFindings = recordReadiness(draft, context, evidence, draftClaims)
   const separatorSuggestion = thousandsSeparatorSuggestion(draft.quantity.originalValue)
   const duplicateRows = records.filter(row => {
     if (row.id === selected?.id || row.kind !== draft.kind) return false
@@ -608,7 +612,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     <div className="worksheet-card"><h2>Saved activities</h2>
       <div className="collection-record-list">{records.length ? records.map(row => {
         const activity = row.currentVersion.activity as CollectionDraft
-        const readiness = recordReadiness(activity, context, evidence)
+        const readiness = recordReadiness(activity, context, evidence, savedClaims)
         return <div key={row.id} className="setup-subcard">
           <strong>{kinds.find(([id]) => id === row.kind)?.[1] ?? row.kind}</strong> · version {row.currentVersion.revision} {activity.state === "withdrawn" && <span className="collection-status-badge">Withdrawn</span>}
           <p>{activity.period.start} to {inclusivePeriodEnd(activity.period.endExclusive)} (last day covered) · {activity.kind === "fugitive" ? "Derived net release" : "Quantity"}: {activity.quantity.originalValue || "unknown"} {activity.quantity.originalUnit}</p>
@@ -642,7 +646,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
         {duplicateRows.length > 0 && <div className="collection-duplicate-warning" role="alert"><strong>Probable duplicate</strong><p>{duplicateRows.length} active record{duplicateRows.length === 1 ? "" : "s"} use this activity type and source ID during an overlapping period. Review the saved record before adding another.</p></div>}
         <ReadinessPanel findings={draftFindings} />
         {draft.kind === "natural_gas" && "heatContent" in p && VOLUMETRIC_GAS_UNITS.has(draft.quantity.originalUnit) && <div className="setup-subcard"><h3>Natural gas</h3><p>Use the heat content printed on the bill. Do not assume a conversion.</p><div className="setup-grid">
-          <Field label="Bill heat content" value={p.heatContent?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).heatContent = value ? { value, unit: p.heatContent?.unit ?? "MMBtu per ccf" } : null })} />
+          <Field label="Bill heat content" value={p.heatContent?.value ?? ""} onChange={value => edit(next => { (next.payload as typeof p).heatContent = value ? { value, unit: p.heatContent?.unit ?? "MMBtu per ccf" } : null })} hint="Natural gas is about 1.026 therms per ccf (0.1026 MMBtu per ccf, 1.026 MMBtu per mcf); bills at high elevation show less. A value far outside that is held: check the unit." />
           <Select label="Heat-content unit" value={p.heatContent?.unit ?? "MMBtu per ccf"} options={[["MMBtu per scf", "MMBtu per scf"], ["MMBtu per ccf", "MMBtu per ccf"], ["MMBtu per mcf", "MMBtu per mcf"], ["therm per ccf", "therm per ccf"]]} onChange={value => edit(next => { (next.payload as typeof p).heatContent = { value: p.heatContent?.value ?? "", unit: value as NonNullable<typeof p.heatContent>["unit"] } })} />
         </div></div>}
         {draft.kind === "distillate_no2" && "consumption" in p && <div className="setup-subcard"><h3>Generator fuel</h3><div className="setup-grid">
@@ -651,7 +655,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
             <Field label="Purchased gallons" value={p.consumption.purchasedGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{purchasedGallons:string}}).consumption.purchasedGallons = value; next.quantity.originalValue = value })} />
             {p.consumption.basis === "purchases_with_tank_levels" && <><Field label="Opening tank level (gallons)" value={p.consumption.openingGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{openingGallons:string}}).consumption.openingGallons = value })} /><Field label="Closing tank level (gallons)" value={p.consumption.closingGallons} onChange={value => edit(next => { (next.payload as typeof p & {consumption:{closingGallons:string}}).consumption.closingGallons = value })} /></>}
           </>}
-          <Field label="Stated heating value (MMBtu per gallon, optional)" value={p.statedHhvMmbtuPerGallon ?? ""} onChange={value => edit(next => { (next.payload as typeof p).statedHhvMmbtuPerGallon = value || null })} />
+          <Field label="Stated heating value (MMBtu per gallon, optional)" value={p.statedHhvMmbtuPerGallon ?? ""} onChange={value => edit(next => { (next.payload as typeof p).statedHhvMmbtuPerGallon = value || null })} hint="No. 2 fuel oil is about 0.138 MMBtu per gallon; leave blank to use that default. A value more than 15% from it is held: check the unit." />
         </div></div>}
         {draft.kind === "vehicle" && "fuelEconomy" in p && <div className="setup-subcard"><h3>Vehicle or linked group</h3><div className="setup-grid">
           <Select label="Fuel" value={vehicleFuels.includes(p.fuel as typeof vehicleFuels[number]) ? p.fuel : ""} options={[["", "Choose fuel"] as const, ...vehicleFuels.map(value => [value, value] as const)]} onChange={value => edit(next => { if (next.kind !== "vehicle") return; next.payload.fuel = value; next.payload.vehicleType = "" })} />

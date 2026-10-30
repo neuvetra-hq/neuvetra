@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from decimal import localcontext
 from pathlib import Path
 
 import scope1_engine as e
@@ -197,6 +198,67 @@ class Aggregation(unittest.TestCase):
     def test_empty_aggregate_is_not_complete(self):
         a = e.aggregate([])
         self.assertEqual((a['complete'], a['resultCount'], a['knownSourceSubtotal']['display']), (False, 0, '0.0000'))
+
+
+QUANTITIES = ('0.001', '17.125', '123456789.987', '999999999999.999')
+
+
+def regression_requests():
+    """A-04 regression set: every Scope 1 kind, unit and option the adapter can send, at small, ordinary and maximum
+    quantities (the replay in claude-dev/2026-10-26-scope1-precision-a04 runs the same set through old and new bytes)."""
+    out = []
+    heat = [('0.001026', 'MMBtu per scf'), ('0.102579', 'MMBtu per ccf'), ('1.025987', 'MMBtu per mcf'), ('1.037123', 'therm per ccf'), ('999999999999.999999', 'MMBtu per scf')]
+    fleet = [dict(fuel='gasoline', vehicleType=t) for t in e.GASOLINE_TYPES] + [dict(fuel='diesel', vehicleType=t) for t in e.DIESEL_TYPES]
+    terms = lambda q: {'PN': q, 'CN': '0', 'PS': q, 'CD': q, 'RD': '0.001'}
+    fugitive = dict(insideBoundary=True, maintainsRefrigerantStock=False, retrofitInPeriod=False, contractorRecordsComplete=True, eventChronologyComplete=True)
+    for q in QUANTITIES:
+        out += [{'kind': 'natural_gas', 'input': dict(period=P, quantity=q, unit=u)} for u in ('MMBtu', 'therm')]
+        out += [{'kind': 'natural_gas', 'input': dict(period=P, quantity=q, unit=u, heatContent={'value': v, 'unit': hu})} for u in ('scf', 'ccf', 'mcf') for v, hu in heat]
+        for hhv in (None, '0.137123', '0.138', '999999999999.999999'):
+            for c in ({'basis': 'measured', 'gallons': q}, {'basis': 'purchases_with_tank_levels', 'purchasedGallons': q, 'openingGallons': q, 'closingGallons': '0.001'}):
+                out.append({'kind': 'distillate_no2', 'input': dict(period=P, consumption=c, **({} if hhv is None else {'statedHhvMmbtuPerGallon': hhv}))})
+        for v in fleet:
+            for year in (1975, 2005, 2015, 2024):
+                for extra in ({}, {'miles': {'value': q, 'basis': 'odometer'}}, {'fuelEconomy': {'mpg': '23.456', 'source': 'fleet_record'}}):
+                    out.append({'kind': 'vehicle', 'input': dict(period=P, modelYear=year, gallons=q, **v, **extra)})
+        for gas in e.REFRIGERANT_GWP + ['R-22']:
+            for unit in ('kg', 'lb'):
+                out.append({'kind': 'fugitive', 'input': dict(period=P, gas=gas, unit=unit, terms=terms(q), **fugitive)})
+    return out
+
+
+class ContextIndependence(unittest.TestCase):
+    """A-04 (Claude, 26 October 2026): totals were summed and rounded at the caller's precision (28 for the CLI), outside
+    the engine's precision-96 context, while aggregate recomputes inside it (the Scope 2 defect fixed by PR #20)."""
+
+    def test_results_do_not_depend_on_the_callers_precision_and_always_aggregate(self):
+        complete = []
+        for request in regression_requests():
+            outcomes = []
+            for prec in (12, 28, 200):
+                with localcontext() as ctx:
+                    ctx.prec = prec
+                    try:
+                        outcomes.append(e.calculate(request))
+                    except e.Refused as refused:
+                        outcomes.append(('refused', refused.code))
+            self.assertEqual(outcomes[0], outcomes[1], request)
+            self.assertEqual(outcomes[1], outcomes[2], request)
+            if isinstance(outcomes[0], dict) and outcomes[0]['total']:
+                complete.append(outcomes[0])
+        self.assertGreater(len(complete), 400)
+        for i in range(0, len(complete), 200):
+            e.aggregate(complete[i:i + 200])  # raises Refused('result_integrity') if any result is not reproduced
+
+    def test_the_reported_case(self):
+        # An accepted distillate record with a very large stated HHV raised InvalidOperation in display rounding, so the
+        # CLI answered "engine unavailable". By hand: 999,999,999,999.999 gal x 999,999,999,999.999999 MMBtu/gal =
+        # 999999999999998999000000.000000001 MMBtu; x (73.96 + 3/1000 x 28 + 0.6/1000 x 265) = 74.203 kg CO2e/MMBtu.
+        r = calc('distillate_no2', consumption={'basis': 'measured', 'gallons': '999999999999.999'}, statedHhvMmbtuPerGallon='999999999999.999999')
+        self.assertEqual(r['total'], {'unrounded': '74202999999999925722797000.000000074203', 'display': '74202999999999925722797000.0000', 'unit': 'kg CO2e', 'rounding': 'half_even_4dp'})
+        self.assertEqual(e.aggregate([r])['knownSourceSubtotal']['display'], '74202999999999925722797000.0000')
+        run = subprocess.run([sys.executable, str(HERE / 'scope1_engine.py')], input=json.dumps({'action': 'calculate', 'request': {'kind': 'distillate_no2', 'input': r['input']}}).encode(), capture_output=True)
+        self.assertEqual((run.returncode, json.loads(run.stdout)['result']), (0, r))
 
 
 class Dates(unittest.TestCase):

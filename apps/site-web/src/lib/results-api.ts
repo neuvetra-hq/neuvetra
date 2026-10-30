@@ -80,6 +80,7 @@ const DECIMAL = /^-?\d+(\.\d+)?$/
 const record = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value)
 const total = (value: unknown) => record(value) && typeof value.display === "string" && DECIMAL.test(value.display) && typeof value.unrounded === "string"
 const SHA256 = /^[0-9a-f]{64}$/
+const resultHashes = (value: unknown) => Array.isArray(value) && value.every(hash => typeof hash === "string" && SHA256.test(hash))
 const method = (value: unknown) => record(value) && typeof value.methodVersionId === "string" && value.methodVersionId.length > 0 && [1, 2].includes(value.scope as number)
   && typeof value.engineSha256 === "string" && SHA256.test(value.engineSha256) && typeof value.registerSha256 === "string" && SHA256.test(value.registerSha256)
   // A released method names its release; an unreleased one names none.
@@ -95,6 +96,8 @@ const inSubtotal = (value: unknown) => record(value) && typeof value.scope1 === 
 export class NotSyntheticResultsError extends Error { constructor() { super("Draft results are only shown for synthetic test companies.") } }
 
 /** Rejects anything that is not the draft-results contract, so a malformed response can never show a number. */
+/** A-01/A-03: the adapter's notes on why an instrument's certificate wasn't counted, shown next to the engine's own findings. */
+export const instrumentNotes = (row: Pick<ResultRow, "plan">): string[] => (row.plan.notes ?? []).filter(note => /^instrument_\d+_evidence_(?:pending_scan|shared|not_usable)$/.test(note))
 export function decodeResults(value: unknown, companyId: string): ResultsResponse {
   if (!record(value) || value.profile !== RESULTS_PROFILE || value.companyId !== companyId || typeof value.label !== "string" || !Array.isArray(value.records) || !record(value.counts)) throw new Error("The results response was not recognized.")
   // Board option 1: numbers only from the synthetic staging environment, each tied to a named unreleased method.
@@ -134,9 +137,11 @@ export function decodeResults(value: unknown, companyId: string): ResultsRespons
     if ((flags.scope1 && !s1) || ((flags.scope2LocationBased || flags.scope2MarketBased) && !s2)) throw new Error("The results response was not recognized.")
   }
   const s1 = value.scope1 as Record<string, unknown> | null
-  if (s1 !== null && (!record(s1) || !total(s1.knownSourceSubtotal))) throw new Error("The results response was not recognized.")
+  if (s1 !== null && (!record(s1) || !total(s1.knownSourceSubtotal) || !resultHashes(s1.includedResults) || typeof s1.complete !== "boolean")) throw new Error("The results response was not recognized.")
   const s2 = value.scope2 as Record<string, unknown> | null
-  if (s2 !== null && (!record(s2) || !total(s2.locationBasedSubtotal) || !total(s2.marketBasedSubtotal))) throw new Error("The results response was not recognized.")
+  if (s2 !== null && (!record(s2) || !total(s2.locationBasedSubtotal) || !total(s2.marketBasedSubtotal)
+    || !resultHashes(s2.locationBasedIncluded) || !resultHashes(s2.marketBasedIncluded) || !resultHashes(s2.marketBasedProvisional)
+    || typeof s2.locationBasedComplete !== "boolean" || typeof s2.marketBasedComplete !== "boolean")) throw new Error("The results response was not recognized.")
   return value as unknown as ResultsResponse
 }
 
@@ -193,7 +198,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     `# Boundary approach: ${labels.boundary(setup?.boundaryApproach ?? "unknown")}`,
     `# Generated: ${results.generatedAt}`,
     "# kg CO2e figures are exact engine output (rounded once, half-even, 4 decimals). Only rows marked Yes in the matching \"In … subtotal\" column are in that subtotal.",
-    "# Evidence: each file shows its quarantine-review state in brackets. Only [cleared] files have passed quarantine review (in this beta, an operator check, not a malware scan); pending, failed, rejected or missing files do not support a figure. Evidence state does not change any figure.",
+    "# Evidence: each file shows its quarantine-review state in brackets. Only [cleared] files have passed quarantine review (in this beta, an operator check, not a malware scan); pending, failed, rejected or missing files do not support a figure. Evidence state changes no figure, except that a market-based certificate counts only once its file has cleared review, and only for one claim.",
     `# Methods: ${results.methods.map(item => `${item.methodVersionId} (${item.releaseStatus === "released_beta" ? `released beta, release ${item.releaseId}` : "unreleased beta, not released"}) engine ${item.engineSha256.slice(0, 12)} register ${item.registerSha256.slice(0, 12)}`).join("; ") || "none calculated"}`,
     ...(labels.completeness ? [`# Completeness, Scope 1: ${labels.completeness.scope1}`, `# Completeness, Scope 2 location-based: ${labels.completeness.scope2Location}`, `# Completeness, Scope 2 market-based: ${labels.completeness.scope2Market}`] : []),
     ...(labels.coverage ?? []).map(line => `# ${oneLine(line)}`),
@@ -204,7 +209,7 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
     const code = row.outcome === "calculated" ? (s1?.status ?? s2?.locationBased.status ?? "") : row.plan.status === "withdrawn" || row.plan.status === "excluded" ? row.plan.status : row.periodCheck === "outside" || row.periodCheck === "partial" ? `${row.periodCheck === "partial" ? "partly_" : ""}outside_reporting_period` : row.plan.status ?? row.outcome
     const yes = (flag: boolean, applies: boolean) => applies ? (flag ? "Yes" : "No") : ""
     const periodHeld = row.plan.status !== "withdrawn" && row.plan.status !== "excluded"
-    const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
+    const notes = [...new Set([...(periodHeld && row.periodCheck === "outside" ? ["outside_reporting_period"] : periodHeld && row.periodCheck === "partial" ? ["partly_outside_reporting_period"] : []), ...row.plan.reasons, ...instrumentNotes(row), ...(row.refusalCode ? [row.refusalCode] : []), ...(s1?.findings ?? []), ...(s1?.estimates ?? []), ...(s2?.findings ?? []), ...(s2?.estimates ?? [])].map(labels.reason))].join(" ")
     const files = row.evidence.map(evidenceFileText).join("; ")
     const run = s1 ?? s2
     return [String(row.scope), labels.kind(row.kind), row.locationName ?? "", row.sourceId, row.period.start, lastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit, labels.quality?.(row.quality) ?? row.quality, labels.status(row), code,
@@ -212,7 +217,9 @@ export function resultsCsv(results: ResultsResponse, labels: CsvLabels): string 
       s1?.total?.display ?? "", s2?.locationBased.total?.display ?? "", s2?.marketBased.total?.display ?? "", run ? methodLabel(run, results.methods) : "", s1?.gwpSetId ?? s2?.gwpSetId ?? "", files, notes].map(escape).join(",")
   })
   const subtotal = (label: string, value: string | undefined) => ["Subtotal", label, "", "", "", "", "", "", "", "", "", "", "", "", label === "Scope 1" ? value ?? "" : "", label === "Scope 2 location-based" ? value ?? "" : "", label === "Scope 2 market-based" ? value ?? "" : "", "", "", "", `Engine aggregate of rows marked Yes under "In ${label === "Scope 1" ? "Scope 1" : label === "Scope 2 location-based" ? "location-based" : "market-based"} subtotal"`].map(escape).join(",")
-  const totals = [subtotal("Scope 1", results.scope1?.knownSourceSubtotal.display), subtotal("Scope 2 location-based", results.scope2?.locationBasedSubtotal.display), subtotal("Scope 2 market-based", results.scope2?.marketBasedSubtotal.display)]
+  const totals = [subtotal("Scope 1", results.scope1?.includedResults.length ? results.scope1.knownSourceSubtotal.display : undefined),
+    subtotal("Scope 2 location-based", results.scope2?.locationBasedIncluded.length ? results.scope2.locationBasedSubtotal.display : undefined),
+    subtotal("Scope 2 market-based", results.scope2?.marketBasedIncluded.length ? results.scope2.marketBasedSubtotal.display : undefined)]
   // BF1: header lines carry user text (legal name, site names, notes) and commas ("Jan 1 – Dec 31, 2025"), so each is one
   // escaped cell; unescaped, a comma started a new cell that a spreadsheet could run as a formula.
   return [...meta.map(escape), header.join(","), ...lines, ...totals].join("\n") + "\n"

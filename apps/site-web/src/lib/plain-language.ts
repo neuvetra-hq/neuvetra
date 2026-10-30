@@ -35,6 +35,19 @@ export const BOUNDARY_LABELS: Record<string, string> = { unknown: "Not decided y
 
 /** Every adapter hold reason and engine finding, in words a preparer can act on. Unknown codes fall back to a readable form. */
 const REASONS: Record<string, string> = {
+  boundary_metadata_unavailable: "Held: reload the company setup boundary details before calculating.",
+  location_entity_unresolved: "Held: link this location to an existing company entity, or identify it as directly controlled by the reporting company.",
+  entity_excluded_by_company_setup: "Excluded: the location's entity is excluded in company setup.",
+  entity_inclusion_unknown: "Held: decide whether the location's entity is included in company setup.",
+  equity_share_not_supported: "Held: equity-share allocation is not supported by these draft calculations. No ownership allocation has been applied.",
+  boundary_approach_unknown: "Held: choose the company's organizational boundary approach in company setup.",
+  entity_outside_control_boundary: "Excluded: company setup states that the entity is outside the selected control boundary.",
+  entity_control_unresolved: "Held: confirm the entity's control assessment for the selected boundary approach.",
+  location_control_unresolved: "Held: confirm who controls this location and its relationship to the reporting company.",
+  reporting_period_unknown: "Held: complete the reporting period in company setup.",
+  activity_outside_reporting_period: "Held: this activity extends outside the company's reporting period. Split it using supported source quantities; no prorating was applied.",
+  location_coverage_unknown: "Held: complete this location's start and end coverage in company setup.",
+  activity_outside_location_coverage: "Held: this activity extends outside the location's reporting coverage. Split it using supported source quantities; no prorating was applied.",
   // collection -> engine adapter (methods v7)
   record_withdrawn: "This record was withdrawn, so it is not counted.",
   location_not_in_current_setup: "Its site is no longer in your company setup. Choose a current site.",
@@ -85,6 +98,9 @@ const REASONS: Record<string, string> = {
   default_hhv: "Used the published default heating value for this fuel.",
   unsupported_unit: "This unit isn’t supported for this activity.",
   unsupported_refrigerant: "This refrigerant isn’t supported yet.",
+  // A-02: plausibility holds on a stated heat content (adapter)
+  heat_content_outside_plausible_range: "The stated heat content is outside the range natural gas can have in this unit. Natural gas is about 1.026 therms per ccf (0.1026 MMBtu per ccf, 1.026 MMBtu per mcf, 0.001026 MMBtu per standard cubic foot); bills at high elevation show less, about 0.75 to 0.9 therms per ccf. Check the unit on the bill: a therm figure entered as MMBtu is ten times too high.",
+  stated_hhv_outside_plausible_range: "The stated heating value is more than 15% away from the EPA default for No. 2 distillate (0.138 MMBtu per gallon). Check the supplier’s figure and its unit, or leave it blank to use the default.",
   // Scope 2 engine findings
   utility_not_listed_for_zip_and_subregion: "The utility doesn’t match the ZIP code. Run the ZIP lookup again.",
   utility_required_for_multi_subregion_zip: "This ZIP spans more than one grid region. Choose the utility.",
@@ -107,9 +123,14 @@ const REASONS: Record<string, string> = {
 export function reasonText(code: string): string {
   if (REASONS[code]) return REASONS[code]!
   const [base, detail] = code.split(":")
-  // BF2: the adapter's code keeps its name; the text says quarantine review, not scan.
+  // BF2: the adapter's code keeps its name; the text says quarantine review, not scan. A-03: until it clears, it isn't counted.
   const waiting = /^instrument_(\d+)_evidence_pending_scan$/.exec(code)
-  if (waiting) return `Market-based instrument ${waiting[1]} evidence is waiting for quarantine review; the market-based figure uses it until the review finishes.`
+  if (waiting) return `Market-based instrument ${waiting[1]} evidence is waiting for quarantine review, so the market-based figure is held until the review clears it.`
+  // A-01: one certificate file supports one claim.
+  const shared = /^instrument_(\d+)_evidence_shared$/.exec(code)
+  if (shared) return `Market-based instrument ${shared[1]} uses a certificate file that also supports another market-based claim. A certificate can be claimed only once, so the market-based figure is held. Give each claim its own certificate or retirement record.`
+  const unusable = /^instrument_(\d+)_evidence_not_usable$/.exec(code)
+  if (unusable) return `Market-based instrument ${unusable[1]} evidence can’t be used (missing, rejected or failed review), so the market-based figure is held.`
   if (base === "model_year_proxy") return `Model year is newer than the latest published factors; used the ${detail?.replace(/_/g, " ") ?? "latest"} band.`
   if (base === "miles_estimated_from_fuel_economy") return `Miles were estimated from fuel economy (${detail?.replace(/_/g, " ") ?? "stated source"}).`
   if (REASONS[base!]) return REASONS[base!]!
