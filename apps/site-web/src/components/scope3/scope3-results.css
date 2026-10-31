@@ -81,6 +81,12 @@ section[aria-labelledby="scope3-report-versions"] > .nv-report__scroll :is(th, t
 .nv-report [aria-labelledby="scope3-report-title"] .worksheet-details * { color: #111; }
 @media print {
   .s3-todo, .s3-filters { display: none; }
+  /* Keep trace labels with their values and each quality badge intact across pages. */
+  .nv-report [aria-labelledby="scope3-report-title"] .worksheet-details dt,
+  .nv-report [aria-labelledby="scope3-report-title"] > h4,
+  .nv-report--frozen > h4,
+  .nv-report [aria-labelledby="scope3-report-title"] > div > p:has(> strong) { break-after: avoid-page; page-break-after: avoid; }
+  .nv-report [aria-labelledby="scope3-report-title"] .worksheet-details .nv-badge { display: inline-block; break-inside: avoid; page-break-inside: avoid; }
 }
 
 /* Round 2 polish (lane D): the setup screen's assessment editor, opened inside the Results to-do list, gets the design
