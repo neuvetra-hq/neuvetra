@@ -1,7 +1,7 @@
 {
   "id": "S3-COMPLETE-20261031",
-  "updatedAtUtc": "2026-10-31T19:14:49.145340+00:00",
-  "status": "final_native_and_browser_verification",
+  "updatedAtUtc": "2026-10-31T19:59:39.453625+00:00",
+  "status": "repairing_final_browser_findings",
   "definitionOfDoneMet": false,
   "branch": "codex/scope3-completion-20261031",
   "base": "143bac1838701c97f1e4ce07879b5cab2cb3575e",
@@ -18,12 +18,14 @@
   "N5Retired": false,
   "hostedActions": false,
   "mergeOrDeploy": false,
-  "nextAction": "Final candidate: run all native and broad checks, refresh four-company r4.6 oracle and settled browser evidence, then require three independent exact-commit scores. No shipping action.",
+  "nextAction": "Commit independently checked Overview/retry/Scope3 presentation fixes, then repeat all final gates on exact candidate. No merge or deployment.",
   "topic": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-10-31-scope3-completion",
   "preflightAgent": "finished; no worker continuing in background",
   "workingTreeReconstructed": "f89cb2146e10b56dd43b9ce9caa42be30145506e",
   "activeWorkers": [
-    "s3_native_harness: final native checks after this commit; exact process status comes from execution evidence"
+    "s3_final_engineering_r4: browser capture harness repairs",
+    "s3_final_product: scoped presentation repair author",
+    "s3_visual_c3_c4: independent repair review"
   ],
   "broadChecks": {
     "run": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-10-31-scope3-completion\\integration-checks\\20261031T180102Z",
@@ -56,5 +58,13 @@
   "currentMainIdentity": "Four companies pass strict calculated payload comparison and unchanged saved setup/activity/evidence identities; final candidate rerun required.",
   "oracle": "Original r4.3 failures preserved. Explicit r4.4 mission amendments and independently hardened r4.6 pass 9142 result and 5021 CSV comparisons on captured evidence; final rerun required.",
   "browser": "Preliminary capture gaps and confirmed mobile withdrawal defect preserved. Layout and capture helper regressions pass; final settled walk and all-image inspection pending.",
-  "nativeReportTest": "Before: Bun rejects.toThrow stalls after PostgreSQL correctly rejects immutable UPDATE. Explicit awaited rejection checks Error, SQLSTATE55000 and immutable message; full lifecycle passed diagnostic copy. Full final native sequence pending."
+  "nativeReportTest": "Before: Bun rejects.toThrow stalls after PostgreSQL correctly rejects immutable UPDATE. Explicit awaited rejection checks Error, SQLSTATE55000 and immutable message; full lifecycle passed diagnostic copy. Full final native sequence pending.",
+  "latestDiagnostic": {
+    "commit": "c86f9adba2ff018222759a721fddeacf19b6d190",
+    "run": "20261031T193050875627Z-e2e",
+    "oracleAndCsv": "passed all four companies",
+    "scope12AndSavedIdentities": "passed",
+    "browser": "diagnostic failure: Overview context, trace contrast and mobile layout findings; capture false positives separately repaired",
+    "cleanup": "server and database stopped; source/harness unchanged"
+  }
 }

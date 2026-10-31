@@ -28,14 +28,14 @@ const view = (lines: any[], extra: Record<string, unknown> = {}) => api.decodeSc
     fileTotals: { USD: String(lines.length * 75) }, reconciliation: { reconciled: true, nonNumericRows: { file: 0, imported: 0 }, currencies: [{ currency: "USD", fileTotal: String(lines.length * 75), importedTotal: String(lines.length * 75), lines: lines.length, matches: true }] } }] : [],
   mappings: [], lines, superseded: [], superseders: [], ...extra }, company)
 
-async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false) {
+async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false, loadFailures = 0) {
   const calls: any[] = []
   let current = initial
   let changed = 0, saves = 0
   const record = { id: rec(2), currentVersion: { id: rec(52), revision: 1, activity: { kind: "purchase_spend", state: "active", withdrawalReason: null, payload: { duplicateConfirmedDistinct: false, possibleDuplicateOf: { importId: imp, row: 1 } } } } }
   const make = await loadComponent("./scope3/SpendImport.tsx", "SpendImport", {
     ...parser, ...api, ...review, reasonText, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle,
-    loadScope3SpendImports: async () => { if (correctionFailure && saves) throw new Error("Rate limited."); return current },
+    loadScope3SpendImports: async () => { if (loadFailures-- > 0 || (correctionFailure && saves)) throw new Error("Rate limited."); return current },
     uploadCollectionEvidence: async (...args: any[]) => { calls.push(["upload", args[1].name, args[1].type]); return { receipt: { evidenceId } } },
     importScope3SpendFile: async (...args: any[]) => { calls.push(["import", new TextDecoder().decode(args[1]), args[2], args[3]]); current = view([line(1, {}), line(2, {})])
       return api.decodeScope3SpendImportResult({ profile: api.SCOPE3_SPEND_IMPORTS_PROFILE, import: imported, replayed: false, saved: 2, calculable: 0, holds: { naics_code_required: 2 }, lines: current.lines }, company) },
@@ -51,7 +51,8 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
     saveCollectionActivity: async (...args: any[]) => { calls.push(["save", args[1], args[2]]); saves++; if (correctionFailure && saves === 2) throw new Error("Too many requests. Wait a minute and try again."); return {} },
     convertScope3SpendCurrency: async (...args: any[]) => { calls.push(["convert", args[1]]); return { converted: [{ recordId: rec(1), sourceId: "L1", versionId: rec(51), revision: 2, from: "75", usd: "81.17" }], skipped: [{ recordId: rec(2), sourceId: "L2", reason: "negative_amount_not_supported" }] } },
   })
-  const app = harness(make, () => ({ companyId: company, actor: { userId: user, accessToken: "t" }, onOpenRecord, onChanged: () => { changed++ } }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File })
+  const actor = { userId: user, accessToken: "t" }
+  const app = harness(make, () => ({ companyId: company, actor, onOpenRecord, onChanged: () => { changed++ } }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File })
   await app.settle()
   const node = (label: string) => app.nodes().find(n => n.props["aria-label"] === label)
   const choose = async (text: string) => { node("Spend file")!.props.onChange({ target: { files: [new File([text], "ledger.csv", { type: "text/csv" })] } }); await new Promise(r => setTimeout(r, 5)); await app.settle() }
@@ -123,6 +124,33 @@ async function groupRow(p: Awaited<ReturnType<typeof panel>>, vendor: string) {
 }
 
 describe("SpendImport (I-09)", () => {
+  test("a second failed read keeps the file; a later recovery refreshes period warnings without writing", async () => {
+    const p = await panel(view([]), undefined, undefined, false, 2)
+    await p.choose(`${HEADER}\nL1,2024-03-01,Events,6310,,Venue,75,USD,2024,,,,\n`)
+    p.app.button("Try again")!.props.onClick(); await p.app.settle()
+    p.says("Spend imports could not be loaded."); p.says("$75.00")
+    expect(p.calls).toEqual([])
+    p.app.button("Try again")!.props.onClick(); await p.app.settle()
+    expect(p.app.button("Try again")).toBeUndefined()
+    p.says("$75.00"); p.says("1 dated outside the reporting period")
+    expect(p.calls).toEqual([])
+  })
+
+  test("a failed initial read can be retried without losing the chosen file or importing it", async () => {
+    const p = await panel(view([]), undefined, undefined, false, 1)
+    p.says("Spend imports could not be loaded.")
+    const text = `${HEADER}\nL1,2025-03-01,Events,6310,,Venue,75,USD,2025,,,,\n`
+    await p.choose(text)
+    expect(p.app.button("Try again")).toBeDefined()
+    p.app.button("Try again")!.props.onClick(); await p.app.settle()
+    expect(p.app.text()).not.toContain("Spend imports could not be loaded.")
+    expect(p.app.button("Try again")).toBeUndefined()
+    p.says("$75.00")
+    expect(p.node("Setup location")!.props.value).toBe(loc)
+    expect(p.calls).toEqual([])
+    expect(p.app.button("Import spend lines")!.props.disabled).toBe(false)
+  })
+
   test("a refused file shows every problem and cannot be imported", async () => {
     const p = await panel()
     await p.choose(`${HEADER}\nA,,V,,,d,10,USD,,9,,,\n`)

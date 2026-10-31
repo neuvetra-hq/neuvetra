@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { parseScope3SpendCsv, scope3DecimalSum, scope3SpendImportTemplate, type Scope3SpendImportLine, type Scope3SpendParse } from "../../../../../packages/neuvetra-database/src/scope3-spend-import"
 import type { HostedWorkspaceActor } from "@/lib/workspace-api"
 import { reasonText } from "@/lib/plain-language"
@@ -43,9 +43,10 @@ const matches = (query: string, ...texts: string[]) => !query.trim() || query.tr
 export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { companyId: string; actor: HostedWorkspaceActor; onChanged?: () => void; onOpenRecord?: (recordId: string) => void }) {
   const [view, setView] = useState<Scope3SpendImportsView | null>(null)
   const [message, setMessage] = useState<string | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [file, setFile] = useState<{ name: string; bytes: Uint8Array<ArrayBuffer>; type: string } | null>(null)
-  const [preview, setPreview] = useState<Scope3SpendParse | null>(null)
+  const preview = useMemo<Scope3SpendParse | null>(() => file ? parseScope3SpendCsv(file.bytes, { period: view?.reportingPeriod ?? null }) : null, [file, view?.reportingPeriod])
   const [previewAll, setPreviewAll] = useState(false)
   const [locationId, setLocationId] = useState("")
   const [result, setResult] = useState<Scope3SpendImportResult | null>(null)
@@ -63,7 +64,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
     let live = true
     loadScope3SpendImports(companyId, actor).then(next => {
       if (!live) return
-      setView(next); setLocationId(current => current || next.locations[0]?.id || "")
+      setView(next); setLoadError(null); setLocationId(current => current || next.locations[0]?.id || "")
       // Round 3 lane C (PR-3): opened from the Overview, the to-do list or a category row: show the asked-for tab and come into view.
       const asked = takeSpendImportFocus()
       if (!asked) return
@@ -72,7 +73,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
     })
       .catch(error => { if (live) {
         const problem = error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import needs database schema 30." : "Spend imports could not be loaded."
-        setMessage(previous => previous ? previous.includes(problem) ? previous : `${previous} ${problem}` : problem)
+        setLoadError(problem)
       } })
     return () => { live = false }
   }, [companyId, actor, reload])
@@ -80,12 +81,11 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
   // Round 3 lane C (decision 9, PR-4): a new file always clears the previous file's preview and errors first, and a file
   // that cannot be read says so (never a silent, stale preview).
   const choose = async (picked: File | undefined) => {
-    setResult(null); setProblems([]); setMessage(null); setPreviewAll(false); setFile(null); setPreview(null)
+    setResult(null); setProblems([]); setMessage(null); setPreviewAll(false); setFile(null)
     if (!picked) return
     try {
       const bytes = new Uint8Array(await picked.arrayBuffer())
-      const parsed = parseScope3SpendCsv(bytes, { period: view?.reportingPeriod ?? null })
-      setFile({ name: picked.name, bytes, type: picked.type || "text/csv" }); setPreview(parsed)
+      setFile({ name: picked.name, bytes, type: picked.type || "text/csv" })
     } catch (error) {
       setMessage(`${SPEND_TEXT_R3C.unreadable} ${error instanceof Error ? error.message : ""}`.trim())
     }
@@ -205,6 +205,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
         <a className="nv-btn nv-btn--sm" href={`data:text/csv;charset=utf-8,${encodeURIComponent(scope3SpendImportTemplate())}`} download={SCOPE3_SPEND_TEMPLATE_PATH.split("/").pop()}>Download the template</a>
       </div>
       {message && <p className="spend-import__status" role="status">{message}</p>}
+      {loadError && <div className="nv-notice nv-notice--error" role="status"><p>{loadError}</p><button type="button" className="nv-btn" disabled={busy} onClick={() => setReload(n => n + 1)}>Try again</button></div>}
 
       <div className="spend-import__step" aria-label="Upload">
         <h4 className="spend-import__step-title"><span className="spend-import__num">1</span> Choose a file and check it</h4>

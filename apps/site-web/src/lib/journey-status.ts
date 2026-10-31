@@ -8,6 +8,7 @@ import type { HostedWorkspaceActor } from "./workspace-api"
 import { recordReadiness, type CollectionReadinessFinding } from "@/components/CollectionWorkspace"
 import { kindLabel, periodLabel, type RecordState } from "./plain-language"
 import { TODO_SPEND_TEXT_R3C } from "./scope3-text-r3c"
+import { scope3ReadinessOptions, scope3SetupFacts, scope3SpendLineChoices } from "./scope3-forms"
 
 export type JourneyPanel = "home" | "setup" | "collection" | "results"
 export interface JourneyRecord { id: string; kind: string; label: string; sourceId: string; locationId: string; site: string; state: RecordState; reasons: string[]; evidenceCount: number; quality: string
@@ -102,7 +103,7 @@ export function coverageGaps(view: CompanySetupView | null, records: JourneyReco
   return gaps
 }
 
-export function computeJourneyStatus(input: { setup: CompanySetupView | null; context: CollectionContext | null; records: CollectionActivityRecord[]; evidence: CollectionEvidenceMetadata[]; canManage: boolean; scope3?: boolean }): JourneyStatus {
+export function computeJourneyStatus(input: { setup: CompanySetupView | null; context: CollectionContext | null; records: CollectionActivityRecord[]; evidence: CollectionEvidenceMetadata[]; canManage: boolean; scope3?: boolean; scope3MappingKeys?: ReadonlyMap<string, string> }): JourneyStatus {
   const setupVersion = input.setup?.currentVersion ?? null
   const setup = setupVersion?.setup
   const locations = setup?.locations ?? []
@@ -112,9 +113,14 @@ export function computeJourneyStatus(input: { setup: CompanySetupView | null; co
   const period = setup?.reportingPeriod ?? null
   // A-01: certificate claims are counted across the company, as Results counts them.
   const claims = input.context ? instrumentEvidenceClaims(input.records.map(row => row.currentVersion.activity), input.context, input.evidence) : undefined
+  // Overview and Ask use Activity's same saved setup and cross-record Scope 3 rules.
+  const scope3Options = input.scope3 && input.context ? scope3ReadinessOptions({
+    setup: scope3SetupFacts(input.setup ?? { currentVersion: null }), context: input.context, records: input.records,
+    mappingKeys: input.scope3MappingKeys ?? new Map(),
+  }) : undefined
   const records: JourneyRecord[] = input.records.map(row => {
     const activity = row.currentVersion.activity
-    const findings = recordReadiness(activity, input.context, input.evidence, claims)
+    const findings = recordReadiness(activity, input.context, input.evidence, claims, scope3Options ? { options: scope3Options, recordId: row.id } : undefined)
     // BF2: a file still in quarantine review is waiting, not something to fix, so it never makes the record need input
     // (Results counts it as calculated). A-03: its market-based result is held meanwhile, so the record is partial.
     // Pending files are listed separately.
@@ -209,7 +215,9 @@ export async function loadJourneyStatus(workspaceId: string, actor: HostedWorksp
     listCollectionActivities(workspaceId, actor),
     listCollectionEvidence(workspaceId, actor),
   ])
-  return computeJourneyStatus({ setup, context: overview.context, records, evidence, canManage: actor.role === "owner" || actor.role === "admin", scope3: overview.scope3 })
+  const spendLines = overview.scope3 ? await scope3SpendLineChoices(records) : []
+  return computeJourneyStatus({ setup, context: overview.context, records, evidence, canManage: actor.role === "owner" || actor.role === "admin", scope3: overview.scope3,
+    scope3MappingKeys: new Map(spendLines.map(line => [line.mappingKeyInput, line.mappingKey])) })
 }
 
 /** Answers the user's progress question from their own saved data, never from a model. */

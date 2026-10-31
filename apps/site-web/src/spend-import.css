@@ -98,7 +98,7 @@
   .nv-app .spend-import__table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; margin: 0 0 8px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
   .nv-app .spend-import__table td { display: block; padding: 0; border: 0; text-align: left; white-space: normal; }
   .nv-app .spend-import__table td.nv-right { text-align: left; }
-  .nv-app .spend-import__table td[data-label]::before { content: attr(data-label); display: block; color: var(--subtle); font-size: .76rem; }
+  .nv-app .spend-import__table td[data-label]::before { content: attr(data-label); display: block; color: var(--subtle); font-size: .76rem; white-space: normal; overflow-wrap: anywhere; }
   .nv-app .spend-import__table td[data-label=""]::before { content: none; }
   .nv-app .spend-import__table td[data-label="Description"], .nv-app .spend-import__table td[data-label=""], .nv-app .spend-import__table td[data-label="Code"], .nv-app .spend-import__table td[data-label="On import"] { grid-column: 1 / -1; }
   .nv-app .spend-import__table td .nv-actions { flex-wrap: wrap; justify-content: flex-start; }
