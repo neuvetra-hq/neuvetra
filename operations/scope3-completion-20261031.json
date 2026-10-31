@@ -1,6 +1,6 @@
 {
   "id": "S3-COMPLETE-20261031",
-  "updatedAtUtc": "2026-10-31T19:07:02.843527+00:00",
+  "updatedAtUtc": "2026-10-31T19:14:49.145340+00:00",
   "status": "final_native_and_browser_verification",
   "definitionOfDoneMet": false,
   "branch": "codex/scope3-completion-20261031",
@@ -43,7 +43,7 @@
   },
   "capacity": {
     "profileRun": "20261031T190417637693Z-native",
-    "integratedRun": "20261031T190531-native (see native evidence exact directory)",
+    "integratedRun": "20261031T190531556291Z-native",
     "records": 3000,
     "calculated": 3000,
     "apiPeakMiB": 1304,
@@ -55,5 +55,6 @@
   },
   "currentMainIdentity": "Four companies pass strict calculated payload comparison and unchanged saved setup/activity/evidence identities; final candidate rerun required.",
   "oracle": "Original r4.3 failures preserved. Explicit r4.4 mission amendments and independently hardened r4.6 pass 9142 result and 5021 CSV comparisons on captured evidence; final rerun required.",
-  "browser": "Preliminary capture gaps and confirmed mobile withdrawal defect preserved. Layout and capture helper regressions pass; final settled walk and all-image inspection pending."
+  "browser": "Preliminary capture gaps and confirmed mobile withdrawal defect preserved. Layout and capture helper regressions pass; final settled walk and all-image inspection pending.",
+  "nativeReportTest": "Before: Bun rejects.toThrow stalls after PostgreSQL correctly rejects immutable UPDATE. Explicit awaited rejection checks Error, SQLSTATE55000 and immutable message; full lifecycle passed diagnostic copy. Full final native sequence pending."
 }

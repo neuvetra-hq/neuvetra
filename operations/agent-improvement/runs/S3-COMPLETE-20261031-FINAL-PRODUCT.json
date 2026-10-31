@@ -10,7 +10,7 @@
       "id": "EXACT-ARTIFACT-INDEPENDENT-ACCEPTANCE",
       "status": "pending",
       "evidence": [],
-      "reason": "Actual dispatched assignment; preliminary evidence is in the local review packet. Final acceptance is not inferred from preparation or a queued task."
+      "reason": "Actual dispatched assignment; preliminary evidence is in the local review packet. Final acceptance is not inferred from preparation or a queued task. Known findings awaiting final verification are counted separately from incomplete evidence; zero is not a final acceptance."
     }
   ],
   "review": {
@@ -23,7 +23,7 @@
   "outcome": {
     "status": "in_progress",
     "first_review": "pending",
-    "material_findings_open": null,
+    "material_findings_open": 1,
     "rework_cycles": null,
     "escaped_defects": null,
     "repeated_findings": []

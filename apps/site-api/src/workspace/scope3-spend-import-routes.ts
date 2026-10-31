@@ -167,6 +167,7 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
     if ("response" in prelude) return prelude.response
     const actor: AuthenticatedUser = prelude.actor
     let attemptedFileLines = 0
+    let completedImport: Awaited<ReturnType<Scope3SpendImportRouteDatabase["importScope3Spend"]>> | null = null
     const capRefusal = (lineBudget: ReturnType<typeof scope3LineBudget>) => respond(409, {
       code: "line_budget_exceeded", lineBudget, fileLines: attemptedFileLines,
       error: SCOPE3_CAPACITY_TEXT.lineBudgetExceeded(lineBudget.max, lineBudget.used, attemptedFileLines),
@@ -233,6 +234,7 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       if (!earlier.some(item => item.fileSha256 === fileSha256) && parsed.lines.length > budget.remaining)
         return capRefusal(budget)
       const result = await deps.database.importScope3Spend(actor.id, companyId, { parsed, fileSha256, evidenceId, locationId })
+      completedImport = result
       const ids = new Set(result.import.lines.map(line => line.recordId))
       const lines = (await lineViews()).lines.filter(line => ids.has(line.recordId))
       const holds: Record<string, number> = {}
@@ -241,11 +243,21 @@ export function createScope3SpendImportRoutes(deps: { database: Scope3SpendImpor
       return respond(result.replayed ? 200 : 201, body)
     } catch (error) {
       if (error instanceof Scope3RouteProblem) return respond(error.status, error.body)
+      const code = (error as { code?: string }).code
+      if (code === "42501") return respond(404, NOT_FOUND)
+      // The import transaction has already committed before its separate review read.
+      // A failed read cannot truthfully be reported as a refused write.
+      if (completedImport) return respond(503, {
+        code: "import_saved_review_unavailable", importId: completedImport.import.id,
+        saved: completedImport.saved, replayed: completedImport.replayed,
+        error: "The import is saved, but its review could not be loaded. Reload to review the saved lines. Importing this same file again will not duplicate them.",
+      })
+      if (request.method === "GET" && (code === "55P03" || code === "57014")) return respond(503, {
+        code: "read_unavailable", error: "Scope 3 spend imports could not be read. Reload and try again.",
+      })
       // Round 3 (EN-1): lock timeout and statement timeout are specific, retryable refusals (nothing was saved).
       const busy = scope3BusyResponse(error)
       if (busy) return busy
-      const code = (error as { code?: string }).code
-      if (code === "42501") return respond(404, NOT_FOUND)
       // Round 3 (owner decision 7, EN-3): 0030's line cap (54N30), checked under the company lock for the whole file.
       if (code === "54N30") {
         // A concurrent writer may have consumed the remaining capacity after the precheck. Read the

@@ -106,7 +106,10 @@ integration("Scope 3 report versions freeze, approve and stay byte-identical on 
     const row = await operator.query<{ report_sha256: string; csv_sha256: string }>("select report_sha256,csv_sha256 from neuvetra.scope3_report_versions where id=$1", [one.id])
     expect(row.rows[0]).toEqual({ report_sha256: bytes1.reportSha256, csv_sha256: bytes1.csvSha256 })
     // Not even the operator can change them (0030's triggers).
-    await expect(operator.query("update neuvetra.scope3_report_versions set csv_text=csv_text||' ' where id=$1", [one.id])).rejects.toThrow("immutable")
+    const immutableFailure = await operator.query("update neuvetra.scope3_report_versions set csv_text=csv_text||' ' where id=$1", [one.id]).then(() => null, error => error)
+    expect(immutableFailure).toBeInstanceOf(Error)
+    expect(immutableFailure.code).toBe("55000")
+    expect(immutableFailure.message).toContain("immutable")
 
     // Version 2: a stale expected revision is a conflict; a reason is required; the change log compares with approved version 1.
     expect((await request(reports, "owner", { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null })).status).toBe(409)

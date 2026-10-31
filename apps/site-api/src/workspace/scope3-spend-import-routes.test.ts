@@ -34,7 +34,7 @@ function harness(overrides: Partial<Scope3SpendImportRouteDatabase> & { setup?: 
   const records: CollectionActivityRecord[] = [], imports: Scope3SpendImportRecord[] = [], evidence: CollectionEvidenceMetadata[] = []
   const database: Scope3SpendImportRouteDatabase = {
     findCompanySetup: async (...args) => { calls.push({ fn: "setup", args }); return overrides.setup === undefined ? setupView() : overrides.setup },
-    findCollectionContext: async () => context,
+    findCollectionContext: overrides.findCollectionContext ?? (async () => context),
     findCollectionActivities: async () => records,
     findCollectionEvidence: async () => evidence,
     findScope3SpendImports: async () => imports,
@@ -259,6 +259,32 @@ describe("Scope 3 spend import route (I-09)", () => {
 // as the line-budget error; "withdraw this import" through the route.
 describe("round 3: spend import refusals and withdraw-import", () => {
   const coded = (code: string) => async () => { throw Object.assign(new Error("db"), { code }) }
+  test("a committed import survives a failed review read; its receipt is truthful and replay saves no duplicate", async () => {
+    for (const code of ["57014", "55P03", "XX000"]) {
+      let readFails = true
+      const h = harness({ findCollectionContext: async () => { if (readFails) throw Object.assign(new Error("review failed"), { code }); return context } })
+      const text = `${HEADER}\nL1,2025-03-01,Acme,6100,Office,Toner,10,USD,2025,1,339940,with_margins,\n`
+      const response = await h.send(importPath(), csv(text)), body = await response.json()
+      expect(response.status).toBe(503)
+      expect(h.records).toHaveLength(1)
+      expect(body).toMatchObject({ code: "import_saved_review_unavailable", importId: h.imports[0]!.id, saved: 1, replayed: false })
+      expect(body.error).toContain("saved")
+      expect(body.error).toContain("Reload")
+      expect(body.error).not.toContain("nothing was saved")
+      readFails = false
+      const replay = await h.send(importPath(), csv(text))
+      expect(replay.status).toBe(200)
+      expect(await replay.json()).toMatchObject({ replayed: true, saved: 0 })
+      expect(h.records).toHaveLength(1)
+    }
+  })
+  test("read-only timeouts never claim a write was refused", async () => {
+    for (const code of ["57014", "55P03"]) {
+      const response = await harness({ findCollectionContext: coded(code) }).send(root)
+      expect(response.status).toBe(503)
+      expect(await response.json()).toMatchObject({ code: "read_unavailable", error: "Scope 3 spend imports could not be read. Reload and try again." })
+    }
+  })
   test("55P03 and 57014 are 503 with a code and Retry-After (nothing saved); 0030's 54N30 is the line-budget error", async () => {
     const text = `${HEADER}\nL1,2025-03-01,Acme,6100,Office,Toner,10,USD,2025,1,339940,with_margins,\n`
     const busy = await harness({ importScope3Spend: coded("55P03") }).send(importPath(), csv(text))
