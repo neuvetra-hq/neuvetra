@@ -1,0 +1,68 @@
+{
+  "cases": [
+    {
+      "name": "scope3-results.fixture.json: original",
+      "csvSha256": "da48f4ea022b13e73b40269984b52d74419ff06472c73622e8dfb34883f7f8e4",
+      "csvBytes": 141838,
+      "frozenCsvSha256": "b1afb4048851eab1919b92dc13e7435964b0cc8bf2305440bdf3b72bba3fd6b3",
+      "frozenCsvBytes": 145024,
+      "reportSha256": "c98b3df474b1eea40d04f9ea0147b29f90965254a5fa4b307ead0eaab5a34dc2"
+    },
+    {
+      "name": "scope3-results.fixture.json: reversed order",
+      "csvSha256": "2ccba99e9014cdc63565774c5cdaa4a79199838ece01f37963ddf86ecf7ba5a1",
+      "csvBytes": 141838,
+      "frozenCsvSha256": "d228b7901be8ddce7b737f5efe86307e69023cca2676b7d2e9520d29011a580d",
+      "frozenCsvBytes": 145024,
+      "reportSha256": "1c279b7f74a2e01f16aafe1288d8f43fb3c613c97aabdcc228d664250f915405"
+    },
+    {
+      "name": "scope3-results.fixture.json: quotes newlines unicode formula",
+      "csvSha256": "b86f923058c322f4cbed885f0e9c1afbf056db1676bbf97d6ac9dc968ae60555",
+      "csvBytes": 142152,
+      "frozenCsvSha256": "73d9ce9ace1de06eb12bfaad045124ae93442a2535bede71940614d96263730d",
+      "frozenCsvBytes": 145338,
+      "reportSha256": "cf2258953300c2a2a1607d6160dff5cc4fda7ef24e8ca558612e12c549aae924"
+    },
+    {
+      "name": "scope3-results-downstream.fixture.json: original",
+      "csvSha256": "45e64c9ca14e02f49c37fa379ae330b3a706d671aff8d76d49a6b74e389d8edd",
+      "csvBytes": 89636,
+      "frozenCsvSha256": "49840c04f222ae183f2c97d17c929cfa33e079ead46f27e6e95140dd91081151",
+      "frozenCsvBytes": 92619,
+      "reportSha256": "2c3743f050aa4c69b9f908fba55d773bff3c111a4e980560cadb5162221b060d"
+    },
+    {
+      "name": "scope3-results-downstream.fixture.json: reversed order",
+      "csvSha256": "fc52bc12bf2244ac0695deb4969be97e4f94d455d84b4171e3392d61ed8b0529",
+      "csvBytes": 89636,
+      "frozenCsvSha256": "af751d45fe6040cd5608bc704312470ea0ac85b3a7e0979fb4b41f7a970083eb",
+      "frozenCsvBytes": 92619,
+      "reportSha256": "226b1d0c3dc71428efeafbcd5cef06c3d58163ba5a2e609b4e890f755c5a95bb"
+    },
+    {
+      "name": "scope3-results-downstream.fixture.json: quotes newlines unicode formula",
+      "csvSha256": "9cfbfaf029f1af4b354748586ee139bb4bbd66f9895f7ca3b9c344a2703b9a9a",
+      "csvBytes": 89962,
+      "frozenCsvSha256": "73279457f269077acdb99c70b2898f520934f3b99cc76703e393b96934e6ef97",
+      "frozenCsvBytes": 92945,
+      "reportSha256": "6387dba49d27d4b018025a5bccd5e9140a0b9c9145c2a1df9e3622f38df97d59"
+    }
+  ],
+  "goldens": [
+    {
+      "version": "v1",
+      "profile": "neuvetra.scope3-report.v1",
+      "fileSha256": "affde19fb3cf2c7e55a0451b3885bf56f897017dd1aff865d7110c399e701cfb",
+      "reportSha256": "0cd676d21c0f95a86dc7ce9a7a858eed4c6ffa30beaa681f7d380fd3d8315398",
+      "csvSha256": "9e717b15392d54e95c7e1f99507a7f87b392b7ad5a68f4330a2851b11df40731"
+    },
+    {
+      "version": "v2",
+      "profile": "neuvetra.scope3-report.v2",
+      "fileSha256": "afe721888ac7f8b5ec5bcec0096756045bc3825cf03697be7bc2f9a88398ad0f",
+      "reportSha256": "a1278fc2d01a884d3739ad599d9a518f6190bbb1e281056ebe32c5524aadea3a",
+      "csvSha256": "c0955b7d4960d5547854b2dbf731ff10c67dcc1a08277628e8cb9df03bbe4fc1"
+    }
+  ]
+}
