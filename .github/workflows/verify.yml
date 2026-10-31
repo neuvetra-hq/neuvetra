@@ -58,10 +58,8 @@ jobs:
         run: bun test packages/neuvetra-database/src/hosted.test.ts
         env:
           M63_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
-      # Includes Scope 3 (package 2 r2, L07): setup, the four Scope 3 kinds and electricity saved and read back through the
-      # staged server and runtime role, Scope 3 results verified against direct engine calls and decoded by the browser decoder.
       - name: Verify staged HTTP and frontend decoding against PostgreSQL
-        run: bun test apps/site-api/src/staging/postgres.test.ts apps/site-api/src/staging/scope3-postgres.test.ts apps/site-api/src/staging/scope3-reports-postgres.test.ts apps/site-api/src/staging/scope3-round2-postgres.test.ts apps/site-api/src/staging/scope3-round3-postgres.test.ts apps/site-api/src/workspace/m66-postgres.test.ts apps/site-api/src/workspace/m67-postgres.test.ts apps/site-api/src/workspace/m68-postgres.test.ts apps/site-api/src/workspace/m71-postgres.test.ts
+        run: bun test apps/site-api/src/staging/postgres.test.ts apps/site-api/src/workspace/m66-postgres.test.ts apps/site-api/src/workspace/m67-postgres.test.ts apps/site-api/src/workspace/m68-postgres.test.ts apps/site-api/src/workspace/m71-postgres.test.ts
         env:
           M63_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
           M71_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
@@ -167,6 +165,13 @@ jobs:
         run: bun test tools/staging/check-m75-hosted.test.ts
         env:
           M75_HOSTED_NATIVE_SOURCE: m75_author_ci
+
+      # Full-cap Scope 3 reports exceed the historical fixture copiers' single-jsonb limit.
+      # Keep all stress data and assertions, but create the legacy fixtures before these reports.
+      - name: Verify Scope 3 staged HTTP, frozen reports and full capacity against PostgreSQL
+        run: bun test apps/site-api/src/staging/scope3-postgres.test.ts apps/site-api/src/staging/scope3-reports-postgres.test.ts apps/site-api/src/staging/scope3-round2-postgres.test.ts apps/site-api/src/staging/scope3-round3-postgres.test.ts
+        env:
+          M63_API_TEST_DATABASE_URL: postgres://m63_test_admin@127.0.0.1:55463/m63_integration
 
   applications:
     name: Typecheck, lint, unit tests and web builds
