@@ -57,8 +57,14 @@ function printFrozenReport() {
 export function Scope3FrozenReportView({ report, previous, actorId, canManage, busy, onApprove, onClose }: { report: Scope3FrozenReport; previous?: Scope3FrozenReport["document"] | null; actorId: string; canManage: boolean; busy: boolean; onApprove: (confirmations: Scope3ApprovalConfirmations) => void; onClose: () => void }) {
   const { version, document: d } = report, a = d.assertion
   // Round 2 lane D (decision 7): approving needs the frozen open issues acknowledged and a self-approval confirmed.
-  const [acknowledged, setAcknowledged] = useState(false)
-  const [selfConfirmed, setSelfConfirmed] = useState(false)
+  const confirmationKey = `${version.id}:${version.reportSha256}:${actorId}`
+  const [confirmed, setConfirmed] = useState({ key: confirmationKey, acknowledged: false, selfConfirmed: false })
+  const acknowledged = confirmed.key === confirmationKey && confirmed.acknowledged
+  const selfConfirmed = confirmed.key === confirmationKey && confirmed.selfConfirmed
+  if (confirmed.key !== confirmationKey) setConfirmed({ key: confirmationKey, acknowledged: false, selfConfirmed: false })
+  const confirm = (field: "acknowledged" | "selfConfirmed", value: boolean) => setConfirmed(previous => ({
+    ...(previous.key === confirmationKey ? previous : { key: confirmationKey, acknowledged: false, selfConfirmed: false }), [field]: value,
+  }))
   const issues = scope3FrozenOpenIssues(report), self = version.createdBy === actorId, approval = approvalOf(version)
   const canApprove = canManage && !version.approval
   const approveReady = (!issues.length || acknowledged) && (!self || selfConfirmed)
@@ -76,8 +82,8 @@ export function Scope3FrozenReportView({ report, previous, actorId, canManage, b
       <button type="button" className="nv-btn nv-btn--sm nv-btn--ghost" onClick={onClose}>Close</button>
     </div>
     {canApprove && <div className="s3-readiness" id="scope3-approval-gate">
-      {issues.length > 0 && <label className="s3-confirm"><input type="checkbox" checked={acknowledged} onChange={event => setAcknowledged(event.target.checked)} /><span>{SCOPE3_READINESS_TEXT.acknowledge(issues.length)}</span></label>}
-      {self && <label className="s3-confirm"><input type="checkbox" checked={selfConfirmed} onChange={event => setSelfConfirmed(event.target.checked)} /><span>{SCOPE3_READINESS_TEXT.selfConfirm}</span></label>}
+      {issues.length > 0 && <label className="s3-confirm"><input type="checkbox" checked={acknowledged} onChange={event => confirm("acknowledged", event.target.checked)} /><span>{SCOPE3_READINESS_TEXT.acknowledge(issues.length)}</span></label>}
+      {self && <label className="s3-confirm"><input type="checkbox" checked={selfConfirmed} onChange={event => confirm("selfConfirmed", event.target.checked)} /><span>{SCOPE3_READINESS_TEXT.selfConfirm}</span></label>}
       {!approveReady && <p className="nv-muted" role="status">{issues.length && !acknowledged ? SCOPE3_READINESS_TEXT.acknowledgeRequired : SCOPE3_READINESS_TEXT.selfConfirmRequired}</p>}
     </div>}
     <article className="nv-report nv-report--frozen" aria-label={`Frozen Scope 3 report version ${version.revision}`}>

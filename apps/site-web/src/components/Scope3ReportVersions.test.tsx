@@ -147,6 +147,23 @@ describe("round 2: readiness gate, open-issues acknowledgement and self-approval
   const checkboxes = (app: any) => app.nodes().filter((node: any) => node.type === "input" && node.props.type === "checkbox")
   const approveButton = (app: any) => app.nodes().find((node: any) => node.type === "button" && node.children.flat(Infinity).some((x: any) => typeof x === "string" && x.startsWith("Approve")))
 
+  test("switching the open revision requires fresh confirmations, including when returning to the earlier revision", async () => {
+    const c = await component("Scope3FrozenReportView")
+    let report = report1
+    const app = harness(c.make, () => ({ report, actorId: me, canManage: true, busy: false, onApprove: () => {}, onClose: () => {} }), c.globals)
+    await app.settle()
+    for (const checkbox of checkboxes(app)) checkbox.props.onChange({ target: { checked: true } })
+    await app.settle()
+    expect(approveButton(app).props.disabled).toBe(false)
+    report = { ...report1, version: { ...report1.version, id: second.id, revision: 2, reportSha256: "a".repeat(64) } }
+    app.render()
+    expect(approveButton(app).props.disabled).toBe(true)
+    await app.settle()
+    expect(checkboxes(app).every((node: any) => node.props.checked === false)).toBe(true)
+    report = report1; app.render(); await app.settle()
+    expect(approveButton(app).props.disabled).toBe(true)
+  })
+
   test("the fixture's frozen version has open issues (categories needing input, relevant categories without an assessment), listed in the printed version", async () => {
     expect(issues.length).toBeGreaterThan(0)
     const c = await component("Scope3FrozenReportView")

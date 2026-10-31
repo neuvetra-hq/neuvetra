@@ -9,7 +9,7 @@ export const SPEND_TEXT_R3C = {
   unreadable: "This file could not be read, so nothing was imported. Check that it is a CSV file and choose it again.",
   withdrawChip: (kind: Scope3SpendWithdrawKind) => kind === "energy" ? "Energy bill — Scope 1 or 2" : "Not a purchase — withdraw",
   withdrawWhy: (kind: Scope3SpendWithdrawKind, why: string) => kind === "energy" ? `Suggested: withdraw. ${capital(why)}; record the bill as electricity or fuel instead.` : `Suggested: withdraw. ${capital(why)}, so nothing is counted for these lines.`,
-  withdrawReason: (kind: Scope3SpendWithdrawKind, why: string) => kind === "energy" ? `Energy bill, counted in Scope 1 or 2 from the bill (${why}).` : `Not a purchase: ${why}.`,
+  withdrawReason: (kind: Scope3SpendWithdrawKind, why: string) => kind === "energy" ? "Energy bill withdrawn from spend; record or verify its treatment separately in Scope 1 or 2 and category 3. This withdrawal does not confirm any emissions were counted." : `Not a purchase: ${why}.`,
   withdrawButton: (lines: number) => `Withdraw ${lines} line${lines === 1 ? "" : "s"}`,
   noConfident: "No confident suggestion: open Map to search the NAICS titles.",
   categoryWhy: (why: string) => `Suggested category. ${why} Change it if these purchases belong elsewhere.`,

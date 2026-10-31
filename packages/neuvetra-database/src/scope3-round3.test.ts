@@ -32,6 +32,17 @@ describe('round 3 (owner decision 6): the report text without the JSON round tri
     expect(scope3CanonicalJsonText('text')).toBe('"text"')
   })
 
+  test('bounded canonical chunks offer cleanup without changing JSON edge semantics', () => {
+    const edge = { z: '雪😀\ud800,"\n', a: [undefined, , -0, Number.NaN, Number.POSITIVE_INFINITY], omitted: undefined,
+      nested: { toJSON: (key: string) => ({ key, value: '\udc00' }) } }
+    const large = Array.from({ length: 600 }, () => edge)
+    for (const levels of [1, 2, 3, 6]) {
+      let checkpoints = 0
+      expect(scope3CanonicalJsonText(large, levels, () => { checkpoints++ })).toBe(roundTrip(large))
+      expect(checkpoints).toBeGreaterThan(1)
+    }
+  })
+
   test('the previous version\'s change-log basis is small and gives the same change log as the full document', () => {
     const summary = { id: '31060000-0000-4000-8000-000000000001', companyId: fixture.companyId, reportingYear: 2025, revision: 1, previousId: null, setupVersionId: '31050000-0000-4000-8000-000000000001', reason: null,
       reportSha256: 'a'.repeat(64), csvSha256: 'b'.repeat(64), engineSha256: fixture.methods[0]!.engineSha256, registerSha256s: fixture.registerSha256s, inputVersionCount: 0, createdBy: '31010000-0000-4000-8000-000000000001',

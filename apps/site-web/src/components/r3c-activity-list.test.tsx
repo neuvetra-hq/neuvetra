@@ -17,20 +17,29 @@ const waste = (n: number, state = "active") => ({ id: `29810000-0000-4000-8000-$
     quantity: { originalValue: "3.2", originalUnit: "short_ton", normalizedValue: "3.2", normalizedUnit: "short_ton" }, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" }, reference: "", notes: "", evidenceIds: [],
     payload: { material: "MIXED_MSW", treatment: "LANDFILLED" } } } })
 
-async function workspace(list: () => Promise<any[]>) {
+async function workspace(list: () => Promise<any[]>, extra: Record<string, unknown> = {}) {
   const api = {
     deriveCollectionQuantity, planCollectionCalculation, reasonText, CollectionApiError, savedAgainstCurrentSetup, withCurrentSetupVersion, validateCollectionSaveInput,
     listCollectionActivities: list, listCollectionEvidence: async () => [], listGridLossLineages: async () => [], loadCollectionContext: async () => context,
     loadCollectionOverview: async () => ({ context, scope3: true, scope3Kinds: ["transport", "waste", "business_travel", "employee_commuting"], scope3Completion: false }),
     saveCollectionActivity: async () => { throw new CollectionApiError("stop", 500) },
     downloadCollectionEvidence: async () => null, loadCollectionVersion: async () => null, lookupCollectionZip: async () => null, saveGridLossLineage: async () => null, uploadCollectionEvidence: async () => null,
-    window: { confirm: () => true, addEventListener() {}, removeEventListener() {} }, document: { getElementById: () => null }, requestAnimationFrame: () => 0,
+    window: { confirm: () => true, addEventListener() {}, removeEventListener() {} }, document: { getElementById: () => null }, requestAnimationFrame: () => 0, ...extra,
   }
   const make = await loadComponent("./CollectionWorkspace.tsx", "CollectionWorkspace", api)
   const app = harness(make, () => ({ actor: { userId: "u", role: "owner", accessToken: "t" }, workspaceId: W, headingRef: { current: null }, onDirtyChange: () => {}, openRecordId: null, intro: null }))
   await app.settle(); await new Promise(r => setTimeout(r, 5)); await app.settle()
   return app
 }
+
+test("Activity jump links move keyboard focus into the requested section", async () => {
+  const calls: string[] = []
+  const app = await workspace(async () => [], { document: { getElementById: (id: string) => ({ scrollIntoView: () => calls.push(`scroll:${id}`), focus: () => calls.push(`focus:${id}`) }) } })
+  const link = app.nodes().find(node => node.type === "a" && node.props.href === "#collection-record-editor")!
+  link.props.onClick({ preventDefault() {} })
+  expect(calls).toEqual(["scroll:collection-record-editor", "focus:collection-record-editor"])
+  expect(app.nodes().find(node => node.props.id === "collection-record-editor")!.props.tabIndex).toBe(-1)
+})
 
 test("a failed load shows the error and Try again, never an empty list or the Scope 1 and 2 wording; Try again loads the records", async () => {
   let fail = true

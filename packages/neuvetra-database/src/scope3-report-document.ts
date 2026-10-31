@@ -246,7 +246,7 @@ export function buildScope3ReportDocument(input: {
 }
 
 /** The stored report text: canonical JSON of the document after a JSON round trip (so no `undefined` ever reaches the text). */
-export const scope3ReportText = (document: Scope3ReportDocument): string => scope3CanonicalJsonText(document)
+export const scope3ReportText = (document: Scope3ReportDocument, betweenBatches?: () => void): string => scope3CanonicalJsonText(document, 3, betweenBatches)
 
 /**
  * Round 3 (owner decision 6): what the change log reads from the previous approved document (`scope3ReportChangeLog`), and
@@ -344,8 +344,8 @@ export function scope3ReportFrozenLines(document: Scope3ReportDocument, labels: 
 }
 
 /** The stored CSV of a version: the frozen lines, then the shared CSV v2 of the frozen results, byte for byte. */
-export function scope3ReportCsv(document: Scope3ReportDocument, labels: Scope3CsvLabels): string {
-  return scope3ReportFrozenLines(document, labels).map(line => scope3CsvEscape(line.replace(/[\r\n]+/g, ' '))).join('\n') + '\n' + scope3Csv(document.results, labels)
+export function scope3ReportCsv(document: Scope3ReportDocument, labels: Scope3CsvLabels, betweenBatches?: () => void): string {
+  return scope3Csv(document.results, labels, scope3ReportFrozenLines(document, labels).map(line => line.replace(/[\r\n]+/g, ' ')), betweenBatches)
 }
 
 // --- Decoding a stored version (the web and the API read back with the same rules) ---

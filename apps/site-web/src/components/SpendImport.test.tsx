@@ -28,13 +28,14 @@ const view = (lines: any[], extra: Record<string, unknown> = {}) => api.decodeSc
     fileTotals: { USD: String(lines.length * 75) }, reconciliation: { reconciled: true, nonNumericRows: { file: 0, imported: 0 }, currencies: [{ currency: "USD", fileTotal: String(lines.length * 75), importedTotal: String(lines.length * 75), lines: lines.length, matches: true }] } }] : [],
   mappings: [], lines, superseded: [], superseders: [], ...extra }, company)
 
-async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error) {
+async function panel(initial: any = view([]), onOpenRecord?: (id: string) => void, withdrawalError?: Error, correctionFailure = false) {
   const calls: any[] = []
   let current = initial
+  let changed = 0, saves = 0
   const record = { id: rec(2), currentVersion: { id: rec(52), revision: 1, activity: { kind: "purchase_spend", state: "active", withdrawalReason: null, payload: { duplicateConfirmedDistinct: false, possibleDuplicateOf: { importId: imp, row: 1 } } } } }
   const make = await loadComponent("./scope3/SpendImport.tsx", "SpendImport", {
     ...parser, ...api, ...review, reasonText, scope3NaicsChoices: naics.scope3NaicsChoices, scope3NaicsGuard: forms.scope3NaicsGuard, SCOPE3_NAICS_GUARD_TEXT: forms.SCOPE3_NAICS_GUARD_TEXT, scope3NaicsTitle: naics.scope3NaicsTitle,
-    loadScope3SpendImports: async () => current,
+    loadScope3SpendImports: async () => { if (correctionFailure && saves) throw new Error("Rate limited."); return current },
     uploadCollectionEvidence: async (...args: any[]) => { calls.push(["upload", args[1].name, args[1].type]); return { receipt: { evidenceId } } },
     importScope3SpendFile: async (...args: any[]) => { calls.push(["import", new TextDecoder().decode(args[1]), args[2], args[3]]); current = view([line(1, {}), line(2, {})])
       return api.decodeScope3SpendImportResult({ profile: api.SCOPE3_SPEND_IMPORTS_PROFILE, import: imported, replayed: false, saved: 2, calculable: 0, holds: { naics_code_required: 2 }, lines: current.lines }, company) },
@@ -46,11 +47,11 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
       current = { ...current, lines: current.lines.map((line: any) => line.importId === args[1] ? { ...line, state: "withdrawn", plan: { action: "hold", status: "withdrawn", reasons: ["record_withdrawn"] } } : line) }
       return { importId: args[1], withdrawn: count, alreadyWithdrawn: 0, message: `${count} lines withdrawn. Withdrawn lines stay in the history and no longer count.` }
     },
-    listCollectionActivities: async () => [record],
-    saveCollectionActivity: async (...args: any[]) => { calls.push(["save", args[1], args[2]]); return {} },
+    listCollectionActivities: async () => correctionFailure ? current.lines.map((item: any) => ({ ...record, id: item.recordId, currentVersion: { ...record.currentVersion, id: item.versionId } })) : [record],
+    saveCollectionActivity: async (...args: any[]) => { calls.push(["save", args[1], args[2]]); saves++; if (correctionFailure && saves === 2) throw new Error("Too many requests. Wait a minute and try again."); return {} },
     convertScope3SpendCurrency: async (...args: any[]) => { calls.push(["convert", args[1]]); return { converted: [{ recordId: rec(1), sourceId: "L1", versionId: rec(51), revision: 2, from: "75", usd: "81.17" }], skipped: [{ recordId: rec(2), sourceId: "L2", reason: "negative_amount_not_supported" }] } },
   })
-  const app = harness(make, () => ({ companyId: company, actor: { userId: user, accessToken: "t" }, onOpenRecord }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File })
+  const app = harness(make, () => ({ companyId: company, actor: { userId: user, accessToken: "t" }, onOpenRecord, onChanged: () => { changed++ } }), { crypto: { randomUUID: () => "93920000-0000-4000-8000-0000000000aa" }, File })
   await app.settle()
   const node = (label: string) => app.nodes().find(n => n.props["aria-label"] === label)
   const choose = async (text: string) => { node("Spend file")!.props.onChange({ target: { files: [new File([text], "ledger.csv", { type: "text/csv" })] } }); await new Promise(r => setTimeout(r, 5)); await app.settle() }
@@ -58,10 +59,29 @@ async function panel(initial: any = view([]), onOpenRecord?: (id: string) => voi
   const says = (expected: string) => expect(app.text().replace(/\s+/g, "")).toContain(expected.replace(/\s+/g, ""))
   const component = (name: string) => app.nodes().filter(n => typeof n.type === "function" && (n.type as any).name === name)
   const tab = async (label: string) => { app.button(label)!.props.onClick(); await app.settle() }
-  return { app, calls, node, choose, says, component, tab }
+  return { app, calls, node, choose, says, component, tab, changed: () => changed }
 }
 
 describe("whole-import withdrawal", () => {
+  test("partial group withdrawal reports saved progress and removes confirmed withdrawn rows even if refresh fails", async () => {
+    const p = await panel(view([line(1, { vendor: "ADP" }), line(2, { vendor: "ADP" })]), undefined, undefined, true)
+    await p.component("SpendGroupRow")[0]!.props.onWithdraw("Payroll is not a purchase."); await p.app.settle()
+    p.says("1 of 2 lines withdrawn")
+    p.says("Too many requests")
+    expect(p.changed()).toBe(1)
+    expect(p.component("SpendGroupRow").flatMap(row => row.props.group.lines.map((item: any) => item.recordId))).toEqual([rec(2)])
+    expect(p.calls.filter(call => call[0] === "save")).toHaveLength(2)
+  })
+
+  test("withdrawing an energy suggestion never claims an unverified Scope 1 or 2 result exists", async () => {
+    const p = await panel(view([line(1, {}), line(2, { vendor: "Electric utility", glDescription: "Electricity", description: "Electric utility bill" })]))
+    const row = await groupRow(p, "Electric utility")
+    row.app.button("Withdraw 1 line")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    const reason = p.calls.find(call => call[0] === "save")![2].activity.withdrawalReason
+    expect(reason).not.toContain("counted in Scope 1 or 2")
+    expect(reason).toContain("record or verify")
+  })
+
   test("requires a reason and confirmation, withdraws only the selected import and refreshes its counts", async () => {
     const p = await panel(view([line(1, {}), line(2, {})]))
     p.app.button("Withdraw this import")!.props.onClick(); await p.app.settle()

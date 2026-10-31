@@ -160,7 +160,7 @@ const record = (value: unknown): value is Record<string, unknown> => !!value && 
 const str = (value: unknown) => typeof value === 'string' ? value : value === null || value === undefined ? '' : String(value)
 
 /** D4, CSV v2 (DESIGN 6.3): the Scope 3 CSV, a separate download. Figures are the engine's exact strings; nothing is re-summed. */
-export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabels): string {
+export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabels, preamble: readonly string[] = [], betweenBatches?: () => void): string {
   const coverage = results.coverage
   const meta = [
     `# ${results.label}`,
@@ -188,8 +188,18 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
     ...SCOPE3_CSV_SECTIONS.map(section => `# Section ${section}: ${SCOPE3_CSV_SECTION_TEXT[section]}`),
     ...SCOPE3_CSV_SECTIONS.flatMap(section => COLUMNS[section]!.map(([name, meaning]) => `# Column ${section}.${name}: ${meaning}`)),
   ]
-  const rows: string[][] = []
-  const section = (name: typeof SCOPE3_CSV_SECTIONS[number], body: string[][]) => { rows.push(scope3CsvHeader(name), ...body.map(cells => { if (cells.length !== COLUMNS[name]!.length) throw new Error(`Scope 3 CSV ${name} row has the wrong number of columns.`); return cells })) }
+  // Escape one row at a time so large engine traces do not remain in a second, unescaped table.
+  const rows: string[] = [...preamble.map(escape), ...meta.map(escape)]
+  let written = 0
+  const section = (name: typeof SCOPE3_CSV_SECTIONS[number], body: Iterable<readonly string[]>) => {
+    rows.push(scope3CsvHeader(name).map(escape).join(','))
+    for (const cells of body) {
+      if (cells.length !== COLUMNS[name]!.length) throw new Error(`Scope 3 CSV ${name} row has the wrong number of columns.`)
+      rows.push(cells.map(escape).join(','))
+      // The server can reclaim temporary trace strings every 256 rows; browsers need no runtime-specific hook.
+      if (++written % 256 === 0) betweenBatches?.()
+    }
+  }
 
   // 1. Category.
   section('Category', coverage.categories.map(row => {
@@ -211,9 +221,9 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   // 2. Record: the existing columns, then the full trace of each line.
   const lines = results.records
   const closedLines = scope3ClosedLines(lines)  // round 3 (AC-5): a closed 3C/3D combustion line's status says so
-  section('Record', lines.map(row => {
+  section('Record', (function* () { for (const row of lines) {
     const r = row.result, origin = row.effectiveDataQuality?.activityDataOrigin
-    return ['Record', String(row.category), labels.kind(row.kind), row.locationName ?? '', row.sourceId, row.period.start, scope3LastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit,
+    yield ['Record', String(row.category), labels.kind(row.kind), row.locationName ?? '', row.sourceId, row.period.start, scope3LastDayCovered(row.period.endExclusive), row.quantity.value, labels.unit?.(row.quantity.unit) ?? row.quantity.unit,
       labels.quality?.(row.quality) ?? row.quality, scope3LineStatusText(row, closedLines.has(row)), scope3LineReasonCodes(row).map(labels.reason).join(' '),
       r?.total?.display ?? '', r?.gwpSetId ?? '', r?.methodVersionId ?? '', row.evidence.map(scope3EvidenceFileText).join('; '),
       row.recordId, row.versionId, String(row.revision), row.derivedFrom ? `${row.derivedFrom.kind} ${row.derivedFrom.recordId}` : '', row.reference, row.estimateBasis ?? '',
@@ -223,7 +233,7 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
       row.kind, r?.total?.unrounded ?? '', r ? scope3GasTexts(r).join('; ') : '', (r?.constantsUsed ?? []).map(scope3ConstantText).join('; '),
       r ? scope3CanonicalJson(r.input) : '', r ? scope3CanonicalJson(r.activity) : '', scope3LineEvidenceLinked(row) ? 'yes' : 'no',
       scope3LineMemoText(row), TAX_TEXT[row.plan.notes.find(note => note in TAX_TEXT) ?? ''] ?? '', row.currencyConversion ? scope3SpendConversionNote(row.currencyConversion) : '']
-  }))
+  } })())
 
   // 3. Factor: every factor and constant any line used, once per key and value, with the lines that used it.
   const factors = new Map<string, { cells: string[]; records: string[] }>()
@@ -244,10 +254,10 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   section('Factor', [...factors.entries()].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([, item]) => [...item.cells, [...new Set(item.records)].join('; ')]))
 
   // 4. Conversion: every exact division, per line, in the engine's order.
-  section('Conversion', lines.flatMap(row => (row.result?.conversions ?? []).map((c, i) => {
+  section('Conversion', (function* () { for (const row of lines) for (const [i, c] of (row.result?.conversions ?? []).entries()) {
     const x = c as { quantity: string; numerator: string; denominator: string; result: string; rounded: boolean; places: number; rounding: string }
-    return ['Conversion', row.recordId, row.kind, String(row.category), String(i + 1), x.quantity, x.numerator, x.denominator, x.result, x.rounded ? 'yes' : 'no', String(x.places), x.rounding]
-  })))
+    yield ['Conversion', row.recordId, row.kind, String(row.category), String(i + 1), x.quantity, x.numerator, x.denominator, x.result, x.rounded ? 'yes' : 'no', String(x.places), x.rounding]
+  } })())
 
   // 5. Methodology: the generated statement of every category, one row per sentence.
   section('Methodology', coverage.categories.flatMap(row => row.methodology.map((sentence, i) => ['Methodology', String(row.category), row.title, String(i + 1), sentence.topic, sentence.text])))
@@ -286,7 +296,9 @@ export function scope3Csv(results: Scope3ResultsDocument, labels: Scope3CsvLabel
   section('Total', [['Total', `Known-source Scope 3 subtotal (${total.label})`, coverage.knownSourceSubtotal?.display ?? '', coverage.knownSourceSubtotal ? scope3KgToTonnesExact(coverage.knownSourceSubtotal.display) : '',
     total.includes.join('; '), total.excludes.map(item => `${item.category} (${(SCOPE3_REPORT_TEXT_V3.status[item.status] ?? SCOPE3_STATUS_TEXT[item.status]).toLowerCase()})`).join('; '), total.label]])
 
-  return [...meta.map(escape), ...rows.map(cells => cells.map(escape).join(','))].join('\n') + '\n'
+  rows.push('')
+  betweenBatches?.()
+  return rows.join('\n')
 }
 
 /** Round 3, lane A (AC-14): a spend line's recorded tax treatment in words. */

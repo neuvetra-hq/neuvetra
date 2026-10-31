@@ -177,7 +177,7 @@ async function windowsPeaks(pids: number[], name: "bun" | "postgres"): Promise<M
   console.info(`native Windows lifetime PeakWorkingSet64: ${JSON.stringify(rows)}`)
   return new Map(rows.map(row => [row.pid, row.peakWorkingSetBytes / 1048576]))
 }
-/** Linux resets VmHWM; Windows conservatively includes the entire API/test process lifetime, including browser decoding. */
+/** Linux resets VmHWM; Windows includes the API/test lifetime; browser decoding runs in a separate client process. */
 const apiPeak = {
   reset: () => { Bun.gc(true); if (process.platform !== "win32") writeFileSync("/proc/self/clear_refs", "5") },
   mib: async () => process.platform === "win32" ? (await windowsPeaks([process.pid], "bun")).get(process.pid)! : kib(readFileSync("/proc/self/status", "utf8"), "VmHWM") / 1024,
@@ -202,6 +202,38 @@ async function backendPeaks(operator: { query<T>(sql: string, args?: unknown[]):
   }
   if (out.size !== pids.size || [...out.values()].some(value => !Number.isFinite(value) || value <= 0)) throw new Error("Incomplete Linux peak-memory observation")
   return out
+}
+
+const WINDOWS_DECODE_SCRIPT = `
+const [decoder, companyId, versionId, url] = process.argv.slice(1)
+const { decodeScope3ReportVersion } = await import(decoder)
+const response = await fetch(url)
+if (response.status !== 200) throw new Error("Frozen report response failed")
+const frozen = await decodeScope3ReportVersion(await response.json(), companyId, versionId)
+console.log(JSON.stringify({ records: frozen.document.results.records.length, selfApproved: frozen.version.approval?.selfApproved ?? null,
+  calculatedComplete: frozen.document.results.records.every(row => row.outcome === "calculated" && row.result?.status === "complete") }))
+`
+/** The real browser decoder runs outside the API process; Windows cannot reset its lifetime peak afterward. */
+async function decodeFrozenInChild(response: Response, companyId: string, versionId: string) {
+  if (!response.body) throw new Error("Frozen report response has no body")
+  const path = `/${crypto.randomUUID()}`
+  let served = false
+  const server = Bun.serve({ hostname: "127.0.0.1", port: 0, fetch(request) {
+    if (served || request.method !== "GET" || new URL(request.url).pathname !== path) return new Response(null, { status: 404 })
+    served = true
+    return response
+  } })
+  try {
+    const child = Bun.spawn([process.execPath, "--eval", WINDOWS_DECODE_SCRIPT, import.meta.resolve("../../../site-web/src/lib/scope3-report-api.ts"), companyId, versionId, `http://127.0.0.1:${server.port}${path}`],
+      { stdin: "ignore", stdout: "pipe", stderr: "pipe" })
+    console.info(`native browser decoder child: ${child.pid}; loopback response port: ${server.port}`)
+    const timer = setTimeout(() => child.kill(), 120_000)
+    try {
+      const [stdout, stderr, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited])
+      if (code !== 0) throw new Error(`Frozen report browser decoding failed: ${stderr}`)
+      return JSON.parse(stdout) as { records: number; selfApproved: boolean | null; calculatedComplete: boolean }
+    } finally { clearTimeout(timer); if (child.exitCode === null) { child.kill(); await child.exited } }
+  } finally { await server.stop(true) }
 }
 
 integration("round 3 owner decision 6 natively: preparing, approving and re-preparing at the line cap stay inside 1.5 GB (API) and 768 MiB (any backend); one prepare at a time", async () => {
@@ -260,11 +292,20 @@ integration("round 3 owner decision 6 natively: preparing, approving and re-prep
     const [approved] = await measured("approve r1", () => h.json(`${w.root}/scope3/reports/${body.version.id}/approval`, w.name, { reportSha256: body.version.reportSha256, acknowledgeOpenIssues: body.version.openIssues.length > 0, confirmSelfApproval: true }))
     expect(approved!.status).toBe(201)
     // 3. Open the stored version (both texts in the response).
-    const [opened] = await measured("open r1", () => h.call(`${w.root}/scope3/reports/${body.version.id}`, w.name))
-    expect(opened!.status).toBe(200)
-    // The stored version opens as the web opens it (round 2c's check), decoded here and dropped before the next step, so
-    // the browser's side of opening it never counts as the API's memory.
-    {
+    // The full unchanged browser validator checks the exact response bytes. Windows isolates that client work because
+    // its API lifetime peak cannot be reset; Linux keeps the original in-process decode followed by VmHWM reset.
+    if (process.platform === "win32") {
+      await measured("open and stream r1 to browser decoder", async () => {
+        const opened = await h.call(`${w.root}/scope3/reports/${body.version.id}`, w.name)
+        expect(opened.status).toBe(200)
+        const frozen = await decodeFrozenInChild(opened, w.id, body.version.id)
+        expect([frozen.records, frozen.selfApproved]).toEqual([records, true])
+        expect(frozen.calculatedComplete).toBe(true)
+        return opened
+      }) // One measured request, with no collection or reset between headers and body.
+    } else {
+      const [opened] = await measured("open r1", () => h.call(`${w.root}/scope3/reports/${body.version.id}`, w.name))
+      expect(opened!.status).toBe(200)
       const frozen = await decodeScope3ReportVersion(await opened!.json(), w.id, body.version.id)
       expect([frozen.document.results.records.length, frozen.version.approval?.selfApproved]).toEqual([records, true])
       expect(frozen.document.results.records.every(row => row.outcome === "calculated" && row.result?.status === "complete")).toBe(true)

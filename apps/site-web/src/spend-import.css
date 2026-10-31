@@ -28,6 +28,7 @@
 .nv-app .spend-import__preview, .nv-app .spend-import__result { display: grid; gap: 10px; min-width: 0; }
 .nv-app .spend-import__counts, .nv-app .spend-import__holds { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
 .nv-app .spend-import__counts li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--muted); }
+.nv-app .spend-import__withdraw { display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; min-width: 0; }
 .nv-app .spend-import__holds li { padding: 8px 12px; border-left: 3px solid var(--warn-line); background: var(--surface); border-radius: 0 8px 8px 0; color: var(--muted); }
 .nv-app .spend-import__table-wrap { max-height: 440px; overflow: auto; background: var(--surface); }
 .nv-app .spend-import__table td { overflow-wrap: anywhere; }

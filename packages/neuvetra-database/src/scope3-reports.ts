@@ -30,7 +30,22 @@ export type { Scope3ReportDocument, Scope3ReportPrevious, Scope3ReportVersionSum
 export interface Scope3ReportVersionDetail { version: Scope3ReportVersionSummary; reportText: string; csvText: string }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
-const sha256 = (text: string) => createHash('sha256').update(text, 'utf8').digest('hex')
+function sha256(text: string): string {
+  const hash = createHash('sha256'), chars = 65_536
+  if (text.length <= chars) return hash.update(text, 'utf8').digest('hex')
+  // One reusable UTF-8 buffer avoids retaining a second full copy of each frozen text while hashing.
+  const encoder = new TextEncoder(), bytes = new Uint8Array(chars * 3)
+  for (let start = 0; start < text.length;) {
+    let end = Math.min(text.length, start + chars)
+    const last = text.charCodeAt(end - 1)
+    if (end < text.length && last >= 0xd800 && last <= 0xdbff) end--
+    const { read, written } = encoder.encodeInto(text.slice(start, end), bytes)
+    if (read !== end - start) throw new Error('Incomplete report text encoding.')
+    hash.update(bytes.subarray(0, written))
+    start = end
+  }
+  return hash.digest('hex')
+}
 const utf8Bytes = (text: string) => Buffer.byteLength(text, 'utf8')
 const coded = (message: string, code: string) => Object.assign(new Error(message), { code })
 type Row = {
@@ -123,17 +138,17 @@ export function scope3ReportDraft(input: {
   /** Round 2c: the size limit of the whole request (default 0030's, SCOPE3_REPORT_MAX_REQUEST_BYTES); a test may lower it. */
   maxRequestBytes?: number
   /**
-   * Round 3 (owner decision 6): called after each text is built (the route passes a full garbage collection), so building
-   * the CSV and hashing never sit on the garbage of building the report text.
+   * Round 3 (owner decision 6): called after each text and between serialization batches (the route passes a full garbage
+   * collection), so building the next phase does not retain temporary serialization buffers from earlier work.
    */
   betweenPhases?: () => void
 }): Scope3ReportPrepareCall & { document: Scope3ReportDocument } {
   const document = buildScope3ReportDocument({ results: input.results, reportingYear: input.reportingYear, revision: input.expectedRevision + 1, setupVersionId: input.setupVersionId,
     consolidationApproach: input.consolidationApproach, preparedBy: input.preparedBy, preparedAt: input.preparedAt, previous: input.previous })
   if (input.results.methods.some(item => item.engineSha256 !== input.engineSha256)) throw new Error('The Scope 3 results name another engine.')
-  const reportText = scope3ReportText(document)
+  const reportText = scope3ReportText(document, input.betweenPhases)
   input.betweenPhases?.()
-  const csvText = scope3ReportCsv(document, input.labels)
+  const csvText = scope3ReportCsv(document, input.labels, input.betweenPhases)
   input.betweenPhases?.()
   // Round 2 (owner decision 10, ENG-3): 0030's limit, checked before any call, with its own error.
   const max = Math.min(input.maxTextBytes ?? SCOPE3_REPORT_MAX_TEXT_BYTES, SCOPE3_REPORT_MAX_TEXT_BYTES)

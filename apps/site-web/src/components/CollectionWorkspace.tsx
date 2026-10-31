@@ -889,8 +889,8 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
     {!canManage && <p>Owner or admin access is needed to save activity or upload evidence.</p>}
     {intro}
     {loaded && <nav className="nv-actions collection-jump" aria-label={ACTIVITY_LIST_TEXT_R3C.jumpLabel}>
-      {spendImportShown && <a className="nv-btn nv-btn--sm" href={`#${SPEND_IMPORT_ANCHOR}`} onClick={event => { event.preventDefault(); document.getElementById(SPEND_IMPORT_ANCHOR)?.scrollIntoView({ block: "start" }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpSpend}</a>}
-      <a className="nv-btn nv-btn--sm" href="#collection-record-editor" onClick={event => { event.preventDefault(); document.getElementById("collection-record-editor")?.scrollIntoView({ block: "start" }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpNew}</a>
+      {spendImportShown && <a className="nv-btn nv-btn--sm" href={`#${SPEND_IMPORT_ANCHOR}`} onClick={event => { event.preventDefault(); const target = document.getElementById(SPEND_IMPORT_ANCHOR); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpSpend}</a>}
+      <a className="nv-btn nv-btn--sm" href="#collection-record-editor" onClick={event => { event.preventDefault(); const target = document.getElementById("collection-record-editor"); target?.scrollIntoView({ block: "start" }); target?.focus({ preventScroll: true }) }}>{ACTIVITY_LIST_TEXT_R3C.jumpNew}</a>
     </nav>}
 
     <div className="worksheet-card" id="saved-activities"><h2>Saved activities</h2>
@@ -917,7 +917,7 @@ export function CollectionWorkspace({ actor, workspaceId, headingRef, onDirtyCha
       <button type="button" disabled={busy} onClick={() => void refresh()}>Reload saved records</button>
     </div>
 
-    <div className="worksheet-card worksheet-form" id="collection-record-editor"><h2>{selected ? `Correct saved ${kindName(selected.kind)}` : "New activity record"}</h2>
+    <div className="worksheet-card worksheet-form" id="collection-record-editor" tabIndex={-1}><h2>{selected ? `Correct saved ${kindName(selected.kind)}` : "New activity record"}</h2>
       {selected && <button type="button" disabled={busy || !canManage} onClick={startNewRecord}>Start a new record</button>}
       <div className="worksheet-nav" aria-label="Activity types">{kinds.map(([kind, label]) => kindButton(kind, label))}</div>
       {scope3FormGroups(availableScope3Kinds.filter(kind => FORM_KINDS.has(kind))).map(group => <div key={group.title} className="worksheet-nav" role="group" aria-label={group.title}><span className="nv-subtle">{group.title}</span>{group.kinds.map(kind => kindButton(kind, kindName(kind)))}</div>)}

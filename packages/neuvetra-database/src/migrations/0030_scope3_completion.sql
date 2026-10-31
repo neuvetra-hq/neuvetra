@@ -1195,7 +1195,7 @@ grant execute on function neuvetra.stage_scope3_report_text(uuid,jsonb,text) to 
 -- category of the year), the evidence (no file linked by an input version was rejected since) and the change-log basis
 -- (the previous approved version is still the year's latest approved one): otherwise 40001, as for the records.
 create function neuvetra.prepare_scope3_report(target_company uuid,request jsonb)
-returns table(version_id uuid,revision integer,replayed boolean) language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp as $$
+returns table(version_id uuid,revision integer,replayed boolean) language plpgsql security definer set search_path=pg_catalog,neuvetra,pg_temp set plan_cache_mode='force_generic_plan' as $$
 #variable_conflict use_column
 declare actor uuid; old neuvetra.scope3_report_requests%rowtype; head_id uuid; head_revision integer; fingerprint text; new_id uuid:=gen_random_uuid(); next_revision integer; r record; k text; issues jsonb; category3 boolean;
   report_text text; csv_text text; uuid_re text:='^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'; begin

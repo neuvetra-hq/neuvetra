@@ -186,8 +186,9 @@ export function scope3CanonicalJson(value: unknown): string {
  * into one list joined once, so no ancestor of the large record list is ever copied whole; anything deeper (one result
  * line, a few kB) is written as one string.
  */
-export function scope3CanonicalJsonText(value: unknown, levels = 3): string {
+export function scope3CanonicalJsonText(value: unknown, levels = 3, betweenBatches?: () => void): string {
   const parts: string[] = []
+  let written = 0
   const prepare = (v: unknown, key: string): unknown => v !== null && typeof v === 'object' && typeof (v as { toJSON?: unknown }).toJSON === 'function' ? (v as { toJSON(key: string): unknown }).toJSON(key) : v
   const omitted = (v: unknown) => v === undefined || typeof v === 'function' || typeof v === 'symbol'
   const small = (v: unknown): string | undefined => {
@@ -200,7 +201,12 @@ export function scope3CanonicalJsonText(value: unknown, levels = 3): string {
   }
   const write = (v: unknown, depth: number): boolean => {
     if (omitted(v)) return false
-    if (depth >= levels || v === null || typeof v !== 'object') { parts.push(small(v)!); return true }
+    if (depth >= levels || v === null || typeof v !== 'object') {
+      parts.push(small(v)!)
+      // The server can reclaim temporary per-record strings before they accumulate across the full report.
+      if (++written % 256 === 0) betweenBatches?.()
+      return true
+    }
     if (Array.isArray(v)) {
       parts.push('[')
       for (let i = 0; i < v.length; i++) { if (i > 0) parts.push(','); if (!write(prepare(v[i], String(i)), depth + 1)) parts.push('null') }
@@ -217,6 +223,7 @@ export function scope3CanonicalJsonText(value: unknown, levels = 3): string {
     parts.push('}'); return true
   }
   if (!write(prepare(value, ''), 0)) return 'null'
+  betweenBatches?.()
   return parts.join('')
 }
 /**

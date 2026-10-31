@@ -30,6 +30,25 @@ const results = (mutate: (r: Scope3ResultsDocument) => void = () => {}): Scope3R
   mutate(r); return r
 }
 
+test('report text hashing preserves exact UTF-8 bytes across chunk and surrogate boundaries', async () => {
+  const vectors = ['', 'ASCII', 'é漢字', '😀', '\ud800', '\udc00', '\ud800x\udc00']
+  for (const boundary of [65_536, 131_072, 1_048_576]) {
+    for (const offset of [-1, 0, 1]) vectors.push('a'.repeat(boundary + offset) + '😀é漢字\ud800x\udc00' + 'z'.repeat(31))
+  }
+  for (const csvText of vectors) {
+    const row = { id: setupVersion, company_id: company, reporting_year: 2025, revision: 1, previous_id: null, setup_version_id: setupVersion, reason: null,
+      report_sha256: sha256('{}'), csv_sha256: sha256(csvText), engine_sha256: ENGINE, register_sha256s: fixture.registerSha256s, input_version_count: 0,
+      created_by: owner, created_at: '2026-10-30T10:00:00.000Z', approved_by: null, approved_at: null, self_approved: null, approval_sha256: null,
+      open_issues: [], acknowledged_open_issues: null, self_approval_confirmed: null, report_text: '{}', csv_text: csvText }
+    const tx: WorkspaceSql = { query: async <T>() => ({ rows: [row as unknown as T] }), exec: async () => {} }
+    const read = await readScope3ReportVersion(tx, company, setupVersion)
+    expect(read?.csvText).toBe(csvText)
+    expect(read?.version.csvSha256).toBe(sha256(csvText))
+    row.csv_text += '!'
+    await expect(readScope3ReportVersion(tx, company, setupVersion)).rejects.toThrow('integrity')
+  }
+})
+
 describe('Scope 3 report versions in the database (I-10)', () => {
   let db: PGlite
   const asUser = <T,>(actor: string, operation: (tx: WorkspaceSql) => Promise<T>) => db.transaction(async tx => {

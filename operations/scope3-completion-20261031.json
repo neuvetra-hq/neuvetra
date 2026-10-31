@@ -1,7 +1,7 @@
 {
   "id": "S3-COMPLETE-20261031",
-  "updatedAtUtc": "2026-10-31T18:09:24.030685+00:00",
-  "status": "active_capacity_and_end_to_end_verification",
+  "updatedAtUtc": "2026-10-31T19:07:02.843527+00:00",
+  "status": "final_native_and_browser_verification",
   "definitionOfDoneMet": false,
   "branch": "codex/scope3-completion-20261031",
   "base": "143bac1838701c97f1e4ce07879b5cab2cb3575e",
@@ -18,13 +18,12 @@
   "N5Retired": false,
   "hostedActions": false,
   "mergeOrDeploy": false,
-  "nextAction": "Finish real full-cap memory repair, then strict current-main baseline and C1-C4 oracle/CSV/frozen/browser acceptance. Final commit and three independent scores remain required.",
+  "nextAction": "Final candidate: run all native and broad checks, refresh four-company r4.6 oracle and settled browser evidence, then require three independent exact-commit scores. No shipping action.",
   "topic": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-10-31-scope3-completion",
   "preflightAgent": "finished; no worker continuing in background",
   "workingTreeReconstructed": "f89cb2146e10b56dd43b9ce9caa42be30145506e",
   "activeWorkers": [
-    "s3_native_harness: capacity repair and fresh local PG checks",
-    "s3_e2e_preparation: browser/helper preparation; no heavy run"
+    "s3_native_harness: final native checks after this commit; exact process status comes from execution evidence"
   ],
   "broadChecks": {
     "run": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-10-31-scope3-completion\\integration-checks\\20261031T180102Z",
@@ -41,5 +40,20 @@
     "lintWarnings": 15,
     "entryGzipBytes": 445615,
     "headroomBytes": 24385
-  }
+  },
+  "capacity": {
+    "profileRun": "20261031T190417637693Z-native",
+    "integratedRun": "20261031T190531-native (see native evidence exact directory)",
+    "records": 3000,
+    "calculated": 3000,
+    "apiPeakMiB": 1304,
+    "backendPeakMiB": 555,
+    "apiLimitMiB": 1536,
+    "backendLimitMiB": 768,
+    "repeatPassed": true,
+    "fullNativeGate": "pending"
+  },
+  "currentMainIdentity": "Four companies pass strict calculated payload comparison and unchanged saved setup/activity/evidence identities; final candidate rerun required.",
+  "oracle": "Original r4.3 failures preserved. Explicit r4.4 mission amendments and independently hardened r4.6 pass 9142 result and 5021 CSV comparisons on captured evidence; final rerun required.",
+  "browser": "Preliminary capture gaps and confirmed mobile withdrawal defect preserved. Layout and capture helper regressions pass; final settled walk and all-image inspection pending."
 }

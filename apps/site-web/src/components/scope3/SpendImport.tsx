@@ -70,7 +70,10 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
       setTab(asked); setShown(PAGE)
       if (typeof document !== "undefined") requestAnimationFrame(() => { const panel = document.getElementById(SPEND_IMPORT_ANCHOR), heading = panel?.querySelector("[data-spend-review-heading]") as HTMLElement | null; (heading ?? panel)?.scrollIntoView({ block: "start" }); heading?.focus({ preventScroll: true }) })
     })
-      .catch(error => { if (live) setMessage(error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import needs database schema 30." : "Spend imports could not be loaded.") })
+      .catch(error => { if (live) {
+        const problem = error instanceof Scope3SpendImportApiError && error.unavailable ? "Spend import needs database schema 30." : "Spend imports could not be loaded."
+        setMessage(previous => previous ? previous.includes(problem) ? previous : `${previous} ${problem}` : problem)
+      } })
     return () => { live = false }
   }, [companyId, actor, reload])
 
@@ -113,7 +116,9 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
     finally { setBusy(false) }
   }
   const correct = async (recordIds: string[], change: "distinct" | "withdraw", withdrawalReason = "Duplicate of an earlier imported spend line.") => {
+    if (busy || !view?.canManage) return
     setBusy(true); setMessage(null)
+    const saved: string[] = []
     try {
       const records = await listCollectionActivities(companyId, actor)
       for (const recordId of recordIds) {
@@ -125,10 +130,22 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
           : { ...activity, state: "withdrawn" as const, withdrawalReason }
         await saveCollectionActivity(companyId, recordId, { idempotencyKey: crypto.randomUUID(), expectedRevision: version.revision, expectedVersionId: version.id,
           correctionReason: change === "distinct" ? "Confirmed not a duplicate of the earlier imported line." : withdrawalReason === "Duplicate of an earlier imported spend line." ? "Withdrawn as a duplicate of an earlier imported line." : `Withdrawn from the spend review: ${withdrawalReason}`, activity: next as typeof activity }, actor)
+        saved.push(recordId)
       }
       if (change === "withdraw" && withdrawalReason !== "Duplicate of an earlier imported spend line.") setMessage(`${recordIds.length} line${recordIds.length === 1 ? "" : "s"} withdrawn.`)
-      setReload(n => n + 1); onChanged?.()
-    } catch (error) { setMessage(error instanceof Error ? error.message : "The line could not be saved.") } finally { setBusy(false) }
+    } catch (error) {
+      const problem = error instanceof Error ? error.message : "The line could not be saved."
+      setMessage(`${saved.length ? `${saved.length} of ${recordIds.length} lines ${change === "withdraw" ? "withdrawn" : "confirmed distinct"}; check the remaining lines before retrying. ` : ""}${problem}`)
+    } finally {
+      if (saved.length) {
+        // Reflect confirmed saves even when the subsequent refresh is rate-limited or unavailable.
+        setView(current => current ? { ...current, lines: current.lines.map(line => !saved.includes(line.recordId) ? line : change === "withdraw"
+          ? { ...line, state: "withdrawn", plan: { action: "hold", status: "withdrawn", reasons: ["record_withdrawn"] } }
+          : { ...line, duplicateConfirmedDistinct: true }) } : current)
+        setSelected([]); setReload(n => n + 1); onChanged?.()
+      }
+      setBusy(false)
+    }
   }
   /** Round 3 lane C (PR-11): every held line in one currency converted on the server, in one transaction. */
   const convert = async (currency: string) => {
@@ -179,7 +196,7 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
   const previewLines = preview?.lines ?? []
 
   return (
-    <section aria-label="Spend import" className="spend-import" id={SPEND_IMPORT_ANCHOR}>
+    <section aria-label="Spend import" className="spend-import" id={SPEND_IMPORT_ANCHOR} tabIndex={-1}>
       <div className="spend-import__head">
         <div>
           <h3 className="nv-h3">Import spend from a ledger CSV</h3>
@@ -218,8 +235,8 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
         </div>}
         {result && <div aria-label="Import result" className="spend-import__result">
           <p>{result.replayed ? "Replayed" : "Saved"}: {result.import.fileName}, {result.import.rowCount} lines; {result.calculable} go to the calculation.</p>
-          <div className="nv-table-wrap"><table className="nv-table" aria-label="Reconciliation"><thead><tr><th scope="col">Currency</th><th scope="col" className="nv-right">{SPEND_BASIS_TEXT_R2C.fileTotalNet}</th><th scope="col" className="nv-right">{SPEND_BASIS_TEXT_R2C.importedTotalNet}</th><th scope="col" className="nv-right">Lines</th><th scope="col">Reconciled</th></tr></thead>
-            <tbody>{result.import.reconciliation.currencies.map(row => <tr key={row.currency}><td>{row.currency}</td><td className="nv-right nv-num">{row.fileTotal === null ? "—" : spendMoney(row.fileTotal, row.currency)}</td><td className="nv-right nv-num">{row.importedTotal === null ? "—" : spendMoney(row.importedTotal, row.currency)}</td><td className="nv-right nv-num">{row.lines}</td><td><span className={`nv-chip ${row.matches ? "nv-chip--ready" : "nv-chip--danger"}`}>{row.matches ? "Yes" : "No"}</span></td></tr>)}</tbody></table></div>
+          <div className="nv-table-wrap spend-import__table-wrap"><table className="nv-table spend-import__table" aria-label="Reconciliation"><thead><tr><th scope="col">Currency</th><th scope="col" className="nv-right">{SPEND_BASIS_TEXT_R2C.fileTotalNet}</th><th scope="col" className="nv-right">{SPEND_BASIS_TEXT_R2C.importedTotalNet}</th><th scope="col" className="nv-right">Lines</th><th scope="col">Reconciled</th></tr></thead>
+            <tbody>{result.import.reconciliation.currencies.map(row => <tr key={row.currency}><td data-label="Currency">{row.currency}</td><td data-label={SPEND_BASIS_TEXT_R2C.fileTotalNet} className="nv-right nv-num">{row.fileTotal === null ? "—" : spendMoney(row.fileTotal, row.currency)}</td><td data-label={SPEND_BASIS_TEXT_R2C.importedTotalNet} className="nv-right nv-num">{row.importedTotal === null ? "—" : spendMoney(row.importedTotal, row.currency)}</td><td data-label="Lines" className="nv-right nv-num">{row.lines}</td><td data-label="Reconciled"><span className={`nv-chip ${row.matches ? "nv-chip--ready" : "nv-chip--danger"}`}>{row.matches ? "Yes" : "No"}</span></td></tr>)}</tbody></table></div>
           {Object.keys(result.holds).length > 0 && <ul aria-label="Held lines by reason" className="spend-import__holds">{Object.entries(result.holds).sort().map(([reason, count]) => <li key={reason}>{`${count} × ${reasonText(reason)}`}</li>)}</ul>}
         </div>}
       </div>
@@ -233,11 +250,13 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
             return <li key={imported.id}>
               <strong>{imported.fileName}</strong> — {active} active line(s) of {imported.rowCount}.
               <button type="button" className="nv-btn nv-btn--sm" disabled={busy || !canManage || active === 0} onClick={() => setWithdrawal({ importId: imported.id, reason: "" })}>Withdraw this import</button>
-              {withdrawal?.importId === imported.id && <div className="nv-notice" aria-label={`Withdraw ${imported.fileName}`}>
+              {withdrawal?.importId === imported.id && <div className="nv-notice spend-import__withdraw" aria-label={`Withdraw ${imported.fileName}`}>
                 <p>Withdraw all active lines from this file. They stay in the history and no longer count in the report.</p>
                 <label className="nv-field"><span>Reason for withdrawing {imported.fileName}</span><textarea aria-label={`Reason for withdrawing ${imported.fileName}`} maxLength={2000} value={withdrawal.reason} disabled={busy} onChange={event => setWithdrawal({ importId: imported.id, reason: event.target.value })} /></label>
-                <button type="button" className="nv-btn" disabled={busy || !canManage || withdrawal.reason.trim().length < 3} onClick={withdrawImport}>Confirm withdrawal</button>
-                <button type="button" className="nv-btn nv-btn--ghost" disabled={busy} onClick={() => setWithdrawal(null)}>Cancel withdrawal</button>
+                <div className="nv-actions">
+                  <button type="button" className="nv-btn" disabled={busy || !canManage || withdrawal.reason.trim().length < 3} onClick={withdrawImport}>Confirm withdrawal</button>
+                  <button type="button" className="nv-btn nv-btn--ghost" disabled={busy} onClick={() => setWithdrawal(null)}>Cancel withdrawal</button>
+                </div>
               </div>}
             </li>
           })}
