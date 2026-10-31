@@ -5,25 +5,126 @@
   "execution_context": "/root",
   "prompt_sha256": "a9ab5574fe2ef1e940cb1950e6ae69da008ff71ba1f857b6a63b45d53240a52b",
   "artifacts": [
-    { "path": "apps/site-web/src/components/CompanySetup.tsx", "sha256": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5" },
-    { "path": "apps/site-web/src/lib/company-setup-api.ts", "sha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d" },
-    { "path": "apps/site-api/src/workspace/company-setup-routes.ts", "sha256": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc" }
+    {
+      "path": "operations/agent-improvement/snapshots/HOSTED-SETUP-UI-01-ORIGINAL.json",
+      "sha256": "af8ae50a53f9079136ce773dcb52c422f701334a216cd8d7410759bb80e9e1b5"
+    }
   ],
   "criteria": [
-    { "id": "UI-01", "status": "pass", "evidence": ["apps/site-web/src/components/CompanySetup.tsx", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reason": "Seven React/Chrome checks, strict response decoder tests and staging build passed for the reviewed local candidate." },
-    { "id": "API-01", "status": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reason": "Independent native PostgreSQL, mounted API and real client integration passed locally." },
-    { "id": "HOST-01", "status": "pending", "evidence": ["Dockerfile.staging"], "reason": "Staging source allowlist updated; no Docker build or hosted backup/deployment yet." }
+    {
+      "id": "UI-01",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/HOSTED-SETUP-UI-01-ORIGINAL.json"
+      ],
+      "reason": "Seven React/Chrome checks, strict response decoder tests and staging build passed for the reviewed local candidate.",
+      "original_evidence": [
+        "apps/site-web/src/components/CompanySetup.tsx",
+        "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"
+      ]
+    },
+    {
+      "id": "API-01",
+      "status": "pass",
+      "evidence": [
+        "operations/agent-improvement/snapshots/HOSTED-SETUP-UI-01-ORIGINAL.json"
+      ],
+      "reason": "Independent native PostgreSQL, mounted API and real client integration passed locally.",
+      "original_evidence": [
+        "evaluations/research-qa/hosted-setup-01-independent-review.md",
+        "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"
+      ]
+    },
+    {
+      "id": "HOST-01",
+      "status": "pending",
+      "evidence": [
+        "operations/agent-improvement/snapshots/HOSTED-SETUP-UI-01-ORIGINAL.json"
+      ],
+      "reason": "Staging source allowlist updated; no Docker build or hosted backup/deployment yet.",
+      "original_evidence": [
+        "Dockerfile.staging"
+      ]
+    }
   ],
-  "review": { "reviewer_execution_context": "/root/hosted_qa", "independent": true, "verdict": "pass", "evidence": ["evaluations/research-qa/hosted-setup-01-independent-review.md", "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"], "reviewed_artifacts": [
-    { "path": "apps/site-web/src/components/CompanySetup.tsx", "sha256": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5" },
-    { "path": "apps/site-web/src/lib/company-setup-api.ts", "sha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d" },
-    { "path": "apps/site-api/src/workspace/company-setup-routes.ts", "sha256": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc" }
-  ] },
-  "outcome": { "status": "in_progress", "first_review": "fail", "material_findings_open": 0, "rework_cycles": 1, "escaped_defects": 0, "repeated_findings": [] },
-  "compute": { "requested": { "model": "gpt-5.6-terra", "effort": "medium" }, "observed": { "model": null, "effort": null }, "observation_evidence": [] },
-  "metrics": { "elapsed_seconds": null, "active_seconds": null, "waiting_seconds": null, "input_tokens": null, "cached_input_tokens": null, "output_tokens": null, "reasoning_tokens": null, "cost_usd": null },
+  "review": {
+    "reviewer_execution_context": "/root/hosted_qa",
+    "independent": true,
+    "verdict": "pass",
+    "evidence": [
+      "evaluations/research-qa/hosted-setup-01-independent-review.md",
+      "evaluations/research-qa/hosted-setup-01-ui-independent-review.md"
+    ],
+    "reviewed_artifacts": [
+      {
+        "path": "operations/agent-improvement/snapshots/HOSTED-SETUP-UI-01-ORIGINAL.json",
+        "sha256": "af8ae50a53f9079136ce773dcb52c422f701334a216cd8d7410759bb80e9e1b5"
+      }
+    ],
+    "original_reviewed_artifacts": [
+      {
+        "path": "apps/site-web/src/components/CompanySetup.tsx",
+        "sha256": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5"
+      },
+      {
+        "path": "apps/site-web/src/lib/company-setup-api.ts",
+        "sha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d"
+      },
+      {
+        "path": "apps/site-api/src/workspace/company-setup-routes.ts",
+        "sha256": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc"
+      }
+    ]
+  },
+  "outcome": {
+    "status": "in_progress",
+    "first_review": "fail",
+    "material_findings_open": 0,
+    "rework_cycles": 1,
+    "escaped_defects": 0,
+    "repeated_findings": []
+  },
+  "compute": {
+    "requested": {
+      "model": "gpt-5.6-terra",
+      "effort": "medium"
+    },
+    "observed": {
+      "model": null,
+      "effort": null
+    },
+    "observation_evidence": []
+  },
+  "metrics": {
+    "elapsed_seconds": null,
+    "active_seconds": null,
+    "waiting_seconds": null,
+    "input_tokens": null,
+    "cached_input_tokens": null,
+    "output_tokens": null,
+    "reasoning_tokens": null,
+    "cost_usd": null
+  },
   "metrics_evidence": [],
   "pilot_eligible": false,
   "dispatch_exception": "Fresh software-engineering worker request hit the runtime thread limit. Root became the actual UI/API writer; requested registry model was not applied or observed. Cost reservation and actual cost remain unknown.",
-  "applied_lessons": ["L03", "L04"]
+  "applied_lessons": [
+    "L03",
+    "L04"
+  ],
+  "source_artifacts": [
+    {
+      "path": "apps/site-web/src/components/CompanySetup.tsx",
+      "sha256": "efe71d160115234a39c5b0b0477af7406c2aea8139f0179cb210149c568cf7a5"
+    },
+    {
+      "path": "apps/site-web/src/lib/company-setup-api.ts",
+      "sha256": "517caaff2c3a85d5f4d7a52ac42bbc2adcbb184b120855511e83f06ed6938a5d"
+    },
+    {
+      "path": "apps/site-api/src/workspace/company-setup-routes.ts",
+      "sha256": "bad0775f823e866459e094884099d4fd8a7a943b59935c3bea93840c30f12bbc"
+    }
+  ],
+  "historical_binding_note": "The old run pinned mutable source files. This bundle preserves every original pinned byte recovered from Git and the original run record itself. Review status, outcomes and historical reviewer are unchanged. No acceptance of current source or hosted action is implied. Serialization-only rebinding independently reviewed at Scope3 closure."
 }

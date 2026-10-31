@@ -47,12 +47,13 @@ const FIX_FIELD_POLL_MS = 100
 export function focusRecordEditor(recordId: string, doc: Document = document): HTMLElement | null {
   const editor = doc.getElementById("collection-record-editor")
   if (!editor) return null
+  const isFixRequest = pending?.recordId === recordId
   const fields = takeRecordFieldFocus(recordId)
   const control = fields.length ? findFieldControl(editor, fields) : null
   const heading = editor.querySelector("h2")
   const target: HTMLElement | null = control ?? heading
   if (!target) return null
-  focusTarget(control ?? target, !!control, doc)
+  focusTarget(control ?? target, !!control, doc, isFixRequest)
   // Round 2 polish (lane D): since the record forms load on first use (lane E, ENG-13), the editor can show the record
   // before its form has rendered the fields. The heading is focused now and the named field as soon as it renders.
   const view = doc.defaultView
@@ -69,9 +70,11 @@ export function focusRecordEditor(recordId: string, doc: Document = document): H
   return target
 }
 
-function focusTarget(target: HTMLElement, isControl: boolean, doc: Document): void {
+function focusTarget(target: HTMLElement, isControl: boolean, doc: Document, centerFallback = false): void {
   if (!isControl) target.tabIndex = -1
-  const block: ScrollLogicalPosition = isControl ? "center" : "start"
+  // A Scope 3 Fix fallback must remain below fixed navigation, including while its form loads.
+  // Ordinary editor navigation keeps its existing alignment.
+  const block: ScrollLogicalPosition = isControl || centerFallback ? "center" : "start"
   target.scrollIntoView({ block })
   target.focus({ preventScroll: true })
   if (isControl) {

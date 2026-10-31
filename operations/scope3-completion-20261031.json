@@ -1,7 +1,7 @@
 {
   "id": "S3-COMPLETE-20261031",
-  "updatedAtUtc": "2026-10-31T19:59:39.453625+00:00",
-  "status": "repairing_final_browser_findings",
+  "updatedAtUtc": "2026-10-31T20:49:00.358267+00:00",
+  "status": "verifying_fix_navigation_repair",
   "definitionOfDoneMet": false,
   "branch": "codex/scope3-completion-20261031",
   "base": "143bac1838701c97f1e4ce07879b5cab2cb3575e",
@@ -18,15 +18,11 @@
   "N5Retired": false,
   "hostedActions": false,
   "mergeOrDeploy": false,
-  "nextAction": "Commit independently checked Overview/retry/Scope3 presentation fixes, then repeat all final gates on exact candidate. No merge or deployment.",
+  "nextAction": "Repeat full final checks on committed Fix navigation repair, then exact-head independent accounting/engineering/product scores. No merge or deployment.",
   "topic": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-10-31-scope3-completion",
   "preflightAgent": "finished; no worker continuing in background",
   "workingTreeReconstructed": "f89cb2146e10b56dd43b9ce9caa42be30145506e",
-  "activeWorkers": [
-    "s3_final_engineering_r4: browser capture harness repairs",
-    "s3_final_product: scoped presentation repair author",
-    "s3_visual_c3_c4: independent repair review"
-  ],
+  "activeWorkers": [],
   "broadChecks": {
     "run": "C:\\Users\\nimab\\Neuvetra\\notes\\reviews\\2026-10-31-scope3-completion\\integration-checks\\20261031T180102Z",
     "commands": 12,
@@ -41,7 +37,8 @@
     "lintErrors": 0,
     "lintWarnings": 15,
     "entryGzipBytes": 445615,
-    "headroomBytes": 24385
+    "headroomBytes": 24385,
+    "currentCandidate": "pending after navigation repair; prior counts historical"
   },
   "capacity": {
     "profileRun": "20261031T190417637693Z-native",
@@ -53,11 +50,11 @@
     "apiLimitMiB": 1536,
     "backendLimitMiB": 768,
     "repeatPassed": true,
-    "fullNativeGate": "pending"
+    "fullNativeGate": "f247 passed; new navigation candidate repeat pending"
   },
   "currentMainIdentity": "Four companies pass strict calculated payload comparison and unchanged saved setup/activity/evidence identities; final candidate rerun required.",
   "oracle": "Original r4.3 failures preserved. Explicit r4.4 mission amendments and independently hardened r4.6 pass 9142 result and 5021 CSV comparisons on captured evidence; final rerun required.",
-  "browser": "Preliminary capture gaps and confirmed mobile withdrawal defect preserved. Layout and capture helper regressions pass; final settled walk and all-image inspection pending.",
+  "browser": "f247 automated walk and all936 actual image views passed; independent live Fix-navigation minor repaired after preserving first failure. Final candidate repeat required.",
   "nativeReportTest": "Before: Bun rejects.toThrow stalls after PostgreSQL correctly rejects immutable UPDATE. Explicit awaited rejection checks Error, SQLSTATE55000 and immutable message; full lifecycle passed diagnostic copy. Full final native sequence pending.",
   "latestDiagnostic": {
     "commit": "c86f9adba2ff018222759a721fddeacf19b6d190",
@@ -66,5 +63,32 @@
     "scope12AndSavedIdentities": "passed",
     "browser": "diagnostic failure: Overview context, trace contrast and mobile layout findings; capture false positives separately repaired",
     "cleanup": "server and database stopped; source/harness unchanged"
-  }
+  },
+  "latestCompletedCandidate": {
+    "commit": "f2475fa4d05615049d7614c9cb4a2324f0b470fd",
+    "broadCommands": 12,
+    "databasePass": 423,
+    "apiPass": 829,
+    "webPass": 570,
+    "pythonPass": 283,
+    "goldenPass": 3,
+    "sourceRequiredBuilderPass": 79,
+    "lintErrors": 0,
+    "baselineWarnings": 15,
+    "entryGzipBytes": 445797,
+    "imageSimulationChecks": 310,
+    "hostedTests": 13,
+    "stagedTests": 15,
+    "raceTests": 1,
+    "rehearsalChecks": 128,
+    "apiPeakMiB": 1444.88671875,
+    "backendPeakMiB": 560.26953125,
+    "e2eRun": "20261031T201745985281Z-e2e",
+    "e2eNumericalAndScope12Passed": true,
+    "actualUiPngsInspected": 936,
+    "selectedPdfPagesInspected": 28,
+    "unselectedPdfPages": 378,
+    "independentLiveProductFinding": "Two missing Fix-field mappings and fallback heading hidden by fixed navigation; repaired, fresh verification pending."
+  },
+  "metadataBindings": "Exact historical bytes preserved in two snapshots; independent recovery37checks, application18mutation cases and applied23checks pass; ordinary validator360records/11roles."
 }

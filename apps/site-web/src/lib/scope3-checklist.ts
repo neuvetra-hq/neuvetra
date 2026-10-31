@@ -67,6 +67,8 @@ export const SCOPE3_FIX_FIELDS: Readonly<Record<string, readonly string[]>> = {
   finance_lease_in_scope1_2: ["Lease"], lease_type_required: ["Lease"],
   // Round 2 polish (lane D): the freight load basis and the category 4-6 spend overlap confirmation.
   load_basis_required: ["Did the goods have the vehicle to themselves?"], spend_overlap_not_confirmed: ["Covered by another record?"],
+  commuting_overlap_not_confirmed: ["Covered by distance-based commuting records?"],
+  naics_not_valid_for_category: ["Search NAICS codes"],
   lease_in_scope1_2_under_boundary: [COPY_TEXT_R2E.leaseNoControlLabel, "Lease"],
   natural_gas_use_unknown: ["Does the building use natural gas?"],
   hotel_country_not_in_factor_set: ["Hotel country (two-letter code)"], hotel_country_required: ["Hotel country (two-letter code)"],
