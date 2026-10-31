@@ -1,0 +1,18 @@
+# Neuvetra Scope 3 spend import template (CSV, UTF-8, up to 2 MB and 2,000 lines). Lines starting with # are ignored.
+# Keep the header line below; add one line per purchase. Each line becomes a spend record: calculated, or held with a reason.
+# Columns (header names are not case-sensitive; spaces and hyphens read as underscores):
+# line_id: Your invoice or ledger line number. Optional; used to spot the same line in two exports. Also accepted as: invoice, invoice_number, document_number, transaction_id, reference.
+# date: Invoice or posting date, written yyyy-mm-dd or mm/dd/yyyy (US month first, e.g. 03/14/2025). Optional; a line dated outside the reporting period is held. Also accepted as: invoice_date, posting_date, transaction_date.
+# vendor: Supplier name (up to 200 characters). Also accepted as: supplier, supplier_name, vendor_name, payee.
+# gl_account: General-ledger account code (up to 120 characters). Also accepted as: account, account_number, gl_code.
+# gl_description: General-ledger account name. Used as the description when description is blank. Also accepted as: account_name, account_description.
+# description: What was bought (up to 200 characters). Required unless gl_description is given. Also accepted as: memo, line_description.
+# amount: Amount paid, e.g. 1250.50 or 1,250.50. Required. Negative amounts and text are kept and held, never counted as zero. Also accepted as: net_amount, spend.
+# currency: Three-letter currency code. Required. Only USD is calculated; other currencies are kept and held. Also accepted as: currency_code.
+# dollar_year: Year of the prices (2012-2035). Blank = the reporting year. Also accepted as: price_year.
+# category: Scope 3 category: 1, 2, 4, 5 or 6. Category 9 (transport the company did not pay for) is entered by hand, never imported. Blank = mapped from memory, else 1 and held for mapping. Also accepted as: scope3_category, ghg_category.
+# naics_code: Six-digit 2017 NAICS code of the producing sector (needs category). A code outside the category list is held for mapping. Also accepted as: naics, naics6.
+# margin_choice: with_margins (purchaser price, the default) or without_margins (producer price at the factory gate; held until the factory gate is confirmed). Also accepted as: margins, price_basis.
+# capital_full_cost: Category 2 only: true when the amount is the full acquisition cost (required for capital goods to calculate). Also accepted as: full_cost, capital_at_full_cost.
+# Example (put lines like this below the header, without the #): INV-1001,2025-03-14,Acme Office Supply,6100,Office supplies,Toner and paper,4820.50,USD,2025,1,339940,with_margins,
+line_id,date,vendor,gl_account,gl_description,description,amount,currency,dollar_year,category,naics_code,margin_choice,capital_full_cost

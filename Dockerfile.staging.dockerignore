@@ -211,6 +211,44 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/collection.ts
 !packages/neuvetra-database/src/collection-contract.ts
 !packages/neuvetra-database/src/collection-engine-input.ts
+!packages/neuvetra-database/src/scope3-collection-contract.ts
+!packages/neuvetra-database/src/scope3-collection.ts
+!packages/neuvetra-database/src/scope3-coverage.ts
+!packages/neuvetra-database/src/scope3-engine-output.ts
+# Scope 3 completion I-01
+!packages/neuvetra-database/src/scope3-method-catalog.ts
+!packages/neuvetra-database/src/scope3-text.ts
+!apps/site-api/src/workspace/results-scheduler.ts
+# Scope 3 completion I-02
+!packages/neuvetra-database/src/scope3-assessment-contract.ts
+# Scope 3 completion I-04
+!packages/neuvetra-database/src/scope3-assessments.ts
+!packages/neuvetra-database/src/scope3-deadline.ts
+!apps/site-api/src/workspace/scope3-assessment-routes.ts
+!packages/neuvetra-database/src/scope3-spend-import.ts
+!packages/neuvetra-database/src/scope3-spend-imports.ts
+!packages/neuvetra-database/src/scope3-spend-grouping.ts
+!packages/neuvetra-database/src/scope3-spend-currency.ts
+!apps/site-api/src/workspace/scope3-spend-import-routes.ts
+# Scope 3 completion I-06
+!packages/neuvetra-database/src/scope3-trace.ts
+!packages/neuvetra-database/src/scope3-methodology.ts
+!packages/neuvetra-database/src/scope3-report-csv.ts
+# Scope 3 completion I-10: frozen report versions (document module, database access, route).
+!packages/neuvetra-database/src/scope3-report-document.ts
+!packages/neuvetra-database/src/scope3-reports.ts
+!apps/site-api/src/workspace/scope3-report-routes.ts
+# Round 2 (lane B): frozen report validators and the shared Scope 3 route helpers.
+!packages/neuvetra-database/src/scope3-report-v1.ts
+!packages/neuvetra-database/src/scope3-report-v2.ts
+!packages/neuvetra-database/src/scope3-report-v3.ts
+!packages/neuvetra-database/src/scope3-text-v3.ts
+!apps/site-api/src/workspace/scope3-route-helpers.ts
+# Round 2 lane E (ENG-6): the plain-language labels (web and API).
+!packages/neuvetra-database/src/plain-language-labels.ts
+!packages/neuvetra-database/src/scope3-text-r2e.ts
+# Round 3 lane A: the shared memo, partial-boundary and superseded-spend helpers.
+!packages/neuvetra-database/src/scope3-r3a.ts
 !packages/neuvetra-database/src/method-reference.ts
 !packages/neuvetra-database/src/method-reference/
 !packages/neuvetra-database/src/method-reference/verified-factor-register-2025.json
@@ -218,15 +256,26 @@ apps/site-web/src/m71-local-preview.tsx
 !packages/neuvetra-database/src/method-reference/verified-electricity-register-egrid2023-greene2025.json
 !packages/neuvetra-database/src/method-reference/verified-scope3-register-2025.json
 !packages/neuvetra-database/src/method-reference/egrid2023-zip-subregion-utility.csv
+# Scope 3 completion I-03
+!packages/neuvetra-database/src/method-reference/verified-scope3-spend-register-epa-scghg-v1.3.json
+# Scope 3 completion I-05
+!packages/neuvetra-database/src/method-reference/verified-scope3-supplement-register-2025.json
+# Scope 3 completion I-12u
+!packages/neuvetra-database/src/method-reference/verified-scope3-us-upstream-register-2025.json
+# Scope 3 completion I-12h
+!packages/neuvetra-database/src/method-reference/verified-scope3-us-building-hotel-register-2025.json
 !packages/neuvetra-database/src/migrations/0024_method_reference.sql
 !packages/neuvetra-database/src/migrations/0025_scope3_method_reference.sql
 !packages/neuvetra-database/src/migrations/0026_scope2_residual_mix.sql
 !packages/neuvetra-database/src/migrations/0027_collection.sql
 !packages/neuvetra-database/src/migrations/0028_collection_zip_check.sql
+!packages/neuvetra-database/src/migrations/0029_scope3_collection.sql
+!packages/neuvetra-database/src/migrations/0030_scope3_completion.sql
 !apps/site-api/src/workspace/collection-routes.ts
 !apps/site-api/src/workspace/collection-storage.ts
 !apps/site-api/src/workspace/collection-zip.ts
 !apps/site-api/src/workspace/collection-results-routes.ts
+!apps/site-api/src/workspace/scope3-results-routes.ts
 !apps/site-api/src/calculation/method-engine-runner.ts
 !apps/site-api/src/calculation/scope1-authority.ts
 !apps/site-api/src/calculation/scope2-authority.ts

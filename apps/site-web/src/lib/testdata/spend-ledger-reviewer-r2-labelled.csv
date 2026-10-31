@@ -1,0 +1,201 @@
+Document Number,Posting Date,Vendor Name,Account,Account Name,Memo,Amount,Currency,Label NAICS 2017,Label category,Justification
+AP-100105,2025-09-01,FedEx,5300,Freight in,,914.19,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100018,2025-05-11,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot,9500.33,USD,331313,1,Primary aluminum ingot: 331313.
+AP-100025,2025-11-07,ResinTech Polymers,5020,Raw materials - plastics,,"14,724.14",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100001,2025-05-28,Amazon Web Services,6400,Software and cloud,AWS monthly,2275.38,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100106,2025-09-11,Grainger,6110,MRO supplies,Shop supplies,1403.52,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100024,2025-05-23,Baker Lyman LLP,6600,Legal fees,Patent filing,"14,261.24",USD,541110,1,Law firm: 541110 Offices of Lawyers.
+AP-100147,2025-12-01,Enterprise Rent-A-Car,6720,Travel - ground,Car rental,721.25,USD,532111,6,"Car rental: 532111 Passenger Car Rental, category 6."
+AP-100126,2025-11-26,Amazon Web Services,6400,Software and cloud,AWS monthly,3311.71,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100124,2025-11-24,Uline,5030,Packaging,Corrugated boxes,"1,199.84",USD,322211,1,Corrugated boxes: 322211.
+AP-100179,2025-06-06,Fastenal,6110,MRO supplies,Cutting tools,2576.45,USD,333515,1,Cutting tools: 333515.
+AP-100143,2025-08-05,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel,41371.05,USD,331221,1,Cold-rolling purchased steel: 331221 Rolled Steel Shape Manufacturing.
+AP-100016,2025-04-14,Baker Lyman LLP,6600,Legal fees,Contract review,3271.82,USD,541110,1,Law firm: 541110 Offices of Lawyers.
+AP-100049,2025-11-04,Uline,5030,Packaging,Packing tape,710.71,USD,322220,1,Packing tape: 322220 (pressure-sensitive tape from purchased materials).
+AP-100189,2025-04-15,Uline,5030,Packaging,Credit memo damaged boxes,-812.40,USD,322211,1,A credit for corrugated boxes: 322211 (held as a credit in any case).
+AP-100199,2025-07-07,,6110,MRO supplies,,155.20,USD,332999,1,"No vendor, MRO supplies account, no memo: 332999 as for other unspecified MRO consumables."
+AP-100005,2025-07-08,Uline,5030,Packaging,,811.32,USD,322211,1,"Blank memo under Packaging from a box distributor: corrugated boxes, 322211, as the main packaging bought."
+AP-100077,2025-07-11,XPO Logistics,5300,Freight in,LTL inbound,"2,044.61",USD,484122,4,"LTL freight: 484122, category 4."
+AP-100046,2025-12-15,Staples Business Advantage,6100,Office supplies,Toner,356.12,USD,339940,1,Toner cartridges: 339940 Office Supplies (except Paper) Manufacturing.
+AP-100034,2025-09-10,Grainger,6110,MRO supplies,Lubricants,1697.79,USD,324191,1,Lubricants: 324191.
+AP-100006,2025-08-17,FedEx,5300,Freight in,Inbound parcels,963.75,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100003,2025-04-17,Baker Lyman LLP,6600,Legal fees,Patent filing,14760.75,USD,541110,1,Law firm: 541110 Offices of Lawyers.
+AP-100043,2025-07-16,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,18043.10,USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100194,2026-01-05,Uline,5030,Packaging,Corrugated boxes,980.00,USD,322211,1,Corrugated boxes: 322211.
+AP-100096,2025-06-19,PG&E,6900,Utilities - electricity,Electricity plant,"15,345.63",USD,energy_scope_1_2,,"Electricity: Scope 2 from the bill, so the spend line is withdrawn."
+AP-100014,2025-07-27,XPO Logistics,5300,Freight in,LTL inbound,4360.26,USD,484122,4,"LTL freight: 484122, category 4."
+AP-100174,2025-04-02,FedEx,5300,Freight in,,1616.33,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100087,2025-04-15,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,"40,203.38",USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100153,2025-04-06,Salesforce,6400,Software and cloud,CRM subscription,"5,200.00",USD,511210,1,Software subscription: 511210 Software Publishers.
+AP-100036,2025-11-28,Amazon Web Services,6400,Software and cloud,AWS monthly,3377.07,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100099,2025-08-07,Amazon Web Services,6400,Software and cloud,AWS monthly,"3,152.30",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100004,2025-03-08,Uline,5030,Packaging,Stretch wrap,"1,154.31",USD,326112,1,Stretch film: 326112 Plastics Packaging Film and Sheet Manufacturing.
+JE-2025-12-ACC,,Accrual - consultants,6610,Audit and consulting,Year-end accrual,15000.00,USD,541611,1,Accrued consultants' fees: 541611 Administrative Management and General Management Consulting Services.
+AP-100088,2025-09-24,Delta Air Lines,6700,Travel - airfare,Airfare sales team,1099.83,USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-100073,2025-10-16,ResinTech Polymers,5020,Raw materials - plastics,,"8,508.97",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100092,2025-04-12,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot,20344.77,USD,331313,1,Primary aluminum ingot: 331313.
+AP-100177,2025-12-02,Staples Business Advantage,6100,Office supplies,Office supplies,810.29,USD,339940,1,Office supplies: 339940.
+AP-100131,2025-03-26,SoCalGas,6910,Utilities - gas,Natural gas plant,7921.92,USD,energy_scope_1_2,,"Natural gas: Scope 1 from the bill, so the spend line is withdrawn."
+AP-100155,2025-03-19,Marriott,6710,Travel - lodging,Hotel,1077.01,USD,721110,6,"Hotel: 721110, category 6."
+AP-100045,2025-12-20,Microsoft,6400,Software and cloud,M365 licences,1800.00,USD,511210,1,Software licences: 511210 Software Publishers.
+AP-100062,2025-11-26,Magna Components Canada,5040,Components,Motor housings,"11,437.16",CAD,335312,1,Motor housings are motor parts: 335312 Motor and Generator Manufacturing.
+AP-100192,2025-02-15,Amazon Business,6100,Office supplies,Refund,-64.99,USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100188,2025-07-19,Staples Business Advantage,6100,Office supplies,Toner,670.04,USD,339940,1,Toner cartridges: 339940 Office Supplies (except Paper) Manufacturing.
+AP-100057,2025-09-12,ResinTech Polymers,5020,Raw materials - plastics,,"5,940.73",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100011,2025-05-16,Waste Management,6800,Waste disposal,Monthly hauling,"1,127.83",USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100144,2025-09-01,Fastenal,6110,MRO supplies,Cutting tools,"2,536.55",USD,333515,1,Cutting tools: 333515.
+AP-100170,2025-02-13,Fastenal,6110,MRO supplies,Fasteners,236.32,USD,332722,1,Fasteners: 332722.
+AP-100094,2025-04-20,Fastenal,6110,MRO supplies,Cutting tools,"1,766.58",USD,333515,1,Cutting tools: 333515.
+AP-100195,2026-01-02,Amazon Web Services,6400,Software and cloud,AWS monthly,"2,890.00",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100123,2025-11-16,ADP,6500,Payroll services,Payroll processing fee,1588.08,USD,541214,1,Payroll processing fee: 541214 Payroll Services.
+AP-100089,2025-02-16,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,"11,573.82",EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100075,2025-07-04,Uline,5030,Packaging,,"2,567.14",USD,322211,1,"Blank memo under Packaging from a box distributor: corrugated boxes, 322211, as the main packaging bought."
+AP-100080,2025-03-27,Marriott,6710,Travel - lodging,Hotel,1145.82,USD,721110,6,"Hotel: 721110, category 6."
+AP-100154,2025-06-07,Staples Business Advantage,6100,Office supplies,Paper,491.79,USD,322121,1,Office paper is made at paper mills: 322121.
+AP-100181,2025-02-22,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,15067.01,USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100083,2025-03-09,Baker Lyman LLP,6600,Legal fees,Contract review,"13,647.40",USD,541110,1,Law firm: 541110 Offices of Lawyers.
+AP-100121,2025-11-12,Microsoft,6400,Software and cloud,M365 licences,1800.00,USD,511210,1,Software licences: 511210 Software Publishers.
+AP-100168,2025-09-12,Waste Management,6800,Waste disposal,Monthly hauling,1320.41,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100064,2025-07-03,Enterprise Rent-A-Car,6720,Travel - ground,Car rental,474.57,USD,532111,6,"Car rental: 532111 Passenger Car Rental, category 6."
+AP-100148,2025-01-03,Grainger,6110,MRO supplies,Shop supplies,2567.85,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100161,2025-03-15,FedEx,5300,Freight in,,660.53,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100030,2025-05-10,Waste Management,6800,Waste disposal,Monthly hauling,998.34,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100051,2025-11-03,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,"39,289.87",USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100169,2025-05-28,Uline,5030,Packaging,Corrugated boxes,"2,026.30",USD,322211,1,Corrugated boxes: 322211.
+AP-100091,2025-02-11,Amazon Business,6100,Office supplies,Misc supplies,"1,587.57",USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100103,2025-06-22,ADP,6500,Payroll services,Payroll processing fee,1588.51,USD,541214,1,Payroll processing fee: 541214 Payroll Services.
+AP-100125,2025-09-19,Marriott,6710,Travel - lodging,Hotel,440.95,USD,721110,6,"Hotel: 721110, category 6."
+AP-100128,2025-09-16,Cintas,6120,Uniforms and facility services,Uniform rental,890.45,USD,812332,1,Uniform rental: 812332 Industrial Launderers.
+AP-100182,2025-01-07,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,"16,315.86",USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100022,2025-09-15,PG&E,6900,Utilities - electricity,Electricity plant,20730.24,USD,energy_scope_1_2,,"Electricity: Scope 2 from the bill, so the spend line is withdrawn."
+AP-100151,2025-06-14,Uline,5030,Packaging,Stretch wrap,3873.60,USD,326112,1,Stretch film: 326112 Plastics Packaging Film and Sheet Manufacturing.
+AP-100055,2025-12-11,Sysco,6310,Meals and catering,Canteen supplies,1741.60,USD,311999,1,"Food supplies for the canteen from a food distributor: the food itself, 311999 All Other Miscellaneous Food Manufacturing (Sysco's own code 424410 is the margin only)."
+AP-100173,2025-10-12,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,4689.52,EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100193,2024-12-30,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,12750.00,USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100129,2025-02-27,Cintas,6120,Uniforms and facility services,Uniform rental,813.25,USD,812332,1,Uniform rental: 812332 Industrial Launderers.
+AP-100109,2025-11-07,ResinTech Polymers,5020,Raw materials - plastics,,"12,015.35",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100158,2025-12-17,FedEx,5300,Freight in,Inbound parcels,"1,769.80",USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100040,2025-07-07,Grainger,6110,MRO supplies,Lubricants,493.02,USD,324191,1,Lubricants: 324191.
+AP-100056,2025-10-16,FedEx,5300,Freight in,,"1,011.14",USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100160,2025-02-22,FedEx,5300,Freight in,Inbound parcels,374.68,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100115,2025-11-17,Amazon Business,6100,Office supplies,Misc supplies,911.81,USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100133,2025-03-12,Uline,5030,Packaging,Corrugated boxes,"2,078.55",USD,322211,1,Corrugated boxes: 322211.
+AP-100029,2025-06-26,FedEx,5300,Freight in,Inbound parcels,446.17,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100175,2025-02-23,Pacific Steel Supply,5010,Raw materials - metals,Steel bar stock,"39,222.32",USD,331110,1,Hot-rolled bar stock is made at steel mills: 331110.
+AP-100102,2025-04-19,FedEx,5300,Freight in,,351.43,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100137,2025-04-16,Cintas,6120,Uniforms and facility services,Uniform rental,769.70,USD,812332,1,Uniform rental: 812332 Industrial Launderers.
+AP-100035,2025-03-09,Staples Business Advantage,6100,Office supplies,Toner,789.48,USD,339940,1,Toner cartridges: 339940 Office Supplies (except Paper) Manufacturing.
+AP-100019,2025-11-18,Grainger,6110,MRO supplies,Shop supplies,238.94,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100071,2025-05-21,Grainger,6110,MRO supplies,Safety gloves,1154.04,USD,339113,1,Personal safety equipment: 339113 Surgical Appliance and Supplies Manufacturing.
+AP-100191,2025-08-15,Delta Air Lines,6700,Travel - airfare,Refund cancelled trip,-1180.00,USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-100011,2025-05-16,Waste Management,6800,Waste disposal,Monthly hauling,1127.83,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100044,2025-06-01,Grainger,6110,MRO supplies,Shop supplies,2242.81,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100002,2025-09-03,Waste Management,6800,Waste disposal,Monthly hauling,"1,381.86",USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100097,2025-01-15,SoCalGas,6910,Utilities - gas,Natural gas plant,"6,470.17",USD,energy_scope_1_2,,"Natural gas: Scope 1 from the bill, so the spend line is withdrawn."
+AP-100063,2025-07-09,Amazon Business,6100,Office supplies,Office chairs,1306.80,USD,337214,1,Office chairs: 337214 Office Furniture (except Wood) Manufacturing.
+AP-100145,2025-04-08,Grainger,6110,MRO supplies,,276.60,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100150,2025-02-10,ResinTech Polymers,5020,Raw materials - plastics,,17760.75,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100090,2025-02-17,Fastenal,6110,MRO supplies,Cutting tools,2463.39,USD,333515,1,Cutting tools: 333515.
+AP-100027,2025-05-04,XPO Logistics,5300,Freight in,LTL inbound,1604.62,USD,484122,4,"LTL freight: 484122, category 4."
+AP-100015,2025-04-24,FedEx,5300,Freight in,Inbound parcels,1670.23,USD,492110,4,"Parcels paid by the company: 492110 Couriers and Express Delivery Services, category 4."
+AP-100067,2025-11-04,Cintas,6120,Uniforms and facility services,Uniform rental,837.62,USD,812332,1,Uniform rental: 812332 Industrial Launderers.
+AP-100012,2025-10-01,ResinTech Polymers,5020,Raw materials - plastics,,6794.50,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100156,2025-12-05,XPO Logistics,5300,Freight in,LTL inbound,"6,173.65",USD,484122,4,"LTL freight: 484122, category 4."
+AP-100084,2025-01-22,Amazon Web Services,6400,Software and cloud,AWS monthly,3172.26,USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100172,2025-04-11,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions,17819.56,USD,331318,1,"Extruded aluminum: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-100023,2025-11-04,Staples Business Advantage,6100,Office supplies,Toner,605.44,USD,339940,1,Toner cartridges: 339940 Office Supplies (except Paper) Manufacturing.
+AP-100185,2025-09-18,Waste Management,6800,Waste disposal,Monthly hauling,1406.70,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100008,2025-05-15,SoCalGas,6910,Utilities - gas,Natural gas plant,"3,032.32",USD,energy_scope_1_2,,"Natural gas: Scope 1 from the bill, so the spend line is withdrawn."
+AP-100134,2025-03-25,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,24875.11,USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100165,2025-12-16,Baker Lyman LLP,6600,Legal fees,Contract review,"5,081.73",USD,541110,1,Law firm: 541110 Offices of Lawyers.
+AP-100042,2025-06-07,Delta Air Lines,6700,Travel - airfare,Airfare sales team,"2,842.88",USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-100082,2025-12-03,Delta Air Lines,6700,Travel - airfare,Airfare sales team,"2,126.88",USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-100101,2025-10-26,Staples Business Advantage,6100,Office supplies,Paper,389.52,USD,322121,1,Office paper is made at paper mills: 322121.
+AP-100038,2025-12-03,Magna Components Canada,5040,Components,Motor housings,"14,720.61",CAD,335312,1,Motor housings are motor parts: 335312 Motor and Generator Manufacturing.
+AP-100074,2025-10-19,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions,20939.73,USD,331318,1,"Extruded aluminum: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-100140,2025-06-18,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,"10,984.87",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100098,2025-11-15,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot,"22,751.75",USD,331313,1,Primary aluminum ingot: 331313.
+AP-100171,2025-01-28,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,8994.84,EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100054,2025-05-12,Amazon Web Services,6400,Software and cloud,AWS monthly,"3,159.19",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100086,2025-01-07,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot,"18,912.72",USD,331313,1,Primary aluminum ingot: 331313.
+AP-100058,2025-07-06,Waste Management,6800,Waste disposal,Monthly hauling,918.50,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100009,2025-02-08,Uline,5030,Packaging,Packing tape,"3,477.57",USD,322220,1,Packing tape: 322220 (pressure-sensitive tape from purchased materials).
+AP-100053,2025-03-04,ResinTech Polymers,5020,Raw materials - plastics,Polypropylene resin,4214.76,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100149,2025-07-13,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,"10,542.72",EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100081,2025-01-27,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,"8,974.74",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100197,2025-05-20,Renishaw plc,5040,Components,Probe kit,3400.00,GBP,334519,1,A measuring probe: 334519 Other Measuring and Controlling Device Manufacturing.
+AP-100108,2025-07-13,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,"8,079.25",EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100110,2025-02-17,Amazon Business,6100,Office supplies,Office chairs,228.49,USD,337214,1,Office chairs: 337214 Office Furniture (except Wood) Manufacturing.
+AP-100186,2025-06-13,Fastenal,6110,MRO supplies,Cutting tools,544.98,USD,333515,1,Cutting tools: 333515.
+AP-100085,2025-05-25,Grainger,6110,MRO supplies,Fasteners,"2,441.72",USD,332722,1,Fasteners: 332722.
+AP-100017,2025-01-19,Cintas,6120,Uniforms and facility services,Uniform rental,799.25,USD,812332,1,Uniform rental: 812332 Industrial Launderers.
+AP-100028,2025-04-17,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,9489.52,EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100139,2025-02-12,Cintas,6120,Uniforms and facility services,Uniform rental,821.37,USD,812332,1,Uniform rental: 812332 Industrial Launderers.
+AP-100066,2025-11-13,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,"11,862.51",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100033,2025-06-10,SoCalGas,6910,Utilities - gas,Natural gas plant,7654.25,USD,energy_scope_1_2,,"Natural gas: Scope 1 from the bill, so the spend line is withdrawn."
+AP-100021,2025-02-26,Amazon Web Services,6400,Software and cloud,AWS monthly,"2,175.38",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100039,2025-02-11,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,"40,833.63",USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100111,2025-11-12,Uline,5030,Packaging,Corrugated boxes,601.75,USD,322211,1,Corrugated boxes: 322211.
+AP-100093,2025-09-20,Grainger,6110,MRO supplies,Lubricants,391.79,USD,324191,1,Lubricants: 324191.
+AP-100127,2025-09-10,Enterprise Rent-A-Car,6720,Travel - ground,Car rental,616.33,USD,532111,6,"Car rental: 532111 Passenger Car Rental, category 6."
+AP-100166,2025-07-23,Grainger,6110,MRO supplies,Fasteners,2323.78,USD,332722,1,Fasteners: 332722.
+AP-100013,2025-05-16,ADP,6500,Payroll services,Payroll processing fee,1688.98,USD,541214,1,Payroll processing fee: 541214 Payroll Services.
+AP-100159,2025-12-26,Pacific Steel Supply,5010,Raw materials - metals,Steel bar stock,"11,126.93",USD,331110,1,Hot-rolled bar stock is made at steel mills: 331110.
+AP-100078,2025-10-21,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions,14706.80,USD,331318,1,"Extruded aluminum: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-100076,2025-12-15,ResinTech Polymers,5020,Raw materials - plastics,Polypropylene resin,8840.35,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100116,2025-01-27,Deloitte,6610,Audit and consulting,Annual audit fee,48000.00,USD,541211,1,Audit fee: 541211 Offices of Certified Public Accountants.
+AP-100141,2025-03-24,PG&E,6900,Utilities - electricity,Electricity plant,15182.41,USD,energy_scope_1_2,,"Electricity: Scope 2 from the bill, so the spend line is withdrawn."
+AP-100187,2025-08-09,Pacific Steel Supply,5010,Raw materials - metals,Steel sheet coils,21612.47,USD,331110,1,Steel sheet in coils is a steel-mill product: 331110 Iron and Steel Mills.
+AP-100072,2025-03-02,Fastenal,6110,MRO supplies,Cutting tools,2917.81,USD,333515,1,Cutting tools: 333515.
+AP-100010,2025-09-09,Baker Lyman LLP,6600,Legal fees,Patent filing,"15,925.88",USD,541110,1,Law firm: 541110 Offices of Lawyers.
+AP-100190,2025-05-15,Grainger,6110,MRO supplies,Return credit,-245.00,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100117,2025-01-14,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel,"26,113.26",USD,331221,1,Cold-rolling purchased steel: 331221 Rolled Steel Shape Manufacturing.
+AP-100184,2025-05-26,Staples Business Advantage,6100,Office supplies,Paper,725.00,USD,322121,1,Office paper is made at paper mills: 322121.
+AP-100095,2025-11-26,Microsoft,6400,Software and cloud,M365 licences,1800.00,USD,511210,1,Software licences: 511210 Software Publishers.
+AP-100163,2025-03-06,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel,"19,000.26",USD,331221,1,Cold-rolling purchased steel: 331221 Rolled Steel Shape Manufacturing.
+AP-100060,2025-10-12,Deloitte,6610,Audit and consulting,Annual audit fee,48000.00,USD,541211,1,Audit fee: 541211 Offices of Certified Public Accountants.
+AP-100113,2025-08-23,Delta Air Lines,6700,Travel - airfare,Airfare sales team,1079.53,USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-100048,2025-10-03,Waste Management,6800,Waste disposal,Monthly hauling,"1,197.42",USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100164,2025-01-24,Waste Management,6800,Waste disposal,Monthly hauling,1052.42,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100176,2025-12-13,Amazon Web Services,6400,Software and cloud,AWS monthly,"2,669.63",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100118,2025-03-10,Sysco,6310,Meals and catering,Canteen supplies,"1,914.43",USD,311999,1,"Food supplies for the canteen from a food distributor: the food itself, 311999 All Other Miscellaneous Food Manufacturing (Sysco's own code 424410 is the margin only)."
+AP-100007,2025-12-08,Amazon Web Services,6400,Software and cloud,AWS monthly,"2,429.46",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100167,2025-01-20,Magna Components Canada,5040,Components,Motor housings,"7,792.60",CAD,335312,1,Motor housings are motor parts: 335312 Motor and Generator Manufacturing.
+AP-100162,2025-05-08,Amazon Business,6100,Office supplies,,1509.67,USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100146,2025-08-22,Amazon Business,6100,Office supplies,Office chairs,91.94,USD,337214,1,Office chairs: 337214 Office Furniture (except Wood) Manufacturing.
+AP-100130,2025-05-17,Pacific Steel Supply,5010,Raw materials - metals,Cold rolled steel,8224.70,USD,331221,1,Cold-rolling purchased steel: 331221 Rolled Steel Shape Manufacturing.
+AP-100183,2025-02-28,PG&E,6900,Utilities - electricity,Electricity plant,"18,505.65",USD,energy_scope_1_2,,"Electricity: Scope 2 from the bill, so the spend line is withdrawn."
+AP-100119,2025-10-07,Staples Business Advantage,6100,Office supplies,Office supplies,299.26,USD,339940,1,Office supplies: 339940.
+AP-100026,2025-03-12,ResinTech Polymers,5020,Raw materials - plastics,Polypropylene resin,10883.57,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100138,2025-08-16,XPO Logistics,5300,Freight in,LTL inbound,5853.26,USD,484122,4,"LTL freight: 484122, category 4."
+AP-100050,2025-09-11,Waste Management,6800,Waste disposal,Monthly hauling,918.28,USD,562111,5,"Trash hauling: 562111 Solid Waste Collection, category 5."
+AP-100020,2025-06-20,Uline,5030,Packaging,Stretch wrap,"3,507.35",USD,326112,1,Stretch film: 326112 Plastics Packaging Film and Sheet Manufacturing.
+AP-100122,2025-10-17,Magna Components Canada,5040,Components,Motor housings,"13,740.66",CAD,335312,1,Motor housings are motor parts: 335312 Motor and Generator Manufacturing.
+AP-100069,2025-07-08,Grainger,6110,MRO supplies,Lubricants,1071.08,USD,324191,1,Lubricants: 324191.
+AP-100112,2025-08-04,XPO Logistics,5300,Freight in,LTL inbound,"3,483.77",USD,484122,4,"LTL freight: 484122, category 4."
+AP-100065,2025-04-22,Magna Components Canada,5040,Components,Motor housings,"5,664.18",CAD,335312,1,Motor housings are motor parts: 335312 Motor and Generator Manufacturing.
+AP-100157,2025-12-15,ResinTech Polymers,5020,Raw materials - plastics,ABS resin pellets,14934.67,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100032,2025-07-25,ResinTech Polymers,5020,Raw materials - plastics,,"9,205.99",USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100114,2025-05-05,XPO Logistics,5300,Freight in,LTL inbound,3446.21,USD,484122,4,"LTL freight: 484122, category 4."
+AP-100104,2025-05-13,Uline,5030,Packaging,,1412.96,USD,322211,1,"Blank memo under Packaging from a box distributor: corrugated boxes, 322211, as the main packaging bought."
+AP-100135,2025-03-05,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot,"10,183.72",USD,331313,1,Primary aluminum ingot: 331313.
+AP-100059,2025-04-03,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,5600.97,EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100070,2025-04-11,Grainger,6110,MRO supplies,Fasteners,"2,220.62",USD,332722,1,Fasteners: 332722.
+AP-100068,2025-11-15,Salesforce,6400,Software and cloud,CRM subscription,5200.00,USD,511210,1,Software subscription: 511210 Software Publishers.
+AP-100120,2025-05-17,ADP,6500,Payroll services,Payroll processing fee,1508.99,USD,541214,1,Payroll processing fee: 541214 Payroll Services.
+AP-100052,2025-05-23,ResinTech Polymers,5020,Raw materials - plastics,Polypropylene resin,7779.45,USD,325211,1,Plastics resin: 325211 Plastics Material and Resin Manufacturing.
+AP-100196,2024-12-18,Grainger,6110,MRO supplies,Shop supplies,410.00,USD,332999,1,Unspecified MRO consumables: 332999 All Other Miscellaneous Fabricated Metal Product Manufacturing as the goods proxy (not the margin-only 423840).
+AP-100061,2025-04-25,Uline,5030,Packaging,,2800.33,USD,322211,1,"Blank memo under Packaging from a box distributor: corrugated boxes, 322211, as the main packaging bought."
+AP-100178,2025-04-28,Fastenal,6110,MRO supplies,Fasteners,"2,276.56",USD,332722,1,Fasteners: 332722.
+AP-100041,2025-12-21,Amazon Business,6100,Office supplies,,936.46,USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100079,2025-07-01,Amazon Business,6100,Office supplies,,1047.06,USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100031,2025-11-27,Bosch Rexroth GmbH,5040,Components,Hydraulic valves,"9,778.94",EUR,332912,1,Hydraulic valves: 332912 Fluid Power Valve and Hose Fitting Manufacturing.
+AP-100107,2025-08-03,Northwest Aluminum,5010,Raw materials - metals,Aluminum ingot,"22,390.80",USD,331313,1,Primary aluminum ingot: 331313.
+AP-100047,2025-02-09,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions,"13,965.16",USD,331318,1,"Extruded aluminum: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-100142,2025-10-14,Amazon Business,6100,Office supplies,Misc supplies,"1,635.47",USD,339940,1,Office supplies (the account) of no stated kind: 339940.
+AP-100136,2025-08-16,Delta Air Lines,6700,Travel - airfare,Airfare sales team,"1,477.34",USD,481111,6,"Flights: 481111 Scheduled Passenger Air Transportation, category 6."
+AP-100132,2025-01-16,Amazon Web Services,6400,Software and cloud,AWS monthly,"2,624.05",USD,518210,1,"Cloud hosting: 518210 Data Processing, Hosting, and Related Services."
+AP-100180,2025-11-21,Northwest Aluminum,5010,Raw materials - metals,Aluminum extrusions,11638.46,USD,331318,1,"Extruded aluminum: 331318 Other Aluminum Rolling, Drawing, and Extruding."
+AP-100152,2025-04-26,Marriott,6710,Travel - lodging,Hotel,"1,213.36",USD,721110,6,"Hotel: 721110, category 6."
+AP-100100,2025-06-06,Pacific Steel Supply,5010,Raw materials - metals,Steel bar stock,"22,637.63",USD,331110,1,Hot-rolled bar stock is made at steel mills: 331110.
+AP-100037,2025-03-14,Deloitte,6610,Audit and consulting,Annual audit fee,"48,000.00",USD,541211,1,Audit fee: 541211 Offices of Certified Public Accountants.

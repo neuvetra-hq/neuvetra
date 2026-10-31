@@ -1,3 +1,4 @@
+import { sharedFetch } from "./shared-get"
 import type {
   CollectionActivityRecord,
   CollectionActivitySaveInput,
@@ -8,6 +9,7 @@ import type {
   GridLossLineage,
 } from "../../../../packages/neuvetra-database/src/collection-contract"
 import type { HostedWorkspaceActor } from "./workspace-api"
+import { SCOPE3_COLLECTION_KINDS, SCOPE3_LEGACY_KINDS, type Scope3CollectionKind } from "../../../../packages/neuvetra-database/src/scope3-collection-contract"
 
 export type { CollectionActivityRecord, CollectionActivitySaveInput, CollectionActivityVersion, CollectionEvidenceMetadata, CollectionEvidenceReceipt, GridLossLineage }
 export type CollectionContext = DatabaseCollectionContext
@@ -46,7 +48,8 @@ const idPath = (id: string) => {
 async function request(actor: HostedWorkspaceActor, path: string, init?: RequestInit): Promise<Response> {
   if (!actor.accessToken || /[\r\n]/.test(actor.accessToken)) throw new Error("Sign in again to continue.")
   actor.signal?.throwIfAborted()
-  const response = await fetch(path, {
+  // Round 3 lane C (PR-3): GETs shared across screens and retried once on 429; writes clear them.
+  const response = await sharedFetch(actor, path, {
     ...init,
     headers: { authorization: `Bearer ${actor.accessToken}`, ...init?.headers },
     cache: "no-store",
@@ -76,7 +79,18 @@ export async function listCollectionActivities(companyId: string, actor: HostedW
 }
 
 export async function loadCollectionContext(companyId: string, actor: HostedWorkspaceActor) {
-  const value = await json<{ profile: string; context: CollectionContext }>(await request(actor, companyPath(companyId)))
+  return (await loadCollectionOverview(companyId, actor)).context
+}
+
+/**
+ * The collection context and what the server can store (Scope 3 package 2): `scope3` is true only when the server says
+ * Scope 3 activity is available (schema 29). An older server, or one at the schema-28 bridge, gives false.
+ * I-02: `scope3Kinds` lists the Scope 3 kinds the database stores (the four 0029 kinds at 29, every kind at 30); a server
+ * that sends no list (older) offers the four 0029 kinds whenever `scope3` is true. Unknown kind names are ignored.
+ * I-08: `scope3Completion` is true only when the server says the database has 0030's payload additions (schema 30).
+ */
+export async function loadCollectionOverview(companyId: string, actor: HostedWorkspaceActor): Promise<{ context: CollectionContext; scope3: boolean; scope3Kinds: Scope3CollectionKind[]; scope3Completion: boolean }> {
+  const value = await json<{ profile: string; context: CollectionContext; capabilities?: { scope3?: { calculations?: unknown; kinds?: unknown; completion?: unknown } } }>(await request(actor, companyPath(companyId)))
   if (!value.context || value.context.companyId !== companyId || !(value.context.setupVersionId === null || UUID.test(value.context.setupVersionId)) || !(value.context.setupRevision === null || Number.isInteger(value.context.setupRevision)) || !Array.isArray(value.context.locations)) throw new Error("The collection context was not recognized.")
   // BF2: optional (older servers omit it); when sent, it lists UUIDs and includes the current version.
   const same = value.context.sameContentSetupVersionIds
@@ -99,7 +113,12 @@ export async function loadCollectionContext(companyId: string, actor: HostedWork
       || !["unknown", "operational_control", "financial_control", "none"].includes(entity.control)
       || !(entity.ownershipPercent === null || typeof entity.ownershipPercent === "string" && /^(?:100(?:\.0+)?|(?:[0-9]|[1-9][0-9])(?:\.[0-9]+)?)$/.test(entity.ownershipPercent)))) throw new Error("The collection context was not recognized.")
   }
-  return value.context
+  const scope3 = value.capabilities?.scope3?.calculations === true
+  const listed = value.capabilities?.scope3?.kinds
+  const scope3Kinds = !scope3 ? [] : Array.isArray(listed) ? SCOPE3_COLLECTION_KINDS.filter(kind => listed.includes(kind)) : [...SCOPE3_LEGACY_KINDS]
+  // I-08: `completion` (schema 30) lets 0029 kinds carry 0030's additions: data quality, and business travel's cabin class and hotel stays.
+  const scope3Completion = scope3 && value.capabilities?.scope3?.completion === true
+  return { context: value.context, scope3, scope3Kinds, scope3Completion }
 }
 
 export async function lookupCollectionZip(companyId: string, zipCode: string, actor: HostedWorkspaceActor) {

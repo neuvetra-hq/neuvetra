@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
-import { CollectionApiError, loadCollectionContext, lookupCollectionZip, uploadCollectionEvidence } from "./collection-api"
+import { CollectionApiError, loadCollectionContext, loadCollectionOverview, lookupCollectionZip, uploadCollectionEvidence } from "./collection-api"
 
 const companyId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
 const setupVersionId = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
@@ -91,5 +91,30 @@ describe("collection context and ZIP browser boundary", () => {
       expect(cause).toBeInstanceOf(CollectionApiError)
       expect((cause as CollectionApiError).code).toBeNull()
     }
+  })
+})
+
+describe("I-02: the per-kind Scope 3 capability", () => {
+  const respond = (capabilities: unknown) => { globalThis.fetch = (async () => Response.json({ profile: "neuvetra.collection.v1", context: { companyId, setupVersionId, setupRevision: 1, locations: [] }, capabilities })) as typeof fetch }
+  test("lists the kinds the server's database stores; an older server means the four 0029 kinds", async () => {
+    respond({ scope3: { gridLossLineage: true, calculations: true, kinds: ["transport", "purchase_spend", "made_up_kind"], completion: true } })
+    expect((await loadCollectionOverview(companyId, actor)).scope3Kinds).toEqual(["transport", "purchase_spend"])
+    respond({ scope3: { gridLossLineage: true, calculations: true } })
+    expect((await loadCollectionOverview(companyId, actor)).scope3Kinds).toEqual(["transport", "waste", "business_travel", "employee_commuting"])
+    respond({ scope3: { gridLossLineage: true, calculations: false, kinds: ["transport"] } })
+    expect(await loadCollectionOverview(companyId, actor)).toMatchObject({ scope3: false, scope3Kinds: [] })
+    respond(undefined)
+    expect(await loadCollectionOverview(companyId, actor)).toMatchObject({ scope3: false, scope3Kinds: [] })
+  })
+  // I-08: data quality and business travel v2 are offered only when the server's database has 0030 (schema 30).
+  test("the 0030 payload additions are offered only when the server says completion is available", async () => {
+    respond({ scope3: { gridLossLineage: true, calculations: true, kinds: ["transport"], completion: true } })
+    expect((await loadCollectionOverview(companyId, actor)).scope3Completion).toBe(true)
+    for (const scope3 of [{ gridLossLineage: true, calculations: true, kinds: ["transport"], completion: false }, { gridLossLineage: true, calculations: true }, { calculations: false, completion: true }]) {
+      respond({ scope3 })
+      expect((await loadCollectionOverview(companyId, actor)).scope3Completion).toBe(false)
+    }
+    respond(undefined)
+    expect((await loadCollectionOverview(companyId, actor)).scope3Completion).toBe(false)
   })
 })

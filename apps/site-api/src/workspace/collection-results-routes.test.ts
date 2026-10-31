@@ -227,6 +227,22 @@ describe("draft results (Claude UX journey)", () => {
     expect([body.label, body.methods.map(m => m.releaseStatus), body.warnings]).toEqual([DRAFT_RESULTS_LABEL, ["unreleased_beta"], []])
   }, 60_000)
 
+  // Round 3 lane C (found in the e2e walk): a company with a 200-line spend import passed 400 records in all and lost the
+  // whole Results page ("Too many records to calculate in one draft"), although Scope 3 records never enter this route.
+  test("the 400-record cap counts Scope 1 and 2 records only: Scope 3 lines (spend imports) never refuse these results", async () => {
+    const gas = record({ kind: "natural_gas", sourceId: "GAS-1", quantity: q("10", "therm"), payload: { heatContent: null } })
+    const spend = Array.from({ length: 450 }, (_, i) => ({ ...gas, id: `11111111-0000-4000-8000-${String(i).padStart(12, "0")}`, kind: "purchase_spend" }))
+    const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [gas, ...spend] as never, findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] }
+    const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+    const response = await routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))
+    expect(response.status).toBe(200)
+    expect((await response.json() as CollectionResultsResponse).records).toHaveLength(1)
+    // 401 Scope 1 and 2 records are still refused.
+    const many = Array.from({ length: 401 }, (_, i) => ({ ...gas, id: `22222222-0000-4000-8000-${String(i).padStart(12, "0")}` }))
+    const capped = createCollectionResultsRoutes({ database: { ...database, findCollectionActivities: async () => many }, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async () => ({ id: owner, phone: null, email: null, fullName: null }) })
+    expect((await capped(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: "Bearer owner" } }))).status).toBe(422)
+  }, 60_000)
+
   test("a record from another company is never calculated", async () => {
     const foreign = record({ kind: "natural_gas", sourceId: "GAS-X", quantity: q("10", "therm"), payload: { heatContent: null } }, other)
     const database: CollectionResultsDatabase = { findCollectionContext: async () => context, findCollectionActivities: async () => [foreign], findCollectionEvidence: async () => [], findCompanySetup: async () => setupView, findCurrentMethodReleases: async () => [] }
@@ -368,6 +384,30 @@ describe("draft results (Claude UX journey)", () => {
     expect(reads).toBe(2)                     // the two later requests shared one follow-up run
     expect(await get().then(r => r.records.length)).toBe(1)
     expect(reads).toBe(3)                     // and nothing stays queued afterwards
+  }, 60_000)
+
+  test("API-01: a follow-up run is shared only by the same actor; a member revoked while waiting gets no data", async () => {
+    const [a, b, c] = ["70000000-0000-4000-8000-0000000000b1", "70000000-0000-4000-8000-0000000000b2", "70000000-0000-4000-8000-0000000000b3"]
+    let release!: () => void
+    const gate = new Promise<void>(resolve => { release = resolve })
+    const reads: string[] = [], revoked = new Set<string>()
+    let gated = false
+    const scoped = async <T>(user: string, value: T) => { reads.push(user); if (revoked.has(user)) throw new Error("Private staging access required."); return value }
+    const database: CollectionResultsDatabase = { findCollectionContext: async user => revoked.has(user) ? null : context, findCurrentMethodReleases: async () => [],
+      findCollectionEvidence: user => scoped(user, []), findCompanySetup: user => scoped(user, setupView),
+      findCollectionActivities: async user => { const records = await scoped(user, [gasOffice]); if (!gated) { gated = true; await gate } return records } }
+    const routes = createCollectionResultsRoutes({ database, engines, environment: "synthetic_staging", origin: "https://www.neuvetra.ai", validateUser: async token => ({ id: token, phone: null, email: null, fullName: null }) })
+    const get = (user: string) => routes(new Request(`https://www.neuvetra.ai/workspace/${company}/results`, { headers: { authorization: `Bearer ${user}` } }))
+    const first = get(a)
+    while (reads.length === 0) await Bun.sleep(1)
+    const second = get(b), third = get(c)
+    await Bun.sleep(20)
+    expect(new Set(reads)).toEqual(new Set([a])) // still one run per company at a time: B and C wait
+    revoked.add(c)
+    release()
+    const statuses = await Promise.all([first, second, third].map(response => response.then(r => r.status)))
+    expect(statuses).toEqual([200, 200, 503])
+    expect(reads.filter(user => user === c).length).toBeGreaterThan(0) // C's own reads ran, and refused it
   }, 60_000)
 
   test("a release check that cannot run is logged with only its stage and an error code, and logging never blocks results (MR3)", async () => {

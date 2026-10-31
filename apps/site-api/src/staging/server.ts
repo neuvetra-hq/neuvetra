@@ -17,7 +17,7 @@ import { createSourceWorksheetReportRoutes } from "../workspace/m66-report-route
 import { createElectricitySourceRoutes } from "../workspace/m66-source-routes"
 import { createWorksheetReportRoutes } from "../workspace/m65-routes"
 import { createWorksheetRoutes } from "../workspace/m64-routes"
-import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_COLLECTION_SCHEMA_VERSION, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, loadStagingDatabaseCa, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
+import { COLLECTION_EVIDENCE_MAX_BYTES, EXISTING_PROJECT_REF, HostedWorkspaceDatabase, STAGING_COLLECTION_SCHEMA_VERSION, STAGING_SCHEMA_BRIDGE_VERSION, STAGING_SCHEMA_VERSION, STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION, STAGING_SCOPE3_SCHEMA_VERSION, STAGING_SERVED_SCHEMA_VERSIONS, loadStagingDatabaseCa, SCOPE3_CSV_LABELS, type WorkspaceDatabase, type CompanyWorkspaceRecord } from "@neuvetra/database"
 import { createClient } from "@supabase/supabase-js"
 import { extractBearerToken, validateUserFromToken, type AuthenticatedUser } from "../lib/auth"
 import { createRateLimiter } from "../lib/rate-limit"
@@ -29,12 +29,21 @@ import { createCollectionRoutes, type CollectionEvidenceStorage } from "../works
 import { createCollectionResultsRoutes, REVIEWED_SCOPE1_ENGINE_SHA256, REVIEWED_SCOPE2_ENGINE_SHA256, type CollectionResultsEngines } from "../workspace/collection-results-routes"
 import { createScope1Engine } from "../calculation/scope1-authority"
 import { createScope2Engine } from "../calculation/scope2-authority"
+import { createScope3Engine } from "../calculation/scope3-authority"
+import { createScope3ResultsRoutes, createScope3ResultsRunner, REVIEWED_SCOPE3_ENGINE_SHA256, type Scope3ResultsEngine } from "../workspace/scope3-results-routes"
 import { createSupabaseCollectionEvidenceStorage } from "../workspace/collection-storage"
+import { createScope3AssessmentRoutes } from "../workspace/scope3-assessment-routes"
+import { createScope3SpendImportRoutes } from "../workspace/scope3-spend-import-routes"
+// Round 3 (EN-9): the package's public export.
+import { SCOPE3_SPEND_IMPORT_MAX_BYTES } from "@neuvetra/database"
+import { createScope3ReportRoutes } from "../workspace/scope3-report-routes"
 import { readStagingConfig, STAGING_PROFILE, type StagingConfig } from "./config"
 import { serveStagingAsset, verifyStagingAssets } from "./assets"
 
 const MAX_BODY_BYTES = 300_000
 const COLLECTION_EVIDENCE_UPLOAD = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/collection\/evidence$/i
+/** I-09: a spend import carries the CSV bytes (≤ 2 MB, DESIGN 3.6), bounded on its own like evidence uploads. */
+const SCOPE3_SPEND_IMPORT = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/scope3\/spend-imports$/i
 const LEGACY_CALIFORNIA_ROUTE = /^\/workspace\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/(?:electricity-worksheet|source-electricity-worksheet|annual-electricity-worksheet|annual-electricity-evidence|fugitive-sources|fugitive-population)(?:\/|$)/i
 type Access = { workspace: CompanyWorkspaceRecord; role: "owner" | "admin" | "member"; evidenceId: string | null }
 export type StagingDatabase = WorkspaceDatabase & {
@@ -59,10 +68,15 @@ export interface StagingOverrides {
   serveAsset?: (pathname: string) => Promise<Response | null>
   collectionEvidenceStorage?: CollectionEvidenceStorage
   resultsEngines?: CollectionResultsEngines
+  /** Scope 3 package 2: the Scope 3 engine for draft Scope 3 results (tests only). */
+  scope3ResultsEngine?: Scope3ResultsEngine
   log?: (event: StagingLog) => void
 }
 
 function json(status: number, value: unknown) { return Response.json(value, { status }) }
+/** Round 3 lane C (PR-3): a refused request says to wait, and when (Retry-After, seconds until the window resets). */
+export const STAGING_RATE_LIMIT_TEXT = "Too many requests in the last minute. Wait about a minute, then try again; nothing you saved was lost."
+function rateLimited(resetAt: number) { return Response.json({ code: "rate_limited", error: STAGING_RATE_LIMIT_TEXT }, { status: 429, headers: { "retry-after": String(Math.max(1, Math.min(60, Math.ceil((resetAt - Date.now()) / 1000)))) } }) }
 
 async function boundedRequest(request: Request, url: URL, maxBytes = MAX_BODY_BYTES): Promise<Request> {
   const claimed = request.headers.get("content-length")
@@ -103,9 +117,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     fetch: ((input: RequestInfo | URL, init?: RequestInit) => fetch(input, { ...init, signal: AbortSignal.timeout(15_000) })) as typeof fetch,
   })
   const log = overrides.log ?? ((event: StagingLog) => console.info(JSON.stringify(event)))
-  const admission = createRateLimiter({ max: 360, windowMs: 60_000, maxBuckets: 1 })
-  const configAdmission = createRateLimiter({ max: 360, windowMs: 60_000, maxBuckets: 1 })
-  const actors = createRateLimiter({ max: 120, windowMs: 60_000, maxBuckets: 100 })
+  // Spend review can make several authenticated reads per correction. Allow a sustained review session
+  // (300/user/minute), while bounding the instance to 1,200/minute; public config has a separate budget.
+  const admission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 1 })
+  const configAdmission = createRateLimiter({ max: 1200, windowMs: 60_000, maxBuckets: 1 })
+  const actors = createRateLimiter({ max: 300, windowMs: 60_000, maxBuckets: 100 })
   const validateUser = async (token: string) => {
     const user = await auth(token)
     return user && await database.hasStagingAccess(user.id) ? user : null
@@ -126,9 +142,24 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   const scope1Routes=createM78Routes({database,validateUser,origin:config.origin,authorities:{gas:createM73Authority(),mobile:createM74Authority(),diesel:createM76DieselAuthority(),fugitive:createM77Authority()},policy:M78_REVIEWED_POLICY})
   const scope1BetaRoutes=createM80BetaRoutes({database,validateUser,origin:config.origin})
   const companySetupRoutes=createCompanySetupRoutes({database,validateUser,origin:config.origin})
-  const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage})
+  // Scope 3 package 2 (D5) and completion I-02: the 0029 kinds exist from schema 29 and the 0030 kinds and payload
+  // features from 30; below that the route refuses the save with 503 before any SQL.
+  const collectionRoutes=createCollectionRoutes({database,validateUser,origin:config.origin,evidenceStorage,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
   // Board 2026-09-29: draft numbers from unreleased methods only in this private synthetic staging server (profile checked above).
   const resultsRoutes=createCollectionResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engines:overrides.resultsEngines ?? { scope1: createScope1Engine({ expectedEngineSha256: REVIEWED_SCOPE1_ENGINE_SHA256 }), scope2: createScope2Engine({ expectedEngineSha256: REVIEWED_SCOPE2_ENGINE_SHA256 }) }})
+  // I-04: Scope 3 results read the category assessments only when the database is at schema 30 (0030); below it, never.
+  // I-10: the results route and the report route share one runner, so a frozen report version holds exactly the figures
+  // /results/scope3 gives (one run per company at a time).
+  const scope3Engine=overrides.scope3ResultsEngine ?? createScope3Engine({ expectedEngineSha256: REVIEWED_SCOPE3_ENGINE_SHA256 })
+  const scope3Results=createScope3ResultsRunner({database,engine:scope3Engine,schemaVersion:async()=>(await databaseReadiness()).schemaVersion})
+  const scope3ResultsRoutes=createScope3ResultsRoutes({database,validateUser,origin:config.origin,environment:"synthetic_staging",engine:scope3Engine,schemaVersion:async()=>(await databaseReadiness()).schemaVersion,runner:scope3Results})
+  // I-10: frozen Scope 3 report versions (0030); the /scope3/ gate below refuses them before any SQL below schema 30. The
+  // stored CSV is written with the web's own label functions, so it is the bytes the Results screen would download.
+  const scope3ReportRoutes=createScope3ReportRoutes({database,validateUser,origin:config.origin,results:scope3Results,engineSha256:REVIEWED_SCOPE3_ENGINE_SHA256,labels:SCOPE3_CSV_LABELS})
+  // I-04: Scope 3 category assessments (0030); the /scope3/ gate below refuses them before any SQL below schema 30.
+  const scope3AssessmentRoutes=createScope3AssessmentRoutes({database,validateUser,origin:config.origin})
+  // I-09: spend CSV imports and mappings (0030); behind the same /scope3/ schema-30 gate.
+  const scope3SpendImportRoutes=createScope3SpendImportRoutes({database,validateUser,origin:config.origin})
   const mobileDieselRoutes=createM74Routes({database,validateUser,origin:config.origin,authority:createM74Authority()})
   const annualEvidenceRoutes=createAnnualEvidenceRoutes({database,validateUser,origin:config.origin})
   const annualEvidenceReportRoutes=createAnnualEvidenceReportRoutes({database,validateUser,origin:config.origin})
@@ -149,19 +180,20 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
     if (existingProject && (!config.reuseExistingProject || receipt.legacyContainmentVerified !== true)) throw new Error("Existing project containment unavailable.")
     return receipt
   }
+  const served = (schemaVersion: number) => STAGING_SERVED_SCHEMA_VERSIONS.includes(schemaVersion)
   const readiness = async () => {
     const receipt = await databaseReadiness()
-    if (receipt.schemaVersion !== STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion !== STAGING_SCHEMA_VERSION) throw new Error("Staging database is upgrading.")
+    if (!served(receipt.schemaVersion)) throw new Error("Staging database is upgrading.")
     await checkAssets()
     return receipt
   }
-  // The schema-28 image starts and reports ready at the exact bridge (27) and at
-  // 28; any other prefix refuses to start.
+  // The schema-30 image starts and reports ready at exactly 28, 29 and 30 (hosted
+  // 0029 is on hold); any other prefix refuses to start.
   try { await databaseReadiness(); await checkAssets() } catch { await database.close(); throw new Error("Private staging dependencies are unavailable.") }
 
   const routeName = (pathname: string): StagingLog["route"] => pathname === "/health" ? "health" : pathname === "/ready" ? "ready" : pathname === "/workspace-api/config" ? "config" : pathname === "/workspace-api/session" ? "session" : pathname.startsWith("/workspace-api/workspace") ? "workspace" : pathname === "/" || pathname === "/workspace" || pathname.startsWith("/assets/") ? "asset" : "unknown"
 
-  async function dispatch(request: Request): Promise<Response> {
+  async function dispatch(request: Request, options: StagingFetchOptions): Promise<Response> {
     const url = new URL(request.url)
     const isGet = request.method === "GET"
     if (url.pathname === "/health" && isGet) return json(200, { status: "alive" })
@@ -176,15 +208,17 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       const token = extractBearerToken(request.headers)
       // A request that cannot authenticate never spends the shared admission budget.
       if (!publicConfig && (!token || token.length > 8192)) return json(401, { error: "Authentication required." })
-      if (!(publicConfig ? configAdmission : admission).check("staging").allowed) return json(429, { error: "Request limit reached." })
+      const admitted = (publicConfig ? configAdmission : admission).check("staging")
+      if (!admitted.allowed) return rateLimited(admitted.resetAt)
       const requestReadiness = config.projectRef === EXISTING_PROJECT_REF ? await databaseReadiness() : undefined
-      if (requestReadiness && requestReadiness.schemaVersion > STAGING_SCHEMA_BRIDGE_VERSION && requestReadiness.schemaVersion < STAGING_SCHEMA_VERSION) return json(503, { error: "Staging database is upgrading." })
+      if (requestReadiness && !served(requestReadiness.schemaVersion)) return json(503, { error: "Staging database is upgrading." })
       if (publicConfig) return json(200, { profile: STAGING_PROFILE, supabaseUrl: config.supabaseUrl, anonKey: config.supabaseAnonKey })
       if (!token) return json(401, { error: "Authentication required." })
       let user: AuthenticatedUser | null
       try { user = await auth(token) } catch { return json(503, { error: "Authentication is unavailable." }) }
       if (!user) return json(401, { error: "Authentication required." })
-      if (!actors.check(user.id).allowed) return json(429, { error: "Request limit reached." })
+      const allowance = actors.check(user.id)
+      if (!allowance.allowed) return rateLimited(allowance.resetAt)
       if (!await database.hasStagingAccess(user.id)) return json(403, { error: "Private staging access required." })
       if (url.pathname === "/workspace-api/session" && isGet) {
         const access = await database.findStagingMembershipForUser(user.id)
@@ -192,12 +226,22 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
         return json(200, { profile: STAGING_PROFILE, user: { id: user.id }, access: { role: access.role, workspaceId: access.companyId, evidenceId: access.evidenceId } })
       }
       url.pathname = url.pathname.slice("/workspace-api".length)
-      // Collection and draft-results SQL exist from schema 27 (0027). 0028 only
-      // adds the database ZIP check, so both stay available at the bridge (27)
-      // and at 28; the route's own ZIP check applies at both.
-      if (/^\/workspace\/[0-9a-f-]+\/(?:collection(?:\/|$)|results$)/i.test(url.pathname)) {
+      // Round 3 (EN-7): a longer listener allowance only here, after the bearer token named a user with staging access, and
+      // only for the two routes that need it at the line cap (prepare: about 30-40 s; results: one run of up to 25 s, plus
+      // the wait behind a run already in progress for the company). Every other request keeps the listener's 30 s.
+      if (request.method === "POST" && SCOPE3_REPORT_PREPARE_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_REPORT_PREPARE_TIMEOUT_SECONDS)
+      if (isGet && SCOPE3_RESULTS_ROUTE.test(url.pathname)) options.extendTimeout?.(SCOPE3_RESULTS_TIMEOUT_SECONDS)
+      // Collection and draft-results SQL exist from schema 27 (0027), so both stay
+      // available at 28, 29 and 30. Scope 3 records and Scope 3 results exist only
+      // from 29 (0029): below it they are refused here, and the collection route
+      // refuses a Scope 3 save before any SQL. Scope 3 assessments, spend imports
+      // and report versions exist only from 30 (0030): below it every
+      // /workspace/:id/scope3/... route is refused here before any SQL.
+      if (/^\/workspace\/[0-9a-f-]+\/(?:collection(?:\/|$)|results(?:\/scope3)?$|scope3(?:\/|$))/i.test(url.pathname)) {
         const receipt = requestReadiness ?? await databaseReadiness()
         if (receipt.schemaVersion < STAGING_COLLECTION_SCHEMA_VERSION) return json(503, { code: "collection_unavailable", error: "Activity and evidence is not available yet." })
+        if (/\/results\/scope3$/i.test(url.pathname) && receipt.schemaVersion < STAGING_SCOPE3_SCHEMA_VERSION) return json(503, { code: "scope3_unavailable", error: "Scope 3 results are not available yet." })
+        if (/^\/workspace\/[0-9a-f-]+\/scope3(?:\/|$)/i.test(url.pathname) && receipt.schemaVersion < STAGING_SCOPE3_COMPLETION_SCHEMA_VERSION) return json(503, { code: "scope3_schema_30_required", error: "This Scope 3 feature needs database schema 30." })
       }
       let forwarded: Request
       const evidenceUpload = request.method === "POST" && COLLECTION_EVIDENCE_UPLOAD.test(url.pathname)
@@ -205,7 +249,7 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
         // Evidence is the only larger request class. Its route consumes the
         // stream with its own 10 MiB bound; ordinary workspace requests retain
         // the 300 kB buffered cap.
-        forwarded = evidenceUpload ? new Request(url, request) : await boundedRequest(request, url)
+        forwarded = evidenceUpload ? new Request(url, request) : await boundedRequest(request, url, request.method === "POST" && SCOPE3_SPEND_IMPORT.test(url.pathname) ? SCOPE3_SPEND_IMPORT_MAX_BYTES : undefined)
       } catch { return json(413, { error: "Request too large." }) }
       const legacyCalifornia = LEGACY_CALIFORNIA_ROUTE.exec(url.pathname)
       if (legacyCalifornia) {
@@ -214,11 +258,15 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
       }
       if (url.pathname.includes("/corporate-inventories")) return corporateInventoryRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/results$/i.test(url.pathname)) return resultsRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/results\/scope3$/i.test(url.pathname)) return scope3ResultsRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/collection(?:\/|$)/i.test(url.pathname)) return collectionRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/scope3\/assessments(?:\/|$)/i.test(url.pathname)) return scope3AssessmentRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/scope3\/spend-(?:(?:imports|mappings)(?:\/[0-9a-f-]+\/withdrawal)?|currency-conversions)$/i.test(url.pathname)) return scope3SpendImportRoutes(forwarded)
+      if (/^\/workspace\/[0-9a-f-]+\/scope3\/reports(?:\/|$)/i.test(url.pathname)) return scope3ReportRoutes(forwarded)
       if (/^\/workspace\/[0-9a-f-]+\/setup(?:\/|$)/i.test(url.pathname)) {
-        // Company setup exists at the bridge (27) and at 28.
+        // Company setup exists at 28, 29 and 30.
         const receipt = requestReadiness ?? await databaseReadiness()
-        if (receipt.schemaVersion !== STAGING_SCHEMA_BRIDGE_VERSION && receipt.schemaVersion !== STAGING_SCHEMA_VERSION) return json(503, { error: "Company setup is unavailable." })
+        if (!served(receipt.schemaVersion)) return json(503, { error: "Company setup is unavailable." })
         return companySetupRoutes(forwarded)
       }
       if (url.pathname.includes("/scope1-beta-setup")) return scope1BetaRoutes(forwarded)
@@ -244,11 +292,11 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   }
 
   return {
-    async fetch(request: Request) {
+    async fetch(request: Request, options: StagingFetchOptions = {}) {
       const started = performance.now()
       const requestId = crypto.randomUUID()
       let response: Response
-      try { response = await dispatch(request) } catch { response = json(503, { error: "Private staging is unavailable." }) }
+      try { response = await dispatch(request, options) } catch { response = json(503, { error: "Private staging is unavailable." }) }
       const headers = new Headers(response.headers)
       headers.set("cache-control", "no-store")
       headers.set("x-request-id", requestId)
@@ -264,11 +312,31 @@ export async function createStagingServer(config: StagingConfig, overrides: Stag
   }
 }
 
+/**
+ * Round 2c integration (DESIGN 13.8): the listener closes a connection idle for 30 seconds, and a request whose response
+ * has not started counts as idle. Preparing a Scope 3 report at the line cap took 38 s natively (3,000 worst-case commuting
+ * records), so that route gets 120 seconds (Bun allows up to 255); every other request keeps the listener's 30.
+ * Round 3 (EN-7): the allowance is granted by the server itself, only after authentication (a bearer token naming a user
+ * with staging access) and the route match, through `extendTimeout`; the listener no longer grants it by path, so an
+ * unauthenticated request never holds a socket longer than 30 s. The Scope 3 results route gets a documented 90 s: one run
+ * at the line cap took about 10 s (budget 25 s), and a request that arrives while a run is in progress for the company
+ * waits for it and then runs (about 20 s measured for two at once).
+ */
+export const SCOPE3_REPORT_PREPARE_TIMEOUT_SECONDS = 120
+export const SCOPE3_RESULTS_TIMEOUT_SECONDS = 90
+const SCOPE3_REPORT_PREPARE_ROUTE = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/scope3\/reports$/i
+const SCOPE3_RESULTS_ROUTE = /^\/workspace\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/results\/scope3$/i
+/** Round 3 (EN-7): what the listener lets the server do for one request (the server decides when). */
+export interface StagingFetchOptions { extendTimeout?(seconds: number): void }
+export function stagingListenerFetch(app: { fetch: (request: Request, options?: StagingFetchOptions) => Response | Promise<Response> }) {
+  return (request: Request, server: { timeout(request: Request, seconds: number): void }) => app.fetch(request, { extendTimeout: seconds => server.timeout(request, seconds) })
+}
+
 if (import.meta.main) {
   try {
     const config = readStagingConfig()
     const app = await createStagingServer(config)
-    const server = Bun.serve({ hostname: "0.0.0.0", port: config.port, maxRequestBodySize: COLLECTION_EVIDENCE_MAX_BYTES, idleTimeout: 30, fetch: app.fetch })
+    const server = Bun.serve({ hostname: "0.0.0.0", port: config.port, maxRequestBodySize: COLLECTION_EVIDENCE_MAX_BYTES, idleTimeout: 30, fetch: stagingListenerFetch(app) })
     const shutdown = async () => { await server.stop(); await app.close(); process.exit(0) }
     process.once("SIGINT", shutdown)
     process.once("SIGTERM", shutdown)

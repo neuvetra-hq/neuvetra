@@ -1,0 +1,624 @@
+{
+ "schema": "neuvetra.verified-factor-register.v1",
+ "verifiedBy": "Claude (lane A engineer, Scope 3 completion I-12u), 2026-10-30; built by tools/method-reference/build_scope3_us_upstream_register.py from the committed transcription files",
+ "method": "US upstream register R5 for Scope 3 category 3 activities A (upstream of purchased fuels), B (upstream of purchased electricity), C (upstream of electricity lost in transmission and distribution) and D (upstream of energy resold). Hand transcriptions (WebFetch, two verbatim reads that agreed; transcription webfetch_double_read) of free official documents, each entry citing publisher, title, edition, URL, page/table/row and both quotes: NETL DOE/NETL-2024/4862 natural gas supply chain (8.8 production through distribution, 7.8 production through transmission, g CO2e/MJ, HHV, IPCC AR6 100-year as published); CA-GREET3.0 Lookup Table TSD (2018) Tables A.1, B.1, D.1 (upstream = Total - Tailpipe, component rows asserted within 0.01; GWP set not stated, AR4 inferred and re-verified by arithmetic); CARB LCFS 17 CCR 95486 Table 4 energy densities (LHV, the basis of CA-GREET3.0); eGRID heat-input HHV basis (40 CFR 72.2, EIA). Derived constants are exact. No coal or oil upstream value is registered (none was verifiable). Upgrade each entry to a file read (pdftotext) with a document SHA-256 once the documents are staged. Round 2 (lane F, DESIGN 13.6): a derived, methane-only coal term from EPA GHGI 1990-2022 Table 3-1 (coal mining CH4 2022, AR5) and EIA MER Tables 6.1 and A5 (2022 coal production and its gross heat content), one division rounded half-even to 12 dp; its derivation record is in the provenance sidecar. Round 3 (lane A, owner decision 2): NPC 2011 Table 7 coal upstream combustion (5.0 lb CO2e/MMBtu, AR4) and Abrahams et al. 2015 Table S7 coal upstream (12.2 g CO2e/MJ, non-IPCC GWP) are registered as entries for a screening-range memo of the omitted coal mining energy and transport CO2 only (outside every total; older vintages, heating value not stated).",
+ "source": {
+  "publisher": "Neuvetra research transcriptions (sources: U.S. DOE NETL; California Air Resources Board; U.S. EPA; eCFR; U.S. EIA)",
+  "title": "US upstream transcriptions (tools/method-reference/sources/us-upstream-transcriptions.json, -2.json and -3.json)",
+  "edition": "2026-10-30; files: us-upstream-transcriptions.json sha256 1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb; us-upstream-transcriptions-2.json sha256 0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701; us-upstream-transcriptions-3.json sha256 fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb; every entry cites its own document URL in sheet and its transcription file in sourceSha256",
+  "url": "tools/method-reference/sources/us-upstream-transcriptions.json",
+  "sha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+  "bytes": 126304,
+  "provenanceSidecar": {
+   "file": "verified-scope3-us-upstream-register-2025.provenance.json",
+   "sha256": "8c2b180b57cbc1e677e74f2addcb74495f46a1af7c6373418ff1f6d1cebd4f71",
+   "bytes": "3999"
+  }
+ },
+ "constants": [
+  {
+   "id": "us_upstream_const.coal_mine_methane_kg_per_mmbtu_hhv",
+   "value": "3.650822140444",
+   "unit": "kg CO2e per MMBtu of coal (HHV; IPCC AR5 100-year; coal mine methane only)",
+   "basis": "Derived, not a printed value (DESIGN 13.6; derivation record in the provenance sidecar): round12(43.6 MMT CO2e (EPA GHGI 1990-2022 Table 3-1, CH4, Coal Mining, 2022; AR5) x 10^9 kg/MMT / (594,155 thousand short tons (EIA MER Table 6.1, 2022 production) x 1000 x 20.100 MMBtu per short ton (EIA MER Table A5, 2022 coal production, gross heat content))) = 43,600,000,000 / 11,942,515,500, half-even to 12 dp. Methane only: coal mining energy and coal transport CO2 are not included; abandoned mines are excluded; the denominator is all U.S. production, exports included"
+  },
+  {
+   "id": "us_upstream_const.kg_per_million_metric_tons",
+   "value": "1000000000",
+   "unit": "kg per million metric tons",
+   "basis": "Definition: 1 million metric tons (MMT) = 10^6 t x 1000 kg/t = 10^9 kg"
+  },
+  {
+   "id": "us_upstream_const.mj_per_mmbtu",
+   "value": "1055.05585262",
+   "unit": "MJ per MMBtu",
+   "basis": "Definition: International Table Btu = 1055.05585262 J, so 1 MMBtu = 10^6 Btu = 1055.05585262 MJ exactly (the definition behind supplement_const.kwh_per_mmbtu)"
+  },
+  {
+   "id": "us_upstream_const.ng_upstream_distribution_kg_per_mmbtu_hhv",
+   "value": "9.284491503056",
+   "unit": "kg CO2e per MMBtu (HHV; IPCC AR6 100-year, as published)",
+   "basis": "Derived exactly: NETL 8.8 g CO2e/MJ (entry netl2024_4862.ng_upstream.prod_through_distribution) x 1055.05585262 MJ/MMBtu / 1000 g/kg"
+  },
+  {
+   "id": "us_upstream_const.ng_upstream_transmission_kg_per_mmbtu_hhv",
+   "value": "8.229435650436",
+   "unit": "kg CO2e per MMBtu (HHV; IPCC AR6 100-year, as published)",
+   "basis": "Derived exactly: NETL 7.8 g CO2e/MJ (entry netl2024_4862.ng_upstream.prod_through_transmission) x 1055.05585262 MJ/MMBtu / 1000 g/kg"
+  },
+  {
+   "id": "us_upstream_const.short_tons_per_thousand_short_tons",
+   "value": "1000",
+   "unit": "short tons per thousand short tons",
+   "basis": "Definition: the EIA table unit \"thousand short tons\" = 1000 short tons"
+  }
+ ],
+ "entries": [
+  {
+   "id": "cagreet3.gwp_inferred",
+   "table": "CARB: CA-GREET3.0 Supplemental Document and Tables of Changes (August 13, 2018 (clean)); licence: California state government publication",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic/fuels/lcfs/ca-greet/cagreet_supp_doc_clean.pdf",
+   "valueCell": "Table 10 rows 'Class 8b Combination long-haul trucks', 'Class 6 Medium-Heavy Duty vocational vehicles'; Table 6 row 'Cars'; recomputed here: (g CH4/MMBtu x 25 + g N2O/MMBtu x 298) / 1055.05585262 rounds to the printed 2.56, 5.97 and 0.93 g/MJ [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3.gwp_inferred]",
+   "value": "AR4-100 (inferred)",
+   "unit": "GWP set (inferred; CARB states none)",
+   "labelCells": [
+    "quote1: \"Class 8b Combination long-haul trucks 108 0.102 0.004 3.45E-06 2.56\" | \"Class 6 Medium-Heavy Duty vocational vehicles 252 0.239 0.006 5.73E-06 5.97\" | \"Cars 19.08 0.018 1.682 1.59E-03 0.93\"",
+    "quote2: \"Class 8b Combination long-haul trucks 108 0.102 0.004 3.45E-06 2.56\" | \"Class 6 Medium-Heavy Duty vocational vehicles 252 0.239 0.006 5.73E-06 5.97\" | \"Cars 19.08 0.018 1.682 1.59E-03 0.93\""
+   ],
+   "label": "CA-GREET3.0 GWP set: not stated by CARB; AR4 100-year (CH4 25, N2O 298) reproduces the printed supplemental Table 10 and 6 CO2e values and AR5 (28, 265) does not",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3.heating_value_basis",
+   "table": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII): Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4 (Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes); licence: California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+   "sheet": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+   "valueCell": "§ 95486(b) text referring to Table 4, and Table 4 footnote 1 [transcription: webfetch_double_read; us-upstream-transcriptions-2.json id cagreet3.heating_value_basis]",
+   "value": "LHV",
+   "unit": "heating-value basis",
+   "labelCells": [
+    "quote1: Footnote 1: \"Energy density factors are based on the lower heating values of fuels in CA-GREET3.0\" \"using BTU to MJ conversion of 1055.06 J/Btu.\" (read 1, Justia; the tool split the sentence into two quotes)",
+    "quote2: Body: \"Fuel quantities denominated in other units, such as those shown in Table 4, are converted to MJ in the LRT-CBTS\" \"by multiplying by the corresponding energy density\" [footnote 1]; footnote 1: \"Energy density factors are based on the lower heating values of fuels in CA-GREET3.0\" \"using BTU to MJ conversion of 1055.06 J/Btu.\" (read 2, Justia)"
+   ],
+   "label": "CA-GREET3.0 carbon intensities and LCFS energy densities: lower heating value basis (LCFS Table 4 footnote 1)",
+   "sourceSha256": "0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701"
+  },
+  {
+   "id": "cagreet3_lut2018.carbob.crude_recovery_and_transport",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Crude Recovery and Crude Transport\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.carbob.crude_recovery_and_transport]",
+   "value": "11.78",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Crude Recovery and Crude Transport | 11.78 |  (read 1, tool rendered table)",
+    "quote2: \"Crude Recovery and Crude Transport 11.78\""
+   ],
+   "label": "CA-GREET3.0 Table A.1 carbob row crude_recovery_and_transport (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.carbob.fuel_transport",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"CARBOB Transport\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.carbob.fuel_transport]",
+   "value": "0.30",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | CARBOB Transport | 0.30 |",
+    "quote2: \"CARBOB Transport 0.30\""
+   ],
+   "label": "CA-GREET3.0 Table A.1 carbob row fuel_transport (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.carbob.refining",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Refining\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.carbob.refining]",
+   "value": "14.80",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Refining | 14.80 |",
+    "quote2: \"Refining 14.80\""
+   ],
+   "label": "CA-GREET3.0 Table A.1 carbob row refining (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.carbob.tailpipe",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Tailpipe Emissions\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.carbob.tailpipe]",
+   "value": "73.94",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Tailpipe Emissions | 73.94 |",
+    "quote2: \"Tailpipe Emissions 73.94\""
+   ],
+   "label": "CA-GREET3.0 Table A.1 carbob row tailpipe (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.carbob.total",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Total CI\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.carbob.total]",
+   "value": "100.82",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Total CI | 100.82 |",
+    "quote2: \"Total CI 100.82\""
+   ],
+   "label": "CA-GREET3.0 Table A.1 carbob row total (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.carbob.upstream",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Total CI\"; derived: Total 100.82 - Tailpipe 73.94 = 26.88; the 3 component rows sum to 26.88 (|difference| 0 <= 0.01, the table's rounding) [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.carbob.total]",
+   "value": "26.88",
+   "unit": "g CO2e per MJ (well-to-tank; LHV; GWP inferred AR4-100)",
+   "labelCells": [
+    "Total quote1: | Total CI | 100.82 |",
+    "Total quote2: \"Total CI 100.82\"",
+    "Tailpipe quote1: | Tailpipe Emissions | 73.94 |",
+    "Tailpipe quote2: \"Tailpipe Emissions 73.94\""
+   ],
+   "label": "CA-GREET3.0 Table A.1 carbob: upstream (well-to-tank) carbon intensity = Total - Tailpipe",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.crude_recovery",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Crude Recovery\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.crude_recovery]",
+   "value": "5.01",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Crude Recovery | 5.01 | (read 1, weighted column)",
+    "quote2: \"Crude Recovery 6.69 5.01\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row crude_recovery (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.crude_transport",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Crude Transport\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.crude_transport]",
+   "value": "1.20",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Crude Transport | 1.20 | (read 1, weighted column)",
+    "quote2: \"Crude Transport 1.60 1.20\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row crude_transport (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.ng_processing",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"NG Processing\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.ng_processing]",
+   "value": "0.82",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | NG Processing | 0.82 | (read 1, weighted column)",
+    "quote2: \"NG Processing 3.30 0.82\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row ng_processing (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.ng_recovery",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"NG Recovery\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.ng_recovery]",
+   "value": "1.51",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | NG Recovery | 1.51 | (read 1, weighted column)",
+    "quote2: \"NG Recovery 6.05 1.51\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row ng_recovery (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.ng_transmission",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"NG Transmission\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.ng_transmission]",
+   "value": "0.07",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | NG Transmission | 0.07 | (read 1, weighted column)",
+    "quote2: \"NG Transmission 0.27 0.07\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row ng_transmission (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.non_combustion",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Non-Combustion Emissions\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.non_combustion]",
+   "value": "0.52",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Non-Combustion Emissions | 0.52 | (read 1, weighted column)",
+    "quote2: \"Non-Combustion Emissions 0.79 0.43 0.52\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row non_combustion (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.propane_storage",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Storage\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.propane_storage]",
+   "value": "0.0",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Propane Storage | 0.0 | (read 1, weighted column)",
+    "quote2: \"Propane Storage 0.0 0.0 0.0\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row propane_storage (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.propane_transport",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Transport\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.propane_transport]",
+   "value": "0.74",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Propane Transport | 0.74 | (read 1, weighted column)",
+    "quote2: \"Propane Transport 0.74 0.74 0.74\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row propane_transport (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.refining_from_crude",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Refining from Crude\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.refining_from_crude]",
+   "value": "7.51",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Propane Refining from Crude | 7.51 | (read 1, weighted column)",
+    "quote2: \"Propane Refining from Crude 10.01 7.51\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row refining_from_crude (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.refining_from_ng",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Refining from NG\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.refining_from_ng]",
+   "value": "0.77",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Propane Refining from NG | 0.77 | (read 1, weighted column)",
+    "quote2: \"Propane Refining from NG 3.07 0.77\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row refining_from_ng (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.tailpipe",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Tailpipe Emissions\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.tailpipe]",
+   "value": "65.03",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Tailpipe Emissions | 65.03 | (read 1, weighted column)",
+    "quote2: \"Tailpipe Emissions 65.03 65.03 65.03\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row tailpipe (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.total",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Total CI\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.total]",
+   "value": "83.19",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Total CI | 83.19 | (read 1, weighted column)",
+    "quote2: \"Total CI 79.26 84.50 83.19\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted row total (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.propane_weighted.upstream",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Total CI\"; derived: Total 83.19 - Tailpipe 65.03 = 18.16; the 10 component rows sum to 18.15 (|difference| 0.01 <= 0.01, the table's rounding) [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.propane_weighted.total]",
+   "value": "18.16",
+   "unit": "g CO2e per MJ (well-to-tank; LHV; GWP inferred AR4-100)",
+   "labelCells": [
+    "Total quote1: | Total CI | 83.19 | (read 1, weighted column)",
+    "Total quote2: \"Total CI 79.26 84.50 83.19\" (read 2; last number = weighted column)",
+    "Tailpipe quote1: | Tailpipe Emissions | 65.03 | (read 1, weighted column)",
+    "Tailpipe quote2: \"Tailpipe Emissions 65.03 65.03 65.03\" (read 2; last number = weighted column)"
+   ],
+   "label": "CA-GREET3.0 Table D.1 propane_weighted: upstream (well-to-tank) carbon intensity = Total - Tailpipe",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.ulsd.crude_recovery_and_transport",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Crude Recovery and Crude Transport\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.ulsd.crude_recovery_and_transport]",
+   "value": "11.78",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Crude Recovery and Crude Transport | 11.78 |",
+    "quote2: \"Crude Recovery and Crude Transport 11.78\""
+   ],
+   "label": "CA-GREET3.0 Table B.1 ulsd row crude_recovery_and_transport (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.ulsd.fuel_transport",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"ULSD Transport\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.ulsd.fuel_transport]",
+   "value": "0.24",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | ULSD Transport | 0.24 |",
+    "quote2: \"ULSD Transport 0.24\""
+   ],
+   "label": "CA-GREET3.0 Table B.1 ulsd row fuel_transport (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.ulsd.refining",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Crude Oil Refining\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.ulsd.refining]",
+   "value": "13.57",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Crude Oil Refining | 13.57 |",
+    "quote2: \"Crude Oil Refining 13.57\""
+   ],
+   "label": "CA-GREET3.0 Table B.1 ulsd row refining (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.ulsd.tailpipe",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Tailpipe Emissions\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.ulsd.tailpipe]",
+   "value": "74.86",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Tailpipe Emissions | 74.86 |",
+    "quote2: \"Tailpipe Emissions 74.86\""
+   ],
+   "label": "CA-GREET3.0 Table B.1 ulsd row tailpipe (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.ulsd.total",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Total CI\" [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.ulsd.total]",
+   "value": "100.45",
+   "unit": "g CO2e per MJ (CA-GREET3.0; LHV per cagreet3.heating_value_basis; GWP not stated, inferred AR4-100)",
+   "labelCells": [
+    "quote1: | Total CI | 100.45 |",
+    "quote2: \"Total CI 100.45\""
+   ],
+   "label": "CA-GREET3.0 Table B.1 ulsd row total (California pathway)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "cagreet3_lut2018.ulsd.upstream",
+   "table": "California Air Resources Board (CARB): CA-GREET3.0 Lookup Table Pathways Technical Support Documentation (August 13, 2018 (clean)); licence: California state government publication (free public access; no licence fee)",
+   "sheet": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+   "valueCell": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Total CI\"; derived: Total 100.45 - Tailpipe 74.86 = 25.59; the 3 component rows sum to 25.59 (|difference| 0 <= 0.01, the table's rounding) [transcription: webfetch_double_read; us-upstream-transcriptions.json id cagreet3_lut2018.ulsd.total]",
+   "value": "25.59",
+   "unit": "g CO2e per MJ (well-to-tank; LHV; GWP inferred AR4-100)",
+   "labelCells": [
+    "Total quote1: | Total CI | 100.45 |",
+    "Total quote2: \"Total CI 100.45\"",
+    "Tailpipe quote1: | Tailpipe Emissions | 74.86 |",
+    "Tailpipe quote2: \"Tailpipe Emissions 74.86\""
+   ],
+   "label": "CA-GREET3.0 Table B.1 ulsd: upstream (well-to-tank) carbon intensity = Total - Tailpipe",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "carb_lcfs.energy_density.carbob",
+   "table": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII): Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4 (Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes); licence: California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+   "sheet": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+   "valueCell": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"CARBOB (gal)\", column 'Energy Density' [transcription: webfetch_double_read; us-upstream-transcriptions-2.json id carb_lcfs.energy_density.carbob]",
+   "value": "119.53",
+   "unit": "MJ per U.S. gallon (LHV)",
+   "labelCells": [
+    "quote1: \"CARBOB (gal) | 119.53 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+    "quote2: \"| CARBOB (gal) | 119.53 (MJ/gal) |\" (character-for-character copy request)"
+   ],
+   "label": "CARB LCFS energy density of carbob (17 CCR 95486 Table 4; LHV, from CA-GREET3.0)",
+   "sourceSha256": "0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701"
+  },
+  {
+   "id": "carb_lcfs.energy_density.propane",
+   "table": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII): Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4 (Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes); licence: California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+   "sheet": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+   "valueCell": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"Propane (LPG) (gal)\", column 'Energy Density' [transcription: webfetch_double_read; us-upstream-transcriptions-2.json id carb_lcfs.energy_density.propane]",
+   "value": "89.63",
+   "unit": "MJ per U.S. gallon (LHV)",
+   "labelCells": [
+    "quote1: \"Propane (LPG) (gal) | 89.63 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+    "quote2: \"| Propane (LPG) (gal) | 89.63 (MJ/gal) |\" (character-for-character copy request)"
+   ],
+   "label": "CARB LCFS energy density of propane (17 CCR 95486 Table 4; LHV, from CA-GREET3.0)",
+   "sourceSha256": "0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701"
+  },
+  {
+   "id": "carb_lcfs.energy_density.ulsd",
+   "table": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII): Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4 (Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes); licence: California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+   "sheet": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+   "valueCell": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"Diesel fuel (gal)\", column 'Energy Density' [transcription: webfetch_double_read; us-upstream-transcriptions-2.json id carb_lcfs.energy_density.ulsd]",
+   "value": "134.47",
+   "unit": "MJ per U.S. gallon (LHV)",
+   "labelCells": [
+    "quote1: \"Diesel fuel (gal) | 134.47 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+    "quote2: \"| Diesel fuel (gal) | 134.47 (MJ/gal) |\" (character-for-character copy request)"
+   ],
+   "label": "CARB LCFS energy density of ulsd (17 CCR 95486 Table 4; LHV, from CA-GREET3.0)",
+   "sourceSha256": "0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701"
+  },
+  {
+   "id": "cfr40_72_2.heat_input_rate_gcv",
+   "table": "U.S. EPA / Office of the Federal Register (eCFR): 40 CFR 72.2 Definitions (Acid Rain Program) (current eCFR as read 2026-10-30); licence: US government work",
+   "sheet": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-72/subpart-A/section-72.2",
+   "valueCell": "§72.2, definition 'Heat input rate' [transcription: webfetch_double_read; us-upstream-transcriptions.json id cfr40_72_2.heat_input_rate_gcv]",
+   "value": "gross calorific value",
+   "unit": "definition",
+   "labelCells": [
+    "quote1: Heat input rate means the product (expressed in mmBtu/hr) of the gross calorific value of the fuel (expressed in mmBtu/mass of fuel) and the fuel feed rate into the combustion device (expressed in mass of fuel/hr) and does not include the heat derived from preheated combustion air, recirculated flue gases, or exhaust from other sources.",
+    "quote2: Heat input rate means the product (expressed in mmBtu/hr) of the gross calorific value of the fuel  [LII mirror https://www.law.cornell.edu/cfr/text/40/72.2]"
+   ],
+   "label": "Part 75 heat input (eGRID's first data source) uses the gross calorific value (HHV)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "coal_upstream.abrahams2015_cmu.us_average",
+   "table": "Carnegie Mellon University authors (journal SI, Environ. Sci. Technol. 2015); copy hosted on energy.gov: Life Cycle Greenhouse Gas Emissions From U.S. Liquefied Natural Gas Exports: Implications for End Uses - Supporting Information (Abrahams, Samaras, Griffin, Matthews; Carnegie Mellon University) (Not stated in the document (journal article 2015); energy.gov file path 2022-07); licence: Journal supporting information (publisher copyright); free to read at the URL",
+   "sheet": "https://www.energy.gov/sites/default/files/2022-07/26.%20Life%20Cycle%20of%20GHG%20emissions.pdf",
+   "valueCell": "Table S7 'Life cycle emissions for industrial heating using U.S. LNG, Russian natural gas, and coal', COAL block, 100-yr GWP, row 'Upstream', columns mean / 5% / 95% [transcription: webfetch_double_read; us-upstream-transcriptions-3.json id coal_upstream.abrahams2015_cmu.us_average]",
+   "value": "12.2",
+   "unit": "g CO2e per MJ of coal (CH4 GWP Normal(36, 8.5), not an IPCC set; heating value not stated)",
+   "labelCells": [
+    "quote1: Under header \"g CO2-e/MJ\" (coal, industrial heating, 100-yr GWP): \"Upstream 12.2 5.4 22\"; 20-yr: \"upstream 26 9.8 49\"",
+    "quote2: Table S7 rendered by the tool: \"100-yr GWP / mean 5% 95% / ... / COAL: / Upstream 12.2 5.4 22 / combustion 111 105 129 / total 124 113 137\""
+   ],
+   "label": "Screening only (memo, high end less the counted mine methane): Abrahams et al. 2015 SI Table S7 coal upstream, 100-year mean",
+   "sourceSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb"
+  },
+  {
+   "id": "coal_upstream.npc2011.us_average.upstream_combustion",
+   "table": "National Petroleum Council; hosted on energy.gov: Life-Cycle Emissions of Natural Gas and Coal in the Power Sector, Paper #4-2 (NPC North American Resource Development Study) (Made available September 15, 2011); licence: Free public document (NPC working paper); hosted by DOE",
+   "sheet": "https://www.energy.gov/sites/default/files/2022-10/4-2_Life-Cycle_Emissions_Coal_and_Gas_in_Power_Paper.pdf",
+   "valueCell": "Table 7 'Comparison of Fuel and Upstream Emissions (lb. CO2e/MMBtu)', row 'Upstream combustion', column Coal / NPC (4th value) [transcription: webfetch_double_read; us-upstream-transcriptions-3.json id coal_upstream.npc2011.us_average.upstream_combustion]",
+   "value": "5.0",
+   "unit": "lb CO2e per MMBtu of coal (IPCC AR4; heating value not stated; 1997 coal data)",
+   "labelCells": [
+    "quote1: Table 7 (rendered): row \"Upstream combustion | 9.1 | 9.1 | 7.0 | 5.0\"",
+    "quote2: Raw text (read 2): row \"Upstream\" / \"combustion\" values \"9.1 9.1 7.0 5.0\""
+   ],
+   "label": "Screening only (memo, low end): NPC 2011 Table 7 coal upstream combustion (mining energy + transport), Coal/NPC",
+   "sourceSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb"
+  },
+  {
+   "id": "egrid2023_tg.heat_input_definition",
+   "table": "U.S. EPA: eGRID2023 Technical Guide (January 2025 (file dated 2025-01-15)); licence: US government work",
+   "sheet": "https://www.epa.gov/system/files/documents/2025-01/egrid2023_technical_guide.pdf",
+   "valueCell": "Section 3.1.3.2 Heat Input, p. 18 (read 1) / p. 19 (read 2; PDF vs printed page) [transcription: webfetch_double_read; us-upstream-transcriptions.json id egrid2023_tg.heat_input_definition]",
+   "value": "MMBtu (heating-value basis not stated)",
+   "unit": "definition",
+   "labelCells": [
+    "quote1: Heat input, in MMBtu, is the amount of heat energy consumed by a generating unit that combusts fuel.",
+    "quote2: Heat input, in MMBtu, is the amount of heat energy consumed by a generating unit that combusts fuel."
+   ],
+   "label": "eGRID2023 heat input is in MMBtu; the Technical Guide states no heating-value basis",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "eia.2022.coal_heat_content_production",
+   "table": "U.S. Energy Information Administration (EIA), Monthly Energy Review: Monthly Energy Review, Table A5 Approximate Heat Content of Coal and Coal Coke (Appendix A pages as fetched carry footer 'Monthly Energy Review August 2026'); licence: US government work (public domain)",
+   "sheet": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec12_6.pdf",
+   "valueCell": "Table A5 (Million Btu per Short Ton), row 2022, column 'Coal Production' (first numeric column, footnote a) [transcription: webfetch_double_read; us-upstream-transcriptions-3.json id eia.2022.coal_heat_content_production]",
+   "value": "20.100",
+   "unit": "MMBtu per short ton (gross heat content, HHV; coal production 2022)",
+   "labelCells": [
+    "quote1: Row 2022 (read 1): \"20.100 11.268 18.083 28.669 20.388 18.792 | 19.180 21.447 24.346 24.800\"; title printed as \"Table AS. Approximate Heat Content of Coal and Coal Coke\" (OCR 'AS' = A5); unit line \"(Million Btu per Short Ton)\"",
+    "quote2: Row 2022 (read 2): \"2022 20.100 11.268 18.083 28.669 20.388 18.792\" (second block 19.180 21.447 24.346 24.800); coal production heat content 20.100"
+   ],
+   "label": "Approximate heat content of U.S. coal production 2022 (gross, HHV)",
+   "sourceSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb"
+  },
+  {
+   "id": "eia.2022.coal_production_short_tons",
+   "table": "U.S. Energy Information Administration (EIA), Monthly Energy Review: Monthly Energy Review, Table 6.1 Coal Overview (MER September 2026 (page footer 'Monthly Energy Review September 2026')); licence: US government work (public domain)",
+   "sheet": "https://www.eia.gov/TOTALENERGY/data/monthly/pdf/sec6.pdf",
+   "valueCell": "Table 6.1 Coal Overview (Thousand Short Tons), annual row '2022 Total', column 'Production' (first numeric column, footnote a) [transcription: webfetch_double_read; us-upstream-transcriptions-3.json id eia.2022.coal_production_short_tons]",
+   "value": "594155",
+   "unit": "thousand short tons (calendar year 2022 U.S. coal production)",
+   "labelCells": [
+    "quote1: \"2022 Total 594,155 8,934 6,313 85,956 -79,642 -1,383 9,296 515,534\" (read 1; unit line \"(Thousand Short Tons)\")",
+    "quote2: \"2022 Total ... 594,155 | 8,934 | 6,313 | 85,956 | -79,642 | -1,383 | 9,296 | 515,534\" (read 2; tool matched columns by position: Production, Waste Coal Supplied, Imports, Exports, Net Imports, Stock Change, Losses and Unaccounted for, Consumption)"
+   ],
+   "label": "U.S. coal production 2022, all ranks (includes a small amount of refuse recovery and coal later exported)",
+   "sourceSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb"
+  },
+  {
+   "id": "eia_glossary.gross_heat_content",
+   "table": "U.S. Energy Information Administration: EIA Glossary (H) (web page as read 2026-10-30); licence: US government work",
+   "sheet": "https://www.eia.gov/tools/glossary/index.php?id=H",
+   "valueCell": "entry 'Heat content' note [transcription: webfetch_double_read; us-upstream-transcriptions.json id eia_glossary.gross_heat_content]",
+   "value": "gross heat content",
+   "unit": "definition",
+   "labelCells": [
+    "quote1: The Energy Information Administration typically uses gross heat content values.",
+    "quote2: The Energy Information Administration typically uses gross heat content values."
+   ],
+   "label": "EIA (eGRID's other data source, EIA-923) uses gross heat content (HHV)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "epa_ghgi.2022.coal_mining_ch4_total",
+   "table": "U.S. Environmental Protection Agency (EPA): Inventory of U.S. Greenhouse Gas Emissions and Sinks: 1990-2022, Chapter 3 Energy (Final report, April 2024 (file path 2024-04); EPA 430-R-24-004); licence: US government work (public domain)",
+   "sheet": "https://www.epa.gov/system/files/documents/2024-04/us-ghg-inventory-2024-chapter-3-energy.pdf",
+   "valueCell": "Table 3-1 'CO2, CH4, and N2O Emissions from Energy (MMT CO2 Eq.)', pp. 3-4 to 3-5, CH4 block, row 'Coal Mining', column 2022 (last column) [transcription: webfetch_double_read; us-upstream-transcriptions-3.json id epa_ghgi.2022.coal_mining_ch4_total]",
+   "value": "43.6",
+   "unit": "MMT CO2e (million metric tons CO2-equivalent; IPCC AR5 100-year GWPs), calendar year 2022",
+   "labelCells": [
+    "quote1: Table 3-1 CH4 row (read 1): \"Coal Mining 108.1 71.5 59.1 53.0 46.2 44.7 43.6\" (the tool reported it as the summary-level CH4 coal mining series from Table 3-1)",
+    "quote2: Read 2 (header + row copied): \"Gas/Source 1990 2005 2018 2019 2020 2021 2022\" / \"Coal Mining 108.1 71.5 59.1 53.0 46.2 44.7 43.6\"; GWP footnote 4 p. 3-4: \"Following the current reporting requirements under the UNFCCC, this Inventory report presents CO2 equivalent values based on the IPCC Fifth Assessment Report (AR5) GWP values.\""
+   ],
+   "label": "U.S. coal mining CH4 (GHGI category 1B1a: active underground mines net of methane recovered and used, surface mines, post-mining; abandoned mines excluded), 2022, IPCC AR5 100-year",
+   "sourceSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb"
+  },
+  {
+   "id": "netl2024_4862.ng_upstream.prod_through_distribution",
+   "table": "U.S. DOE National Energy Technology Laboratory (NETL): Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile (DOE/NETL-2024/4862, January 2025); licence: US government work (public domain)",
+   "sheet": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+   "valueCell": "Executive Summary, p. 2, first results sentence [transcription: webfetch_double_read; us-upstream-transcriptions.json id netl2024_4862.ng_upstream.prod_through_distribution]",
+   "value": "8.8",
+   "unit": "g CO2e per MJ of natural gas (HHV; IPCC AR6 100-year GWPs, as published)",
+   "labelCells": [
+    "quote1: For the “production through distribution” life cycle boundary, the GHG emissions intensity from the United States (U.S.) NG supply chain for the year 2020 is 8.8 g carbon dioxide equivalents (CO2e)/MJ (with a 95 percent mean confidence interval of 5.7–12.7 g CO2e/MJ, using the Intergovernmental Panel on Climate Change [IPCC] Sixth Assessment Report [AR6] 100-yr global warming potential [GWP] values, higher heating value [HHV] basis)",
+    "quote2: For the “production through distribution” life cycle boundary, the GHG emissions intensity from the United States (U.S.) NG supply chain for the year 2020 is 8.8 g carbon dioxide equivalents (CO2e)/MJ (with a 95 percent mean confidence interval of 5.7–12.7 g CO2e/MJ, using the Intergovernmental Panel on Climate Change [IPCC] Sixth Assessment Report [AR6] 100-yr global warming potential [GWP] values, higher heating value [HHV] basis)"
+   ],
+   "label": "U.S. natural gas supply chain 2020, production through distribution (extraction, processing, transmission, storage, distribution); US 2020 (95% CI 5.7–12.7 g CO2e/MJ)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  },
+  {
+   "id": "netl2024_4862.ng_upstream.prod_through_transmission",
+   "table": "U.S. DOE National Energy Technology Laboratory (NETL): Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile (DOE/NETL-2024/4862, January 2025); licence: US government work (public domain)",
+   "sheet": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+   "valueCell": "Executive Summary, p. 2, same sentence (second clause) [transcription: webfetch_double_read; us-upstream-transcriptions.json id netl2024_4862.ng_upstream.prod_through_transmission]",
+   "value": "7.8",
+   "unit": "g CO2e per MJ of natural gas (HHV; IPCC AR6 100-year GWPs, as published)",
+   "labelCells": [
+    "quote1: whereas, for the “production through transmission network” life cycle boundary, the GHG emissions from the U.S. NG supply chain are 7.8 g CO2e/MJ (with a 95 percent mean confidence interval of 4.9–11.5 g CO2e/MJ, IPCC AR6 100-yr GWP, HHV basis).",
+    "quote2: whereas, for the “production through transmission network” life cycle boundary, the GHG emissions from the U.S. NG supply chain are 7.8 g CO2e/MJ (with a 95 percent mean confidence interval of 4.9–11.5 g CO2e/MJ, IPCC AR6 100-yr GWP, HHV basis)."
+   ],
+   "label": "U.S. natural gas supply chain 2020, production through transmission network (excludes distribution); US 2020 (95% CI 4.9–11.5 g CO2e/MJ)",
+   "sourceSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb"
+  }
+ ]
+}

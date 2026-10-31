@@ -1,0 +1,286 @@
+{
+ "schema": "neuvetra.sources-extra.upstream-transcriptions/v1",
+ "generated": "2026-10-31",
+ "method": "Round 3. Each value was read with WebFetch at least twice using differently-worded prompts asking for verbatim table rows/sentences. agreed=true only when the printed value matched in both reads. WebFetch returns a small-model rendering of the page text, not the raw file: these are transcriptions, not file reads; cite as hand-transcribed (page/table/row) and upgrade to pdftotext/xlsx/csv reads when files are staged. Where the tool rendered a table instead of quoting lines, the quote field says so. Derived numbers in notes are builder arithmetic, not printed values.",
+ "values": [
+  {
+   "id": "epa_ghgi.2022.coal_mining_ch4_total",
+   "value": "43.6",
+   "unit": "MMT CO2 Eq. (million metric tons CO2-equivalent), calendar year 2022",
+   "basis": {
+    "heating_value": "n/a (mass inventory total)",
+    "gwp_set": "IPCC AR5 100-yr (chapter footnote 4: 'this Inventory report presents CO2 equivalent values based on the IPCC Fifth Assessment Report (AR5) GWP values'; the numeric CH4 GWP (28 in AR5 without climate-carbon feedback) is not printed in the text read)",
+    "boundary": "CH4 only from U.S. coal mining source category (1B1a): active underground mining (net of methane recovered and used), surface mining, and post-mining (underground and surface) per the GHGI category structure. EXCLUDES abandoned underground coal mines (separate row, 6.3 MMT CO2 Eq. in 2022, single read), EXCLUDES mining energy CO2 and coal transport CO2. Covers all U.S. coal produced (including exports), not only power-plant coal."
+   },
+   "source_title": "Inventory of U.S. Greenhouse Gas Emissions and Sinks: 1990-2022, Chapter 3 Energy",
+   "publisher": "U.S. Environmental Protection Agency (EPA)",
+   "edition_date": "Final report, April 2024 (file path 2024-04); EPA 430-R-24-004",
+   "licence": "US government work (public domain)",
+   "url": "https://www.epa.gov/system/files/documents/2024-04/us-ghg-inventory-2024-chapter-3-energy.pdf",
+   "locator": "Table 3-1 'CO2, CH4, and N2O Emissions from Energy (MMT CO2 Eq.)', pp. 3-4 to 3-5, CH4 block, row 'Coal Mining', column 2022 (last column)",
+   "quote1": "Table 3-1 CH4 row (read 1): \"Coal Mining 108.1 71.5 59.1 53.0 46.2 44.7 43.6\" (the tool reported it as the summary-level CH4 coal mining series from Table 3-1)",
+   "quote2": "Read 2 (header + row copied): \"Gas/Source 1990 2005 2018 2019 2020 2021 2022\" / \"Coal Mining 108.1 71.5 59.1 53.0 46.2 44.7 43.6\"; GWP footnote 4 p. 3-4: \"Following the current reporting requirements under the UNFCCC, this Inventory report presents CO2 equivalent values based on the IPCC Fifth Assessment Report (AR5) GWP values.\"",
+   "agreed": true,
+   "row_parsed": {
+    "1990": "108.1",
+    "2005": "71.5",
+    "2018": "59.1",
+    "2019": "53.0",
+    "2020": "46.2",
+    "2021": "44.7",
+    "2022": "43.6"
+   },
+   "notes": "The detailed coal-mining table (underground liberated / recovered & used / surface / post-mining split, Section 3.4) could NOT be read: WebFetch text of both the final (2024-04) and the public-review draft (2024-02) chapter stops in Section 3.1 at about p. 3-34 (102,557 characters). So only the total is registered; the split ids epa_ghgi.2022.coal_mining_ch4_underground/_surface/_post_mining are gaps. Year choice: 2022 because the 1990-2023 edition (2025) chapter was not found on epa.gov (only FOIA copies via EDF, not used). Read 2 also printed 'Abandoned Underground Coal Mines 8.1 7.4 6.9 6.6 6.5 6.3 6.3' (single read; context only). Builder derivation (NOT a printed value): 43.6e12 g / (594,155e3 short tons x 20.100 MMBtu/short ton) = 3,651 g CO2e/MMBtu (HHV, AR5) = 3.46 g CO2e/MJ HHV = 73.4 kg CO2e/short ton. METHANE-ONLY: excludes mining energy CO2 and transport CO2, so it understates full coal upstream."
+  },
+  {
+   "id": "eia.2022.coal_production_short_tons",
+   "value": "594,155",
+   "unit": "thousand short tons (calendar year 2022 U.S. coal production)",
+   "basis": {
+    "heating_value": "n/a (mass)",
+    "gwp_set": "n/a",
+    "boundary": "U.S. coal production, all ranks; footnote a: 'Beginning in 2001, includes a small amount of refuse recovery'"
+   },
+   "source_title": "Monthly Energy Review, Table 6.1 Coal Overview",
+   "publisher": "U.S. Energy Information Administration (EIA), Monthly Energy Review",
+   "edition_date": "MER September 2026 (page footer 'Monthly Energy Review September 2026')",
+   "licence": "US government work (public domain)",
+   "url": "https://www.eia.gov/TOTALENERGY/data/monthly/pdf/sec6.pdf",
+   "url_crosscheck": "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=T06.01",
+   "locator": "Table 6.1 Coal Overview (Thousand Short Tons), annual row '2022 Total', column 'Production' (first numeric column, footnote a)",
+   "quote1": "\"2022 Total 594,155 8,934 6,313 85,956 -79,642 -1,383 9,296 515,534\" (read 1; unit line \"(Thousand Short Tons)\")",
+   "quote2": "\"2022 Total ... 594,155 | 8,934 | 6,313 | 85,956 | -79,642 | -1,383 | 9,296 | 515,534\" (read 2; tool matched columns by position: Production, Waste Coal Supplied, Imports, Exports, Net Imports, Stock Change, Losses and Unaccounted for, Consumption)",
+   "agreed": true,
+   "notes": "Balance check: 594,155 + 8,934 + (-79,642) - (-1,383) - 9,296 = 515,534 = Consumption, so the column assignment is right. Other years read twice: 2023 = 577,954; 2024 = 512,540 (thousand short tons). Recent annual values can be revised between MER editions; cite the edition."
+  },
+  {
+   "id": "eia.2022.coal_heat_content_production",
+   "value": "20.100",
+   "unit": "million Btu per short ton (coal production, 2022)",
+   "basis": {
+    "heating_value": "HHV (gross): table note 'The values in this table are for gross heat contents.'",
+    "gwp_set": "n/a",
+    "boundary": "Approximate heat content of U.S. coal production (all ranks), annual"
+   },
+   "source_title": "Monthly Energy Review, Table A5 Approximate Heat Content of Coal and Coal Coke",
+   "publisher": "U.S. Energy Information Administration (EIA), Monthly Energy Review",
+   "edition_date": "Appendix A pages as fetched carry footer 'Monthly Energy Review August 2026'",
+   "licence": "US government work (public domain)",
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec12_6.pdf",
+   "url_crosscheck": "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=TA5",
+   "locator": "Table A5 (Million Btu per Short Ton), row 2022, column 'Coal Production' (first numeric column, footnote a)",
+   "quote1": "Row 2022 (read 1): \"20.100 11.268 18.083 28.669 20.388 18.792 | 19.180 21.447 24.346 24.800\"; title printed as \"Table AS. Approximate Heat Content of Coal and Coal Coke\" (OCR 'AS' = A5); unit line \"(Million Btu per Short Ton)\"",
+   "quote2": "Row 2022 (read 2): \"2022 20.100 11.268 18.083 28.669 20.388 18.792\" (second block 19.180 21.447 24.346 24.800); coal production heat content 20.100",
+   "agreed": true,
+   "notes": "Gross basis read separately: \"The values in this table are for gross heat contents.\" (read for 2023/2021 rows). Other years read twice: 2023 = 20.172 (row '2023 20.172 11.268 17.375 28.859 20.490 18.717'); 2021 = 19.933 (single read). Electric power sector consumption heat content 2022 = 18.792 is in the same row (6th number) but its column label was reconstructed by the tool, so it is not registered here. Pair with eia.2022.coal_production_short_tons and epa_ghgi.2022.coal_mining_ch4_total (same year)."
+  },
+  {
+   "id": "eia.2023.coal_production_short_tons",
+   "value": "577,954",
+   "unit": "thousand short tons (calendar year 2023 U.S. coal production)",
+   "basis": {
+    "heating_value": "n/a (mass)",
+    "gwp_set": "n/a",
+    "boundary": "U.S. coal production, all ranks; includes a small amount of refuse recovery (footnote a)"
+   },
+   "source_title": "Monthly Energy Review, Table 6.1 Coal Overview",
+   "publisher": "U.S. Energy Information Administration (EIA), Monthly Energy Review",
+   "edition_date": "MER September 2026",
+   "licence": "US government work (public domain)",
+   "url": "https://www.eia.gov/TOTALENERGY/data/monthly/pdf/sec6.pdf",
+   "url_crosscheck": "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=T06.01",
+   "locator": "Table 6.1, annual row '2023 Total', column 'Production'",
+   "quote1": "\"2023 Total 577,954 8,165 4,010 100,208 -96,198 48,493 15,533 425,895\" (read 1)",
+   "quote2": "Read 2: \"2023 production: 577,954 thousand short tons\"; the tool noted the extracted text separates the label '2023 Total ...' from the numbers and matched the value by row position",
+   "agreed": true,
+   "notes": "Registered only for use if an EPA GHGI 2023 coal mining value is later staged (not available from epa.gov in this round). Balance check on read 1's row: 577,954 + 8,165 + (-96,198) - 48,493 - 15,533 = 425,895 = Consumption."
+  },
+  {
+   "id": "eia.2023.coal_heat_content_production",
+   "value": "20.172",
+   "unit": "million Btu per short ton (coal production, 2023)",
+   "basis": {
+    "heating_value": "HHV (gross): 'The values in this table are for gross heat contents.'",
+    "gwp_set": "n/a",
+    "boundary": "Approximate heat content of U.S. coal production (all ranks), annual"
+   },
+   "source_title": "Monthly Energy Review, Table A5 Approximate Heat Content of Coal and Coal Coke",
+   "publisher": "U.S. Energy Information Administration (EIA), Monthly Energy Review",
+   "edition_date": "Footer 'Monthly Energy Review August 2026'",
+   "licence": "US government work (public domain)",
+   "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec12_6.pdf",
+   "url_crosscheck": "https://www.eia.gov/totalenergy/data/browser/csv.php?tbl=TA5",
+   "locator": "Table A5, row 2023, column 'Coal Production'",
+   "quote1": "Row 2023 (read 1): \"20.172 11.268 17.375 28.859 20.490 18.717 | 19.185 21.929 24.055 24.800\"",
+   "quote2": "Row 2023 (read 2): \"2023 20.172 11.268 17.375 28.859 20.490 18.717\"; plus \"The values in this table are for gross heat contents.\"",
+   "agreed": true,
+   "notes": "Companion to eia.2023.coal_production_short_tons."
+  },
+  {
+   "id": "coal_upstream.npc2011.us_average.methane",
+   "value": "7.9",
+   "unit": "lb CO2e per MMBtu of coal (coal mine methane, fugitive and vented)",
+   "basis": {
+    "heating_value": "not stated (EIA/US convention would be HHV; unverified)",
+    "gwp_set": "IPCC AR4 100-yr, CH4 = 25 (footnote 6: '100-year time horizon GWP value from 2007 Intergovernmental Panel on Climate Change (IPCC) Fourth Assessment Report (AR4)'; text: 'this paper uses a global warming potential (GWP) of 25 for methane rather than 21')",
+    "boundary": "U.S. coal upstream, methane component only. Coal data year 1997 (Table 4 title 'Upstream GHG Emissions for Coal (1997) as Calculated for NPC'); mining energy 'updated to 2007'; methane from 2009 EPA estimates (mixed years)"
+   },
+   "source_title": "Life-Cycle Emissions of Natural Gas and Coal in the Power Sector, Paper #4-2 (NPC North American Resource Development Study, Carbon and Other End-Use Emissions Subgroup, Life-Cycle Analysis Team)",
+   "publisher": "National Petroleum Council (federal advisory committee to the Secretary of Energy); hosted on energy.gov. NPC did not endorse the paper's conclusions.",
+   "edition_date": "Made available September 15, 2011",
+   "licence": "Free public document (NPC working paper); hosted by DOE",
+   "url": "https://www.energy.gov/sites/default/files/2022-10/4-2_Life-Cycle_Emissions_Coal_and_Gas_in_Power_Paper.pdf",
+   "locator": "Table 7 'Comparison of Fuel and Upstream Emissions (lb. CO2e/MMBtu)', row 'Methane Emissions (Fugitive and Vented)', column Coal / NPC (4th value)",
+   "quote1": "Table 7 (rendered as a table by the tool): row \"Methane Emissions (Fugitive and Vented) | 9.1 | 18 | 7.9 | 7.9\" under columns Natural Gas Jaramillo, Natural Gas NPC, Coal Jaramillo, Coal NPC",
+   "quote2": "Raw text (read 2): headings \"Natural Gas Coal\" / \"Jaramillo NPC Jaramillo NPC\"; row \"Methane Emissions (Fugitive and\" / \"Vented)\" values \"9.1 18 7.9 7.9\"",
+   "agreed": true,
+   "notes": "Weak proxy: 1997-era coal data, AR4, heating value unstated, working paper. Consistency flag: NPC Table 4 (MMTCO2e) gives methane 84.5 vs upstream combustion 51.2 (ratio 1.65), but Table 7 NPC coal gives 7.9 vs 5.0 (ratio 1.58); the Jaramillo columns are consistent (81.4/72.3 = 1.126 vs 7.9/7.0 = 1.129). The coal MMBtu denominator is not stated ('In order to compare the gas and coal emissions, it is useful to normalize them to lb. CO2e/MMBtu.' is the only sentence)."
+  },
+  {
+   "id": "coal_upstream.npc2011.us_average.upstream_combustion",
+   "value": "5.0",
+   "unit": "lb CO2e per MMBtu of coal (upstream energy combustion: mining energy + transportation)",
+   "basis": {
+    "heating_value": "not stated (unverified)",
+    "gwp_set": "IPCC AR4 100-yr (CH4 = 25)",
+    "boundary": "U.S. coal upstream combustion CO2e: Table 4 NPC rows 'Production 84.5 14.0 98.6' and 'Transportation -- 37.1 37.1' (columns Methane, Upstream Combustion, Total; MMTCO2e) show this covers mining-energy combustion (14.0) and transport (37.1); 1997 coal data"
+   },
+   "source_title": "Life-Cycle Emissions of Natural Gas and Coal in the Power Sector, Paper #4-2 (NPC North American Resource Development Study)",
+   "publisher": "National Petroleum Council; hosted on energy.gov",
+   "edition_date": "Made available September 15, 2011",
+   "licence": "Free public document (NPC working paper); hosted by DOE",
+   "url": "https://www.energy.gov/sites/default/files/2022-10/4-2_Life-Cycle_Emissions_Coal_and_Gas_in_Power_Paper.pdf",
+   "locator": "Table 7 'Comparison of Fuel and Upstream Emissions (lb. CO2e/MMBtu)', row 'Upstream combustion', column Coal / NPC (4th value)",
+   "quote1": "Table 7 (rendered): row \"Upstream combustion | 9.1 | 9.1 | 7.0 | 5.0\"",
+   "quote2": "Raw text (read 2): row \"Upstream\" / \"combustion\" values \"9.1 9.1 7.0 5.0\"",
+   "agreed": true,
+   "notes": "Builder derivation (NOT printed): NPC coal upstream total = 7.9 + 5.0 = 12.9 lb CO2e/MMBtu = 5.85 kg CO2e/MMBtu (= 5.55 g/MJ if the MMBtu is HHV). Printed Table 7 totals: Coal NPC 'Total 222' with Fuel CO2 209 (read 1 says the Fuel CO2 row was garbled in layout), consistent with ~13 upstream. Same caveats as the methane entry. Jaramillo column (7.9 + 7.0 = 14.9) is the 1997-data Jaramillo et al. estimate; Table 6 (single read) gives Jaramillo coal 'Upstream' range 8.4 to 18.2 lb CO2e/MMBtu."
+  },
+  {
+   "id": "coal_upstream.abrahams2015_cmu.us_average",
+   "value": "12.2",
+   "unit": "g CO2e per MJ of coal (Monte Carlo mean; 5th-95th percentile 5.4-22)",
+   "basis": {
+    "heating_value": "not stated",
+    "gwp_set": "Not a standard IPCC set: CH4 100-yr GWP modeled as a distribution 'Normal(36,8.5)' (SI Section 8, Rank #1); a 20-yr variant is also printed (26; 9.8-49)",
+    "boundary": "Coal upstream (production CO2, production methane, transport CO2 per Table S12 labels) for coal used in industrial heating; parameters 'adapted from Venkatesh et al. 2012' ('Uncertainty in life cycle greenhouse gas emissions from United States coal'), so U.S. coal is inferred, not stated"
+   },
+   "source_title": "Life Cycle Greenhouse Gas Emissions From U.S. Liquefied Natural Gas Exports: Implications for End Uses - Supporting Information (Abrahams, Samaras, Griffin, Matthews; Carnegie Mellon University)",
+   "publisher": "Carnegie Mellon University authors (journal SI, Environ. Sci. Technol. 2015); copy hosted on energy.gov",
+   "edition_date": "Not stated in the document (journal article 2015); energy.gov file path 2022-07",
+   "licence": "Journal supporting information (publisher copyright); free to read at the URL",
+   "url": "https://www.energy.gov/sites/default/files/2022-07/26.%20Life%20Cycle%20of%20GHG%20emissions.pdf",
+   "locator": "Table S7 'Life cycle emissions for industrial heating using U.S. LNG, Russian natural gas, and coal', COAL block, 100-yr GWP, row 'Upstream', columns mean / 5% / 95%",
+   "quote1": "Under header \"g CO2-e/MJ\" (coal, industrial heating, 100-yr GWP): \"Upstream 12.2 5.4 22\"; 20-yr: \"upstream 26 9.8 49\"",
+   "quote2": "Table S7 rendered by the tool: \"100-yr GWP / mean 5% 95% / ... / COAL: / Upstream 12.2 5.4 22 / combustion 111 105 129 / total 124 113 137\"",
+   "agreed": true,
+   "notes": "Academic uncertainty study, not an official factor; the GWP is a distribution (mean 36, closer to AR5-with-feedback fossil CH4 than to AR5 28), heating value unstated, U.S. coal origin only inferred from the cited source. Table S12 parameter values are scrambled in the text extraction (not usable). Possible source typo flagged by the tool: combustion 95th percentile 129 (100-yr) vs 120 (20-yr). Same document also prints coal electricity upstream 117 (52-210) g CO2e/kWh, 100-yr (single read). Use only as a cross-check range, not as a registered factor."
+  }
+ ],
+ "rejected": [
+  {
+   "id": "coal_upstream.netl2024_4846.us_average",
+   "value_seen": "none printed as text (third check)",
+   "reason": "OSTI biblio page 2370100 is robots-disallowed for WebFetch. The purl PDF text (97,949 characters) runs only to p. 40 (References, mid-reference [24]); Appendices (pp. 43-49) are not in the extracted text. Read with two prompts plus an offset read (85,000+): no absolute GWP result anywhere; Executive Summary refers only to 'mass-weighted averages' with no number; Conclusions are qualitative ('Overall, PRB scenarios had the highest environmental impacts and WNW scenarios had the lowest.'). Only CO2e numbers in text are Exhibit 2-9 characterization factors (kg CO2e/kg): 'CH4 82.5 29.8', 'N2O 273 273' (AR6 20-yr/100-yr). Exhibit ES-2 / 4-7 axis label '(kg CO2e/kg coal delivered)' with values only in the chart.",
+   "url": "https://www.osti.gov/servlets/purl/2370100/"
+  },
+  {
+   "id": "coal_upstream.lcacommons_coal_repository.page",
+   "value_seen": "none",
+   "reason": "LCA Commons 'US coal extraction repository updated' page describes the NETL model (22 coal type and basin combinations; refers to DOE/NETL-2024/4846) with no numeric result and no date.",
+   "url": "https://www.lcacommons.gov/us-coal-extraction-repository-updated"
+  },
+  {
+   "id": "coal_upstream.netl_edx_zolca_resource.page",
+   "value_seen": "none",
+   "reason": "EDX resource page for netl_coal_delivery_lca_baseline_model_v4_12262024.zolca: 'Results are expressed on the basis of 1 kg of coal delivered to a power plant.' but no numeric result (model file only).",
+   "url": "https://edx.netl.doe.gov/dataset/fc1e9337-d762-4688-8415-9abf4528c428/resource/618e4cef-cdbd-4541-9717-425db6b9af12"
+  },
+  {
+   "id": "coal_upstream.acsf2011.us_average",
+   "value_seen": "99.4 kgCO2e/MMBtu fuel-chain total incl. combustion; 'Coal 80' MMT CO2e upstream CH4 (Table 2 line 4); 'add about 4%'",
+   "reason": "Staple & Swisher, American Clean Skies Foundation (19 Apr 2011): advocacy-funded, AR4, 2008 data; prints only a fuel-chain total including combustion and a methane mass total; no upstream-only per-energy value printed (any 4.1 kg/MMBtu figure is a subtraction, not printed). Single read; not pursued.",
+   "url": "https://www.ourenergypolicy.org/wp-content/uploads/2013/09/The-Climate-Impact-Of-Natural-Gas-and-Coal-Fired-Electricity_-A-Review-of-Fuel-Chain-Emissions-Based-on-Updated-EPA-National-Inventory-Data.pdf"
+  },
+  {
+   "id": "coal_upstream.netl2014_1646.extraction_delivery",
+   "value_seen": "18.7 / 11.7 g CO2e/MJ (tool inference from chart labels; inconsistent with round 1's ~4.9 reading)",
+   "reason": "Same report rejected in round 1. Figure ES-1 data labels do not map to bars in the text; the tool inferred values. AR4, superseded by 2024/4846. Not a printed value.",
+   "url": "https://www.energy.gov/sites/prod/files/2019/09/f66/Life%20Cycle%20Analysis%20of%20Natural%20Gas%20Extraction%20and%20Power%20Generation%2005_29_14%20NETL.pdf"
+  },
+  {
+   "id": "coal_upstream.greet.anl_eere_lca_ng_slides",
+   "value_seen": "none",
+   "reason": "Wang & Elgowainy (ANL), 'Well-to-Wheels GHG Emissions of Natural Gas Use in Transportation' slides (10 Oct 2014): no coal upstream numbers.",
+   "url": "https://greet.anl.gov/files/EERE-LCA-NG"
+  },
+  {
+   "id": "coal_upstream.greet.ttt_2025_electricity_intro",
+   "value_seen": "none (charts only); 440 g CO2e/kWh is the 2022 all-sector US grid average",
+   "reason": "ANL 'Introducing Electricity and Electric Infrastructure in R&D GREET' (10 Feb 2025): slide 22 lists coal mining, cleaning, transport as upstream activities but prints no values.",
+   "url": "https://greet.anl.gov/files/ttt_2025-electricity-intro"
+  },
+  {
+   "id": "coal_upstream.cagreet4_documentation_2024",
+   "value_seen": "none",
+   "reason": "CA-GREET4.0 documentation (v08122024): no coal upstream factor; only eGRID resource mix shares. No GWP statement found. Table 34 'Updated Energy Density of Liquid Fuels (LHV)'.",
+   "url": "https://ww2.arb.ca.gov/sites/default/files/classic/fuels/lcfs/ca-greet/cagreet4_documentation_v08122024.pdf"
+  },
+  {
+   "id": "coal_upstream.epa_warm_v16.precombustion",
+   "value_seen": "none",
+   "reason": "EPA WARM v16 Background Chapters (Dec 2023): precombustion emissions are mentioned and defined ('The GHG emissions that are produced by extracting, transporting, and processing fuels') but no factors are printed (full text read in two parts). WARM uses AR4 GWPs.",
+   "url": "https://www.epa.gov/system/files/documents/2023-12/warm-background_v16_dec.pdf"
+  },
+  {
+   "id": "epa_ghgi.2022.coal_mining_ch4_underground_surface_postmining_split",
+   "value_seen": "none (section not in extracted text)",
+   "reason": "Section 3.4 Coal Mining table 'CH4 Emissions from Coal Mining (MMT CO2 Eq.)' not reachable: extracted text of the final (2024-04) and draft (2024-02) chapter 3 stops in Section 3.1 (~p. 3-34). Only the Table 3-1 total is registered.",
+   "url": "https://www.epa.gov/system/files/documents/2024-04/us-ghg-inventory-2024-chapter-3-energy.pdf"
+  },
+  {
+   "id": "oil_upstream.anl_marad_marine_lca.residual",
+   "value_seen": "HFO well-to-hull totals only: 95.5 gCO2/MJ (2.7% S) and 97.3 gCO2e/MJ (labelled '1.0% sulfur'); 'combustion emissions take around 85% of total WTH GHG emissions'",
+   "reason": "Hawkins, Lee, Wang (ANL) & Thompson (MARAD), 'Life Cycle Assessment of Greenhouse Gas and Criteria Air Pollutant Emissions from Conventional and Biobased Marine Fuels' (AR5; LHV per Table A1): no upstream-only (WTT) HFO value printed; upstream shown only as percentages in Figure 2. Single read.",
+   "url": "https://www.maritime.dot.gov/sites/marad.dot.gov/files/docs/innovation/meta/12046/marine-lcav2.pdf"
+  },
+  {
+   "id": "coal_upstream.columbia_sipa_2017.national (2026-02 hosted copy)",
+   "value_seen": "13.02 kg CO2e/MMBtu, 20-yr GWP",
+   "reason": "Same 2017 student capstone (client Sierra Club) rejected in round 2, re-hosted under a 2026-02 path: 'Our model calculates emissions factors using the IPCC 2014 20-year GWP.' Not a 100-yr value; student report. Single read.",
+   "url": "https://www.sipa.columbia.edu/sites/default/files/2026-02/ESP_Report_Upstream-Emissions-of-Coal-and-Gas.pdf"
+  },
+  {
+   "id": "coal_upstream.netl_mutchek2016_energies.prb",
+   "value_seen": "'38.7 standard cubic feet of methane per ton of coal (scf CH4/ton) mined' (attributed to EPA GHGI); 8 scf/ton for NETL PRB reference mine",
+   "reason": "Mutchek, Cooney, Pickenpaugh, Marriott, Skone (NETL), Energies 9(7):559 (2016, CC BY 3.0, AR5 100-yr): Powder River Basin export study; no U.S.-average upstream CO2e value printed (mining/transport only as % of cradle-to-busbar). Single read.",
+   "url": "https://www.mdpi.com/1996-1073/9/7/559"
+  },
+  {
+   "id": "coal_upstream.netl2024_4862.coal_comparison",
+   "value_seen": "none",
+   "reason": "NETL natural gas LCA 2020 profile (Jan 2025) has no coal comparison or coal upstream value in its extracted text.",
+   "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf"
+  },
+  {
+   "id": "coal_upstream.erg_vermont_lca_2024 / oil_upstream.erg_vermont_lca_2024.residual",
+   "value_seen": "none (sector totals in MMTCO2e only)",
+   "reason": "ERG 'Vermont Energy Sector Life Cycle Assessment' (draft 4 Apr 2024; GREET 2022 rev1; AR5-100yr) and the 1990-2022 update summary (Sept 2025): per-fuel upstream EFs are only in a companion Excel workbook ('The EFs generated for this assessment are included in a companion Excel workbook.'); residual fuel maps to 'Heating Oil'. Stage the workbook if it can be obtained.",
+   "url": "https://outside.vermont.gov/agency/anr/climatecouncil/Shared%20Documents/VT_GHGI_Report_04_04_24_Draft.pdf"
+  },
+  {
+   "id": "coal_upstream.netl_edx_inventories_xlsx.page",
+   "value_seen": "none",
+   "reason": "EDX resource page for Basin-CoalType-MineTypeInventories.xlsx (1.764 MB, 25 Mar 2025): inventories only, previews need an EDX login.",
+   "url": "https://edx.netl.doe.gov/dataset/fc1e9337-d762-4688-8415-9abf4528c428/resource/a3555976-387e-4b96-bdc1-f6f4254f6df5"
+  }
+ ],
+ "gaps": [
+  "Direct U.S.-average coal upstream (mining incl. mine methane + mining energy + transport) from a current official source on a stated GWP set: still NOT available as printed text. NETL DOE/NETL-2024/4846 remains the right source but its extracted text has no absolute result and no appendices. Stage the PDF (pdftotext of Appendix C) or EDX DOI 10.18141/2560300 xlsx to close.",
+  "Best available now: (a) methane-only route from EPA GHGI 2022 total (43.6 MMT CO2 Eq., AR5) / EIA 2022 production (594,155 thousand short tons) x heat content (20.100 MMBtu/short ton, gross) = derived 3.65 kg CO2e/MMBtu HHV; excludes mining energy and transport CO2; (b) NPC 2011 printed components 7.9 (methane) + 5.0 (upstream combustion) lb CO2e/MMBtu, AR4, 1997-era data, heating value unstated; (c) Abrahams et al. 2015 SI 12.2 g CO2e/MJ (5.4-22), non-standard GWP distribution. None is a clean, current, fully stated factor; register (a) as a partial (methane-only) term and disclose it, or hold.",
+  "EPA GHGI coal mining split (active underground net of recovery / surface / post-mining) not read; only the total is registered.",
+  "EPA GHGI 1990-2023 (2025 edition) coal mining value not obtained from epa.gov (only FOIA copies via EDF were indexed; not used). EIA 2023 values were read twice (production 577,954 thousand short tons; heat content 20.172) if a 2023 GHGI value is later staged.",
+  "No Argonne GREET publication with a printed coal mining/transport per-MMBtu table was found in this round (EERE-LCA-NG slides, 2025 electricity training deck: none). No CA-GREET3.0/4.0 coal table.",
+  "Residual fuel oil upstream: still none. ANL/MARAD marine LCA prints only well-to-hull totals for HFO; the ERG Vermont LCA (GREET 2022 rev1, AR5) keeps per-fuel EFs in an unpublished-as-text companion workbook. Distillate proxy remains CA-GREET3.0 ULSD (round 1)."
+ ]
+}

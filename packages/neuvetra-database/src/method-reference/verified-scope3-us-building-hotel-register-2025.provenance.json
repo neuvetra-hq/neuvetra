@@ -1,0 +1,672 @@
+{
+  "schema": "neuvetra.verified-factor-register-provenance.v1",
+  "register": "verified-scope3-us-building-hotel-register-2025.json",
+  "entries": {
+    "cbecs2018.electricity_kwh_per_sqft.all_buildings": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.all_buildings.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "All buildings 213 12.6 13.7 4.1 8.6 15.8 $21.2 $1.25 $0.099",
+      "quote2": "All buildings 213 12.6 13.7 4.1 8.6 15.8 $21.2 $1.25 $0.099",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"All buildings\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.education": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.education.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Education 293 9.4 12.4 5.8 9.6 13.1 $28.8 $0.92 $0.098",
+      "quote2": "Education 293 9.4 12.4 5.8 9.6 13.1 $28.8 $0.92 $0.098",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Education\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.enclosed_and_strip_malls": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.enclosed_and_strip_malls.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Enclosed and strip malls 657 19.6 19.4 16.3 20.1 24.0 $58.4 $1.74 $0.089",
+      "quote2": "Enclosed and strip malls 657 19.6 19.4 16.3 20.1 24.0 $58.4 $1.74 $0.089",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Enclosed and strip malls\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.food_sales": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.food_sales.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Food sales 329 53.3 58.5 33.1 47.4 69.9 $32.6 $5.27 $0.099",
+      "quote2": "Food sales 329 53.3 58.5 33.1 47.4 69.9 $32.6 $5.27 $0.099",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Food sales\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.food_service": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.food_service.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Food service 212 43.8 21.0 22.9 39.3 58.5 $20.6 $4.25 $0.097",
+      "quote2": "Food service 212 43.8 21.0 22.9 39.3 58.5 $20.6 $4.25 $0.097",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Food service\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.health_care": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.health_care.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Health care 698 23.8 14.4 8.4 14.2 19.8 $65.0 $2.22 $0.093",
+      "quote2": "Health care 698 23.8 14.4 8.4 14.2 19.8 $65.0 $2.22 $0.093",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Health care\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.health_care_inpatient": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.health_care_inpatient.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Inpatient 7,631 28.8 18.1 22.2 30.4 35.3 $653.8 $2.47 $0.086",
+      "quote2": "Inpatient 7,631 28.8 18.1 22.2 30.4 35.3 $653.8 $2.47 $0.086",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Inpatient\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.health_care_outpatient": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.health_care_outpatient.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Outpatient 238 17.4 10.0 8.4 13.8 19.1 $25.9 $1.89 $0.109",
+      "quote2": "Outpatient 238 17.4 10.0 8.4 13.8 19.1 $25.9 $1.89 $0.109",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Outpatient\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.lodging": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.lodging.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Lodging 484 14.4 34.9 8.2 14.5 24.5 $46.5 $1.38 $0.096",
+      "quote2": "Lodging 484 14.4 34.9 8.2 14.5 24.5 $46.5 $1.38 $0.096",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Lodging\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.mercantile": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.mercantile.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Mercantile 352 16.7 20.3 7.3 12.5 20.1 $32.3 $1.54 $0.092",
+      "quote2": "Mercantile 352 16.7 20.3 7.3 12.5 20.1 $32.3 $1.54 $0.092",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Mercantile\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.office": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.office.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Office 234 13.6 6.9 6.1 10.1 15.7 $24.4 $1.42 $0.104",
+      "quote2": "Office 234 13.6 6.9 6.1 10.1 15.7 $24.4 $1.42 $0.104",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Office\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.retail_other_than_mall": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.retail_other_than_mall.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Retail (other than mall) 205 13.7 21.9 5.1 9.0 14.5 $19.7 $1.31 $0.096",
+      "quote2": "Retail (other than mall) 205 13.7 21.9 5.1 9.0 14.5 $19.7 $1.31 $0.096",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Retail (other than mall)\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.service": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.service.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions-2.json",
+      "transcriptionSha256": "0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701",
+      "quote1": "Service 52 7.2 8.9 3.0 6.3 10.8 $5.8 $0.81 $0.113",
+      "quote2": "Service 52 7.2 8.9 3.0 6.3 10.8 $5.8 $0.81 $0.113",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Service\" (between \"Religious worship\" and \"Warehouse and storage\"), column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.electricity_kwh_per_sqft.warehouse_and_storage": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c14.warehouse_and_storage.kwh_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Warehouse and storage 120 5.8 13.1 1.6 3.4 7.8 $12.9 $0.63 $0.107",
+      "quote2": "Warehouse and storage 120 5.8 13.1 1.6 3.4 7.8 $12.9 $0.63 $0.107",
+      "agreed": true,
+      "title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C14, row \"Warehouse and storage\", column 'Per square foot (kWh)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.all_buildings": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.all_buildings.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "All buildings 745 32.7 36.1 14.3 28.1 51.7 $5.5 $0.24 $7.35",
+      "quote2": "All buildings 745 32.7 36.1 14.3 28.1 51.7 $5.5 $0.24 $7.35",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"All buildings\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.education": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.education.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Education 1,461 30.8 43.5 10.9 23.0 44.1 $10.0 $0.21 $6.82",
+      "quote2": "Education 1,461 30.8 43.5 10.9 23.0 44.1 $10.0 $0.21 $6.82",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Education\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.enclosed_and_strip_malls": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.enclosed_and_strip_malls.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Enclosed and strip malls 1,528 44.0 43.6 23.9 45.0 62.0 $10.1 $0.29 $6.58",
+      "quote2": "Enclosed and strip malls 1,528 44.0 43.6 23.9 45.0 62.0 $10.1 $0.29 $6.58",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Enclosed and strip malls\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.food_sales": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.food_sales.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Food sales 511 69.2 77.1 24.8 67.2 113.8 $3.7 $0.50 $7.23",
+      "quote2": "Food sales 511 69.2 77.1 24.8 67.2 113.8 $3.7 $0.50 $7.23",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Food sales\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.food_service": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.food_service.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Food service 719 147.6 67.1 64.5 152.1 245.8 $5.6 $1.15 $7.82",
+      "quote2": "Food service 719 147.6 67.1 64.5 152.1 245.8 $5.6 $1.15 $7.82",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Food service\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.health_care": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.health_care.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Health care 2,577 59.1 37.1 17.4 28.1 45.4 $16.9 $0.39 $6.55",
+      "quote2": "Health care 2,577 59.1 37.1 17.4 28.1 45.4 $16.9 $0.39 $6.55",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Health care\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.health_care_inpatient": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.health_care_inpatient.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Inpatient 23,840 77.9 49.5 29.5 82.7 129.2 $148.3 $0.48 $6.22",
+      "quote2": "Inpatient 23,840 77.9 49.5 29.5 82.7 129.2 $148.3 $0.48 $6.22",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Inpatient\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.health_care_outpatient": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.health_care_outpatient.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Outpatient 499 27.8 17.1 15.5 27.2 37.1 $4.0 $0.22 $8.09",
+      "quote2": "Outpatient 499 27.8 17.1 15.5 27.2 37.1 $4.0 $0.22 $8.09",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Outpatient\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.lodging": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.lodging.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Lodging 1,564 37.0 90.1 16.4 34.3 62.5 $10.5 $0.25 $6.73",
+      "quote2": "Lodging 1,564 37.0 90.1 16.4 34.3 62.5 $10.5 $0.25 $6.73",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Lodging\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.mercantile": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.mercantile.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Mercantile 980 35.7 41.2 13.3 26.5 51.0 $6.7 $0.24 $6.83",
+      "quote2": "Mercantile 980 35.7 41.2 13.3 26.5 51.0 $6.7 $0.24 $6.83",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Mercantile\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.office": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.office.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Office 438 21.3 11.1 13.7 24.0 36.8 $3.7 $0.18 $8.42",
+      "quote2": "Office 438 21.3 11.1 13.7 24.0 36.8 $3.7 $0.18 $8.42",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Office\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.retail_other_than_mall": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.retail_other_than_mall.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Retail (other than mall) 485 23.3 35.7 9.0 16.7 29.8 $3.7 $0.18 $7.54",
+      "quote2": "Retail (other than mall) 485 23.3 35.7 9.0 16.7 29.8 $3.7 $0.18 $7.54",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Retail (other than mall)\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.service": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.service.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions-2.json",
+      "transcriptionSha256": "0415bd7da90544ddf843161bddfba59cc225f2b6beecb21995052081318e0701",
+      "quote1": "Service 366 41.9 46.8 11.8 32.0 53.6 $3.1 $0.36 $8.57",
+      "quote2": "Service 366 41.9 46.8 11.8 32.0 53.6 $3.1 $0.36 $8.57",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Service\" (between \"Religious worship\" and \"Warehouse and storage\"), column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "cbecs2018.natural_gas_cf_per_sqft.warehouse_and_storage": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "cbecs2018_c24.warehouse_and_storage.cf_per_sqft"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Warehouse and storage 600 18.6 42.6 9.0 22.0 38.1 $4.6 $0.14 $7.61",
+      "quote2": "Warehouse and storage 600 18.6 42.6 9.0 22.0 38.1 $4.6 $0.14 $7.61",
+      "agreed": true,
+      "title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "licence": "US government work (public domain)",
+      "locator": "Table C24, row \"Warehouse and storage\", column 'Per square foot (cubic feet)' (2nd numeric column)"
+    },
+    "epa_events2018.hotel.economy_budget.electricity_kwh_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.economy_budget.electricity",
+        "chp2005_hotel.t16.economy_budget.sqft_per_room",
+        "chp2005_hotel.t17.economy_budget.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Economy and budget 15 0.062",
+      "quote2": "Economy and budget 15 0.062",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Economy and budget\", FIRST numeric column"
+    },
+    "epa_events2018.hotel.economy_budget.natural_gas_mmbtu_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.economy_budget.natural_gas",
+        "chp2005_hotel.t16.economy_budget.sqft_per_room",
+        "chp2005_hotel.t17.economy_budget.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Economy and budget 15 0.062",
+      "quote2": "Economy and budget 15 0.062",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Economy and budget\", SECOND numeric column"
+    },
+    "epa_events2018.hotel.midscale_with_fb.electricity_kwh_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.midscale_with_fb.electricity",
+        "chp2005_hotel.t16.midscale_with_fb.sqft_per_room",
+        "chp2005_hotel.t17.midscale_with_fb.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Midscale with food and beverage 30 0.097",
+      "quote2": "Midscale with food and beverage 30 0.097",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Midscale with food and beverage\", FIRST numeric column"
+    },
+    "epa_events2018.hotel.midscale_with_fb.natural_gas_mmbtu_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.midscale_with_fb.natural_gas",
+        "chp2005_hotel.t16.midscale_with_fb.sqft_per_room",
+        "chp2005_hotel.t17.midscale_with_fb.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Midscale with food and beverage 30 0.097",
+      "quote2": "Midscale with food and beverage 30 0.097",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Midscale with food and beverage\", SECOND numeric column"
+    },
+    "epa_events2018.hotel.midscale_without_fb.electricity_kwh_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.midscale_without_fb.electricity",
+        "chp2005_hotel.t16.midscale_without_fb.sqft_per_room",
+        "chp2005_hotel.t17.midscale_without_fb.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Midscale without food and beverage 19 0.059",
+      "quote2": "Midscale without food and beverage 19 0.059",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Midscale without food and beverage\", FIRST numeric column"
+    },
+    "epa_events2018.hotel.midscale_without_fb.natural_gas_mmbtu_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.midscale_without_fb.natural_gas",
+        "chp2005_hotel.t16.midscale_without_fb.sqft_per_room",
+        "chp2005_hotel.t17.midscale_without_fb.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Midscale without food and beverage 19 0.059",
+      "quote2": "Midscale without food and beverage 19 0.059",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Midscale without food and beverage\", SECOND numeric column"
+    },
+    "epa_events2018.hotel.upper_upscale.electricity_kwh_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.upper_upscale.electricity",
+        "chp2005_hotel.t16.upper_upscale.sqft_per_room",
+        "chp2005_hotel.t17.upper_upscale.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Upper upscale 45 0.122",
+      "quote2": "Upper upscale 45 0.122",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Upper upscale\", FIRST numeric column"
+    },
+    "epa_events2018.hotel.upper_upscale.natural_gas_mmbtu_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.upper_upscale.natural_gas",
+        "chp2005_hotel.t16.upper_upscale.sqft_per_room",
+        "chp2005_hotel.t17.upper_upscale.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Upper upscale 45 0.122",
+      "quote2": "Upper upscale 45 0.122",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Upper upscale\", SECOND numeric column"
+    },
+    "epa_events2018.hotel.upscale.electricity_kwh_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.upscale.electricity",
+        "chp2005_hotel.t16.upscale.sqft_per_room",
+        "chp2005_hotel.t17.upscale.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Upscale 35 0.094",
+      "quote2": "Upscale 35 0.094",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Upscale\", FIRST numeric column"
+    },
+    "epa_events2018.hotel.upscale.natural_gas_mmbtu_per_room_night": {
+      "transcription": "webfetch_double_read",
+      "transcriptionIds": [
+        "epa_events2018_t5.upscale.natural_gas",
+        "chp2005_hotel.t16.upscale.sqft_per_room",
+        "chp2005_hotel.t17.upscale.total"
+      ],
+      "transcriptionFile": "tools/method-reference/sources/us-upstream-transcriptions.json",
+      "transcriptionSha256": "1774e71e0b2cc7d2d29df9ca153956254b96e3f733ea35a34312ea03b4accaeb",
+      "quote1": "Upscale 35 0.094",
+      "quote2": "Upscale 35 0.094",
+      "agreed": true,
+      "title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "locator": "Table 5, row \"Upscale\", SECOND numeric column"
+    }
+  }
+}

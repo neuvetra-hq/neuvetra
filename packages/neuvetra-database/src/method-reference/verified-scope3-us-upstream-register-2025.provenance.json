@@ -1,0 +1,82 @@
+{
+ "schema": "neuvetra.verified-factor-register-provenance.v1",
+ "register": "verified-scope3-us-upstream-register-2025.json",
+ "derived": {
+  "us_upstream_const.coal_mine_methane_kg_per_mmbtu_hhv": {
+   "derived": true,
+   "design": "DESIGN 13.6 (owner decision, round 2): coal upstream, methane-only term",
+   "formula": "F_COAL = round12(epa_ghgi.2022.coal_mining_ch4_total (MMT CO2e) x us_upstream_const.kg_per_million_metric_tons / (eia.2022.coal_production_short_tons (thousand short tons) x us_upstream_const.short_tons_per_thousand_short_tons x eia.2022.coal_heat_content_production (MMBtu/short ton, HHV))) kg CO2e per MMBtu HHV",
+   "inputs": [
+    {
+     "id": "epa_ghgi.2022.coal_mining_ch4_total",
+     "printed": "43.6",
+     "value": "43.6",
+     "unit": "MMT CO2e (million metric tons CO2-equivalent; IPCC AR5 100-year GWPs), calendar year 2022",
+     "file": "us-upstream-transcriptions-3.json",
+     "fileSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb",
+     "url": "https://www.epa.gov/system/files/documents/2024-04/us-ghg-inventory-2024-chapter-3-energy.pdf",
+     "locator": "Table 3-1 'CO2, CH4, and N2O Emissions from Energy (MMT CO2 Eq.)', pp. 3-4 to 3-5, CH4 block, row 'Coal Mining', column 2022 (last column)",
+     "agreed": true
+    },
+    {
+     "id": "eia.2022.coal_production_short_tons",
+     "printed": "594,155",
+     "value": "594155",
+     "unit": "thousand short tons (calendar year 2022 U.S. coal production)",
+     "file": "us-upstream-transcriptions-3.json",
+     "fileSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb",
+     "url": "https://www.eia.gov/TOTALENERGY/data/monthly/pdf/sec6.pdf",
+     "locator": "Table 6.1 Coal Overview (Thousand Short Tons), annual row '2022 Total', column 'Production' (first numeric column, footnote a)",
+     "agreed": true
+    },
+    {
+     "id": "eia.2022.coal_heat_content_production",
+     "printed": "20.100",
+     "value": "20.100",
+     "unit": "MMBtu per short ton (gross heat content, HHV; coal production 2022)",
+     "file": "us-upstream-transcriptions-3.json",
+     "fileSha256": "fe96dddc44e7bda8cfa39f386b0b072c333d435d7e6c5e61fda4eeb9bc9a6aeb",
+     "url": "https://www.eia.gov/totalenergy/data/monthly/pdf/sec12_6.pdf",
+     "locator": "Table A5 (Million Btu per Short Ton), row 2022, column 'Coal Production' (first numeric column, footnote a)",
+     "agreed": true
+    }
+   ],
+   "constants": {
+    "us_upstream_const.kg_per_million_metric_tons": "1000000000",
+    "us_upstream_const.short_tons_per_thousand_short_tons": "1000"
+   },
+   "division": {
+    "numerator": "43600000000",
+    "denominator": "11942515500",
+    "exactQuotient": "87200000/23885031",
+    "result": "3.650822140444",
+    "places": 12,
+    "rounding": "half_even",
+    "rounded": true
+   },
+   "gwpSet": "IPCC AR5 100-year (EPA GHGI CO2 Eq. values; the CH4 GWP number itself is not printed in the text read)",
+   "heatingValue": "HHV (EIA gross heat content), matching the eGRID heat input basis",
+   "boundary": "Coal mine methane only (active underground mines net of recovery and use, surface mines, post-mining); excludes abandoned mines, mining energy CO2 and coal transport CO2; all U.S. coal production including exports, not only power-plant coal"
+  },
+  "us_upstream_const.ng_upstream_distribution_kg_per_mmbtu_hhv": {
+   "derived": true,
+   "formula": "netl2024_4862.ng_upstream.prod_through_distribution (g CO2e/MJ HHV) x us_upstream_const.mj_per_mmbtu / 1000 (exact, no rounding)",
+   "inputs": [
+    {
+     "id": "netl2024_4862.ng_upstream.prod_through_distribution",
+     "value": "8.8"
+    }
+   ]
+  },
+  "us_upstream_const.ng_upstream_transmission_kg_per_mmbtu_hhv": {
+   "derived": true,
+   "formula": "netl2024_4862.ng_upstream.prod_through_transmission (g CO2e/MJ HHV) x us_upstream_const.mj_per_mmbtu / 1000 (exact, no rounding)",
+   "inputs": [
+    {
+     "id": "netl2024_4862.ng_upstream.prod_through_transmission",
+     "value": "7.8"
+    }
+   ]
+  }
+ }
+}

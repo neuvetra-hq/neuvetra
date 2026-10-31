@@ -1,0 +1,247 @@
+{
+  "schema": "neuvetra.sources-extra.upstream-transcriptions/v1",
+  "generated": "2026-10-30",
+  "method": "Each value was read with WebFetch at least twice using differently-worded prompts asking for verbatim table rows/sentences. agreed=true only when the printed value matched in both reads. WebFetch returns a small-model rendering of the page text, not the raw file: these are transcriptions, not file reads; the builder should cite them as hand-transcribed (page/table/row) and upgrade to pdftotext/xlsx cell reads when the files are staged. Where WebFetch rendered a table instead of quoting lines, the quote field says so.",
+  "values": [
+    {
+      "id": "cbecs2018_c14.service.kwh_per_sqft",
+      "value": "7.2",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Service\" (between \"Religious worship\" and \"Warehouse and storage\"), column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Service 52 7.2 8.9 3.0 6.3 10.8 $5.8 $0.81 $0.113",
+      "quote2": "Service 52 7.2 8.9 3.0 6.3 10.8 $5.8 $0.81 $0.113",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "52",
+        "per_sqft_kwh": "7.2",
+        "per_worker_thousand_kwh": "8.9",
+        "p25_kwh_sqft": "3.0",
+        "median_kwh_sqft": "6.3",
+        "p75_kwh_sqft": "10.8"
+      },
+      "notes": "Both reads returned the identical printed line (read 1: row with neighbours 'Religious worship 61 4.9 12.9 2.5 4.2 7.5 $6.8 $0.55 $0.112' / 'Warehouse and storage 120 5.8 13.1 1.6 3.4 7.8 $12.9 $0.63 $0.107', which match round 1's warehouse entry; read 2: character-for-character copy). Read 2 column order: Per building (thousand kWh), Per square foot (kWh), Per worker (thousand kWh), 25th percentile, Median, 75th percentile, Per building (thousand dollars), Per square foot (dollars), Per kWh (dollars). Check: 52,000/7.2 = 7,222 sqft mean size; percentiles monotonic; 7.2 kWh x $0.113 = $0.81/sqft (matches). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c24.service.cf_per_sqft",
+      "value": "41.9",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Service\" (between \"Religious worship\" and \"Warehouse and storage\"), column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Service 366 41.9 46.8 11.8 32.0 53.6 $3.1 $0.36 $8.57",
+      "quote2": "Service 366 41.9 46.8 11.8 32.0 53.6 $3.1 $0.36 $8.57",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "366",
+        "per_sqft_cf": "41.9",
+        "per_worker_thousand_cf": "46.8",
+        "p25_cf_sqft": "11.8",
+        "median_cf_sqft": "32.0",
+        "p75_cf_sqft": "53.6"
+      },
+      "notes": "Both reads returned the identical printed line (read 1 neighbours: 'Religious worship 350 22.2 64.9 14.4 22.1 32.2 $3.0 $0.19 $8.70' / 'Warehouse and storage 600 18.6 42.6 9.0 22.0 38.1 $4.6 $0.14 $7.61', which match round 1's warehouse entry). Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity in round 1). Check: 366,000/41.9 = 8,735 sqft mean size; percentiles monotonic; 41.9 cf x $8.57/Mcf = $0.359 = printed $0.36/sqft (so the printed expenditure order is per building / per sq ft / per thousand cf, as in round 1; read 2's extracted header order differs). Do not use the expenditure columns."
+    },
+    {
+      "id": "carb_lcfs.energy_density.carbob",
+      "value": "119.53",
+      "unit": "MJ/gal (LHV, as stated in footnote 1)",
+      "basis": {
+        "heating_value": "LHV (stated: Table 4 footnote 1)",
+        "gwp_set": "n/a",
+        "boundary": "energy density used to convert fuel quantities to MJ for LCFS credit/deficit calculation"
+      },
+      "locator": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"CARBOB (gal)\", column 'Energy Density'",
+      "source_title": "Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4",
+      "publisher": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII)",
+      "edition_date": "Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes",
+      "url": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+      "url_crosscheck": "https://www.law.cornell.edu/regulations/california/17-CCR-95486",
+      "licence": "California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+      "quote1": "\"CARBOB (gal) | 119.53 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+      "quote2": "\"| CARBOB (gal) | 119.53 (MJ/gal) |\" (character-for-character copy request)",
+      "agreed": true,
+      "notes": "Heating value basis stated in the Table 4 footnote 1 (both reads): 'Energy density factors are based on the lower heating values of fuels in CA-GREET3.0 using BTU to MJ conversion of 1055.06 J/Btu.' Cornell LII (third read) printed the identical table and footnote and the same history notes (last: 'filed 1-4-2019; operative 1-4-2019 ... (Register 2019, No. 1)'). VERSION CAVEAT: the 2025 amendments switched the LCFS to CA-GREET4.0 (2025 FRO §95481 'Blendstock' definition cites 'the CA-GREET4.0 model (August 12, 2024)'); whether Table 4 or its footnote changed in 2025 was NOT verified - WebFetch's text of the 2025 unofficial FRO (07012025 and 08112025 PDFs) stops in §95483 and never reaches §95486 (p. 80). Stage https://ww2.arb.ca.gov/sites/default/files/2025-08/2025_lcfs_fro_oal-approved_unofficial_08112025.pdf and read Table 4 with pdftotext before registering."
+    },
+    {
+      "id": "carb_lcfs.energy_density.ulsd",
+      "value": "134.47",
+      "unit": "MJ/gal (LHV, as stated in footnote 1)",
+      "basis": {
+        "heating_value": "LHV (stated: Table 4 footnote 1)",
+        "gwp_set": "n/a",
+        "boundary": "energy density used to convert fuel quantities to MJ for LCFS credit/deficit calculation"
+      },
+      "locator": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"Diesel fuel (gal)\", column 'Energy Density'",
+      "source_title": "Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4",
+      "publisher": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII)",
+      "edition_date": "Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes",
+      "url": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+      "url_crosscheck": "https://www.law.cornell.edu/regulations/california/17-CCR-95486",
+      "licence": "California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+      "quote1": "\"Diesel fuel (gal) | 134.47 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+      "quote2": "\"| Diesel fuel (gal) | 134.47 (MJ/gal) |\" (character-for-character copy request)",
+      "agreed": true,
+      "notes": "Heating value basis stated in the Table 4 footnote 1 (both reads): 'Energy density factors are based on the lower heating values of fuels in CA-GREET3.0 using BTU to MJ conversion of 1055.06 J/Btu.' Cornell LII (third read) printed the identical table and footnote and the same history notes (last: 'filed 1-4-2019; operative 1-4-2019 ... (Register 2019, No. 1)'). VERSION CAVEAT: the 2025 amendments switched the LCFS to CA-GREET4.0 (2025 FRO §95481 'Blendstock' definition cites 'the CA-GREET4.0 model (August 12, 2024)'); whether Table 4 or its footnote changed in 2025 was NOT verified - WebFetch's text of the 2025 unofficial FRO (07012025 and 08112025 PDFs) stops in §95483 and never reaches §95486 (p. 80). Stage https://ww2.arb.ca.gov/sites/default/files/2025-08/2025_lcfs_fro_oal-approved_unofficial_08112025.pdf and read Table 4 with pdftotext before registering. The row is labelled 'Diesel fuel (gal)', not 'ULSD'; the regulation applies it to CARB diesel (ULSD)."
+    },
+    {
+      "id": "carb_lcfs.energy_density.propane",
+      "value": "89.63",
+      "unit": "MJ/gal (LHV, as stated in footnote 1)",
+      "basis": {
+        "heating_value": "LHV (stated: Table 4 footnote 1)",
+        "gwp_set": "n/a",
+        "boundary": "energy density used to convert fuel quantities to MJ for LCFS credit/deficit calculation"
+      },
+      "locator": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"Propane (LPG) (gal)\", column 'Energy Density'",
+      "source_title": "Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4",
+      "publisher": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII)",
+      "edition_date": "Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes",
+      "url": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+      "url_crosscheck": "https://www.law.cornell.edu/regulations/california/17-CCR-95486",
+      "licence": "California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+      "quote1": "\"Propane (LPG) (gal) | 89.63 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+      "quote2": "\"| Propane (LPG) (gal) | 89.63 (MJ/gal) |\" (character-for-character copy request)",
+      "agreed": true,
+      "notes": "Heating value basis stated in the Table 4 footnote 1 (both reads): 'Energy density factors are based on the lower heating values of fuels in CA-GREET3.0 using BTU to MJ conversion of 1055.06 J/Btu.' Cornell LII (third read) printed the identical table and footnote and the same history notes (last: 'filed 1-4-2019; operative 1-4-2019 ... (Register 2019, No. 1)'). VERSION CAVEAT: the 2025 amendments switched the LCFS to CA-GREET4.0 (2025 FRO §95481 'Blendstock' definition cites 'the CA-GREET4.0 model (August 12, 2024)'); whether Table 4 or its footnote changed in 2025 was NOT verified - WebFetch's text of the 2025 unofficial FRO (07012025 and 08112025 PDFs) stops in §95483 and never reaches §95486 (p. 80). Stage https://ww2.arb.ca.gov/sites/default/files/2025-08/2025_lcfs_fro_oal-approved_unofficial_08112025.pdf and read Table 4 with pdftotext before registering."
+    },
+    {
+      "id": "carb_lcfs.energy_density.cng",
+      "value": "105.5",
+      "unit": "MJ/Therm (LHV, as stated in footnote 1)",
+      "basis": {
+        "heating_value": "LHV (stated: Table 4 footnote 1)",
+        "gwp_set": "n/a",
+        "boundary": "energy density used to convert fuel quantities to MJ for LCFS credit/deficit calculation"
+      },
+      "locator": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"CNG (Therms)\", column 'Energy Density'",
+      "source_title": "Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4",
+      "publisher": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII)",
+      "edition_date": "Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes",
+      "url": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+      "url_crosscheck": "https://www.law.cornell.edu/regulations/california/17-CCR-95486",
+      "licence": "California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+      "quote1": "\"CNG (Therms) | 105.5 (MJ/Therm)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+      "quote2": "\"| CNG (Therms) | 105.5 (MJ/Therm) |\" (character-for-character copy request)",
+      "agreed": true,
+      "notes": "Heating value basis stated in the Table 4 footnote 1 (both reads): 'Energy density factors are based on the lower heating values of fuels in CA-GREET3.0 using BTU to MJ conversion of 1055.06 J/Btu.' Cornell LII (third read) printed the identical table and footnote and the same history notes (last: 'filed 1-4-2019; operative 1-4-2019 ... (Register 2019, No. 1)'). VERSION CAVEAT: the 2025 amendments switched the LCFS to CA-GREET4.0 (2025 FRO §95481 'Blendstock' definition cites 'the CA-GREET4.0 model (August 12, 2024)'); whether Table 4 or its footnote changed in 2025 was NOT verified - WebFetch's text of the 2025 unofficial FRO (07012025 and 08112025 PDFs) stops in §95483 and never reaches §95486 (p. 80). Stage https://ww2.arb.ca.gov/sites/default/files/2025-08/2025_lcfs_fro_oal-approved_unofficial_08112025.pdf and read Table 4 with pdftotext before registering. Printed per therm, not per scf or GGE: 105.5 MJ/Therm (1 therm = 100,000 Btu; 100,000 x 1055.06 J = 105.506 MJ, consistent with the stated J/Btu). Note a therm is normally an HHV-based billing unit while the footnote says LHV; the table does not explain this."
+    },
+    {
+      "id": "carb_lcfs.energy_density.lng",
+      "value": "78.83",
+      "unit": "MJ/gal (LHV, as stated in footnote 1)",
+      "basis": {
+        "heating_value": "LHV (stated: Table 4 footnote 1)",
+        "gwp_set": "n/a",
+        "boundary": "energy density used to convert fuel quantities to MJ for LCFS credit/deficit calculation"
+      },
+      "locator": "§ 95486, Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks, row \"LNG (gal)\", column 'Energy Density'",
+      "source_title": "Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4",
+      "publisher": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII)",
+      "edition_date": "Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes",
+      "url": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+      "url_crosscheck": "https://www.law.cornell.edu/regulations/california/17-CCR-95486",
+      "licence": "California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+      "quote1": "\"LNG (gal) | 78.83 (MJ/gal)\" (tool table rendering of all 13 rows; title 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks.')",
+      "quote2": "\"| LNG (gal) | 78.83 (MJ/gal) |\" (character-for-character copy request)",
+      "agreed": true,
+      "notes": "Heating value basis stated in the Table 4 footnote 1 (both reads): 'Energy density factors are based on the lower heating values of fuels in CA-GREET3.0 using BTU to MJ conversion of 1055.06 J/Btu.' Cornell LII (third read) printed the identical table and footnote and the same history notes (last: 'filed 1-4-2019; operative 1-4-2019 ... (Register 2019, No. 1)'). VERSION CAVEAT: the 2025 amendments switched the LCFS to CA-GREET4.0 (2025 FRO §95481 'Blendstock' definition cites 'the CA-GREET4.0 model (August 12, 2024)'); whether Table 4 or its footnote changed in 2025 was NOT verified - WebFetch's text of the 2025 unofficial FRO (07012025 and 08112025 PDFs) stops in §95483 and never reaches §95486 (p. 80). Stage https://ww2.arb.ca.gov/sites/default/files/2025-08/2025_lcfs_fro_oal-approved_unofficial_08112025.pdf and read Table 4 with pdftotext before registering."
+    },
+    {
+      "id": "cagreet3.heating_value_basis",
+      "value": "LHV",
+      "unit": "heating-value basis",
+      "basis": {
+        "heating_value": "LHV",
+        "gwp_set": "n/a",
+        "boundary": "LCFS energy accounting: fuel MJ (and hence gCO2e/MJ carbon intensities) under the LCFS regulation, CA-GREET3.0 era"
+      },
+      "locator": "§ 95486(b) text referring to Table 4, and Table 4 footnote 1",
+      "source_title": "Cal. Code Regs. tit. 17, § 95486 Generating and Calculating Credits and Deficits (Low Carbon Fuel Standard), Table 4",
+      "publisher": "California Air Resources Board (regulation text as published in the California Code of Regulations; read via Justia and Cornell LII)",
+      "edition_date": "Section as last amended 1-4-2019 (Register 2019, No. 1) per the printed history notes; Justia page 'Current through Register 2025 Notice Reg. No. 26, June 27, 2025'. Does NOT yet reflect any change made by the 2025 LCFS amendments (OAL-approved 27 June 2025, operative 1 July 2025) - see notes",
+      "url": "https://regulations.justia.com/states/california/title-17/division-3/chapter-1/subchapter-10/article-4/subarticle-7/section-95486",
+      "url_crosscheck": "https://www.law.cornell.edu/regulations/california/17-CCR-95486",
+      "licence": "California regulation text (public law; no licence fee). Justia/Cornell are free secondary hosts of the official CCR text",
+      "quote1": "Footnote 1: \"Energy density factors are based on the lower heating values of fuels in CA-GREET3.0\" \"using BTU to MJ conversion of 1055.06 J/Btu.\" (read 1, Justia; the tool split the sentence into two quotes)",
+      "quote2": "Body: \"Fuel quantities denominated in other units, such as those shown in Table 4, are converted to MJ in the LRT-CBTS\" \"by multiplying by the corresponding energy density\" [footnote 1]; footnote 1: \"Energy density factors are based on the lower heating values of fuels in CA-GREET3.0\" \"using BTU to MJ conversion of 1055.06 J/Btu.\" (read 2, Justia)",
+      "agreed": true,
+      "notes": "Third read (Cornell LII, 17 CCR 95486): same footnote, names CA-GREET3.0. What is STATED: LCFS energy densities are LHV values from CA-GREET3.0. What FOLLOWS (not a separate sentence): LCFS carbon intensities are gCO2e per MJ of fuel energy (2025 FRO §95481: 'Carbon Intensity (CI)' means the quantity of life cycle greenhouse gas emissions, per unit of fuel energy,' [verbatim, one read; the tool paraphrased the rest as 'expressed in gCO2e/MJ']) and the regulation multiplies CI by MJ computed from these LHV energy densities, so the CA-GREET3.0 CIs in round 1 (cagreet3_lut2018.*) are per MJ LHV. No CA-GREET3.0 TSD/LUT sentence saying 'LHV' was found (round 1 and CA-GREET4.0 LUT TSD Aug 2024 both checked: no LHV/HHV mention). §95481 (2025 FRO) defines both 'Lower Heating Value (LHV)' ('... excluding the heat of condensation for water vapor produced during combustion') and 'Higher Heating Value (HHV)' ('... including ...'). Version caveat as for carb_lcfs.energy_density.*: the 2025 text (CA-GREET4.0) was not reachable."
+    }
+  ],
+  "rejected": [
+    {
+      "id": "coal_upstream.netl2024_4846.us_production_weighted",
+      "value_seen": "none printed as text (charts only)",
+      "reason": "NETL 'Cradle-to-Gate Life Cycle Analysis Baseline for United States Coal Mining and Delivery', DOE/NETL-2024/4846, cover date December 20, 2023. This is the right source (US, mining + cleaning + transport, functional unit 'The functional unit for this LCA is 1 kg of coal delivered to a power plant.' Section 2.1 p. 8; Exhibit ES-2 title 'Global warming potential (AR6, 100-yr) impacts for all basin-coal type scenarios'), but two reads found NO absolute GWP value in text or tables: results are only in charts (Exhibits ES-2, 4-3, 4-7, 4-8); Exhibit 4-5 (p. 31) gives each scenario only as a percent of the production-weighted U.S. average (e.g. PRB-S 39%, IB-B 131%, SA-B 460%); Appendix C TRACI summary tables (Exhibits C-1 to C-3) are not in the extracted text. Heating values (Exhibit 3-2, p. 16, Btu/lb, HHV/LHV not stated): U.S. bituminous 1.20E+04, subbituminous 8.76E+03, lignite 6.62E+03. Next step: stage the PDF (incl. Appendix C) or the EDX dataset files.",
+      "url": "https://www.osti.gov/servlets/purl/2370100/"
+    },
+    {
+      "id": "coal_upstream.netl_edx_coal_baseline_2025.model",
+      "value_seen": "none (model/inventory files only)",
+      "reason": "EDX dataset 'LCA Baseline for U.S. Coal Mining and Delivery Data Products' (Cutshaw et al., 3/25/2025, DOI 10.18141/2560300, CC0) holds only an openLCA model (netl_coal_delivery_lca_baseline_model_v4_12262024.zolca, 30.5 MB) and Basin-CoalType-MineTypeInventories.xlsx (1.76 MB); no printed result; previews need an EDX account. Binary -> files to stage, not a transcription.",
+      "url": "https://edx.netl.doe.gov/dataset/lca-baseline-for-us-coal-mining-and-delivery-data-products"
+    },
+    {
+      "id": "coal_upstream.netl2019_2041.regional_coal",
+      "value_seen": "European/Chinese regional coal: extraction 9 and rail transport 11 kg CO2e/MWh (AR5 100-yr)",
+      "reason": "NETL 'Life Cycle Greenhouse Gas Perspective on Exporting LNG from the United States: 2019 Update' (DOE/NETL-2019/2041, Sept 12, 2019), Appendix A Exhibits A-1/A-2: values are for regional coal in Europe and China, per MWh of electricity, not US coal; single read. US coal inputs printed are only mine methane factors (8 scf/ton PRB surface, 360 scf/ton Illinois No. 6 underground; Exhibit 5-12 p. 19), not intensities -> rejected.",
+      "url": "https://www.energy.gov/sites/prod/files/2019/09/f66/2019 NETL LCA-GHG Report.pdf"
+    },
+    {
+      "id": "coal_upstream.columbia_sipa_2017.national",
+      "value_seen": "13.02 kg CO2e/MMBtu (PRB 15.77; Appalachian 9.48; Illinois 9.43)",
+      "reason": "Columbia SIPA student capstone 'Upstream Emissions of Coal and Gas' (Scull et al., April 28, 2017, rev. May 24, 2017): the report's own weighting of reviewed studies, stated on a 20-YEAR GWP basis; not a government or primary LCA source; single read -> rejected.",
+      "url": "https://www.sipa.columbia.edu/sites/default/files/2026-02/ESP_Report_Upstream-Emissions-of-Coal-and-Gas.pdf"
+    },
+    {
+      "id": "netl2024_4862.ng_upstream.prod_through_distribution.ar5",
+      "value_seen": "none (poster shows 8.4 g CO2e/MJ national average, AR6 only)",
+      "reason": "NETL 2024 Research Symposium poster 'Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile Update' (Khutal et al.): all GWP labels are AR6 100-yr, no AR5 value, and the page is marked 'Preliminary Results. Please do not cite.' -> rejected. AR5 values remain only in Appendix E of DOE/NETL-2024/4862 (round 1).",
+      "url": "https://netl.doe.gov/sites/default/files/netl-file/24RS_Poster_Khutal.pdf"
+    },
+    {
+      "id": "netl2024_4862.ng_upstream.prod_through_transmission.ar5",
+      "value_seen": "none",
+      "reason": "Same as prod_through_distribution.ar5: no readable AR5 figure (Appendix E spreadsheet not readable via WebFetch; round 1 also tried the EDX appendix page).",
+      "url": "https://edx.netl.doe.gov/dataset/2020-natural-gas-lca-appendices-rev1"
+    },
+    {
+      "id": "carb_lcfs.energy_density.2025_text",
+      "value_seen": "not reached",
+      "reason": "2025 LCFS Final Regulation Order (unofficial, OAL-approved 27 June 2025, operative 1 July 2025; 07012025 and 08112025 PDFs): WebFetch text (~110k chars) stops in §95483 and never reaches §95486 Table 4 (table of contents: 'Table 4. Energy Densities and Conversion Factors for LCFS Fuels and Blendstocks', p. 80). The 2026-10 proposed amendments (Appendix A-4) text also omits Table 4. So the registered values come from the CCR text as last amended 1-4-2019 (Justia/Cornell); whether 2025 changed Table 4 or its 'CA-GREET3.0' footnote is unverified.",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/2025-08/2025_lcfs_fro_oal-approved_unofficial_08112025.pdf"
+    },
+    {
+      "id": "cagreet4_lut2024.heating_value_basis",
+      "value_seen": "no LHV/HHV statement",
+      "reason": "CARB 'Technical Support Documentation for Lookup Table Pathways Proposed Amendments for the LCFS Regulation' (Aug 12, 2024; CA-GREET4.0): one read; no 'LHV'/'HHV'/'lower heating value' in the text; only 'The energy flow rates of gaseous and solid streams are calculated using their heating values.' No energy density table.",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic/fuels/lcfs/ca-greet/lut_update_v08122024.pdf"
+    }
+  ],
+  "gaps": [
+    "Coal upstream (mining + transport) for US power-plant coal: still no free source with a printed US average as text. The best source exists but prints results only in charts: NETL DOE/NETL-2024/4846 (Dec 2023; AR6 100-yr; per kg coal delivered to a power plant). Files to stage: the OSTI PDF (https://www.osti.gov/servlets/purl/2370100/) for pdftotext of Appendix C Exhibits C-1..C-3 if present, or EDX dataset DOI 10.18141/2560300 (Basin-CoalType-MineTypeInventories.xlsx; openLCA model). Until then the 3B/3C-up/3D-up coal term stays held/partial, never zero.",
+    "Oil-fired generation upstream (residual fuel oil, distillate at power plants): no free readable source found in this round (no NETL/GREET/CARB/EPA printed value located). CA-GREET3.0 ULSD WTT (round 1) is the only distillate proxy and is a California pathway on an unstated (per this round: LHV, via LCFS Table 4) basis; nothing for residual fuel oil.",
+    "NETL AR5 natural gas values: still not obtained (Appendix E spreadsheet). Register 7.8/8.8 as AR6 with explicit gwp_set and disclose, or stage Appendix E.",
+    "LCFS Table 4 currency: values are the CCR text last amended 1-4-2019 (footnote cites CA-GREET3.0). Confirm against the 2025 FRO (CA-GREET4.0) by staging its PDF before registering.",
+    "CA-GREET3.0 LHV basis is now STATED for LCFS energy densities (Table 4 footnote 1) and carries to LCFS gCO2e/MJ by the credit formula; no CA-GREET TSD sentence says 'LHV' directly. Converting round-1 CA-GREET g/MJ (LHV) to per-gallon or HHV-MMBtu terms should use the LCFS Table 4 MJ/gal values (LHV), not Hub HHV heat contents.",
+    "LCFS CNG row is per THERM (105.5 MJ/Therm = 100,000 Btu x 1055.06 J/Btu), not per scf; a therm is normally an HHV billing unit although the footnote says LHV. Do not use it to convert scf."
+  ]
+}

@@ -1,0 +1,87 @@
+/* Round 2, lane D (Claude, 31 October 2026): the Scope 3 Results to-do list, category table, record filters and groups,
+   grouped disclosures and readiness gate (round-1 product review UX-2, UX-9, UX-10, UX-19). Own file, so lane E's CSS
+   edits never collide; only the journey design tokens are used. Contrast: text uses --text / --muted (both ≥ 4.5:1 on
+   --surface and --surface-2). */
+
+.s3-todo { margin: 18px 0; padding: 16px; border: 1px solid var(--line-2); border-radius: 12px; background: var(--surface-2); }
+.s3-todo__head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; }
+.s3-todo__head .nv-h3 { margin: 0; }
+.s3-todo__group { margin-top: 14px; }
+.s3-todo__group:focus { outline: none; }
+.s3-todo__category { margin: 0 0 6px; font-size: .95rem; color: var(--muted); font-weight: 600; }
+.s3-todo__list { list-style: none; margin: 0; padding: 0; }
+.s3-todo__item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 16px; align-items: start; padding: 12px 0; border-top: 1px solid var(--line); }
+.s3-todo__main { min-width: 0; }
+.s3-todo__title { font-weight: 600; margin-right: 8px; overflow-wrap: anywhere; }
+.s3-todo__reasons { margin: 6px 0 0; padding-left: 18px; color: var(--muted); }
+.s3-todo__reasons li + li { margin-top: 2px; }
+.s3-todo__actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.s3-todo__assessment { margin-top: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+
+.s3-table { width: 100%; border-collapse: collapse; }
+.s3-table th, .s3-table td { padding: 10px 8px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.s3-table th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+.s3-table td.nv-right, .s3-table th.nv-right { text-align: right; }
+.s3-table tbody tr:hover { background: var(--surface-2); }
+.s3-issues { margin-top: 6px; }
+.s3-issues summary { cursor: pointer; color: var(--warn); font-size: .9rem; }
+.s3-issues ul { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: .9rem; }
+.s3-total { margin: 12px 0; }
+.s3-next { margin-top: 8px; }
+.s3-next .nv-btn { white-space: nowrap; }
+/* The screening decision and its reason, clamped to three lines (the full text is the cell's title and in the methodology). */
+.s3-screening { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.s3-table td.nv-num { white-space: nowrap; }
+
+.s3-filters { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: flex-end; margin: 6px 0 10px; }
+.s3-filter { display: grid; gap: 4px; font-size: .85rem; color: var(--muted); }
+.s3-filter select, .s3-filter input { min-height: 40px; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface-2); color: var(--text); font: inherit; }
+.s3-filter--search { flex: 1 1 220px; }
+.s3-record-group { margin: 14px 0; }
+.s3-record-group__title { margin: 0 0 8px; font-size: .95rem; color: var(--muted); font-weight: 600; }
+.s3-disclosures { margin: 6px 0; }
+.s3-disclosures summary { cursor: pointer; }
+.s3-disclosures ul { margin: 6px 0 10px; padding-left: 20px; }
+
+.s3-readiness { margin: 12px 0; }
+.s3-readiness ul { margin: 6px 0 0; padding-left: 20px; }
+.s3-confirm { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; }
+.s3-confirm input { margin-top: 4px; width: 18px; height: 18px; flex: none; }
+
+@media (max-width: 720px) {
+  .s3-todo { padding: 12px; }
+  .s3-todo__item { grid-template-columns: minmax(0, 1fr); }
+  .s3-todo__actions { justify-content: flex-start; }
+  /* UX-19: the category table becomes one card per category at phone width (no horizontal scroll, no clipped text). */
+  .s3-table-wrap { overflow-x: visible; }
+  .s3-table-wrap table.s3-table { min-width: 0; }
+  .s3-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .s3-table, .s3-table tbody, .s3-table tr, .s3-table td { display: block; width: 100%; }
+  .s3-table tr { padding: 10px 0; border-bottom: 1px solid var(--line-2); }
+  .s3-table td { padding: 4px 0; border: 0; text-align: left; }
+  .s3-table td.nv-right { text-align: left; }
+  .s3-table td::before { content: attr(data-label); display: block; color: var(--muted); font-size: .8rem; }
+  .s3-table td:first-child { display: block; font-weight: 600; }
+  .s3-table td:first-child::before { content: none; }
+  .s3-table td.nv-num { white-space: normal; }
+}
+@media print {
+  .s3-todo, .s3-filters { display: none; }
+}
+
+/* Round 2 polish (lane D): the setup screen's assessment editor, opened inside the Results to-do list, gets the design
+   system's button look (on Results it sat as unstyled text) and its fields one column at phone width. */
+.s3-todo__assessment .scope3-assessment button:not(.nv-btn) { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 8px 16px; margin-top: 10px;
+  border: 1px solid var(--accent); border-radius: 10px; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 600; cursor: pointer; }
+.s3-todo__assessment .scope3-assessment button:not(.nv-btn):disabled { opacity: .5; cursor: not-allowed; }
+.s3-todo__assessment .scope3-assessment__prefill { margin: 6px 0 10px; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--surface-2); color: var(--text); }
+@media (max-width: 720px) { .s3-todo__assessment { padding: 10px 8px; } }
+
+/* Round 2 polish (lane D): an opened frozen version at phone width. Its SHA-256 values, factor keys and change-log lines are
+   long unbroken strings that pushed the page to 546 px at 390; they wrap now (tables keep their own horizontal scroll). */
+#scope3-results .nv-report--frozen :is(h3, h4, p, li, dd, dt), #scope3-results .worksheet-fingerprint, #scope3-results .worksheet-details dd { overflow-wrap: anywhere; }
+#scope3-results .nv-report--frozen { max-width: 100%; }
+
+/* Round 3 lane D (decision 5): the capped label on one line, the engine's weighted score below it, small. */
+.s3-table .s3-dq-label { display: block; white-space: nowrap; }
+.s3-table .s3-dq-score { display: block; font-size: .8rem; white-space: nowrap; }

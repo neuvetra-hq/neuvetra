@@ -7,7 +7,7 @@ import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRost
 import { createStagingServer } from "../staging/server"
 import { readStagingConfig, STAGING_PROFILE } from "../staging/config"
 const target=process.env.M68_API_TEST_DATABASE_URL??process.env.M63_API_TEST_DATABASE_URL
-if(target){const u=new URL(target);if(u.hostname!=="127.0.0.1"||u.port!=="55463"||!["/m68_author","/m63_integration"].includes(u.pathname)||u.username!=="m63_test_admin"||u.password||u.search||u.hash)throw new Error("M68 native tests require an explicitly approved loopback fixture.")}
+if(target){const u=new URL(target);if(u.hostname!=="127.0.0.1"||!/^\d{2,5}$/.test(u.port)||!["/m68_author","/m63_integration"].includes(u.pathname)||u.username!=="m63_test_admin"||u.password||u.search||u.hash)throw new Error("M68 native tests require an explicitly approved loopback fixture.")}
 const integration=target?test:test.skip
 integration("M68 native API and frontend decoders preserve exact annual/source lineage, evidence corrections, conflicts and reports",async()=>{
  const REF="abcdefghijklmnopqrst",ORIGIN="http://127.0.0.1:3015",company=crypto.randomUUID()

@@ -10,6 +10,15 @@ import type { WorkspaceSql } from './workspace'
 // exactly the released values, and each must equal what the engine uses. Closes decisions §6.3.
 // fileURLToPath, not URL.pathname: on Windows .pathname gives /C:/... which Python cannot open (QA note).
 const ENGINES = ['scope1_engine.py', 'scope2_engine.py', 'scope3_engine.py'].map(f => fileURLToPath(new URL(`../../../apps/site-api/src/calculation/${f}`, import.meta.url)))
+// This schema-26 release-store test covers the eleven methods admitted by 0024–0026.
+// Completion methods remain unreleased and must not be silently admitted to the older store.
+const ADMITTED_METHOD_IDS = [
+  'scope1.stationary.natural_gas.v2', 'scope1.mobile.onroad_diesel.v2', 'scope1.stationary.distillate_no2.v2',
+  'scope1.fugitive.material_balance.v2', 'scope1.mobile.onroad_gasoline.v2',
+  'scope2.electricity.egrid2023_greene2025.v3', 'scope3.cat3.td_losses.egrid2023.v1',
+  'scope3.cat4_9.transport_distance.v1', 'scope3.cat5_12.waste.v1',
+  'scope3.cat6.business_travel_distance.v1', 'scope3.cat7.employee_commuting_distance.v1',
+]
 const DECISION: Record<string, string> = {
   f5351cd375a54072c03061dc3fab6740bed1cf78e05db9de575dca7f2d5c0c02: '6c0d52b56e63651afe2d80a70a5c3dd9b5bb85e9f917137df3d4a6ae0a50a9c6',
   [ELECTRICITY_REGISTER_GREENE2025_SHA256]: '1960499ec1a6872b3eda5d684149e1e59d66a34a57a1eb920993bbc6ef5e5236',
@@ -32,12 +41,15 @@ type Method = { id: string; profileId: string; engineSha256: string; registerSha
 describe.skipIf(!SOURCES)('engine and released database values agree', () => {
   let db: PGlite, methods: Method[]
   beforeAll(async () => {
-    methods = ENGINES.flatMap(engine => {
+    const described = ENGINES.flatMap(engine => {
       // UTF-8 on every platform, as method-engine-runner.ts does (Codex v5 run: Windows Python defaulted to a legacy code page).
       const p = Bun.spawnSync([process.env.NEUVETRA_PYTHON ?? 'python3', engine], { stdin: new TextEncoder().encode('{"action":"describe"}'), env: { ...process.env, PYTHONIOENCODING: 'utf-8', PYTHONUTF8: '1' } })
       expect(p.exitCode).toBe(0)
       return JSON.parse(p.stdout.toString()).description.methods as Method[]
     })
+    methods = described.filter(method => ADMITTED_METHOD_IDS.includes(method.id))
+    expect(methods.map(method => method.id).sort()).toEqual([...ADMITTED_METHOD_IDS].sort())
+    expect(described.filter(method => !ADMITTED_METHOD_IDS.includes(method.id)).every(method => method.scope === 3)).toBe(true)
     db = new PGlite()
     await db.exec(`create role authenticated; create schema auth; create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;`)

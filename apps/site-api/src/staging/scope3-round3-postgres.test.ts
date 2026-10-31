@@ -1,0 +1,351 @@
+// Round 3, lane B (Claude, 31 October 2026): native PostgreSQL acceptance tests with explicit budgets.
+// - EN-1: on a database with planner statistics (ANALYZE after another company's 2,000 imported lines), a new company's
+//   2,000-line spend import saves inside the runtime's 15-second statement timeout, and the read-backs that run inside
+//   the write transaction have no join the planner can turn quadratic (asserted on their plans).
+// - Owner decision 6 (EN-2): preparing, approving and re-preparing a report at the line cap (3,000 worst-case ten-mode
+//   commuting records) stays under 1.5 GB peak RSS in the API process and 768 MiB in any PostgreSQL backend (25% headroom).
+// - Owner decision 7 (EN-3): the line cap is enforced in SQL (import and record saves), and "withdraw this import" is one
+//   set-based action.
+// Runs on the disposable loopback fixture hosted.test.ts migrates (verify.yml native step); any loopback port.
+import { expect, test } from "bun:test"
+import { readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { createPostgresConnection, HostedWorkspaceDatabase, provisionStagingRoster, type WorkspaceConnection } from "@neuvetra/database"
+import { createSyntheticCompanySetup } from "../../../../packages/neuvetra-database/src/company-setup-fixture"
+import { SCOPE3_SETUP_CATEGORY_TOKENS } from "../../../../packages/neuvetra-database/src/scope3-coverage"
+import { SCOPE3_SPEND_IMPORT_READBACK_SQL } from "../../../../packages/neuvetra-database/src/scope3-spend-imports"
+import { decodeScope3ReportVersion } from "../../../site-web/src/lib/scope3-report-api"
+import { createStagingServer } from "./server"
+import { readStagingConfig, STAGING_PROFILE } from "./config"
+
+const target = process.env.M63_API_TEST_DATABASE_URL
+if (target) {
+  const parsed = new URL(target)
+  if (parsed.hostname !== "127.0.0.1" || !/^\d{2,5}$/.test(parsed.port) || parsed.pathname !== "/m63_integration" || parsed.username !== "m63_test_admin" || parsed.password || parsed.search || parsed.hash) throw new Error("The Scope 3 round-3 native suite requires the named disposable loopback database.")
+}
+const integration = target ? test : test.skip
+const REF = "abcdefghijklmnopqrst", ORIGIN = "http://127.0.0.1:3016"
+const enc = (text: string) => new TextEncoder().encode(text) as Uint8Array<ArrayBuffer>
+const HEADER = "line_id,date,vendor,gl_account,gl_description,description,amount,currency,dollar_year,category,naics_code,margin_choice,capital_full_cost\n"
+const NAICS = ["541611", "541512", "561320", "484121", "481111", "562111"], CAT = [1, 1, 1, 4, 6, 5]
+/** `rows` coded spend lines (category and NAICS stated in the file, so every line calculates), many vendors and accounts. */
+const ledger = (prefix: string, rows: number) => enc(HEADER + Array.from({ length: rows }, (_, i) => `${prefix}-${i + 1},2025-03-14,Vendor ${prefix} ${i % 97} Holdings LLC,61${i % 50},Services account ${i % 50},Invoice ${prefix}-${i + 1} for professional services,${1000 + i}.55,USD,2025,${CAT[i % 6]},${NAICS[i % 6]},with_margins,\n`).join(""))
+/** EN-1 budget: the runtime's statement timeout is 15 s (hosted.ts); the whole import (several statements) must finish well inside it (4-6 s unloaded, about 10 s on a loaded 2-CPU host). */
+const IMPORT_BUDGET_MS = 12_000
+
+async function harness() {
+  const operator = createPostgresConnection(target!, { tls: false })
+  const runtimeUrl = new URL(target!); runtimeUrl.username = "neuvetra_runtime"
+  const runtime = createPostgresConnection(runtimeUrl.toString(), { tls: false, maxConnections: 6 })
+  const database = new (HostedWorkspaceDatabase as unknown as new (db: WorkspaceConnection, ref: string) => HostedWorkspaceDatabase)(runtime, REF)
+  const config = readStagingConfig({ NODE_ENV: "test", NEUVETRA_STAGING_ENABLED: "enabled", NEUVETRA_STAGING_PROFILE: STAGING_PROFILE, NEUVETRA_STAGING_PROJECT_REF: REF, NEUVETRA_STAGING_ORIGIN: ORIGIN, SUPABASE_URL: `https://${REF}.supabase.co`, SUPABASE_ANON_KEY: "sb_publishable_synthetic_fixture_not_a_real_key", DATABASE_URL: `postgres://neuvetra_runtime:fixture@db.${REF}.supabase.co:5432/postgres` })
+  const users = new Map<string, string>()
+  const stored = new Map<string, Uint8Array<ArrayBuffer>>()
+  const collectionEvidenceStorage = { put: async (_token: string, _bucket: string, key: string, bytes: Uint8Array<ArrayBuffer>) => { stored.set(key, bytes) }, get: async (_token: string, _bucket: string, key: string) => stored.get(key)! }
+  const app = await createStagingServer(config, { database, collectionEvidenceStorage, validateUser: async token => users.has(token) ? { id: users.get(token)!, email: null, phone: null, fullName: null } : null, verifyAssets: async () => {}, serveAsset: async () => null, log: () => {} })
+  const call = (route: string, actor: string, init: { method?: string; body?: BodyInit; type?: string } = {}) => app.fetch(new Request(`${ORIGIN}/workspace-api${route}`, {
+    method: init.method ?? (init.body === undefined ? "GET" : "POST"), body: init.body, headers: { origin: ORIGIN, authorization: `Bearer ${actor}`, ...(init.type ? { "content-type": init.type } : {}) } }))
+  const json = (route: string, actor: string, body: unknown) => call(route, actor, { body: JSON.stringify(body), type: "application/json" })
+  const company = async (name: string, included: number[]) => {
+    const owner = crypto.randomUUID(), id = crypto.randomUUID()
+    users.set(name, owner)
+    await operator.query("insert into auth.users(id) values($1)", [owner])
+    await provisionStagingRoster(operator, { expectedProjectRef: REF, workspaceId: id, ownerUserId: owner, members: [] })
+    const base = createSyntheticCompanySetup()
+    const setup = { ...base,
+      boundary: { ...base.boundary, approach: "operational_control" as const },
+      entities: base.entities.map(entity => ({ ...entity, inclusion: "included" as const, control: "operational_control" as const })),
+      locations: [{ ...base.locations[0]!, inclusion: "included" as const, control: "reporting_company" as const, startMode: "period_start" as const, endMode: "period_end" as const }],
+      screening: included.map(category => ({ id: `s3-${category}`, scope: 3, category: SCOPE3_SETUP_CATEGORY_TOKENS[category - 1]!, state: "yes" as const, reason: "", details: `Synthetic category ${category} activity.`, locationId: null })) }
+    const saved = await json(`/workspace/${id}/setup`, name, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, setup })
+    expect(saved.status).toBe(201)
+    return { owner, id, root: `/workspace/${id}`, site: base.locations[0]!.id, setupVersionId: (await saved.json()).savedVersion.id as string, name }
+  }
+  const upload = async (root: string, actor: string, bytes: Uint8Array<ArrayBuffer>, file: string) => {
+    const response = await app.fetch(new Request(`${ORIGIN}/workspace-api${root}/collection/evidence`, { method: "POST", body: bytes, headers: { origin: ORIGIN, authorization: `Bearer ${actor}`, "content-type": "text/csv", "x-neuvetra-original-name": file, "x-neuvetra-upload-id": crypto.randomUUID() } }))
+    expect(response.status).toBe(201)
+    return (await response.json()).receipt.evidenceId as string
+  }
+  const importFile = (c: { root: string; site: string; name: string }, bytes: Uint8Array<ArrayBuffer>, evidenceId: string) => call(`${c.root}/scope3/spend-imports?evidenceId=${evidenceId}&locationId=${c.site}`, c.name, { body: bytes, type: "text/csv" })
+  /** EXPLAIN of `sql` as the runtime role with the company member's JWT subject (as the route runs it), rolled back. */
+  const explain = async (owner: string, sql: string, args: unknown[]) => {
+    let plan = ""
+    const rollback = new Error("rollback")
+    await runtime.transaction(async tx => {
+      await tx.query("select set_config('request.jwt.claim.sub', $1, true)", [owner])
+      plan = (await tx.query<{ "QUERY PLAN": string }>(`explain ${sql}`, args)).rows.map(row => row["QUERY PLAN"]).join("\n")
+      throw rollback
+    }).catch((error: unknown) => { if (error !== rollback) throw error })
+    return plan
+  }
+  const close = async () => { await app.close?.(); await database.close(); await operator.close() }
+  /** Lets this harness's server authenticate a user another harness created (its bearer token is `name`). */
+  const register = (name: string, owner: string) => { users.set(name, owner) }
+  return { operator, runtime, database, call, json, company, upload, importFile, explain, close, register }
+}
+
+integration("round 3 EN-1 natively: on an ANALYZEd multi-company database a new company's 2,000-line import saves well inside the statement timeout", async () => {
+  const h = await harness()
+  try {
+    // Another company's 2,000 lines, then planner statistics (what autoanalyze gives any database in use).
+    const a = await h.company("en1-first", [1, 4, 5, 6])
+    const first = ledger("A", 2000)
+    let started = performance.now()
+    const one = await h.importFile(a, first, await h.upload(a.root, a.name, first, "first-2000.csv"))
+    console.info(`round 3 EN-1 native: first company's 2,000-line import ${one.status} in ${Math.round(performance.now() - started)} ms`)
+    expect(one.status).toBe(201)
+    await h.operator.exec("analyze")
+    // A new company (not in the statistics): its first 2,000-line import.
+    const b = await h.company("en1-second", [1, 4, 5, 6])
+    const second = ledger("B", 2000)
+    const evidence = await h.upload(b.root, b.name, second, "second-2000.csv")
+    started = performance.now()
+    const two = await h.importFile(b, second, evidence)
+    const importMs = Math.round(performance.now() - started)
+    const body = await two.json()
+    console.info(`round 3 EN-1 native: new company's 2,000-line import on an analyzed database ${two.status} in ${importMs} ms`)
+    expect([two.status, body.saved, body.import?.reconciliation?.reconciled]).toEqual([201, 2000, true])
+    expect(importMs).toBeLessThan(IMPORT_BUDGET_MS)
+    // The list read (GET) of the same company, in the same statistics state, inside the same budget.
+    started = performance.now()
+    const listed = await h.call(`${b.root}/scope3/spend-imports`, b.name)
+    const listMs = Math.round(performance.now() - started)
+    const list = await listed.json()
+    console.info(`round 3 EN-1 native: spend-imports GET ${listed.status} in ${listMs} ms`)
+    expect([listed.status, list.imports.length, list.imports[0].lines.length, list.lines.length]).toEqual([200, 1, 2000, 2000])
+    expect(listMs).toBeLessThan(IMPORT_BUDGET_MS)
+    // The read-back's plan: each line's first version is found by the unique (record_id, revision) key; never a join whose
+    // inner side scans the company's versions per line (the round-2 plan: Join Filter on record_id).
+    const plan = await h.explain(b.owner, SCOPE3_SPEND_IMPORT_READBACK_SQL.versions, [b.id, body.import.lines.slice(0, 5).map((line: { recordId: string }) => line.recordId)])
+    console.info(`round 3 EN-1 native: read-back plan\n${plan}`)
+    expect(plan).not.toMatch(/Join Filter/)
+    expect(plan).toMatch(/record_id = ANY/)
+  } finally { await h.close() }
+}, 600_000)
+
+// --- Owner decision 6 (EN-2): memory at the line cap, with explicit budgets ---------------------------------------------
+
+/** Budgets (owner decision 6): peak RSS of the API process and of any PostgreSQL backend while preparing at the line cap. */
+const API_BUDGET_MIB = 1536, BACKEND_BUDGET_MIB = 768
+const kib = (text: string, key: string) => Number(new RegExp(`^${key}:\\s+(\\d+) kB`, "m").exec(text)?.[1] ?? Number.NaN)
+type WindowsPeak = { pid: number; name: string; peakWorkingSetBytes: number; startUtc: string }
+// PROCESS_MEMORY_COUNTERS.PeakWorkingSetSize is the OS lifetime peak, in bytes.
+// https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters
+const WINDOWS_PEAK_SCRIPT = `
+import ctypes, datetime, json, ntpath, sys
+from ctypes import wintypes as w
+class Counters(ctypes.Structure):
+    _fields_ = [('cb',w.DWORD),('PageFaultCount',w.DWORD)] + [(k,ctypes.c_size_t) for k in ['PeakWorkingSetSize','WorkingSetSize','QuotaPeakPagedPoolUsage','QuotaPagedPoolUsage','QuotaPeakNonPagedPoolUsage','QuotaNonPagedPoolUsage','PagefileUsage','PeakPagefileUsage']]
+k=ctypes.WinDLL('kernel32',use_last_error=True)
+p=ctypes.WinDLL('psapi',use_last_error=True)
+k.OpenProcess.argtypes=[w.DWORD,w.BOOL,w.DWORD]; k.OpenProcess.restype=w.HANDLE
+k.CloseHandle.argtypes=[w.HANDLE]; k.CloseHandle.restype=w.BOOL
+k.QueryFullProcessImageNameW.argtypes=[w.HANDLE,w.DWORD,w.LPWSTR,ctypes.POINTER(w.DWORD)]; k.QueryFullProcessImageNameW.restype=w.BOOL
+k.GetProcessTimes.argtypes=[w.HANDLE]+[ctypes.POINTER(w.FILETIME)]*4; k.GetProcessTimes.restype=w.BOOL
+p.GetProcessMemoryInfo.argtypes=[w.HANDLE,ctypes.POINTER(Counters),w.DWORD]; p.GetProcessMemoryInfo.restype=w.BOOL
+def checked(ok):
+    if not ok: raise ctypes.WinError(ctypes.get_last_error())
+rows=[]
+for text in sys.argv[2].split(','):
+    pid=int(text); handle=k.OpenProcess(0x1000,False,pid); checked(handle)
+    try:
+        image=ctypes.create_unicode_buffer(32768); length=w.DWORD(len(image))
+        checked(k.QueryFullProcessImageNameW(handle,0,image,ctypes.byref(length)))
+        name=ntpath.basename(image.value).lower().removesuffix('.exe')
+        if name != sys.argv[1]: raise RuntimeError('Unexpected memory process identity')
+        created,exited,kernel,user=w.FILETIME(),w.FILETIME(),w.FILETIME(),w.FILETIME()
+        checked(k.GetProcessTimes(handle,ctypes.byref(created),ctypes.byref(exited),ctypes.byref(kernel),ctypes.byref(user)))
+        ticks=(created.dwHighDateTime<<32)|created.dwLowDateTime
+        start=(datetime.datetime(1601,1,1,tzinfo=datetime.timezone.utc)+datetime.timedelta(microseconds=ticks//10)).isoformat()
+        count=Counters(); count.cb=ctypes.sizeof(count)
+        checked(p.GetProcessMemoryInfo(handle,ctypes.byref(count),count.cb))
+        rows.append(dict(pid=pid,name=name,peakWorkingSetBytes=count.PeakWorkingSetSize,startUtc=start))
+    finally: checked(k.CloseHandle(handle))
+print(json.dumps(rows))
+`
+/** Windows retains the lifetime peak: no reset or subtraction can hide an earlier allocation. */
+async function windowsPeaks(pids: number[], name: "bun" | "postgres"): Promise<Map<number, number>> {
+  if (pids.length === 0 || pids.some(pid => !Number.isSafeInteger(pid) || pid <= 0)) throw new Error("Memory measurement requires live process IDs")
+  const child = Bun.spawn([process.env.NEUVETRA_PYTHON ?? "python", "-I", "-c", WINDOWS_PEAK_SCRIPT, name, pids.join(",")], { stdout: "pipe", stderr: "pipe" })
+  const timer = setTimeout(() => child.kill(), 10_000)
+  let rows: WindowsPeak[]
+  try {
+    const [stdout, stderr, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited])
+    if (code !== 0) throw new Error(`Windows peak-memory observation failed: ${stderr}`)
+    rows = JSON.parse(stdout) as WindowsPeak[]
+  } finally { clearTimeout(timer) }
+  if (!Array.isArray(rows) || rows.length !== pids.length || new Set(rows.map(row => row.pid)).size !== pids.length || rows.some(row => !pids.includes(row.pid) || row.name !== name || !Number.isFinite(row.peakWorkingSetBytes) || row.peakWorkingSetBytes <= 0 || !Number.isFinite(Date.parse(row.startUtc)))) throw new Error("Incomplete Windows peak-memory observation")
+  console.info(`native Windows lifetime PeakWorkingSet64: ${JSON.stringify(rows)}`)
+  return new Map(rows.map(row => [row.pid, row.peakWorkingSetBytes / 1048576]))
+}
+/** Linux resets VmHWM; Windows conservatively includes the entire API/test process lifetime, including browser decoding. */
+const apiPeak = {
+  reset: () => { Bun.gc(true); if (process.platform !== "win32") writeFileSync("/proc/self/clear_refs", "5") },
+  mib: async () => process.platform === "win32" ? (await windowsPeaks([process.pid], "bun")).get(process.pid)! : kib(readFileSync("/proc/self/status", "utf8"), "VmHWM") / 1024,
+}
+/**
+ * The peak RSS (VmHWM, MiB) of each runtime backend, by its PostgreSQL pid. A server in a container (CI's service) reports
+ * pids of its own namespace, so each host process is matched by the last pid of its NSpid line (the host pid natively).
+ */
+async function backendPeaks(operator: { query<T>(sql: string, args?: unknown[]): Promise<{ rows: T[] }> }): Promise<Map<number, number>> {
+  const pids = new Set((await operator.query<{ pid: number }>("select pid from pg_stat_activity where datname=current_database() and usename='neuvetra_runtime'")).rows.map(row => Number(row.pid)))
+  if (pids.size === 0) throw new Error("No runtime backend remains for peak-memory observation")
+  if (process.platform === "win32") return windowsPeaks([...pids], "postgres")
+  const out = new Map<number, number>()
+  for (const entry of readdirSync("/proc")) {
+    if (!/^\d+$/.test(entry)) continue
+    let status: string
+    try { status = readFileSync(`/proc/${entry}/status`, "utf8") } catch { continue }
+    if (!/^Name:\s+postgres/m.test(status)) continue
+    const ns = (/^NSpid:\s+(.+)$/m.exec(status)?.[1] ?? entry).trim().split(/\s+/).map(Number)
+    const pid = ns[ns.length - 1]!
+    if (pids.has(pid)) out.set(pid, kib(status, "VmHWM") / 1024)
+  }
+  if (out.size !== pids.size || [...out.values()].some(value => !Number.isFinite(value) || value <= 0)) throw new Error("Incomplete Linux peak-memory observation")
+  return out
+}
+
+integration("round 3 owner decision 6 natively: preparing, approving and re-preparing at the line cap stay inside 1.5 GB (API) and 768 MiB (any backend); one prepare at a time", async () => {
+  // The largest report a company at the line cap can freeze (DESIGN 13.8): 3,000 ten-mode average commuting records with every
+  // free-text field at its maximum, 20 evidence files each and the longest numbers. Saved through the collection RPC with
+  // a fixture pool, which is then closed, so the measured server's backends are new and their peaks are only its own.
+  const fixture = await harness()
+  const w = await fixture.company("cap-memory", [7])
+  const files = Array.from({ length: 20 }, () => crypto.randomUUID())
+  for (const [i, file] of files.entries()) await fixture.operator.query("insert into neuvetra.collection_evidence_objects(id,company_id,storage_key,original_name,media_type,byte_length,sha256,uploaded_by) values($1,$2,$3,$4,'application/pdf',1,$5,$6)",
+    [file, w.id, `${w.id}/original/${file}`, `${String(i).padStart(4, "0")}${"E".repeat(247)}.pdf`, "f".repeat(62) + i.toString(16).padStart(2, "0"), w.owner])
+  const vehicles = ["passenger_car", "light_duty_truck", "motorcycle"]
+  const modes = [...vehicles, "intercity_rail_northeast_corridor", "intercity_rail_other_routes", "intercity_rail_national_average", "commuter_rail", "transit_rail", "bus", "non_motorized"]
+    .map(mode => ({ mode, sharePercent: "10", oneWayDistance: "999999999999.999", distanceUnit: "km", occupancy: vehicles.includes(mode) ? "3.333" : null }))
+  const dataQuality = { indicators: { technological: "very_good", temporal: "very_good", geographical: "very_good", completeness: "very_good", reliability: "very_good" }, activityDataOrigin: "value_chain_partner", basis: "D".repeat(500) }
+  const records = Number(process.env.NEUVETRA_R3_CAP_RECORDS ?? 3000)
+  let started = performance.now()
+  for (let i = 0; i < records; i++) {
+    const employees = `${999999999999 - i}.999`
+    const activity = { locationId: w.site, setupVersionId: w.setupVersionId, state: "active", withdrawalReason: null, quality: "estimated", estimateBasis: "B".repeat(2000), period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+      reference: "R".repeat(1000), notes: "N".repeat(4000), evidenceIds: files, kind: "commuting_average", sourceId: `${String(i).padStart(6, "0")}${"S".repeat(114)}`,
+      quantity: { originalValue: employees, originalUnit: "employee", normalizedValue: employees, normalizedUnit: "employee" },
+      payload: { workingDays: 366, modes, sharesBasis: "H".repeat(300), distanceBasis: "K".repeat(300), activityOverlap: "none_confirmed", dataQuality } }
+    await fixture.database.saveCollectionActivity(w.owner, w.id, crypto.randomUUID(), { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity })
+  }
+  console.info(`round 3 decision 6 native: ${records} worst-case commuting records saved in ${Math.round(performance.now() - started)} ms`)
+  await fixture.close()
+  console.info(`round 3 decision 6 native: API lifetime peak after fixture ${Math.round(await apiPeak.mib())} MiB`)
+
+  const h = await harness()
+  h.register(w.name, w.owner)
+  const peaks: Array<{ step: string; ms: number; status: number; api: number; backend: number; apiBefore: number }> = []
+  const measured = async (step: string, run: () => Promise<Response | Response[]>) => {
+    apiPeak.reset()
+    // This process is the API and the test harness at once: its RSS before the step (after a full collection) is logged too.
+    const apiBefore = Math.round(process.memoryUsage().rss / 1048576)
+    const t = performance.now()
+    const out = await run()
+    const responses = Array.isArray(out) ? out : [out]
+    const backend = Math.max(0, ...(await backendPeaks(h.operator)).values())
+    const api = await apiPeak.mib()
+    peaks.push({ step, ms: Math.round(performance.now() - t), status: responses[0]!.status, api: Math.round(api), backend: Math.round(backend), apiBefore })
+    console.info(`round 3 decision 6 native: ${JSON.stringify(peaks.at(-1))}`)
+    expect({ step, apiWithinBudget: api <= API_BUDGET_MIB, backendWithinBudget: backend <= BACKEND_BUDGET_MIB }).toEqual({ step, apiWithinBudget: true, backendWithinBudget: true })
+    return responses
+  }
+  try {
+    // 1. Prepare revision 1.
+    const [prepared] = await measured("prepare r1", () => h.json(`${w.root}/scope3/reports`, w.name, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, reason: null }))
+    const body = await prepared!.json()
+    expect([prepared!.status, body.code ?? null]).toEqual([201, null])
+    const size = (await h.operator.query<{ report: number; csv: number }>("select octet_length(report_text) report,octet_length(csv_text) csv from neuvetra.scope3_report_versions where id=$1", [body.version.id])).rows[0]!
+    console.info(`round 3 decision 6 native: stored report ${size.report} bytes, CSV ${size.csv} bytes`)
+    if (records === 3000) expect(Number(size.report)).toBeGreaterThan(67_108_864) // the cap's worst case (round 2c: 83.4 MB)
+    // 2. Approve (the owner prepared it: a confirmed self-approval; open issues acknowledged if any).
+    const [approved] = await measured("approve r1", () => h.json(`${w.root}/scope3/reports/${body.version.id}/approval`, w.name, { reportSha256: body.version.reportSha256, acknowledgeOpenIssues: body.version.openIssues.length > 0, confirmSelfApproval: true }))
+    expect(approved!.status).toBe(201)
+    // 3. Open the stored version (both texts in the response).
+    const [opened] = await measured("open r1", () => h.call(`${w.root}/scope3/reports/${body.version.id}`, w.name))
+    expect(opened!.status).toBe(200)
+    // The stored version opens as the web opens it (round 2c's check), decoded here and dropped before the next step, so
+    // the browser's side of opening it never counts as the API's memory.
+    {
+      const frozen = await decodeScope3ReportVersion(await opened!.json(), w.id, body.version.id)
+      expect([frozen.document.results.records.length, frozen.version.approval?.selfApproved]).toEqual([records, true])
+      expect(frozen.document.results.records.every(row => row.outcome === "calculated" && row.result?.status === "complete")).toBe(true)
+    }
+    // 4. Two prepares of revision 2 at once (its change log reads the approved revision 1): one runs, the other is told to
+    // retry (503 report_prepare_busy with Retry-After) at once, before any results run.
+    const second = (key: string) => h.json(`${w.root}/scope3/reports`, w.name, { idempotencyKey: key, expectedRevision: 1, reason: "Second version at the cap." })
+    const pair = await measured("prepare r2 (two at once)", () => Promise.all([second(crypto.randomUUID()), second(crypto.randomUUID())]))
+    const statuses = pair.map(response => response.status).sort()
+    expect(statuses).toEqual([201, 503])
+    const busy = pair.find(response => response.status === 503)!
+    expect([(await busy.json()).code, busy.headers.get("retry-after")]).toEqual(["report_prepare_busy", "30"])
+    // The budgets, for every step.
+    for (const row of peaks) { expect([row.step, row.api <= API_BUDGET_MIB]).toEqual([row.step, true]); expect([row.step, row.backend <= BACKEND_BUDGET_MIB]).toEqual([row.step, true]) }
+  } finally { await h.close() }
+}, 1_800_000)
+
+// --- Owner decision 7 (EN-3): the line cap in SQL, "withdraw this import", bulk corrections ------------------------------
+
+integration("round 3 owner decision 7 natively: the line cap holds in SQL (import and record saves); a whole import is withdrawn in one action; bulk corrections", async () => {
+  const h = await harness()
+  try {
+    const c = await h.company("cap-sql", [1, 4, 5, 6])
+    const lines = async () => (await h.call(`${c.root}/results/scope3`, c.name).then(r => r.json())).lineBudget
+    const imports = async () => Number((await h.operator.query<{ n: string }>("select count(*) n from neuvetra.scope3_spend_imports where company_id=$1", [c.id])).rows[0]!.n)
+    // Exactly at the cap: 2,000 + 1,000 imported lines.
+    const a = ledger("CA", 2000), b = ledger("CB", 1000)
+    expect((await h.importFile(c, a, await h.upload(c.root, c.name, a, "a.csv"))).status).toBe(201)
+    const second = await h.importFile(c, b, await h.upload(c.root, c.name, b, "b.csv"))
+    expect(second.status).toBe(201)
+    const secondImport = (await second.json()).import
+    expect(await lines()).toEqual({ max: 3000, used: 3000, remaining: 0 })
+    // SQL refuses past the cap even when the API's own pre-check is skipped (two imports racing past it would both pass that
+    // check): 54N30, nothing saved.
+    const one = ledger("CC", 1), oneEvidence = await h.upload(c.root, c.name, one, "c.csv")
+    const { parseScope3SpendCsv } = await import("../../../../packages/neuvetra-database/src/scope3-spend-import")
+    const { createHash } = await import("node:crypto")
+    const parsed = parseScope3SpendCsv(one, { period: { start: "2025-01-01", endExclusive: "2026-01-01" } })
+    const before = await imports()
+    const direct = await h.database.importScope3Spend(c.owner, c.id, { parsed, fileSha256: createHash("sha256").update(one).digest("hex"), evidenceId: oneEvidence, locationId: c.site }).then(() => null, (error: { code?: string }) => error.code)
+    expect([direct, await imports()]).toEqual(["54N30", before])
+    // A record save that adds a Scope 3 line is refused by SQL too, with the line-budget error through the route.
+    const waste = { locationId: c.site, setupVersionId: c.setupVersionId, state: "active", withdrawalReason: null, quality: "actual", estimateBasis: null, period: { start: "2025-01-01", endExclusive: "2026-01-01" },
+      reference: "Synthetic native", notes: "", evidenceIds: [], kind: "waste", sourceId: "W-CAP", quantity: { originalValue: "1.5", originalUnit: "metric_ton", normalizedValue: "1.5", normalizedUnit: "metric_ton" }, payload: { category: 5, material: "asphalt_concrete", treatment: "recycled" } }
+    const saveWaste = () => h.json(`${c.root}/collection/activities/${crypto.randomUUID()}`, c.name, { idempotencyKey: crypto.randomUUID(), expectedRevision: 0, expectedVersionId: null, correctionReason: null, activity: waste })
+    const refused = await saveWaste()
+    const refusal = await refused.json()
+    expect([refused.status, refusal.code]).toEqual([409, "line_budget_exceeded"])
+    expect(refusal.error).toContain("3,000 active lines")
+    // "Withdraw this import": a member may not; the owner withdraws all 1,000 lines in one set-based statement.
+    const withdraw = (actor: string, importId: string, reason = "Imported the wrong month's ledger.") => h.json(`${c.root}/scope3/spend-imports/${importId}/withdrawal`, actor, { reason })
+    const started = performance.now()
+    const withdrawn = await withdraw(c.name, secondImport.id)
+    const withdrawMs = Math.round(performance.now() - started)
+    const done = await withdrawn.json()
+    console.info(`round 3 decision 7 native: 1,000-line import withdrawn in ${withdrawMs} ms`)
+    expect([withdrawn.status, done.withdrawn, done.alreadyWithdrawn]).toEqual([201, 1000, 0])
+    expect(withdrawMs).toBeLessThan(IMPORT_BUDGET_MS)
+    expect(await lines()).toEqual({ max: 3000, used: 2000, remaining: 1000 })
+    const again = await (await withdraw(c.name, secondImport.id)).json()
+    expect([again.withdrawn, again.alreadyWithdrawn]).toEqual([0, 1000])
+    expect((await withdraw(c.name, crypto.randomUUID())).status).toBe(404)
+    expect((await h.json(`${c.root}/scope3/spend-imports/${secondImport.id}/withdrawal`, c.name, { reason: "no" })).status).toBe(422)
+    const reasons = (await h.operator.query<{ state: string; reason: string; n: string }>(`select v.state,v.withdrawal_reason reason,count(*) n from neuvetra.scope3_spend_import_lines l join neuvetra.collection_activity_heads hd on hd.record_id=l.record_id
+      join neuvetra.collection_activity_versions v on v.id=hd.version_id where l.import_id=$1 group by 1,2`, [secondImport.id])).rows
+    expect(reasons.map(row => [row.state, row.reason, Number(row.n)])).toEqual([["withdrawn", "Imported the wrong month's ledger.", 1000]])
+    // Room again: the record save goes through.
+    expect((await saveWaste()).status).toBe(201)
+    // Bulk corrections (the server-side path for lane C's bulk actions): two lines of the first import get a new amount in
+    // one set-based statement; changing a line's identity is refused (22023), and a stale version (23505).
+    const records: any[] = (await (await h.call(`${c.root}/collection/activities`, c.name)).json()).records
+    const pick = records.filter(record => record.kind === "purchase_spend" && record.currentVersion.activity.state === "active").slice(0, 2)
+    const corrected = (record: any, amount: string) => ({ ...record.currentVersion.activity, quantity: { originalValue: amount, originalUnit: "USD", normalizedValue: amount, normalizedUnit: "USD" } })
+    const result = await h.database.saveScope3SpendCorrections(c.owner, c.id, { reason: "Converted at the stated rate.", corrections: pick.map(record => ({ recordId: record.id, expectedVersionId: record.currentVersion.id, activity: corrected(record, "123.45") })) })
+    expect(result).toEqual({ corrected: 2, unchanged: 0 })
+    const stale = await h.database.saveScope3SpendCorrections(c.owner, c.id, { reason: "Again.", corrections: [{ recordId: pick[0].id, expectedVersionId: pick[0].currentVersion.id, activity: corrected(pick[0], "1.00") }] }).then(() => null, (error: { code?: string }) => error.code)
+    expect(stale).toBe("23505")
+    const fresh: any[] = (await (await h.call(`${c.root}/collection/activities`, c.name)).json()).records
+    const head = fresh.find(record => record.id === pick[0].id)
+    const identity = { ...head.currentVersion.activity, sourceId: "CHANGED-1" }
+    expect(await h.database.saveScope3SpendCorrections(c.owner, c.id, { reason: "Identity change.", corrections: [{ recordId: head.id, expectedVersionId: head.currentVersion.id, activity: identity }] }).then(() => null, (error: { code?: string }) => error.code)).toBe("22023")
+    expect([head.currentVersion.revision, head.currentVersion.activity.quantity.originalValue, head.currentVersion.correctionReason]).toEqual([pick[0].currentVersion.revision + 1, "123.45", "Converted at the stated rate."])
+  } finally { await h.close() }
+}, 900_000)

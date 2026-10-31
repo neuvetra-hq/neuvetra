@@ -1,0 +1,1947 @@
+{
+  "schema": "neuvetra.sources-extra.upstream-transcriptions/v1",
+  "generated": "2026-10-30",
+  "method": "Each value was read with WebFetch at least twice using differently-worded prompts asking for verbatim table rows/sentences. agreed=true only when the printed value matched in both reads. WebFetch returns a small-model rendering of the page text, not the raw file: these are transcriptions, not file reads; the builder should cite them as hand-transcribed (page/table/row) and upgrade to pdftotext/xlsx cell reads when the files are staged. Where WebFetch rendered a table instead of quoting lines, the quote field says so.",
+  "values": [
+    {
+      "id": "netl2024_4862.ng_upstream.prod_through_distribution",
+      "value": "8.8",
+      "unit": "g CO2e/MJ of NG delivered",
+      "basis": {
+        "heating_value": "HHV",
+        "gwp_set": "IPCC AR6 100-yr (as published)",
+        "boundary": "production through distribution (extraction, processing, transmission, storage, distribution); US 2020"
+      },
+      "ci95": "5.7–12.7",
+      "locator": "Executive Summary, p. 2, first results sentence",
+      "source_title": "Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile",
+      "publisher": "U.S. DOE National Energy Technology Laboratory (NETL)",
+      "edition_date": "DOE/NETL-2024/4862, January 2025",
+      "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+      "licence": "US government work (public domain)",
+      "quote1": "For the “production through distribution” life cycle boundary, the GHG emissions intensity from the United States (U.S.) NG supply chain for the year 2020 is 8.8 g carbon dioxide equivalents (CO2e)/MJ (with a 95 percent mean confidence interval of 5.7–12.7 g CO2e/MJ, using the Intergovernmental Panel on Climate Change [IPCC] Sixth Assessment Report [AR6] 100-yr global warming potential [GWP] values, higher heating value [HHV] basis)",
+      "quote2": "For the “production through distribution” life cycle boundary, the GHG emissions intensity from the United States (U.S.) NG supply chain for the year 2020 is 8.8 g carbon dioxide equivalents (CO2e)/MJ (with a 95 percent mean confidence interval of 5.7–12.7 g CO2e/MJ, using the Intergovernmental Panel on Climate Change [IPCC] Sixth Assessment Report [AR6] 100-yr global warming potential [GWP] values, higher heating value [HHV] basis)",
+      "agreed": true,
+      "notes": "Use for 3A (gas bought from an LDC). Exact conversion: 8.8 g/MJ x 1055.05585262 MJ/MMBtu / 1000 = 9.284491503056 kg CO2e/MMBtu (HHV). GWP is AR6, not AR5: the AR5 result is only in Appendix E (separate release package, not readable). Do not convert AR6->AR5 ourselves. Both reads returned identical text (line-wrapping differed only)."
+    },
+    {
+      "id": "netl2024_4862.ng_upstream.prod_through_transmission",
+      "value": "7.8",
+      "unit": "g CO2e/MJ of NG delivered",
+      "basis": {
+        "heating_value": "HHV",
+        "gwp_set": "IPCC AR6 100-yr (as published)",
+        "boundary": "production through transmission network (excludes distribution); US 2020"
+      },
+      "ci95": "4.9–11.5",
+      "locator": "Executive Summary, p. 2, same sentence (second clause)",
+      "source_title": "Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile",
+      "publisher": "U.S. DOE National Energy Technology Laboratory (NETL)",
+      "edition_date": "DOE/NETL-2024/4862, January 2025",
+      "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+      "licence": "US government work (public domain)",
+      "quote1": "whereas, for the “production through transmission network” life cycle boundary, the GHG emissions from the U.S. NG supply chain are 7.8 g CO2e/MJ (with a 95 percent mean confidence interval of 4.9–11.5 g CO2e/MJ, IPCC AR6 100-yr GWP, HHV basis).",
+      "quote2": "whereas, for the “production through transmission network” life cycle boundary, the GHG emissions from the U.S. NG supply chain are 7.8 g CO2e/MJ (with a 95 percent mean confidence interval of 4.9–11.5 g CO2e/MJ, IPCC AR6 100-yr GWP, HHV basis).",
+      "agreed": true,
+      "notes": "Use for 3B, 3C-upstream and 3D-upstream (power plants take gas off the transmission system). 7.8 g/MJ = 8.229435650436 kg CO2e/MMBtu HHV (exact)."
+    },
+    {
+      "id": "netl2024_4862.ng_upstream.consumption_weighted_national",
+      "value": "8.3",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "HHV",
+        "gwp_set": "IPCC AR6 100-yr",
+        "boundary": "NG-consumption-weighted mix of the two boundaries"
+      },
+      "ci95": "5.3–12.2",
+      "locator": "Executive Summary, p. 4",
+      "source_title": "Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile",
+      "publisher": "U.S. DOE National Energy Technology Laboratory (NETL)",
+      "edition_date": "DOE/NETL-2024/4862, January 2025",
+      "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+      "licence": "US government work (public domain)",
+      "quote1": "The NG consumption weighted national average GHG emissions intensity is 8.3 g CO2e/MJ (with a mean confidence interval of 5.3–12.2 g CO2e/MJ, AR6 100-yr GWP, HHV basis),",
+      "quote2": "The NG consumption weighted national average GHG emissions intensity is 8.3 g CO2e/MJ (with a mean confidence interval of 5.3–12.2 g CO2e/MJ, AR6 100-yr GWP, HHV basis)",
+      "agreed": true,
+      "notes": "Context only; not recommended for any category (mixes boundaries)."
+    },
+    {
+      "id": "netl2024_4862.basis.hhv_footnote",
+      "value": "54.3",
+      "unit": "MJ/kg (HHV of NG); 1037 BTU/scf; density 0.044 lb/scf",
+      "basis": {
+        "heating_value": "HHV",
+        "gwp_set": "n/a",
+        "boundary": "n/a"
+      },
+      "locator": "Section 2.2, p. 8, footnote 2",
+      "source_title": "Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile",
+      "publisher": "U.S. DOE National Energy Technology Laboratory (NETL)",
+      "edition_date": "DOE/NETL-2024/4862, January 2025",
+      "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+      "licence": "US government work (public domain)",
+      "quote1": "The results in this work are on a higher heating value (HHV) basis, using an HHV of 54.3 MJ/kg (or 1037 BTU/scf), and an NG density of 0.044 lb/scf.",
+      "quote2": "The results in this work are on a higher heating value (HHV) basis, using an HHV of 54.3 MJ/kg (or 1037 BTU/scf), and an",
+      "agreed": true,
+      "notes": "quote2 truncated by the tool's 125-char limit; overlapping text identical."
+    },
+    {
+      "id": "netl2024_4862.basis.functional_unit",
+      "value": "1 MJ",
+      "unit": "MJ of NG delivered to the consumer through the distribution network",
+      "basis": {
+        "heating_value": "HHV",
+        "gwp_set": "n/a",
+        "boundary": "functional unit"
+      },
+      "locator": "Section 2.2, p. 8",
+      "source_title": "Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile",
+      "publisher": "U.S. DOE National Energy Technology Laboratory (NETL)",
+      "edition_date": "DOE/NETL-2024/4862, January 2025",
+      "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+      "licence": "US government work (public domain)",
+      "quote1": "The functional unit for this analysis is 1 megajoule2(MJ) of NG delivered to the consumer through the distribution network,",
+      "quote2": "1 MJ \"delivered to the consumer through the distribution network\" (prior session read, upstream-factors-us.md §1.1)",
+      "agreed": false,
+      "notes": "Only one verbatim read in this session; supporting text, not a factor."
+    },
+    {
+      "id": "netl2024_4862.basis.gwp_primary",
+      "value": "AR6",
+      "unit": "GWP set",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "IPCC AR6 100-yr",
+        "boundary": "n/a"
+      },
+      "locator": "Section 2.4 (Metrics), p. 12",
+      "source_title": "Life Cycle Analysis of Natural Gas Extraction and Power Generation: U.S. 2020 Emissions Profile",
+      "publisher": "U.S. DOE National Energy Technology Laboratory (NETL)",
+      "edition_date": "DOE/NETL-2024/4862, January 2025",
+      "url": "https://www.netl.doe.gov/projects/files/LifeCycleAnalysisofNaturalGasExtractionandPowerGenerationUS2020EmissionsProfile_012425.pdf",
+      "licence": "US government work (public domain)",
+      "quote1": "The primary GHG emissions results are reported on a common-mass basis of carbon dioxide equivalents (CO2e) using the GWPs of each gas from the Intergovernmental Panel on Climate Change (IPCC) Sixth Assessment Report (AR6) [7]. The default GWP used is the 100-year timeframe",
+      "quote2": "(Executive Summary sentence, both reads) \"using the Intergovernmental Panel on Climate Change [IPCC] Sixth Assessment Report [AR6] 100-yr global warming potential [GWP] values\"",
+      "agreed": true,
+      "notes": "AR4/AR5 location: \"all GHG emissions results are also provided on an alternate GWP basis (IPCC Fourth Assessment Report [AR4] and Fifth Assessment Report [AR5], 100- and 20-year) in Appendix E (available in the release package published along with this report).\" Appendix E is not in the PDF; EDX dataset page (https://edx.netl.doe.gov/dataset/2020-natural-gas-lca-appendices-rev1, DOI 10.18141/2568689) lists 'Appendix E: Detailed GHG Results for All Scenarios (spreadsheet)' but the file list did not load. AR5 value NOT obtained."
+    },
+    {
+      "id": "cagreet3_lut2018.carbob.crude_recovery_and_transport",
+      "value": "11.78",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: crude extraction + crude transport to CA refinery"
+      },
+      "locator": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Crude Recovery and Crude Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Crude Recovery and Crude Transport | 11.78 |  (read 1, tool rendered table)",
+      "quote2": "\"Crude Recovery and Crude Transport 11.78\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.carbob.refining",
+      "value": "14.80",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: refining"
+      },
+      "locator": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Refining\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Refining | 14.80 |",
+      "quote2": "\"Refining 14.80\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.carbob.fuel_transport",
+      "value": "0.30",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: product transport/distribution"
+      },
+      "locator": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"CARBOB Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| CARBOB Transport | 0.30 |",
+      "quote2": "\"CARBOB Transport 0.30\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.carbob.tailpipe",
+      "value": "73.94",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "TTW combustion (not upstream)"
+      },
+      "locator": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Tailpipe Emissions\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Tailpipe Emissions | 73.94 |",
+      "quote2": "\"Tailpipe Emissions 73.94\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.carbob.total",
+      "value": "100.82",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "well-to-wheel"
+      },
+      "locator": "Table A.1 Summary Table of CARBOB CI (p. 5), row \"Total CI\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Total CI | 100.82 |",
+      "quote2": "\"Total CI 100.82\"",
+      "agreed": true,
+      "notes": "Footnote both reads: \"* Individual values may not sum to the total due to rounding\". Derived WTT = 11.78+14.80+0.30 = 26.88 = 100.82-73.94 (both ways agree). Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.ulsd.crude_recovery_and_transport",
+      "value": "11.78",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: crude extraction + crude transport"
+      },
+      "locator": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Crude Recovery and Crude Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Crude Recovery and Crude Transport | 11.78 |",
+      "quote2": "\"Crude Recovery and Crude Transport 11.78\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.ulsd.refining",
+      "value": "13.57",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: refining"
+      },
+      "locator": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Crude Oil Refining\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Crude Oil Refining | 13.57 |",
+      "quote2": "\"Crude Oil Refining 13.57\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.ulsd.fuel_transport",
+      "value": "0.24",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: product transport"
+      },
+      "locator": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"ULSD Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| ULSD Transport | 0.24 |",
+      "quote2": "\"ULSD Transport 0.24\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.ulsd.tailpipe",
+      "value": "74.86",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "TTW combustion"
+      },
+      "locator": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Tailpipe Emissions\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Tailpipe Emissions | 74.86 |",
+      "quote2": "\"Tailpipe Emissions 74.86\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.ulsd.total",
+      "value": "100.45",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "well-to-wheel"
+      },
+      "locator": "Table B.1 Summary Table of California ULSD CI (p. 12), row \"Total CI\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Total CI | 100.45 |",
+      "quote2": "\"Total CI 100.45\"",
+      "agreed": true,
+      "notes": "Derived WTT = 11.78+13.57+0.24 = 25.59 = 100.45-74.86. Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.cng_fossil.ng_recovery",
+      "value": "6.07",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: NG recovery (North American fossil NG)"
+      },
+      "locator": "Table C.1 Summary Table of Compressed Natural Gas CI (p. 18), row \"Natural Gas (NG) Recovery\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Natural gas recovery | 6.07 | (read 1, tool restructured table)",
+      "quote2": "\"Natural Gas (NG) Recovery 6.07\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.cng_fossil.ng_processing",
+      "value": "3.31",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: processing"
+      },
+      "locator": "Table C.1 Summary Table of Compressed Natural Gas CI (p. 18), row \"NG Processing\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| NG processing | 3.31 |",
+      "quote2": "\"NG Processing 3.31\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.cng_fossil.ng_transport",
+      "value": "5.92",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "WTT: pipeline transport to CA"
+      },
+      "locator": "Table C.1 Summary Table of Compressed Natural Gas CI (p. 18), row \"NG Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| NG transport | 5.92 |",
+      "quote2": "\"NG Transport 5.92\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.cng_fossil.ng_compression",
+      "value": "3.18",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "CNG station compression (vehicle-fuel specific; exclude for pipeline gas)"
+      },
+      "locator": "Table C.1 Summary Table of Compressed Natural Gas CI (p. 18), row \"NG Compression\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| NG compression | 3.18 |",
+      "quote2": "\"NG Compression 3.18\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.cng_fossil.tailpipe",
+      "value": "60.73",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "TTW"
+      },
+      "locator": "Table C.1 Summary Table of Compressed Natural Gas CI (p. 18), row \"Tailpipe Emissions\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Tailpipe emissions | 60.73 |",
+      "quote2": "\"Tailpipe Emissions 60.73\"",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.cng_fossil.total",
+      "value": "79.21",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "well-to-wheel"
+      },
+      "locator": "Table C.1 Summary Table of Compressed Natural Gas CI (p. 18), row \"Total CI\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| **Total** | **79.21** |",
+      "quote2": "\"Total CI 79.21\"",
+      "agreed": true,
+      "notes": "Derived: recovery+processing+transport = 15.30 (pipeline-gas upstream); +compression = 18.48 = 79.21-60.73. Much higher than NETL 7.8-8.8 (HHV, AR6): different leakage/transport assumptions and basis; disclose if both are shown. Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.ng_recovery",
+      "value": "1.51",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"NG Recovery\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| NG Recovery | 1.51 | (read 1, weighted column)",
+      "quote2": "\"NG Recovery 6.05 1.51\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.ng_processing",
+      "value": "0.82",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"NG Processing\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| NG Processing | 0.82 | (read 1, weighted column)",
+      "quote2": "\"NG Processing 3.30 0.82\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.ng_transmission",
+      "value": "0.07",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"NG Transmission\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| NG Transmission | 0.07 | (read 1, weighted column)",
+      "quote2": "\"NG Transmission 0.27 0.07\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.crude_recovery",
+      "value": "5.01",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Crude Recovery\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Crude Recovery | 5.01 | (read 1, weighted column)",
+      "quote2": "\"Crude Recovery 6.69 5.01\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.crude_transport",
+      "value": "1.20",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Crude Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Crude Transport | 1.20 | (read 1, weighted column)",
+      "quote2": "\"Crude Transport 1.60 1.20\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.refining_from_ng",
+      "value": "0.77",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Refining from NG\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Propane Refining from NG | 0.77 | (read 1, weighted column)",
+      "quote2": "\"Propane Refining from NG 3.07 0.77\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.refining_from_crude",
+      "value": "7.51",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Refining from Crude\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Propane Refining from Crude | 7.51 | (read 1, weighted column)",
+      "quote2": "\"Propane Refining from Crude 10.01 7.51\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.non_combustion",
+      "value": "0.52",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Non-Combustion Emissions\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Non-Combustion Emissions | 0.52 | (read 1, weighted column)",
+      "quote2": "\"Non-Combustion Emissions 0.79 0.43 0.52\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.propane_transport",
+      "value": "0.74",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Transport\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Propane Transport | 0.74 | (read 1, weighted column)",
+      "quote2": "\"Propane Transport 0.74 0.74 0.74\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.propane_storage",
+      "value": "0.0",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Propane Storage\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Propane Storage | 0.0 | (read 1, weighted column)",
+      "quote2": "\"Propane Storage 0.0 0.0 0.0\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.tailpipe",
+      "value": "65.03",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Tailpipe Emissions\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Tailpipe Emissions | 65.03 | (read 1, weighted column)",
+      "quote2": "\"Tailpipe Emissions 65.03 65.03 65.03\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3_lut2018.propane_weighted.total",
+      "value": "83.19",
+      "unit": "g CO2e/MJ",
+      "basis": {
+        "heating_value": "not stated (CA-GREET convention LHV; unverified)",
+        "gwp_set": "not stated (inferred AR4-100; see cagreet3.gwp_inferred)",
+        "boundary": "propane WTW, 25% NG / 75% crude"
+      },
+      "locator": "Table D.1 Summary Table of Propane CI (p. 25), column 'Total CI* gCO2e/MJ (weighted based 25/75 ratio of the sources)', row \"Total CI\"",
+      "source_title": "CA-GREET3.0 Lookup Table Pathways Technical Support Documentation",
+      "publisher": "California Air Resources Board (CARB)",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic//fuels/lcfs/ca-greet/lut-doc.pdf",
+      "licence": "California state government publication (free public access; no licence fee)",
+      "quote1": "| Total CI | 83.19 | (read 1, weighted column)",
+      "quote2": "\"Total CI 79.26 84.50 83.19\" (read 2; last number = weighted column)",
+      "agreed": true,
+      "notes": "Derived WTT = 83.19-65.03 = 18.16; row sum of weighted upstream rows = 18.15 (rounding; footnote \"* Values may not sum to total due to rounding\"). Register the published total-minus-tailpipe or the row sum, and say which. Source split quote (read 1): \"approximately 25% of propane is produced from natural gas sources and 75% from refineries.\" (single read). Heating-value basis NOT stated in the LUT doc (both reads). GWP set NOT stated (both reads); see cagreet3.gwp_inferred (arithmetic on printed CA-GREET3.0 tables implies AR4: CH4 25, N2O 298). California pathway (CA crude slate/refineries) - a proxy, not US average."
+    },
+    {
+      "id": "cagreet3.gwp_inferred",
+      "value": "CH4 25, N2O 298 (AR4-100) - INFERRED",
+      "unit": "GWP set",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "inferred AR4-100",
+        "boundary": "n/a"
+      },
+      "source_title": "CA-GREET3.0 Supplemental Document and Tables of Changes",
+      "publisher": "CARB",
+      "edition_date": "August 13, 2018 (clean)",
+      "url": "https://ww2.arb.ca.gov/sites/default/files/classic/fuels/lcfs/ca-greet/cagreet_supp_doc_clean.pdf",
+      "licence": "California state government publication",
+      "locator": "Table 10 rows 'Class 8b Combination long-haul trucks', 'Class 6 Medium-Heavy Duty vocational vehicles'; Table 6 row 'Cars'",
+      "quote1": "\"Class 8b Combination long-haul trucks 108 0.102 0.004 3.45E-06 2.56\" | \"Class 6 Medium-Heavy Duty vocational vehicles 252 0.239 0.006 5.73E-06 5.97\" | \"Cars 19.08 0.018 1.682 1.59E-03 0.93\"",
+      "quote2": "\"Class 8b Combination long-haul trucks 108 0.102 0.004 3.45E-06 2.56\" | \"Class 6 Medium-Heavy Duty vocational vehicles 252 0.239 0.006 5.73E-06 5.97\" | \"Cars 19.08 0.018 1.682 1.59E-03 0.93\"",
+      "agreed": true,
+      "notes": "Columns: NGV CH4 (g/MMBtu), NGV CH4 (g/MJ), NGV N2O (g/MMBtu), NGV N2O (g/MJ), NGV CH4 and N2O (gCO2e/MJ). Recomputed with g/MMBtu / 1055.05585262: (25,298) -> 2.560 / 5.973 / 0.927 = printed 2.56 / 5.97 / 0.93; (30,265) -> 3.072 / 7.167 / 0.965 (no match); (28,265) -> 2.867 / 6.689 (no match). So CA-GREET3.0 applies AR4 GWPs. This is an INFERENCE from printed numbers, not a stated basis; no CARB text read here names the GWP set (LUT doc, supplemental doc, 15-day Attachment C, ISOR pp. 1-~100k chars, FRO 95481 all checked: none states AR4/AR5)."
+    },
+    {
+      "id": "egrid2023_tg.heat_input_definition",
+      "value": "MMBtu (heating-value basis not stated)",
+      "unit": "definition",
+      "basis": {
+        "heating_value": "not stated in eGRID TG",
+        "gwp_set": "n/a",
+        "boundary": "unit heat input"
+      },
+      "source_title": "eGRID2023 Technical Guide",
+      "publisher": "U.S. EPA",
+      "edition_date": "January 2025 (file dated 2025-01-15)",
+      "url": "https://www.epa.gov/system/files/documents/2025-01/egrid2023_technical_guide.pdf",
+      "licence": "US government work",
+      "locator": "Section 3.1.3.2 Heat Input, p. 18 (read 1) / p. 19 (read 2; PDF vs printed page)",
+      "quote1": "Heat input, in MMBtu, is the amount of heat energy consumed by a generating unit that combusts fuel.",
+      "quote2": "Heat input, in MMBtu, is the amount of heat energy consumed by a generating unit that combusts fuel.",
+      "agreed": true,
+      "notes": "A separate read searched the whole TG for 'higher heating value', 'HHV', 'heating value', 'heat content', 'gross calorific' and found none. Data sources (single verbatim read): \"Annual and ozone season unit-level heat input for eGRID is initially obtained from the reported emissions data\" (EPA/CAPD, i.e. 40 CFR Part 75) and, when not reported, \"annual and ozone heat input data are obtained at the unit level or prime mover level from the EIA-923 monthly data\". The HHV basis therefore rests on the two source definitions below."
+    },
+    {
+      "id": "cfr40_72_2.heat_input_rate_gcv",
+      "value": "gross calorific value",
+      "unit": "definition",
+      "basis": {
+        "heating_value": "HHV (gross calorific value)",
+        "gwp_set": "n/a",
+        "boundary": "Acid Rain Program / Part 75 heat input"
+      },
+      "source_title": "40 CFR 72.2 Definitions (Acid Rain Program)",
+      "publisher": "U.S. EPA / Office of the Federal Register (eCFR)",
+      "edition_date": "current eCFR as read 2026-10-30",
+      "url": "https://www.ecfr.gov/current/title-40/chapter-I/subchapter-C/part-72/subpart-A/section-72.2",
+      "licence": "US government work",
+      "locator": "§72.2, definition 'Heat input rate'",
+      "quote1": "Heat input rate means the product (expressed in mmBtu/hr) of the gross calorific value of the fuel (expressed in mmBtu/mass of fuel) and the fuel feed rate into the combustion device (expressed in mass of fuel/hr) and does not include the heat derived from preheated combustion air, recirculated flue gases, or exhaust from other sources.",
+      "quote2": "Heat input rate means the product (expressed in mmBtu/hr) of the gross calorific value of the fuel  [LII mirror https://www.law.cornell.edu/cfr/text/40/72.2]",
+      "agreed": true,
+      "notes": "Second read from Cornell LII mirror of the same section; overlapping text identical. Neither read found a standalone 'Heat input' or 'GCV' definition in the text window returned."
+    },
+    {
+      "id": "eia_glossary.gross_heat_content",
+      "value": "gross heat content",
+      "unit": "definition",
+      "basis": {
+        "heating_value": "HHV (gross)",
+        "gwp_set": "n/a",
+        "boundary": "EIA data convention (EIA-923 heat input)"
+      },
+      "source_title": "EIA Glossary (H)",
+      "publisher": "U.S. Energy Information Administration",
+      "edition_date": "web page as read 2026-10-30",
+      "url": "https://www.eia.gov/tools/glossary/index.php?id=H",
+      "licence": "US government work",
+      "locator": "entry 'Heat content' note",
+      "quote1": "The Energy Information Administration typically uses gross heat content values.",
+      "quote2": "The Energy Information Administration typically uses gross heat content values.",
+      "agreed": true,
+      "notes": "Also (both reads): Higher Heating Value = \"A measure of heat content based on the gross energy content of a combustible fuel. Also known as \"upper heating value.\"\" Conclusion: eGRID heat input = HHV by its two data sources (Part 75 GCV; EIA gross). Label 'HHV (per 40 CFR 72.2 and EIA convention; eGRID TG silent)'."
+    },
+    {
+      "id": "cbecs2018_c14.all_buildings.kwh_per_sqft",
+      "value": "12.6",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"All buildings\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "All buildings 213 12.6 13.7 4.1 8.6 15.8 $21.2 $1.25 $0.099",
+      "quote2": "All buildings 213 12.6 13.7 4.1 8.6 15.8 $21.2 $1.25 $0.099",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "213",
+        "per_sqft_kwh": "12.6",
+        "per_worker_thousand_kwh": "13.7",
+        "p25_kwh_sqft": "4.1",
+        "median_kwh_sqft": "8.6",
+        "p75_kwh_sqft": "15.8"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.education.kwh_per_sqft",
+      "value": "9.4",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Education\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Education 293 9.4 12.4 5.8 9.6 13.1 $28.8 $0.92 $0.098",
+      "quote2": "Education 293 9.4 12.4 5.8 9.6 13.1 $28.8 $0.92 $0.098",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "293",
+        "per_sqft_kwh": "9.4",
+        "per_worker_thousand_kwh": "12.4",
+        "p25_kwh_sqft": "5.8",
+        "median_kwh_sqft": "9.6",
+        "p75_kwh_sqft": "13.1"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.food_sales.kwh_per_sqft",
+      "value": "53.3",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Food sales\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Food sales 329 53.3 58.5 33.1 47.4 69.9 $32.6 $5.27 $0.099",
+      "quote2": "Food sales 329 53.3 58.5 33.1 47.4 69.9 $32.6 $5.27 $0.099",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "329",
+        "per_sqft_kwh": "53.3",
+        "per_worker_thousand_kwh": "58.5",
+        "p25_kwh_sqft": "33.1",
+        "median_kwh_sqft": "47.4",
+        "p75_kwh_sqft": "69.9"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.food_service.kwh_per_sqft",
+      "value": "43.8",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Food service\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Food service 212 43.8 21.0 22.9 39.3 58.5 $20.6 $4.25 $0.097",
+      "quote2": "Food service 212 43.8 21.0 22.9 39.3 58.5 $20.6 $4.25 $0.097",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "212",
+        "per_sqft_kwh": "43.8",
+        "per_worker_thousand_kwh": "21.0",
+        "p25_kwh_sqft": "22.9",
+        "median_kwh_sqft": "39.3",
+        "p75_kwh_sqft": "58.5"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.health_care.kwh_per_sqft",
+      "value": "23.8",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Health care\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Health care 698 23.8 14.4 8.4 14.2 19.8 $65.0 $2.22 $0.093",
+      "quote2": "Health care 698 23.8 14.4 8.4 14.2 19.8 $65.0 $2.22 $0.093",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "698",
+        "per_sqft_kwh": "23.8",
+        "per_worker_thousand_kwh": "14.4",
+        "p25_kwh_sqft": "8.4",
+        "median_kwh_sqft": "14.2",
+        "p75_kwh_sqft": "19.8"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.health_care_inpatient.kwh_per_sqft",
+      "value": "28.8",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Inpatient\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Inpatient 7,631 28.8 18.1 22.2 30.4 35.3 $653.8 $2.47 $0.086",
+      "quote2": "Inpatient 7,631 28.8 18.1 22.2 30.4 35.3 $653.8 $2.47 $0.086",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "7,631",
+        "per_sqft_kwh": "28.8",
+        "per_worker_thousand_kwh": "18.1",
+        "p25_kwh_sqft": "22.2",
+        "median_kwh_sqft": "30.4",
+        "p75_kwh_sqft": "35.3"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.health_care_outpatient.kwh_per_sqft",
+      "value": "17.4",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Outpatient\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Outpatient 238 17.4 10.0 8.4 13.8 19.1 $25.9 $1.89 $0.109",
+      "quote2": "Outpatient 238 17.4 10.0 8.4 13.8 19.1 $25.9 $1.89 $0.109",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "238",
+        "per_sqft_kwh": "17.4",
+        "per_worker_thousand_kwh": "10.0",
+        "p25_kwh_sqft": "8.4",
+        "median_kwh_sqft": "13.8",
+        "p75_kwh_sqft": "19.1"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.lodging.kwh_per_sqft",
+      "value": "14.4",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Lodging\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Lodging 484 14.4 34.9 8.2 14.5 24.5 $46.5 $1.38 $0.096",
+      "quote2": "Lodging 484 14.4 34.9 8.2 14.5 24.5 $46.5 $1.38 $0.096",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "484",
+        "per_sqft_kwh": "14.4",
+        "per_worker_thousand_kwh": "34.9",
+        "p25_kwh_sqft": "8.2",
+        "median_kwh_sqft": "14.5",
+        "p75_kwh_sqft": "24.5"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.mercantile.kwh_per_sqft",
+      "value": "16.7",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Mercantile\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Mercantile 352 16.7 20.3 7.3 12.5 20.1 $32.3 $1.54 $0.092",
+      "quote2": "Mercantile 352 16.7 20.3 7.3 12.5 20.1 $32.3 $1.54 $0.092",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "352",
+        "per_sqft_kwh": "16.7",
+        "per_worker_thousand_kwh": "20.3",
+        "p25_kwh_sqft": "7.3",
+        "median_kwh_sqft": "12.5",
+        "p75_kwh_sqft": "20.1"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.retail_other_than_mall.kwh_per_sqft",
+      "value": "13.7",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Retail (other than mall)\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Retail (other than mall) 205 13.7 21.9 5.1 9.0 14.5 $19.7 $1.31 $0.096",
+      "quote2": "Retail (other than mall) 205 13.7 21.9 5.1 9.0 14.5 $19.7 $1.31 $0.096",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "205",
+        "per_sqft_kwh": "13.7",
+        "per_worker_thousand_kwh": "21.9",
+        "p25_kwh_sqft": "5.1",
+        "median_kwh_sqft": "9.0",
+        "p75_kwh_sqft": "14.5"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.enclosed_and_strip_malls.kwh_per_sqft",
+      "value": "19.6",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Enclosed and strip malls\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Enclosed and strip malls 657 19.6 19.4 16.3 20.1 24.0 $58.4 $1.74 $0.089",
+      "quote2": "Enclosed and strip malls 657 19.6 19.4 16.3 20.1 24.0 $58.4 $1.74 $0.089",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "657",
+        "per_sqft_kwh": "19.6",
+        "per_worker_thousand_kwh": "19.4",
+        "p25_kwh_sqft": "16.3",
+        "median_kwh_sqft": "20.1",
+        "p75_kwh_sqft": "24.0"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.office.kwh_per_sqft",
+      "value": "13.6",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Office\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Office 234 13.6 6.9 6.1 10.1 15.7 $24.4 $1.42 $0.104",
+      "quote2": "Office 234 13.6 6.9 6.1 10.1 15.7 $24.4 $1.42 $0.104",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "234",
+        "per_sqft_kwh": "13.6",
+        "per_worker_thousand_kwh": "6.9",
+        "p25_kwh_sqft": "6.1",
+        "median_kwh_sqft": "10.1",
+        "p75_kwh_sqft": "15.7"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c14.warehouse_and_storage.kwh_per_sqft",
+      "value": "5.8",
+      "unit": "kWh per square foot per year (2018)",
+      "basis": {
+        "heating_value": "site electricity (n/a)",
+        "gwp_set": "n/a",
+        "boundary": "conditional intensity: buildings that use electricity; floorspace-weighted ratio, US national, principal building activity"
+      },
+      "source_title": "2018 CBECS Table C14. Electricity consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c14.pdf",
+      "locator": "Table C14, row \"Warehouse and storage\", column 'Per square foot (kWh)' (2nd numeric column)",
+      "quote1": "Warehouse and storage 120 5.8 13.1 1.6 3.4 7.8 $12.9 $0.63 $0.107",
+      "quote2": "Warehouse and storage 120 5.8 13.1 1.6 3.4 7.8 $12.9 $0.63 $0.107",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_kwh": "120",
+        "per_sqft_kwh": "5.8",
+        "per_worker_thousand_kwh": "13.1",
+        "p25_kwh_sqft": "1.6",
+        "median_kwh_sqft": "3.4",
+        "p75_kwh_sqft": "7.8"
+      },
+      "notes": "Both reads returned the identical printed line. Column order checked: per-building/per-sqft gives plausible mean size (e.g. all buildings 213,000/12.6 = 16,905 sqft); percentile triple is monotonic. Median/percentiles are building-level distributions (no RSE). RSEs are in the xlsx RSE tab (not read)."
+    },
+    {
+      "id": "cbecs2018_c24.all_buildings.cf_per_sqft",
+      "value": "32.7",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"All buildings\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "All buildings 745 32.7 36.1 14.3 28.1 51.7 $5.5 $0.24 $7.35",
+      "quote2": "All buildings 745 32.7 36.1 14.3 28.1 51.7 $5.5 $0.24 $7.35",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "745",
+        "per_sqft_cf": "32.7",
+        "per_worker_thousand_cf": "36.1",
+        "p25_cf_sqft": "14.3",
+        "median_cf_sqft": "28.1",
+        "p75_cf_sqft": "51.7"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.education.cf_per_sqft",
+      "value": "30.8",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Education\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Education 1,461 30.8 43.5 10.9 23.0 44.1 $10.0 $0.21 $6.82",
+      "quote2": "Education 1,461 30.8 43.5 10.9 23.0 44.1 $10.0 $0.21 $6.82",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "1,461",
+        "per_sqft_cf": "30.8",
+        "per_worker_thousand_cf": "43.5",
+        "p25_cf_sqft": "10.9",
+        "median_cf_sqft": "23.0",
+        "p75_cf_sqft": "44.1"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.food_sales.cf_per_sqft",
+      "value": "69.2",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Food sales\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Food sales 511 69.2 77.1 24.8 67.2 113.8 $3.7 $0.50 $7.23",
+      "quote2": "Food sales 511 69.2 77.1 24.8 67.2 113.8 $3.7 $0.50 $7.23",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "511",
+        "per_sqft_cf": "69.2",
+        "per_worker_thousand_cf": "77.1",
+        "p25_cf_sqft": "24.8",
+        "median_cf_sqft": "67.2",
+        "p75_cf_sqft": "113.8"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.food_service.cf_per_sqft",
+      "value": "147.6",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Food service\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Food service 719 147.6 67.1 64.5 152.1 245.8 $5.6 $1.15 $7.82",
+      "quote2": "Food service 719 147.6 67.1 64.5 152.1 245.8 $5.6 $1.15 $7.82",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "719",
+        "per_sqft_cf": "147.6",
+        "per_worker_thousand_cf": "67.1",
+        "p25_cf_sqft": "64.5",
+        "median_cf_sqft": "152.1",
+        "p75_cf_sqft": "245.8"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.health_care.cf_per_sqft",
+      "value": "59.1",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Health care\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Health care 2,577 59.1 37.1 17.4 28.1 45.4 $16.9 $0.39 $6.55",
+      "quote2": "Health care 2,577 59.1 37.1 17.4 28.1 45.4 $16.9 $0.39 $6.55",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "2,577",
+        "per_sqft_cf": "59.1",
+        "per_worker_thousand_cf": "37.1",
+        "p25_cf_sqft": "17.4",
+        "median_cf_sqft": "28.1",
+        "p75_cf_sqft": "45.4"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.health_care_inpatient.cf_per_sqft",
+      "value": "77.9",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Inpatient\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Inpatient 23,840 77.9 49.5 29.5 82.7 129.2 $148.3 $0.48 $6.22",
+      "quote2": "Inpatient 23,840 77.9 49.5 29.5 82.7 129.2 $148.3 $0.48 $6.22",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "23,840",
+        "per_sqft_cf": "77.9",
+        "per_worker_thousand_cf": "49.5",
+        "p25_cf_sqft": "29.5",
+        "median_cf_sqft": "82.7",
+        "p75_cf_sqft": "129.2"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.health_care_outpatient.cf_per_sqft",
+      "value": "27.8",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Outpatient\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Outpatient 499 27.8 17.1 15.5 27.2 37.1 $4.0 $0.22 $8.09",
+      "quote2": "Outpatient 499 27.8 17.1 15.5 27.2 37.1 $4.0 $0.22 $8.09",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "499",
+        "per_sqft_cf": "27.8",
+        "per_worker_thousand_cf": "17.1",
+        "p25_cf_sqft": "15.5",
+        "median_cf_sqft": "27.2",
+        "p75_cf_sqft": "37.1"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.lodging.cf_per_sqft",
+      "value": "37.0",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Lodging\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Lodging 1,564 37.0 90.1 16.4 34.3 62.5 $10.5 $0.25 $6.73",
+      "quote2": "Lodging 1,564 37.0 90.1 16.4 34.3 62.5 $10.5 $0.25 $6.73",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "1,564",
+        "per_sqft_cf": "37.0",
+        "per_worker_thousand_cf": "90.1",
+        "p25_cf_sqft": "16.4",
+        "median_cf_sqft": "34.3",
+        "p75_cf_sqft": "62.5"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.mercantile.cf_per_sqft",
+      "value": "35.7",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Mercantile\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Mercantile 980 35.7 41.2 13.3 26.5 51.0 $6.7 $0.24 $6.83",
+      "quote2": "Mercantile 980 35.7 41.2 13.3 26.5 51.0 $6.7 $0.24 $6.83",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "980",
+        "per_sqft_cf": "35.7",
+        "per_worker_thousand_cf": "41.2",
+        "p25_cf_sqft": "13.3",
+        "median_cf_sqft": "26.5",
+        "p75_cf_sqft": "51.0"
+      },
+      "notes": "Read 1 (first C24 prompt) omitted this row; reads 2 and 3 returned the identical line, so it is double-read. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.retail_other_than_mall.cf_per_sqft",
+      "value": "23.3",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Retail (other than mall)\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Retail (other than mall) 485 23.3 35.7 9.0 16.7 29.8 $3.7 $0.18 $7.54",
+      "quote2": "Retail (other than mall) 485 23.3 35.7 9.0 16.7 29.8 $3.7 $0.18 $7.54",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "485",
+        "per_sqft_cf": "23.3",
+        "per_worker_thousand_cf": "35.7",
+        "p25_cf_sqft": "9.0",
+        "median_cf_sqft": "16.7",
+        "p75_cf_sqft": "29.8"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.enclosed_and_strip_malls.cf_per_sqft",
+      "value": "44.0",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Enclosed and strip malls\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Enclosed and strip malls 1,528 44.0 43.6 23.9 45.0 62.0 $10.1 $0.29 $6.58",
+      "quote2": "Enclosed and strip malls 1,528 44.0 43.6 23.9 45.0 62.0 $10.1 $0.29 $6.58",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "1,528",
+        "per_sqft_cf": "44.0",
+        "per_worker_thousand_cf": "43.6",
+        "p25_cf_sqft": "23.9",
+        "median_cf_sqft": "45.0",
+        "p75_cf_sqft": "62.0"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.office.cf_per_sqft",
+      "value": "21.3",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Office\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Office 438 21.3 11.1 13.7 24.0 36.8 $3.7 $0.18 $8.42",
+      "quote2": "Office 438 21.3 11.1 13.7 24.0 36.8 $3.7 $0.18 $8.42",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "438",
+        "per_sqft_cf": "21.3",
+        "per_worker_thousand_cf": "11.1",
+        "p25_cf_sqft": "13.7",
+        "median_cf_sqft": "24.0",
+        "p75_cf_sqft": "36.8"
+      },
+      "notes": "Three reads returned the identical line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_c24.warehouse_and_storage.cf_per_sqft",
+      "value": "18.6",
+      "unit": "cubic feet of natural gas per square foot per year (2018)",
+      "basis": {
+        "heating_value": "volume (EIA Btu/cf conversion not stated in table)",
+        "gwp_set": "n/a",
+        "boundary": "CONDITIONAL intensity: only buildings that use natural gas (EIA guide default; table title does not specify); floorspace-weighted ratio, US national"
+      },
+      "source_title": "2018 CBECS Table C24. Natural gas consumption and expenditure intensities, 2018",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/ce/pdf/c24.pdf",
+      "locator": "Table C24, row \"Warehouse and storage\", column 'Per square foot (cubic feet)' (2nd numeric column)",
+      "quote1": "Warehouse and storage 600 18.6 42.6 9.0 22.0 38.1 $4.6 $0.14 $7.61",
+      "quote2": "Warehouse and storage 600 18.6 42.6 9.0 22.0 38.1 $4.6 $0.14 $7.61",
+      "agreed": true,
+      "row_parsed": {
+        "per_building_thousand_cf": "600",
+        "per_sqft_cf": "18.6",
+        "per_worker_thousand_cf": "42.6",
+        "p25_cf_sqft": "9.0",
+        "median_cf_sqft": "22.0",
+        "p75_cf_sqft": "38.1"
+      },
+      "notes": "Both reads returned the identical printed line. Apply only to buildings that burn natural gas (see cbecs2018_guide.conditional_intensity). Expenditure columns: printed values are per building / per sq ft / per thousand cf (e.g. 32.7 cf x $7.35/Mcf = $0.24/sqft) although the extracted header order differs; do not use them."
+    },
+    {
+      "id": "cbecs2018_guide.conditional_intensity",
+      "value": "conditional energy intensity (default when table title does not specify)",
+      "unit": "definition",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "denominator = floorspace of buildings using the energy source"
+      },
+      "source_title": "Guide to 2018 Commercial Buildings Energy Consumption Survey (CBECS) tables",
+      "publisher": "U.S. Energy Information Administration (EIA)",
+      "edition_date": "2018 CBECS; preliminary release September 2022, revised December 2022",
+      "licence": "US government work (public domain)",
+      "url": "https://www.eia.gov/consumption/commercial/data/2018/guide.php",
+      "locator": "Terminology: 'Conditional energy intensity', 'Gross energy intensity'",
+      "quote1": "If the table title does not specify, energy intensity should be interpreted as conditional energy intensity.",
+      "quote2": "If the table title does not specify, energy intensity should be interpreted as conditional energy intensity.",
+      "agreed": true,
+      "notes": "Definitions (both reads, truncated by tool): conditional = \"The amount of electricity, natural gas, fuel oil, or district heat used per square foot only in buildings\" [read 1 continues: \"only in buildings using the specified energy source.\"]; gross = \"The ratio of the total amount of energy consumed by a group of buildings to the total floorspace of those buildings\" [read 1: \"including buildings and floorspace where the energy source is not used.\"]. Neither C14 nor C24 title specifies, so both are conditional: C24 averages ONLY gas-using buildings. The guide page has no Btu-per-cubic-foot statement."
+    },
+    {
+      "id": "epa_events2018_t5.upper_upscale.electricity",
+      "value": "45",
+      "unit": "kWh per room per night",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "hotel electricity per room-night (per available room; = CHP 2005 kWh/sf/yr x sf/room / 365)"
+      },
+      "locator": "Table 5, row \"Upper upscale\", FIRST numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Upper upscale 45 0.122",
+      "quote2": "Upper upscale 45 0.122",
+      "agreed": true,
+      "notes": "Column resolved by derivation from the cited source (CHP Partnership 2005, Table 16 sf/room 905 x Table 17 Total kWh/sf/yr 18.10 / 365 = 44.878 -> rounds to 45). The extracted Table 5 header is scrambled (raw text order: 'Natural gas consumption Electricity consumption Hotel Category (mmBtu per room per (kWh per room per night) night)'); WebFetch's positional reading put this number under natural gas - that is WRONG (45 MMBtu/night is physically impossible)."
+    },
+    {
+      "id": "epa_events2018_t5.upper_upscale.natural_gas",
+      "value": "0.122",
+      "unit": "MMBtu per room per night",
+      "basis": {
+        "heating_value": "MMBtu as published (CHP report kBtu; HHV not stated)",
+        "gwp_set": "n/a",
+        "boundary": "hotel natural gas per room-night (per available room; = CHP 2005 kBtu/sf x sf/room / 1000 / 365)"
+      },
+      "locator": "Table 5, row \"Upper upscale\", SECOND numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Upper upscale 45 0.122",
+      "quote2": "Upper upscale 45 0.122",
+      "agreed": true,
+      "notes": "Derivation: 905 sf/room x 49.01 kBtu/sf / 1000 / 365 = 0.12152 -> rounds to 0.122. Same column caveat as the electricity entry."
+    },
+    {
+      "id": "epa_events2018_t5.upscale.electricity",
+      "value": "35",
+      "unit": "kWh per room per night",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "hotel electricity per room-night (per available room; = CHP 2005 kWh/sf/yr x sf/room / 365)"
+      },
+      "locator": "Table 5, row \"Upscale\", FIRST numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Upscale 35 0.094",
+      "quote2": "Upscale 35 0.094",
+      "agreed": true,
+      "notes": "Column resolved by derivation from the cited source (CHP Partnership 2005, Table 16 sf/room 842 x Table 17 Total kWh/sf/yr 14.96 / 365 = 34.510 -> rounds to 35). The extracted Table 5 header is scrambled (raw text order: 'Natural gas consumption Electricity consumption Hotel Category (mmBtu per room per (kWh per room per night) night)'); WebFetch's positional reading put this number under natural gas - that is WRONG (45 MMBtu/night is physically impossible)."
+    },
+    {
+      "id": "epa_events2018_t5.upscale.natural_gas",
+      "value": "0.094",
+      "unit": "MMBtu per room per night",
+      "basis": {
+        "heating_value": "MMBtu as published (CHP report kBtu; HHV not stated)",
+        "gwp_set": "n/a",
+        "boundary": "hotel natural gas per room-night (per available room; = CHP 2005 kBtu/sf x sf/room / 1000 / 365)"
+      },
+      "locator": "Table 5, row \"Upscale\", SECOND numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Upscale 35 0.094",
+      "quote2": "Upscale 35 0.094",
+      "agreed": true,
+      "notes": "Derivation: 842 sf/room x 40.57 kBtu/sf / 1000 / 365 = 0.09359 -> rounds to 0.094. Same column caveat as the electricity entry."
+    },
+    {
+      "id": "epa_events2018_t5.midscale_with_fb.electricity",
+      "value": "30",
+      "unit": "kWh per room per night",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "hotel electricity per room-night (per available room; = CHP 2005 kWh/sf/yr x sf/room / 365)"
+      },
+      "locator": "Table 5, row \"Midscale with food and beverage\", FIRST numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Midscale with food and beverage 30 0.097",
+      "quote2": "Midscale with food and beverage 30 0.097",
+      "agreed": true,
+      "notes": "Column resolved by derivation from the cited source (CHP Partnership 2005, Table 16 sf/room 656 x Table 17 Total kWh/sf/yr 16.57 / 365 = 29.781 -> rounds to 30). The extracted Table 5 header is scrambled (raw text order: 'Natural gas consumption Electricity consumption Hotel Category (mmBtu per room per (kWh per room per night) night)'); WebFetch's positional reading put this number under natural gas - that is WRONG (45 MMBtu/night is physically impossible)."
+    },
+    {
+      "id": "epa_events2018_t5.midscale_with_fb.natural_gas",
+      "value": "0.097",
+      "unit": "MMBtu per room per night",
+      "basis": {
+        "heating_value": "MMBtu as published (CHP report kBtu; HHV not stated)",
+        "gwp_set": "n/a",
+        "boundary": "hotel natural gas per room-night (per available room; = CHP 2005 kBtu/sf x sf/room / 1000 / 365)"
+      },
+      "locator": "Table 5, row \"Midscale with food and beverage\", SECOND numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Midscale with food and beverage 30 0.097",
+      "quote2": "Midscale with food and beverage 30 0.097",
+      "agreed": true,
+      "notes": "Derivation: 656 sf/room x 54.04 kBtu/sf / 1000 / 365 = 0.09712 -> rounds to 0.097. Same column caveat as the electricity entry."
+    },
+    {
+      "id": "epa_events2018_t5.midscale_without_fb.electricity",
+      "value": "19",
+      "unit": "kWh per room per night",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "hotel electricity per room-night (per available room; = CHP 2005 kWh/sf/yr x sf/room / 365)"
+      },
+      "locator": "Table 5, row \"Midscale without food and beverage\", FIRST numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Midscale without food and beverage 19 0.059",
+      "quote2": "Midscale without food and beverage 19 0.059",
+      "agreed": true,
+      "notes": "Column resolved by derivation from the cited source (CHP Partnership 2005, Table 16 sf/room 549 x Table 17 Total kWh/sf/yr 12.70 / 365 = 19.102 -> rounds to 19). The extracted Table 5 header is scrambled (raw text order: 'Natural gas consumption Electricity consumption Hotel Category (mmBtu per room per (kWh per room per night) night)'); WebFetch's positional reading put this number under natural gas - that is WRONG (45 MMBtu/night is physically impossible)."
+    },
+    {
+      "id": "epa_events2018_t5.midscale_without_fb.natural_gas",
+      "value": "0.059",
+      "unit": "MMBtu per room per night",
+      "basis": {
+        "heating_value": "MMBtu as published (CHP report kBtu; HHV not stated)",
+        "gwp_set": "n/a",
+        "boundary": "hotel natural gas per room-night (per available room; = CHP 2005 kBtu/sf x sf/room / 1000 / 365)"
+      },
+      "locator": "Table 5, row \"Midscale without food and beverage\", SECOND numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Midscale without food and beverage 19 0.059",
+      "quote2": "Midscale without food and beverage 19 0.059",
+      "agreed": true,
+      "notes": "Derivation: 549 sf/room x 39.43 kBtu/sf / 1000 / 365 = 0.05931 -> rounds to 0.059. Same column caveat as the electricity entry."
+    },
+    {
+      "id": "epa_events2018_t5.economy_budget.electricity",
+      "value": "15",
+      "unit": "kWh per room per night",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "hotel electricity per room-night (per available room; = CHP 2005 kWh/sf/yr x sf/room / 365)"
+      },
+      "locator": "Table 5, row \"Economy and budget\", FIRST numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Economy and budget 15 0.062",
+      "quote2": "Economy and budget 15 0.062",
+      "agreed": true,
+      "notes": "Column resolved by derivation from the cited source (CHP Partnership 2005, Table 16 sf/room 535 x Table 17 Total kWh/sf/yr 10.31 / 365 = 15.112 -> rounds to 15). The extracted Table 5 header is scrambled (raw text order: 'Natural gas consumption Electricity consumption Hotel Category (mmBtu per room per (kWh per room per night) night)'); WebFetch's positional reading put this number under natural gas - that is WRONG (45 MMBtu/night is physically impossible)."
+    },
+    {
+      "id": "epa_events2018_t5.economy_budget.natural_gas",
+      "value": "0.062",
+      "unit": "MMBtu per room per night",
+      "basis": {
+        "heating_value": "MMBtu as published (CHP report kBtu; HHV not stated)",
+        "gwp_set": "n/a",
+        "boundary": "hotel natural gas per room-night (per available room; = CHP 2005 kBtu/sf x sf/room / 1000 / 365)"
+      },
+      "locator": "Table 5, row \"Economy and budget\", SECOND numeric column",
+      "source_title": "Greenhouse Gas Inventory Guidance: Indirect Emissions from Events and Conferences",
+      "publisher": "U.S. EPA Center for Corporate Climate Leadership",
+      "edition_date": "December 2018",
+      "url": "https://19january2021snapshot.epa.gov/sites/static/files/2018-12/documents/indirectemissions_draft2_12212018_b_508pass_3.pdf",
+      "licence": "US government work",
+      "quote1": "Economy and budget 15 0.062",
+      "quote2": "Economy and budget 15 0.062",
+      "agreed": true,
+      "notes": "Derivation: 535 sf/room x 42.25 kBtu/sf / 1000 / 365 = 0.06193 -> rounds to 0.062. Same column caveat as the electricity entry."
+    },
+    {
+      "id": "chp2005_hotel.t16.economy_budget.sqft_per_room",
+      "value": "535",
+      "unit": "square feet per room",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "average hotel size per room"
+      },
+      "locator": "Table 16 Average Hotel Size per Room in Square Feet, row \"Economy and Budget\"",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Economy and Budget 535\"",
+      "quote2": "\"Economy and Budget\" \"535\"",
+      "agreed": true,
+      "notes": "Derivation input for Table 5 column resolution."
+    },
+    {
+      "id": "chp2005_hotel.t17.economy_budget.total",
+      "value": "Elec 10.31 kWh/sf/yr; Gas 42.25 kBtu/sf",
+      "unit": "kWh/sf/yr and kBtu/sf (annual)",
+      "basis": {
+        "heating_value": "not stated",
+        "gwp_set": "n/a",
+        "boundary": "Total column (all climates)"
+      },
+      "locator": "Table 17 Gas and Electric Energy Usage Intensities by Climate and Chain Scale, Hotel (Economy and Budget), Total column",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Avg. Elec kWh/sf/yr ... 10.31\" \"Avg. Gas KBtu/sf ... 42.25\" (full Cold/Hot/Moderate/Total lines, read 1)",
+      "quote2": "\"Avg. Elec kWh/sf/yr\" \"10.31\"; \"Avg. Gas KBtu/sf\" \"42.25\" (read 3, Total column)",
+      "agreed": true,
+      "notes": "Read 2 (tool-rendered table) gave the same numbers. Derivation input only."
+    },
+    {
+      "id": "chp2005_hotel.t16.midscale_without_fb.sqft_per_room",
+      "value": "549",
+      "unit": "square feet per room",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "average hotel size per room"
+      },
+      "locator": "Table 16 Average Hotel Size per Room in Square Feet, row \"Midscale w/o Food and Beverage\"",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Midscale w/o Food and Beverage 549\"",
+      "quote2": "\"Midscale w/o Food and Beverage\" \"549\"",
+      "agreed": true,
+      "notes": "Derivation input for Table 5 column resolution."
+    },
+    {
+      "id": "chp2005_hotel.t17.midscale_without_fb.total",
+      "value": "Elec 12.70 kWh/sf/yr; Gas 39.43 kBtu/sf",
+      "unit": "kWh/sf/yr and kBtu/sf (annual)",
+      "basis": {
+        "heating_value": "not stated",
+        "gwp_set": "n/a",
+        "boundary": "Total column (all climates)"
+      },
+      "locator": "Table 17 Gas and Electric Energy Usage Intensities by Climate and Chain Scale, Hotel (Midscale w/o Food and Beverage), Total column",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Avg. Elec kWh/sf/yr ... 12.70\" \"Avg. Gas KBtu/sf ... 39.43\" (full Cold/Hot/Moderate/Total lines, read 1)",
+      "quote2": "\"Avg. Elec kWh/sf/yr\" \"12.70\"; \"Avg. Gas KBtu/sf\" \"39.43\" (read 3, Total column)",
+      "agreed": true,
+      "notes": "Read 2 (tool-rendered table) gave the same numbers. Derivation input only."
+    },
+    {
+      "id": "chp2005_hotel.t16.midscale_with_fb.sqft_per_room",
+      "value": "656",
+      "unit": "square feet per room",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "average hotel size per room"
+      },
+      "locator": "Table 16 Average Hotel Size per Room in Square Feet, row \"Midscale w/ Food and Beverage\"",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Midscale w/ Food and Beverage 656\"",
+      "quote2": "\"Midscale w/ Food and Beverage\" \"656\"",
+      "agreed": true,
+      "notes": "Derivation input for Table 5 column resolution."
+    },
+    {
+      "id": "chp2005_hotel.t17.midscale_with_fb.total",
+      "value": "Elec 16.57 kWh/sf/yr; Gas 54.04 kBtu/sf",
+      "unit": "kWh/sf/yr and kBtu/sf (annual)",
+      "basis": {
+        "heating_value": "not stated",
+        "gwp_set": "n/a",
+        "boundary": "Total column (all climates)"
+      },
+      "locator": "Table 17 Gas and Electric Energy Usage Intensities by Climate and Chain Scale, Hotel (Midscale w/Food and Beverage), Total column",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Avg. Elec kWh/sf/yr ... 16.57\" \"Avg. Gas KBtu/sf ... 54.04\" (full Cold/Hot/Moderate/Total lines, read 1)",
+      "quote2": "\"Avg. Elec kWh/sf/yr\" \"16.57\"; \"Avg. Gas KBtu/sf\" \"54.04\" (read 3, Total column)",
+      "agreed": true,
+      "notes": "Read 2 (tool-rendered table) gave the same numbers. Derivation input only."
+    },
+    {
+      "id": "chp2005_hotel.t16.upscale.sqft_per_room",
+      "value": "842",
+      "unit": "square feet per room",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "average hotel size per room"
+      },
+      "locator": "Table 16 Average Hotel Size per Room in Square Feet, row \"Upscale\"",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Upscale 842\"",
+      "quote2": "\"Upscale\" \"842\"",
+      "agreed": true,
+      "notes": "Derivation input for Table 5 column resolution."
+    },
+    {
+      "id": "chp2005_hotel.t17.upscale.total",
+      "value": "Elec 14.96 kWh/sf/yr; Gas 40.57 kBtu/sf",
+      "unit": "kWh/sf/yr and kBtu/sf (annual)",
+      "basis": {
+        "heating_value": "not stated",
+        "gwp_set": "n/a",
+        "boundary": "Total column (all climates)"
+      },
+      "locator": "Table 17 Gas and Electric Energy Usage Intensities by Climate and Chain Scale, Hotel (Upscale), Total column",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Avg. Elec kWh/sf/yr ... 14.96\" \"Avg. Gas KBtu/sf ... 40.57\" (full Cold/Hot/Moderate/Total lines, read 1)",
+      "quote2": "\"Avg. Elec kWh/sf/yr\" \"14.96\"; \"Avg. Gas KBtu/sf\" \"40.57\" (read 3, Total column)",
+      "agreed": true,
+      "notes": "Read 2 (tool-rendered table) gave the same numbers. Derivation input only."
+    },
+    {
+      "id": "chp2005_hotel.t16.upper_upscale.sqft_per_room",
+      "value": "905",
+      "unit": "square feet per room",
+      "basis": {
+        "heating_value": "n/a",
+        "gwp_set": "n/a",
+        "boundary": "average hotel size per room"
+      },
+      "locator": "Table 16 Average Hotel Size per Room in Square Feet, row \"Upper Upscale\"",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Upper Upscale 905\"",
+      "quote2": "\"Upper Upscale\" \"905\"",
+      "agreed": true,
+      "notes": "Derivation input for Table 5 column resolution."
+    },
+    {
+      "id": "chp2005_hotel.t17.upper_upscale.total",
+      "value": "Elec 18.10 kWh/sf/yr; Gas 49.01 kBtu/sf",
+      "unit": "kWh/sf/yr and kBtu/sf (annual)",
+      "basis": {
+        "heating_value": "not stated",
+        "gwp_set": "n/a",
+        "boundary": "Total column (all climates)"
+      },
+      "locator": "Table 17 Gas and Electric Energy Usage Intensities by Climate and Chain Scale, Hotel (Upper Upscale), Total column",
+      "source_title": "CHP in the Hotel and Casino Market Sectors",
+      "publisher": "Energy and Environmental Analysis, Inc., prepared for U.S. EPA CHP Partnership",
+      "edition_date": "December 2005 (cover, two reads); the events guidance cites it as 'December 2015'",
+      "url": "https://www.epa.gov/sites/production/files/2015-07/documents/chp_in_the_hotel_and_casino_market_sectors.pdf",
+      "licence": "US government (EPA) publication",
+      "quote1": "\"Avg. Elec kWh/sf/yr ... 18.10\" \"Avg. Gas KBtu/sf ... 49.01\" (full Cold/Hot/Moderate/Total lines, read 1)",
+      "quote2": "\"Avg. Elec kWh/sf/yr\" \"18.10\"; \"Avg. Gas KBtu/sf\" \"49.01\" (read 3, Total column)",
+      "agreed": true,
+      "notes": "Read 2 (tool-rendered table) gave the same numbers. Derivation input only."
+    }
+  ],
+  "rejected": [
+    {
+      "id": "netl2014_1646.coal.extraction_delivery",
+      "value_seen": "~4.9 g CO2e/MJ (100-yr), ~11.7 (20-yr)",
+      "reason": "Read off a bar chart (Figure ES-1) by the summariser; numbers not printed as text, labels inferred from bar order; AR4 (2007) GWPs; superseded report. Not verbatim -> rejected.",
+      "url": "https://www.energy.gov/sites/prod/files/2019/09/f66/Life%20Cycle%20Analysis%20of%20Natural%20Gas%20Extraction%20and%20Power%20Generation%2005_29_14%20NETL.pdf"
+    },
+    {
+      "id": "netl_ui_underground_mine_illinois6.ch4",
+      "value_seen": "Methane 7.56E-03 kg per kg coal",
+      "reason": "Single unit process (one underground Illinois No. 6 mine), methane only, excludes transport and upstream energy, no GWP; single read. Not a WTT intensity -> rejected.",
+      "url": "https://edx.netl.doe.gov/resource/43ab7db7-f015-4dd2-836c-736fe44fade4/download"
+    },
+    {
+      "id": "netl2024_4862.ng_upstream.ar5",
+      "value_seen": "none",
+      "reason": "AR5 results are only in Appendix E (release package spreadsheet); not in the PDF text and the EDX file list did not load. Only a relative statement exists (32% decrease vs 2017 on AR5 basis).",
+      "url": "https://edx.netl.doe.gov/dataset/2020-natural-gas-lca-appendices-rev1"
+    }
+  ],
+  "gaps": [
+    "Coal upstream (mining + transport) for US power-plant coal: no free US-government or CARB source readable via WebFetch gives it as verbatim text. 3B/3C-up/3D-up coal term stays unmapped (held / partial), never zero.",
+    "Residual fuel oil, kerosene/jet fuel upstream: not in CA-GREET3.0 LUT TSD (2018); no federal readable source. Jet fuel appears in the CA-GREET3.0 supplemental doc only as tailpipe (Table 1).",
+    "CA-GREET3.0 heating-value basis: not stated in any CARB document read (LUT TSD, supplemental doc, 15-day Attachment C, ISOR, FRO first 100k chars). LHV is the GREET convention but is unverified; applying these g/MJ values to HHV gallons/MMBtu needs a cited LHV/HHV bridge.",
+    "CA-GREET3.0 GWP set: not stated; inferred AR4 (CH4 25, N2O 298) from printed table arithmetic (cagreet3.gwp_inferred). Different from Scope 1/2 register (AR5) and from NETL (AR6).",
+    "NETL natural gas AR5 values (Appendix E): not obtained; register 7.8/8.8 as AR6 with explicit gwp_set and disclose the mix, or stage the appendix spreadsheet.",
+    "CBECS: heat content EIA used to convert natural gas cubic feet is not stated in C24 or the guide page; RSE tab (xlsx) not read.",
+    "Hotel Table 5: values are per AVAILABLE room-night (annual/365, no occupancy adjustment) from 2005-vintage data; the events guidance citation date ('December 2015') conflicts with the CHP report cover ('December 2005')."
+  ]
+}

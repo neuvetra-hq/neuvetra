@@ -1,0 +1,76 @@
+name: Scope 3 register primaries
+
+# Round 3 (EN-8): the rebuild of the Scope 3 registers from the official EPA primaries left the required verify workflow,
+# where it downloaded three files from epa.gov on every pull request and push (an EPA outage or re-post turned every PR red).
+# It runs nightly, on demand, and whenever a builder, a register, a committed source or the engine changes. The primaries are
+# cached by their pinned SHA-256, so a run downloads them only when the cache is cold; the hashes are checked either way.
+on:
+  schedule:
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'tools/method-reference/**'
+      - 'packages/neuvetra-database/src/method-reference/**'
+      - 'apps/site-api/src/calculation/scope3_engine*.py'
+      - '.github/workflows/register-primaries.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/method-reference/**'
+      - 'packages/neuvetra-database/src/method-reference/**'
+      - 'apps/site-api/src/calculation/scope3_engine*.py'
+      - '.github/workflows/register-primaries.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: register-primaries-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  register-primaries:
+    # Round 2 (ENG-5, ACC-8): the Scope 3 registers R2 and R3 are rebuilt byte for byte from the official EPA primaries,
+    # checked against their pinned SHA-256 first; the builder tests may not skip here.
+    name: Scope 3 registers rebuilt from the official primaries
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install the builders' tools (pdftotext, openpyxl)
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q poppler-utils
+          python -m pip install --disable-pip-version-check openpyxl==3.1.5
+      - name: Restore the EPA primaries (cached by their pinned SHA-256)
+        id: primaries
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/primaries
+          key: epa-primaries-43afb91d79b2ae76-5d07c678fae67836-895cd81dd8662406
+      - name: Download the EPA primaries (cold cache only)
+        if: steps.primaries.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/primaries"
+          cd "$RUNNER_TEMP/primaries"
+          curl -fsSL --retry 3 -o epa-factors-hub-2025.xlsx https://www.epa.gov/system/files/other-files/2025-01/ghg-emission-factors-hub-2025.xlsx
+          curl -fsSL --retry 3 -o epa-factors-hub-2025.pdf https://www.epa.gov/system/files/documents/2025-01/ghg-emission-factors-hub-2025.pdf
+          curl -fsSL --retry 3 -o egrid2023_data_rev2.xlsx https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx
+      - name: Check the primaries' SHA-256 (cached or downloaded)
+        run: |
+          cd "$RUNNER_TEMP/primaries"
+          printf '%s  %s\n' \
+            43afb91d79b2ae765b3a447549d9e1021a144a407cec5eb804be9fcf69a668a7 epa-factors-hub-2025.xlsx \
+            5d07c678fae6783623acb1e23faa4a7c46268ee6c5a0654c9e49c50de7caf924 epa-factors-hub-2025.pdf \
+            895cd81dd8662406189ad8adf5a2578dcb362cdb5cff7cca81b10ee6bd2447c6 egrid2023_data_rev2.xlsx | sha256sum -c -
+          sha256sum -c - <<< "6025a14c4fe16675735efba1683030e4d36011e3973f3c4261f8231aa69c002f  $GITHUB_WORKSPACE/tools/method-reference/sources/epa-scghg-v1.3/SupplyChainGHGEmissionFactors_v1.3.0_NAICS_CO2e_USD2022.csv"
+      - name: Rebuild R2 and R3 (and R5, R6 from the committed transcriptions) and compare bytes
+        working-directory: apps/site-api/src/calculation
+        env:
+          NEUVETRA_METHOD_SOURCES_DIR: ${{ runner.temp }}/primaries
+          NEUVETRA_METHOD_SOURCES_REQUIRED: '1'
+        run: python -m unittest -v scope3_engine_purchases_test scope3_engine_energy_partner_test scope3_engine_upstream_us_test scope3_engine_hotel_building_test

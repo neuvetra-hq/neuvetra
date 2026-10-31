@@ -2,7 +2,7 @@
 // and progress — never invents a value and keeps the reviewed wording.
 import { describe, expect, test } from "bun:test"
 import { HELP_ENTRIES, isProgressQuestion, matchQuestion } from "./help-content"
-import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS } from "./plain-language"
+import { groupDigits, kgToTonnes, periodLabel, reasonText, RECORD_STATE_LABELS, RECORD_STATE_TONE } from "./plain-language"
 import { decodeResults, DRAFT_LABEL, resultsCsv, RESULTS_PROFILE } from "./results-api"
 import { computeJourneyStatus, coverageGaps, coverageIssues, coverageLines, periodFit, progressAnswer, recordState, setupMissing, type JourneyRecord } from "./journey-status"
 import { rowReasons, rowStatus } from "./results-view"
@@ -219,6 +219,28 @@ describe("journey progress", () => {
   test("record states follow the reviewed readiness findings", () => {
     expect(recordState([])).toBe("ready")
     expect(recordState([{ status: "input_needed", reason: "x" }, { status: "partial", reason: "y" }])).toBe("input_needed")
+    // I-08: a Scope 3 record waiting for a factor source is neither ready nor something to fix; something to fix still wins.
+    expect(recordState([{ status: "method_pending", reason: "x" }])).toBe("method_pending")
+    expect(recordState([{ status: "method_pending", reason: "x" }, { status: "input_needed", reason: "y" }])).toBe("input_needed")
+    expect([RECORD_STATE_LABELS.method_pending, RECORD_STATE_TONE.method_pending]).toEqual(["Waiting for a factor source", "info"])
     expect(recordState([{ status: "withdrawn", reason: "x" }])).toBe("withdrawn")
+  })
+})
+
+// Scope 3 package 2 (Claude, 26 October 2026): Scope 3 screening lives in company setup (D2) but never opens a Scope 1 or
+// 2 item or gap. Unscreened Scope 3 categories are listed by the Scope 3 results section instead.
+describe("Scope 3 screening rows in company setup", () => {
+  test("never open a Scope 1 or 2 setup item or coverage gap", () => {
+    const office = "29400000-0000-4000-8000-000000000001"
+    const scope3 = ["purchased_goods_and_services", "fuel_and_energy_related_activities", "upstream_transportation_and_distribution", "waste_generated_in_operations"]
+      .map((category, index) => ({ id: `scope3-${index}`, scope: 3, category, state: (["unknown", "yes", "no", "not_applicable"] as const)[index], reason: index > 1 ? "Synthetic reason." : "", details: "", locationId: null }))
+    const base = { company: { legalName: "Acme" }, reportingPeriod: { start: "2025-01-01", endExclusive: "2026-01-01" }, boundary: { approach: "operational_control" }, locations: [{ id: office, name: "Office", inclusion: "included", operatorDetails: "" }] }
+    const without = { currentVersion: { revision: 1, setup: { ...base, screening: [] } } } as never
+    const withScope3 = { currentVersion: { revision: 1, setup: { ...base, screening: scope3 } } } as never
+    expect(setupMissing(withScope3)).toEqual(setupMissing(without))
+    expect(setupMissing(withScope3)).toEqual([])
+    expect(coverageGaps(withScope3, [])).toEqual(coverageGaps(without, []))
+    const gas: JourneyRecord = { id: "r", kind: "natural_gas", label: "Natural gas", sourceId: "G", locationId: office, site: "Office", state: "ready", reasons: [], evidenceCount: 1, quality: "actual" }
+    expect(coverageGaps(withScope3, [gas, { ...gas, id: "e", kind: "electricity" }])).toEqual([])
   })
 })
