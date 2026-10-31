@@ -259,7 +259,11 @@ interface VerifiedScope3Output { aggregate: Scope3EngineAggregate | null; result
  * Not exported: only `scope3Coverage` reaches it, so no caller can supply an aggregate of its own.
  */
 async function verifyScope3EngineOutput(results: Scope3EngineResult[], engine: Scope3AggregateEngine, pins: Scope3Pins, annotations: Scope3Annotation[]): Promise<VerifiedScope3Output> {
-  results.forEach(r => verifyResult(r, pins))
+  results.forEach((r, i) => {
+    verifyResult(r, pins)
+    // Canonical hash checks allocate temporary trace strings; discard settled batches before encoding the aggregate.
+    if ((i + 1) % 128 === 0) (globalThis as { Bun?: { gc(force: boolean): void } }).Bun?.gc(true)
+  })
   if (annotations.length !== results.length) fail('annotations do not match the results')
   annotations.forEach(verifyAnnotation)
   if (!results.length) return { aggregate: null, results: new Map(), resultSha256s: [] }

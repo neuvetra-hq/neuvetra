@@ -203,8 +203,11 @@ export async function prepareScope3Report(tx: WorkspaceSql, actorId: string, com
   await assertActor(tx, actorId, 'Scope 3 report')
   const { request } = call
   for (const [kind, text] of [['report', call.reportText], ['csv', call.csvText]] as const)
-    for (const [ordinal, chunk] of scope3TextChunks(text).entries())
+    for (const [ordinal, chunk] of scope3TextChunks(text).entries()) {
       await tx.query('select neuvetra.stage_scope3_report_text($1,$2::text::jsonb,$3::text)', [companyId, JSON.stringify({ idempotencyKey: request.idempotencyKey, kind, ordinal }), chunk])
+      // pg builds two wire buffers per chunk; reclaim settled batches before they accumulate across both frozen texts.
+      if ((ordinal + 1) % 4 === 0) (globalThis as { Bun?: { gc(force: boolean): void } }).Bun?.gc(true)
+    }
   const receipt = await tx.query<{ version_id: string; revision: number; replayed: boolean }>('select * from neuvetra.prepare_scope3_report($1,$2::text::jsonb)', [companyId, JSON.stringify(request)])
   const row = receipt.rows[0]
   if (!row) throw new Error('Scope 3 report save returned no receipt.')

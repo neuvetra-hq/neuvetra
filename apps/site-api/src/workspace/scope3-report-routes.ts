@@ -78,7 +78,12 @@ export function scope3ReportVersionResponse(body: Scope3ReportVersionResponse): 
     yield '"}'
   }
   const it = pieces()
-  const stream = new ReadableStream<Uint8Array>({ pull(controller) { const next = it.next(); if (next.done) controller.close(); else controller.enqueue(encoder.encode(next.value)) } })
+  let pulls = 0
+  const stream = new ReadableStream<Uint8Array>({ pull(controller) {
+    // Reclaim consumed database and transfer buffers while the exact frozen texts continue streaming.
+    if (pulls++ % 16 === 0) scope3CollectGarbage()
+    const next = it.next(); if (next.done) controller.close(); else controller.enqueue(encoder.encode(next.value))
+  } })
   return new Response(stream, { status: 200, headers: { "content-type": "application/json;charset=utf-8", "cache-control": "no-store" } })
 }
 

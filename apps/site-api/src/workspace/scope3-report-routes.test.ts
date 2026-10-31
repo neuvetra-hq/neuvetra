@@ -261,4 +261,11 @@ describe("round 3: the prepare gate and the streamed version", () => {
     expect(response.headers.get("content-type")).toBe("application/json;charset=utf-8")
     expect(await response.text()).toBe(JSON.stringify(body))
   })
+
+  test("a large frozen stream keeps exact Unicode and escaping through multiple transfer batches", async () => {
+    const piece = `${"x".repeat(1_048_575)}😀\n"\\`
+    const body = { profile: SCOPE3_REPORTS_PROFILE, version: { id: "v", note: "雪" } as unknown as Scope3ReportVersionSummary,
+      reportText: piece.repeat(17), csvText: `# CSV\n${piece}` }
+    expect(await scope3ReportVersionResponse(body).text()).toBe(JSON.stringify(body))
+  })
 })
