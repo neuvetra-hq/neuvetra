@@ -194,6 +194,9 @@ describe('I-05: holds before the engine (DESIGN §5.1)', () => {
       // working days was calculated as a whole year of commuting; 366 working days in 2025 (365 days) cannot happen either.
       ['commuting working days beyond the quarter', record('commuting_average', q('180', 'employee'), COMMUTE, { period: { start: '2025-01-01', endExclusive: '2025-04-01' } }), ['working_days_exceed_days_in_period']],
       ['commuting 366 working days in 2025', record('commuting_average', q('180', 'employee'), { ...COMMUTE, workingDays: 366 }), ['working_days_exceed_days_in_period']],
+      // PR22 bug hunt A-4: one reason per problem, however many modes share it (the line's to-do list repeated each sentence).
+      ['commuting two unknown modes over 100', record('commuting_average', q('180', 'employee'), { ...COMMUTE, modes: [mode('bus', '120', '8'), mode('e-scooter', '150', '2'), mode('hoverboard', '0', '2')] }),
+        ['mode_shares_must_total_100', 'mode_not_an_engine_token']],
       ['commuting overlap unknown with distance records', record('commuting_average', q('180', 'employee'), { ...COMMUTE, activityOverlap: 'unknown' }), ['commuting_overlap_not_confirmed'], { distanceCommutingPeriods: [{ start: '2025-06-01', endExclusive: '2025-07-01' }] }],
       ['teleworking gas in kWh', record('teleworking', q('100', 'kWh'), { ...TELE, carrier: 'natural_gas', zip: null, subregion: null }), ['unit_not_an_engine_token']],
       ['teleworking unknown subregion', record('teleworking', q('100', 'kWh'), { ...TELE, subregion: 'XXXX' }), ['subregion_not_an_egrid_subregion']],

@@ -299,7 +299,8 @@ function createScope3PlanState(version: Scope3CollectionVersion, context: Collec
   const period = { start: a.period.start, endExclusive: a.period.endExclusive }
   const q = a.quantity
   const reasons: string[] = []
-  const need = (ok: boolean, reason: string) => { if (!ok) reasons.push(reason) }
+  // PR22 bug hunt A-4: each reason once (a profile with several bad modes repeated the same sentence on its to-do list).
+  const need = (ok: boolean, reason: string) => { if (!ok && !reasons.includes(reason)) reasons.push(reason) }
   // I-05 (A14): a hotel stay is recognised from the mode text, also on a record saved before 0030 (unit written, not normalized).
   const hotel = a.kind === 'business_travel' && scope3IsHotelMode(a.payload.mode)
   // A spend line's amount and currency get their own, more specific reasons (I-03, below); so does a hotel stay.
