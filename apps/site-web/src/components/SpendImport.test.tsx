@@ -329,6 +329,34 @@ describe("SpendImport (I-09)", () => {
   })
 })
 
+// PR 22 integration (Claude, 1 November 2026), W-1: the duplicate queue's "Not a duplicate" / "Duplicate: withdraw" (and a
+// group's or a held line's withdrawal) corrected each line with the setup version the line was saved against. 0030 takes
+// a correction only against the current company setup version, so after any new setup version every such action was
+// refused (422 "Invalid or unsupported collection record."; reproduced natively). The spend view names the current version.
+describe("integration W-1: spend review corrections are saved against the current company setup version", () => {
+  test("after company setup was saved again, Not a duplicate, Duplicate: withdraw and a group withdrawal send the current setup version", async () => {
+    const earlier = "93920000-0000-4000-8000-0000000000c0"
+    const saved = (n: number) => ({ id: rec(n), currentVersion: { id: rec(n + 50), revision: 1, activity: { kind: "purchase_spend", locationId: loc, setupVersionId: earlier, sourceId: `L${n}`, state: "active", withdrawalReason: null,
+      payload: { duplicateConfirmedDistinct: false, possibleDuplicateOf: n === 2 ? { importId: imp, row: 1 } : null, naicsCode: null } } } })
+    const records = [saved(1), saved(2), saved(3)]
+    const p = await panel(view([line(1, { mappingSource: "file", naicsCode: "711310", plan: { action: "calculate", status: null, reasons: [] } }),
+      line(2, { mappingSource: "file", naicsCode: "711310", possibleDuplicateOf: { importId: imp, row: 1 }, plan: { action: "hold", status: "input_needed", reasons: ["possible_duplicate_spend_line"] } }),
+      line(3, { vendor: "ADP", glAccount: "7000", glDescription: "Salaries and wages", description: "Payroll funding" })]), undefined, undefined, false, 0, { listCollectionActivities: async () => records })
+    await p.tab("Possible duplicates (1)")
+    p.app.button("Not a duplicate")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    p.app.button("Duplicate: withdraw")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    await p.tab("Needs a code (1)")
+    const payroll = await groupRow(p, "ADP")
+    payroll.app.button("Withdraw 1 line")!.props.onClick(); await new Promise(r => setTimeout(r, 5)); await p.app.settle()
+    const saves = p.calls.filter(c => c[0] === "save")
+    expect(saves.map(c => [c[1], c[2].activity.setupVersionId])).toEqual([[rec(2), setup], [rec(2), setup], [rec(3), setup]])
+    // Only the setup version (and the correction itself) changes; the line keeps its location and the rest of its record.
+    expect(saves[0]![2].activity).toEqual({ ...records[1]!.currentVersion.activity, setupVersionId: setup, payload: { ...records[1]!.currentVersion.activity.payload, duplicateConfirmedDistinct: true } })
+    expect(saves[1]![2].activity).toMatchObject({ locationId: loc, sourceId: "L2", state: "withdrawn", withdrawalReason: "Duplicate of an earlier imported spend line." })
+    expect(saves[2]![2].activity).toMatchObject({ locationId: loc, sourceId: "L3", state: "withdrawn" })
+  })
+})
+
 // Bug hunt C (pr22, Claude, 1 November 2026), C-06: "Open the spend import" (Overview, to-do list, category row) asked for
 // the review heading in an animation frame queued with the list's state update; when that frame ran before React had
 // rendered the review (reproduced live at 390 px), the heading was not found: the page scrolled to the panel's top and

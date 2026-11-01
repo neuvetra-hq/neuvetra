@@ -134,7 +134,10 @@ export function SpendImport({ companyId, actor, onChanged, onOpenRecord }: { com
       for (const recordId of recordIds) {
         const record = records.find(item => item.id === recordId)
         if (!record) throw new Error("The line could not be found; reload and try again.")
-        const version = record.currentVersion, activity = version.activity
+        const version = record.currentVersion
+        // PR 22 integration (W-1): a correction is saved only against the current company setup version (0030), which the
+        // spend view names; the line's saved one is refused after any later setup save. Nothing else of the line changes.
+        const activity = { ...version.activity, setupVersionId: view.setupVersionId ?? version.activity.setupVersionId }
         const next = change === "distinct"
           ? { ...activity, payload: { ...(activity.payload as Record<string, unknown>), duplicateConfirmedDistinct: true } }
           : { ...activity, state: "withdrawn" as const, withdrawalReason }
