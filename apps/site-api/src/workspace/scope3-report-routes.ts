@@ -96,12 +96,23 @@ function approvalBody(value: unknown): { reportSha256: string; acknowledgeOpenIs
   return { reportSha256: v.reportSha256, acknowledgeOpenIssues: v.acknowledgeOpenIssues, confirmSelfApproval: v.confirmSelfApproval }
 }
 
+/**
+ * Bug hunt (PR 22, 1 November 2026): what 0030 can't store in a reason: U+0000 (PostgreSQL text and jsonb refuse it, 22P05),
+ * the other control characters except tab, line feed and carriage return (scope3_assert_text, 22023) and a lone surrogate
+ * (jsonb, 22P02). Refused before any results run, so a reason that can never be saved costs no prepare and is never a 503.
+ */
+const UNSTORABLE_REASON = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]|\p{Cs}/u
+export const SCOPE3_REPORT_REASON_UNSTORABLE = "The reason contains a control character that can't be saved. Remove it and try again."
+/** The route's own refusals whose sentence is shown as is (everything else invalid is the generic sentence). */
+const SHOWN_REFUSALS = ["Say why", SCOPE3_REPORT_REASON_UNSTORABLE]
+
 /** The prepare request body: exactly `{ idempotencyKey, expectedRevision, reason }`; a reason of 3+ characters after the first version. */
 function prepareBody(value: unknown): { idempotencyKey: string; expectedRevision: number; reason: string | null } {
   if (!exactKeys(value, ["idempotencyKey", "expectedRevision", "reason"])) throw invalid("Invalid Scope 3 report request.")
   const v = value as Record<string, unknown>
   if (typeof v.idempotencyKey !== "string" || !UUID.test(v.idempotencyKey) || !Number.isSafeInteger(v.expectedRevision) || (v.expectedRevision as number) < 0 || (v.expectedRevision as number) > 999) throw invalid("Invalid Scope 3 report request.")
   if (!(v.reason === null || (typeof v.reason === "string" && v.reason.length <= 2000))) throw invalid("Invalid Scope 3 report reason.")
+  if (typeof v.reason === "string" && UNSTORABLE_REASON.test(v.reason)) throw invalid(SCOPE3_REPORT_REASON_UNSTORABLE)
   const reason = v.reason as string | null
   if ((v.expectedRevision as number) > 0 && (reason ?? "").trim().length < 3) throw invalid("Say why this version replaces the earlier one (at least 3 characters).")
   return { idempotencyKey: v.idempotencyKey, expectedRevision: v.expectedRevision as number, reason }
@@ -260,7 +271,8 @@ export function createScope3ReportRoutes(deps: {
       if (code === "23503") return respond(409, { code: "reload_required", error: "Company setup or the records changed while the report was prepared. Reload and try again." })
       if (code === "23505" || code === "40001") return respond(409, { code: "report_changed", error: "A newer Scope 3 report version was prepared. Reload the versions and try again." })
       if (code === "54000") return respond(422, { code: "history_limit", error: "This Scope 3 report is too large or its history capacity is reached." })
-      if (["22023", "22P02", "22007", "22008", "22003", "23514", "23502"].includes(code ?? "")) return respond(422, { error: (error as Error).message.startsWith("Say why") ? (error as Error).message : "Invalid or unsupported Scope 3 report request." })
+      // Bug hunt (PR 22): 22P05 and 22021 (text PostgreSQL can't store) are invalid input too, never a retryable outage.
+      if (["22023", "22P02", "22P05", "22021", "22007", "22008", "22003", "23514", "23502"].includes(code ?? "")) return respond(422, { error: SHOWN_REFUSALS.some(start => (error as Error).message.startsWith(start)) ? (error as Error).message : "Invalid or unsupported Scope 3 report request." })
       return respond(503, { error: "Scope 3 report versions could not be read or saved. Try again shortly." })
     }
   }
