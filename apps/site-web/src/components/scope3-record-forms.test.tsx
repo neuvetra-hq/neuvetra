@@ -870,3 +870,25 @@ test('category 10 partner form states the average-processing limitation', async 
  expect(f.app.text()).toContain('average-data processing estimate is unavailable')
  expect(f.app.text()).toContain('processor data')
 })
+
+// PR 22 bug hunt C (Claude, 1 November 2026), C-08: a correction whose save failed kept its request for an exact retry, and
+// rewriting "Reason for this correction" did not retire it, so the retry stored the reason the user had replaced while the
+// screen said "Saved." (reproduced live: c-tools/e2e/reason-retry.mjs on C1, the stored reason was "First reason typed").
+// Every other field already starts a new request when it changes; the reason now does too.
+describe("bug hunt C: a rewritten correction reason is the one saved", () => {
+  test("after a failed correction save, editing the reason sends a new request with the new reason", async () => {
+    const fixtureActivity = SCOPE3_PAYLOAD_FIXTURES.find(item => item.kind === "purchase_spend")!
+    const saved = savedRecord("93900000-0000-4000-8000-0000000000d1", { ...blank("purchase_spend"), sourceId: "SPEND-1", quantity: structuredClone((fixtureActivity as any).quantity ?? blank("purchase_spend").quantity), payload: structuredClone(fixtureActivity.payload) } as unknown as CollectionActivity)
+    const w = await workspace({ records: [saved] })
+    w.app.button("Review or correct")!.props.onClick(); await w.app.settle()
+    w.recordForm()!.props.onEdit((next: CollectionActivity) => { next.notes = "Amount checked against the reissued invoice." }); await w.app.settle()
+    const saveCorrection = async () => { await w.app.button("Save correction")!.props.onClick(); await w.app.settle() }
+    w.app.byLabel("Reason for this correction")!.props.onChange("First reason typed"); await w.app.settle()
+    await saveCorrection() // the stub refuses after capturing the request, as a 500 would
+    expect(w.sent.at(-1)?.correctionReason).toBe("First reason typed")
+    w.app.byLabel("Reason for this correction")!.props.onChange("Invoice 4471 was reissued"); await w.app.settle()
+    await saveCorrection()
+    expect(w.sent.at(-1)?.correctionReason).toBe("Invoice 4471 was reissued")
+    expect(w.sent.at(-1)?.idempotencyKey).not.toBe(w.sent[0].idempotencyKey)
+  })
+})

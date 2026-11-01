@@ -66,7 +66,8 @@ export const SCOPE3_SAVED_TEXT_R3D = {
 export const SCOPE3_CSV_TEXT_R3D = {
   oneFile: "Download Scope 3 CSV",
   zip: "Download as ZIP (one CSV per section)",
-  zipAria: "Download the Scope 3 CSV as a ZIP with one CSV file per section",
+  // Bug hunt C (C-07): the accessible name starts with the visible label (WCAG 2.5.3 Label in Name).
+  zipAria: "Download as ZIP (one CSV per section): the Scope 3 CSV with one CSV file per section",
   notesFile: "00-notes-and-columns.csv",
   readme: (sections: readonly string[]) => `# This ZIP holds the Scope 3 CSV split into one file per section (${sections.join(", ")}). Each file starts with its own header row. The notes and column definitions of the single-file CSV are in this file, unchanged.`,
 } as const

@@ -119,12 +119,16 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [unavailable, setUnavailable] = useState(false)
+  // Bug hunt C (C-04): a failed list read says so with a way to read it again (it used to need leaving the screen).
+  const [listFailed, setListFailed] = useState(false)
   const key = useRef<string | null>(null)
+  // Bug hunt C (C-05): only the version asked for last is shown (a slower earlier answer, or its previous version, is dropped).
+  const openRequest = useRef(0)
   const actorRef = useRef(actor)
   useEffect(() => { actorRef.current = actor }, [actor])
   const load = useCallback(async () => {
-    try { setView(await loadScope3Reports(companyId, actorRef.current)); setUnavailable(false) }
-    catch (cause) { if (cause instanceof Scope3ReportApiError && cause.unavailable) setUnavailable(true); else setMessage(cause instanceof Error ? cause.message : "Scope 3 report versions are unavailable right now.") }
+    try { setView(await loadScope3Reports(companyId, actorRef.current)); setUnavailable(false); setListFailed(false) }
+    catch (cause) { if (cause instanceof Scope3ReportApiError && cause.unavailable) setUnavailable(true); else { setListFailed(true); setMessage(cause instanceof Error ? cause.message : "Scope 3 report versions are unavailable right now.") } }
   }, [companyId])
   useEffect(() => { void load() }, [load])
   const run = async (step: () => Promise<void>) => { setBusy(true); setMessage(null); try { await step() } catch (cause) { setMessage(cause instanceof Error ? cause.message : "That didn’t work. Try again.") } finally { setBusy(false) } }
@@ -132,11 +136,15 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
   const versions = view?.versions ?? [], next = versions.length, needsReason = next > 0
   // Shown only where a version can be prepared and something is screened ("ready" would mislead an empty company).
   const live = results && view?.reportingYear != null && results.coverage.categories.some(row => row.status !== "not_screened") ? scope3LiveOpenIssues(results) : null
-  const setOpen = async (report: Scope3FrozenReport | null) => {
+  /** Shows the version `read` returns (null closes it), unless another version was asked for in the meantime. */
+  const setOpen = async (read: () => Promise<Scope3FrozenReport | null>) => {
+    const request = ++openRequest.current
+    const report = await read()
+    if (request !== openRequest.current) return
     setOpenReport(report); setPrevious(null)
     const before = report?.document.changeLog.previous
     if (!report || !before) return
-    try { const loaded = await loadScope3ReportVersion(companyId, before.versionId, actorRef.current); setPrevious(loaded.document) } catch { /* the log still names what this version holds */ }
+    try { const loaded = await loadScope3ReportVersion(companyId, before.versionId, actorRef.current); if (request === openRequest.current) setPrevious(loaded.document) } catch { /* the log still names what this version holds */ }
   }
   const prepare = () => run(async () => {
     if (needsReason && reason.trim().length < 3) throw new Error("Say why this version replaces the earlier one (at least 3 characters).")
@@ -144,19 +152,20 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
     const saved = await prepareScope3Report(companyId, { idempotencyKey: key.current, expectedRevision: next, reason: needsReason ? reason : null }, actorRef.current)
     key.current = null; setReason("")
     await load()
-    await setOpen(await loadScope3ReportVersion(companyId, saved.version.id, actorRef.current))
+    await setOpen(() => loadScope3ReportVersion(companyId, saved.version.id, actorRef.current))
   })
-  const openVersion = (id: string) => run(async () => { await setOpen(await loadScope3ReportVersion(companyId, id, actorRef.current)) })
+  const openVersion = (id: string) => run(async () => { await setOpen(() => loadScope3ReportVersion(companyId, id, actorRef.current)) })
   const approve = (confirmations: Scope3ApprovalConfirmations) => run(async () => {
     if (!open) return
     await approveScope3Report(companyId, open.version.id, open.version.reportSha256, actorRef.current, confirmations)
     await load()
-    await setOpen(await loadScope3ReportVersion(companyId, open.version.id, actorRef.current))
+    await setOpen(() => loadScope3ReportVersion(companyId, open.version.id, actorRef.current))
   })
   return <section aria-labelledby="scope3-report-versions" style={{ marginTop: 18 }}>
     <h3 className="nv-h3" id="scope3-report-versions">Report versions{view?.reportingYear ? ` · reporting year ${view.reportingYear}` : ""}</h3>
     <p className="nv-muted">A report version freezes these Scope 3 results, with an assertion and a change log, as exact bytes with a SHA-256. Approving binds the approval to that hash. Later record changes never alter a stored version.</p>
-    {message && <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><p>{message}</p></div>}
+    {message && <div className="nv-notice nv-notice--error" role="alert"><Icon name="alert" /><div><p>{message}</p>
+      {listFailed && <div className="nv-actions" style={{ marginTop: 10 }}><button type="button" className="nv-btn nv-btn--sm" onClick={() => { setMessage(null); void load() }}>Try again</button></div>}</div></div>}
     {view && view.reportingYear === null && <p className="nv-muted">Save company setup with a reporting period before preparing a report version.</p>}
     {/* Round 2 lane D (UX-10): the live readiness before preparing; preparing a draft is always allowed. */}
     {live && <div className={`nv-notice ${live.length ? "nv-notice--warn" : "nv-notice--info"} s3-readiness`} role="status"><Icon name={live.length ? "alert" : "info"} /><div>
@@ -168,6 +177,6 @@ export function Scope3ReportVersions({ companyId, actor, results }: { companyId:
       <button type="button" className="nv-btn nv-btn--sm nv-btn--primary" disabled={busy} onClick={() => void prepare()}>{busy ? "Working…" : "Prepare report version"}</button>
     </div>}
     {view && <Scope3ReportHistory versions={versions} actorId={view.actorId} onOpen={id => void openVersion(id)} />}
-    {open && view && <Scope3FrozenReportView report={open} previous={previous} actorId={view.actorId} canManage={view.canManage} busy={busy} onApprove={confirmations => void approve(confirmations)} onClose={() => void setOpen(null)} />}
+    {open && view && <Scope3FrozenReportView report={open} previous={previous} actorId={view.actorId} canManage={view.canManage} busy={busy} onApprove={confirmations => void approve(confirmations)} onClose={() => void setOpen(async () => null)} />}
   </section>
 }

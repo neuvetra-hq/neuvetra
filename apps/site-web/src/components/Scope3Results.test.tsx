@@ -537,7 +537,7 @@ describe("round 3 lane D: one data-quality label, screened-out categories, plura
     expect(text(cardOf(screen, travel)!)).toContain(shown)
     expect(printed).toContain(shown)
     expect(text(screen)).not.toMatch(/\d passenger-mile\b/)
-    expect(screen.find(node => node.type === "button" && node.props["aria-label"] === "Download the Scope 3 CSV as a ZIP with one CSV file per section")).toBeDefined()
+    expect(screen.find(node => node.type === "button" && node.props["aria-label"] === "Download as ZIP (one CSV per section): the Scope 3 CSV with one CSV file per section")).toBeDefined()
   })
 })
 

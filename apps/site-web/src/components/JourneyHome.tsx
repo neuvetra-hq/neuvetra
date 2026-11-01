@@ -29,6 +29,8 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
   }
   const allMustFix = collection.records.filter(row => row.state === "input_needed" || row.state === "review_required")
   const spendFix = allMustFix.filter(row => row.importedSpend), mustFix = allMustFix.filter(row => !row.importedSpend)
+  // Bug hunt C (C-01): step 2's count is every record needing input (imported spend lines too), as the sidebar and the
+  // Activity list count them; the attention list below shows the imported lines as one spend-import item.
   const openSpendImport = () => { requestSpendImportFocus("code"); onNavigate("collection") }
   const heldRows = collection.records.filter(row => row.state === "held_period")
   const improve: Array<{ key: string; title: string; detail: string }> = []
@@ -65,7 +67,7 @@ export function JourneyHome({ status, error, headingRef, onNavigate, onAsk, onRe
       <button type="button" className="nv-journey__step" data-state={stepState("collection")} onClick={() => onNavigate("collection")}>
         <span className="nv-journey__num" aria-hidden="true">{stepState("collection") === "done" ? <Icon name="check" size={16} /> : 2}</span>
         <span className="nv-journey__title">Activity & evidence</span>
-        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), mustFix.length ? `${mustFix.length} input needed` : "", heldRows.length ? `${heldRows.length} held — outside the reporting period` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !mustFix.length && !heldRows.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
+        <span className="nv-journey__meta">{!collection.active ? "No records yet" : [plural(collection.active, "record"), allMustFix.length ? `${allMustFix.length} input needed` : "", heldRows.length ? `${heldRows.length} held — outside the reporting period` : "", gaps.length ? plural(gaps.length, "possible gap") : "", !allMustFix.length && !heldRows.length && !gaps.length ? "none waiting on input" : ""].filter(Boolean).join(" · ")}</span>
       </button>
       <button type="button" className="nv-journey__step" data-state={stepState("results")} onClick={() => onNavigate("results")}>
         <span className="nv-journey__num" aria-hidden="true">3</span>
