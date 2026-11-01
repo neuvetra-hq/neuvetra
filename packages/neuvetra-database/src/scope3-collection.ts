@@ -433,6 +433,9 @@ function planScope3EnergyAndBuildings(state: Scope3PlanState): Scope3Calculation
       need(decimalAtMost(m.sharePercent, 100), 'mode_shares_must_total_100')
     }
     // B5(c): a survey profile may not count the same employees' commuting as distance records do.
+    // PR22 bug hunt A-3: working days on site are days of the profile's own period; more than the period has would count a whole
+    // year of commuting in a shorter profile (a first-quarter profile with 220 days counted the year).
+    need(p.workingDays <= daysInPeriodOf(period), 'working_days_exceed_days_in_period')
     const overlaps = options.distanceCommutingPeriods?.some(other => other.start < period.endExclusive && period.start < other.endExclusive) ?? false
     need(p.activityOverlap === 'none_confirmed' || !overlaps, 'commuting_overlap_not_confirmed')
     return send({ period, headcount: q.normalizedValue, workingDays: p.workingDays,

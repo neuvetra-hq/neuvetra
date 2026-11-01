@@ -268,6 +268,7 @@ Object.assign(SCOPE3_DISCLOSURE_TEXT, SCOPE3_DISCLOSURE_TEXT_I05)
 /** Reasons the I-05 methods (engine findings) and the collection adapter's I-05 branches (holds) can give. */
 export const SCOPE3_REASON_TEXT_I05: Readonly<Record<string, string>> = {
   mode_shares_must_total_100: 'The shares of employees by commuting mode must add up to 100%. Correct the shares; the profile isn’t counted until then.',
+  working_days_exceed_days_in_period: 'The working days on site are more than the days in this profile’s period. Give the working days within the period (or correct the period); the profile isn’t counted until then.',
   allocated_share_exceeds_one: 'The reporting area is larger than the occupied area of the building, so the share would be over 100%. Check the areas and occupancy; the record isn’t counted until then.',
   building_area_or_occupancy_zero: 'The building area or its occupancy is zero, so no share can be worked out. Enter both; the record isn’t counted until then.',
   partner_share_denominator_zero: 'The partner’s share has a denominator of zero. Enter the partner’s total for the allocation basis; the record isn’t counted until then.',

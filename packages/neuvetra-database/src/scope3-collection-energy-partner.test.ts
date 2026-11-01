@@ -190,6 +190,10 @@ describe('I-05: holds before the engine (DESIGN §5.1)', () => {
       ['commuting occupancy on a bus', record('commuting_average', q('180', 'employee'), { ...COMMUTE, modes: [mode('bus', '100', '8', '2')] }), ['occupancy_not_applicable_to_mode']],
       ['commuting occupancy on walking', record('commuting_average', q('180', 'employee'), { ...COMMUTE, modes: [mode('non_motorized', '100', '1', '1')] }), ['occupancy_not_applicable_to_mode']],
       ['commuting share above 100', record('commuting_average', q('180', 'employee'), { ...COMMUTE, modes: [mode('bus', '120', '8')] }), ['mode_shares_must_total_100']],
+      // PR22 bug hunt A-3: working days on site are days of the profile's own period. A first-quarter profile (90 days) with 220
+      // working days was calculated as a whole year of commuting; 366 working days in 2025 (365 days) cannot happen either.
+      ['commuting working days beyond the quarter', record('commuting_average', q('180', 'employee'), COMMUTE, { period: { start: '2025-01-01', endExclusive: '2025-04-01' } }), ['working_days_exceed_days_in_period']],
+      ['commuting 366 working days in 2025', record('commuting_average', q('180', 'employee'), { ...COMMUTE, workingDays: 366 }), ['working_days_exceed_days_in_period']],
       ['commuting overlap unknown with distance records', record('commuting_average', q('180', 'employee'), { ...COMMUTE, activityOverlap: 'unknown' }), ['commuting_overlap_not_confirmed'], { distanceCommutingPeriods: [{ start: '2025-06-01', endExclusive: '2025-07-01' }] }],
       ['teleworking gas in kWh', record('teleworking', q('100', 'kWh'), { ...TELE, carrier: 'natural_gas', zip: null, subregion: null }), ['unit_not_an_engine_token']],
       ['teleworking unknown subregion', record('teleworking', q('100', 'kWh'), { ...TELE, subregion: 'XXXX' }), ['subregion_not_an_egrid_subregion']],
@@ -209,6 +213,9 @@ describe('I-05: holds before the engine (DESIGN §5.1)', () => {
     for (const options of [{ distanceCommutingPeriods: [] }, { distanceCommutingPeriods: [{ start: '2024-01-01', endExclusive: '2025-01-01' }] }, {}] as Scope3PlanOptions[])
       expect(plan(record('commuting_average', q('180', 'employee'), { ...COMMUTE, activityOverlap: 'unknown' }), options).action).toBe('calculate')
     expect(plan(record('commuting_average', q('180', 'employee'), COMMUTE), { distanceCommutingPeriods: [year] }).action).toBe('calculate')
+    // A-3: as many working days as the profile's period has is fine (90 in the first quarter, 365 in the year).
+    expect(plan(record('commuting_average', q('180', 'employee'), { ...COMMUTE, workingDays: 90 }, { period: { start: '2025-01-01', endExclusive: '2025-04-01' } })).action).toBe('calculate')
+    expect(plan(record('commuting_average', q('180', 'employee'), { ...COMMUTE, workingDays: 365 })).action).toBe('calculate')
   })
 
   test('A15: the lease boundary by consolidation approach (Scope 3 Standard Tables A.1 and A.2), table-driven for asset energy, partner figures and buildings', () => {
